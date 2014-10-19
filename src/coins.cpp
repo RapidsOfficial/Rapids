@@ -34,38 +34,20 @@ void CCoins::CalcMaskSize(unsigned int& nBytes, unsigned int& nNonzeroBytes) con
     nBytes += nLastUsedByte;
 }
 
-bool CCoins::Spend(const COutPoint& out, CTxInUndo& undo)
+bool CCoins::Spend(uint32_t nPos)
 {
-    if (out.n >= vout.size())
+    if (nPos >= vout.size() || vout[nPos].IsNull())
         return false;
-    if (vout[out.n].IsNull())
-        return false;
-    undo = CTxInUndo(vout[out.n]);
-    vout[out.n].SetNull();
+    vout[nPos].SetNull();
     Cleanup();
-    if (vout.size() == 0) {
-        undo.nHeight = nHeight;
-        undo.fCoinBase = fCoinBase;
-        undo.fCoinStake = fCoinStake;
-        undo.nVersion = this->nVersion;
-    }
     return true;
 }
-
-bool CCoins::Spend(int nPos)
-{
-    CTxInUndo undo;
-    COutPoint out(UINT256_ZERO, nPos);
-    return Spend(out, undo);
-}
-
 
 bool CCoinsView::GetCoins(const uint256& txid, CCoins& coins) const { return false; }
 bool CCoinsView::HaveCoins(const uint256& txid) const { return false; }
 uint256 CCoinsView::GetBestBlock() const { return UINT256_ZERO; }
 bool CCoinsView::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) { return false; }
 bool CCoinsView::GetStats(CCoinsStats& stats) const { return false; }
-
 
 CCoinsViewBacked::CCoinsViewBacked(CCoinsView* viewIn) : base(viewIn) {}
 bool CCoinsViewBacked::GetCoins(const uint256& txid, CCoins& coins) const { return base->GetCoins(txid, coins); }
