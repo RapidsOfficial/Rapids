@@ -13,6 +13,7 @@
 #include "script/script.h"
 #include "script/script_error.h"
 #include "core_io.h"
+#include "test_pivx.h"
 
 #include <map>
 #include <string>
@@ -79,7 +80,7 @@ string FormatScriptFlags(unsigned int flags)
     return ret.substr(0, ret.size() - 1);
 }
 
-BOOST_AUTO_TEST_SUITE(transaction_tests)
+BOOST_FIXTURE_TEST_SUITE(transaction_tests, TestingSetup)
 
 BOOST_AUTO_TEST_CASE(tx_valid)
 {

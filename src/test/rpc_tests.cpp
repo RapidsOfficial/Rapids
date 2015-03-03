@@ -10,6 +10,8 @@
 #include "netbase.h"
 #include "util.h"
 
+#include "test/test_pivx.h"
+
 #include <boost/algorithm/string.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -48,7 +50,7 @@ UniValue CallRPC(string args)
 }
 
 
-BOOST_AUTO_TEST_SUITE(rpc_tests)
+BOOST_FIXTURE_TEST_SUITE(rpc_tests, TestingSetup)
 
 BOOST_AUTO_TEST_CASE(rpc_rawparams)
 {

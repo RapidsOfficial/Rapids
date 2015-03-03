@@ -10,12 +10,13 @@
 #include "checkpoints.h"
 
 #include "uint256.h"
+#include "test_pivx.h"
 
 #include <boost/test/unit_test.hpp>
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(Checkpoints_tests)
+BOOST_FIXTURE_TEST_SUITE(Checkpoints_tests, TestingSetup)
 
 BOOST_AUTO_TEST_CASE(sanity)
 {
