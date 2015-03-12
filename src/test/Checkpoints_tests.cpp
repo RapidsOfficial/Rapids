@@ -16,7 +16,7 @@
 
 using namespace std;
 
-BOOST_FIXTURE_TEST_SUITE(Checkpoints_tests, TestingSetup)
+BOOST_FIXTURE_TEST_SUITE(Checkpoints_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(sanity)
 {

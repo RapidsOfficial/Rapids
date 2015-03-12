@@ -7,6 +7,7 @@
 #include "test_pivx.h"
 
 #include <boost/test/unit_test.hpp>
+
 BOOST_FIXTURE_TEST_SUITE(sanity_tests, TestingSetup)
 
 BOOST_AUTO_TEST_CASE(basic_sanity)
