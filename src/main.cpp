@@ -5482,7 +5482,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 {
                     LOCK(cs_vNodes);
                     // Use deterministic randomness to send to the same nodes for 24 hours
-                    // at a time so the setAddrKnowns of the chosen nodes prevent repeats
+                    // at a time so the addrKnowns of the chosen nodes prevent repeats
                     static uint256 hashSalt;
                     if (hashSalt.IsNull())
                         hashSalt = GetRandHash();
@@ -6264,9 +6264,9 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
         if (!IsInitialBlockDownload() && (GetTime() - nLastRebroadcast > 24 * 60 * 60)) {
             LOCK(cs_vNodes);
             for (CNode* pnode : vNodes) {
-                // Periodically clear setAddrKnown to allow refresh broadcasts
+                // Periodically clear addrKnown to allow refresh broadcasts
                 if (nLastRebroadcast)
-                    pnode->setAddrKnown.clear();
+                    pnode->addrKnown.clear();
 
                 // Rebroadcast our address
                 AdvertiseLocal(pnode);
@@ -6282,8 +6282,8 @@ bool SendMessages(CNode* pto, bool fSendTrickle)
             std::vector<CAddress> vAddr;
             vAddr.reserve(pto->vAddrToSend.size());
             for (const CAddress& addr : pto->vAddrToSend) {
-                // returns true if wasn't already contained in the set
-                if (pto->setAddrKnown.insert(addr).second) {
+                if (!pto->addrKnown.contains(addr.GetKey())) {
+                    pto->addrKnown.insert(addr.GetKey());
                     vAddr.push_back(addr);
                     // receiver rejects addr messages larger than 1000
                     if (vAddr.size() >= 1000) {
