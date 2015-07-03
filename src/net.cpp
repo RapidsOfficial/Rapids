@@ -1314,9 +1314,7 @@ void DumpAddresses()
 void DumpData()
 {
     DumpAddresses();
-
-    if (CNode::BannedSetIsDirty())
-        DumpBanlist();
+    DumpBanlist();
 }
 
 void static ProcessOneShot()
@@ -2326,7 +2324,6 @@ bool CBanDB::Read(banmap_t& banSet)
 
 void DumpBanlist()
 {
-    int64_t nStart = GetTimeMillis();
     CNode::SweepBanned(); // clean unused entries (if bantime has expired)
 
     if (!CNode::BannedSetIsDirty())
