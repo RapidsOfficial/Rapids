@@ -921,14 +921,14 @@ static void AcceptConnection(const ListenSocket& hListenSocket) {
         return;
     }
 
-    if (nInbound >= nMaxConnections - MAX_OUTBOUND_CONNECTIONS) {
-        LogPrint(BCLog::NET, "connection from %s dropped (full)\n", addr.ToString());
+    if (CNode::IsBanned(addr) && !whitelisted) {
+        LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
         CloseSocket(hSocket);
         return;
     }
 
-    if (CNode::IsBanned(addr) && !whitelisted) {
-        LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
+    if (nInbound >= nMaxConnections - MAX_OUTBOUND_CONNECTIONS) {
+        LogPrint(BCLog::NET, "connection from %s dropped (full)\n", addr.ToString());
         CloseSocket(hSocket);
         return;
     }
