@@ -912,24 +912,36 @@ static void AcceptConnection(const ListenSocket& hListenSocket) {
         int nErr = WSAGetLastError();
         if (nErr != WSAEWOULDBLOCK)
             LogPrintf("socket error accept failed: %s\n", NetworkErrorString(nErr));
-    } else if (!IsSelectableSocket(hSocket)) {
+        return;
+    }
+
+    if (!IsSelectableSocket(hSocket)) {
         LogPrintf("connection from %s dropped: non-selectable socket\n", addr.ToString());
         CloseSocket(hSocket);
-    } else if (nInbound >= nMaxConnections - MAX_OUTBOUND_CONNECTIONS) {
+        return;
+    }
+
+    if (nInbound >= nMaxConnections - MAX_OUTBOUND_CONNECTIONS) {
         LogPrint(BCLog::NET, "connection from %s dropped (full)\n", addr.ToString());
         CloseSocket(hSocket);
-    } else if (CNode::IsBanned(addr) && !whitelisted) {
+        return;
+    }
+
+    if (CNode::IsBanned(addr) && !whitelisted) {
         LogPrintf("connection from %s dropped (banned)\n", addr.ToString());
         CloseSocket(hSocket);
-    } else {
-        CNode* pnode = new CNode(hSocket, addr, "", true);
-        pnode->AddRef();
-        pnode->fWhitelisted = whitelisted;
+        return;
+    }
 
-        {
-            LOCK(cs_vNodes);
-            vNodes.push_back(pnode);
-        }
+    CNode* pnode = new CNode(hSocket, addr, "", true);
+    pnode->AddRef();
+    pnode->fWhitelisted = whitelisted;
+
+    LogPrint(BCLog::NET, "connection from %s accepted\n", addr.ToString());
+
+    {
+        LOCK(cs_vNodes);
+        vNodes.push_back(pnode);
     }
 }
 
