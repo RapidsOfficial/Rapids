@@ -931,7 +931,7 @@ public:
     }
 };
 
-static bool AttemptToEvictConnection() {
+static bool AttemptToEvictConnection(bool fPreferNewConnection) {
     std::vector<CNode*> vEvictionCandidates;
     {
         LOCK(cs_vNodes);
@@ -979,8 +979,11 @@ static bool AttemptToEvictConnection() {
     // Reduce to the CNetAddr with the most connections
     vEvictionCandidates = mapAddrCounts[naMostConnections];
 
+    // Do not disconnect peers who have only 1 evictable connection
     if (vEvictionCandidates.size() <= 1)
-        return false;
+        // unless we prefer the new connection (for whitelisted peers)
+        if (!fPreferNewConnection)
+            return false;
 
     // Disconnect the most recent connection from the CNetAddr with the most connections
     std::sort(vEvictionCandidates.begin(), vEvictionCandidates.end(), ReverseCompareNodeTimeConnected);
@@ -1028,7 +1031,7 @@ static void AcceptConnection(const ListenSocket& hListenSocket) {
     }
 
     if (nInbound >= nMaxConnections - MAX_OUTBOUND_CONNECTIONS) {
-        if (!AttemptToEvictConnection()) {
+        if (!AttemptToEvictConnection(whitelisted)) {
             // No connection to evict, disconnect the new connection
             LogPrint(BCLog::NET, "failed to find an eviction candidate - connection dropped (full)\n");
             CloseSocket(hSocket);
