@@ -19,11 +19,13 @@
 #include <stdint.h>
 #include <vector>
 
-/** 
- * Extended statistics about a CAddress 
+/**
+ * Extended statistics about a CAddress
  */
 class CAddrInfo : public CAddress
 {
+
+
 public:
     //! last try whatsoever by us (memory only)
     int64_t nLastTry;
@@ -165,8 +167,8 @@ public:
 //! the maximum number of nodes to return in a getaddr call
 #define ADDRMAN_GETADDR_MAX 2500
 
-/** 
- * Stochastical (IP) address manager 
+/**
+ * Stochastical (IP) address manager
  */
 class CAddrMan
 {
@@ -230,9 +232,8 @@ protected:
     //! Mark an entry as attempted to connect.
     void Attempt_(const CService& addr, int64_t nTime);
 
-    //! Select an address to connect to.
-    //! nUnkBias determines how much to favor new addresses over tried ones (min=0, max=100)
-    CAddrInfo Select_();
+    //! Select an address to connect to, if newOnly is set to true, only the new table is selected from.
+    CAddrInfo Select_(bool newOnly);
 
 #ifdef DEBUG_ADDRMAN
     //! Perform consistency check. Returns an error code or zero.
@@ -534,13 +535,13 @@ public:
      * Choose an address to connect to.
      * nUnkBias determines how much "new" entries are favored over "tried" ones (0-100).
      */
-    CAddrInfo Select()
+    CAddrInfo Select(bool newOnly = false)
     {
         CAddrInfo addrRet;
         {
             LOCK(cs);
             Check();
-            addrRet = Select_();
+            addrRet = Select_(newOnly);
             Check();
         }
         return addrRet;
@@ -569,6 +570,12 @@ public:
             Check();
         }
     }
+
+    //! Ensure that bucket placement is always the same for testing purposes.
+    void MakeDeterministic(){
+        nKey.SetNull(); //Do not use outside of tests.
+    }
+
 };
 
 #endif // BITCOIN_ADDRMAN_H
