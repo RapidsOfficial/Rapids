@@ -995,7 +995,10 @@ bool AppInit2()
         UIWarning(_("Warning: Unsupported argument -benchmark ignored, use -debug=bench."));
 
     // Checkmempool and checkblockindex default to true in regtest mode
-    mempool.setSanityCheck(GetBoolArg("-checkmempool", Params().DefaultConsistencyChecks()));
+    int ratio = std::min<int>(std::max<int>(GetArg("-checkmempool", Params().DefaultConsistencyChecks() ? 1 : 0), 0), 1000000);
+    if (ratio != 0) {
+        mempool.setSanityCheck(1.0 / ratio);
+    }
     fCheckBlockIndex = GetBoolArg("-checkblockindex", Params().DefaultConsistencyChecks());
     Checkpoints::fEnabled = GetBoolArg("-checkpoints", true);
 
