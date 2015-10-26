@@ -5680,6 +5680,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             if (nDoS > 0)
                 Misbehaving(pfrom->GetId(), nDoS);
         }
+        FlushStateToDisk(state, FLUSH_STATE_PERIODIC);
     }
 
 
