@@ -12,7 +12,6 @@
 #include "fs.h"
 #include "hash.h"
 #include "limitedmap.h"
-#include "mruset.h"
 #include "netaddress.h"
 #include "protocol.h"
 #include "random.h"
