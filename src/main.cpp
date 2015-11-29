@@ -6397,7 +6397,7 @@ bool SendMessages(CNode* pto)
             vInv.reserve(pto->vInventoryToSend.size());
             vInvWait.reserve(pto->vInventoryToSend.size());
             for (const CInv& inv : pto->vInventoryToSend) {
-                if (pto->filterInventoryKnown.contains(inv.hash))
+                if (inv.type == MSG_TX && pto->filterInventoryKnown.contains(inv.hash))
                     continue;
 
                 // trickle out tx inv to protect privacy
@@ -6416,13 +6416,12 @@ bool SendMessages(CNode* pto)
                     }
                 }
 
-                if (!pto->filterInventoryKnown.contains(inv.hash)) {
-                    pto->filterInventoryKnown.insert(inv.hash);
-                    vInv.push_back(inv);
-                    if (vInv.size() >= 1000) {
-                        pto->PushMessage(NetMsgType::INV, vInv);
-                        vInv.clear();
-                    }
+                pto->filterInventoryKnown.insert(inv.hash);
+
+                vInv.push_back(inv);
+                if (vInv.size() >= 1000) {
+                    pto->PushMessage(NetMsgType::INV, vInv);
+                    vInv.clear();
                 }
             }
             pto->vInventoryToSend = vInvWait;
