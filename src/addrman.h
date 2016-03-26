@@ -1,5 +1,5 @@
 // Copyright (c) 2012 Pieter Wuille
-// Copyright (c) 2012-2014 The Bitcoin developers
+// Copyright (c) 2012-2015 The Bitcoin developers
 // Copyright (c) 2017-2020 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -263,6 +263,9 @@ protected:
 
     //! Mark an entry as currently-connected-to.
     void Connected_(const CService& addr, int64_t nTime);
+
+    //! Update an entry's service bits.
+    void SetServices_(const CService& addr, uint64_t nServices);
 
 public:
     /**
@@ -588,6 +591,14 @@ public:
             Connected_(addr, nTime);
             Check();
         }
+    }
+
+    void SetServices(const CService& addr, uint64_t nServices)
+    {
+        LOCK(cs);
+        Check();
+        SetServices_(addr, nServices);
+        Check();
     }
 };
 

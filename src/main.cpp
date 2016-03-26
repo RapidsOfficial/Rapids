@@ -5234,6 +5234,9 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         CAddress addrFrom;
         uint64_t nNonce = 1;
         vRecv >> pfrom->nVersion >> pfrom->nServices >> nTime >> addrMe;
+        if (!pfrom->fInbound) {
+            addrman.SetServices(pfrom->addr, pfrom->nServices);
+        }
         if (pfrom->DisconnectOldProtocol(ActiveProtocol(), strCommand))
             return false;
 
