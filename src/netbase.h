@@ -48,8 +48,8 @@ protected:
 public:
     CNetAddr();
     CNetAddr(const struct in_addr& ipv4Addr);
-    explicit CNetAddr(const char* pszIp, bool fAllowLookup = false);
-    explicit CNetAddr(const std::string& strIp, bool fAllowLookup = false);
+    explicit CNetAddr(const char* pszIp);
+    explicit CNetAddr(const std::string& strIp);
     void Init();
     void SetIP(const CNetAddr& ip);
 
@@ -119,7 +119,7 @@ protected:
 
 public:
     CSubNet();
-    explicit CSubNet(const std::string& strSubnet, bool fAllowLookup = false);
+    explicit CSubNet(const std::string& strSubnet);
 
     //constructor for single ip subnet (<ipv4>/32 or <ipv6>/128)
     explicit CSubNet(const CNetAddr &addr);
@@ -154,10 +154,10 @@ public:
     CService(const CNetAddr& ip, unsigned short port);
     CService(const struct in_addr& ipv4Addr, unsigned short port);
     CService(const struct sockaddr_in& addr);
-    explicit CService(const char* pszIpPort, int portDefault, bool fAllowLookup = false);
-    explicit CService(const char* pszIpPort, bool fAllowLookup = false);
-    explicit CService(const std::string& strIpPort, int portDefault, bool fAllowLookup = false);
-    explicit CService(const std::string& strIpPort, bool fAllowLookup = false);
+    explicit CService(const char* pszIpPort, int portDefault);
+    explicit CService(const char* pszIpPort);
+    explicit CService(const std::string& strIpPort, int portDefault);
+    explicit CService(const std::string& strIpPort);
     void Init();
     void SetPort(unsigned short portIn);
     unsigned short GetPort() const;
