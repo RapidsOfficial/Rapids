@@ -42,10 +42,12 @@ struct BasicTestingSetup {
  * Included are data directory, coins database, script check threads
  * and wallet (if enabled) setup.
  */
+class CConnman;
 struct TestingSetup: public BasicTestingSetup {
     CCoinsViewDB *pcoinsdbview;
     fs::path pathTemp;
     boost::thread_group threadGroup;
+    CConnman* connman;
     ECCVerifyHandle globalVerifyHandle;
 
     TestingSetup();

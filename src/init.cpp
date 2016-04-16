@@ -66,6 +66,7 @@
 #include <fstream>
 #include <stdint.h>
 #include <stdio.h>
+#include <memory>
 
 #ifndef WIN32
 #include <signal.h>
@@ -96,6 +97,8 @@ static const bool DEFAULT_DISABLE_SAFEMODE = false;
 static const bool DEFAULT_STOPAFTERBLOCKIMPORT = false;
 static const bool DEFAULT_MASTERNODE  = false;
 static const bool DEFAULT_MNCONFLOCK = true;
+
+std::unique_ptr<CConnman> g_connman;
 
 #if ENABLE_ZMQ
 static CZMQNotificationInterface* pzmqNotificationInterface = NULL;
@@ -220,7 +223,9 @@ void PrepareShutdown()
         bitdb.Flush(false);
     GenerateBitcoins(false, NULL, 0);
 #endif
-    StopNode();
+    StopNode(*g_connman);
+    g_connman.reset();
+
     DumpMasternodes();
     DumpBudgets();
     DumpMasternodePayments();
@@ -1286,6 +1291,10 @@ bool AppInit2()
 
     // ********************************************************* Step 6: network initialization
 
+    assert(!g_connman);
+    g_connman = std::unique_ptr<CConnman>(new CConnman());
+    CConnman& connman = *g_connman;
+
     RegisterNodeSignals(GetNodeSignals());
 
     // sanitize comments per BIP-0014, format user agent and check total size
@@ -1865,7 +1874,9 @@ bool AppInit2()
     if (GetBoolArg("-listenonion", DEFAULT_LISTEN_ONION))
         StartTorControl(threadGroup);
 
-    StartNode(threadGroup, scheduler);
+    std::string strNodeError;
+    if(!StartNode(connman, threadGroup, scheduler, strNodeError))
+        return UIError(strNodeError);
 
 #ifdef ENABLE_WALLET
     // Generate coins in the background
