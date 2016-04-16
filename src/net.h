@@ -89,6 +89,14 @@ unsigned int SendBufferSize();
 
 bool RecvLine(SOCKET hSocket, std::string& strLine);
 
+struct AddedNodeInfo
+{
+    std::string strAddedNode;
+    CService resolvedAddress;
+    bool fConnected;
+    bool fInbound;
+};
+
 CNode* FindNode(const CNetAddr& ip);
 CNode* FindNode(const CSubNet& subNet);
 CNode* FindNode(const std::string& addrName);
@@ -138,6 +146,11 @@ public:
     void SetBanned(const banmap_t &banmap);
 
     void AddOneShot(const std::string& strDest);
+
+    bool AddNode(const std::string& node);
+    bool RemoveAddedNode(const std::string& node);
+    std::vector<AddedNodeInfo> GetAddedNodeInfo();
+
 private:
     struct ListenSocket {
         SOCKET socket;
@@ -174,6 +187,8 @@ private:
     CAddrMan addrman;
     std::deque<std::string> vOneShots;
     RecursiveMutex cs_vOneShots;
+    std::vector<std::string> vAddedNodes;
+    RecursiveMutex cs_vAddedNodes;
 };
 extern std::unique_ptr<CConnman> g_connman;
 void MapPort(bool fUseUPnP);
@@ -255,9 +270,6 @@ extern std::map<CInv, CDataStream> mapRelay;
 extern std::deque<std::pair<int64_t, CInv> > vRelayExpiration;
 extern RecursiveMutex cs_mapRelay;
 extern limitedmap<CInv, int64_t> mapAlreadyAskedFor;
-
-extern std::vector<std::string> vAddedNodes;
-extern RecursiveMutex cs_vAddedNodes;
 
 extern NodeId nLastNodeId;
 extern RecursiveMutex cs_nLastNodeId;
@@ -770,15 +782,6 @@ void RelayTransaction(const CTransaction& tx);
 void RelayTransaction(const CTransaction& tx, const CDataStream& ss);
 void RelayTransactionLockReq(const CTransaction& tx, bool relayToAll = false);
 void RelayInv(CInv& inv);
-
-struct AddedNodeInfo {
-    std::string strAddedNode;
-    CService resolvedAddress;
-    bool fConnected;
-    bool fInbound;
-};
-
-std::vector<AddedNodeInfo> GetAddedNodeInfo();
 
 /** Return a timestamp in the future (in microseconds) for exponentially distributed events. */
 int64_t PoissonNextSend(int64_t nNow, int average_interval_seconds);

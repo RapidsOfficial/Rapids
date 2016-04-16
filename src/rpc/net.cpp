@@ -194,20 +194,13 @@ UniValue addnode(const JSONRPCRequest& request)
         return NullUniValue;
     }
 
-    LOCK(cs_vAddedNodes);
-    std::vector<std::string>::iterator it = vAddedNodes.begin();
-    for (; it != vAddedNodes.end(); it++)
-        if (strNode == *it)
-            break;
-
     if (strCommand == "add") {
-        if (it != vAddedNodes.end())
+        if(!g_connman->AddNode(strNode))
             throw JSONRPCError(RPC_CLIENT_NODE_ALREADY_ADDED, "Error: Node already added");
-        vAddedNodes.push_back(strNode);
-    } else if (strCommand == "remove") {
-        if (it == vAddedNodes.end())
+    }
+    else if(strCommand == "remove") {
+        if(!g_connman->RemoveAddedNode(strNode))
             throw JSONRPCError(RPC_CLIENT_NODE_NOT_ADDED, "Error: Node has not been added.");
-        vAddedNodes.erase(it);
     }
 
     return NullUniValue;
@@ -267,7 +260,10 @@ UniValue getaddednodeinfo(const JSONRPCRequest& request)
             "\nExamples:\n" +
             HelpExampleCli("getaddednodeinfo", "true") + HelpExampleCli("getaddednodeinfo", "true \"192.168.0.201\"") + HelpExampleRpc("getaddednodeinfo", "true, \"192.168.0.201\""));
 
-    std::vector<AddedNodeInfo> vInfo = GetAddedNodeInfo();
+    if(!g_connman)
+        throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
+
+    std::vector<AddedNodeInfo> vInfo = g_connman->GetAddedNodeInfo();
 
     if (request.params.size() == 2) {
         bool found = false;

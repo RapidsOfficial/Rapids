@@ -93,9 +93,6 @@ std::deque<std::pair<int64_t, CInv> > vRelayExpiration;
 RecursiveMutex cs_mapRelay;
 limitedmap<CInv, int64_t> mapAlreadyAskedFor(MAX_INV_SZ);
 
-std::vector<std::string> vAddedNodes;
-RecursiveMutex cs_vAddedNodes;
-
 NodeId nLastNodeId = 0;
 RecursiveMutex cs_nLastNodeId;
 
@@ -1656,7 +1653,7 @@ void CConnman::ThreadOpenConnections()
     }
 }
 
-std::vector<AddedNodeInfo> GetAddedNodeInfo()
+std::vector<AddedNodeInfo> CConnman::GetAddedNodeInfo()
 {
     std::vector<AddedNodeInfo> ret;
 
@@ -2165,6 +2162,30 @@ void CConnman::AddNewAddresses(const std::vector<CAddress>& vAddr, const CAddres
 std::vector<CAddress> CConnman::GetAddresses()
 {
     return addrman.GetAddr();
+}
+
+bool CConnman::AddNode(const std::string& strNode)
+{
+    LOCK(cs_vAddedNodes);
+    for(std::vector<std::string>::const_iterator it = vAddedNodes.begin(); it != vAddedNodes.end(); ++it) {
+        if (strNode == *it)
+            return false;
+    }
+
+    vAddedNodes.push_back(strNode);
+    return true;
+}
+
+bool CConnman::RemoveAddedNode(const std::string& strNode)
+{
+    LOCK(cs_vAddedNodes);
+    for(std::vector<std::string>::iterator it = vAddedNodes.begin(); it != vAddedNodes.end(); ++it) {
+        if (strNode == *it) {
+            vAddedNodes.erase(it);
+            return true;
+        }
+    }
+    return false;
 }
 
 void RelayTransaction(const CTransaction& tx)
