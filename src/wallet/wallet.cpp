@@ -1659,9 +1659,23 @@ void CWalletTx::RelayWalletTransaction(CConnman* connman, std::string strCommand
             if (strCommand == NetMsgType::IX) {
                 mapTxLockReq.insert(std::make_pair(hash, (CTransaction) * this));
                 CreateNewLock(((CTransaction) * this));
-                RelayTransactionLockReq((CTransaction) * this, true);
+                if (connman) {
+                    CInv inv(MSG_TXLOCK_REQUEST, GetHash());
+                    connman->ForEachNode([&inv](CNode* pnode)
+                    {
+                        pnode->PushInventory(inv);
+                        return true;
+                    });
+                }
             } else {
-                RelayTransaction((CTransaction) * this);
+                if (connman) {
+                    CInv inv(MSG_TX, GetHash());
+                    connman->ForEachNode([&inv](CNode* pnode)
+                    {
+                        pnode->PushInventory(inv);
+                        return true;
+                    });
+                }
             }
         }
     }

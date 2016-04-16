@@ -241,15 +241,13 @@ void CMasternodeSync::ProcessMessage(CNode* pfrom, std::string& strCommand, CDat
 
 void CMasternodeSync::ClearFulfilledRequest()
 {
-    TRY_LOCK(cs_vNodes, lockRecv);
-    if (!lockRecv) return;
-
-    for (CNode* pnode : vNodes) {
+    g_connman->ForEachNode([](CNode* pnode) {
         pnode->ClearFulfilledRequest("getspork");
         pnode->ClearFulfilledRequest("mnsync");
         pnode->ClearFulfilledRequest("mnwsync");
         pnode->ClearFulfilledRequest("busync");
-    }
+        return true;
+    });
 }
 
 void CMasternodeSync::Process()
@@ -284,10 +282,8 @@ void CMasternodeSync::Process()
     if (!isRegTestNet && !IsBlockchainSynced() &&
         RequestedMasternodeAssets > MASTERNODE_SYNC_SPORKS) return;
 
-    TRY_LOCK(cs_vNodes, lockRecv);
-    if (!lockRecv) return;
-
-    for (CNode* pnode : vNodes) {
+    std::vector<CNode*> vNodesCopy = g_connman->CopyNodeVector();
+    for (CNode* pnode : vNodesCopy) {
         if (isRegTestNet) {
             if (RequestedMasternodeAttempt <= 2) {
                 pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
@@ -419,4 +415,5 @@ void CMasternodeSync::Process()
             }
         }
     }
+    g_connman->ReleaseNodeVector(vNodesCopy);
 }
