@@ -223,7 +223,7 @@ BOOST_AUTO_TEST_CASE(addrman_new_collisions)
 
     BOOST_CHECK(addrman.size() == 0);
 
-    for (int i = 1; i < 18; i++) {
+    for (unsigned int i = 1; i < 18; i++) {
         CService addr = ResolveService("250.1.1." + boost::to_string(i));
         addrman.Add(CAddress(addr, NODE_NONE), source);
 
@@ -252,7 +252,7 @@ BOOST_AUTO_TEST_CASE(addrman_tried_collisions)
 
     BOOST_CHECK(addrman.size() == 0);
 
-    for (int i = 1; i < 80; i++) {
+    for (unsigned int i = 1; i < 80; i++) {
         CService addr = ResolveService("250.1.1." + boost::to_string(i));
         addrman.Add(CAddress(addr, NODE_NONE), source);
         addrman.Good(CAddress(addr, NODE_NONE));
