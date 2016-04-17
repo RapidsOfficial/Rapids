@@ -1333,7 +1333,7 @@ bool AppInit2()
             LookupSubNet(net.c_str(), subnet);
             if (!subnet.IsValid())
                 return UIError(strprintf(_("Invalid netmask specified in -whitelist: '%s'"), net));
-            CNode::AddWhitelistedRange(subnet);
+            connman.AddWhitelistedRange(subnet);
         }
     }
 
