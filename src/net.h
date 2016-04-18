@@ -118,6 +118,7 @@ public:
     void Stop();
     bool BindListenPort(const CService &bindAddr, std::string& strError, bool fWhitelisted = false);
     bool OpenNetworkConnection(const CAddress& addrConnect, bool fCountFailure, CSemaphoreGrant* grantOutbound = NULL, const char* strDest = NULL, bool fOneShot = false, bool fFeeler = false);
+    bool CheckIncomingNonce(uint64_t nonce);
 
     bool ForNode(NodeId id, std::function<bool(CNode* pnode)> func);
     bool ForEachNode(std::function<bool(CNode* pnode)> func);
@@ -305,7 +306,6 @@ bool validateMasternodeIP(const std::string& addrStr);          // valid, reacha
 extern bool fDiscover;
 extern bool fListen;
 extern ServiceFlags nLocalServices;
-extern uint64_t nLocalHostNonce;
 
 /** Maximum number of connections to simultaneously allow (aka connection slots) */
 extern int nMaxConnections;
@@ -499,10 +499,15 @@ private:
 
     static uint64_t CalculateKeyedNetGroup(const CAddress& ad);
 
+    uint64_t nLocalHostNonce;
 public:
     NodeId GetId() const
     {
         return id;
+    }
+
+    uint64_t GetLocalNonce() const {
+      return nLocalHostNonce;
     }
 
     int GetRefCount()
