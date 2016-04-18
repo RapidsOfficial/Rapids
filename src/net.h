@@ -776,8 +776,6 @@ public:
     bool Read(banmap_t& banSet);
 };
 
-void DumpBanlist();
-
 struct AddedNodeInfo {
     std::string strAddedNode;
     CService resolvedAddress;
