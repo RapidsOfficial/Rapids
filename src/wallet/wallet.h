@@ -26,7 +26,7 @@
 #include "util.h"
 #include "util/memory.h"
 #include "validationinterface.h"
-#include "wallet/wallet_ismine.h"
+#include "script/ismine.h"
 #include "wallet/scriptpubkeyman.h"
 #include "sapling/saplingscriptpubkeyman.h"
 #include "wallet/walletdb.h"
