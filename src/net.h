@@ -181,6 +181,10 @@ public:
     bool DisconnectSubnet(const CSubNet& subnet);
 
     void AddWhitelistedRange(const CSubNet& subnet);
+
+    uint64_t GetTotalBytesRecv();
+    uint64_t GetTotalBytesSent();
+
 private:
     struct ListenSocket {
         SOCKET socket;
@@ -219,6 +223,16 @@ private:
     void DumpAddresses();
     void DumpData();
     void DumpBanlist();
+
+    // Network stats
+    void RecordBytesRecv(uint64_t bytes);
+    void RecordBytesSent(uint64_t bytes);
+
+    // Network usage totals
+    RecursiveMutex cs_totalBytesRecv;
+    RecursiveMutex cs_totalBytesSent;
+    uint64_t nTotalBytesRecv;
+    uint64_t nTotalBytesSent;
 
     // Whitelisted ranges. Any node connecting from these is automatically
     // whitelisted (as well as those connecting to whitelisted binds).
@@ -402,6 +416,7 @@ public:
     CDataStream ssSend;
     size_t nSendSize;   // total size of all vSendMsg entries
     size_t nSendOffset; // offset inside the first vSendMsg already sent
+    uint64_t nOptimisticBytesWritten;
     uint64_t nSendBytes;
     std::deque<CSerializeData> vSendMsg;
     RecursiveMutex cs_vSend;
@@ -489,12 +504,6 @@ public:
     ~CNode();
 
 private:
-    // Network usage totals
-    static RecursiveMutex cs_totalBytesRecv;
-    static RecursiveMutex cs_totalBytesSent;
-    static uint64_t nTotalBytesRecv;
-    static uint64_t nTotalBytesSent;
-
     CNode(const CNode&);
     void operator=(const CNode&);
 
@@ -801,13 +810,6 @@ public:
     bool DisconnectOldProtocol(int nVersionRequired, std::string strLastCommand = "");
 
     void copyStats(CNodeStats& stats);
-
-    // Network stats
-    static void RecordBytesRecv(uint64_t bytes);
-    static void RecordBytesSent(uint64_t bytes);
-
-    static uint64_t GetTotalBytesRecv();
-    static uint64_t GetTotalBytesSent();
 };
 
 class CExplicitNetCleanup

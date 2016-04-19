@@ -335,10 +335,6 @@ bool IsReachable(const CNetAddr& addr)
     return IsReachable(net);
 }
 
-uint64_t CNode::nTotalBytesRecv = 0;
-uint64_t CNode::nTotalBytesSent = 0;
-RecursiveMutex CNode::cs_totalBytesRecv;
-RecursiveMutex CNode::cs_totalBytesSent;
 
 CNode* CConnman::FindNode(const CNetAddr& ip)
 {
@@ -824,7 +820,6 @@ size_t SocketSendData(CNode* pnode)
             pnode->nLastSend = GetTime();
             pnode->nSendBytes += nBytes;
             pnode->nSendOffset += nBytes;
-            pnode->RecordBytesSent(nBytes);
             nSentSize += nBytes;
             if (pnode->nSendOffset == data.size()) {
                 pnode->nSendOffset = 0;
@@ -1179,6 +1174,10 @@ void CConnman::ThreadSocketHandler()
                 // * We process a message in the buffer (message handler thread).
                 {
                     LOCK(pnode->cs_vSend);
+                    if (pnode->nOptimisticBytesWritten) {
+                        RecordBytesSent(pnode->nOptimisticBytesWritten);
+                        pnode->nOptimisticBytesWritten = 0;
+                    }
                     if (!pnode->vSendMsg.empty()) {
                         FD_SET(pnode->hSocket, &fdsetSend);
                         continue;
@@ -1251,7 +1250,7 @@ void CConnman::ThreadSocketHandler()
                                 messageHandlerCondition.notify_one();
                             pnode->nLastRecv = GetTime();
                             pnode->nRecvBytes += nBytes;
-                            pnode->RecordBytesRecv(nBytes);
+                            RecordBytesRecv(nBytes);
                         } else if (nBytes == 0) {
                             // socket closed gracefully
                             if (!pnode->fDisconnect)
@@ -1277,7 +1276,9 @@ void CConnman::ThreadSocketHandler()
                 continue;
             if (FD_ISSET(pnode->hSocket, &fdsetSend)) {
                 LOCK(pnode->cs_vSend);
-                SocketSendData(pnode);
+                size_t nBytes = SocketSendData(pnode);
+                if (nBytes)
+                    RecordBytesSent(nBytes);
             }
 
             //
@@ -1980,6 +1981,9 @@ NodeId CConnman::GetNewNodeId()
 
 bool CConnman::Start(boost::thread_group& threadGroup, CScheduler& scheduler, std::string& strNodeError)
 {
+    nTotalBytesRecv = 0;
+    nTotalBytesSent = 0;
+
     uiInterface.InitMessage(_("Loading addresses..."));
     // Load addresses from peers.dat
     int64_t nStart = GetTimeMillis();
@@ -2326,25 +2330,25 @@ void CConnman::RelayInv(CInv& inv)
     }
 }
 
-void CNode::RecordBytesRecv(uint64_t bytes)
+void CConnman::RecordBytesRecv(uint64_t bytes)
 {
     LOCK(cs_totalBytesRecv);
     nTotalBytesRecv += bytes;
 }
 
-void CNode::RecordBytesSent(uint64_t bytes)
+void CConnman::RecordBytesSent(uint64_t bytes)
 {
     LOCK(cs_totalBytesSent);
     nTotalBytesSent += bytes;
 }
 
-uint64_t CNode::GetTotalBytesRecv()
+uint64_t CConnman::GetTotalBytesRecv()
 {
     LOCK(cs_totalBytesRecv);
     return nTotalBytesRecv;
 }
 
-uint64_t CNode::GetTotalBytesSent()
+uint64_t CConnman::GetTotalBytesSent()
 {
     LOCK(cs_totalBytesSent);
     return nTotalBytesSent;
@@ -2433,6 +2437,7 @@ CNode::CNode(NodeId idIn, SOCKET hSocketIn, const CAddress& addrIn, const std::s
     fPingQueued = false;
     nMinPingUsecTime = std::numeric_limits<int64_t>::max();
     id = idIn;
+    nOptimisticBytesWritten = 0;
 
     GetRandBytes((unsigned char*)&nLocalHostNonce, sizeof(nLocalHostNonce));
 
@@ -2538,7 +2543,7 @@ void CNode::EndMessage() UNLOCK_FUNCTION(cs_vSend)
 
     // If write queue empty, attempt "optimistic write"
     if (it == vSendMsg.begin())
-        SocketSendData(this);
+        nOptimisticBytesWritten += SocketSendData(this);
 
     LEAVE_CRITICAL_SECTION(cs_vSend);
 }
