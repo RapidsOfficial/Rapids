@@ -18,6 +18,7 @@
 
 #include "boost/multi_index_container.hpp"
 #include "boost/multi_index/ordered_index.hpp"
+#include "boost/multi_index/hashed_index.hpp"
 
 class CAutoFile;
 
@@ -325,7 +326,7 @@ public:
         CTxMemPoolEntry,
         boost::multi_index::indexed_by<
             // sorted by txid
-            boost::multi_index::ordered_unique<mempoolentry_txid>,
+            boost::multi_index::hashed_unique<mempoolentry_txid, SaltedTxidHasher>,
             // sorted by fee rate
             boost::multi_index::ordered_non_unique<
                 boost::multi_index::identity<CTxMemPoolEntry>,
