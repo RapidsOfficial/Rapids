@@ -19,6 +19,14 @@
 
 #include "chainparamsseeds.h"
 
+std::string CDNSSeedData::getHost(uint64_t requiredServiceBits) const {
+    //use default host for non-filter-capable seeds or if we use the default service bits (NODE_NETWORK)
+    if (!supportsServiceBitsFiltering || requiredServiceBits == NODE_NETWORK)
+        return host;
+
+    return strprintf("x%x.%s", requiredServiceBits, host);
+}
+
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -222,8 +230,8 @@ public:
         nDefaultPort = 51472;
 
         // Note that of those with the service bits flag, most only support a subset of possible options
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx.seed.fuzzbawls.pw"));     // Primary DNS Seeder from Fuzzbawls
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx.seed2.fuzzbawls.pw"));    // Secondary DNS Seeder from Fuzzbawls
+        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx.seed.fuzzbawls.pw", true));     // Primary DNS Seeder from Fuzzbawls
+        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx.seed2.fuzzbawls.pw", true));    // Secondary DNS Seeder from Fuzzbawls
         vSeeds.push_back(CDNSSeedData("warrows.dev", "dnsseed.pivx.warrows.dev"));    // Primery DNS Seeder from warrows
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 30);
@@ -339,8 +347,9 @@ public:
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx-testnet.seed.fuzzbawls.pw"));
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx-testnet.seed2.fuzzbawls.pw"));
+        // nodes with support for servicebits filtering should be at the top
+        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx-testnet.seed.fuzzbawls.pw", true));
+        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx-testnet.seed2.fuzzbawls.pw", true));
         vSeeds.push_back(CDNSSeedData("warrows.dev", "testnet.dnsseed.pivx.warrows.dev"));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet pivx addresses start with 'x' or 'y'
