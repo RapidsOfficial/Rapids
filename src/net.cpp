@@ -811,9 +811,10 @@ int CNetMessage::readData(const char* pch, unsigned int nBytes)
 
 
 // requires LOCK(cs_vSend)
-void SocketSendData(CNode* pnode)
+size_t SocketSendData(CNode* pnode)
 {
     std::deque<CSerializeData>::iterator it = pnode->vSendMsg.begin();
+    size_t nSentSize = 0;
 
     while (it != pnode->vSendMsg.end()) {
         const CSerializeData& data = *it;
@@ -824,6 +825,7 @@ void SocketSendData(CNode* pnode)
             pnode->nSendBytes += nBytes;
             pnode->nSendOffset += nBytes;
             pnode->RecordBytesSent(nBytes);
+            nSentSize += nBytes;
             if (pnode->nSendOffset == data.size()) {
                 pnode->nSendOffset = 0;
                 pnode->nSendSize -= data.size();
@@ -851,6 +853,7 @@ void SocketSendData(CNode* pnode)
         assert(pnode->nSendSize == 0);
     }
     pnode->vSendMsg.erase(pnode->vSendMsg.begin(), it);
+    return nSentSize;
 }
 
 void CheckOffsetDisconnectedPeers(const CNetAddr& ip)
