@@ -1882,7 +1882,7 @@ bool AppInit2()
 
     std::string strNodeError;
     int nMaxOutbound = std::min(MAX_OUTBOUND_CONNECTIONS, nMaxConnections);
-    if(!StartNode(connman, threadGroup, scheduler, nLocalServices, nRelevantServices, nMaxConnections, nMaxOutbound, strNodeError))
+    if(!StartNode(connman, threadGroup, scheduler, nLocalServices, nRelevantServices, nMaxConnections, nMaxOutbound, chainActive.Height(), strNodeError))
         return UIError(strNodeError);
 
 #ifdef ENABLE_WALLET
