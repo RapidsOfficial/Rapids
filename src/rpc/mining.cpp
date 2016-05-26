@@ -179,7 +179,7 @@ UniValue generate(const JSONRPCRequest& request)
         }
 
         CValidationState state;
-        if (!ProcessNewBlock(state, nullptr, pblock))
+        if (!ProcessNewBlock(state, nullptr, pblock, nullptr, g_connman.get()))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "ProcessNewBlock, block not accepted");
 
         ++nHeight;
@@ -708,7 +708,7 @@ UniValue submitblock(const JSONRPCRequest& request)
     CValidationState state;
     submitblock_StateCatcher sc(block.GetHash());
     RegisterValidationInterface(&sc);
-    bool fAccepted = ProcessNewBlock(state, NULL, &block);
+    bool fAccepted = ProcessNewBlock(state, nullptr, &block, nullptr, g_connman.get());
     UnregisterValidationInterface(&sc);
     if (fBlockPresent) {
         if (fAccepted && !sc.found)
