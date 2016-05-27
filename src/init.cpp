@@ -223,7 +223,8 @@ void PrepareShutdown()
         bitdb.Flush(false);
     GenerateBitcoins(false, NULL, 0);
 #endif
-    StopNode(*g_connman);
+    MapPort(false);
+    g_connman->Stop();
     g_connman.reset();
 
     DumpMasternodes();
@@ -1880,9 +1881,14 @@ bool AppInit2()
     if (GetBoolArg("-listenonion", DEFAULT_LISTEN_ONION))
         StartTorControl(threadGroup);
 
+    Discover(threadGroup);
+
+    // Map ports with UPnP
+    MapPort(GetBoolArg("-upnp", DEFAULT_UPNP));
+
     std::string strNodeError;
     int nMaxOutbound = std::min(MAX_OUTBOUND_CONNECTIONS, nMaxConnections);
-    if(!StartNode(connman, threadGroup, scheduler, nLocalServices, nRelevantServices, nMaxConnections, nMaxOutbound, chainActive.Height(), &uiInterface, strNodeError))
+    if(!connman.Start(threadGroup, scheduler, nLocalServices, nRelevantServices, nMaxConnections, nMaxOutbound, chainActive.Height(), &uiInterface, strNodeError))
         return UIError(strNodeError);
 
 #ifdef ENABLE_WALLET
