@@ -877,8 +877,6 @@ void CheckOffsetDisconnectedPeers(const CNetAddr& ip)
     }
 }
 
-static std::list<CNode*> vNodesDisconnected;
-
 struct NodeEvictionCandidate
 {
     NodeId id;

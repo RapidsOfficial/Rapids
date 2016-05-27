@@ -275,6 +275,7 @@ private:
     std::vector<std::string> vAddedNodes;
     RecursiveMutex cs_vAddedNodes;
     std::vector<CNode*> vNodes;
+    std::list<CNode*> vNodesDisconnected;
     mutable RecursiveMutex cs_vNodes;
     std::atomic<NodeId> nLastNodeId;
     boost::condition_variable messageHandlerCondition;
