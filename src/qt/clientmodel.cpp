@@ -309,7 +309,8 @@ bool ClientModel::getTorInfo(std::string& ip_port) const
             LOCK(cs_mapLocalHost);
             for (const std::pair<const CNetAddr, LocalServiceInfo>& item : mapLocalHost) {
                 if (item.first.IsTor()) {
-                     CService addrOnion = CService(item.first.ToString(), item.second.nPort);
+                     CService addrOnion;
+                     LookupNumeric(item.first.ToString().c_str(), addrOnion, item.second.nPort);
                      ip_port = addrOnion.ToStringIPPort();
                      return true;
                 }
