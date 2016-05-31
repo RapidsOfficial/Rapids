@@ -7,18 +7,17 @@
 #include "db.h"
 #include "init.h"
 #include "main.h"
-#include "masternode-budget.h"
 #include "masternode-payments.h"
 #include "masternode-sync.h"
 #include "masternodeconfig.h"
 #include "masternodeman.h"
+#include "netbase.h"
 #include "rpc/server.h"
 #include "utilmoneystr.h"
 
 #include <univalue.h>
 
 #include <boost/tokenizer.hpp>
-#include <fstream>
 
 UniValue listmasternodes(const UniValue& params, bool fHelp)
 {

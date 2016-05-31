@@ -11,6 +11,7 @@
 #include "masternode-sync.h"
 #include "masternode.h"
 #include "messagesigner.h"
+#include "netbase.h"
 #include "spork.h"
 #include "swifttx.h"
 #include "util.h"

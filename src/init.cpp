@@ -32,6 +32,7 @@
 #include "masternodeman.h"
 #include "messagesigner.h"
 #include "miner.h"
+#include "netbase.h"
 #include "net.h"
 #include "rpc/server.h"
 #include "script/standard.h"

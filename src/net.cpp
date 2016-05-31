@@ -19,6 +19,7 @@
 #include "main.h"
 #include "miner.h"
 #include "primitives/transaction.h"
+#include "netbase.h"
 #include "scheduler.h"
 
 #ifdef WIN32

@@ -11,8 +11,8 @@
 #include "masternodeconfig.h"
 #include "masternodeman.h"
 #include "messagesigner.h"
+#include "netbase.h"
 #include "protocol.h"
-#include "spork.h"
 
 //
 // Bootup the Masternode, look for a 10000 PIVX input and register on the network

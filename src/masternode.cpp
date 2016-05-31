@@ -10,6 +10,7 @@
 #include "masternode-payments.h"
 #include "masternode-sync.h"
 #include "masternodeman.h"
+#include "netbase.h"
 #include "sync.h"
 #include "util.h"
 #include "wallet/wallet.h"

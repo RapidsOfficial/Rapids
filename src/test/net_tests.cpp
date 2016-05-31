@@ -6,6 +6,7 @@
 #include "chainparams.h"
 #include "hash.h"
 #include "net.h"
+#include "netbase.h"
 #include "serialize.h"
 #include "streams.h"
 

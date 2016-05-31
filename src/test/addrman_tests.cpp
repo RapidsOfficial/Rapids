@@ -9,6 +9,7 @@
 #include <crypto/common.h> // for ReadLE64
 
 #include "hash.h"
+#include "netbase.h"
 #include "random.h"
 
 class CAddrManTest : public CAddrMan
