@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2009-2015 The Bitcoin developers
 // Copyright (c) 2017-2020 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -198,6 +198,16 @@ bool LookupHost(const char* pszName, std::vector<CNetAddr>& vIP, unsigned int nM
     }
 
     return LookupIntern(strHost.c_str(), vIP, nMaxSolutions, fAllowLookup);
+}
+
+bool LookupHost(const char* pszName, CNetAddr& addr, bool fAllowLookup)
+{
+    std::vector<CNetAddr> vIP;
+    LookupHost(pszName, vIP, 1, fAllowLookup);
+    if(vIP.empty())
+        return false;
+    addr = vIP.front();
+    return true;
 }
 
 bool Lookup(const char* pszName, std::vector<CService>& vAddr, int portDefault, bool fAllowLookup, unsigned int nMaxSolutions)
@@ -710,22 +720,6 @@ CNetAddr::CNetAddr(const struct in_addr& ipv4Addr)
 CNetAddr::CNetAddr(const struct in6_addr& ipv6Addr)
 {
     SetRaw(NET_IPV6, (const uint8_t*)&ipv6Addr);
-}
-
-CNetAddr::CNetAddr(const char* pszIp)
-{
-    Init();
-    std::vector<CNetAddr> vIP;
-    if (LookupHost(pszIp, vIP, 1, false))
-        *this = vIP[0];
-}
-
-CNetAddr::CNetAddr(const std::string& strIp)
-{
-    Init();
-    std::vector<CNetAddr> vIP;
-    if (LookupHost(strIp.c_str(), vIP, 1, false))
-        *this = vIP[0];
 }
 
 unsigned int CNetAddr::GetByte(int n) const

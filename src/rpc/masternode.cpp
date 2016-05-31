@@ -80,7 +80,8 @@ UniValue listmasternodes(const UniValue& params, bool fHelp)
             std::string strHost;
             int port;
             SplitHostPort(mn->addr.ToString(), port, strHost);
-            CNetAddr node = CNetAddr(strHost);
+            CNetAddr node;
+            LookupHost(strHost.c_str(), node, false);
             std::string strNetwork = GetNetworkName(node.GetNetwork());
 
             obj.push_back(Pair("rank", (strStatus == "ENABLED" ? s.first : 0)));
