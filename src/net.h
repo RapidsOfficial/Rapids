@@ -71,6 +71,8 @@ static const unsigned int DEFAULT_MAX_PEER_CONNECTIONS = 125;
 /** Maximum number of peers added to setOffsetDisconnectedPeers before triggering a warning */
 #define MAX_TIMEOFFSET_DISCONNECTIONS 16
 
+static const ServiceFlags REQUIRED_SERVICES = NODE_NETWORK;
+
 unsigned int ReceiveFloodSize();
 unsigned int SendBufferSize();
 
