@@ -1,5 +1,5 @@
 // Copyright (c) 2010 Satoshi Nakamoto
-// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2009-2015 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2020 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
@@ -15,14 +15,6 @@
 #include <boost/assign/list_of.hpp>
 
 #include <assert.h>
-
-std::string CDNSSeedData::getHost(uint64_t requiredServiceBits) const {
-    //use default host for non-filter-capable seeds or if we use the default service bits (NODE_NETWORK)
-    if (!supportsServiceBitsFiltering || requiredServiceBits == NODE_NETWORK)
-        return host;
-
-    return strprintf("x%x.%s", requiredServiceBits, host);
-}
 
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {

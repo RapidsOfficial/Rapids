@@ -1,5 +1,5 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2009-2015 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2020 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
@@ -19,11 +19,9 @@
 
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 
-class CDNSSeedData {
-public:
+struct CDNSSeedData {
     std::string name, host;
     bool supportsServiceBitsFiltering;
-    std::string getHost(uint64_t requiredServiceBits) const;
     CDNSSeedData(const std::string& strName, const std::string& strHost, bool supportsServiceBitsFilteringIn = false) : name(strName), host(strHost), supportsServiceBitsFiltering(supportsServiceBitsFilteringIn) {}
 };
 
