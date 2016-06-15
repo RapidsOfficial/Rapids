@@ -649,7 +649,6 @@ UniValue setmocktime(const JSONRPCRequest& request)
     if(g_connman) {
         g_connman->ForEachNode([t](CNode* pnode) {
             pnode->nLastSend = pnode->nLastRecv = t;
-            return true;
         });
     }
 

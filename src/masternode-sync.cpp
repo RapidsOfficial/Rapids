@@ -246,7 +246,6 @@ void CMasternodeSync::ClearFulfilledRequest()
         pnode->ClearFulfilledRequest("mnsync");
         pnode->ClearFulfilledRequest("mnwsync");
         pnode->ClearFulfilledRequest("busync");
-        return true;
     });
 }
 

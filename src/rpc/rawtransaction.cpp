@@ -877,7 +877,6 @@ UniValue sendrawtransaction(const JSONRPCRequest& request)
     g_connman->ForEachNode([&inv](CNode* pnode)
     {
         pnode->PushInventory(inv);
-        return true;
     });
     return hashTx.GetHex();
 }
