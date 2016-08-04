@@ -5,6 +5,8 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "torcontrol.h"
+
+#include "chainparams.h"
 #include "utilstrencodings.h"
 #include "netbase.h"
 #include "net.h"
@@ -504,7 +506,7 @@ void TorController::add_onion_cb(TorControlConnection& _conn, const TorControlRe
             }
             return;
         }
-        LookupNumeric(std::string(service_id+".onion").c_str(), service, GetListenPort());
+        service = LookupNumeric(std::string(service_id+".onion").c_str(), Params().GetDefaultPort());
         LogPrintf("tor: Got service ID %s, advertising service %s\n", service_id, service.ToString());
         if (WriteBinaryFile(GetPrivateKeyFile(), private_key)) {
             LogPrint(BCLog::TOR, "tor: Cached service private key to %s\n", GetPrivateKeyFile().string());
@@ -528,8 +530,7 @@ void TorController::auth_cb(TorControlConnection& _conn, const TorControlReply& 
         // Now that we know Tor is running setup the proxy for onion addresses
         // if -onion isn't set to something else.
         if (GetArg("-onion", "") == "") {
-            CService resolved;
-            assert(LookupNumeric("127.0.0.1", resolved, 9050));
+            CService resolved(LookupNumeric("127.0.0.1", 9050));
             proxyType addrOnion = proxyType(resolved, true);
             SetProxy(NET_TOR, addrOnion);
             SetLimited(NET_TOR, false);
@@ -539,9 +540,8 @@ void TorController::auth_cb(TorControlConnection& _conn, const TorControlReply& 
         if (private_key.empty()) // No private key, generate one
             private_key = "NEW:RSA1024"; // Explicitly request RSA1024 - see issue #9214
         // Request hidden service, redirect port.
-        // Note that the 'virtual' port doesn't have to be the same as our internal port, but this is just a convenient
-        // choice.  TODO; refactor the shutdown sequence some day.
-        _conn.Command(strprintf("ADD_ONION %s Port=%i,127.0.0.1:%i", private_key, GetListenPort(), GetListenPort()),
+        // Note that the 'virtual' port is always the default port to avoid decloaking nodes using other ports.
+        _conn.Command(strprintf("ADD_ONION %s Port=%i,127.0.0.1:%i", private_key, Params().GetDefaultPort(), GetListenPort()),
             boost::bind(&TorController::add_onion_cb, this, _1, _2));
     } else {
         LogPrintf("tor: Authentication failed\n");

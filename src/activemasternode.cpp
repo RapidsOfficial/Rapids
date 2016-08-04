@@ -67,7 +67,7 @@ void CActiveMasternode::ManageStatus()
                 return;
             }
         } else {
-            LookupNumeric(strMasterNodeAddr.c_str(), service, GetListenPort());
+            service = LookupNumeric(strMasterNodeAddr.c_str(), GetListenPort());
         }
 
         // The service needs the correct default port to work properly
@@ -218,7 +218,6 @@ bool CActiveMasternode::CreateBroadcast(std::string strService, std::string strK
     CKey keyCollateralAddress;
     CPubKey pubKeyMasternode;
     CKey keyMasternode;
-    CService _service;
 
     //need correct blocks to send ping
     if (!fOffline && !masternodeSync.IsBlockchainSynced()) {
@@ -242,7 +241,7 @@ bool CActiveMasternode::CreateBroadcast(std::string strService, std::string strK
     int nPort;
     std::string strHost;
     SplitHostPort(strService, nPort, strHost);
-    LookupNumeric(strHost.c_str(), _service, nPort);
+    CService _service(LookupNumeric(strHost.c_str(), nPort));
 
     // The service needs the correct default port to work properly
     if(!CMasternodeBroadcast::CheckDefaultPort(_service, errorMessage, "CActiveMasternode::CreateBroadcast()"))

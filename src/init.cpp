@@ -1953,8 +1953,7 @@ bool AppInit2()
                 return UIError(strprintf(_("Invalid -masternodeaddr port %d, only %d is supported on %s-net."),
                     nPort, nDefaultPort, Params().NetworkIDString()));
             }
-            CService addrTest;
-            LookupNumeric(strHost.c_str(), addrTest, nPort);
+            CService addrTest(LookupNumeric(strHost.c_str(), nPort));
             if (!addrTest.IsValid()) {
                 return UIError(strprintf(_("Invalid -masternodeaddr address: %s"), strMasterNodeAddr));
             }

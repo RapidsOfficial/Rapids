@@ -1506,8 +1506,7 @@ std::vector<AddedNodeInfo> GetAddedNodeInfo()
     }
 
     for (std::string& strAddNode : lAddresses) {
-        CService service;
-        LookupNumeric(strAddNode.c_str(), service, Params().GetDefaultPort());
+        CService service(LookupNumeric(strAddNode.c_str(), Params().GetDefaultPort()));
         if (service.IsValid()) {
             // strAddNode is an IP:port
             auto it = mapConnected.find(service);
@@ -1544,8 +1543,7 @@ void ThreadOpenAddedConnections()
                 CSemaphoreGrant grant(*semOutbound);
                 // If strAddedNode is an IP/port, decode it immediately, so
                 // OpenNetworkConnection can detect existing connections to that IP/port.
-                CService service;
-                LookupNumeric(info.strAddedNode.c_str(), service, Params().GetDefaultPort());
+                CService service(LookupNumeric(info.strAddedNode.c_str(), Params().GetDefaultPort()));
                 OpenNetworkConnection(CAddress(service, NODE_NONE), false, &grant, info.strAddedNode.c_str(), false);
                 MilliSleep(500);
             }

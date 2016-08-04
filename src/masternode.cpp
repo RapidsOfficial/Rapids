@@ -345,7 +345,6 @@ bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMast
     CKey keyCollateralAddressNew;
     CPubKey pubKeyMasternodeNew;
     CKey keyMasternodeNew;
-    CService _service;
 
     //need correct blocks to send ping
     if (!fOffline && !masternodeSync.IsBlockchainSynced()) {
@@ -371,7 +370,7 @@ bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMast
     std::string strHost;
     SplitHostPort(strService, nPort, strHost);
     if (nPort == 0) nPort = nDefaultPort;
-    LookupNumeric(strHost.c_str(), _service, nPort);
+    CService _service(LookupNumeric(strHost.c_str(), nPort));
 
     // The service needs the correct default port to work properly
     if(!CheckDefaultPort(_service, strErrorRet, "CMasternodeBroadcast::Create"))
