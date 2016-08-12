@@ -143,9 +143,9 @@ BITCOIN_CORE_H = \
   messagesigner.h \
   miner.h \
   mruset.h \
-  netbase.h \
   net.h \
   netaddress.h \
+  netbase.h \
   noui.h \
   policy/fees.h \
   pow.h \
