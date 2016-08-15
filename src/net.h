@@ -477,9 +477,9 @@ public:
     }
 
 
-    void AddAddressKnown(const CAddress& addr)
+    void AddAddressKnown(const CAddress& _addr)
     {
-        addrKnown.insert(addr.GetKey());
+        addrKnown.insert(_addr.GetKey());
     }
 
     void PushAddress(const CAddress& _addr, FastRandomContext &insecure_rand)

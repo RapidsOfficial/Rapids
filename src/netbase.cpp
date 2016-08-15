@@ -651,8 +651,8 @@ bool ConnectSocketByName(CService& addr, SOCKET& hSocketRet, const char* pszDest
 
     SplitHostPort(std::string(pszDest), port, strDest);
 
-    proxyType nameProxy;
-    GetNameProxy(nameProxy);
+    proxyType proxy;
+    GetNameProxy(proxy);
 
     std::vector<CService> addrResolved;
     if (Lookup(strDest.c_str(), addrResolved, port, fNameLookup && !HaveNameProxy(), 256)) {
@@ -666,7 +666,7 @@ bool ConnectSocketByName(CService& addr, SOCKET& hSocketRet, const char* pszDest
 
     if (!HaveNameProxy())
         return false;
-    return ConnectThroughProxy(nameProxy, strDest, port, hSocketRet, nTimeout, outProxyConnectionFailed);
+    return ConnectThroughProxy(proxy, strDest, port, hSocketRet, nTimeout, outProxyConnectionFailed);
 }
 
 bool LookupSubNet(const char* pszName, CSubNet& ret)
