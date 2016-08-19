@@ -93,7 +93,7 @@ void copyEntryData(QAbstractItemView* view, int column, int role = Qt::EditRole)
        @param[in] role    Data role to extract from the model
        @see  TransactionView::copyLabel, TransactionView::copyAmount, TransactionView::copyAddress
      */
-QString getEntryData(QAbstractItemView *view, int column, int role);
+QVariant getEntryData(QAbstractItemView *view, int column, int role);
 
 void setClipboard(const QString& str);
 
