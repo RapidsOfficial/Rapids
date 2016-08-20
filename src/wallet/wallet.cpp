@@ -3834,8 +3834,6 @@ CWalletKey::CWalletKey(int64_t nExpires)
 
 void CMerkleTx::SetMerkleBranch(const CBlockIndex* pindex, int posInBlock)
 {
-    CBlock blockTmp;
-
     // Update the tx's hashBlock
     hashBlock = pindex->GetBlockHash();
 
