@@ -141,6 +141,8 @@ public:
      */
     CMerkleBlock(const CBlock& block, CBloomFilter& filter);
 
+    CMerkleBlock() {}
+
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
