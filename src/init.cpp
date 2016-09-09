@@ -1942,11 +1942,7 @@ bool AppInit2()
 
 #ifdef ENABLE_WALLET
     if (pwalletMain) {
-        // Add wallet transactions that aren't already in a block to mapTransactions
-        pwalletMain->ReacceptWalletTransactions(/*fFirstLoad*/true);
-
-        // Run a thread to flush wallet periodically
-        threadGroup.create_thread(boost::bind(&ThreadFlushWalletDB, boost::ref(pwalletMain->strWalletFile)));
+        pwalletMain->postInitProcess(threadGroup);
 
         // StakeMiner thread disabled by default on regtest
         if (GetBoolArg("-staking", !Params().IsRegTestNet() && DEFAULT_STAKING)) {

@@ -3998,6 +3998,19 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
     return walletInstance;
 }
 
+std::atomic<bool> CWallet::fFlushThreadRunning(false);
+
+void CWallet::postInitProcess(boost::thread_group& threadGroup)
+{
+    // Add wallet transactions that aren't already in a block to mapTransactions
+    ReacceptWalletTransactions(/*fFirstLoad*/true);
+
+    // Run a thread to flush wallet periodically
+    if (!CWallet::fFlushThreadRunning.exchange(true)) {
+        threadGroup.create_thread(ThreadFlushWalletDB);
+    }
+}
+
 
 CKeyPool::CKeyPool()
 {
