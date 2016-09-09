@@ -1300,7 +1300,7 @@ bool AppInit2()
     // ********************************************************* Step 6: network initialization
 
     assert(!g_connman);
-    g_connman = MakeUnique<CConnman>();
+    g_connman = MakeUnique<CConnman>(GetRand(std::numeric_limits<uint64_t>::max()), GetRand(std::numeric_limits<uint64_t>::max()));
     CConnman& connman = *g_connman;
 
     RegisterNodeSignals(GetNodeSignals());
