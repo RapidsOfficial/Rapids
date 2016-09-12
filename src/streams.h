@@ -81,6 +81,13 @@ public:
         Init(nTypeIn, nVersionIn);
     }
 
+    template <typename... Args>
+    CBaseDataStream(int nTypeIn, int nVersionIn, Args&&... args)
+    {
+        Init(nTypeIn, nVersionIn);
+        ::SerializeMany(*this, std::forward<Args>(args)...);
+    }
+
     void Init(int nTypeIn, int nVersionIn)
     {
         nReadPos = 0;
@@ -310,6 +317,10 @@ public:
 
     CDataStream(const std::vector<unsigned char>& vchIn, int nTypeIn, int nVersionIn) :
             CBaseDataStream(vchIn, nTypeIn, nVersionIn) { }
+
+    template <typename... Args>
+    CDataStream(int nTypeIn, int nVersionIn, Args&&... args) :
+            CBaseDataStream(nTypeIn, nVersionIn, args...) { }
 
 };
 

@@ -166,6 +166,7 @@ enum {
 };
 
 #define READWRITE(obj) (::SerReadWrite(s, (obj), ser_action))
+#define READWRITEMANY(...)      (::SerReadWriteMany(s, ser_action, __VA_ARGS__))
 
 /**
  * Implement three methods for serializable objects. These are actually wrappers over
@@ -919,6 +920,54 @@ public:
     int GetVersion() const { return nVersion; }
     int GetType() const { return nType; }
 };
+
+template<typename Stream>
+void SerializeMany(Stream& s)
+{
+}
+
+template<typename Stream, typename Arg>
+void SerializeMany(Stream& s, Arg&& arg)
+{
+    ::Serialize(s, std::forward<Arg>(arg));
+}
+
+template<typename Stream, typename Arg, typename... Args>
+void SerializeMany(Stream& s, Arg&& arg, Args&&... args)
+{
+    ::Serialize(s, std::forward<Arg>(arg));
+    ::SerializeMany(s, std::forward<Args>(args)...);
+}
+
+template<typename Stream>
+inline void UnserializeMany(Stream& s)
+{
+}
+
+template<typename Stream, typename Arg>
+inline void UnserializeMany(Stream& s, Arg& arg)
+{
+    ::Unserialize(s, arg);
+}
+
+template<typename Stream, typename Arg, typename... Args>
+inline void UnserializeMany(Stream& s, Arg& arg, Args&... args)
+{
+    ::Unserialize(s, arg);
+    ::UnserializeMany(s, args...);
+}
+
+template<typename Stream, typename... Args>
+inline void SerReadWriteMany(Stream& s, CSerActionSerialize ser_action, Args&&... args)
+{
+    ::SerializeMany(s, std::forward<Args>(args)...);
+}
+
+template<typename Stream, typename... Args>
+inline void SerReadWriteMany(Stream& s, CSerActionUnserialize ser_action, Args&... args)
+{
+    ::UnserializeMany(s, args...);
+}
 
 template<typename I>
 inline void WriteVarInt(CSizeComputer &s, I n)
