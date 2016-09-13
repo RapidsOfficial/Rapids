@@ -1182,10 +1182,6 @@ void CConnman::ThreadSocketHandler()
                 // * We process a message in the buffer (message handler thread).
                 {
                     LOCK(pnode->cs_vSend);
-                    if (pnode->nOptimisticBytesWritten) {
-                        RecordBytesSent(pnode->nOptimisticBytesWritten);
-                        pnode->nOptimisticBytesWritten = 0;
-                    }
                     if (!pnode->vSendMsg.empty()) {
                         FD_SET(pnode->hSocket, &fdsetSend);
                         continue;
@@ -2532,7 +2528,6 @@ CNode::CNode(NodeId idIn, ServiceFlags nLocalServicesIn, int nMyStartingHeightIn
     nPingUsecTime = 0;
     fPingQueued = false;
     nMinPingUsecTime = std::numeric_limits<int64_t>::max();
-    nOptimisticBytesWritten = 0;
     fPauseRecv = false;
     nProcessQueueSize = 0;
 
