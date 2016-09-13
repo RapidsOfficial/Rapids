@@ -232,7 +232,7 @@ void CMasternodeMan::AskForMN(CNode* pnode, CTxIn& vin)
     // ask for the mnb info once from the node that sent mnp
 
     LogPrint(BCLog::MASTERNODE, "CMasternodeMan::AskForMN - Asking node for missing entry, vin: %s\n", vin.prevout.hash.ToString());
-    pnode->PushMessage(NetMsgType::GETMNLIST, vin);
+    g_connman->PushMessage(pnode, NetMsgType::GETMNLIST, vin);
     int64_t askAgain = GetTime() + MASTERNODE_MIN_MNP_SECONDS;
     mWeAskedForMasternodeListEntry[vin.prevout] = askAgain;
 }
@@ -437,7 +437,7 @@ void CMasternodeMan::DsegUpdate(CNode* pnode)
         }
     }
 
-    pnode->PushMessage(NetMsgType::GETMNLIST, CTxIn());
+    g_connman->PushMessage(pnode, NetMsgType::GETMNLIST, CTxIn());
     int64_t askAgain = GetTime() + MASTERNODES_DSEG_SECONDS;
     mWeAskedForMasternodeList[pnode->addr] = askAgain;
 }
@@ -810,7 +810,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         }
 
         if (vin == CTxIn()) {
-            pfrom->PushMessage(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_LIST, nInvCount);
+            g_connman->PushMessage(pfrom, NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_LIST, nInvCount);
             LogPrint(BCLog::MASTERNODE, "dseg - Sent %d Masternode entries to peer %i\n", nInvCount, pfrom->GetId());
         }
     }

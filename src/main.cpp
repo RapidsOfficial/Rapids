@@ -4171,7 +4171,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, const CBlock* pblock
         //if we get this far, check if the prev block is our prev block, if not then request sync and return false
         BlockMap::iterator mi = mapBlockIndex.find(pblock->hashPrevBlock);
         if (mi == mapBlockIndex.end()) {
-            pfrom->PushMessage(NetMsgType::GETBLOCKS, chainActive.GetLocator(), UINT256_ZERO);
+            g_connman->PushMessage(pfrom, NetMsgType::GETBLOCKS, chainActive.GetLocator(), UINT256_ZERO);
             return false;
         }
     }
@@ -5058,7 +5058,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                     if (!ReadBlockFromDisk(block, (*mi).second))
                         assert(!"cannot load block from disk");
                     if (inv.type == MSG_BLOCK)
-                        pfrom->PushMessage(NetMsgType::BLOCK, block);
+                        connman.PushMessage(pfrom, NetMsgType::BLOCK, block);
                     else // MSG_FILTERED_BLOCK)
                     {
                         bool send = false;
@@ -5071,7 +5071,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                             }
                         }
                         if (send) {
-                            pfrom->PushMessage(NetMsgType::MERKLEBLOCK, merkleBlock);
+                            connman.PushMessage(pfrom, NetMsgType::MERKLEBLOCK, merkleBlock);
                             // CMerkleBlock just contains hashes, so also push any transactions in the block the client did not see
                             // This avoids hurting performance by pointlessly requiring a round-trip
                             // Note that there is currently no way for a node to request any single transactions we didnt send here -
@@ -5080,7 +5080,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                             // however we MUST always provide at least what the remote peer needs
                             typedef std::pair<unsigned int, uint256> PairType;
                             for (PairType& pair : merkleBlock.vMatchedTxn)
-                                pfrom->PushMessage(NetMsgType::TX, block.vtx[pair.first]);
+                                connman.PushMessage(pfrom, NetMsgType::TX, block.vtx[pair.first]);
                         }
                         // else
                         // no response
@@ -5093,7 +5093,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         // wait for other stuff first.
                         std::vector<CInv> vInv;
                         vInv.push_back(CInv(MSG_BLOCK, chainActive.Tip()->GetBlockHash()));
-                        pfrom->PushMessage(NetMsgType::INV, vInv);
+                        connman.PushMessage(pfrom, NetMsgType::INV, vInv);
                         pfrom->hashContinue.SetNull();
                     }
                 }
@@ -5104,7 +5104,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                     LOCK(cs_mapRelay);
                     std::map<CInv, CDataStream>::iterator mi = mapRelay.find(inv);
                     if (mi != mapRelay.end()) {
-                        pfrom->PushMessage(inv.GetCommand(), (*mi).second);
+                        connman.PushMessage(pfrom, inv.GetCommand(), (*mi).second);
                         pushed = true;
                     }
                 }
@@ -5115,7 +5115,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << tx;
-                        pfrom->PushMessage(NetMsgType::TX, ss);
+                        connman.PushMessage(pfrom, NetMsgType::TX, ss);
                         pushed = true;
                     }
                 }
@@ -5125,7 +5125,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mapTxLockVote[inv.hash];
-                        pfrom->PushMessage(NetMsgType::IXLOCKVOTE, ss);
+                        connman.PushMessage(pfrom, NetMsgType::IXLOCKVOTE, ss);
                         pushed = true;
                     }
                 }
@@ -5134,7 +5134,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mapTxLockReq[inv.hash];
-                        pfrom->PushMessage(NetMsgType::IX, ss);
+                        connman.PushMessage(pfrom, NetMsgType::IX, ss);
                         pushed = true;
                     }
                 }
@@ -5143,7 +5143,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mapSporks[inv.hash];
-                        pfrom->PushMessage(NetMsgType::SPORK, ss);
+                        connman.PushMessage(pfrom, NetMsgType::SPORK, ss);
                         pushed = true;
                     }
                 }
@@ -5152,7 +5152,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << masternodePayments.mapMasternodePayeeVotes[inv.hash];
-                        pfrom->PushMessage(NetMsgType::MNWINNER, ss);
+                        connman.PushMessage(pfrom, NetMsgType::MNWINNER, ss);
                         pushed = true;
                     }
                 }
@@ -5161,7 +5161,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenMasternodeBudgetVotes[inv.hash];
-                        pfrom->PushMessage(NetMsgType::BUDGETVOTE, ss);
+                        connman.PushMessage(pfrom, NetMsgType::BUDGETVOTE, ss);
                         pushed = true;
                     }
                 }
@@ -5171,7 +5171,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenMasternodeBudgetProposals[inv.hash];
-                        pfrom->PushMessage(NetMsgType::BUDGETPROPOSAL, ss);
+                        connman.PushMessage(pfrom, NetMsgType::BUDGETPROPOSAL, ss);
                         pushed = true;
                     }
                 }
@@ -5181,7 +5181,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenFinalizedBudgetVotes[inv.hash];
-                        pfrom->PushMessage(NetMsgType::FINALBUDGETVOTE, ss);
+                        connman.PushMessage(pfrom, NetMsgType::FINALBUDGETVOTE, ss);
                         pushed = true;
                     }
                 }
@@ -5191,7 +5191,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenFinalizedBudgets[inv.hash];
-                        pfrom->PushMessage(NetMsgType::FINALBUDGET, ss);
+                        connman.PushMessage(pfrom, NetMsgType::FINALBUDGET, ss);
                         pushed = true;
                     }
                 }
@@ -5201,7 +5201,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mnodeman.mapSeenMasternodeBroadcast[inv.hash];
-                        pfrom->PushMessage(NetMsgType::MNBROADCAST, ss);
+                        connman.PushMessage(pfrom, NetMsgType::MNBROADCAST, ss);
                         pushed = true;
                     }
                 }
@@ -5211,7 +5211,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mnodeman.mapSeenMasternodePing[inv.hash];
-                        pfrom->PushMessage("mnp", ss);
+                        connman.PushMessage(pfrom, NetMsgType::MNPING, ss);
                         pushed = true;
                     }
                 }
@@ -5239,7 +5239,7 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
         // do that because they want to know about (and store and rebroadcast and
         // risk analyze) the dependencies of transactions relevant to them, without
         // having to download the entire memory pool.
-        pfrom->PushMessage(NetMsgType::NOTFOUND, vNotFound);
+        connman.PushMessage(pfrom, NetMsgType::NOTFOUND, vNotFound);
     }
 }
 
@@ -5321,7 +5321,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
         if (fMissingSporks || !fRequestedSporksIDB){
             LogPrintf("asking peer for sporks\n");
-            pfrom->PushMessage(NetMsgType::GETSPORKS);
+            connman.PushMessageWithVersion(pfrom, INIT_PROTO_VERSION, NetMsgType::GETSPORKS);
             fRequestedSporksIDB = true;
         }
 
@@ -5362,7 +5362,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
             // Get recent addresses
             if (pfrom->fOneShot || pfrom->nVersion >= CADDR_TIME_VERSION || connman.GetAddressCount() < 1000) {
-                pfrom->PushMessage(NetMsgType::GETADDR);
+                connman.PushMessage(pfrom, NetMsgType::GETADDR);
                 pfrom->fGetAddr = true;
             }
             connman.MarkAddressGood(pfrom->addr);
@@ -5497,7 +5497,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         }
 
         if (!vToFetch.empty())
-            pfrom->PushMessage(NetMsgType::GETDATA, vToFetch);
+            connman.PushMessage(pfrom, NetMsgType::GETDATA, vToFetch);
     }
 
 
@@ -5598,7 +5598,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             if (--nLimit <= 0 || pindex->GetBlockHash() == hashStop)
                 break;
         }
-        pfrom->PushMessage(NetMsgType::HEADERS, vHeaders);
+        connman.PushMessage(pfrom, NetMsgType::HEADERS, vHeaders);
     }
 
 
@@ -5723,7 +5723,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 pfrom->id, pfrom->cleanSubVer,
                 FormatStateMessage(state));
             if (state.GetRejectCode() < REJECT_INTERNAL) // Never send AcceptToMemoryPool's internal codes over P2P
-                pfrom->PushMessage(NetMsgType::REJECT, strCommand, state.GetRejectCode(),
+                connman.PushMessage(pfrom, NetMsgType::REJECT, strCommand, state.GetRejectCode(),
                         state.GetRejectReason().substr(0, MAX_REJECT_MESSAGE_LENGTH), inv.hash);
             if (nDoS > 0)
                 Misbehaving(pfrom->GetId(), nDoS);
@@ -5785,7 +5785,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             // TODO: optimize: if pindexLast is an ancestor of chainActive.Tip or pindexBestHeader, continue
             // from there instead.
             LogPrintf("more getheaders (%d) to end to peer=%d (startheight:%d)\n", pindexLast->nHeight, pfrom->id, pfrom->nStartingHeight);
-            pfrom->PushMessage(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexLast), UINT256_ZERO);
+            connman.PushMessage(pfrom, NetMsgType::GETHEADERS, chainActive.GetLocator(pindexLast), UINT256_ZERO);
         }
 
         CheckBlockIndex();
@@ -5803,11 +5803,11 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         if (!mapBlockIndex.count(block.hashPrevBlock)) {
             if (find(pfrom->vBlockRequested.begin(), pfrom->vBlockRequested.end(), hashBlock) != pfrom->vBlockRequested.end()) {
                 //we already asked for this block, so lets work backwards and ask for the previous block
-                pfrom->PushMessage(NetMsgType::GETBLOCKS, chainActive.GetLocator(), block.hashPrevBlock);
+                connman.PushMessage(pfrom, NetMsgType::GETBLOCKS, chainActive.GetLocator(), block.hashPrevBlock);
                 pfrom->vBlockRequested.push_back(block.hashPrevBlock);
             } else {
                 //ask to sync to this block
-                pfrom->PushMessage(NetMsgType::GETBLOCKS, chainActive.GetLocator(), hashBlock);
+                connman.PushMessage(pfrom, NetMsgType::GETBLOCKS, chainActive.GetLocator(), hashBlock);
                 pfrom->vBlockRequested.push_back(hashBlock);
             }
         } else {
@@ -5819,7 +5819,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 int nDoS;
                 if(state.IsInvalid(nDoS)) {
                     assert (state.GetRejectCode() < REJECT_INTERNAL); // Blocks are never rejected with internal reject codes
-                    pfrom->PushMessage(NetMsgType::REJECT, strCommand, state.GetRejectCode(),
+                    connman.PushMessage(pfrom, NetMsgType::REJECT, strCommand, state.GetRejectCode(),
                         state.GetRejectReason().substr(0, MAX_REJECT_MESSAGE_LENGTH), inv.hash);
                     if(nDoS > 0) {
                         TRY_LOCK(cs_main, lockMain);
@@ -5863,12 +5863,12 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 (!pfrom->pfilter))
                 vInv.push_back(inv);
             if (vInv.size() == MAX_INV_SZ) {
-                pfrom->PushMessage(NetMsgType::INV, vInv);
+                connman.PushMessage(pfrom, NetMsgType::INV, vInv);
                 vInv.clear();
             }
         }
         if (vInv.size() > 0)
-            pfrom->PushMessage(NetMsgType::INV, vInv);
+            connman.PushMessage(pfrom, NetMsgType::INV, vInv);
     }
 
 
@@ -5887,7 +5887,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             // it, if the remote node sends a ping once per second and this node takes 5
             // seconds to respond to each, the 5th ping the remote sends would appear to
             // return very quickly.
-            pfrom->PushMessage(NetMsgType::PONG, nonce);
+            connman.PushMessage(pfrom, NetMsgType::PONG, nonce);
         }
     }
 
@@ -6201,11 +6201,11 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
             pto->nPingUsecStart = GetTimeMicros();
             if (pto->nVersion > BIP0031_VERSION) {
                 pto->nPingNonceSent = nonce;
-                pto->PushMessage(NetMsgType::PING, nonce);
+                connman.PushMessage(pto, NetMsgType::PING, nonce);
             } else {
                 // Peer is too old to support ping command with nonce, pong will never arrive.
                 pto->nPingNonceSent = 0;
-                pto->PushMessage(NetMsgType::PING);
+                connman.PushMessage(pto, NetMsgType::PING);
             }
         }
 
@@ -6233,14 +6233,14 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
                     vAddr.push_back(addr);
                     // receiver rejects addr messages larger than 1000
                     if (vAddr.size() >= 1000) {
-                        pto->PushMessage(NetMsgType::ADDR, vAddr);
+                        connman.PushMessage(pto, NetMsgType::ADDR, vAddr);
                         vAddr.clear();
                     }
                 }
             }
             pto->vAddrToSend.clear();
             if (!vAddr.empty())
-                pto->PushMessage(NetMsgType::ADDR, vAddr);
+                connman.PushMessage(pto, NetMsgType::ADDR, vAddr);
         }
 
         CNodeState& state = *State(pto->GetId());
@@ -6259,7 +6259,7 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
         }
 
         for (const CBlockReject& reject : state.rejects)
-            pto->PushMessage(NetMsgType::REJECT, (std::string)NetMsgType::BLOCK, reject.chRejectCode, reject.strRejectReason, reject.hashBlock);
+            connman.PushMessage(pto, NetMsgType::REJECT, (std::string)NetMsgType::BLOCK, reject.chRejectCode, reject.strRejectReason, reject.hashBlock);
         state.rejects.clear();
 
         // Start block sync
@@ -6274,7 +6274,7 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
                 //CBlockIndex *pindexStart = pindexBestHeader->pprev ? pindexBestHeader->pprev : pindexBestHeader;
                 //LogPrint(BCLog::NET, "initial getheaders (%d) to peer=%d (startheight:%d)\n", pindexStart->nHeight, pto->id, pto->nStartingHeight);
                 //pto->PushMessage(NetMsgType::GETHEADERS, chainActive.GetLocator(pindexStart), UINT256_ZERO);
-                pto->PushMessage(NetMsgType::GETBLOCKS, chainActive.GetLocator(chainActive.Tip()), UINT256_ZERO);
+                connman.PushMessage(pto, NetMsgType::GETBLOCKS, chainActive.GetLocator(chainActive.Tip()), UINT256_ZERO);
             }
         }
 
@@ -6323,14 +6323,14 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
 
                 vInv.push_back(inv);
                 if (vInv.size() >= 1000) {
-                    pto->PushMessage(NetMsgType::INV, vInv);
+                    connman.PushMessage(pto, NetMsgType::INV, vInv);
                     vInv.clear();
                 }
             }
             pto->vInventoryToSend = vInvWait;
         }
         if (!vInv.empty())
-            pto->PushMessage(NetMsgType::INV, vInv);
+            connman.PushMessage(pto, NetMsgType::INV, vInv);
 
         // Detect whether we're stalling
         nNow = GetTimeMicros();
@@ -6382,14 +6382,14 @@ bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsg
                 LogPrint(BCLog::NET, "Requesting %s peer=%d\n", inv.ToString(), pto->id);
                 vGetData.push_back(inv);
                 if (vGetData.size() >= 1000) {
-                    pto->PushMessage(NetMsgType::GETDATA, vGetData);
+                    connman.PushMessage(pto, NetMsgType::GETDATA, vGetData);
                     vGetData.clear();
                 }
             }
             pto->mapAskFor.erase(pto->mapAskFor.begin());
         }
         if (!vGetData.empty())
-            pto->PushMessage(NetMsgType::GETDATA, vGetData);
+            connman.PushMessage(pto, NetMsgType::GETDATA, vGetData);
     }
     return true;
 }

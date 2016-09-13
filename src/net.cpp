@@ -494,7 +494,7 @@ bool CNode::DisconnectOldProtocol(int nVersionRequired, std::string strLastComma
     fDisconnect = false;
     if (nVersion < nVersionRequired) {
         LogPrintf("%s : peer=%d using obsolete version %i; disconnecting\n", __func__, id, nVersion);
-        PushMessage(NetMsgType::REJECT, strLastCommand, REJECT_OBSOLETE, strprintf("Version must be %d or greater", ActiveProtocol()));
+        g_connman->PushMessageWithVersion(this, INIT_PROTO_VERSION, NetMsgType::REJECT, strLastCommand, REJECT_OBSOLETE, strprintf("Version must be %d or greater", ActiveProtocol()));
         fDisconnect = true;
     }
 
@@ -2392,7 +2392,7 @@ void CConnman::RelayTransactionLockReq(const CTransaction& tx, bool relayToAll)
         if (!relayToAll && !pnode->fRelayTxes)
             continue;
 
-        pnode->PushMessage(NetMsgType::IX, tx);
+        g_connman->PushMessage(pnode, NetMsgType::IX, tx);
     }
 }
 
@@ -2582,68 +2582,6 @@ void CNode::AskFor(const CInv& inv)
     else
         mapAlreadyAskedFor.insert(std::make_pair(inv, nRequestTime));
     mapAskFor.insert(std::make_pair(nRequestTime, inv));
-}
-
-void CNode::BeginMessage(const char* pszCommand) EXCLUSIVE_LOCK_FUNCTION(cs_vSend)
-{
-    ENTER_CRITICAL_SECTION(cs_vSend);
-    assert(ssSend.size() == 0);
-    ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0);
-    LogPrint(BCLog::NET, "sending: %s ", SanitizeString(pszCommand));
-}
-
-void CNode::AbortMessage() UNLOCK_FUNCTION(cs_vSend)
-{
-    ssSend.clear();
-
-    LEAVE_CRITICAL_SECTION(cs_vSend);
-
-    LogPrint(BCLog::NET, "(aborted)\n");
-}
-
-void CNode::EndMessage(const char* pszCommand) UNLOCK_FUNCTION(cs_vSend)
-{
-    // The -*messagestest options are intentionally not documented in the help message,
-    // since they are only used during development to debug the networking code and are
-    // not intended for end-users.
-    if (mapArgs.count("-dropmessagestest") && GetRand(GetArg("-dropmessagestest", 2)) == 0) {
-        LogPrint(BCLog::NET, "dropmessages DROPPING SEND MESSAGE\n");
-        AbortMessage();
-        return;
-    }
-    if (mapArgs.count("-fuzzmessagestest"))
-        Fuzz(GetArg("-fuzzmessagestest", 10));
-
-    if (ssSend.size() == 0) {
-        LEAVE_CRITICAL_SECTION(cs_vSend);
-        return;
-    }
-
-    // Set the size
-    unsigned int nSize = ssSend.size() - CMessageHeader::HEADER_SIZE;
-    WriteLE32((uint8_t*)&ssSend[CMessageHeader::MESSAGE_SIZE_OFFSET], nSize);
-
-    //log total amount of bytes per command
-    mapSendBytesPerMsgCmd[std::string(pszCommand)] += nSize + CMessageHeader::HEADER_SIZE;
-
-    // Set the checksum
-    uint256 hash = Hash(ssSend.begin() + CMessageHeader::HEADER_SIZE, ssSend.end());
-    unsigned int nChecksum = 0;
-    memcpy(&nChecksum, &hash, sizeof(nChecksum));
-    assert(ssSend.size() >= CMessageHeader::CHECKSUM_OFFSET + sizeof(nChecksum));
-    memcpy((char*)&ssSend[CMessageHeader::CHECKSUM_OFFSET], &nChecksum, sizeof(nChecksum));
-
-    LogPrint(BCLog::NET, "(%d bytes) peer=%d\n", nSize, id);
-
-    std::deque<CSerializeData>::iterator it = vSendMsg.insert(vSendMsg.end(), CSerializeData());
-    ssSend.GetAndClear(*it);
-    nSendSize += (*it).size();
-
-    // If write queue empty, attempt "optimistic write"
-    if (it == vSendMsg.begin())
-        nOptimisticBytesWritten += SocketSendData(this);
-
-    LEAVE_CRITICAL_SECTION(cs_vSend);
 }
 
 CDataStream CConnman::BeginMessage(CNode* pnode, int nVersion, int flags, const std::string& sCommand)

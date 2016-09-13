@@ -784,7 +784,7 @@ void CMasternodePayments::Sync(CNode* node, int nCountNeeded)
         }
         ++it;
     }
-    node->PushMessage(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_MNW, nInvCount);
+    g_connman->PushMessage(node, NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_MNW, nInvCount);
 }
 
 std::string CMasternodePayments::ToString() const

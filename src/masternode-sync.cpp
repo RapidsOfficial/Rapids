@@ -291,14 +291,14 @@ bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
 {
     if (isRegTestNet) {
         if (RequestedMasternodeAttempt <= 2) {
-            pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
+            g_connman->PushMessageWithVersion(pnode, INIT_PROTO_VERSION, NetMsgType::GETSPORKS); //get current network sporks
         } else if (RequestedMasternodeAttempt < 4) {
             mnodeman.DsegUpdate(pnode);
         } else if (RequestedMasternodeAttempt < 6) {
             int nMnCount = mnodeman.CountEnabled();
-            pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
+            g_connman->PushMessage(pnode, NetMsgType::GETMNWINNERS, nMnCount); //sync payees
             uint256 n;
-            pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
+            g_connman->PushMessage(pnode, NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
         } else {
             RequestedMasternodeAssets = MASTERNODE_SYNC_FINISHED;
         }
@@ -311,7 +311,7 @@ bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
         if (pnode->HasFulfilledRequest("getspork")) return true;
         pnode->FulfilledRequest("getspork");
 
-        pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
+        g_connman->PushMessageWithVersion(pnode, INIT_PROTO_VERSION, NetMsgType::GETSPORKS); //get current network sporks
         if (RequestedMasternodeAttempt >= 2) GetNextAsset();
         RequestedMasternodeAttempt++;
         return false;
@@ -377,7 +377,7 @@ bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
             if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return false;
 
             int nMnCount = mnodeman.CountEnabled();
-            pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
+            g_connman->PushMessage(pnode, NetMsgType::GETMNWINNERS, nMnCount); //sync payees
             RequestedMasternodeAttempt++;
             return false;
         }
@@ -410,7 +410,7 @@ bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
             if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return false;
 
             uint256 n;
-            pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
+            g_connman->PushMessage(pnode, NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
             RequestedMasternodeAttempt++;
             return false;
         }
