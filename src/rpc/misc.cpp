@@ -45,9 +45,9 @@ extern std::vector<CSporkDef> sporkDefs;
  *
  * Or alternatively, create a specific query method for the information.
  **/
-UniValue getinfo(const UniValue& params, bool fHelp)
+UniValue getinfo(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() != 0)
+    if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "getinfo\n"
             "\nReturns an object containing various state info.\n"
@@ -170,13 +170,13 @@ UniValue getinfo(const UniValue& params, bool fHelp)
     return obj;
 }
 
-UniValue mnsync(const UniValue& params, bool fHelp)
+UniValue mnsync(const JSONRPCRequest& request)
 {
     std::string strMode;
-    if (params.size() == 1)
-        strMode = params[0].get_str();
+    if (request.params.size() == 1)
+        strMode = request.params[0].get_str();
 
-    if (fHelp || params.size() != 1 || (strMode != "status" && strMode != "reset")) {
+    if (request.fHelp || request.params.size() != 1 || (strMode != "status" && strMode != "reset")) {
         throw std::runtime_error(
             "mnsync \"status|reset\"\n"
             "\nReturns the sync status or resets sync.\n"
@@ -289,29 +289,29 @@ public:
 /*
     Used for updating/reading spork settings on the network
 */
-UniValue spork(const UniValue& params, bool fHelp)
+UniValue spork(const JSONRPCRequest& request)
 {
-    if (params.size() == 1 && params[0].get_str() == "show") {
+    if (request.params.size() == 1 && request.params[0].get_str() == "show") {
         UniValue ret(UniValue::VOBJ);
         for (const auto& sporkDef : sporkDefs) {
             ret.push_back(Pair(sporkDef.name, sporkManager.GetSporkValue(sporkDef.sporkId)));
         }
         return ret;
-    } else if (params.size() == 1 && params[0].get_str() == "active") {
+    } else if (request.params.size() == 1 && request.params[0].get_str() == "active") {
         UniValue ret(UniValue::VOBJ);
         for (const auto& sporkDef : sporkDefs) {
             ret.push_back(Pair(sporkDef.name, sporkManager.IsSporkActive(sporkDef.sporkId)));
         }
         return ret;
-    } else if (params.size() == 2) {
+    } else if (request.params.size() == 2) {
         // advanced mode, update spork values
-        SporkId nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
+        SporkId nSporkID = sporkManager.GetSporkIDByName(request.params[0].get_str());
         if (nSporkID == SPORK_INVALID) {
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid spork name");
         }
 
         // SPORK VALUE
-        int64_t nValue = params[1].get_int64();
+        int64_t nValue = request.params[1].get_int64();
 
         //broadcast new spork
         if (sporkManager.UpdateSpork(nSporkID, nValue)) {
@@ -349,9 +349,9 @@ UniValue spork(const UniValue& params, bool fHelp)
         HelpExampleCli("spork", "show") + HelpExampleRpc("spork", "show"));
 }
 
-UniValue validateaddress(const UniValue& params, bool fHelp)
+UniValue validateaddress(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() != 1)
+    if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
             "validateaddress \"pivxaddress\"\n"
             "\nReturn information about the given pivx address.\n"
@@ -383,7 +383,7 @@ UniValue validateaddress(const UniValue& params, bool fHelp)
     LOCK(cs_main);
 #endif
 
-    std::string currentAddress = params[0].get_str();
+    std::string currentAddress = request.params[0].get_str();
     bool isStakingAddress = false;
     CTxDestination dest = DecodeDestination(currentAddress, isStakingAddress);
     bool isValid = IsValidDestination(dest);
@@ -470,9 +470,9 @@ CScript _createmultisig_redeemScript(const UniValue& params)
     return result;
 }
 
-UniValue createmultisig(const UniValue& params, bool fHelp)
+UniValue createmultisig(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() < 2 || params.size() > 2)
+    if (request.fHelp || request.params.size() < 2 || request.params.size() > 2)
         throw std::runtime_error(
             "createmultisig nrequired [\"key\",...]\n"
             "\nCreates a multi-signature address with n signature of m keys required.\n"
@@ -499,7 +499,7 @@ UniValue createmultisig(const UniValue& params, bool fHelp)
             HelpExampleRpc("createmultisig", "2, \"[\\\"16sSauSf5pF2UkUwvKGq4qjNRzBZYqgEL5\\\",\\\"171sgjn4YtPu27adkKGrdDwzRTxnRkBfKV\\\"]\""));
 
     // Construct using pay-to-script-hash:
-    CScript inner = _createmultisig_redeemScript(params);
+    CScript inner = _createmultisig_redeemScript(request.params);
     CScriptID innerID(inner);
 
     UniValue result(UniValue::VOBJ);
@@ -509,9 +509,9 @@ UniValue createmultisig(const UniValue& params, bool fHelp)
     return result;
 }
 
-UniValue verifymessage(const UniValue& params, bool fHelp)
+UniValue verifymessage(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() != 3)
+    if (request.fHelp || request.params.size() != 3)
         throw std::runtime_error(
             "verifymessage \"pivxaddress\" \"signature\" \"message\"\n"
             "\nVerify a signed message\n"
@@ -536,9 +536,9 @@ UniValue verifymessage(const UniValue& params, bool fHelp)
 
     LOCK(cs_main);
 
-    std::string strAddress = params[0].get_str();
-    std::string strSign = params[1].get_str();
-    std::string strMessage = params[2].get_str();
+    std::string strAddress = request.params[0].get_str();
+    std::string strSign = request.params[1].get_str();
+    std::string strMessage = request.params[2].get_str();
 
     CTxDestination destination = DecodeDestination(strAddress);
     if (!IsValidDestination(destination))
@@ -566,9 +566,9 @@ UniValue verifymessage(const UniValue& params, bool fHelp)
     return (pubkey.GetID() == *keyID);
 }
 
-UniValue setmocktime(const UniValue& params, bool fHelp)
+UniValue setmocktime(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() != 1)
+    if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
             "setmocktime timestamp\n"
             "\nSet the local time to given timestamp (-regtest only)\n"
@@ -582,8 +582,8 @@ UniValue setmocktime(const UniValue& params, bool fHelp)
 
     LOCK(cs_main);
 
-    RPCTypeCheck(params, boost::assign::list_of(UniValue::VNUM));
-    SetMockTime(params[0].get_int64());
+    RPCTypeCheck(request.params, boost::assign::list_of(UniValue::VNUM));
+    SetMockTime(request.params[0].get_int64());
 
     return NullUniValue;
 }
@@ -605,9 +605,9 @@ void EnableOrDisableLogCategories(UniValue cats, bool enable) {
     }
 }
 
-UniValue logging(const UniValue& params, bool fHelp)
+UniValue logging(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() > 2) {
+    if (request.fHelp || request.params.size() > 2) {
         throw std::runtime_error(
             "logging [include,...] <exclude>\n"
             "Gets and sets the logging configuration.\n"
@@ -626,12 +626,12 @@ UniValue logging(const UniValue& params, bool fHelp)
     }
 
     uint32_t original_log_categories = g_logger->GetCategoryMask();
-    if (params.size() > 0 && params[0].isArray()) {
-        EnableOrDisableLogCategories(params[0], true);
+    if (request.params.size() > 0 && request.params[0].isArray()) {
+        EnableOrDisableLogCategories(request.params[0], true);
     }
 
-    if (params.size() > 1 && params[1].isArray()) {
-        EnableOrDisableLogCategories(params[1], false);
+    if (request.params.size() > 1 && request.params[1].isArray()) {
+        EnableOrDisableLogCategories(request.params[1], false);
     }
     uint32_t updated_log_categories = g_logger->GetCategoryMask();
     uint32_t changed_log_categories = original_log_categories ^ updated_log_categories;
@@ -660,9 +660,9 @@ UniValue logging(const UniValue& params, bool fHelp)
 }
 
 #ifdef ENABLE_WALLET
-UniValue getstakingstatus(const UniValue& params, bool fHelp)
+UniValue getstakingstatus(const JSONRPCRequest& request)
 {
-    if (fHelp || params.size() != 0)
+    if (request.fHelp || request.params.size() != 0)
         throw std::runtime_error(
             "getstakingstatus\n"
             "\nReturns an object containing various staking information.\n"
