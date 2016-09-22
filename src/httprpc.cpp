@@ -77,7 +77,7 @@ static void JSONErrorReply(HTTPRequest* req, const UniValue& objError, const Uni
     req->WriteReply(nStatus, strReply);
 }
 
-static bool RPCAuthorized(const std::string& strAuth)
+static bool RPCAuthorized(const std::string& strAuth, std::string& strAuthUsernameOut)
 {
     if (strRPCUserColonPass.empty()) // Belt-and-suspenders measure if InitRPCAuthentication was not called
         return false;
@@ -86,6 +86,10 @@ static bool RPCAuthorized(const std::string& strAuth)
     std::string strUserPass64 = strAuth.substr(6);
     boost::trim(strUserPass64);
     std::string strUserPass = DecodeBase64(strUserPass64);
+
+    if (strUserPass.find(":") != std::string::npos)
+        strAuthUsernameOut = strUserPass.substr(0, strUserPass.find(":"));
+
     return TimingResistantEqual(strUserPass, strRPCUserColonPass);
 }
 
@@ -103,7 +107,8 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
         return false;
     }
 
-    if (!RPCAuthorized(authHeader.second)) {
+    JSONRPCRequest jreq;
+    if (!RPCAuthorized(authHeader.second, jreq.authUser)) {
         LogPrintf("ThreadRPCServer incorrect password attempt from %s\n", req->GetPeer().ToString());
 
         /* Deter brute-forcing
@@ -115,7 +120,6 @@ static bool HTTPReq_JSONRPC(HTTPRequest* req, const std::string &)
         return false;
     }
 
-    JSONRPCRequest jreq;
     try {
         // Parse request
         UniValue valRequest;
