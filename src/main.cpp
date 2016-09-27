@@ -6159,15 +6159,17 @@ bool ProcessMessages(CNode* pfrom, CConnman& connman, std::atomic<bool>& interru
     // Message size
     unsigned int nMessageSize = hdr.nMessageSize;
 
-    // Checksum
-    CDataStream& vRecv = msg.vRecv;
-    uint256 hash = Hash(vRecv.begin(), vRecv.begin() + nMessageSize);
-    unsigned int nChecksum = ReadLE32((unsigned char*)&hash);
-    if (nChecksum != hdr.nChecksum) {
-        LogPrintf("ProcessMessages(%s, %u bytes): CHECKSUM ERROR nChecksum=%08x hdr.nChecksum=%08x\n",
-            SanitizeString(strCommand), nMessageSize, nChecksum, hdr.nChecksum);
-        return fMoreWork;
-    }
+        // Checksum
+        CDataStream& vRecv = msg.vRecv;
+        uint256 hash = Hash(vRecv.begin(), vRecv.begin() + nMessageSize);
+        if (memcmp(hash.begin(), hdr.pchChecksum, CMessageHeader::CHECKSUM_SIZE) != 0)
+        {
+            LogPrintf("%s(%s, %u bytes): CHECKSUM ERROR expected %s was %s\n", __func__,
+               SanitizeString(strCommand), nMessageSize,
+               HexStr(hash.begin(), hash.begin()+CMessageHeader::CHECKSUM_SIZE),
+               HexStr(hdr.pchChecksum, hdr.pchChecksum+CMessageHeader::CHECKSUM_SIZE));
+            return fMoreWork;
+        }
 
     // Process message
     bool fRet = false;
