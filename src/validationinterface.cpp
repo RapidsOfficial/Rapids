@@ -54,7 +54,3 @@ void UnregisterAllValidationInterfaces() {
     g_signals.UpdatedBlockTip.disconnect_all_slots();
 // XX42    g_signals.EraseTransaction.disconnect_all_slots();
 }
-
-void SyncWithWallets(const CTransaction &tx, const CBlockIndex *pindex, int posInBlock) {
-    g_signals.SyncTransaction(tx, pindex, posInBlock);
-}
