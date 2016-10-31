@@ -590,7 +590,7 @@ public:
     bool fFeeler;      // If true this node is being used as a short lived feeler.
     bool fOneShot;
     bool fClient;
-    bool fInbound;
+    const bool fInbound;
     bool fNetworkNode;
     bool fSuccessfullyConnected;
     std::atomic_bool fDisconnect;
@@ -603,7 +603,7 @@ public:
     RecursiveMutex cs_filter;
     CBloomFilter* pfilter;
     int nRefCount;
-    NodeId id;
+    const NodeId id;
 
     const uint64_t nKeyedNetGroup;
     std::atomic_bool fPauseRecv;
@@ -657,8 +657,9 @@ private:
 
 
     uint64_t nLocalHostNonce;
-    ServiceFlags nLocalServices;
-    int nMyStartingHeight;
+    // Services offered to this peer
+    const ServiceFlags nLocalServices;
+    const int nMyStartingHeight;
 public:
     NodeId GetId() const
     {

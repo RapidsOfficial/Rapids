@@ -2467,9 +2467,13 @@ unsigned int CConnman::GetSendBufferSize() const{ return nSendBufferMaxSize; }
 CNode::CNode(NodeId idIn, ServiceFlags nLocalServicesIn, int nMyStartingHeightIn, SOCKET hSocketIn, const CAddress& addrIn, uint64_t nKeyedNetGroupIn, const std::string& addrNameIn, bool fInboundIn) :
     ssSend(SER_NETWORK, INIT_PROTO_VERSION),
     addr(addrIn),
+    fInbound(fInboundIn),
+    id(idIn),
     nKeyedNetGroup(nKeyedNetGroupIn),
     addrKnown(5000, 0.001),
-    filterInventoryKnown(50000, 0.000001)
+    filterInventoryKnown(50000, 0.000001),
+    nLocalServices(nLocalServicesIn),
+    nMyStartingHeight(nMyStartingHeightIn)
 {
     nServices = NODE_NONE;
     nServicesExpected = NODE_NONE;
@@ -2488,7 +2492,6 @@ CNode::CNode(NodeId idIn, ServiceFlags nLocalServicesIn, int nMyStartingHeightIn
     fOneShot = false;
     fClient = false; // set by version message
     fFeeler = false;
-    fInbound = fInboundIn;
     fNetworkNode = false;
     fSuccessfullyConnected = false;
     fDisconnect = false;
@@ -2509,9 +2512,7 @@ CNode::CNode(NodeId idIn, ServiceFlags nLocalServicesIn, int nMyStartingHeightIn
     nPingUsecTime = 0;
     fPingQueued = false;
     nMinPingUsecTime = std::numeric_limits<int64_t>::max();
-    id = idIn;
     nOptimisticBytesWritten = 0;
-    nLocalServices = nLocalServicesIn;
     fPauseRecv = false;
     nProcessQueueSize = 0;
 
@@ -2520,7 +2521,6 @@ CNode::CNode(NodeId idIn, ServiceFlags nLocalServicesIn, int nMyStartingHeightIn
     mapRecvBytesPerMsgCmd[NET_MESSAGE_COMMAND_OTHER] = 0;
 
     GetRandBytes((unsigned char*)&nLocalHostNonce, sizeof(nLocalHostNonce));
-    nMyStartingHeight = nMyStartingHeightIn;
 
     if (fLogIPs)
         LogPrint(BCLog::NET, "Added connection to %s peer=%d\n", addrName, id);
