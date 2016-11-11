@@ -6,6 +6,7 @@
 #include "main.h"
 #include "messagesigner.h"
 #include "net.h"
+#include "netmessagemaker.h"
 #include "spork.h"
 #include "sporkdb.h"
 #include <iostream>
@@ -153,7 +154,7 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
         std::map<SporkId, CSporkMessage>::iterator it = mapSporksActive.begin();
 
         while (it != mapSporksActive.end()) {
-            g_connman->PushMessage(pfrom, NetMsgType::SPORK, it->second);
+            g_connman->PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::SPORK, it->second));
             it++;
         }
     }
