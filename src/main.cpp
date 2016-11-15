@@ -5277,12 +5277,6 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
     }
 
     if (strCommand == NetMsgType::VERSION) {
-        // Feeler connections exist only to verify if address is online.
-        if (pfrom->fFeeler) {
-            assert(pfrom->fInbound == false);
-            pfrom->fDisconnect = true;
-        }
-
         // Each connection can only send one version message
         if (pfrom->nVersion != 0) {
             connman.PushMessageWithVersion(pfrom, INIT_PROTO_VERSION, NetMsgType::REJECT, strCommand, REJECT_DUPLICATE, std::string("Duplicate version message"));
@@ -5412,6 +5406,12 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                     nTimeOffset, pfrom->addr.ToString().c_str());
             pfrom->fDisconnect = true;
             CheckOffsetDisconnectedPeers(pfrom->addr);
+        }
+
+        // Feeler connections exist only to verify if address is online.
+        if (pfrom->fFeeler) {
+            assert(pfrom->fInbound == false);
+            pfrom->fDisconnect = true;
         }
     }
 
