@@ -460,11 +460,6 @@ void CNode::CloseSocketDisconnect()
         LogPrint(BCLog::NET, "disconnecting peer=%d\n", id);
         CloseSocket(hSocket);
     }
-
-    // in case this fails, we'll empty the recv buffer when the CNode is deleted
-    TRY_LOCK(cs_vRecvMsg, lockRecv);
-    if (lockRecv)
-        vRecvMsg.clear();
 }
 
 bool CNode::DisconnectOldProtocol(int nVersionRequired, std::string strLastCommand)
