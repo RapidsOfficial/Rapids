@@ -208,8 +208,6 @@ public:
         post();
     };
 
-    void RelayTransaction(const CTransaction& tx);
-    void RelayTransaction(const CTransaction& tx, const CDataStream& ss);
     void RelayTransactionLockReq(const CTransaction& tx, bool relayToAll = false);
     void RelayInv(CInv& inv);
 
@@ -254,10 +252,8 @@ public:
 
     size_t GetNodeCount(NumConnections num);
     void GetNodeStats(std::vector<CNodeStats>& vstats);
-    bool DisconnectAddress(const CNetAddr& addr);
     bool DisconnectNode(const std::string& node);
     bool DisconnectNode(NodeId id);
-    bool DisconnectSubnet(const CSubNet& subnet);
 
     unsigned int GetSendBufferSize() const;
 

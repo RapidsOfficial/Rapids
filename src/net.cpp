@@ -2291,24 +2291,6 @@ void CConnman::GetNodeStats(std::vector<CNodeStats>& vstats)
     }
 }
 
-bool CConnman::DisconnectAddress(const CNetAddr& netAddr)
-{
-    if (CNode* pnode = FindNode(netAddr)) {
-        pnode->fDisconnect = true;
-        return true;
-    }
-    return false;
-}
-
-bool CConnman::DisconnectSubnet(const CSubNet& subNet)
-{
-    if (CNode* pnode = FindNode(subNet)) {
-        pnode->fDisconnect = true;
-        return true;
-    }
-    return false;
-}
-
 bool CConnman::DisconnectNode(const std::string& strNode)
 {
     if (CNode* pnode = FindNode(strNode)) {
@@ -2328,42 +2310,6 @@ bool CConnman::DisconnectNode(NodeId id)
         }
     }
     return false;
-}
-
-void CConnman::RelayTransaction(const CTransaction& tx)
-{
-    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-    ss.reserve(10000);
-    ss << tx;
-    RelayTransaction(tx, ss);
-}
-
-void CConnman::RelayTransaction(const CTransaction& tx, const CDataStream& ss)
-{
-    CInv inv(MSG_TX, tx.GetHash());
-    {
-        LOCK(cs_mapRelay);
-        // Expire old relay messages
-        while (!vRelayExpiration.empty() && vRelayExpiration.front().first < GetTime()) {
-            mapRelay.erase(vRelayExpiration.front().second);
-            vRelayExpiration.pop_front();
-        }
-
-        // Save original serialized message so newer versions are preserved
-        mapRelay.insert(std::make_pair(inv, ss));
-        vRelayExpiration.push_back(std::make_pair(GetTime() + 15 * 60, inv));
-    }
-    LOCK(cs_vNodes);
-    for (CNode* pnode : vNodes) {
-        if (!pnode->fRelayTxes)
-            continue;
-        LOCK(pnode->cs_filter);
-        if (pnode->pfilter) {
-            if (pnode->pfilter->IsRelevantAndUpdate(tx))
-                pnode->PushInventory(inv);
-        } else
-            pnode->PushInventory(inv);
-    }
 }
 
 void CConnman::RelayTransactionLockReq(const CTransaction& tx, bool relayToAll)
