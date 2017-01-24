@@ -2293,6 +2293,7 @@ void CConnman::GetNodeStats(std::vector<CNodeStats>& vstats)
 
 bool CConnman::DisconnectNode(const std::string& strNode)
 {
+    LOCK(cs_vNodes);
     if (CNode* pnode = FindNode(strNode)) {
         pnode->fDisconnect = true;
         return true;
