@@ -544,6 +544,7 @@ public:
     uint64_t nSendBytes;
     std::deque<std::vector<unsigned char>> vSendMsg;
     RecursiveMutex cs_vSend;
+    RecursiveMutex cs_hSocket;
 
     RecursiveMutex cs_vProcessMsg;
     std::list<CNetMessage> vProcessMsg;

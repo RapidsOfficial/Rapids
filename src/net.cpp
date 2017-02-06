@@ -455,6 +455,7 @@ void CConnman::DumpBanlist()
 void CNode::CloseSocketDisconnect()
 {
     fDisconnect = true;
+    LOCK(cs_hSocket);
     if (hSocket != INVALID_SOCKET) {
         LogPrint(BCLog::NET, "disconnecting peer=%d\n", id);
         CloseSocket(hSocket);
@@ -820,7 +821,13 @@ size_t CConnman::SocketSendData(CNode* pnode)
     while (it != pnode->vSendMsg.end()) {
         const auto& data = *it;
         assert(data.size() > pnode->nSendOffset);
-        int nBytes = send(pnode->hSocket, reinterpret_cast<const char*>(data.data()) + pnode->nSendOffset, data.size() - pnode->nSendOffset, MSG_NOSIGNAL | MSG_DONTWAIT);
+        int nBytes = 0;
+        {
+            LOCK(pnode->cs_hSocket);
+            if (pnode->hSocket == INVALID_SOCKET)
+                break;
+            nBytes = send(pnode->hSocket, reinterpret_cast<const char*>(data.data()) + pnode->nSendOffset, data.size() - pnode->nSendOffset, MSG_NOSIGNAL | MSG_DONTWAIT);
+        }
         if (nBytes > 0) {
             pnode->nLastSend = GetTime();
             pnode->nSendBytes += nBytes;
@@ -1154,9 +1161,6 @@ void CConnman::ThreadSocketHandler()
         {
             LOCK(cs_vNodes);
             for (CNode* pnode : vNodes) {
-                if (pnode->hSocket == INVALID_SOCKET)
-                    continue;
-
                 // Implement the following logic:
                 // * If there is data to send, select() for sending data. As this only
                 //   happens when optimistic write failed, we choose to first drain the
@@ -1174,6 +1178,10 @@ void CConnman::ThreadSocketHandler()
                     LOCK(pnode->cs_vSend);
                     select_send = !pnode->vSendMsg.empty();
                 }
+
+                LOCK(pnode->cs_hSocket);
+                if (pnode->hSocket == INVALID_SOCKET)
+                    continue;
 
                 FD_SET(pnode->hSocket, &fdsetError);
                 hSocketMax = std::max(hSocketMax, pnode->hSocket);
@@ -1236,17 +1244,26 @@ void CConnman::ThreadSocketHandler()
             bool recvSet = false;
             bool sendSet = false;
             bool errorSet = false;
-            if (pnode->hSocket == INVALID_SOCKET)
-                continue;
-            recvSet = FD_ISSET(pnode->hSocket, &fdsetRecv);
-            sendSet = FD_ISSET(pnode->hSocket, &fdsetSend);
-            errorSet = FD_ISSET(pnode->hSocket, &fdsetError);
+            {
+                LOCK(pnode->cs_hSocket);
+                if (pnode->hSocket == INVALID_SOCKET)
+                    continue;
+                recvSet = FD_ISSET(pnode->hSocket, &fdsetRecv);
+                sendSet = FD_ISSET(pnode->hSocket, &fdsetSend);
+                errorSet = FD_ISSET(pnode->hSocket, &fdsetError);
+            }
             if (recvSet || errorSet) {
                 {
                     {
                         // typical socket buffer is 8K-64K
                         char pchBuf[0x10000];
-                        int nBytes = recv(pnode->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
+                        int nBytes = 0;
+                        {
+                            LOCK(pnode->cs_hSocket);
+                            if (pnode->hSocket == INVALID_SOCKET)
+                                continue;
+                            nBytes = recv(pnode->hSocket, pchBuf, sizeof(pchBuf), MSG_DONTWAIT);
+                        }
                         if (nBytes > 0) {
                             bool notify = false;
                             if (!pnode->ReceiveMsgBytes(pchBuf, nBytes, notify))
@@ -2180,8 +2197,7 @@ void CConnman::Stop()
 
     // Close sockets
     for(CNode* pnode : vNodes)
-        if (pnode->hSocket != INVALID_SOCKET)
-            CloseSocket(pnode->hSocket);
+        pnode->CloseSocketDisconnect();
     for(ListenSocket& hListenSocket : vhListenSocket)
         if (hListenSocket.socket != INVALID_SOCKET)
             if (!CloseSocket(hListenSocket.socket))
@@ -2512,9 +2528,6 @@ void CConnman::PushMessage(CNode* pnode, CSerializedNetMsg&& msg)
     size_t nBytesSent = 0;
     {
         LOCK(pnode->cs_vSend);
-        if(pnode->hSocket == INVALID_SOCKET) {
-            return;
-        }
         bool optimisticSend(pnode->vSendMsg.empty());
 
         //log total amount of bytes per command
