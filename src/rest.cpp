@@ -507,10 +507,10 @@ static bool rest_getutxos(HTTPRequest* req, const std::string& strURIPart)
         for (size_t i = 0; i < vOutPoints.size(); i++) {
             CCoins coins;
             uint256 hash = vOutPoints[i].hash;
+            bool hit = false;
             if (view.GetCoins(hash, coins)) {
-                mempool.pruneSpent(hash, coins);
-                if (coins.IsAvailable(vOutPoints[i].n)) {
-                    hits[i] = true;
+                if (coins.IsAvailable(vOutPoints[i].n) && !mempool.isSpent(vOutPoints[i])) {
+                    hit = true;
                     // Safe to index into vout here because IsAvailable checked if it's off the end of the array, or if
                     // n is valid but points to an already spent output (IsNull).
                     CCoin coin;
@@ -521,7 +521,8 @@ static bool rest_getutxos(HTTPRequest* req, const std::string& strURIPart)
                 }
             }
 
-            bitmapStringRepresentation.append(hits[i] ? "1" : "0"); // form a binary string representation (human-readable for json output)
+            hits.push_back(hit);
+            bitmapStringRepresentation.append(hit ? "1" : "0"); // form a binary string representation (human-readable for json output)
         }
     }
     boost::to_block_range(hits, std::back_inserter(bitmap));
