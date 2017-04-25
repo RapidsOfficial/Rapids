@@ -515,6 +515,7 @@ public:
     uint64_t Finalize() const;
 };
 
+
 /** Optimized SipHash-2-4 implementation for uint256.
  *
  *  It is identical to:
@@ -526,6 +527,7 @@ public:
  *      .Finalize()
  */
 uint64_t SipHashUint256(uint64_t k0, uint64_t k1, const uint256& val);
+uint64_t SipHashUint256Extra(uint64_t k0, uint64_t k1, const uint256& val, uint32_t extra);
 
 #endif // PIVX_HASH_H
 
