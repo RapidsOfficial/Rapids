@@ -61,12 +61,7 @@ size_t CCoinsViewBacked::EstimateSize() const { return base->EstimateSize(); }
 
 SaltedTxidHasher::SaltedTxidHasher() : k0(GetRand(std::numeric_limits<uint64_t>::max())), k1(GetRand(std::numeric_limits<uint64_t>::max())) {}
 
-CCoinsViewCache::CCoinsViewCache(CCoinsView* baseIn) : CCoinsViewBacked(baseIn), hasModifier(false), cachedCoinsUsage(0) {}
-
-CCoinsViewCache::~CCoinsViewCache()
-{
-    assert(!hasModifier);
-}
+CCoinsViewCache::CCoinsViewCache(CCoinsView *baseIn) : CCoinsViewBacked(baseIn), cachedCoinsUsage(0) { }
 
 size_t CCoinsViewCache::DynamicMemoryUsage() const {
     return memusage::DynamicUsage(cacheCoins) + cachedCoinsUsage;
@@ -101,61 +96,7 @@ bool CCoinsViewCache::GetCoins(const uint256& txid, CCoins& coins) const
     return false;
 }
 
-CCoinsModifier CCoinsViewCache::ModifyCoins(const uint256& txid)
-{
-    assert(!hasModifier);
-    std::pair<CCoinsMap::iterator, bool> ret = cacheCoins.insert(std::make_pair(txid, CCoinsCacheEntry()));
-    size_t cachedCoinUsage = 0;
-    if (ret.second) {
-        if (!base->GetCoins(txid, ret.first->second.coins)) {
-            // The parent view does not have this entry; mark it as fresh.
-            ret.first->second.coins.Clear();
-            ret.first->second.flags = CCoinsCacheEntry::FRESH;
-        } else if (ret.first->second.coins.IsPruned()) {
-            // The parent view only has a pruned entry for this; mark it as fresh.
-            ret.first->second.flags = CCoinsCacheEntry::FRESH;
-        }
-    } else {
-        cachedCoinUsage = memusage::DynamicUsage(ret.first->second.coins);
-    }
-    // Assume that whenever ModifyCoins is called, the entry will be modified.
-    ret.first->second.flags |= CCoinsCacheEntry::DIRTY;
-    return CCoinsModifier(*this, ret.first, cachedCoinUsage);
-}
-
-/* ModifyNewCoins allows for faster coin modification when creating the new
- * outputs from a transaction.  It assumes that BIP 30 (no duplicate txids)
- * applies and has already been tested for (or the test is not required due to
- * BIP 34, height in coinbase).  If we can assume BIP 30 then we know that any
- * non-coinbase transaction we are adding to the UTXO must not already exist in
- * the utxo unless it is fully spent.  Thus we can check only if it exists DIRTY
- * at the current level of the cache, in which case it is not safe to mark it
- * FRESH (b/c then its spentness still needs to flushed).  If it's not dirty and
- * doesn't exist or is pruned in the current cache, we know it either doesn't
- * exist or is pruned in parent caches, which is the definition of FRESH.
- */
-CCoinsModifier CCoinsViewCache::ModifyNewCoins(const uint256 &txid)
-{
-    assert(!hasModifier);
-    std::pair<CCoinsMap::iterator, bool> ret = cacheCoins.insert(std::make_pair(txid, CCoinsCacheEntry()));
-    // New coins must not already exist.
-    if (!ret.first->second.coins.IsPruned())
-        throw std::logic_error("ModifyNewCoins should not find pre-existing coins on a non-coinbase unless they are pruned!");
-
-    if (!(ret.first->second.flags & CCoinsCacheEntry::DIRTY)) {
-        // If the coin is known to be pruned (have no unspent outputs) in
-        // the current view and the cache entry is not dirty, we know the
-        // coin also must be pruned in the parent view as well, so it is safe
-        // to mark this fresh.
-        ret.first->second.flags |= CCoinsCacheEntry::FRESH;
-    }
-    ret.first->second.coins.Clear();
-    ret.first->second.flags |= CCoinsCacheEntry::DIRTY;
-    return CCoinsModifier(*this, ret.first, 0);
-}
-
-void CCoinsViewCache::AddCoin(const COutPoint& outpoint, Coin&& coin, bool possible_overwrite)
-{
+void CCoinsViewCache::AddCoin(const COutPoint& outpoint, Coin&& coin, bool possible_overwrite) {
     assert(!coin.IsPruned());
     if (coin.out.scriptPubKey.IsUnspendable()) return;
     CCoinsMap::iterator it;
@@ -272,9 +213,7 @@ void CCoinsViewCache::SetBestBlock(const uint256& hashBlockIn)
     hashBlock = hashBlockIn;
 }
 
-bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn)
-{
-    assert(!hasModifier);
+bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn) {
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
         if (it->second.flags & CCoinsCacheEntry::DIRTY) { // Ignore non-dirty entries (optimization).
             CCoinsMap::iterator itUs = cacheCoins.find(it->first);
@@ -410,26 +349,6 @@ double CCoinsViewCache::GetPriority(const CTransaction& tx, int nHeight, CAmount
         }
     }
     return tx.ComputePriority(dResult);
-}
-
-CCoinsModifier::CCoinsModifier(CCoinsViewCache& cache_, CCoinsMap::iterator it_, size_t usage) : cache(cache_), it(it_), cachedCoinUsage(usage)
-{
-    assert(!cache.hasModifier);
-    cache.hasModifier = true;
-}
-
-CCoinsModifier::~CCoinsModifier()
-{
-    assert(cache.hasModifier);
-    cache.hasModifier = false;
-    it->second.coins.Cleanup();
-    cache.cachedCoinsUsage -= cachedCoinUsage; // Subtract the old usage
-    if ((it->second.flags & CCoinsCacheEntry::FRESH) && it->second.coins.IsPruned()) {
-        cache.cacheCoins.erase(it);
-    } else {
-        // If the coin still exists after the modification, add the new usage
-        cache.cachedCoinsUsage += memusage::DynamicUsage(it->second.coins);
-    }
 }
 
 CCoinsViewCursor::~CCoinsViewCursor()
