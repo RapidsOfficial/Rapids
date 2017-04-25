@@ -1563,8 +1563,15 @@ bool AppInit2()
                 pcoinscatcher = new CCoinsViewErrorCatcher(pcoinsdbview);
                 pcoinsTip = new CCoinsViewCache(pcoinscatcher);
 
-                if (fReindex)
+                if (fReindex) {
                     pblocktree->WriteReindexing(true);
+                } else {
+                    // If necessary, upgrade from older database format.
+                    if (!pcoinsdbview->Upgrade()) {
+                        strLoadError = _("Error upgrading chainstate database");
+                        break;
+                    }
+                }
 
                 // End loop if shutdown was requested
                 if (ShutdownRequested()) break;

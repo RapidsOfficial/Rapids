@@ -28,11 +28,11 @@ static const char DB_MONEY_SUPPLY = 'M';
 
 namespace {
 
-struct CoinsEntry
+struct CoinEntry
 {
     COutPoint* outpoint;
     char key;
-    CoinsEntry(const COutPoint* ptr) : outpoint(const_cast<COutPoint*>(ptr)), key(DB_COIN)  {}
+    explicit CoinEntry(const COutPoint* ptr) : outpoint(const_cast<COutPoint*>(ptr)), key(DB_COIN)  {}
 
     template<typename Stream>
     void Serialize(Stream &s) const {
@@ -58,12 +58,12 @@ CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe) : db(Get
 
 bool CCoinsViewDB::GetCoins(const COutPoint& outpoint, Coin& coin) const
 {
-    return db.Read(CoinsEntry(&outpoint), coin);
+    return db.Read(CoinEntry(&outpoint), coin);
 }
 
 bool CCoinsViewDB::HaveCoins(const COutPoint& outpoint) const
 {
-    return db.Exists(CoinsEntry(&outpoint));
+    return db.Exists(CoinEntry(&outpoint));
 }
 
 uint256 CCoinsViewDB::GetBestBlock() const
@@ -81,7 +81,7 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
     size_t changed = 0;
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
         if (it->second.flags & CCoinsCacheEntry::DIRTY) {
-            CoinsEntry entry(&it->first);
+            CoinEntry entry(&it->first);
             if (it->second.coins.IsPruned())
                 batch.Erase(entry);
             else
@@ -148,7 +148,7 @@ CCoinsViewCursor *CCoinsViewDB::Cursor() const
     // Cache key of first record
     // Cache key of first record
     if (i->pcursor->Valid()) {
-        CoinsEntry entry(&i->keyTmp.second);
+        CoinEntry entry(&i->keyTmp.second);
         i->pcursor->GetKey(entry);
         i->keyTmp.first = entry.key;
     } else {
@@ -185,7 +185,7 @@ bool CCoinsViewDBCursor::Valid() const
 void CCoinsViewDBCursor::Next()
 {
     pcursor->Next();
-    CoinsEntry entry(&keyTmp.second);
+    CoinEntry entry(&keyTmp.second);
     if (!pcursor->Valid() || !pcursor->GetKey(entry)) {
         keyTmp.first = 0; // Invalidate cached key after last record so that Valid() and GetKey() return false
     } else {
@@ -476,5 +476,51 @@ bool CZerocoinDB::WipeAccChecksums()
     }
 
     LogPrintf("%s: AccChecksum database removed.\n", __func__);
+    return true;
+}
+
+/** Upgrade the database from older formats.
+ *
+ * Currently implemented:
+ * - from the per-tx utxo model (4.2.0) to per-txout (4.2.99)
+ */
+bool CCoinsViewDB::Upgrade() {
+    std::unique_ptr<CDBIterator> pcursor(db.NewIterator());
+    pcursor->Seek(std::make_pair(DB_COINS, uint256()));
+    if (!pcursor->Valid()) {
+        return true;
+    }
+
+    LogPrintf("Upgrading database...\n");
+    size_t batch_size = 1 << 24;
+    CDBBatch batch;
+    while (pcursor->Valid()) {
+        boost::this_thread::interruption_point();
+        std::pair<unsigned char, uint256> key;
+        if (pcursor->GetKey(key) && key.first == DB_COINS) {
+            CCoins old_coins;
+            if (!pcursor->GetValue(old_coins)) {
+                return error("%s: cannot parse CCoins record", __func__);
+            }
+            COutPoint outpoint(key.second, 0);
+            for (size_t i = 0; i < old_coins.vout.size(); ++i) {
+                if (!old_coins.vout[i].IsNull() && !old_coins.vout[i].scriptPubKey.IsUnspendable()) {
+                    Coin newcoin(std::move(old_coins.vout[i]), old_coins.nHeight, old_coins.fCoinBase, old_coins.fCoinStake);
+                    outpoint.n = i;
+                    CoinEntry entry(&outpoint);
+                    batch.Write(entry, newcoin);
+                }
+            }
+            batch.Erase(key);
+            if (batch.SizeEstimate() > batch_size) {
+                db.WriteBatch(batch);
+                batch.Clear();
+            }
+            pcursor->Next();
+        } else {
+            break;
+        }
+    }
+    db.WriteBatch(batch);
     return true;
 }
