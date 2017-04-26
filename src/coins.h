@@ -285,8 +285,6 @@ public:
      */
     double GetPriority(const CTransaction& tx, int nHeight, CAmount &inChainInputValue) const;
 
-    const CTxOut& GetOutputFor(const CTxIn& input) const;
-
 private:
     CCoinsMap::iterator FetchCoins(const COutPoint& outpoint) const;
 
