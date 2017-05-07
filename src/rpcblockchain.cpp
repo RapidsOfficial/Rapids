@@ -15,7 +15,7 @@
 
 #include <stdint.h>
 
-#include "univalue/univalue.h"
+#include <univalue.h>
 
 using namespace std;
 

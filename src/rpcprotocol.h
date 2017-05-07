@@ -15,7 +15,7 @@
 #include <boost/asio.hpp>
 #include <boost/asio/ssl.hpp>
 
-#include "univalue/univalue.h"
+#include <univalue.h>
 
 //! HTTP status codes
 enum HTTPStatusCode {

@@ -25,7 +25,7 @@
 #include <openssl/aes.h>
 #include <openssl/sha.h>
 
-#include "univalue/univalue.h"
+#include <univalue.h>
 
 using namespace std;
 
