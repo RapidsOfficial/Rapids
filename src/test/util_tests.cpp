@@ -7,7 +7,6 @@
 
 #include "clientversion.h"
 #include "primitives/transaction.h"
-#include "test_random.h"
 #include "sync.h"
 #include "utilstrencodings.h"
 #include "utilmoneystr.h"

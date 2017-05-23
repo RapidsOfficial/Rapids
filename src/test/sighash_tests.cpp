@@ -5,7 +5,6 @@
 
 #include "data/sighash.json.h"
 #include "main.h"
-#include "test_random.h"
 #include "serialize.h"
 #include "script/script.h"
 #include "script/interpreter.h"
