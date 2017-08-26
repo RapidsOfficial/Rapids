@@ -94,6 +94,7 @@ BITCOIN_CORE_H = \
   arith_uint256.h \
   amount.h \
   base58.h \
+  bech32.h \
   bip38.h \
   bloom.h \
   blocksignature.h \
@@ -410,6 +411,7 @@ libbitcoin_common_a_SOURCES = \
   allocators.cpp \
   amount.cpp \
   base58.cpp \
+  bech32.cpp \
   bip38.cpp \
   chainparams.cpp \
   consensus/upgrades.cpp \
