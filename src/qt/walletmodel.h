@@ -187,6 +187,7 @@ public:
         }
 
     private:
+        WalletModel* wallet;
         bool valid;
         mutable bool relock; // mutable, as it can be set to false by copying
 
