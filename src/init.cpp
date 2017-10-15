@@ -1531,6 +1531,9 @@ bool AppInit2(boost::thread_group& threadGroup)
                 }
             }
         }
+
+        bool fEnableZPivBackups = GetBoolArg("-backupzpiv", false);
+        pwalletMain->setZPivAutoBackups(fEnableZPivBackups);
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");
