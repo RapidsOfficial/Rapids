@@ -556,6 +556,9 @@
                </item>
                <item>
                 <widget class="QLabel" name="labelzPIVBalanceText">
+                 <property name="toolTip">
+                  <string>Available (mature and spendable) zPIV for spending</string>
+                 </property>
                  <property name="text">
                   <string>Available Balance:</string>
                  </property>
@@ -571,6 +574,9 @@
                    <weight>75</weight>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Available (mature and spendable) zPIV for spending&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;zPIV are mature when they have more than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations &lt;span style=&quot; font-weight:600;&quot;&gt;AND&lt;/span&gt; more than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after them were minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>0 zPIV</string>
@@ -949,7 +955,7 @@
                   </font>
                  </property>
                  <property name="toolTip">
-                  <string>Available Funds</string>
+                  <string>Avialable Balance including immature zPIV</string>
                  </property>
                  <property name="text">
                   <string>Available Zerocoin  Balance:</string>
@@ -985,6 +991,9 @@
                    <weight>75</weight>
                    <bold>true</bold>
                   </font>
+                 </property>
+                 <property name="toolTip">
+                  <string>Avialable Balance including immature zPIV</string>
                  </property>
                  <property name="text">
                   <string>0 zPIV</string>
@@ -1031,6 +1040,9 @@
                    <width>40</width>
                    <height>0</height>
                   </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1081,6 +1093,9 @@
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>0 x</string>
                  </property>
@@ -1129,6 +1144,9 @@
                    <width>40</width>
                    <height>0</height>
                   </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1179,6 +1197,9 @@
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>0 x</string>
                  </property>
@@ -1227,6 +1248,9 @@
                    <width>40</width>
                    <height>0</height>
                   </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1277,6 +1301,9 @@
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>0 x</string>
                  </property>
@@ -1326,6 +1353,9 @@
                    <height>0</height>
                   </size>
                  </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                 </property>
                  <property name="text">
                   <string>0 x</string>
                  </property>
@@ -1374,6 +1404,9 @@
                    <width>40</width>
                    <height>0</height>
                   </size>
+                 </property>
+                 <property name="toolTip">
+                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
