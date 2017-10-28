@@ -133,6 +133,7 @@ public:
     CAmount getBalance(const CCoinControl* coinControl = NULL) const;
     CAmount getUnconfirmedBalance() const;
     CAmount getImmatureBalance() const;
+    CAmount getLockedBalance() const;
     CAmount getZerocoinBalance() const;
     CAmount getUnconfirmedZerocoinBalance() const;
     CAmount getImmatureZerocoinBalance() const;
@@ -145,6 +146,7 @@ public:
     bool setAddressBook(const CTxDestination& address, const string& strName, const string& strPurpose);
     void encryptKey(const CKey key, const std::string& pwd, const std::string& slt, std::vector<unsigned char>& crypted);
     void decryptKey(const std::vector<unsigned char>& crypted, const std::string& slt, const std::string& pwd, CKey& key);
+    void emitBalanceChanged(); // Force update of UI-elements even when no values have changed
 
     // Check address for validity
     bool validateAddress(const QString& address);

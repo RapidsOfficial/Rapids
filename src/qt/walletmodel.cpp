@@ -82,6 +82,11 @@ CAmount WalletModel::getImmatureBalance() const
     return wallet->GetImmatureBalance();
 }
 
+CAmount WalletModel::getLockedBalance() const
+{
+    return wallet->GetLockedCoins();
+}
+
 CAmount WalletModel::getZerocoinBalance() const
 {
     return wallet->GetZerocoinBalance(false);
@@ -150,6 +155,14 @@ void WalletModel::pollBalanceChanged()
             transactionTableModel->updateConfirmations();
         }
     }
+}
+
+void WalletModel::emitBalanceChanged()
+{
+    // Force update of UI elements even when no values have changed
+    emit balanceChanged(cachedBalance, cachedUnconfirmedBalance, cachedImmatureBalance, 
+                        cachedZerocoinBalance, cachedUnconfirmedZerocoinBalance, cachedImmatureZerocoinBalance,
+                        cachedWatchOnlyBalance, cachedWatchUnconfBalance, cachedWatchImmatureBalance);
 }
 
 void WalletModel::checkBalanceChanged()

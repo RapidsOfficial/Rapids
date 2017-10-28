@@ -177,6 +177,9 @@
                </item>
                <item>
                 <widget class="QLabel" name="labelzPIVAmountText">
+                 <property name="toolTip">
+                  <string>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</string>
+                 </property>
                  <property name="text">
                   <string>Available for Minting:</string>
                  </property>
@@ -576,7 +579,9 @@
                   </font>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Available (mature and spendable) zPIV for spending&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;zPIV are mature when they have more than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations &lt;span style=&quot; font-weight:600;&quot;&gt;AND&lt;/span&gt; more than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after them were minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Available (mature and spendable) zPIV for spending
+
+zPIV are mature when they have more than 20 confirmations AND more than 3 mints of the same denomination after them were minted</string>
                  </property>
                  <property name="text">
                   <string>0 zPIV</string>
@@ -955,10 +960,10 @@
                   </font>
                  </property>
                  <property name="toolTip">
-                  <string>Avialable Balance including immature zPIV</string>
+                  <string>Total Balance including unconfirmed and immature zPIV</string>
                  </property>
                  <property name="text">
-                  <string>Available Zerocoin  Balance:</string>
+                  <string>Total Zerocoin  Balance:</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -993,7 +998,7 @@
                   </font>
                  </property>
                  <property name="toolTip">
-                  <string>Avialable Balance including immature zPIV</string>
+                  <string>Total Balance including unconfirmed and immature zPIV</string>
                  </property>
                  <property name="text">
                   <string>0 zPIV</string>
@@ -1042,7 +1047,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1094,7 +1100,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1146,7 +1153,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1198,7 +1206,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1250,7 +1259,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1302,7 +1312,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1354,7 +1365,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>
@@ -1406,7 +1418,8 @@
                   </size>
                  </property>
                  <property name="toolTip">
-                  <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Unconfirmed:&lt;/span&gt; less than &lt;span style=&quot; font-weight:600;&quot;&gt;20&lt;/span&gt; confirmations&lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:600;&quot;&gt;Immature:&lt;/span&gt; confirmed, but less than &lt;span style=&quot; font-weight:600;&quot;&gt;3&lt;/span&gt; mints of the same denomination after it was minted&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                  <string>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 3 mints of the same denomination after it was minted</string>
                  </property>
                  <property name="text">
                   <string>0 x</string>

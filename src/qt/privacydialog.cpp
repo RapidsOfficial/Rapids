@@ -634,9 +634,14 @@ void PrivacyDialog::setBalance(const CAmount& balance, const CAmount& unconfirme
         }
     }
     CAmount matureZerocoinBalance = zerocoinBalance - immatureZerocoinBalance;
+    CAmount nLockedBalance = 0;
+    if (walletModel) {
+        nLockedBalance = walletModel->getLockedBalance();
+    }
+
     ui->labelzAvailableAmount->setText(QString::number(zerocoinBalance/COIN) + QString(" zPIV "));
     ui->labelzAvailableAmount_2->setText(QString::number(matureZerocoinBalance/COIN) + QString(" zPIV "));
-    ui->labelzPIVAmountValue->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, balance - immatureBalance, false, BitcoinUnits::separatorAlways));
+    ui->labelzPIVAmountValue->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, balance - immatureBalance - nLockedBalance, false, BitcoinUnits::separatorAlways));
 }
 
 void PrivacyDialog::updateDisplayUnit()

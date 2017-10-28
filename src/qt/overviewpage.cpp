@@ -28,6 +28,8 @@
 #define ICON_OFFSET 16
 #define NUM_ITEMS 5
 
+extern CWallet* pwalletMain;
+
 class TxViewDelegate : public QAbstractItemDelegate
 {
     Q_OBJECT
@@ -148,7 +150,7 @@ OverviewPage::~OverviewPage()
     delete ui;
 }
 
-void OverviewPage::getPercentage(CAmount nTotalBalance, CAmount nZerocoinBalance, QString& sPIVPercentage, QString& szPIVPercentage)
+void OverviewPage::getPercentage(CAmount nUnlockedBalance, CAmount nZerocoinBalance, QString& sPIVPercentage, QString& szPIVPercentage)
 {
     int nPrecision = 2;
     double dzPercentage = 0.0;
@@ -157,15 +159,15 @@ void OverviewPage::getPercentage(CAmount nTotalBalance, CAmount nZerocoinBalance
         dzPercentage = 0.0;
     }
     else{
-        if (nTotalBalance <= 0){
+        if (nUnlockedBalance <= 0){
             dzPercentage = 100.0;
         }
         else{
-            dzPercentage = 100 * (double)nZerocoinBalance / (double)(nZerocoinBalance + nTotalBalance);
+            dzPercentage = 100.0 * (double)(nZerocoinBalance / (double)(nZerocoinBalance + nUnlockedBalance));
         }
     }
 
-    double dPercentage = 100 - dzPercentage;
+    double dPercentage = 100.0 - dzPercentage;
     
     szPIVPercentage = "(" + QLocale(QLocale::system()).toString(dzPercentage, 'f', nPrecision) + " %)";
     sPIVPercentage = "(" + QLocale(QLocale::system()).toString(dPercentage, 'f', nPrecision) + " %)";
@@ -176,7 +178,6 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
                               const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
                               const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance)
 {
-
     currentBalance = balance;
     currentUnconfirmedBalance = unconfirmedBalance;
     currentImmatureBalance = immatureBalance;
@@ -203,9 +204,16 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     // zPIV labels
     QString szPercentage = "";
     QString sPercentage = "";
+    CAmount nLockedBalance = 0;
+    if (pwalletMain) {
+        nLockedBalance = pwalletMain->GetLockedCoins();
+    }
+    ui->labelLockedBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nLockedBalance, false, BitcoinUnits::separatorAlways));
+
     CAmount nTotalBalance = balance + unconfirmedBalance;
+    CAmount nUnlockedBalance = nTotalBalance - nLockedBalance;
     CAmount matureZerocoinBalance = zerocoinBalance - immatureZerocoinBalance;
-    getPercentage(nTotalBalance, zerocoinBalance, sPercentage, szPercentage);
+    getPercentage(nUnlockedBalance, zerocoinBalance, sPercentage, szPercentage);
 
     ui->labelBalancez->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalancez->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, zerocoinBalance, false, BitcoinUnits::separatorAlways));
@@ -213,8 +221,22 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelzBalanceUnconfirmed->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, unconfirmedZerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelzBalanceMature->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, matureZerocoinBalance, false, BitcoinUnits::separatorAlways));
     ui->labelTotalz->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nTotalBalance + zerocoinBalance, false, BitcoinUnits::separatorAlways));
+    ui->labelUnLockedBalance->setText(BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, nUnlockedBalance, false, BitcoinUnits::separatorAlways));
     ui->labelPIVPercent->setText(sPercentage);
     ui->labelzPIVPercent->setText(szPercentage);
+
+    // Adjust bubble-help according to AutoMint settings
+    QString automintHelp = tr("Current percentage of zPIV.\nIf AutoMint is enabled this percentage will settle around the configured AutoMint percentage (default = 10%).\n");
+    bool fEnableZeromint = GetBoolArg("-enablezeromint", true);
+    int nZeromintPercentage = GetArg("-zeromintpercentage", 10);
+    if (fEnableZeromint) {
+        automintHelp += tr("AutoMint is currently enabled and set to ") + QString::number(nZeromintPercentage) + "%.\n";
+        automintHelp += tr("To disable AutoMint add 'enablezeromint=0' in pivx.conf.");
+    }
+    else {
+        automintHelp += tr("AutoMint is currently disabled.\nTo enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf");
+    }
+    ui->labelzPIVPercent->setToolTip(automintHelp);
 
     // only show immature (newly mined) balance if it's non-zero, so as not to complicate things
     // for the non-mining users
