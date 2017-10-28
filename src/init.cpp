@@ -1311,7 +1311,7 @@ bool AppInit2(boost::thread_group& threadGroup)
                 // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
                 bool fVecFixed = false;
                 pblocktree->ReadFlag("msvecfix", fVecFixed);
-                bool fReindexRange = chainActive.Tip()->pprev && chainActive.Height() > GetZerocoinStartHeight();
+                bool fReindexRange = chainActive.Height() > GetZerocoinStartHeight();
                 if (fReindexRange && !fVecFixed) {
                     uiInterface.InitMessage(_("Recalculating supply statistics may take 30-60 minutes..."));
                     LogPrintf("%s : Recalculating supply statistics\n", __func__);
