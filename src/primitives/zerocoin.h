@@ -8,6 +8,7 @@
 #include <limits.h>
 #include "libzerocoin/bignum.h"
 #include "libzerocoin/Denominations.h"
+#include "key.h"
 #include "serialize.h"
 
 class CZerocoinMint
@@ -19,15 +20,20 @@ private:
     CBigNum randomness;
     CBigNum serialNumber;
     uint256 txid;
+    CPrivKey privkey;
+    uint8_t version;
     bool isUsed;
 
 public:
+    static const int STAKABLE_VERSION = 2;
+    static const int CURRENT_VERSION = 2;
+
     CZerocoinMint()
     {
         SetNull();
     }
 
-    CZerocoinMint(libzerocoin::CoinDenomination denom, CBigNum value, CBigNum randomness, CBigNum serialNumber, bool isUsed)
+    CZerocoinMint(libzerocoin::CoinDenomination denom, const CBigNum& value, const CBigNum& randomness, const CBigNum& serialNumber, bool isUsed, const uint8_t& nVersion, CPrivKey* privkey = nullptr)
     {
         SetNull();
         this->denomination = denom;
@@ -35,6 +41,9 @@ public:
         this->randomness = randomness;
         this->serialNumber = serialNumber;
         this->isUsed = isUsed;
+        this->version = nVersion;
+        if (privkey)
+            this->privkey = *privkey;
     }
 
     void SetNull()
@@ -45,6 +54,8 @@ public:
         denomination = libzerocoin::ZQ_ERROR;
         nHeight = 0;
         txid = 0;
+        version = 0;
+        privkey.clear();
     }
 
     uint256 GetHash() const;
@@ -64,6 +75,9 @@ public:
     void SetSerialNumber(CBigNum serial){ this->serialNumber = serial; }
     uint256 GetTxHash() const { return this->txid; }
     void SetTxHash(uint256 txid) { this->txid = txid; }
+    uint8_t GetVersion() const { return this->version; }
+    CPrivKey GetPrivKey() const { return this->privkey; }
+    bool GetKeyPair(CKey& key) const;
 
     inline bool operator <(const CZerocoinMint& a) const { return GetHeight() < a.GetHeight(); }
 
@@ -75,7 +89,11 @@ public:
         serialNumber = other.GetSerialNumber();
         txid = other.GetTxHash();
         isUsed = other.IsUsed();
+        version = other.GetVersion();
+        privkey = other.privkey;
     }
+
+    std::string ToString() const;
 
     bool operator == (const CZerocoinMint& other) const
     {
@@ -91,6 +109,8 @@ public:
         serialNumber = other.GetSerialNumber();
         txid = other.GetTxHash();
         isUsed = other.IsUsed();
+        version = other.GetVersion();
+        privkey = other.GetPrivKey();
         return *this;
     }
     
@@ -114,6 +134,21 @@ public:
         READWRITE(denomination);
         READWRITE(nHeight);
         READWRITE(txid);
+
+        bool fVersionedMint = true;
+        try {
+            READWRITE(version);
+        } catch (...) {
+            fVersionedMint = false;
+        }
+
+        if (version > CURRENT_VERSION) {
+            version = 0;
+            fVersionedMint = false;
+        }
+
+        if (fVersionedMint)
+            READWRITE(privkey);
     };
 };
 

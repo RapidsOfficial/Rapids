@@ -81,6 +81,7 @@ void ZPivControlDialog::updateList()
 
         itemMint->setText(COLUMN_DENOMINATION, QString::number(mint.GetDenomination()));
         itemMint->setText(COLUMN_PUBCOIN, QString::fromStdString(strPubCoin));
+        itemMint->setText(COLUMN_VERSION, QString::number(mint.GetVersion()));
 
         int nConfirmations = (mint.GetHeight() ? nBestHeight - mint.GetHeight() : 0);
         if (nConfirmations < 0) {
