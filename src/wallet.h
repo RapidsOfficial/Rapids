@@ -23,6 +23,7 @@
 #include "validationinterface.h"
 #include "wallet_ismine.h"
 #include "walletdb.h"
+#include "zpivwallet.h"
 
 #include <algorithm>
 #include <map>
@@ -213,6 +214,8 @@ public:
     bool CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, libzerocoin::PrivateCoin& coin, CTxOut& outMint);
     bool GetMint(const uint256& hashSerial, CZerocoinMint& mint);
     bool DatabaseMint(libzerocoin::PrivateCoin* coin);
+    bool SetMintUnspent(const CBigNum& bnSerial);
+    bool UpdateMint(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const libzerocoin::CoinDenomination& denom);
 
     /** Zerocin entry changed.
     * @note called with lock cs_wallet held.
@@ -226,6 +229,8 @@ public:
      *      strWalletFile (immutable after instantiation)
      */
     mutable CCriticalSection cs_wallet;
+
+    CzPIVWallet* zwalletMain;
 
     bool fFileBacked;
     bool fWalletUnlockAnonymizeOnly;
@@ -316,6 +321,13 @@ public:
     {
         return nZeromintPercentage;
     }
+
+    void setZWallet(CzPIVWallet* zwallet)
+    {
+        zwalletMain = zwallet;
+    }
+
+    CzPIVWallet* getZWallet() { return zwalletMain; }
 
     bool isZeromintEnabled()
     {
@@ -528,6 +540,7 @@ public:
         return ::IsMine(*this, txout.scriptPubKey);
     }
     bool IsMyZerocoinSpend(const CBigNum& bnSerial) const;
+    bool IsMyMint(const CBigNum& bnValue) const;
     CAmount GetCredit(const CTxOut& txout, const isminefilter& filter) const
     {
         if (!MoneyRange(txout.nValue))
