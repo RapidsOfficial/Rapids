@@ -354,16 +354,25 @@ CCriticalSection CNode::cs_totalBytesSent;
 CNode* FindNode(const CNetAddr& ip)
 {
     LOCK(cs_vNodes);
-    BOOST_FOREACH (CNode* pnode, vNodes)
+    for (CNode* pnode : vNodes)
         if ((CNetAddr)pnode->addr == ip)
             return (pnode);
+    return NULL;
+}
+
+CNode* FindNode(const CSubNet& subNet)
+{
+    LOCK(cs_vNodes);
+    for (CNode* pnode : vNodes)
+    if (subNet.Match((CNetAddr)pnode->addr))
+        return (pnode);
     return NULL;
 }
 
 CNode* FindNode(const std::string& addrName)
 {
     LOCK(cs_vNodes);
-    BOOST_FOREACH (CNode* pnode, vNodes)
+    for (CNode* pnode : vNodes)
         if (pnode->addrName == addrName)
             return (pnode);
     return NULL;
@@ -372,7 +381,7 @@ CNode* FindNode(const std::string& addrName)
 CNode* FindNode(const CService& addr)
 {
     LOCK(cs_vNodes);
-    BOOST_FOREACH (CNode* pnode, vNodes) {
+    for (CNode* pnode : vNodes) {
         if (Params().NetworkID() == CBaseChainParams::REGTEST) {
             //if using regtest, just check the IP
             if ((CNetAddr)pnode->addr == (CNetAddr)addr)
@@ -487,7 +496,7 @@ void CNode::PushVersion()
 }
 
 
-std::map<CNetAddr, int64_t> CNode::setBanned;
+std::map<CSubNet, int64_t> CNode::setBanned;
 CCriticalSection CNode::cs_setBanned;
 
 void CNode::ClearBanned()
@@ -500,7 +509,24 @@ bool CNode::IsBanned(CNetAddr ip)
     bool fResult = false;
     {
         LOCK(cs_setBanned);
-        std::map<CNetAddr, int64_t>::iterator i = setBanned.find(ip);
+        for (std::map<CSubNet, int64_t>::iterator it = setBanned.begin(); it != setBanned.end(); it++)
+        {
+            CSubNet subNet = (*it).first;
+            int64_t t = (*it).second;
+
+            if(subNet.Match(ip) && GetTime() < t)
+                fResult = true;
+        }
+    }
+    return fResult;
+}
+
+bool CNode::IsBanned(CSubNet subnet)
+{
+    bool fResult = false;
+    {
+        LOCK(cs_setBanned);
+        std::map<CSubNet, int64_t>::iterator i = setBanned.find(subnet);
         if (i != setBanned.end()) {
             int64_t t = (*i).second;
             if (GetTime() < t)
@@ -510,15 +536,41 @@ bool CNode::IsBanned(CNetAddr ip)
     return fResult;
 }
 
-bool CNode::Ban(const CNetAddr& addr)
+void CNode::Ban(const CNetAddr& addr, int64_t bantimeoffset, bool sinceUnixEpoch)
+{
+    CSubNet subNet(addr.ToString()+(addr.IsIPv4() ? "/32" : "/128"));
+    Ban(subNet, bantimeoffset, sinceUnixEpoch);
+}
+
+void CNode::Ban(const CSubNet& subNet, int64_t bantimeoffset, bool sinceUnixEpoch)
 {
     int64_t banTime = GetTime() + GetArg("-bantime", 60 * 60 * 24); // Default 24-hour ban
-    {
-        LOCK(cs_setBanned);
-        if (setBanned[addr] < banTime)
-            setBanned[addr] = banTime;
-    }
-    return true;
+    if (bantimeoffset > 0)
+        banTime = (sinceUnixEpoch ? 0 : GetTime() )+bantimeoffset;
+
+    LOCK(cs_setBanned);
+    if (setBanned[subNet] < banTime)
+        setBanned[subNet] = banTime;
+}
+
+bool CNode::Unban(const CNetAddr &addr)
+{
+    CSubNet subNet(addr.ToString()+(addr.IsIPv4() ? "/32" : "/128"));
+    return Unban(subNet);
+}
+
+bool CNode::Unban(const CSubNet &subNet)
+{
+    LOCK(cs_setBanned);
+    if (setBanned.erase(subNet))
+        return true;
+    return false;
+}
+
+void CNode::GetBanned(std::map<CSubNet, int64_t> &banMap)
+{
+    LOCK(cs_setBanned);
+    banMap = setBanned; //create a thread safe copy
 }
 
 
