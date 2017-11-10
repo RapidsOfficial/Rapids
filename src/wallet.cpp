@@ -4078,8 +4078,9 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
     libzerocoin::AccumulatorWitness witness(Params().Zerocoin_Params(), accumulator, pubCoinSelected);
     string strFailReason = "";
     int nMintsAdded = 0;
-    if (!CAccumulators::getInstance().IntializeWitnessAndAccumulator(pubCoinSelected, accumulator, witness, nSecurityLevel, nMintsAdded, strFailReason)) {
+    if (!GenerateAccumulatorWitness(pubCoinSelected, accumulator, witness, nSecurityLevel, nMintsAdded, strFailReason)) {
         receipt.SetStatus("Try to spend with a higher security level to include more coins", ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
+        LogPrintf("%s : %s \n", __func__, receipt.GetStatusMessage());
         return false;
     }
 
@@ -4088,7 +4089,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
     privateCoin.setPublicCoin(pubCoinSelected);
     privateCoin.setRandomness(zerocoinSelected.GetRandomness());
     privateCoin.setSerialNumber(zerocoinSelected.GetSerialNumber());
-    uint32_t nChecksum = CAccumulators::getInstance().GetChecksum(accumulator);
+    uint32_t nChecksum = GetChecksum(accumulator.getValue());
 
     try {
         libzerocoin::CoinSpend spend(Params().Zerocoin_Params(), privateCoin, accumulator, nChecksum, witness, hashTxOut);
@@ -4142,7 +4143,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
             }
         }
 
-        uint32_t nAccumulatorChecksum = CAccumulators::getInstance().GetChecksum(accumulator);
+        uint32_t nAccumulatorChecksum = GetChecksum(accumulator.getValue());
         CZerocoinSpend zcSpend(spend.getCoinSerialNumber(), 0, zerocoinSelected.GetValue(), zerocoinSelected.GetDenomination(), nAccumulatorChecksum);
         zcSpend.SetMintCount(nMintsAdded);
         receipt.AddSpend(zcSpend);
