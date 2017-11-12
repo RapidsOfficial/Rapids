@@ -122,7 +122,7 @@
               </layout>
              </item>
              <item>
-              <widget class="Line" name="line_3">
+              <widget class="Line" name="line_1_left">
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
@@ -921,7 +921,7 @@ zPIV are mature when they have more than 20 confirmations AND more than 3 mints 
               </layout>
              </item>
              <item>
-              <widget class="Line" name="line_4">
+              <widget class="Line" name="line_1_right">
                <property name="maximumSize">
                 <size>
                  <width>16777215</width>
@@ -1431,6 +1431,61 @@ Immature: confirmed, but less than 3 mints of the same denomination after it was
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                  </property>
                 </widget>
+               </item>
+              </layout>
+             </item>
+             <item>
+              <widget class="Line" name="line_2_right">
+               <property name="minimumSize">
+                <size>
+                 <width>0</width>
+                 <height>1</height>
+                </size>
+               </property>
+               <property name="maximumSize">
+                <size>
+                 <width>16777215</width>
+                 <height>1</height>
+                </size>
+               </property>
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <layout class="QHBoxLayout" name="horizontalLayout_25">
+               <item>
+                <widget class="QLabel" name="label_AutoMintStatus">
+                 <property name="toolTip">
+                  <string>Show the current status of automatic zPIV minting.
+
+To change the status (restart required):
+- enable: add 'enablezeromint=1' to pivx.conf
+- disable: add 'enablezeromint=0' to pivx.conf
+
+To change the percentage (no restart required):
+- menu Settings-&gt;Options-&gt;Percentage of autominted zPIV
+
+</string>
+                 </property>
+                 <property name="text">
+                  <string>AutoMint Status</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
+                <spacer name="horizontalSpacer_20">
+                 <property name="orientation">
+                  <enum>Qt::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
                </item>
               </layout>
              </item>
