@@ -63,11 +63,13 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
     (863795, uint256("2ad866818c4866e0d555181daccc628056216c0db431f88a825e84ed4f469067"))
     (863805, uint256("a755bd9a22b63c70d3db474f4b2b61a1f86c835b290a081bb3ec1ba2103eb4cb"))
     (867733, uint256("03b26296bf693de5782c76843d2fb649cb66d4b05550c6a79c047ff7e1c3ae15"))
-    (879650, uint256("227e1d2b738b6cd83c46d1d64617934ec899d77cee34336a56e61b71acd10bb2"));
+    (879650, uint256("227e1d2b738b6cd83c46d1d64617934ec899d77cee34336a56e61b71acd10bb2"))
+    (895400, uint256("7796a0274a608fac12d400198174e50beda992c1d522e52e5b95b884bc1beac6"))//block that serial# range is enforced
+    (895991, uint256("d53013ed7ea5c325b9696c95e07667d6858f8ff7ee13fecfa90827bf3c9ae316"));//network split here
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1509225216, // * UNIX timestamp of last checkpoint block
-    1770098,    // * total number of transactions between genesis and last checkpoint
+    1510187238, // * UNIX timestamp of last checkpoint block
+    1816040,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -132,6 +134,11 @@ public:
         nLastPOWBlock = 259200;
         nModifierUpdateBlock = 615800;
         nZerocoinStartHeight = 863787;
+        nZerocoinStartTime = 1508214600; // October 17, 2017 4:30:00 AM
+        nBlockEnforceSerialRange = 895400; //Enforce serial range starting this block
+        nBlockRecalculateAccumulators = 908000; //Trigger a recalculation of accumulators
+        nBlockFirstFraudulent = 891737; //First block that bad serials emerged
+        nBlockLastGoodCheckpoint = 891730; //Last valid accumulator checkpoint
 
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -283,7 +290,7 @@ public:
         strSporkKey = "04348C2F50F90267E64FACC65BFDC9D0EB147D090872FB97ABAE92E9A36E6CA60983E28E741F8E7277B11A7479B626AC115BA31463AC48178A5075C5A9319D4A38";
         strObfuscationPoolDummyAddress = "y57cqfGRkekRyDRNeJiLtYVEbvhXrNbmox";
         nStartMasternodePayments = 1420837558; //Fri, 09 Jan 2015 21:05:58 GMT
-        nBudget_Fee_Confirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short 
+        nBudget_Fee_Confirmations = 3; // Number of confirmations for the finalization fee. We have to make this very short
                                        // here because we only have a 8 block finalization window on testnet
     }
     const Checkpoints::CCheckpointData& Checkpoints() const

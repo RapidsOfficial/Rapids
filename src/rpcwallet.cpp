@@ -2321,23 +2321,23 @@ Value getzerocoinbalance(const Array& params, bool fHelp)
 }
 Value listmintedzerocoins(const Array& params, bool fHelp)
 {
-    
+
     if (fHelp || params.size() != 0)
         throw runtime_error(
                             "listmintedzerocoins\n"
                             + HelpRequiringPassphrase());
-    
+
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
-    
+
     CWalletDB walletdb(pwalletMain->strWalletFile);
     list<CZerocoinMint> listPubCoin = walletdb.ListMintedCoins(true, false, true);
-    
+
     Array jsonList;
     for (const CZerocoinMint& pubCoinItem : listPubCoin) {
         jsonList.push_back(pubCoinItem.GetValue().GetHex());
     }
-    
+
     return jsonList;
 }
 
@@ -2354,7 +2354,7 @@ Value listzerocoinamounts(const Array& params, bool fHelp)
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
     list<CZerocoinMint> listPubCoin = walletdb.ListMintedCoins(true, true, true);
- 
+
     std::map<libzerocoin::CoinDenomination, CAmount> spread;
     for (const auto& denom : libzerocoin::zerocoinDenomList)
         spread.insert(std::pair<libzerocoin::CoinDenomination, CAmount>(denom, 0));
@@ -2405,8 +2405,8 @@ Value mintzerocoin(const Array& params, bool fHelp)
 
     int64_t nTime = GetTimeMillis();
 
-    if (GetAdjustedTime() < GetSporkValue(SPORK_17_ENABLE_ZEROCOIN))
-        throw JSONRPCError(RPC_WALLET_ERROR, "Error: Zerocoin functionality is not enabled on the PIVX network yet.");
+    if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
+        throw JSONRPCError(RPC_WALLET_ERROR, "zPIV is currently disabled due to maintenance.");
 
     if (pwalletMain->IsLocked())
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
@@ -2431,7 +2431,7 @@ Value mintzerocoin(const Array& params, bool fHelp)
         m.push_back(Pair("time", GetTimeMillis() - nTime));
         arrMints.push_back(m);
     }
-    
+
     return arrMints;
 }
 
@@ -2451,8 +2451,8 @@ Value spendzerocoin(const Array& params, bool fHelp)
                     "an address is required"
             + HelpRequiringPassphrase());
 
-    if (GetAdjustedTime() < GetSporkValue(SPORK_17_ENABLE_ZEROCOIN))
-        throw JSONRPCError(RPC_WALLET_ERROR, "Error: Zerocoin functionality is not enabled on the PIVX network yet.");
+    if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
+        throw JSONRPCError(RPC_WALLET_ERROR, "zPIV is currently disabled due to maintenance.");
 
     int64_t nTimeStart = GetTimeMillis();
     if (pwalletMain->IsLocked())

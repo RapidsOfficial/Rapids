@@ -108,7 +108,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
 
     // Make sure to create the correct block version after zerocoin is enabled
-    bool fZerocoinActive = GetAdjustedTime() > GetSporkValue(SPORK_17_ENABLE_ZEROCOIN);
+    bool fZerocoinActive = GetAdjustedTime() >= Params().Zerocoin_StartTime();
     if (fZerocoinActive)
         pblock->nVersion = 4;
     else
@@ -154,7 +154,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     // Largest block you're willing to create:
     unsigned int nBlockMaxSize = GetArg("-blockmaxsize", DEFAULT_BLOCK_MAX_SIZE);
     // Limit to betweeen 1K and MAX_BLOCK_SIZE-1K for sanity:
-    unsigned int nBlockMaxSizeNetwork = pblock->nTime > GetSporkValue(SPORK_17_ENABLE_ZEROCOIN) ? MAX_BLOCK_SIZE_CURRENT : MAX_BLOCK_SIZE_LEGACY;
+    unsigned int nBlockMaxSizeNetwork = MAX_BLOCK_SIZE_CURRENT;
     nBlockMaxSize = std::max((unsigned int)1000, std::min((nBlockMaxSizeNetwork - 1000), nBlockMaxSize));
 
     // How much of the block should be dedicated to high-priority transactions,
@@ -188,14 +188,18 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         for (map<uint256, CTxMemPoolEntry>::iterator mi = mempool.mapTx.begin();
              mi != mempool.mapTx.end(); ++mi) {
             const CTransaction& tx = mi->second.GetTx();
-            if (tx.IsCoinBase() || tx.IsCoinStake() || !IsFinalTx(tx, nHeight))
+            if (tx.IsCoinBase() || tx.IsCoinStake() || !IsFinalTx(tx, nHeight)){
                 continue;
+            }
+            if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE) && tx.ContainsZerocoins()){
+                continue;
+            }
 
             COrphan* porphan = NULL;
             double dPriority = 0;
             CAmount nTotalIn = 0;
             bool fMissingInputs = false;
-            BOOST_FOREACH (const CTxIn& txin, tx.vin) {
+            for (const CTxIn& txin : tx.vin) {
                 //zerocoinspend has special vin
                 if (tx.IsZerocoinSpend()) {
                     nTotalIn = tx.GetZerocoinSpent();
@@ -227,6 +231,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     nTotalIn += mempool.mapTx[txin.prevout.hash].GetTx().vout[txin.prevout.n].nValue;
                     continue;
                 }
+
+                //Check for invalid/fraudulent inputs. They shouldn't make it through mempool, but check anyways.
+                if (mapInvalidOutPoints.count(txin.prevout)) {
+                    LogPrintf("%s : found invalid input %s in tx %s", __func__, txin.prevout.ToString());
+                    fMissingInputs = true;
+                    break;
+                }
+
                 const CCoins* coins = view.AccessCoins(txin.prevout.hash);
                 assert(coins);
 
@@ -281,7 +293,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 continue;
 
             // Legacy limits on sigOps:
-            unsigned int nMaxBlockSigOps = GetAdjustedTime() > GetSporkValue(SPORK_17_ENABLE_ZEROCOIN) ? MAX_BLOCK_SIGOPS_CURRENT : MAX_BLOCK_SIGOPS_LEGACY;
+            unsigned int nMaxBlockSigOps = MAX_BLOCK_SIGOPS_CURRENT;
             unsigned int nTxSigOps = GetLegacySigOpCount(tx);
             if (nBlockSigOps + nTxSigOps >= nMaxBlockSigOps)
                 continue;
@@ -316,6 +328,8 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 for (const CTxIn txIn : tx.vin) {
                     if (txIn.scriptSig.IsZerocoinSpend()) {
                         libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txIn);
+                        if (!spend.HasValidSerial(Params().Zerocoin_Params()))
+                            fDoubleSerial = true;
                         if (count(vBlockSerials.begin(), vBlockSerials.end(), spend.getCoinSerialNumber()))
                             fDoubleSerial = true;
                         if (count(vTxSerials.begin(), vTxSerials.end(), spend.getCoinSerialNumber()))
