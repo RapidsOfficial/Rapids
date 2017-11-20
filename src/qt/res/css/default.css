@@ -1641,6 +1641,12 @@ QWidget#PrivacyDialog .QFrame#verticalFrameRight {
 background-color:#ffffff;
 }
 
+/**************************** MASTERNODE LIST *******************************************/
+QWidget#MasternodeList .QFrame#frameList {
+background-color:#ffffff;
+}
+
+
 /********************************* CALENDAR WIDGET **************************************/
 
 QCalendarView {
