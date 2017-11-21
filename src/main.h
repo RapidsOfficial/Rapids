@@ -374,6 +374,7 @@ bool ValidOutPoint(const COutPoint out, int nHeight);
 void RecalculateZPIVSpent();
 void RecalculateZPIVMinted();
 bool RecalculatePIVSupply(int nHeightStart);
+bool ReindexAccumulators(list<uint256> listMissingCheckpoints, string& strError);
 
 
 /**
