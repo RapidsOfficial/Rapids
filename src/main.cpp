@@ -2779,7 +2779,7 @@ void PopulateInvalidOutPointMap()
 
 bool ValidOutPoint(const COutPoint out, int nHeight)
 {
-    bool isInvalid = nHeight >= GetSporkValue(SPORK_11_LOCK_INVALID_UTXO) && mapInvalidOutPoints.count(out);
+    bool isInvalid = nHeight >= Params().Block_Enforce_Invalid() && mapInvalidOutPoints.count(out);
     return !isInvalid;
 }
 
