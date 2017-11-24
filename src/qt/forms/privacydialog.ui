@@ -297,6 +297,12 @@
                         </item>
                         <item>
                          <widget class="QLabel" name="labelzPIVAmountValue">
+                          <property name="font">
+                           <font>
+                            <weight>75</weight>
+                            <bold>true</bold>
+                           </font>
+                          </property>
                           <property name="toolTip">
                            <string>Enter an amount of Piv to convert to zPiv</string>
                           </property>

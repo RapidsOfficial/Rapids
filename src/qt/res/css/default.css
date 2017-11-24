@@ -200,7 +200,7 @@ color: #5c4c7c;
 background-color:#f2f2f2;
 }
 
-/****************************************************************************************/
+/***************************** Global Qt Objects ***********************************************************/
 
 QPushButton { /* Global Button Style */
 background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #382f44, stop: .1 #5B4C86, stop: .95 #5B4C86, stop: 1 #5c4c7c);
@@ -228,6 +228,24 @@ outline:none;
 
 QPushButton:pressed {
 border:1px solid #333;
+}
+
+/*
+QSpinBox::up-arrow:hover {
+background-color: #f2f2f2;
+}
+
+QSpinBox::down-arrow:hover {
+background-color: #f2f2f2;
+}
+*/
+
+QSpinBox::up-button:hover {
+background-color: #f2f2f2;
+}
+
+QSpinBox::down-button:hover {
+background-color: #f2f2f2;
 }
 
 QComboBox { /* Dropdown Menus */
