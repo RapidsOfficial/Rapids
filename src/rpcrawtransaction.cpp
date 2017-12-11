@@ -16,6 +16,7 @@
 #include "script/script.h"
 #include "script/sign.h"
 #include "script/standard.h"
+#include "swifttx.h"
 #include "uint256.h"
 #include "utilmoneystr.h"
 #ifdef ENABLE_WALLET
@@ -687,7 +688,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
 
 UniValue sendrawtransaction(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || params.size() < 1 || params.size() > 3)
         throw runtime_error(
             "sendrawtransaction \"hexstring\" ( allowhighfees )\n"
             "\nSubmits raw transaction (serialized, hex-encoded) to local node and network.\n"
@@ -695,6 +696,7 @@ UniValue sendrawtransaction(const UniValue& params, bool fHelp)
             "\nArguments:\n"
             "1. \"hexstring\"    (string, required) The hex string of the raw transaction)\n"
             "2. allowhighfees    (boolean, optional, default=false) Allow high fees\n"
+            "3. swiftx           (boolean, optional, default=false) Use SwiftX to send this transaction\n"
             "\nResult:\n"
             "\"hex\"             (string) The transaction hash in hex\n"
             "\nExamples:\n"
@@ -716,12 +718,21 @@ UniValue sendrawtransaction(const UniValue& params, bool fHelp)
     if (params.size() > 1)
         fOverrideFees = params[1].get_bool();
 
+    bool fSwiftX = false;
+    if (params.size() > 2)
+        fSwiftX = params[2].get_bool();
+
     CCoinsViewCache& view = *pcoinsTip;
     const CCoins* existingCoins = view.AccessCoins(hashTx);
     bool fHaveMempool = mempool.exists(hashTx);
     bool fHaveChain = existingCoins && existingCoins->nHeight < 1000000000;
     if (!fHaveMempool && !fHaveChain) {
         // push to local node and sync with wallets
+        if (fSwiftX) {
+            mapTxLockReq.insert(make_pair(tx.GetHash(), tx));
+            CreateNewLock(tx);
+            RelayTransactionLockReq(tx, true);
+        }
         CValidationState state;
         if (!AcceptToMemoryPool(mempool, state, tx, false, NULL, !fOverrideFees)) {
             if (state.IsInvalid())
