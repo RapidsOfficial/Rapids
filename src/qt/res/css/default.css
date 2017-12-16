@@ -203,10 +203,13 @@ background-color:#f2f2f2;
 /***************************** Global Qt Objects ***********************************************************/
 
 QPushButton { /* Global Button Style */
-background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #382f44, stop: .1 #5B4C86, stop: .95 #5B4C86, stop: 1 #5c4c7c);
-border:0;
-border-radius:3px;
-color:#ffffff;
+/* background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #382f44, stop: .1 #5B4C86, stop: .95 #5B4C86, stop: 1 #5c4c7c); */
+background-color: #f2f2f2;
+border-width: 1px;
+border-style: outset;
+border-color: #382f44;
+border-radius: 2px;
+color:#000;
 font-size:12px;
 font-weight:bold;
 padding-left:25px;
@@ -217,17 +220,17 @@ margin: 2px;
 }
 
 QPushButton:hover {
-/* background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #5B4C86, stop: .4 #b396f6, stop: .6 #b396f6, stop: 1 #5b4c86); */
-background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #6f5ca3, stop: 1 #6f5ca3);
+/* background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #6f5ca3, stop: 1 #6f5ca3); */
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #ffffff, stop: 1 #ffffff);
 }
 
 QPushButton:focus {
-border:none;
-outline:none;
+/* border:none; */
+/* outline:none; */
 }
 
 QPushButton:pressed {
-border:1px solid #333;
+border:1px solid #ce00bc;
 }
 
 /*
@@ -714,29 +717,12 @@ background-color:#5c4c7c;
 }
 
 QWidget#PrivacyDialog QPushButton {
-background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #64ACD2, stop: .1 #382f44, stop: .95 #382f44, stop: 1 #1D80B5);
-border:0;
-border-radius:3px;
-color:#ffffff;
 font-size:12px;
 font-weight:normal;
 padding-left:5px;
 padding-right:5px;
 padding-top:5px;
 padding-bottom:5px;
-}
-
-QWidget#PrivacyDialog QPushButton:hover {
-background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #5B4C9A, stop: .1 #5B4C86, stop: .95 #5B4C86, stop: 1 #5c4c7c);
-}
-
-QWidget#PrivacyDialog QPushButton:focus {
-border:none;
-outline:none;
-}
-
-QWidget#PrivacyDialog QPushButton:pressed {
-border:1px solid #333;
 }
 
 QWidget#PrivacyDialog QProgressBar#obfuscationProgress { /* Obfuscation Completion */

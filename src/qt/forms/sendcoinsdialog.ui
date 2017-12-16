@@ -1573,7 +1573,7 @@
              </property>
              <property name="icon">
               <iconset resource="../pivx.qrc">
-               <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
+               <normaloff>:/icons/send_dark</normaloff>:/icons/send_dark</iconset>
              </property>
              <property name="autoDefault">
               <bool>false</bool>
@@ -1727,4 +1727,3 @@
   <buttongroup name="groupFee"/>
  </buttongroups>
 </ui>
-
