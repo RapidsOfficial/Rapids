@@ -203,8 +203,11 @@ background-color:#f2f2f2;
 /***************************** Global Qt Objects ***********************************************************/
 
 QPushButton { /* Global Button Style */
-/* background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #382f44, stop: .1 #5B4C86, stop: .95 #5B4C86, stop: 1 #5c4c7c); */
-background-color: #f2f2f2;
+/* 
+background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: .01 #382f44, stop: .1 #5B4C86, stop: .95 #5B4C86, stop: 1 #5c4c7c);
+background-color: #f2f2f2; 
+*/
+background-color: qradialgradient(cx: 0.5, cy: 0.5, fx: 0.5, fy: 0.5, radius: 0.9, stop: 0.3 #ffffff, stop: 0.8 #5c4c7c);
 border-width: 1px;
 border-style: outset;
 border-color: #382f44;
@@ -220,8 +223,12 @@ margin: 2px;
 }
 
 QPushButton:hover {
-/* background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #6f5ca3, stop: 1 #6f5ca3); */
+/* 
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #6f5ca3, stop: 1 #6f5ca3);
 background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #ffffff, stop: 1 #ffffff);
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #ffffff, stop: 0.9 #ffffff, stop: 1 #5c4c7c);
+*/
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #5c4c7c, stop: 0.1 #ffffff, stop: 0.9 #ffffff, stop: 1 #5c4c7c);
 }
 
 QPushButton:focus {
@@ -381,7 +388,8 @@ outline:0;
 
 QHeaderView::section { /* Table Header Sections */
 qproperty-alignment:center;
-background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 0.25, stop: 0 #372f44, stop: 1 #5c4c7c);
+/* background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 0.25, stop: 0 #372f44, stop: 1 #5c4c7c); */
+background-color: #5c4c7c;
 color:#fff;
 min-height:25px;
 font-weight:bold;
@@ -392,6 +400,24 @@ padding-left:5px;
 padding-right:5px;
 padding-top:2px;
 padding-bottom:2px;
+
+/*
+background-color: #f2f2f2;
+border-width: 1px;
+border-style: outset;
+border-color: #382f44;
+border-radius: 2px;
+color:#000;
+*/
+
+}
+
+QHeaderView::down-arrow {
+    image: url(':/images/downArrow_small_white');
+}
+
+QHeaderView::up-arrow {
+    image: url(':/images/upArrow_small_white');
 }
 
 QHeaderView::section:last {
@@ -451,7 +477,6 @@ background:#ffffff;
 height:18px;
 margin:0px 18px 0px 18px;
 }
-
 
 QScrollBar::handle:vertical { /* Scroll Bar Slider - vertical */
 background:#e0e0e0;
