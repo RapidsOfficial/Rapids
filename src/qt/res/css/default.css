@@ -59,6 +59,7 @@ color:#333;
 
 QToolBar {
 background-color:#372f44;
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
 border:0px solid #333;
 padding:1;
 margin:0;
@@ -67,7 +68,8 @@ width: 70px;
 
 QToolBar > QToolButton {
 Alignment: left;
-background-color: #372f44;
+/* background-color: #372f44; */
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
 selection-background-color:transparent;
 border:0.5px solid #888;
 border-left: 0px;
@@ -76,18 +78,18 @@ border-top: 0px;
 min-height:2.5em;
 padding: 0em 0em;
 font-size: 11px;
-color:#888;
+color:#aaa;
 width: 70px;
 height: 60px;
 }
 
 QToolBar > QToolButton:checked {
-background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.08 #ce00bc, stop: 0.0801 #5B4C86, stop: 1 #5c4c7c);
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.08 #ce00bc, stop: 0.0801 #5c4c7c, stop: 0.5 #372f44, stop: 1 #5c4c7c);
 color:#fff;
 }
 
 QToolBar > QToolButton:hover:!selected {
-background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.08 #ce00bc, stop: 0.0801 #5B4C86, stop: 1 #5c4c7c);
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.08 #ce00bc, stop: 0.0801 #5c4c7c, stop: 0.5 #372f44, stop: 1 #5c4c7c);
 color:#fff;
 }
 
@@ -100,15 +102,20 @@ background-color:#fff;
 }
 
 QProgressBar {
-color:#d2d2d2;
-border:2px solid grey;
+color:#382f44;
+border:0px solid grey;
 border-radius:5px;
 background-color:transparent;
 }
 
 QProgressBar::chunk {
-background-color:#5c4c7c;
+/* background-color:#5c4c7c; */
+background-color: qlineargradient(y1:0, y2: 1, stop: 0 #5c4c7c, stop: 0.4 #ffffff, stop: 0.6 #ffffff, stop: 1 #5c4c7c);
 width: 20px;
+}
+
+QLabel#progressBarLabel {
+background-color: qlineargradient(y1:0, y2: 1, stop: 0 #5c4c7c, stop: 0.4 #ffffff, stop: 0.6 #ffffff, stop: 1 #5c4c7c);
 }
 
 QTabWidget {
@@ -197,6 +204,10 @@ background-color: #00ffff;
 */
 .QValidatedLineEdit:disabled, .QLineEdit:disabled, .QTextEdit:disabled {
 color: #5c4c7c;
+background-color:#f2f2f2;
+}
+
+.QPlainTextEdit {
 background-color:#f2f2f2;
 }
 
@@ -388,8 +399,8 @@ outline:0;
 
 QHeaderView::section { /* Table Header Sections */
 qproperty-alignment:center;
-/* background-color:qlineargradient(x1: 0, y1: 0, x2: 0, y2: 0.25, stop: 0 #372f44, stop: 1 #5c4c7c); */
-background-color: #5c4c7c;
+/* background-color: #5c4c7c; */
+background-color: qlineargradient(y1:0, y2: 1, stop: 0 #5c4c7c, stop: 0.4 #ffffff, stop: 0.6 #ffffff, stop: 1 #5c4c7c);
 color:#fff;
 min-height:25px;
 font-weight:bold;
@@ -401,6 +412,8 @@ padding-right:5px;
 padding-top:2px;
 padding-bottom:2px;
 
+
+color: #000;
 /*
 background-color: #f2f2f2;
 border-width: 1px;
@@ -413,11 +426,11 @@ color:#000;
 }
 
 QHeaderView::down-arrow {
-    image: url(':/images/downArrow_small_white');
+    image: url(':/images/downArrow_small');
 }
 
 QHeaderView::up-arrow {
-    image: url(':/images/upArrow_small_white');
+    image: url(':/images/upArrow_small');
 }
 
 QHeaderView::section:last {
@@ -445,7 +458,8 @@ color:#fff;
 }
 
 QTableWidget { /* Table Background */
-background-color:red; /*#fcfcfc;*/
+background-color: #fcfcfc;
+alternate-background-color: yellow;
 border:1px solid #333;
 }
 
@@ -466,25 +480,35 @@ QScrollBar { /* Scroll Bar */
 
 QScrollBar:vertical { /* Vertical Scroll Bar Attributes */
 border:0;
-background:#ffffff;
+background:#5c4c7c;
 width:18px;
 margin:18px 0px 18px 0px;
 }
 
 QScrollBar:horizontal { /* Horizontal Scroll Bar Attributes */
 border:0;
-background:#ffffff;
+background:#5c4c7c;
 height:18px;
 margin:0px 18px 0px 18px;
 }
 
 QScrollBar::handle:vertical { /* Scroll Bar Slider - vertical */
-background:#e0e0e0;
+background:#9179c7;
+min-height:10px;
+}
+
+QScrollBar::handle:vertical:hover { /* Scroll Bar Slider - vertical */
+background:#5c4c7c;
 min-height:10px;
 }
 
 QScrollBar::handle:horizontal { /* Scroll Bar Slider - horizontal */
-background:#e0e0e0;
+background:#9179c7;
+min-width:10px;
+}
+
+QScrollBar::handle:horizontal:hover { /* Scroll Bar Slider - horizontal */
+background:#5c4c7c;
 min-width:10px;
 }
 
