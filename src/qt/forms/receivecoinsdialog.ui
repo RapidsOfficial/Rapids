@@ -250,7 +250,7 @@
                  </property>
                  <property name="icon">
                   <iconset resource="../pivx.qrc">
-                   <normaloff>:/icons/receiving_addresses_dark</normaloff>:/icons/receiving_addresses_dark</iconset>
+                   <normaloff>:/icons/receiving_addresses</normaloff>:/icons/receiving_addresses</iconset>
                  </property>
                 </widget>
                </item>

@@ -29,7 +29,7 @@ QLabel{background-color:#ffffff;}
 QFrame &gt; QLabel{background-color:#f2f0f0;}</string>
      </property>
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="addMultisigTab">
       <property name="sizePolicy">
@@ -272,7 +272,7 @@ Please be patient after clicking import.</string>
            </property>
            <property name="icon">
             <iconset resource="../pivx.qrc">
-             <normaloff>:/icons/receiving_addresses_dark</normaloff>:/icons/receiving_addresses_dark</iconset>
+             <normaloff>:/icons/receiving_addresses</normaloff>:/icons/receiving_addresses</iconset>
            </property>
           </widget>
          </item>
@@ -400,8 +400,8 @@ Please be patient after clicking import.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>747</width>
-                <height>70</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_7">
@@ -485,8 +485,8 @@ Please be patient after clicking import.</string>
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>747</width>
-                <height>70</height>
+                <width>98</width>
+                <height>28</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_11">
@@ -691,7 +691,7 @@ txScrollArea:{
                </property>
                <property name="icon">
                 <iconset resource="../pivx.qrc">
-                 <normaloff>:/icons/send_dark</normaloff>:/icons/send_dark</iconset>
+                 <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
                </property>
                <property name="autoDefault">
                 <bool>true</bool>

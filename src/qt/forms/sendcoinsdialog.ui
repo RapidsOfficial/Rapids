@@ -1573,7 +1573,7 @@
              </property>
              <property name="icon">
               <iconset resource="../pivx.qrc">
-               <normaloff>:/icons/send_dark</normaloff>:/icons/send_dark</iconset>
+               <normaloff>:/icons/send</normaloff>:/icons/send</iconset>
              </property>
              <property name="autoDefault">
               <bool>false</bool>
