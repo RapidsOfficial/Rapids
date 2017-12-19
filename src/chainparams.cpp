@@ -212,7 +212,7 @@ public:
         nMaxZerocoinSpendsPerTransaction = 7; // Assume about 20kb each
         nMinZerocoinMintFee = 1 * CENT; //high fee required for zerocoin mints
         nMintRequiredConfirmations = 20; //the maximum amount of confirmations until accumulated in 19
-        nRequiredAccumulation = 2;
+        nRequiredAccumulation = 1;
         nDefaultSecurityLevel = 100; //full security level for accumulators
         nZerocoinHeaderVersion = 4; //Block headers must be this version once zerocoin is active
         nBudget_Fee_Confirmations = 6; // Number of confirmations for the finalization fee
