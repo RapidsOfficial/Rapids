@@ -564,6 +564,7 @@ void PrivacyDialog::setBalance(const CAmount& balance, const CAmount& unconfirme
         mapImmature.insert(make_pair(denom, 0));
     }
 
+    int nBestHeight = chainActive.Height();
     for (auto& mint : listMints){
         // All denominations
         mapDenomBalances.at(mint.GetDenomination())++;
@@ -575,8 +576,9 @@ void PrivacyDialog::setBalance(const CAmount& balance, const CAmount& unconfirme
         else {
             // After a denomination is confirmed it might still be immature because < 3 of the same denomination were minted after it
             CBlockIndex *pindex = chainActive[mint.GetHeight() + 1];
+            int nHeight2CheckpointsDeep = nBestHeight - (nBestHeight % 10) - 20;
             int nMintsAdded = 0;
-            while (pindex->nHeight < chainActive.Height() - 30) { // 30 just to make sure that its at least 2 checkpoints from the top block
+            while (pindex->nHeight < nHeight2CheckpointsDeep) { //at least 2 checkpoints from the top block
                 nMintsAdded += count(pindex->vMintDenominationsInBlock.begin(), pindex->vMintDenominationsInBlock.end(), mint.GetDenomination());
                 if (nMintsAdded >= Params().Zerocoin_RequiredAccumulation())
                     break;
