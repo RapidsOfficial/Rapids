@@ -79,22 +79,28 @@ min-height:2.5em;
 padding: 0em 0em;
 font-size: 11px;
 color:#aaa;
-width: 70px;
+width: 80px;
 height: 60px;
 }
 
 QToolBar > QToolButton:checked {
-background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.08 #ce00bc, stop: 0.0801 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ffffff, stop: 0.07 #ffffff, stop: 0.0701 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
 color:#fff;
 }
 
-QToolBar > QToolButton:hover:!selected {
-background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.08 #ce00bc, stop: 0.0801 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
+/* QToolBar > QToolButton:hover:!selected { */
+QToolBar > QToolButton:hover {
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ffffff, stop: 0.07 #ffffff, stop: 0.0701 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
 color:#fff;
 }
 
 QToolBar > QToolButton#ToolbarSpacer:hover:!selected {
 background-color: #372f44; /* Do not highlight placeholder on hover */
+}
+
+QToolBar > QToolButton:pressed {
+background-color: qlineargradient(x1:0, x2: 1, stop: 0 #00a300, stop: 0.07 #00a300, stop: 0.0701 #372f44, stop: 0.5 #5c4c7c, stop: 1 #372f44);
+color:#fff;
 }
 
 QMessageBox {
@@ -231,8 +237,9 @@ font-size:12px;
 font-weight:bold;
 padding-left:25px;
 padding-right:25px;
-padding-top:5px;
-padding-bottom:5px;
+padding-top:1px;
+padding-bottom:1px;
+height: 26px;
 margin: 2px;
 }
 
@@ -242,7 +249,7 @@ background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00
 background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #ffffff, stop: 0.9 #ffffff, stop: 1 #5c4c7c);
 background-color: qlineargradient(x1:0, x2: 1, stop: 0 #5c4c7c, stop: 0.1 #ffffff, stop: 0.9 #ffffff, stop: 1 #5c4c7c);
 */
-background-color: qlineargradient(x1:0, x2: 1, stop: 0 #ce00bc, stop: 0.04 #ce00bc, stop: 0.0401 #6f5ca3, stop: 1 #6f5ca3);
+background-color: qlineargradient(y1:0, y2: 1, stop: 0 #ffffff, stop: 0.1 #ffffff, stop: 0.101 #6f5ca3, stop: 0.9 #6f5ca3, stop: 0.901 #ffffff, stop: 1 #ffffff);
 }
 
 QPushButton:focus {
@@ -251,7 +258,9 @@ QPushButton:focus {
 }
 
 QPushButton:pressed {
-border:1px solid #ce00bc;
+background-color: #5c4c7c;
+border:1px solid #000000;
+background-color: qlineargradient(y1:0, y2: 1, stop: 0 #00ff00, stop: 0.1 #00ff00, stop: 0.101 #6f5ca3, stop: 0.9 #6f5ca3, stop: 0.901 #00ff00, stop: 1 #00ff00);
 }
 
 /* Special handling for statusbar-icons (which are partly QPushButtons) */
@@ -1443,7 +1452,31 @@ padding-right:5px;
 
 /* QStackedWidget#SendCoinsEntry .QValidatedLineEdit#payTo { /* Pay To Input Field */
 /* QStackedWidget#SendCoinsEntry .QValidatedLineEdit#payTo:!focus { /* Pay To Input Field */
-/* QStackedWidget#SendCoinsEntry .QToolButton { /* General Settings for Pay To Icons */
+
+QStackedWidget#SendCoinsEntry .QToolButton { /* General Settings for Pay To Icons */
+background-color: #5c4c7c; 
+border-width: 1px;
+border-style: outset;
+border-color: #382f44;
+border-radius: 2px;
+color:#ffffff;
+font-size:12px;
+font-weight:bold;
+margin: 2px;
+}    
+
+QStackedWidget#SendCoinsEntry .QToolButton:hover { /* General Settings for Pay To Icons */
+background-color: qlineargradient(y1:0, y2: 1, stop: 0 #ffffff, stop: 0.1 #ffffff, stop: 0.101 #6f5ca3, stop: 0.9 #6f5ca3, stop: 0.901 #ffffff, stop: 1 #ffffff);
+}    
+
+QStackedWidget#SendCoinsEntry .QToolButton:focus { /* General Settings for Pay To Icons */
+
+}    
+
+QStackedWidget#SendCoinsEntry .QToolButton:pressed { /* General Settings for Pay To Icons */
+border:1px solid #ffffff;
+}    
+    
 /* QStackedWidget#SendCoinsEntry .QToolButton#addressBookButton { /* Address Book Button */
 /* QStackedWidget#SendCoinsEntry .QToolButton#addressBookButton { */
 /* QStackedWidget#SendCoinsEntry .QToolButton#pasteButton { */
