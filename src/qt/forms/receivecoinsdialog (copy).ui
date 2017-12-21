@@ -235,13 +235,6 @@
                </property>
               </widget>
              </item>
-             <item row="8" column="0">
-              <widget class="QLabel" name="label_7">
-               <property name="text">
-                <string/>
-               </property>
-              </widget>
-             </item>
              <item row="8" column="2">
               <layout class="QHBoxLayout" name="horizontalLayout">
                <item>
@@ -299,18 +292,12 @@
                </item>
               </layout>
              </item>
-             <item row="9" column="2">
-              <spacer name="verticalSpacer">
-               <property name="orientation">
-                <enum>Qt::Vertical</enum>
+             <item row="8" column="0">
+              <widget class="QLabel" name="label_7">
+               <property name="text">
+                <string/>
                </property>
-               <property name="sizeHint" stdset="0">
-                <size>
-                 <width>20</width>
-                 <height>40</height>
-                </size>
-               </property>
-              </spacer>
+              </widget>
              </item>
             </layout>
            </item>
