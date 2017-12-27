@@ -16,6 +16,7 @@
 #include "obfuscationconfig.h"
 #include "optionsmodel.h"
 #include "transactionfilterproxy.h"
+#include "transactionrecord.h"
 #include "transactiontablemodel.h"
 #include "walletmodel.h"
 
@@ -57,6 +58,14 @@ public:
         QString address = index.data(Qt::DisplayRole).toString();
         qint64 amount = index.data(TransactionTableModel::AmountRole).toLongLong();
         bool confirmed = index.data(TransactionTableModel::ConfirmedRole).toBool();
+
+        // Check transaction status
+        int nStatus = index.data(TransactionTableModel::StatusRole).toInt();
+        bool fConflicted = false;
+        if (nStatus == TransactionStatus::Conflicted || nStatus == TransactionStatus::NotAccepted) {
+            fConflicted = true; // Most probably orphaned, but could have other reasons as well
+        }
+
         QVariant value = index.data(Qt::ForegroundRole);
         QColor foreground = COLOR_BLACK;
         if (value.canConvert<QBrush>()) {
@@ -74,7 +83,9 @@ public:
             iconWatchonly.paint(painter, watchonlyRect);
         }
 
-        if (amount < 0) {
+        if(fConflicted) { // No need to check anything else for conflicted transactions
+            foreground = COLOR_CONFLICTED;
+        } else if (amount < 0) {
             foreground = COLOR_NEGATIVE;
         } else if (!confirmed) {
             foreground = COLOR_UNCONFIRMED;
