@@ -226,9 +226,11 @@ RES_ICONS = \
   qt/res/icons/qrcode.png \
   qt/res/icons/quit.png \
   qt/res/icons/receive.png \
+  qt/res/icons/receive_dark.png \
   qt/res/icons/privacy.png \
   qt/res/icons/remove.png \
   qt/res/icons/send.png \
+  qt/res/icons/send_dark.png \
   qt/res/icons/staking_active.png \
   qt/res/icons/staking_inactive.png \
   qt/res/icons/synced.png \
@@ -316,11 +318,13 @@ RES_IMAGES = \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
   qt/res/images/pivx_logo_horizontal.png \
-  qt/res/images/downArrow.png \
+  qt/res/images/downArrow_dark.png \
+  qt/res/images/downArrow_small_dark.png \
   qt/res/images/downArrow_small.png \
+  qt/res/images/upArrow_small_dark.png \
   qt/res/images/upArrow_small.png \
-  qt/res/images/leftArrow_small.png \
-  qt/res/images/rightArrow_small.png \
+  qt/res/images/leftArrow_small_dark.png \
+  qt/res/images/rightArrow_small_dark.png \
   qt/res/images/qtreeview_selected.png \
   qt/res/images/walletFrame.png \
   qt/res/images/walletFrame_bg.png \

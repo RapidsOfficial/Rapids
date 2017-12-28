@@ -305,6 +305,11 @@ public:
         nAutoCombineThreshold = 0;
     }
 
+    int getZeromintPercentage()
+    {
+        return nZeromintPercentage;
+    }
+
     bool isZeromintEnabled()
     {
         return fEnableZeromint;
