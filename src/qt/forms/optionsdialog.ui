@@ -131,6 +131,19 @@
         </spacer>
        </item>
        <item>
+        <widget class="QCheckBox" name="checkBoxZeromintEnable">
+         <property name="toolTip">
+          <string>Enable automatic minting of PIV units to zPIV</string>
+         </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Enable zPIV Automint</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QLabel" name="percentage_label">
