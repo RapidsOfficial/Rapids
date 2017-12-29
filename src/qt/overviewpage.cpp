@@ -65,6 +65,10 @@ public:
         if (nStatus == TransactionStatus::Conflicted || nStatus == TransactionStatus::NotAccepted) {
             fConflicted = true; // Most probably orphaned, but could have other reasons as well
         }
+        bool fImmature = false;
+        if (nStatus == TransactionStatus::Immature) {
+            fImmature = true;
+        }
 
         QVariant value = index.data(Qt::ForegroundRole);
         QColor foreground = COLOR_BLACK;
@@ -85,10 +89,10 @@ public:
 
         if(fConflicted) { // No need to check anything else for conflicted transactions
             foreground = COLOR_CONFLICTED;
+        } else if (!confirmed || fImmature) {
+            foreground = COLOR_UNCONFIRMED;
         } else if (amount < 0) {
             foreground = COLOR_NEGATIVE;
-        } else if (!confirmed) {
-            foreground = COLOR_UNCONFIRMED;
         } else {
             foreground = COLOR_BLACK;
         }
