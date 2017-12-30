@@ -137,6 +137,7 @@ UniValue getblockcount(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getblockcount", "") + HelpExampleRpc("getblockcount", ""));
 
+    LOCK(cs_main);
     return chainActive.Height();
 }
 
@@ -151,6 +152,7 @@ UniValue getbestblockhash(const UniValue& params, bool fHelp)
             "\nExamples\n" +
             HelpExampleCli("getbestblockhash", "") + HelpExampleRpc("getbestblockhash", ""));
 
+    LOCK(cs_main);
     return chainActive.Tip()->GetBlockHash().GetHex();
 }
 
@@ -165,6 +167,7 @@ UniValue getdifficulty(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getdifficulty", "") + HelpExampleRpc("getdifficulty", ""));
 
+    LOCK(cs_main);
     return GetDifficulty();
 }
 
@@ -264,6 +267,8 @@ UniValue getblockhash(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getblockhash", "1000") + HelpExampleRpc("getblockhash", "1000"));
 
+    LOCK(cs_main);
+
     int nHeight = params[0].get_int();
     if (nHeight < 0 || nHeight > chainActive.Height())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Block height out of range");
@@ -318,6 +323,8 @@ UniValue getblock(const UniValue& params, bool fHelp)
             "\"data\"             (string) A string that is serialized, hex-encoded data for block 'hash'.\n"
             "\nExamples:\n" +
             HelpExampleCli("getblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\"") + HelpExampleRpc("getblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\""));
+
+    LOCK(cs_main);
 
     std::string strHash = params[0].get_str();
     uint256 hash(strHash);
@@ -411,6 +418,8 @@ UniValue gettxoutsetinfo(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("gettxoutsetinfo", "") + HelpExampleRpc("gettxoutsetinfo", ""));
 
+    LOCK(cs_main);
+
     UniValue ret(UniValue::VOBJ);
 
     CCoinsStats stats;
@@ -461,6 +470,8 @@ UniValue gettxout(const UniValue& params, bool fHelp)
             HelpExampleCli("listunspent", "") +
             "\nView the details\n" + HelpExampleCli("gettxout", "\"txid\" 1") +
             "\nAs a json rpc call\n" + HelpExampleRpc("gettxout", "\"txid\", 1"));
+
+    LOCK(cs_main);
 
     UniValue ret(UniValue::VOBJ);
 
@@ -515,6 +526,8 @@ UniValue verifychain(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("verifychain", "") + HelpExampleRpc("verifychain", ""));
 
+    LOCK(cs_main);
+
     int nCheckLevel = 4;
     int nCheckDepth = GetArg("-checkblocks", 288);
     if (params.size() > 0)
@@ -541,6 +554,8 @@ UniValue getblockchaininfo(const UniValue& params, bool fHelp)
             "}\n"
             "\nExamples:\n" +
             HelpExampleCli("getblockchaininfo", "") + HelpExampleRpc("getblockchaininfo", ""));
+
+    LOCK(cs_main);
 
     UniValue obj(UniValue::VOBJ);
     obj.push_back(Pair("chain", Params().NetworkIDString()));
@@ -597,6 +612,8 @@ UniValue getchaintips(const UniValue& params, bool fHelp)
             "5.  \"active\"                This is the tip of the active main chain, which is certainly valid\n"
             "\nExamples:\n" +
             HelpExampleCli("getchaintips", "") + HelpExampleRpc("getchaintips", ""));
+
+    LOCK(cs_main);
 
     /* Build up a list of chain tips.  We start with the list of all
        known blocks, and successively remove blocks that appear as pprev
@@ -670,6 +687,7 @@ UniValue getfeeinfo(const UniValue& params, bool fHelp)
                         "\nExamples:\n" +
                 HelpExampleCli("getfeeinfo", "5") + HelpExampleRpc("getfeeinfo", "5"));
 
+    LOCK(cs_main);
 
     int nBlocks = params[0].get_int();
     int nBestHeight = chainActive.Height();
