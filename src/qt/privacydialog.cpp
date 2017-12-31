@@ -449,6 +449,8 @@ void PrivacyDialog::sendzPIV()
 
     // Clear zpiv selector in case it was used
     ZPivControlDialog::listSelectedMints.clear();
+    ui->labelzPivSelected_int->setText(QString("0"));
+    ui->labelQuantitySelected_int->setText(QString("0"));
 
     // Some statistics for entertainment
     QString strStats = "";
