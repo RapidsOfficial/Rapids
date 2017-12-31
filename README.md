@@ -34,7 +34,7 @@ More information at [pivx.org](http://www.pivx.org) Visit our ANN thread at [Bit
 <tr><td>151201-259200</td><td>50 PIV</td></tr>
 <tr><th colspan=4>PoS Phase</th></tr>
 <tr><th>Block Height</th><th colspan=3>Reward Amount</th></tr>
-<tr><td>259201-Infinite</td><td colspan=3>Variable based on SeeSaw Reward Mechanism</td></tr>
+<tr><td>259201-Infinite</td><td colspan=3>Variable based on <a href="https://pivx.org/knowledge-base/see-saw-rewards-mechanism/">SeeSaw Reward Mechanism</a></td></tr>
 </table>
 
 ### PoW Rewards Breakdown
