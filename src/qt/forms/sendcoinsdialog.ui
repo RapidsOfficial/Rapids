@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>978</width>
-    <height>693</height>
+    <height>695</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -840,16 +840,16 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="labelBlockSize">
+                 <widget class="QLabel" name="labelBlockSizeText">
                   <property name="text">
-                   <string>0 PIV</string>
+                   <string>UTXO Size:</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="labelBlockSizeText">
+                 <widget class="QLabel" name="labelBlockSize">
                   <property name="text">
-                   <string>UTXO Size:</string>
+                   <string>0 PIV</string>
                   </property>
                  </widget>
                 </item>
@@ -1762,7 +1762,7 @@
  </resources>
  <connections/>
  <buttongroups>
-  <buttongroup name="groupCustomFee"/>
   <buttongroup name="groupFee"/>
+  <buttongroup name="groupCustomFee"/>
  </buttongroups>
 </ui>
