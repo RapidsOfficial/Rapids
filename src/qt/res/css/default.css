@@ -1005,9 +1005,10 @@ font-size:12px;
 
 QWidget .QFrame#frame_Balances .QLabel#labelBalance { /* Available Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:26px;
-font-weight:normal;
-color:#372f44;
+font-size:12px;
+font-weight:bold;
+color:#5c4c7c;
+margin-left:0px;
 }
 
 QWidget .QFrame#frame_Balances .QLabel#labelWatchAvailable { /* Watch-only Balance */
@@ -1028,9 +1029,10 @@ font-size:12px;
 
 QWidget .QFrame#frame_Balances .QLabel#labelUnconfirmed { /* Pending Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:18px;
-font-weight:normal;
-color:#372f44;
+font-size:12px;
+font-weight:bold;
+color:#5c4c7c;
+margin-left:0px;
 }
 
 QWidget .QFrame#frame_Balances .QLabel#labelWatchPending { /* Watch-only Pending Balance */
@@ -1051,9 +1053,10 @@ font-size:12px;
 
 QWidget .QFrame#frame_Balances .QLabel#labelImmature { /* Immature Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:18px;
-font-weight:normal;
-color:#372f44;
+font-size:12px;
+font-weight:bold;
+color:#5c4c7c;
+margin-left:0px;
 }
 
 QWidget .QFrame#frame_Balances .QLabel#labelWatchImmature { /* Watch-only Immature Balance */
@@ -1074,12 +1077,37 @@ font-size:12px;
 
 QWidget .QFrame#frame_Balances .QLabel#labelTotal { /* Total Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:26px;
-font-weight:normal;
-color:#372f44;
+font-size:12px;
+font-weight:bold;
+color:#5c4c7c;
+margin-left:0px;
 }
 
 QWidget .QFrame#frame_Balances .QLabel#labelWatchTotal { /* Watch-only Total Balance */
+qproperty-alignment: 'AlignVCenter | AlignLeft';
+font-size:12px;
+margin-left:16px;
+}
+
+QWidget .QFrame#frame_Balances .QLabel#labelLockedBalanceText { /* Available zPIV Label */
+qproperty-alignment: 'AlignVCenter | AlignLeft';
+min-width:160px;
+color:#372f44;
+margin-right:5px;
+padding-right:5px;
+font-weight:bold;
+font-size:12px;
+}
+
+QWidget .QFrame#frame_Balances .QLabel#labelLockedBalance { /* Available zPIV Balance */
+qproperty-alignment: 'AlignVCenter | AlignLeft';
+font-size:12px;
+font-weight:bold;
+color:#5c4c7c;
+margin-left:0px;
+}
+
+QWidget .QFrame#frame_Balances .QLabel#labelWatchLocked { /* Available zPIV Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
 font-size:12px;
 margin-left:16px;
@@ -1193,10 +1221,9 @@ font-size:12px;
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelBalancez { /* Available PIV Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:12px;
-font-weight:bold;
-color:#5c4c7c;
-margin-left:0px;
+font-size:26px;
+font-weight:normal;
+color:#372f44;
 }
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelzBalanceTextz { /* Available zPIV Label */
@@ -1217,42 +1244,6 @@ color:#5c4c7c;
 margin-left:0px;
 }
 
-QWidget .QFrame#frame_CombinedBalances .QLabel#labelLockedBalanceText { /* Available zPIV Label */
-qproperty-alignment: 'AlignVCenter | AlignLeft';
-min-width:160px;
-color:#372f44;
-margin-right:5px;
-padding-right:5px;
-font-weight:bold;
-font-size:12px;
-}
-
-QWidget .QFrame#frame_CombinedBalances .QLabel#labelLockedBalance { /* Available zPIV Balance */
-qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:12px;
-font-weight:normal;
-color:#5c4c7c;
-margin-left:0px;
-}
-
-QWidget .QFrame#frame_CombinedBalances .QLabel#labelUnLockedBalanceText { /* Available zPIV Label */
-qproperty-alignment: 'AlignVCenter | AlignLeft';
-min-width:160px;
-color:#372f44;
-margin-right:5px;
-padding-right:5px;
-font-weight:bold;
-font-size:12px;
-}
-
-QWidget .QFrame#frame_CombinedBalances .QLabel#labelUnLockedBalance { /* Available zPIV Balance */
-qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:12px;
-font-weight:normal;
-color:#5c4c7c;
-margin-left:0px;
-}
-
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelTotalTextz { /* Available total Label */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
 min-width:160px;
@@ -1265,10 +1256,9 @@ font-size:12px;
 
 QWidget .QFrame#frame_CombinedBalances .QLabel#labelTotalz { /* Available total Balance */
 qproperty-alignment: 'AlignVCenter | AlignLeft';
-font-size:12px;
-font-weight:bold;
-color:#5c4c7c;
-margin-left:0px;
+font-size:26px;
+font-weight:normal;
+color:#372f44;
 }
 
 /**************************** RECENT TRANSACTIONS ***************************************/

@@ -46,6 +46,7 @@ public:
         ZeromintEnable,      // bool
         ZeromintPercentage,  // int
         ZeromintPrefDenom,   // int
+        HideZeroBalances,    // bool
         AnonymizePivxAmount, //int
         ShowMasternodesTab,  // bool
         Listen,              // bool
@@ -86,6 +87,7 @@ private:
     int nDisplayUnit;
     QString strThirdPartyTxUrls;
     bool fCoinControlFeatures;
+    bool fHideZeroBalances;
     /* settings that were overriden by command-line */
     QString strOverriddenByCommandLine;
 
@@ -99,6 +101,7 @@ signals:
     void preferredDenomChanged(int);
     void anonymizePivxAmountChanged(int);
     void coinControlFeaturesChanged(bool);
+    void hideZeroBalancesChanged(bool);
 };
 
 #endif // BITCOIN_QT_OPTIONSMODEL_H

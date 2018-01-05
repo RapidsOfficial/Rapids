@@ -465,6 +465,7 @@ public:
     CAmount GetWatchOnlyBalance() const;
     CAmount GetUnconfirmedWatchOnlyBalance() const;
     CAmount GetImmatureWatchOnlyBalance() const;
+    CAmount GetLockedWatchOnlyBalance() const;
     bool CreateTransaction(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl);
     bool CreateTransaction(const std::vector<std::pair<CScript, CAmount> >& vecSend,
         CWalletTx& wtxNew,
@@ -1247,6 +1248,40 @@ public:
 
         nAvailableWatchCreditCached = nCredit;
         fAvailableWatchCreditCached = true;
+        return nCredit;
+    }
+        
+    CAmount GetLockedWatchOnlyCredit() const
+    {
+        if (pwallet == 0)
+            return 0;
+
+        // Must wait until coinbase is safely deep enough in the chain before valuing it
+        if (IsCoinBase() && GetBlocksToMaturity() > 0)
+            return 0;
+
+        CAmount nCredit = 0;
+        uint256 hashTx = GetHash();
+        for (unsigned int i = 0; i < vout.size(); i++) {
+            const CTxOut& txout = vout[i];
+
+            // Skip spent coins
+            if (pwallet->IsSpent(hashTx, i)) continue;
+
+            // Add locked coins
+            if (pwallet->IsLockedCoin(hashTx, i)) {
+                nCredit += pwallet->GetCredit(txout, ISMINE_WATCH_ONLY);
+            }
+
+            // Add masternode collaterals which are handled likc locked coins
+            if (fMasterNode && vout[i].nValue == 10000 * COIN) {
+                nCredit += pwallet->GetCredit(txout, ISMINE_WATCH_ONLY);
+            }
+
+            if (!MoneyRange(nCredit))
+                throw std::runtime_error("CWalletTx::GetLockedCredit() : value out of range");
+        }
+
         return nCredit;
     }
 
