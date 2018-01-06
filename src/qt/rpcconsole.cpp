@@ -616,6 +616,8 @@ void RPCConsole::on_tabWidget_currentChanged(int index)
 {
     if (ui->tabWidget->widget(index) == ui->tab_console) {
         ui->lineEdit->setFocus();
+    } else if (ui->tabWidget->widget(index) != ui->tab_peers) {
+        clearSelectedNode();
     }
 }
 
@@ -726,12 +728,11 @@ void RPCConsole::peerLayoutChanged()
         return;
 
     // find the currently selected row
-    int selectedRow;
+    int selectedRow = -1;
     QModelIndexList selectedModelIndex = ui->peerWidget->selectionModel()->selectedIndexes();
-    if (selectedModelIndex.isEmpty())
-        selectedRow = -1;
-    else
+    if (!selectedModelIndex.isEmpty()) {
         selectedRow = selectedModelIndex.first().row();
+    }
 
     // check if our detail node has a row in the table (it may not necessarily
     // be at selectedRow since its position can change after a layout change)
@@ -740,8 +741,6 @@ void RPCConsole::peerLayoutChanged()
     if (detailNodeRow < 0) {
         // detail node dissapeared from table (node disconnected)
         fUnselect = true;
-        cachedNodeid = -1;
-        ui->peerHeading->setText(tr("Select a peer to view detailed information."));
     } else {
         if (detailNodeRow != selectedRow) {
             // detail node moved position
@@ -754,8 +753,7 @@ void RPCConsole::peerLayoutChanged()
     }
 
     if (fUnselect && selectedRow >= 0) {
-        ui->peerWidget->selectionModel()->select(QItemSelection(selectedModelIndex.first(), selectedModelIndex.last()),
-            QItemSelectionModel::Deselect);
+        clearSelectedNode();
     }
 
     if (fReselect) {
@@ -837,4 +835,12 @@ void RPCConsole::hideEvent(QHideEvent* event)
 void RPCConsole::showBackups()
 {
     GUIUtil::showBackups();
+}
+
+void RPCConsole::clearSelectedNode()
+{
+    ui->peerWidget->selectionModel()->clearSelection();
+    cachedNodeid = -1;
+    ui->detailWidget->hide();
+    ui->peerHeading->setText(tr("Select a peer to view detailed information."));
 }

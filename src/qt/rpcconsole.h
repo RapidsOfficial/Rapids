@@ -58,6 +58,8 @@ private slots:
     void resizeEvent(QResizeEvent* event);
     void showEvent(QShowEvent* event);
     void hideEvent(QHideEvent* event);
+    /** clear the selected node */
+    void clearSelectedNode();
 
 public slots:
     void clear();
