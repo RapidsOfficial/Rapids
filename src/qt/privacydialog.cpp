@@ -144,8 +144,9 @@ void PrivacyDialog::on_pasteButton_clicked()
 
 void PrivacyDialog::on_addressBookButton_clicked()
 {
-    if (!walletModel)
+    if (!walletModel || !walletModel->getOptionsModel())
         return;
+
     AddressBookPage dlg(AddressBookPage::ForSelection, AddressBookPage::SendingTab, this);
     dlg.setModel(walletModel->getAddressTableModel());
     if (dlg.exec()) {
@@ -235,9 +236,6 @@ void PrivacyDialog::on_pushButtonMintzPIV_clicked()
 
 void PrivacyDialog::on_pushButtonMintReset_clicked()
 {
-    if (!walletModel || !walletModel->getOptionsModel())
-        return;
-
     ui->TEMintStatus->setPlainText(tr("Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. \nPlease be patient..."));
     ui->TEMintStatus->repaint ();
 
@@ -252,9 +250,6 @@ void PrivacyDialog::on_pushButtonMintReset_clicked()
 
 void PrivacyDialog::on_pushButtonSpentReset_clicked()
 {
-    if (!walletModel || !walletModel->getOptionsModel())
-        return;
-
     ui->TEMintStatus->setPlainText(tr("Starting ResetSpentZerocoin: "));
     ui->TEMintStatus->repaint ();
     int64_t nTime = GetTimeMillis();
@@ -296,6 +291,9 @@ void PrivacyDialog::on_pushButtonSpendzPIV_clicked()
 
 void PrivacyDialog::on_pushButtonZPivControl_clicked()
 {
+    if (!walletModel || !walletModel->getOptionsModel())
+        return;
+
     ZPivControlDialog* zPivControl = new ZPivControlDialog(this);
     zPivControl->setModel(walletModel);
     zPivControl->exec();
@@ -447,6 +445,15 @@ void PrivacyDialog::sendzPIV()
         return;
     }
 
+    if (walletModel && walletModel->getAddressTableModel()) {
+        // If zPiv was spent successfully update the addressbook with the label
+        std::string labelText = ui->addAsLabel->text().toStdString();
+        if (!labelText.empty())
+            walletModel->updateAddressBookLabels(address.Get(), labelText, "send");
+        else
+            walletModel->updateAddressBookLabels(address.Get(), "(no label)", "send");
+    }
+
     // Clear zpiv selector in case it was used
     ZPivControlDialog::listSelectedMints.clear();
     ui->labelzPivSelected_int->setText(QString("0"));
@@ -513,6 +520,9 @@ void PrivacyDialog::coinControlClipboardAmount()
 // Coin Control: button inputs -> show actual coin control dialog
 void PrivacyDialog::coinControlButtonClicked()
 {
+    if (!walletModel || !walletModel->getOptionsModel())
+        return;
+
     CoinControlDialog dlg;
     dlg.setModel(walletModel);
     dlg.exec();
