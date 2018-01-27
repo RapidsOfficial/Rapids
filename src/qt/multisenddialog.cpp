@@ -140,13 +140,15 @@ void MultiSendDialog::on_addButton_clicked()
         strMultiSendPrint += "% \n";
     }
 
-    // update the address book with the label given or no label if none was given.
-    CBitcoinAddress address(strAddress);
-    std::string userInputLabel = ui->labelAddressLabelEdit->text().toStdString();
-    if (!userInputLabel.empty())
-        pwalletMain->SetAddressBook(address.Get(), userInputLabel, "send");
-    else
-        pwalletMain->SetAddressBook(address.Get(), "(no label)", "send");
+    if (model && model->getAddressTableModel()) {
+        // update the address book with the label given or no label if none was given.
+        CBitcoinAddress address(strAddress);
+        std::string userInputLabel = ui->labelAddressLabelEdit->text().toStdString();
+        if (!userInputLabel.empty())
+            model->updateAddressBookLabels(address.Get(), userInputLabel, "send");
+        else
+            model->updateAddressBookLabels(address.Get(), "(no label)", "send");
+    }
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
     if(!walletdb.WriteMultiSend(pwalletMain->vMultiSend)) {
