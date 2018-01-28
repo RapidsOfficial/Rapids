@@ -4003,6 +4003,8 @@ void CWallet::AutoCombineDust()
         CCoinControl* coinControl = new CCoinControl();
         CAmount nTotalRewardsValue = 0;
         BOOST_FOREACH (const COutput& out, vCoins) {
+            if (!out.fSpendable)
+                continue;
             //no coins should get this far if they dont have proper maturity, this is double checking
             if (out.tx->IsCoinStake() && out.tx->GetDepthInMainChain() < COINBASE_MATURITY + 1)
                 continue;
@@ -4040,10 +4042,8 @@ void CWallet::AutoCombineDust()
         string strErr;
         CAmount nFeeRet = 0;
 
-        //get the fee amount
-        CWalletTx wtxdummy;
-        CreateTransaction(vecSend, wtxdummy, keyChange, nFeeRet, strErr, coinControl, ALL_COINS, false, CAmount(0));
-        vecSend[0].second = nTotalRewardsValue - nFeeRet - 500;
+        // 10% safety margin to avoid "Insufficient funds" errors
+        vecSend[0].second = nTotalRewardsValue - (nTotalRewardsValue / 10);
 
         if (!CreateTransaction(vecSend, wtx, keyChange, nFeeRet, strErr, coinControl, ALL_COINS, false, CAmount(0))) {
             LogPrintf("AutoCombineDust createtransaction failed, reason: %s\n", strErr);
