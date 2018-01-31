@@ -312,14 +312,14 @@ void OptionsDialog::doProxyIpChecks(QValidatedLineEdit* pUiProxyIp, QLineEdit* p
         ui->statusLabel->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel->setText(tr("The supplied proxy address is invalid."));
         return;
-    } 
+    }
     // Check proxy port
     if (!pUiProxyPort->hasAcceptableInput()){
         disableOkButton();
         ui->statusLabel->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel->setText(tr("The supplied proxy port is invalid."));
         return;
-    } 
+    }
 
     proxyType checkProxy = proxyType(addrProxy);
     if (!checkProxy.IsValid()) {
