@@ -97,6 +97,7 @@ struct COrphanTx {
 map<uint256, COrphanTx> mapOrphanTransactions;
 map<uint256, set<uint256> > mapOrphanTransactionsByPrev;
 map<uint256, int64_t> mapRejectedBlocks;
+map<uint256, int64_t> mapZerocoinspends; //txid, time received
 
 
 void EraseOrphansFor(NodeId peer);
@@ -1822,6 +1823,10 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
     SyncWithWallets(tx, NULL);
 
+    //Track zerocoinspends and ensure that they are given priority to make it into the blockchain
+    if (tx.IsZerocoinSpend())
+        mapZerocoinspends[tx.GetHash()] = GetAdjustedTime();
+
     return true;
 }
 
@@ -3340,6 +3345,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     CAmount nValueOut = 0;
     CAmount nValueIn = 0;
     unsigned int nMaxBlockSigOps = MAX_BLOCK_SIGOPS_CURRENT;
+    vector<uint256> vSpendsInBlock;
     for (unsigned int i = 0; i < block.vtx.size(); i++) {
         const CTransaction& tx = block.vtx[i];
 
@@ -3355,7 +3361,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         }
         if (tx.IsZerocoinSpend()) {
             int nHeightTx = 0;
-            if (IsTransactionInChain(tx.GetHash(), nHeightTx)) {
+            uint256 txid = tx.GetHash();
+            vSpendsInBlock.emplace_back(txid);
+            if (IsTransactionInChain(txid, nHeightTx)) {
                 //when verifying blocks on init, the blocks are scanned without being disconnected - prevent that from causing an error
                 if (!fVerifyingBlocks || (fVerifyingBlocks && pindex->nHeight > nHeightTx))
                     return state.DoS(100, error("%s : txid %s already exists in block %d , trying to include it again in block %d", __func__,
@@ -3599,6 +3607,13 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     //Continue tracking possible movement of fraudulent funds until they are completely frozen
     if (pindex->nHeight >= Params().Zerocoin_Block_FirstFraudulent() && pindex->nHeight <= Params().Zerocoin_Block_RecalculateAccumulators() + 1)
         AddInvalidSpendsToMap(block);
+
+    //Remove zerocoinspends from the pending map
+    for (const uint256& txid : vSpendsInBlock) {
+        auto it = mapZerocoinspends.find(txid);
+        if (it != mapZerocoinspends.end())
+            mapZerocoinspends.erase(it);
+    }
 
     return true;
 }
