@@ -305,22 +305,32 @@ void OptionsDialog::doProxyIpChecks(QValidatedLineEdit* pUiProxyIp, QLineEdit* p
     const std::string strAddrProxy = pUiProxyIp->text().toStdString();
     CService addrProxy;
 
-    /* Check for a valid IPv4 / IPv6 address */
+    // Check for a valid IPv4 / IPv6 address
     if (!(fProxyIpValid = LookupNumeric(strAddrProxy.c_str(), addrProxy))) {
         disableOkButton();
         pUiProxyIp->setValid(false);
         ui->statusLabel->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel->setText(tr("The supplied proxy address is invalid."));
-    } else {
-        if (!pUiProxyPort->hasAcceptableInput()){
-            disableOkButton();
-            ui->statusLabel->setStyleSheet("QLabel { color: red; }");
-            ui->statusLabel->setText(tr("The supplied proxy port is invalid."));
-        } else {
-            enableOkButton();
-            ui->statusLabel->clear();
-        }
+        return;
+    } 
+    // Check proxy port
+    if (!pUiProxyPort->hasAcceptableInput()){
+        disableOkButton();
+        ui->statusLabel->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel->setText(tr("The supplied proxy port is invalid."));
+        return;
+    } 
+
+    proxyType checkProxy = proxyType(addrProxy);
+    if (!checkProxy.IsValid()) {
+        disableOkButton();
+        ui->statusLabel->setStyleSheet("QLabel { color: red; }");
+        ui->statusLabel->setText(tr("The supplied proxy settings are invalid."));
+        return;
     }
+
+    enableOkButton();
+    ui->statusLabel->clear();
 }
 
 bool OptionsDialog::eventFilter(QObject* object, QEvent* event)
