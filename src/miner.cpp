@@ -211,7 +211,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     //and higher priority to zpivs that are large in value
                     int64_t nTimeSeen = GetAdjustedTime();
                     double nConfs = 100000;
-                    double dPriorityPrev = dPriority;
 
                     auto it = mapZerocoinspends.find(txid);
                     if (it != mapZerocoinspends.end()) {
@@ -221,19 +220,11 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                         mapZerocoinspends[txid] = nTimeSeen;
                     }
 
-                    //zPIV spends can have very large priority, prevent datatype problems
                     double nTimePriority = std::pow(GetAdjustedTime() - nTimeSeen, 6);
-                    double fLimit = std::numeric_limits<double>::max() - dPriority;
-                    if (fLimit > (nTimePriority * nConfs))
-                        dPriority += nTimePriority * nConfs;
-                    else
-                        dPriority = std::numeric_limits<double>::max();
 
-                    fLimit = std::numeric_limits<double>::max() / dPriority;
-                    if (fLimit > nTotalIn)
-                        dPriority *= nTotalIn;
-                    else
-                        dPriority = std::numeric_limits<double>::max();
+                    // zPIV spends can have very large priority, use non-overflowing safe functions
+                    dPriority = double_safe_addition(dPriority, (nTimePriority * nConfs));
+                    dPriority = double_safe_multiplication(dPriority, nTotalIn);
 
                     continue;
                 }
@@ -279,13 +270,9 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
                 int nConf = nHeight - coins->nHeight;
 
-                //zPIV spends can have very large priority, prevent datatype problems
-                double fLimit = std::numeric_limits<double>::max() - dPriority;
+                // zPIV spends can have very large priority, use non-overflowing safe functions
+                dPriority = double_safe_addition(dPriority, ((double)nValueIn * nConf));
 
-                if (fLimit > ((double)nValueIn * nConf))
-                    dPriority += (double)nValueIn * nConf;
-                else
-                    dPriority = std::numeric_limits<double>::max();
             }
             if (fMissingInputs) continue;
 
