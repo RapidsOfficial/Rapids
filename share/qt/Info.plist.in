@@ -30,6 +30,12 @@
 
   <key>CFBundleExecutable</key>
   <string>PIVX-Qt</string>
+  
+  <key>CFBundleName</key>
+  <string>PIVX-Qt</string>
+
+  <key>LSHasLocalizedDisplayName</key>
+  <true/>
 
   <key>CFBundleIdentifier</key>
   <string>io.pivx.Pivx-Qt</string>
