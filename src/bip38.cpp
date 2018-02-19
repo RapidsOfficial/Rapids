@@ -48,9 +48,23 @@ void ComputePassfactor(std::string ownersalt, uint256 prefactor, uint256& passfa
 
 bool ComputePasspoint(uint256 passfactor, CPubKey& passpoint)
 {
+    size_t clen = 65;
+    secp256k1_context *ctx = NULL;
+    secp256k1_pubkey pubkey;
+
     //passpoint is the ec_mult of passfactor on secp256k1
-    int clen = 65;
-    return secp256k1_ec_pubkey_create(UBEGIN(passpoint), &clen, passfactor.begin(), true) != 0;
+    if (!secp256k1_ec_pubkey_create(ctx, &pubkey, passfactor.begin()))
+        return false;
+
+    secp256k1_ec_pubkey_serialize(ctx, (unsigned char*)passpoint.begin(), &clen, &pubkey, SECP256K1_EC_COMPRESSED);
+
+    if (passpoint.size() != clen)
+        return false;
+
+    if (!passpoint.IsValid())
+        return false;
+
+    return true;
 }
 
 void ComputeSeedBPass(CPubKey passpoint, std::string strAddressHash, std::string strOwnerSalt, uint512& seedBPass)
@@ -227,8 +241,9 @@ bool BIP38_Decrypt(std::string strPassphrase, std::string strEncryptedKey, uint2
     ComputeFactorB(seedB, factorB);
 
     //multiply passfactor by factorb mod N to yield the priv key
+    secp256k1_context *ctx = NULL;
     privKey = factorB;
-    if (!secp256k1_ec_privkey_tweak_mul(privKey.begin(), passfactor.begin()))
+    if (!secp256k1_ec_privkey_tweak_mul(ctx, privKey.begin(), passfactor.begin()))
         return false;
 
     //double check that the address hash matches our final privkey
