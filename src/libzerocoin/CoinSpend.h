@@ -123,7 +123,7 @@ public:
             READWRITE(vchSig);
             READWRITE(spendType);
         } catch (...) {
-            version = 0;
+            version = 1;
         }
     }
 
