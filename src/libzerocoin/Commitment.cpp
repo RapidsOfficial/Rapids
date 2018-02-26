@@ -9,9 +9,8 @@
  * @copyright  Copyright 2013 Ian Miers, Christina Garman and Matthew Green
  * @license    This project is released under the MIT license.
  **/
-// Copyright (c) 2017 The PIVX developers
+// Copyright (c) 2017-2018 The PIVX developers
 
-#include <stdlib.h>
 #include "Commitment.h"
 #include "hash.h"
 
@@ -132,12 +131,7 @@ bool CommitmentProofOfKnowledge::Verify(const CBigNum& A, const CBigNum& B) cons
 	CBigNum computedChallenge = calculateChallenge(A, B, T1, T2);
 
 	// Return success if the computed challenge matches the incoming challenge
-	if(computedChallenge == this->challenge) {
-		return true;
-	}
-
-	// Otherwise return failure
-	return false;
+	return computedChallenge == this->challenge;
 }
 
 const CBigNum CommitmentProofOfKnowledge::calculateChallenge(const CBigNum& a, const CBigNum& b, const CBigNum &commitOne, const CBigNum &commitTwo) const {
