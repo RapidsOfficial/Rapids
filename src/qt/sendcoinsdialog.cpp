@@ -321,7 +321,7 @@ void SendCoinsDialog::on_sendButton_clicked()
     // will call relock
     WalletModel::EncryptionStatus encStatus = model->getEncryptionStatus();
     if (encStatus == model->Locked || encStatus == model->UnlockedForAnonymizationOnly) {
-        WalletModel::UnlockContext ctx(model->requestUnlock(true));
+        WalletModel::UnlockContext ctx(model->requestUnlock(AskPassphraseDialog::Context::Send_PIV, true));
         if (!ctx.isValid()) {
             // Unlock wallet was cancelled
             fNewRecipientAllowed = true;
@@ -639,7 +639,7 @@ void SendCoinsDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn&
 
     // Unlock wallet if it wasn't fully unlocked already
     if(fAskForUnlock) {
-        model->requestUnlock(false);
+        model->requestUnlock(AskPassphraseDialog::Context::Unlock_Full, false);
         if(model->getEncryptionStatus () != WalletModel::Unlocked) {
             msgParams.first = tr("Error: The wallet was unlocked only to anonymize coins. Unlock canceled.");
         }
