@@ -53,6 +53,25 @@ https://www.torproject.org/docs/tor-manual.html.en
 This allows running pivxd without having to do any manual configuration.
 
 
+Autocombine changes
+---------------------------------
+
+The autocombine feature was carrying a bug leading to a significant CPU overhead
+when being used. The function is now called only once initial blockchain
+download is finished. It's also now avoiding to combine several times while
+under the threshold in order to avoid additional transaction fees. Last but not
+least, the fee computation as been changed and the dust from fee provisioning
+is returned in the main output.
+
+
+SOCKS5 Proxy bug
+---------------------------------
+
+When inputting wrong data into the GUI for a SOCKS5 proxy, the wallet would
+crash and be unable to restart without accessing hidden configuration.
+This crash has been fixed.
+
+
 *version* Change log
 =================
 
