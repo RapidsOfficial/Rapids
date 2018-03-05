@@ -963,29 +963,24 @@ bool DecodeHexMnb(CMasternodeBroadcast& mnb, std::string strHexMnb) {
 
     return true;
 }
-
-UniValue masternodebroadcast(const UniValue& params, bool fHelp)
+UniValue createmasternodebroadcast(const UniValue& params, bool fHelp)
 {
-    string strCommand;
-    if (params.size() >= 1)
-        strCommand = params[0].get_str();
+	string strCommand;
+	if (params.size() >= 1)
+		strCommand = params[0].get_str();
+	if (fHelp  ||
+		(strCommand != "alias" && strCommand != "all"))
+		throw runtime_error(
+				"createmasternodebroadcast \"command\""
+				"Set of commands to create masternode broadcast messages for masternodes configured in masternode.conf\n"
+				"\nArguments:\n"
+				"1. \"command\"        (string or set of strings, required) The command to execute\n"
+				"\nAvailable commands:\n"
+				"  alias  - Create single remote masternode broadcast message by assigned alias configured in masternode.conf\n"
+				"  all    - Create remote masternode broadcast messages for all masternodes configured in masternode.conf\n"
+				+ HelpRequiringPassphrase());
 
-    if (fHelp  ||
-        (strCommand != "create-alias" && strCommand != "create-all" && strCommand != "decode" && strCommand != "relay"))
-        throw runtime_error(
-                "masternodebroadcast \"command\"... ( \"passphrase\" )\n"
-                "Set of commands to create and relay masternode broadcast messages\n"
-                "\nArguments:\n"
-                "1. \"command\"        (string or set of strings, required) The command to execute\n"
-                "2. \"passphrase\"     (string, optional) The wallet passphrase\n"
-                "\nAvailable commands:\n"
-                "  create-alias  - Create single remote masternode broadcast message by assigned alias configured in masternode.conf\n"
-                "  create-all    - Create remote masternode broadcast messages for all masternodes configured in masternode.conf\n"
-                "  decode        - Decode masternode broadcast message\n"
-                "  relay         - Relay masternode broadcast message to the network\n"
-                + HelpRequiringPassphrase());
-
-    if (strCommand == "create-alias")
+    if (strCommand == "alias")
     {
         // wait for reindex and/or import to finish
         if (fImporting || fReindex)
@@ -996,20 +991,8 @@ UniValue masternodebroadcast(const UniValue& params, bool fHelp)
 
         std::string alias = params[1].get_str();
 
-        if(pwalletMain->IsLocked()) {
-            SecureString strWalletPass;
-            strWalletPass.reserve(100);
-
-            if (params.size() == 3){
-                strWalletPass = params[2].get_str().c_str();
-            } else {
-                throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Your wallet is locked, passphrase is required");
-            }
-
-            if(!pwalletMain->Unlock(strWalletPass)){
-                throw JSONRPCError(RPC_WALLET_PASSPHRASE_INCORRECT, "The wallet passphrase entered was incorrect");
-            }
-        }
+        if(pwalletMain->IsLocked())
+        		throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Your wallet is locked, it needs to be unlocked first.");
 
         bool found = false;
 
@@ -1046,26 +1029,14 @@ UniValue masternodebroadcast(const UniValue& params, bool fHelp)
 
     }
 
-    if (strCommand == "create-all")
+    if (strCommand == "all")
     {
         // wait for reindex and/or import to finish
         if (fImporting || fReindex)
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Wait for reindex and/or import to finish");
 
-        if(pwalletMain->IsLocked()) {
-            SecureString strWalletPass;
-            strWalletPass.reserve(100);
-
-            if (params.size() == 2){
-                strWalletPass = params[1].get_str().c_str();
-            } else {
-                throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Your wallet is locked, passphrase is required");
-            }
-
-            if(!pwalletMain->Unlock(strWalletPass)){
-                throw JSONRPCError(RPC_WALLET_PASSPHRASE_INCORRECT, "The wallet passphrase entered was incorrect");
-            }
-        }
+        if(pwalletMain->IsLocked())
+        		throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Your wallet is locked, it needs to be unlocked first.");
 
         std::vector<CMasternodeConfig::CMasternodeEntry> mnEntries;
         mnEntries = masternodeConfig.getEntries();
@@ -1108,59 +1079,75 @@ UniValue masternodebroadcast(const UniValue& params, bool fHelp)
         return returnObj;
     }
 
-    if (strCommand == "decode")
-    {
-        if (params.size() != 2)
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Correct usage is 'masternodebroadcast decode \"hexstring\"'");
+    return NullUniValue;
 
-        CMasternodeBroadcast mnb;
-
-        if (!DecodeHexMnb(mnb, params[1].get_str()))
-            throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Masternode broadcast message decode failed");
-
-        if(!mnb.VerifySignature())
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Masternode broadcast signature verification failed");
-
-        UniValue resultObj(UniValue::VOBJ);
-
-        resultObj.push_back(Pair("vin", mnb.vin.ToString()));
-        resultObj.push_back(Pair("addr", mnb.addr.ToString()));
-        resultObj.push_back(Pair("pubkey", CBitcoinAddress(mnb.pubKeyCollateralAddress.GetID()).ToString()));
-        resultObj.push_back(Pair("pubkey2", CBitcoinAddress(mnb.pubKeyMasternode.GetID()).ToString()));
-        resultObj.push_back(Pair("vchSig", EncodeBase64(&mnb.sig[0], mnb.sig.size())));
-        resultObj.push_back(Pair("sigTime", mnb.sigTime));
-        resultObj.push_back(Pair("protocolVersion", mnb.protocolVersion));
-        resultObj.push_back(Pair("nLastDsq", mnb.nLastDsq));
-
-        UniValue lastPingObj(UniValue::VOBJ);
-        lastPingObj.push_back(Pair("vin", mnb.lastPing.vin.ToString()));
-        lastPingObj.push_back(Pair("blockHash", mnb.lastPing.blockHash.ToString()));
-        lastPingObj.push_back(Pair("sigTime", mnb.lastPing.sigTime));
-        lastPingObj.push_back(Pair("vchSig", EncodeBase64(&mnb.lastPing.vchSig[0], mnb.lastPing.vchSig.size())));
-
-        resultObj.push_back(Pair("lastPing", lastPingObj));
-
-        return resultObj;
-    }
-
-    if (strCommand == "relay")
-    {
-        if (params.size() != 2)
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Correct usage is 'masternodebroadcast relay \"hexstring\"'");
-
-        CMasternodeBroadcast mnb;
-
-        if (!DecodeHexMnb(mnb, params[1].get_str()))
-            throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Masternode broadcast message decode failed");
-
-        if(!mnb.VerifySignature())
-            throw JSONRPCError(RPC_INVALID_PARAMETER, "Masternode broadcast signature verification failed");
-
-        mnodeman.UpdateMasternodeList(mnb);
-        mnb.Relay();
-
-        return strprintf("Masternode broadcast sent (service %s, vin %s)", mnb.addr.ToString(), mnb.vin.ToString());
-    }
-
-    return UniValue(UniValue::VOBJ);
 }
+
+UniValue decodemasternodebroadcast(const UniValue& params, bool fHelp)
+{
+	if (fHelp)
+		throw runtime_error(
+				"decodemasternodebroadcast \"hexstring\"\n"
+				"Command to decode masternode broadcast messages\n"
+				"\nArgument:\n"
+				"1. \"hexstring\"        (hex string) The masternode broadcast message\n");
+
+	if (params.size() != 1)
+		throw JSONRPCError(RPC_INVALID_PARAMETER, "Correct usage is 'decodemasternodebroadcast \"hexstring\"'");
+
+	CMasternodeBroadcast mnb;
+
+	if (!DecodeHexMnb(mnb, params[0].get_str()))
+		throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Masternode broadcast message decode failed");
+
+	if(!mnb.VerifySignature())
+		throw JSONRPCError(RPC_INVALID_PARAMETER, "Masternode broadcast signature verification failed");
+
+	UniValue resultObj(UniValue::VOBJ);
+
+	resultObj.push_back(Pair("vin", mnb.vin.ToString()));
+	resultObj.push_back(Pair("addr", mnb.addr.ToString()));
+	resultObj.push_back(Pair("pubkey", CBitcoinAddress(mnb.pubKeyCollateralAddress.GetID()).ToString()));
+	resultObj.push_back(Pair("pubkey2", CBitcoinAddress(mnb.pubKeyMasternode.GetID()).ToString()));
+	resultObj.push_back(Pair("vchSig", EncodeBase64(&mnb.sig[0], mnb.sig.size())));
+	resultObj.push_back(Pair("sigTime", mnb.sigTime));
+	resultObj.push_back(Pair("protocolVersion", mnb.protocolVersion));
+	resultObj.push_back(Pair("nLastDsq", mnb.nLastDsq));
+
+	UniValue lastPingObj(UniValue::VOBJ);
+	lastPingObj.push_back(Pair("vin", mnb.lastPing.vin.ToString()));
+	lastPingObj.push_back(Pair("blockHash", mnb.lastPing.blockHash.ToString()));
+	lastPingObj.push_back(Pair("sigTime", mnb.lastPing.sigTime));
+	lastPingObj.push_back(Pair("vchSig", EncodeBase64(&mnb.lastPing.vchSig[0], mnb.lastPing.vchSig.size())));
+
+	resultObj.push_back(Pair("lastPing", lastPingObj));
+
+	return resultObj;
+}
+
+UniValue relaymasternodebroadcast(const UniValue& params, bool fHelp)
+{
+    if (fHelp)
+        throw runtime_error(
+                "relaymasternodebroadcast \"hexstring\"\n"
+                "Command to relay masternode broadcast messages\n"
+                "\nArguments:\n"
+				"1. \"hexstring\"        (hex string) The masternode broadcast message\n");
+
+    if (params.size() != 1)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Correct usage is 'relaymasternodebroadcast \"hexstring\"'");
+
+    CMasternodeBroadcast mnb;
+
+    if (!DecodeHexMnb(mnb, params[0].get_str()))
+        throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Masternode broadcast message decode failed");
+
+    if(!mnb.VerifySignature())
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Masternode broadcast signature verification failed");
+
+    mnodeman.UpdateMasternodeList(mnb);
+    mnb.Relay();
+
+    return strprintf("Masternode broadcast sent (service %s, vin %s)", mnb.addr.ToString(), mnb.vin.ToString());
+}
+
