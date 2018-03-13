@@ -2481,16 +2481,38 @@ UniValue listspentzerocoins(const UniValue& params, bool fHelp)
 
 UniValue mintzerocoin(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw runtime_error(
-            "mintzerocoin <amount>\n"
-            "Usage: Enter an amount of Piv to convert to zPiv"
+            "mintzerocoin amount ( UTXOs )\n"
+            "amount: (numeric, required) Enter an amount of Piv to convert to zPiv\n"
+            "UTXOs: (string, optional) A json array of objects. Each object needs the txid (string) and vout (numeric)\n"
+            "     [           (json array of json objects)\n"
+            "       {\n"
+            "         \"txid\":\"id\",    (string) The transaction id\n"
+            "         \"vout\": n         (numeric) The output number\n"
+            "       }\n"
+            "       ,...\n"
+            "     ]\n"
+            "\nExamples:\n"
+            "\nMint 50 from anywhere\n" +
+            HelpExampleCli("mintzerocoin", "50") +
+            "\nMint 13 from a specific output\n" + 
+            HelpExampleCli("mintzerocoin", "13 \"[{\\\"txid\\\":\\\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\\\",\\\"vout\\\":1}]\"") +
+            "\nAs a json rpc call\n" + 
+            HelpExampleRpc("mintzerocoin", "13, \"[{\\\"txid\\\":\\\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\\\",\\\"vout\\\":1}]\"")
             + HelpRequiringPassphrase());
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    int64_t nTime = GetTimeMillis();
+    if (params.size() == 1)
+    {
+        RPCTypeCheck(params, boost::assign::list_of(UniValue::VNUM));
+    } else
+    {
+        RPCTypeCheck(params, boost::assign::list_of(UniValue::VNUM)(UniValue::VARR));
+    }
 
+    int64_t nTime = GetTimeMillis();
     if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
         throw JSONRPCError(RPC_WALLET_ERROR, "zPIV is currently disabled due to maintenance.");
 
@@ -2501,7 +2523,36 @@ UniValue mintzerocoin(const UniValue& params, bool fHelp)
 
     CWalletTx wtx;
     vector<CZerocoinMint> vMints;
-    string strError = pwalletMain->MintZerocoin(nAmount, wtx, vMints);
+    string strError;
+    vector<COutPoint> vOutpts;
+
+    if (params.size() == 2)
+    {
+        UniValue outputs = params[1].get_array();
+        for (unsigned int idx = 0; idx < outputs.size(); idx++) {
+            const UniValue& output = outputs[idx];
+            if (!output.isObject())
+                throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected object");
+            const UniValue& o = output.get_obj();
+
+            RPCTypeCheckObj(o, boost::assign::map_list_of("txid", UniValue::VSTR)("vout", UniValue::VNUM));
+
+            string txid = find_value(o, "txid").get_str();
+            if (!IsHex(txid))
+                throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex txid");
+
+            int nOutput = find_value(o, "vout").get_int();
+            if (nOutput < 0)
+                throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, vout must be positive");
+
+            COutPoint outpt(uint256(txid), nOutput);
+            vOutpts.push_back(outpt);
+        }
+        strError = pwalletMain->MintZerocoinFromOutPoint(nAmount, wtx, vMints, vOutpts);
+    } else
+    {
+        strError = pwalletMain->MintZerocoin(nAmount, wtx, vMints);
+    }
 
     if (strError != "")
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
