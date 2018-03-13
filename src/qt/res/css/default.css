@@ -255,7 +255,7 @@ background-color: qlineargradient(y1:0, y2: 1, stop: 0 #00ff00, stop: 0.1 #00ff0
 }
 
 /* Special handling for statusbar-icons (which are partly QPushButtons) */
-QPushButton#labelEncryptionIcon, QPushButton#labelConnectionsIcon {
+QPushButton#labelEncryptionIcon, QPushButton#labelConnectionsIcon, QPushButton#labelAutoMintIcon {
 border: 0px;
 padding-left:0px;
 padding-right:0px;
