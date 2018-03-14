@@ -9,16 +9,25 @@
 #include "stakeinput.h"
 #include "wallet.h"
 
+CZPivStake::CZPivStake(const libzerocoin::CoinSpend& spend)
+{
+    this->nChecksum = spend.getAccumulatorChecksum();
+    this->denom = spend.getDenomination();
+    uint256 nSerial = spend.getCoinSerialNumber().getuint256();
+    this->hashSerial = Hash(nSerial.begin(), nSerial.end());
+    this->pindexFrom = nullptr;
+    fMint = false;
+}
+
 int CZPivStake::GetChecksumHeightFromMint()
 {
     int nHeightChecksum = chainActive.Height() - Params().Zerocoin_RequiredStakeDepth();
-    //nHeightChecksum -= (nHeightChecksum % 10);
 
     //Need to return the first occurance of this checksum in order for the validation process to identify a specific
     //block height
     uint32_t nChecksum = 0;
-    nChecksum = ParseChecksum(chainActive[nHeightChecksum]->nAccumulatorCheckpoint, mint.GetDenomination());
-    return GetChecksumHeight(nChecksum, mint.GetDenomination());
+    nChecksum = ParseChecksum(chainActive[nHeightChecksum]->nAccumulatorCheckpoint, denom);
+    return GetChecksumHeight(nChecksum, denom);
 }
 
 int CZPivStake::GetChecksumHeightFromSpend()
@@ -84,21 +93,28 @@ bool CZPivStake::GetModifier(uint64_t& nStakeModifier)
 
 CDataStream CZPivStake::GetUniqueness()
 {
-    //LogPrintf("%s serial=%s\n", __func__, bnSerial.GetHex());
-    //The unique identifier for a ZPIV is the serial
+    //The unique identifier for a zPIV is a hash of the serial
     CDataStream ss(SER_GETHASH, 0);
-    ss << bnSerial;
+    ss << hashSerial;
     return ss;
 }
 
 bool CZPivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
 {
     LogPrintf("%s\n", __func__);
-    CZerocoinSpendReceipt receipt;
-    int nSecurityLevel = 100;
     CBlockIndex* pindexCheckpoint = GetIndexFrom();
     if (!pindexCheckpoint)
         return error("%s: failed to find checkpoint block index", __func__);
+
+    CZerocoinMint mint;
+    if (!pwallet->GetMint(hashSerial, mint))
+        return error("%s: failed to fetch mint associated with serial hash %s", __func__, hashSerial.GetHex());
+
+    if (libzerocoin::ExtractVersionFromSerial(mint.GetSerialNumber()) < 2)
+        return error("%s: serial extract is less than v2", __func__);
+
+    int nSecurityLevel = 100;
+    CZerocoinSpendReceipt receipt;
     if (!pwallet->MintToTxIn(mint, nSecurityLevel, hashTxOut, txIn, receipt, libzerocoin::SpendType::STAKE, GetIndexFrom()))
         return error("%s\n", receipt.GetStatusMessage());
 
@@ -108,7 +124,7 @@ bool CZPivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
 bool CZPivStake::CreateTxOuts(CWallet* pwallet, vector<CTxOut>& vout)
 {
     LogPrintf("%s\n", __func__);
-    //todo: add mints here
+
     //Create an output returning the zPIV that was staked
     CTxOut outReward;
     libzerocoin::CoinDenomination denomStaked = libzerocoin::AmountToZerocoinDenomination(this->GetValue());
@@ -136,6 +152,12 @@ bool CZPivStake::GetTxFrom(CTransaction& tx)
 
 bool CZPivStake::MarkSpent(CWallet *pwallet)
 {
+    CZerocoinMint mint;
+    if (!pwallet->GetMint(hashSerial, mint))
+        return error("%s: failed to retrieve mint associated with serial hash", __func__);
+
+    //Remove from database and from the map of serial hashes
+    pwallet->mapSerialHashes.erase(hashSerial);
     mint.SetUsed(true);
     CWalletDB walletdb(pwallet->strWalletFile);
     return walletdb.WriteZerocoinMint(mint);

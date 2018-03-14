@@ -422,8 +422,9 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, b
         return QString::fromStdString(wtx->address) + watchAddress;
     case TransactionRecord::ZerocoinMint:
     case TransactionRecord::ZerocoinSpend_Change_zPiv:
+        return tr("Anonymous (zPIV Transaction)");
     case TransactionRecord::StakeZPIV:
-        return tr("zPiv Accumulator");
+        return tr("Anonymous (zPIV Stake)");
     case TransactionRecord::SendToSelf:
     default:
         return tr("(n/a)") + watchAddress;

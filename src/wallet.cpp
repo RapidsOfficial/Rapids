@@ -767,7 +767,11 @@ isminetype CWallet::IsMine(const CTxIn& txin) const
 
 bool CWallet::IsMyZerocoinSpend(const CBigNum& bnSerial) const
 {
-    return CWalletDB(strWalletFile).ReadZerocoinSpendSerialEntry(bnSerial);
+    uint256 nSerial = bnSerial.getuint256();
+    uint256 hashSerial = Hash(nSerial.begin(), nSerial.end());
+    auto it = mapSerialHashes.find(hashSerial);
+
+    return it != mapSerialHashes.end();
 }
 
 CAmount CWallet::GetDebit(const CTxIn& txin, const isminefilter& filter) const
@@ -2052,7 +2056,7 @@ bool less_then_denom(const COutput& out1, const COutput& out2)
     return (!found1 && found2);
 }
 
-bool CWallet::SelectStakeCoins(std::list<CStakeInput*>& listInputs, CAmount nTargetAmount) const
+bool CWallet::SelectStakeCoins(std::list<CStakeInput*>& listInputs, CAmount nTargetAmount)
 {
     //Add PIV
     vector<COutput> vCoins;
@@ -2091,19 +2095,20 @@ bool CWallet::SelectStakeCoins(std::list<CStakeInput*>& listInputs, CAmount nTar
 
     //zPIV
     if (GetBoolArg("-zpivstake", true) && chainActive.Height() > Params().Zerocoin_Block_V2_Start() && !IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
-        CWalletDB walletdb(strWalletFile);
-        list<CZerocoinMint> listMints = walletdb.ListMintedCoins(true, true, true);
+        //Add zPIV
+        if (mapSerialHashes.empty()) {
+            CWalletDB walletdb(strWalletFile);
+            list<CZerocoinMint> listMints = walletdb.ListMintedCoins(true, true, true, &mapSerialHashes);
+        }
 
-        for (CZerocoinMint mint : listMints) {
-            if (mint.GetVersion() < CZerocoinMint::STAKABLE_VERSION)
+        for (auto it : mapSerialHashes) {
+            CMintMeta meta = it.second;
+            if (meta.isUsed)
                 continue;
-            if (libzerocoin::ExtractVersionFromSerial(mint.GetSerialNumber()) <
-                libzerocoin::PrivateCoin::PUBKEY_VERSION)
-                continue; //todo: this is contextual to presstabs wallet. Not sure why others would need this check too
-            if (!mint.GetHeight())
+            if (meta.nVersion < CZerocoinMint::STAKABLE_VERSION)
                 continue;
-            if (mint.GetHeight() < chainActive.Height() - Params().Zerocoin_RequiredStakeDepth()) {
-                CZPivStake *input = new CZPivStake(mint);
+            if (meta.nHeight < chainActive.Height() - Params().Zerocoin_RequiredStakeDepth()) {
+                CZPivStake *input = new CZPivStake(meta.denom, meta.hashSerial);
                 listInputs.emplace_back(input);
             }
         }
@@ -2136,13 +2141,15 @@ bool CWallet::MintableCoins()
     }
 
     //Add zPIV
-    CWalletDB walletdb(strWalletFile);
-    list<CZerocoinMint> listMints = walletdb.ListMintedCoins(true, true, true);
+    if (mapSerialHashes.empty()) {
+        CWalletDB walletdb(strWalletFile);
+        list<CZerocoinMint> listMints = walletdb.ListMintedCoins(true, true, true, &mapSerialHashes);
+    }
 
-    for (CZerocoinMint mint : listMints) {
-        if (mint.GetVersion() < CZerocoinMint::STAKABLE_VERSION)
+    for (auto it : mapSerialHashes) {
+        if (it.second.nVersion < CZerocoinMint::STAKABLE_VERSION)
             continue;
-        if (mint.GetHeight() < chainActive.Height() - Params().Zerocoin_RequiredStakeDepth()) {
+        if (it.second.nHeight < chainActive.Height() - Params().Zerocoin_RequiredStakeDepth()) {
             return true;
         }
     }
@@ -2981,6 +2988,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
                 LogPrintf("%s : failed to create TxIn\n", __func__);
                 txNew.vin.clear();
                 txNew.vout.clear();
+                nCredit = 0;
                 continue;
             }
             txNew.vin.emplace_back(in);
@@ -4926,7 +4934,6 @@ void CWallet::ReconsiderZerocoins(std::list<CZerocoinMint>& listMintsRestored)
     }
 }
 
-
 void CWallet::ZPivBackupWallet()
 {
     filesystem::path backupDir = GetDataDir() / "backups";
@@ -5093,6 +5100,11 @@ bool CWallet::SpendZerocoin(CAmount nAmount, int nSecurityLevel, CWalletTx& wtxN
 
     for (CZerocoinMint mint : vMintsSelected) {
         mint.SetUsed(true);
+
+        uint256 hashSerial = GetSerialHash(mint.GetSerialNumber());
+        if (mapSerialHashes.count(hashSerial))
+            mapSerialHashes.at(hashSerial).isUsed = true;
+
         if (!walletdb.WriteZerocoinMint(mint)) {
             receipt.SetStatus("Failed to write mint to db", nStatus);
             return false;
@@ -5119,4 +5131,13 @@ bool CWallet::SpendZerocoin(CAmount nAmount, int nSecurityLevel, CWalletTx& wtxN
     receipt.SetStatus("Spend Successful", ZPIV_SPEND_OKAY);  // When we reach this point spending zPIV was successful
 
     return true;
+}
+
+bool CWallet::GetMint(const uint256& hashSerial, CZerocoinMint& mint)
+{
+    auto it = mapSerialHashes.find(hashSerial);
+    if (it == mapSerialHashes.end())
+        return false;
+
+    return CWalletDB(strWalletFile).ReadZerocoinMint(it->second.hashPubcoin, mint);
 }
