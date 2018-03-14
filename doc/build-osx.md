@@ -47,17 +47,22 @@ Instructions: Homebrew
         git clone https://github.com/PIVX-Project/PIVX.git
         cd PIVX
 
-2.  Build pivxd:
+2.  Make the Homebrew OpenSSL headers visible to the configure script  (do ```brew info openssl``` to find out why this is necessary, or if you use Homebrew with installation folders different from the default).
+
+        export LDFLAGS+=-L/usr/local/opt/openssl/lib
+        export CPPFLAGS+=-I/usr/local/opt/openssl/include
+
+3.  Build pivxd:
 
         ./autogen.sh
         ./configure --with-gui=qt5
         make
 
-3.  It is also a good idea to build and run the unit tests:
+4.  It is also a good idea to build and run the unit tests:
 
         make check
 
-4.  (Optional) You can also install pivxd to your path:
+5.  (Optional) You can also install pivxd to your path:
 
         make install
 
