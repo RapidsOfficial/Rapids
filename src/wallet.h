@@ -642,6 +642,9 @@ public:
 
     /** MultiSig address added */
     boost::signals2::signal<void(bool fHaveMultiSig)> NotifyMultiSigChanged;
+
+    /** zPIV reset */
+    boost::signals2::signal<void()> NotifyzPIVReset;
 };
 
 

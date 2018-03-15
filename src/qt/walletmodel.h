@@ -249,7 +249,7 @@ private:
 
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
-    void checkBalanceChanged();
+    Q_INVOKABLE void checkBalanceChanged();
 
 signals:
     // Signal that balance in wallet changed

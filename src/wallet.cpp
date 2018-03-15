@@ -4791,6 +4791,8 @@ string CWallet::ResetMintZerocoin(bool fExtendedSearch)
         walletdb.ArchiveMintOrphan(mint);
     }
 
+    NotifyzPIVReset();
+
     string strResult = _("ResetMintZerocoin finished: ") + to_string(updates) + _(" mints updated, ") + to_string(deletions) + _(" mints deleted\n");
     return strResult;
 }
@@ -4829,6 +4831,8 @@ string CWallet::ResetSpentZerocoin()
             }
         }
     }
+
+    NotifyzPIVReset();
 
     string strResult = _("ResetSpentZerocoin finished: ") + to_string(removed) + _(" unconfirmed transactions removed\n");
     return strResult;
