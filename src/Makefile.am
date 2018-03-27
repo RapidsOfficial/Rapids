@@ -190,6 +190,7 @@ BITCOIN_CORE_H = \
   wallet.h \
   wallet_ismine.h \
   walletdb.h \
+  zpivtracker.h \
   zpivwallet.h \
   zmq/zmqabstractnotifier.h \
   zmq/zmqconfig.h \
@@ -277,6 +278,7 @@ libbitcoin_wallet_a_SOURCES = \
   wallet_ismine.cpp \
   walletdb.cpp \
   zpivwallet.cpp \
+  zpivtracker.cpp \
   stakeinput.cpp \
   $(BITCOIN_CORE_H)
 

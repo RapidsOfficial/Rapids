@@ -1640,15 +1640,14 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         bool fFirstRunZWallet = !CWalletDB(pwalletMain->strWalletFile).ReadZPIVSeed(seed);
         zwalletMain = new CzPIVWallet(pwalletMain->strWalletFile, fFirstRunZWallet);
         uiInterface.InitMessage(_("Syncing zPIV wallet..."));
-        zwalletMain->SyncWithChain();
 
         pwalletMain->setZWallet(zwalletMain);
-
         bool fEnableZPivBackups = GetBoolArg("-backupzpiv", true);
         pwalletMain->setZPivAutoBackups(fEnableZPivBackups);
 
         //Load zerocoin mint hashes to memory
-        CWalletDB(pwalletMain->strWalletFile).ListMintedCoins(true, true, true, &(pwalletMain->mapSerialHashes));
+        CWalletDB(pwalletMain->strWalletFile).ListMintedCoins(true, true, true, pwalletMain->zpivTracker);
+        zwalletMain->SyncWithChain();
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");
