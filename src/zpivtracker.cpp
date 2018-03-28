@@ -12,11 +12,14 @@ CzPIVTracker::CzPIVTracker(std::string strWalletFile)
     mapSerialHashes.clear();
 }
 
-bool CzPIVTracker::Archive(CZerocoinMint& mint)
+bool CzPIVTracker::Archive(CZerocoinMint& mint, bool fUpdateDB)
 {
     uint256 hashSerial = GetSerialHash(mint.GetSerialNumber());
     if (mapSerialHashes.count(hashSerial))
         mapSerialHashes.at(hashSerial).isArchived = true;
+
+    if (!fUpdateDB)
+        return true;
 
     return CWalletDB(strWalletFile).ArchiveMintOrphan(mint);
 }
@@ -24,6 +27,15 @@ bool CzPIVTracker::Archive(CZerocoinMint& mint)
 CMintMeta CzPIVTracker::Get(const uint256 &hashSerial)
 {
     return mapSerialHashes.at(hashSerial);
+}
+
+std::vector<uint256> CzPIVTracker::GetSerialHashes()
+{
+    vector<uint256> vHashes;
+    for (auto it : mapSerialHashes)
+        vHashes.emplace_back(it.first);
+
+    return vHashes;
 }
 
 CAmount CzPIVTracker::GetBalance(bool fConfirmedOnly, bool fUnconfirmedOnly) const

@@ -171,6 +171,8 @@ public:
     bool WriteZPIVCount(const uint32_t& nCount);
     bool ReadZPIVCount(uint32_t& nCount);
     bool ReadZerocoinMintFromSerial(const CBigNum& bnSerial, CZerocoinMint& mint);
+    std::map<uint256, std::vector<pair<uint256, uint32_t> > > MapMintPool();
+    bool WriteMintPoolPair(const uint256& hashMasterSeed, const uint256& hashPubcoin, const uint32_t& nCount);
 
 private:
     CWalletDB(const CWalletDB&);
