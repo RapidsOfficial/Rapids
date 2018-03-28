@@ -381,9 +381,8 @@ static const CRPCCommand vRPCCommands[] =
         {"pivx", "mnsync", &mnsync, true, true, false},
         {"pivx", "spork", &spork, true, true, false},
         {"pivx", "getpoolinfo", &getpoolinfo, true, true, false},
-#ifdef ENABLE_WALLET
-        {"pivx", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
 
+#ifdef ENABLE_WALLET
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
         {"wallet", "autocombinerewards", &autocombinerewards, false, false, true},
