@@ -52,10 +52,16 @@ bool CzPIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
 }
 
 //Add the next 10 mints to the mint pool
-void CzPIVWallet::GenerateMintPool()
+void CzPIVWallet::GenerateMintPool(int nCountStart, int nCountEnd)
 {
     int n = std::max(mintPool.CountOfLastGenerated() + 1, nCount);
+    if (nCountStart > 0)
+        n = nCountStart;
+
     int nStop = n + 20;
+    if (nCountEnd > 0)
+        nStop = std::max(n, n + nCountEnd);
+
     uint256 hashSeed = Hash(seedMaster.begin(), seedMaster.end());
     LogPrintf("%s : n=%d nStop=%d\n", __func__, n, nStop);
     for (int i = n; i < nStop; i++) {
@@ -98,25 +104,22 @@ void CzPIVWallet::RemoveMintsFromPool(const std::vector<uint256>& vPubcoinHashes
 
 //Catch the counter up with the chain
 map<uint256, uint32_t> mapMissingMints;
-void CzPIVWallet::SyncWithChain()
+void CzPIVWallet::SyncWithChain(bool fGenerateMintPool)
 {
     uint32_t nLastCountUsed = 0;
     bool found = true;
     CWalletDB walletdb(strWalletFile);
-    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker;
     while (found) {
         found = false;
-        GenerateMintPool();
+        if (fGenerateMintPool)
+            GenerateMintPool();
+        LogPrintf("%s: Mintpool size=%d\n", __func__, mintPool.size());
 
         for (pair<uint256, uint32_t> pMint : mintPool.List()) {
             if (ShutdownRequested())
                 return;
 
             if (mapMissingMints.count(pMint.first))
-                continue;
-
-            // See if the mint is already known to the zpiv tracker
-            if (zpivTracker->HasPubcoinHash(pMint.first))
                 continue;
 
             uint256 txHash;
@@ -171,8 +174,16 @@ void CzPIVWallet::SyncWithChain()
 
                 //The mint was found in the chain, so recalculate the randomness and serial and DB it
                 int nHeight = 0;
-                if (mapBlockIndex.count(hashBlock))
+                int nTimeReceived = 0;
+                if (mapBlockIndex.count(hashBlock)) {
                     nHeight = mapBlockIndex.at(hashBlock)->nHeight;
+                    nTimeReceived = mapBlockIndex.at(hashBlock)->nTime;
+                }
+
+                //Fill out wtx so that a transaction record can be created
+                CWalletTx wtx(pwalletMain, tx);
+                wtx.nTimeReceived = nTimeReceived;
+                pwalletMain->AddToWallet(wtx);
 
                 SetMintSeen(bnValue, nHeight, txHash, denomination);
                 nLastCountUsed = std::max(pMint.second, nLastCountUsed);
@@ -203,10 +214,8 @@ bool CzPIVWallet::SetMintSeen(const CBigNum& bnValue, const int& nHeight, const 
     mint.SetTxHash(txid);
 
     //Store the mint to DB
-    if (!CWalletDB(strWalletFile).WriteZerocoinMint(mint)) {
-        LogPrintf("%s : failed to database mint %s!\n", __func__, mint.GetValue().GetHex());
-        return false;
-    }
+    if (!CWalletDB(strWalletFile).WriteZerocoinMint(mint))
+        return error("%s : failed to database mint %s!", __func__, mint.GetValue().GetHex());
 
     //Update the count if it is less than the mint's count
     if (nCount <= pMint.second) {

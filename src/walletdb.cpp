@@ -1325,13 +1325,15 @@ std::list<CZerocoinMint> CWalletDB::ListMintedCoins(bool fUnusedOnly, bool fMatu
 
     //overwrite any updates
     for (CZerocoinMint& mint : vOverWrite) {
-        zpivTracker->UpdateMint(mint, false);
+        if (zpivTracker)
+            zpivTracker->UpdateMint(mint, false);
         WriteZerocoinMint(mint);
     }
 
     // archive mints
     for (CZerocoinMint& mint : vArchive) {
-        zpivTracker->Archive(mint, false);
+        if (zpivTracker)
+            zpivTracker->Archive(mint, false);
         ArchiveMintOrphan(mint);
     }
 

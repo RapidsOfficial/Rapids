@@ -3082,3 +3082,39 @@ UniValue generatemintlist(const UniValue& params, bool fHelp)
 
     return arrRet;
 }
+
+UniValue searchdzpiv(const UniValue& params, bool fHelp)
+{
+    if(fHelp || params.size() != 2)
+        throw runtime_error(
+            "searchdzpiv\n"
+                "\nMake an extended search for deterministically generated zPIV that have not yet been recognized by the wallet.\n"
+
+                "\nArguments\n"
+                "1. \"count\"  : n,  (numeric) Which sequential zPIV to start with.\n"
+                "2. \"range\"  : n,  (numeric) How many zPIV to generate.\n"
+
+                "\nExamples\n" +
+            HelpExampleCli("searchdzpiv", "1, 100") + HelpExampleRpc("searchdzpiv", "1, 100"));
+
+    if(pwalletMain->IsLocked())
+        throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED,
+                           "Error: Please enter the wallet passphrase with walletpassphrase first.");
+
+    int nCount = params[0].get_int();
+    if (nCount < 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Count cannot be less than 0");
+
+    int nRange = params[1].get_int();
+    if (nRange < 1)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Range has to be at least 1");
+
+    CzPIVWallet* zwallet = pwalletMain->zwalletMain;
+    zwallet->GenerateMintPool(nCount, nRange);
+    CzPIVTracker* tracker = pwalletMain->zpivTracker;
+    zwallet->RemoveMintsFromPool(tracker->GetSerialHashes());
+    zwallet->SyncWithChain(false);
+
+    //todo: better response
+    return "done";
+}
