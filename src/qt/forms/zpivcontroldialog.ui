@@ -157,7 +157,7 @@
        </column>
        <column>
         <property name="text">
-         <string notr="true">zPiv Public ID</string>
+         <string notr="true">zPiv ID</string>
         </property>
        </column>
        <column>
