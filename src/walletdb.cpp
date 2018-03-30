@@ -1159,14 +1159,44 @@ bool CWalletDB::UnarchiveZerocoinMint(const uint256& hashPubcoin)
     return true;
 }
 
-bool CWalletDB::WriteZPIVSeed(const uint256& seed)
+bool CWalletDB::WriteCurrentSeedHash(const uint256& hashSeed)
 {
-    return Write(string("dzs"), seed);
+    return Write(string("seedhash"), hashSeed);
 }
 
-bool CWalletDB::ReadZPIVSeed(uint256& seed)
+bool CWalletDB::ReadCurrentSeedHash(uint256& hashSeed)
 {
-    return Read(string("dzs"), seed);
+    return Read(string("seedhash"), hashSeed);
+}
+
+bool CWalletDB::WriteZPIVSeed(const uint256& hashSeed, const vector<unsigned char>& seed)
+{
+    LogPrintf("%s: seedHash %s \nseed %s\n", __func__, hashSeed.GetHex(), ReverseEndianString(HexStr(seed)));
+    if (!WriteCurrentSeedHash(hashSeed))
+        return error("%s: failed to write current seed hash", __func__);
+
+    return Write(make_pair(string("dzs"), hashSeed), seed);
+}
+
+bool CWalletDB::EraseZPIVSeed()
+{
+    uint256 hash;
+    if(!ReadCurrentSeedHash(hash)){
+        return error("Failed to read a current seed hash");
+    }
+    if(!WriteZPIVSeed(hash, ToByteVector(base_uint<256>(0) << 256))) {
+        return error("Failed to write empty seed to wallet");
+    }
+    if(!WriteCurrentSeedHash(0)) {
+        return error("Failed to write empty seedHash");
+    }
+
+    return true;
+}
+
+bool CWalletDB::ReadZPIVSeed(const uint256& hashSeed, vector<unsigned char>& seed)
+{
+    return Read(make_pair(string("dzs"), hashSeed), seed);
 }
 
 bool CWalletDB::WriteZPIVCount(const uint32_t& nCount)

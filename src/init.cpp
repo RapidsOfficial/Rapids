@@ -1696,9 +1696,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         fVerifyingBlocks = false;
 
         //Inititalize zPIVWallet
-        uint256 seed = 0;
-        bool fFirstRunZWallet = !CWalletDB(pwalletMain->strWalletFile).ReadZPIVSeed(seed);
-        zwalletMain = new CzPIVWallet(pwalletMain->strWalletFile, fFirstRunZWallet);
+        zwalletMain = new CzPIVWallet(pwalletMain->strWalletFile);
         uiInterface.InitMessage(_("Syncing zPIV wallet..."));
 
         pwalletMain->setZWallet(zwalletMain);
