@@ -17,7 +17,7 @@ class CzPIVWallet
 {
 private:
     uint256 seedMaster;
-    uint32_t nCount;
+    uint32_t nCountLastUsed;
     std::string strWalletFile;
     CMintPool mintPool;
 

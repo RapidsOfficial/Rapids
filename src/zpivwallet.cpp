@@ -26,7 +26,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile, bool fFirstRun)
         seed = CBigNum::randBignum(CBigNum(~uint256(0))).getuint256();
 
     SetMasterSeed(seed);
-    this->mintPool = CMintPool(nCount);
+    this->mintPool = CMintPool(nCountLastUsed);
 }
 
 bool CzPIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
@@ -37,11 +37,11 @@ bool CzPIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
     if (!walletdb.WriteZPIVSeed(seedMaster))
         return false;
 
-    nCount = 0;
+    nCountLastUsed = 0;
     if (fResetCount)
-        walletdb.WriteZPIVCount(nCount);
-    else if (!walletdb.ReadZPIVCount(nCount))
-        nCount = 0;
+        walletdb.WriteZPIVCount(nCountLastUsed);
+    else if (!walletdb.ReadZPIVCount(nCountLastUsed))
+        nCountLastUsed = 0;
 
     //todo fix to sync with count above
     mintPool.Reset();
@@ -52,7 +52,7 @@ bool CzPIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
 //Add the next 10 mints to the mint pool
 void CzPIVWallet::GenerateMintPool(int nCountStart, int nCountEnd)
 {
-    int n = std::max(mintPool.CountOfLastGenerated() + 1, nCount);
+    int n = nCountLastUsed + 1;
     if (nCountStart > 0)
         n = nCountStart;
 
@@ -199,8 +199,8 @@ void CzPIVWallet::SyncWithChain(bool fGenerateMintPool)
 
                 SetMintSeen(bnValue, nHeight, txHash, denomination);
                 nLastCountUsed = std::max(pMint.second, nLastCountUsed);
-                nCount = std::max(nLastCountUsed + 1, nCount);
-                LogPrint("zero", "%s: updated count to %d\n", __func__, nCount);
+                nCountLastUsed = std::max(nLastCountUsed, nCountLastUsed);
+                LogPrint("zero", "%s: updated count to %d\n", __func__, nCountLastUsed);
             }
         }
     }
@@ -272,10 +272,10 @@ bool CzPIVWallet::SetMintSeen(const CBigNum& bnValue, const int& nHeight, const 
     pwalletMain->zpivTracker->Add(dMint, true);
     
     //Update the count if it is less than the mint's count
-    if (nCount <= pMint.second) {
+    if (nCountLastUsed < pMint.second) {
         CWalletDB walletdb(strWalletFile);
-        nCount = pMint.second + 1;
-        walletdb.WriteZPIVCount(nCount);
+        nCountLastUsed = pMint.second;
+        walletdb.WriteZPIVCount(nCountLastUsed);
     }
 
     //remove from the pool
@@ -341,7 +341,7 @@ void CzPIVWallet::SeedToZPIV(const uint512& seedZerocoin, CBigNum& bnSerial, CBi
 
 uint512 CzPIVWallet::GetNextZerocoinSeed()
 {
-    return GetZerocoinSeed(nCount);
+    return GetZerocoinSeed(nCountLastUsed + 1);
 }
 
 uint512 CzPIVWallet::GetZerocoinSeed(uint32_t n)
@@ -354,14 +354,14 @@ uint512 CzPIVWallet::GetZerocoinSeed(uint32_t n)
 
 void CzPIVWallet::UpdateCount()
 {
-    nCount++;
+    nCountLastUsed++;
     CWalletDB walletdb(strWalletFile);
-    walletdb.WriteZPIVCount(nCount);
+    walletdb.WriteZPIVCount(nCountLastUsed);
 }
 
 void CzPIVWallet::GenerateDeterministicZPIV(CoinDenomination denom, PrivateCoin& coin, CDeterministicMint& dMint, bool fGenerateOnly)
 {
-    GenerateMint(nCount, denom, coin, dMint);
+    GenerateMint(nCountLastUsed + 1, denom, coin, dMint);
     if (fGenerateOnly)
         return;
 
