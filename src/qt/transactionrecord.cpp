@@ -342,7 +342,7 @@ void TransactionRecord::updateStatus(const CWalletTx& wtx)
     //status.countsForBalance = wtx.IsTrusted() && !(wtx.GetBlocksToMaturity() > 0);
     status.depth = wtx.GetDepthInMainChain();
     if (IsZPIVType(type)) {
-        status.depth = pindex ? chainActive.Height() - pindex->nHeight : 0;
+        status.depth = pindex ? chainActive.Height() - pindex->nHeight + 1: 0;
     }
 
     //Determine the depth of the block
