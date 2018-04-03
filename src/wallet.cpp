@@ -4403,6 +4403,8 @@ bool CWallet::CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, CTxOu
     if(!pubCoin.validate())
         return error("%s: newly created pubcoin is not valid", __func__);
 
+    zwalletMain->UpdateCount();
+
     CScript scriptSerializedCoin = CScript() << OP_ZEROCOINMINT << pubCoin.getValue().getvch().size() << pubCoin.getValue().getvch();
     outMint = CTxOut(libzerocoin::ZerocoinDenominationToAmount(denomination), scriptSerializedCoin);
 
