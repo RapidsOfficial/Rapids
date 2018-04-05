@@ -12,8 +12,8 @@
 using namespace std;
 using namespace libzerocoin;
 
-std::list<std::string> ZPivControlDialog::listSelectedMints;
-std::list<CMintMeta> ZPivControlDialog::listMints;
+std::set<std::string> ZPivControlDialog::setSelectedMints;
+std::set<CMintMeta> ZPivControlDialog::setMints;
 
 ZPivControlDialog::ZPivControlDialog(QWidget *parent) :
     QDialog(parent),
@@ -21,7 +21,7 @@ ZPivControlDialog::ZPivControlDialog(QWidget *parent) :
     model(0)
 {
     ui->setupUi(this);
-    listMints.clear();
+    setMints.clear();
     privacyDialog = (PrivacyDialog*)parent;
 
     // click on checkbox
@@ -64,23 +64,25 @@ void ZPivControlDialog::updateList()
     }
 
     // select all unused coins - including not mature. Update status of coins too.
-    std::list<CMintMeta> list;
-    model->listZerocoinMints(list, true, false, true);
-    this->listMints = list;
+    std::set<CMintMeta> set;
+    model->listZerocoinMints(set, true, false, true);
+    this->setMints = set;
 
     //populate rows with mint info
     int nBestHeight = chainActive.Height();
     map<CoinDenomination, int> mapMaturityHeight = GetMintMaturityHeight();
-    for(const CMintMeta mint : listMints) {
+    for (const CMintMeta& mint : setMints) {
         // assign this mint to the correct denomination in the tree view
         libzerocoin::CoinDenomination denom = mint.denom;
         QTreeWidgetItem *itemMint = new QTreeWidgetItem(ui->treeWidget->topLevelItem(mapDenomPosition.at(denom)));
 
         // if the mint is already selected, then it needs to have the checkbox checked
         std::string strPubCoinHash = mint.hashPubcoin.GetHex();
-        itemMint->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
-        if(count(listSelectedMints.begin(), listSelectedMints.end(), strPubCoinHash))
+
+        if (setSelectedMints.count(strPubCoinHash))
             itemMint->setCheckState(COLUMN_CHECKBOX, Qt::Checked);
+        else
+            itemMint->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
 
         itemMint->setText(COLUMN_DENOMINATION, QString::number(mint.denom));
         itemMint->setText(COLUMN_PUBCOIN, QString::fromStdString(strPubCoinHash));
@@ -106,10 +108,8 @@ void ZPivControlDialog::updateList()
             itemMint->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
 
             //if this mint is in the selection list, then remove it
-            auto it = std::find(listSelectedMints.begin(), listSelectedMints.end(), mint.hashPubcoin.GetHex());
-            if (it != listSelectedMints.end()) {
-                listSelectedMints.erase(it);
-            }
+            if (setSelectedMints.count(strPubCoinHash))
+                setSelectedMints.erase(strPubCoinHash);
 
             string strReason = "";
             if(nConfirmations < Params().Zerocoin_MintRequiredConfirmations())
@@ -135,16 +135,15 @@ void ZPivControlDialog::updateSelection(QTreeWidgetItem* item, int column)
 
         // see if this mint is already selected in the selection list
         std::string strPubcoin = item->text(COLUMN_PUBCOIN).toStdString();
-        auto iter = std::find(listSelectedMints.begin(), listSelectedMints.end(), strPubcoin);
-        bool fSelected = iter != listSelectedMints.end();
+        bool fSelected = setSelectedMints.count(strPubcoin);
 
         // set the checkbox to the proper state and add or remove the mint from the selection list
         if (item->checkState(COLUMN_CHECKBOX) == Qt::Checked) {
             if (fSelected) return;
-            listSelectedMints.emplace_back(strPubcoin);
+            setSelectedMints.insert(strPubcoin);
         } else {
             if (!fSelected) return;
-            listSelectedMints.erase(iter);
+            setSelectedMints.erase(strPubcoin);
         }
         updateLabels();
     }
@@ -154,27 +153,25 @@ void ZPivControlDialog::updateSelection(QTreeWidgetItem* item, int column)
 void ZPivControlDialog::updateLabels()
 {
     int64_t nAmount = 0;
-    for (const CMintMeta mint : listMints) {
-        if (count(listSelectedMints.begin(), listSelectedMints.end(), mint.hashPubcoin.GetHex())) {
+    for (const CMintMeta& mint : setMints) {
+        if (setSelectedMints.count(mint.hashPubcoin.GetHex()))
             nAmount += mint.denom;
-        }
     }
 
     //update this dialog's labels
     ui->labelZPiv_int->setText(QString::number(nAmount));
-    ui->labelQuantity_int->setText(QString::number(listSelectedMints.size()));
+    ui->labelQuantity_int->setText(QString::number(setSelectedMints.size()));
 
     //update PrivacyDialog labels
-    privacyDialog->setZPivControlLabels(nAmount, listSelectedMints.size());
+    privacyDialog->setZPivControlLabels(nAmount, setSelectedMints.size());
 }
 
 std::vector<CMintMeta> ZPivControlDialog::GetSelectedMints()
 {
     std::vector<CMintMeta> listReturn;
-    for (const CMintMeta mint : listMints) {
-        if (count(listSelectedMints.begin(), listSelectedMints.end(), mint.hashPubcoin.GetHex())) {
+    for (const CMintMeta& mint : setMints) {
+        if (setSelectedMints.count(mint.hashPubcoin.GetHex()))
             listReturn.emplace_back(mint);
-        }
     }
 
     return listReturn;
@@ -185,7 +182,7 @@ void ZPivControlDialog::ButtonAllClicked()
 {
     ui->treeWidget->blockSignals(true);
     Qt::CheckState state = Qt::Checked;
-    for(int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
+    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
         if(ui->treeWidget->topLevelItem(i)->checkState(COLUMN_CHECKBOX) != Qt::Unchecked) {
             state = Qt::Unchecked;
             break;
@@ -195,11 +192,11 @@ void ZPivControlDialog::ButtonAllClicked()
     //much quicker to start from scratch than to have QT go through all the objects and update
     ui->treeWidget->clear();
 
-    if(state == Qt::Checked) {
-        for(const CMintMeta mint : listMints)
-            listSelectedMints.emplace_back(mint.hashPubcoin.GetHex());
+    if (state == Qt::Checked) {
+        for(const CMintMeta& mint : setMints)
+            setSelectedMints.insert(mint.hashPubcoin.GetHex());
     } else {
-        listSelectedMints.clear();
+        setSelectedMints.clear();
     }
 
     updateList();
