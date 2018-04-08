@@ -2685,7 +2685,7 @@ UniValue resetmintzerocoin(const UniValue& params, bool fHelp)
     CWalletDB walletdb(pwalletMain->strWalletFile);
     CzPIVTracker* zpivTracker = pwalletMain->zpivTracker;
     set<CMintMeta> setMints = zpivTracker->ListMints(false, false, true);
-    vector<CMintMeta> vMintsToFind{ std::make_move_iterator(std::begin(setMints)), std::make_move_iterator(std::end(setMints)) };
+    vector<CMintMeta> vMintsToFind(setMints.begin(), setMints.end());
     vector<CMintMeta> vMintsMissing;
     vector<CMintMeta> vMintsToUpdate;
 
