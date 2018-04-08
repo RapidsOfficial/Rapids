@@ -451,6 +451,13 @@ void PrivacyDialog::sendzPIV()
 
     // Display errors during spend
     if (!fSuccess) {
+        if (receipt.GetStatus() == ZPIV_SPEND_V1_SEC_LEVEL) {
+            QMessageBox::warning(this, tr("Spend Zerocoin"), tr("Version 1 zPIV require a security level of 100 to successfully spend."), QMessageBox::Ok, QMessageBox::Ok);
+            ui->TEMintStatus->setPlainText(tr("Failed to spend zPIV"));
+            ui->TEMintStatus->repaint();
+            return;
+        }
+
         int nNeededSpends = receipt.GetNeededSpends(); // Number of spends we would need for this transaction
         const int nMaxSpends = Params().Zerocoin_MaxSpendsPerTransaction(); // Maximum possible spends for one zPIV transaction
         if (nNeededSpends > nMaxSpends) {
