@@ -20,6 +20,24 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
     uint256 hashSeed;
     bool fFirstRun = !walletdb.ReadCurrentSeedHash(hashSeed);
 
+    //Check for old db version of storing zpiv seed
+    if (fFirstRun) {
+        uint256 seed;
+        if (walletdb.ReadZPIVSeed_deprecated(seed)) {
+            //Update to new format, erase old
+            seedMaster = seed;
+            hashSeed = Hash(seed.begin(), seed.end());
+            if (pwalletMain->AddDeterministicSeed(seed)) {
+                if (walletdb.EraseZPIVSeed_deprecated()) {
+                    LogPrintf("%s: Updated zPIV seed databasing\n", __func__);
+                    fFirstRun = false;
+                } else {
+                    LogPrintf("%s: failed to remove old zpiv seed\n", __func__);
+                }
+            }
+        }
+    }
+
     //Don't try to do anything if the wallet is locked.
     if (pwalletMain->IsLocked() && !fFirstRun) {
         seedMaster = 0;
@@ -28,7 +46,6 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
         return;
     }
 
-    //TODO: make better (hopefully 12 word mnemonic)
     //First time running, generate master seed
     uint256 seed;
     if (fFirstRun) {
@@ -42,7 +59,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
         return;
     }
 
-    if(!SetMasterSeed(seed)){
+    if (!SetMasterSeed(seed)) {
         LogPrintf("%s: failed to save deterministic seed for hashseed %s\n", __func__, hashSeed.GetHex());
         return;
     }
