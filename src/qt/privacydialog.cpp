@@ -484,6 +484,7 @@ void PrivacyDialog::sendzPIV()
         strStats += tr("serial: ") + spend.GetSerial().ToString().c_str() + "\n";
         strStats += tr("Spend is 1 of : ") + QString::number(spend.GetMintCount()) + " mints in the accumulator\n";
         nValueIn += libzerocoin::ZerocoinDenominationToAmount(spend.GetDenomination());
+        ++nCount;
     }
 
     CAmount nValueOut = 0;
