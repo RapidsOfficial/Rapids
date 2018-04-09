@@ -1128,9 +1128,8 @@ bool CWalletDB::ArchiveDeterministicOrphan(const CDeterministicMint& dMint)
     return true;
 }
 
-bool CWalletDB::UnarchiveDeterministicMint(const uint256& hashPubcoin)
+bool CWalletDB::UnarchiveDeterministicMint(const uint256& hashPubcoin, CDeterministicMint& dMint)
 {
-    CDeterministicMint dMint;
     if (!Read(make_pair(string("dzco"), hashPubcoin), dMint))
         return error("%s: failed to retrieve deterministic mint from archive", __func__);
 
@@ -1143,9 +1142,8 @@ bool CWalletDB::UnarchiveDeterministicMint(const uint256& hashPubcoin)
     return true;
 }
 
-bool CWalletDB::UnarchiveZerocoinMint(const uint256& hashPubcoin)
+bool CWalletDB::UnarchiveZerocoinMint(const uint256& hashPubcoin, CZerocoinMint& mint)
 {
-    CZerocoinMint mint;
     if (!Read(make_pair(string("zco"), hashPubcoin), mint))
         return error("%s: failed to retrieve zerocoinmint from archive", __func__);
 
