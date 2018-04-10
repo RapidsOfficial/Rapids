@@ -219,6 +219,8 @@ public:
     bool DatabaseMint(CDeterministicMint& dMint);
     bool SetMintUnspent(const CBigNum& bnSerial);
     bool UpdateMint(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const libzerocoin::CoinDenomination& denom);
+    string GetUniqueWalletBackupName(bool fzpivAuto) const;
+
 
     /** Zerocin entry changed.
     * @note called with lock cs_wallet held.
@@ -667,6 +669,9 @@ public:
 
     /** zPIV reset */
     boost::signals2::signal<void()> NotifyzPIVReset;
+
+    /** notify wallet file backed up */
+    boost::signals2::signal<void (const bool& fSuccess, const std::string& filename)> NotifyWalletBacked;
 };
 
 
