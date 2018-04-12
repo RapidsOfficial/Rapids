@@ -3392,6 +3392,26 @@ UniValue generatemintlist(const UniValue& params, bool fHelp)
     return arrRet;
 }
 
+UniValue dzpivstate(const UniValue& params, bool fHelp) {
+    if (fHelp || params.size() != 0)
+        throw runtime_error(
+                "dzpivstate\n"
+                        "\nThe current state of the mintpool of the deterministic zPIV wallet.\n" +
+                HelpRequiringPassphrase() + "\n"
+
+                        "\nExamples\n" +
+                HelpExampleCli("mintpoolstatus", "") + HelpExampleRpc("mintpoolstatus", ""));
+
+    CzPIVWallet* zwallet = pwalletMain->zwalletMain;
+    UniValue obj(UniValue::VOBJ);
+    int nCount, nCountLastUsed;
+    zwallet->GetState(nCount, nCountLastUsed);
+    obj.push_back(Pair("dzpiv_count", nCount));
+    obj.push_back(Pair("mintpool_count", nCountLastUsed));
+
+    return obj;
+}
+
 UniValue searchdzpiv(const UniValue& params, bool fHelp)
 {
     if(fHelp || params.size() != 2)
