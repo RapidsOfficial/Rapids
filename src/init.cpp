@@ -1706,7 +1706,7 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         //Load zerocoin mint hashes to memory
         pwalletMain->zpivTracker->Init();
         zwalletMain->LoadMintPoolFromDB();
-        zwalletMain->RemoveMintsFromPool(pwalletMain->zpivTracker->GetSerialHashes());
+        //zwalletMain->RemoveMintsFromPool(pwalletMain->zpivTracker->GetSerialHashes());
         zwalletMain->SyncWithChain();
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
