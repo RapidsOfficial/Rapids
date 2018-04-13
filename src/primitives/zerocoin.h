@@ -62,7 +62,7 @@ public:
         this->serialNumber = serialNumber;
         this->isUsed = isUsed;
         this->version = nVersion;
-        if (privkey)
+        if (nVersion >= 2 && privkey)
             this->privkey = *privkey;
     }
 
