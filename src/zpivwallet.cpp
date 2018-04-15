@@ -54,6 +54,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
         key.MakeNewKey(true);
         seed = key.GetPrivKey_256();
         seedMaster = seed;
+        LogPrintf("%s: first run of zpiv wallet detected, new seed generated. Seedhash=%s\n", __func__, Hash(seed.begin(), seed.end()).GetHex());
     } else if (!pwalletMain->GetDeterministicSeed(hashSeed, seed)) {
         LogPrintf("%s: failed to get deterministic seed for hashseed %s\n", __func__, hashSeed.GetHex());
         return;
@@ -96,9 +97,9 @@ void CzPIVWallet::Lock()
     seedMaster = 0;
 }
 
-void CzPIVWallet::AddToMintPool(const std::pair<uint256, uint32_t>& pMint)
+void CzPIVWallet::AddToMintPool(const std::pair<uint256, uint32_t>& pMint, bool fVerbose)
 {
-    mintPool.Add(pMint);
+    mintPool.Add(pMint, fVerbose);
 }
 
 //Add the next 20 mints to the mint pool
