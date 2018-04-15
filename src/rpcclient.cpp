@@ -139,6 +139,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"generatemintlist", 1},
         {"searchdzpiv", 0},
         {"searchdzpiv", 1},
+        {"searchdzpiv", 2},
         {"getfeeinfo", 0}
     };
 

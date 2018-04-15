@@ -96,6 +96,11 @@ void CzPIVWallet::Lock()
     seedMaster = 0;
 }
 
+void CzPIVWallet::AddToMintPool(const std::pair<uint256, uint32_t>& pMint)
+{
+    mintPool.Add(pMint);
+}
+
 //Add the next 20 mints to the mint pool
 void CzPIVWallet::GenerateMintPool(uint32_t nCountStart, uint32_t nCountEnd)
 {
@@ -222,7 +227,7 @@ void CzPIVWallet::SyncWithChain(bool fGenerateMintPool)
                 CoinDenomination denomination = CoinDenomination::ZQ_ERROR;
                 bool fFoundMint = false;
                 CBigNum bnValue = 0;
-                for (const CTxOut out : tx.vout) {
+                for (const CTxOut& out : tx.vout) {
                     if (!out.scriptPubKey.IsZerocoinMint())
                         continue;
 

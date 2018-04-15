@@ -24,6 +24,7 @@
 #include "spork.h"
 #include "primitives/deterministicmint.h"
 #include <boost/assign/list_of.hpp>
+#include <boost/thread/thread.hpp>
 
 #include <univalue.h>
 
@@ -3412,9 +3413,37 @@ UniValue dzpivstate(const UniValue& params, bool fHelp) {
     return obj;
 }
 
+
+void static SearchThread(CzPIVWallet* zwallet, int nCountStart, int nCountEnd)
+{
+    LogPrintf("%s: start=%d end=%d\n", __func__, nCountStart, nCountEnd);
+    try {
+        uint256 seedMaster = zwallet->GetMasterSeed();
+        for(int i = nCountStart; i < nCountEnd; i++) {
+            boost::this_thread::interruption_point();
+            CDataStream ss(SER_GETHASH, 0);
+            ss << seedMaster << i;
+            uint512 zerocoinSeed = Hash512(ss.begin(), ss.end());
+
+            CBigNum bnValue;
+            CBigNum bnSerial;
+            CBigNum bnRandomness;
+            CKey key;
+            zwallet->SeedToZPIV(zerocoinSeed, bnValue, bnSerial, bnRandomness, key);
+
+            uint256 hashPubcoin = GetPubCoinHash(bnValue);
+            zwallet->AddToMintPool(make_pair(hashPubcoin, i));
+        }
+    } catch (std::exception& e) {
+        LogPrintf("SearchThread() exception");
+    } catch (...) {
+        LogPrintf("SearchThread() exception");
+    }
+}
+
 UniValue searchdzpiv(const UniValue& params, bool fHelp)
 {
-    if(fHelp || params.size() != 2)
+    if(fHelp || params.size() != 3)
         throw runtime_error(
             "searchdzpiv\n"
             "\nMake an extended search for deterministically generated zPIV that have not yet been recognized by the wallet.\n" +
@@ -3423,9 +3452,10 @@ UniValue searchdzpiv(const UniValue& params, bool fHelp)
             "\nArguments\n"
             "1. \"count\"       (numeric) Which sequential zPIV to start with.\n"
             "2. \"range\"       (numeric) How many zPIV to generate.\n"
+            "3. \"threads\"     (numeric) How many threads should this operation consume.\n"
 
             "\nExamples\n" +
-            HelpExampleCli("searchdzpiv", "1, 100") + HelpExampleRpc("searchdzpiv", "1, 100"));
+            HelpExampleCli("searchdzpiv", "1, 100, 2") + HelpExampleRpc("searchdzpiv", "1, 100, 2"));
 
     EnsureWalletIsUnlocked();
 
@@ -3437,8 +3467,23 @@ UniValue searchdzpiv(const UniValue& params, bool fHelp)
     if (nRange < 1)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Range has to be at least 1");
 
+    int nThreads = params[2].get_int();
+
     CzPIVWallet* zwallet = pwalletMain->zwalletMain;
-    zwallet->GenerateMintPool(nCount, nRange);
+
+    boost::thread_group* dzpivThreads = new boost::thread_group();
+    int nRangePerThread = nRange / nThreads;
+
+    int nPrevThreadEnd = nCount - 1;
+    for (int i = 0; i < nThreads; i++) {
+        int nStart = nPrevThreadEnd + 1;;
+        int nEnd = nStart + nRangePerThread;
+        nPrevThreadEnd = nEnd;
+        dzpivThreads->create_thread(boost::bind(&SearchThread, zwallet, nStart, nEnd));
+    }
+
+    dzpivThreads->join_all();
+
     CzPIVTracker* tracker = pwalletMain->zpivTracker;
     zwallet->RemoveMintsFromPool(tracker->GetSerialHashes());
     zwallet->SyncWithChain(false);
