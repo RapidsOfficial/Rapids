@@ -2922,7 +2922,7 @@ UniValue resetmintzerocoin(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
-    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker;
+    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker.get();
     set<CMintMeta> setMints = zpivTracker->ListMints(false, false, true);
     vector<CMintMeta> vMintsToFind(setMints.begin(), setMints.end());
     vector<CMintMeta> vMintsMissing;
@@ -2975,7 +2975,7 @@ UniValue resetspentzerocoin(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
-    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker;
+    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker.get();
     set<CMintMeta> setMints = zpivTracker->ListMints(false, false, false);
     list<CZerocoinSpend> listSpends = walletdb.ListSpentCoins();
     list<CZerocoinSpend> listUnconfirmedSpends;
@@ -3112,7 +3112,7 @@ UniValue exportzerocoins(const UniValue& params, bool fHelp)
     if (params.size() == 2)
         denomination = libzerocoin::IntToZerocoinDenomination(params[1].get_int());
 
-    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker;
+    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker.get();
     set<CMintMeta> setMints = zpivTracker->ListMints(!fIncludeSpent, false, false);
 
     UniValue jsonList(UniValue::VARR);
@@ -3487,8 +3487,7 @@ UniValue searchdzpiv(const UniValue& params, bool fHelp)
 
     dzpivThreads->join_all();
 
-    CzPIVTracker* tracker = pwalletMain->zpivTracker;
-    zwallet->RemoveMintsFromPool(tracker->GetSerialHashes());
+    zwallet->RemoveMintsFromPool(pwalletMain->zpivTracker->GetSerialHashes());
     zwallet->SyncWithChain(false);
 
     //todo: better response

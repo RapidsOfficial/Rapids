@@ -12,7 +12,14 @@ CzPIVTracker::CzPIVTracker(std::string strWalletFile)
 {
     this->strWalletFile = strWalletFile;
     mapSerialHashes.clear();
+    mapPendingSpends.clear();
     fInitialized = false;
+}
+
+CzPIVTracker::~CzPIVTracker()
+{
+    mapSerialHashes.clear();
+    mapPendingSpends.clear();
 }
 
 void CzPIVTracker::Init()

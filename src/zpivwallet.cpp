@@ -183,7 +183,6 @@ void CzPIVWallet::SyncWithChain(bool fGenerateMintPool)
     uint32_t nLastCountUsed = 0;
     bool found = true;
     CWalletDB walletdb(strWalletFile);
-    CzPIVTracker* zpivTracker = pwalletMain->zpivTracker;
 
     set<uint256> setAddedTx;
     while (found) {
@@ -203,7 +202,7 @@ void CzPIVWallet::SyncWithChain(bool fGenerateMintPool)
             if (ShutdownRequested())
                 return;
 
-            if (zpivTracker->HasPubcoinHash(pMint.first)) {
+            if (pwalletMain->zpivTracker->HasPubcoinHash(pMint.first)) {
                 mintPool.Remove(pMint.first);
                 continue;
             }
