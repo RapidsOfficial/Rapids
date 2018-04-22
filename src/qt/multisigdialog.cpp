@@ -31,6 +31,9 @@
 #include <QSpinBox>
 #include <QClipboard>
 #include <QDebug>
+#include <QArgument>
+#include <QtGlobal>
+#include <QString>
 
 
 MultisigDialog::MultisigDialog(QWidget* parent) : QDialog(parent),
