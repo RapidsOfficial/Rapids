@@ -1,3 +1,7 @@
+// Copyright (c) 2018 The PIVX developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #include "invalid.h"
 #include "invalid_outpoints.json.h"
 #include "invalid_serials.json.h"
