@@ -17,6 +17,9 @@
 #include "rpcclient.h"
 #include "rpcserver.h"
 #include "util.h"
+#ifdef ENABLE_WALLET
+#include "wallet.h"
+#endif // ENABLE_WALLET
 
 #include <openssl/crypto.h>
 
@@ -291,7 +294,7 @@ RPCConsole::RPCConsole(QWidget* parent) : QDialog(parent),
 #ifdef ENABLE_WALLET
     std::string strPathCustom = GetArg("-backuppath", "");
     std::string strzPIVPathCustom = GetArg("-zpivbackuppath", "");
-    std::string strCustomBackupThreshold = GetArg("-custombackupthreshold", "");
+    int nCustomBackupThreshold = GetArg("-custombackupthreshold", DEFAULT_CUSTOMBACKUPTHRESHOLD);
 
     if(!strPathCustom.empty()) {
         ui->wallet_custombackuppath->setText(QString::fromStdString(strPathCustom));
@@ -305,8 +308,8 @@ RPCConsole::RPCConsole(QWidget* parent) : QDialog(parent),
         ui->wallet_customzpivbackuppath->setVisible(true);
     }
 
-    if(!strCustomBackupThreshold.empty()) {
-        ui->wallet_custombackupthreshold->setText(QString::fromStdString(strCustomBackupThreshold));
+    if((!strPathCustom.empty() || !strzPIVPathCustom.empty()) && nCustomBackupThreshold > 0) {
+        ui->wallet_custombackupthreshold->setText(QString::fromStdString(std::to_string(nCustomBackupThreshold)));
         ui->wallet_custombackupthreshold_label->setVisible(true);
         ui->wallet_custombackupthreshold->setVisible(true);
     }
