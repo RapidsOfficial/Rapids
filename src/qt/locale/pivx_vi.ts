@@ -1,57 +1,69 @@
-<TS language="ro_RO" version="2.1">
+<TS language="vi" version="2.1">
 <context>
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
-        <translation>Faceți click dreapta pentru a edita adresa sau eticheta</translation>
+        <translation>Ấn chuột phải để sửa địa chỉ hoặc tên</translation>
     </message>
     <message>
         <source>Create a new address</source>
-        <translation>Creează o nouă adresă</translation>
+        <translation>Tạo địa chỉ mới </translation>
     </message>
     <message>
         <source>&amp;New</source>
-        <translation>&amp;Nou/Nouă</translation>
-    </message>
-    <message>
-        <source>Copy the currently selected address to the system clipboard</source>
-        <translation>Copiază adresa selectată în clipboard</translation>
+        <translation>Mới</translation>
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>&amp;Copiază</translation>
+        <translation>Sao chép</translation>
     </message>
     <message>
         <source>Delete the currently selected address from the list</source>
-        <translation>Șterge adresa selectată din listă</translation>
+        <translation>Xóa các địa chỉ được chọn khỏi danh sách</translation>
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>&amp;Șterge</translation>
+        <translation>Xóa</translation>
     </message>
     <message>
         <source>Export the data in the current tab to a file</source>
-        <translation>Exportă datele din fila curentă într-un fișier</translation>
+        <translation>Xuất dữ liệu của tab hiện tại sang file</translation>
     </message>
     <message>
         <source>&amp;Export</source>
-        <translation>&amp;Exportă</translation>
+        <translation>Xuất</translation>
     </message>
     <message>
         <source>C&amp;lose</source>
-        <translation>&amp;Închide </translation>
+        <translation>Đóng</translation>
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation>Alege adresa la care vrei să trimiți monedele</translation>
+        <translation>Chọn địa chỉ để gửi coin đi</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
-        <translation>Alege adresa la care vrei să primești monedele</translation>
+        <translation>Chọn địa chỉ để nhận coin về</translation>
     </message>
     <message>
         <source>C&amp;hoose</source>
-        <translation>&amp;Alege</translation>
+        <translation>Chọn</translation>
+    </message>
+    <message>
+        <source>Sending addresses</source>
+        <translation>Địa chỉ nhận</translation>
+    </message>
+    <message>
+        <source>Receiving addresses</source>
+        <translation>Địa chỉ gửi </translation>
+    </message>
+    <message>
+        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Đây là địa chỉ ví PIVX của bạn để gửi đi. Luôn luôn kiểm tra số lượng và địa chỉ ví nhận trước khi gửi.</translation>
+    </message>
+    <message>
+        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Đây là địa chỉ ví PIVX của bạn để nhận. Bạn nên sử dụng địa chỉ ví nhận mới cho mỗi giao dịch</translation>
     </message>
     </context>
 <context>
@@ -59,6 +71,10 @@
     </context>
 <context>
     <name>AskPassphraseDialog</name>
+    <message>
+        <source>Unlock wallet</source>
+        <translation>Mở khóa ví</translation>
+    </message>
     </context>
 <context>
     <name>BanTableModel</name>
@@ -68,6 +84,10 @@
     </context>
 <context>
     <name>BitcoinGUI</name>
+    <message>
+        <source>Unlock wallet</source>
+        <translation>Mở khóa ví</translation>
+    </message>
     </context>
 <context>
     <name>BlockExplorer</name>
@@ -181,11 +201,11 @@
     <name>WalletView</name>
     <message>
         <source>&amp;Export</source>
-        <translation>&amp;Exportă</translation>
+        <translation>Xuất</translation>
     </message>
     <message>
         <source>Export the data in the current tab to a file</source>
-        <translation>Exportă datele din fila curentă într-un fișier</translation>
+        <translation>Xuất dữ liệu của tab hiện tại sang file</translation>
     </message>
     </context>
 <context>
