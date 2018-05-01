@@ -252,7 +252,7 @@
                            </size>
                           </property>
                           <property name="toolTip">
-                           <string>Enter an amount of Piv to convert to zPiv</string>
+                           <string>Enter an amount of Piv to convert to zPIV</string>
                           </property>
                           <property name="text">
                            <string>Mint Zerocoin</string>
@@ -304,7 +304,7 @@
                            </font>
                           </property>
                           <property name="toolTip">
-                           <string>Enter an amount of Piv to convert to zPiv</string>
+                           <string>Enter an amount of Piv to convert to zPIV</string>
                           </property>
                           <property name="text">
                            <string>0.000 000 00 PIV</string>
@@ -605,14 +605,14 @@
                         <item>
                          <widget class="QPushButton" name="pushButtonZPivControl">
                           <property name="text">
-                           <string>zPiv Control</string>
+                           <string>zPIV Control</string>
                           </property>
                          </widget>
                         </item>
                         <item>
                          <widget class="QLabel" name="labelzPivSelected">
                           <property name="text">
-                           <string>zPiv Selected:</string>
+                           <string>zPIV Selected:</string>
                           </property>
                          </widget>
                         </item>
@@ -922,9 +922,6 @@ zPIV are mature when they have more than 20 confirmations AND more than 2 mints 
                           </item>
                           <item>
                            <widget class="QLabel" name="labelzPIV">
-                            <property name="alignment">
-                             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                            </property>
                             <property name="minimumSize">
                              <size>
                               <width>55</width>
@@ -933,6 +930,9 @@ zPIV are mature when they have more than 20 confirmations AND more than 2 mints 
                             </property>
                             <property name="text">
                              <string>zPIV</string>
+                            </property>
+                            <property name="alignment">
+                             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                             </property>
                            </widget>
                           </item>
@@ -1181,7 +1181,7 @@ zPIV are mature when they have more than 20 confirmations AND more than 2 mints 
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1234,7 +1234,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1287,7 +1287,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1340,7 +1340,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1393,7 +1393,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1446,7 +1446,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1499,7 +1499,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>
@@ -1552,7 +1552,7 @@ Immature: confirmed, but less than 2 mints of the same denomination after it was
                           </property>
                           <property name="toolTip">
                            <string>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 2 mints of the same denomination after it was minted</string>
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</string>
                           </property>
                           <property name="text">
                            <string>0 x</string>

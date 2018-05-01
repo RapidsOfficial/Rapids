@@ -92,6 +92,8 @@ endif
 BITCOIN_CORE_H = \
   activemasternode.h \
   accumulators.h \
+  accumulatorcheckpoints.h \
+  accumulatorcheckpoints.json.h \
   accumulatormap.h \
   addrman.h \
   alert.h \
@@ -100,6 +102,7 @@ BITCOIN_CORE_H = \
   base58.h \
   bip38.h \
   bloom.h \
+  blocksignature.h \
   chain.h \
   chainparams.h \
   chainparamsbase.h \
@@ -113,6 +116,7 @@ BITCOIN_CORE_H = \
   compat/sanity.h \
   compressor.h \
   primitives/block.h \
+  primitives/deterministicmint.h \
   primitives/transaction.h \
   primitives/zerocoin.h \
   core_io.h \
@@ -127,6 +131,9 @@ BITCOIN_CORE_H = \
   httprpc.h \
   httpserver.h \
   init.h \
+  invalid.h \
+  invalid_outpoints.json.h \
+  invalid_serials.json.h \
   kernel.h \
   swifttx.h \
   key.h \
@@ -142,6 +149,7 @@ BITCOIN_CORE_H = \
   masternodeconfig.h \
   merkleblock.h \
   miner.h \
+  mintpool.h \
   mruset.h \
   netbase.h \
   net.h \
@@ -165,6 +173,7 @@ BITCOIN_CORE_H = \
   serialize.h \
   spork.h \
   sporkdb.h \
+  stakeinput.h \
   streams.h \
   sync.h \
   threadsafety.h \
@@ -185,6 +194,8 @@ BITCOIN_CORE_H = \
   wallet.h \
   wallet_ismine.h \
   walletdb.h \
+  zpivtracker.h \
+  zpivwallet.h \
   zmq/zmqabstractnotifier.h \
   zmq/zmqconfig.h \
   zmq/zmqnotificationinterface.h \
@@ -203,6 +214,7 @@ libbitcoin_server_a_SOURCES = \
   addrman.cpp \
   alert.cpp \
   bloom.cpp \
+  blocksignature.cpp \
   chain.cpp \
   checkpoints.cpp \
   httprpc.cpp \
@@ -261,13 +273,18 @@ libbitcoin_wallet_a_SOURCES = \
   masternode-sync.cpp \
   masternodeconfig.cpp \
   masternodeman.cpp \
+  mintpool.cpp \
   rpcdump.cpp \
+  primitives/deterministicmint.cpp \
   primitives/zerocoin.cpp \
   rpcwallet.cpp \
   kernel.cpp \
   wallet.cpp \
   wallet_ismine.cpp \
   walletdb.cpp \
+  zpivwallet.cpp \
+  zpivtracker.cpp \
+  stakeinput.cpp \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
@@ -320,6 +337,7 @@ libzerocoin_libbitcoin_zerocoin_a_SOURCES = \
   libzerocoin/ParamGeneration.h \
   libzerocoin/Params.h \
   libzerocoin/SerialNumberSignatureOfKnowledge.h \
+  libzerocoin/SpendType.h \
   libzerocoin/ZerocoinDefines.h \
   libzerocoin/Accumulator.cpp \
   libzerocoin/AccumulatorProofOfKnowledge.cpp \
@@ -336,6 +354,7 @@ libbitcoin_common_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_common_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_common_a_SOURCES = \
   accumulators.cpp \
+  accumulatorcheckpoints.cpp \
   accumulatormap.cpp \
   allocators.cpp \
   amount.cpp \
@@ -345,6 +364,7 @@ libbitcoin_common_a_SOURCES = \
   coins.cpp \
   compressor.cpp \
   primitives/block.cpp \
+  primitives/deterministicmint.cpp \
   primitives/transaction.cpp \
   primitives/zerocoin.cpp \
   core_read.cpp \
@@ -352,6 +372,7 @@ libbitcoin_common_a_SOURCES = \
   eccryptoverify.cpp \
   ecwrapper.cpp \
   hash.cpp \
+  invalid.cpp \
   key.cpp \
   keystore.cpp \
   netbase.cpp \

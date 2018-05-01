@@ -1,5 +1,5 @@
-// Copyright (c) 2014-2015 The Dash Developers
-// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2015-2018 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -171,14 +171,14 @@ UniValue preparebudget(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "\"xxxx\"       (string) proposal fee hash (if successful) or error message (if failed)\n"
+
             "\nExamples:\n" +
             HelpExampleCli("preparebudget", "\"test-proposal\" \"https://forum.pivx.org/t/test-proposal\" 2 820800 \"D9oc6C3dttUbv8zd7zGNq1qKBGf4ZQ1XEE\" 500") +
             HelpExampleRpc("preparebudget", "\"test-proposal\" \"https://forum.pivx.org/t/test-proposal\" 2 820800 \"D9oc6C3dttUbv8zd7zGNq1qKBGf4ZQ1XEE\" 500"));
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    if (pwalletMain->IsLocked())
-        throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
+    EnsureWalletIsUnlocked();
 
     std::string strProposalName = SanitizeString(params[0].get_str());
     if (strProposalName.size() > 20)
@@ -234,7 +234,7 @@ UniValue preparebudget(const UniValue& params, bool fHelp)
     // }
 
     CWalletTx wtx;
-    if (!pwalletMain->GetBudgetSystemCollateralTX(wtx, budgetProposalBroadcast.GetHash(), useIX)) {
+    if (!pwalletMain->GetBudgetSystemCollateralTX(wtx, budgetProposalBroadcast.GetHash(), useIX)) { // 50 PIV collateral for proposal
         throw runtime_error("Error making collateral transaction for proposal. Please check your wallet balance.");
     }
 
@@ -267,6 +267,7 @@ UniValue submitbudget(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "\"xxxx\"       (string) proposal hash (if successful) or error message (if failed)\n"
+
             "\nExamples:\n" +
             HelpExampleCli("submitbudget", "\"test-proposal\" \"https://forum.pivx.org/t/test-proposal\" 2 820800 \"D9oc6C3dttUbv8zd7zGNq1qKBGf4ZQ1XEE\" 500") +
             HelpExampleRpc("submitbudget", "\"test-proposal\" \"https://forum.pivx.org/t/test-proposal\" 2 820800 \"D9oc6C3dttUbv8zd7zGNq1qKBGf4ZQ1XEE\" 500"));
@@ -619,6 +620,7 @@ UniValue getbudgetvotes(const UniValue& params, bool fHelp)
             "  }\n"
             "  ,...\n"
             "]\n"
+
             "\nExamples:\n" +
             HelpExampleCli("getbudgetvotes", "\"test-proposal\"") + HelpExampleRpc("getbudgetvotes", "\"test-proposal\""));
 
@@ -656,6 +658,7 @@ UniValue getnextsuperblock(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "n      (numeric) Block height of the next super block\n"
+
             "\nExamples:\n" +
             HelpExampleCli("getnextsuperblock", "") + HelpExampleRpc("getnextsuperblock", ""));
 
@@ -700,6 +703,7 @@ UniValue getbudgetprojection(const UniValue& params, bool fHelp)
             "  }\n"
             "  ,...\n"
             "]\n"
+
             "\nExamples:\n" +
             HelpExampleCli("getbudgetprojection", "") + HelpExampleRpc("getbudgetprojection", ""));
 
@@ -761,6 +765,7 @@ UniValue getbudgetinfo(const UniValue& params, bool fHelp)
             "  }\n"
             "  ,...\n"
             "]\n"
+
             "\nExamples:\n" +
             HelpExampleCli("getbudgetprojection", "") + HelpExampleRpc("getbudgetprojection", ""));
 
@@ -807,6 +812,7 @@ UniValue mnbudgetrawvote(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "\"status\"     (string) Vote status or error message\n"
+
             "\nExamples:\n" +
             HelpExampleCli("mnbudgetrawvote", "") + HelpExampleRpc("mnbudgetrawvote", ""));
 
@@ -863,7 +869,8 @@ UniValue mnfinalbudget(const UniValue& params, bool fHelp)
         (strCommand != "suggest" && strCommand != "vote-many" && strCommand != "vote" && strCommand != "show" && strCommand != "getvotes"))
         throw runtime_error(
             "mnfinalbudget \"command\"... ( \"passphrase\" )\n"
-            "Vote or show current budgets\n"
+            "\nVote or show current budgets\n"
+
             "\nAvailable commands:\n"
             "  vote-many   - Vote on a finalized budget\n"
             "  vote        - Vote on a finalized budget\n"
@@ -1037,6 +1044,7 @@ UniValue checkbudgets(const UniValue& params, bool fHelp)
         throw runtime_error(
             "checkbudgets\n"
             "\nInitiates a buddget check cycle manually\n"
+
             "\nExamples:\n" +
             HelpExampleCli("checkbudgets", "") + HelpExampleRpc("checkbudgets", ""));
 

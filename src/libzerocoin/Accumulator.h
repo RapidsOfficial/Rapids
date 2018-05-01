@@ -9,7 +9,7 @@
  * @copyright  Copyright 2013 Ian Miers, Christina Garman and Matthew Green
  * @license    This project is released under the MIT license.
  **/
-// Copyright (c) 2017 The PIVX developers
+// Copyright (c) 2017-2018 The PIVX developers
 #ifndef ACCUMULATOR_H_
 #define ACCUMULATOR_H_
 
@@ -153,7 +153,7 @@ public:
   AccumulatorWitness& operator =(AccumulatorWitness rhs);
 private:
 	Accumulator witness;
-  PublicCoin element; // was const but changed to use setting in assignment
+    PublicCoin element; // was const but changed to use setting in assignment
 };
 
 } /* namespace libzerocoin */

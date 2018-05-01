@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2015-2018 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -206,6 +206,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "Optionally filter to only include txouts paid to specified addresses.\n"
             "Results are an array of Objects, each of which has:\n"
             "{txid, vout, scriptPubKey, amount, confirmations}\n"
+
             "\nArguments:\n"
             "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
             "2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter\n"
@@ -215,6 +216,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "      ,...\n"
             "    ]\n"
             "4. watchonlyconfig  (numberic, optional, default=1) 1 = list regular unspent transactions, 2 = list only watchonly transactions,  3 = list all unspent transactions (including watchonly)\n"
+
             "\nResult\n"
             "[                   (array of json object)\n"
             "  {\n"
@@ -458,8 +460,10 @@ UniValue decodescript(const UniValue& params, bool fHelp)
         throw runtime_error(
             "decodescript \"hex\"\n"
             "\nDecode a hex-encoded script.\n"
+
             "\nArguments:\n"
             "1. \"hex\"     (string) the hex encoded script\n"
+
             "\nResult:\n"
             "{\n"
             "  \"asm\":\"asm\",   (string) Script public key\n"
@@ -472,6 +476,7 @@ UniValue decodescript(const UniValue& params, bool fHelp)
             "  ],\n"
             "  \"p2sh\",\"address\" (string) script address\n"
             "}\n"
+
             "\nExamples:\n" +
             HelpExampleCli("decodescript", "\"hexstring\"") + HelpExampleRpc("decodescript", "\"hexstring\""));
 
@@ -743,12 +748,15 @@ UniValue sendrawtransaction(const UniValue& params, bool fHelp)
             "sendrawtransaction \"hexstring\" ( allowhighfees )\n"
             "\nSubmits raw transaction (serialized, hex-encoded) to local node and network.\n"
             "\nAlso see createrawtransaction and signrawtransaction calls.\n"
+
             "\nArguments:\n"
             "1. \"hexstring\"    (string, required) The hex string of the raw transaction)\n"
             "2. allowhighfees    (boolean, optional, default=false) Allow high fees\n"
             "3. swiftx           (boolean, optional, default=false) Use SwiftX to send this transaction\n"
+
             "\nResult:\n"
             "\"hex\"             (string) The transaction hash in hex\n"
+
             "\nExamples:\n"
             "\nCreate a transaction\n" +
             HelpExampleCli("createrawtransaction", "\"[{\\\"txid\\\" : \\\"mytxid\\\",\\\"vout\\\":0}]\" \"{\\\"myaddress\\\":0.01}\"") +
@@ -805,11 +813,14 @@ UniValue getspentzerocoinamount(const UniValue& params, bool fHelp)
         throw runtime_error(
             "getspentzerocoinamount hexstring index\n"
             "\nReturns value of spent zerocoin output designated by transaction hash and input index.\n"
+
             "\nArguments:\n"
             "1. hash          (hexstring) Transaction hash\n"
             "2. index         (int) Input index\n"
+
             "\nResult:\n"
             "\"value\"        (int) Spent output value, -1 if error\n"
+
             "\nExamples:\n" +
             HelpExampleCli("getspentzerocoinamount", "78021ebf92a80dfccef1413067f1222e37535399797cce029bb40ad981131706 0"));
 

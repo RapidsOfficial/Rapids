@@ -1,7 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2017 The PIVX developers
+// Copyright (c) 2015-2018 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -307,7 +307,6 @@ static const CRPCCommand vRPCCommands[] =
         {"blockchain", "getchaintips", &getchaintips, true, false, false},
         {"blockchain", "getdifficulty", &getdifficulty, true, false, false},
         {"blockchain", "getfeeinfo", &getfeeinfo, true, false, false},
-        {"blockchain", "getinvalid", &getinvalid, true, true, false},
         {"blockchain", "getmempoolinfo", &getmempoolinfo, true, true, false},
         {"blockchain", "getrawmempool", &getrawmempool, true, false, false},
         {"blockchain", "gettxout", &gettxout, true, false, false},
@@ -356,6 +355,9 @@ static const CRPCCommand vRPCCommands[] =
         {"pivx", "listmasternodes", &listmasternodes, true, true, false},
         {"pivx", "getmasternodecount", &getmasternodecount, true, true, false},
         {"pivx", "masternodeconnect", &masternodeconnect, true, true, false},
+        {"pivx", "createmasternodebroadcast", &createmasternodebroadcast, true, true, false},
+        {"pivx", "decodemasternodebroadcast", &decodemasternodebroadcast, true, true, false},
+        {"pivx", "relaymasternodebroadcast", &relaymasternodebroadcast, true, true, false},
         {"pivx", "masternodecurrent", &masternodecurrent, true, true, false},
         {"pivx", "masternodedebug", &masternodedebug, true, true, false},
         {"pivx", "startmasternode", &startmasternode, true, true, false},
@@ -379,9 +381,8 @@ static const CRPCCommand vRPCCommands[] =
         {"pivx", "mnsync", &mnsync, true, true, false},
         {"pivx", "spork", &spork, true, true, false},
         {"pivx", "getpoolinfo", &getpoolinfo, true, true, false},
-#ifdef ENABLE_WALLET
-        {"pivx", "obfuscation", &obfuscation, false, false, true}, /* not threadSafe because of SendMoney */
 
+#ifdef ENABLE_WALLET
         /* Wallet */
         {"wallet", "addmultisigaddress", &addmultisigaddress, true, false, true},
         {"wallet", "autocombinerewards", &autocombinerewards, false, false, true},
@@ -443,7 +444,12 @@ static const CRPCCommand vRPCCommands[] =
         {"zerocoin", "importzerocoins", &importzerocoins, false, false, true},
         {"zerocoin", "exportzerocoins", &exportzerocoins, false, false, true},
         {"zerocoin", "reconsiderzerocoins", &reconsiderzerocoins, false, false, true},
-        {"zerocoin", "getspentzerocoinamount", &getspentzerocoinamount, false, false, false}
+        {"zerocoin", "getspentzerocoinamount", &getspentzerocoinamount, false, false, false},
+        {"zerocoin", "getzpivseed", &getzpivseed, false, false, true},
+        {"zerocoin", "setzpivseed", &setzpivseed, false, false, true},
+        {"zerocoin", "generatemintlist", &generatemintlist, false, false, true},
+        {"zerocoin", "searchdzpiv", &searchdzpiv, false, false, true},
+        {"zerocoin", "dzpivstate", &dzpivstate, false, false, true}
 
 #endif // ENABLE_WALLET
 };
