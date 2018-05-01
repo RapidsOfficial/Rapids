@@ -47,7 +47,7 @@ zPIV Updates
 
 ### zPIV Staking
 
-zPIV Staking is now live! With the release of zPIV staking, there are effectively 2 versions of zPIV, zPIV minted on the 3.0.6 PIVX wallet or lower, and zPIV minted on PIVX wallet version or higher. New features in this release will require the use of zPIV v2, zPIV minted on this wallet release or later. If you currently hold zPIV v1 and wish to take advantage of zPIV staking and deterministic zPIV, you will need to spend the zPIV v1 to yourself and remint zPIV v2.
+zPIV Staking is here! zPIV staking will be activated on the morning of the 8th of May 2018. With the release of zPIV staking, there are effectively 2 versions of zPIV, zPIV minted on the 3.0.6 PIVX wallet or lower, and zPIV minted on PIVX wallet version or higher. New features in this release will require the use of zPIV v2, zPIV minted on this wallet release or later. If you currently hold zPIV v1 and wish to take advantage of zPIV staking and deterministic zPIV, you will need to spend the zPIV v1 to yourself and remint zPIV v2.
 In order to take advantage of zPIV staking, you must mint new zPIV v2 and wait for at least 200 confirmations before that zPIV is considered valid for staking.
 
 **Note:**  To find your zPIV version, click the privacy tab, then the zPIV Control button then expand the arrows next to the desired denomination. 
@@ -409,4 +409,4 @@ Thanks to everyone who directly contributed to this release:
 - PeterL73
 - Anthony Posselli
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/), the QA team during Testing and the Node hosts supporting our Testnet.
