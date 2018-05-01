@@ -115,7 +115,7 @@ The gbuild invocations below <b>DO NOT DO THIS</b> by default.
     mv build/out/pivx-*.tar.gz build/out/pivx-*.dmg ../
 
     ./bin/gbuild --memory 3000 --commit pivx=v${VERSION} ../pivx/contrib/gitian-descriptors/gitian-aarch64.yml
-    ./bin/gsign --signer $SIGNER --release ${VERSION}-linux --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-aarch64.yml
+    ./bin/gsign --signer $SIGNER --release ${VERSION}-aarch64 --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-aarch64.yml
     mv build/out/pivx-*.tar.gz build/out/src/pivx-*.tar.gz ../
     popd
 
