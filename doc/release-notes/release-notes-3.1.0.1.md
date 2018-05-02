@@ -1,15 +1,8 @@
-(note: this is a temporary file, to be added-to by anybody, and moved to release-notes at release time)
+PIVX Core version *3.1.0.1* is now available from:  <https://github.com/pivx-project/pivx/releases>
 
-PIVX Core version *version* is now available from:  <https://github.com/pivx-project/pivx/releases>
-
-This is a new major version release, including various bug fixes and performance improvements, as well as updated translations.
+This is a new bugfix release, specifically addressing a bug with windows OS masternode control wallets. Users upgrading to this version are encouraged to also read the detailed release notes for the previous [3.1.0](https://github.com/PIVX-Project/PIVX/releases/tag/v3.1.0) release as information will not be duplicated here.
 
 Please report bugs using the issue tracker at github: <https://github.com/pivx-project/pivx/issues>
-
-
-Mandatory Update
-==============
-
 
 How to Upgrade
 ==============
@@ -34,30 +27,28 @@ PIVX Core should also work on most other Unix-like systems but is not frequently
 Notable Changes
 ==============
 
+Windows masternode.conf bug
+--------------
 
-*version* Change log
+Windows Masternode Controller wallets were experiencing an issue with reading the `masternode.conf` file during startup that prevented the wallet from opening properly. 
+
+Windows file icons
+-------------
+
+The Windows program icons and installer images were of less than ideal quality, often appearing grainy or distorted. These icons/images have now been recreated to meet higher standards.
+
+*3.1.0.1* Change log
 ==============
 
 Detailed release notes follow. This overview includes changes that affect behavior, not code moves, refactors and string updates. For convenience in locating the code changes and accompanying discussion, both the pull request and git merge commit are mentioned.
 
-### Core Features
-
-### Build System
- 
-### P2P Protocol and Network Code
-
-### GUI
- 
-### RPC/REST
-
-### Wallet
- 
 ### Miscellaneous
- 
- 
+- #586 `fc211bfdf` [Bug] Fix CMasternodeConfig::read (Fuzzbawls)
+- #587 `69498104f` [Bug] Fix Windows icon files (Fuzzbawls)
+
 ## Credits
 
 Thanks to everyone who directly contributed to this release:
-
+- Fuzzbawls
 
 As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/), the QA team during Testing and the Node hosts supporting our Testnet.
