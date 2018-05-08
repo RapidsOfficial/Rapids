@@ -791,7 +791,9 @@ void PrivacyDialog::updateAutomintStatus()
 void PrivacyDialog::updateSPORK16Status()
 {
     // Update/enable labels, buttons and tooltips depending on the current SPORK_16 status
-    if(GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
+    bool fButtonsEnabled =  ui->pushButtonMintzPIV->isEnabled();
+    bool fMaintenanceMode = GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE);
+    if (fMaintenanceMode && fButtonsEnabled) {
         // Mint zPIV
         ui->pushButtonMintzPIV->setEnabled(false);
         ui->pushButtonMintzPIV->setToolTip(tr("zPIV is currently disabled due to maintenance."));
@@ -799,8 +801,7 @@ void PrivacyDialog::updateSPORK16Status()
         // Spend zPIV
         ui->pushButtonSpendzPIV->setEnabled(false);
         ui->pushButtonSpendzPIV->setToolTip(tr("zPIV is currently disabled due to maintenance."));
-    }
-    else {
+    } else if (!fMaintenanceMode && !fButtonsEnabled) {
         // Mint zPIV
         ui->pushButtonMintzPIV->setEnabled(true);
         ui->pushButtonMintzPIV->setToolTip(tr("PrivacyDialog", "Enter an amount of PIV to convert to zPIV", 0));
