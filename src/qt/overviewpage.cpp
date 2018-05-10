@@ -209,10 +209,11 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
         nWatchOnlyLockedBalance = pwalletMain->GetLockedWatchOnlyBalance();
     }
     // PIV Balance
-    CAmount nTotalBalance = balance + unconfirmedBalance;
-    CAmount pivAvailableBalance = balance - immatureBalance - nLockedBalance;
+    CAmount nTotalBalance = balance + unconfirmedBalance + nLockedBalance;
+    CAmount pivAvailableBalance = balance - immatureBalance;
     CAmount nTotalWatchBalance = watchOnlyBalance + watchUnconfBalance + watchImmatureBalance;    
-    CAmount nUnlockedBalance = nTotalBalance - nLockedBalance;
+    CAmount nUnlockedBalance = nTotalBalance - nLockedBalance - nLockedBalance; // increment nLockedBalance twice because it was added to
+                                                                                // nTotalBalance above
     // zPIV Balance
     CAmount matureZerocoinBalance = zerocoinBalance - unconfirmedZerocoinBalance - immatureZerocoinBalance;
     // Percentages
