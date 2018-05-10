@@ -2174,10 +2174,14 @@ bool CObfuScationSigner::VerifyMessage(CPubKey pubkey, vector<unsigned char>& vc
         return false;
     }
 
-    if (fDebug && pubkey2.GetID() != pubkey.GetID())
-        LogPrintf("CObfuScationSigner::VerifyMessage -- keys don't match: %s %s\n", pubkey2.GetID().ToString(), pubkey.GetID().ToString());
+    if (pubkey2.GetID() != pubkey.GetID()) {
+        errorMessage = strprintf("keys don't match - input: %s, recovered: %s, message: %s, sig: %s\n",
+                pubkey.GetID().ToString(), pubkey2.GetID().ToString(), strMessage,
+                EncodeBase64(&vchSig[0], vchSig.size()));
+        return false;
+    }
 
-    return (pubkey2.GetID() == pubkey.GetID());
+    return true;
 }
 
 bool CObfuscationQueue::Sign()
