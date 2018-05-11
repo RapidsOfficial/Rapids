@@ -16,6 +16,7 @@
 #include <accumulators.h>
 #include "wallet.h"
 #include "zpivwallet.h"
+#include "zpivchain.h"
 
 using namespace libzerocoin;
 
