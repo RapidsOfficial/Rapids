@@ -2174,13 +2174,10 @@ bool CObfuScationSigner::VerifyMessage(CPubKey pubkey, vector<unsigned char>& vc
         return false;
     }
 
-    if (pubkey2.GetID() != pubkey.GetID()) {
-        errorMessage = strprintf("keys don't match - input: %s, recovered: %s, sig: %s\n",
-                pubkey.GetID().ToString(), pubkey2.GetID().ToString(), EncodeBase64(&vchSig[0], vchSig.size()));
-        return false;
-    }
+    if (fDebug && pubkey2.GetID() != pubkey.GetID())
+        LogPrintf("CObfuScationSigner::VerifyMessage -- keys don't match: %s %s\n", pubkey2.GetID().ToString(), pubkey.GetID().ToString());
 
-    return true;
+    return (pubkey2.GetID() == pubkey.GetID());
 }
 
 bool CObfuscationQueue::Sign()
@@ -2325,4 +2322,3 @@ void ThreadCheckObfuScationPool()
         }
     }
 }
-
