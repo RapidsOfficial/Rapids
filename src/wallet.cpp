@@ -4670,6 +4670,31 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransa
     return true;
 }
 
+bool CWallet::CheckCoinSpend(libzerocoin::CoinSpend& spend, libzerocoin::Accumulator& accumulator, CZerocoinSpendReceipt& receipt)
+{
+    if (!spend.Verify(accumulator)) {
+        receipt.SetStatus(_("The transaction did not verify"), ZPIV_BAD_SERIALIZATION);
+        return false;
+    }
+
+    if (IsSerialKnown(spend.getCoinSerialNumber())) {
+        //Tried to spend an already spent zPIV
+        receipt.SetStatus(_("The coin spend has been used"), ZPIV_SPENT_USED_ZPIV);
+        uint256 hashSerial = GetSerialHash(spend.getCoinSerialNumber());
+        if(!zpivTracker->HasSerialHash(hashSerial))
+            return error("%s: serialhash %s not found in tracker", __func__, hashSerial.GetHex());
+
+        CMintMeta meta = zpivTracker->Get(hashSerial);
+        meta.isUsed = true;
+        if (!zpivTracker->UpdateState(meta))
+            LogPrintf("%s: failed to write zerocoinmint\n", __func__);
+
+        return false;
+    }
+
+    return true;
+}
+
 bool CWallet::MintToTxIn(CZerocoinMint mint, int nSecurityLevel, const uint256& hashTxOut, CTxIn& newTxIn, CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint)
 {
     std::map<CBigNum, CZerocoinMint> mapMints;
@@ -4686,62 +4711,51 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
     // Default error status if not changed below
     receipt.SetStatus(_("Transaction Mint Started"), ZPIV_TXMINT_GENERAL);
     libzerocoin::ZerocoinParams* paramsAccumulator = Params().Zerocoin_Params(false);
+    AccumulatorMap mapAccumulators(paramsAccumulator);
 
-    std::list<std::unique_ptr<CoinWitnessData> > listWitnessData;
     for (auto& it : mapMintsSelected) {
         CZerocoinMint mint = it.second;
-        std::unique_ptr<CoinWitnessData> coinWitness(new CoinWitnessData());
-        coinWitness->denom = mint.GetDenomination();
+        CoinWitnessData coinWitness;
+        coinWitness.denom = mint.GetDenomination();
         bool isV1Coin = libzerocoin::ExtractVersionFromSerial(mint.GetSerialNumber()) < libzerocoin::PrivateCoin::PUBKEY_VERSION;
-        coinWitness->isV1 = isV1Coin;
+        coinWitness.isV1 = isV1Coin;
         libzerocoin::ZerocoinParams* paramsCoin = Params().Zerocoin_Params(isV1Coin);
 
         // 2. Get pubcoin from the private coin
-        coinWitness->coin = std::unique_ptr<libzerocoin::PublicCoin>(new libzerocoin::PublicCoin(paramsCoin, mint.GetValue(), mint.GetDenomination()));
-        if(!coinWitness->coin->validate()) {
+        coinWitness.coin = std::unique_ptr<libzerocoin::PublicCoin>(new libzerocoin::PublicCoin(paramsCoin, mint.GetValue(), mint.GetDenomination()));
+        if(!coinWitness.coin->validate()) {
             receipt.SetStatus(_("The selected mint coin is an invalid coin"), ZPIV_INVALID_COIN);
             return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
 
         // 3. Compute Accumulator and Witness
-        libzerocoin::Accumulator accumulator(paramsAccumulator, coinWitness->denom);
-        coinWitness->pWitness = std::unique_ptr<libzerocoin::AccumulatorWitness>(new libzerocoin::AccumulatorWitness(paramsAccumulator, accumulator, *coinWitness->coin));
-        listWitnessData.emplace_back(std::move(coinWitness));
-    }
+        libzerocoin::Accumulator accumulator1(paramsAccumulator, coinWitness.denom);
+        coinWitness.pWitness = std::unique_ptr<libzerocoin::AccumulatorWitness>(new libzerocoin::AccumulatorWitness(paramsAccumulator, accumulator1, *coinWitness.coin));
 
-    // Generate the witness for each mint being spent
-    string strFailReason = "";
-    int nMintsAdded = 0;
-    AccumulatorMap mapAccumulators(paramsAccumulator);
-    if (!GenerateAccumulatorWitness(listWitnessData, mapAccumulators, nSecurityLevel, strFailReason, pindexCheckpoint)) {
-        receipt.SetStatus(_("Try to spend with a higher security level to include more coins"), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
-        return error("%s : %s", __func__, receipt.GetStatusMessage());
-    }
+        // Generate the witness for each mint being spent
+        string strFailReason = "";
+        if (!GenerateAccumulatorWitness(&coinWitness, mapAccumulators, nSecurityLevel, strFailReason, pindexCheckpoint)) {
+            receipt.SetStatus(_("Try to spend with a higher security level to include more coins"), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
+            return error("%s : %s", __func__, receipt.GetStatusMessage());
+        }
 
-    for (auto& coinWitness : listWitnessData) {
         // Construct the CoinSpend object. This acts like a signature on the transaction.
-        libzerocoin::ZerocoinParams* paramsCoin = Params().Zerocoin_Params(coinWitness->isV1);
-        libzerocoin::PrivateCoin privateCoin(paramsCoin, coinWitness->denom);
-        privateCoin.setPublicCoin(*coinWitness->coin);
-
-        CZerocoinMint mint = mapMintsSelected.at(coinWitness->coin->getValue());
-
+        libzerocoin::PrivateCoin privateCoin(paramsCoin, coinWitness.denom);
+        privateCoin.setPublicCoin(*coinWitness.coin);
         privateCoin.setRandomness(mint.GetRandomness());
         privateCoin.setSerialNumber(mint.GetSerialNumber());
 
         //Version 2 zerocoins have a privkey associated with them
         uint8_t nVersion = mint.GetVersion();
         privateCoin.setVersion(mint.GetVersion());
-        LogPrintf("%s: privatecoin version=%d\n", __func__, privateCoin.getVersion());
-        if(nVersion >= libzerocoin::PrivateCoin::PUBKEY_VERSION) {
+        if (nVersion >= libzerocoin::PrivateCoin::PUBKEY_VERSION) {
             CKey key;
             if(!mint.GetKeyPair(key))
                 return error("%s: failed to set zPIV privkey mint version=%d", __func__, nVersion);
-
             privateCoin.setPrivKey(key.GetPrivKey());
         }
 
-        libzerocoin::Accumulator accumulator = mapAccumulators.GetAccumulator(coinWitness->denom);
+        libzerocoin::Accumulator accumulator = mapAccumulators.GetAccumulator(coinWitness.denom);
         uint32_t nChecksum = GetChecksum(accumulator.getValue());
         CBigNum bnValue;
         if(!GetAccumulatorValueFromChecksum(nChecksum, false, bnValue) || bnValue == 0)
@@ -4749,53 +4763,14 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
 
         try {
             libzerocoin::CoinSpend spend(paramsCoin, paramsAccumulator, privateCoin, accumulator, nChecksum,
-                                         *coinWitness->pWitness, hashTxOut, spendType);
+                                         *coinWitness.pWitness, hashTxOut, spendType);
 
-            if (!spend.Verify(accumulator)) {
-                receipt.SetStatus(_("The transaction did not verify"), ZPIV_BAD_SERIALIZATION);
-                return false;
-            }
-
-            if (Params().NetworkID() != CBaseChainParams::REGTEST && IsSerialKnown(spend.getCoinSerialNumber())) {
-                //Tried to spend an already spent zPIV
-                receipt.SetStatus(_("The coin spend has been used"), ZPIV_SPENT_USED_ZPIV);
-
-                uint256 hashSerial = GetSerialHash(spend.getCoinSerialNumber());
-                if(!zpivTracker->HasSerialHash(hashSerial))
-                    return error("%s: serialhash %s not found in tracker", __func__, hashSerial.GetHex());
-
-                CMintMeta meta = zpivTracker->Get(hashSerial);
-                meta.isUsed = true;
-                if (!zpivTracker->UpdateState(meta))
-                    LogPrintf("%s: failed to write zerocoinmint\n", __func__);
-
-                pwalletMain->NotifyZerocoinChanged(pwalletMain, mint.GetValue().GetHex(), "Used",
-                                                   CT_UPDATED);
+            if (!CheckCoinSpend(spend, accumulator, receipt))
                 return error("%s : %s", __func__, receipt.GetStatusMessage());
-            }
 
-            LogPrintf("%s\n", spend.ToString());
-
-            // Deserialize the CoinSpend intro a fresh object
-            CDataStream serializedCoinSpend(SER_NETWORK, PROTOCOL_VERSION);
-            serializedCoinSpend << spend;
-            std::vector<unsigned char> data(serializedCoinSpend.begin(), serializedCoinSpend.end());
-
-            //Add the coin spend into TxIn
-            CTxIn newTxIn;
-            newTxIn.scriptSig = CScript() << OP_ZEROCOINSPEND << data.size();
-            newTxIn.scriptSig.insert(newTxIn.scriptSig.end(), data.begin(), data.end());
-            newTxIn.prevout.SetNull();
-
-            //use nSequence as a shorthand lookup of denomination
-            //NOTE that this should never be used in place of checking the value in the final blockchain acceptance/verification
-            //of the transaction
-            newTxIn.nSequence = coinWitness->denom;
-            vin.emplace_back(newTxIn);
-
-            uint32_t nAccumulatorChecksum = GetChecksum(accumulator.getValue());
-            CZerocoinSpend zcSpend(spend.getCoinSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(), nAccumulatorChecksum);
-            zcSpend.SetMintCount(nMintsAdded);
+            vin.emplace_back(CTxIn(spend, coinWitness.denom));
+            CZerocoinSpend zcSpend(spend.getCoinSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(), GetChecksum(accumulator.getValue()));
+            zcSpend.SetMintCount(coinWitness.nMintsAdded);
             receipt.AddSpend(zcSpend);
         } catch(const std::exception&) {
             receipt.SetStatus(_("CoinSpend: Accumulator witness does not verify"), ZPIV_INVALID_WITNESS);
