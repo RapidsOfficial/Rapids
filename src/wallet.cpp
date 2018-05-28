@@ -4740,17 +4740,17 @@ bool CWallet::CheckCoinSpend(libzerocoin::CoinSpend& spend, libzerocoin::Accumul
     return true;
 }
 
-bool CWallet::MintToTxIn(CZerocoinMint mint, int nSecurityLevel, const uint256& hashTxOut, CTxIn& newTxIn, CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint)
+bool CWallet::MintToTxIn(CZerocoinMint mint, const uint256& hashTxOut, CTxIn& newTxIn, CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint)
 {
     std::map<CBigNum, CZerocoinMint> mapMints;
     mapMints.insert(std::make_pair(mint.GetValue(), mint));
     std::vector<CTxIn> vin;
-    bool fSuccess = MintsToInputVector(mapMints, nSecurityLevel, hashTxOut, vin, receipt, spendType, pindexCheckpoint);
+    bool fSuccess = MintsToInputVector(mapMints, hashTxOut, vin, receipt, spendType, pindexCheckpoint);
     newTxIn = vin[0];
     return fSuccess;
 }
 
-bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, int nSecurityLevel, const uint256& hashTxOut, std::vector<CTxIn>& vin,
+bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, const uint256& hashTxOut, std::vector<CTxIn>& vin,
                          CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint)
 {
     // Default error status if not changed below
@@ -4772,7 +4772,7 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
 
         // Generate the witness for each mint being spent
         string strFailReason = "";
-        if (!GenerateAccumulatorWitness(coinWitness, mapAccumulators, nSecurityLevel, pindexCheckpoint)) {
+        if (!GenerateAccumulatorWitness(coinWitness, mapAccumulators, pindexCheckpoint)) {
             receipt.SetStatus(_("Try to spend with a higher security level to include more coins"), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
             return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
@@ -4822,7 +4822,7 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
     return true;
 }
 
-bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel, CWalletTx& wtxNew, CReserveKey& reserveKey, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vSelectedMints, vector<CDeterministicMint>& vNewMints, bool fMintChange,  bool fMinimizeChange, CBitcoinAddress* address)
+bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, CReserveKey& reserveKey, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vSelectedMints, vector<CDeterministicMint>& vNewMints, bool fMintChange,  bool fMinimizeChange, CBitcoinAddress* address)
 {
     // Check available funds
     int nStatus = ZPIV_TRX_FUNDS_PROBLEMS;
@@ -4937,16 +4937,6 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
         return false;
     }
 
-    for (const auto& mint : vSelectedMints) {
-        if (mint.GetVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
-            if (nSecurityLevel < 100) {
-                nStatus = ZPIV_SPEND_V1_SEC_LEVEL;
-                receipt.SetStatus(_("Version 1 zPIV require a security level of 100 to successfully spend."), nStatus);
-                return false;
-            }
-        }
-    }
-
     if ((static_cast<int>(vSelectedMints.size()) > Params().Zerocoin_MaxSpendsPerTransaction())) {
         receipt.SetStatus(_("Failed to find coin set amongst held coins with less than maxNumber of Spends"), nStatus);
         return false;
@@ -5024,21 +5014,13 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, int nSecurityLevel,
             }
 
             CBlockIndex* pindexCheckpoint = nullptr;
-            if (nSecurityLevel < 100) {
-                RandomizeSecurityLevel(nSecurityLevel);
-                int nHeightCheckpoint = nHeightHighest + nSecurityLevel * 10;
-                nHeightCheckpoint = std::min(chainActive.Height() - 20, nHeightCheckpoint);
-                nHeightCheckpoint -= nHeightCheckpoint % 10;
-                pindexCheckpoint = chainActive[nHeightCheckpoint];
-            }
-
             std::map<CBigNum, CZerocoinMint> mapSelectedMints;
             for (const CZerocoinMint& mint : vSelectedMints)
                 mapSelectedMints.insert(std::make_pair(mint.GetValue(), mint));
 
             //add all of the mints to the transaction as inputs
             std::vector<CTxIn> vin;
-            if (!MintsToInputVector(mapSelectedMints, nSecurityLevel, hashTxOut, vin, receipt, libzerocoin::SpendType::SPEND, pindexCheckpoint))
+            if (!MintsToInputVector(mapSelectedMints, hashTxOut, vin, receipt, libzerocoin::SpendType::SPEND, pindexCheckpoint))
                 return false;
             txNew.vin = vin;
 
@@ -5345,7 +5327,7 @@ string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, vector<CDetermin
     return "";
 }
 
-bool CWallet::SpendZerocoin(CAmount nAmount, int nSecurityLevel, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vMintsSelected, bool fMintChange, bool fMinimizeChange, CBitcoinAddress* addressTo)
+bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vMintsSelected, bool fMintChange, bool fMinimizeChange, CBitcoinAddress* addressTo)
 {
     // Default: assume something goes wrong. Depending on the problem this gets more specific below
     int nStatus = ZPIV_SPEND_ERROR;
@@ -5357,7 +5339,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, int nSecurityLevel, CWalletTx& wtxN
 
     CReserveKey reserveKey(this);
     vector<CDeterministicMint> vNewMints;
-    if (!CreateZerocoinSpendTransaction(nAmount, nSecurityLevel, wtxNew, reserveKey, receipt, vMintsSelected, vNewMints, fMintChange, fMinimizeChange, addressTo)) {
+    if (!CreateZerocoinSpendTransaction(nAmount, wtxNew, reserveKey, receipt, vMintsSelected, vNewMints, fMintChange, fMinimizeChange, addressTo)) {
         return false;
     }
 

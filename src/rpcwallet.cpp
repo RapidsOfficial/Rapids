@@ -2841,9 +2841,9 @@ UniValue mintzerocoin(const UniValue& params, bool fHelp)
 
 UniValue spendzerocoin(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() > 5 || params.size() < 4)
+    if (fHelp || params.size() > 4 || params.size() < 3)
         throw runtime_error(
-            "spendzerocoin amount mintchange minimizechange securitylevel ( \"address\" )\n"
+            "spendzerocoin amount mintchange minimizechange ( \"address\" )\n"
             "\nSpend zPIV to a PIV address.\n" +
             HelpRequiringPassphrase() + "\n"
 
@@ -2851,12 +2851,7 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
             "1. amount          (numeric, required) Amount to spend.\n"
             "2. mintchange      (boolean, required) Re-mint any leftover change.\n"
             "3. minimizechange  (boolean, required) Try to minimize the returning change  [false]\n"
-            "4. securitylevel   (numeric, required) Amount of checkpoints to add to the accumulator.\n"
-            "                       A checkpoint contains 10 blocks worth of zerocoinmints.\n"
-            "                       The more checkpoints that are added, the more untraceable the transaction.\n"
-            "                       Use [100] to add the maximum amount of checkpoints available.\n"
-            "                       Adding more checkpoints makes the minting process take longer\n"
-            "5. \"address\"     (string, optional, default=change) Send to specified address or to a new change address.\n"
+            "4. \"address\"     (string, optional, default=change) Send to specified address or to a new change address.\n"
             "                       If there is change then an address is required\n"
 
             "\nResult:\n"
@@ -2896,7 +2891,6 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
     CAmount nAmount = AmountFromValue(params[0]);   // Spending amount
     bool fMintChange = params[1].get_bool();        // Mint change to zPIV
     bool fMinimizeChange = params[2].get_bool();    // Minimize change
-    int nSecurityLevel = params[3].get_int();       // Security level
     std::string address_str = params.size() > 4 ? params[4].get_str() : "";
 
     vector<CZerocoinMint> vMintsSelected;
@@ -3002,9 +2996,9 @@ extern UniValue DoZpivSpend(const CAmount nAmount, bool fMintChange, bool fMinim
         address = CBitcoinAddress(address_str);
         if(!address.IsValid())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
-        fSuccess = pwalletMain->SpendZerocoin(nAmount, nSecurityLevel, wtx, receipt, vMintsSelected, fMintChange, fMinimizeChange, &address);
+        fSuccess = pwalletMain->SpendZerocoin(nAmount, wtx, receipt, vMintsSelected, fMintChange, fMinimizeChange, &address);
     } else                   // Spend to newly generated local address
-        fSuccess = pwalletMain->SpendZerocoin(nAmount, nSecurityLevel, wtx, receipt, vMintsSelected, fMintChange, fMinimizeChange);
+        fSuccess = pwalletMain->SpendZerocoin(nAmount, wtx, receipt, vMintsSelected, fMintChange, fMinimizeChange);
 
     if (!fSuccess)
         throw JSONRPCError(RPC_WALLET_ERROR, receipt.GetStatusMessage());
