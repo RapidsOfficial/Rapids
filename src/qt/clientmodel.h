@@ -75,6 +75,8 @@ public:
     QString clientName() const;
     QString formatClientStartupTime() const;
 
+    bool getTorInfo(std::string& ip_port) const;
+
 private:
     OptionsModel* optionsModel;
     PeerTableModel* peerTableModel;
