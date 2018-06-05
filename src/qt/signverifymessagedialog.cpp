@@ -21,7 +21,7 @@
 
 #include <QClipboard>
 
-SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget* parent) : QDialog(parent),
+SignVerifyMessageDialog::SignVerifyMessageDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
                                                                     ui(new Ui::SignVerifyMessageDialog),
                                                                     model(0)
 {

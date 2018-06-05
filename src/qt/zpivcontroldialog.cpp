@@ -16,7 +16,7 @@ std::set<std::string> ZPivControlDialog::setSelectedMints;
 std::set<CMintMeta> ZPivControlDialog::setMints;
 
 ZPivControlDialog::ZPivControlDialog(QWidget *parent) :
-    QDialog(parent),
+    QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
     ui(new Ui::ZPivControlDialog),
     model(0)
 {
