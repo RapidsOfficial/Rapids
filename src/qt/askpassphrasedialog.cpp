@@ -18,7 +18,7 @@
 #include <QPushButton>
 #include <QWidget>
 
-AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget* parent, WalletModel* model, Context context) : QDialog(parent),
+AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget* parent, WalletModel* model, Context context) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
                                                                                                             ui(new Ui::AskPassphraseDialog),
                                                                                                             mode(mode),
                                                                                                             model(model),

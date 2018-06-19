@@ -36,7 +36,7 @@
 #include <QString>
 
 
-MultisigDialog::MultisigDialog(QWidget* parent) : QDialog(parent),
+MultisigDialog::MultisigDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
                                                   ui(new Ui::MultisigDialog),
                                                   model(0)
 {
