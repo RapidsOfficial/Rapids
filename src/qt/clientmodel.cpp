@@ -18,6 +18,7 @@
 #include "masternode-sync.h"
 #include "masternodeman.h"
 #include "net.h"
+#include "netbase.h"
 #include "ui_interface.h"
 #include "util.h"
 
@@ -298,4 +299,22 @@ void ClientModel::unsubscribeFromCoreSignals()
     uiInterface.NotifyNumConnectionsChanged.disconnect(boost::bind(NotifyNumConnectionsChanged, this, _1));
     uiInterface.NotifyAlertChanged.disconnect(boost::bind(NotifyAlertChanged, this, _1, _2));
     uiInterface.BannedListChanged.disconnect(boost::bind(BannedListChanged, this));
+}
+
+bool ClientModel::getTorInfo(std::string& ip_port) const
+{
+    proxyType onion;
+    if (GetProxy((Network) 3, onion) && IsReachable((Network) 3)) {
+        {
+            LOCK(cs_mapLocalHost);
+            for (const std::pair<CNetAddr, LocalServiceInfo> &item : mapLocalHost) {
+                if (item.first.IsTor()) {
+                     CService addrOnion = CService(item.first.ToString(), item.second.nPort);
+                     ip_port = addrOnion.ToStringIPPort();
+                     return true;
+                }
+            }
+        }
+    }
+    return false;
 }
