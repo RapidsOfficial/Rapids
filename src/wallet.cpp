@@ -4760,6 +4760,7 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
 
     LOCK(cs_spendcache);
 
+    int64_t nTimeStart = GetTimeMicros();
     for (auto& it : mapMintsSelected) {
         CZerocoinMint mint = it.second;
         CMintMeta meta = zpivTracker->Get(GetSerialHash(mint.GetSerialNumber()));
@@ -4778,11 +4779,14 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
         }
 
         // Construct the CoinSpend object. This acts like a signature on the transaction.
+        int64_t nTime1 = GetTimeMicros();
         libzerocoin::ZerocoinParams* paramsCoin = Params().Zerocoin_Params(coinWitness->isV1);
         libzerocoin::PrivateCoin privateCoin(paramsCoin, coinWitness->denom);
         privateCoin.setPublicCoin(*coinWitness->coin);
         privateCoin.setRandomness(mint.GetRandomness());
         privateCoin.setSerialNumber(mint.GetSerialNumber());
+        int64_t nTime2 = GetTimeMicros();
+        LogPrint("bench", "        - CoinSpend constructed in %.2fms\n", 0.001 * (nTime2 - nTime1));
 
         //Version 2 zerocoins have a privkey associated with them
         uint8_t nVersion = mint.GetVersion();
@@ -4793,12 +4797,17 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
                 return error("%s: failed to set zPIV privkey mint version=%d", __func__, nVersion);
             privateCoin.setPrivKey(key.GetPrivKey());
         }
+        int64_t nTime3 = GetTimeMicros();
+        LogPrint("bench", "        - Signing key set in %.2fms\n", 0.001 * (nTime3 - nTime2));
 
         libzerocoin::Accumulator accumulator = mapAccumulators.GetAccumulator(coinWitness->denom);
         uint32_t nChecksum = GetChecksum(accumulator.getValue());
         CBigNum bnValue;
         if(!GetAccumulatorValueFromChecksum(nChecksum, false, bnValue) || bnValue == 0)
             return error("%s: could not find checksum used for spend\n", __func__);
+
+        int64_t nTime4 = GetTimeMicros();
+        LogPrint("bench", "        - Accumulator value fetched in %.2fms\n", 0.001 * (nTime4 - nTime3));
 
         try {
             libzerocoin::CoinSpend spend(paramsCoin, paramsAccumulator, privateCoin, accumulator, nChecksum,
@@ -4811,11 +4820,17 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
             CZerocoinSpend zcSpend(spend.getCoinSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(), GetChecksum(accumulator.getValue()));
             zcSpend.SetMintCount(coinWitness->nMintsAdded);
             receipt.AddSpend(zcSpend);
+
+            int64_t nTime5 = GetTimeMicros();
+            LogPrint("bench", "        - CoinSpend verified in %.2fms\n", 0.001 * (nTime5 - nTime4));
         } catch(const std::exception&) {
             receipt.SetStatus(_("CoinSpend: Accumulator witness does not verify"), ZPIV_INVALID_WITNESS);
             return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
     }
+
+    int64_t nTimeFinished = GetTimeMicros();
+    LogPrint("bench", "    - %s took %.2fms [%.3fms/spend]\n", __func__, 0.001 * (nTimeFinished - nTimeStart), 0.001 * (nTimeFinished - nTimeStart) / mapMintsSelected.size());
 
     receipt.SetStatus(_("Spend Valid"), ZPIV_SPEND_OKAY); // Everything okay
 
