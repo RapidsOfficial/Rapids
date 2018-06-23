@@ -3112,39 +3112,49 @@ bool CWallet::CreateCoinStake(
     if (nHeightCacheStop % 10)
         nHeightCacheStop -= nHeightCacheStop % 10;
     if (!fKernelFound) {
-        TRY_LOCK(cs_spendcache, fLocked);
-        if (!fLocked)
-            return false;
 
         //Do some precomputing of zerocoin spend knowledge proofs
         int nCompute = 50000 / listInputs.size();
         for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
-            if (ShutdownRequested())
-                return false;
-            if (!stakeInput->IsZPIV())
-                continue;
-
-            CoinWitnessData* witnessData = zpivTracker->GetSpendCache(stakeInput->GetSerialHash());
-            int nHeightStop = nHeightCacheStop;
-            if (witnessData->nHeightAccStart == 0) {
-                // This has no cache, so initialize it
-                CZerocoinMint mint;
-                if (!GetMintFromStakeHash(stakeInput->GetSerialHash(), mint))
+            {
+                TRY_LOCK(cs_spendcache, fLocked);
+                if (!fLocked) {
+                    LogPrintf("%s : Cannot get lock on cs_spendcache\n", __func__);
                     continue;
-                *witnessData = CoinWitnessData(mint);
-                nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + nCompute);
-            } else {
-                nHeightStop = std::min(chainActive.Height() - 210, witnessData->nHeightAccEnd + nCompute);
-            }
+                }
 
-            if (nHeightStop - witnessData->nHeightAccEnd < 20)
-                continue;
+                if (ShutdownRequested())
+                    return false;
+                if (!stakeInput->IsZPIV())
+                    continue;
 
-            CBlockIndex* pindexStop = chainActive[nHeightStop];
-            AccumulatorMap mapAccumulators(Params().Zerocoin_Params(false));
-            LogPrintf("%s: caching mint %s\n   start=%d\n   end=%d\n", __func__, witnessData->coin->getValue().GetHex().substr(0, 6), witnessData->nHeightAccStart, nHeightStop);
-            if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, 100, pindexStop)) {
-                LogPrintf("%s: caching of witness failed!\n", __func__);
+                CoinWitnessData *witnessData = zpivTracker->GetSpendCache(stakeInput->GetSerialHash());
+                int nHeightStop = nHeightCacheStop;
+                if (!witnessData->nHeightAccStart) {
+                    // This has no cache, so initialize it
+                    CZerocoinMint mint;
+                    if (!GetMintFromStakeHash(stakeInput->GetSerialHash(), mint))
+                        continue;
+                    *witnessData = CoinWitnessData(mint);
+                    nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
+                } else {
+                    nHeightStop = std::min(chainActive.Height() - 210, (witnessData->nHeightAccEnd > 0 ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) + 1000);
+                }
+
+                if (nHeightStop - witnessData->nHeightAccEnd < 20)
+                    continue;
+
+                CBlockIndex *pindexStop = chainActive[nHeightStop];
+                AccumulatorMap mapAccumulators(Params().Zerocoin_Params(false));
+                LogPrintf("%s: caching mint %s\n   start=%d\n   end=%d\n", __func__,
+                          witnessData->coin->getValue().GetHex().substr(0, 6), witnessData->nHeightAccStart,
+                          nHeightStop);
+                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop)) {
+                    LogPrintf("%s: caching of witness failed!\n", __func__);
+                } else {
+                    LogPrintf("%s : caching of mint %s success!\n", __func__,
+                              witnessData->coin->getValue().GetHex().substr(0, 6));
+                }
             }
         }
         return false;
@@ -4758,7 +4768,21 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
     libzerocoin::ZerocoinParams* paramsAccumulator = Params().Zerocoin_Params(false);
     AccumulatorMap mapAccumulators(paramsAccumulator);
 
-    LOCK(cs_spendcache);
+    int nLockAttempts = 0;
+    while (nLockAttempts < 100) {
+        TRY_LOCK(cs_spendcache, lockSpendcache);
+        if (!lockSpendcache) {
+            MilliSleep(100);
+            ++nLockAttempts;
+            continue;
+        }
+        break;
+    }
+    if (nLockAttempts == 100) {
+        LogPrintf("%s : could not get lock on cs_spendcache\n");
+        receipt.SetStatus(_("could not get lock on cs_spendcache"), ZPIV_TXMINT_GENERAL);
+        return false;
+    }
 
     int64_t nTimeStart = GetTimeMicros();
     for (auto& it : mapMintsSelected) {
