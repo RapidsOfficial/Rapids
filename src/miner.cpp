@@ -662,7 +662,6 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                     continue;
                 }
             }
-            fLastLoopOrphan = false;
         }
 
         //
