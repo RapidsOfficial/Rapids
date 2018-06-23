@@ -283,9 +283,6 @@ bool stakeTargetHit(const uint256& hashProofOfStake, const int64_t& nValueIn, co
 {
     //get the stake weight - weight is equal to coin amount
     uint256 bnCoinDayWeight = uint256(nValueIn) / 100;
-    uint256 bnTarget = (bnCoinDayWeight * bnTargetPerCoinDay);
-    if (hashProofOfStake >> (256-14) == 0)
-        LogPrintf("%s:\n valuein: %s\n weight=  %s\n hash=    %s\n target=  %s\n", __func__, FormatMoney(nValueIn), bnCoinDayWeight.GetHex(), hashProofOfStake.GetHex(), bnTarget.GetHex());
 
     // Now check if proof-of-stake hash meets target protocol
     return hashProofOfStake < (bnCoinDayWeight * bnTargetPerCoinDay);
