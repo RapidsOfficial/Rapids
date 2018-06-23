@@ -20,6 +20,7 @@ CoinWitnessData::CoinWitnessData()
 
 CoinWitnessData::CoinWitnessData(CZerocoinMint& mint)
 {
+    SetNull();
     denom = mint.GetDenomination();
     isV1 = libzerocoin::ExtractVersionFromSerial(mint.GetSerialNumber()) < libzerocoin::PrivateCoin::PUBKEY_VERSION;
     libzerocoin::ZerocoinParams* paramsCoin = Params().Zerocoin_Params(isV1);
