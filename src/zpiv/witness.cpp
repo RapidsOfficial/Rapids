@@ -26,6 +26,7 @@ CoinWitnessData::CoinWitnessData(CZerocoinMint& mint)
     coin = std::unique_ptr<libzerocoin::PublicCoin>(new libzerocoin::PublicCoin(paramsCoin, mint.GetValue(), denom));
     libzerocoin::Accumulator accumulator1(Params().Zerocoin_Params(false), denom);
     pWitness = std::unique_ptr<libzerocoin::AccumulatorWitness>(new libzerocoin::AccumulatorWitness(Params().Zerocoin_Params(false), accumulator1, *coin));
+    nHeightAccStart = mint.GetHeight();
 }
 
 void CoinWitnessData::SetHeightMintAdded(int nHeight)
