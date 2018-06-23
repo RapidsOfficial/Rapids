@@ -637,9 +637,6 @@ bool calculateAccumulatedBlocksFor(
 
     LogPrintf("calculateAccumulatedBlocksFor() : nMintsAdded %d",nMintsAdded);
 
-    int64_t nTime1 = GetTimeMicros();
-    LogPrint("bench", "        - Witness generated in %.2fms\n", 0.001 * (nTime1 - nTimeStart));
-
     return true;
 }
 
