@@ -262,6 +262,8 @@ std::string ReindexZerocoinDB()
     uiInterface.ShowProgress(_("Reindexing zerocoin database..."), 0);
 
     CBlockIndex* pindex = chainActive[Params().Zerocoin_StartHeight()];
+    std::vector<std::pair<libzerocoin::CoinSpend, uint256> > vSpendInfo;
+    std::vector<std::pair<libzerocoin::PublicCoin, uint256> > vMintInfo;
     while (pindex) {
         uiInterface.ShowProgress(_("Reindexing zerocoin database..."), std::max(1, std::min(99, (int)((double)(pindex->nHeight - Params().Zerocoin_StartHeight()) / (double)(chainActive.Height() - Params().Zerocoin_StartHeight()) * 100))));
 
@@ -287,7 +289,7 @@ std::string ReindexZerocoinDB()
                                 continue;
 
                             libzerocoin::CoinSpend spend = TxInToZerocoinSpend(in);
-                            zerocoinDB->WriteCoinSpend(spend.getCoinSerialNumber(), txid);
+                            vSpendInfo.push_back(make_pair(spend, txid));
                         }
                     }
 
@@ -300,14 +302,29 @@ std::string ReindexZerocoinDB()
                             CValidationState state;
                             libzerocoin::PublicCoin coin(Params().Zerocoin_Params(pindex->nHeight < Params().Zerocoin_Block_V2_Start()));
                             TxOutToPublicCoin(out, coin, state);
-                            zerocoinDB->WriteCoinMint(coin, txid);
+                            vMintInfo.push_back(make_pair(coin, txid));
                         }
                     }
                 }
             }
         }
+
+        // Flush the zerocoinDB to disk every 100 blocks
+        if (pindex->nHeight % 100 == 0) {
+            if ((!vSpendInfo.empty() && !zerocoinDB->WriteCoinSpendBatch(vSpendInfo)) || (!vMintInfo.empty() && !zerocoinDB->WriteCoinMintBatch(vMintInfo)))
+                return _("Error writing zerocoinDB to disk");
+            vSpendInfo.clear();
+            vMintInfo.clear();
+        }
+
         pindex = chainActive.Next(pindex);
     }
+    uiInterface.ShowProgress("", 100);
+
+    // Final flush to disk in case any remaining information exists
+    if ((!vSpendInfo.empty() && !zerocoinDB->WriteCoinSpendBatch(vSpendInfo)) || (!vMintInfo.empty() && !zerocoinDB->WriteCoinMintBatch(vMintInfo)))
+        return _("Error writing zerocoinDB to disk");
+
     uiInterface.ShowProgress("", 100);
 
     return "";

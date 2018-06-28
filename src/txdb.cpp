@@ -294,10 +294,19 @@ CZerocoinDB::CZerocoinDB(size_t nCacheSize, bool fMemory, bool fWipe) : CLevelDB
 {
 }
 
-bool CZerocoinDB::WriteCoinMint(const PublicCoin& pubCoin, const uint256& hashTx)
+bool CZerocoinDB::WriteCoinMintBatch(const std::vector<std::pair<libzerocoin::PublicCoin, uint256> >& mintInfo)
 {
-    uint256 hash = GetPubCoinHash(pubCoin.getValue());
-    return Write(make_pair('m', hash), hashTx, true);
+    CLevelDBBatch batch;
+    size_t count = 0;
+    for (std::vector<std::pair<libzerocoin::PublicCoin, uint256> >::const_iterator it=mintInfo.begin(); it != mintInfo.end(); it++) {
+        PublicCoin pubCoin = it->first;
+        uint256 hash = GetPubCoinHash(pubCoin.getValue());
+        batch.Write(make_pair('m', hash), it->second);
+        ++count;
+    }
+
+    LogPrint("zero", "Writing %u coin mints to db.\n", (unsigned int)count);
+    return WriteBatch(batch, true);
 }
 
 bool CZerocoinDB::ReadCoinMint(const CBigNum& bnPubcoin, uint256& hashTx)
@@ -316,13 +325,21 @@ bool CZerocoinDB::EraseCoinMint(const CBigNum& bnPubcoin)
     return Erase(make_pair('m', hash));
 }
 
-bool CZerocoinDB::WriteCoinSpend(const CBigNum& bnSerial, const uint256& txHash)
+bool CZerocoinDB::WriteCoinSpendBatch(const std::vector<std::pair<libzerocoin::CoinSpend, uint256> >& spendInfo)
 {
-    CDataStream ss(SER_GETHASH, 0);
-    ss << bnSerial;
-    uint256 hash = Hash(ss.begin(), ss.end());
+    CLevelDBBatch batch;
+    size_t count = 0;
+    for (std::vector<std::pair<libzerocoin::CoinSpend, uint256> >::const_iterator it=spendInfo.begin(); it != spendInfo.end(); it++) {
+        CBigNum bnSerial = it->first.getCoinSerialNumber();
+        CDataStream ss(SER_GETHASH, 0);
+        ss << bnSerial;
+        uint256 hash = Hash(ss.begin(), ss.end());
+        batch.Write(make_pair('s', hash), it->second);
+        ++count;
+    }
 
-    return Write(make_pair('s', hash), txHash, true);
+    LogPrint("zero", "Writing %u coin spends to db.\n", (unsigned int)count);
+    return WriteBatch(batch, true);
 }
 
 bool CZerocoinDB::ReadCoinSpend(const CBigNum& bnSerial, uint256& txHash)
