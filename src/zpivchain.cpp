@@ -259,8 +259,12 @@ std::string ReindexZerocoinDB()
         return _("Failed to wipe zerocoinDB");
     }
 
+    uiInterface.ShowProgress(_("Reindexing zerocoin database..."), 0);
+
     CBlockIndex* pindex = chainActive[Params().Zerocoin_StartHeight()];
     while (pindex) {
+        uiInterface.ShowProgress(_("Reindexing zerocoin database..."), std::max(1, std::min(99, (int)((double)(pindex->nHeight - Params().Zerocoin_StartHeight()) / (double)(chainActive.Height() - Params().Zerocoin_StartHeight()) * 100))));
+
         if (pindex->nHeight % 1000 == 0)
             LogPrintf("Reindexing zerocoin : block %d...\n", pindex->nHeight);
 
@@ -304,6 +308,7 @@ std::string ReindexZerocoinDB()
         }
         pindex = chainActive.Next(pindex);
     }
+    uiInterface.ShowProgress("", 100);
 
     return "";
 }
