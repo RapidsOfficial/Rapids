@@ -125,8 +125,6 @@ BITCOIN_CORE_H = \
   obfuscation.h \
   obfuscation-relay.h \
   db.h \
-  eccryptoverify.h \
-  ecwrapper.h \
   hash.h \
   httprpc.h \
   httpserver.h \
@@ -371,8 +369,6 @@ libbitcoin_common_a_SOURCES = \
   primitives/zerocoin.cpp \
   core_read.cpp \
   core_write.cpp \
-  eccryptoverify.cpp \
-  ecwrapper.cpp \
   hash.cpp \
   invalid.cpp \
   key.cpp \
@@ -502,8 +498,6 @@ libbitcoinconsensus_la_SOURCES = \
   crypto/sha256.cpp \
   crypto/sha512.cpp \
   crypto/ripemd160.cpp \
-  eccryptoverify.cpp \
-  ecwrapper.cpp \
   hash.cpp \
   pubkey.cpp \
   script/script.cpp \
@@ -517,11 +511,9 @@ if GLIBC_BACK_COMPAT
 endif
 
 libbitcoinconsensus_la_LDFLAGS = $(AM_LDFLAGS) -no-undefined $(RELDFLAGS)
-libbitcoinconsensus_la_LIBADD = $(CRYPTO_LIBS) $(BOOST_LIBS)
-libbitcoinconsensus_la_CPPFLAGS = $(CRYPTO_CFLAGS) -I$(builddir)/obj -DBUILD_BITCOIN_INTERNAL
-if USE_LIBSECP256K1
+libbitcoinconsensus_la_LIBADD = $(LIBSECP256K1) $(BOOST_LIBS)
+libbitcoinconsensus_la_CPPFLAGS = -I$(builddir)/obj -I$(srcdir)/secp256k1/include -DBUILD_BITCOIN_INTERNAL
 libbitcoinconsensus_la_LIBADD += secp256k1/libsecp256k1.la
-endif
 endif
 
 CLEANFILES = $(EXTRA_LIBRARIES)
