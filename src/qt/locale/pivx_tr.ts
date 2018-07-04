@@ -2629,6 +2629,26 @@ zPIV, 20'den fazla teyit bulunduğunda olgunlaşır ve bundan sonra aynı mezhep
         <translation>Miktarı kopyala</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>ResetMintZerocoin: tam blok zinciri yeniden tarama, bu donanımınıza bağlı olarak 30 dakika kadar sürmelidir.
+Lütfen sabırlı olun...</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>Harcanıyor Zerocoin.
+Hesaplaması pahalı, biraz fazla  hardware. ve seçili güvenlik seviyesine bağlı olarak.
+Lütfen sabırlı olun...</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) gerekli.
+Maksimum bırakılan: </translation>
+    </message>
+    <message>
         <source>zPIV is currently disabled due to maintenance.</source>
         <translation>zPIV bakım nedeniyle şu an kullanıma kapalı.</translation>
     </message>
@@ -2665,12 +2685,6 @@ zPIV, 20'den fazla teyit bulunduğunda olgunlaşır ve bundan sonra aynı mezhep
 </source>
         <translation> sec. Used denominations:
 </translation>
-    </message>
-    <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>ResetMintZerocoin: tam blok zinciri yeniden tarama, bu donanımınıza bağlı olarak 30 dakika kadar sürmelidir. 
-Lütfen sabırlı olun...</translation>
     </message>
     <message>
         <source>Duration: </source>
@@ -2723,22 +2737,8 @@ Lütfen sabırlı olun...</translation>
         <translation>Coin gönderimini onayla</translation>
     </message>
     <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>Harcanıyor Zerocoin.
-Hesaplaması pahalı, biraz fazla  hardware. ve seçili güvenlik seviyesine bağlı olarak 
-Lütfen sabırlı olun...</translation>
-    </message>
-    <message>
         <source>Too much inputs (</source>
         <translation>Çok fazla girdi (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) gerekli. 
-Maksimum bırakılan: </translation>
     </message>
     <message>
         <source>

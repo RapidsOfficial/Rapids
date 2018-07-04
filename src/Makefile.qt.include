@@ -14,6 +14,7 @@ QT_TS = \
   qt/locale/pivx_de.ts \
   qt/locale/pivx_en.ts \
   qt/locale/pivx_en_US.ts \
+  qt/locale/pivx_eo.ts \
   qt/locale/pivx_es.ts \
   qt/locale/pivx_es_ES.ts \
   qt/locale/pivx_fi.ts \

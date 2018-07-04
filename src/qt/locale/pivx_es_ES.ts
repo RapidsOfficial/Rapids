@@ -11,7 +11,7 @@
     </message>
     <message>
         <source>&amp;New</source>
-        <translation>&amp;Nueva</translation>
+        <translation>Nueva</translation>
     </message>
     <message>
         <source>Copy the currently selected address to the system clipboard</source>
@@ -19,7 +19,7 @@
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation>&amp;Copiar</translation>
+        <translation>Copiar</translation>
     </message>
     <message>
         <source>Delete the currently selected address from the list</source>
@@ -27,7 +27,7 @@
     </message>
     <message>
         <source>&amp;Delete</source>
-        <translation>&amp;Eliminar</translation>
+        <translation>Eliminar</translation>
     </message>
     <message>
         <source>Export the data in the current tab to a file</source>
@@ -35,7 +35,7 @@
     </message>
     <message>
         <source>&amp;Export</source>
-        <translation>&amp;Exportar</translation>
+        <translation>Exportar</translation>
     </message>
     <message>
         <source>C&amp;lose</source>
@@ -51,7 +51,7 @@
     </message>
     <message>
         <source>C&amp;hoose</source>
-        <translation>Elija</translation>
+        <translation>Elegir</translation>
     </message>
     <message>
         <source>Sending addresses</source>
@@ -71,11 +71,11 @@
     </message>
     <message>
         <source>&amp;Copy Address</source>
-        <translation>&amp;Copiar dirección</translation>
+        <translation>Copiar dirección</translation>
     </message>
     <message>
         <source>Copy &amp;Label</source>
-        <translation>Copiar eti&amp;queta</translation>
+        <translation>Copiar etiqueta</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -290,6 +290,22 @@
         <translation>Copiar la firma actual al portapapeles del sistema</translation>
     </message>
     <message>
+        <source>Encrypt the private key for this PIVX address</source>
+        <translation>Cifrar la llave privada para esta dirección PIVX</translation>
+    </message>
+    <message>
+        <source>Reset all fields</source>
+        <translation>Limpiar todos los campos</translation>
+    </message>
+    <message>
+        <source>The encrypted private key</source>
+        <translation>La llave privada cifrada</translation>
+    </message>
+    <message>
+        <source>Decrypt the entered key using the passphrase</source>
+        <translation>Descifrar la llave ingresada usando la frase de contraseña</translation>
+    </message>
+    <message>
         <source>Encrypt &amp;Key</source>
         <translation>Encriptar Clave</translation>
     </message>
@@ -300,6 +316,54 @@
     <message>
         <source>&amp;BIP 38 Decrypt</source>
         <translation>Desencriptar BIP 38</translation>
+    </message>
+    <message>
+        <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking 'Import Address' will add this private key to the wallet.</source>
+        <translation>Ingrese la clave privada cifrada BIP 38. Ingrese la frase de contraseña en el cuadro del medio. Haga clic en Descifrar clave para calcular la clave privada. Después de descifrar la clave, al hacer clic en "Importar dirección" para agregar esta clave privada al monedero.</translation>
+    </message>
+    <message>
+        <source>Decrypt &amp;Key</source>
+        <translation>Descifrar clave</translation>
+    </message>
+    <message>
+        <source>Decrypted Key:</source>
+        <translation>Clave descifrada:</translation>
+    </message>
+    <message>
+        <source>Import Address</source>
+        <translation>Importar dirección</translation>
+    </message>
+    <message>
+        <source>Click "Decrypt Key" to compute key</source>
+        <translation>Haga clic en "Descifrar clave" para calcular la clave</translation>
+    </message>
+    <message>
+        <source>The entered passphrase is invalid. </source>
+        <translation>La contraseña introducida es inválida</translation>
+    </message>
+    <message>
+        <source>Allowed: 0-9,a-z,A-Z,</source>
+        <translation>Permitido: 0-9,a.z,A-Z,</translation>
+    </message>
+    <message>
+        <source>The entered address is invalid.</source>
+        <translation>La dirección introducida es inválida.</translation>
+    </message>
+    <message>
+        <source>Please check the address and try again.</source>
+        <translation>Por favor compruebe la dirección e inténtelo de nuevo.</translation>
+    </message>
+    <message>
+        <source>The entered address does not refer to a key.</source>
+        <translation>La dirección introducida no se refiere a ninguna clave.</translation>
+    </message>
+    <message>
+        <source>Wallet unlock was cancelled.</source>
+        <translation>El desbloqueo del monedero fue cancelado.</translation>
+    </message>
+    <message>
+        <source>Private key for the entered address is not available.</source>
+        <translation>La clave privada para la dirección introducida no está disponible.</translation>
     </message>
     </context>
 <context>
@@ -501,6 +565,26 @@
         <source>Clear &amp;All</source>
         <translation>Limpiar todo</translation>
     </message>
+    <message>
+        <source>The entered address is invalid.</source>
+        <translation>La dirección introducida es inválida.</translation>
+    </message>
+    <message>
+        <source>Please check the address and try again.</source>
+        <translation>Por favor compruebe la dirección e inténtelo de nuevo.</translation>
+    </message>
+    <message>
+        <source>The entered address does not refer to a key.</source>
+        <translation>La dirección introducida no se refiere a ninguna clave.</translation>
+    </message>
+    <message>
+        <source>Wallet unlock was cancelled.</source>
+        <translation>El desbloqueo del monedero fue cancelado.</translation>
+    </message>
+    <message>
+        <source>Private key for the entered address is not available.</source>
+        <translation>La clave privada para la dirección introducida no está disponible.</translation>
+    </message>
     </context>
 <context>
     <name>SplashScreen</name>
@@ -565,6 +649,22 @@
     </context>
 <context>
     <name>pivx-core</name>
+    <message>
+        <source>Zapping all transactions from wallet...</source>
+        <translation>Saltando todas las transacciones del monedero...</translation>
+    </message>
+    <message>
+        <source>ZeroMQ notification options:</source>
+        <translation>Opciones de notificación ZeroMQ:</translation>
+    </message>
+    <message>
+        <source>Zerocoin options:</source>
+        <translation>Opciones Zerocoin:</translation>
+    </message>
+    <message>
+        <source>on startup</source>
+        <translation>al inicio</translation>
+    </message>
     <message>
         <source>wallet.dat corrupt, salvage failed</source>
         <translation>wallet.dat corrupto, recuperación fallida</translation>

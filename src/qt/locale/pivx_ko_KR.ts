@@ -43,11 +43,11 @@
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation>전송할 주소를 선택해주세요.</translation>
+        <translation>송금할 주소를 선택해주세요.</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
-        <translation>전송 받을 주소를 선택해주세요.</translation>
+        <translation>입금 받을 주소를 선택해주세요.</translation>
     </message>
     <message>
         <source>C&amp;hoose</source>
@@ -59,15 +59,15 @@
     </message>
     <message>
         <source>Receiving addresses</source>
-        <translation>받는 주소</translation>
+        <translation>받을 주소</translation>
     </message>
     <message>
         <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>이 주소들은 전송할 PIVX 주소입니다. 송금하기 전 항상 금액과 전송할 주소를 확인해주세요.</translation>
+        <translation>이 주소들은 송금할 PIVX 주소입니다. 송금하기 전 항상 금액과 주소를 확인해주세요.</translation>
     </message>
     <message>
         <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>이 주소들은 전송 받을 PIVX 주소입니다. 각 트랜잭션별로 새로운 입금 주소를 사용하는 것이 좋습니다.</translation>
+        <translation>이 주소들은 입금 받을 PIVX 주소입니다. 매 거래마다 새로운 입금 주소를 사용하는 것이 좋습니다.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -106,7 +106,7 @@
     </message>
     <message>
         <source>Address</source>
-        <translation>마스터노드 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -418,7 +418,7 @@
     </message>
     <message>
         <source>&amp;Send</source>
-        <translation>&amp;전송</translation>
+        <translation>&amp;보내기</translation>
     </message>
     <message>
         <source>&amp;Receive</source>
@@ -426,15 +426,15 @@
     </message>
     <message>
         <source>&amp;Transactions</source>
-        <translation>&amp;트랜잭션</translation>
+        <translation>&amp;거래내역</translation>
     </message>
     <message>
         <source>Browse transaction history</source>
-        <translation>트랜잭션 내역 보기</translation>
+        <translation>겨래내역 보기</translation>
     </message>
     <message>
         <source>Privacy Actions for zPIV</source>
-        <translation>zPIV와 난독화를 위한 프라이버스 작업</translation>
+        <translation>zPIV 생성 및 관리</translation>
     </message>
     <message>
         <source>E&amp;xit</source>
@@ -562,19 +562,19 @@
     </message>
     <message>
         <source>&amp;Sending addresses...</source>
-        <translation>&amp;주소 보내는중...</translation>
+        <translation>&amp;송금 주소</translation>
     </message>
     <message>
         <source>Show the list of used sending addresses and labels</source>
-        <translation>전송 된 주소 및 라벨 목록 표시</translation>
+        <translation>송금 주소 및 라벨 목록 표시</translation>
     </message>
     <message>
         <source>&amp;Receiving addresses...</source>
-        <translation>&amp;받는 주소...</translation>
+        <translation>&amp;입금 주소</translation>
     </message>
     <message>
         <source>Show the list of used receiving addresses and labels</source>
-        <translation>입금 된 주소 및 라벨 목록 표시</translation>
+        <translation>입금 주소 및 라벨 목록 표시</translation>
     </message>
     <message>
         <source>&amp;Multisignature creation...</source>
@@ -650,7 +650,7 @@
     </message>
     <message>
         <source>Send coins to a PIVX address</source>
-        <translation>PIVX 주소로 전송하기</translation>
+        <translation>PIVX 주소로 입금하기</translation>
     </message>
     <message>
         <source>Request payments (generates QR codes and pivx: URIs)</source>
@@ -806,15 +806,15 @@
     </message>
     <message>
         <source>Sent transaction</source>
-        <translation>보낸 트랜잭션</translation>
+        <translation>보낸 내역</translation>
     </message>
     <message>
         <source>Incoming transaction</source>
-        <translation>받은 트랜잭션</translation>
+        <translation>받은 내역</translation>
     </message>
     <message>
         <source>Sent MultiSend transaction</source>
-        <translation>다중 트랜잭션 전송</translation>
+        <translation>다중 보내기 방식으로 보냄</translation>
     </message>
     <message>
         <source>Date: %1
@@ -915,7 +915,7 @@ Address: %4
     </message>
     <message>
         <source>Bytes:</source>
-        <translation>Bytes:</translation>
+        <translation>바이트:</translation>
     </message>
     <message>
         <source>Amount:</source>
@@ -939,7 +939,7 @@ Address: %4
     </message>
     <message>
         <source>After Fee:</source>
-        <translation>이후 수수료:</translation>
+        <translation>최종 금액:</translation>
     </message>
     <message>
         <source>Change:</source>
@@ -991,7 +991,7 @@ Address: %4
     </message>
     <message>
         <source>Confirmed</source>
-        <translation>확정</translation>
+        <translation>확정됨</translation>
     </message>
     <message>
         <source>Priority</source>
@@ -1035,7 +1035,7 @@ Address: %4
     </message>
     <message>
         <source>Copy bytes</source>
-        <translation>Bytes 복사</translation>
+        <translation>바이트 복사</translation>
     </message>
     <message>
         <source>Copy priority</source>
@@ -1174,7 +1174,7 @@ Address: %4
     </message>
     <message>
         <source>New sending address</source>
-        <translation>새로운 발신 주소</translation>
+        <translation>새로운 보내는 주소</translation>
     </message>
     <message>
         <source>Edit receiving address</source>
@@ -1346,7 +1346,7 @@ Address: %4
     </message>
     <message>
         <source>Address</source>
-        <translation>마스터노드 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <source>Protocol</source>
@@ -1765,15 +1765,15 @@ Please be patient after clicking import.</source>
     </message>
     <message>
         <source>Basic Privacy</source>
-        <translation>기본 익명</translation>
+        <translation>기본 익명화</translation>
     </message>
     <message>
         <source>High Privacy</source>
-        <translation>높은 익명</translation>
+        <translation>높은 익명화</translation>
     </message>
     <message>
         <source>Maximum Privacy</source>
-        <translation>최고 익명</translation>
+        <translation>최대 익명화</translation>
     </message>
     <message>
         <source>Please select a privacy level.</source>
@@ -1949,7 +1949,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Enable automatic minting of PIV units to zPIV</source>
-        <translation>Enable automatic minting of PIV units to zPIV</translation>
+        <translation>보상받은 PIV를 zPIV로 자동변환 활성화</translation>
     </message>
     <message>
         <source>Enable zPIV Automint</source>
@@ -1957,11 +1957,11 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
-        <translation>PIV수신시 자동변환 zPIV 퍼센트 (최소값:10%)</translation>
+        <translation>PIV수신시 자동변환 zPIV 비율 (최소값:10%)</translation>
     </message>
     <message>
         <source>Percentage of autominted zPIV</source>
-        <translation>자동 변환되는 zPIV 퍼센트</translation>
+        <translation>자동 변환되는 zPIV 비율</translation>
     </message>
     <message>
         <source>Wait with automatic conversion to Zerocoin until enough PIV for this denomination is available</source>
@@ -2180,7 +2180,7 @@ Immature: confirmed, but less than 1 mint of the same denomination after it was 
     </message>
     <message>
         <source>OVERVIEW</source>
-        <translation>OVERVIEW</translation>
+        <translation>개요</translation>
     </message>
     <message>
         <source>Combined Balance (including unconfirmed and immature coins)</source>
@@ -2443,6 +2443,14 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf<
     <message>
         <source>Enter an amount of Piv to convert to zPIV</source>
         <translation>zPIV로 변환할 PIV 수량을 입력하세요.</translation>
+    </message>
+    <message>
+        <source>zPIV Control</source>
+        <translation>zPIV 컨트롤</translation>
+    </message>
+    <message>
+        <source>zPIV Selected:</source>
+        <translation>선택된 zPIV :</translation>
     </message>
     <message>
         <source>Quantity Selected:</source>
@@ -2761,6 +2769,34 @@ To change the percentage (no restart required):
         <translation>금액 복사</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>제로코인 생성 초기화 진행중... : 전체 블록체인을 다시 검색합니다. 하드웨어에 따라 최대 30분이 걸릴수 있습니다.
+기다려주세요...</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>제로코인 전송중입니다.
+시큐리티 레벨과 여러분의 하드웨어에 따라 수 분이 걸립니다.
+조금만 기다려주세요...</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) 가 필요함.
+가능한 최대값 :</translation>
+    </message>
+    <message>
+        <source>zPIV Spend #: </source>
+        <translation>zPIV 전송 # :</translation>
+    </message>
+    <message>
+        <source>zPIV Mint</source>
+        <translation>zPIV 생성</translation>
+    </message>
+    <message>
         <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
         <translation> &lt;b&gt; 활성화됨 &lt;/b&gt;.</translation>
     </message>
@@ -2875,12 +2911,6 @@ To change the percentage (no restart required):
 </translation>
     </message>
     <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>제로코인 생성 초기화 진행중... : 전체 블록체인을 다시 검색합니다. 하드웨어에 따라 최대 30분이 걸릴수 있습니다.
-기다려주세요...</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>경과시간:</translation>
     </message>
@@ -2931,22 +2961,20 @@ Please be patient...</source>
         <translation>코인 전송 확인</translation>
     </message>
     <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>제로코인 전송중입니다.
-시큐리티 레벨과 여러분의 하드웨어에 따라 수 분이 걸립니다.
-조금만 기다려주세요...</translation>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>zPIV 버전 1은 성공적으로 보내기 위해서 100 시큐리티 레벨이 필요합니다.</translation>
+    </message>
+    <message>
+        <source>Failed to spend zPIV</source>
+        <translation>zPIV 전송 실패</translation>
+    </message>
+    <message>
+        <source>Failed to fetch mint associated with serial hash</source>
+        <translation>Failed to fetch mint associated with serial hash</translation>
     </message>
     <message>
         <source>Too much inputs (</source>
-        <translation>너무나 많은 입력 (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) 가 필요함.
-가능한 최대값 :</translation>
+        <translation>너무 많은 입력 (</translation>
     </message>
     <message>
         <source>
@@ -3270,6 +3298,18 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Time Offset</source>
         <translation>타임 오프셋</translation>
+    </message>
+    <message>
+        <source>Custom Backup Path:</source>
+        <translation>맞춤 백업 경로 :</translation>
+    </message>
+    <message>
+        <source>Custom zPIV Backup Path:</source>
+        <translation>맞춤 zPIV 백업 경로 :</translation>
+    </message>
+    <message>
+        <source>Custom Backups Threshold:</source>
+        <translation>맞춤 백업 역치(threshold) : </translation>
     </message>
     <message>
         <source>Salvage wallet</source>
@@ -3654,7 +3694,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Bytes:</source>
-        <translation>Bytes:</translation>
+        <translation>바이트:</translation>
     </message>
     <message>
         <source>Amount:</source>
@@ -3682,7 +3722,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>After Fee:</source>
-        <translation>이후 수수료:</translation>
+        <translation>최종 금액:</translation>
     </message>
     <message>
         <source>Change:</source>
@@ -3714,7 +3754,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Transaction Fee:</source>
-        <translation>트랜잭션 수수료:</translation>
+        <translation>거래 수수료:</translation>
     </message>
     <message>
         <source>Choose...</source>
@@ -3726,7 +3766,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Minimize</source>
-        <translation>최소화</translation>
+        <translation>닫기</translation>
     </message>
     <message>
         <source>per kilobyte</source>
@@ -3758,11 +3798,11 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Open Coin Control...</source>
-        <translation>코인 설정 열기...</translation>
+        <translation>코인 설정 열기</translation>
     </message>
     <message>
         <source>Coins automatically selected</source>
-        <translation>코인 자동으로 선택됨</translation>
+        <translation>자동으로 선택됩니다.</translation>
     </message>
     <message>
         <source>If the custom fee is set to 1000 uPIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uPIVs in fee,&lt;br /&gt;while "at least" pays 1000 uPIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
@@ -3846,7 +3886,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Copy bytes</source>
-        <translation>Bytes 복사</translation>
+        <translation>바이트 복사</translation>
     </message>
     <message>
         <source>Copy priority</source>
@@ -3882,7 +3922,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>are added as transaction fee</source>
-        <translation>트랜잭션 수수료가 추가됩니다</translation>
+        <translation>거래 수수료가 추가됩니다</translation>
     </message>
     <message>
         <source>Total Amount = &lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;= %2</source>
@@ -3973,7 +4013,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>The PIVX address to send the payment to</source>
-        <translation>전송할 PIVX 주소</translation>
+        <translation>보낼 PIVX 주소</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -4021,7 +4061,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Pay To:</source>
-        <translation>지불 대상:</translation>
+        <translation>보낼 주소:</translation>
     </message>
     <message>
         <source>Memo:</source>
@@ -4431,7 +4471,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Address</source>
-        <translation>마스터노드 주소</translation>
+        <translation>주소</translation>
     </message>
     <message numerus="yes">
         <source>Open for %n more block(s)</source>
@@ -4447,7 +4487,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Unconfirmed</source>
-        <translation>미확인 됨</translation>
+        <translation>미확인됨</translation>
     </message>
     <message>
         <source>Confirming (%1 of %2 recommended confirmations)</source>
@@ -4459,7 +4499,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Conflicted</source>
-        <translation>충돌 됨</translation>
+        <translation>충돌됨</translation>
     </message>
     <message>
         <source>Immature (%1 confirmations, will be available after %2)</source>
@@ -4471,7 +4511,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Received with</source>
-        <translation>수신 됨</translation>
+        <translation>수신됨</translation>
     </message>
     <message>
         <source>Masternode Reward</source>
@@ -4484,6 +4524,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Received via Obfuscation</source>
         <translation>난독화를 통해 수신 됨</translation>
+    </message>
+    <message>
+        <source>PIV Stake</source>
+        <translation>PIV stake</translation>
+    </message>
+    <message>
+        <source>zPIV Stake</source>
+        <translation>zPIV stake</translation>
     </message>
     <message>
         <source>Obfuscation Denominate</source>
@@ -4500,6 +4548,34 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Obfuscation Create Denominations</source>
         <translation>난독화 표시 만들기</translation>
+    </message>
+    <message>
+        <source>Converted PIV to zPIV</source>
+        <translation>PIV를 zPIV로 변환</translation>
+    </message>
+    <message>
+        <source>Spent zPIV</source>
+        <translation>zPIV 사용</translation>
+    </message>
+    <message>
+        <source>Received PIV from zPIV</source>
+        <translation>zPIV를 PIV로 받음</translation>
+    </message>
+    <message>
+        <source>Minted Change as zPIV from zPIV Spend</source>
+        <translation>zPIV 전송후 남은 zPIV로 잔돈 생성</translation>
+    </message>
+    <message>
+        <source>Converted zPIV to PIV</source>
+        <translation>zPIV를 PIV로 변환</translation>
+    </message>
+    <message>
+        <source>Anonymous (zPIV Transaction)</source>
+        <translation>Anonymous (zPIV 거래)</translation>
+    </message>
+    <message>
+        <source>Anonymous (zPIV Stake)</source>
+        <translation>Anonymous (zPIV 스테이킹)</translation>
     </message>
     <message>
         <source>Sent to</source>
@@ -4690,7 +4766,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Address</source>
-        <translation>마스터노드 주소</translation>
+        <translation>주소</translation>
     </message>
     <message>
         <source>ID</source>
@@ -4707,6 +4783,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Exporting Successful</source>
         <translation>내보내기 성공</translation>
+    </message>
+    <message>
+        <source>Received PIV from zPIV</source>
+        <translation>zPIV를 PIV로 받음</translation>
+    </message>
+    <message>
+        <source>Zerocoin Spend, Change in zPIV</source>
+        <translation>제로코인 전송, 잔돈은 zPIV</translation>
     </message>
     <message>
         <source>The transaction history was successfully saved to %1.</source>
@@ -4750,7 +4834,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <name>WalletView</name>
     <message>
         <source>HISTORY</source>
-        <translation>HISTORY</translation>
+        <translation>거래내역</translation>
     </message>
     <message>
         <source>&amp;Export</source>
@@ -4775,6 +4859,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
 </context>
 <context>
     <name>ZPivControlDialog</name>
+    <message>
+        <source>Select zPIV to Spend</source>
+        <translation>사용할 zPIV 선택</translation>
+    </message>
     <message>
         <source>Quantity</source>
         <translation>수량</translation>
@@ -4843,8 +4931,24 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>지갑의 모든 트랜잭션들을 삭제하고 오직 블록체인을 통한 트랜잭션 부분들만 복구합니다 -시작 시 다시 스캔</translation>
     </message>
     <message>
+        <source>Delete all zerocoin spends and mints that have been recorded to the blockchain database and reindex them (0-1, default: %u)</source>
+        <translation>Delete all zerocoin spends and mints that have been recorded to the blockchain database and reindex them (0-1, default: %u)</translation>
+    </message>
+    <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>MIT 소프트웨어 라이센스에 따라 배포, 첨부 파일 COPYING 또는 &lt;http://www.opensource.org/licenses/mit-license.php&gt; 를 참조하십시오.</translation>
+    </message>
+    <message>
+        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
+        <translation>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</translation>
+    </message>
+    <message>
+        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
+        <translation>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</translation>
+    </message>
+    <message>
+        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
+        <translation>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</translation>
     </message>
     <message>
         <source>Enable spork administration functionality with the appropriate private key.</source>
@@ -5443,6 +5547,18 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>PIV 및 zPIV 공급량 다시 색인</translation>
     </message>
     <message>
+        <source>Reindexing zerocoin database...</source>
+        <translation>제로코인 데이타베이스 재색인</translation>
+    </message>
+    <message>
+        <source>Reindexing zerocoin failed</source>
+        <translation>제로코인 재 인덱싱 실패</translation>
+    </message>
+    <message>
+        <source>Selected coins value is less than payment target</source>
+        <translation>지불대상보다 적은 코인 선택됨</translation>
+    </message>
+    <message>
         <source>SwiftX options:</source>
         <translation>SwiftX 옵션:</translation>
     </message>
@@ -5501,6 +5617,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
         <translation>자동생성 제로코인 선호 디노미네이션 (1/5/10/50/100/500/1000/5000) 0사용안됨, 기본값 : %u)</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <translation>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
+        <translation>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</translation>
     </message>
     <message>
         <source>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
@@ -5563,8 +5687,16 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>디시리얼 실패</translation>
     </message>
     <message>
+        <source>Failed to find Zerocoins in wallet.dat</source>
+        <translation>wallet.dat 에서 제로코인을 인식 실패</translation>
+    </message>
+    <message>
         <source>Failed to select a zerocoin</source>
         <translation>제로코인 선택 실패</translation>
+    </message>
+    <message>
+        <source>Failed to wipe zerocoinDB</source>
+        <translation>제로코인 DB 삭제 실패</translation>
     </message>
     <message>
         <source>Failed to write coin serial number into wallet</source>
@@ -5729,6 +5861,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Number of automatic wallet backups (default: 10)</source>
         <translation>자동 지갑 백업 횟수 (기본값: 10)</translation>
+    </message>
+    <message>
+        <source>Number of custom location backups to retain (default: %d)</source>
+        <translation>Number of custom location backups to retain (default: %d)</translation>
     </message>
     <message>
         <source>Obfuscation is idle.</source>
@@ -5983,6 +6119,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>sporks와 동기화 중입니다...</translation>
     </message>
     <message>
+        <source>Syncing zPIV wallet...</source>
+        <translation>zPIV 지갑 동기화중...</translation>
+    </message>
+    <message>
         <source>The coin spend has been used</source>
         <translation>전송이 이미 되었습니다.</translation>
     </message>
@@ -6127,6 +6267,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>JSON-RPC 연결 사용자 이름</translation>
     </message>
     <message>
+        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
+        <translation>Value is below the smallest available denomination (= 1) of zPIV</translation>
+    </message>
+    <message>
         <source>Value more than Obfuscation pool maximum allows.</source>
         <translation>난독화 풀의 최대 허용 값보다 높습니다.</translation>
     </message>
@@ -6137,6 +6281,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Verifying wallet...</source>
         <translation>지갑 인증 중...</translation>
+    </message>
+    <message>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>zPIV 버전 1은 성공적으로 보내기 위해서 100 시큐리티 레벨이 필요합니다.</translation>
     </message>
     <message>
         <source>Wallet %s resides outside data directory %s</source>

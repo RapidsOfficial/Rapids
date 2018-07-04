@@ -2769,6 +2769,26 @@ Om het percentage te wijzigen (geen herstart vereist):
         <translation>Kopieer hoeveelheid</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>Start ResetMintZerocoin: rescanning complete blockchain, dit zal tot 30 minuten nodig hebben, afhankelijk van uw hardware.
+Wees alsjeblieft geduldig...</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>Zerocoin besteden.
+Computationeel duur, zou mogelijk enkele minuten nodig hebben, afhankelijk van het geselecteerde beveiligingsniveau en je hardware.
+Wees alsjeblieft geduldig...</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) vereist.
+Maximaal toegestaan:</translation>
+    </message>
+    <message>
         <source>zPIV Spend #: </source>
         <translation>zPIV besteed #:</translation>
     </message>
@@ -2891,12 +2911,6 @@ Om het percentage te wijzigen (geen herstart vereist):
 </translation>
     </message>
     <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>Start ResetMintZerocoin: rescanning complete blockchain, dit zal tot 30 minuten nodig hebben, afhankelijk van uw hardware.
-Wees alsjeblieft geduldig...</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>Duur:</translation>
     </message>
@@ -2947,15 +2961,6 @@ Wees alsjeblieft geduldig...</translation>
         <translation>Bevestig verzending coins</translation>
     </message>
     <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>Zerocoin besteden.
-Computationeel duur, zou mogelijk enkele minuten nodig hebben, afhankelijk van het geselecteerde beveiligingsniveau en je 
-hardware.
-Wees alsjeblieft geduldig...</translation>
-    </message>
-    <message>
         <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
         <translation>Versie 1 zPIV vereist een beveiligingsniveau van 100 om succesvol te besteden.</translation>
     </message>
@@ -2970,12 +2975,6 @@ Wees alsjeblieft geduldig...</translation>
     <message>
         <source>Too much inputs (</source>
         <translation>Teveel invoer (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) vereist.
-Maximaal toegestaan:</translation>
     </message>
     <message>
         <source>
