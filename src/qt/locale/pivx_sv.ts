@@ -43,7 +43,7 @@
     </message>
     <message>
         <source>Choose the address to send coins to</source>
-        <translation>Välj adress att sända mynt till</translation>
+        <translation>Välj adress att skicka mynt till</translation>
     </message>
     <message>
         <source>Choose the address to receive coins with</source>
@@ -55,7 +55,7 @@
     </message>
     <message>
         <source>Sending addresses</source>
-        <translation>Sändar adresser</translation>
+        <translation>Skicka adresser</translation>
     </message>
     <message>
         <source>Receiving addresses</source>
@@ -63,7 +63,7 @@
     </message>
     <message>
         <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Det här är dina PIVX adresser för att sända betalningar. Kontrollera alltid summan och mottagaradressen före du sänder mynt.</translation>
+        <translation>Det här är dina PIVX adresser för att skicka betalningar. Kontrollera alltid summan och mottagaradressen före du sänder mynt.</translation>
     </message>
     <message>
         <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
@@ -75,7 +75,7 @@
     </message>
     <message>
         <source>Copy &amp;Label</source>
-        <translation>Kopiera &amp; Ettikera</translation>
+        <translation>Kopiera &amp; Ettiket</translation>
     </message>
     <message>
         <source>&amp;Edit</source>
@@ -91,11 +91,11 @@
     </message>
     <message>
         <source>Exporting Failed</source>
-        <translation>Exportering Misslyckad</translation>
+        <translation>Exportering Misslyckades</translation>
     </message>
     <message>
         <source>There was an error trying to save the address list to %1. Please try again.</source>
-        <translation>Det uppstod ett fel när vi försökte spara adresslistan till %1. Var snäll och pröva på nytt.</translation>
+        <translation>Det uppstod ett fel när vi försökte spara adresslistan till %1. Var snäll och försök på nytt.</translation>
     </message>
 </context>
 <context>
@@ -133,11 +133,11 @@
     </message>
     <message>
         <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation>Ser till att inaktivera obetydliga skickade pengar när OSkontot är i risk. Förser ingen riktig säkerhet.</translation>
+        <translation>Ser till att inaktivera obetydliga skickade pengar när OS kontot är i risk. Förser ingen riktig säkerhet.</translation>
     </message>
     <message>
         <source>For anonymization, automint, and staking only</source>
-        <translation>Endast för anonymisering, automint, och staking.</translation>
+        <translation>Endast för anonymisering, automint, och staking</translation>
     </message>
     <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
@@ -189,15 +189,15 @@
     </message>
     <message>
         <source>Wallet encrypted</source>
-        <translation>PLånbok krypterad</translation>
+        <translation>Plånbok krypterad</translation>
     </message>
     <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
-        <translation>VIKTIGT: Alla dina tidigare säkerhetskopior du har gjort av plånboks filen bör ersättas med den nygenerade,kryyterade plånboks filen. För säkerhetsskäl, tidigar säkerhetskopior av okrypterade plånboks filer kommer bli oanvändbar så fort du börjar använda den nya krypterade plånboken.</translation>
+        <translation>VIKTIGT: Alla dina tidigare säkerhetskopior du har gjort av plånboks filen bör ersättas med den nygenererade, krypterade plånboks filen. För säkerhetsskäl, tidigare säkerhetskopior av okrypterade plånboks filer kommer bli oanvändbar så fort du börjar använda den nya krypterade plånboken.</translation>
     </message>
     <message>
         <source>Wallet encryption failed</source>
-        <translation>Plånboks kryptering misslyckad</translation>
+        <translation>Plånboks kryptering misslyckades</translation>
     </message>
     <message>
         <source>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</source>
@@ -213,15 +213,15 @@
     </message>
     <message>
         <source>The passphrase entered for the wallet decryption was incorrect.</source>
-        <translation>Den givna lösenfrasen för plånbokens avkryptering var fel</translation>
+        <translation>Den givna lösenfrasen för plånbokens avkryptering var fel.</translation>
     </message>
     <message>
         <source>Wallet decryption failed</source>
-        <translation>plånboks avkryptering misslyckades</translation>
+        <translation>plånboks dekryptering misslyckades</translation>
     </message>
     <message>
         <source>Wallet passphrase was successfully changed.</source>
-        <translation>Ändring av plånbokens lösefras lyckades </translation>
+        <translation>Ändring av plånbokens lösenfras lyckades.</translation>
     </message>
     <message>
         <source>Warning: The Caps Lock key is on!</source>
@@ -255,7 +255,7 @@
     </message>
     <message>
         <source>Enter a PIVX Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
-        <translation>Fyll i en PIVX Adress som du skulle vilja cryptera med BIP 38. Skriv in ett lösenord i den mittersta lådan. Tryck kryptera för att beräkna fram den krypterade privata nyckeln</translation>
+        <translation>Fyll i en PIVX Adress som du skulle vilja cryptera med BIP 38. Skriv in en lösenfras i den mittersta lådan. Tryck kryptera för att beräkna fram den krypterade privata nyckeln.</translation>
     </message>
     <message>
         <source>The PIVX address to encrypt</source>
@@ -303,7 +303,7 @@
     </message>
     <message>
         <source>Decrypt the entered key using the passphrase</source>
-        <translation>Avkryptera den inmatade nyckeln med lösenordsfrasen</translation>
+        <translation>Dekryptera den inmatade nyckeln med lösenordsfrasen</translation>
     </message>
     <message>
         <source>Encrypt &amp;Key</source>
@@ -315,19 +315,19 @@
     </message>
     <message>
         <source>&amp;BIP 38 Decrypt</source>
-        <translation>&amp;BIP 38 Avkryptera</translation>
+        <translation>&amp;BIP 38 Dekryptera</translation>
     </message>
     <message>
         <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking 'Import Address' will add this private key to the wallet.</source>
-        <translation>Ange BIP 38 krypterade privata nyckeln. Ange lösenfrasen i med mittersta boxen. Tryck på krypetra nyckel för att beräkna den privata nyckeln. Efter att nyckeln är avkrypterad, Tryck på 'Importera Adress' kommer att lägga till denna privata nyckel till plånboken.</translation>
+        <translation>Ange BIP 38 krypterade privata nyckeln. Ange lösenfrasen i med mittersta boxen. Tryck på krypetra nyckel för att beräkna den privata nyckeln. Efter att nyckeln är avkrypterad, tryck på 'Importera Adress' kommer att lägga till denna privata nyckel till plånboken.</translation>
     </message>
     <message>
         <source>Decrypt &amp;Key</source>
-        <translation>Avkryptera &amp;Nyckel</translation>
+        <translation>Dekryptera &amp;Nyckel</translation>
     </message>
     <message>
         <source>Decrypted Key:</source>
-        <translation>Avkrypterad Nyckel:</translation>
+        <translation>Dekrypterad Nyckel:</translation>
     </message>
     <message>
         <source>Import Address</source>
@@ -335,11 +335,11 @@
     </message>
     <message>
         <source>Click "Decrypt Key" to compute key</source>
-        <translation>Tryck "Avkryptera Nyckel" för att beräkna nyckel</translation>
+        <translation>Tryck "Dekryptera Nyckel" för att beräkna nyckeln</translation>
     </message>
     <message>
         <source>The entered passphrase is invalid. </source>
-        <translation>Den angivna lösenfrasen är felaktig</translation>
+        <translation>Den angivna lösenfrasen är felaktig.</translation>
     </message>
     <message>
         <source>Allowed: 0-9,a-z,A-Z,</source>
@@ -347,7 +347,7 @@
     </message>
     <message>
         <source>The entered address is invalid.</source>
-        <translation>Den angivna adressen är felaktig</translation>
+        <translation>Den angivna adressen är felaktig.</translation>
     </message>
     <message>
         <source>Please check the address and try again.</source>
@@ -355,23 +355,23 @@
     </message>
     <message>
         <source>The entered address does not refer to a key.</source>
-        <translation>Den angivna adressen refererar inte till en nyckel.</translation>
+        <translation>Den angivna adressen visar inte till en nyckel.</translation>
     </message>
     <message>
         <source>Wallet unlock was cancelled.</source>
-        <translation>Upplåsningen av plånboken var avbruten.</translation>
+        <translation>Upplåsningen av plånboken blev avbruten.</translation>
     </message>
     <message>
         <source>Private key for the entered address is not available.</source>
-        <translation>Den privata nyckel som angivits flr adressen är inte tillgänglig.</translation>
+        <translation>Den privata nyckel som angivits till adressen är inte tillgänglig.</translation>
     </message>
     <message>
         <source>Failed to decrypt.</source>
-        <translation>Avkryptering misslyckades</translation>
+        <translation>Dekryptering misslyckades.</translation>
     </message>
     <message>
         <source>Please check the key and passphrase and try again.</source>
-        <translation>Var vänlig och kontrollera nyckeln och lösenfrasen och pröva igen.</translation>
+        <translation>Var vänlig och kontrollera nyckeln och lösenfrasen och försök igen.</translation>
     </message>
     <message>
         <source>Data Not Valid.</source>
@@ -422,7 +422,7 @@
     </message>
     <message>
         <source>&amp;Receive</source>
-        <translation>&amp;Motta</translation>
+        <translation>&amp;Mottaga</translation>
     </message>
     <message>
         <source>&amp;Transactions</source>
@@ -438,7 +438,7 @@
     </message>
     <message>
         <source>E&amp;xit</source>
-        <translation>gå ut</translation>
+        <translation>gå ur</translation>
     </message>
     <message>
         <source>Quit application</source>
@@ -466,7 +466,7 @@
     </message>
     <message>
         <source>&amp;Encrypt Wallet...</source>
-        <translation>Kryptera Plånbok</translation>
+        <translation>&amp;Kryptera Plånbok...</translation>
     </message>
     <message>
         <source>Encrypt the private keys that belong to your wallet</source>
@@ -474,7 +474,7 @@
     </message>
     <message>
         <source>&amp;Backup Wallet...</source>
-        <translation>&amp;Säkerhetskopiera plånbok</translation>
+        <translation>&amp;Säkerhetskopiera Plånbok...</translation>
     </message>
     <message>
         <source>Backup wallet to another location</source>
@@ -502,19 +502,19 @@
     </message>
     <message>
         <source>Sign &amp;message...</source>
-        <translation>signera &amp; meddelande...</translation>
+        <translation>signera &amp;meddelande...</translation>
     </message>
     <message>
         <source>&amp;Verify message...</source>
-        <translation>Verifiera meddelande</translation>
+        <translation>&amp;Verifiera meddelande</translation>
     </message>
     <message>
         <source>&amp;Information</source>
-        <translation>information</translation>
+        <translation>&amp;Information</translation>
     </message>
     <message>
         <source>Show diagnostic information</source>
-        <translation>Visa diagnostik information</translation>
+        <translation>Visa diagnostisk information</translation>
     </message>
     <message>
         <source>&amp;Debug console</source>
@@ -526,7 +526,7 @@
     </message>
     <message>
         <source>&amp;Network Monitor</source>
-        <translation>Nätverks övervakare</translation>
+        <translation>&amp;Nätverks Övervakare</translation>
     </message>
     <message>
         <source>Show network monitor</source>
@@ -694,7 +694,7 @@
     </message>
     <message>
         <source>Encrypt and decrypt private keys using a passphrase</source>
-        <translation>Kryptera och avkryptera privata nycklar genom användning av lösenfras</translation>
+        <translation>Kryptera och dekryptera privata nycklar genom användning av lösenfras</translation>
     </message>
     <message>
         <source>&amp;MultiSend</source>
@@ -742,7 +742,7 @@
     </message>
     <message>
         <source>Synchronizing with network...</source>
-        <translation>Synchroniserar med nätverket...</translation>
+        <translation>Synkroniserar med nätverket...</translation>
     </message>
     <message>
         <source>Importing blocks from disk...</source>
@@ -850,7 +850,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>AutoMint is currently enabled and set to </source>
-        <translation>AutoMint är för tillfället aktiverat och satt på</translation>
+        <translation>AutoMint är för tillfället aktiverat och inställd på</translation>
     </message>
     <message>
         <source>AutoMint is disabled</source>
@@ -955,11 +955,11 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Tree mode</source>
-        <translation>träd sätt</translation>
+        <translation>träd mode</translation>
     </message>
     <message>
         <source>List mode</source>
-        <translation>list sätt</translation>
+        <translation>list mode</translation>
     </message>
     <message>
         <source>(1 locked)</source>
@@ -967,7 +967,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>mängd</translation>
+        <translation>Mängd</translation>
     </message>
     <message>
         <source>Received with label</source>
@@ -1011,7 +1011,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Copy transaction ID</source>
-        <translation>Kopiera transactions ID</translation>
+        <translation>Kopiera transaktions ID</translation>
     </message>
     <message>
         <source>Lock unspent</source>
@@ -1260,7 +1260,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Choose data directory on startup (default: %u)</source>
-        <translation>Välj data katalog vid upstart (standard: %u)</translation>
+        <translation>Välj data katalog vid start (standard: %u)</translation>
     </message>
     <message>
         <source>Show splash screen on startup (default: %u)</source>
@@ -1287,15 +1287,15 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Welcome to PIVX Core.</source>
-        <translation>Välkommen till PIVX Kärna.</translation>
+        <translation>Välkommen till PIVX Core.</translation>
     </message>
     <message>
         <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
-        <translation>Eftersom detta är första gången programmet körs så kan du välja var PIVX Kärnan ska spara sin data.</translation>
+        <translation>Eftersom detta är första gången programmet körs så kan du välja var PIVX Core ska spara sin data.</translation>
     </message>
     <message>
         <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation> Kärnan kommer ladda ner och spara en kopia av PIVX block chain. Minst %1GB data kommer sparas i denna katalog och den kommer växa med tiden. Plånboken kommer också sparas i denna katalog.</translation>
+        <translation>PIVX Kärnan kommer ladda ner och spara en kopia av PIVX block chain. Minst %1GB data kommer sparas i denna katalog och den kommer växa med tiden. Plånboken kommer också sparas i denna katalog.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1307,7 +1307,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>PIVX Core</source>
-        <translation>PIVX Kärna</translation>
+        <translation>PIVX Core</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1398,7 +1398,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Confirm masternode start</source>
-        <translation>Konfirmera huvudnodsstart</translation>
+        <translation>Bekräfta huvudnod start</translation>
     </message>
     <message>
         <source>Are you sure you want to start masternode %1?</source>
@@ -1418,7 +1418,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>You can't use this command until masternode list is synced</source>
-        <translation>Du kan inte använda detta kommando fram tills huvudnodlistan är synkad</translation>
+        <translation>Du kan inte använda detta kommando fram tills huvudnodlistan (masternode) är synkad</translation>
     </message>
     <message>
         <source>Confirm missing masternodes start</source>
@@ -1426,7 +1426,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Are you sure you want to start MISSING masternodes?</source>
-        <translation>Är du säker på att du vill starta FATTANDES huvudnoder?</translation>
+        <translation>Är du säker på att du vill starta SAKNADE huvudnoder (masternodes) ?</translation>
     </message>
 </context>
 <context>
@@ -1452,7 +1452,7 @@ MultiSend: %1</translation>
 To Add: enter percentage to give and PIVX address to add to the MultiSend vector.
 To Delete: Enter address to delete and press delete.
 MultiSend will not be activated unless you have clicked Activate</source>
-        <translation>MultiSend tillåter dig att automatiskt skicka upp till 100% av dina stake eller huvudnod belöningar till en lista av andra PIVX adresser efter att belöningarna har mognat.
+        <translation>MultiSend tillåter dig att automatiskt skicka upp till 100% av dina staking eller huvudnod belöningar till en lista av andra PIVX adresser efter att belöningarna har mognat.
 För att Lägga till: Ange procent att ge och PIVX adress för att lägga till i MultiSend vektorn.
 För att Ta Bort: Ange adressen som ska tas bort och tryck ta bort.
 MultiSend kommer inte aktiveras om du inte tryckt på Aktivera</translation>
@@ -1483,7 +1483,7 @@ MultiSend kommer inte aktiveras om du inte tryckt på Aktivera</translation>
     </message>
     <message>
         <source>Percentage of stake to send</source>
-        <translation>Procent av stake att skicka</translation>
+        <translation>Procent av staking att skicka</translation>
     </message>
     <message>
         <source>Percentage:</source>
@@ -1491,7 +1491,7 @@ MultiSend kommer inte aktiveras om du inte tryckt på Aktivera</translation>
     </message>
     <message>
         <source>Address to send portion of stake to</source>
-        <translation>Adress till att skicka del av stake till</translation>
+        <translation>Adress till att skicka del av staking till</translation>
     </message>
     <message>
         <source>Address:</source>
@@ -1535,7 +1535,7 @@ MultiSend kommer inte aktiveras om du inte tryckt på Aktivera</translation>
     </message>
     <message>
         <source>Send For Masternode Rewards</source>
-        <translation>Skicka för huvudnodbelöningar</translation>
+        <translation>Skicka för masternode belöningar</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -1556,7 +1556,7 @@ Var vänlig kontrollera adressen och försök igen.</translation>
     <message>
         <source>The total amount of your MultiSend vector is over 100% of your stake reward
 </source>
-        <translation>Din totala MultiSend vektor mängd överstiger 100% av din stake belöning
+        <translation>Din totala MultiSend vektor mängd överstiger 100% av din staking belöning
 </translation>
     </message>
     <message>
@@ -1621,7 +1621,11 @@ Var vänlig kontrollera adressen och försök igen.</translation>
     </message>
     <message>
         <source>Create a new multisig address</source>
-        <translation>Skapa en ny multisigadress</translation>
+        <translation>Skapa en ny multisig adress</translation>
+    </message>
+    <message>
+        <source>C&amp;reate</source>
+        <translation>C&amp;reate</translation>
     </message>
     <message>
         <source>Status:</source>
@@ -1669,7 +1673,7 @@ Var god vänta efter att du trycker på importera.</translation>
     </message>
     <message>
         <source>Add a Raw Input</source>
-        <translation>Lägg till en Rå Inmatning</translation>
+        <translation>Lägg till en "rå" Inmatning</translation>
     </message>
     <message>
         <source>Address / Amount:</source>
@@ -1688,6 +1692,10 @@ Var god vänta efter att du trycker på importera.</translation>
         <translation>Skapa ett transaktionsobjekt genom att använda de givna inmatningarna till de givna utmatningarna</translation>
     </message>
     <message>
+        <source>Cr&amp;eate</source>
+        <translation>Cr&amp;eate</translation>
+    </message>
+    <message>
         <source>&amp;Sign MultiSignature Tx</source>
         <translation>&amp;Skriv under MultiSignatur Tx</translation>
     </message>
@@ -1700,8 +1708,16 @@ Var god vänta efter att du trycker på importera.</translation>
         <translation>Skriv under från denna plånbok eller från försedd privat nyckel</translation>
     </message>
     <message>
+        <source>S&amp;ign</source>
+        <translation>S&amp;ignera</translation>
+    </message>
+    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DISABLED until transaction has been signed enough times.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Inaktiverad tills transaktion har blivit signerad tillräckligt många gånger.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;IINAKTIVERAD tills transaktion har blivit signerad tillräckligt många gånger.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Co&amp;mmit</source>
+        <translation>Co&amp;mmit</translation>
     </message>
     <message>
         <source>Add private keys to sign the transaction with</source>
@@ -1717,7 +1733,7 @@ Var god vänta efter att du trycker på importera.</translation>
     </message>
     <message>
         <source>Invalid Tx Hash.</source>
-        <translation>Ogiltig Tx Hash</translation>
+        <translation>Ogiltig Tx Hash.</translation>
     </message>
     <message>
         <source>Vout position must be positive.</source>
@@ -1837,12 +1853,24 @@ Var god vänta efter att du trycker på importera.</translation>
         <translation>Alternativ</translation>
     </message>
     <message>
+        <source>&amp;Main</source>
+        <translation>&amp;Main</translation>
+    </message>
+    <message>
+        <source>Size of &amp;database cache</source>
+        <translation>Storlek på &amp;databasbuffert</translation>
+    </message>
+    <message>
         <source>MB</source>
         <translation>MB</translation>
     </message>
     <message>
         <source>(0 = auto, &lt;0 = leave that many cores free)</source>
-        <translation>(0 = auto, &lt;0 = lämna så många kärnor fria)</translation>
+        <translation>(0 = auto, &lt;0 = lämna så många "kärnor" fria)</translation>
+    </message>
+    <message>
+        <source>W&amp;allet</source>
+        <translation>W&amp;allet</translation>
     </message>
     <message>
         <source>If you disable the spending of unconfirmed change, the change from a transaction&lt;br/&gt;cannot be used until that transaction has at least one confirmation.&lt;br/&gt;This also affects how your balance is computed.</source>
@@ -1869,6 +1897,10 @@ Var god vänta efter att du trycker på importera.</translation>
         <translation>Starta PIVX automatiskt efter inloggning på systemet.</translation>
     </message>
     <message>
+        <source>&amp;Start PIVX on system login</source>
+        <translation>&amp;Starta PIVX vid systeminloggning</translation>
+    </message>
+    <message>
         <source>Whether to show coin control features or not.</source>
         <translation>Huruvida mynt kontroll funktioner ska visas eller inte.</translation>
     </message>
@@ -1881,6 +1913,14 @@ Var god vänta efter att du trycker på importera.</translation>
         <translation>Visa Huvudnoder Flik</translation>
     </message>
     <message>
+        <source>&amp;Spend unconfirmed change</source>
+        <translation>&amp;Spendera ej bekräftad växel</translation>
+    </message>
+    <message>
+        <source>&amp;Network</source>
+        <translation>&amp;Nätverk</translation>
+    </message>
+    <message>
         <source>The user interface language can be set here. This setting will take effect after restarting PIVX.</source>
         <translation>Användargränssnittets språk kan väljas här. Denna inställning börjar gälla efter att man startat om PIVX.</translation>
     </message>
@@ -1891,12 +1931,16 @@ https://www.transifex.com/pivx-project/pivx-project-translations</source>
 https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
+        <source>Map port using &amp;UPnP</source>
+        <translation>Kartlägg port med &amp;UPnP</translation>
+    </message>
+    <message>
         <source>Enable automatic minting of PIV units to zPIV</source>
-        <translation>Tillåt automatisk minting med PIV enheter till zPIV</translation>
+        <translation>Tillåt automatisk prägling med PIV enheter till zPIV</translation>
     </message>
     <message>
         <source>Enable zPIV Automint</source>
-        <translation>Tillåt zPIV Automint</translation>
+        <translation>Tillåt zPIV Autoprägling</translation>
     </message>
     <message>
         <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
@@ -1904,7 +1948,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Percentage of autominted zPIV</source>
-        <translation>Procent av automintade zPIV</translation>
+        <translation>Procent av autopräglade zPIV</translation>
     </message>
     <message>
         <source>Wait with automatic conversion to Zerocoin until enough PIV for this denomination is available</source>
@@ -1912,31 +1956,55 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Preferred Automint zPIV Denomination</source>
-        <translation>Automint zPIV valör som föredras</translation>
+        <translation>Preferens på zPIV valör i autoprägling</translation>
     </message>
     <message>
         <source>Stake split threshold:</source>
-        <translation>Stake delnings tröskel:</translation>
+        <translation>Staking delnings tröskel:</translation>
     </message>
     <message>
         <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
         <translation>Anslut till PIVX nätverket via en SOCKS5 proxy.</translation>
     </message>
     <message>
+        <source>Proxy &amp;IP:</source>
+        <translation>Proxy &amp;IP:</translation>
+    </message>
+    <message>
         <source>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</source>
         <translation>Proxyns IP adress (t.ex. IPv4: 127.0.0.1 / IPv6: ::1)</translation>
+    </message>
+    <message>
+        <source>&amp;Port:</source>
+        <translation>&amp;Port:</translation>
     </message>
     <message>
         <source>Port of the proxy (e.g. 9050)</source>
         <translation>Proxyns port (t.ex. 9050)</translation>
     </message>
     <message>
+        <source>&amp;Window</source>
+        <translation>&amp;Window</translation>
+    </message>
+    <message>
         <source>Show only a tray icon after minimizing the window.</source>
-        <translation>När fönstret minimeras visa endast en fackicon.</translation>
+        <translation>När fönstret minimeras visa endast en icon.</translation>
+    </message>
+    <message>
+        <source>&amp;Minimize to the tray instead of the taskbar</source>
+        <translation>&amp;Minimera till "tray" istället för aktivitetsfältet</translation>
     </message>
     <message>
         <source>Minimize instead of exit the application when the window is closed. When this option is enabled, the application will be closed only after selecting Quit in the menu.</source>
         <translation>Minimera istället för att stänga ner applikationen när fönstret stängs. När denna inställning är tillåten kan applikationen endast stängas ner av att välja Avsluta i menyn.</translation>
+    </message>
+    <message>
+        <source>M&amp;inimize on close</source>
+        <translation>M&amp;inimera på stäng</translation>
+    </message>
+    <message>
+        <source>&amp;Display</source>
+        <translation>&amp;Display</translation>
     </message>
     <message>
         <source>User Interface Theme:</source>
@@ -1971,8 +2039,16 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Starta om alla klient alternativ till standard.</translation>
     </message>
     <message>
+        <source>&amp;OK</source>
+        <translation>&amp;OK</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation>&amp;ta bort</translation>
+    </message>
+    <message>
         <source>Any</source>
-        <translation>Vilkensom</translation>
+        <translation>Vilken som helst</translation>
     </message>
     <message>
         <source>default</source>
@@ -1984,19 +2060,19 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Confirm options reset</source>
-        <translation>Konfirmera omstart av alternativ</translation>
+        <translation>Bekräfta omstart av alternativ</translation>
     </message>
     <message>
         <source>Client restart required to activate changes.</source>
-        <translation>Omstart av klienten krävs för att aktivera ändringarna.</translation>
+        <translation>Omstart av applikationen krävs för att aktivera ändringarna.</translation>
     </message>
     <message>
         <source>Client will be shutdown, do you want to proceed?</source>
-        <translation>Klient kommer stängas av, vill du fortsätta.</translation>
+        <translation>Applikationen kommer stängas av, vill du fortsätta.</translation>
     </message>
     <message>
         <source>This change would require a client restart.</source>
-        <translation>Denna ändring kommer kräva att klienten startas om.</translation>
+        <translation>Denna ändring kommer kräva att applikationen startas om.</translation>
     </message>
     <message>
         <source>The supplied proxy address is invalid.</source>
@@ -2027,7 +2103,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Total Balance, including all unavailable coins.</source>
-        <translation>All saldo, inkluderat alla otillgängliga mynt.</translation>
+        <translation>Totalt saldo, inkluderar alla otillgängliga mynt.</translation>
     </message>
     <message>
         <source>PIV Balance</source>
@@ -2035,23 +2111,23 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Pending:</source>
-        <translation>Avvaktan:</translation>
+        <translation>I avvaktan på:</translation>
     </message>
     <message>
         <source>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</source>
-        <translation>Totala transaktioner som fortfarande behöver konfirmeras och som inte ingår i det förbrukningsbara saldot</translation>
+        <translation>Totala transaktioner som fortfarande behöver bekräftas och som inte ännu  ingår i det förbrukningsbara saldot</translation>
     </message>
     <message>
         <source>Immature:</source>
-        <translation>Ommogen:</translation>
+        <translation>Omogen:</translation>
     </message>
     <message>
         <source>Staked or masternode rewards that has not yet matured</source>
-        <translation>Staked eller huvudnods belöning som ännu inte mognat</translation>
+        <translation>Staking eller masternodes belöning som ännu inte mognat</translation>
     </message>
     <message>
         <source>Current locked balance in watch-only addresses</source>
-        <translation>Nuvarande låst saldo i endast-se adresser</translation>
+        <translation>Nuvarande låst saldo endast i "watch only" adresser</translation>
     </message>
     <message>
         <source>Your current PIVX balance, unconfirmed and immature transactions included</source>
@@ -2064,62 +2140,62 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>Mature: more than 20 confirmation and more than 1 mint of the same denomination after it was minted.
 These zPIV are spendable.</source>
-        <translation>Mogna: över 20 bekräftelser och över 1 mint av samma valör efter den blev mintad
+        <translation>Mogna: över 20 bekräftelser och över 1 prägling av samma valör efter den blev myntad.
 Dessa zPIV kan spenderas.</translation>
     </message>
     <message>
         <source>Unconfirmed: less than 20 confirmations
 Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
         <translation>Obekräftade: Under 20 bekräftelser
-Omogna: bekräftade men under 1 mint av samma valör efter den blev mintad</translation>
+Omogna: bekräftade men under 1 myntning av samma valör efter den blev präglad</translation>
     </message>
     <message>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Den visade informationen kan vara utdaterad. Din plånbok synkroniserar automatiskt med PIVX nätverket efter att en anslutning är etablerad, men denna process har inte blivit klar än.</translation>
+        <translation>Informationen kan vara föråldrad. Din plånbok synkroniserar automatiskt med PIVX nätverket efter att en anslutning är etablerad, men denna process har inte blivit klar än.</translation>
     </message>
     <message>
         <source>OVERVIEW</source>
-        <translation>ÖVERSYN</translation>
+        <translation>ÖVERBLICK</translation>
     </message>
     <message>
         <source>Combined Balance (including unconfirmed and immature coins)</source>
-        <translation>Kombinerad Saldo (inkluderar obekräftade och omogna mynt)</translation>
+        <translation>Kombinerat Saldo (inkluderar obekräftade och omogna mynt)</translation>
     </message>
     <message>
         <source>Combined Balance</source>
-        <translation>Kombinerad Saldo</translation>
+        <translation>Kombinerat Saldo</translation>
     </message>
     <message>
         <source>Unconfirmed transactions to watch-only addresses</source>
-        <translation>Obekräftade transaktioner till endast-se adresser</translation>
+        <translation>Obekräftade transaktioner till "watch only" adresser</translation>
     </message>
     <message>
         <source>Staked or masternode rewards in watch-only addresses that has not yet matured</source>
-        <translation>Staked eller huvudnod belöningar i endast-se adresser som ännu inte har mognat</translation>
+        <translation>Staking eller masternode belöningar i "watch only" adresser som ännu inte har mognat</translation>
     </message>
     <message>
         <source>Total:</source>
-        <translation>Total:</translation>
+        <translation>Totalt:</translation>
     </message>
     <message>
         <source>Current total balance in watch-only addresses</source>
-        <translation>Nuvarande total saldo i endast-se adresser</translation>
+        <translation>Nuvarande totalt saldo i "watch only" adresser</translation>
     </message>
     <message>
         <source>Watch-only:</source>
-        <translation>Endast-se:</translation>
+        <translation>"Watch only":</translation>
     </message>
     <message>
         <source>Your current balance in watch-only addresses</source>
-        <translation>Ditt nuvarande saldo i endast-se adresser</translation>
+        <translation>Ditt nuvarande saldo i "watch only" adresser</translation>
     </message>
     <message>
         <source>Spendable:</source>
-        <translation>Spenderbart:</translation>
+        <translation>Spenderbar:</translation>
     </message>
     <message>
         <source>Locked PIV or Masternode collaterals. These are excluded from zPIV minting.</source>
-        <translation>Låsta PIV eller huvudnod säkerheter. Dessa är uteslutna från zPIV minting.</translation>
+        <translation>Låsta PIV eller masternode som säkerhet. Dessa är uteslutna från zPIV minting.</translation>
     </message>
     <message>
         <source>Locked:</source>
@@ -2146,12 +2222,12 @@ Omogna: bekräftade men under 1 mint av samma valör efter den blev mintad</tran
 If AutoMint is enabled this percentage will settle around the configured AutoMint percentage (default = 10%).
 </source>
         <translation>Nuvarande procent zPIV.
-Om AutoMint är tillåten så kommer denna procent sätta sig runt den konfigurerade AutoMint procenten (standard = 10%).
+Om AutoMint är tillåten så kommer denna procent att vara som den konfigurerade AutoMint procenten (standard = 10%).
 </translation>
     </message>
     <message>
         <source>AutoMint is currently enabled and set to </source>
-        <translation>AutoMint är för tillfället aktiverat och satt på</translation>
+        <translation>AutoMint är för tillfället aktiverat och inställt på</translation>
     </message>
     <message>
         <source>To disable AutoMint add 'enablezeromint=0' in pivx.conf.</source>
@@ -2278,11 +2354,11 @@ För att aktivera AutoMint ändra 'enablezeromint=0' till 'enablezeromint=1' i p
     </message>
     <message>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Den visade informationen kan vara utdaterad. Din plånbok synkroniserar automatiskt med PIVX nätverket efter att en anslutning är etablerad, men denna process har inte blivit klar än.</translation>
+        <translation>nformationen kan vara föråldrad. Din plånbok synkroniserar automatiskt med PIVX nätverket efter att en anslutning är etablerad, men denna process har inte blivit klar än.</translation>
     </message>
     <message>
         <source>Mint Zerocoin</source>
-        <translation>Mint Zerocoin</translation>
+        <translation>Prägla Zerocoin</translation>
     </message>
     <message>
         <source>0</source>
@@ -2294,11 +2370,11 @@ För att aktivera AutoMint ändra 'enablezeromint=0' till 'enablezeromint=1' i p
     </message>
     <message>
         <source>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</source>
-        <translation>Tillgänglig att minta med är mynt som är bekräftade och ej låsta eller huvudnod säkerheter.</translation>
+        <translation>Tillgänglig att prägla med mynt som är bekräftade och ej låsta eller som är en masternod säkerhet.</translation>
     </message>
     <message>
         <source>Available for Minting:</source>
-        <translation>Tillgängligt att Minta med:</translation>
+        <translation>Tillgängligt att prägla:</translation>
     </message>
     <message>
         <source>0.000 000 00 PIV</source>
@@ -2326,15 +2402,15 @@ För att aktivera AutoMint ändra 'enablezeromint=0' till 'enablezeromint=1' i p
     </message>
     <message>
         <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
-        <translation>Scanna om hela blockchain för att hitta Zerocoin mints och deras meta-data.</translation>
+        <translation>Skanna om hela blockchain för att hitta Zerocoin präglingar och deras meta-data.</translation>
     </message>
     <message>
         <source>ReScan</source>
-        <translation>Scanna om</translation>
+        <translation>Skanna om</translation>
     </message>
     <message>
         <source>Status and/or Mesages from the last Mint Action.</source>
-        <translation>Status och/eller Meddelande från den senaste Mint Handlingen.</translation>
+        <translation>Status och/eller Meddelande från den senaste präglingen.</translation>
     </message>
     <message>
         <source>PRIVACY</source>
@@ -2350,15 +2426,15 @@ För att aktivera AutoMint ändra 'enablezeromint=0' till 'enablezeromint=1' i p
     </message>
     <message>
         <source>zPIV Selected:</source>
-        <translation>zPIV Valda:</translation>
+        <translation>Valda zPIV:</translation>
     </message>
     <message>
         <source>Quantity Selected:</source>
-        <translation>Kvantitet Vald:</translation>
+        <translation>Vald Kvantitet:</translation>
     </message>
     <message>
         <source>Spend Zerocoin. Without 'Pay To:' address creates payments to yourself.</source>
-        <translation>Spendera Zerocoin. Utan 'Betala Till:' adress skapas betalningar till dig själv.</translation>
+        <translation>Spendera Zerocoin. Utan 'Betala Till:' adress skapar betalningar till dig själv.</translation>
     </message>
     <message>
         <source>Spend Zerocoin</source>
@@ -2378,7 +2454,7 @@ För att aktivera AutoMint ändra 'enablezeromint=0' till 'enablezeromint=1' i p
 zPIV are mature when they have more than 20 confirmations AND more than 2 mints of the same denomination after them were minted</source>
         <translation>Tillgängliga (mogna och spenderbara) zPIV att spendera
 
-zPIV är mogna när de har över 20 bekräftelser OCH över 2 mints av samma valör efter de mintades.</translation>
+zPIV är mogna när de har över 20 bekräftelser OCH över 2 präglingar av samma valör efter de är myntade.</translation>
     </message>
     <message>
         <source>0 zPIV</source>
@@ -2397,8 +2473,12 @@ zPIV är mogna när de har över 20 bekräftelser OCH över 2 mints av samma val
         <translation>Säkerhetsnivå 1- 100 (standard: 42)</translation>
     </message>
     <message>
+        <source>Pay &amp;To:</source>
+        <translation>Betala &amp;Till:</translation>
+    </message>
+    <message>
         <source>The PIVX address to send the payment to. Creates local payment to yourself when empty.</source>
-        <translation>PIVX adressen att skicka betalningen till. Skapar lokal betalning till dig själv när den är tom.</translation>
+        <translation>PIVX adress att skicka betalningen till. Skapar betalning till dig själv när den är tom.</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -2410,7 +2490,7 @@ zPIV är mogna när de har över 20 bekräftelser OCH över 2 mints av samma val
     </message>
     <message>
         <source>Paste address from clipboard</source>
-        <translation>Limma in adress från urklipp</translation>
+        <translation>Infoga adress från urklipp</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -2425,12 +2505,16 @@ zPIV är mogna när de har över 20 bekräftelser OCH över 2 mints av samma val
         <translation>Mata in en etikett till denna adress för att lägga till den till listan med använda adresser</translation>
     </message>
     <message>
+        <source>A&amp;mount:</source>
+        <translation>&amp;Mängd:</translation>
+    </message>
+    <message>
         <source>Convert Change to Zerocoin (might cost additional fees)</source>
         <translation>Konvertera växel till Zerocoin (extra avgifter kan tillkomma)</translation>
     </message>
     <message>
         <source>If checked, the wallet tries to minimize the returning change instead of minimizing the number of spent denominations.</source>
-        <translation>Om markerad, plånboken försöker minimera mängden växel istället för att minimera mängden spenderade valörer.</translation>
+        <translation>Om markerad, försöker plånboken minimera mängden växel istället för att minimera mängden spenderade valörer.</translation>
     </message>
     <message>
         <source>Minimize Change</source>
@@ -2490,7 +2574,7 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source>AutoMint Status</source>
-        <translation>AutoMint Status</translation>
+        <translation>AutoPräglings Status</translation>
     </message>
     <message>
         <source>Global Supply:</source>
@@ -2614,7 +2698,7 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source>Insufficient funds!</source>
-        <translation>Otillräckliga pengar!</translation>
+        <translation>Otillräckliga medel !</translation>
     </message>
     <message>
         <source>Coins automatically selected</source>
@@ -2630,7 +2714,7 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
-        <translation>Om detta är aktiverat, men växeladressen är tom eller ogiltig så kommer växel skickas till en nybildad adress.</translation>
+        <translation>Om detta är aktiverat, men växeladressen är tom eller ogiltig så kommer växeln att skickas till en nybildad adress.</translation>
     </message>
     <message>
         <source>Custom change address</source>
@@ -2650,7 +2734,7 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source>Mint Status: Okay</source>
-        <translation>Mint Status: Okay</translation>
+        <translation>Myntnings Status: Okej</translation>
     </message>
     <message>
         <source>Copy quantity</source>
@@ -2661,12 +2745,32 @@ För att ändra procenten (ingen omstart krävs):
         <translation>Kopiera antal</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>Startar ResetMintZerocoin: skannar om hela blockchain, detta kan ta upp till 30 minuter beroende på din hårdvara.
+Ha lite tålamod...</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>Spendera Zerocoin.
+Beräkningsmässigt krävande, kan behöva flera minuter beroende på den valda säkerhetsnivån och din hårdvara.
+Var god dröj...</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) behövda.
+Högsta tillåtna:</translation>
+    </message>
+    <message>
         <source>zPIV Spend #: </source>
         <translation>zPIV spendering #:</translation>
     </message>
     <message>
         <source>zPIV Mint</source>
-        <translation>zPIV Mint</translation>
+        <translation>zPIV Prägling</translation>
     </message>
     <message>
         <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
@@ -2678,11 +2782,11 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source> Configured target percentage: &lt;b&gt;</source>
-        <translation>Konfigurerat mål för procenten: &lt;b&gt;</translation>
+        <translation>Konfigurerat procent mål: &lt;b&gt;</translation>
     </message>
     <message>
         <source>zPIV is currently disabled due to maintenance.</source>
-        <translation>zPIV är för nuvarande inaktiverat p.g.a. underhållning.</translation>
+        <translation>zPIV är för nuvarande inaktiverat p.g.a. underhåll.</translation>
     </message>
     <message>
         <source>zPIV is currently undergoing maintenance.</source>
@@ -2722,7 +2826,7 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source>AutoMint Status:</source>
-        <translation>AutoMint Status:</translation>
+        <translation>AutoMyntnings Status:</translation>
     </message>
     <message>
         <source>Denom. &lt;b&gt;1&lt;/b&gt;:</source>
@@ -2766,25 +2870,31 @@ För att ändra procenten (ingen omstart krävs):
     </message>
     <message>
         <source>Minting </source>
-        <translation>Mintande</translation>
+        <translation>Myntade</translation>
     </message>
     <message>
         <source>Successfully minted </source>
-        <translation>Mintad med Framgång</translation>
+        <translation>Framgångsrikt Myntade</translation>
     </message>
     <message>
         <source> zPIV in </source>
         <translation>zPIV i</translation>
     </message>
     <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>Startar ResetMintZerocoin: skannar om komplett blockchain, detta kan ta upp till 30 minuter beroende på din hårdvara.
-Var god dröjj...</translation>
+        <source> sec. Used denominations:
+</source>
+        <translation>sek. Använda valörer:
+</translation>
     </message>
     <message>
         <source>Duration: </source>
         <translation>Varaktighet:</translation>
+    </message>
+    <message>
+        <source> sec.
+</source>
+        <translation>sec.
+</translation>
     </message>
     <message>
         <source>Starting ResetSpentZerocoin: </source>
@@ -2816,7 +2926,7 @@ Var god dröjj...</translation>
     </message>
     <message>
         <source> to a newly generated (unused and therefore anonymous) local address &lt;br /&gt;</source>
-        <translation>till en nygord (oanvänd och dörfär anonym) local adress&lt;br /&gt;</translation>
+        <translation>till en nygjord (oanvänd och därför anonym) lokal adress&lt;br /&gt;</translation>
     </message>
     <message>
         <source>with Security Level </source>
@@ -2824,15 +2934,7 @@ Var god dröjj...</translation>
     </message>
     <message>
         <source>Confirm send coins</source>
-        <translation>Bekräfta skicka mynt</translation>
-    </message>
-    <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>Spendera Zerocoin.
-Datorkraftskrävande, kan behöva flera minuter beroende på den valda säkerhetsnivån och din hårdvara. 
-Var god dröjj...</translation>
+        <translation>Bekräfta att skicka mynt</translation>
     </message>
     <message>
         <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
@@ -2840,21 +2942,15 @@ Var god dröjj...</translation>
     </message>
     <message>
         <source>Failed to spend zPIV</source>
-        <translation>Misslyckades att spendera zPIV</translation>
+        <translation>Misslyckades med att spendera zPIV</translation>
     </message>
     <message>
         <source>Failed to fetch mint associated with serial hash</source>
-        <translation>Misslyckades hämta mint associerat med serie hash</translation>
+        <translation>Misslyckades med att hämta myntning associerat med serie hashen</translation>
     </message>
     <message>
         <source>Too much inputs (</source>
         <translation>För många input (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) behövda.
-Högsta tillåtna:</translation>
     </message>
     <message>
         <source>
@@ -2864,12 +2960,12 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Spend Zerocoin failed with status = </source>
-        <translation>Spendera Zerocoin misslyckades med status =</translation>
+        <translation>Spendering av Zerocoin misslyckades med status =</translation>
     </message>
     <message numerus="yes">
         <source>PrivacyDialog</source>
         <comment>Enter an amount of PIV to convert to zPIV</comment>
-        <translation><numerusform>SekretessRuta</numerusform><numerusform>SekretessRuta</numerusform></translation>
+        <translation><numerusform>SekretessRuta</numerusform><numerusform>SekretessDialog</numerusform></translation>
     </message>
     <message>
         <source>denomination: </source>
@@ -2893,7 +2989,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Sending successful, return code: </source>
-        <translation>Skickar lyckat, returkod:</translation>
+        <translation>Sändning lyckat, returkod:</translation>
     </message>
     <message>
         <source>txid: </source>
@@ -2908,7 +3004,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     <name>QObject</name>
     <message>
         <source>Amount</source>
-        <translation>mängd</translation>
+        <translation>Mängd</translation>
     </message>
     <message>
         <source>Enter a PIVX address (e.g. %1)</source>
@@ -2936,7 +3032,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>BLOOM</source>
-        <translation>BLOM</translation>
+        <translation>"BLOOM"</translation>
     </message>
     <message>
         <source>UNKNOWN</source>
@@ -3002,7 +3098,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Startup time</source>
-        <translation>Tid för upstart</translation>
+        <translation>Starttid</translation>
     </message>
     <message>
         <source>Network</source>
@@ -3026,7 +3122,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Current number of blocks</source>
-        <translation>Närvarande mängd block</translation>
+        <translation>Nuvarande mängd block</translation>
     </message>
     <message>
         <source>Client version</source>
@@ -3038,7 +3134,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Block chain</source>
-        <translation>Block kedja</translation>
+        <translation>Blockchain</translation>
     </message>
     <message>
         <source>Open the PIVX debug log file from the current data directory. This can take a few seconds for large log files.</source>
@@ -3046,11 +3142,15 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Number of Masternodes</source>
-        <translation>Antal Huvudnoder</translation>
+        <translation>Antal Huvudnoder "masternodes"</translation>
     </message>
     <message>
         <source>Clear console</source>
         <translation>Rensa konsol</translation>
+    </message>
+    <message>
+        <source>&amp;Network Traffic</source>
+        <translation>&amp;Nätverkstrafik</translation>
     </message>
     <message>
         <source>Totals</source>
@@ -3065,12 +3165,16 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Skickat</translation>
     </message>
     <message>
+        <source>&amp;Peers</source>
+        <translation>&amp;Peers</translation>
+    </message>
+    <message>
         <source>Banned peers</source>
-        <translation>Bannade peers</translation>
+        <translation>Förbjudna kamrater</translation>
     </message>
     <message>
         <source>Select a peer to view detailed information.</source>
-        <translation>Välj en peer för att visa detaljerad information.</translation>
+        <translation>Välj en person för att visa detaljerad information.</translation>
     </message>
     <message>
         <source>Whitelisted</source>
@@ -3094,7 +3198,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Ban Score</source>
-        <translation>Ban Poäng</translation>
+        <translation>"Ban" Poäng</translation>
     </message>
     <message>
         <source>Connection Time</source>
@@ -3114,7 +3218,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Bytes Received</source>
-        <translation>Bytes Mottaget</translation>
+        <translation>Mottagna Bytes</translation>
     </message>
     <message>
         <source>Ping Time</source>
@@ -3126,7 +3230,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Wallet In Use:</source>
-        <translation>Plånbok I Användning:</translation>
+        <translation>Plånbok Används:</translation>
     </message>
     <message>
         <source>Starting Block</source>
@@ -3154,19 +3258,19 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Custom Backup Path:</source>
-        <translation>Skräddarsydd Backup Sökväg:</translation>
+        <translation>Vanlig Backup Sökväg:</translation>
     </message>
     <message>
         <source>Custom zPIV Backup Path:</source>
-        <translation>Skräddarsydd zPIV Backup Sökväg:</translation>
+        <translation>Vanlig zPIV Backup Sökväg:</translation>
     </message>
     <message>
         <source>Custom Backups Threshold:</source>
-        <translation>Skräddarsydd Backups Tröskel:</translation>
+        <translation>Vanlig Backup Tröskel:</translation>
     </message>
     <message>
         <source>Salvage wallet</source>
-        <translation>Rädda plånbok</translation>
+        <translation>Spara plånboken</translation>
     </message>
     <message>
         <source>Attempt to recover private keys from a corrupt wallet.dat.</source>
@@ -3178,23 +3282,23 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Rescan the block chain for missing wallet transactions.</source>
-        <translation>Skanna om block chainen efter fattandes plånbok transaktioner.</translation>
+        <translation>Skanna om blockchain efter de saknade plånboks transaktionerna.</translation>
     </message>
     <message>
         <source>Recover transactions 1</source>
-        <translation>Hämta om transaktioner 1</translation>
+        <translation>Hämta åter transaktion 1</translation>
     </message>
     <message>
         <source>Recover transactions from blockchain (keep meta-data, e.g. account owner).</source>
-        <translation>Hämta om transaktioner från blockchain (behåll meta-data, t.ex. kontoägare).</translation>
+        <translation>Återvinn transaktioner från blockchain (behåll meta-data, t.ex. kontoägare).</translation>
     </message>
     <message>
         <source>Recover transactions 2</source>
-        <translation>Hämta om transaktioner 2</translation>
+        <translation>Hämta åter transaktion 2</translation>
     </message>
     <message>
         <source>Recover transactions from blockchain (drop meta-data).</source>
-        <translation>Hämta om transaktioner från blockchain (släpp meta-data).</translation>
+        <translation>Hämta åter transaktioner från blockchain (släpp meta-data).</translation>
     </message>
     <message>
         <source>Upgrade wallet format</source>
@@ -3202,7 +3306,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Rebuild block chain index from current blk000??.dat files.</source>
-        <translation>Bygg om block chain index från nuvarande blk000??.dat filer.</translation>
+        <translation>Bygg om blockchain index från nuvarande blk000??.dat filer.</translation>
     </message>
     <message>
         <source>-resync:</source>
@@ -3210,11 +3314,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Deletes all local blockchain folders so the wallet synchronizes from scratch.</source>
-        <translation>Raderar alla locala blockchain mappar så att plånboken synkroniserar från start.</translation>
+        <translation>Raderar alla lokala blockchain mappar så att plånboken synkroniseras från start.</translation>
     </message>
     <message>
         <source>The buttons below will restart the wallet with command-line options to repair the wallet, fix issues with corrupt blockhain files or missing/obsolete transactions.</source>
-        <translation>Knapparna nedanför kommer starta om plånboken med kommandorad val att reparera plånboken, lösa problem med korrupta blockchain filer eller saknade/föråldrade transaktioner.</translation>
+        <translation>Knapparna nedanför kommer starta om plånboken med ett kommandorads val att reparera plånboken, lösa problem med korrupta blockchain filer eller saknade/föråldrade transaktioner.</translation>
     </message>
     <message>
         <source>Wallet repair options.</source>
@@ -3241,8 +3345,12 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Välkommen till PIVX RPC konsol.</translation>
     </message>
     <message>
+        <source>&amp;Disconnect Node</source>
+        <translation>&amp;stänga av nod</translation>
+    </message>
+    <message>
         <source>Ban Node for</source>
-        <translation>Banna Nod för att</translation>
+        <translation>förbjud Nod för att</translation>
     </message>
     <message>
         <source>This will delete your local blockchain folders and the wallet will synchronize the complete Blockchain from scratch.&lt;br /&gt;&lt;br /&gt;</source>
@@ -3328,8 +3436,16 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Återanvänd en av de föregående använda adresserna.&lt;br&gt;Återanvända adresser har säkerhets och sekretess problem.&lt;br&gt;Använd inte detta utöver att generera om en tidigare betalningsförfrågan.</translation>
     </message>
     <message>
+        <source>R&amp;euse an existing receiving address (not recommended)</source>
+        <translation>Återanvänd en befintlig mottagande adress (inte att rekommendera)</translation>
+    </message>
+    <message>
+        <source>&amp;Message:</source>
+        <translation>&amp;Meddelande:</translation>
+    </message>
+    <message>
         <source>An optional label to associate with the new receiving address.</source>
-        <translation>En frivillig etikett att associera med den nya mottagaradressen.</translation>
+        <translation>En valfri etikett att associera med den nya mottagaradressen.</translation>
     </message>
     <message>
         <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the PIVX network.</source>
@@ -3337,7 +3453,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>RECEIVE</source>
-        <translation>MOTTA</translation>
+        <translation>ERHÅLLA</translation>
     </message>
     <message>
         <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the PIVX network.</source>
@@ -3349,11 +3465,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>&amp;Label:</source>
-        <translation>Etikett:</translation>
+        <translation>&amp;Etikett:</translation>
     </message>
     <message>
         <source>An optional amount to request. Leave this empty or zero to not request a specific amount.</source>
-        <translation>En frivillig mängd att förfråga om. Lämna denna tom eller noll för att inte förfråga om en specifik mängd.</translation>
+        <translation>En frivillig mängd att anhålla om. Lämna den tom eller på noll för att inte fråga efter en specifik mängd.</translation>
     </message>
     <message>
         <source>Clear all fields of the form.</source>
@@ -3369,7 +3485,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Show the selected request (does the same as double clicking an entry)</source>
-        <translation>Visa den valda förfrågan (gör samma sak som att dubbelklicka en post)</translation>
+        <translation>Visa förfrågan (gör samma sak som att dubbelklicka)</translation>
     </message>
     <message>
         <source>Show</source>
@@ -3389,7 +3505,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Copy message</source>
-        <translation>Kopiera medelande</translation>
+        <translation>Kopiera meddelande</translation>
     </message>
     <message>
         <source>Copy amount</source>
@@ -3416,7 +3532,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Request payment to %1</source>
-        <translation>Förfråga om en betalning till %1</translation>
+        <translation>Fråga om betalning till %1</translation>
     </message>
     <message>
         <source>Payment information</source>
@@ -3432,7 +3548,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Amount</source>
-        <translation>mängd</translation>
+        <translation>Mängd</translation>
     </message>
     <message>
         <source>Label</source>
@@ -3440,7 +3556,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Message</source>
-        <translation>Medelande</translation>
+        <translation>Meddelande</translation>
     </message>
     <message>
         <source>Resulting URI too long, try to reduce the text for label / message.</source>
@@ -3467,7 +3583,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Amount</source>
-        <translation>mängd</translation>
+        <translation>Mängd</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -3634,7 +3750,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Recommended</source>
-        <translation>Rekomenderad</translation>
+        <translation>Rekommenderad</translation>
     </message>
     <message>
         <source>Send as zero-fee transaction if possible</source>
@@ -3730,7 +3846,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Confirm send coins</source>
-        <translation>Bekräfta skicka mynt</translation>
+        <translation>Bekräfta att skicka mynt</translation>
     </message>
     <message>
         <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
@@ -3808,6 +3924,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Detta är en normal betalning.</translation>
     </message>
     <message>
+        <source>Pay &amp;To:</source>
+        <translation>Betala &amp;Till:</translation>
+    </message>
+    <message>
         <source>The PIVX address to send the payment to</source>
         <translation>PIVX adressen att skicka betalningen till</translation>
     </message>
@@ -3821,7 +3941,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Paste address from clipboard</source>
-        <translation>Limma in adress från urklipp</translation>
+        <translation>Infoga adress från urklipp</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -3838,6 +3958,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     <message>
         <source>Enter a label for this address to add it to the list of used addresses</source>
         <translation>Mata in en etikett till denna adress för att lägga till den till listan med använda adresser</translation>
+    </message>
+    <message>
+        <source>A&amp;mount:</source>
+        <translation>&amp;mängd:</translation>
     </message>
     <message>
         <source>Message:</source>
@@ -3872,11 +3996,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     <name>ShutdownWindow</name>
     <message>
         <source>PIVX Core is shutting down...</source>
-        <translation>PIVX Kärna stängs ner...</translation>
+        <translation>PIVX Core stängs ner...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
-        <translation>Stäng inte av datorn förräns detta fönster försvinner.</translation>
+        <translation>Stäng inte av datorn förrän detta fönster försvinner.</translation>
     </message>
 </context>
 <context>
@@ -3886,8 +4010,12 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Signaturer - Signera / Verifiera ett Meddelande</translation>
     </message>
     <message>
+        <source>&amp;Sign Message</source>
+        <translation>&amp;Signera Meddelande</translation>
+    </message>
+    <message>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Du kan signera meddelanden med din egna adress för att bevisa att du äger dem. Se upp för att signera något vagt, då phishing-attacker kan försöka lura dig att signera din identitet åt de. Signera endast fullt detaljerade påståenden du går med på.</translation>
+        <translation>Du kan signera meddelanden med din egna adress för att bevisa att du äger dem. Se upp för att signera något vagt, då phishing-attacker kan försöka lura dig att signera din identitet åt dom. Signera endast fullt detaljerade påståenden du går med på.</translation>
     </message>
     <message>
         <source>The PIVX address to sign the message with</source>
@@ -3903,7 +4031,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Paste address from clipboard</source>
-        <translation>Limma in adress från urklipp</translation>
+        <translation>Infoga adress från urklipp</translation>
     </message>
     <message>
         <source>Alt+P</source>
@@ -3934,6 +4062,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Verifiera meddelandet för att säkerställa att de blev signerat med den specifika PIVX adressen.</translation>
     </message>
     <message>
+        <source>Sign &amp;Message</source>
+        <translation>Signera &amp;Meddelande</translation>
+    </message>
+    <message>
         <source>Reset all sign message fields</source>
         <translation>Återställ alla signatur meddelande fält</translation>
     </message>
@@ -3942,8 +4074,16 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Rensa &amp;allt</translation>
     </message>
     <message>
+        <source>&amp;Verify Message</source>
+        <translation>&amp;Verifiera Meddelande</translation>
+    </message>
+    <message>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>
-        <translation>Skriv in den signerande adressen, meddelande (var säker på att du kopierar radbrytningar, mellanrum, tabs, etc. exakt) och signatur under för att verifiera meddelandet. Var försiktig med att inte läsa in mer i signaturen än själva signerade meddelandet, för att undvika att bli lurad av en man-i-mitten attack.</translation>
+        <translation>Skriv in den signerande adressen, meddelande (var säker på att du kopierar radbrytningar, mellanslag, tabs, etc. exakt) och signera under för att verifiera meddelandet. Var försiktig med att inte läsa in mer i signaturen än själva signerade meddelandet, för att undvika att bli lurad av en "man i mitten" attack.</translation>
+    </message>
+    <message>
+        <source>Verify &amp;Message</source>
+        <translation>Verifiera &amp;Meddelande</translation>
     </message>
     <message>
         <source>Reset all verify message fields</source>
@@ -3955,7 +4095,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>The entered address is invalid.</source>
-        <translation>Den angivna adressen är felaktig</translation>
+        <translation>Den angivna adressen är felaktig.</translation>
     </message>
     <message>
         <source>Please check the address and try again.</source>
@@ -3999,14 +4139,14 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Message verified.</source>
-        <translation>Medelande verifierat</translation>
+        <translation>Medelande verifierat.</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
         <source>PIVX Core</source>
-        <translation>PIVX Kärna</translation>
+        <translation>PIVX Core</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -4014,15 +4154,15 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>The Bitcoin Core developers</source>
-        <translation>Bitcoin Kärna utvecklarna</translation>
+        <translation>Bitcoin Core utvecklarna</translation>
     </message>
     <message>
         <source>The Dash Core developers</source>
-        <translation>Dash Kärna utvecklarna</translation>
+        <translation>Dash Core utvecklarna</translation>
     </message>
     <message>
         <source>The PIVX Core developers</source>
-        <translation>PIVX Kärna utvecklarna</translation>
+        <translation>PIVX Core utvecklarna</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -4100,7 +4240,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>, has not been successfully broadcast yet</source>
-        <translation>, har ännu inte lyckats utsändas</translation>
+        <translation>, har ännu inte lyckats sändas ut</translation>
     </message>
     <message numerus="yes">
         <source>, broadcast through %n node(s)</source>
@@ -4176,7 +4316,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Message</source>
-        <translation>Medelande</translation>
+        <translation>Meddelande</translation>
     </message>
     <message>
         <source>Comment</source>
@@ -4196,7 +4336,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Genererade mynt måste mogna %1 block innan de kan spenderas. När du genererar detta blcok, sändes den uttill nätverket för att läggas till i block chain. Om den misslyckas att komma in i chain så kommer dens status ändras till "ej accepterad" och kommer ej kunna spenderas. Detta kan ibland hända om en annan nod genererar ett block inom några sekunder av ditt.</translation>
+        <translation>Genererade mynt måste mogna %1 block innan de kan spenderas. När du genererar detta block, sänds den ut till nätverket för att läggas till i block chain. Om den misslyckas att komma med i blockchain så kommer dess status att ändras till "ej accepterad" och kommer ej kunna spenderas. Detta kan ibland hända om en annan nod genererar ett block inom några sekunder av ditt.</translation>
     </message>
     <message>
         <source>Debug information</source>
@@ -4208,11 +4348,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Inputs</source>
-        <translation>Inmatningar</translation>
+        <translation>Input</translation>
     </message>
     <message>
         <source>Amount</source>
-        <translation>mängd</translation>
+        <translation>Mängd</translation>
     </message>
     <message>
         <source>true</source>
@@ -4290,7 +4430,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Masternode Reward</source>
-        <translation>Huvudnods Belöning</translation>
+        <translation>Masternode Belöning</translation>
     </message>
     <message>
         <source>Received from</source>
@@ -4298,27 +4438,31 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Received via Obfuscation</source>
-        <translation>Mottaget via Förvirring</translation>
+        <translation>Mottaget via Fördunkling</translation>
     </message>
     <message>
         <source>PIV Stake</source>
-        <translation>PIV stake</translation>
+        <translation>PIV staking</translation>
     </message>
     <message>
         <source>zPIV Stake</source>
-        <translation>zPIV Stake</translation>
+        <translation>zPIV Staking</translation>
     </message>
     <message>
         <source>Obfuscation Denominate</source>
-        <translation>Förvirring Betecknat</translation>
+        <translation>Fördunkling Betecknat</translation>
     </message>
     <message>
         <source>Obfuscation Collateral Payment</source>
-        <translation>Förvirring Kollateral Betalning</translation>
+        <translation>Fördunkling Kollateral Betalning</translation>
     </message>
     <message>
         <source>Obfuscation Make Collateral Inputs</source>
-        <translation>Förvirring Gör Kollateral Inmatning</translation>
+        <translation>Fördunkling Gör Kollateral Inmatning</translation>
+    </message>
+    <message>
+        <source>Obfuscation Create Denominations</source>
+        <translation>Obfuscation Skapa tecken</translation>
     </message>
     <message>
         <source>Converted PIV to zPIV</source>
@@ -4334,11 +4478,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Minted Change as zPIV from zPIV Spend</source>
-        <translation>Mintad Växel som zPIV från zPIV Spendera</translation>
+        <translation>Myntad Växel som zPIV från zPIV Spendering</translation>
     </message>
     <message>
         <source>Converted zPIV to PIV</source>
-        <translation>Convert zPIV to PIV</translation>
+        <translation>Konverterad zPIV till PIV</translation>
     </message>
     <message>
         <source>Anonymous (zPIV Transaction)</source>
@@ -4365,6 +4509,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Mined</translation>
     </message>
     <message>
+        <source>Obfuscated</source>
+        <translation>Fördunklade</translation>
+    </message>
+    <message>
         <source>watch-only</source>
         <translation>se-endast</translation>
     </message>
@@ -4386,7 +4534,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Whether or not a watch-only address is involved in this transaction.</source>
-        <translation>Om en se-endast adress är involverad i denna transaktion.</translation>
+        <translation>Om en "watch only" adress är involverad i denna transaktion.</translation>
     </message>
     <message>
         <source>Destination address of transaction.</source>
@@ -4644,11 +4792,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Select/Deselect All</source>
-        <translation>Markera/avmarkera Alla</translation>
+        <translation>Markera/Avmarkera alla</translation>
     </message>
     <message>
         <source>Is Spendable</source>
-        <translation>Är Spenderbart</translation>
+        <translation>Är Spenderbar</translation>
     </message>
 </context>
 <context>
@@ -4806,6 +4954,10 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Antal sekunder att hindra peers som beter sig illa från att återansluta (standard: %u)</translation>
     </message>
     <message>
+        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
+        <translation>Obfuscation använder exakta denominerade mängder för att skicka medel, du kan helt enkelt behöva anonymisera några fler mynt.</translation>
+    </message>
+    <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>Utmata felsökningsinformation (standard: %u, tillgodose &lt;category&gt; är frivilligt)</translation>
     </message>
@@ -4851,11 +5003,19 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Unable to bind to %s on this computer. PIVX Core is probably already running.</source>
-        <translation>Kan inte binda till %s på denna dator. PIVX Kärna körs förmodligen redan.</translation>
+        <translation>Kan inte binda till %s på denna dator. PIVX Core körs förmodligen redan.</translation>
+    </message>
+    <message>
+        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
+        <translation>Kan ej lokalisera tillräckligt Fördunklingsdenominationerade pengar för denna transaktion.</translation>
+    </message>
+    <message>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 PIV.</source>
+        <translation>Kan ej lokalisera tillräckligt Fördunkling icke-denominationerade pengar för denna transaktion som inte är 10000 PIV.</translation>
     </message>
     <message>
         <source>Unable to locate enough funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Kan inte hitta tillräckliga pengar för denna transaktion som inte är 10000 PIV.</translation>
+        <translation>Kan inte hitta tillräckligt med pengar för denna transaktion som inte är 10000 PIV.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -4871,7 +5031,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>Varning: Var vänlig kontrollera att din dators tid och datum är korrekt! Om din klocka är fel så kommer PIVX Kärna inte att fungera korrekt.</translation>
+        <translation>Varning: Var vänlig kontrollera att din dators tid och datum är korrekt! Om din klocka är fel så kommer PIVX Core inte att fungera korrekt.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -4879,7 +5039,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
-        <translation>Varning: Vi verkar inte fullständigt hålla med våran peers! Du kan behöva upgradera, eller andra noder kan behöva uppgradera.</translation>
+        <translation>Varning: Vi verkar inte fullständigt hålla med våra peers! Du kan behöva uppgradera, eller andra noder kan behöva uppgraderas.</translation>
     </message>
     <message>
         <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
@@ -4887,7 +5047,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Varning: wallet.dat korrupt, data bärgat! Originala wallet.dat sparad som wallet.{timestamp}.bak i %s; om ditt saldo eller transaktioner är fel borde du återställa från en backup.</translation>
+        <translation>Varning: wallet.dat korrupt, data bärgat! Original wallet.dat sparad som wallet.{timestamp}.bak i %s; om ditt saldo eller transaktioner är fel borde du återställa från en backup.</translation>
     </message>
     <message>
         <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
@@ -4895,11 +5055,11 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Whitelisted peers cannot be DoS banned and their transactions are always relayed, even if they are already in the mempool, useful e.g. for a gateway</source>
-        <translation>Vitlistade peers kan ej DoS bannas och deras transaktioner är alltid återutsända, även om dom redan är i mempool, användbart t.ex. för en gateway</translation>
+        <translation>Vitlistade peers kan ej DoS bannas och deras transaktioner är alltid vidarebofordrade, även om dom redan är i mempool, användbart t.ex. för en gateway</translation>
     </message>
     <message>
         <source>You must specify a masternodeprivkey in the configuration. Please see documentation for help.</source>
-        <translation>Du måste specifiera en masternodeprivkey i konfigurationen. Var vänlig se dokumentation för hjälp.</translation>
+        <translation>Du måste specifiera en masternodeprivkey i konfigurationen. Var vänlig se dokumentationen för hjälp.</translation>
     </message>
     <message>
         <source>(51472 could be used only on mainnet)</source>
@@ -4947,7 +5107,7 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     </message>
     <message>
         <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation>Försök återfå privata nycklar från en korrupt plånbok.dat</translation>
+        <translation>Försök återfå privata nycklar från en korrupt wallet.dat</translation>
     </message>
     <message>
         <source>Automatically create Tor hidden service (default: %d)</source>
@@ -5110,32 +5270,404 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Fel vid laddning av wallet.dat: Plånbok korrupterad</translation>
     </message>
     <message>
+        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
+        <translation>Fel vid laddning av wallet.dat: Plånbok  kräver nyare PIVX Kärna version</translation>
+    </message>
+    <message>
+        <source>Error opening block database</source>
+        <translation>Fel vid öppning av block databas</translation>
+    </message>
+    <message>
+        <source>Error reading from database, shutting down.</source>
+        <translation>Fel vid läsning från databas, stänger ner.</translation>
+    </message>
+    <message>
+        <source>Error recovering public key.</source>
+        <translation>Fel vid återhämtning av offentlig nyckel.</translation>
+    </message>
+    <message>
         <source>Error</source>
         <translation>Fel</translation>
+    </message>
+    <message>
+        <source>Error: A fatal internal error occured, see debug.log for details</source>
+        <translation>Fel: Ett fatalt internt fel inträffade, se debug.log för detaljer</translation>
+    </message>
+    <message>
+        <source>Error: Can't select current denominated inputs</source>
+        <translation>Fel: Kan ej välja nuvarande benämnda inmatningar</translation>
+    </message>
+    <message>
+        <source>Error: Disk space is low!</source>
+        <translation>Fel: Diskutrymme lågt!</translation>
+    </message>
+    <message>
+        <source>Error: Unsupported argument -tor found, use -onion.</source>
+        <translation>Fel: Argument som ej stöds, -tor, hittat, använd -onion.</translation>
+    </message>
+    <message>
+        <source>Error: Wallet locked, unable to create transaction!</source>
+        <translation>Fel: Plånbok låst, kan ej genomföra transaktion!</translation>
+    </message>
+    <message>
+        <source>Error: You already have pending entries in the Obfuscation pool</source>
+        <translation>Fel: Du har redan avvaktande poster i Fördunklingspoolen</translation>
+    </message>
+    <message>
+        <source>Failed to calculate accumulator checkpoint</source>
+        <translation>Misslyckades att beräkna ackumulator kontrollstation</translation>
+    </message>
+    <message>
+        <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
+        <translation>Misslyckades att lyssna på någon port. Använd -listen=0 om du vill detta.</translation>
+    </message>
+    <message>
+        <source>Failed to read block</source>
+        <translation>Misslyckades läsa block</translation>
+    </message>
+    <message>
+        <source>Fee (in PIV/kB) to add to transactions you send (default: %s)</source>
+        <translation>Avgift (i PIV/kB) för att lägga till transaktioner you skicka (standard: %s)</translation>
+    </message>
+    <message>
+        <source>Finalizing transaction.</source>
+        <translation>Slutgiltiggör transaktion.</translation>
+    </message>
+    <message>
+        <source>Force safe mode (default: %u)</source>
+        <translation>Tvinga säkert läga (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Found enough users, signing ( waiting %s )</source>
+        <translation>Hittat tillräckligt många användare, signerar (väntar %s)</translation>
+    </message>
+    <message>
+        <source>Found enough users, signing ...</source>
+        <translation>Hittade tillräckligt många användare, signerar ...</translation>
+    </message>
+    <message>
+        <source>Generate coins (default: %u)</source>
+        <translation>Generera mynt (standard: %u)</translation>
+    </message>
+    <message>
+        <source>How many blocks to check at startup (default: %u, 0 = all)</source>
+        <translation>Hur  många block som kollas vid start (standard: %u, 0 = alla)</translation>
+    </message>
+    <message>
+        <source>If &lt;category&gt; is not supplied, output all debugging information.</source>
+        <translation>Om &lt;category&gt; inte ges, mata ut all felsökningsinformation.</translation>
     </message>
     <message>
         <source>Importing...</source>
         <translation>Importerar...</translation>
     </message>
     <message>
+        <source>Imports blocks from external blk000??.dat file</source>
+        <translation>Importera block från externt blk000??.dat fil</translation>
+    </message>
+    <message>
+        <source>Include IP addresses in debug output (default: %u)</source>
+        <translation>Inkludera IP adress i felsökningens utmatning (standard: %u)</translation>
+    </message>
+    <message>
         <source>Incompatible mode.</source>
-        <translation>okompatibel sätt</translation>
+        <translation>Okompatibel sätt.</translation>
     </message>
     <message>
         <source>Incompatible version.</source>
-        <translation>okompatibel version.</translation>
+        <translation>Okompatibel version.</translation>
+    </message>
+    <message>
+        <source>Incorrect or no genesis block found. Wrong datadir for network?</source>
+        <translation>Ogiltig eller ingen tillblivelse block hittat. Fel datadir för nätverk?</translation>
     </message>
     <message>
         <source>Information</source>
         <translation>Information</translation>
     </message>
     <message>
+        <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
+        <translation>Initierings renlighetscheck misslyckades. PIVX Kärna stängs ner.</translation>
+    </message>
+    <message>
         <source>Input is not valid.</source>
-        <translation>inmatning är inte giltig</translation>
+        <translation>inmatning är inte giltig.</translation>
+    </message>
+    <message>
+        <source>Insufficient funds</source>
+        <translation>Otillräckliga pengar</translation>
+    </message>
+    <message>
+        <source>Insufficient funds.</source>
+        <translation>Otillräckliga pengar.</translation>
+    </message>
+    <message>
+        <source>Invalid -onion address or hostname: '%s'</source>
+        <translation>Ogiltig -onion adress eller värdnamn: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Ogiltig mängd -maxtxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Ogiltig mängd -minrelaytxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Ogiltig mäng -mintxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
+        <translation>Ogiltig mäng -paytxfee=&lt;amount&gt;: '%s' (måste vara minst %s)</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Ogiltig mäng -paytxfee=&lt;amount&gt;: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
+        <translation>Ogiltig mäng -reservebalance=&lt;amount&gt;</translation>
+    </message>
+    <message>
+        <source>Invalid amount</source>
+        <translation>Ogiltig mängd</translation>
+    </message>
+    <message>
+        <source>Invalid masternodeprivkey. Please see documenation.</source>
+        <translation>ogiltig masternodeprivkey. Var vänlig se dokumentation.</translation>
+    </message>
+    <message>
+        <source>Invalid netmask specified in -whitelist: '%s'</source>
+        <translation>Ogiltig nätmask spefifierad i -whitelist: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid port detected in masternode.conf</source>
+        <translation>Ogiltig port upptäckt i masternode.conf</translation>
     </message>
     <message>
         <source>Invalid private key.</source>
-        <translation>Fel privat nyckel</translation>
+        <translation>Fel privat nyckel.</translation>
+    </message>
+    <message>
+        <source>Invalid script detected.</source>
+        <translation>Ogiltigt script upptäckt.</translation>
+    </message>
+    <message>
+        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
+        <translation>Procent automatiskt mintad Zerocoin (1-100, default: %u)</translation>
+    </message>
+    <message>
+        <source>Reindex the PIV and zPIV money supply statistics</source>
+        <translation>Indexera PIV och zPIV pengarna tillgång statistik på nytt</translation>
+    </message>
+    <message>
+        <source>Reindexing zerocoin database...</source>
+        <translation>Indexera zerocoin databas på nytt...</translation>
+    </message>
+    <message>
+        <source>Reindexing zerocoin failed</source>
+        <translation>Indexera zerocoin på nytt misslyckades</translation>
+    </message>
+    <message>
+        <source>Selected coins value is less than payment target</source>
+        <translation>Valda mynts värde är under betalningsmål</translation>
+    </message>
+    <message>
+        <source>SwiftX options:</source>
+        <translation>SwiftX alternativ:</translation>
+    </message>
+    <message>
+        <source>This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!</source>
+        <translation>Det här är en för-släppt test byggnad - använd på din egna risk - använd inte för staking eller handel applikationer!</translation>
+    </message>
+    <message>
+        <source> mints deleted
+</source>
+        <translation>mints raderade
+</translation>
+    </message>
+    <message>
+        <source> mints updated, </source>
+        <translation>mints updaterade,</translation>
+    </message>
+    <message>
+        <source> unconfirmed transactions removed
+</source>
+        <translation>obekräftade transaktioner borttagna
+</translation>
+    </message>
+    <message>
+        <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <translation>Avaktivera all PIVX funktionalitet (Huvudnoder, Zerocoin, SwiftX, Budgeting) (0-1, standard: %u)</translation>
+    </message>
+    <message>
+        <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
+        <translation>Tillåt SwiftX, visa bekräftelser för låsta transaktioner (bool, default: %s)</translation>
+    </message>
+    <message>
+        <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Fel: Transaktionen nekades! Detta kan hända om några mynt i din plånbok redan har spenderats, möjligen att du använt en kopia av wallet.dat och spenderade mynt från kopian men de inte blivit markerade som spenderade här.</translation>
+    </message>
+    <message>
+        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
+        <translation>Fel: Denna transaktion kräver enatransaktionsavgift på minst %s på grund av dess mängd, komplexitet, eller användning av nyligen mottagna pengar!</translation>
+    </message>
+    <message>
+        <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
+        <translation>Fel: Argument som ej stöds hittat, -checklevel. Checklevel måste vara 4.</translation>
+    </message>
+    <message>
+        <source>Execute command when the best block changes and its size is over (%s in cmd is replaced by block hash, %d with the block size)</source>
+        <translation>Exekvera kommando när den bästa block ändras och dess storlek är över (%s i cmd är utbytt mot block hash, %d med blockstorleken)</translation>
+    </message>
+    <message>
+        <source>Failed to find coin set amongst held coins with less than maxNumber of Spends</source>
+        <translation>Misslyckades hitta mynt set bland hållandes mynt med mindre än maxNumber av Spenderingar</translation>
+    </message>
+    <message>
+        <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
+        <translation>I sällsynta fall, en spendering med 7 mynt överstiger våran maximala tillåtna transaktionsstorlek, var vänlig försök spendera 6 elr färre mynt</translation>
+    </message>
+    <message>
+        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
+        <translation>Valör aatt föredra för automatiskt mintad Zerocoin (1/5/10/50/100/500/1000/5000), 0 för ingen preface. standard: %u)</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <translation>Specifiera skräddarsydd backup väg att lägga till en kopia av alla automatisk zPIV backup. Om satt som dir, varje backup genererar en tidsstämplad fil. Om satt som fil, skriver över den filen vid varje backup. Om backupvägen också är satt, 4 backups kommer hända</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
+        <translation>Specifiera skräddarsydd backup väg att lägga till en kopia av vilken plånbok backup som helst. Om satt som dir, varje backup genererar en tidsstämplad fil. Om satt som fil, skriver över den filen vid varje backup.</translation>
+    </message>
+    <message>
+        <source>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
+        <translation>SwiftX kräver inmatningar med minst 6 bekräftelser, du kan behöva vänta några minuter och försöka igen.</translation>
+    </message>
+    <message>
+        <source>&lt;category&gt; can be:</source>
+        <translation>&lt;category&gt; kan vara:</translation>
+    </message>
+    <message>
+        <source>Attempt to force blockchain corruption recovery</source>
+        <translation>Försök tvinga återhämtning av korrupt blockchain</translation>
+    </message>
+    <message>
+        <source>CoinSpend: Accumulator witness does not verify</source>
+        <translation>CoinSend: Ackumulator vittnesmål verifierar inte</translation>
+    </message>
+    <message>
+        <source>Display the stake modifier calculations in the debug.log file.</source>
+        <translation>Visar stake modifierar beräkningar i debug.log fil.</translation>
+    </message>
+    <message>
+        <source>Display verbose coin stake messages in the debug.log file.</source>
+        <translation>Visa omständig mynt stake meddelande i debug.log filen.</translation>
+    </message>
+    <message>
+        <source>Enable publish hash block in &lt;address&gt;</source>
+        <translation>Aktivera publicera hash block i &lt;address&gt;</translation>
+    </message>
+    <message>
+        <source>Enable publish hash transaction in &lt;address&gt;</source>
+        <translation>Aktivera publicera hash transaktion i &lt;address&gt;</translation>
+    </message>
+    <message>
+        <source>Enable publish raw block in &lt;address&gt;</source>
+        <translation>Aktivera publicera rå block i &lt;address&gt;</translation>
+    </message>
+    <message>
+        <source>Enable publish raw transaction in &lt;address&gt;</source>
+        <translation>Aktivera publicera rå transaktion i &lt;address&gt;</translation>
+    </message>
+    <message>
+        <source>Enable staking functionality (0-1, default: %u)</source>
+        <translation>Aktivera staking funktionalitet (0-1, standard: %u)</translation>
+    </message>
+    <message>
+        <source>Error: A fatal internal error occurred, see debug.log for details</source>
+        <translation>Fel: Ett fatalt internt fel hände, se debug.log för detaljer</translation>
+    </message>
+    <message>
+        <source>Error: No valid utxo!</source>
+        <translation>Fel: Ingen giltig utxo!</translation>
+    </message>
+    <message>
+        <source>Failed to create mint</source>
+        <translation>Misslyckades skapa mint</translation>
+    </message>
+    <message>
+        <source>Failed to deserialize</source>
+        <translation>Misslyckades att deserialize</translation>
+    </message>
+    <message>
+        <source>Failed to find Zerocoins in wallet.dat</source>
+        <translation>Misslyckades hitta Zerocoins i wallet.dat</translation>
+    </message>
+    <message>
+        <source>Failed to select a zerocoin</source>
+        <translation>Misslyckades välja en zerocoin</translation>
+    </message>
+    <message>
+        <source>Failed to wipe zerocoinDB</source>
+        <translation>Misslyckades torka zerocoinDB</translation>
+    </message>
+    <message>
+        <source>Failed to write coin serial number into wallet</source>
+        <translation>Misslyckades skriva mynt serienummer i plånbok</translation>
+    </message>
+    <message>
+        <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
+        <translation>Behåll som mest &lt;n&gt; oanslutningsbara transaktioner i minne (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Last Obfuscation was too recent.</source>
+        <translation>Senaste obfuscation var för ny.</translation>
+    </message>
+    <message>
+        <source>Last successful Obfuscation action was too recent.</source>
+        <translation>Den senaste framgångsrika Obfuscation-åtgärden var för ny.</translation>
+    </message>
+    <message>
+        <source>Limit size of signature cache to &lt;n&gt; entries (default: %u)</source>
+        <translation>Begränsa storlek av signatur cache till &lt;n&gt; poster (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Line: %d</source>
+        <translation>Linje: %d</translation>
+    </message>
+    <message>
+        <source>Listen for JSON-RPC connections on &lt;port&gt; (default: %u or testnet: %u)</source>
+        <translation>Lystna efter JSON-RPC anslutningar på &lt;port&gt; (standard: %u eller testnet: %u)</translation>
+    </message>
+    <message>
+        <source>Listen for connections on &lt;port&gt; (default: %u or testnet: %u)</source>
+        <translation>Lystna efter anslutningar på &lt;port&gt;(default: %u or testnet: %u) </translation>
+    </message>
+    <message>
+        <source>Loading addresses...</source>
+        <translation>Laddar adresser...</translation>
+    </message>
+    <message>
+        <source>Loading block index...</source>
+        <translation>Laddar block index...</translation>
+    </message>
+    <message>
+        <source>Loading budget cache...</source>
+        <translation> budget cache...</translation>
+    </message>
+    <message>
+        <source>Loading masternode cache...</source>
+        <translation>Laddar huvudnod cache...</translation>
+    </message>
+    <message>
+        <source>Loading masternode payment cache...</source>
+        <translation>Laddar huvudnod betalnings cache...</translation>
+    </message>
+    <message>
+        <source>Loading sporks...</source>
+        <translation>Laddar sporks...</translation>
     </message>
     <message>
         <source>Loading wallet... (%3.2f %%)</source>
@@ -5144,6 +5676,26 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
     <message>
         <source>Loading wallet...</source>
         <translation>Laddar plånbok...</translation>
+    </message>
+    <message>
+        <source>Location of the auth cookie (default: data dir)</source>
+        <translation>Lokation av auth cookie (standard: data dir)</translation>
+    </message>
+    <message>
+        <source>Lock is already in place.</source>
+        <translation>Lås är redan på plats.</translation>
+    </message>
+    <message>
+        <source>Lock masternodes from masternode configuration file (default: %u)</source>
+        <translation>Lås huvudnoder från huvudnod konfigurations fil (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Lookup(): Invalid -proxy address or hostname: '%s'</source>
+        <translation>Lookup(): Ogiltig -proxy adress eller värdnamn: '%s'</translation>
+    </message>
+    <message>
+        <source>Maintain at most &lt;n&gt; connections to peers (default: %u)</source>
+        <translation>Behåll som mest &lt;n&gt; anslutningar till peers (standard: %u)</translation>
     </message>
     <message>
         <source>Masternode options:</source>
@@ -5158,12 +5710,180 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Masternod:</translation>
     </message>
     <message>
+        <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: %u)</source>
+        <translation>Maximala mottagna per-anslutning buffer, &lt;n&gt;*1000 bytes (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Maximum per-connection send buffer, &lt;n&gt;*1000 bytes (default: %u)</source>
+        <translation>Maximala skicka per-anslutning buffer, &lt;n&gt;*1000 bytes (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Mint did not make it into blockchain</source>
+        <translation>Mint kom inte med i blockchain</translation>
+    </message>
+    <message>
+        <source>Missing input transaction information.</source>
+        <translation>Inmatad transaktions information fattas.</translation>
+    </message>
+    <message>
+        <source>Mixing in progress...</source>
+        <translation>Blandning pågår...</translation>
+    </message>
+    <message>
+        <source>Need address because change is not exact</source>
+        <translation>Adress behövs för att växel ej är exakt</translation>
+    </message>
+    <message>
+        <source>Need to specify a port with -whitebind: '%s'</source>
+        <translation>Port behöver specifieras med -whitebind: '%s'</translation>
+    </message>
+    <message>
+        <source>No Masternodes detected.</source>
+        <translation>Inga Huvudnoder upptäckta.</translation>
+    </message>
+    <message>
+        <source>No compatible Masternode found.</source>
+        <translation>Inga kompatibla Huvudnoder hittade.</translation>
+    </message>
+    <message>
+        <source>No funds detected in need of denominating.</source>
+        <translation>Inga pengar o behov av benämnelse upptäckta.</translation>
+    </message>
+    <message>
+        <source>No matching denominations found for mixing.</source>
+        <translation>Inga matchande valörer hittade till blandning.</translation>
+    </message>
+    <message>
         <source>Node relay options:</source>
         <translation>Nod relä val:</translation>
     </message>
     <message>
+        <source>Non-standard public key detected.</source>
+        <translation>Ej-standard offentlig nyckel upptäckt.</translation>
+    </message>
+    <message>
+        <source>Not compatible with existing transactions.</source>
+        <translation>Ej kompatibel med existerande transaktioner.</translation>
+    </message>
+    <message>
+        <source>Not enough file descriptors available.</source>
+        <translation>Ej tillräckliga fil deskriptorer tillgängliga.</translation>
+    </message>
+    <message>
+        <source>Not in the Masternode list.</source>
+        <translation>Inte i Huvudnod listan.</translation>
+    </message>
+    <message>
+        <source>Number of automatic wallet backups (default: 10)</source>
+        <translation>Antal automatiska plånboks backups (standard: 10)</translation>
+    </message>
+    <message>
+        <source>Number of custom location backups to retain (default: %d)</source>
+        <translation>Antal skräddarsydda platser för backup att behålla (standard: %d)</translation>
+    </message>
+    <message>
+        <source>Obfuscation is idle.</source>
+        <translation>Fördunkling är overksam.</translation>
+    </message>
+    <message>
+        <source>Obfuscation request complete:</source>
+        <translation>Fördunkling förfrågan avslutad:</translation>
+    </message>
+    <message>
+        <source>Obfuscation request incomplete:</source>
+        <translation>Fördunkling förfrågan ej avslutad:</translation>
+    </message>
+    <message>
+        <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
+        <translation>Acceptera endast block chain som matchar inbyggda kontrollstationer (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Only connect to nodes in network &lt;net&gt; (ipv4, ipv6 or onion)</source>
+        <translation>Anslut endast till noder i nätverk &lt;net&gt; (ipv4, ipv6 eller onion)</translation>
+    </message>
+    <message>
         <source>Options:</source>
         <translation>Val:</translation>
+    </message>
+    <message>
+        <source>Password for JSON-RPC connections</source>
+        <translation>Lösenord för JSON-RPC anslutningar</translation>
+    </message>
+    <message>
+        <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
+        <translation>isValid(): Ogiltig -proxy adress eller värdnamn: '%s'</translation>
+    </message>
+    <message>
+        <source>Preparing for resync...</source>
+        <translation>Förbereder för omsynkronisering...</translation>
+    </message>
+    <message>
+        <source>Prepend debug output with timestamp (default: %u)</source>
+        <translation>Addera till början felsöknings utmatning med tidsstämpel (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Print version and exit</source>
+        <translation>Skriv ut version och stäng</translation>
+    </message>
+    <message>
+        <source>RPC server options:</source>
+        <translation>RPC server alternativ:</translation>
+    </message>
+    <message>
+        <source>Randomly drop 1 of every &lt;n&gt; network messages</source>
+        <translation>Slumpmässig släpp 1 för varje &lt;n&gt; nätverksmeddelanden</translation>
+    </message>
+    <message>
+        <source>Randomly fuzz 1 of every &lt;n&gt; network messages</source>
+        <translation>Slumpmässigt brusa 1 för varje &lt;n&gt; nätverksmeddelanden</translation>
+    </message>
+    <message>
+        <source>Rebuild block chain index from current blk000??.dat files</source>
+        <translation>Bygg om block chain index från nuvarande blk000??.dat filer</translation>
+    </message>
+    <message>
+        <source>Receive and display P2P network alerts (default: %u)</source>
+        <translation>Motta och visa P2P nätverk varningar (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Reindex the accumulator database</source>
+        <translation>Indexera om ackumulator databasen</translation>
+    </message>
+    <message>
+        <source>Relay and mine data carrier transactions (default: %u)</source>
+        <translation>Lägg om och utvinn data bärar transaktioner (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Relay non-P2SH multisig (default: %u)</source>
+        <translation>Lägg om icke-P2SH multisig (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Rescan the block chain for missing wallet transactions</source>
+        <translation>Skanna om block chain för transaktioner som fattas</translation>
+    </message>
+    <message>
+        <source>Rescanning...</source>
+        <translation>Skannar om...</translation>
+    </message>
+    <message>
+        <source>ResetMintZerocoin finished: </source>
+        <translation>ResetMintZerocoin färdig:</translation>
+    </message>
+    <message>
+        <source>ResetSpentZerocoin finished: </source>
+        <translation>ResetSpentZerocoin färdigt:</translation>
+    </message>
+    <message>
+        <source>Run a thread to flush wallet periodically (default: %u)</source>
+        <translation>Kör en tråd för att spola plånbok periodvis (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Run in the background as a daemon and accept commands</source>
+        <translation>Kör i bakgrunden som en daemon och acceptera kommandon</translation>
+    </message>
+    <message>
+        <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
+        <translation>Skicka transaktioner som avgiftsfria transaktioner om möjligt (standard: %u)</translation>
     </message>
     <message>
         <source>Session not complete!</source>
@@ -5174,6 +5894,54 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Sessionens tidsgräns överskriden</translation>
     </message>
     <message>
+        <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
+        <translation>Ställ in databas cache storlek i megabytes (%d till %d, standard: %d)</translation>
+    </message>
+    <message>
+        <source>Set external address:port to get to this masternode (example: %s)</source>
+        <translation>Ställ in externa adress:port för att komma åt denna huvudnod (exempel: %s)</translation>
+    </message>
+    <message>
+        <source>Set key pool size to &lt;n&gt; (default: %u)</source>
+        <translation>Ställ in nyckel pool storlek till &lt;n&gt; (standard: %u) </translation>
+    </message>
+    <message>
+        <source>Set maximum block size in bytes (default: %d)</source>
+        <translation>Ställ in maximala blockstorlek i bytes (standard: %d) </translation>
+    </message>
+    <message>
+        <source>Set minimum block size in bytes (default: %u)</source>
+        <translation>Ställ in minimum blockstorlek i bytes (standard: %u) </translation>
+    </message>
+    <message>
+        <source>Set the Maximum reorg depth (default: %u)</source>
+        <translation>Ställ in maximala reorg djup (standard: %u) </translation>
+    </message>
+    <message>
+        <source>Set the masternode private key</source>
+        <translation>Ställ in privata huvudnods nyckeln</translation>
+    </message>
+    <message>
+        <source>Set the number of threads to service RPC calls (default: %d)</source>
+        <translation>Ställ in antalet trådar att behandla RPC calls (default: %d)</translation>
+    </message>
+    <message>
+        <source>Sets the DB_PRIVATE flag in the wallet db environment (default: %u)</source>
+        <translation>Ställer in DB_PRIVATE flaggan i plånbokens db miljö (standard: %u) </translation>
+    </message>
+    <message>
+        <source>Show all debugging options (usage: --help -help-debug)</source>
+        <translation>Visa alla felsöknings alternativ (användning: --help -help-debug)</translation>
+    </message>
+    <message>
+        <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
+        <translation>Minska debug.log fil vid klient start (standard: 1 när ingen -debug)</translation>
+    </message>
+    <message>
+        <source>Signing failed.</source>
+        <translation>Signering misslyckades.</translation>
+    </message>
+    <message>
         <source>Signing timed out.</source>
         <translation>Signeringens tidsgräns överskriden</translation>
     </message>
@@ -5182,12 +5950,68 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Signering av transaktion misslyckades</translation>
     </message>
     <message>
+        <source>Specify configuration file (default: %s)</source>
+        <translation>Specifiera konfigurationsfil (standard: %s)</translation>
+    </message>
+    <message>
+        <source>Specify connection timeout in milliseconds (minimum: 1, default: %d)</source>
+        <translation>Specifiera anslutnings timeout i millisekunder (minimum: 1, standard: %d)</translation>
+    </message>
+    <message>
         <source>Specify data directory</source>
         <translation>Specificera data katalog</translation>
     </message>
     <message>
+        <source>Specify masternode configuration file (default: %s)</source>
+        <translation>Specifiera huvudnod konfigurationsfil (standard: %s)</translation>
+    </message>
+    <message>
+        <source>Specify pid file (default: %s)</source>
+        <translation>Specifiera pid fil (standard: %s)</translation>
+    </message>
+    <message>
+        <source>Specify wallet file (within data directory)</source>
+        <translation>Specifiera plånboksfil (inom data katalog)</translation>
+    </message>
+    <message>
+        <source>Specify your own public address</source>
+        <translation>Specifiera din egna offentliga adress</translation>
+    </message>
+    <message>
+        <source>Spend Valid</source>
+        <translation>Spendering Giltig</translation>
+    </message>
+    <message>
+        <source>Spend unconfirmed change when sending transactions (default: %u)</source>
+        <translation>Spendera obekräftad växel när transaktioner skickas (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Staking options:</source>
+        <translation>Staking alternativ:</translation>
+    </message>
+    <message>
+        <source>Stop running after importing blocks from disk (default: %u)</source>
+        <translation>Sluta kör efter block har importerats från disk (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Submitted following entries to masternode: %u / %d</source>
+        <translation>Skickade in följande poster till huvudnod: %u / %d</translation>
+    </message>
+    <message>
+        <source>Submitted to masternode, waiting for more entries ( %u / %d ) %s</source>
+        <translation>Inskickat till huvudnod, väntar på fler poster ( %u / %d ) %s</translation>
+    </message>
+    <message>
+        <source>Submitted to masternode, waiting in queue %s</source>
+        <translation>Inskickat till huvudnod, väntar i kö %s</translation>
+    </message>
+    <message>
         <source>Synchronization failed</source>
         <translation>Synchronisering misslyckad</translation>
+    </message>
+    <message>
+        <source>Synchronization finished</source>
+        <translation>Synkronisering klar</translation>
     </message>
     <message>
         <source>Synchronization pending...</source>
@@ -5198,8 +6022,36 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Synchroniserar budgetar</translation>
     </message>
     <message>
+        <source>Synchronizing masternode winners...</source>
+        <translation>Synkroniserar huvudnod vinnarna...</translation>
+    </message>
+    <message>
         <source>Synchronizing masternodes...</source>
         <translation>Synchroniserar masternoder</translation>
+    </message>
+    <message>
+        <source>Synchronizing sporks...</source>
+        <translation>Synkroniserar sporks...</translation>
+    </message>
+    <message>
+        <source>Syncing zPIV wallet...</source>
+        <translation>Synkroniserar zPIV plånbok...</translation>
+    </message>
+    <message>
+        <source>The coin spend has been used</source>
+        <translation>Mynt spenderingen har redan använts</translation>
+    </message>
+    <message>
+        <source>The new spend coin transaction did not verify</source>
+        <translation>Den nya spendera mynt transaktionen kunde inte verifieras</translation>
+    </message>
+    <message>
+        <source>The selected mint coin is an invalid coin</source>
+        <translation>Den valda mint myntet är ett ogiltigt mynt</translation>
+    </message>
+    <message>
+        <source>The transaction did not verify</source>
+        <translation>Transaktionen verifierades inte</translation>
     </message>
     <message>
         <source>This help message</source>
@@ -5210,8 +6062,36 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Detta är experimentiell mjukvara</translation>
     </message>
     <message>
+        <source>This is intended for regression testing tools and app development.</source>
+        <translation>Det här är menat för regression testverktyg och app utveckling.</translation>
+    </message>
+    <message>
         <source>This is not a Masternode.</source>
         <translation>Dehär är ingen Masternod</translation>
+    </message>
+    <message>
+        <source>Threshold for disconnecting misbehaving peers (default: %u)</source>
+        <translation>Tröskel för att koppla från peers som beteer sig illa (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Too many spends needed</source>
+        <translation>För många spenderingar behövda</translation>
+    </message>
+    <message>
+        <source>Tor control port password (default: empty)</source>
+        <translation>Tor kontroll port lösenord (standard: tom)</translation>
+    </message>
+    <message>
+        <source>Tor control port to use if onion listening enabled (default: %s)</source>
+        <translation>Tor kontroll port att använda om onion lystning är aktiverad (standard: %s)</translation>
+    </message>
+    <message>
+        <source>Transaction Created</source>
+        <translation>Transaktion Skapad</translation>
+    </message>
+    <message>
+        <source>Transaction Mint Started</source>
+        <translation>Transaktion Mint Startad</translation>
     </message>
     <message>
         <source>Transaction amount too small</source>
@@ -5242,8 +6122,72 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Transaktion för stor</translation>
     </message>
     <message>
+        <source>Transmitting final transaction.</source>
+        <translation>Sänder ut slutgiltig transaktion.</translation>
+    </message>
+    <message>
+        <source>Try to spend with a higher security level to include more coins</source>
+        <translation>Försök att spendera med en högre säkerhetsnivå för att inkludera fler mynt</translation>
+    </message>
+    <message>
+        <source>Trying to spend an already spent serial #, try again.</source>
+        <translation>Försöker spendera en redan spendera serie #, försök igen.</translation>
+    </message>
+    <message>
+        <source>Unable to bind to %s on this computer (bind returned error %s)</source>
+        <translation>Kan ej binda till %s på denna dator (bind återgav fel %s)</translation>
+    </message>
+    <message>
+        <source>Unable to find transaction containing mint</source>
+        <translation>Kan ej hitta transaktion innehållandes mint</translation>
+    </message>
+    <message>
+        <source>Unable to sign spork message, wrong key?</source>
+        <translation>Kan ej signera spork meddelande, fel nyckel?</translation>
+    </message>
+    <message>
+        <source>Unable to start HTTP server. See debug log for details.</source>
+        <translation>Kan ej starta HTTP server. Se felsöknings log för detaljer.</translation>
+    </message>
+    <message>
+        <source>Unknown network specified in -onlynet: '%s'</source>
+        <translation>Okänt nätverk specifierat i -onlynet: '%s'</translation>
+    </message>
+    <message>
+        <source>Unknown state: id = %u</source>
+        <translation>Okänt tillstånd: id = %u</translation>
+    </message>
+    <message>
+        <source>Upgrade wallet to latest format</source>
+        <translation>Upgradera plånbok till senaste format</translation>
+    </message>
+    <message>
+        <source>Use UPnP to map the listening port (default: %u)</source>
+        <translation>Använd UPnP för att kartlägga den lystnande porten (standard: %u)</translation>
+    </message>
+    <message>
+        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
+        <translation>Använd UPnP för att kartlägga den lyssnande porten (standard: 1 när lyssnar)</translation>
+    </message>
+    <message>
+        <source>Use a custom max chain reorganization depth (default: %u)</source>
+        <translation>Använd en skräddarsydd max chain reorganiserations djup (standard: %u)</translation>
+    </message>
+    <message>
         <source>Use the test network</source>
         <translation>Använd test nätverket</translation>
+    </message>
+    <message>
+        <source>Username for JSON-RPC connections</source>
+        <translation>Användarnamn för JSON-RPC anslutningar</translation>
+    </message>
+    <message>
+        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
+        <translation>Värde är under den minsta tillgängliga valören (=1) av zPIV</translation>
+    </message>
+    <message>
+        <source>Value more than Obfuscation pool maximum allows.</source>
+        <translation>Värde högre än fördunklingspoolen maximalt tillåter.</translation>
     </message>
     <message>
         <source>Verifying blocks...</source>
@@ -5258,8 +6202,16 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Version 1 zPIV kräver en säkerhetsnivå på 100 för att kunna spenderas med framgång.</translation>
     </message>
     <message>
+        <source>Wallet %s resides outside data directory %s</source>
+        <translation>Plånbok %s finns utanför data katalog %s</translation>
+    </message>
+    <message>
         <source>Wallet is locked.</source>
         <translation>Plånboken är låst.</translation>
+    </message>
+    <message>
+        <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
+        <translation>Plånbok behöver skrivas om: starta om PIVX Kärna för att göra klart</translation>
     </message>
     <message>
         <source>Wallet options:</source>
@@ -5274,8 +6226,56 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Varning</translation>
     </message>
     <message>
+        <source>Warning: This version is obsolete, upgrade required!</source>
+        <translation>Varning: Denna version är föråldrad, upgradering krävs!</translation>
+    </message>
+    <message>
+        <source>Warning: Unsupported argument -benchmark ignored, use -debug=bench.</source>
+        <translation>Varning: Argument -benchmark stödjes ej, ignoreras. Använd -debug=bench.</translation>
+    </message>
+    <message>
+        <source>Warning: Unsupported argument -debugnet ignored, use -debug=net.</source>
+        <translation>Varning: Argument -debugnet stödjes ej, ignoreras. Använd -debug=net.</translation>
+    </message>
+    <message>
+        <source>Will retry...</source>
+        <translation>Kommer försöka igen...</translation>
+    </message>
+    <message>
+        <source>You don't have enough Zerocoins in your wallet</source>
+        <translation>Du har inte tillräckligt med Zerocoins i din plånbok</translation>
+    </message>
+    <message>
+        <source>You need to rebuild the database using -reindex to change -txindex</source>
+        <translation>Du behöver bygga om databasen genom att använda -reindex för att ändra -txindex</translation>
+    </message>
+    <message>
+        <source>Your entries added successfully.</source>
+        <translation>Dina poster lyckades läggas till.</translation>
+    </message>
+    <message>
+        <source>Your transaction was accepted into the pool!</source>
+        <translation>Din transaktion accepterades in i poolen!</translation>
+    </message>
+    <message>
+        <source>Zapping all transactions from wallet...</source>
+        <translation>Zapping alla transaktioner från plånboken ...</translation>
+    </message>
+    <message>
+        <source>ZeroMQ notification options:</source>
+        <translation>ZeroMQ-anmälningsalternativ:</translation>
+    </message>
+    <message>
+        <source>Zerocoin options:</source>
+        <translation>Zerocoin alternativ:</translation>
+    </message>
+    <message>
         <source>on startup</source>
         <translation>Vid uppstart</translation>
     </message>
-    </context>
+    <message>
+        <source>wallet.dat corrupt, salvage failed</source>
+        <translation>wallet.dat korrupt, räddning misslyckades</translation>
+    </message>
+</context>
 </TS>

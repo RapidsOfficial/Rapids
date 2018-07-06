@@ -2163,6 +2163,18 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>zPIV-saldo</translation>
     </message>
     <message>
+        <source>Mature: more than 20 confirmation and more than 1 mint of the same denomination after it was minted.
+These zPIV are spendable.</source>
+        <translation>Ældre: mere end 20 bekræftelser og mere end 1 minutter med samme betegnelse, efter at den blev minted
+Disse zPIV kan bruges.</translation>
+    </message>
+    <message>
+        <source>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
+        <translation>Ubekræftet: mindre end 20 bekræftelser
+Uplettet: bekræftet, men mindre end 1 minutter med samme betegnelse, efter at den blev mønnet</translation>
+    </message>
+    <message>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
         <translation>De viste informationer kan være uddaterede. Deres tegnebog synkronisere automatism med PIVX netværket så snart en forbindelse er etalbleret, men denne proces er ikke færdiggjort endnu. </translation>
     </message>
@@ -2429,6 +2441,18 @@ For at aktivere AutoMint-ændring 'enablezeromint = 0' til 'enablezeromint = 1' 
         <translation>PRIVATLIV</translation>
     </message>
     <message>
+        <source>Enter an amount of Piv to convert to zPIV</source>
+        <translation>Indtast en mængde Piv for at konvertere til zPiv</translation>
+    </message>
+    <message>
+        <source>zPIV Control</source>
+        <translation>zPIV Control</translation>
+    </message>
+    <message>
+        <source>zPIV Selected:</source>
+        <translation>zPIV Selected:</translation>
+    </message>
+    <message>
         <source>Quantity Selected:</source>
         <translation>Mængde valgt:</translation>
     </message>
@@ -2543,6 +2567,12 @@ zPIV er modne, når de har mere end 20 bekræftelser OG mere end 2 minutter med 
     <message>
         <source>Denom. with value 1:</source>
         <translation>DENOM. med værdi 1:</translation>
+    </message>
+    <message>
+        <source>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
+        <translation>Ubekræftet: mindre end 20 bekræftelser
+Uplettet: bekræftet, men mindre end 1 minutter med samme betegnelse, efter at den blev mønnet</translation>
     </message>
     <message>
         <source>Show the current status of automatic zPIV minting.
@@ -2738,6 +2768,34 @@ For at ændre procentdelen (ingen genstart kræves):.
         <translation>Kopiér beløb</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>Starter ResetMintZerocoin: Genskanning af komplet blockchain, dette vil tage op til 30 minutter afhængigt af din hardware.
+Vær tålmodig...</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>Tilbringe Zerocoin
+Computationally dyrt, kan have brug for flere minutter afhængigt af det valgte sikkerhedsniveau og din hardware.
+Vær tålmodig..</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) havde brug for.
+Maksimum tilladt:</translation>
+    </message>
+    <message>
+        <source>zPIV Spend #: </source>
+        <translation>zPIV Spend #: </translation>
+    </message>
+    <message>
+        <source>zPIV Mint</source>
+        <translation>zPIV Mint</translation>
+    </message>
+    <message>
         <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
         <translation>&lt;b&gt;aktiveret&lt;/b&gt;.</translation>
     </message>
@@ -2852,12 +2910,6 @@ For at ændre procentdelen (ingen genstart kræves):.
 </translation>
     </message>
     <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>Starter ResetMintZerocoin: Genskanning af komplet blockchain, dette vil tage op til 30 minutter afhængigt af din hardware.
-Vær tålmodig...</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>Varighed:</translation>
     </message>
@@ -2908,22 +2960,20 @@ Vær tålmodig...</translation>
         <translation>Bekræft at De vil sende mønter</translation>
     </message>
     <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>Tilbringe Zerocoin
-Computationally dyrt, kan have brug for flere minutter afhængigt af det valgte sikkerhedsniveau og din hardware.
-Vær tålmodig..</translation>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>Version 1 zPIV kræver et sikkerhedsniveau på 100 til succes.</translation>
+    </message>
+    <message>
+        <source>Failed to spend zPIV</source>
+        <translation>Kunne ikke bruge zPIV</translation>
+    </message>
+    <message>
+        <source>Failed to fetch mint associated with serial hash</source>
+        <translation>Kunne ikke hente mynte i forbindelse med seriel hash</translation>
     </message>
     <message>
         <source>Too much inputs (</source>
         <translation>For mange input (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) havde brug for. 
-Maksimum tilladt:</translation>
     </message>
     <message>
         <source>
@@ -2934,6 +2984,11 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     <message>
         <source>Spend Zerocoin failed with status = </source>
         <translation>Brug Zerocoin mislykkedes med status =</translation>
+    </message>
+    <message numerus="yes">
+        <source>PrivacyDialog</source>
+        <comment>Enter an amount of PIV to convert to zPIV</comment>
+        <translation><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform></translation>
     </message>
     <message>
         <source>denomination: </source>
@@ -3243,6 +3298,18 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     <message>
         <source>Time Offset</source>
         <translation>Tidsforskydning</translation>
+    </message>
+    <message>
+        <source>Custom Backup Path:</source>
+        <translation>Brugerdefineret Backup-sti:</translation>
+    </message>
+    <message>
+        <source>Custom zPIV Backup Path:</source>
+        <translation>Brugerdefineret zPIV Backup-sti:</translation>
+    </message>
+    <message>
+        <source>Custom Backups Threshold:</source>
+        <translation>Brugerdefineret sikkerhedskopieringstærskel:</translation>
     </message>
     <message>
         <source>Salvage wallet</source>
@@ -4457,6 +4524,14 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Modtaget via tilsløring</translation>
     </message>
     <message>
+        <source>PIV Stake</source>
+        <translation>PIV Stake</translation>
+    </message>
+    <message>
+        <source>zPIV Stake</source>
+        <translation>zPIV Stake</translation>
+    </message>
+    <message>
         <source>Obfuscation Denominate</source>
         <translation>Tilslør designerede</translation>
     </message>
@@ -4471,6 +4546,34 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     <message>
         <source>Obfuscation Create Denominations</source>
         <translation>Opret tilsløret designering</translation>
+    </message>
+    <message>
+        <source>Converted PIV to zPIV</source>
+        <translation>Konverteret PIV til zPIV</translation>
+    </message>
+    <message>
+        <source>Spent zPIV</source>
+        <translation>Brugt zPiv</translation>
+    </message>
+    <message>
+        <source>Received PIV from zPIV</source>
+        <translation>Modtaget Piv fra zPiv</translation>
+    </message>
+    <message>
+        <source>Minted Change as zPIV from zPIV Spend</source>
+        <translation>Minted Change som zPIV fra zPIV Spend</translation>
+    </message>
+    <message>
+        <source>Converted zPIV to PIV</source>
+        <translation>Konverteret PIV til zPIV</translation>
+    </message>
+    <message>
+        <source>Anonymous (zPIV Transaction)</source>
+        <translation>Anonym (zPIV Transaction)</translation>
+    </message>
+    <message>
+        <source>Anonymous (zPIV Stake)</source>
+        <translation>Anonym (zPIV Stake)</translation>
     </message>
     <message>
         <source>Sent to</source>
@@ -4680,6 +4783,14 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Eksporteret!</translation>
     </message>
     <message>
+        <source>Received PIV from zPIV</source>
+        <translation>Modtaget Piv fra zPiv</translation>
+    </message>
+    <message>
+        <source>Zerocoin Spend, Change in zPIV</source>
+        <translation>Zerocoin Spend, Ændring i zPIV</translation>
+    </message>
+    <message>
         <source>The transaction history was successfully saved to %1.</source>
         <translation>Transaktionshistorikken blev gemt i %1</translation>
     </message>
@@ -4746,6 +4857,10 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
 </context>
 <context>
     <name>ZPivControlDialog</name>
+    <message>
+        <source>Select zPIV to Spend</source>
+        <translation>Vælg zPIV for at bruge</translation>
+    </message>
     <message>
         <source>Quantity</source>
         <translation>Antal</translation>
@@ -4814,9 +4929,25 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Slet alle tegnebogens transaktioner og genskab kun fra blokkæden ved at tilføje -rescan i forbindes med opstart.</translation>
     </message>
     <message>
+        <source>Delete all zerocoin spends and mints that have been recorded to the blockchain database and reindex them (0-1, default: %u)</source>
+        <translation>Slet alle zerocoin-udgifter og minter, der er blevet sendt til blockchain-databasen og geninddrive dem (0-1, standard: %u)</translation>
+    </message>
+    <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Distribueret under MIT software licensen. Se den vedlaget fil COPYING eller 
 &lt;http://www.opensource.org/licenses/mit-license.php&gt;. </translation>
+    </message>
+    <message>
+        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
+        <translation>Aktivér automatiske wallet-sikkerhedskopier udløst efter hver zPiv-mintning (0-1, standard: %u)</translation>
+    </message>
+    <message>
+        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
+        <translation>Aktiver eller deaktiver staking-funktionalitet for PIV-indgange (0-1, standard: %u)</translation>
+    </message>
+    <message>
+        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
+        <translation>Aktiver eller deaktiver staking-funktionalitet for zPIV-indgange (0-1, standard: %u)</translation>
     </message>
     <message>
         <source>Enable spork administration functionality with the appropriate private key.</source>
@@ -5415,6 +5546,18 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Reindex PIV og zPIV pengemængde statistikker</translation>
     </message>
     <message>
+        <source>Reindexing zerocoin database...</source>
+        <translation>Reindexing zerocoin database ...</translation>
+    </message>
+    <message>
+        <source>Reindexing zerocoin failed</source>
+        <translation>Reindexerende zerocoin mislykkedes</translation>
+    </message>
+    <message>
+        <source>Selected coins value is less than payment target</source>
+        <translation>Valgt mønter værdi er mindre end betalingsmål</translation>
+    </message>
+    <message>
         <source>SwiftX options:</source>
         <translation>SwiftTX optioner:</translation>
     </message>
@@ -5473,6 +5616,14 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     <message>
         <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
         <translation>Foretrukken Betegnelse for automatisk mintede Zerocoin (1/5/10/50/100/500/1000/5000), 0 uden præference. standard: %u)</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <translation>Angiv brugerdefineret backup-vej for at tilføje en kopi af enhver zPIV-backup. Hvis det er angivet som dig, genererer hver backup en tidsstempelet fil. Hvis den er angivet som fil, ønsker man at omskrive til den pågældende fil hver backup. Hvis backupath er indstillet, vil der ske 4 sikkerhedskopier</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
+        <translation>Angiv en brugerdefineret backup-sti for at tilføje en kopi af en wallet-backup. Hvis det er angivet som dig, genererer hver backup en tidsstempelet fil. Hvis den er angivet som fil, ønsker man at omskrive til den pågældende fil hver backup.</translation>
     </message>
     <message>
         <source>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
@@ -5535,8 +5686,16 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Kunne ikke deserialisere</translation>
     </message>
     <message>
+        <source>Failed to find Zerocoins in wallet.dat</source>
+        <translation>Kunne ikke finde Zerocoins i wallet.dat</translation>
+    </message>
+    <message>
         <source>Failed to select a zerocoin</source>
         <translation>Kunne ikke vælge en zerocoin</translation>
+    </message>
+    <message>
+        <source>Failed to wipe zerocoinDB</source>
+        <translation>Kunne ikke tørre zerocoinDB</translation>
     </message>
     <message>
         <source>Failed to write coin serial number into wallet</source>
@@ -5701,6 +5860,10 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     <message>
         <source>Number of automatic wallet backups (default: 10)</source>
         <translation>Antal automatiske sikkerhedskopier af tegnebogen (default: 10)</translation>
+    </message>
+    <message>
+        <source>Number of custom location backups to retain (default: %d)</source>
+        <translation>Antal brugerdefinerede positionsbackups til at beholde (standard: %d)</translation>
     </message>
     <message>
         <source>Obfuscation is idle.</source>
@@ -5955,6 +6118,10 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Synkroniserer sporks...</translation>
     </message>
     <message>
+        <source>Syncing zPIV wallet...</source>
+        <translation>Syncing zPIV wallet ..</translation>
+    </message>
+    <message>
         <source>The coin spend has been used</source>
         <translation>Møntudgifterne er blevet brugt</translation>
     </message>
@@ -6099,6 +6266,10 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
         <translation>Brugernavn til JSON-RPC forbindelser</translation>
     </message>
     <message>
+        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
+        <translation>Værdien er under den mindste tilgængelige værdi (= 1) for zPIV</translation>
+    </message>
+    <message>
         <source>Value more than Obfuscation pool maximum allows.</source>
         <translation>Værdien er højere end tilsløringsgruppen tillader</translation>
     </message>
@@ -6109,6 +6280,10 @@ Enten mint højere nomineringer (så færre input er nødvendige) eller reducere
     <message>
         <source>Verifying wallet...</source>
         <translation>Verificerer  tegnebog</translation>
+    </message>
+    <message>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>Version 1 zPIV kræver et sikkerhedsniveau på 100 til succes.</translation>
     </message>
     <message>
         <source>Wallet %s resides outside data directory %s</source>

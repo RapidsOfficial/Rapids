@@ -137,7 +137,7 @@
     </message>
     <message>
         <source>For anonymization, automint, and staking only</source>
-        <translation>Solo per anonimizzazione, automint e stake</translation>
+        <translation>Solo per anonimizzazione, conio automatico e stake</translation>
     </message>
     <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
@@ -578,7 +578,7 @@
     </message>
     <message>
         <source>&amp;Multisignature creation...</source>
-        <translation>Creazione &amp;Multifirma...</translation>
+        <translation>Creazione &amp;Firma multipla...</translation>
     </message>
     <message>
         <source>Create a new multisignature address and add it to this wallet</source>
@@ -598,7 +598,7 @@
     </message>
     <message>
         <source>Sign with a multisignature address</source>
-        <translation>Firma digitale con un indirizzo multifirma</translation>
+        <translation>Firma digitale con un indirizzo a firma multipla</translation>
     </message>
     <message>
         <source>Open &amp;URI...</source>
@@ -650,7 +650,7 @@
     </message>
     <message>
         <source>Send coins to a PIVX address</source>
-        <translation>Invia monete all' indirizzo PIVX</translation>
+        <translation>Invia valuta all'indirizzo PIVX</translation>
     </message>
     <message>
         <source>Request payments (generates QR codes and pivx: URIs)</source>
@@ -698,7 +698,7 @@
     </message>
     <message>
         <source>&amp;MultiSend</source>
-        <translation>Invio &amp;multiplo</translation>
+        <translation>&amp;MultiSend</translation>
     </message>
     <message>
         <source>MultiSend Settings</source>
@@ -846,11 +846,11 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>AutoMint is currently enabled and set to </source>
-        <translation>AutoMint è attivo e impostato su</translation>
+        <translation>Conio automatico è attivo e impostato su</translation>
     </message>
     <message>
         <source>AutoMint is disabled</source>
-        <translation>AutoMint disabilitato</translation>
+        <translation>Conio automatico disabilitato</translation>
     </message>
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
@@ -946,6 +946,10 @@ MultiSend: %1</translation>
         <translation>(de)seleziona tutto</translation>
     </message>
     <message>
+        <source>toggle lock state</source>
+        <translation>Attiva/disattiva stato bloccato</translation>
+    </message>
+    <message>
         <source>Tree mode</source>
         <translation>Modalità albero</translation>
     </message>
@@ -1036,6 +1040,10 @@ MultiSend: %1</translation>
     <message>
         <source>Copy dust</source>
         <translation>Copia polvere</translation>
+    </message>
+    <message>
+        <source>Copy change</source>
+        <translation>Copia resto</translation>
     </message>
     <message>
         <source>Please switch to "List mode" to use this function.</source>
@@ -1413,19 +1421,33 @@ MultiSend: %1</translation>
     <name>MultiSendDialog</name>
     <message>
         <source>MultiSend</source>
-        <translation>Invio multiplo</translation>
+        <translation>MultiSend</translation>
     </message>
     <message>
         <source>Enter whole numbers 1 - 100</source>
         <translation>Inserire numeri interi 1 - 100</translation>
     </message>
     <message>
+        <source>Enter % to Give (1-100)</source>
+        <translation>Inserisci % da inviare (1-100)</translation>
+    </message>
+    <message>
         <source>Enter Address to Send to</source>
         <translation>Inserire indirizzo destinatario</translation>
     </message>
     <message>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other PIVX addresses after it matures.
+To Add: enter percentage to give and PIVX address to add to the MultiSend vector.
+To Delete: Enter address to delete and press delete.
+MultiSend will not be activated unless you have clicked Activate</source>
+        <translation>MultiSend ti permette di inviare automaticamente ad una lista di indirizzi PIVX fino al 100% delle ricompense di stake o masternodi, dopo che queste sono mature.
+Per Aggiunger: inserisci la percentuale da inviare e l'indirizzo PIVX da aggiungere al vettore MultiSend.
+Per Eliminare: Inserisci l'indirizzo da eliminare e premi elimina.
+MultiSend non verrà attivato a meno che tu non prema su Attiva</translation>
+    </message>
+    <message>
         <source>Add to MultiSend Vector</source>
-        <translation>Aggiungi a Vettore InvioMultiplo</translation>
+        <translation>Aggiungi a Vettore MultiSend</translation>
     </message>
     <message>
         <source>Add</source>
@@ -1433,7 +1455,7 @@ MultiSend: %1</translation>
     </message>
     <message>
         <source>Deactivate MultiSend</source>
-        <translation>Disattiva InvioMultiplo</translation>
+        <translation>Disattiva MultiSend</translation>
     </message>
     <message>
         <source>Deactivate</source>
@@ -1448,8 +1470,16 @@ MultiSend: %1</translation>
         <translation>Alt+A</translation>
     </message>
     <message>
+        <source>Percentage of stake to send</source>
+        <translation>Percentuale dello stake da inviare</translation>
+    </message>
+    <message>
         <source>Percentage:</source>
         <translation>Percentuale:</translation>
+    </message>
+    <message>
+        <source>Address to send portion of stake to</source>
+        <translation>Indirizzo a cui inviare la percentuale dello stake</translation>
     </message>
     <message>
         <source>Address:</source>
@@ -1460,20 +1490,71 @@ MultiSend: %1</translation>
         <translation>Etichetta:</translation>
     </message>
     <message>
+        <source>Enter a label for this address to add it to your address book</source>
+        <translation>Inserisci un'etichetta per questo indirizzo da aggiungere alla tua rubrica</translation>
+    </message>
+    <message>
+        <source>Delete Address From MultiSend Vector</source>
+        <translation>Elimina indirizzo dal vettore MultiSend</translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation>Elimina</translation>
+    </message>
+    <message>
+        <source>Activate MultiSend</source>
+        <translation>Attiva MultiSend</translation>
     </message>
     <message>
         <source>Activate</source>
         <translation>Attiva</translation>
     </message>
     <message>
+        <source>View MultiSend Vector</source>
+        <translation>Visualizza vettore MultiSend</translation>
+    </message>
+    <message>
+        <source>View MultiSend</source>
+        <translation>Visualizza MultiSend</translation>
+    </message>
+    <message>
         <source>Send For Stakes</source>
         <translation>Invia per stake</translation>
     </message>
     <message>
+        <source>Send For Masternode Rewards</source>
+        <translation>Invio per le Ricompense Masternodo</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(nessuna etichetta)</translation>
+    </message>
+    <message>
+        <source>The entered address:
+</source>
+        <translation>L'indirizzo immesso:</translation>
+    </message>
+    <message>
+        <source> is invalid.
+Please check the address and try again.</source>
+        <translation>è invalido.
+Per favore controlla l'indirizzo e riprova nuovamente.</translation>
+    </message>
+    <message>
+        <source>The total amount of your MultiSend vector is over 100% of your stake reward
+</source>
+        <translation>L'ammontare totale del tuo vettore MultiSend è superiore al 100% della tua ricompensa per lo stake
+</translation>
+    </message>
+    <message>
+        <source>Please Enter 1 - 100 for percent.</source>
+        <translation>Per favore inserisci 1 - 100 come percentuale.</translation>
+    </message>
+    <message>
+        <source>Saved the MultiSend to memory, but failed saving properties to the database.
+</source>
+        <translation>MultiSend è stato salvato con successo in memoria, ma il salvataggio delle proprietà nel database non è andato a buon fine.
+</translation>
     </message>
     <message>
         <source>MultiSend Vector
@@ -1495,8 +1576,16 @@ MultiSend: %1</translation>
 <context>
     <name>MultisigDialog</name>
     <message>
+        <source>Multisignature Address Interactions</source>
+        <translation>Interazioni indirizzo multifirma</translation>
+    </message>
+    <message>
         <source>Create MultiSignature &amp;Address</source>
         <translation>Crea indirizzo a firme &amp;Multiple</translation>
+    </message>
+    <message>
+        <source>How many people must sign to verify a transaction</source>
+        <translation>Quante persone devono firmare per verificare una transazione</translation>
     </message>
     <message>
         <source>Address Label:</source>
@@ -1507,12 +1596,20 @@ MultiSend: %1</translation>
         <translation>&amp;Aggiungi indirizzo / codice</translation>
     </message>
     <message>
+        <source>Create a new multisig address</source>
+        <translation>Crea un nuovo indirizzo multifirma</translation>
+    </message>
+    <message>
         <source>C&amp;reate</source>
         <translation>C&amp;rea</translation>
     </message>
     <message>
         <source>Status:</source>
         <translation>Stato:</translation>
+    </message>
+    <message>
+        <source>&amp;Create MultiSignature Tx</source>
+        <translation>&amp;Crea Tx multifirma</translation>
     </message>
     <message>
         <source>Inputs:</source>
@@ -1541,6 +1638,10 @@ MultiSend: %1</translation>
     <message>
         <source>Cr&amp;eate</source>
         <translation>Cr&amp;ea</translation>
+    </message>
+    <message>
+        <source>&amp;Sign MultiSignature Tx</source>
+        <translation>&amp;Firma Tx a firma multipla</translation>
     </message>
     <message>
         <source>Transaction Hex:</source>
@@ -1612,8 +1713,24 @@ MultiSend: %1</translation>
         <translation>Mappa la porta utilizzando &amp;UPnP</translation>
     </message>
     <message>
+        <source>Enable automatic minting of PIV units to zPIV</source>
+        <translation>Attiva il conio automatico di unità PIV in zPIV</translation>
+    </message>
+    <message>
         <source>Enable zPIV Automint</source>
-        <translation>Attiva Autoconio zPIV</translation>
+        <translation>Attiva Conio automatico zPIV</translation>
+    </message>
+    <message>
+        <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
+        <translation>Percentuale di PIV in entrata che viene automaticamente convertita in zPIV attraverso il protocollo Zerocoin (min: 10%)</translation>
+    </message>
+    <message>
+        <source>Percentage of autominted zPIV</source>
+        <translation>Percentuale di zPIV Percentuale di zPIV da coniare automaticamente</translation>
+    </message>
+    <message>
+        <source>Preferred Automint zPIV Denomination</source>
+        <translation>Denominazione preferita conio automatico zPIV</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -1667,6 +1784,14 @@ MultiSend: %1</translation>
         <translation>Disponibile:</translation>
     </message>
     <message>
+        <source>Your current spendable balance</source>
+        <translation>Il tuo saldo spendibile corrente</translation>
+    </message>
+    <message>
+        <source>Total Balance, including all unavailable coins.</source>
+        <translation>Saldo totale, inclusi tutte le monete non disponibili.</translation>
+    </message>
+    <message>
         <source>PIV Balance</source>
         <translation>Bilancio PIV</translation>
     </message>
@@ -1675,20 +1800,54 @@ MultiSend: %1</translation>
         <translation>Non maturi:</translation>
     </message>
     <message>
+        <source>Current locked balance in watch-only addresses</source>
+        <translation>Saldo corrente bloccato in indirizzi sola-lettura.</translation>
+    </message>
+    <message>
+        <source>Your current PIVX balance, unconfirmed and immature transactions included</source>
+        <translation>Il tuo saldo PIVX corrente, incluse le transazioni non confermate e non mature</translation>
+    </message>
+    <message>
         <source>zPIV Balance</source>
         <translation>Bilancio zPIV</translation>
+    </message>
+    <message>
+        <source>Mature: more than 20 confirmation and more than 1 mint of the same denomination after it was minted.
+These zPIV are spendable.</source>
+        <translation>Maturi: più di 20 conferme e più di 1 conio della stessa denominazione dopo il conio.
+Questi zPIV sono spendibili.</translation>
     </message>
     <message>
         <source>OVERVIEW</source>
         <translation>PANORAMICA</translation>
     </message>
     <message>
+        <source>Combined Balance (including unconfirmed and immature coins)</source>
+        <translation>Saldo complessivo (incluse monete non confermate e non mature)</translation>
+    </message>
+    <message>
+        <source>Combined Balance</source>
+        <translation>Saldo complessivo</translation>
+    </message>
+    <message>
         <source>Total:</source>
         <translation>Totale:</translation>
     </message>
     <message>
+        <source>Current total balance in watch-only addresses</source>
+        <translation>Saldo corrente totale in indirizzi sola-lettura</translation>
+    </message>
+    <message>
+        <source>Your current balance in watch-only addresses</source>
+        <translation>Il tuo saldo corrente in indirizzi sola-lettura</translation>
+    </message>
+    <message>
         <source>Spendable:</source>
         <translation>Spendibili:</translation>
+    </message>
+    <message>
+        <source>Locked PIV or Masternode collaterals. These are excluded from zPIV minting.</source>
+        <translation>PIV bloccati o collaterali Masternodo. Questi sono esclusi dal conio di zPIV.</translation>
     </message>
     <message>
         <source>Locked:</source>
@@ -1699,14 +1858,36 @@ MultiSend: %1</translation>
         <translation>Non confermati:</translation>
     </message>
     <message>
+        <source>Your current zPIV balance, unconfirmed and immature zPIV included.</source>
+        <translation>Il tuo saldo zPIV corrente, inclusi zPIV non confermati e non maturi</translation>
+    </message>
+    <message>
         <source>Recent transactions</source>
         <translation>Transazioni recenti</translation>
+    </message>
+    <message>
+        <source>Current percentage of zPIV.
+If AutoMint is enabled this percentage will settle around the configured AutoMint percentage (default = 10%).
+</source>
+        <translation>Percentuale corrente di zPIV.
+Se il conio automatico è attivato questa percentuale si stabilizzerà all'incirca sulla percentuale stabilita per il conio automatico (percentuale prestabilita = 10%).
+</translation>
     </message>
     <message>
         <source>AutoMint is currently enabled and set to </source>
         <translation>AutoMint è attivo e impostato su</translation>
     </message>
-    </context>
+    <message>
+        <source>To disable AutoMint add 'enablezeromint=0' in pivx.conf.</source>
+        <translation>Per disabilitare il conio automatico aggiungi 'enablezeromint=0' in pivx.conf.</translation>
+    </message>
+    <message>
+        <source>AutoMint is currently disabled.
+To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf</source>
+        <translation>Conio automatico è correntemente disattivato.
+Per attivare il Conio automatico cambiare 'enablezeromint=0' in 'enablezeromint=1' in pivx.conf</translation>
+    </message>
+</context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -1780,8 +1961,16 @@ MultiSend: %1</translation>
         <translation>PRIVACY</translation>
     </message>
     <message>
+        <source>Enter an amount of Piv to convert to zPIV</source>
+        <translation>Immetti un importo di PIV da convertire in zPIV</translation>
+    </message>
+    <message>
         <source>zPIV Control</source>
         <translation>Controllo zPIV</translation>
+    </message>
+    <message>
+        <source>zPIV Selected:</source>
+        <translation>zPIV selezionati:</translation>
     </message>
     <message>
         <source>Quantity Selected:</source>
@@ -1792,8 +1981,19 @@ MultiSend: %1</translation>
         <translation>Spendi Zerocoin</translation>
     </message>
     <message>
+        <source>Available (mature and spendable) zPIV for spending</source>
+        <translation>zPIV disponibili disponibili per essere spesi (maturi e spendibili)</translation>
+    </message>
+    <message>
         <source>Available Balance:</source>
         <translation>Bilancio Disponibile:</translation>
+    </message>
+    <message>
+        <source>Available (mature and spendable) zPIV for spending
+
+zPIV are mature when they have more than 20 confirmations AND more than 2 mints of the same denomination after them were minted</source>
+        <translation>zPIV disponibili disponibili per essere spesi (maturi e spendibili)
+Gli zPIV sono maturi quando hanno più di 20 conferme E più di 2 conii della stessa denominazione dopo che sono stati coniati</translation>
     </message>
     <message>
         <source>0 zPIV</source>
@@ -1838,6 +2038,39 @@ MultiSend: %1</translation>
     <message>
         <source>Zerocoin Stats:</source>
         <translation>Statistiche Zerocoin:</translation>
+    </message>
+    <message>
+        <source>Total Balance including unconfirmed and immature zPIV</source>
+        <translation>Saldo totale inclusi zPIV non confermati e non maturi</translation>
+    </message>
+    <message>
+        <source>Total Zerocoin  Balance:</source>
+        <translation>Saldo totale Zerocoin:</translation>
+    </message>
+    <message>
+        <source>Show the current status of automatic zPIV minting.
+
+To change the status (restart required):
+- enable: add 'enablezeromint=1' to pivx.conf
+- disable: add 'enablezeromint=0' to pivx.conf
+
+To change the percentage (no restart required):
+- menu Settings-&gt;Options-&gt;Percentage of autominted zPIV
+
+</source>
+        <translation>Mostra lo stato corrente del conio automatico zPIV.
+Per cambiare lo stato (riavvio necessario):
+- attivato: aggiungi 'enablezeromint=1' a pivx.conf
+- disattivato: aggiungi 'enablezeromint=0' a pivx.conf
+
+Per cambiare la percentuale (riavvio non necessario):
+- menu Impostazioni-&gt;Opzioni-&gt;Percentuale di zPIV da coniare automaticamente
+
+</translation>
+    </message>
+    <message>
+        <source>AutoMint Status</source>
+        <translation>Stato Conio automatico</translation>
     </message>
     <message>
         <source>Denom. 1:</source>
@@ -1980,8 +2213,24 @@ MultiSend: %1</translation>
         <translation>Conio zPIV</translation>
     </message>
     <message>
+        <source>AutoMint Status:</source>
+        <translation>Stato Conio automatico:</translation>
+    </message>
+    <message>
+        <source>Invalid Send Amount</source>
+        <translation>Importo di invio non valido</translation>
+    </message>
+    <message>
         <source>Confirm additional Fees</source>
         <translation>Conferma commissioni aggiuntive</translation>
+    </message>
+    <message>
+        <source>Confirm send coins</source>
+        <translation>Converma invio monete</translation>
+    </message>
+    <message>
+        <source>Sending successful, return code: </source>
+        <translation>Invio riuscito con successo, codice di conferma:</translation>
     </message>
     <message>
         <source>fee: </source>
@@ -2011,6 +2260,10 @@ MultiSend: %1</translation>
     <message>
         <source>Version</source>
         <translation>Versione</translation>
+    </message>
+    <message>
+        <source>Last Send</source>
+        <translation>Ultimo Invio</translation>
     </message>
     </context>
 <context>
@@ -2065,6 +2318,14 @@ MultiSend: %1</translation>
 <context>
     <name>SendCoinsDialog</name>
     <message>
+        <source>Send Coins</source>
+        <translation>Invia Monete</translation>
+    </message>
+    <message>
+        <source>SEND</source>
+        <translation>INVIA</translation>
+    </message>
+    <message>
         <source>Insufficient funds!</source>
         <translation>Fondi insufficienti!</translation>
     </message>
@@ -2117,8 +2378,24 @@ MultiSend: %1</translation>
         <translation>(Commissioni smart non ancora inizializzate. L'inizializzazione richiede in genere un paio di blocchi...)</translation>
     </message>
     <message>
+        <source>Send as zero-fee transaction if possible</source>
+        <translation>Invia qualora possibile come transazione a commissione-zero</translation>
+    </message>
+    <message>
+        <source>Confirm the send action</source>
+        <translation>Conferma l'azione di invio</translation>
+    </message>
+    <message>
         <source>Clear &amp;All</source>
         <translation>Cancella &amp;All</translation>
+    </message>
+    <message>
+        <source>Send to multiple recipients at once</source>
+        <translation>Invia contemporaneamente a destinatari multipli</translation>
+    </message>
+    <message>
+        <source>Balance:</source>
+        <translation>Saldo:</translation>
     </message>
     <message>
         <source>Copy quantity</source>
@@ -2143,6 +2420,22 @@ MultiSend: %1</translation>
     <message>
         <source>Copy dust</source>
         <translation>Copia polvere</translation>
+    </message>
+    <message>
+        <source>Copy change</source>
+        <translation>Copia resto</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to send?</source>
+        <translation>Sei sicuro di voler inviare?</translation>
+    </message>
+    <message>
+        <source>Confirm send coins</source>
+        <translation>Conferma invio monete</translation>
+    </message>
+    <message>
+        <source>The amount exceeds your balance.</source>
+        <translation>L'importo eccede il tuo saldo.</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -2179,7 +2472,11 @@ MultiSend: %1</translation>
         <source>A&amp;mount:</source>
         <translation>Q&amp;uantità:</translation>
     </message>
-    </context>
+    <message>
+        <source>Enter a label for this address to add it to your address book</source>
+        <translation>Inserisci un'etichetta per questo indirizzo da aggiungere alla tua rubrica</translation>
+    </message>
+</context>
 <context>
     <name>ShutdownWindow</name>
     </context>
@@ -2352,6 +2649,10 @@ MultiSend: %1</translation>
     </context>
 <context>
     <name>WalletModel</name>
+    <message>
+        <source>Send Coins</source>
+        <translation>Invia Monete</translation>
+    </message>
     </context>
 <context>
     <name>WalletView</name>

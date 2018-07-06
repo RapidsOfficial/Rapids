@@ -2163,6 +2163,17 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Баланс zPIV</translation>
     </message>
     <message>
+        <source>Mature: more than 20 confirmation and more than 1 mint of the same denomination after it was minted.
+These zPIV are spendable.</source>
+        <translation>Зрелые: более 20 подтверждений и более 1 чеканки одного и того же наименования после того, как оно было отчеканено. Эти zPIV можно потратить.</translation>
+    </message>
+    <message>
+        <source>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
+        <translation>Неподтверждено: менее 20 подтверждений
+Незрелый: подтвержден, но менее 1 чеканок того же наименования после того, как он был отчеканен</translation>
+    </message>
+    <message>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
         <translation>Возможно отображаемая информация устарела. Ваш кошелек автоматически синхронизируется с сетью PIVX после установки соединения, но этот процесс еще не завершен. </translation>
     </message>
@@ -2262,6 +2273,10 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf<
     <message>
         <source>URI handling</source>
         <translation>Обработка ссылок</translation>
+    </message>
+    <message>
+        <source>Payment request fetch URL is invalid: %1</source>
+        <translation> Недопустимый URL-адрес запроса платежа: %1</translation>
     </message>
     <message>
         <source>Payment request file handling</source>
@@ -2426,6 +2441,18 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf<
         <translation>КОНФИДЕНЦИАЛЬНОСТЬ</translation>
     </message>
     <message>
+        <source>Enter an amount of Piv to convert to zPIV</source>
+        <translation>Введите сумму в Piv для  конвертации в zPIV</translation>
+    </message>
+    <message>
+        <source>zPIV Control</source>
+        <translation>Контроль zPIV</translation>
+    </message>
+    <message>
+        <source>zPIV Selected:</source>
+        <translation>Выбрано zPIV:</translation>
+    </message>
+    <message>
         <source>Quantity Selected:</source>
         <translation>Выбранное Количество:</translation>
     </message>
@@ -2540,6 +2567,12 @@ zPIV are mature when they have more than 20 confirmations AND more than 2 mints 
     <message>
         <source>Denom. with value 1:</source>
         <translation>Номинал со значением 1:</translation>
+    </message>
+    <message>
+        <source>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
+        <translation>Неподтверждено: менее 20 подтверждений
+Незрелый: подтвержден, но менее 1 чеканок того же наименования после того, как он был отчеканен</translation>
     </message>
     <message>
         <source>Show the current status of automatic zPIV minting.
@@ -2734,6 +2767,34 @@ To change the percentage (no restart required):
         <translation>Копировать сумму</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>Запуск ResetMintZerocoin: повторное сканирование полной блок-цепи, это потребует до 30 минут в зависимости от вашего оборудования.
+Будьте терпеливы ...</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>Расходы Zerocoin.
+Вычислительно дорого, может потребоваться несколько минут в зависимости от выбранного уровня безопасности и вашего оборудования.
+Пожалуйста, будьте терпеливы...</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) необходимо.
+Максимально допустимое:</translation>
+    </message>
+    <message>
+        <source>zPIV Spend #: </source>
+        <translation>zPIV Тратить #: </translation>
+    </message>
+    <message>
+        <source>zPIV Mint</source>
+        <translation>чеканка zPIV</translation>
+    </message>
+    <message>
         <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
         <translation> &lt;b&gt;включен&lt;/b&gt;.</translation>
     </message>
@@ -2848,12 +2909,6 @@ To change the percentage (no restart required):
 </translation>
     </message>
     <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>Запуск ResetMintZerocoin: повторное сканирование полной блок-цепи, это потребует до 30 минут в зависимости от вашего оборудования. 
-Будьте терпеливы ...</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>Продолжительность:</translation>
     </message>
@@ -2904,22 +2959,20 @@ Please be patient...</source>
         <translation>Подтвердить отправку монет</translation>
     </message>
     <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>Расходы Zerocoin.
-Вычислительно дорого, может потребоваться несколько минут в зависимости от выбранного уровня безопасности и вашего оборудования. 
-Пожалуйста, будьте терпеливы...</translation>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>Для версии 1 zPIV требуется уровень безопасности 100, который можно успешно тратить.</translation>
+    </message>
+    <message>
+        <source>Failed to spend zPIV</source>
+        <translation>Не удалось провести zPIV</translation>
+    </message>
+    <message>
+        <source>Failed to fetch mint associated with serial hash</source>
+        <translation>Не удалось получить чеканку, связанную с серийным хэшем</translation>
     </message>
     <message>
         <source>Too much inputs (</source>
         <translation>Слишком много входов (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) необходимо. 
-Максимально допустимое:</translation>
     </message>
     <message>
         <source>
@@ -2930,6 +2983,11 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Spend Zerocoin failed with status = </source>
         <translation>Провести Zerocoin не удалось со статусом =</translation>
+    </message>
+    <message numerus="yes">
+        <source>PrivacyDialog</source>
+        <comment>Enter an amount of PIV to convert to zPIV</comment>
+        <translation><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform></translation>
     </message>
     <message>
         <source>denomination: </source>
@@ -3239,6 +3297,18 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Time Offset</source>
         <translation>смещение по времени</translation>
+    </message>
+    <message>
+        <source>Custom Backup Path:</source>
+        <translation>Пользовательский путь резервного копирования:</translation>
+    </message>
+    <message>
+        <source>Custom zPIV Backup Path:</source>
+        <translation>Пользовательский путь резервного копирования zPIV:</translation>
+    </message>
+    <message>
+        <source>Custom Backups Threshold:</source>
+        <translation>Порог пользовательских резервных копий:</translation>
     </message>
     <message>
         <source>Salvage wallet</source>
@@ -4454,6 +4524,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Получено через обфускацию</translation>
     </message>
     <message>
+        <source>PIV Stake</source>
+        <translation>Доля PIV</translation>
+    </message>
+    <message>
+        <source>zPIV Stake</source>
+        <translation>Доля zPIV</translation>
+    </message>
+    <message>
         <source>Obfuscation Denominate</source>
         <translation>Обфускация</translation>
     </message>
@@ -4468,6 +4546,34 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Obfuscation Create Denominations</source>
         <translation>Обфускация Создание конфессий</translation>
+    </message>
+    <message>
+        <source>Converted PIV to zPIV</source>
+        <translation>Преобразованный PIV в zPIV</translation>
+    </message>
+    <message>
+        <source>Spent zPIV</source>
+        <translation>потраченный zPIV</translation>
+    </message>
+    <message>
+        <source>Received PIV from zPIV</source>
+        <translation>Полученный PIV от zPIV</translation>
+    </message>
+    <message>
+        <source>Minted Change as zPIV from zPIV Spend</source>
+        <translation>созданная  замена  zPIV из потраенного zPIV </translation>
+    </message>
+    <message>
+        <source>Converted zPIV to PIV</source>
+        <translation>Преобразованный zPIV to PIV</translation>
+    </message>
+    <message>
+        <source>Anonymous (zPIV Transaction)</source>
+        <translation>Анонимный (транзакция zPIV)</translation>
+    </message>
+    <message>
+        <source>Anonymous (zPIV Stake)</source>
+        <translation>Анонимный (ставка zPIV)</translation>
     </message>
     <message>
         <source>Sent to</source>
@@ -4677,6 +4783,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Экспортирование произошло успешно</translation>
     </message>
     <message>
+        <source>Received PIV from zPIV</source>
+        <translation>Полученный PIV от zPIV</translation>
+    </message>
+    <message>
+        <source>Zerocoin Spend, Change in zPIV</source>
+        <translation>Потратить Zerocoin, Преобразовать в zPIV</translation>
+    </message>
+    <message>
         <source>The transaction history was successfully saved to %1.</source>
         <translation>История транзакций была успешно сохранена в %1.</translation>
     </message>
@@ -4743,6 +4857,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
 </context>
 <context>
     <name>ZPivControlDialog</name>
+    <message>
+        <source>Select zPIV to Spend</source>
+        <translation>Выберите zPIV чтобы потратить</translation>
+    </message>
     <message>
         <source>Quantity</source>
         <translation>Количество</translation>
@@ -4811,8 +4929,24 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Удалите все транзакции кошелька и восстановите только те части блок-цепи через -rescan при запуске</translation>
     </message>
     <message>
+        <source>Delete all zerocoin spends and mints that have been recorded to the blockchain database and reindex them (0-1, default: %u)</source>
+        <translation>Удалите все траты и монетки zerocoin, которые были записаны в базу данных blockchain, и переиндексируйте их (0-1, по умолчанию: %u)</translation>
+    </message>
+    <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Распространяется по лицензии программного обеспечения MIT, см. Сопроводительный файл COPYING или &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
+    </message>
+    <message>
+        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
+        <translation>Включить автоматическое резервное копирование кошелька, запускаемое после каждого чеканки zPIV (0-1, по умолчанию: %u)</translation>
+    </message>
+    <message>
+        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
+        <translation>Включение или отключение функций разбивки для входов PIV (0-1, по умолчанию: %u)</translation>
+    </message>
+    <message>
+        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
+        <translation>Включение или отключение функций разбивки для входов zPIV (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable spork administration functionality with the appropriate private key.</source>
@@ -5411,6 +5545,18 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Reindex статистика денежной массы PIV и zPIV</translation>
     </message>
     <message>
+        <source>Reindexing zerocoin database...</source>
+        <translation>Реиндексирующая база данных нулевого цикла ...</translation>
+    </message>
+    <message>
+        <source>Reindexing zerocoin failed</source>
+        <translation>Повторный обмен зерокоинта не удался</translation>
+    </message>
+    <message>
+        <source>Selected coins value is less than payment target</source>
+        <translation>Выбранная стоимость монет меньше цели платежа</translation>
+    </message>
+    <message>
         <source>SwiftX options:</source>
         <translation>Параметры SwiftX:</translation>
     </message>
@@ -5469,6 +5615,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
         <translation>Предпочтительный номинал для автоматически чеканившегося Zerocoin (1/5/10/50/100/500/1000/5000), 0 без предпочтений. default: %u)</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <translation>Укажите собственный путь резервного копирования, чтобы добавить копию любой автоматической резервной копии zPIV. Если задано как dir, каждая резервная копия генерирует файл с отметкой времени. Если он установлен как файл, он будет переписывать в этот файл каждую резервную копию. Если также установлен резервный путь, произойдет 4 резервных копии</translation>
+    </message>
+    <message>
+        <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
+        <translation>Укажите собственный путь резервного копирования, чтобы добавить копию любой резервной копии кошелька. Если задано как dir, каждая резервная копия генерирует файл с отметкой времени. Если он установлен как файл, он будет переписывать в этот файл каждую резервную копию.</translation>
     </message>
     <message>
         <source>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
@@ -5531,8 +5685,16 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Не удалось десериализовать</translation>
     </message>
     <message>
+        <source>Failed to find Zerocoins in wallet.dat</source>
+        <translation>Не удалось найти Zerocoins в файле wallet.dat</translation>
+    </message>
+    <message>
         <source>Failed to select a zerocoin</source>
         <translation>Не удалось выбрать зерокоин</translation>
+    </message>
+    <message>
+        <source>Failed to wipe zerocoinDB</source>
+        <translation>Не удалось вытереть zerocoinDB</translation>
     </message>
     <message>
         <source>Failed to write coin serial number into wallet</source>
@@ -5699,6 +5861,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Количество резервных копий автоматического кошелька (по умолчанию: 10)</translation>
     </message>
     <message>
+        <source>Number of custom location backups to retain (default: %d)</source>
+        <translation>Количество резервных копий пользовательского местоположения для сохранения (по умолчанию: %d)</translation>
+    </message>
+    <message>
         <source>Obfuscation is idle.</source>
         <translation>Обфускация простаивает.</translation>
     </message>
@@ -5820,7 +5986,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Set key pool size to &lt;n&gt; (default: %u)</source>
-        <translation>Установите размер пула ключей &lt;n&gt;(по умолчанию: %u)</translation>
+        <translation>Установите размер пула ключей&lt;n&gt;(по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Set maximum block size in bytes (default: %d)</source>
@@ -5949,6 +6115,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Synchronizing sporks...</source>
         <translation>Синхронизация спорков ...</translation>
+    </message>
+    <message>
+        <source>Syncing zPIV wallet...</source>
+        <translation>Синхронизация zPIV кошелька ...</translation>
     </message>
     <message>
         <source>The coin spend has been used</source>
@@ -6095,6 +6265,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Имя пользователя для соединений JSON-RPC</translation>
     </message>
     <message>
+        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
+        <translation>Значение ниже наименьшего доступного номинала (= 1) zPiv</translation>
+    </message>
+    <message>
         <source>Value more than Obfuscation pool maximum allows.</source>
         <translation>Максимальное значение больше, чем позволяет пул перекрытий Obfuscation.</translation>
     </message>
@@ -6105,6 +6279,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Verifying wallet...</source>
         <translation>Проверка кошелька ...</translation>
+    </message>
+    <message>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>Для версии 1 zPIV требуется уровень безопасности 100, который можно успешно тратить.</translation>
     </message>
     <message>
         <source>Wallet %s resides outside data directory %s</source>

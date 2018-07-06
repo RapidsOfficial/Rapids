@@ -610,7 +610,7 @@
     </message>
     <message numerus="yes">
         <source>Processed %n blocks of transaction history.</source>
-        <translation><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform></translation>
+        <translation><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform><numerusform>Apdorota %n operacijų istorijos blokų.</numerusform></translation>
     </message>
     <message>
         <source>Synchronizing additional data: %p%</source>
@@ -738,7 +738,7 @@
     </message>
     <message numerus="yes">
         <source>%n active connection(s) to PIVX network</source>
-        <translation><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform></translation>
+        <translation><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform><numerusform>%n aktyvių prisijungimų PIVX tinkle ()</numerusform></translation>
     </message>
     <message>
         <source>Synchronizing with network...</source>
@@ -762,15 +762,15 @@
     </message>
     <message numerus="yes">
         <source>%n hour(s)</source>
-        <translation><numerusform>%n valanda</numerusform><numerusform>%n valandų</numerusform><numerusform>%n valandų</numerusform></translation>
+        <translation><numerusform>%n valanda</numerusform><numerusform>%n valandų</numerusform><numerusform>%n valandų</numerusform><numerusform>%n valandų</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n day(s)</source>
-        <translation><numerusform>%n diena</numerusform><numerusform>%n dienų</numerusform><numerusform>%n dienų</numerusform></translation>
+        <translation><numerusform>%n diena</numerusform><numerusform>%n dienų</numerusform><numerusform>%n dienų</numerusform><numerusform>%n dienų</numerusform></translation>
     </message>
     <message numerus="yes">
         <source>%n week(s)</source>
-        <translation><numerusform>%n savaitė</numerusform><numerusform>%n savaičių</numerusform><numerusform>%n savaičių</numerusform></translation>
+        <translation><numerusform>%n savaitė</numerusform><numerusform>%n savaičių</numerusform><numerusform>%n savaičių</numerusform><numerusform>%n savaičių</numerusform></translation>
     </message>
     <message>
         <source>%1 and %2</source>
@@ -778,7 +778,7 @@
     </message>
     <message numerus="yes">
         <source>%n year(s)</source>
-        <translation><numerusform>%n metai</numerusform><numerusform>%n metų</numerusform><numerusform>%n metų</numerusform></translation>
+        <translation><numerusform>%n metai</numerusform><numerusform>%n metų</numerusform><numerusform>%n metų</numerusform><numerusform>%n metų</numerusform></translation>
     </message>
     <message>
         <source>Catching up...</source>
@@ -1643,6 +1643,10 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
         <translation>Suma:</translation>
     </message>
     <message>
+        <source>Add a Raw Input</source>
+        <translation>Pridėti Gryną Įvestį</translation>
+    </message>
+    <message>
         <source>Address / Amount:</source>
         <translation>Adresas / Suma:</translation>
     </message>
@@ -1677,6 +1681,14 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
     <message>
         <source>S&amp;ign</source>
         <translation>&amp;Pasirašyti</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DISABLED until transaction has been signed enough times.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;IŠJUNGTA, kol sandoris bus patvirtintas pakankamai kartų.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Co&amp;mmit</source>
+        <translation>Sk&amp;irti</translation>
     </message>
     <message>
         <source>Add private keys to sign the transaction with</source>
@@ -1717,6 +1729,10 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
 </context>
 <context>
     <name>ObfuscationConfig</name>
+    <message>
+        <source>Configure Obfuscation</source>
+        <translation>Konfigūruoti Obfuscation</translation>
+    </message>
     <message>
         <source>Basic Privacy</source>
         <translation>Pagrindinis Privatumas</translation>
@@ -1761,7 +1777,23 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
         <source>0.1 PIV per 10000 PIV you anonymize.</source>
         <translation>0.1 PIV kas 1000 PIV kuriuos anonimizuosite.</translation>
     </message>
-    </context>
+    <message>
+        <source>Obfuscation Configuration</source>
+        <translation>Obfuscation Konfigūracija</translation>
+    </message>
+    <message>
+        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
+        <translation>Obfuscation buvo sėkmingai nustatytas į paprastą (%1 ir 2 raundai). Bet kada galite tai pakeisti, atidarę PIVX konfigūracijos ekraną.</translation>
+    </message>
+    <message>
+        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
+        <translation>Obfuscation buvo sėkmingai nustatytas į aukštą (%1 ir 8 raundai). Bet kada galite tai pakeisti, atidarę PIVX konfigūracijos ekraną.</translation>
+    </message>
+    <message>
+        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
+        <translation>Obfuscation buvo sėkmingai nustatytas į maksimumą (%1 ir 16 raundai). Bet kada galite tai pakeisti, atidarę PIVX konfigūracijos ekraną.</translation>
+    </message>
+</context>
 <context>
     <name>OpenURIDialog</name>
     <message>
@@ -1788,6 +1820,10 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
         <translation>Nustatymai</translation>
     </message>
     <message>
+        <source>Size of &amp;database cache</source>
+        <translation>&amp;Duomenų bazės talpyklos dydis</translation>
+    </message>
+    <message>
         <source>MB</source>
         <translation>MB</translation>
     </message>
@@ -1802,6 +1838,10 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
     <message>
         <source>Allow incoming connections</source>
         <translation>Leisti įeinančius ryšius</translation>
+    </message>
+    <message>
+        <source>Expert</source>
+        <translation>Ekspertas</translation>
     </message>
     <message>
         <source>Automatically start PIVX after logging in to the system.</source>
@@ -1820,8 +1860,16 @@ Patikrinkite adresą ir bandykite dar kartą.</translation>
         <translation>Įgalinti monetų &amp;valdymo funkcijas</translation>
     </message>
     <message>
+        <source>Show additional tab listing all your masternodes in first sub-tab&lt;br/&gt;and all masternodes on the network in second sub-tab.</source>
+        <translation>Rodyti papildomą skirtuką, kuriame pateikiami visi jūsų masternod'ai pirmame&lt;br/&gt; skirtuke ir visi antrame skirtuke visi tinkle esantys masternod'ai.</translation>
+    </message>
+    <message>
         <source>Show Masternodes Tab</source>
         <translation>Rodyti Masternod'ų Langelį</translation>
+    </message>
+    <message>
+        <source>&amp;Spend unconfirmed change</source>
+        <translation>&amp;Išleisti nepatvirtintą grąžą</translation>
     </message>
     <message>
         <source>&amp;Network</source>
@@ -1840,6 +1888,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>Map port using &amp;UPnP</source>
         <translation>Įrašyti prievadą naudojant &amp;UPnP</translation>
+    </message>
+    <message>
+        <source>Enable automatic minting of PIV units to zPIV</source>
+        <translation>Įgalinti automatinį konvertavimą iš PIV į zPIV</translation>
     </message>
     <message>
         <source>Enable zPIV Automint</source>
@@ -1886,12 +1938,24 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Po lango minimizavimo rodyti tik piktogramą.</translation>
     </message>
     <message>
+        <source>&amp;Display</source>
+        <translation>&amp;Rodyti</translation>
+    </message>
+    <message>
+        <source>Decimal digits</source>
+        <translation>Dešimtainiai skaitmenys</translation>
+    </message>
+    <message>
         <source>Hide empty balances</source>
         <translation>Slėpti tuščius balansus</translation>
     </message>
     <message>
         <source>Third party transaction URLs</source>
         <translation>Trečių šalių pavedimų URL adresai</translation>
+    </message>
+    <message>
+        <source>Reset all client options to default.</source>
+        <translation>Iš naujo nustatyti visas parinktis.</translation>
     </message>
     <message>
         <source>&amp;Reset Options</source>
@@ -1997,6 +2061,18 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>zPIV Balansas</translation>
     </message>
     <message>
+        <source>Mature: more than 20 confirmation and more than 1 mint of the same denomination after it was minted.
+These zPIV are spendable.</source>
+        <translation>Subrendę: daugiau nei 20 patvirtinimų ir daugiau nei 1 konvertacija to pačio nominalo, kai jis jau buvo konvertuotas.
+Šiuos zPIV galima išleisti.</translation>
+    </message>
+    <message>
+        <source>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
+        <translation>Nepatvirtinta: mažiau nei 20 patvirtinimų
+Nesubrendusios: patvirtintos, bet mažiau nei 1 konvertacijos to pačio nominalo po to, kai buvo konvertuotas.</translation>
+    </message>
+    <message>
         <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
         <translation>Rodoma informacija gali būti pasenusi. Jūsų piniginė automatiškai sinchronizuojasi su PIVX tinklu po ryšio aktyvavimo, tačiau šis procesas dar nebaigtas.</translation>
     </message>
@@ -2011,6 +2087,14 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>Combined Balance</source>
         <translation>Kombinuotas balansas</translation>
+    </message>
+    <message>
+        <source>Unconfirmed transactions to watch-only addresses</source>
+        <translation>Nepatvirtinti sandoriai tik žiūrėjimo adresams</translation>
+    </message>
+    <message>
+        <source>Staked or masternode rewards in watch-only addresses that has not yet matured</source>
+        <translation>Stake'inimo ar masternod'ų atlygiai tik žiūrėjimo adresuose, kurie dar nėra subrendę</translation>
     </message>
     <message>
         <source>Total:</source>
@@ -2063,14 +2147,62 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </context>
 <context>
     <name>PaymentServer</name>
-    </context>
+    <message>
+        <source>Payment request error</source>
+        <translation>Mokėjimo užklausos klaida</translation>
+    </message>
+    <message>
+        <source>Invalid payment address %1</source>
+        <translation>Netinkamas mokėjimo adresas %1</translation>
+    </message>
+    <message>
+        <source>Cannot start pivx: click-to-pay handler</source>
+        <translation>Nepavyksta paleisti pivx: apdorojimo "spustelėjimo ir apmokėjimo" funkcijos klaida</translation>
+    </message>
+    <message>
+        <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
+        <translation>Mokėjimo užklausos failas negali būti nuskaitytas! Tai gali sukelti netinkamas mokėjimo prašymo failas.</translation>
+    </message>
+    <message>
+        <source>Payment request rejected</source>
+        <translation>Mokėjimo užklausa atmesta</translation>
+    </message>
+    <message>
+        <source>Error communicating with %1: %2</source>
+        <translation>Klaida susisiekiant su %1: %2</translation>
+    </message>
+    <message>
+        <source>Payment request cannot be parsed!</source>
+        <translation>Negalima išnagrinėti mokėjimo užklausos!</translation>
+    </message>
+    <message>
+        <source>Bad response from server %1</source>
+        <translation>Blogas serverio %1 atsakymas</translation>
+    </message>
+    <message>
+        <source>Network request error</source>
+        <translation>Tinklo užklausos klaida</translation>
+    </message>
+    <message>
+        <source>Payment acknowledged</source>
+        <translation>Mokėjimas patvirtintas</translation>
+    </message>
+</context>
 <context>
     <name>PeerTableModel</name>
+    <message>
+        <source>Address/Hostname</source>
+        <translation>Adresas / pavadinimas</translation>
+    </message>
     <message>
         <source>Version</source>
         <translation>Versija</translation>
     </message>
-    </context>
+    <message>
+        <source>Ping Time</source>
+        <translation>Ping'o laikas</translation>
+    </message>
+</context>
 <context>
     <name>PrivacyDialog</name>
     <message>
@@ -2082,6 +2214,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Rodoma informacija gali būti pasenusi. Jūsų piniginė automatiškai sinchronizuojasi su PIVX tinklu po ryšio aktyvavimo, tačiau šis procesas dar nebaigtas.</translation>
     </message>
     <message>
+        <source>Mint Zerocoin</source>
+        <translation>Konvertuoti į Zerocoin</translation>
+    </message>
+    <message>
         <source>0</source>
         <translation>0</translation>
     </message>
@@ -2090,8 +2226,24 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>zPIV</translation>
     </message>
     <message>
+        <source>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</source>
+        <translation>Galimos konvertavimui monetos, kurios yra patvirtintos ir neužrakintos, arba Masternod'ų užstatai.</translation>
+    </message>
+    <message>
+        <source>Available for Minting:</source>
+        <translation>Prieinama Konvertavimui:</translation>
+    </message>
+    <message>
         <source>0.000 000 00 PIV</source>
         <translation>0.000 000 00 PIV</translation>
+    </message>
+    <message>
+        <source>Reset</source>
+        <translation>Atitaisyti</translation>
+    </message>
+    <message>
+        <source>Coin Control...</source>
+        <translation>Monetų Kontrolė...</translation>
     </message>
     <message>
         <source>Quantity:</source>
@@ -2102,12 +2254,32 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Suma:</translation>
     </message>
     <message>
+        <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
+        <translation>Iš naujo nuskenuokite blockchain'ą Zerocoin konvertacijoms ir jų metaduomenims.</translation>
+    </message>
+    <message>
+        <source>ReScan</source>
+        <translation>Nuskenuoti iš naujo</translation>
+    </message>
+    <message>
         <source>PRIVACY</source>
         <translation>PRIVATUMAS</translation>
     </message>
     <message>
+        <source>zPIV Control</source>
+        <translation>zPiv Kontrolė</translation>
+    </message>
+    <message>
+        <source>zPIV Selected:</source>
+        <translation>Pasirinkta zPIV:</translation>
+    </message>
+    <message>
         <source>Quantity Selected:</source>
         <translation>Pasirinktas Kiekis:</translation>
+    </message>
+    <message>
+        <source>Spend Zerocoin. Without 'Pay To:' address creates payments to yourself.</source>
+        <translation>Išleisti Zerocoin. Be "Mokėti:" adreso sukuria mokėjimus sau.</translation>
     </message>
     <message>
         <source>Spend Zerocoin</source>
@@ -2130,6 +2302,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Saugumo Lygmuo 1 - 100 (numatytas: 42)</translation>
     </message>
     <message>
+        <source>Pay &amp;To:</source>
+        <translation>&amp;Mokėti:</translation>
+    </message>
+    <message>
         <source>Choose previously used address</source>
         <translation>Pasirinkti prieš tai naudotą adresą</translation>
     </message>
@@ -2150,12 +2326,130 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>&amp;Etiketė:</translation>
     </message>
     <message>
+        <source>A&amp;mount:</source>
+        <translation>S&amp;uma:</translation>
+    </message>
+    <message>
+        <source>Minimize Change</source>
+        <translation>Sumažinti Grąžą</translation>
+    </message>
+    <message>
+        <source>Zerocoin Stats:</source>
+        <translation>Zerocoin Statistika:</translation>
+    </message>
+    <message>
+        <source>Total Balance including unconfirmed and immature zPIV</source>
+        <translation>Bendras balansas, įskaitant nepatvirtintą ir nesubrendusį zPIV</translation>
+    </message>
+    <message>
         <source>Total Zerocoin  Balance:</source>
         <translation>Visas Zerocoin Balansas:</translation>
     </message>
     <message>
+        <source>Denominations with value 1:</source>
+        <translation>Nominalai su verte 1:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 1:</source>
+        <translation>Nomin. su verte 1:</translation>
+    </message>
+    <message>
+        <source>Unconfirmed: less than 20 confirmations
+Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
+        <translation>Nepatvirtinta: mažiau nei 20 patvirtinimų
+Nesubrendusios: patvirtintos, bet mažiau nei 1 konvertacijos tos pačio nominalo po to, kai buvo konvertuota.</translation>
+    </message>
+    <message>
+        <source>Denom. 1:</source>
+        <translation>Nomin.  1:</translation>
+    </message>
+    <message>
+        <source>Denom. 5:</source>
+        <translation>Nomin. 5:</translation>
+    </message>
+    <message>
+        <source>Denom. 10:</source>
+        <translation>Nomin.  10:</translation>
+    </message>
+    <message>
+        <source>Denom. 50:</source>
+        <translation>Nomin. 50:</translation>
+    </message>
+    <message>
+        <source>Denom. 100:</source>
+        <translation>Nomin.  100:</translation>
+    </message>
+    <message>
+        <source>Denom. 500:</source>
+        <translation>Nomin. 500:</translation>
+    </message>
+    <message>
+        <source>Denom. 1000:</source>
+        <translation>Nomin.  1000:</translation>
+    </message>
+    <message>
+        <source>Denom. 5000:</source>
+        <translation>Nomin. 5000:</translation>
+    </message>
+    <message>
         <source>0 x</source>
         <translation>0 x</translation>
+    </message>
+    <message>
+        <source>Denominations with value 5:</source>
+        <translation>Nominalai su verte 5:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 5:</source>
+        <translation>Nomin. su verte 5:</translation>
+    </message>
+    <message>
+        <source>Denominations with value 10:</source>
+        <translation>Nominalai su verte 10:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 10:</source>
+        <translation>Nomin. su verte 10:</translation>
+    </message>
+    <message>
+        <source>Denominations with value 50:</source>
+        <translation>Nominalai su verte 50:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 50:</source>
+        <translation>Nomin. su verte 50:</translation>
+    </message>
+    <message>
+        <source>Denominations with value 100:</source>
+        <translation>Nominalai su verte 100:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 100:</source>
+        <translation>Nomin. su verte 100:</translation>
+    </message>
+    <message>
+        <source>Denominations with value 500:</source>
+        <translation>Nominalai su verte 500:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 500:</source>
+        <translation>Nomin. su verte 500:</translation>
+    </message>
+    <message>
+        <source>Denominations with value 1000:</source>
+        <translation>Nominalai su verte 1000:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 1000:</source>
+        <translation>Nomin. su verte 1000:</translation>
+    </message>
+    <message>
+        <source>Denominations with value 5000:</source>
+        <translation>Nominalai su verte 5000:</translation>
+    </message>
+    <message>
+        <source>Denom. with value 5000:</source>
+        <translation>Nomin. su verte 5000:</translation>
     </message>
     <message>
         <source>Priority:</source>
@@ -2194,12 +2488,24 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Monetų Valdymo Funkcijos</translation>
     </message>
     <message>
+        <source>Custom change address</source>
+        <translation>Pasirinktinio pakeitimo adresas</translation>
+    </message>
+    <message>
+        <source>Amount After Fee:</source>
+        <translation>Suma Po Mokesčių:</translation>
+    </message>
+    <message>
         <source>Change:</source>
         <translation>Grąža: </translation>
     </message>
     <message>
         <source>out of sync</source>
         <translation>ne sinchronizuotas</translation>
+    </message>
+    <message>
+        <source>Mint Status: Okay</source>
+        <translation>Konvertavimo Statusas: Geras</translation>
     </message>
     <message>
         <source>Copy quantity</source>
@@ -2209,12 +2515,160 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <source>Copy amount</source>
         <translation>Kopijuoti sumą</translation>
     </message>
-    </context>
+    <message>
+        <source>zPIV Spend #: </source>
+        <translation>zPIV Išleidimas #:</translation>
+    </message>
+    <message>
+        <source>zPIV Mint</source>
+        <translation>zPIV Konvertavimas</translation>
+    </message>
+    <message>
+        <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
+        <translation>&lt;b&gt;įjungta&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source> &lt;b&gt;disabled&lt;/b&gt;.</source>
+        <translation>&lt;b&gt;išjungta&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;1&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;1&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;5&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;5&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;10&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;10&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;50&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;50&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;100&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;100&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;500&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;500&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;1000&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;1000&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. with value &lt;b&gt;5000&lt;/b&gt;:</source>
+        <translation>Nomin. su verte &lt;b&gt;5000&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>AutoMint Status:</source>
+        <translation>Auto-Konvertavimo Statusas:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;1&lt;/b&gt;:</source>
+        <translation>Nomin.  &lt;b&gt;1&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;5&lt;/b&gt;:</source>
+        <translation>Nomin. &lt;b&gt;5&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;10&lt;/b&gt;:</source>
+        <translation>Nomin.  &lt;b&gt;10&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;50&lt;/b&gt;:</source>
+        <translation>Nomin. &lt;b&gt;50&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;100&lt;/b&gt;:</source>
+        <translation>Nomin.  &lt;b&gt;100&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;500&lt;/b&gt;:</source>
+        <translation>Nomin. &lt;b&gt;500&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;1000&lt;/b&gt;:</source>
+        <translation>Nomin.  &lt;b&gt;1000&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Denom. &lt;b&gt;5000&lt;/b&gt;:</source>
+        <translation>Nomin. &lt;b&gt;5000&lt;/b&gt;:</translation>
+    </message>
+    <message>
+        <source>Error: Your wallet is locked. Please enter the wallet passphrase first.</source>
+        <translation>Klaida: jūsų piniginė užrakinta. Pirmiausia įveskite piniginės slaptažodį.</translation>
+    </message>
+    <message>
+        <source>Invalid Pivx Address</source>
+        <translation>Netinkamas Pivx Adresas</translation>
+    </message>
+    <message>
+        <source>Invalid Send Amount</source>
+        <translation>Netinkama Siuntimo Suma</translation>
+    </message>
+    <message>
+        <source>Confirm additional Fees</source>
+        <translation>Patvirtinkite papildomus mokesčius</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to send?&lt;br /&gt;&lt;br /&gt;</source>
+        <translation>Ar tikrai norite siųsti?&lt;br /&gt;&lt;br /&gt;</translation>
+    </message>
+    <message>
+        <source> to address </source>
+        <translation>į adresą</translation>
+    </message>
+    <message>
+        <source>with Security Level </source>
+        <translation>su Saugumo Lygmeniu</translation>
+    </message>
+    <message>
+        <source>Failed to spend zPIV</source>
+        <translation>Nepavyko išleisti zPIV</translation>
+    </message>
+    <message>
+        <source>serial: </source>
+        <translation>serija:</translation>
+    </message>
+    <message>
+        <source>address: </source>
+        <translation>adresas:</translation>
+    </message>
+    <message>
+        <source>fee: </source>
+        <translation>mokestis: </translation>
+    </message>
+</context>
 <context>
     <name>QObject</name>
     <message>
         <source>Amount</source>
         <translation>Suma</translation>
+    </message>
+    <message>
+        <source>Enter a PIVX address (e.g. %1)</source>
+        <translation>Įveskite PIVX adresą (pvz. %1)</translation>
+    </message>
+    <message>
+        <source>%1 d</source>
+        <translation>%1 d</translation>
+    </message>
+    <message>
+        <source>%1 h</source>
+        <translation>%1 v</translation>
+    </message>
+    <message>
+        <source>%1 m</source>
+        <translation>%1 m</translation>
+    </message>
+    <message>
+        <source>%1 s</source>
+        <translation>%1 s</translation>
     </message>
     <message>
         <source>NETWORK</source>
@@ -2357,6 +2811,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>Bytes Received</source>
         <translation>Gauta Baitų</translation>
+    </message>
+    <message>
+        <source>Ping Time</source>
+        <translation>Ping'o laikas</translation>
     </message>
     <message>
         <source>&amp;Wallet Repair</source>
@@ -2539,6 +2997,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Grąža: </translation>
     </message>
     <message>
+        <source>Custom change address</source>
+        <translation>Pasirinktinio pakeitimo adresas</translation>
+    </message>
+    <message>
         <source>0 PIV</source>
         <translation>0 PIV</translation>
     </message>
@@ -2658,6 +3120,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Tai normalus mokėjimas.</translation>
     </message>
     <message>
+        <source>Pay &amp;To:</source>
+        <translation>&amp;Mokėti:</translation>
+    </message>
+    <message>
         <source>Choose previously used address</source>
         <translation>Pasirinkti prieš tai naudotą adresą</translation>
     </message>
@@ -2676,6 +3142,10 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>&amp;Label:</source>
         <translation>&amp;Etiketė:</translation>
+    </message>
+    <message>
+        <source>A&amp;mount:</source>
+        <translation>S&amp;uma:</translation>
     </message>
     <message>
         <source>Enter a label for this address to add it to your address book</source>

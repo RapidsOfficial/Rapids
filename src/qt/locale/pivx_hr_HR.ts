@@ -2768,6 +2768,25 @@ Promjena postotka (nije potrebno ponovno pokretanje):
         <translation>Kopiraj iznos</translation>
     </message>
     <message>
+        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
+Please be patient...</source>
+        <translation>Pokretanje ResetMintZerocoin: ponovno skeniranje potpunog blockchain, to će trajati i do 30 minuta, ovisno o vašem hardveru.</translation>
+    </message>
+    <message>
+        <source>Spending Zerocoin.
+Computationally expensive, might need several minutes depending on the selected Security Level and your hardware.
+Please be patient...</source>
+        <translation>Potrošnja Zerocoina.
+Zahtjevan izračun, možda će trebati nekoliko minuta ovisno o odabranoj razini sigurnosti i vašem hardveru.
+Budite strpljivi ...</translation>
+    </message>
+    <message>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) potrebno.
+Maksimalno dopušteno:</translation>
+    </message>
+    <message>
         <source>zPIV Spend #: </source>
         <translation>zPIV utrošeno #: </translation>
     </message>
@@ -2889,11 +2908,6 @@ Promjena postotka (nije potrebno ponovno pokretanje):
         <translation>sek. Upotrijebljene denominacije:</translation>
     </message>
     <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware. 
-Please be patient...</source>
-        <translation>Pokretanje ResetMintZerocoin: ponovno skeniranje potpunog blockchain, to će trajati i do 30 minuta, ovisno o vašem hardveru.</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>Trajanje:</translation>
     </message>
@@ -2944,14 +2958,6 @@ Please be patient...</source>
         <translation>Potvrdite slanje novca</translation>
     </message>
     <message>
-        <source>Spending Zerocoin.
-Computationally expensive, might need several minutes depending on the selected Security Level and your hardware. 
-Please be patient...</source>
-        <translation>Potrošnja Zerocoina.
-Zahtjevan izračun, možda će trebati nekoliko minuta ovisno o odabranoj razini sigurnosti i vašem hardveru.
-Budite strpljivi ...</translation>
-    </message>
-    <message>
         <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
         <translation>Verzija 1 zPIV zahtjeva sigurnosnu razinu 100 da se uspješno utroši.</translation>
     </message>
@@ -2966,12 +2972,6 @@ Budite strpljivi ...</translation>
     <message>
         <source>Too much inputs (</source>
         <translation>Previše unosa (</translation>
-    </message>
-    <message>
-        <source>) needed. 
-Maximum allowed: </source>
-        <translation>) potrebno.
-Maksimalno dopušteno:</translation>
     </message>
     <message>
         <source>
