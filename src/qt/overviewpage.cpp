@@ -272,30 +272,42 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     // Only show most balances if they are non-zero for the sake of simplicity
     QSettings settings;
     bool settingShowAllBalances = !settings.value("fHideZeroBalances").toBool();
+
     bool showSumAvailable = settingShowAllBalances || sumTotalBalance != availableTotalBalance;
     ui->labelBalanceTextz->setVisible(showSumAvailable);
     ui->labelBalancez->setVisible(showSumAvailable);
-    bool showPIVAvailable = settingShowAllBalances || pivAvailableBalance != nTotalBalance;
-    bool showWatchOnlyPIVAvailable = watchOnlyBalance != nTotalWatchBalance;
-    bool showPIVPending = settingShowAllBalances || unconfirmedBalance != 0;
-    bool showWatchOnlyPIVPending = watchUnconfBalance != 0;
-    bool showPIVLocked = settingShowAllBalances || nLockedBalance != 0;
-    bool showWatchOnlyPIVLocked = nWatchOnlyLockedBalance != 0;
-    bool showImmature = settingShowAllBalances || immatureBalance != 0;
-    bool showWatchOnlyImmature = watchImmatureBalance != 0;
+
     bool showWatchOnly = nTotalWatchBalance != 0;
-    ui->labelBalance->setVisible(showPIVAvailable || showWatchOnlyPIVAvailable);
+
+    // PIV Available
+    bool showPIVAvailable = settingShowAllBalances || pivAvailableBalance != nTotalBalance;
+    bool showWatchOnlyPIVAvailable = settingShowAllBalances || nAvailableWatchBalance != nTotalWatchBalance;
     ui->labelBalanceText->setVisible(showPIVAvailable || showWatchOnlyPIVAvailable);
-    ui->labelWatchAvailable->setVisible(showPIVAvailable && showWatchOnly);
-    ui->labelUnconfirmed->setVisible(showPIVPending || showWatchOnlyPIVPending);
+    ui->labelBalance->setVisible(showPIVAvailable || showWatchOnlyPIVAvailable);
+    ui->labelWatchAvailable->setVisible(showWatchOnlyPIVAvailable && showWatchOnly);
+
+    // PIV Pending
+    bool showPIVPending = settingShowAllBalances || unconfirmedBalance != 0;
+    bool showWatchOnlyPIVPending = settingShowAllBalances || watchUnconfBalance != 0;
     ui->labelPendingText->setVisible(showPIVPending || showWatchOnlyPIVPending);
-    ui->labelWatchPending->setVisible(showPIVPending && showWatchOnly);
-    ui->labelLockedBalance->setVisible(showPIVLocked || showWatchOnlyPIVLocked);
+    ui->labelUnconfirmed->setVisible(showPIVPending || showWatchOnlyPIVPending);
+    ui->labelWatchPending->setVisible(showWatchOnlyPIVPending && showWatchOnly);
+
+    // PIV Immature
+    bool showPIVImmature = settingShowAllBalances || immatureBalance != 0;
+    bool showWatchOnlyImmature = settingShowAllBalances || watchImmatureBalance != 0;
+    ui->labelImmatureText->setVisible(showPIVImmature || showWatchOnlyImmature);
+    ui->labelImmature->setVisible(showPIVImmature || showWatchOnlyImmature); // for symmetry reasons also show immature label when the watch-only one is shown
+    ui->labelWatchImmature->setVisible(showWatchOnlyImmature && showWatchOnly); // show watch-only immature balance
+
+    // PIV Locked
+    bool showPIVLocked = settingShowAllBalances || nLockedBalance != 0;
+    bool showWatchOnlyPIVLocked = settingShowAllBalances || nWatchOnlyLockedBalance != 0;
     ui->labelLockedBalanceText->setVisible(showPIVLocked || showWatchOnlyPIVLocked);
-    ui->labelWatchLocked->setVisible(showPIVLocked && showWatchOnly);
-    ui->labelImmature->setVisible(showImmature || showWatchOnlyImmature); // for symmetry reasons also show immature label when the watch-only one is shown
-    ui->labelImmatureText->setVisible(showImmature || showWatchOnlyImmature);
-    ui->labelWatchImmature->setVisible(showImmature && showWatchOnly); // show watch-only immature balance
+    ui->labelLockedBalance->setVisible(showPIVLocked || showWatchOnlyPIVLocked);
+    ui->labelWatchLocked->setVisible(showWatchOnlyPIVLocked && showWatchOnly);
+
+    // zPIV
     bool showzPIVAvailable = settingShowAllBalances || zerocoinBalance != matureZerocoinBalance;
     bool showzPIVUnconfirmed = settingShowAllBalances || unconfirmedZerocoinBalance != 0;
     bool showzPIVImmature = settingShowAllBalances || immatureZerocoinBalance != 0;
@@ -305,6 +317,8 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
     ui->labelzBalanceUnconfirmedText->setVisible(showzPIVUnconfirmed);
     ui->labelzBalanceImmature->setVisible(showzPIVImmature);
     ui->labelzBalanceImmatureText->setVisible(showzPIVImmature);
+
+    // Percent split
     bool showPercentages = ! (zerocoinBalance == 0 && nTotalBalance == 0);
     ui->labelPIVPercent->setVisible(showPercentages);
     ui->labelzPIVPercent->setVisible(showPercentages);
