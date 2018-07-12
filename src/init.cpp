@@ -40,6 +40,7 @@
 #include "utilmoneystr.h"
 #include "validationinterface.h"
 #include "zpiv/accumulatorcheckpoints.h"
+#include "zpivchain.h"
 
 #ifdef ENABLE_WALLET
 #include "db.h"
