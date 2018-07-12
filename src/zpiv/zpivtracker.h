@@ -7,6 +7,7 @@
 
 #include "zerocoin.h"
 #include "witness.h"
+#include "sync.h"
 #include <list>
 
 class CDeterministicMint;
@@ -39,7 +40,9 @@ public:
     bool GetMetaFromStakeHash(const uint256& hashStake, CMintMeta& meta) const;
     CAmount GetBalance(bool fConfirmedOnly, bool fUnconfirmedOnly) const;
     std::vector<uint256> GetSerialHashes();
-    CoinWitnessData* GetSpendCache(const uint256& hashStake);
+    mutable CCriticalSection cs_spendcache;
+    CoinWitnessData* GetSpendCache(const uint256& hashStake) EXCLUSIVE_LOCKS_REQUIRED(cs_spendcache);
+    bool ClearSpendCache() EXCLUSIVE_LOCKS_REQUIRED(cs_spendcache);
     std::vector<CMintMeta> GetMints(bool fConfirmedOnly) const;
     CAmount GetUnconfirmedBalance() const;
     std::set<CMintMeta> ListMints(bool fUnusedOnly, bool fMatureOnly, bool fUpdateStatus, bool fWrongSeed = false);

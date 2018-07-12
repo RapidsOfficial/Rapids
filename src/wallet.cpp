@@ -29,6 +29,7 @@
 #include "denomination_functions.h"
 #include "libzerocoin/Denominations.h"
 #include "zpiv/zpivwallet.h"
+#include "zpiv/zpivtracker.h"
 #include "zpiv/deterministicmint.h"
 #include <assert.h>
 
@@ -2964,7 +2965,6 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, const CAmount& nValue, CWa
 
 // ppcoin: create coin stake transaction
 int nHeightCacheStop;
-CCriticalSection cs_spendcache;
 bool CWallet::CreateCoinStake(
         const CKeyStore& keystore,
         unsigned int nBits,
@@ -3082,15 +3082,21 @@ bool CWallet::CreateCoinStake(
             //Masternode payment
             FillBlockPayee(txNew, nMinFee, true, stakeInput->IsZPIV());
 
-            uint256 hashTxOut = txNew.GetHash();
-            CTxIn in;
-            if (!stakeInput->CreateTxIn(this, in, hashTxOut)) {
-                LogPrintf("%s : failed to create TxIn\n", __func__);
-                txNew.vin.clear();
-                txNew.vout.clear();
-                continue;
+            {
+                TRY_LOCK(zpivTracker->cs_spendcache, fLocked);
+                if (!fLocked)
+                    continue;
+
+                uint256 hashTxOut = txNew.GetHash();
+                CTxIn in;
+                if (!stakeInput->CreateTxIn(this, in, hashTxOut)) {
+                    LogPrintf("%s : failed to create TxIn\n", __func__);
+                    txNew.vin.clear();
+                    txNew.vout.clear();
+                    continue;
+                }
+                txNew.vin.emplace_back(in);
             }
-            txNew.vin.emplace_back(in);
 
             //Mark mints as spent
             if (stakeInput->IsZPIV()) {
@@ -3106,6 +3112,9 @@ bool CWallet::CreateCoinStake(
             break; // if kernel is found stop searching
     }
     LogPrintf("%s: attempted staking %d times\n", __func__, nAttempts);
+
+    // TODO: Add adjustable caching length
+    // nHeightCacheStop not being used currently
     nHeightCacheStop += 1000;
     nHeightCacheStop = std::max(Params().Zerocoin_Block_V2_Start() + 2500, nHeightCacheStop);
     nHeightCacheStop = std::min(chainActive.Height() - Params().Zerocoin_RequiredStakeDepth() - 20, nHeightCacheStop);
@@ -3113,19 +3122,17 @@ bool CWallet::CreateCoinStake(
         nHeightCacheStop -= nHeightCacheStop % 10;
     if (!fKernelFound) {
 
-        //Do some precomputing of zerocoin spend knowledge proofs
-        int nCompute = 50000 / listInputs.size();
+        // Do some precomputing of zerocoin spend knowledge proofs
+        // TODO: Break this process out into it's own dedicated thread
         for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
-            {
-                TRY_LOCK(cs_spendcache, fLocked);
-                if (!fLocked) {
-                    LogPrintf("%s : Cannot get lock on cs_spendcache\n", __func__);
-                    continue;
-                }
+            if (ShutdownRequested() || IsLocked())
+                return false;
+            if (!stakeInput->IsZPIV())
+                continue;
 
-                if (ShutdownRequested())
-                    return false;
-                if (!stakeInput->IsZPIV())
+            {
+                TRY_LOCK(zpivTracker->cs_spendcache, fLocked);
+                if (!fLocked)
                     continue;
 
                 CoinWitnessData *witnessData = zpivTracker->GetSpendCache(stakeInput->GetSerialHash());
@@ -3138,25 +3145,25 @@ bool CWallet::CreateCoinStake(
                     *witnessData = CoinWitnessData(mint);
                     nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
                 } else {
-                    nHeightStop = std::min(chainActive.Height() - 210, (witnessData->nHeightAccEnd > 0 ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) + 1000);
+                    nHeightStop = std::min(chainActive.Height() - 210, (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) + 1000);
                 }
 
-                if (nHeightStop - witnessData->nHeightAccEnd < 20)
+                if (nHeightStop - (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) < 20)
                     continue;
 
                 CBlockIndex *pindexStop = chainActive[nHeightStop];
                 AccumulatorMap mapAccumulators(Params().Zerocoin_Params(false));
-                LogPrintf("%s: caching mint %s\n   start=%d\n   end=%d\n", __func__,
-                          witnessData->coin->getValue().GetHex().substr(0, 6), witnessData->nHeightAccStart,
-                          nHeightStop);
-                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop)) {
+                LogPrintf("%s: caching mint %s of denom %d start=%d stop=%d end=%s\n", __func__,
+                          witnessData->coin->getValue().GetHex().substr(0, 6), ZerocoinDenominationToInt(witnessData->denom),
+                          witnessData->nHeightAccStart, nHeightStop, witnessData->nHeightAccEnd);
+
+                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop))
                     LogPrintf("%s: caching of witness failed!\n", __func__);
-                } else {
-                    LogPrintf("%s : caching of mint %s success!\n", __func__,
-                              witnessData->coin->getValue().GetHex().substr(0, 6));
-                }
             }
+            // Sleep for 150ms to allow any potential spend attempt
+            MilliSleep(150);
         }
+        LogPrintf("\n\n%s : Finished precompute round...\n\n", __func__);
         return false;
     }
 
@@ -4755,9 +4762,12 @@ bool CWallet::MintToTxIn(CZerocoinMint mint, const uint256& hashTxOut, CTxIn& ne
     std::map<CBigNum, CZerocoinMint> mapMints;
     mapMints.insert(std::make_pair(mint.GetValue(), mint));
     std::vector<CTxIn> vin;
-    bool fSuccess = MintsToInputVector(mapMints, hashTxOut, vin, receipt, spendType, pindexCheckpoint);
-    newTxIn = vin[0];
-    return fSuccess;
+    if (MintsToInputVector(mapMints, hashTxOut, vin, receipt, spendType, pindexCheckpoint)) {
+        newTxIn = vin[0];
+        return true;
+    }
+
+    return false;
 }
 
 bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, const uint256& hashTxOut, std::vector<CTxIn>& vin,
@@ -4767,90 +4777,94 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
     receipt.SetStatus(_("Transaction Mint Started"), ZPIV_TXMINT_GENERAL);
     libzerocoin::ZerocoinParams* paramsAccumulator = Params().Zerocoin_Params(false);
     AccumulatorMap mapAccumulators(paramsAccumulator);
+    int64_t nTimeStart = GetTimeMicros();
 
     int nLockAttempts = 0;
     while (nLockAttempts < 100) {
-        TRY_LOCK(cs_spendcache, lockSpendcache);
+        TRY_LOCK(zpivTracker->cs_spendcache, lockSpendcache);
         if (!lockSpendcache) {
             MilliSleep(100);
             ++nLockAttempts;
             continue;
         }
+
+        for (auto &it : mapMintsSelected) {
+            CZerocoinMint mint = it.second;
+            CMintMeta meta = zpivTracker->Get(GetSerialHash(mint.GetSerialNumber()));
+            CoinWitnessData *coinWitness = zpivTracker->GetSpendCache(meta.hashStake);
+
+            if (!coinWitness->nHeightAccEnd) {
+                *coinWitness = CoinWitnessData(mint);
+                coinWitness->SetHeightMintAdded(mint.GetHeight());
+            }
+
+            // Generate the witness for each mint being spent
+            if (!GenerateAccumulatorWitness(coinWitness, mapAccumulators, pindexCheckpoint)) {
+                receipt.SetStatus(_("Try to spend with a higher security level to include more coins"),
+                                  ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
+                return error("%s : %s", __func__, receipt.GetStatusMessage());
+            }
+
+            // Construct the CoinSpend object. This acts like a signature on the transaction.
+            int64_t nTime1 = GetTimeMicros();
+            libzerocoin::ZerocoinParams *paramsCoin = Params().Zerocoin_Params(coinWitness->isV1);
+            libzerocoin::PrivateCoin privateCoin(paramsCoin, coinWitness->denom);
+            privateCoin.setPublicCoin(*coinWitness->coin);
+            privateCoin.setRandomness(mint.GetRandomness());
+            privateCoin.setSerialNumber(mint.GetSerialNumber());
+            int64_t nTime2 = GetTimeMicros();
+            LogPrint("bench", "        - CoinSpend constructed in %.2fms\n", 0.001 * (nTime2 - nTime1));
+
+            //Version 2 zerocoins have a privkey associated with them
+            uint8_t nVersion = mint.GetVersion();
+            privateCoin.setVersion(mint.GetVersion());
+            if (nVersion >= libzerocoin::PrivateCoin::PUBKEY_VERSION) {
+                CKey key;
+                if (!mint.GetKeyPair(key))
+                    return error("%s: failed to set zPIV privkey mint version=%d", __func__, nVersion);
+                privateCoin.setPrivKey(key.GetPrivKey());
+            }
+            int64_t nTime3 = GetTimeMicros();
+            LogPrint("bench", "        - Signing key set in %.2fms\n", 0.001 * (nTime3 - nTime2));
+
+            libzerocoin::Accumulator accumulator = mapAccumulators.GetAccumulator(coinWitness->denom);
+            uint32_t nChecksum = GetChecksum(accumulator.getValue());
+            CBigNum bnValue;
+            if (!GetAccumulatorValueFromChecksum(nChecksum, false, bnValue) || bnValue == 0)
+                return error("%s: could not find checksum used for spend\n", __func__);
+
+            int64_t nTime4 = GetTimeMicros();
+            LogPrint("bench", "        - Accumulator value fetched in %.2fms\n", 0.001 * (nTime4 - nTime3));
+
+            try {
+                libzerocoin::CoinSpend spend(paramsCoin, paramsAccumulator, privateCoin, accumulator, nChecksum,
+                                             *coinWitness->pWitness, hashTxOut, spendType);
+
+                if (!CheckCoinSpend(spend, accumulator, receipt)) {
+                    receipt.SetStatus(_("CoinSpend: failed check"), ZPIV_SPEND_ERROR);
+                    return error("%s : %s", __func__, receipt.GetStatusMessage());
+                }
+
+                vin.emplace_back(CTxIn(spend, coinWitness->denom));
+                CZerocoinSpend zcSpend(spend.getCoinSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(),
+                                       GetChecksum(accumulator.getValue()));
+                zcSpend.SetMintCount(coinWitness->nMintsAdded);
+                receipt.AddSpend(zcSpend);
+
+                int64_t nTime5 = GetTimeMicros();
+                LogPrint("bench", "        - CoinSpend verified in %.2fms\n", 0.001 * (nTime5 - nTime4));
+            } catch (const std::exception &) {
+                receipt.SetStatus(_("CoinSpend: Accumulator witness does not verify"), ZPIV_INVALID_WITNESS);
+                return error("%s : %s", __func__, receipt.GetStatusMessage());
+            }
+        }
         break;
     }
+
     if (nLockAttempts == 100) {
         LogPrintf("%s : could not get lock on cs_spendcache\n");
         receipt.SetStatus(_("could not get lock on cs_spendcache"), ZPIV_TXMINT_GENERAL);
         return false;
-    }
-
-    int64_t nTimeStart = GetTimeMicros();
-    for (auto& it : mapMintsSelected) {
-        CZerocoinMint mint = it.second;
-        CMintMeta meta = zpivTracker->Get(GetSerialHash(mint.GetSerialNumber()));
-        CoinWitnessData* coinWitness = zpivTracker->GetSpendCache(meta.hashStake);
-
-        if (!coinWitness->nHeightAccEnd) {
-            *coinWitness = CoinWitnessData(mint);
-            coinWitness->SetHeightMintAdded(mint.GetHeight());
-        }
-
-        // Generate the witness for each mint being spent
-        string strFailReason = "";
-        if (!GenerateAccumulatorWitness(coinWitness, mapAccumulators, pindexCheckpoint)) {
-            receipt.SetStatus(_("Try to spend with a higher security level to include more coins"), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
-            return error("%s : %s", __func__, receipt.GetStatusMessage());
-        }
-
-        // Construct the CoinSpend object. This acts like a signature on the transaction.
-        int64_t nTime1 = GetTimeMicros();
-        libzerocoin::ZerocoinParams* paramsCoin = Params().Zerocoin_Params(coinWitness->isV1);
-        libzerocoin::PrivateCoin privateCoin(paramsCoin, coinWitness->denom);
-        privateCoin.setPublicCoin(*coinWitness->coin);
-        privateCoin.setRandomness(mint.GetRandomness());
-        privateCoin.setSerialNumber(mint.GetSerialNumber());
-        int64_t nTime2 = GetTimeMicros();
-        LogPrint("bench", "        - CoinSpend constructed in %.2fms\n", 0.001 * (nTime2 - nTime1));
-
-        //Version 2 zerocoins have a privkey associated with them
-        uint8_t nVersion = mint.GetVersion();
-        privateCoin.setVersion(mint.GetVersion());
-        if (nVersion >= libzerocoin::PrivateCoin::PUBKEY_VERSION) {
-            CKey key;
-            if(!mint.GetKeyPair(key))
-                return error("%s: failed to set zPIV privkey mint version=%d", __func__, nVersion);
-            privateCoin.setPrivKey(key.GetPrivKey());
-        }
-        int64_t nTime3 = GetTimeMicros();
-        LogPrint("bench", "        - Signing key set in %.2fms\n", 0.001 * (nTime3 - nTime2));
-
-        libzerocoin::Accumulator accumulator = mapAccumulators.GetAccumulator(coinWitness->denom);
-        uint32_t nChecksum = GetChecksum(accumulator.getValue());
-        CBigNum bnValue;
-        if(!GetAccumulatorValueFromChecksum(nChecksum, false, bnValue) || bnValue == 0)
-            return error("%s: could not find checksum used for spend\n", __func__);
-
-        int64_t nTime4 = GetTimeMicros();
-        LogPrint("bench", "        - Accumulator value fetched in %.2fms\n", 0.001 * (nTime4 - nTime3));
-
-        try {
-            libzerocoin::CoinSpend spend(paramsCoin, paramsAccumulator, privateCoin, accumulator, nChecksum,
-                                         *coinWitness->pWitness, hashTxOut, spendType);
-
-            if (!CheckCoinSpend(spend, accumulator, receipt))
-                return error("%s : %s", __func__, receipt.GetStatusMessage());
-
-            vin.emplace_back(CTxIn(spend, coinWitness->denom));
-            CZerocoinSpend zcSpend(spend.getCoinSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(), GetChecksum(accumulator.getValue()));
-            zcSpend.SetMintCount(coinWitness->nMintsAdded);
-            receipt.AddSpend(zcSpend);
-
-            int64_t nTime5 = GetTimeMicros();
-            LogPrint("bench", "        - CoinSpend verified in %.2fms\n", 0.001 * (nTime5 - nTime4));
-        } catch(const std::exception&) {
-            receipt.SetStatus(_("CoinSpend: Accumulator witness does not verify"), ZPIV_INVALID_WITNESS);
-            return error("%s : %s", __func__, receipt.GetStatusMessage());
-        }
     }
 
     int64_t nTimeFinished = GetTimeMicros();
