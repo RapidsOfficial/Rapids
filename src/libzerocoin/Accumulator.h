@@ -48,7 +48,7 @@ public:
 	 **/
 	Accumulator(const AccumulatorAndProofParams* p, const CoinDenomination d);
 
-	Accumulator(const ZerocoinParams* p, const CoinDenomination d, Bignum bnValue = 0);
+	Accumulator(const ZerocoinParams* p, const CoinDenomination d, CBigNum bnValue = 0);
 
 	/**
 	 * Accumulate a coin into the accumulator. Validates
