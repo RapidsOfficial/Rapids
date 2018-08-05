@@ -73,6 +73,7 @@ private:
     
     int nSecurityLevel = 0;
     bool fMinimizeChange = false;
+    bool fDenomsMinimized;
 
     int nDisplayUnit;
     bool updateLabel(const QString& address);
@@ -101,7 +102,10 @@ private slots:
     void on_pushButtonSpentReset_clicked();
     void on_pushButtonSpendzPIV_clicked();
     void on_pushButtonZPivControl_clicked();
+    void on_pushButtonHideDenoms_clicked();
+    void on_pushButtonShowDenoms_clicked();
     void on_pasteButton_clicked();
+    void minimizeDenomsSection(bool fMinimize);
     void updateDisplayUnit();
     void updateAutomintStatus();
     void updateSPORK16Status();
