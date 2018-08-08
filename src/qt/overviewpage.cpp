@@ -281,28 +281,28 @@ void OverviewPage::setBalance(const CAmount& balance, const CAmount& unconfirmed
 
     // PIV Available
     bool showPIVAvailable = settingShowAllBalances || pivAvailableBalance != nTotalBalance;
-    bool showWatchOnlyPIVAvailable = settingShowAllBalances || nAvailableWatchBalance != nTotalWatchBalance;
+    bool showWatchOnlyPIVAvailable = showPIVAvailable || nAvailableWatchBalance != nTotalWatchBalance;
     ui->labelBalanceText->setVisible(showPIVAvailable || showWatchOnlyPIVAvailable);
     ui->labelBalance->setVisible(showPIVAvailable || showWatchOnlyPIVAvailable);
     ui->labelWatchAvailable->setVisible(showWatchOnlyPIVAvailable && showWatchOnly);
 
     // PIV Pending
     bool showPIVPending = settingShowAllBalances || unconfirmedBalance != 0;
-    bool showWatchOnlyPIVPending = settingShowAllBalances || watchUnconfBalance != 0;
+    bool showWatchOnlyPIVPending = showPIVPending || watchUnconfBalance != 0;
     ui->labelPendingText->setVisible(showPIVPending || showWatchOnlyPIVPending);
     ui->labelUnconfirmed->setVisible(showPIVPending || showWatchOnlyPIVPending);
     ui->labelWatchPending->setVisible(showWatchOnlyPIVPending && showWatchOnly);
 
     // PIV Immature
     bool showPIVImmature = settingShowAllBalances || immatureBalance != 0;
-    bool showWatchOnlyImmature = settingShowAllBalances || watchImmatureBalance != 0;
+    bool showWatchOnlyImmature = showPIVImmature || watchImmatureBalance != 0;
     ui->labelImmatureText->setVisible(showPIVImmature || showWatchOnlyImmature);
     ui->labelImmature->setVisible(showPIVImmature || showWatchOnlyImmature); // for symmetry reasons also show immature label when the watch-only one is shown
     ui->labelWatchImmature->setVisible(showWatchOnlyImmature && showWatchOnly); // show watch-only immature balance
 
     // PIV Locked
     bool showPIVLocked = settingShowAllBalances || nLockedBalance != 0;
-    bool showWatchOnlyPIVLocked = settingShowAllBalances || nWatchOnlyLockedBalance != 0;
+    bool showWatchOnlyPIVLocked = showPIVLocked || nWatchOnlyLockedBalance != 0;
     ui->labelLockedBalanceText->setVisible(showPIVLocked || showWatchOnlyPIVLocked);
     ui->labelLockedBalance->setVisible(showPIVLocked || showWatchOnlyPIVLocked);
     ui->labelWatchLocked->setVisible(showWatchOnlyPIVLocked && showWatchOnly);
