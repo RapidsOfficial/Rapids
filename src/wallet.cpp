@@ -2110,14 +2110,14 @@ bool less_then_denom(const COutput& out1, const COutput& out2)
     return (!found1 && found2);
 }
 
-bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount)
+bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount, bool fPrecompute)
 {
     LOCK(cs_main);
     //Add PIV
     vector<COutput> vCoins;
     AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS);
     CAmount nAmountSelected = 0;
-    if (GetBoolArg("-pivstake", true)) {
+    if (GetBoolArg("-pivstake", true) && !fPrecompute) {
         for (const COutput &out : vCoins) {
             //make sure not to outrun target amount
             if (nAmountSelected + out.tx->vout[out.i].nValue > nTargetAmount)
@@ -2149,7 +2149,7 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
     }
 
     //zPIV
-    if (GetBoolArg("-zpivstake", true) && chainActive.Height() > Params().Zerocoin_Block_V2_Start() && !IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
+    if ((GetBoolArg("-zpivstake", true) || fPrecompute) && chainActive.Height() > Params().Zerocoin_Block_V2_Start() && !IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
         //Only update zPIV set once per update interval
         bool fUpdate = false;
         static int64_t nTimeLastUpdate = 0;
@@ -2964,7 +2964,6 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, const CAmount& nValue, CWa
 }
 
 // ppcoin: create coin stake transaction
-int nHeightCacheStop;
 bool CWallet::CreateCoinStake(
         const CKeyStore& keystore,
         unsigned int nBits,
@@ -3113,60 +3112,8 @@ bool CWallet::CreateCoinStake(
     }
     LogPrintf("%s: attempted staking %d times\n", __func__, nAttempts);
 
-    // TODO: Add adjustable caching length
-    // nHeightCacheStop not being used currently
-    nHeightCacheStop += 1000;
-    nHeightCacheStop = std::max(Params().Zerocoin_Block_V2_Start() + 2500, nHeightCacheStop);
-    nHeightCacheStop = std::min(chainActive.Height() - Params().Zerocoin_RequiredStakeDepth() - 20, nHeightCacheStop);
-    if (nHeightCacheStop % 10)
-        nHeightCacheStop -= nHeightCacheStop % 10;
-    if (!fKernelFound) {
-
-        // Do some precomputing of zerocoin spend knowledge proofs
-        // TODO: Break this process out into it's own dedicated thread
-        for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
-            if (ShutdownRequested() || IsLocked())
-                return false;
-            if (!stakeInput->IsZPIV())
-                continue;
-
-            {
-                TRY_LOCK(zpivTracker->cs_spendcache, fLocked);
-                if (!fLocked)
-                    continue;
-
-                CoinWitnessData *witnessData = zpivTracker->GetSpendCache(stakeInput->GetSerialHash());
-                int nHeightStop = nHeightCacheStop;
-                if (!witnessData->nHeightAccStart) {
-                    // This has no cache, so initialize it
-                    CZerocoinMint mint;
-                    if (!GetMintFromStakeHash(stakeInput->GetSerialHash(), mint))
-                        continue;
-                    *witnessData = CoinWitnessData(mint);
-                    nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
-                } else {
-                    nHeightStop = std::min(chainActive.Height() - 210, (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) + 1000);
-                }
-
-                if (nHeightStop - (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) < 20)
-                    continue;
-
-                CBlockIndex *pindexStop = chainActive[nHeightStop];
-                AccumulatorMap mapAccumulators(Params().Zerocoin_Params(false));
-                LogPrintf("%s: caching mint %s of denom %d start=%d stop=%d end=%s\n", __func__,
-                          witnessData->coin->getValue().GetHex().substr(0, 6), ZerocoinDenominationToInt(witnessData->denom),
-                          witnessData->nHeightAccStart, nHeightStop, witnessData->nHeightAccEnd);
-
-                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop))
-                    LogPrintf("%s: caching of witness failed!\n", __func__);
-            }
-            // Sleep for 150ms to allow any potential spend attempt
-            MilliSleep(150);
-        }
-        LogPrintf("\n\n%s : Finished precompute round...\n\n", __func__);
+    if (!fKernelFound)
         return false;
-    }
-
 
     // Sign for PIV
     int nIn = 0;
@@ -5533,3 +5480,100 @@ bool CWallet::DatabaseMint(CDeterministicMint& dMint)
     zpivTracker->Add(dMint, true);
     return true;
 }
+
+void ThreadPrecomputeSpends()
+{
+    boost::this_thread::interruption_point();
+    LogPrintf("ThreadPrecomputeSpends started\n");
+    CWallet* pwallet = pwalletMain;
+    try {
+        pwallet->PrecomputeSpends();
+        boost::this_thread::interruption_point();
+    } catch (std::exception& e) {
+        LogPrintf("ThreadPrecomputeSpends() exception \n");
+    } catch (...) {
+        LogPrintf("ThreadPrecomputeSpends() error \n");
+    }
+    LogPrintf("ThreadPrecomputeSpends exiting,\n");
+}
+
+int nHeightCacheStop;
+void CWallet::PrecomputeSpends()
+{
+    LogPrintf("Precomputer started\n");
+    RenameThread("pivx-precomputer");
+
+    while (true) {
+        // Get the list of zPIV inputs
+        std::list<std::unique_ptr<CStakeInput> > listInputs;
+        if (!SelectStakeCoins(listInputs, 0, true)) {
+            MilliSleep(5000);
+            continue;
+        }
+
+        if (listInputs.empty()) {
+            MilliSleep(5000);
+            continue;
+        }
+
+        if (ShutdownRequested())
+            break;
+
+        while (IsLocked())
+            MilliSleep(5000);
+
+
+        // TODO: Add adjustable caching length
+        // nHeightCacheStop not being used currently
+        nHeightCacheStop += 1000;
+        nHeightCacheStop = std::max(Params().Zerocoin_Block_V2_Start() + 2500, nHeightCacheStop);
+        nHeightCacheStop = std::min(chainActive.Height() - Params().Zerocoin_RequiredStakeDepth() - 20, nHeightCacheStop);
+        if (nHeightCacheStop % 10)
+            nHeightCacheStop -= nHeightCacheStop % 10;
+
+        // Do some precomputing of zerocoin spend knowledge proofs
+        for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
+            if (ShutdownRequested() || IsLocked())
+                break;
+
+            {
+                TRY_LOCK(zpivTracker->cs_spendcache, fLocked);
+                if (!fLocked)
+                    continue;
+
+                CoinWitnessData *witnessData = zpivTracker->GetSpendCache(stakeInput->GetSerialHash());
+                int nHeightStop = nHeightCacheStop;
+                if (!witnessData->nHeightAccStart) {
+                    // This has no cache, so initialize it
+                    CZerocoinMint mint;
+                    if (!GetMintFromStakeHash(stakeInput->GetSerialHash(), mint))
+                        continue;
+                    *witnessData = CoinWitnessData(mint);
+                    nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
+                } else {
+                    nHeightStop = std::min(chainActive.Height() - 210,
+                                           (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd
+                                                                       : witnessData->nHeightAccStart) + 1000);
+                }
+
+                if (nHeightStop - (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) < 20)
+                    continue;
+
+                CBlockIndex *pindexStop = chainActive[nHeightStop];
+                AccumulatorMap mapAccumulators(Params().Zerocoin_Params(false));
+                LogPrintf("%s: caching mint %s of denom %d start=%d stop=%d end=%s\n", __func__,
+                          witnessData->coin->getValue().GetHex().substr(0, 6),
+                          ZerocoinDenominationToInt(witnessData->denom),
+                          witnessData->nHeightAccStart, nHeightStop, witnessData->nHeightAccEnd);
+
+                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop))
+                    LogPrintf("%s: caching of witness failed!\n", __func__);
+            }
+            // Sleep for 150ms to allow any potential spend attempt
+            MilliSleep(150);
+        }
+        LogPrint("precompute", "%s : Finished precompute round...\n\n", __func__);
+        MilliSleep(5000);
+    }
+}
+
