@@ -303,71 +303,6 @@ public:
         return vch;
     }
 
-    // The "compact" format is a representation of a whole
-    // number N using an unsigned 32bit number similar to a
-    // floating point format.
-    // The most significant 8 bits are the unsigned exponent of base 256.
-    // This exponent can be thought of as "number of bytes of N".
-    // The lower 23 bits are the mantissa.
-    // Bit number 24 (0x800000) represents the sign of N.
-    // N = (-1^sign) * mantissa * 256^(exponent-3)
-    //
-    // Satoshi's original implementation used BN_bn2mpi() and BN_mpi2bn().
-    // MPI uses the most significant bit of the first byte as sign.
-    // Thus 0x1234560000 is compact (0x05123456)
-    // and  0xc0de000000 is compact (0x0600c0de)
-    // (0x05c0de00) would be -0x40de000000
-    //
-    // Bitcoin only uses this "compact" format for encoding difficulty
-    // targets, which are unsigned 256bit quantities.  Thus, all the
-    // complexities of the sign bit and using base 256 are probably an
-    // implementation accident.
-    //
-    // This implementation directly uses shifts instead of going
-    // through an intermediate MPI representation.
-    CBigNum& SetCompact(unsigned int nCompact)
-    {
-        unsigned int nSize = nCompact >> 24;
-        bool fNegative     =(nCompact & 0x00800000) != 0;
-        unsigned int nWord = nCompact & 0x007fffff;
-        if (nSize <= 3)
-        {
-            nWord >>= 8*(3-nSize);
-            BN_set_word(bn, nWord);
-        }
-        else
-        {
-            BN_set_word(bn, nWord);
-            BN_lshift(bn, bn, 8*(nSize-3));
-        }
-        BN_set_negative(bn, fNegative);
-        return *this;
-    }
-
-    unsigned int GetCompact() const
-    {
-        unsigned int nSize = BN_num_bytes(bn);
-        unsigned int nCompact = 0;
-        if (nSize <= 3)
-            nCompact = BN_get_word(bn) << 8*(3-nSize);
-        else
-        {
-            CBigNum cbn;
-            BN_rshift(cbn.bn, bn, 8*(nSize-3));
-            nCompact = BN_get_word(cbn.bn);
-        }
-        // The 0x00800000 bit denotes the sign.
-        // Thus, if it is already set, divide the mantissa by 256 and increase the exponent.
-        if (nCompact & 0x00800000)
-        {
-            nCompact >>= 8;
-            nSize++;
-        }
-        nCompact |= nSize << 24;
-        nCompact |= (BN_is_negative(bn) ? 0x00800000 : 0);
-        return nCompact;
-    }
-
     void SetDec(const std::string& str)
     {
         BN_dec2bn(&bn, str.c_str());
@@ -771,7 +706,5 @@ inline bool operator>=(const CBigNum& a, const CBigNum& b) { return (BN_cmp(a.bn
 inline bool operator<(const CBigNum& a, const CBigNum& b)  { return (BN_cmp(a.bn, b.bn) < 0); }
 inline bool operator>(const CBigNum& a, const CBigNum& b)  { return (BN_cmp(a.bn, b.bn) > 0); }
 inline std::ostream& operator<<(std::ostream &strm, const CBigNum &b) { return strm << b.ToString(10); }
-
-typedef CBigNum Bignum;
 
 #endif
