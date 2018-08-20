@@ -165,7 +165,7 @@ CAmount CTransaction::GetValueOut() const
 
 CAmount CTransaction::GetZerocoinMinted() const
 {
-    for (const CTxOut txOut : vout) {
+    for (const CTxOut& txOut : vout) {
         if(!txOut.scriptPubKey.IsZerocoinMint())
             continue;
 
@@ -177,7 +177,7 @@ CAmount CTransaction::GetZerocoinMinted() const
 
 bool CTransaction::UsesUTXO(const COutPoint out)
 {
-    for (const CTxIn in : vin) {
+    for (const CTxIn& in : vin) {
         if (in.prevout == out)
             return true;
     }
@@ -200,7 +200,7 @@ CAmount CTransaction::GetZerocoinSpent() const
         return 0;
 
     CAmount nValueOut = 0;
-    for (const CTxIn txin : vin) {
+    for (const CTxIn& txin : vin) {
         if(!txin.scriptSig.IsZerocoinSpend())
             continue;
 
@@ -213,7 +213,7 @@ CAmount CTransaction::GetZerocoinSpent() const
 int CTransaction::GetZerocoinMintCount() const
 {
     int nCount = 0;
-    for (const CTxOut out : vout) {
+    for (const CTxOut& out : vout) {
         if (out.scriptPubKey.IsZerocoinMint())
             nCount++;
     }
