@@ -86,8 +86,10 @@ void ReceiveCoinsDialog::setModel(WalletModel* model)
         columnResizingFixer = new GUIUtil::TableViewLastColumnResizingFixer(tableView, AMOUNT_MINIMUM_COLUMN_WIDTH, DATE_COLUMN_WIDTH);
 
         // Init address field
-        ui->reqAddress->setText(getAddress());
+        address = getAddress();
+        ui->reqAddress->setText(address);
 
+        connect(model, SIGNAL(notifyReceiveAddressChanged()), this, SLOT(receiveAddressUsed()));
     }
 }
 
@@ -99,7 +101,8 @@ ReceiveCoinsDialog::~ReceiveCoinsDialog()
 void ReceiveCoinsDialog::clear()
 {
     ui->reqAmount->clear();
-    ui->reqAddress->setText(getAddress());
+    address = getAddress();
+    ui->reqAddress->setText(address);
     ui->reqLabel->setText("");
     ui->reqMessage->setText("");
     ui->reuseAddress->setChecked(false);
@@ -146,7 +149,7 @@ void ReceiveCoinsDialog::on_receiveButton_clicked()
         return;
 
     QString label = ui->reqLabel->text();
-    QString address = getAddress(label);
+    address = getAddress(label);
     if (address.isEmpty())
         return;
     if (ui->reuseAddress->isChecked() && label.isEmpty()) {
@@ -284,3 +287,11 @@ void ReceiveCoinsDialog::copyAddress()
 {
     copyColumnToClipboard(RecentRequestsTableModel::Address);
 }
+
+void ReceiveCoinsDialog::receiveAddressUsed()
+{
+    if (model && model->isUsed(CBitcoinAddress(address.toStdString()))) {
+        clear();
+    }
+}
+
