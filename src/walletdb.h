@@ -190,7 +190,9 @@ public:
     std::map<uint256, std::vector<pair<uint256, uint32_t> > > MapMintPool();
     bool WriteMintPoolPair(const uint256& hashMasterSeed, const uint256& hashPubcoin, const uint32_t& nCount);
 
-
+    bool WritePrecomputes(const std::map<uint256, CoinWitnessCacheData>& data);
+    bool ReadPrecomputes(std::map<uint256, CoinWitnessCacheData>& data);
+    bool ErasePrecomputes();
 private:
     CWalletDB(const CWalletDB&);
     void operator=(const CWalletDB&);

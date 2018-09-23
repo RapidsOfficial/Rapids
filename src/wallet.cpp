@@ -5490,7 +5490,7 @@ void ThreadPrecomputeSpends()
         pwallet->PrecomputeSpends();
         boost::this_thread::interruption_point();
     } catch (std::exception& e) {
-        LogPrintf("ThreadPrecomputeSpends() exception \n");
+        LogPrintf("ThreadPrecomputeSpends() exception: %s \n", e.what());
     } catch (...) {
         LogPrintf("ThreadPrecomputeSpends() error \n");
     }
@@ -5503,6 +5503,10 @@ void CWallet::PrecomputeSpends()
     LogPrintf("Precomputer started\n");
     RenameThread("pivx-precomputer");
 
+    bool fLoadedPrecomputesFromDB = false;
+    std::map<uint256, CoinWitnessCacheData> mapPrecomputeCache;
+    int64_t nLastCacheCleanUpTime = GetTime();
+    int64_t nLastCacheWriteDB = nLastCacheCleanUpTime;
     while (true) {
         // Get the list of zPIV inputs
         std::list<std::unique_ptr<CStakeInput> > listInputs;
@@ -5522,7 +5526,6 @@ void CWallet::PrecomputeSpends()
         while (IsLocked())
             MilliSleep(5000);
 
-
         // TODO: Add adjustable caching length
         // nHeightCacheStop not being used currently
         nHeightCacheStop += 1000;
@@ -5531,7 +5534,16 @@ void CWallet::PrecomputeSpends()
         if (nHeightCacheStop % 10)
             nHeightCacheStop -= nHeightCacheStop % 10;
 
+        // If we haven't loaded from database yet, load the precomputes from the database
+        if (!fLoadedPrecomputesFromDB) {
+            CWalletDB walletdb("precomputes.dat", "cr+");
+            walletdb.ReadPrecomputes(mapPrecomputeCache);
+            fLoadedPrecomputesFromDB = true;
+            LogPrint("precompute", "%s: Loaded precomputes from database. Size of map: %d\n", __func__, mapPrecomputeCache.size());
+        }
+
         // Do some precomputing of zerocoin spend knowledge proofs
+        std::set<uint256> setInputHashes;
         for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
             if (ShutdownRequested() || IsLocked())
                 break;
@@ -5541,21 +5553,40 @@ void CWallet::PrecomputeSpends()
                 if (!fLocked)
                     continue;
 
-                CoinWitnessData *witnessData = zpivTracker->GetSpendCache(stakeInput->GetSerialHash());
+                uint256 serialHash = stakeInput->GetSerialHash();
+                setInputHashes.insert(serialHash);
+                CoinWitnessData *witnessData = zpivTracker->GetSpendCache(serialHash);
+
                 int nHeightStop = nHeightCacheStop;
+                // If we dont have a nHeightAccStart
                 if (!witnessData->nHeightAccStart) {
-                    // This has no cache, so initialize it
-                    CZerocoinMint mint;
-                    if (!GetMintFromStakeHash(stakeInput->GetSerialHash(), mint))
-                        continue;
-                    *witnessData = CoinWitnessData(mint);
-                    nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
+                    if (mapPrecomputeCache.count(serialHash)) {
+                        // Get the witness data from the cache
+                        *witnessData = CoinWitnessData(mapPrecomputeCache.at(serialHash));
+
+                        // Set the stop height from the variables received from the database cache
+                        nHeightStop = std::min(chainActive.Height() - 210,
+                                               (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd
+                                                                           : witnessData->nHeightAccStart) + 1000);
+
+                        LogPrint("precompute", "%s: Got Witness Data from Database: %s\n", __func__, witnessData->ToString());
+                    } else {
+
+                        // This has no cache, so initialize it
+                        CZerocoinMint mint;
+                        if (!GetMintFromStakeHash(serialHash, mint))
+                            continue;
+                        *witnessData = CoinWitnessData(mint);
+                        nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
+                    }
                 } else {
                     nHeightStop = std::min(chainActive.Height() - 210,
                                            (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd
                                                                        : witnessData->nHeightAccStart) + 1000);
                 }
 
+                // If the data in the database cache was recent, we can't use it
+                // to skip the GenerateAccmulatorWitness method if the height was within our parameters
                 if (nHeightStop - (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) < 20)
                     continue;
 
@@ -5566,13 +5597,54 @@ void CWallet::PrecomputeSpends()
                           ZerocoinDenominationToInt(witnessData->denom),
                           witnessData->nHeightAccStart, nHeightStop, witnessData->nHeightAccEnd);
 
-                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop))
+                if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop)) {
                     LogPrintf("%s: caching of witness failed!\n", __func__);
+                    continue;
+                }
+
+                // Update the database cache with the new witness data
+                CoinWitnessCacheData serialData(witnessData);
+                mapPrecomputeCache[serialHash] = serialData;
+                LogPrint("precompute","%s: Writing new witness data db cache %s\n", __func__, witnessData->ToString());
             }
             // Sleep for 150ms to allow any potential spend attempt
             MilliSleep(150);
         }
-        LogPrint("precompute", "%s : Finished precompute round...\n\n", __func__);
+
+        //TODO we dont remove spent inputs from our cache. So this cache that we are saving to database will contain spent inputs
+        //TODO We could loop through the listInputs and see if our cache
+        //TODO has any inputs that the list doesn't and remove it from the cache.
+        //TODO this could be expensive depending on how large the list of inputs is
+        //TODO but we could only try to do this every couple minutes Currently set to 5 minutes
+        //TODO update this number to given value once testing is completed
+        // This is a an example of what we could do.
+        if (nLastCacheCleanUpTime < GetTime() - 300) {
+            LogPrint("precompute", "%s: Cleaning up precompute cache\n", __func__);
+            std::map<uint256, CoinWitnessCacheData> mapLatestCoinWitnessData;
+            for (auto inputHash : setInputHashes) {
+                if (mapPrecomputeCache.count(inputHash))
+                    mapLatestCoinWitnessData.insert(make_pair(inputHash, mapPrecomputeCache.at(inputHash)));
+            }
+
+            LogPrint("precompute", "%s: Cleaning up precomputes cache. Current Size: %d\n", __func__, mapPrecomputeCache.size());
+            mapPrecomputeCache = mapLatestCoinWitnessData;
+            LogPrint("precompute", "%s: Cleaning up precomputes cache. CleanedUp Size: %d\n", __func__, mapPrecomputeCache.size());
+
+            nLastCacheCleanUpTime = GetTime();
+        }
+
+        // TODO figure out the best number for this to be. Currently set to 5 minutes
+        // TODO figure out if I can trigger a Write to database when a shutdown is executed.
+        // Write to precompute cache to database every so often
+        if (nLastCacheWriteDB < GetTime() - 300) {
+            CWalletDB walletdb("precomputes.dat", "cr+");
+            walletdb.WritePrecomputes(mapPrecomputeCache);
+
+            LogPrint("precompute", "%s: Writing precomputes to database. Precomputes size: %d\n", __func__, mapPrecomputeCache.size());
+            nLastCacheWriteDB = GetTime();
+        }
+
+        LogPrint("precompute", "%s: Finished precompute round...\n\n", __func__);
         MilliSleep(5000);
     }
 }

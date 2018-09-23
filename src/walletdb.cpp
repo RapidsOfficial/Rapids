@@ -1377,6 +1377,19 @@ bool CWalletDB::WriteMintPoolPair(const uint256& hashMasterSeed, const uint256& 
     return Write(make_pair(string("mintpool"), hashPubcoin), make_pair(hashMasterSeed, nCount));
 }
 
+bool CWalletDB::WritePrecomputes(const std::map<uint256, CoinWitnessCacheData>& data)
+{
+    return Write(string("precomputes"), data);
+}
+bool CWalletDB::ReadPrecomputes(std::map<uint256, CoinWitnessCacheData>& data)
+{
+    return Read(string("precomputes"), data);
+}
+bool CWalletDB::ErasePrecomputes()
+{
+    return Erase(string("precomputes"));
+}
+
 //! map with hashMasterSeed as the key, paired with vector of hashPubcoins and their count
 std::map<uint256, std::vector<pair<uint256, uint32_t> > > CWalletDB::MapMintPool()
 {
