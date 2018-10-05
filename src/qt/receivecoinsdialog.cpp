@@ -21,6 +21,7 @@
 #include <QMessageBox>
 #include <QScrollBar>
 #include <QTextDocument>
+#include <QSettings>
 
 ReceiveCoinsDialog::ReceiveCoinsDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
                                                           ui(new Ui::ReceiveCoinsDialog),
@@ -84,17 +85,29 @@ void ReceiveCoinsDialog::setModel(WalletModel* model)
             SLOT(recentRequestsView_selectionChanged(QItemSelection, QItemSelection)));
         // Last 2 columns are set by the columnResizingFixer, when the table geometry is ready.
         columnResizingFixer = new GUIUtil::TableViewLastColumnResizingFixer(tableView, AMOUNT_MINIMUM_COLUMN_WIDTH, DATE_COLUMN_WIDTH);
+
+        // Init address field
+        QSettings settings;
+        address = settings.value("current_receive_address").toString();
+        if (address.isEmpty())
+            address = getAddress();
+        ui->reqAddress->setText(address);
+
+        connect(model, SIGNAL(notifyReceiveAddressChanged()), this, SLOT(receiveAddressUsed()));
     }
 }
 
 ReceiveCoinsDialog::~ReceiveCoinsDialog()
 {
+    QSettings settings;
+    settings.setValue("current_receive_address", address);
     delete ui;
 }
 
 void ReceiveCoinsDialog::clear()
 {
     ui->reqAmount->clear();
+    ui->reqAddress->setText(address);
     ui->reqLabel->setText("");
     ui->reqMessage->setText("");
     ui->reuseAddress->setChecked(false);
@@ -118,29 +131,34 @@ void ReceiveCoinsDialog::updateDisplayUnit()
     }
 }
 
-void ReceiveCoinsDialog::on_receiveButton_clicked()
+QString ReceiveCoinsDialog::getAddress(QString label)
 {
-    if (!model || !model->getOptionsModel() || !model->getAddressTableModel() || !model->getRecentRequestsTableModel())
-        return;
-
-    QString address;
-    QString label = ui->reqLabel->text();
     if (ui->reuseAddress->isChecked()) {
         /* Choose existing receiving address */
         AddressBookPage dlg(AddressBookPage::ForSelection, AddressBookPage::ReceivingTab, this);
         dlg.setModel(model->getAddressTableModel());
         if (dlg.exec()) {
-            address = dlg.getReturnValue();
-            if (label.isEmpty()) /* If no label provided, use the previously used label */
-            {
-                label = model->getAddressTableModel()->labelForAddress(address);
-            }
+            return dlg.getReturnValue();
         } else {
-            return;
+            return "";
         }
     } else {
         /* Generate new receiving address */
-        address = model->getAddressTableModel()->addRow(AddressTableModel::Receive, label, "");
+        return model->getAddressTableModel()->addRow(AddressTableModel::Receive, label, "");
+    }
+}
+
+void ReceiveCoinsDialog::on_receiveButton_clicked()
+{
+    if (!model || !model->getOptionsModel() || !model->getAddressTableModel() || !model->getRecentRequestsTableModel())
+        return;
+
+    QString label = ui->reqLabel->text();
+    address = getAddress(label);
+    if (address.isEmpty())
+        return;
+    if (ui->reuseAddress->isChecked() && label.isEmpty()) {
+        label = model->getAddressTableModel()->labelForAddress(address);
     }
     SendCoinsRecipient info(address, label,
         ui->reqAmount->value(), ui->reqMessage->text());
@@ -274,3 +292,12 @@ void ReceiveCoinsDialog::copyAddress()
 {
     copyColumnToClipboard(RecentRequestsTableModel::Address);
 }
+
+void ReceiveCoinsDialog::receiveAddressUsed()
+{
+    if ((!ui->reuseAddress->isChecked()) && model && model->isUsed(CBitcoinAddress(address.toStdString()))) {
+        address = getAddress();
+        clear();
+    }
+}
+
