@@ -5497,16 +5497,30 @@ void ThreadPrecomputeSpends()
     LogPrintf("ThreadPrecomputeSpends exiting,\n");
 }
 
-int nHeightCacheStop;
 void CWallet::PrecomputeSpends()
 {
     LogPrintf("Precomputer started\n");
     RenameThread("pivx-precomputer");
 
+    // Initialize Variables
     bool fLoadedPrecomputesFromDB = false;
+    bool fOnFirstLoad = true;
     std::map<uint256, CoinWitnessCacheData> mapPrecomputeCache;
     int64_t nLastCacheCleanUpTime = GetTime();
     int64_t nLastCacheWriteDB = nLastCacheCleanUpTime;
+    int nRequiredStakeDepthBuffer = Params().Zerocoin_RequiredStakeDepth() + 10;
+    int nAdjustableCacheLength = GetArg("-precomputecachelength", DEFAULT_PRECOMPUTE_LENGTH);
+
+    // Force the cache length to be divisible by 10
+    if (nAdjustableCacheLength % 10)
+        nAdjustableCacheLength -= nAdjustableCacheLength % 10;
+
+    if (nAdjustableCacheLength < MIN_PRECOMPUTE_LENGTH)
+        nAdjustableCacheLength = MIN_PRECOMPUTE_LENGTH;
+
+    if (nAdjustableCacheLength > MAX_PRECOMPUTE_LENGTH)
+        nAdjustableCacheLength = MAX_PRECOMPUTE_LENGTH;
+
     while (true) {
         // Get the list of zPIV inputs
         std::list<std::unique_ptr<CStakeInput> > listInputs;
@@ -5526,14 +5540,6 @@ void CWallet::PrecomputeSpends()
         while (IsLocked())
             MilliSleep(5000);
 
-        // TODO: Add adjustable caching length
-        // nHeightCacheStop not being used currently
-        nHeightCacheStop += 1000;
-        nHeightCacheStop = std::max(Params().Zerocoin_Block_V2_Start() + 2500, nHeightCacheStop);
-        nHeightCacheStop = std::min(chainActive.Height() - Params().Zerocoin_RequiredStakeDepth() - 20, nHeightCacheStop);
-        if (nHeightCacheStop % 10)
-            nHeightCacheStop -= nHeightCacheStop % 10;
-
         // If we haven't loaded from database yet, load the precomputes from the database
         if (!fLoadedPrecomputesFromDB) {
             CWalletDB walletdb("precomputes.dat", "cr+");
@@ -5552,41 +5558,37 @@ void CWallet::PrecomputeSpends()
                 TRY_LOCK(zpivTracker->cs_spendcache, fLocked);
                 if (!fLocked)
                     continue;
-
+                
                 uint256 serialHash = stakeInput->GetSerialHash();
                 setInputHashes.insert(serialHash);
                 CoinWitnessData *witnessData = zpivTracker->GetSpendCache(serialHash);
 
-                int nHeightStop = nHeightCacheStop;
-                // If we dont have a nHeightAccStart
-                if (!witnessData->nHeightAccStart) {
-                    if (mapPrecomputeCache.count(serialHash)) {
-                        // Get the witness data from the cache
-                        *witnessData = CoinWitnessData(mapPrecomputeCache.at(serialHash));
+                // Initialize nHeightStop so it can be set below
+                int nHeightStop = 0;
 
-                        // Set the stop height from the variables received from the database cache
-                        nHeightStop = std::min(chainActive.Height() - 210,
-                                               (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd
-                                                                           : witnessData->nHeightAccStart) + 1000);
-
-                        LogPrint("precompute", "%s: Got Witness Data from Database: %s\n", __func__, witnessData->ToString());
-                    } else {
-
-                        // This has no cache, so initialize it
-                        CZerocoinMint mint;
-                        if (!GetMintFromStakeHash(serialHash, mint))
-                            continue;
-                        *witnessData = CoinWitnessData(mint);
-                        nHeightStop = std::min(chainActive.Height() - 210, mint.GetHeight() + 1000);
-                    }
-                } else {
-                    nHeightStop = std::min(chainActive.Height() - 210,
+                if (witnessData->nHeightAccStart) { // Witness is already valid
+                    nHeightStop = std::min(chainActive.Height() - nRequiredStakeDepthBuffer,
                                            (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd
-                                                                       : witnessData->nHeightAccStart) + 1000);
+                                                                       : witnessData->nHeightAccStart) + nAdjustableCacheLength);
+                } else if (mapPrecomputeCache.count(serialHash)) { // Check Database cache
+                    // Get the witness data from the cache
+                    *witnessData = CoinWitnessData(mapPrecomputeCache.at(serialHash));
+
+                    // Set the stop height from the variables received from the database cache
+                    nHeightStop = std::min(chainActive.Height() - nRequiredStakeDepthBuffer,
+                                           (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd
+                                                                       : witnessData->nHeightAccStart) +
+                                           nAdjustableCacheLength);
+
+                    LogPrint("precompute", "%s: Got Witness Data from Database: %s\n", __func__, witnessData->ToString());
+                } else { // This has no cache, so initialize it
+                    CZerocoinMint mint;
+                    if (!GetMintFromStakeHash(serialHash, mint))
+                        continue;
+                    *witnessData = CoinWitnessData(mint);
+                    nHeightStop = std::min(chainActive.Height() - nRequiredStakeDepthBuffer, mint.GetHeight() + nAdjustableCacheLength);
                 }
 
-                // If the data in the database cache was recent, we can't use it
-                // to skip the GenerateAccmulatorWitness method if the height was within our parameters
                 if (nHeightStop - (witnessData->nHeightAccEnd ? witnessData->nHeightAccEnd : witnessData->nHeightAccStart) < 20)
                     continue;
 
@@ -5599,50 +5601,52 @@ void CWallet::PrecomputeSpends()
 
                 if (!GenerateAccumulatorWitness(witnessData, mapAccumulators, pindexStop)) {
                     LogPrintf("%s: caching of witness failed!\n", __func__);
+
+                    // If we fail this check, we need to make sure we remove this from the pre compute cache
+                    mapPrecomputeCache.erase(serialHash);
                     continue;
                 }
 
                 // Update the database cache with the new witness data
                 CoinWitnessCacheData serialData(witnessData);
                 mapPrecomputeCache[serialHash] = serialData;
-                LogPrint("precompute","%s: Writing new witness data db cache %s\n", __func__, witnessData->ToString());
             }
             // Sleep for 150ms to allow any potential spend attempt
             MilliSleep(150);
         }
 
-        //TODO we dont remove spent inputs from our cache. So this cache that we are saving to database will contain spent inputs
-        //TODO We could loop through the listInputs and see if our cache
-        //TODO has any inputs that the list doesn't and remove it from the cache.
-        //TODO this could be expensive depending on how large the list of inputs is
-        //TODO but we could only try to do this every couple minutes Currently set to 5 minutes
-        //TODO update this number to given value once testing is completed
-        // This is a an example of what we could do.
-        if (nLastCacheCleanUpTime < GetTime() - 300) {
+        // On first load, and every 5 minutes clean up our cache with only valid unspent inputs
+        if (fOnFirstLoad || nLastCacheCleanUpTime < GetTime() - 300) {
             LogPrint("precompute", "%s: Cleaning up precompute cache\n", __func__);
-            std::map<uint256, CoinWitnessCacheData> mapLatestCoinWitnessData;
-            for (auto inputHash : setInputHashes) {
-                if (mapPrecomputeCache.count(inputHash))
-                    mapLatestCoinWitnessData.insert(make_pair(inputHash, mapPrecomputeCache.at(inputHash)));
+
+            // We only want to clear the cache if we have calculated new witness data
+           if (setInputHashes.size()) {
+                // Create temporary cache to hold witness data
+                std::map<uint256, CoinWitnessCacheData> mapLatestCoinWitnessData;
+
+                // Remove old cache data
+                for (auto inputHash : setInputHashes) {
+                    if (mapPrecomputeCache.count(inputHash))
+                        mapLatestCoinWitnessData.insert(make_pair(inputHash, mapPrecomputeCache.at(inputHash)));
+                }
+                mapPrecomputeCache = mapLatestCoinWitnessData;
+                nLastCacheCleanUpTime = GetTime();
             }
-
-            LogPrint("precompute", "%s: Cleaning up precomputes cache. Current Size: %d\n", __func__, mapPrecomputeCache.size());
-            mapPrecomputeCache = mapLatestCoinWitnessData;
-            LogPrint("precompute", "%s: Cleaning up precomputes cache. CleanedUp Size: %d\n", __func__, mapPrecomputeCache.size());
-
-            nLastCacheCleanUpTime = GetTime();
         }
 
-        // TODO figure out the best number for this to be. Currently set to 5 minutes
-        // TODO figure out if I can trigger a Write to database when a shutdown is executed.
-        // Write to precompute cache to database every so often
-        if (nLastCacheWriteDB < GetTime() - 300) {
+        // On first load, and every 5 minutes write the cache to database
+        if (fOnFirstLoad || nLastCacheWriteDB < GetTime() - 300 || ShutdownRequested()) {
             CWalletDB walletdb("precomputes.dat", "cr+");
             walletdb.WritePrecomputes(mapPrecomputeCache);
 
             LogPrint("precompute", "%s: Writing precomputes to database. Precomputes size: %d\n", __func__, mapPrecomputeCache.size());
             nLastCacheWriteDB = GetTime();
         }
+
+        fOnFirstLoad = false;
+
+        if (ShutdownRequested())
+            break;
 
         LogPrint("precompute", "%s: Finished precompute round...\n\n", __func__);
         MilliSleep(5000);
