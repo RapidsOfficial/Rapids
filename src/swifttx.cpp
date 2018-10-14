@@ -17,8 +17,6 @@
 #include "util.h"
 #include "validationinterface.h"
 
-#include <boost/lexical_cast.hpp>
-
 using namespace std;
 using namespace boost;
 
@@ -481,7 +479,7 @@ uint256 CConsensusVote::GetHash() const
 bool CConsensusVote::SignatureValid()
 {
     std::string errorMessage;
-    std::string strMessage = txHash.ToString().c_str() + boost::lexical_cast<std::string>(nBlockHeight);
+    std::string strMessage = txHash.ToString().c_str() + std::to_string(nBlockHeight);
     //LogPrintf("verify strMessage %s \n", strMessage.c_str());
 
     CMasternode* pmn = mnodeman.Find(vinMasternode);
@@ -505,7 +503,7 @@ bool CConsensusVote::Sign()
 
     CKey key2;
     CPubKey pubkey2;
-    std::string strMessage = txHash.ToString().c_str() + boost::lexical_cast<std::string>(nBlockHeight);
+    std::string strMessage = txHash.ToString().c_str() + std::to_string(nBlockHeight);
     //LogPrintf("signing strMessage %s \n", strMessage.c_str());
     //LogPrintf("signing privkey %s \n", strMasterNodePrivKey.c_str());
 
