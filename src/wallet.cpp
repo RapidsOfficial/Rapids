@@ -5522,6 +5522,15 @@ void CWallet::PrecomputeSpends()
         nAdjustableCacheLength = MAX_PRECOMPUTE_LENGTH;
 
     while (true) {
+
+        // Check to see if we need to clear the cache
+        if (fClearSpendCache) {
+            fClearSpendCache = false;
+            mapPrecomputeCache.clear();
+            nLastCacheCleanUpTime = GetTime();
+            nLastCacheWriteDB = nLastCacheCleanUpTime;
+        }
+
         // Get the list of zPIV inputs
         std::list<std::unique_ptr<CStakeInput> > listInputs;
         if (!SelectStakeCoins(listInputs, 0, true)) {
@@ -5558,6 +5567,12 @@ void CWallet::PrecomputeSpends()
                 TRY_LOCK(zpivTracker->cs_spendcache, fLocked);
                 if (!fLocked)
                     continue;
+
+                // When we see a clear spend cache bool set to true, break out of the loop
+                // All cache data will be cleared at the beginning of the while loop above
+                if (fClearSpendCache) {
+                    break;
+                }
                 
                 uint256 serialHash = stakeInput->GetSerialHash();
                 setInputHashes.insert(serialHash);
