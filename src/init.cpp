@@ -1685,6 +1685,8 @@ bool AppInit2(boost::thread_group& threadGroup, CScheduler& scheduler)
         //Inititalize zPIVWallet
         uiInterface.InitMessage(_("Syncing zPIV wallet..."));
 
+        pwalletMain->InitAutoConvertAddresses();
+
         bool fEnableZPivBackups = GetBoolArg("-backupzpiv", true);
         pwalletMain->setZPivAutoBackups(fEnableZPivBackups);
 
