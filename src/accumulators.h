@@ -12,12 +12,44 @@
 #include "accumulatormap.h"
 #include "chain.h"
 #include "uint256.h"
+#include "bloom.h"
 
 class CBlockIndex;
 
 std::map<libzerocoin::CoinDenomination, int> GetMintMaturityHeight();
-bool GenerateAccumulatorWitness(const libzerocoin::PublicCoin &coin, libzerocoin::Accumulator& accumulator, libzerocoin::AccumulatorWitness& witness, int nSecurityLevel, int& nMintsAdded, std::string& strError, CBlockIndex* pindexCheckpoint = nullptr);
+
+/**
+ * Calculate the acc witness for a single coin.
+ * @return true if the witness was calculated well
+ */
+bool GenerateAccumulatorWitness(const libzerocoin::PublicCoin &coin,
+                                libzerocoin::Accumulator& accumulator,
+                                libzerocoin::AccumulatorWitness& witness,
+                                int nSecurityLevel,
+                                int& nMintsAdded,
+                                std::string& strError,
+                                CBlockIndex* pindexCheckpoint = nullptr
+                                        );
+
+bool CalculateAccumulatorWitnessFor(
+        const libzerocoin::ZerocoinParams* params,
+        int startingHeight,
+        int maxCalculationRange,
+        libzerocoin::CoinDenomination den,
+        const CBloomFilter& filter,
+        libzerocoin::Accumulator& accumulator,
+        libzerocoin::AccumulatorWitness& witness,
+        int nSecurityLevel,
+        int& nMintsAdded,
+        string& strError,
+        list<CBigNum>& ret,
+        int &heightStop
+);
+
+
+list<libzerocoin::PublicCoin> GetPubcoinFromBlock(const CBlockIndex* pindex);
 bool GetAccumulatorValueFromDB(uint256 nCheckpoint, libzerocoin::CoinDenomination denom, CBigNum& bnAccValue);
+bool GetAccumulatorValue(int& nHeight, const libzerocoin::CoinDenomination denom, CBigNum& bnAccValue);
 bool GetAccumulatorValueFromChecksum(uint32_t nChecksum, bool fMemoryOnly, CBigNum& bnAccValue);
 void AddAccumulatorChecksum(const uint32_t nChecksum, const CBigNum &bnValue, bool fMemoryOnly);
 bool CalculateAccumulatorCheckpoint(int nHeight, uint256& nCheckpoint, AccumulatorMap& mapAccumulators);
@@ -29,5 +61,17 @@ uint32_t GetChecksum(const CBigNum &bnValue);
 int GetChecksumHeight(uint32_t nChecksum, libzerocoin::CoinDenomination denomination);
 bool InvalidCheckpointRange(int nHeight);
 bool ValidateAccumulatorCheckpoint(const CBlock& block, CBlockIndex* pindex, AccumulatorMap& mapAccumulators);
+
+
+// Exceptions
+
+class NoEnoughMintsException : public std::exception {
+
+public:
+    std::string message;
+
+    NoEnoughMintsException(const string &message) : message(message) {}
+
+};
 
 #endif //PIVX_ACCUMULATORS_H

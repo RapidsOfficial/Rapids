@@ -49,16 +49,18 @@ PublicCoin::PublicCoin(const ZerocoinParams* p, const CBigNum& coin, const CoinD
 bool PublicCoin::validate() const
 {
     if (this->params->accumulatorParams.minCoinValue >= value) {
-        cout << "PublicCoin::validate value is too low\n";
+        cout << "PublicCoin::validate value is too low: " << value.GetDec() << endl;
         return false;
     }
 
     if (value > this->params->accumulatorParams.maxCoinValue) {
-        cout << "PublicCoin::validate value is too high\n";
+        cout << "PublicCoin::validate value is too high, max: " << this->params->accumulatorParams.maxCoinValue << ", received: " << value.GetDec() << endl; ;
         return false;
     }
 
     if (!value.isPrime(params->zkp_iterations)) {
+        cout << "Value: " << value.GetDec() << endl;
+        cout << "zkp iterations: " << params->zkp_iterations << endl;
         cout << "PublicCoin::validate value is not prime\n";
         return false;
     }
@@ -255,7 +257,9 @@ void PrivateCoin::mintCoinFast(const CoinDenomination denomination) {
 int ExtractVersionFromSerial(const CBigNum& bnSerial)
 {
 	//Serial is marked as v2 only if the first byte is 0xF
+    //std::cout << "uint256 serial: " <<  bnSerial.getuint256().GetHex() << std::endl;
 	uint256 nMark = bnSerial.getuint256() >> (256 - PrivateCoin::V2_BITSHIFT);
+	//std::cout << "nMark: " << nMark.GetHex() << std::endl;
 	if (nMark == 0xf)
 		return PrivateCoin::PUBKEY_VERSION;
 

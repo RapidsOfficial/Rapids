@@ -128,11 +128,12 @@ public:
      */
     void addRawValue(const CBigNum& bnValue);
 
-    /**
-     *
-     * @return the value of the witness
-     */
-    const CBigNum& getValue() const;
+	/**
+	 *
+	 * @return the value of the witness
+	 */
+	const CBigNum& getValue() const;
+	const PublicCoin& getPublicCoin() const;
     void resetValue(const Accumulator& checkpoint, const PublicCoin coin);
 
     /** Checks that this is a witness to the accumulation of coin

@@ -16,9 +16,13 @@
 #include "utilmoneystr.h"
 #include "accumulatormap.h"
 #include "accumulators.h"
-
+#include "wallet.h"
+#include "libzerocoin/Coin.h"
 #include <stdint.h>
+#include <fstream>
+#include <iostream>
 #include <univalue.h>
+#include "libzerocoin/bignum.h"
 
 using namespace std;
 
@@ -1013,4 +1017,91 @@ UniValue getaccumulatorvalues(const UniValue& params, bool fHelp)
     }
 
     return ret;
+}
+
+/**
+ * TODO: Clean me please.. validate inputs..
+ *
+ */
+UniValue getaccumulatorwitness(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 2)
+        throw runtime_error(
+                "getaccumulatorwitness \"commitmentCoinValue, coinDenomination\"\n"
+                "\nReturns the accumulator witness value associated with the coin\n"
+
+                "\nArguments:\n"
+                "1. commitmentCoinValue   (numeric, required) the commitment value of the coin in DEC.\n"
+                "2. coinDenomination   (numeric, required) the coin denomination.\n"
+
+                "\nExamples:\n" +
+                HelpExampleCli("getaccumulatorvalues", "\"height\"") + HelpExampleRpc("getaccumulatorvalues", "\"height\""));
+
+
+    CBigNum coinCommitmentValue;
+    coinCommitmentValue.SetHex(params[0].get_str());
+
+    int d = std::stoi(params[1].get_str());
+    libzerocoin::CoinDenomination denomination = libzerocoin::IntToZerocoinDenomination(d);
+    libzerocoin::ZerocoinParams* paramsAccumulator = Params().Zerocoin_Params(false);
+
+    // Public coin
+    libzerocoin::PublicCoin pubCoinSelected(paramsAccumulator, coinCommitmentValue, denomination);
+
+    //Compute Accumulator and Witness
+    libzerocoin::Accumulator accumulator(paramsAccumulator, pubCoinSelected.getDenomination());
+    libzerocoin::AccumulatorWitness witness(paramsAccumulator, accumulator, pubCoinSelected);
+    string strFailReason = "";
+    int nMintsAdded = 0;
+    CZerocoinSpendReceipt receipt;
+    if (!GenerateAccumulatorWitness(pubCoinSelected, accumulator, witness, 100, nMintsAdded, strFailReason)) {
+        receipt.SetStatus(_("Try to spend with a higher security level to include more coins"), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
+        throw JSONRPCError(RPC_DATABASE_ERROR, receipt.GetStatusMessage());
+    }
+
+    UniValue ret(UniValue::VARR);
+
+    UniValue obj(UniValue::VOBJ);
+    obj.push_back(Pair("value", accumulator.getValue().GetHex()));
+    obj.push_back(Pair("denomination", accumulator.getDenomination()));
+    obj.push_back(Pair("Mints added",nMintsAdded));
+    ret.push_back(obj);
+
+    UniValue obj1(UniValue::VOBJ);
+    obj1.push_back(Pair("witness value", witness.getValue().GetHex()));
+    obj1.push_back(Pair("PublicCoin value", witness.getPublicCoin().getValue().GetHex()));
+    obj1.push_back(Pair("PublicCoin denomination", witness.getPublicCoin().getDenomination()));
+    ret.push_back(obj1);
+
+    return ret;
+}
+
+UniValue getmintsvalues(const UniValue& params, bool fHelp) {
+    if (fHelp || params.size() != 3)
+        throw runtime_error(
+                "getmintsvalues \"height, coinDenomination\"\n"
+                "\nReturns the mints that occurred on a certain block and denomination\n"
+
+                "\nArguments:\n"
+                "1. height   (numeric, required) the block height.\n"
+                "2. coinDenomination   (numeric, required) the coin denomination.\n"
+
+                "\nExamples:\n" +
+                HelpExampleCli("getmintsvalues", "\"height\"") +
+                HelpExampleRpc("getmintsvalues", "\"height\""));
+
+
+
+    int heightStart = std::stoi(params[0].get_str());
+    int heightEnd = std::stoi(params[1].get_str());
+    int d = params[2].get_int();
+    libzerocoin::CoinDenomination den = libzerocoin::IntToZerocoinDenomination(d);
+
+    CBlockIndex* blockIndexStart = chainActive[heightStart];
+    CBlockIndex* blockIndexEnd = chainActive[heightEnd];
+
+    UniValue obj(UniValue::VOBJ);
+    obj.push_back(Pair("value", std::to_string(blockIndexEnd->mapZerocoinSupply.at(den) - blockIndexStart->mapZerocoinSupply.at(den)) ));
+
+    return obj;
 }

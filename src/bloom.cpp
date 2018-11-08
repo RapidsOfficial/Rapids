@@ -5,7 +5,11 @@
 
 #include "bloom.h"
 
+
+#include "chainparams.h"
 #include "hash.h"
+#include "libzerocoin/bignum.h"
+#include "libzerocoin/CoinSpend.h"
 #include "primitives/transaction.h"
 #include "script/script.h"
 #include "script/standard.h"
@@ -47,6 +51,10 @@ inline unsigned int CBloomFilter::Hash(unsigned int nHashNum, const std::vector<
     return MurmurHash3(nHashNum * 0xFBA4C795 + nTweak, vDataToHash) % (vData.size() * 8);
 }
 
+void CBloomFilter::setFull(){
+	    isFull = false;
+	}
+
 void CBloomFilter::insert(const vector<unsigned char>& vKey)
 {
     if (isFull)
@@ -75,10 +83,12 @@ void CBloomFilter::insert(const uint256& hash)
 
 bool CBloomFilter::contains(const vector<unsigned char>& vKey) const
 {
-    if (isFull)
+    if (isFull) {
         return true;
-    if (isEmpty)
+    }
+    if (isEmpty) {
         return false;
+    }
     for (unsigned int i = 0; i < nHashFuncs; i++) {
         unsigned int nIndex = Hash(i, vKey);
         // Checks bit nIndex of vData
@@ -114,6 +124,38 @@ bool CBloomFilter::IsWithinSizeConstraints() const
     return vData.size() <= MAX_BLOOM_FILTER_SIZE && nHashFuncs <= MAX_HASH_FUNCS;
 }
 
+/**
+ * Returns true if this filter will match anything. See {@link org.pivxj.core.BloomFilter#setMatchAll()}
+ * for when this can be a useful thing to do.
+ */
+bool CBloomFilter::MatchesAll() const {
+    for (char b : vData)
+        if (b !=  0xff)
+            return false;
+    return true;
+}
+
+/**
+ * Copies filter into this. Filter must have the same size, hash function count and nTweak or an
+ * IllegalArgumentException will be thrown.
+ */
+bool CBloomFilter::Merge(const CBloomFilter& filter) {
+    if (!this->MatchesAll() && !filter.MatchesAll()) {
+        if(! (filter.vData.size() == this->vData.size() &&
+                filter.nHashFuncs == this->nHashFuncs &&
+                filter.nTweak == this->nTweak)){
+            return false;
+        }
+        for (int i = 0; i < vData.size(); i++)
+            this->vData[i] |= filter.vData[i];
+    } else {
+        // TODO: Check this.
+        this->vData.clear();
+        this->vData[0] = 0xff;
+    }
+}
+
+	// TODO: FIX ME, this is slow for the coinSpend unserialization.
 bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
 {
     bool fFound = false;
@@ -137,8 +179,19 @@ bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
         vector<unsigned char> data;
         while (pc < txout.scriptPubKey.end()) {
             opcodetype opcode;
-            if (!txout.scriptPubKey.GetOp(pc, opcode, data))
+            if (!txout.scriptPubKey.GetOp(pc, opcode, data)){
                 break;
+            }
+
+            if (txout.IsZerocoinMint()){
+                CBigNum publicZerocoin;
+                vector<unsigned char> vchZeroMint;
+                vchZeroMint.insert(vchZeroMint.end(), txout.scriptPubKey.begin() + 6,
+                                   txout.scriptPubKey.begin() + txout.scriptPubKey.size());
+                publicZerocoin.setvch(vchZeroMint);
+                data = publicZerocoin.getvch();
+            }
+
             if (data.size() != 0 && contains(data)) {
                 fFound = true;
                 if ((nFlags & BLOOM_UPDATE_MASK) == BLOOM_UPDATE_ALL)
@@ -170,8 +223,16 @@ bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
             opcodetype opcode;
             if (!txin.scriptSig.GetOp(pc, opcode, data))
                 break;
-            if (data.size() != 0 && contains(data))
+            if (txin.scriptSig.IsZerocoinSpend()){
+                std::vector<char, zero_after_free_allocator<char> > spend;
+                spend.insert(spend.end(), txin.scriptSig.begin() + 44, txin.scriptSig.end());
+                CDataStream s(spend, SER_NETWORK, PROTOCOL_VERSION);
+                CBigNum serial = libzerocoin::CoinSpend::ParseSerial(s);
+                data = serial.getvch();
+            }
+            if (data.size() != 0 && contains(data)) {
                 return true;
+            }
         }
     }
 
