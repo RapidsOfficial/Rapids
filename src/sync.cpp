@@ -5,6 +5,7 @@
 
 #include "sync.h"
 
+#include <memory>
 #include <set>
 
 #include "util.h"
@@ -48,8 +49,6 @@ struct CLockLocation {
     {
         return mutexName + "  " + sourceFile + ":" + itostr(sourceLine) + (fTry ? " (TRY)" : "");
     }
-
-    std::string MutexName() const { return mutexName; }
 
 private:
     bool fTry;
