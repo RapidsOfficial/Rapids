@@ -117,15 +117,7 @@ public:
     SpendType getSpendType() const { return spendType; }
     std::vector<unsigned char> getSignature() const { return vchSig; }
 
-    static CBigNum ParseSerial(CDataStream& s){
-        unsigned int nSize = ReadCompactSize(s);
-        s.movePos(nSize);
-        nSize = ReadCompactSize(s);
-        s.movePos(nSize);
-        CBigNum coinSerialNumber;
-        s >> coinSerialNumber;
-        return coinSerialNumber;
-    }
+    static std::vector<unsigned char> ParseSerial(CDataStream& s);
 
     const uint256 signatureHash() const;
     bool Verify(const Accumulator& a) const;

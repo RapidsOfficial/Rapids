@@ -6,6 +6,7 @@
 #include <iostream>
 #include "genwit.h"
 #include "chainparams.h"
+#include "util.h"
 
 CGenWit::CGenWit() : accWitValue(0) {}
 
@@ -14,20 +15,18 @@ CGenWit::CGenWit(const CBloomFilter &filter, int startingHeight, libzerocoin::Co
 
 bool CGenWit::isValid(int chainActiveHeight) {
     if (den == libzerocoin::CoinDenomination::ZQ_ERROR){
-        return false;
+        return error("%s: ERROR: invalid denomination", __func__);
     }
     if(!filter.IsWithinSizeConstraints()){
-        //TODO: throw exception
-        return false;
+        return error("%s: ERROR: filter not within size constraints", __func__);
     }
 
     if (startingHeight < Params().Zerocoin_Block_V2_Start()){
-        return false;
+        return error("%s: ERROR: starting height before V2 activation", __func__);
     }
 
     if (accWitValue == 0){
-        std::cout << "invalid accWit" << std::endl;
-        return false;
+        return error("%s: ERROR: invalid accWit value", __func__);
     }
 
     return (startingHeight < chainActiveHeight - 20);

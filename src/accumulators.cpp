@@ -360,36 +360,21 @@ list<PublicCoin> GetPubcoinFromBlock(const CBlockIndex* pindex){
     //grab mints from this block
     CBlock block;
     if(!ReadBlockFromDisk(block, pindex))
-        throw error("%s: failed to read block from disk while adding pubcoins to witness", __func__);
+        throw GetPubcoinException("GetPubcoinFromBlock: failed to read block from disk while adding pubcoins to witness");
     list<libzerocoin::PublicCoin> listPubcoins;
     if(!BlockToPubcoinList(block, listPubcoins, true))
-        throw error("%s: failed to get zerocoin mintlist from block %n\n", __func__, pindex->nHeight);
+        throw GetPubcoinException("GetPubcoinFromBlock: failed to get zerocoin mintlist from block "+std::to_string(pindex->nHeight)+"\n");
     return listPubcoins;
 }
 
-class AddMintsToAccException : public std::exception {
-
-public:
-    std::string message;
-
-    AddMintsToAccException(const string &message) : message(message) {}
-
-};
-
-int AddBlockMintsToAccumulator(const CoinDenomination den, const int nHeightStart,const CBloomFilter filter, const CBlockIndex* pindex,
+int AddBlockMintsToAccumulator(const CoinDenomination den, const CBloomFilter filter, const CBlockIndex* pindex,
                                libzerocoin::Accumulator* accumulator, bool isWitness, list<CBigNum>& notAddedCoins)
 {
     // if this block contains mints of the denomination that is being spent, then add them to the witness
     int nMintsAdded = 0;
     if (pindex->MintedDenomination(den)) {
         //grab mints from this block
-        CBlock block;
-        if(!ReadBlockFromDisk(block, pindex))
-            throw AddMintsToAccException("AddBlockMintsToAccumulator: failed to read block from disk while adding pubcoins to witness");
-
-        list<PublicCoin> listPubcoins;
-        if(!BlockToPubcoinList(block, listPubcoins, true))
-            throw AddMintsToAccException("AddBlockMintsToAccumulator: failed to get zerocoin mintlist from block "+std::to_string(pindex->nHeight)+"\n");
+        list<PublicCoin> listPubcoins = GetPubcoinFromBlock(pindex);
 
         //add the mints to the witness
         for (const PublicCoin& pubcoin : listPubcoins) {
@@ -398,14 +383,6 @@ int AddBlockMintsToAccumulator(const CoinDenomination den, const int nHeightStar
             }
 
             bool filterContains = filter.contains(pubcoin.getValue().getvch());
-
-            // Special check for the height..
-            if (isWitness && pindex->nHeight == nHeightStart){
-                if(filterContains){
-                    notAddedCoins.emplace_back(pubcoin.getValue());
-                    continue;
-                }
-            }
 
             if (isWitness && filterContains) {
                 notAddedCoins.emplace_back(pubcoin.getValue());
@@ -427,13 +404,7 @@ int AddBlockMintsToAccumulator(const libzerocoin::PublicCoin& coin, const int nH
     int nMintsAdded = 0;
     if (pindex->MintedDenomination(coin.getDenomination())) {
         //grab mints from this block
-        CBlock block;
-        if(!ReadBlockFromDisk(block, pindex))
-            throw AddMintsToAccException("AddBlockMintsToAccumulator: failed to read block from disk while adding pubcoins to witness");
-
-        list<PublicCoin> listPubcoins;
-        if(!BlockToPubcoinList(block, listPubcoins, true))
-            throw AddMintsToAccException("AddBlockMintsToAccumulator: failed to get zerocoin mintlist from block "+std::to_string(pindex->nHeight)+"\n");
+        list<PublicCoin> listPubcoins = GetPubcoinFromBlock(pindex);
 
         //add the mints to the witness
         for (const PublicCoin& pubcoin : listPubcoins) {
@@ -499,15 +470,6 @@ bool LockMethod(){
     return true;
 }
 
-class ChecksumInDbNotFoundException : public std::exception {
-
-public:
-    std::string message;
-
-    ChecksumInDbNotFoundException(const string &message) : message(message) {}
-
-};
-
 std::list<CBlockIndex*> calculateAccumulatedBlocksFor(
         int startHeight,
         int nHeightStop,
@@ -562,7 +524,7 @@ std::list<CBlockIndex*> calculateAccumulatedBlocksFor(
 
 bool CalculateAccumulatorWitnessFor(
         const ZerocoinParams* params,
-        int startingHeight,
+        int startHeight,
         int maxCalulationRange,
         CoinDenomination den,
         const CBloomFilter& filter,
@@ -578,15 +540,13 @@ bool CalculateAccumulatorWitnessFor(
     if (!LockMethod()) return false;
 
     try {
-        // Fake coin
-        PublicCoin temp(params, NULL, den);
-
-        // Pure for testing
+        // Dummy coin init
+        PublicCoin temp(params, 0, den);
+        // Dummy Acc init
         Accumulator testingAcc(params, den);
+
         //get the checkpoint added at the next multiple of 10
-        int nHeightCheckpoint = startingHeight + (10 - (startingHeight % 10));
-        //the height to start accumulating coins to add to witness
-        int nAccStartHeight = startingHeight;
+        int nHeightCheckpoint = startHeight + (10 - (startHeight % 10));
 
         // Get the base accumulator
         //CBigNum bnAccValue = accumulator.getValue();
@@ -603,8 +563,8 @@ bool CalculateAccumulatorWitnessFor(
         int nHeightStop = nChainHeight % 10;
         nHeightStop = nChainHeight - nHeightStop - 20; // at least two checkpoints deep
 
-        if (nHeightStop - startingHeight > maxCalulationRange) {
-            int stop = (startingHeight + maxCalulationRange);
+        if (nHeightStop - startHeight > maxCalulationRange) {
+            int stop = (startHeight + maxCalulationRange);
             int nHeightStop = stop % 10;
             nHeightStop = stop - nHeightStop - 20;
         }
@@ -618,7 +578,7 @@ bool CalculateAccumulatorWitnessFor(
         libzerocoin::Accumulator witnessAccumulator(params, den, witness.getValue());
 
         std::list<CBlockIndex*> blocksToInclude = calculateAccumulatedBlocksFor(
-                nAccStartHeight,
+                startHeight,
                 nHeightStop,
                 pindex,
                 nCheckpointsAdded,
@@ -630,41 +590,31 @@ bool CalculateAccumulatorWitnessFor(
 
         // Now accumulate the coins
         for (const CBlockIndex *blockIndex : blocksToInclude) {
-            nMintsAdded += AddBlockMintsToAccumulator(den, startingHeight, filter, blockIndex, &witnessAccumulator, true, ret);
+            nMintsAdded += AddBlockMintsToAccumulator(den, filter, blockIndex, &witnessAccumulator, true, ret);
         }
 
         // A certain amount of accumulated coins are required
         if (nMintsAdded < Params().Zerocoin_RequiredAccumulation()) {
             strError = _(strprintf("Less than %d mints added, unable to create spend",
                                    Params().Zerocoin_RequiredAccumulation()).c_str());
-            throw NoEnoughMintsException(strError);
+            throw NotEnoughMintsException(strError);
         }
 
         witness.resetValue(witnessAccumulator, temp);
 
         // calculate how many mints of this denomination existed in the accumulator we initialized
-        nMintsAdded += ComputeAccumulatedCoins(startingHeight, den);
+        nMintsAdded += ComputeAccumulatedCoins(startHeight, den);
         LogPrint("zero", "%s : %d mints added to witness\n", __func__, nMintsAdded);
 
         return true;
-    }catch (ChecksumInDbNotFoundException e){
-        LogPrintStr(std::string("ERROR: ") + e.message + "\n");
-        return false;
-    }catch (AddMintsToAccException e){
-        LogPrintStr(std::string("ERROR: ") + e.message + "\n");
-        return false;
+
+    } catch (ChecksumInDbNotFoundException e) {
+        return error("%s: ChecksumInDbNotFoundException: %s", __func__, e.message);
+    } catch (GetPubcoinException e) {
+        return error("%s: GetPubcoinException: %s", __func__, e.message);
     }
 }
 
-
-class searchMintHeightException : public std::exception {
-
-public:
-    std::string message;
-
-    searchMintHeightException(const string &message) : message(message) {}
-
-};
 
 int SearchMintHeightOf(CBigNum value){
     uint256 txid;
@@ -704,8 +654,6 @@ bool GenerateAccumulatorWitness(
         int nHeightCheckpoint = nHeightMintAdded + (10 - (nHeightMintAdded % 10));
         //the height to start accumulating coins to add to witness
         int nAccStartHeight = nHeightMintAdded - (nHeightMintAdded % 10);
-
-
 
         //Get the accumulator that is right before the cluster of blocks containing our mint was added to the accumulator
         CBigNum bnAccValue = 0;
@@ -762,16 +710,14 @@ bool GenerateAccumulatorWitness(
         LogPrint("zero", "%s : %d mints added to witness\n", __func__, nMintsAdded);
 
         return true;
+
     // TODO: I know that could merge all of this exception but maybe it's not really good.. think if we should have a different treatment for each one
-    }catch (searchMintHeightException e){
-        LogPrintStr(std::string("ERROR: ") + e.message + "\n");
-        return false;
-    }catch (ChecksumInDbNotFoundException e){
-        LogPrintStr(std::string("ERROR: ") + e.message + "\n");
-        return false;
-    }catch (AddMintsToAccException e){
-        LogPrintStr(std::string("ERROR: ") + e.message + "\n");
-        return false;
+    } catch (searchMintHeightException e) {
+        return error("%s: searchMintHeightException: %s", __func__, e.message);
+    } catch (ChecksumInDbNotFoundException e) {
+        return error("%s: ChecksumInDbNotFoundException: %s", __func__, e.message);
+    } catch (GetPubcoinException e) {
+        return error("%s: GetPubcoinException: %s", __func__, e.message);
     }
 }
 

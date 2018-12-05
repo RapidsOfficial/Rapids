@@ -300,7 +300,7 @@ extern UniValue invalidateblock(const UniValue& params, bool fHelp);
 extern UniValue reconsiderblock(const UniValue& params, bool fHelp);
 extern UniValue getaccumulatorvalues(const UniValue& params, bool fHelp);
 extern UniValue getaccumulatorwitness(const UniValue& params, bool fHelp);
-extern UniValue getmintsvalues(const UniValue& params, bool fHelp);
+extern UniValue getmintsinblocks(const UniValue& params, bool fHelp);
 
 extern UniValue getpoolinfo(const UniValue& params, bool fHelp); // in rpc/masternode.cpp
 extern UniValue masternode(const UniValue& params, bool fHelp);

@@ -152,4 +152,14 @@ CBigNum CoinSpend::CalculateValidSerial(ZerocoinParams* params)
     return bnSerial;
 }
 
+std::vector<unsigned char> CoinSpend::ParseSerial(CDataStream& s) {
+    unsigned int nSize = ReadCompactSize(s);
+    s.movePos(nSize);
+    nSize = ReadCompactSize(s);
+    s.movePos(nSize);
+    CBigNum coinSerialNumber;
+    s >> coinSerialNumber;
+    return coinSerialNumber.getvch();
+}
+
 } /* namespace libzerocoin */

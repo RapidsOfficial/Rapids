@@ -303,7 +303,7 @@ static const CRPCCommand vRPCCommands[] =
         {"blockchain", "findserial", &findserial, true, false, false},
         {"blockchain", "getaccumulatorvalues", &getaccumulatorvalues, true, false, false},
         {"blockchain", "getaccumulatorwitness", &getaccumulatorwitness, true, false, false},
-        {"blockchain", "getmintsvalues", &getmintsvalues, true, false, false},
+        {"blockchain", "getmintsinblocks", &getmintsinblocks, true, false, false},
         {"blockchain", "getblockchaininfo", &getblockchaininfo, true, false, false},
         {"blockchain", "getbestblockhash", &getbestblockhash, true, false, false},
         {"blockchain", "getblockcount", &getblockcount, true, false, false},

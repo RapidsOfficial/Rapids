@@ -18,6 +18,7 @@ private:
     std::mutex              mutex;
     std::condition_variable condition;
     std::deque<T>           queue;
+
 public:
     void push(T const& value) {
         {

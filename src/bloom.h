@@ -78,7 +78,7 @@ public:
         READWRITE(nFlags);
     }
 
-    void setFull();
+    void setNotFull();
 
     void insert(const std::vector<unsigned char>& vKey);
     void insert(const COutPoint& outpoint);

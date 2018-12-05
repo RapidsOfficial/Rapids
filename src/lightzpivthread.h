@@ -38,7 +38,7 @@ public:
     }
 
     enum ERROR_CODES {
-        NO_ENOUGH_MINTS = 0,
+        NOT_ENOUGH_MINTS = 0,
         NON_DETERMINED = 1
     };
 
@@ -50,12 +50,12 @@ public:
         return true;
     }
 
-    void StartLightZpivThread(boost::thread_group& threadGroup){
+    void StartLightZpivThread(boost::thread_group& threadGroup) {
         LogPrintf("%s thread start\n", "pivx-light-thread");
         threadIns = boost::thread(boost::bind(&CLightWorker::ThreadLightZPIVSimplified, this));
     }
 
-    void StopLightZpivThread(){
+    void StopLightZpivThread() {
         threadIns.interrupt();
         LogPrintf("%s thread interrupted\n", "pivx-light-thread");
     }
@@ -114,14 +114,13 @@ private:
                                     heightStop
                             );
 
-                        }catch (NoEnoughMintsException e){
-                            std::cout << "no enough mints" << std::endl;
+                        } catch (NotEnoughMintsException e) {
                             LogPrintStr(std::string("ThreadLightZPIVSimplified: ") + e.message + "\n");
-                            rejectWork(genWit, blockHeight, NO_ENOUGH_MINTS);
+                            rejectWork(genWit, blockHeight, NOT_ENOUGH_MINTS);
                             continue;
                         }
 
-                        if (!res){
+                        if (!res) {
                             // TODO: Check if the GenerateAccumulatorWitnessFor can fail for node's fault or it's just because the peer sent an illegal request..
                             rejectWork(genWit, blockHeight, NON_DETERMINED);
                         } else {
@@ -129,7 +128,7 @@ private:
                             ss.reserve(ret.size() * 32);
 
                             ss << genWit.getRequestNum();
-                            ss << accumulator.getValue(); // TODO: ---> this accumulator value is not neccesary. The light node should get it using the other message..
+                            ss << accumulator.getValue(); // TODO: ---> this accumulator value is not necessary. The light node should get it using the other message..
                             ss << witness.getValue();
                             uint32_t size = ret.size();
                             ss << size;
@@ -143,12 +142,12 @@ private:
                             } else
                                 LogPrintf("%s NOT pushing message to %s ", "pivx-light-thread", genWit.getPfrom()->addrName);
                         }
-                    }else {
+                    } else {
                         // Rejects only the failed height
                         rejectWork(genWit, blockHeight, NON_DETERMINED);
                     }
                 }
-            }catch (std::exception& e) {
+            } catch (std::exception& e) {
                 std::cout << "exception in light loop, closing it. " << e.what() << std::endl;
                 PrintExceptionContinue(&e, "lightzpivthread");
                 break;
@@ -159,14 +158,14 @@ private:
     }
 
     // TODO: Think more the peer misbehaving policy..
-    void rejectWork(CGenWit& wit, int blockHeight, uint32_t errorNumber){
+    void rejectWork(CGenWit& wit, int blockHeight, uint32_t errorNumber) {
         if (wit.getStartingHeight() == blockHeight){
             LogPrintf("%s rejecting work %s , error code: %s", "pivx-light-thread", wit.toString(), errorNumber);
             CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
             ss << wit.getRequestNum();
             ss << errorNumber;
             wit.getPfrom()->PushMessage("pubcoins", ss);
-        } else{
+        } else {
             requestsQueue.push(wit);
         }
     }

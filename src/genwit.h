@@ -25,7 +25,7 @@ class CGenWit {
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
         READWRITE(filter);
-        filter.setFull();
+        filter.setNotFull();
         READWRITE(startingHeight);
         READWRITE(den);
         READWRITE(requestNum);

@@ -51,9 +51,10 @@ inline unsigned int CBloomFilter::Hash(unsigned int nHashNum, const std::vector<
     return MurmurHash3(nHashNum * 0xFBA4C795 + nTweak, vDataToHash) % (vData.size() * 8);
 }
 
-void CBloomFilter::setFull(){
-	    isFull = false;
-	}
+void CBloomFilter::setNotFull()
+{
+    isFull = false;
+}
 
 void CBloomFilter::insert(const vector<unsigned char>& vKey)
 {
@@ -129,7 +130,7 @@ bool CBloomFilter::IsWithinSizeConstraints() const
  * for when this can be a useful thing to do.
  */
 bool CBloomFilter::MatchesAll() const {
-    for (char b : vData)
+    for (unsigned char b : vData)
         if (b !=  0xff)
             return false;
     return true;
@@ -146,13 +147,14 @@ bool CBloomFilter::Merge(const CBloomFilter& filter) {
                 filter.nTweak == this->nTweak)){
             return false;
         }
-        for (int i = 0; i < vData.size(); i++)
+        for (unsigned int i = 0; i < vData.size(); i++)
             this->vData[i] |= filter.vData[i];
     } else {
         // TODO: Check this.
         this->vData.clear();
         this->vData[0] = 0xff;
     }
+    return true;
 }
 
 	// TODO: FIX ME, this is slow for the coinSpend unserialization.
@@ -184,12 +186,7 @@ bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
             }
 
             if (txout.IsZerocoinMint()){
-                CBigNum publicZerocoin;
-                vector<unsigned char> vchZeroMint;
-                vchZeroMint.insert(vchZeroMint.end(), txout.scriptPubKey.begin() + 6,
-                                   txout.scriptPubKey.begin() + txout.scriptPubKey.size());
-                publicZerocoin.setvch(vchZeroMint);
-                data = publicZerocoin.getvch();
+                data = vector<unsigned char>(txout.scriptPubKey.begin() + 6, txout.scriptPubKey.begin() + txout.scriptPubKey.size());
             }
 
             if (data.size() != 0 && contains(data)) {
@@ -224,11 +221,10 @@ bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
             if (!txin.scriptSig.GetOp(pc, opcode, data))
                 break;
             if (txin.scriptSig.IsZerocoinSpend()){
-                std::vector<char, zero_after_free_allocator<char> > spend;
-                spend.insert(spend.end(), txin.scriptSig.begin() + 44, txin.scriptSig.end());
-                CDataStream s(spend, SER_NETWORK, PROTOCOL_VERSION);
-                CBigNum serial = libzerocoin::CoinSpend::ParseSerial(s);
-                data = serial.getvch();
+                CDataStream s(vector<unsigned char>(txin.scriptSig.begin() + 44, txin.scriptSig.end()),
+                        SER_NETWORK, PROTOCOL_VERSION);
+
+                data = libzerocoin::CoinSpend::ParseSerial(s);
             }
             if (data.size() != 0 && contains(data)) {
                 return true;

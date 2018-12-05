@@ -1019,10 +1019,7 @@ UniValue getaccumulatorvalues(const UniValue& params, bool fHelp)
     return ret;
 }
 
-/**
- * TODO: Clean me please.. validate inputs..
- *
- */
+
 UniValue getaccumulatorwitness(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 2)
@@ -1031,77 +1028,108 @@ UniValue getaccumulatorwitness(const UniValue& params, bool fHelp)
                 "\nReturns the accumulator witness value associated with the coin\n"
 
                 "\nArguments:\n"
-                "1. commitmentCoinValue   (numeric, required) the commitment value of the coin in DEC.\n"
-                "2. coinDenomination   (numeric, required) the coin denomination.\n"
+                "1. coinValue             (string, required) the commitment value of the coin in HEX.\n"
+                "2. coinDenomination      (numeric, required) the coin denomination.\n"
+
+                "\nResult:\n"
+                "{\n"
+                "  \"Accumulator Value\": \"xxx\"  (string) Accumulator hex value\n"
+                "  \"Denomination\": \"d\"         (integer) Accumulator denomination\n"
+                "  \"Mints added\": \"d\"          (integer) Number of mints added to the accumulator\n"
+                "  \"Witness Value\": \"xxx\"      (string) Witness hex value\n"
+                "}\n"
 
                 "\nExamples:\n" +
-                HelpExampleCli("getaccumulatorvalues", "\"height\"") + HelpExampleRpc("getaccumulatorvalues", "\"height\""));
+                HelpExampleCli("getaccumulatorwitness", "\"5fb87fb7bb638e83bfc14bcf33ac6f8064c9884dc72a4e652666abcf42cc47f9da0a7aca58076b0122a19b25629a6b6e7461f188baa7c00865b862cdb270d934873648aa12dd66e3242da40e4c17c78b70fded35e2d9c72933b455fadce9684586b1d48b10570d66feebe51ccebb1d98595217d06f41e66d5a0d9246d46ec3dd\" 5") + HelpExampleRpc("getaccumulatorwitness", "\"5fb87fb7bb638e83bfc14bcf33ac6f8064c9884dc72a4e652666abcf42cc47f9da0a7aca58076b0122a19b25629a6b6e7461f188baa7c00865b862cdb270d934873648aa12dd66e3242da40e4c17c78b70fded35e2d9c72933b455fadce9684586b1d48b10570d66feebe51ccebb1d98595217d06f41e66d5a0d9246d46ec3dd\", 5"));
 
 
-    CBigNum coinCommitmentValue;
-    coinCommitmentValue.SetHex(params[0].get_str());
+    CBigNum coinValue;
+    coinValue.SetHex(params[0].get_str());
 
-    int d = std::stoi(params[1].get_str());
+    int d = params[1].get_int();
     libzerocoin::CoinDenomination denomination = libzerocoin::IntToZerocoinDenomination(d);
-    libzerocoin::ZerocoinParams* paramsAccumulator = Params().Zerocoin_Params(false);
+    libzerocoin::ZerocoinParams* zcparams = Params().Zerocoin_Params(false);
 
     // Public coin
-    libzerocoin::PublicCoin pubCoinSelected(paramsAccumulator, coinCommitmentValue, denomination);
+    libzerocoin::PublicCoin pubCoin(zcparams, coinValue, denomination);
 
     //Compute Accumulator and Witness
-    libzerocoin::Accumulator accumulator(paramsAccumulator, pubCoinSelected.getDenomination());
-    libzerocoin::AccumulatorWitness witness(paramsAccumulator, accumulator, pubCoinSelected);
+    libzerocoin::Accumulator accumulator(zcparams, pubCoin.getDenomination());
+    libzerocoin::AccumulatorWitness witness(zcparams, accumulator, pubCoin);
     string strFailReason = "";
     int nMintsAdded = 0;
     CZerocoinSpendReceipt receipt;
-    if (!GenerateAccumulatorWitness(pubCoinSelected, accumulator, witness, 100, nMintsAdded, strFailReason)) {
-        receipt.SetStatus(_("Try to spend with a higher security level to include more coins"), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
+    if (!GenerateAccumulatorWitness(pubCoin, accumulator, witness, 100, nMintsAdded, strFailReason)) {
+        receipt.SetStatus(_(strFailReason.c_str()), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
         throw JSONRPCError(RPC_DATABASE_ERROR, receipt.GetStatusMessage());
     }
 
-    UniValue ret(UniValue::VARR);
-
     UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("value", accumulator.getValue().GetHex()));
-    obj.push_back(Pair("denomination", accumulator.getDenomination()));
+    obj.push_back(Pair("Accumulator Value", accumulator.getValue().GetHex()));
+    obj.push_back(Pair("Denomination", accumulator.getDenomination()));
     obj.push_back(Pair("Mints added",nMintsAdded));
-    ret.push_back(obj);
+    obj.push_back(Pair("Witness Value", witness.getValue().GetHex()));
 
-    UniValue obj1(UniValue::VOBJ);
-    obj1.push_back(Pair("witness value", witness.getValue().GetHex()));
-    obj1.push_back(Pair("PublicCoin value", witness.getPublicCoin().getValue().GetHex()));
-    obj1.push_back(Pair("PublicCoin denomination", witness.getPublicCoin().getDenomination()));
-    ret.push_back(obj1);
-
-    return ret;
+    return obj;
 }
 
-UniValue getmintsvalues(const UniValue& params, bool fHelp) {
+UniValue getmintsinblocks(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() != 3)
         throw runtime_error(
-                "getmintsvalues \"height, coinDenomination\"\n"
-                "\nReturns the mints that occurred on a certain block and denomination\n"
+                "getmintsinblocks \"height\" \"range\" \"coinDenomination\"\n"
+                "\nReturns the number of mints of a certain denomination"
+                "\noccurred in blocks [height, height+1, height+2, ..., height+range-1]\n"
 
                 "\nArguments:\n"
-                "1. height   (numeric, required) the block height.\n"
-                "2. coinDenomination   (numeric, required) the coin denomination.\n"
+                "1. height             (numeric, required) block height where the search starts.\n"
+                "2. range              (numeric, required) number of blocks to include.\n"
+                "2. coinDenomination   (numeric, required) coin denomination.\n"
+
+                "\nResult:\n"
+                "{\n"
+                "  \"Starting block\": \"x\"           (integer) First counted block\n"
+                "  \"Ending block\": \"x\"             (integer) Last counted block\n"
+                "  \"Number of d-denom mints\": \"x\"  (integer) number of mints of the required d denomination\n"
+                "}\n"
 
                 "\nExamples:\n" +
-                HelpExampleCli("getmintsvalues", "\"height\"") +
-                HelpExampleRpc("getmintsvalues", "\"height\""));
+                HelpExampleCli("getmintsinblocks", "1200000 1000 5") +
+                HelpExampleRpc("getmintsinblocks", "1200000, 1000, 5"));
 
+    int nBestHeight = chainActive.Height();
 
+    int heightStart = params[0].get_int();
+    if (heightStart < Params().Zerocoin_StartHeight())
+        heightStart = Params().Zerocoin_StartHeight();
 
-    int heightStart = std::stoi(params[0].get_str());
-    int heightEnd = std::stoi(params[1].get_str());
+    int range = params[1].get_int();
+    if (range < 1)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid block range. Must be strictly positive.");
+
+    int heightEnd = heightStart + range - 1;
+    if (heightEnd > nBestHeight)
+        heightEnd = nBestHeight;
+
     int d = params[2].get_int();
-    libzerocoin::CoinDenomination den = libzerocoin::IntToZerocoinDenomination(d);
+    libzerocoin::CoinDenomination denom = libzerocoin::IntToZerocoinDenomination(d);
+    if (denom == libzerocoin::CoinDenomination::ZQ_ERROR)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid denomination. Must be in {1, 5, 10, 50, 100, 500, 1000, 5000}");
 
-    CBlockIndex* blockIndexStart = chainActive[heightStart];
-    CBlockIndex* blockIndexEnd = chainActive[heightEnd];
+    int num_of_mints = 0;
+    CBlockIndex* pindex = chainActive[heightStart];
+
+    while (true) {
+        num_of_mints += count(pindex->vMintDenominationsInBlock.begin(), pindex->vMintDenominationsInBlock.end(), denom);
+        if (pindex->nHeight < heightEnd)
+            pindex = chainActive.Next(pindex);
+        else
+            break;
+    }
 
     UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("value", std::to_string(blockIndexEnd->mapZerocoinSupply.at(den) - blockIndexStart->mapZerocoinSupply.at(den)) ));
+    obj.push_back(Pair("Starting block", heightStart));
+    obj.push_back(Pair("Ending block", pindex->nHeight));
+    obj.push_back(Pair("Number of "+ std::to_string(d) +"-denom mints", num_of_mints));
 
     return obj;
 }
