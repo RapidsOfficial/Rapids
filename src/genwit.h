@@ -29,12 +29,7 @@ class CGenWit {
         READWRITE(startingHeight);
         READWRITE(den);
         READWRITE(requestNum);
-        try {
-            // TODO: This is for the old testnet nodes that are running my code..
-            READWRITE(accWitValue);
-        }catch (std::exception& e){
-            std::cout << e.what() << std::endl;
-        }
+        READWRITE(accWitValue);
     }
 
     const CBloomFilter &getFilter() const;
