@@ -157,7 +157,6 @@ bool CBloomFilter::Merge(const CBloomFilter& filter) {
     return true;
 }
 
-     // TODO: FIX ME, this is slow for the coinSpend unserialization.
 bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
 {
     bool fFound = false;
