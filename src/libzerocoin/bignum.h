@@ -7,11 +7,12 @@
 #define BITCOIN_BIGNUM_H
 
 #if defined HAVE_CONFIG_H
-#include "pivx-config.h"
+#include "config/pivx-config.h"
 #endif
 
 #include <stdexcept>
 #include <vector>
+#include <limits.h>
 #if defined(USE_NUM_GMP)
 #include <gmp.h>
 #endif
