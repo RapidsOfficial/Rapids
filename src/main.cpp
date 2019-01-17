@@ -5412,7 +5412,7 @@ void static ProcessGetData(CNode* pfrom)
                     }
                 }
 
-                if(nLocalServices == NODE_BLOOM_LIGHT_ZC) {
+                if(nLocalServices & NODE_BLOOM_LIGHT_ZC) {
                     if (!pushed && inv.type == MSG_PUBCOINS) {
                         //std::cout << "asking for pubcoins, requested block hash: " << inv.hash.GetHex() << std::endl;
 
@@ -6200,13 +6200,14 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
     }
 
     else if (strCommand == "accvalue"){
-        if(nLocalServices == NODE_BLOOM_LIGHT_ZC) {
+        if(nLocalServices & NODE_BLOOM_LIGHT_ZC) {
             try {
                 int height;
                 libzerocoin::CoinDenomination den;
                 vRecv >> height;
                 vRecv >> den;
                 CBigNum bnAccValue = 0;
+                LogPrint("zpiv", "%s : accvalue request, height %d\n", __func__, height);
                 //std::cout << "asking for checkpoint value in height: " << height << ", den: " << den << std::endl;
                 if (!GetAccumulatorValue(height, den, bnAccValue)) {
                     std::cout << "peer misbehaving for request an invalid acc checkpoint" << std::endl;
@@ -6223,11 +6224,13 @@ bool static ProcessMessage(CNode* pfrom, string strCommand, CDataStream& vRecv, 
                 // TODO: Response with an error?
                 PrintExceptionContinue(&e, "ProcessMessages()");
             }
+        }else{
+            LogPrint("zpiv", "%s : accvalue request, node zc deactivated %d\n", __func__);
         }
     }
 
     else if (strCommand == "genwit") {
-        if(nLocalServices == NODE_BLOOM_LIGHT_ZC) {
+        if(nLocalServices & NODE_BLOOM_LIGHT_ZC) {
             try {
                 CGenWit gen;
                 vRecv >> gen;
