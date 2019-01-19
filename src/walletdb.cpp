@@ -1413,11 +1413,10 @@ void CWalletDB::LoadPrecomputes(std::list<std::pair<uint256, CoinWitnessCacheDat
         CoinWitnessCacheData cacheData;
         ssValue >> cacheData;
 
-        CoinWitnessCacheData removed;
         itemList.push_front(std::make_pair(hash, cacheData));
         itemMap.insert(make_pair(hash, itemList.begin()));
 
-        if (itemMap.size() > 5)
+        if (itemMap.size() == PRECOMPUTE_LRU_CACHE_SIZE)
             break;
     }
 
