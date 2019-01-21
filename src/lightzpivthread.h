@@ -43,7 +43,7 @@ public:
 
     bool addWitWork(CGenWit wit) {
         if (!isWorkerRunning) {
-            LogPrintf("%s pivx-light-thread not running trying to add wit work \n");
+            LogPrintf("%s not running trying to add wit work \n", "pivx-light-thread");
             return false;
         }
         requestsQueue.push(wit);
