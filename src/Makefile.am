@@ -278,6 +278,7 @@ libbitcoin_wallet_a_SOURCES = \
   zpivtracker.cpp \
   stakeinput.cpp \
   genwit.cpp \
+  lightzpivthread.cpp \
   $(BITCOIN_CORE_H)
 
 # crypto primitives library
