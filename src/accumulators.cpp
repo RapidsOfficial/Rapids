@@ -550,7 +550,7 @@ bool CalculateAccumulatorWitnessFor(
 
         // Get the base accumulator
         //CBigNum bnAccValue = accumulator.getValue();
-        // TODO: This must not be calculated in this way.. the full node will never receive checkpointed acc values.
+        // TODO: This needs to be changed to the partial witness calculation on the next version.
         CBigNum bnAccValue = 0;
         if (GetAccumulatorValue(nHeightCheckpoint, den, bnAccValue)) {
             accumulator.setValue(bnAccValue);
