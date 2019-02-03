@@ -45,6 +45,7 @@ public:
         DatabaseCache,       // int
         SpendZeroConfChange, // bool
         ZeromintEnable,      // bool
+        ZeromintAddresses,   // bool
         ZeromintPercentage,  // int
         ZeromintPrefDenom,   // int
         HideZeroBalances,    // bool
@@ -100,6 +101,7 @@ private:
 signals:
     void displayUnitChanged(int unit);
     void zeromintEnableChanged(bool);
+    void zeromintAddressesChanged(bool);
     void zeromintPercentageChanged(int);
     void preferredDenomChanged(int);
     void anonymizePivxAmountChanged(int);
