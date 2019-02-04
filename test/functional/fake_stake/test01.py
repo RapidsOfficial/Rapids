@@ -4,9 +4,10 @@ from random import randint
 import time
 
 from test_framework.messages import msg_block
+from test_framework.util import bytes_to_hex_str
 
 from base_test import PIVX_FakeStakeTest
-from util import utxos_to_stakingPrevOuts, dir_size
+from util import utxos_to_stakingPrevOuts, dir_size, assert_not_equal
 
 class Test_01(PIVX_FakeStakeTest):
 
@@ -15,7 +16,7 @@ class Test_01(PIVX_FakeStakeTest):
 
         FORK_DEPTH = 20  # Depth at which we are creating a fork. We are mining
         INITAL_MINED_BLOCKS = 150
-        self.NUM_BLOCKS = 15
+        self.NUM_BLOCKS = 7
 
         # 1) Starting mining blocks
         self.log.info("Mining %d blocks.." % INITAL_MINED_BLOCKS)
@@ -41,13 +42,13 @@ class Test_01(PIVX_FakeStakeTest):
         stakingPrevOuts = utxos_to_stakingPrevOuts(utxo_list, tx_block_time)
         time.sleep(1)
 
-        # 3) Start mining again so that spent prevouts get confirmted in a block.
+        # 5) Start mining again so that spent prevouts get confirmted in a block.
         self.log.info("Mining 5 more blocks...")
         self.node.generate(5)
         self.log.info("Sleeping 2 sec. Now mining PoS blocks based on already spent transactions...")
         time.sleep(2)
 
-        # 4) Create "Fake Stake" blocks and send them
+        # 6) Create "Fake Stake" blocks and send them
         init_size = dir_size(self.node.datadir + "/regtest/blocks")
         self.log.info("Initial size of data dir: %s kilobytes" % str(init_size))
 
@@ -65,6 +66,7 @@ class Test_01(PIVX_FakeStakeTest):
             msg = msg_block(block)
             self.log.info("Sending block (size: %.2f Kbytes)...", len(block.serialize())/1000)
             self.test_nodes[0].send_message(msg)
+            #assert_not_equal(self.node.submitblock(bytes_to_hex_str(block.serialize())), None)
 
 
         self.log.info("Sent all %s blocks." % str(self.NUM_BLOCKS))
