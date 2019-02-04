@@ -117,6 +117,10 @@ const CBigNum& AccumulatorWitness::getValue() const {
     return this->witness.getValue();
 }
 
+const PublicCoin& AccumulatorWitness::getPublicCoin() const {
+    return this->element;
+}
+
 bool AccumulatorWitness::VerifyWitness(const Accumulator& a, const PublicCoin &publicCoin) const {
     Accumulator temp(witness);
     temp += element;

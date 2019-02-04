@@ -6,6 +6,7 @@
 #ifndef BITCOIN_BLOOM_H
 #define BITCOIN_BLOOM_H
 
+#include "libzerocoin/bignum.h"
 #include "serialize.h"
 
 #include <vector>
@@ -77,6 +78,8 @@ public:
         READWRITE(nFlags);
     }
 
+    void setNotFull();
+
     void insert(const std::vector<unsigned char>& vKey);
     void insert(const COutPoint& outpoint);
     void insert(const uint256& hash);
@@ -90,6 +93,9 @@ public:
     //! True if the size is <= MAX_BLOOM_FILTER_SIZE and the number of hash functions is <= MAX_HASH_FUNCS
     //! (catch a filter which was just deserialized which was too big)
     bool IsWithinSizeConstraints() const;
+
+    bool Merge(const CBloomFilter& filter);
+    bool MatchesAll() const;
 
     //! Also adds any outputs which match the filter to the filter (to match their spending txes)
     bool IsRelevantAndUpdate(const CTransaction& tx);

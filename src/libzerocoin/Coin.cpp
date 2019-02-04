@@ -49,18 +49,17 @@ PublicCoin::PublicCoin(const ZerocoinParams* p, const CBigNum& coin, const CoinD
 bool PublicCoin::validate() const
 {
     if (this->params->accumulatorParams.minCoinValue >= value) {
-        cout << "PublicCoin::validate value is too low\n";
-        return false;
+        return error("%s: ERROR: PublicCoin::validate value is too low: %s", __func__, value.GetDec());
     }
 
     if (value > this->params->accumulatorParams.maxCoinValue) {
-        cout << "PublicCoin::validate value is too high\n";
-        return false;
+        return error("%s: ERROR: PublicCoin::validate value is too high, max: %s, received: %s",
+                __func__, this->params->accumulatorParams.maxCoinValue, value.GetDec());
     }
 
     if (!value.isPrime(params->zkp_iterations)) {
-        cout << "PublicCoin::validate value is not prime\n";
-        return false;
+        return error("%s: ERROR: PublicCoin::validate value is not prime. Value: %s, Iterations: %d",
+                __func__, value.GetDec(), params->zkp_iterations);
     }
 
     return true;
