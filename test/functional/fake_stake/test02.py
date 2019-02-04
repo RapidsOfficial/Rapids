@@ -7,7 +7,7 @@ from test_framework.messages import msg_block
 
 from base_test import PIVX_FakeStakeTest
 
-from functional.test_framework.util import bytes_to_hex_str,assert_equal
+from test_framework.util import bytes_to_hex_str,assert_equal
 from util import utxos_to_stakingPrevOuts, dir_size
 
 class Test_02(PIVX_FakeStakeTest):
