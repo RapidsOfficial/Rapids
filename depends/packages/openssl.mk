@@ -54,6 +54,7 @@ $(package)_config_opts_mips_linux=linux-generic32
 $(package)_config_opts_powerpc_linux=linux-generic32
 $(package)_config_opts_riscv32_linux=linux-generic32
 $(package)_config_opts_riscv64_linux=linux-generic64
+$(package)_config_opts_s390x_linux=linux-generic64
 $(package)_config_opts_x86_64_darwin=darwin64-x86_64-cc
 $(package)_config_opts_x86_64_mingw32=mingw64
 $(package)_config_opts_i686_mingw32=mingw
