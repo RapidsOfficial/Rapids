@@ -111,6 +111,8 @@ $(package)_config_opts_s390x_linux += -platform linux-g++ -xplatform linux-g++-6
 $(package)_config_opts_powerpc_linux += -platform linux-g++ -xplatform linux-g++-32
 $(package)_config_opts_powerpc64le_linux += -platform linux-g++ -xplatform linux-g++-64
 $(package)_config_opts_sparc64_linux += -platform linux-g++ -xplatform linux-g++-64
+$(package)_config_opts_alpha_linux += -platform linux-g++ -xplatform linux-g++-64
+$(package)_config_opts_m68k_linux += -platform linux-g++ -xplatform linux-g++-32
 $(package)_config_opts_mingw32  = -no-opengl -xplatform win32-g++ -device-option CROSS_COMPILE="$(host)-"
 $(package)_build_env  = QT_RCC_TEST=1
 $(package)_build_env += QT_RCC_SOURCE_DATE_OVERRIDE=1
