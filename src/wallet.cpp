@@ -4762,7 +4762,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
             return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
 
-        if (IsSerialKnown(spend.getCoinSerialNumber())) {
+        if (Params().NetworkID() != CBaseChainParams::REGTEST && IsSerialKnown(spend.getCoinSerialNumber())) {
             //Tried to spend an already spent zPIV
             receipt.SetStatus(_("The coin spend has been used"), ZPIV_SPENT_USED_ZPIV);
 
