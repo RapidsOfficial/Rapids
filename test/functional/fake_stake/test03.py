@@ -46,7 +46,7 @@ class Test_03(PIVX_FakeStakeTest):
 
             if initial_mints % 5 == 0:
                 self.log.info("Minted %d coins" % initial_mints)
-            if initial_mints > 70:
+            if initial_mints >= 70:
                 break
             balance = self.node.getbalance("*", 100)
         self.log.info("Minted %d coins in the %d-denom, remaining balance %d", initial_mints, DENOM_TO_USE, balance)
@@ -65,7 +65,7 @@ class Test_03(PIVX_FakeStakeTest):
         self.log.info("Got %d confirmed mints" % len(mints_hashes))
 
         # 4) spend mints
-        self.log.info("Spending mints...")
+        self.log.info("Spending mints in block %d..." % self.node.getblockcount())
         spends = 0
         spent_mints = []
         for mint in mints_hashes:
