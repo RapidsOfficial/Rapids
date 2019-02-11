@@ -351,12 +351,13 @@ public:
         nTargetTimespan = 24 * 60 * 60; // PIVX: 1 day
         nTargetSpacing = 1 * 60;        // PIVX: 1 minutes
         bnProofOfWorkLimit = ~uint256(0) >> 1;
-        nLastPOWBlock = 200000;
+        nLastPOWBlock = 250;
         nMaturity = 100;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 0; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
-        nZerocoinStartHeight = 100000;
+        nZerocoinStartHeight = 400;
+        nBlockZerocoinV2 = 400;
         nZerocoinStartTime = 1501776000;
         nBlockEnforceSerialRange = 1; //Enforce serial range starting this block
         nBlockRecalculateAccumulators = 999999999; //Trigger a recalculation of accumulators

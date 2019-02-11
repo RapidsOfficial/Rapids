@@ -2985,8 +2985,15 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
     if (listInputs.empty())
         return false;
 
-    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60)
-        MilliSleep(10000);
+    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60){
+
+        if(Params().NetworkID() != CBaseChainParams::REGTEST){
+            MilliSleep(10000);
+        }else{
+            MilliSleep(1000);
+        }
+
+    }
 
     CAmount nCredit;
     CScript scriptPubKeyKernel;
@@ -3013,7 +3020,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         if (Stake(stakeInput.get(), nBits, block.GetBlockTime(), nTxNewTime, hashProofOfStake)) {
             LOCK(cs_main);
             //Double check that this will pass time requirements
-            if (nTxNewTime <= chainActive.Tip()->GetMedianTimePast()) {
+            if (nTxNewTime <= chainActive.Tip()->GetMedianTimePast() && Params().NetworkID() != CBaseChainParams::REGTEST) {
                 LogPrintf("CreateCoinStake() : kernel found, but it is too far in the past \n");
                 continue;
             }
