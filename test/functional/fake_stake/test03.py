@@ -11,7 +11,6 @@ from time import sleep
 from test_framework.authproxy import JSONRPCException
 
 from base_test import PIVX_FakeStakeTest
-from util import mints_to_stakingPrevOuts
 
 class Test_03(PIVX_FakeStakeTest):
 
@@ -19,10 +18,10 @@ class Test_03(PIVX_FakeStakeTest):
         self.description = "Covers the scenario of a zPoS block where the coinstake input is a zerocoin spend of an already spent coin."
         self.init_test()
 
-        DENOM_TO_USE = 5000 # zc denomination
-        INITAL_MINED_BLOCKS = 321
-        MORE_MINED_BLOCKS = 301
-        self.NUM_BLOCKS = 2
+        DENOM_TO_USE = 5000         # zc denomination
+        INITAL_MINED_BLOCKS = 321   # First mined blocks (rewards collected to mint)
+        MORE_MINED_BLOCKS = 301     # More blocks mined before spending zerocoins
+        self.NUM_BLOCKS = 2         # Number of spammed blocks
 
         # 1) Starting mining blocks
         self.log.info("Mining %d blocks to get to zPOS activation...." % INITAL_MINED_BLOCKS)
@@ -58,7 +57,7 @@ class Test_03(PIVX_FakeStakeTest):
         sleep(2)
         mints = self.node.listmintedzerocoins(True, True)
         sleep(1)
-        stakingPrevOuts = mints_to_stakingPrevOuts(mints)
+        stakingPrevOuts = self.get_prevouts(mints, zpos=True)
         mints_hashes = [x["serial hash"] for x in mints]
 
         # This mints are not ready spendable, only few of them.
@@ -96,4 +95,10 @@ class Test_03(PIVX_FakeStakeTest):
 
         # 7) Create "Fake Stake" blocks and send them
         self.log.info("Creating Fake stake zPoS blocks...")
-        self.test_spam("Main", stakingPrevOuts, spendingPrevOuts=spendingPrevOuts, fZPoS=True)
+        err_msgs = self.test_spam("Main", stakingPrevOuts, spendingPrevOuts=spendingPrevOuts, fZPoS=True)
+
+        if not len(err_msgs) == 0:
+            self.log.error("result: " + " | ".join(err_msgs))
+            raise AssertionError("TEST FAILED")
+
+        self.log.info("%s PASSED" % self.__class__.__name__)

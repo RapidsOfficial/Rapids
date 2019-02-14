@@ -341,6 +341,7 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
             time.sleep(1)
 
             try:
+                self.test_nodes[0].handle_connect()
                 self.test_nodes[0].send_message(msg)
                 time.sleep(2)
                 block_ret = self.node.getblock(block.hash)
@@ -365,6 +366,11 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                 else:
                     self.log.warning(exc_msg)
                     err_msgs.append(exc_msg)
+
+            except Exception as e:
+                exc_msg = str(e)
+                self.log.error(exc_msg)
+                err_msgs.append(exc_msg)
 
             # remove a random prevout from the list
             # (to randomize block creation if the same height is picked two times)
