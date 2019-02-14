@@ -17,10 +17,10 @@ class Test_02(PIVX_FakeStakeTest):
     def run_test(self):
         self.description = "Covers the scenario of a valid PoS block where the coinstake input prevout is spent on main chain, but not on the fork branch. These blocks must be accepted."
         self.init_test()
-        INITAL_MINED_BLOCKS = 200
-        FORK_DEPTH = 50
-        MORE_MINED_BLOCKS = 10
-        self.NUM_BLOCKS = 3
+        INITAL_MINED_BLOCKS = 200   # First mined blocks (rewards collected to spend)
+        FORK_DEPTH = 50             # number of blocks after INITIAL_MINED_BLOCKS before the coins are spent
+        MORE_MINED_BLOCKS = 10      # number of blocks after spending of the collected coins
+        self.NUM_BLOCKS = 3         # Number of spammed blocks
 
         # 1) Starting mining blocks
         self.log.info("Mining %d blocks.." % INITAL_MINED_BLOCKS)
@@ -48,6 +48,11 @@ class Test_02(PIVX_FakeStakeTest):
         self.node.generate(MORE_MINED_BLOCKS)
         time.sleep(2)
 
-        # 6) Create PoS blocks and send them
-        self.test_spam("Fork", stakingPrevOuts, fRandomHeight=True, randomRange=FORK_DEPTH, randomRange2=MORE_MINED_BLOCKS-2, fMustPass=True)
+        # 6) Create "Fake Stake" blocks and send them
+        self.log.info("Creating Fake stake blocks")
+        err_msgs = self.test_spam("Fork", stakingPrevOuts, fRandomHeight=True, randomRange=FORK_DEPTH, randomRange2=MORE_MINED_BLOCKS-2, fMustPass=True)
+        if not len(err_msgs) == 0:
+            self.log.error("result: " + " | ".join(err_msgs))
+            raise AssertionError("TEST FAILED")
 
+        self.log.info("%s PASSED" % self.__class__.__name__)
