@@ -114,35 +114,26 @@ def create_transaction(outPoint, sig, value, nTime, scriptPubKey=CScript()):
     return tx
 
 
-def utxo_to_stakingPrevOuts(utxo, stakingPrevOuts, txBlocktime, stakeModifier):
+def utxo_to_stakingPrevOuts(utxo, stakingPrevOuts, txBlocktime, stakeModifier, zpos=False):
     '''
     Updates a map of unspent outputs to (amount, blocktime) to be used as stake inputs
-    :param   utxo:              (map) utxo JSON object returned from listunspent
+    :param   utxo:              (map) utxo JSON object returned from listunspent (if zpos=False)
+                                (map) mint JSON object returned from listmintedzerocoins (if zpos=True)
              stakingPrevOuts:   ({COutPoint --> (int, int)} dictionary)
              txBlocktime:       (int) transaction block time
+             zpos:              (bool) if true, utxo holds a zerocoin serial hash
     :return
     '''
 
-    COINBASE_MATURITY = 100
+    COINBASE_MATURITY = 200 if zpos else 100
     if utxo['confirmations'] > COINBASE_MATURITY:
-        outPoint = COutPoint(int(utxo['txid'], 16), utxo['vout'])
-        stakingPrevOuts[outPoint] = (int(utxo['amount'])*COIN, txBlocktime, stakeModifier)
+        if zpos:
+            outPoint = utxo["serial hash"]
+            stakingPrevOuts[outPoint] = (int(utxo["denomination"]) * COIN, txBlocktime, stakeModifier)
+        else:
+            outPoint = COutPoint(int(utxo['txid'], 16), utxo['vout'])
+            stakingPrevOuts[outPoint] = (int(utxo['amount'])*COIN, txBlocktime, stakeModifier)
 
     return
 
 
-def mints_to_stakingPrevOuts(mints):
-    '''
-    Creates a map of unspent zerocoins to (amount, blocktime) to be used as stake inputs
-    :param   mints:             (JSON list) verbose mint list returned from listmintedzerocoins
-    :return  stakingPrevOuts:   ({string --> (int, int)} dictionary) maps zerocoin serial hashes
-    '''
-    COINBASE_MATURITY = 200
-    stakingPrevOuts = {}
-    txBlocktime = int(time.time())
-    for mint in mints:
-        if mint["confirmations"] > COINBASE_MATURITY:
-            outPoint = mint["serial hash"]
-            stakingPrevOuts[outPoint] = (int(mint["denomination"])*COIN, txBlocktime)
-
-    return stakingPrevOuts

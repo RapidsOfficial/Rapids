@@ -258,19 +258,30 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
         return stake_tx_signed
 
 
-    def get_prevouts(self, utxo_list):
+    def get_prevouts(self, utxo_list, zpos=False):
         ''' get prevouts for each utxo in a list
-        :param      utxo_list:   (JSON list) returned from listunspent used as input
+        :param      utxo_list:   (JSON list) returned from listunspent used as input (if zpos=False)
+                                 (JSON list) returned from listmintedzerocoins used as input (if zpos=True)
+                    zpos:        (bool) if true, utxo holds a zerocoin serial hash
         :return:    stakingPrevOuts:    ({COutPoint --> (int, int)} dictionary)
                          map outpoints to (be used as staking inputs) to amount, block_time
         '''
         stakingPrevOuts = {}
+
         for utxo in utxo_list:
-            utxo_tx = self.node.getrawtransaction(utxo['txid'], 1)
-            txBlocktime = utxo_tx['blocktime']
-            txBlockhash = utxo_tx['blockhash']
+            if zpos:
+                mint_height = utxo['mint height']
+                mint_checkpoint_height = mint_height - mint_height % 10 + 10
+                txBlockhash = self.node.getblockhash(mint_checkpoint_height)
+                mint_checkpoint_block = self.node.getblock(txBlockhash)
+                txBlocktime = mint_checkpoint_block['time']
+            else:
+                utxo_tx = self.node.getrawtransaction(utxo['txid'], 1)
+                txBlocktime = utxo_tx['blocktime']
+                txBlockhash = utxo_tx['blockhash']
+
             stakeModifier = int(self.node.getblock(txBlockhash)['modifier'], 16)
-            utxo_to_stakingPrevOuts(utxo, stakingPrevOuts, txBlocktime, stakeModifier)
+            utxo_to_stakingPrevOuts(utxo, stakingPrevOuts, txBlocktime, stakeModifier, zpos)
 
         return stakingPrevOuts
 
@@ -289,6 +300,7 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
         ''' creates and sends spam blocks
         :param      name:            (string) chain branch (usually either "Main" or "Forked")
                     stakingPrevOuts: ({COutPoint --> (int, int)} dictionary) utxos to use for staking
+                    err_msg:         (string) if result=False reports the issue
                     fRandomHeight:   (bool) send blocks at random height
                     randomRange:     (int) if fRandomHeight=True, height is >= current-randomRange
                     randomRange2:    (int) if fRandomHeight=True, height is < current-randomRange2
@@ -296,8 +308,9 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                     fMustPass:       (bool) if true, the blocks must be stored on disk
                     fZPoS:           (bool) stake the block with zerocoin
                     spendingPrevOuts:({COutPoint --> (int, int)} dictionary) utxos to use for spending
-        :return:
+        :return:    err_msgs:        (string list) reports error messages from the test or empty list if successful
         '''
+        err_msgs = []
         self.log_data_dir_size()
         block_count = self.node.getblockcount()
         pastBlockHash = self.node.getblockhash(block_count)
@@ -311,39 +324,47 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                 randomCount = randint(block_count - randomRange, block_count - randomRange2)
                 pastBlockHash = self.node.getblockhash(randomCount)
 
-            block = self.create_spam_block(pastBlockHash, stakingPrevOuts, randomCount + 1,
+            current_block_n = randomCount + 1
+            block = self.create_spam_block(pastBlockHash, stakingPrevOuts, current_block_n,
                                            fStakeDoubleSpent=fDoubleSpend, fZPoS=fZPoS, spendingPrevOuts=spendingPrevOuts)
             block_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(block.nTime))
             block_size = len(block.serialize())/1000
             self.log.info("Sending block %d [%s...] - nTime: %s - Size (kb): %.2f",
-                          randomCount + 1, block.hash[:7], block_time, block_size)
+                          current_block_n, block.hash[:7], block_time, block_size)
 
             var = self.node.submitblock(bytes_to_hex_str(block.serialize()))
             if (not fMustPass and var not in [None, "bad-txns-invalid-zpiv"]) or (fMustPass and var != "inconclusive"):
-                raise AssertionError("Error, submitblock [fMustPass=%s] result: %s" % (str(fMustPass), str(var)))
+                self.log.error("submitblock [fMustPass=%s] result: %s" % (str(fMustPass), str(var)))
+                err_msgs.append("submitblock %d: %s" % (current_block_n, str(var)))
 
             msg = msg_block(block)
-            self.test_nodes[0].send_message(msg)
+            time.sleep(1)
 
             try:
+                self.test_nodes[0].send_message(msg)
+                time.sleep(2)
                 block_ret = self.node.getblock(block.hash)
                 if not fMustPass and block_ret is not None:
-                    raise AssertionError("Error, block stored in %s chain: %s" % (name, str(block_ret)))
+                    self.log.error("Error, block stored in %s chain" % name)
+                    err_msgs.append("getblock %d: result not None" % current_block_n)
                 if fMustPass:
                     if block_ret is None:
-                        raise AssertionError("Error, block NOT stored in %s chain" % name)
+                        self.log.error("Error, block NOT stored in %s chain" % name)
+                        err_msgs.append("getblock %d: result is None" % current_block_n)
                     else:
                         self.log.info("Good. Block IS stored on disk.")
 
             except JSONRPCException as e:
-                err_msg = str(e)
-                if err_msg == "Can't read block from disk (-32603)":
+                exc_msg = str(e)
+                if exc_msg == "Can't read block from disk (-32603)":
                     if fMustPass:
                         self.log.warning("Bad! Block was NOT stored to disk.")
+                        err_msgs.append(exc_msg)
                     else:
                         self.log.info("Good. Block was not stored on disk.")
                 else:
-                    self.log.warning(err_msg)
+                    self.log.warning(exc_msg)
+                    err_msgs.append(exc_msg)
 
             # remove a random prevout from the list
             # (to randomize block creation if the same height is picked two times)
@@ -351,3 +372,4 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
 
         self.log.info("Sent all %s blocks." % str(self.NUM_BLOCKS))
         self.log_data_dir_size()
+        return err_msgs
