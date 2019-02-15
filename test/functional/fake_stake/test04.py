@@ -3,12 +3,10 @@
 '''
 Performs the same check as in Test_02 verifying that zPoS forked blocks that stake a zerocoin which is spent on mainchain on an higher block are still accepted.
 '''
-from random import randint
-import time
+
 from test_framework.authproxy import JSONRPCException
 from base_test import PIVX_FakeStakeTest
 from time import sleep
-from util import mints_to_stakingPrevOuts
 
 class Test_04(PIVX_FakeStakeTest):
 
@@ -66,7 +64,6 @@ class Test_04(PIVX_FakeStakeTest):
         sleep(2)
         mints = self.node.listmintedzerocoins(True, True)
         sleep(1)
-        stakingPrevOuts = mints_to_stakingPrevOuts(mints)
         mints_hashes = [x["serial hash"] for x in mints]
 
         # This mints are not ready spendable, only few of them.
@@ -103,10 +100,14 @@ class Test_04(PIVX_FakeStakeTest):
         # 6) Collect some prevouts for random txes
         self.log.info("Collecting inputs for txes...")
         utxo_list = self.node.listunspent()
-        spendingPrevOuts = self.get_prevouts(utxo_list)
         sleep(1)
 
         # 7) Create valid forked zPoS blocks and send them
         self.log.info("Creating stake zPoS blocks...")
-        self.test_spam("Fork", stakingPrevOuts, spendingPrevOuts=spendingPrevOuts, fZPoS=True, fRandomHeight=True, randomRange=FORK_DEPTH, randomRange2=50, fMustPass=True)
+        err_msgs = self.test_spam("Fork", mints, spending_utxo_list=utxo_list, fZPoS=True, fRandomHeight=True, randomRange=FORK_DEPTH, randomRange2=50, fMustPass=True)
 
+        if not len(err_msgs) == 0:
+            self.log.error("result: " + " | ".join(err_msgs))
+            raise AssertionError("TEST FAILED")
+
+        self.log.info("%s PASSED" % self.__class__.__name__)

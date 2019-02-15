@@ -258,7 +258,7 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
         return stake_tx_signed
 
 
-    def get_prevouts(self, utxo_list, zpos=False):
+    def get_prevouts(self, utxo_list, blockHeight, zpos=False):
         ''' get prevouts for each utxo in a list
         :param      utxo_list:   (JSON list) returned from listunspent used as input (if zpos=False)
                                  (JSON list) returned from listmintedzerocoins used as input (if zpos=True)
@@ -266,15 +266,20 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
         :return:    stakingPrevOuts:    ({COutPoint --> (int, int)} dictionary)
                          map outpoints to (be used as staking inputs) to amount, block_time
         '''
+        zerocoinDenomList = [1, 5, 10, 50, 100, 500, 1000, 5000]
         stakingPrevOuts = {}
 
         for utxo in utxo_list:
             if zpos:
-                mint_height = utxo['mint height']
-                mint_checkpoint_height = mint_height - mint_height % 10 + 10
-                txBlockhash = self.node.getblockhash(mint_checkpoint_height)
-                mint_checkpoint_block = self.node.getblock(txBlockhash)
-                txBlocktime = mint_checkpoint_block['time']
+                checkpointHeight = blockHeight - 200
+                checkpointBlock = self.node.getblock(self.node.getblockhash(checkpointHeight), True)
+                checkpoint = int(checkpointBlock['acc_checkpoint'], 16)
+                # parse checksum and get stake modifier block hash
+                pos = zerocoinDenomList.index(utxo['denomination'])
+                checksum = checkpoint >> ((32 * (len(zerocoinDenomList) - 1 - pos)) & 0xFFFFFFFF)
+                checksumBlock = self.node.getchecksumblock(hex(checksum), utxo['denomination'], True)
+                txBlockhash = checksumBlock['hash']
+                txBlocktime = checksumBlock['time']
             else:
                 utxo_tx = self.node.getrawtransaction(utxo['txid'], 1)
                 txBlocktime = utxo_tx['blocktime']
@@ -293,10 +298,10 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
 
 
 
-    def test_spam(self, name, stakingPrevOuts,
+    def test_spam(self, name, staking_utxo_list,
                   fRandomHeight=False, randomRange=0, randomRange2=0,
                   fDoubleSpend=False, fMustPass=False, fZPoS=False,
-                  spendingPrevOuts=[]):
+                  spending_utxo_list=[]):
         ''' creates and sends spam blocks
         :param      name:            (string) chain branch (usually either "Main" or "Forked")
                     stakingPrevOuts: ({COutPoint --> (int, int)} dictionary) utxos to use for staking
@@ -325,6 +330,9 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                 pastBlockHash = self.node.getblockhash(randomCount)
 
             current_block_n = randomCount + 1
+            stakingPrevOuts = self.get_prevouts(staking_utxo_list, current_block_n, zpos=fZPoS)
+            spendingPrevOuts = self.get_prevouts(spending_utxo_list, current_block_n)
+
             block = self.create_spam_block(pastBlockHash, stakingPrevOuts, current_block_n,
                                            fStakeDoubleSpent=fDoubleSpend, fZPoS=fZPoS, spendingPrevOuts=spendingPrevOuts)
             block_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(block.nTime))

@@ -37,19 +37,14 @@ class Test_01(PIVX_FakeStakeTest):
         self.log.info("Done. Utxo list has %d elements." % len(utxo_list))
         sleep(2)
 
-        # 4) collect the prevouts
-        self.log.info("Collecting inputs...")
-        stakingPrevOuts = self.get_prevouts(utxo_list)
-        sleep(1)
-
-        # 5) Start mining again so that spent prevouts get confirmted in a block.
+        # 4) Start mining again so that spent prevouts get confirmted in a block.
         self.log.info("Mining %d more blocks..." % MORE_MINED_BLOCKS)
         self.node.generate(MORE_MINED_BLOCKS)
         sleep(2)
 
-        # 6) Create "Fake Stake" blocks and send them
+        # 5) Create "Fake Stake" blocks and send them
         self.log.info("Creating Fake stake blocks")
-        err_msgs = self.test_spam("Main", stakingPrevOuts)
+        err_msgs = self.test_spam("Main", utxo_list)
         if not len(err_msgs) == 0:
             self.log.error("result: " + " | ".join(err_msgs))
             raise AssertionError("TEST FAILED")
