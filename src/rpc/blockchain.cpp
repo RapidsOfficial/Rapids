@@ -148,6 +148,92 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     return result;
 }
 
+UniValue getchecksumblock(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 2 || params.size() > 3)
+        throw runtime_error(
+            "getchecksumblock\n"
+            "\nFinds the first occurrence of a certain accumulator checksum."
+            "\nReturns the block hash or, if fVerbose=true, the JSON block object\n"
+
+            "\nArguments:\n"
+            "1. \"checksum\"      (string, required) The hex encoded accumulator checksum\n"
+            "2. \"denom\"         (integer, required) The denomination of the accumulator\n"
+            "3. fVerbose          (boolean, optional, default=false) true for a json object, false for the hex encoded hash\n"
+
+            "\nResult (for fVerbose = true):\n"
+            "{\n"
+            "  \"hash\" : \"hash\",     (string) the block hash (same as provided)\n"
+            "  \"confirmations\" : n,   (numeric) The number of confirmations, or -1 if the block is not on the main chain\n"
+            "  \"size\" : n,            (numeric) The block size\n"
+            "  \"height\" : n,          (numeric) The block height or index\n"
+            "  \"version\" : n,         (numeric) The block version\n"
+            "  \"merkleroot\" : \"xxxx\", (string) The merkle root\n"
+            "  \"tx\" : [               (array of string) The transaction ids\n"
+            "     \"transactionid\"     (string) The transaction id\n"
+            "     ,...\n"
+            "  ],\n"
+            "  \"time\" : ttt,          (numeric) The block time in seconds since epoch (Jan 1 1970 GMT)\n"
+            "  \"mediantime\" : ttt,    (numeric) The median block time in seconds since epoch (Jan 1 1970 GMT)\n"
+            "  \"nonce\" : n,           (numeric) The nonce\n"
+            "  \"bits\" : \"1d00ffff\", (string) The bits\n"
+            "  \"difficulty\" : x.xxx,  (numeric) The difficulty\n"
+            "  \"previousblockhash\" : \"hash\",  (string) The hash of the previous block\n"
+            "  \"nextblockhash\" : \"hash\"       (string) The hash of the next block\n"
+            "  \"moneysupply\" : \"supply\"       (numeric) The money supply when this block was added to the blockchain\n"
+            "  \"zPIVsupply\" :\n"
+            "  {\n"
+            "     \"1\" : n,            (numeric) supply of 1 zPIV denomination\n"
+            "     \"5\" : n,            (numeric) supply of 5 zPIV denomination\n"
+            "     \"10\" : n,           (numeric) supply of 10 zPIV denomination\n"
+            "     \"50\" : n,           (numeric) supply of 50 zPIV denomination\n"
+            "     \"100\" : n,          (numeric) supply of 100 zPIV denomination\n"
+            "     \"500\" : n,          (numeric) supply of 500 zPIV denomination\n"
+            "     \"1000\" : n,         (numeric) supply of 1000 zPIV denomination\n"
+            "     \"5000\" : n,         (numeric) supply of 5000 zPIV denomination\n"
+            "     \"total\" : n,        (numeric) The total supply of all zPIV denominations\n"
+            "  }\n"
+            "}\n"
+
+            "\nResult (for verbose=false):\n"
+            "\"data\"             (string) A string that is serialized, hex-encoded data for block 'hash'.\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("getchecksumblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\", 5") +
+            HelpExampleRpc("getchecksumblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\", 5"));
+
+
+    LOCK(cs_main);
+
+    // param 0
+    std::string acc_checksum_str = params[0].get_str();
+    uint256 checksum_256(acc_checksum_str);
+    uint32_t acc_checksum = checksum_256.Get32();
+    // param 1
+    libzerocoin::CoinDenomination denomination = libzerocoin::IntToZerocoinDenomination(params[1].get_int());
+    // param 2
+    bool fVerbose = false;
+    if (params.size() > 2)
+        fVerbose = params[2].get_bool();
+
+    int checksumHeight = GetChecksumHeight(acc_checksum, denomination);
+
+    if (checksumHeight == 0)
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found");
+
+    CBlockIndex* pblockindex = chainActive[checksumHeight];
+
+    if (!fVerbose)
+        return pblockindex->GetBlockHash().GetHex();
+
+    CBlock block;
+    if (!ReadBlockFromDisk(block, pblockindex))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Can't read block from disk");
+
+    return blockToJSON(block, pblockindex);
+}
+
+
 UniValue getblockcount(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)

@@ -157,7 +157,9 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getmintsinblocks", 0},
         {"getmintsinblocks", 1},
         {"getmintsinblocks", 2},
-        {"getfeeinfo", 0}
+        {"getfeeinfo", 0},
+        {"getchecksumblock", 1},
+        {"getchecksumblock", 2},
     };
 
 class CRPCConvertTable
