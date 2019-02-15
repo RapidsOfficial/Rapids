@@ -23,7 +23,7 @@
 #include "utilmoneystr.h"
 #include "zpivchain.h"
 #ifdef ENABLE_WALLET
-#include "wallet.h"
+#include "wallet/wallet.h"
 #endif
 
 #include <stdint.h>

@@ -14,7 +14,7 @@
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 #include <zpiv/accumulators.h>
-#include "wallet.h"
+#include "wallet/wallet.h"
 #include "zpiv/zpivwallet.h"
 #include "zpivchain.h"
 
