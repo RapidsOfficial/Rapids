@@ -276,7 +276,7 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                 checkpoint = int(checkpointBlock['acc_checkpoint'], 16)
                 # parse checksum and get stake modifier block hash
                 pos = zerocoinDenomList.index(utxo['denomination'])
-                checksum = checkpoint >> ((32 * (len(zerocoinDenomList) - 1 - pos)) & 0xFFFFFFFF)
+                checksum = (checkpoint >> (32 * (len(zerocoinDenomList) - 1 - pos))) & 0xFFFFFFFF
                 checksumBlock = self.node.getchecksumblock(hex(checksum), utxo['denomination'], True)
                 txBlockhash = checksumBlock['hash']
                 txBlocktime = checksumBlock['time']
@@ -330,8 +330,8 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                 pastBlockHash = self.node.getblockhash(randomCount)
 
             current_block_n = randomCount + 1
-            stakingPrevOuts = self.get_prevouts(staking_utxo_list, current_block_n, zpos=fZPoS)
-            spendingPrevOuts = self.get_prevouts(spending_utxo_list, current_block_n)
+            stakingPrevOuts = self.get_prevouts(staking_utxo_list, randomCount, zpos=fZPoS)
+            spendingPrevOuts = self.get_prevouts(spending_utxo_list, randomCount)
 
             block = self.create_spam_block(pastBlockHash, stakingPrevOuts, current_block_n,
                                            fStakeDoubleSpent=fDoubleSpend, fZPoS=fZPoS, spendingPrevOuts=spendingPrevOuts)
