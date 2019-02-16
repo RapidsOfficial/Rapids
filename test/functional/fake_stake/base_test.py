@@ -94,9 +94,9 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
 
         self.log.info("Creating Spam Block")
 
-        # If not given inputs to create spam txes, use the staking inputs
-        if spendingPrevOuts == {}:
-            spendingPrevOuts = stakingPrevOuts
+        # If not given inputs to create spam txes, use a copy of the staking inputs
+        if len(spendingPrevOuts) == 0:
+            spendingPrevOuts = dict(stakingPrevOuts)
 
         # Get current time
         current_time = int(time.time())
