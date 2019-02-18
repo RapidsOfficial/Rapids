@@ -77,7 +77,6 @@ class Test_04(PIVX_FakeStakeTest):
         # 5) spend mints
         self.log.info("Spending mints in block %d..." % self.node.getblockcount())
         spends = 0
-        spent_mints = []
         for mint in mints_hashes:
             # create a single element list to pass to RPC spendzerocoinmints
             mint_arg = []
@@ -86,7 +85,6 @@ class Test_04(PIVX_FakeStakeTest):
                 self.node.spendzerocoinmints(mint_arg)
                 sleep(1)
                 spends += 1
-                spent_mints.append(mint)
             except JSONRPCException as e:
                 self.log.warning(str(e))
                 continue

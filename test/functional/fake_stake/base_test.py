@@ -82,13 +82,13 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
     def create_spam_block(self, hashPrevBlock, stakingPrevOuts, height, fStakeDoubleSpent=False, fZPoS=False, spendingPrevOuts={}):
         ''' creates a block to spam the network with
         :param   hashPrevBlock:      (hex string) hash of previous block
-                 stakingPrevOuts:    ({COutPoint --> (int, int, int)} dictionary)
-                                      map outpoints (to be used as staking inputs) to amount, block_time, nStakeModifier
+                 stakingPrevOuts:    ({COutPoint --> (int, int, int, str)} dictionary)
+                                      map outpoints (to be used as staking inputs) to amount, block_time, nStakeModifier, hashStake
                  height:             (int) block height
                  fStakeDoubleSpent:  (bool) spend the coinstake input inside the block
                  fZPoS:              (bool) stake the block with zerocoin
-                 spendingPrevOuts:   ({COutPoint --> (int, int, int)} dictionary)
-                                      map outpoints (to be used as tx inputs) to amount, block_time, nStakeModifier
+                 spendingPrevOuts:   ({COutPoint --> (int, int, int, str)} dictionary)
+                                      map outpoints (to be used as tx inputs) to amount, block_time, nStakeModifier, hashStake
         :return  block:              (CBlock) generated block
         '''
 
@@ -290,8 +290,8 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                             <if zpos=True>  (JSON list) mints returned from listmintedzerocoins used as input
                  blockHeight:               (int) height of the previous block
                  zpos:                      (bool) type of utxo_list
-        :return: stakingPrevOuts:           ({COutPoint --> (int, int, int)} dictionary)
-                                            map outpoints to amount, block_time, nStakeModifier
+        :return: stakingPrevOuts:           ({COutPoint --> (int, int, int, str)} dictionary)
+                                            map outpoints to amount, block_time, nStakeModifier, hashStake
         '''
         zerocoinDenomList = [1, 5, 10, 50, 100, 500, 1000, 5000]
         stakingPrevOuts = {}
