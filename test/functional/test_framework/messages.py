@@ -482,7 +482,7 @@ class CBlockHeader():
                 if isinstance(prevout, COutPoint):
                     data += self.get_uniqueness(prevout)
                 else:
-                    data += ser_uint256(uint256_from_str(bytes.fromhex(hashStake)))
+                    data += ser_uint256(uint256_from_str(bytes.fromhex(hashStake)[::-1]))
                 data += struct.pack("<I", self.nTime)
                 posHash = uint256_from_str(hash256(data))
                 if posHash <= target:
