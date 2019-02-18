@@ -128,6 +128,10 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
         if not fZPoS and not fStakeDoubleSpent:
             del spendingPrevOuts[block.prevoutStake]
 
+        # remove a random prevout from the list
+        # (to randomize block creation if the same height is picked two times)
+        del spendingPrevOuts[choice(list(spendingPrevOuts))]
+
         # Create spam for the block. Sign the spendingPrevouts
         self.log.info("Creating spam TXes...")
         for outPoint in spendingPrevOuts:
@@ -422,9 +426,6 @@ class PIVX_FakeStakeTest(BitcoinTestFramework):
                 self.log.error(exc_msg)
                 err_msgs.append(exc_msg)
 
-            # remove a random prevout from the list
-            # (to randomize block creation if the same height is picked two times)
-            del stakingPrevOuts[choice(list(stakingPrevOuts))]
 
         self.log.info("Sent all %s blocks." % str(self.NUM_BLOCKS))
         # Log final datadir size
