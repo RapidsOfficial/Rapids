@@ -529,7 +529,7 @@ bool GenerateAccumulatorWitness(CoinWitnessData* coinWitness, AccumulatorMap& ma
         }
 
         // Mint added height
-        coinWitness->SetHeightMintAdded(SearchMintHeightOf(*coinWitness->coin->getValue()));
+        coinWitness->SetHeightMintAdded(SearchMintHeightOf(coinWitness->coin->getValue()));
 
         // Set the initial state of the witness accumulator for this coin.
         CBigNum bnAccValue = 0;
