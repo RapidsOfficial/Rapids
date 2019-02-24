@@ -33,6 +33,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getaddednodeinfo", 0},
         {"setgenerate", 0},
         {"setgenerate", 1},
+        {"generate", 0},
         {"getnetworkhashps", 0},
         {"getnetworkhashps", 1},
         {"sendtoaddress", 1},
@@ -49,6 +50,12 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getbalance", 1},
         {"getbalance", 2},
         {"getblockhash", 0},
+        { "waitforblockheight", 0 },
+        { "waitforblockheight", 1 },
+        { "waitforblock", 1 },
+        { "waitforblock", 2 },
+        { "waitfornewblock", 0 },
+        { "waitfornewblock", 1 },
         {"move", 2},
         {"move", 3},
         {"sendfrom", 2},
@@ -79,6 +86,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getrawtransaction", 1},
         {"createrawtransaction", 0},
         {"createrawtransaction", 1},
+        {"createrawtransaction", 2},
         {"signrawtransaction", 1},
         {"signrawtransaction", 2},
         {"sendrawtransaction", 1},
@@ -149,7 +157,9 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getmintsinblocks", 0},
         {"getmintsinblocks", 1},
         {"getmintsinblocks", 2},
-        {"getfeeinfo", 0}
+        {"getfeeinfo", 0},
+        {"getchecksumblock", 1},
+        {"getchecksumblock", 2},
     };
 
 class CRPCConvertTable

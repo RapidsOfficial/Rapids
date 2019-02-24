@@ -1942,7 +1942,14 @@ CAmount CWallet::GetLockedWatchOnlyBalance() const
 /**
  * populate vCoins with vector of available COutputs.
  */
-void CWallet::AvailableCoins(vector<COutput>& vCoins, bool fOnlyConfirmed, const CCoinControl* coinControl, bool fIncludeZeroValue, AvailableCoinsType nCoinType, bool fUseIX, int nWatchonlyConfig) const
+void CWallet::AvailableCoins(
+        vector<COutput>& vCoins,
+        bool fOnlyConfirmed,
+        const CCoinControl* coinControl,
+        bool fIncludeZeroValue,
+        AvailableCoinsType nCoinType,
+        bool fUseIX,
+        int nWatchonlyConfig) const
 {
     vCoins.clear();
 
@@ -2123,7 +2130,7 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
             }
 
             //check for min age
-            if (GetAdjustedTime() - nTxTime < nStakeMinAge)
+            if ((GetAdjustedTime() - nTxTime < nStakeMinAge ) && Params().NetworkID() != CBaseChainParams::REGTEST)
                 continue;
 
             //check that it is matured
@@ -2955,7 +2962,13 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, const CAmount& nValue, CWa
 }
 
 // ppcoin: create coin stake transaction
-bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, CMutableTransaction& txNew, unsigned int& nTxNewTime)
+bool CWallet::CreateCoinStake(
+        const CKeyStore& keystore,
+        unsigned int nBits,
+        int64_t nSearchInterval,
+        CMutableTransaction& txNew,
+        unsigned int& nTxNewTime
+        )
 {
     // The following split & combine thresholds are important to security
     // Should not be adjusted if you don't understand the consequences
@@ -2979,14 +2992,25 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
 
     // Get the list of stakable inputs
     std::list<std::unique_ptr<CStakeInput> > listInputs;
-    if (!SelectStakeCoins(listInputs, nBalance - nReserveBalance))
+    if (!SelectStakeCoins(listInputs, nBalance - nReserveBalance)) {
+        LogPrintf("CreateCoinStake(): selectStakeCoins failed\n");
         return false;
+    }
 
-    if (listInputs.empty())
+    if (listInputs.empty()) {
+        LogPrintf("CreateCoinStake(): listInputs empty\n");
         return false;
+    }
 
-    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60)
-        MilliSleep(10000);
+    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60){
+
+        if(Params().NetworkID() != CBaseChainParams::REGTEST){
+            MilliSleep(10000);
+        }else{
+            MilliSleep(1000);
+        }
+
+    }
 
     CAmount nCredit;
     CScript scriptPubKeyKernel;
@@ -3000,7 +3024,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         //make sure that enough time has elapsed between
         CBlockIndex* pindex = stakeInput->GetIndexFrom();
         if (!pindex || pindex->nHeight < 1) {
-            LogPrintf("*** no pindexfrom\n");
+            LogPrintf("CreateCoinStake(): no pindexfrom\n");
             continue;
         }
 
@@ -3013,7 +3037,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         if (Stake(stakeInput.get(), nBits, block.GetBlockTime(), nTxNewTime, hashProofOfStake)) {
             LOCK(cs_main);
             //Double check that this will pass time requirements
-            if (nTxNewTime <= chainActive.Tip()->GetMedianTimePast()) {
+            if (nTxNewTime <= chainActive.Tip()->GetMedianTimePast() && Params().NetworkID() != CBaseChainParams::REGTEST) {
                 LogPrintf("CreateCoinStake() : kernel found, but it is too far in the past \n");
                 continue;
             }
@@ -4660,7 +4684,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
     //LogPrintf("%s : selected mint %s\n pubcoinhash=%s\n", __func__, zerocoinSelected.ToString(), GetPubCoinHash(zerocoinSelected.GetValue()).GetHex());
     if (!pubCoinSelected.validate()) {
         receipt.SetStatus(_("The selected mint coin is an invalid coin"), ZPIV_INVALID_COIN);
-        return false;
+        return error("%s : %s", __func__, receipt.GetStatusMessage());
     }
 
     // 3. Compute Accumulator and Witness
@@ -4710,7 +4734,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
             libzerocoin::CoinSpend spend2(Params().Zerocoin_Params(true), paramsAccumulator, privateCoin, accumulator,
                                           nChecksum, witness, hashTxOut, libzerocoin::SpendType::SPEND);
             LogPrintf("*** spend2 valid=%d\n", spend2.Verify(accumulator));
-            return false;
+            return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
 
         // Deserialize the CoinSpend intro a fresh object
@@ -4733,16 +4757,16 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
             serializedCoinSpendChecking << spend;
         } catch (...) {
             receipt.SetStatus(_("Failed to deserialize"), ZPIV_BAD_SERIALIZATION);
-            return false;
+            return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
 
         libzerocoin::CoinSpend newSpendChecking(paramsCoin, paramsAccumulator, serializedCoinSpendChecking);
         if (!newSpendChecking.Verify(accumulator)) {
             receipt.SetStatus(_("The transaction did not verify"), ZPIV_BAD_SERIALIZATION);
-            return false;
+            return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
 
-        if (IsSerialKnown(spend.getCoinSerialNumber())) {
+        if (Params().NetworkID() != CBaseChainParams::REGTEST && IsSerialKnown(spend.getCoinSerialNumber())) {
             //Tried to spend an already spent zPIV
             receipt.SetStatus(_("The coin spend has been used"), ZPIV_SPENT_USED_ZPIV);
 
@@ -4756,7 +4780,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
                 LogPrintf("%s: failed to write zerocoinmint\n", __func__);
 
             pwalletMain->NotifyZerocoinChanged(pwalletMain, zerocoinSelected.GetValue().GetHex(), "Used", CT_UPDATED);
-            return false;
+            return error("%s : %s", __func__, receipt.GetStatusMessage());
         }
 
         uint32_t nAccumulatorChecksum = GetChecksum(accumulator.getValue());
@@ -4765,7 +4789,7 @@ bool CWallet::MintToTxIn(CZerocoinMint zerocoinSelected, int nSecurityLevel, con
         receipt.AddSpend(zcSpend);
     } catch (const std::exception&) {
         receipt.SetStatus(_("CoinSpend: Accumulator witness does not verify"), ZPIV_INVALID_WITNESS);
-        return false;
+        return error("%s : %s", __func__, receipt.GetStatusMessage());
     }
 
     receipt.SetStatus(_("Spend Valid"), ZPIV_SPEND_OKAY); // Everything okay

@@ -2124,6 +2124,8 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
             "{\n"
             "  \"walletversion\": xxxxx,     (numeric) the wallet version\n"
             "  \"balance\": xxxxxxx,         (numeric) the total PIV balance of the wallet\n"
+            "  \"unconfirmed_balance\": xxx, (numeric) the total unconfirmed balance of the wallet in PIV\n"
+            "  \"immature_balance\": xxxxxx, (numeric) the total immature balance of the wallet in PIV\n"
             "  \"txcount\": xxxxxxx,         (numeric) the total number of transactions in the wallet\n"
             "  \"keypoololdest\": xxxxxx,    (numeric) the timestamp (seconds since GMT epoch) of the oldest pre-generated key in the key pool\n"
             "  \"keypoolsize\": xxxx,        (numeric) how many new keys are pre-generated\n"
@@ -2140,6 +2142,8 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
     UniValue obj(UniValue::VOBJ);
     obj.push_back(Pair("walletversion", pwalletMain->GetVersion()));
     obj.push_back(Pair("balance", ValueFromAmount(pwalletMain->GetBalance())));
+    obj.push_back(Pair("unconfirmed_balance", ValueFromAmount(pwalletMain->GetUnconfirmedBalance())));
+    obj.push_back(Pair("immature_balance",    ValueFromAmount(pwalletMain->GetImmatureBalance())));
     obj.push_back(Pair("txcount", (int)pwalletMain->mapWallet.size()));
     obj.push_back(Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
     obj.push_back(Pair("keypoolsize", (int)pwalletMain->GetKeyPoolSize()));
@@ -2588,7 +2592,9 @@ UniValue listmintedzerocoins(const UniValue& params, bool fHelp)
             "    \"version\": n,   (numeric) Zerocoin version number.\n"
             "    \"zPIV ID\": \"xxx\",   (string) Pubcoin in hex format.\n"
             "    \"denomination\": n,   (numeric) Coin denomination.\n"
+            "    \"mint height\": n     (numeric) Height of the block containing this mint.\n"
             "    \"confirmations\": n   (numeric) Number of confirmations.\n"
+            "    \"hash stake\": \"xxx\",   (string) Mint serialstake hash in hex format.\n"
             "  }\n"
             "  ,..."
             "]\n"
@@ -2612,7 +2618,7 @@ UniValue listmintedzerocoins(const UniValue& params, bool fHelp)
 
     UniValue jsonList(UniValue::VARR);
     if (fVerbose) {
-        for (const CMintMeta& m : setMints) {
+        for (auto m : setMints) {
             // Construct mint object
             UniValue objMint(UniValue::VOBJ);
             objMint.push_back(Pair("serial hash", m.hashSerial.GetHex()));  // Serial hash
@@ -2620,8 +2626,20 @@ UniValue listmintedzerocoins(const UniValue& params, bool fHelp)
             objMint.push_back(Pair("zPIV ID", m.hashPubcoin.GetHex()));     // PubCoin
             int denom = libzerocoin::ZerocoinDenominationToInt(m.denom);
             objMint.push_back(Pair("denomination", denom));                 // Denomination
+            objMint.push_back(Pair("mint height", m.nHeight));              // Mint Height
             int nConfirmations = (m.nHeight && nBestHeight > m.nHeight) ? nBestHeight - m.nHeight : 0;
             objMint.push_back(Pair("confirmations", nConfirmations));       // Confirmations
+            // hashStake
+            if (m.hashStake == 0) {
+                CZerocoinMint mint;
+                if (pwalletMain->GetMint(m.hashSerial, mint)) {
+                    uint256 hashStake = mint.GetSerialNumber().getuint256();
+                    hashStake = Hash(hashStake.begin(), hashStake.end());
+                    m.hashStake = hashStake;
+                    pwalletMain->zpivTracker->UpdateState(m);
+                }
+            }
+            objMint.push_back(Pair("hash stake", m.hashStake.GetHex()));       // Confirmations
             // Push back mint object
             jsonList.push_back(objMint);
         }
