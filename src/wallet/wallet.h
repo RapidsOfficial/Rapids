@@ -197,12 +197,7 @@ private:
 public:
     bool MintableCoins();
     bool SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount, bool fPrecompute = false);
-    bool SelectCoinsByDenominations(int nDenom, CAmount nValueMin, CAmount nValueMax, std::vector<CTxIn>& vCoinsRet, std::vector<COutput>& vCoinsRet2, CAmount& nValueRet, int nObfuscationRoundsMin, int nObfuscationRoundsMax);
-    bool SelectCoinsDarkDenominated(CAmount nTargetValue, std::vector<CTxIn>& setCoinsRet, CAmount& nValueRet) const;
-    bool HasCollateralInputs(bool fOnlyConfirmed = true) const;
     bool IsCollateralAmount(CAmount nInputAmount) const;
-
-    bool SelectCoinsCollateral(std::vector<CTxIn>& setCoinsRet, CAmount& nValueRet) const;
 
     // Zerocoin additions
     bool CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransaction& txNew, vector<CDeterministicMint>& vDMints, CReserveKey* reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl = NULL, const bool isZCSpendChange = false);
@@ -503,7 +498,6 @@ public:
     bool CreateTransaction(CScript scriptPubKey, const CAmount& nValue, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl = NULL, AvailableCoinsType coin_type = ALL_COINS, bool useIX = false, CAmount nFeePay = 0);
     bool CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, std::string strCommand = "tx");
     bool AddAccountingEntry(const CAccountingEntry&, CWalletDB & pwalletdb);
-    std::string PrepareObfuscationDenominate(int minRounds, int maxRounds);
     int GenerateObfuscationOutputs(int nTotalValue, std::vector<CTxOut>& vout);
     bool CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, CMutableTransaction& txNew, unsigned int& nTxNewTime);
     bool MultiSend();
@@ -532,13 +526,7 @@ public:
     bool GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useIX);
     bool GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX); // Only used for budget finalization
 
-    // get the Obfuscation chain depth for a given input
-    int GetRealInputObfuscationRounds(CTxIn in, int rounds) const;
-    // respect current settings
-    int GetInputObfuscationRounds(CTxIn in) const;
-
     bool IsDenominated(const CTxIn& txin) const;
-    bool IsDenominated(const CTransaction& tx) const;
 
     bool IsDenominatedAmount(CAmount nInputAmount) const;
 
@@ -980,13 +968,10 @@ public:
     CAmount GetCredit(const isminefilter& filter) const;
     CAmount GetImmatureCredit(bool fUseCache = true) const;
     CAmount GetAvailableCredit(bool fUseCache = true) const;
-    CAmount GetAnonymizableCredit(bool fUseCache = true) const;
-    CAmount GetAnonymizedCredit(bool fUseCache = true) const;
     // Return sum of unlocked coins
     CAmount GetUnlockedCredit() const;
     // Return sum of unlocked coins
     CAmount GetLockedCredit() const;
-    CAmount GetDenominatedCredit(bool unconfirmed, bool fUseCache = true) const;
     CAmount GetImmatureWatchOnlyCredit(const bool& fUseCache = true) const;
     CAmount GetAvailableWatchOnlyCredit(const bool& fUseCache = true) const;
     CAmount GetLockedWatchOnlyCredit() const;
