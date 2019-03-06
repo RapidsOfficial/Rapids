@@ -16,6 +16,7 @@
 #include "sync.h"
 #include "util.h"
 #include "validationinterface.h"
+#include <boost/foreach.hpp>
 
 using namespace std;
 using namespace boost;

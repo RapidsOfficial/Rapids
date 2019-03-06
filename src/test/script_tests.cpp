@@ -30,7 +30,6 @@
 #include <boost/algorithm/string/split.hpp>
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/path.hpp>
-#include <boost/foreach.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <univalue.h>
