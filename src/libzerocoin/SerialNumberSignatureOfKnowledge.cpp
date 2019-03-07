@@ -125,11 +125,24 @@ inline CBigNum SerialNumberSignatureOfKnowledge::challengeCalculation(const CBig
 }
 
 bool SerialNumberSignatureOfKnowledge::Verify(const CBigNum& coinSerialNumber, const CBigNum& valueOfCommitmentToCoin,
-        const uint256 msghash) const {
+        const uint256 msghash, bool isInParamsValidationRange) const {
 	CBigNum a = params->coinCommitmentGroup.g;
 	CBigNum b = params->coinCommitmentGroup.h;
 	CBigNum g = params->serialNumberSoKCommitmentGroup.g;
 	CBigNum h = params->serialNumberSoKCommitmentGroup.h;
+
+	//// Params validation.
+	if(isInParamsValidationRange) {
+		CBigNum zero = CBigNum(0);
+		// Check that the serial is under the correct group
+		if (coinSerialNumber < zero || coinSerialNumber > CBigNum(2).pow(256))
+			return error("Invalid serial range");
+
+		if (valueOfCommitmentToCoin < zero || valueOfCommitmentToCoin > params->serialNumberSoKCommitmentGroup.modulus)
+			return error("Invalid commitment to coin value range");
+	}
+
+	//// Verification
 	CHashWriter hasher(0,0);
 	hasher << *params << valueOfCommitmentToCoin << coinSerialNumber << msghash;
 

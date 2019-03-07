@@ -22,6 +22,13 @@
 
 namespace libzerocoin
 {
+
+    class InvalidSerialException : public std::exception {
+    public:
+        std::string message;
+        InvalidSerialException(const string &message) : message(message) {}
+    };
+
     int ExtractVersionFromSerial(const CBigNum& bnSerial);
     bool IsValidSerial(const ZerocoinParams* params, const CBigNum& bnSerial);
     CBigNum GetAdjustedSerial(const CBigNum& bnSerial);
