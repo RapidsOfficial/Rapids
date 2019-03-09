@@ -143,7 +143,7 @@ bool CoinSpend::HasValidSignature() const
             return false;
         }
     }catch(std::range_error &e){
-        std::cout << "HasValidSignature() error: " << e.what() << std::endl;
+        //std::cout << "HasValidSignature() error: " << e.what() << std::endl;
         throw InvalidSerialException("Serial longer than 256 bits");
     }
 

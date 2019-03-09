@@ -259,7 +259,7 @@ int ExtractVersionFromSerial(const CBigNum& bnSerial)
         if (nMark == 0xf)
             return PrivateCoin::PUBKEY_VERSION;
     }catch (std::range_error &e){
-        std::cout << "ExtractVersionFromSerial(): " << e.what() << std::endl;
+        //std::cout << "ExtractVersionFromSerial(): " << e.what() << std::endl;
         // Only serial version 2 appeared with this range error..
         return 2;
     }
@@ -291,7 +291,7 @@ bool IsValidSerial(const ZerocoinParams* params, const CBigNum& bnSerial)
         CBigNum bnAdjustedSerial = GetAdjustedSerial(bnSerial);
         return bnAdjustedSerial > 0 && bnAdjustedSerial < params->coinCommitmentGroup.groupOrder;
     }catch(std::range_error &e){
-        std::cout << "IsValidSerial() error: " << e.what() << std::endl;
+        //std::cout << "IsValidSerial() error: " << e.what() << std::endl;
         throw InvalidSerialException("Serial longer than accepted range");
     }
 }

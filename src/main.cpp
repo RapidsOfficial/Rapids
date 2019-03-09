@@ -1005,10 +1005,9 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const Coi
             if (!spend.HasValidSignature())
                 return error("%s: V2 zPIV spend does not have a valid signature", __func__);
         }catch (libzerocoin::InvalidSerialException &e){
-            std::cout << "ContextualCheckZerocoinSpendNoSerialCheck() invalid serial.." << std::endl;
             // Check if we are in the range of the attack
             if(!isBlockBetweenFakeSerialAttackRange(pindex->nHeight)){
-                std::cout << "fake serial detected0" << std::endl;
+                //std::cout << "fake serial detected" << std::endl;
                 return false;
             }
         }
@@ -1030,10 +1029,9 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const Coi
             return error("%s : zPIV spend with serial %s from tx %s is not in valid range\n", __func__,
                          spend.getCoinSerialNumber().GetHex(), tx.GetHash().GetHex());
     }catch (libzerocoin::InvalidSerialException &e){
-        std::cout << "ContextualCheckZerocoinSpendNoSerialCheck()2 invalid serial.." << std::endl;
         // Check if we are in the range of the attack
         if(!isBlockBetweenFakeSerialAttackRange(pindex->nHeight)){
-            std::cout << "fake serial detected" << std::endl;
+            //std::cout << "fake serial detected" << std::endl;
             return false;
         }
     }
