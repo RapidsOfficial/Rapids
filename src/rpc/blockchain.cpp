@@ -1455,7 +1455,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
                         UniValue s(UniValue::VOBJ);
                         s.push_back(Pair("serial", serial_str));
                         s.push_back(Pair("denom", denom));
-                        s.push_back(Pair("bitsize", serial_str.size()*4));
+                        s.push_back(Pair("bitsize", (int)serial_str.size()*4));
                         s.push_back(Pair("spentTo", spentTo));
                         s.push_back(Pair("txid", txid));
                         s.push_back(Pair("blocknum", pblockindex->nHeight));
