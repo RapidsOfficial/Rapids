@@ -60,6 +60,7 @@ BASE_SCRIPTS= [
     'p2p_pos_fakestake_accepted.py',
     'p2p_zpos_fakestake.py',
     'p2p_zpos_fakestake_accepted.py',
+    'zerocoin_wrapped_serials.py',
     # vv Tests less than 5m vv
     'feature_block.py',
     'rpc_fundrawtransaction.py',
