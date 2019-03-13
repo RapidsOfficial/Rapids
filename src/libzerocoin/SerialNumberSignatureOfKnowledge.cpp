@@ -133,13 +133,13 @@ bool SerialNumberSignatureOfKnowledge::Verify(const CBigNum& coinSerialNumber, c
 
 	//// Params validation.
 	if(isInParamsValidationRange) {
-		CBigNum zero = CBigNum(0);
-		// Check that the serial is under the correct group
-		if (coinSerialNumber < zero || coinSerialNumber > CBigNum(2).pow(256))
+		// Check that the serial is within the max size
+		if (!IsValidSerial(params, coinSerialNumber))
 			return error("Invalid serial range");
-
-		if (valueOfCommitmentToCoin < zero || valueOfCommitmentToCoin > params->serialNumberSoKCommitmentGroup.modulus)
-			return error("Invalid commitment to coin value range");
+		
+		// Check that the commitment is in the correct group
+		if (!IsValidCommitmentToCoinRange(params, valueOfCommitmentToCoin))
+		    return error("Invalid commitment to coin range");
 	}
 
 	//// Verification
