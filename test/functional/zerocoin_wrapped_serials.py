@@ -7,6 +7,7 @@
 Covers the 'Wrapped Serials Attack' scenario
 '''
 
+import random
 from time import sleep
 
 from test_framework.authproxy import JSONRPCException
@@ -23,8 +24,10 @@ class zPIVwrappedSerialsTest(PIVX_FakeStakeTest):
         self.init_test()
 
         INITAL_MINED_BLOCKS = 351   # Blocks mined before minting
-        MORE_MINED_BLOCKS = 31     # Blocks mined after minting (before spending)
+        MORE_MINED_BLOCKS = 31      # Blocks mined after minting (before spending)
         DENOM_TO_USE = 1000         # zc denomination used for double spending attack
+        K_BITSIZE = 128             # bitsize of the range for random K
+        NUM_OF_K = 5                # number of wrapping serials to try
 
         # 1) Start mining blocks
         self.log.info("Mining %d first blocks..." % INITAL_MINED_BLOCKS)
@@ -71,27 +74,31 @@ class zPIVwrappedSerialsTest(PIVX_FakeStakeTest):
         self.node.generate(2)
         sleep(2)
 
-        # 6) create the new serial
-        serial = hex(int(zc[0]["s"], 16) + q*pow2)[2:]
+        # 6) create the new serials
+        new_serials = []
+        for i in range(NUM_OF_K):
+            K = random.getrandbits(K_BITSIZE)
+            new_serials.append(hex(int(zc[0]["s"], 16) + K*q*pow2)[2:])
+
         randomness = zc[0]["r"]
         privkey = zc[0]["k"]
 
-        # 7) Spend the new zerocoin
-        self.log.info("Spending the wrapping serial %s" % serial)
-        tx = None
-        try:
-            tx = self.node.spendrawzerocoin(serial, randomness, DENOM_TO_USE, privkey)
-        except JSONRPCException as e:
-            exc_msg = str(e)
-            if exc_msg == "The new spend coin transaction did not verify (-4)":
-                self.log.info("GOOD: Transaction did not verify")
-            else:
-                raise e
+        # 7) Spend the new zerocoins
+        for serial in new_serials:
+            self.log.info("Spending the wrapping serial %s" % serial)
+            tx = None
+            try:
+                tx = self.node.spendrawzerocoin(serial, randomness, DENOM_TO_USE, privkey)
+            except JSONRPCException as e:
+                exc_msg = str(e)
+                if exc_msg == "The new spend coin transaction did not verify (-4)":
+                    self.log.info("GOOD: Transaction did not verify")
+                else:
+                    raise e
 
-        # 8) Check
-        if tx is not None:
-            self.log.warning("Tx is: %s" % tx)
-            raise AssertionError("TEST FAILED")
+            if tx is not None:
+                self.log.warning("Tx is: %s" % tx)
+                raise AssertionError("TEST FAILED")
 
         self.log.info("%s PASSED" % self.__class__.__name__)
 
