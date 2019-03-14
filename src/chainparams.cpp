@@ -157,7 +157,6 @@ public:
         nRejectOldSporkKey = 1527811200; //!> Fully reject old spork key after (GMT): Friday, June 1, 2018 12:00:00 AM
 
         // Fake Serial Attack
-        nFakeSerialBlockHeightStart = 1679090;
         nFakeSerialBlockheightEnd = 1686215;
 
         /**

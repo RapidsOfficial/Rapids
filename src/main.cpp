@@ -978,8 +978,12 @@ bool ContextualCheckZerocoinMint(const CTransaction& tx, const PublicCoin& coin,
     return true;
 }
 
-bool isBlockBetweenFakeSerialAttackRange(int nHeight){
-    return nHeight >= Params().Zerocoin_Block_FirstFakeSerial() && nHeight <= Params().Zerocoin_Block_EndFakeSerial();
+bool isBlockBetweenFakeSerialAttackRange(int nHeight)
+{
+    if (Params().NetworkID() != CBaseChainParams::MAIN)
+        return false;
+
+    return nHeight <= Params().Zerocoin_Block_EndFakeSerial();
 }
 
 bool ContextualCheckZerocoinSpend(const CTransaction& tx, const CoinSpend& spend, CBlockIndex* pindex, const uint256& hashBlock)
