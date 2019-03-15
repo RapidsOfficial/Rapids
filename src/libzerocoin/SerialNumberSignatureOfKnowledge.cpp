@@ -131,19 +131,19 @@ bool SerialNumberSignatureOfKnowledge::Verify(const CBigNum& coinSerialNumber, c
 	CBigNum g = params->serialNumberSoKCommitmentGroup.g;
 	CBigNum h = params->serialNumberSoKCommitmentGroup.h;
 
-	//// Params validation.
-	if(isInParamsValidationRange) {
-		// Check that the serial is within the max size
-		if (!IsValidSerial(params, coinSerialNumber))
-			return error("Invalid serial range");
-		
-		// Check that the commitment is in the correct group
-		if (!IsValidCommitmentToCoinRange(params, valueOfCommitmentToCoin))
-		    return error("Invalid commitment to coin range");
-	}
+    //// Params validation.
+    if(isInParamsValidationRange) {
+        // Check that the serial is within the max size
+        if (!IsValidSerial(params, coinSerialNumber))
+            return error("Invalid serial range");
 
-	//// Verification
-	CHashWriter hasher(0,0);
+        // Check that the commitment is in the correct group
+        if (!IsValidCommitmentToCoinRange(params, valueOfCommitmentToCoin))
+            return error("Invalid commitment to coin range");
+    }
+
+    //// Verification
+    CHashWriter hasher(0,0);
 	hasher << *params << valueOfCommitmentToCoin << coinSerialNumber << msghash;
 
 	vector<CBigNum> tprime(params->zkp_iterations);
