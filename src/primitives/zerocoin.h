@@ -7,6 +7,7 @@
 
 #include <amount.h>
 #include <limits.h>
+#include <chainparams.h>
 #include "libzerocoin/bignum.h"
 #include "libzerocoin/Denominations.h"
 #include "key.h"
@@ -247,5 +248,47 @@ public:
     int GetStatus();
     int GetNeededSpends();
 };
+
+/**
+ * Wrapped serials attack inflation, only for mainnet.
+ * FUTURE: Move this to another file..
+ * @param denom
+ * @return
+ */
+int GetWrapppedSerialInflation(libzerocoin::CoinDenomination denom){
+    if(Params().NetworkID() == CBaseChainParams::MAIN) {
+        switch (denom) {
+            case libzerocoin::CoinDenomination::ZQ_ONE:
+                return 7;
+            case libzerocoin::CoinDenomination::ZQ_FIVE:
+                return 6;
+            case libzerocoin::CoinDenomination::ZQ_TEN:
+                return 36;
+            case libzerocoin::CoinDenomination::ZQ_FIFTY:
+                return 22;
+            case libzerocoin::CoinDenomination::ZQ_ONE_HUNDRED:
+                return 244;
+            case libzerocoin::CoinDenomination::ZQ_FIVE_HUNDRED:
+                return 22;
+            case libzerocoin::CoinDenomination::ZQ_ONE_THOUSAND:
+                return 42;
+            case libzerocoin::CoinDenomination::ZQ_FIVE_THOUSAND:
+                return 98;
+            default:
+                throw std::runtime_error("GetWrapSerialInflation :: Invalid denom");
+        }
+    }else{
+        // Testnet/Regtest is ok.
+        return 0;
+    }
+}
+
+int64_t GetWrapppedSerialInflationAmount(){
+    int64_t amount = 0;
+    for (auto& denom : libzerocoin::zerocoinDenomList){
+        amount += libzerocoin::ZerocoinDenominationToAmount(denom);
+    }
+    return amount;
+}
 
 #endif //PIVX_ZEROCOIN_H

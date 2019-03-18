@@ -2908,7 +2908,7 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
     // Initialize zerocoin supply to the supply from previous block
     if (pindex->pprev && pindex->pprev->GetBlockHeader().nVersion > 3) {
         for (auto& denom : zerocoinDenomList) {
-            pindex->mapZerocoinSupply.at(denom) = pindex->pprev->mapZerocoinSupply.at(denom);
+            pindex->mapZerocoinSupply.at(denom) = pindex->pprev->GetZcMints(denom);
         }
     }
 
@@ -2949,7 +2949,7 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
             nAmountZerocoinSpent += libzerocoin::ZerocoinDenominationToAmount(denom);
 
             // zerocoin failsafe
-            if (pindex->mapZerocoinSupply.at(denom) < 0)
+            if (pindex->GetZcMints(denom) < 0)
                 return error("Block contains zerocoins that spend more than are in the available supply to spend");
         }
     }

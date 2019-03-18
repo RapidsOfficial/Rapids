@@ -1241,6 +1241,17 @@ bool AppInit2()
 
     }  // (!fDisableWallet)
 #endif // ENABLE_WALLET
+
+
+    // Wrapped serials inflation check
+    if(chainActive.Height() >= Params().Zerocoin_Block_EndFakeSerial()){
+        CBlockIndex* pblockindex = chainActive[Params().Zerocoin_Block_EndFakeSerial()];
+        // Supply needs to be exactly 4131563 (last block post attack supply) + GetWrapppedSerialInflationAmount
+        if (pblockindex->GetZerocoinSupply() != (4131563 + GetWrapppedSerialInflationAmount()) ){
+           // Trigger reindex.
+        }
+    }
+
     // ********************************************************* Step 6: network initialization
 
     RegisterNodeSignals(GetNodeSignals());
