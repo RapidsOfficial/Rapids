@@ -2768,6 +2768,14 @@ void RecalculateZPIVSpent()
         for (auto denom : listDenomsSpent)
             pindex->mapZerocoinSupply.at(denom)--;
 
+        // Wrapped serials inflation.
+        if(pindex->nHeight == Params().Zerocoin_Block_EndFakeSerial()){
+            // Re fill the supply
+            for (auto denom : libzerocoin::zerocoinDenomList) {
+                pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
+            }
+        }
+
         //Rewrite money supply
         assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));
 
