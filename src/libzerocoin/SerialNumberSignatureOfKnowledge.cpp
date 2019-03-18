@@ -149,23 +149,32 @@ bool SerialNumberSignatureOfKnowledge::Verify(const CBigNum& coinSerialNumber, c
 	vector<CBigNum> tprime(params->zkp_iterations);
 	unsigned char *hashbytes = (unsigned char*) &this->hash;
 
-	for(uint32_t i = 0; i < params->zkp_iterations; i++) {
-		int bit = i % 8;
-		int byte = i / 8;
-		bool challenge_bit = ((hashbytes[byte] >> bit) & 0x01);
-		if(challenge_bit) {
-			tprime[i] = challengeCalculation(coinSerialNumber, s_notprime[i], SeedTo1024(sprime[i].getuint256()));
-		} else {
-			CBigNum exp = b.pow_mod(s_notprime[i], params->serialNumberSoKCommitmentGroup.groupOrder);
-			tprime[i] = ((valueOfCommitmentToCoin.pow_mod(exp, params->serialNumberSoKCommitmentGroup.modulus) % params->serialNumberSoKCommitmentGroup.modulus) *
-			             (h.pow_mod(sprime[i], params->serialNumberSoKCommitmentGroup.modulus) % params->serialNumberSoKCommitmentGroup.modulus)) %
-			            params->serialNumberSoKCommitmentGroup.modulus;
-		}
-	}
-	for(uint32_t i = 0; i < params->zkp_iterations; i++) {
-		hasher << tprime[i];
-	}
-	return hasher.GetHash() == hash;
+	try {
+		for (uint32_t i = 0; i < params->zkp_iterations; i++) {
+			int bit = i % 8;
+			int byte = i / 8;
+			bool challenge_bit = ((hashbytes[byte] >> bit) & 0x01);
+			if (challenge_bit) {
+			    CBigNum bn = SeedTo1024(sprime[i].getuint256());
+                if (bn > params->serialNumberSoKCommitmentGroup.groupOrder && isInParamsValidationRange)
+                    return error("SoK Verify() :: sprime in pos %d not in valid range", i);
+                tprime[i] = challengeCalculation(coinSerialNumber, s_notprime[i], bn);
+            } else {
+                CBigNum exp = b.pow_mod(s_notprime[i], params->serialNumberSoKCommitmentGroup.groupOrder);
+                tprime[i] = ((valueOfCommitmentToCoin.pow_mod(exp, params->serialNumberSoKCommitmentGroup.modulus) %
+                              params->serialNumberSoKCommitmentGroup.modulus) *
+                             (h.pow_mod(sprime[i], params->serialNumberSoKCommitmentGroup.modulus) %
+                              params->serialNumberSoKCommitmentGroup.modulus)) %
+                            params->serialNumberSoKCommitmentGroup.modulus;
+            }
+        }
+        for (uint32_t i = 0; i < params->zkp_iterations; i++) {
+            hasher << tprime[i];
+        }
+        return hasher.GetHash() == hash;
+    }catch (std::range_error e){
+        return error("SoK Verify() :: sprime invalid range.");
+    }
 }
 
 } /* namespace libzerocoin */
