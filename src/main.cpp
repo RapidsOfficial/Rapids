@@ -1007,37 +1007,30 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const Coi
     if (pindex->nHeight >= Params().Zerocoin_Block_V2_Start()) {
         try {
             if (!spend.HasValidSignature())
-                return error("%s: V2 zPIV spend does not have a valid signature", __func__);
+                return error("%s: V2 zPIV spend does not have a valid signature\n", __func__);
         } catch (libzerocoin::InvalidSerialException &e) {
             // Check if we are in the range of the attack
             if(!isBlockBetweenFakeSerialAttackRange(pindex->nHeight))
-                return error("%s: Invalid serial detected, txid %s", __func__, tx.GetHash().GetHex());
+                return error("%s: Invalid serial detected, txid %s\n", __func__, tx.GetHash().GetHex());
             else
-                LogPrintf("%s: Invalid serial detected within range", __func__);
+                LogPrintf("%s: Invalid serial detected within range\n", __func__);
         }
 
         libzerocoin::SpendType expectedType = libzerocoin::SpendType::SPEND;
         if (tx.IsCoinStake())
             expectedType = libzerocoin::SpendType::STAKE;
         if (spend.getSpendType() != expectedType) {
-            return error("%s: trying to spend zPIV without the correct spend type. txid=%s", __func__,
+            return error("%s: trying to spend zPIV without the correct spend type. txid=%s\n", __func__,
                          tx.GetHash().GetHex());
         }
     }
 
     //Reject serial's that are not in the acceptable value range
     bool fUseV1Params = spend.getVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
-    try {
-        if (pindex->nHeight > Params().Zerocoin_Block_EnforceSerialRange() &&
-            !spend.HasValidSerial(Params().Zerocoin_Params(fUseV1Params)))
+    if(!isBlockBetweenFakeSerialAttackRange(pindex->nHeight)){
+        if(!spend.HasValidSerial(Params().Zerocoin_Params(fUseV1Params)))
             return error("%s : zPIV spend with serial %s from tx %s is not in valid range\n", __func__,
-                         spend.getCoinSerialNumber().GetHex(), tx.GetHash().GetHex());
-    } catch (libzerocoin::InvalidSerialException &e) {
-        // Check if we are in the range of the attack
-        if (!isBlockBetweenFakeSerialAttackRange(pindex->nHeight))
-            return error("%s: Invalid serial detected, txid %s", __func__, tx.GetHash().GetHex());
-        else
-            LogPrintf("%s: Invalid serial detected within range", __func__);
+                     spend.getCoinSerialNumber().GetHex(), tx.GetHash().GetHex());
     }
 
     return true;
