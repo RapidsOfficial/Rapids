@@ -3245,6 +3245,7 @@ UniValue exportzerocoins(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "[                   (array of json object)\n"
             "  {\n"
+            "    \"id\": \"serial hash\",  (string) the mint's zPIV serial hash \n"
             "    \"d\": n,         (numeric) the mint's zerocoin denomination \n"
             "    \"p\": \"pubcoin\", (string) The public coin\n"
             "    \"s\": \"serial\",  (string) The secret serial number\n"
@@ -3285,6 +3286,7 @@ UniValue exportzerocoins(const UniValue& params, bool fHelp)
             continue;
 
         UniValue objMint(UniValue::VOBJ);
+        objMint.push_back(Pair("id", meta.hashSerial.GetHex()));
         objMint.push_back(Pair("d", mint.GetDenomination()));
         objMint.push_back(Pair("p", mint.GetValue().GetHex()));
         objMint.push_back(Pair("s", mint.GetSerialNumber().GetHex()));
@@ -3694,3 +3696,65 @@ UniValue createautomintaddress(const UniValue& params, bool fHelp)
     CBitcoinAddress address = pwalletMain->GenerateNewAutoMintKey();
     return address.ToString();
 }
+
+UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 4 || params.size() > 5)
+        throw runtime_error(
+            "spendrawzerocoin \"serialHex\" denom \"randomnessHex\" [\"address\"]\n"
+            "\nCreate and broadcast a TX spending the provided zericoin.\n"
+
+            "\nArguments:\n"
+            "1. \"serialHex\"        (string, required) A zerocoin serial number (hex)\n"
+            "2. \"randomnessHex\"    (string, required) A zerocoin randomness value (hex)\n"
+            "3. denom                (numeric, required) A zerocoin denomination (decimal)\n"
+            "4. \"priv key\"         (string, required) The private key associated with this coin (hex)\n"
+            "5. \"address\"          (string, optional) PIVX address to spend to. If not specified, spend to change add.\n"
+
+            "\nResult:\n"
+                "\"txid\"             (string) The transaction txid in hex\n"
+
+            "\nExamples\n" +
+            HelpExampleCli("spendrawzerocoin", "\"f80892e78c30a393ef4ab4d5a9d5a2989de6ebc7b976b241948c7f489ad716a2\" \"a4fd4d7248e6a51f1d877ddd2a4965996154acc6b8de5aa6c83d4775b283b600\" 100 \"xxx\"") +
+            HelpExampleRpc("spendrawzerocoin", "\"f80892e78c30a393ef4ab4d5a9d5a2989de6ebc7b976b241948c7f489ad716a2\", \"a4fd4d7248e6a51f1d877ddd2a4965996154acc6b8de5aa6c83d4775b283b600\", 100, \"xxx\""));
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    if (GetAdjustedTime() > GetSporkValue(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
+            throw JSONRPCError(RPC_WALLET_ERROR, "zPIV is currently disabled due to maintenance.");
+
+    CBigNum serial;
+    serial.SetHex(params[0].get_str());
+
+    CBigNum randomness;
+    randomness.SetHex(params[1].get_str());
+
+    const int denom_int = params[2].get_int();
+    libzerocoin::CoinDenomination denom = libzerocoin::IntToZerocoinDenomination(denom_int);
+
+    std::string priv_key_str = params[3].get_str();
+    CPrivKey privkey;
+    CBitcoinSecret vchSecret;
+    bool fGood = vchSecret.SetString(priv_key_str);
+    CKey key = vchSecret.GetKey();
+    if (!key.IsValid() && fGood)
+        return JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "privkey is not valid");
+    privkey = key.GetPrivKey();
+
+    std::string address_str = "";
+    if (params.size() == 5)
+        address_str = params[4].get_str();
+
+    // Create the coin associated with these secrets
+    libzerocoin::PrivateCoin coin(Params().Zerocoin_Params(false), denom, serial, randomness);
+    coin.setPrivKey(privkey);
+    coin.setVersion(libzerocoin::PrivateCoin::CURRENT_VERSION);
+
+    // Create the mint associated with this coin
+    CZerocoinMint mint(denom, coin.getPublicCoin().getValue(), randomness, serial, false, CZerocoinMint::CURRENT_VERSION, &privkey);
+    vector<CZerocoinMint> vMintsSelected = {mint};
+    CAmount nAmount = mint.GetDenominationAsAmount();
+
+    return DoZpivSpend(nAmount, false, true, 42, vMintsSelected, address_str);
+}
+
