@@ -109,7 +109,8 @@ int GetWrapppedSerialInflation(libzerocoin::CoinDenomination denom){
 int64_t GetWrapppedSerialInflationAmount(){
     int64_t amount = 0;
     for (auto& denom : libzerocoin::zerocoinDenomList){
-        amount += libzerocoin::ZerocoinDenominationToAmount(denom);
+        amount += GetWrapppedSerialInflation(denom) * libzerocoin::ZerocoinDenominationToAmount(denom);
     }
     return amount;
 }
+

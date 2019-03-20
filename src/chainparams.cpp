@@ -157,7 +157,8 @@ public:
         nRejectOldSporkKey = 1527811200; //!> Fully reject old spork key after (GMT): Friday, June 1, 2018 12:00:00 AM
 
         // Fake Serial Attack
-        nFakeSerialBlockheightEnd = 1686215;
+        nFakeSerialBlockheightEnd = 1686229;
+        nSupplyBeforeFakeSerial = 4131563 * COIN;   // zerocoin supply at block nFakeSerialBlockheightEnd
 
         /**
          * Build the genesis block. Note that the output of the genesis coinbase cannot
@@ -284,7 +285,7 @@ public:
         nRejectOldSporkKey = 1522454400; //!> Reject old spork key after Saturday, March 31, 2018 12:00:00 AM GMT
 
         // Fake Serial Attack
-        nFakeSerialBlockheightEnd = 0;
+        nFakeSerialBlockheightEnd = -1;
 
         //! Modify the testnet genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1454124731;
@@ -371,7 +372,7 @@ public:
         nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
 
         // Fake Serial Attack
-        nFakeSerialBlockheightEnd = 0;
+        nFakeSerialBlockheightEnd = -1;
 
         //! Modify the regtest genesis block so the timestamp is valid for a later start.
         genesis.nTime = 1454124731;

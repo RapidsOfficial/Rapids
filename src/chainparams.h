@@ -127,6 +127,7 @@ public:
 
     // fake serial attack
     int Zerocoin_Block_EndFakeSerial() const { return nFakeSerialBlockheightEnd; }
+    CAmount GetSupplyBeforeFakeSerial() const { return nSupplyBeforeFakeSerial; }
 
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
 
@@ -195,6 +196,7 @@ protected:
 
     // fake serial attack
     int nFakeSerialBlockheightEnd = 0;
+    CAmount nSupplyBeforeFakeSerial = 0;
 };
 
 /**
