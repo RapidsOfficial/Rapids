@@ -16,7 +16,6 @@ class ClientModel;
 class SendCoinsRecipient;
 class WalletModel;
 class WalletView;
-class TradingDialog;
 class BlockExplorer;
 
 QT_BEGIN_NAMESPACE
