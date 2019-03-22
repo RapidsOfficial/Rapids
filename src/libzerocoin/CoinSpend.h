@@ -120,7 +120,7 @@ public:
     static std::vector<unsigned char> ParseSerial(CDataStream& s);
 
     const uint256 signatureHash() const;
-    bool Verify(const Accumulator& a) const;
+    bool Verify(const Accumulator& a, bool verifyParams = true) const;
     bool HasValidSerial(ZerocoinParams* params) const;
     bool HasValidSignature() const;
     CBigNum CalculateValidSerial(ZerocoinParams* params);

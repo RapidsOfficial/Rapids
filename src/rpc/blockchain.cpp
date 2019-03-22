@@ -17,8 +17,7 @@
 #include "accumulatormap.h"
 #include "accumulators.h"
 #include "wallet.h"
-#include "libzerocoin/bignum.h"
-#include "libzerocoin/Coin.h"
+#include "zpivchain.h"
 
 #include <stdint.h>
 #include <fstream>
@@ -1375,3 +1374,107 @@ UniValue getmintsinblocks(const UniValue& params, bool fHelp) {
 
     return obj;
 }
+
+
+UniValue getserials(const UniValue& params, bool fHelp) {
+    if (fHelp || params.size() < 2 || params.size() > 3)
+        throw runtime_error(
+            "getserials \"hash\"\n"
+            "\nLook the inputs of any tx in a range of blocks and returns the serial numbers for any coinspend.\n"
+
+            "\nArguments:\n"
+            "1. starting_height   (numeric, required) the height of the first block to check\n"
+            "2. range             (numeric, required) the amount of blocks to check\n"
+            "3. fVerbose          (boolean, optional, default=False) return verbose output\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("getserials", "1254000 1000") +
+            HelpExampleRpc("getserials", "1254000, 1000"));
+
+    LOCK(cs_main);
+
+    int nBestHeight = chainActive.Height();
+
+    int heightStart = params[0].get_int();
+    if (heightStart < Params().Zerocoin_StartHeight())
+        heightStart = Params().Zerocoin_StartHeight();
+
+    int range = params[1].get_int();
+    if (range < 1)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid block range. Must be strictly positive.");
+
+    int heightEnd = heightStart + range - 1;
+    if (heightEnd > nBestHeight)
+        heightEnd = nBestHeight;
+
+    bool fVerbose = false;
+    if (params.size() > 2) {
+        fVerbose = params[2].get_bool();
+    }
+
+    CBlockIndex* pblockindex = chainActive[heightStart];
+
+    UniValue serialsObj(UniValue::VOBJ);    // for fVerbose
+    UniValue serialsArr(UniValue::VARR);
+
+    while (true) {
+        CBlock block;
+        if (!ReadBlockFromDisk(block, pblockindex))
+                throw JSONRPCError(RPC_INTERNAL_ERROR, "Can't read block from disk");
+
+        // loop through each tx in the block
+        for (const CTransaction& tx : block.vtx) {
+            std::string txid = tx.GetHash().GetHex();
+            // collect the destination (first output) if fVerbose
+            std::string spentTo = "";
+            if (fVerbose) {
+                if (tx.vout[0].IsZerocoinMint()) {
+                    spentTo = "Zerocoin Mint";
+                } else if (tx.vout[0].IsEmpty()) {
+                    spentTo = "Zerocoin Stake";
+                } else {
+                    txnouttype type;
+                    vector<CTxDestination> addresses;
+                    int nRequired;
+                    if (!ExtractDestinations(tx.vout[0].scriptPubKey, type, addresses, nRequired)) {
+                        spentTo = strprintf("type: %d", GetTxnOutputType(type));
+                    } else {
+                        spentTo = CBitcoinAddress(addresses[0]).ToString();
+                    }
+                }
+            }
+            // loop through each input
+            for (const CTxIn& txin : tx.vin) {
+                if (txin.scriptSig.IsZerocoinSpend()) {
+                    libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txin);
+                    std::string serial_str = spend.getCoinSerialNumber().ToString(16);
+                    if (!fVerbose) {
+                        serialsArr.push_back(serial_str);
+                    } else {
+                        int denom = libzerocoin::ZerocoinDenominationToInt(spend.getDenomination());
+                        UniValue s(UniValue::VOBJ);
+                        s.push_back(Pair("serial", serial_str));
+                        s.push_back(Pair("denom", denom));
+                        s.push_back(Pair("bitsize", (int)serial_str.size()*4));
+                        s.push_back(Pair("spentTo", spentTo));
+                        s.push_back(Pair("txid", txid));
+                        s.push_back(Pair("blocknum", pblockindex->nHeight));
+                        s.push_back(Pair("blocktime", block.GetBlockTime()));
+                        serialsArr.push_back(s);
+                    }
+
+                }
+
+            } // end for vin in tx
+        } // end for tx in block
+
+        if (pblockindex->nHeight < heightEnd) pblockindex = chainActive.Next(pblockindex);
+        else break;
+
+    } // end for blocks
+
+    return serialsArr;
+
+}
+
+

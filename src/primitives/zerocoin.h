@@ -7,6 +7,7 @@
 
 #include <amount.h>
 #include <limits.h>
+#include <chainparams.h>
 #include "libzerocoin/bignum.h"
 #include "libzerocoin/Denominations.h"
 #include "key.h"
@@ -247,5 +248,15 @@ public:
     int GetStatus();
     int GetNeededSpends();
 };
+
+/**
+ * Wrapped serials attack inflation, only for mainnet.
+ * FUTURE: Move this to another file..
+ * @param denom
+ * @return
+ */
+int GetWrapppedSerialInflation(libzerocoin::CoinDenomination denom);
+
+int64_t GetWrapppedSerialInflationAmount();
 
 #endif //PIVX_ZEROCOIN_H

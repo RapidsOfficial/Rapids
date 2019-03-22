@@ -22,8 +22,16 @@
 
 namespace libzerocoin
 {
+
+    class InvalidSerialException : public std::exception {
+    public:
+        std::string message;
+        InvalidSerialException(const string &message) : message(message) {}
+    };
+
     int ExtractVersionFromSerial(const CBigNum& bnSerial);
     bool IsValidSerial(const ZerocoinParams* params, const CBigNum& bnSerial);
+    bool IsValidCommitmentToCoinRange(const ZerocoinParams* params, const CBigNum& bnCommitment);
     CBigNum GetAdjustedSerial(const CBigNum& bnSerial);
     bool GenerateKeyPair(const CBigNum& bnGroupOrder, const uint256& nPrivkey, CKey& key, CBigNum& bnSerial);
 
