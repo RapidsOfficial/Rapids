@@ -2715,7 +2715,10 @@ void ThreadScriptCheck()
 void AddWrappedSerialsInflation()
 {
     CBlockIndex* pindex = chainActive[Params().Zerocoin_Block_EndFakeSerial()];
-    while (pindex->nHeight < chainActive.Height()) {
+    if (pindex->nHeight > chainActive.Height())
+        return;
+
+    while (true) {
         if (pindex->nHeight % 1000 == 0) {
             LogPrintf("%s : block %d...\n", __func__, pindex->nHeight);
             int percent = (int)( (double)(pindex->nHeight - Params().Zerocoin_Block_EndFakeSerial()) * 100 / (chainActive.Height() - Params().Zerocoin_Block_EndFakeSerial()) );
@@ -2729,7 +2732,10 @@ void AddWrappedSerialsInflation()
         // Update current block index to disk
         assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));
         // next block
-        pindex = chainActive.Next(pindex);
+        if (pindex->nHeight < chainActive.Height())
+            pindex = chainActive.Next(pindex);
+        else
+            break;
     }
     uiInterface.ShowProgress("", 100);
 }
@@ -2997,7 +3003,9 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
     // A one-time event where only the zPIV supply was off (due to serial duplication off-chain on main net)
     if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == Params().Zerocoin_Block_EndFakeSerial() + 1
             && pindex->GetZerocoinSupply() < Params().GetSupplyBeforeFakeSerial() + GetWrapppedSerialInflationAmount()) {
-        AddWrappedSerialsInflation();
+        for (auto denom : libzerocoin::zerocoinDenomList) {
+            pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
+        }
     }
     return true;
 }
