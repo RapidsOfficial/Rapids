@@ -140,6 +140,32 @@ The `backupwallet` RPC command no longer allows for overwriting the currently in
 
 The `securitylevel` argument has been removed from the `spendzerocoin` RPC command.
 
+### Spendzerocoinmints Added
+
+Introduce the `spendzerocoinmints` RPC call to enable spending specific zerocoins, provided as an array of hex strings (serial hashes).
+
+### Getreceivedbyaddress Update
+
+When calling `getreceivedbyaddress` with a non-wallet address, return a proper error code/message instead of just `0`
+
+### Validateaddress More Verbosity
+
+`validateaddress` now has the ability to return more (non-critical or identifying) details about P2SH (multisig) addresses by removing the needless check against ISMINE_NO.
+
+### Listmintedzerocoins Additional Options
+
+Add a `fVerbose` boolean optional argument (default=false) to `listmintedzerocoins` call to have a more detailed output.
+
+If `fVerbose` is specified as first argument, then a second optional boolean argument `fMatureOnly` (default=false) can be used to filter-out immature mints.
+
+### Getblock & Getblockheader
+
+A minor change to these two RPC commands to now display the `mediantime`, used primarialy during functional tests.
+
+### Getwalletinfo
+
+The `getwalletinfo` RPC command now outputs the configured transaction fee (`paytxfee` field).
+
 Build System Changes
 ------
 
@@ -156,6 +182,10 @@ Up until now, the zerocoin library relied exclusively on OpenSSL for it's bignum
 ### RISC-V Support
 
 Support for the new RISC-V 64bit processors has been added, though still experimental. Pre-compiled binaries for this CPU architecture are available for linux, and users can self-compile using gitian, depends, or an appropriate host system natively.
+
+### New Gitian Build Script
+
+The previous `gitian-build.sh` shell script has been replaced with a more feature rich python version; `gitian-build.py`. This script now supports the use of a docker container in addition to LXC or KVM virtualization, as well as the ability to build against a pull request by number.
 
 *version* Change log
 ==============
