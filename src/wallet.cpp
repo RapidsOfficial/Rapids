@@ -3006,17 +3006,11 @@ bool CWallet::CreateCoinStake(
         return false;
     }
 
-    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60){
-
-        if(Params().NetworkID() != CBaseChainParams::REGTEST){
-            MilliSleep(10000);
-        }else{
+    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60) {
+        if (Params().NetworkID() == CBaseChainParams::REGTEST) {
             MilliSleep(1000);
         }
-
     }
-//    if (GetAdjustedTime() - chainActive.Tip()->GetBlockTime() < 60)
-//        MilliSleep(10000);
 
     CAmount nCredit;
     CScript scriptPubKeyKernel;
