@@ -4806,7 +4806,7 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
     }
 
     if (nLockAttempts == 100) {
-        LogPrintf("%s : could not get lock on cs_spendcache\n");
+        LogPrintf("%s : could not get lock on cs_spendcache\n", __func__);
         receipt.SetStatus(_("could not get lock on cs_spendcache"), ZPIV_TXMINT_GENERAL);
         return false;
     }
