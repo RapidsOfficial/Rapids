@@ -798,25 +798,6 @@ bool CalculateAccumulatorWitnessFor(
     }
 }
 
-
-int SearchMintHeightOf(CBigNum value){
-    uint256 txid;
-    if (!zerocoinDB->ReadCoinMint(value, txid))
-        throw searchMintHeightException("searchForMintHeightOf:: failed to read mint from db");
-
-    CTransaction txMinted;
-    uint256 hashBlock;
-    if (!GetTransaction(txid, txMinted, hashBlock))
-        throw searchMintHeightException("searchForMintHeightOf:: failed to read tx");
-
-    int nHeightTest;
-    if (!IsTransactionInChain(txid, nHeightTest))
-        throw searchMintHeightException("searchForMintHeightOf:: mint tx "+ txid.GetHex() +" is not in chain");
-
-    return mapBlockIndex[hashBlock]->nHeight;
-}
-
-
 bool GenerateAccumulatorWitness(
         const PublicCoin &coin,
         Accumulator& accumulator,
