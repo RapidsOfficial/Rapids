@@ -165,7 +165,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         }
 
         if (!fStakeFound) {
-            LogPrintf("CreateNewBlock(): stake not found\n");
+            LogPrint("staking", "CreateNewBlock(): stake not found\n");
             return NULL;
         }
     }
