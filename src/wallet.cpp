@@ -4744,7 +4744,7 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
 
             // Generate the witness for each mint being spent
             if (!GenerateAccumulatorWitness(coinWitness, mapAccumulators, pindexCheckpoint)) {
-                receipt.SetStatus(_("Try to spend with a higher security level to include more coins"),
+                receipt.SetStatus(_("Couldn't generate the accumulator witness"),
                                   ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
                 return error("%s : %s", __func__, receipt.GetStatusMessage());
             }
@@ -5002,13 +5002,6 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, 
 
             //hash with only the output info in it to be used in Signature of Knowledge
             uint256 hashTxOut = txNew.GetHash();
-
-            //Use the same accumulator checkpoint for each spend
-            int nHeightHighest = 0;
-            for (const CZerocoinMint& mint : vSelectedMints) {
-                if (mint.GetHeight() > nHeightHighest)
-                    nHeightHighest = mint.GetHeight();
-            }
 
             CBlockIndex* pindexCheckpoint = nullptr;
             std::map<CBigNum, CZerocoinMint> mapSelectedMints;
