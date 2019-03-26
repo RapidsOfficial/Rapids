@@ -570,10 +570,9 @@ bool GenerateAccumulatorWitness(CoinWitnessData* coinWitness, AccumulatorMap& ma
             nHeightStop = nHeightMax;
         }
 
-        if (nHeightStop <= coinWitness->nHeightAccEnd)
-            return error("%s: trying to accumulate bad block range, start=%d end=%d", __func__, coinWitness->nHeightAccEnd, nHeightStop);
+        if (nHeightStop > coinWitness->nHeightAccEnd)
+            AccumulateRange(coinWitness, nHeightStop - 1);
 
-        AccumulateRange(coinWitness, nHeightStop - 1);
         mapAccumulators.Load(chainActive[nHeightStop + 10]->nAccumulatorCheckpoint);
         coinWitness->pWitness->resetValue(*coinWitness->pAccumulator, *coinWitness->coin);
         if(!coinWitness->pWitness->VerifyWitness(mapAccumulators.GetAccumulator(coinWitness->denom), *coinWitness->coin))
