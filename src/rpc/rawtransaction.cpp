@@ -12,7 +12,7 @@
 #include "main.h"
 #include "net.h"
 #include "primitives/transaction.h"
-#include "primitives/deterministicmint.h"
+#include "zpiv/deterministicmint.h"
 #include "rpc/server.h"
 #include "script/script.h"
 #include "script/script_error.h"
@@ -977,7 +977,7 @@ UniValue createrawzerocoinstake(const UniValue& params, bool fHelp)
     // create the zerocoinspend input
     CTxIn newTxIn;
     // !TODO: mint checks
-    if (!pwalletMain->MintToTxIn(input_mint, 100, hashTxOut, newTxIn, receipt, libzerocoin::SpendType::STAKE))
+    if (!pwalletMain->MintToTxIn(input_mint, hashTxOut, newTxIn, receipt, libzerocoin::SpendType::STAKE))
         throw JSONRPCError(RPC_WALLET_ERROR, "failed to create zc-spend stake input");
 
     coinstake_tx.vin.push_back(newTxIn);

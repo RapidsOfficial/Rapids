@@ -14,11 +14,10 @@
 #include "txdb.h"
 #include "util.h"
 #include "utilmoneystr.h"
-#include "accumulatormap.h"
-#include "accumulators.h"
+#include "zpiv/accumulatormap.h"
+#include "zpiv/accumulators.h"
 #include "wallet.h"
 #include "zpivchain.h"
-
 #include <stdint.h>
 #include <fstream>
 #include <iostream>
@@ -1300,7 +1299,8 @@ UniValue getaccumulatorwitness(const UniValue& params, bool fHelp)
     string strFailReason = "";
     int nMintsAdded = 0;
     CZerocoinSpendReceipt receipt;
-    if (!GenerateAccumulatorWitness(pubCoin, accumulator, witness, 100, nMintsAdded, strFailReason)) {
+
+    if (!GenerateAccumulatorWitness(pubCoin, accumulator, witness, nMintsAdded, strFailReason)) {
         receipt.SetStatus(_(strFailReason.c_str()), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
         throw JSONRPCError(RPC_DATABASE_ERROR, receipt.GetStatusMessage());
     }
