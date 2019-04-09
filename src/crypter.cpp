@@ -14,7 +14,7 @@
 #include <boost/foreach.hpp>
 #include <openssl/aes.h>
 #include <openssl/evp.h>
-#include "wallet.h"
+#include "wallet/wallet.h"
 
 bool CCrypter::SetKeyFromPassphrase(const SecureString& strKeyData, const std::vector<unsigned char>& chSalt, const unsigned int nRounds, const unsigned int nDerivationMethod)
 {

@@ -5,9 +5,9 @@
 #include "zpivwallet.h"
 #include "main.h"
 #include "txdb.h"
-#include "walletdb.h"
+#include "wallet/walletdb.h"
 #include "init.h"
-#include "wallet.h"
+#include "wallet/wallet.h"
 #include "deterministicmint.h"
 #include "zpivchain.h"
 

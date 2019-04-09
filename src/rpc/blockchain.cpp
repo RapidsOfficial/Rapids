@@ -16,8 +16,9 @@
 #include "utilmoneystr.h"
 #include "zpiv/accumulatormap.h"
 #include "zpiv/accumulators.h"
-#include "wallet.h"
+#include "wallet/wallet.h"
 #include "zpivchain.h"
+
 #include <stdint.h>
 #include <fstream>
 #include <iostream>

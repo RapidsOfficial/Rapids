@@ -7,7 +7,7 @@
 #include "zpiv/deterministicmint.h"
 #include "main.h"
 #include "stakeinput.h"
-#include "wallet.h"
+#include "wallet/wallet.h"
 
 CZPivStake::CZPivStake(const libzerocoin::CoinSpend& spend)
 {
