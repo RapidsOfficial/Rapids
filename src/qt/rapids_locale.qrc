@@ -1,0 +1,29 @@
+<!DOCTYPE RCC><RCC version="1.0">
+    <qresource prefix="/translations">
+        <file alias="bg">locale/rapids_bg.qm</file>
+        <file alias="ca">locale/rapids_ca.qm</file>
+        <file alias="cs">locale/rapids_cs.qm</file>
+        <file alias="da">locale/rapids_da.qm</file>
+        <file alias="de">locale/rapids_de.qm</file>
+        <file alias="en">locale/rapids_en.qm</file>
+        <file alias="en_US">locale/rapids_en_US.qm</file>
+        <file alias="es">locale/rapids_es.qm</file>
+        <file alias="fi">locale/rapids_fi.qm</file>
+        <file alias="fr_FR">locale/rapids_fr_FR.qm</file>
+        <file alias="it">locale/rapids_it.qm</file>
+        <file alias="ja">locale/rapids_ja.qm</file>
+        <file alias="ko_KR">locale/rapids_ko_KR.qm</file>
+        <file alias="nl">locale/rapids_nl.qm</file>
+        <file alias="pl">locale/rapids_pl.qm</file>
+        <file alias="pt">locale/rapids_pt.qm</file>
+        <file alias="pt_BR">locale/rapids_pt_BR.qm</file>
+        <file alias="ro_RO">locale/rapids_ro_RO.qm</file>
+        <file alias="ru">locale/rapids_ru.qm</file>
+        <file alias="sk">locale/rapids_sk.qm</file>
+        <file alias="sv">locale/rapids_sv.qm</file>
+        <file alias="tr">locale/rapids_tr.qm</file>
+        <file alias="uk">locale/rapids_uk.qm</file>
+        <file alias="zh_CN">locale/rapids_zh_CN.qm</file>
+        <file alias="zh_TW">locale/rapids_zh_TW.qm</file>
+    </qresource>
+</RCC>
