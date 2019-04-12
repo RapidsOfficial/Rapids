@@ -1,4 +1,4 @@
-<a href="https://ibb.co/7zys3d8"><img src="https://i.ibb.co/ZJTqQpt/rpd-new-logo-01.png" alt="rpd-new-logo-01" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'>image upload service</a><br />
+<a href="https://ibb.co/7zys3d8"><img src="https://i.ibb.co/ZJTqQpt/rpd-new-logo-01.png" alt="rpd-new-logo-01" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'></a><br />
 Rapids  
 =================================================
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
