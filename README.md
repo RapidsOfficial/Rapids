@@ -1,11 +1,11 @@
 <a href="https://ibb.co/2P0PTFg"><img src="https://i.ibb.co/WFNFLHg/rpd-new-logo-complet.png" alt="rpd-new-logo-complet" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'></a><br />
-Rapids  
+Rapids  ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 =================================================
-![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-More information at [https://rapidsnetwork.io]
 
-### Coin Specs
+### Specs
+=================================================
+
 
 |         **Parameter**       |       **Specification**       | 
 |-----------------------------|-------------------------------|
