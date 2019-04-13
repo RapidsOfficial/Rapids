@@ -1,6 +1,6 @@
 [Desktop Entry]
-Encoding=UTF-8
-Name=PIVX
+Version=1.0
+Name=PIVX Core
 Comment=PIVX P2P Cryptocurrency
 Comment[fr]=PIVX, monnaie virtuelle cryptographique pair à pair
 Comment[tr]=PIVX, eşten eşe kriptografik sanal para birimi
@@ -10,3 +10,4 @@ Type=Application
 Icon=pivx128
 MimeType=x-scheme-handler/pivx;
 Categories=Office;Finance;
+StartupWMClass=Pivx-qt

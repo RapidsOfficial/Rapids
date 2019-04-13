@@ -1,2 +1,2 @@
-debian/manpages/pivxd.1
-debian/manpages/pivx.conf.5
+doc/man/pivxd.1
+doc/man/pivx-cli.1
