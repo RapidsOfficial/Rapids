@@ -67,21 +67,25 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
     (895400, uint256("7796a0274a608fac12d400198174e50beda992c1d522e52e5b95b884bc1beac6"))//block that serial# range is enforced
     (895991, uint256("d53013ed7ea5c325b9696c95e07667d6858f8ff7ee13fecfa90827bf3c9ae316"))//network split here
     (908000, uint256("202708f8c289b676fceb832a079ff6b308a28608339acbf7584de533619d014d"))
-    (1142400, uint256("98aff9d605bf123247f98b1e3a02567eb5799d208d78ec30fb89737b1c1f79c5"));
+    (1142400, uint256("98aff9d605bf123247f98b1e3a02567eb5799d208d78ec30fb89737b1c1f79c5"))
+    (1679090, uint256("f747ce055ba1b12e1f2e842bd480bc647210799359cb2e553ab292065e3419d6")) //!< First block with a "wrapped" serial spend
+    (1686229, uint256("bb42bf1e886a7c23474634c90893dd3d68a6ccbfea4ac92a98da5cad0c6a6cb7")); //!< Last block in the "wrapped" serial attack range
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1525106065, // * UNIX timestamp of last checkpoint block
-    2498834,    // * total number of transactions between genesis and last checkpoint
+    1551924791, // * UNIX timestamp of last checkpoint block
+    4036872,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
-    boost::assign::map_list_of(0, uint256("0x001"));
+    boost::assign::map_list_of
+    (0, uint256("0x001"))
+    (1016800, uint256("6ae7d52092fd918c8ac8d9b1334400387d3057997e6e927a88e57186dc395231"));
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
-    1740710,
-    0,
+    1554669557,
+    2305594,
     250};
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
