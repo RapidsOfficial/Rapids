@@ -323,7 +323,7 @@ bool Stake(CStakeInput* stakeInput, unsigned int nBits, unsigned int nTimeBlockF
     bool fSuccess = false;
     unsigned int nTryTime = 0;
     int nHeightStart = chainActive.Height();
-    int nHashDrift = 300;
+    int nHashDrift = 60;
     CDataStream ssUniqueID = stakeInput->GetUniqueness();
     CAmount nValueIn = stakeInput->GetValue();
     for (int i = 0; i < nHashDrift; i++) //iterate the hashing
@@ -333,7 +333,7 @@ bool Stake(CStakeInput* stakeInput, unsigned int nBits, unsigned int nTimeBlockF
             break;
 
         //hash this iteration
-        nTryTime = nTimeTx + (nHashDrift/2) - i;
+        nTryTime = nTimeTx + nHashDrift - i;
 
         // if stake hash does not meet the target then continue to next iteration
         if (!CheckStake(ssUniqueID, nValueIn, nStakeModifier, bnTargetPerCoinDay, nTimeBlockFrom, nTryTime, hashProofOfStake))
