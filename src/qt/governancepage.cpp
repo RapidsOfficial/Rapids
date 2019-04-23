@@ -84,7 +84,11 @@ void GovernancePage::updateProposalList()
     std::vector<CBudgetProposal*> proposalsList = budget.GetAllProposals();
     std::sort (proposalsList.begin(), proposalsList.end(), sortProposalsByVotes());
     int nRow = 0;
-    CBlockIndex* pindexPrev = chainActive.Tip();
+    CBlockIndex* pindexPrev;
+    {
+        LOCK(cs_main);
+        pindexPrev = chainActive.Tip();
+    }
     if (!pindexPrev) return;
     int nBlockStart = pindexPrev->nHeight - pindexPrev->nHeight % Params().GetBudgetCycleBlocks() + Params().GetBudgetCycleBlocks();
     int nBlocksLeft = nBlockStart - pindexPrev->nHeight;

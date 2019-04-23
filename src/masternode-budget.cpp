@@ -788,7 +788,12 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
     std::vector<CBudgetProposal*> vBudgetProposalsRet;
 
     CAmount nBudgetAllocated = 0;
-    CBlockIndex* pindexPrev = chainActive.Tip();
+
+    CBlockIndex* pindexPrev;
+    {
+        LOCK(cs_main);
+        pindexPrev = chainActive.Tip();
+    }
     if (pindexPrev == NULL) return vBudgetProposalsRet;
 
     int nBlockStart = pindexPrev->nHeight - pindexPrev->nHeight % Params().GetBudgetCycleBlocks() + Params().GetBudgetCycleBlocks();
