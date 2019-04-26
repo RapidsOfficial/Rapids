@@ -312,7 +312,6 @@ extern UniValue getserials(const UniValue& params, bool fHelp);
 extern UniValue getchecksumblock(const UniValue& params, bool fHelp);
 
 extern UniValue getpoolinfo(const UniValue& params, bool fHelp); // in rpc/masternode.cpp
-extern UniValue masternode(const UniValue& params, bool fHelp);
 extern UniValue listmasternodes(const UniValue& params, bool fHelp);
 extern UniValue getmasternodecount(const UniValue& params, bool fHelp);
 extern UniValue createmasternodebroadcast(const UniValue& params, bool fHelp);
@@ -329,8 +328,7 @@ extern UniValue getmasternodestatus(const UniValue& params, bool fHelp);
 extern UniValue getmasternodewinners(const UniValue& params, bool fHelp);
 extern UniValue getmasternodescores(const UniValue& params, bool fHelp);
 
-extern UniValue mnbudget(const UniValue& params, bool fHelp); // in rpc/budget.cpp
-extern UniValue preparebudget(const UniValue& params, bool fHelp);
+extern UniValue preparebudget(const UniValue& params, bool fHelp); // in rpc/budget.cpp
 extern UniValue submitbudget(const UniValue& params, bool fHelp);
 extern UniValue mnbudgetvote(const UniValue& params, bool fHelp);
 extern UniValue getbudgetvotes(const UniValue& params, bool fHelp);

@@ -365,7 +365,6 @@ static const CRPCCommand vRPCCommands[] =
         { "hidden",             "waitforblockheight",     &waitforblockheight,     true,  true,  false  },
 
         /* PIVX features */
-        {"pivx", "masternode", &masternode, true, true, false},
         {"pivx", "listmasternodes", &listmasternodes, true, true, false},
         {"pivx", "getmasternodecount", &getmasternodecount, true, true, false},
         {"pivx", "masternodeconnect", &masternodeconnect, true, true, false},
@@ -381,7 +380,6 @@ static const CRPCCommand vRPCCommands[] =
         {"pivx", "getmasternodestatus", &getmasternodestatus, true, true, false},
         {"pivx", "getmasternodewinners", &getmasternodewinners, true, true, false},
         {"pivx", "getmasternodescores", &getmasternodescores, true, true, false},
-        {"pivx", "mnbudget", &mnbudget, true, true, false},
         {"pivx", "preparebudget", &preparebudget, true, true, false},
         {"pivx", "submitbudget", &submitbudget, true, true, false},
         {"pivx", "mnbudgetvote", &mnbudgetvote, true, true, false},
