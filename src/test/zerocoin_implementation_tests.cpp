@@ -396,7 +396,7 @@ BOOST_AUTO_TEST_CASE(checkzerocoinspend_test)
     //Get the checksum of the accumulator we use for the spend and also add it to our checksum map
     uint32_t nChecksum_v2 = GetChecksum(accumulator_v2.getValue());
     //AddAccumulatorChecksum(nChecksum_v2, accumulator_v2.getValue(), true);
-    uint256 ptxHash = CBigNum::RandKBitBigum(256).getuint256();
+    uint256 ptxHash = CBigNum::randKBitBignum(256).getuint256();
     CoinSpend coinSpend_v2(Params().Zerocoin_Params(false), Params().Zerocoin_Params(false), privateCoin_v2, accumulator_v2, nChecksum_v2, witness_v2, ptxHash, SpendType::SPEND);
 
     BOOST_CHECK_MESSAGE(coinSpend_v2.HasValidSerial(Params().Zerocoin_Params(false)), "coinspend_v2 does not have a valid serial");

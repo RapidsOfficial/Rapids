@@ -48,6 +48,8 @@ CBigNum::CBigNum(const std::vector<unsigned char>& vch)
     setvch(vch);
 }
 
+/** PRNGs use OpenSSL for consistency with seed initialization **/
+
 /** Generates a cryptographically secure random number between zero and range exclusive
 * i.e. 0 < returned number < range
 * @param range The upper bound on the number.
@@ -55,6 +57,9 @@ CBigNum::CBigNum(const std::vector<unsigned char>& vch)
 */
 CBigNum CBigNum::randBignum(const CBigNum& range)
 {
+    if (range < 2)
+        return 0;
+
     size_t size = (mpz_sizeinbase (range.bn, 2) + CHAR_BIT-1) / CHAR_BIT;
     std::vector<unsigned char> buf(size);
 
@@ -64,14 +69,14 @@ CBigNum CBigNum::randBignum(const CBigNum& range)
     CBigNum ret(buf);
     if (ret < 0)
         mpz_neg(ret.bn, ret.bn);
-    return ret;
+    return 1 + (ret % (range-1));
 }
 
 /** Generates a cryptographically secure random k-bit number
 * @param k The bit length of the number.
 * @return
 */
-CBigNum CBigNum::RandKBitBigum(const uint32_t k)
+CBigNum CBigNum::randKBitBignum(const uint32_t k)
 {
     std::vector<unsigned char> buf((k+7)/8);
 
@@ -81,7 +86,7 @@ CBigNum CBigNum::RandKBitBigum(const uint32_t k)
     CBigNum ret(buf);
     if (ret < 0)
         mpz_neg(ret.bn, ret.bn);
-    return ret;
+    return ret % (CBigNum(1) << k);
 }
 
 /**Returns the size in bits of the underlying bignum.
@@ -256,7 +261,7 @@ CBigNum CBigNum::inverse(const CBigNum& m) const
  */
 CBigNum CBigNum::generatePrime(const unsigned int numBits, bool safe)
 {
-    CBigNum rand = RandKBitBigum(numBits);
+    CBigNum rand = randKBitBignum(numBits);
     CBigNum prime;
     mpz_nextprime(prime.bn, rand.bn);
     return prime;

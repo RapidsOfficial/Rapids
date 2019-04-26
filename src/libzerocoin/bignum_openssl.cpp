@@ -70,7 +70,7 @@ CBigNum CBigNum::randBignum(const CBigNum& range)
 * @param k The bit length of the number.
 * @return
 */
-CBigNum CBigNum::RandKBitBigum(const uint32_t k)
+CBigNum CBigNum::randKBitBignum(const uint32_t k)
 {
     CBigNum ret;
     if(!BN_rand(ret.bn, k, -1, 0)){

@@ -68,13 +68,13 @@ public:
     * @param range The upper bound on the number.
     * @return
     */
-    static CBigNum  randBignum(const CBigNum& range);
+    static CBigNum randBignum(const CBigNum& range);
 
     /** Generates a cryptographically secure random k-bit number
     * @param k The bit length of the number.
     * @return
     */
-    static CBigNum RandKBitBigum(const uint32_t k);
+    static CBigNum randKBitBignum(const uint32_t k);
 
     /**Returns the size in bits of the underlying bignum.
      *
@@ -122,7 +122,7 @@ public:
         * @param e the exponent as an int
         * @return
         */
-    CBigNum pow(const int e) const ;
+    CBigNum pow(const int e) const;
 
     /**
      * exponentiation this^e
