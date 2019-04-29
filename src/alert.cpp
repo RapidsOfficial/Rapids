@@ -11,7 +11,7 @@
 #include "net.h"
 #include "pubkey.h"
 #include "timedata.h"
-#include "ui_interface.h"
+#include "guiinterface.h"
 #include "util.h"
 
 #include <algorithm>

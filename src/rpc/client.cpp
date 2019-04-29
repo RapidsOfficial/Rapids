@@ -8,7 +8,7 @@
 #include "rpc/client.h"
 
 #include "rpc/protocol.h"
-#include "ui_interface.h"
+#include "guiinterface.h"
 #include "util.h"
 
 #include <set>
