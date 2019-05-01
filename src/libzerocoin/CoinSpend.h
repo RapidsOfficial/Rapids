@@ -38,6 +38,8 @@ class CoinSpend
 {
 public:
 
+    CoinSpend(){};
+
     //! \param paramsV1 - if this is a V1 zerocoin, then use params that existed with initial modulus, ignored otherwise
     //! \param paramsV2 - params that begin when V2 zerocoins begin on the PIVX network
     //! \param strm - a serialized CoinSpend
@@ -119,10 +121,10 @@ public:
 
     static std::vector<unsigned char> ParseSerial(CDataStream& s);
 
-    const uint256 signatureHash() const;
+    virtual const uint256 signatureHash() const;
     bool Verify(const Accumulator& a, bool verifyParams = true) const;
-    bool HasValidSerial(ZerocoinParams* params) const;
-    bool HasValidSignature() const;
+    virtual bool HasValidSerial(ZerocoinParams* params) const;
+    virtual bool HasValidSignature() const;
     CBigNum CalculateValidSerial(ZerocoinParams* params);
     std::string ToString() const;
 
@@ -150,22 +152,24 @@ public:
         }
     }
 
-private:
+protected:
     CoinDenomination denomination;
-    uint32_t accChecksum;
-    uint256 ptxHash;
-    CBigNum accCommitmentToCoinValue;
-    CBigNum serialCommitmentToCoinValue;
     CBigNum coinSerialNumber;
-    AccumulatorProofOfKnowledge accumulatorPoK;
-    SerialNumberSignatureOfKnowledge serialNumberSoK;
-    CommitmentProofOfKnowledge commitmentPoK;
     uint8_t version;
-
     //As of version 2
     CPubKey pubkey;
     std::vector<unsigned char> vchSig;
     SpendType spendType;
+
+private:
+    uint32_t accChecksum;
+    uint256 ptxHash;
+    CBigNum accCommitmentToCoinValue;
+    CBigNum serialCommitmentToCoinValue;
+    AccumulatorProofOfKnowledge accumulatorPoK;
+    SerialNumberSignatureOfKnowledge serialNumberSoK;
+    CommitmentProofOfKnowledge commitmentPoK;
+
 };
 
 } /* namespace libzerocoin */
