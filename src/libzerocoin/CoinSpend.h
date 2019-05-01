@@ -122,9 +122,12 @@ public:
     static std::vector<unsigned char> ParseSerial(CDataStream& s);
 
     virtual const uint256 signatureHash() const;
-    bool Verify(const Accumulator& a, bool verifyParams = true) const;
-    virtual bool HasValidSerial(ZerocoinParams* params) const;
-    virtual bool HasValidSignature() const;
+    virtual bool Verify(const Accumulator& a, bool verifyParams = true) const;
+    bool HasValidSerial(ZerocoinParams* params) const;
+    bool HasValidSignature() const;
+    void setTxOutHash(uint256 txOutHash) { this->ptxHash = txOutHash; };
+    void setDenom(libzerocoin::CoinDenomination denom) { this->denomination = denom; }
+
     CBigNum CalculateValidSerial(ZerocoinParams* params);
     std::string ToString() const;
 
@@ -153,17 +156,17 @@ public:
     }
 
 protected:
-    CoinDenomination denomination;
+    CoinDenomination denomination = ZQ_ERROR;
     CBigNum coinSerialNumber;
     uint8_t version;
     //As of version 2
     CPubKey pubkey;
     std::vector<unsigned char> vchSig;
     SpendType spendType;
+    uint256 ptxHash;
 
 private:
     uint32_t accChecksum;
-    uint256 ptxHash;
     CBigNum accCommitmentToCoinValue;
     CBigNum serialCommitmentToCoinValue;
     AccumulatorProofOfKnowledge accumulatorPoK;

@@ -4,101 +4,108 @@
 
 #include "zpiv/zpivmodule.h"
 #include "zpivchain.h"
-#include "chainparams.h"
 #include "libzerocoin/Commitment.h"
 #include "libzerocoin/Coin.h"
 #include "hash.h"
+#include "main.h"
 #include "iostream"
 
-bool PublicCoinSpend::HasValidSerial(libzerocoin::ZerocoinParams* params) const {
-    return IsValidSerial(params, coinSerialNumber);
+bool PublicCoinSpend::Verify(const libzerocoin::Accumulator& a, bool verifyParams) const {
+    return validate();
 }
 
-bool PublicCoinSpend::HasValidSignature() const {
-    // Now check that the signature validates with the serial
-    try {
-        //V2 serial requires that the signature hash be signed by the public key associated with the serial
-        uint256 hashedPubkey = Hash(pubkey.begin(), pubkey.end()) >> libzerocoin::PrivateCoin::V2_BITSHIFT;
-        if (hashedPubkey != libzerocoin::GetAdjustedSerial(coinSerialNumber).getuint256()) {
-            return error("%s: adjusted serial invalid\n", __func__);
-        }
-    } catch(std::range_error &e) {
-        throw libzerocoin::InvalidSerialException("Serial longer than 256 bits");
-    }
-
-    if (!pubkey.Verify(hashTxOut, vchSig)){
-        std::cout << "pubkey not verified" << std::endl;
-        return error("%s: adjusted serial invalid\n", __func__);
-    }
-    return true;
-}
-
-bool ZPIVModule::createInput(CTxIn &in, CZerocoinMint mint, uint256 hashTxOut){
-    uint8_t nVersion = mint.GetVersion();
-    if (nVersion < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
-        // No v1 serials accepted anymore.
-        return error("%s: failed to set zPIV privkey mint version=%d\n", __func__, nVersion);
-    }
-    CKey key;
-    if (!mint.GetKeyPair(key))
-        return error("%s: failed to set zPIV privkey mint version=%d\n", __func__, nVersion);
-
-    std::vector<unsigned char> vchSig;
-    if (!key.Sign(hashTxOut, vchSig))
-        throw std::runtime_error("ZPIVModule failed to sign hashTxOut\n");
-
-    CDataStream ser(SER_NETWORK, PROTOCOL_VERSION);
-    PublicCoinSpend spend(mint.GetSerialNumber(),  mint.GetRandomness(), key.GetPubKey(), vchSig);
-    ser << spend;
-
-    std::vector<unsigned char> data(ser.begin(), ser.end());
-    CScript scriptSigIn = CScript() << OP_ZEROCOINPUBLICSPEND << data.size();
-    scriptSigIn.insert(scriptSigIn.end(), data.begin(), data.end());
-    in = CTxIn(mint.GetTxHash(), mint.GetOutputIndex(), scriptSigIn, mint.GetDenomination());
-    return true;
-}
-
-PublicCoinSpend ZPIVModule::parseCoinSpend(const CTxIn &in, const CTransaction& tx){
-    if (!in.scriptSig.IsZerocoinPublicSpend()) throw runtime_error("parseCoinSpend() :: input is not a public coin spend");
-    std::vector<char, zero_after_free_allocator<char> > data;
-    data.insert(data.end(), in.scriptSig.begin() + 4, in.scriptSig.end());
-    CDataStream serializedCoinSpend(data, SER_NETWORK, PROTOCOL_VERSION);
-    PublicCoinSpend spend(serializedCoinSpend);
-    spend.outputIndex = in.prevout.n;
-    spend.txHash = in.prevout.hash;
-    CTransaction txNew;
-    txNew.vout = tx.vout;
-    spend.hashTxOut = txNew.GetHash();
-    return spend;
-}
-
-bool ZPIVModule::validateInput(const CTxIn &in, const CTxOut &prevOut, const CTransaction& tx, PublicCoinSpend& ret){
-    if (!in.scriptSig.IsZerocoinPublicSpend() || !prevOut.scriptPubKey.IsZerocoinMint())
-        return error("%s: not valid argument/s\n", __func__);
-
-    // Now prove that the commitment value opens to the input
-    PublicCoinSpend publicSpend = parseCoinSpend(in, tx);
+bool PublicCoinSpend::validate() const {
     libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
-
-    // Check prev out now
-    CValidationState state;
-    libzerocoin::PublicCoin pubCoin(params);
-    if (!TxOutToPublicCoin(prevOut, pubCoin, state))
-        return error("%s: cannot get mint from output\n", __func__);
-    publicSpend.pubCoin = &pubCoin;
-
     // Check that it opens to the input values
     libzerocoin::Commitment commitment(
-            &params->coinCommitmentGroup, publicSpend.getCoinSerialNumber(), publicSpend.randomness);
+            &params->coinCommitmentGroup, getCoinSerialNumber(), randomness);
+
     if (commitment.getCommitmentValue() != pubCoin.getValue()){
+        std::cout << "invalid commitment" << std::endl;
         return error("%s: commitments values are not equal\n", __func__);
     }
-    ret = publicSpend;
-
     // Now check that the signature validates with the serial
-    if (!publicSpend.HasValidSignature()) {
+    if (!HasValidSignature()) {
         return error("%s: signature invalid\n", __func__);;
     }
-
     return true;
+}
+
+namespace ZPIVModule {
+
+    bool createInput(CTxIn &in, CZerocoinMint &mint, uint256 hashTxOut) {
+        libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(false);
+        uint8_t nVersion = mint.GetVersion();
+        if (nVersion < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
+            // No v1 serials accepted anymore.
+            return error("%s: failed to set zPIV privkey mint version=%d\n", __func__, nVersion);
+        }
+        CKey key;
+        if (!mint.GetKeyPair(key))
+            return error("%s: failed to set zPIV privkey mint version=%d\n", __func__, nVersion);
+
+        std::vector<unsigned char> vchSig;
+        if (!key.Sign(hashTxOut, vchSig))
+            throw std::runtime_error("ZPIVModule failed to sign hashTxOut\n");
+
+        CDataStream ser(SER_NETWORK, PROTOCOL_VERSION);
+        PublicCoinSpend spend(params, mint.GetSerialNumber(), mint.GetRandomness(), key.GetPubKey(), vchSig);
+        ser << spend;
+
+        std::vector<unsigned char> data(ser.begin(), ser.end());
+        CScript scriptSigIn = CScript() << OP_ZEROCOINPUBLICSPEND << data.size();
+        scriptSigIn.insert(scriptSigIn.end(), data.begin(), data.end());
+        in = CTxIn(mint.GetTxHash(), mint.GetOutputIndex(), scriptSigIn, mint.GetDenomination());
+        in.nSequence = mint.GetDenomination();
+        return true;
+    }
+
+    bool parseCoinSpend(const CTxIn &in, const CTransaction &tx, const CTxOut &prevOut, PublicCoinSpend &publicCoinSpend) {
+        if (!in.scriptSig.IsZerocoinPublicSpend() || !prevOut.scriptPubKey.IsZerocoinMint())
+            return error("%s: invalid argument/s\n", __func__);
+
+        std::vector<char, zero_after_free_allocator<char> > data;
+        data.insert(data.end(), in.scriptSig.begin() + 4, in.scriptSig.end());
+        CDataStream serializedCoinSpend(data, SER_NETWORK, PROTOCOL_VERSION);
+        libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(false);
+        PublicCoinSpend spend(params, serializedCoinSpend);
+
+        spend.outputIndex = in.prevout.n;
+        spend.txHash = in.prevout.hash;
+        CMutableTransaction txNew(tx);
+        txNew.vin.clear();
+        spend.setTxOutHash(txNew.GetHash());
+
+        // Check prev out now
+        CValidationState state;
+        if (!TxOutToPublicCoin(prevOut, spend.pubCoin, state))
+            return error("%s: cannot get mint from output\n", __func__);
+
+        spend.setDenom(spend.pubCoin.getDenomination());
+        publicCoinSpend = spend;
+        return true;
+    }
+
+    bool validateInput(const CTxIn &in, const CTxOut &prevOut, const CTransaction &tx, PublicCoinSpend &publicSpend) {
+        // Now prove that the commitment value opens to the input
+        if (!parseCoinSpend(in, tx, prevOut, publicSpend)) {
+            return false;
+        }
+        // TODO: Validate that the prev out has the same spend denom?
+        return publicSpend.validate();
+    }
+
+    bool ParseZerocoinPublicSpend(const CTxIn &txIn, const CTransaction& tx, CValidationState& state, PublicCoinSpend& publicSpend)
+    {
+        CTxOut prevOut;
+        if(!GetOutput(txIn.prevout.hash, txIn.prevout.n ,state, prevOut)){
+            return state.DoS(100, error("%s: public zerocoin spend prev output not found, prevTx %s, index %d",
+                                        __func__, txIn.prevout.hash.GetHex(), txIn.prevout.n));
+        }
+        if (!ZPIVModule::parseCoinSpend(txIn, tx, prevOut, publicSpend)) {
+            return state.Invalid(error("%s: invalid public coin spend parse %s", __func__,
+                                       tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+        }
+        return true;
+    }
 }

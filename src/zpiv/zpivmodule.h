@@ -12,19 +12,20 @@
 #include "libzerocoin/SpendType.h"
 #include "primitives/transaction.h"
 #include "script/script.h"
-#include "main.h"
 #include "serialize.h"
 #include "uint256.h"
 #include <streams.h>
 #include <utilstrencodings.h>
 #include "zpiv/zerocoin.h"
+#include "chainparams.h"
 
 class PublicCoinSpend : public libzerocoin::CoinSpend{
 public:
 
-    PublicCoinSpend(){};
+    PublicCoinSpend(libzerocoin::ZerocoinParams* params):pubCoin(params){};
 
-    PublicCoinSpend(CBigNum serial, CBigNum randomness, CPubKey pubkey, std::vector<unsigned char> vchSig){
+    PublicCoinSpend(libzerocoin::ZerocoinParams* params,
+            CBigNum serial, CBigNum randomness, CPubKey pubkey, std::vector<unsigned char> vchSig):pubCoin(params){
         this->coinSerialNumber = serial;
         this->randomness = randomness;
         this->vchSig = vchSig;
@@ -32,24 +33,25 @@ public:
     };
 
     template <typename Stream>
-    PublicCoinSpend(Stream& strm){
+    PublicCoinSpend(
+            libzerocoin::ZerocoinParams* params,
+            Stream& strm):pubCoin(params){
         strm >> *this;
     }
 
     uint8_t getVersion() const { return libzerocoin::PrivateCoin::PUBKEY_VERSION; }
 
-    bool HasValidSerial(libzerocoin::ZerocoinParams* params) const override;
-    bool HasValidSignature() const override ;
-    const uint256 signatureHash() const override { return hashTxOut; }
+    const uint256 signatureHash() const override { return ptxHash; }
     libzerocoin::SpendType getSpendType() const { return libzerocoin::SpendType::SPEND; }
+    bool Verify(const libzerocoin::Accumulator& a, bool verifyParams = true) const override;
+    bool validate() const;
 
+    // Members
     CBigNum randomness;
     // prev out values
     uint256 txHash = 0;
-    // hash of the outputs of the txes that spend this coins
-    uint256 hashTxOut = 0;
     unsigned int outputIndex = -1;
-    libzerocoin::PublicCoin *pubCoin = nullptr;
+    libzerocoin::PublicCoin pubCoin;
 
     ADD_SERIALIZE_METHODS;
 
@@ -63,14 +65,22 @@ public:
 };
 
 
-class ZPIVModule {
+class CValidationState;
 
-public:
-    ZPIVModule(){}
-
-    bool createInput(CTxIn &in, CZerocoinMint mint, uint256 hashTxOut);
-    PublicCoinSpend parseCoinSpend(const CTxIn &in, const CTransaction& tx);
+namespace ZPIVModule {
+    bool createInput(CTxIn &in, CZerocoinMint& mint, uint256 hashTxOut);
+    bool parseCoinSpend(const CTxIn &in, const CTransaction& tx, const CTxOut &prevOut, PublicCoinSpend& publicCoinSpend);
     bool validateInput(const CTxIn &in, const CTxOut &prevOut, const CTransaction& tx, PublicCoinSpend& ret);
+
+    // Public zc spend parse
+    /**
+     *
+     * @param in --> public zc spend input
+     * @param tx --> input parent
+     * @param publicCoinSpend ---> return the publicCoinSpend parsed
+     * @return true if everything went ok
+     */
+    bool ParseZerocoinPublicSpend(const CTxIn &in, const CTransaction& tx, CValidationState& state, PublicCoinSpend& publicCoinSpend);
 };
 
 

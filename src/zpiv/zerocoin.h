@@ -43,7 +43,7 @@ private:
     CBigNum randomness;
     CBigNum serialNumber;
     uint256 txid;
-    int outputIndex;
+    int outputIndex = -1;
     CPrivKey privkey;
     uint8_t version;
     bool isUsed;
@@ -105,8 +105,8 @@ public:
     void SetPrivKey(const CPrivKey& privkey) { this->privkey = privkey; }
     bool GetKeyPair(CKey& key) const;
 
-    unsigned int GetOutputIndex() { return this->outputIndex; }
-    void SetOutputIndex(unsigned int index) {this->outputIndex = index; }
+    int GetOutputIndex() { return this->outputIndex; }
+    void SetOutputIndex(int index) { this->outputIndex = index; }
 
     inline bool operator <(const CZerocoinMint& a) const { return GetHeight() < a.GetHeight(); }
 
@@ -190,7 +190,6 @@ private:
     libzerocoin::CoinDenomination denomination;
     unsigned int nAccumulatorChecksum;
     int nMintCount; //memory only - the amount of mints that belong to the accumulator this is spent from
-    bool publicSpend = false;
 
 public:
     CZerocoinSpend()
@@ -205,16 +204,6 @@ public:
         this->pubCoin = pubCoin;
         this->denomination = denomination;
         this->nAccumulatorChecksum = nAccumulatorChecksum;
-    }
-
-    CZerocoinSpend(CBigNum coinSerial, uint256 hashTx, CBigNum pubCoin, libzerocoin::CoinDenomination denomination, unsigned int nAccumulatorChecksum, bool isPublicSpend)
-    {
-        this->coinSerial = coinSerial;
-        this->hashTx = hashTx;
-        this->pubCoin = pubCoin;
-        this->denomination = denomination;
-        this->nAccumulatorChecksum = nAccumulatorChecksum;
-        this->publicSpend = isPublicSpend;
     }
 
     void SetNull()
@@ -234,7 +223,6 @@ public:
     uint256 GetHash() const;
     void SetMintCount(int nMintsAdded) { this->nMintCount = nMintsAdded; }
     int GetMintCount() const { return nMintCount; }
-    bool IsPublicSpend() const { return publicSpend; }
  
     ADD_SERIALIZE_METHODS;
 

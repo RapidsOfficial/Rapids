@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "zpivchain.h"
+#include "zpiv/zpivmodule.h"
 #include "invalid.h"
 #include "main.h"
 #include "txdb.h"
@@ -285,11 +286,21 @@ std::string ReindexZerocoinDB()
                     //Record Serials
                     if (tx.HasZerocoinSpendInputs()) {
                         for (auto& in : tx.vin) {
-                            if (!in.IsZerocoinSpend())
+                            bool isPublicSpend = in.scriptSig.IsZerocoinPublicSpend();
+                            if (!in.IsZerocoinSpend() && !isPublicSpend)
                                 continue;
-
-                            libzerocoin::CoinSpend spend = TxInToZerocoinSpend(in);
-                            vSpendInfo.push_back(make_pair(spend, txid));
+                            if (isPublicSpend) {
+                                libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
+                                PublicCoinSpend publicSpend(params);
+                                CValidationState state;
+                                if (!ZPIVModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
+                                    return _("Failed to parse public spend");
+                                }
+                                vSpendInfo.push_back(make_pair(publicSpend, txid));
+                            } else {
+                                libzerocoin::CoinSpend spend = TxInToZerocoinSpend(in);
+                                vSpendInfo.push_back(make_pair(spend, txid));
+                            }
                         }
                     }
 
@@ -376,10 +387,11 @@ std::list<libzerocoin::CoinDenomination> ZerocoinSpendListFromBlock(const CBlock
             continue;
 
         for (const CTxIn& txin : tx.vin) {
-            if (!txin.IsZerocoinSpend())
+            bool isPublicSpend = txin.scriptSig.IsZerocoinPublicSpend();
+            if (!txin.IsZerocoinSpend() && !isPublicSpend)
                 continue;
 
-            if (fFilterInvalid) {
+            if (fFilterInvalid && !isPublicSpend) {
                 libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txin);
                 if (invalid_out::ContainsSerial(spend.getCoinSerialNumber()))
                     continue;

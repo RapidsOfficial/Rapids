@@ -166,7 +166,7 @@ CTransaction& CTransaction::operator=(const CTransaction &tx) {
 bool CTransaction::HasZerocoinSpendInputs() const
 {
     for (const CTxIn& txin: vin) {
-        if (txin.IsZerocoinSpend())
+        if (txin.IsZerocoinSpend() || txin.scriptSig.IsZerocoinPublicSpend())
             return true;
     }
     return false;
@@ -242,9 +242,12 @@ std::list<COutPoint> CTransaction::GetOutPoints() const
 
 CAmount CTransaction::GetZerocoinSpent() const
 {
+    if(!IsZerocoinSpend() && !IsZerocoinPublicSpend())
+        return 0;
+
     CAmount nValueOut = 0;
     for (const CTxIn& txin : vin) {
-        if(!txin.IsZerocoinSpend())
+        if(!txin.IsZerocoinSpend() && !txin.scriptSig.IsZerocoinPublicSpend())
             continue;
 
         nValueOut += txin.nSequence * COIN;
