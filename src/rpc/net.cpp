@@ -13,7 +13,7 @@
 #include "protocol.h"
 #include "sync.h"
 #include "timedata.h"
-#include "ui_interface.h"
+#include "guiinterface.h"
 #include "util.h"
 #include "version.h"
 
