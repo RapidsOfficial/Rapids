@@ -4693,47 +4693,50 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
             // Start at the block we're adding on to
             CBlockIndex *prev = pindexPrev;
 
-            int readBlock = 0;
             vector<CBigNum> vBlockSerials;
-            CBlock bl;
-            // Go backwards on the forked chain up to the split
-            do {
-                // Check if the forked chain is longer than the max reorg limit
-                if(readBlock == Params().MaxReorganizationDepth()){
-                    // TODO: Remove this chain from disk.
-                    return error("%s: forked chain longer than maximum reorg limit", __func__);
-                }
+            if (!chainActive.Contains(prev)) {
+                int readBlock = 0;
+                CBlock bl;
+                // Go backwards on the forked chain up to the split
+                do {
+                    // Check if the forked chain is longer than the max reorg limit
+                    if (readBlock == Params().MaxReorganizationDepth()) {
+                        // TODO: Remove this chain from disk.
+                        return error("%s: forked chain longer than maximum reorg limit", __func__);
+                    }
 
-                if(!ReadBlockFromDisk(bl, prev))
-                    // Previous block not on disk
-                    return error("%s: previous block %s not on disk", __func__, prev->GetBlockHash().GetHex());
-                // Increase amount of read blocks
-                readBlock++;
-                // Loop through every input from said block
-                for (const CTransaction& t : bl.vtx) {
-                    for (const CTxIn& in: t.vin) {
-                        // Loop through every input of the staking tx
-                        for (const CTxIn& stakeIn : pivInputs) {
-                            // if it's already spent
+                    if (!ReadBlockFromDisk(bl, prev))
+                        // Previous block not on disk
+                        return error("%s: previous block %s not on disk", __func__, prev->GetBlockHash().GetHex());
+                    // Increase amount of read blocks
+                    readBlock++;
+                    // Loop through every input from said block
+                    for (const CTransaction &t : bl.vtx) {
+                        for (const CTxIn &in: t.vin) {
+                            // Loop through every input of the staking tx
+                            for (const CTxIn &stakeIn : pivInputs) {
+                                // if it's already spent
 
-                            // First regular staking check
-                            if(hasPIVInputs) {
-                                if (stakeIn.prevout == in.prevout) {
-                                    return state.DoS(100, error("%s: input already spent on a previous block", __func__));
-                                }
+                                // First regular staking check
+                                if (hasPIVInputs) {
+                                    if (stakeIn.prevout == in.prevout) {
+                                        return state.DoS(100, error("%s: input already spent on a previous block",
+                                                                    __func__));
+                                    }
 
-                                // Second, if there is zPoS staking then store the serials for later check
-                                if(in.scriptSig.IsZerocoinSpend()){
-                                    vBlockSerials.push_back(TxInToZerocoinSpend(in).getCoinSerialNumber());
+                                    // Second, if there is zPoS staking then store the serials for later check
+                                    if (in.scriptSig.IsZerocoinSpend()) {
+                                        vBlockSerials.push_back(TxInToZerocoinSpend(in).getCoinSerialNumber());
+                                    }
                                 }
                             }
                         }
                     }
-                }
 
-                prev = prev->pprev;
+                    prev = prev->pprev;
 
-            } while (!chainActive.Contains(prev));
+                } while (!chainActive.Contains(prev));
+            }
 
             // Split height
             splitHeight = prev->nHeight;
@@ -4795,9 +4798,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
                     return error("%s: coin stake inputs not available on main chain, received height %d vs current %d", __func__, nHeight, chainActive.Height());
                 }
                 if(coin && !coin->IsAvailable(in.prevout.n)){
-                    // If this is not available get the height of the spent and validate it with the forked height
-                    // Check if this occurred before the chain split
-                    if(!(isBlockFromFork && coin->nHeight > splitHeight)){
+                    if(!isBlockFromFork){
                         // Coins not available
                         return error("%s: coin stake inputs already spent in main chain", __func__);
                     }
