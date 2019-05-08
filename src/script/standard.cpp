@@ -66,7 +66,7 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, vector<vector<unsi
     }
 
     // Zerocoin
-    if (scriptPubKey.IsZerocoinMint()){
+    if (scriptPubKey.IsZerocoinMint()) {
         typeRet = TX_ZEROCOINMINT;
         if(scriptPubKey.size() > 150) return false;
         vector<unsigned char> hashBytes(scriptPubKey.begin()+2, scriptPubKey.end());

@@ -16,11 +16,11 @@
 bool BlockToMintValueVector(const CBlock& block, const libzerocoin::CoinDenomination denom, vector<CBigNum>& vValues)
 {
     for (const CTransaction& tx : block.vtx) {
-        if(!tx.IsZerocoinMint())
+        if(!tx.HasZerocoinMintOutputs())
             continue;
 
         for (const CTxOut& txOut : tx.vout) {
-            if(!txOut.scriptPubKey.IsZerocoinMint())
+            if(!txOut.IsZerocoinMint())
                 continue;
 
             CValidationState state;
@@ -41,7 +41,7 @@ bool BlockToMintValueVector(const CBlock& block, const libzerocoin::CoinDenomina
 bool BlockToPubcoinList(const CBlock& block, std::list<libzerocoin::PublicCoin>& listPubcoins, bool fFilterInvalid)
 {
     for (const CTransaction& tx : block.vtx) {
-        if(!tx.IsZerocoinMint())
+        if(!tx.HasZerocoinMintOutputs())
             continue;
 
         // Filter out mints that have used invalid outpoints
@@ -64,7 +64,7 @@ bool BlockToPubcoinList(const CBlock& block, std::list<libzerocoin::PublicCoin>&
                 break;
 
             const CTxOut txOut = tx.vout[i];
-            if(!txOut.scriptPubKey.IsZerocoinMint())
+            if(!txOut.IsZerocoinMint())
                 continue;
 
             CValidationState state;
@@ -83,7 +83,7 @@ bool BlockToPubcoinList(const CBlock& block, std::list<libzerocoin::PublicCoin>&
 bool BlockToZerocoinMintList(const CBlock& block, std::list<CZerocoinMint>& vMints, bool fFilterInvalid)
 {
     for (const CTransaction& tx : block.vtx) {
-        if(!tx.IsZerocoinMint())
+        if(!tx.HasZerocoinMintOutputs())
             continue;
 
         // Filter out mints that have used invalid outpoints
@@ -106,7 +106,7 @@ bool BlockToZerocoinMintList(const CBlock& block, std::list<CZerocoinMint>& vMin
                 break;
 
             const CTxOut txOut = tx.vout[i];
-            if(!txOut.scriptPubKey.IsZerocoinMint())
+            if(!txOut.IsZerocoinMint())
                 continue;
 
             CValidationState state;
@@ -283,9 +283,9 @@ std::string ReindexZerocoinDB()
                 if (tx.ContainsZerocoins()) {
                     uint256 txid = tx.GetHash();
                     //Record Serials
-                    if (tx.IsZerocoinSpend()) {
+                    if (tx.HasZerocoinSpendInputs()) {
                         for (auto& in : tx.vin) {
-                            if (!in.scriptSig.IsZerocoinSpend())
+                            if (!in.IsZerocoinSpend())
                                 continue;
 
                             libzerocoin::CoinSpend spend = TxInToZerocoinSpend(in);
@@ -294,7 +294,7 @@ std::string ReindexZerocoinDB()
                     }
 
                     //Record mints
-                    if (tx.IsZerocoinMint()) {
+                    if (tx.HasZerocoinMintOutputs()) {
                         for (auto& out : tx.vout) {
                             if (!out.IsZerocoinMint())
                                 continue;
@@ -372,11 +372,11 @@ std::list<libzerocoin::CoinDenomination> ZerocoinSpendListFromBlock(const CBlock
 {
     std::list<libzerocoin::CoinDenomination> vSpends;
     for (const CTransaction& tx : block.vtx) {
-        if (!tx.IsZerocoinSpend())
+        if (!tx.HasZerocoinSpendInputs())
             continue;
 
         for (const CTxIn& txin : tx.vin) {
-            if (!txin.scriptSig.IsZerocoinSpend())
+            if (!txin.IsZerocoinSpend())
                 continue;
 
             if (fFilterInvalid) {

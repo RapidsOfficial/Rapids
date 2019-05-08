@@ -490,7 +490,7 @@ void PrivacyDialog::sendzPIV()
 
         strStats += tr("address: ");
         CTxDestination dest;
-        if(txout.scriptPubKey.IsZerocoinMint())
+        if(txout.IsZerocoinMint())
             strStats += tr("zPIV Mint");
         else if(ExtractDestination(txout.scriptPubKey, dest))
             strStats += tr(CBitcoinAddress(dest).ToString().c_str());
