@@ -25,10 +25,9 @@ public:
     PublicCoinSpend(libzerocoin::ZerocoinParams* params):pubCoin(params){};
 
     PublicCoinSpend(libzerocoin::ZerocoinParams* params,
-            CBigNum serial, CBigNum randomness, CPubKey pubkey, std::vector<unsigned char> vchSig):pubCoin(params){
+            CBigNum serial, CBigNum randomness, CPubKey pubkey):pubCoin(params){
         this->coinSerialNumber = serial;
         this->randomness = randomness;
-        this->vchSig = vchSig;
         this->pubkey = pubkey;
     };
 
@@ -41,7 +40,8 @@ public:
 
     uint8_t getVersion() const { return libzerocoin::PrivateCoin::PUBKEY_VERSION; }
 
-    const uint256 signatureHash() const override { return ptxHash; }
+    const uint256 signatureHash() const override;
+    void setVchSig(std::vector<unsigned char> vchSig) { this->vchSig = vchSig; };
     libzerocoin::SpendType getSpendType() const { return libzerocoin::SpendType::SPEND; }
     bool Verify(const libzerocoin::Accumulator& a, bool verifyParams = true) const override;
     bool validate() const;

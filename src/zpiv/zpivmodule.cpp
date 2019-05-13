@@ -21,7 +21,6 @@ bool PublicCoinSpend::validate() const {
             &params->coinCommitmentGroup, getCoinSerialNumber(), randomness);
 
     if (commitment.getCommitmentValue() != pubCoin.getValue()){
-        std::cout << "invalid commitment" << std::endl;
         return error("%s: commitments values are not equal\n", __func__);
     }
     // Now check that the signature validates with the serial
@@ -29,6 +28,13 @@ bool PublicCoinSpend::validate() const {
         return error("%s: signature invalid\n", __func__);;
     }
     return true;
+}
+
+const uint256 PublicCoinSpend::signatureHash() const
+{
+    CHashWriter h(0, 0);
+    h << ptxHash << denomination << getCoinSerialNumber() << randomness << txHash << outputIndex << getSpendType();
+    return h.GetHash();
 }
 
 namespace ZPIVModule {
@@ -40,16 +46,24 @@ namespace ZPIVModule {
             // No v1 serials accepted anymore.
             return error("%s: failed to set zPIV privkey mint version=%d\n", __func__, nVersion);
         }
+
         CKey key;
         if (!mint.GetKeyPair(key))
             return error("%s: failed to set zPIV privkey mint version=%d\n", __func__, nVersion);
 
+        PublicCoinSpend spend(params, mint.GetSerialNumber(), mint.GetRandomness(), key.GetPubKey());
+        spend.setTxOutHash(hashTxOut);
+        spend.outputIndex = mint.GetOutputIndex();
+        spend.txHash = mint.GetTxHash();
+        spend.setDenom(mint.GetDenomination());
+
         std::vector<unsigned char> vchSig;
-        if (!key.Sign(hashTxOut, vchSig))
-            throw std::runtime_error("ZPIVModule failed to sign hashTxOut\n");
+        if (!key.Sign(spend.signatureHash(), vchSig))
+            throw std::runtime_error("ZPIVModule failed to sign signatureHash\n");
+
+        spend.setVchSig(vchSig);
 
         CDataStream ser(SER_NETWORK, PROTOCOL_VERSION);
-        PublicCoinSpend spend(params, mint.GetSerialNumber(), mint.GetRandomness(), key.GetPubKey(), vchSig);
         ser << spend;
 
         std::vector<unsigned char> data(ser.begin(), ser.end());
@@ -89,6 +103,7 @@ namespace ZPIVModule {
     bool validateInput(const CTxIn &in, const CTxOut &prevOut, const CTransaction &tx, PublicCoinSpend &publicSpend) {
         // Now prove that the commitment value opens to the input
         if (!parseCoinSpend(in, tx, prevOut, publicSpend)) {
+            std::cout << "parse failed" << std::endl;
             return false;
         }
         // TODO: Validate that the prev out has the same spend denom?
@@ -99,11 +114,11 @@ namespace ZPIVModule {
     {
         CTxOut prevOut;
         if(!GetOutput(txIn.prevout.hash, txIn.prevout.n ,state, prevOut)){
-            return state.DoS(100, error("%s: public zerocoin spend prev output not found, prevTx %s, index %d",
+            return state.DoS(100, error("%s: public zerocoin spend prev output not found, prevTx %s, index %d\n",
                                         __func__, txIn.prevout.hash.GetHex(), txIn.prevout.n));
         }
         if (!ZPIVModule::parseCoinSpend(txIn, tx, prevOut, publicSpend)) {
-            return state.Invalid(error("%s: invalid public coin spend parse %s", __func__,
+            return state.Invalid(error("%s: invalid public coin spend parse %s\n", __func__,
                                        tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
         }
         return true;
