@@ -96,6 +96,7 @@ public:
     }
 
     bool IsZerocoinSpend() const;
+    bool IsZerocoinPublicSpend() const;
 
     friend bool operator==(const CTxIn& a, const CTxIn& b)
     {
@@ -260,15 +261,14 @@ public:
     unsigned int CalculateModifiedSize(unsigned int nTxSize=0) const;
 
     bool HasZerocoinSpendInputs() const;
+    bool HasZerocoinPublicSpendInputs() const;
 
     bool HasZerocoinMintOutputs() const;
 
     bool ContainsZerocoins() const
     {
-        return HasZerocoinSpendInputs() || HasZerocoinMintOutputs();
+        return HasZerocoinSpendInputs() || HasZerocoinPublicSpendInputs() || HasZerocoinMintOutputs();
     }
-
-    bool IsZerocoinPublicSpend() const;
 
     CAmount GetZerocoinMinted() const;
     CAmount GetZerocoinSpent() const;

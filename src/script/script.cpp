@@ -266,10 +266,7 @@ bool CScript::IsZerocoinSpend() const
 
 bool CScript::IsZerocoinPublicSpend() const
 {
-    if (this->empty())
-        return false;
-
-    return (this->at(0) == OP_ZEROCOINPUBLICSPEND);
+    return StartsWithOpcode(OP_ZEROCOINPUBLICSPEND);
 }
 
 bool CScript::IsPushOnly(const_iterator pc) const

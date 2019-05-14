@@ -565,11 +565,11 @@ void CTxMemPool::check(const CCoinsViewCache* pcoins) const
                 fDependsWait = true;
             } else {
                 const CCoins* coins = pcoins->AccessCoins(txin.prevout.hash);
-                if(!txin.IsZerocoinSpend() && !txin.scriptSig.IsZerocoinPublicSpend())
+                if(!txin.IsZerocoinSpend() && !txin.IsZerocoinPublicSpend())
                     assert(coins && coins->IsAvailable(txin.prevout.n));
             }
             // Check whether its inputs are marked in mapNextTx.
-            if(!txin.IsZerocoinSpend()  && !txin.scriptSig.IsZerocoinPublicSpend()) {
+            if(!txin.IsZerocoinSpend()  && !txin.IsZerocoinPublicSpend()) {
                 std::map<COutPoint, CInPoint>::const_iterator it3 = mapNextTx.find(txin.prevout);
                 assert(it3 != mapNextTx.end());
                 assert(it3->second.ptx == &tx);

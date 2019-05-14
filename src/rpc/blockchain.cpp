@@ -1051,7 +1051,7 @@ UniValue getfeeinfo(const UniValue& params, bool fHelp)
                 continue;
 
             for (unsigned int j = 0; j < tx.vin.size(); j++) {
-                if (tx.vin[j].IsZerocoinSpend() || tx.vin[j].scriptSig.IsZerocoinPublicSpend()) {
+                if (tx.vin[j].IsZerocoinSpend() || tx.vin[j].IsZerocoinPublicSpend()) {
                     nValueIn += tx.vin[j].nSequence * COIN;
                     continue;
                 }

@@ -64,6 +64,11 @@ bool CTxIn::IsZerocoinSpend() const
     return prevout.hash == 0 && scriptSig.IsZerocoinSpend();
 }
 
+bool CTxIn::IsZerocoinPublicSpend() const
+{
+    return scriptSig.IsZerocoinPublicSpend();
+}
+
 std::string CTxIn::ToString() const
 {
     std::string str;
@@ -166,7 +171,7 @@ CTransaction& CTransaction::operator=(const CTransaction &tx) {
 bool CTransaction::HasZerocoinSpendInputs() const
 {
     for (const CTxIn& txin: vin) {
-        if (txin.IsZerocoinSpend() || txin.scriptSig.IsZerocoinPublicSpend())
+        if (txin.IsZerocoinSpend() || txin.IsZerocoinPublicSpend())
             return true;
     }
     return false;
@@ -181,11 +186,11 @@ bool CTransaction::HasZerocoinMintOutputs() const
     return false;
 }
 
-bool CTransaction::IsZerocoinPublicSpend() const
+bool CTransaction::HasZerocoinPublicSpendInputs() const
 {
     // The wallet only allows publicSpend inputs in the same tx and not a combination between piv and zpiv
     for(const CTxIn& txin : vin) {
-        if (txin.scriptSig.IsZerocoinPublicSpend())
+        if (txin.IsZerocoinPublicSpend())
             return true;
     }
     return false;
@@ -254,7 +259,7 @@ CAmount CTransaction::GetZerocoinSpent() const
 {
     CAmount nValueOut = 0;
     for (const CTxIn& txin : vin) {
-        if(!txin.IsZerocoinSpend() && !txin.scriptSig.IsZerocoinPublicSpend())
+        if(!txin.IsZerocoinSpend())
             continue;
 
         nValueOut += txin.nSequence * COIN;

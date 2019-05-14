@@ -371,7 +371,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
                 bool fDoubleSerial = false;
                 for (const CTxIn& txIn : tx.vin) {
-                    bool isPublicSpend = txIn.scriptSig.IsZerocoinPublicSpend();
+                    bool isPublicSpend = txIn.IsZerocoinPublicSpend();
                     if (txIn.IsZerocoinSpend() || isPublicSpend) {
                         libzerocoin::CoinSpend* spend;
                         if (isPublicSpend) {

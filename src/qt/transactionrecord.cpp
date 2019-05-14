@@ -46,7 +46,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
 
     if (wtx.HasZerocoinSpendInputs()) {
         // a zerocoin spend that was created by this wallet
-        if (wtx.IsZerocoinPublicSpend()) {
+        if (wtx.HasZerocoinPublicSpendInputs()) {
             libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
             PublicCoinSpend publicSpend(params);
             CValidationState state;
