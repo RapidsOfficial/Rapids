@@ -225,7 +225,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
                 strSelectionMap.replace(pindex->nHeight - nHeightFirstCandidate, 1, "=");
             pindex = pindex->pprev;
         }
-        for (const PAIRTYPE(uint256, const CBlockIndex*) & item : mapSelectedBlocks) {
+        for (const std::pair<const uint256, const CBlockIndex*> &item : mapSelectedBlocks) {
             // 'S' indicates selected proof-of-stake blocks
             // 'W' indicates selected proof-of-work blocks
             strSelectionMap.replace(item.second->nHeight - nHeightFirstCandidate, 1, item.second->IsProofOfStake() ? "S" : "W");

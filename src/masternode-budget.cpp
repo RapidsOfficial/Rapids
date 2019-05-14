@@ -42,7 +42,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
     findScript << OP_RETURN << ToByteVector(nExpectedHash);
 
     bool foundOpReturn = false;
-    for (const CTxOut o : txCollateral.vout) {
+    for (const CTxOut &o : txCollateral.vout) {
         if (!o.scriptPubKey.IsNormalPaymentScript() && !o.scriptPubKey.IsUnspendable()) {
             strError = strprintf("Invalid Script %s", txCollateral.ToString());
             LogPrint("mnbudget","CBudgetProposalBroadcast::IsBudgetCollateralValid - %s\n", strError);
