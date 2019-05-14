@@ -361,7 +361,7 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
     const CTxIn& txin = tx.vin[0];
 
     //Construct the stakeinput object
-    if (tx.IsZerocoinSpend()) {
+    if (txin.IsZerocoinSpend()) {
         libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txin);
         if (spend.getSpendType() != libzerocoin::SpendType::STAKE)
             return error("%s: spend is using the wrong SpendType (%d)", __func__, (int)spend.getSpendType());

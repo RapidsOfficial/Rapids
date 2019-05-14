@@ -137,7 +137,7 @@ BOOST_AUTO_TEST_CASE(checkzerocoinmint_test)
     CValidationState state;
     bool fFoundMint = false;
     for(unsigned int i = 0; i < tx.vout.size(); i++){
-        if(!tx.vout[i].scriptPubKey.empty() && tx.vout[i].scriptPubKey.IsZerocoinMint()) {
+        if(tx.vout[i].IsZerocoinMint()) {
             BOOST_CHECK(CheckZerocoinMint(tx.GetHash(), tx.vout[i], state, true));
             fFoundMint = true;
         }
@@ -177,7 +177,7 @@ bool CheckZerocoinSpendNoDB(const CTransaction tx, string& strError)
     BOOST_FOREACH(const CTxIn& txin, tx.vin) {
 
         //only check txin that is a zcspend
-        if (!txin.scriptSig.IsZerocoinSpend())
+        if (!txin.IsZerocoinSpend())
             continue;
 
         // extract the CoinSpend from the txin
@@ -271,7 +271,7 @@ BOOST_AUTO_TEST_CASE(checkzerocoinspend_test)
         BOOST_CHECK_MESSAGE(DecodeHexTx(tx, raw.first), "Failed to deserialize hex transaction");
 
         for(const CTxOut& out : tx.vout){
-            if(!out.scriptPubKey.empty() && out.scriptPubKey.IsZerocoinMint()) {
+            if(out.IsZerocoinMint()) {
                 PublicCoin publicCoin(Params().Zerocoin_Params(true));
                 BOOST_CHECK_MESSAGE(TxOutToPublicCoin(out, publicCoin, state), "Failed to convert CTxOut " << out.ToString() << " to PublicCoin");
 

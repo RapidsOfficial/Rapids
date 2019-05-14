@@ -901,7 +901,7 @@ UniValue getspentzerocoinamount(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter for transaction input");
 
     const CTxIn& input = tx.vin[inputIndex];
-    if (!input.scriptSig.IsZerocoinSpend())
+    if (!input.IsZerocoinSpend())
         return -1;
 
     libzerocoin::CoinSpend spend = TxInToZerocoinSpend(input);

@@ -248,19 +248,19 @@ bool CScript::IsPayToScriptHash() const
             this->at(22) == OP_EQUAL);
 }
 
+bool CScript::StartsWithOpcode(const opcodetype opcode) const
+{
+    return (!this->empty() && this->at(0) == opcode);
+}
+
 bool CScript::IsZerocoinMint() const
 {
-    //fast test for Zerocoin Mint CScripts
-    return (this->size() > 0 &&
-        this->at(0) == OP_ZEROCOINMINT);
+    return StartsWithOpcode(OP_ZEROCOINMINT);
 }
 
 bool CScript::IsZerocoinSpend() const
 {
-    if (this->empty())
-        return false;
-
-    return (this->at(0) == OP_ZEROCOINSPEND);
+    return StartsWithOpcode(OP_ZEROCOINSPEND);
 }
 
 bool CScript::IsPushOnly(const_iterator pc) const

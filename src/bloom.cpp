@@ -219,7 +219,7 @@ bool CBloomFilter::IsRelevantAndUpdate(const CTransaction& tx)
             opcodetype opcode;
             if (!txin.scriptSig.GetOp(pc, opcode, data))
                 break;
-            if (txin.scriptSig.IsZerocoinSpend()){
+            if (txin.IsZerocoinSpend()) {
                 CDataStream s(vector<unsigned char>(txin.scriptSig.begin() + 44, txin.scriptSig.end()),
                         SER_NETWORK, PROTOCOL_VERSION);
 
