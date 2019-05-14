@@ -135,6 +135,8 @@ public:
     int Zerocoin_Block_Double_Accumulated() const { return nBlockDoubleAccumulated; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
 
+    int Zerocoin_Block_Public_Spend_Enabled() const { return nPublicZCSpends; }
+
 protected:
     CChainParams() {}
 
@@ -200,6 +202,7 @@ protected:
     int nBlockEnforceInvalidUTXO;
     int nBlockZerocoinV2;
     int nBlockDoubleAccumulated;
+    int nPublicZCSpends;
 
     // fake serial attack
     int nFakeSerialBlockheightEnd = 0;
