@@ -133,16 +133,7 @@
        <item>
         <widget class="QWidget" name="verticalZpivOptionsWidget" native="true">
          <layout class="QVBoxLayout" name="verticalZpivOptionsLayout">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
@@ -572,16 +563,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations</string>
        <item>
         <widget class="QWidget" name="verticalZpivDisplayWidget" native="true">
          <layout class="QVBoxLayout" name="verticalZpivDisplayLayout">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="topMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <property name="bottomMargin">
+          <property name="margin">
            <number>0</number>
           </property>
           <item>
