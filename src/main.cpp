@@ -1042,9 +1042,13 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const Coi
         }
     }
 
+    //Reject V1 old serials.
+    if (spend->getVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
+        return error("%s : zPIV v1 serial spend not spendable\n", __func__,
+                     spend->getCoinSerialNumber().GetHex(), tx.GetHash().GetHex());
+    }
     //Reject serial's that are not in the acceptable value range
-    bool fUseV1Params = spend->getVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
-    if (!spend->HasValidSerial(Params().Zerocoin_Params(fUseV1Params))) {
+    if (!spend->HasValidSerial(Params().Zerocoin_Params(false))) {
         // Up until this block our chain was not checking serials correctly..
         if (!isBlockBetweenFakeSerialAttackRange(pindex->nHeight))
             return error("%s : zPIV spend with serial %s from tx %s is not in valid range\n", __func__,
