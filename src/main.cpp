@@ -967,7 +967,7 @@ bool CheckZerocoinMint(const uint256& txHash, const CTxOut& txout, CValidationSt
 
 bool ContextualCheckZerocoinMint(const CTransaction& tx, const PublicCoin& coin, const CBlockIndex* pindex)
 {
-    if (pindex->nHeight > Params().Zerocoin_Block_EndFakeSerial() && Params().NetworkID() != CBaseChainParams::TESTNET) {
+    if (pindex->nHeight >= Params().Zerocoin_Block_Public_Spend_Enabled()) {
         // Zerocoin MINTs have been disabled
         return error("%s: Mints disabled at height %d - unable to add pubcoin %s", __func__,
                 pindex->nHeight, coin.getValue().GetHex().substr(0, 10));
