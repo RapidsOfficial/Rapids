@@ -103,10 +103,13 @@ namespace ZPIVModule {
     bool validateInput(const CTxIn &in, const CTxOut &prevOut, const CTransaction &tx, PublicCoinSpend &publicSpend) {
         // Now prove that the commitment value opens to the input
         if (!parseCoinSpend(in, tx, prevOut, publicSpend)) {
-            std::cout << "parse failed" << std::endl;
             return false;
         }
-        // TODO: Validate that the prev out has the same spend denom?
+        if (libzerocoin::ZerocoinDenominationToAmount(
+                libzerocoin::IntToZerocoinDenomination(in.nSequence)) != prevOut.nValue) {
+            return error("PublicCoinSpend validateInput :: input nSequence different to prevout value\n");
+        }
+
         return publicSpend.validate();
     }
 

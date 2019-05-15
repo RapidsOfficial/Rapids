@@ -109,6 +109,11 @@ BOOST_AUTO_TEST_CASE(zerocoin_public_spend_test)
     BOOST_CHECK_MESSAGE(publicSpendTest.HasValidSignature(), "Failed to validate public spend signature");
     BOOST_CHECK_MESSAGE(spend->HasValidSignature(), "Failed to validate spend signature");
 
+    // Verify that fails with a different denomination
+    in.nSequence = 500;
+    PublicCoinSpend publicSpend2(ZCParams);
+    BOOST_CHECK_MESSAGE(!ZPIVModule::validateInput(in, out, tx, publicSpend2), "Different denomination");
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()
