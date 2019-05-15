@@ -65,9 +65,25 @@ class zPIVValidCoinSpendTest(PIVX_FakeStakeTest):
         else:
             assert (rawTx["confirmations"] == 6)
 
-        self.log.info("%s PASSED" % self.__class__.__name__)
+        self.log.info("%s VALID PUBLIC COIN SPEND PASSED" % self.__class__.__name__)
 
+        self.log.info("%s Trying to spend the serial twice now" % self.__class__.__name__)
 
+        serial = zc[0]["s"]
+        randomness = zc[0]["r"]
+        privkey = zc[0]["k"]
+
+        tx = None
+        try:
+            tx = self.node.spendrawzerocoin(serial, randomness, DENOM_TO_USE, privkey)
+        except JSONRPCException as e:
+            self.log.info("GOOD: Transaction did not verify")
+
+        if tx is not None:
+            self.log.warning("Tx is: %s" % tx)
+            raise AssertionError("TEST FAILED")
+
+        self.log.info("%s DOUBLE SPENT SERIAL NOT VERIFIED, TEST PASSED" % self.__class__.__name__)
 
 if __name__ == '__main__':
     zPIVValidCoinSpendTest().main()
