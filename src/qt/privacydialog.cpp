@@ -109,6 +109,8 @@ PrivacyDialog::PrivacyDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystem
     if(!settings.contains("fDenomsSectionMinimized"))
         settings.setValue("fDenomsSectionMinimized", true);
     minimizeDenomsSection(settings.value("fDenomsSectionMinimized").toBool());
+
+    ui->checkBoxMintChange->setVisible(false);
 }
 
 PrivacyDialog::~PrivacyDialog()
@@ -343,7 +345,7 @@ void PrivacyDialog::sendzPIV()
     }
 
     // Convert change to zPIV
-    bool fMintChange = ui->checkBoxMintChange->isChecked();
+    bool fMintChange = false;// ui->checkBoxMintChange->isChecked();
 
     // Persist minimize change setting
     fMinimizeChange = ui->checkBoxMinimizeChange->isChecked();
