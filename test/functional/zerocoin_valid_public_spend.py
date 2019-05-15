@@ -85,5 +85,18 @@ class zPIVValidCoinSpendTest(PIVX_FakeStakeTest):
 
         self.log.info("%s DOUBLE SPENT SERIAL NOT VERIFIED, TEST PASSED" % self.__class__.__name__)
 
+        self.log.info("%s Trying to spend using the old coin spend method.." % self.__class__.__name__)
+
+        tx = None
+        try:
+            tx = self.node.spendzerocoin(DENOM_TO_USE, False, False, "", False)
+            raise AssertionError("TEST FAILED, old coinSpend spent")
+        except JSONRPCException as e:
+            self.log.info("GOOD: spendzerocoin old spend did not verify")
+
+
+        self.log.info("%s OLD COIN SPEND NON USABLE ANYMORE, TEST PASSED" % self.__class__.__name__)
+
+
 if __name__ == '__main__':
     zPIVValidCoinSpendTest().main()
