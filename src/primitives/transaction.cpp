@@ -14,7 +14,6 @@
 #include "utilstrencodings.h"
 #include "transaction.h"
 
-#include <boost/foreach.hpp>
 
 extern bool GetTransaction(const uint256 &hash, CTransaction &txOut, uint256 &hashBlock, bool fAllowSlow);
 

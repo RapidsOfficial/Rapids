@@ -16,7 +16,6 @@
 #include "utilmoneystr.h"
 #include "utilstrencodings.h"
 
-#include <boost/foreach.hpp>
 
 using namespace std;
 
@@ -83,7 +82,7 @@ void ScriptPubKeyToUniv(const CScript& scriptPubKey,
     out.pushKV("type", GetTxnOutputType(type));
 
     UniValue a(UniValue::VARR);
-    BOOST_FOREACH (const CTxDestination& addr, addresses)
+    for (const CTxDestination& addr : addresses)
         a.push_back(CBitcoinAddress(addr).ToString());
     out.pushKV("addresses", a);
 }
