@@ -1409,9 +1409,16 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
             for (const CTxIn& txIn : tx.vin) {
                 // Only allow for zc spends inputs
                 bool isPublicSpend = txIn.IsZerocoinPublicSpend();
-                if (!txIn.IsZerocoinSpend() && !isPublicSpend) {
-                    return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s, every input must be a zcspend or zcpublicspend", __func__,
+                bool isPrivZerocoinSpend = txIn.IsZerocoinSpend();
+                if (!isPrivZerocoinSpend && !isPublicSpend) {
+                    return state.Invalid(error("%s: AcceptToMemoryPool failed for tx %s, every input must be a zcspend or zcpublicspend", __func__,
                                         tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                }
+
+                // Check enforcement
+                if (!CheckPublicCoinSpendEnforced(chainActive.Height(), isPrivZerocoinSpend, isPublicSpend)){
+                    return state.Invalid(error("%s: AcceptToMemoryPool failed for tx %s", __func__,
+                                               tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
                 }
 
                 if (isPublicSpend) {
