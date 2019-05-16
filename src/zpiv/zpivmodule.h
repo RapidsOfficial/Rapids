@@ -19,6 +19,8 @@
 #include "zpiv/zerocoin.h"
 #include "chainparams.h"
 
+static int const COIN_SPEND_PUBLIC_SPEND_VERSION = 3;
+
 class PublicCoinSpend : public libzerocoin::CoinSpend{
 public:
 
@@ -30,6 +32,7 @@ public:
         this->randomness = randomness;
         this->pubkey = pubkey;
         this->spendType = libzerocoin::SpendType::SPEND;
+        this->version = COIN_SPEND_PUBLIC_SPEND_VERSION;
     };
 
     template <typename Stream>
@@ -39,8 +42,6 @@ public:
         strm >> *this;
         this->spendType = libzerocoin::SpendType::SPEND;
     }
-
-    uint8_t getVersion() const { return libzerocoin::PrivateCoin::PUBKEY_VERSION; }
 
     const uint256 signatureHash() const override;
     void setVchSig(std::vector<unsigned char> vchSig) { this->vchSig = vchSig; };
@@ -58,6 +59,7 @@ public:
 
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
+        READWRITE(version);
         READWRITE(coinSerialNumber);
         READWRITE(randomness);
         READWRITE(pubkey);
