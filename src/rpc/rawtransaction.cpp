@@ -211,12 +211,12 @@ UniValue listunspent(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() > 4)
         throw runtime_error(
-            "listunspent ( minconf maxconf  [\"address\",...] )\n"
+            "listunspent ( minconf maxconf  [\"address\",...] watchonlyconfig )\n"
             "\nReturns array of unspent transaction outputs\n"
             "with between minconf and maxconf (inclusive) confirmations.\n"
             "Optionally filter to only include txouts paid to specified addresses.\n"
             "Results are an array of Objects, each of which has:\n"
-            "{txid, vout, scriptPubKey, amount, confirmations}\n"
+            "{txid, vout, scriptPubKey, amount, confirmations, spendable}\n"
 
             "\nArguments:\n"
             "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
@@ -226,18 +226,20 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "      \"address\"   (string) pivx address\n"
             "      ,...\n"
             "    ]\n"
-            "4. watchonlyconfig  (numberic, optional, default=1) 1 = list regular unspent transactions, 2 = list only watchonly transactions,  3 = list all unspent transactions (including watchonly)\n"
+            "4. watchonlyconfig  (numeric, optional, default=1) 1 = list regular unspent transactions, 2 = list only watchonly transactions,  3 = list all unspent transactions (including watchonly)\n"
 
             "\nResult\n"
             "[                   (array of json object)\n"
             "  {\n"
-            "    \"txid\" : \"txid\",        (string) the transaction id \n"
+            "    \"txid\" : \"txid\",        (string) the transaction id\n"
             "    \"vout\" : n,               (numeric) the vout value\n"
             "    \"address\" : \"address\",  (string) the pivx address\n"
             "    \"account\" : \"account\",  (string) The associated account, or \"\" for the default account\n"
             "    \"scriptPubKey\" : \"key\", (string) the script key\n"
+            "    \"redeemScript\" : \"key\", (string) the redeemscript key\n"
             "    \"amount\" : x.xxx,         (numeric) the transaction amount in btc\n"
-            "    \"confirmations\" : n       (numeric) The number of confirmations\n"
+            "    \"confirmations\" : n,      (numeric) The number of confirmations\n"
+            "    \"spendable\" : true|false  (boolean) Whether we have the private keys to spend this output\n"
             "  }\n"
             "  ,...\n"
             "]\n"
