@@ -8,12 +8,13 @@
 #include <string>
 #include <map>
 #include <univalue.h>
+#include "test/test_pivx.h"
 
 #include <boost/test/unit_test.hpp>
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(univalue_tests)
+BOOST_FIXTURE_TEST_SUITE(univalue_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(univalue_constructor)
 {

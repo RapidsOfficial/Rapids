@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "netbase.h"
+#include "test/test_pivx.h"
 
 #include <string>
 
@@ -12,7 +13,7 @@
 
 using namespace std;
 
-BOOST_AUTO_TEST_SUITE(netbase_tests)
+BOOST_FIXTURE_TEST_SUITE(netbase_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(netbase_networks)
 {

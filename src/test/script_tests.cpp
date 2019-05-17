@@ -14,6 +14,7 @@
 #include "script/script_error.h"
 #include "script/sign.h"
 #include "util.h"
+#include "test_pivx.h"
 
 #if defined(HAVE_CONSENSUS_LIB)
 #include "script/bitcoinconsensus.h"
@@ -58,7 +59,7 @@ read_json(const std::string& jsondata)
     return v.get_array();
 }
 
-BOOST_AUTO_TEST_SUITE(script_tests)
+BOOST_FIXTURE_TEST_SUITE(script_tests, TestingSetup)
 
 CMutableTransaction BuildCreditingTransaction(const CScript& scriptPubKey)
 {
@@ -826,7 +827,7 @@ BOOST_AUTO_TEST_CASE(script_CHECKMULTISIG23)
     CScript badsig6 = sign_multisig(scriptPubKey23, keys, txTo23);
     BOOST_CHECK(!VerifyScript(badsig6, scriptPubKey23, flags, MutableTransactionSignatureChecker(&txTo23, 0), &err));
     BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_INVALID_STACK_OPERATION, ScriptErrorString(err));
-}    
+}
 
 BOOST_AUTO_TEST_CASE(script_combineSigs)
 {

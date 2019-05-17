@@ -6,10 +6,11 @@
 
 #include "primitives/transaction.h"
 #include "main.h"
+#include "test_pivx.h"
 
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_SUITE(main_tests)
+BOOST_FIXTURE_TEST_SUITE(main_tests, TestingSetup)
 
 CAmount nMoneySupplyPoWEnd = 43199500 * COIN;
 
