@@ -52,8 +52,8 @@ CBigNum::CBigNum(const std::vector<unsigned char>& vch)
     setvch(vch);
 }
 
-/** Generates a cryptographically secure random number between zero and range exclusive
-* i.e. 0 < returned number < range
+/** Generates a cryptographically secure random number between zero and range-1 (inclusive)
+* i.e. 0 <= returned number < range
 * @param range The upper bound on the number.
 * @return
 */

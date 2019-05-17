@@ -21,9 +21,7 @@ bool testRandKBitBignum(int k_bits)
 bool testRandBignum(CBigNum limit)
 {
     CBigNum x = CBigNum::randBignum(limit);
-    if (limit < 2)
-        return x == CBigNum(0);
-    return 0 < x && x < limit;
+    return 0 <= x && x < limit;
 }
 
 BOOST_AUTO_TEST_SUITE(zerocoin_bignum_tests)
@@ -84,7 +82,7 @@ BOOST_AUTO_TEST_CASE(bignum_random_generation_tests)
     }
 
     for(int i=1; i<3000; i++) {
-        CBigNum x = CBigNum::randKBitBignum(i);
+        CBigNum x = 1 + CBigNum::randKBitBignum(i);
         BOOST_CHECK_MESSAGE(testRandBignum(x), strprintf("CBigNum::randBignum(x) failed with x=%s", x.ToString()));
     }
 }

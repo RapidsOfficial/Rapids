@@ -50,8 +50,8 @@ CBigNum::CBigNum(const std::vector<unsigned char>& vch)
 
 /** PRNGs use OpenSSL for consistency with seed initialization **/
 
-/** Generates a cryptographically secure random number between zero and range exclusive
-* i.e. 0 < returned number < range
+/** Generates a cryptographically secure random number between zero and range-1 (inclusive)
+* i.e. 0 <= returned number < range
 * @param range The upper bound on the number.
 * @return
 */
@@ -69,7 +69,7 @@ CBigNum CBigNum::randBignum(const CBigNum& range)
     CBigNum ret(buf);
     if (ret < 0)
         mpz_neg(ret.bn, ret.bn);
-    return 1 + (ret % (range-1));
+    return (ret % range);
 }
 
 /** Generates a cryptographically secure random k-bit number
