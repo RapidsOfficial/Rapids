@@ -10,8 +10,6 @@
 #include "hash.h"
 #include "random.h"
 
-using namespace std;
-
 class CAddrManTest : public CAddrMan
 {
     uint64_t state;
@@ -378,7 +376,7 @@ BOOST_AUTO_TEST_CASE(addrman_getaddr)
         int octet1 = i % 256;
         int octet2 = (i / 256) % 256;
         int octet3 = (i / (256 * 2)) % 256;
-        string strAddr = boost::to_string(octet1) + "." + boost::to_string(octet2) + "." + boost::to_string(octet3) + ".23";
+        std::string strAddr = boost::to_string(octet1) + "." + boost::to_string(octet2) + "." + boost::to_string(octet3) + ".23";
         CAddress addr = CAddress(CService(strAddr));
 
         // Ensure that for all addrs in addrman, isTerrible == false.
@@ -387,7 +385,7 @@ BOOST_AUTO_TEST_CASE(addrman_getaddr)
         if (i % 8 == 0)
             addrman.Good(addr);
     }
-    vector<CAddress> vAddr = addrman.GetAddr();
+    std::vector<CAddress> vAddr = addrman.GetAddr();
 
     size_t percent23 = (addrman.size() * 23) / 100;
     BOOST_CHECK(vAddr.size() == percent23);
@@ -429,7 +427,7 @@ BOOST_AUTO_TEST_CASE(caddrinfo_get_tried_bucket)
     BOOST_CHECK(info1.GetKey() != info2.GetKey());
     BOOST_CHECK(info1.GetTriedBucket(nKey1) != info2.GetTriedBucket(nKey1));
 
-    set<int> buckets;
+    std::set<int> buckets;
     for (int i = 0; i < 255; i++) {
         CAddrInfo infoi = CAddrInfo(
             CAddress(CService("250.1.1." + boost::to_string(i))),
@@ -482,7 +480,7 @@ BOOST_AUTO_TEST_CASE(caddrinfo_get_new_bucket)
     BOOST_CHECK(info1.GetKey() != info2.GetKey());
     BOOST_CHECK(info1.GetNewBucket(nKey1) == info2.GetNewBucket(nKey1));
 
-    set<int> buckets;
+    std::set<int> buckets;
     for (int i = 0; i < 255; i++) {
         CAddrInfo infoi = CAddrInfo(
             CAddress(CService("250.1.1." + boost::to_string(i))),
