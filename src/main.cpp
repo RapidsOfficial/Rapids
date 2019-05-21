@@ -739,7 +739,7 @@ bool IsStandardTx(const CTransaction& tx, string& reason)
     }
 
     for (const CTxIn& txin : tx.vin) {
-        if (txin.IsZerocoinSpend())
+        if (txin.IsZerocoinSpend() || txin.IsZerocoinPublicSpend())
             continue;
         // Biggest 'standard' txin is a 15-of-15 P2SH multisig with compressed
         // keys. (remember the 520 byte limit on redeemScript size) That works
@@ -1042,16 +1042,17 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const Coi
         }
     }
 
+    bool v1Serial = spend->getVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
     if (pindex->nHeight >= Params().Zerocoin_Block_Public_Spend_Enabled()) {
         //Reject V1 old serials.
-        if (spend->getVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION) {
+        if (v1Serial) {
             return error("%s : zPIV v1 serial spend not spendable, serial %s, tx %s\n", __func__,
                          spend->getCoinSerialNumber().GetHex(), tx.GetHash().GetHex());
         }
     }
 
     //Reject serial's that are not in the acceptable value range
-    if (!spend->HasValidSerial(Params().Zerocoin_Params(false))) {
+    if (!spend->HasValidSerial(Params().Zerocoin_Params(v1Serial)))  {
         // Up until this block our chain was not checking serials correctly..
         if (!isBlockBetweenFakeSerialAttackRange(pindex->nHeight))
             return error("%s : zPIV spend with serial %s from tx %s is not in valid range\n", __func__,
@@ -1817,15 +1818,13 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
 
 bool GetOutput(const uint256& hash, unsigned int index, CValidationState& state, CTxOut& out)
 {
-    libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
-    PublicCoinSpend ret(params);
     CTransaction txPrev;
     uint256 hashBlock;
     if (!GetTransaction(hash, txPrev, hashBlock, true)) {
         return state.DoS(100, error("Output not found"));
     }
     if (index > txPrev.vout.size()) {
-        return state.DoS(100, error("Output not found, invalid index %d", index));
+        return state.DoS(100, error("Output not found, invalid index %d for %s",index, hash.GetHex()));
     }
     out = txPrev.vout[index];
     return true;
