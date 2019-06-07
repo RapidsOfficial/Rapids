@@ -460,7 +460,7 @@ bool CzPIVTracker::UpdateStatusInternal(const std::set<uint256>& setMempool, CMi
     return false;
 }
 
-std::set<CMintMeta> CzPIVTracker::ListMints(bool fUnusedOnly, bool fMatureOnly, bool fUpdateStatus, bool fWrongSeed)
+std::set<CMintMeta> CzPIVTracker::ListMints(bool fUnusedOnly, bool fMatureOnly, bool fUpdateStatus, bool fWrongSeed, bool fExcludeV1)
 {
     CWalletDB walletdb(strWalletFile);
     if (fUpdateStatus) {
@@ -473,6 +473,8 @@ std::set<CMintMeta> CzPIVTracker::ListMints(bool fUnusedOnly, bool fMatureOnly, 
 
         CzPIVWallet* zPIVWallet = new CzPIVWallet(strWalletFile);
         for (auto& dMint : listDeterministicDB) {
+            if (fExcludeV1 && dMint.GetVersion() < 2)
+                continue;
             Add(dMint, false, false, zPIVWallet);
         }
         delete zPIVWallet;

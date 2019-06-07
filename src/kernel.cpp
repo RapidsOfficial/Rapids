@@ -372,7 +372,8 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
         uint256 hashBlock;
         CTransaction txPrev;
         if (!GetTransaction(txin.prevout.hash, txPrev, hashBlock, true))
-            return error("CheckProofOfStake() : INFO: read txPrev failed");
+            return error("CheckProofOfStake() : INFO: read txPrev failed, tx id prev: %s, block id %s",
+                         txin.prevout.hash.GetHex(), block.GetHash().GetHex());
 
         //verify signature and script
         if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0)))

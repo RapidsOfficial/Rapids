@@ -1660,20 +1660,25 @@ CAmount CWallet::GetBalance() const
     return nTotal;
 }
 
-std::map<libzerocoin::CoinDenomination, int> mapMintMaturity;
-int nLastMaturityCheck = 0;
+//std::map<libzerocoin::CoinDenomination, int> mapMintMaturity;
+//int nLastMaturityCheck = 0;
+
 CAmount CWallet::GetZerocoinBalance(bool fMatureOnly) const
 {
     if (fMatureOnly) {
-        if (chainActive.Height() > nLastMaturityCheck)
-            mapMintMaturity = GetMintMaturityHeight();
-        nLastMaturityCheck = chainActive.Height();
+        // This code is not removed just for when we back to use zPIV in the future, for now it's useless,
+        // every public coin spend is now spendable without need to have new mints on top.
+
+        //if (chainActive.Height() > nLastMaturityCheck)
+        //    mapMintMaturity = GetMintMaturityHeight();
+        //nLastMaturityCheck = chainActive.Height();
 
         CAmount nBalance = 0;
         vector<CMintMeta> vMints = zpivTracker->GetMints(true);
         for (auto meta : vMints) {
-            if (meta.nHeight >= mapMintMaturity.at(meta.denom) || meta.nHeight >= chainActive.Height() || meta.nHeight == 0)
-                continue;
+            // Every public coin spend is now spendable, no need to mint new coins on top.
+            //if (meta.nHeight >= mapMintMaturity.at(meta.denom) || meta.nHeight >= chainActive.Height() || meta.nHeight == 0)
+            //    continue;
             nBalance += libzerocoin::ZerocoinDenominationToAmount(meta.denom);
         }
         return nBalance;
@@ -3114,7 +3119,7 @@ bool CWallet::CreateCoinStake(
 
     // Sign for PIV
     int nIn = 0;
-    if (!txNew.vin[0].IsZerocoinSpend()) {
+    if (!txNew.vin[0].scriptSig.IsZerocoinSpend()) {
         for (CTxIn txIn : txNew.vin) {
             const CWalletTx *wtx = GetWalletTx(txIn.prevout.hash);
             if (!SignSignature(*this, *wtx, txNew, nIn++))
@@ -4701,14 +4706,28 @@ bool CWallet::CheckCoinSpend(libzerocoin::CoinSpend& spend, libzerocoin::Accumul
     return true;
 }
 
-bool CWallet::MintToTxIn(CZerocoinMint mint, const uint256& hashTxOut, CTxIn& newTxIn, CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint)
+bool CWallet::MintToTxIn(
+        CZerocoinMint mint,
+        const uint256& hashTxOut,
+        CTxIn& newTxIn,
+        CZerocoinSpendReceipt& receipt,
+        libzerocoin::SpendType spendType,
+        CBlockIndex* pindexCheckpoint,
+        bool publicCoinSpend)
 {
     std::map<CBigNum, CZerocoinMint> mapMints;
     mapMints.insert(std::make_pair(mint.GetValue(), mint));
     std::vector<CTxIn> vin;
-    if (MintsToInputVector(mapMints, hashTxOut, vin, receipt, spendType, pindexCheckpoint)) {
-        newTxIn = vin[0];
-        return true;
+    if (publicCoinSpend) {
+        if (MintsToInputVectorPublicSpend(mapMints, hashTxOut, vin, receipt, spendType, pindexCheckpoint)) {
+            newTxIn = vin[0];
+            return true;
+        }
+    } else {
+        if (MintsToInputVector(mapMints, hashTxOut, vin, receipt, spendType, pindexCheckpoint)) {
+            newTxIn = vin[0];
+            return true;
+        }
     }
 
     return false;
@@ -4820,7 +4839,93 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
     return true;
 }
 
-bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, CReserveKey& reserveKey, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vSelectedMints, vector<CDeterministicMint>& vNewMints, bool fMintChange,  bool fMinimizeChange, CBitcoinAddress* address)
+bool CWallet::MintsToInputVectorPublicSpend(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, const uint256& hashTxOut, std::vector<CTxIn>& vin,
+                                    CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint)
+{
+    // Default error status if not changed below
+    receipt.SetStatus(_("Transaction Mint Started"), ZPIV_TXMINT_GENERAL);
+
+    int nLockAttempts = 0;
+    while (nLockAttempts < 100) {
+        TRY_LOCK(zpivTracker->cs_spendcache, lockSpendcache);
+        if (!lockSpendcache) {
+            fGlobalUnlockSpendCache = true;
+            MilliSleep(100);
+            ++nLockAttempts;
+            continue;
+        }
+
+        for (auto &it : mapMintsSelected) {
+            CZerocoinMint mint = it.second;
+
+            // Create the simple input and the scriptSig -> Serial + Randomness + Private key signature of both.
+            // As the mint doesn't have the output index search it..
+            CTransaction txMint;
+            uint256 hashBlock;
+            if (!GetTransaction(mint.GetTxHash(), txMint, hashBlock)) {
+                receipt.SetStatus(strprintf(_("Unable to find transaction containing mint %s"), mint.GetTxHash().GetHex()), ZPIV_TXMINT_GENERAL);
+                return false;
+            } else if (mapBlockIndex.count(hashBlock) < 1) {
+                // check that this mint made it into the blockchain
+                receipt.SetStatus(_("Mint did not make it into blockchain"), ZPIV_TXMINT_GENERAL);
+                return false;
+            }
+
+            int outputIndex = -1;
+            for (unsigned long i = 0; i < txMint.vout.size(); ++i) {
+                CTxOut out = txMint.vout[i];
+                if (out.scriptPubKey.IsZerocoinMint()){
+                    libzerocoin::PublicCoin pubcoin(Params().Zerocoin_Params(false));
+                    CValidationState state;
+                    if (!TxOutToPublicCoin(out, pubcoin, state))
+                        return error("%s: extracting pubcoin from txout failed", __func__);
+
+                    if (pubcoin.getValue() == mint.GetValue()){
+                        outputIndex = i;
+                        break;
+                    }
+                }
+            }
+
+            if (outputIndex == -1) {
+                receipt.SetStatus(_("Pubcoin not found in mint tx"), ZPIV_TXMINT_GENERAL);
+                return false;
+            }
+
+            mint.SetOutputIndex(outputIndex);
+            CTxIn in;
+            if(!ZPIVModule::createInput(in, mint, hashTxOut)){
+                receipt.SetStatus(_("Cannot create public spend input"), ZPIV_TXMINT_GENERAL);
+                return false;
+            }
+            vin.emplace_back(in);
+            receipt.AddSpend(CZerocoinSpend(mint.GetSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(), 0));
+        }
+        break;
+    }
+
+    if (nLockAttempts == 100) {
+        LogPrintf("%s : could not get lock on cs_spendcache\n", __func__);
+        receipt.SetStatus(_("could not get lock on cs_spendcache"), ZPIV_TXMINT_GENERAL);
+        return false;
+    }
+
+    receipt.SetStatus(_("Spend Valid"), ZPIV_SPEND_OKAY); // Everything okay
+
+    return true;
+}
+
+bool CWallet::CreateZerocoinSpendTransaction(
+        CAmount nValue,
+        CWalletTx& wtxNew,
+        CReserveKey& reserveKey,
+        CZerocoinSpendReceipt& receipt,
+        vector<CZerocoinMint>& vSelectedMints,
+        vector<CDeterministicMint>& vNewMints,
+        bool fMintChange,
+        bool fMinimizeChange,
+        CBitcoinAddress* address,
+        bool isPublicSpend)
 {
     // Check available funds
     int nStatus = ZPIV_TRX_FUNDS_PROBLEMS;
@@ -4843,10 +4948,11 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, 
     CAmount nValueSelected = 0;
     int nCoinsReturned = 0; // Number of coins returned in change from function below (for debug)
     int nNeededSpends = 0;  // Number of spends which would be needed if selection failed
-    const int nMaxSpends = Params().Zerocoin_MaxSpendsPerTransaction(); // Maximum possible spends for one zPIV transaction
+    const int nMaxSpends = Params().Zerocoin_MaxPublicSpendsPerTransaction(); // Maximum possible spends for one zPIV public spend transaction
     vector<CMintMeta> vMintsToFetch;
     if (vSelectedMints.empty()) {
-        setMints = zpivTracker->ListMints(true, true, true); // need to find mints to spend
+        //  All of the zPIV used in the public coin spend are mature by default (everything is public now.. no need to wait for any accumulation)
+        setMints = zpivTracker->ListMints(true, false, true, true); // need to find mints to spend
         if(setMints.empty()) {
             receipt.SetStatus(_("Failed to find Zerocoins in wallet.dat"), nStatus);
             return false;
@@ -4907,7 +5013,7 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, 
         uint256 hashBlock;
         bool fArchive = false;
         if (!GetTransaction(mint.GetTxHash(), txMint, hashBlock)) {
-            receipt.SetStatus(_("Unable to find transaction containing mint"), nStatus);
+            receipt.SetStatus(strprintf(_("Unable to find transaction containing mint, txHash: %s"), mint.GetTxHash().GetHex()), nStatus);
             fArchive = true;
         } else if (mapBlockIndex.count(hashBlock) < 1) {
             receipt.SetStatus(_("Mint did not make it into blockchain"), nStatus);
@@ -4935,10 +5041,12 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, 
         return false;
     }
 
-    if ((static_cast<int>(vSelectedMints.size()) > Params().Zerocoin_MaxSpendsPerTransaction())) {
+
+    if (static_cast<int>(vSelectedMints.size()) > nMaxSpends) {
         receipt.SetStatus(_("Failed to find coin set amongst held coins with less than maxNumber of Spends"), nStatus);
         return false;
     }
+
 
     // Create change if needed
     nStatus = ZPIV_TRX_CHANGE;
@@ -5011,8 +5119,15 @@ bool CWallet::CreateZerocoinSpendTransaction(CAmount nValue, CWalletTx& wtxNew, 
 
             //add all of the mints to the transaction as inputs
             std::vector<CTxIn> vin;
-            if (!MintsToInputVector(mapSelectedMints, hashTxOut, vin, receipt, libzerocoin::SpendType::SPEND, pindexCheckpoint))
-                return false;
+            if (isPublicSpend) {
+                if (!MintsToInputVectorPublicSpend(mapSelectedMints, hashTxOut, vin, receipt,
+                                                   libzerocoin::SpendType::SPEND, pindexCheckpoint))
+                    return false;
+            } else {
+                if (!MintsToInputVector(mapSelectedMints, hashTxOut, vin, receipt,
+                                                   libzerocoin::SpendType::SPEND, pindexCheckpoint))
+                    return false;
+            }
             txNew.vin = vin;
 
             // Limit size
@@ -5318,7 +5433,7 @@ string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, vector<CDetermin
     return "";
 }
 
-bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vMintsSelected, bool fMintChange, bool fMinimizeChange, CBitcoinAddress* addressTo)
+bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, vector<CZerocoinMint>& vMintsSelected, bool fMintChange, bool fMinimizeChange, CBitcoinAddress* addressTo, bool isPublicSpend)
 {
     // Default: assume something goes wrong. Depending on the problem this gets more specific below
     int nStatus = ZPIV_SPEND_ERROR;
@@ -5330,7 +5445,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
 
     CReserveKey reserveKey(this);
     vector<CDeterministicMint> vNewMints;
-    if (!CreateZerocoinSpendTransaction(nAmount, wtxNew, reserveKey, receipt, vMintsSelected, vNewMints, fMintChange, fMinimizeChange, addressTo)) {
+    if (!CreateZerocoinSpendTransaction(nAmount, wtxNew, reserveKey, receipt, vMintsSelected, vNewMints, fMintChange, fMinimizeChange, addressTo, isPublicSpend)) {
         return false;
     }
 

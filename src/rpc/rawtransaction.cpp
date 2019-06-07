@@ -991,4 +991,68 @@ UniValue createrawzerocoinstake(const UniValue& params, bool fHelp)
     return ret;
 
 }
+
+UniValue createrawzerocoinpublicspend(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 1 || params.size() > 2)
+        throw runtime_error(
+            "createrawzerocoinpublicspend mint_input \n"
+            "\nCreates raw zPIV public spend.\n" +
+            HelpRequiringPassphrase() + "\n"
+
+            "\nArguments:\n"
+            "1. mint_input      (hex string, required) serial hash of the mint used as input\n"
+            "2. \"address\"     (string, optional, default=change) Send to specified address or to a new change address.\n"
+
+
+            "\nResult:\n"
+            "{\n"
+            "   \"hex\": \"xxx\",           (hex string) raw public spend signed transaction\n"
+            "}\n"
+            "\nExamples\n" +
+            HelpExampleCli("createrawzerocoinpublicspend", "0d8c16eee7737e3cc1e4e70dc006634182b175e039700931283b202715a0818f") +
+            HelpExampleRpc("createrawzerocoinpublicspend", "0d8c16eee7737e3cc1e4e70dc006634182b175e039700931283b202715a0818f"));
+
+
+    assert(pwalletMain != NULL);
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    std::string serial_hash = params[0].get_str();
+    if (!IsHex(serial_hash))
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex serial hash");
+
+    std::string address_str = "";
+    CBitcoinAddress address;
+    CBitcoinAddress* addr_ptr = nullptr;
+    if (params.size() > 1) {
+        address_str = params[1].get_str();
+        address = CBitcoinAddress(address_str);
+        if(!address.IsValid())
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
+        addr_ptr = &address;
+    }
+
+    EnsureWalletIsUnlocked();
+
+    uint256 hashSerial(serial_hash);
+    CZerocoinMint input_mint;
+    if (!pwalletMain->GetMint(hashSerial, input_mint)) {
+        std::string strErr = "Failed to fetch mint associated with serial hash " + serial_hash;
+        throw JSONRPCError(RPC_WALLET_ERROR, strErr);
+    }
+    CAmount nAmount = input_mint.GetDenominationAsAmount();
+    vector<CZerocoinMint> vMintsSelected = vector<CZerocoinMint>(1,input_mint);
+
+    // create the spend
+    CWalletTx rawTx;
+    CZerocoinSpendReceipt receipt;
+    CReserveKey reserveKey(pwalletMain);
+    vector<CDeterministicMint> vNewMints;
+    if (!pwalletMain->CreateZerocoinSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, false, true, addr_ptr, true))
+        throw JSONRPCError(RPC_WALLET_ERROR, receipt.GetStatusMessage());
+
+    // output the raw transaction
+    return EncodeHexTx(rawTx);
+}
 #endif
+

@@ -109,6 +109,8 @@ PrivacyDialog::PrivacyDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystem
     if(!settings.contains("fDenomsSectionMinimized"))
         settings.setValue("fDenomsSectionMinimized", true);
     minimizeDenomsSection(settings.value("fDenomsSectionMinimized").toBool());
+
+    ui->checkBoxMintChange->setVisible(false);
 }
 
 PrivacyDialog::~PrivacyDialog()
@@ -343,7 +345,7 @@ void PrivacyDialog::sendzPIV()
     }
 
     // Convert change to zPIV
-    bool fMintChange = ui->checkBoxMintChange->isChecked();
+    bool fMintChange = false;// ui->checkBoxMintChange->isChecked();
 
     // Persist minimize change setting
     fMinimizeChange = ui->checkBoxMinimizeChange->isChecked();
@@ -438,6 +440,7 @@ void PrivacyDialog::sendzPIV()
 
     // Display errors during spend
     if (!fSuccess) {
+        /*
         int nNeededSpends = receipt.GetNeededSpends(); // Number of spends we would need for this transaction
         const int nMaxSpends = Params().Zerocoin_MaxSpendsPerTransaction(); // Maximum possible spends for one zPIV transaction
         if (nNeededSpends > nMaxSpends) {
@@ -447,9 +450,10 @@ void PrivacyDialog::sendzPIV()
             ui->TEMintStatus->setPlainText(tr("Spend Zerocoin failed with status = ") +QString::number(receipt.GetStatus(), 10) + "\n" + "Message: " + QString::fromStdString(strStatusMessage.toStdString()));
         }
         else {
-            QMessageBox::warning(this, tr("Spend Zerocoin"), receipt.GetStatusMessage().c_str(), QMessageBox::Ok, QMessageBox::Ok);
-            ui->TEMintStatus->setPlainText(tr("Spend Zerocoin failed with status = ") +QString::number(receipt.GetStatus(), 10) + "\n" + "Message: " + QString::fromStdString(receipt.GetStatusMessage()));
-        }
+         */
+        QMessageBox::warning(this, tr("Spend Zerocoin"), receipt.GetStatusMessage().c_str(), QMessageBox::Ok, QMessageBox::Ok);
+        ui->TEMintStatus->setPlainText(tr("Spend Zerocoin failed with status = ") +QString::number(receipt.GetStatus(), 10) + "\n" + "Message: " + QString::fromStdString(receipt.GetStatusMessage()));
+        //}
         ui->zPIVpayAmount->setFocus();
         ui->TEMintStatus->repaint();
         ui->TEMintStatus->verticalScrollBar()->setValue(ui->TEMintStatus->verticalScrollBar()->maximum()); // Automatically scroll to end of text
