@@ -35,6 +35,8 @@ public:
         this->version = COIN_SPEND_PUBLIC_SPEND_VERSION;
     };
 
+    ~PublicCoinSpend(){};
+
     template <typename Stream>
     PublicCoinSpend(
             libzerocoin::ZerocoinParams* params,
