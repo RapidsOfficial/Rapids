@@ -46,13 +46,11 @@ Visit the [Transifex Signup](https://www.transifex.com/signup/) page to create a
 You can find the PIVX translation project at [https://www.transifex.com/pivx-project/pivx-project-translations/](https://www.transifex.com/pivx-project/pivx-project-translations/).
 
 ### Installing the Transifex client command-line tool
-The client it used to fetch updated translations. If you are having problems, or need more details, see [http://docs.transifex.com/developer/client/setup](http://docs.transifex.com/developer/client/setup)
-
-**For Linux and Mac**
+The client is used to fetch updated translations. If you are having problems, or need more details, see [https://docs.transifex.com/client/installing-the-client](https://docs.transifex.com/client/installing-the-client)
 
 `pip install transifex-client`
 
-Setup your transifex client config as follows. Please *ignore the token field*.
+Setup your Transifex client config as follows. Please *ignore the token field*.
 
 ```ini
 nano ~/.transifexrc
@@ -64,21 +62,21 @@ token =
 username = USERNAME
 ```
 
-**For Windows**
-
-Please see [http://docs.transifex.com/developer/client/setup#windows](http://docs.transifex.com/developer/client/setup#windows) for details on installation.
-
-The Transifex PIVX project config file is included as part of the repo. It can be found at `.tx/config`, however you shouldn’t need change anything.
+The Transifex PIVX project config file is included as part of the repo. It can be found at `.tx/config`, however you shouldn’t need to change anything.
 
 ### Synchronising translations
 To assist in updating translations, we have created a script to help.
 
 1. `python contrib/devtools/update-translations.py`
-2. Update `src/qt/pivx_locale.qrc` manually or via
-   `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(pivx_\(.*\)\).ts/<file alias="\2">locale\/\1.qm<\/file>/'`
-3. Update `src/Makefile.qt.include` manually or via
-   `ls src/qt/locale/*ts|xargs -n1 basename|sed 's/\(pivx_\(.*\)\).ts/  qt\/locale\/\1.ts \\/'`
-4. `git add` new translations from `src/qt/locale/`
+2. `git add` new translations from `src/qt/locale/`
+3. Update `src/qt/pivx_locale.qrc` manually or via
+```bash
+git ls-files src/qt/locale/*ts|xargs -n1 basename|sed 's/\(pivx_\(.*\)\).ts/<file alias="\2">locale\/\1.qm<\/file>/'
+```
+4. Update `src/Makefile.qt.include` manually or via
+```bash
+git ls-files src/qt/locale/*ts|xargs -n1 basename|sed 's/\(pivx_\(.*\)\).ts/  qt\/locale\/\1.ts \\/'
+```
 
 **Do not directly download translations** one by one from the Transifex website, as we do a few post-processing steps before committing the translations.
 
@@ -106,6 +104,6 @@ To create a new language template, you will need to edit the languages manifest 
 **Note:** that the language translation file **must end in `.qm`** (the compiled extension), and not `.ts`.
 
 ### Questions and general assistance
-The PIVX Core translation maintainers include *Fuzzbawls and s3v3nh4cks*. You can find them, and others, in the [PIVX Discord](https://discord.pivx.org).
+The PIVX Core translation maintainers include *Fuzzbawls*. You can find them, and others, in the [PIVX Discord](https://discord.pivx.org).
 
 Announcements will be posted during application pre-releases to notify translators to check for updates.
