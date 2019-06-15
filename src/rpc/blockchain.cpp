@@ -1301,7 +1301,7 @@ void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int
 UniValue getmintsinblocks(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() != 3)
         throw runtime_error(
-                "getmintsinblocks <height> <range> [coinDenomination]\n"
+                "getmintsinblocks height range coinDenomination\n"
                 "\nReturns the number of mints of a certain denomination"
                 "\noccurred in blocks [height, height+1, height+2, ..., height+range-1]\n"
 
@@ -1354,7 +1354,7 @@ UniValue getmintsinblocks(const UniValue& params, bool fHelp) {
 UniValue getserials(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() < 2 || params.size() > 3)
         throw runtime_error(
-            "getserials <height> <range> [fVerbose]\n"
+            "getserials height range ( fVerbose )\n"
             "\nLook the inputs of any tx in a range of blocks and returns the serial numbers for any coinspend.\n"
 
             "\nArguments:\n"
@@ -1461,7 +1461,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
 UniValue getblockindexstats(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() < 2 || params.size() > 3)
         throw runtime_error(
-                "getblockindexstats <height> <range> [fFeeOnly]\n"
+                "getblockindexstats height range ( fFeeOnly )\n"
                 "\nReturns aggregated BlockIndex data for blocks "
                 "\n[height, height+1, height+2, ..., height+range-1]\n"
 
