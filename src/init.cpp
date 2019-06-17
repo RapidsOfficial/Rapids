@@ -520,6 +520,7 @@ std::string HelpMessage(HelpMessageMode mode)
         strUsage += HelpMessageOpt("-relaypriority", strprintf(_("Require high priority for relaying free or low-fee transactions (default:%u)"), 1));
         strUsage += HelpMessageOpt("-maxsigcachesize=<n>", strprintf(_("Limit size of signature cache to <n> entries (default: %u)"), 50000));
     }
+    strUsage += HelpMessageOpt("-maxtipage=<n>", strprintf("Maximum tip age in seconds to consider node in initial block download (default: %u)", DEFAULT_MAX_TIP_AGE));
     strUsage += HelpMessageOpt("-minrelaytxfee=<amt>", strprintf(_("Fees (in PIV/Kb) smaller than this are considered zero fee for relaying (default: %s)"), FormatMoney(::minRelayTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-printtoconsole", strprintf(_("Send trace/debug info to console instead of debug.log file (default: %u)"), 0));
     if (GetBoolArg("-help-debug", false)) {
@@ -1018,6 +1019,8 @@ bool AppInit2()
             nLocalServices |= NODE_BLOOM;
 
     }
+
+    nMaxTipAge = GetArg("-maxtipage", DEFAULT_MAX_TIP_AGE);
 
     // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
 
@@ -2025,7 +2028,7 @@ bool AppInit2()
         // Run a thread to flush wallet periodically
         threadGroup.create_thread(boost::bind(&ThreadFlushWalletDB, boost::ref(pwalletMain->strWalletFile)));
 
-        if (GetBoolArg("-precompute", true)) {
+        if (GetBoolArg("-precompute", false)) {
             // Run a thread to precompute any zPIV spends
             threadGroup.create_thread(boost::bind(&ThreadPrecomputeSpends));
         }
