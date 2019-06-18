@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Copyright (c) 2015-2017 The Bitcoin Core developers
+# Copyright (c) 2015-2018 The Bitcoin Core developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 '''
@@ -86,7 +86,7 @@ def check_ELF_RELRO(executable):
         # This does not affect security: the permission flags of the GNU_RELRO program header are ignored, the PT_LOAD header determines the effective permissions.
         # However, the dynamic linker need to write to this area so these are RW.
         # Glibc itself takes care of mprotecting this area R after relocations are finished.
-        # See also http://permalink.gmane.org/gmane.comp.gnu.binutils/71347
+        # See also https://marc.info/?l=binutils&m=1498883354122353
         if typ == 'GNU_RELRO':
             have_gnu_relro = True
 
