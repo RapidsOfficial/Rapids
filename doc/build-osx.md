@@ -1,126 +1,210 @@
-Mac OS X Build Instructions and Notes
+macOS Build Instructions and Notes
 ====================================
-This guide will show you how to build pivxd (headless client) for OSX.
-
-Notes
------
-
-* Tested on OS X 10.7 through 10.10 on 64-bit Intel processors only.
-
-* All of the commands should be executed in a Terminal application. The
-built-in one is located in `/Applications/Utilities`.
+The commands in this guide should be executed in a Terminal application.
+The built-in one is located in `/Applications/Utilities/Terminal.app`.
 
 Preparation
 -----------
+Install the macOS command line tools:
 
-You need to install XCode with all the options checked so that the compiler
-and everything is available in /usr not just /Developer. XCode should be
-available on your OS X installation media, but if not, you can get the
-current version from https://developer.apple.com/xcode/. If you install
-Xcode 4.3 or later, you'll need to install its command line tools. This can
-be done in `Xcode > Preferences > Downloads > Components` and generally must
-be re-done or updated every time Xcode is updated.
+`xcode-select --install`
 
-There's also an assumption that you already have `git` installed. If
-not, it's the path of least resistance to install [Github for Mac](https://mac.github.com/)
-(OS X 10.7+) or
-[Git for OS X](https://code.google.com/p/git-osx-installer/). It is also
-available via Homebrew.
+When the popup appears, click `Install`.
 
-You will also need to install [Homebrew](http://brew.sh) in order to install library
-dependencies.
+Then install [Homebrew](https://brew.sh).
 
-The installation of the actual dependencies is covered in the Instructions
-sections below.
-
-Instructions: Homebrew
+Dependencies
 ----------------------
 
-#### Install dependencies using Homebrew
+    brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf python3 qt5 zmq libevent qrencode gmp
 
-        brew install autoconf automake berkeley-db4 libtool boost miniupnpc openssl pkg-config protobuf qt5 zmq libevent
+See [dependencies.md](dependencies.md) for a complete overview.
 
-### Building `pivxd`
+If you want to build the disk image with `make deploy` (.dmg / optional), you need RSVG:
 
-1. Clone the github tree to get the source code and go into the directory.
+    brew install librsvg
 
-        git clone https://github.com/PIVX-Project/PIVX.git
-        cd PIVX
+Berkeley DB
+-----------
+It is recommended to use Berkeley DB 4.8. If you have to build it yourself,
+you can use [the installation script included in contrib/](/contrib/install_db4.sh)
+like so:
+
+```shell
+./contrib/install_db4.sh .
+```
+
+from the root of the repository.
+
+**Note**: You only need Berkeley DB if the wallet is enabled (see [*Disable-wallet mode*](/doc/build-osx.md#disable-wallet-mode)).
+
+Build PIVX Core
+------------------------
+
+1. Clone the PIVX Core source code:
+
+        git clone https://github.com/pivx-project/pivx
+        cd pivx
 
 2.  Make the Homebrew OpenSSL headers visible to the configure script  (do ```brew info openssl``` to find out why this is necessary, or if you use Homebrew with installation folders different from the default).
 
         export LDFLAGS+=-L/usr/local/opt/openssl/lib
         export CPPFLAGS+=-I/usr/local/opt/openssl/include
 
-3.  Build pivxd:
+3.  Build PIVX Core:
 
         ./autogen.sh
-        ./configure --with-gui=qt5
+        ./configure
         make
 
-4.  It is also a good idea to build and run the unit tests:
+4.  It is recommended to build and run the unit tests:
 
         make check
 
-5.  (Optional) You can also install pivxd to your path:
+5.  You can also create a .dmg that contains the .app bundle (optional):
 
-        make install
+        make deploy
 
-Use Qt Creator as IDE
-------------------------
-You can use Qt Creator as IDE, for debugging and for manipulating forms, etc.
-Download Qt Creator from http://www.qt.io/download/. Download the "community edition" and only install Qt Creator (uncheck the rest during the installation process).
+Disable-wallet mode
+--------------------
+**Note:** This functionality is not yet completely implemented, and compilation using the below option will currently fail.
 
-1. Make sure you installed everything through homebrew mentioned above
-2. Do a proper ./configure --with-gui=qt5 --enable-debug
-3. In Qt Creator do "New Project" -> Import Project -> Import Existing Project
-4. Enter "pivx-qt" as project name, enter src/qt as location
-5. Leave the file selection as it is
-6. Confirm the "summary page"
-7. In the "Projects" tab select "Manage Kits..."
-8. Select the default "Desktop" kit and select "Clang (x86 64bit in /usr/bin)" as compiler
-9. Select LLDB as debugger (you might need to set the path to your installtion)
-10. Start debugging with Qt Creator
+When the intention is to run only a P2P node without a wallet, PIVX Core may be compiled in
+disable-wallet mode with:
 
-Creating a release build
-------------------------
-You can ignore this section if you are building `pivxd` for your own use.
+    ./configure --disable-wallet
 
-pivxd/pivx-cli binaries are not included in the pivx-Qt.app bundle.
-
-If you are building `pivxd` or `pivx-qt` for others, your build machine should be set up
-as follows for maximum compatibility:
-
-All dependencies should be compiled with these flags:
-
- -mmacosx-version-min=10.7
- -arch x86_64
- -isysroot $(xcode-select --print-path)/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.7.sdk
-
-Once dependencies are compiled, see release-process.md for how the PIVX-Qt.app
-bundle is packaged and signed to create the .dmg disk image that is distributed.
+In this case there is no dependency on Berkeley DB 4.8.
 
 Running
 -------
 
-It's now available at `./pivxd`, provided that you are still in the `src`
-directory. We have to first create the RPC configuration file, though.
+PIVX Core is now available at `./src/pivxd`
 
-Run `./pivxd` to get the filename where it should be put, or just try these
-commands:
+Before running, you may create an empty configuration file:
 
-    echo -e "rpcuser=pivxrpc\nrpcpassword=$(xxd -l 16 -p /dev/urandom)" > "/Users/${USER}/Library/Application Support/PIVX/pivx.conf"
+    mkdir -p "/Users/${USER}/Library/Application Support/PIVX"
+
+    touch "/Users/${USER}/Library/Application Support/PIVX/pivx.conf"
+
     chmod 600 "/Users/${USER}/Library/Application Support/PIVX/pivx.conf"
 
-The next time you run it, it will start downloading the blockchain, but it won't
-output anything while it's doing this. This process may take several hours;
-you can monitor its process by looking at the debug.log file, like this:
+The first time you run pivxd, it will start downloading the blockchain. This process could take many hours, or even days on slower than average systems.
+
+You can monitor the download process by looking at the debug.log file:
 
     tail -f $HOME/Library/Application\ Support/PIVX/debug.log
 
 Other commands:
 -------
 
-    ./pivxd -daemon # to start the pivx daemon.
-    ./pivx-cli --help  # for a list of command-line options.
-    ./pivx-cli help    # When the daemon is running, to get a list of RPC commands
+    ./src/pivxd -daemon # Starts the pivx daemon.
+    ./src/pivx-cli --help # Outputs a list of command-line options.
+    ./src/pivx-cli help # Outputs a list of RPC commands when the daemon is running.
+
+Notes
+-----
+
+* Tested on OS X 10.10 Yosemite through macOS 10.13 High Sierra on 64-bit Intel processors only.
+
+* Building with downloaded Qt binaries is not officially supported. See the notes in [#7714](https://github.com/bitcoin/bitcoin/issues/7714)
+
+Deterministic macOS DMG Notes
+-----------------------------
+
+Working macOS DMGs are created in Linux by combining a recent clang,
+the Apple binutils (ld, ar, etc) and DMG authoring tools.
+
+Apple uses clang extensively for development and has upstreamed the necessary
+functionality so that a vanilla clang can take advantage. It supports the use
+of -F, -target, -mmacosx-version-min, and --sysroot, which are all necessary
+when building for macOS.
+
+Apple's version of binutils (called cctools) contains lots of functionality
+missing in the FSF's binutils. In addition to extra linker options for
+frameworks and sysroots, several other tools are needed as well such as
+install_name_tool, lipo, and nmedit. These do not build under linux, so they
+have been patched to do so. The work here was used as a starting point:
+[mingwandroid/toolchain4](https://github.com/mingwandroid/toolchain4).
+
+In order to build a working toolchain, the following source packages are needed
+from Apple: cctools, dyld, and ld64.
+
+These tools inject timestamps by default, which produce non-deterministic
+binaries. The ZERO_AR_DATE environment variable is used to disable that.
+
+This version of cctools has been patched to use the current version of clang's
+headers and its libLTO.so rather than those from llvmgcc, as it was
+originally done in toolchain4.
+
+To complicate things further, all builds must target an Apple SDK. These SDKs
+are free to download, but not redistributable.
+To obtain it, register for a developer account, then download the [Xcode 7.3.1 dmg](https://developer.apple.com/devcenter/download.action?path=/Developer_Tools/Xcode_7.3.1/Xcode_7.3.1.dmg).
+
+This file is several gigabytes in size, but only a single directory inside is
+needed:
+```
+Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.11.sdk
+```
+
+Unfortunately, the usual linux tools (7zip, hpmount, loopback mount) are incapable of opening this file.
+To create a tarball suitable for Gitian input, there are two options:
+
+Using macOS, you can mount the dmg, and then create it with:
+```
+  $ hdiutil attach Xcode_7.3.1.dmg
+  $ tar -C /Volumes/Xcode/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/ -czf MacOSX10.11.sdk.tar.gz MacOSX10.11.sdk
+```
+
+Alternatively, you can use 7zip and SleuthKit to extract the files one by one.
+The script contrib/macdeploy/extract-osx-sdk.sh automates this. First ensure
+the dmg file is in the current directory, and then run the script. You may wish
+to delete the intermediate 5.hfs file and MacOSX10.11.sdk (the directory) when
+you've confirmed the extraction succeeded.
+
+```bash
+apt-get install p7zip-full sleuthkit
+contrib/macdeploy/extract-osx-sdk.sh
+rm -rf 5.hfs MacOSX10.11.sdk
+```
+
+The Gitian descriptors build 2 sets of files: Linux tools, then Apple binaries
+which are created using these tools. The build process has been designed to
+avoid including the SDK's files in Gitian's outputs. All interim tarballs are
+fully deterministic and may be freely redistributed.
+
+genisoimage is used to create the initial DMG. It is not deterministic as-is,
+so it has been patched. A system genisoimage will work fine, but it will not
+be deterministic because the file-order will change between invocations.
+The patch can be seen here:  [theuni/osx-cross-depends](https://raw.githubusercontent.com/theuni/osx-cross-depends/master/patches/cdrtools/genisoimage.diff).
+No effort was made to fix this cleanly, so it likely leaks memory badly. But
+it's only used for a single invocation, so that's no real concern.
+
+genisoimage cannot compress DMGs, so afterwards, the 'dmg' tool from the
+libdmg-hfsplus project is used to compress it. There are several bugs in this
+tool and its maintainer has seemingly abandoned the project. It has been forked
+and is available (with fixes) here: [theuni/libdmg-hfsplus](https://github.com/theuni/libdmg-hfsplus).
+
+The 'dmg' tool has the ability to create DMGs from scratch as well, but this
+functionality is broken. Only the compression feature is currently used.
+Ideally, the creation could be fixed and genisoimage would no longer be necessary.
+
+Background images and other features can be added to DMG files by inserting a
+.DS_Store before creation. This is generated by the script
+contrib/macdeploy/custom_dsstore.py.
+
+As of OS X 10.9 Mavericks, using an Apple-blessed key to sign binaries is a
+requirement in order to satisfy the new Gatekeeper requirements. Because this
+private key cannot be shared, we'll have to be a bit creative in order for the
+build process to remain somewhat deterministic. Here's how it works:
+
+- Builders use Gitian to create an unsigned release. This outputs an unsigned
+  dmg which users may choose to bless and run. It also outputs an unsigned app
+  structure in the form of a tarball, which also contains all of the tools
+  that have been previously (deterministically) built in order to create a
+  final dmg.
+- The Apple keyholder uses this unsigned app to create a detached signature,
+  using the script that is also included there. Detached signatures are available from this [repository](https://github.com/bitcoin-core/bitcoin-detached-sigs).
+- Builders feed the unsigned app + detached signature back into Gitian. It
+  uses the pre-built tools to recombine the pieces into a deterministic dmg.
+
