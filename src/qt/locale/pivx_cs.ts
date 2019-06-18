@@ -1423,53 +1423,6 @@ MultiSend: %1</translation>
     </message>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Konfigurace obfuskace</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Základní ochrana soukromí</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Vysoká ochrana soukromí</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Maximální ochrana soukromí</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Vyberte úrpvěň ochrany soukromí</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Použí 2 oddělené masternody k promíchání prostředků až do 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Použít 16 oddělených masternodů</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Tato možnost je nejrychleší a bude stát zhruba ~0.025 PIV pro anonymizaci 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Toto je nejpomalejší a nejvíce bezpečná volba. Použití maximalní anonymity bude stát</translation>
-    </message>
-    <message>
-        <source>0.1 PIV per 10000 PIV you anonymize.</source>
-        <translation>0.1 PIV za 10000 PIV anonymizujete.</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Konfigurace obufuskace</translation>
-    </message>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1651,14 +1604,6 @@ MultiSend: %1</translation>
         <translation>Reset</translation>
     </message>
     <message>
-        <source>Quantity:</source>
-        <translation>Množství:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Hodnota:</translation>
-    </message>
-    <message>
         <source>Choose previously used address</source>
         <translation>Vyberte již dříve použitou adresu</translation>
     </message>
@@ -1713,14 +1658,6 @@ MultiSend: %1</translation>
     <message>
         <source>Change:</source>
         <translation>Změna:</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Kopíroat množstí</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopírovat hodnotu</translation>
     </message>
     </context>
 <context>
@@ -2432,28 +2369,12 @@ MultiSend: %1</translation>
         <translation>Toto je experimentální software.</translation>
     </message>
     <message>
-        <source>This is not a Masternode.</source>
-        <translation>Toto není Masternode.</translation>
-    </message>
-    <message>
         <source>Transaction amount too small</source>
         <translation>Hodnota transakce je příliš malá</translation>
     </message>
     <message>
         <source>Transaction amounts must be positive</source>
         <translation>Hodnota transakce musí být kladná</translation>
-    </message>
-    <message>
-        <source>Transaction created successfully.</source>
-        <translation>Transakce byla uspěšně vytvořena.</translation>
-    </message>
-    <message>
-        <source>Transaction fees are too high.</source>
-        <translation>Poplatek za transakci je příliš vysoký.</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>Transakce není validní.</translation>
     </message>
     <message>
         <source>Transaction too large for fee policy</source>
@@ -2466,10 +2387,6 @@ MultiSend: %1</translation>
     <message>
         <source>Unknown network specified in -onlynet: '%s'</source>
         <translation>Neznámá síť uvedená v -onlynet: '%s'</translation>
-    </message>
-    <message>
-        <source>Unknown state: id = %u</source>
-        <translation>Neznámý stav: id = %u</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -2486,10 +2403,6 @@ MultiSend: %1</translation>
     <message>
         <source>Verifying wallet...</source>
         <translation>Ověřování peněženky...</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>Peněženka je zamčená</translation>
     </message>
     <message>
         <source>Wallet options:</source>

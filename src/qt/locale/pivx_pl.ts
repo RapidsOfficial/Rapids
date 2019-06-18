@@ -617,10 +617,6 @@ Użyj hasła składającego się z dziesięciu lub więcej losowych znaków lub 
         <source>&amp;Command-line options</source>
         <translation>&amp;Opcje Command-line</translation>
     </message>
-    <message numerus="yes">
-        <source>Processed %n blocks of transaction history.</source>
-        <translation><numerusform>Przetworzono %n blok historii transakcji.</numerusform><numerusform>Przetworzono %n bloków historii transakcji.</numerusform><numerusform>Przetworzono %n bloków historii transakcji.</numerusform><numerusform>Przetworzono %n bloków historii transakcji.</numerusform></translation>
-    </message>
     <message>
         <source>Synchronizing additional data: %p%</source>
         <translation>Synchronizacja dodatkowych danych %p%</translation>
@@ -631,12 +627,11 @@ Użyj hasła składającego się z dziesięciu lub więcej losowych znaków lub 
     </message>
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt; for anonymization and staking only</source>
-        <translation>Portfel jest
-odszyfrowany i aktualnie odblokowany tylko do anonimizacji i stakingu</translation>
+        <translation>Portfel jest odszyfrowany i aktualnie odblokowany tylko do anonimizacji i stakingu</translation>
     </message>
     <message>
         <source>Tor is &lt;b&gt;enabled&lt;/b&gt;: %1</source>
-        <translation>Tor włączony %1</translation>
+        <translation>Tor &lt;b&gt;włączony&lt;/b&gt; %1</translation>
     </message>
     <message>
         <source>&amp;File</source>
@@ -660,7 +655,7 @@ odszyfrowany i aktualnie odblokowany tylko do anonimizacji i stakingu</translati
     </message>
     <message>
         <source>PIVX Core</source>
-        <translation>Rdzeń PIVX</translation>
+        <translation>PIVX Core</translation>
     </message>
     <message>
         <source>Send coins to a PIVX address</source>
@@ -750,10 +745,6 @@ odszyfrowany i aktualnie odblokowany tylko do anonimizacji i stakingu</translati
         <source>PIVX Core client</source>
         <translation>PIVX Core klient</translation>
     </message>
-    <message numerus="yes">
-        <source>%n active connection(s) to PIVX network</source>
-        <translation><numerusform>%n aktywne połączenie z siecią PIVX()</numerusform><numerusform>%n aktywnych połączeń z siecią PIVX()</numerusform><numerusform>%n aktywnych połączeń z siecią PIVX()</numerusform><numerusform>%n aktywnych połączeń z siecią PIVX()</numerusform></translation>
-    </message>
     <message>
         <source>Synchronizing with network...</source>
         <translation>Synchronizuję z siecią</translation>
@@ -774,25 +765,9 @@ odszyfrowany i aktualnie odblokowany tylko do anonimizacji i stakingu</translati
         <source>Up to date</source>
         <translation>Zaktualizowany</translation>
     </message>
-    <message numerus="yes">
-        <source>%n hour(s)</source>
-        <translation><numerusform>%n godzinę</numerusform><numerusform>%n godzin</numerusform><numerusform>%n godzin</numerusform><numerusform>%n godzin</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <source>%n day(s)</source>
-        <translation><numerusform>%n dzień</numerusform><numerusform>%n dni</numerusform><numerusform>%n dni</numerusform><numerusform>%n dni</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <source>%n week(s)</source>
-        <translation><numerusform>%n tydzień</numerusform><numerusform>%n tygodni</numerusform><numerusform>%n tygodni</numerusform><numerusform>%n tygodni</numerusform></translation>
-    </message>
     <message>
         <source>%1 and %2</source>
         <translation>%1 i %2</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n year(s)</source>
-        <translation><numerusform>%n rok</numerusform><numerusform>%n lat</numerusform><numerusform>%n lat</numerusform><numerusform>%n lat</numerusform></translation>
     </message>
     <message>
         <source>Catching up...</source>
@@ -872,11 +847,11 @@ MultiWysyłlka: %1</translation>
     </message>
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
-        <translation>Portfel jest zaszyfrowany i obecnie odblokowany</translation>
+        <translation>Portfel jest &lt;b&gt;zaszyfrowany&lt;/b&gt; i obecnie &lt;b&gt;odblokowany&lt;/b&gt;</translation>
     </message>
     <message>
         <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
-        <translation>Portfel jest zaszyfrowany i obecnie zablokowany</translation>
+        <translation>Portfel jest &lt;b&gt;zaszyfrowany&lt;/b&gt; i obecnie &lt;b&gt;zablokowany&lt;/b&gt;</translation>
     </message>
     <message>
         <source>A fatal error occurred. PIVX can no longer continue safely and will quit.</source>
@@ -1293,7 +1268,7 @@ MultiWysyłlka: %1</translation>
     </message>
     <message>
         <source>PIVX Core</source>
-        <translation>Rdzeń PIVX</translation>
+        <translation>PIVX Core</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
@@ -1309,7 +1284,7 @@ MultiWysyłlka: %1</translation>
     </message>
     <message>
         <source>Usage:</source>
-        <translation>użycie</translation>
+        <translation>użycie:</translation>
     </message>
     <message>
         <source>command-line options</source>
@@ -1368,7 +1343,7 @@ MultiWysyłlka: %1</translation>
     </message>
     <message>
         <source>PIVX Core</source>
-        <translation>Rdzeń PIVX</translation>
+        <translation>PIVX Core</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1399,7 +1374,7 @@ MultiWysyłlka: %1</translation>
     </message>
     <message>
         <source>Note: Status of your masternodes in local wallet can potentially be slightly incorrect.&lt;br /&gt;Always wait for wallet to sync additional data and then double check from another node&lt;br /&gt;if your node should be running but you still see "MISSING" in "Status" field.</source>
-        <translation>Uwaga: Stan twoich masternodów w lokalnym portfelu może być nieco niepoprawny. Zawsze czekaj, aż portfel zsynchronizuje dodatkowe dane, a następnie sprawdź ponownie od innego węzła, w którym powinien działać twój węzeł, ale nadal widzisz komunikat "BRAK" w polu "Stan".</translation>
+        <translation>Uwaga: Stan twoich masternodów w lokalnym portfelu może być nieco niepoprawny. &lt;br /&gt;Zawsze czekaj, aż portfel zsynchronizuje dodatkowe dane, a następnie sprawdź ponownie od innego węzła&lt;br /&gt;, w którym powinien działać twój węzeł, ale nadal widzisz komunikat "BRAK" w polu "Stan".</translation>
     </message>
     <message>
         <source>Alias</source>
@@ -1541,7 +1516,7 @@ MultiSend will not be activated unless you have clicked Activate</source>
     </message>
     <message>
         <source>Percentage of stake to send</source>
-        <translation>Procent staku do wysłania</translation>
+        <translation>Procent stake do wysłania</translation>
     </message>
     <message>
         <source>Percentage:</source>
@@ -1844,73 +1819,6 @@ Please be patient after clicking import.</source>
     </message>
 </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Skonfiguruj Obfuskację</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Podstawowa prywatność</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Wysoka prywatność</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Maksymalna prywatność</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Proszę wybrać poziom prywatności</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Użyj 2 oddzielnych masternodów, aby wymieszać fundusze od 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Użyj 8 oddzielnych masternodów, aby wymieszać fundusze od 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Użyj 16 oddzielnych masternode</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Ta opcja jest najszybsza, najmniej bezpieczna i kosztuje około 0,025 PIV, aby anonimizować 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Ta opcja jest wolniejsza, bezpieczniejsza i kosztuje około 0,05 PIV, aby anonimizować 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Jest to najwolniejsza i najbezpieczniejsza opcja. Korzystanie z maksymalnej anonimowości będzie kosztować</translation>
-    </message>
-    <message>
-        <source>0.1 PIV per 10000 PIV you anonymize.</source>
-        <translation>anonimizujesz 10000 PIV za 0,1 PIV</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Skonfiguruj Zaciemnianie</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Zaciemnianie zostało z powodzeniem ustawione na podstawową wartość (%1 i 2 rundy). Możesz to zmienić w dowolnym momencie, otwierając ekran konfiguracji PIVX.</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Zaciemnianie zostało z powodzeniem ustawiona na wysoką wartość (%1 i 8 rund). Możesz to zmienić w dowolnym momencie, otwierając ekran konfiguracji PIVX.</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Zaciemnianie zostało z powodzeniem ustawione na makszmalną wartość (%1 i 16 rund). Możesz to zmienić w dowolnym momencie, otwierając ekran konfiguracji PIVX.</translation>
-    </message>
-</context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -2067,7 +1975,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations </translation>
     </message>
     <message>
         <source>Stake split threshold:</source>
-        <translation>Próg podziału stawki -stake- :</translation>
+        <translation>Próg podziału stawki 'stake' :</translation>
     </message>
     <message>
         <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
@@ -2122,10 +2030,6 @@ https://www.transifex.com/pivx-project/pivx-project-translations </translation>
         <translation>Motyw interfejsu użytkownika:</translation>
     </message>
     <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>&amp;Pokaż wartości w:</translation>
-    </message>
-    <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
         <translation>Nagrody ze stakingu lub masternode, które nie są jeszcze dojrzałe</translation>
     </message>
@@ -2139,7 +2043,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations </translation>
     </message>
     <message>
         <source>Hide orphan stakes in transaction lists</source>
-        <translation>Ukryj osierocone stawki w liście tranzakcji</translation>
+        <translation>Ukryj osierocone stakes w liście tranzakcji</translation>
     </message>
     <message>
         <source>Hide orphan stakes</source>
@@ -2282,7 +2186,7 @@ Niedojrzały: potwierdzony, ale mniej niż 1 mint o tym samym nominale po wybici
     </message>
     <message>
         <source>OVERVIEW</source>
-        <translation>PRZEGLĄD</translation>
+        <translation>PODSUMOWANIE</translation>
     </message>
     <message>
         <source>Combined Balance (including unconfirmed and immature coins)</source>
@@ -2310,7 +2214,7 @@ Niedojrzały: potwierdzony, ale mniej niż 1 mint o tym samym nominale po wybici
     </message>
     <message>
         <source>Watch-only:</source>
-        <translation>Watch-only:</translation>
+        <translation>Tylko do oglądania:</translation>
     </message>
     <message>
         <source>Your current balance in watch-only addresses</source>
@@ -2496,18 +2400,6 @@ Aby włączyć AutoMint zmień "enablezeromint = 0" na "enablezeromint = 1" w pl
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</source>
-        <translation>Do minting dostępne są monety, które są potwierdzone i niezablokowane dla Masternode.</translation>
-    </message>
-    <message>
-        <source>Available for Minting:</source>
-        <translation>Dostępne dla Minting:</translation>
-    </message>
-    <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset Zerocoin Wallet DB. Deletes transactions that did not make it into the blockchain.</source>
         <translation>Zresetuj DB portfela Zerocoin. Usuwa transakcje, które nie zostały wprowadzone do łańcucha blokowego.</translation>
     </message>
@@ -2516,24 +2408,12 @@ Aby włączyć AutoMint zmień "enablezeromint = 0" na "enablezeromint = 1" w pl
         <translation>Resetuj</translation>
     </message>
     <message>
-        <source>Coin Control...</source>
-        <translation>Kontrola monet ...</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Ilość:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Ilość:</translation>
-    </message>
-    <message>
         <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
         <translation>Ponownie przeszukaj cały blockchain dla Zerocoin, mint i ich meta-danych.</translation>
     </message>
     <message>
         <source>ReScan</source>
-        <translation>skanuje ponownie</translation>
+        <translation>Skanuj</translation>
     </message>
     <message>
         <source>Status and/or Mesages from the last Mint Action.</source>
@@ -2542,10 +2422,6 @@ Aby włączyć AutoMint zmień "enablezeromint = 0" na "enablezeromint = 1" w pl
     <message>
         <source>PRIVACY</source>
         <translation>PRYWATNOŚĆ</translation>
-    </message>
-    <message>
-        <source>Enter an amount of Piv to convert to zPIV</source>
-        <translation>Wprowadź ilość Piv, aby przekonwertować na zPIV</translation>
     </message>
     <message>
         <source>zPIV Control</source>
@@ -2864,24 +2740,10 @@ Aby zmienić procent (bez ponownego uruchamiania):
         <translation>Mint Stan: Ok</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Kopiuj ilość</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopiuj liczbę</translation>
-    </message>
-    <message>
         <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
 Please be patient...</source>
         <translation>Uruchamianie ResetMintZerocoin: ponowne skanowanie kompletnego blockchaina, to będzie wymagać do 30 minut w zależności od sprzętu.
 Proszę być cierpliwym...</translation>
-    </message>
-    <message>
-        <source>) needed.
-Maximum allowed: </source>
-        <translation>) potrzebne.
-Maksymalna dozwolona:</translation>
     </message>
     <message>
         <source>zPIV Spend #: </source>
@@ -2949,11 +2811,11 @@ Maksymalna dozwolona:</translation>
     </message>
     <message>
         <source>Denom. &lt;b&gt;1&lt;/b&gt;:</source>
-        <translation>Nominały  &lt;b&gt;1&lt;/b&gt; :</translation>
+        <translation>Nominały &lt;b&gt;1&lt;/b&gt; :</translation>
     </message>
     <message>
         <source>Denom. &lt;b&gt;5&lt;/b&gt;:</source>
-        <translation>Nominały 1 :&lt;b&gt;5&lt;/b&gt; :</translation>
+        <translation>Nominały &lt;b&gt;5&lt;/b&gt; :</translation>
     </message>
     <message>
         <source>Denom. &lt;b&gt;10&lt;/b&gt;:</source>
@@ -2978,32 +2840,6 @@ Maksymalna dozwolona:</translation>
     <message>
         <source>Denom. &lt;b&gt;5000&lt;/b&gt;:</source>
         <translation>Nominały &lt;b&gt;5000&lt;/b&gt; :</translation>
-    </message>
-    <message>
-        <source>Error: Your wallet is locked. Please enter the wallet passphrase first.</source>
-        <translation>Błąd: Twój portfel jest zablokowany. Najpierw wpisz hasło do portfela.</translation>
-    </message>
-    <message>
-        <source>Message: Enter an amount &gt; 0.</source>
-        <translation>Wiadomość: wprowadź kwotę &gt; 0.</translation>
-    </message>
-    <message>
-        <source>Minting </source>
-        <translation>Minting</translation>
-    </message>
-    <message>
-        <source>Successfully minted </source>
-        <translation>Pomyślnie minted -wybite-</translation>
-    </message>
-    <message>
-        <source> zPIV in </source>
-        <translation> zPIV w</translation>
-    </message>
-    <message>
-        <source> sec. Used denominations:
-</source>
-        <translation>sec. Używane nominały:
-</translation>
     </message>
     <message>
         <source>Duration: </source>
@@ -3056,23 +2892,8 @@ Maksymalna dozwolona:</translation>
         <translation>Nie udało się pobrać mint powiązanej z hashem szeregowym</translation>
     </message>
     <message>
-        <source>Too much inputs (</source>
-        <translation>Za dużo wejść (</translation>
-    </message>
-    <message>
-        <source>
-Either mint higher denominations (so fewer inputs are needed) or reduce the amount to spend.</source>
-        <translation>
-Albo wybierz wyższe nominały (potrzeba mniej wejść) albo zmniejsz kwotę do wydania.</translation>
-    </message>
-    <message>
         <source>Spend Zerocoin failed with status = </source>
         <translation>Wydawanie Zerocoin nie powiodło się ze stanem =</translation>
-    </message>
-    <message numerus="yes">
-        <source>PrivacyDialog</source>
-        <comment>Enter an amount of PIV to convert to zPIV</comment>
-        <translation><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform><numerusform>PrivacyDialog</numerusform></translation>
     </message>
     <message>
         <source>denomination: </source>
@@ -3216,7 +3037,7 @@ Proszę być cierpliwym...</translation>
     </message>
     <message>
         <source>BLOOM</source>
-        <translation>KWIAT</translation>
+        <translation>BLOOM</translation>
     </message>
     <message>
         <source>ZK_BLOOM</source>
@@ -3398,7 +3219,7 @@ Proszę być cierpliwym...</translation>
     </message>
     <message>
         <source>Banned peers</source>
-        <translation>Zbanowani rówieśnicy -peers-</translation>
+        <translation>Zbanowane peery -punkty sieciowe-</translation>
     </message>
     <message>
         <source>Select a peer to view detailed information.</source>
@@ -3721,7 +3542,7 @@ Proszę być cierpliwym...</translation>
     </message>
     <message>
         <source>RECEIVE</source>
-        <translation>OTRZYMASZ</translation>
+        <translation>OTRZYMAJ</translation>
     </message>
     <message>
         <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the PIVX network.</source>
@@ -3729,7 +3550,7 @@ Proszę być cierpliwym...</translation>
     </message>
     <message>
         <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
-        <translation>Użyj tego formularza do żądania płatności. Wszystkie pola są&lt;b&gt;opcionalne&lt;/b&gt;.</translation>
+        <translation>Użyj tego formularza do żądania płatności. Wszystkie pola są &lt;b&gt;opcionalne&lt;/b&gt;.</translation>
     </message>
     <message>
         <source>&amp;Label:</source>
@@ -4152,10 +3973,6 @@ Proszę być cierpliwym...</translation>
         <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
         <translation>Opłata %1 razy wyższa niż %2 za kB jest uważana za niesamowicie wysoką opłatę.</translation>
     </message>
-    <message numerus="yes">
-        <source>Estimated to begin confirmation within %n block(s).</source>
-        <translation><numerusform>Szacowany początek potwierdzenia za %n blok.</numerusform><numerusform>Szacowany początek potwierdzenia za %n bloków.</numerusform><numerusform>Szacowany początek potwierdzenia za %n bloków.</numerusform><numerusform>Szacowany początek potwierdzenia za %n bloków.</numerusform></translation>
-    </message>
     <message>
         <source>The recipient address is not valid, please recheck.</source>
         <translation>Adres odbiorcy jest nieprawidłowy, proszę ponownie sprawdzić.</translation>
@@ -4482,10 +4299,6 @@ Proszę być cierpliwym...</translation>
 </context>
 <context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Otwórz dla %n kolejnego bloku</numerusform><numerusform>Otwórz dla %n kolejnych bloków</numerusform><numerusform>Otwórz dla %n kolejnych bloków</numerusform><numerusform>Otwórz dla %n kolejnych bloków</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>Otwórz od %1</translation>
@@ -4546,10 +4359,6 @@ Proszę być cierpliwym...</translation>
         <source>, has not been successfully broadcast yet</source>
         <translation>, nie udało się jeszcze nadać</translation>
     </message>
-    <message numerus="yes">
-        <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, rozgłaszane przez %n węzeł</numerusform><numerusform>, rozgłaszane przez %n węzłów</numerusform><numerusform>, rozgłaszane przez %n węzłów</numerusform><numerusform>, rozgłaszane przez %n węzłów</numerusform></translation>
-    </message>
     <message>
         <source>Date</source>
         <translation>Data</translation>
@@ -4589,10 +4398,6 @@ Proszę być cierpliwym...</translation>
     <message>
         <source>Credit</source>
         <translation>Kredyt</translation>
-    </message>
-    <message numerus="yes">
-        <source>matures in %n more block(s)</source>
-        <translation><numerusform>dojrzewa po %n bloku</numerusform><numerusform>dojrzewa po %n blokach</numerusform><numerusform>dojrzewa po %n blokach</numerusform><numerusform>dojrzewa po %n blokach</numerusform></translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -4691,10 +4496,6 @@ Proszę być cierpliwym...</translation>
     <message>
         <source>Address</source>
         <translation>Adres</translation>
-    </message>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Otwórz dla %n kolejnego bloku</numerusform><numerusform>Otwórz dla %n kolejnych bloków</numerusform><numerusform>Otwórz dla %n kolejnych bloków</numerusform><numerusform>Otwórz dla %n kolejnych bloków</numerusform></translation>
     </message>
     <message>
         <source>Open until %1</source>
@@ -4802,7 +4603,7 @@ Proszę być cierpliwym...</translation>
     </message>
     <message>
         <source>Orphan Block - Generated but not accepted. This does not impact your holdings.</source>
-        <translation>Orphan Block - wygenerowany, ale nie akceptowany. To nie ma wpływu na twoje saldo.</translation>
+        <translation>Orphan Block - wygenerowany, ale nie zakceptowany. To nie ma wpływu na twoje saldo.</translation>
     </message>
     <message>
         <source>Payment to yourself</source>
@@ -4973,7 +4774,7 @@ Proszę być cierpliwym...</translation>
     </message>
     <message>
         <source>Watch-only</source>
-        <translation>Watch-only</translation>
+        <translation>Tylko do oglądania:</translation>
     </message>
     <message>
         <source>Date</source>
@@ -5222,10 +5023,6 @@ Proszę być cierpliwym...</translation>
         <translation>Opróżniaj dziennik z pamięci dysku co &lt;n&gt; megabajtów (domyślnie:%u)</translation>
     </message>
     <message>
-        <source>Found unconfirmed denominated outputs, will wait till they confirm to continue.</source>
-        <translation>Znaleziono niepotwierdzone wyniki, czekam na potwierdzenie żeby kontynuować.</translation>
-    </message>
-    <message>
         <source>If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)</source>
         <translation>Jeśli paytxfee nie jest ustawiony, należy ustawić odpowiednią opłatę, aby transakcje zaczęły potwierdzać średnio w n blokach (domyślnie:%u)</translation>
     </message>
@@ -5236,6 +5033,10 @@ Proszę być cierpliwym...</translation>
     <message>
         <source>Insufficient or insufficient confirmed funds, you might need to wait a few minutes and try again.</source>
         <translation>Niewystarczające lub niewystarczająco potwierdzone fundusze, może trzeba poczekać kilka minut i spróbować ponownie.</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
+        <translation>Nieprawidłowa kwota dla -maxtxfee=&lt;amount&gt;: „%s” (musi być co najmniej minimalną opłatą %s, aby zapobiec zablokowanym transakcjom)</translation>
     </message>
     <message>
         <source>Keep the specified amount available for spending at all times (default: 0)</source>
@@ -5250,12 +5051,136 @@ Proszę być cierpliwym...</translation>
         <translation>Utrzymuj pełny indeks transakcji, używany przez wywołanie getrawtransaction rpc (domyślnie:%u)</translation>
     </message>
     <message>
+        <source>Maximum average size of an index occurrence in the block spam filter (default: %u)</source>
+        <translation>Maksymalny średni rozmiar wystąpienia indeksu w filtrze blokującym spam (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Maximum size of data in data carrier transactions we relay and mine (default: %u)</source>
+        <translation>Maksymalny rozmiar danych w transakcjach nośników danych przekazywany i kopany (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Maximum size of the list of indexes in the block spam filter (default: %u)</source>
+        <translation>Maksymalny rozmiar listy indeksów w blokowym filtrze spamu (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Maximum total fees to use in a single wallet transaction, setting too low may abort large transactions (default: %s)</source>
+        <translation>Maksymalna łączna opłata za pojedynczą transakcję , ustawienie zbyt niskiej opłaty może przerwać duże transakcje (domyślnie: %s)</translation>
+    </message>
+    <message>
+        <source>Number of seconds to keep misbehaving peers from reconnecting (default: %u)</source>
+        <translation>Liczba sekund, po których nastąpi ponowne łączenie się  (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
+        <translation>Obfuscation używa dokładnych kwot denominowanych do wysyłania środków, może po prostu trzeba anonimizować więcej monet.</translation>
+    </message>
+    <message>
+        <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
+        <translation>Informacje o debugowaniu wyjścia (domyślnie: %u, dostarczanie &lt;category&gt; jest opcjonalne)</translation>
+    </message>
+    <message>
+        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect)</source>
+        <translation>Zapytanie o adresy peer za pomocą DNS lookup, jeśli adresy są low (domyślnie: 1 chyba, że -connect)</translation>
+    </message>
+    <message>
+        <source>Randomize credentials for every proxy connection. This enables Tor stream isolation (default: %u)</source>
+        <translation>Losuj dane uwierzytelniające dla każdego połączenia proxy. To umożliwia izolację strumienia Tora (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Require high priority for relaying free or low-fee transactions (default:%u)</source>
+        <translation>Wymagaj wysokiego priorytetu przy przekazywaniu transakcji bezpłatnych lub o niskich opłatach (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Send trace/debug info to console instead of debug.log file (default: %u)</source>
+        <translation>Wyślij informacje śledzenia/debugowania do konsoli zamiast pliku debug.log (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
+        <translation>Ustaw maksymalny rozmiar transakcji o wysokim priorytecie / niskich opłatach w bajtach (domyślnie: %d)</translation>
+    </message>
+    <message>
+        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
+        <translation>Ustaw liczbę dołączonych bloków do wstępnego obliczenia cyklu. (minimum: %d) (maksimum: %d) (domyślnie: %d)</translation>
+    </message>
+    <message>
+        <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
+        <translation>Ustaw liczbę wątków weryfikujących skrypty (%u do %d, 0 = auto, &lt;0 = pozostaw tyle rdzeni wolnych, domyślnie: %d)</translation>
+    </message>
+    <message>
+        <source>Set the number of threads for coin generation if enabled (-1 = all cores, default: %d)</source>
+        <translation>Ustaw liczbę wątków do generowania monet, jeśli jest włączona (-1 = wszystkie rdzenie, domyślnie: %d)</translation>
+    </message>
+    <message>
+        <source>Show N confirmations for a successfully locked transaction (0-9999, default: %u)</source>
+        <translation>Pokaż N potwierdzeń dla pomyślnie zablokowanej transakcji (0-9999, domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Support filtering of blocks and transaction with bloom filters (default: %u)</source>
+        <translation>Obsługa filtrowania bloków i transakcji za pomocą filtrów bloom (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Total length of network version string (%i) exceeds maximum length (%i). Reduce the number or size of uacomments.</source>
+        <translation>Całkowita długość string wersji sieciowej (%i) przekracza maksymalną długość (%i). Zmniejsz liczbę lub rozmiar uacomments.</translation>
+    </message>
+    <message>
         <source>Unable to bind to %s on this computer. PIVX Core is probably already running.</source>
         <translation>Nie można podłączyć %s na tym komputerze. PIVX Core prawdopodobnie już działa.</translation>
     </message>
     <message>
         <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
         <translation>Nie można znaleźć wystarczającej liczby funduszy ukrytych dla tej transakcji.</translation>
+    </message>
+    <message>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 PIV.</source>
+        <translation>Nie można zlokalizować wystarczająco dużo zaciemnionych Środków. Ta transakcja nie jest równa 10000 PIV.</translation>
+    </message>
+    <message>
+        <source>Unable to locate enough funds for this transaction that are not equal 10000 PIV.</source>
+        <translation>Nie można zlokalizować wystarczająco dużo Środków. Ta transakcja nie jest równa 10000 PIV.</translation>
+    </message>
+    <message>
+        <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
+        <translation>Oddzielne użycie proxy SOCKS5, aby dotrzeć do peerów za pośrednictwem ukrytych usług Tora (domyślnie: %s)</translation>
+    </message>
+    <message>
+        <source>Warning: -maxtxfee is set very high! Fees this large could be paid on a single transaction.</source>
+        <translation>Ostrzeżenie: -maxtxfee jest ustawiony bardzo wysoko! Opłatą tak dużą można by zapłacić za pojedynczą transakcję.</translation>
+    </message>
+    <message>
+        <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
+        <translation>Ostrzeżenie: -paytxfee jest ustawione bardzo wysoko! Jest to opłata transakcyjna, którą zapłacisz, jeśli wyślesz transakcję.</translation>
+    </message>
+    <message>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
+        <translation>Ostrzeżenie: sprawdź, czy data i godzina komputera są poprawne! Jeśli zegar jest nieprawidłowy, PIVX Core nie będzie działać poprawnie.</translation>
+    </message>
+    <message>
+        <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
+        <translation>Ostrzeżenie: Wydaje się, że sieć nie zgadza się w pełni! Niektórzy górnicy wydają się mieć problemy.</translation>
+    </message>
+    <message>
+        <source>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</source>
+        <translation>Ostrzeżenie: Wydaje się, że nie zgadzamy się całkowicie z naszymi peer-ami! Może zajść potrzeba aktualizacji lub inne węzły mogą wymagać aktualizacji.</translation>
+    </message>
+    <message>
+        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
+        <translation>Ostrzeżenie: błąd odczytu wallet.dat! Wszystkie klucze wczytują się poprawnie, ale może brakować danych transakcji lub wpisów w książce adresowej lub są one nieprawidłowe.</translation>
+    </message>
+    <message>
+        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
+        <translation>Ostrzeżenie: uszkodzony plik wallet.dat, dane odzyskane! Oryginalny wallet.dat zapisany jako wallet.{timestamp}.bak w %s; jeśli saldo lub transakcje są nieprawidłowe, należy je przywrócić z kopii zapasowej.</translation>
+    </message>
+    <message>
+        <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
+        <translation>Biała lista peerów łączących się z podanej maski sieciowej lub adresu IP. Można podać wiele razy.</translation>
+    </message>
+    <message>
+        <source>Whitelisted peers cannot be DoS banned and their transactions are always relayed, even if they are already in the mempool, useful e.g. for a gateway</source>
+        <translation>Peery na białej liście nie mogą być zbanowane przez DoS, a ich transakcje są zawsze przekazywane, nawet jeśli są już w pamięci, przydatne np. na gatewaya</translation>
+    </message>
+    <message>
+        <source>You must specify a masternodeprivkey in the configuration. Please see documentation for help.</source>
+        <translation>Musisz określić masternodeprivkey w konfiguracji. Aby uzyskać pomoc, zapoznaj się z dokumentacją.</translation>
     </message>
     <message>
         <source>(51472 could be used only on mainnet)</source>
@@ -5278,8 +5203,40 @@ Proszę być cierpliwym...</translation>
         <translation>Zaakceptuj polecenia linii poleceń i JSON-RPC</translation>
     </message>
     <message>
-        <source>Already have that input.</source>
-        <translation>Masz już to wejście.</translation>
+        <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
+        <translation>Akceptuj połączenia z zewnątrz (domyślnie: 1 jeśli nie -proxy lub -connect)</translation>
+    </message>
+    <message>
+        <source>Accept public REST requests (default: %u)</source>
+        <translation>Akceptuj publiczne żądania REST (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Add a node to connect to and attempt to keep the connection open</source>
+        <translation>Dodaj węzeł do połączenia i spróbuj je utrzymać otwarte</translation>
+    </message>
+    <message>
+        <source>Adding Wrapped Serials supply...</source>
+        <translation>Dodanie zapakowanych dostaw seryjnych ...</translation>
+    </message>
+    <message>
+        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
+        <translation>Zezwalaj na wyszukiwanie DNS dla -addnode, -seednode i -connect</translation>
+    </message>
+    <message>
+        <source>Always query for peer addresses via DNS lookup (default: %u)</source>
+        <translation>Zawsze sprawdzaj adresy peer za pomocą wyszukiwania DNS (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Append comment to the user agent string</source>
+        <translation>Dołącz komentarz do ciągu agenta użytkownika</translation>
+    </message>
+    <message>
+        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
+        <translation>Próba odzyskania kluczy prywatnych z uszkodzonego wallet.dat</translation>
+    </message>
+    <message>
+        <source>Automatically create Tor hidden service (default: %d)</source>
+        <translation>Automatycznie utwórz usługę ukrytą Tora (domyślnie: %d)</translation>
     </message>
     <message>
         <source>Block creation options:</source>
@@ -5290,24 +5247,28 @@ Proszę być cierpliwym...</translation>
         <translation>Obliczanie brakujących akumulatorów ...</translation>
     </message>
     <message>
-        <source>Can't find random Masternode.</source>
-        <translation>Nie można znaleźć losowego masternodu.</translation>
-    </message>
-    <message>
-        <source>Can't mix while sync in progress.</source>
-        <translation>Nie można mieszać w trakcie synchronizacji.</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Nie można cofnąć wersji portfela</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -bind address: '%s'</source>
+        <translation>Nie można odwzorować adresu -bind: '%s'</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -externalip address: '%s'</source>
+        <translation>Nie można odwzorować adresu -externalip: '%s'</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -whitebind address: '%s'</source>
+        <translation>Nie można odwzorować adresu -whitebind: '%s'</translation>
     </message>
     <message>
         <source>Cannot write default address</source>
         <translation>Nie można zapisać adresu domyślnego</translation>
     </message>
     <message>
-        <source>Collateral not valid.</source>
-        <translation>Zabezpieczenie jest nie ważne.</translation>
+        <source>CoinSpend: failed check</source>
+        <translation>CoinSpend: nieudane sprawdzenie</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -5316,6 +5277,10 @@ Proszę być cierpliwym...</translation>
     <message>
         <source>Connect through SOCKS5 proxy</source>
         <translation>Połącz przez serwer proxy SOCKS5</translation>
+    </message>
+    <message>
+        <source>Connect to a node to retrieve peer addresses, and disconnect</source>
+        <translation>Połącz się z węzłem, aby pobrać adresy równorzędne, i rozłącz się</translation>
     </message>
     <message>
         <source>Connection options:</source>
@@ -5350,6 +5315,22 @@ Proszę być cierpliwym...</translation>
         <translation>Usuń foldery blockchain i zsynchronizuj ponownie od podstaw</translation>
     </message>
     <message>
+        <source>Disable OS notifications for incoming transactions (default: %u)</source>
+        <translation>Wyłącz powiadomienia systemu operacyjnego dla transakcji przychodzących (domyślnie:%u)</translation>
+    </message>
+    <message>
+        <source>Disable safemode, override a real safe mode event (default: %u)</source>
+        <translation>Wyłącz tryb bezpieczny, zastąp rzeczywiste zdarzenie w trybie bezpiecznym (domyślnie:%u)</translation>
+    </message>
+    <message>
+        <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
+        <translation>Odkryj własny adres IP (domyślnie: 1 podczas słuchania i bez -externalip)</translation>
+    </message>
+    <message>
+        <source>Do not load the wallet and disable wallet RPC calls</source>
+        <translation>Nie ładuj portfela i nie wyłączaj wywołań RPC portfela</translation>
+    </message>
+    <message>
         <source>Do you want to rebuild the block database now?</source>
         <translation>Czy chcesz teraz odbudować block database danych?</translation>
     </message>
@@ -5362,12 +5343,20 @@ Proszę być cierpliwym...</translation>
         <translation>Włącz automatyczne Zerocoin minting (0-100, domyślnie: %u)</translation>
     </message>
     <message>
-        <source>Entries are full.</source>
-        <translation>Wpisy są pełne.</translation>
+        <source>Enable precomputation of zPIV spends and stakes (0-1, default %u)</source>
+        <translation>Włącz wstępne obliczanie wydatków i stawek zPIV (0-1, domyślnie %u)</translation>
     </message>
     <message>
-        <source>Error connecting to Masternode.</source>
-        <translation>Błąd połączenia z Masternode.</translation>
+        <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
+        <translation>Włącz transakcję mieszania (zablokowaną przez SwiftX) w &lt;address&gt;</translation>
+    </message>
+    <message>
+        <source>Enable publish raw transaction (locked via SwiftX) in &lt;address&gt;</source>
+        <translation>Włącz publikowanie surowej transakcji (zablokowanej przez SwiftX) w &lt;address&gt;</translation>
+    </message>
+    <message>
+        <source>Enable the client to act as a masternode (0-1, default: %u)</source>
+        <translation>Włącz klienta, aby działał jako masternode (0-1, domyślnie: %u)</translation>
     </message>
     <message>
         <source>Error initializing block database</source>
@@ -5414,12 +5403,16 @@ Proszę być cierpliwym...</translation>
         <translation>Błąd</translation>
     </message>
     <message>
-        <source>Error: Can't select current denominated inputs</source>
-        <translation>Błąd: nie można wybrać takich jednostek</translation>
+        <source>Error: A fatal internal error occured, see debug.log for details</source>
+        <translation>Błąd: Wystąpił krytyczny błąd wewnętrzny, zobacz szczegóły w pliku debug.log</translation>
     </message>
     <message>
         <source>Error: Disk space is low!</source>
         <translation>Błąd: Mało miejsca na dysku!</translation>
+    </message>
+    <message>
+        <source>Error: Unsupported argument -tor found, use -onion.</source>
+        <translation>Błąd: Nieobsługiwany argument -tor, użyj -onion.</translation>
     </message>
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
@@ -5428,6 +5421,10 @@ Proszę być cierpliwym...</translation>
     <message>
         <source>Failed to calculate accumulator checkpoint</source>
         <translation>Nie można obliczyć punktu kontrolnego akumulatora</translation>
+    </message>
+    <message>
+        <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
+        <translation>Nie można nasłuchiwać na żadnym porcie. Użyj -listen=0, jeśli chcesz tego.</translation>
     </message>
     <message>
         <source>Failed to parse host:port string</source>
@@ -5442,44 +5439,44 @@ Proszę być cierpliwym...</translation>
         <translation>Opłata (w PIV/kB) dodawana do wysyłanych transakcji (domyślnie: %s)</translation>
     </message>
     <message>
-        <source>Finalizing transaction.</source>
-        <translation>Finalizowanie transakcji.</translation>
-    </message>
-    <message>
         <source>Force safe mode (default: %u)</source>
         <translation>Wymuś tryb bezpieczny (domyślnie: %u)</translation>
-    </message>
-    <message>
-        <source>Found enough users, signing ( waiting %s )</source>
-        <translation>Znaleziono wystarczającą liczbę użytkowników, podpisanie (czekanie %s)</translation>
-    </message>
-    <message>
-        <source>Found enough users, signing ...</source>
-        <translation>Znaleziono wystarczającą liczbę użytkowników, podpisywanie ...</translation>
     </message>
     <message>
         <source>Generate coins (default: %u)</source>
         <translation>Wygeneruj monety (domyślnie: %u)</translation>
     </message>
     <message>
+        <source>How many blocks to check at startup (default: %u, 0 = all)</source>
+        <translation>Ile bloków należy sprawdzić przy starcie (domyślnie: %u, 0 = wszystko)</translation>
+    </message>
+    <message>
+        <source>If &lt;category&gt; is not supplied, output all debugging information.</source>
+        <translation>Jeśli &lt;category&gt; nie jest podana, wyślij wszystkie informacje debugowania.</translation>
+    </message>
+    <message>
         <source>Importing...</source>
         <translation>Importuję ...</translation>
     </message>
     <message>
-        <source>Incompatible mode.</source>
-        <translation>Tryb niezgodny.</translation>
+        <source>Imports blocks from external blk000??.dat file</source>
+        <translation>Importuje bloki z zewnętrznego pliku blk000??.dat</translation>
     </message>
     <message>
-        <source>Incompatible version.</source>
-        <translation>Niezgodna wersja.</translation>
+        <source>Include IP addresses in debug output (default: %u)</source>
+        <translation>Włącz adresy IP do wyników debugowania (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Incorrect or no genesis block found. Wrong datadir for network?</source>
+        <translation>Nieprawidłowy lub nie znaleziony blok genezy. Nieprawidłowy datadir do sieci?</translation>
     </message>
     <message>
         <source>Information</source>
         <translation>Informacje</translation>
     </message>
     <message>
-        <source>Input is not valid.</source>
-        <translation>Dane wejściowe nie są prawidłowe.</translation>
+        <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
+        <translation>Sprawdzenie poprawności inicjalizacji nie powiodło się. PIVX Core zamyka się.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -5490,20 +5487,72 @@ Proszę być cierpliwym...</translation>
         <translation>Niewystarczające środki.</translation>
     </message>
     <message>
+        <source>Invalid -onion address or hostname: '%s'</source>
+        <translation>Nieprawidłowy adres -onion lub nazwa hosta: „%s”</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -maxtxfee= &lt;amount&gt; : '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -minrelaytxfee= &lt;amount&gt; : '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -mintxfee= &lt;amount&gt; : '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
+        <translation>Nieprawidłowa kwota dla -paytxfee= &lt;amount&gt; : '%s' (musi być przynajmniej %s)</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
+        <translation>Nieprawidłowa kwota dla -paytxfee= &lt;amount&gt; : '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
+        <translation>Nieprawidłowa kwota dla -reservebalance=&lt;amount&gt;</translation>
+    </message>
+    <message>
         <source>Invalid amount</source>
         <translation>nieprawidłowa kwota</translation>
+    </message>
+    <message>
+        <source>Invalid masternodeprivkey. Please see documenation.</source>
+        <translation>Nieprawidłowy masternodeprivkey. Zobacz dokumentację.</translation>
+    </message>
+    <message>
+        <source>Invalid netmask specified in -whitelist: '%s'</source>
+        <translation>Nieprawidłowa netmask podana w -whitelist: '%s'</translation>
+    </message>
+    <message>
+        <source>Invalid port detected in masternode.conf</source>
+        <translation>Nieprawidłowy port wykryty w masternode.conf</translation>
     </message>
     <message>
         <source>Invalid private key.</source>
         <translation>Nieprawidłowy klucz prywatny.</translation>
     </message>
     <message>
-        <source>Invalid script detected.</source>
-        <translation>Wykryto niepoprawny skrypt.</translation>
-    </message>
-    <message>
         <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
         <translation>Odsetek automatycznych minted Zerocoin (1-100, domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Recalculating PIV supply...</source>
+        <translation>Przeliczanie podaży PIV ...</translation>
+    </message>
+    <message>
+        <source>Recalculating minted ZPIV...</source>
+        <translation>Przeliczenie wybitego ZPIV ...</translation>
+    </message>
+    <message>
+        <source>Recalculating spent ZPIV...</source>
+        <translation>Przeliczanie wydanego ZPIV ...</translation>
+    </message>
+    <message>
+        <source>Reindex the PIV and zPIV money supply statistics</source>
+        <translation>Ponownie oblicz statystyki podaży pieniądza PIV i zPIV</translation>
     </message>
     <message>
         <source>Reindexing zerocoin database...</source>
@@ -5514,8 +5563,20 @@ Proszę być cierpliwym...</translation>
         <translation>Ponowne indeksowanie zerocoin nie powiodło się</translation>
     </message>
     <message>
+        <source>Selected coins value is less than payment target</source>
+        <translation>Wybrana wartość monet jest mniejsza niż docelowa</translation>
+    </message>
+    <message>
+        <source>Support the zerocoin light node protocol (default: %u)</source>
+        <translation>Obsługa protokołu zerocoin light node (domyślnie: %u)</translation>
+    </message>
+    <message>
         <source>SwiftX options:</source>
         <translation>Opcje SwiftX:</translation>
+    </message>
+    <message>
+        <source>This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!</source>
+        <translation>Jest to wersja testowa pre-release - korzystaj z niej na własne ryzyko - nie używaj do staking lub prawdziwych transakcji!</translation>
     </message>
     <message>
         <source> mints deleted
@@ -5542,12 +5603,52 @@ Proszę być cierpliwym...</translation>
         <translation>Włącz SwiftX, pokaż potwierdzenia zablokowanych transakcji (bool, domyślnie: %s)</translation>
     </message>
     <message>
+        <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Błąd: transakcja została odrzucona! Może się tak zdarzyć, jeśli niektóre monety w portfelu zostały już wydane, np. Jeśli użyłeś kopii portfela. Monety zostały wydane w kopii, ale nie zostały oznaczone jako wydane tutaj.</translation>
+    </message>
+    <message>
+        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
+        <translation>Błąd: ta transakcja wymaga opłaty transakcyjnej w wysokości co najmniej %s ze względu na jej ilość, złożoność lub wykorzystanie ostatnio otrzymanych środków!</translation>
+    </message>
+    <message>
+        <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
+        <translation>Błąd: Znaleziono nieobsługiwany argument -checklevel. Checklevel musi być poziomem 4.</translation>
+    </message>
+    <message>
+        <source>Failed to find coin set amongst held coins with less than maxNumber of Spends</source>
+        <translation>Nie udało się znaleźć zestawu monet i innych monet o wartości mniejszej niż maksymalna liczba wydatków</translation>
+    </message>
+    <message>
+        <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
+        <translation>W rzadkich przypadkach należy wydać 7 lub więcej monet z naszym maksymalnym dopuszczalnym rozmiarem transakcji, spróbuj ponownie wydać 6 lub mniej monet</translation>
+    </message>
+    <message>
+        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
+        <translation>Preferowana jednostka dla automatycznych minted Zerocoin (1/5/10/50/100/500/1000/5000), 0 bez żadnych preferencji. domyślnie: %u)</translation>
+    </message>
+    <message>
         <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
         <translation>Określ standardową ścieżkę kopii zapasowej, aby dodać kopię automatycznej kopii zapasowej zPIV. Jeśli ustawione jako katalog, każda kopia zapasowa generuje plik z sygnaturą czasową. Jeśli ustawione jako plik, będzie przepisywać do tego pliku każdą kopię zapasową. Jeśli ustawiona jest również ścieżka tworzenia kopii zapasowych, zostaną utworzone 4 kopie zapasowe</translation>
     </message>
     <message>
+        <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
+        <translation>Określ ścieżkę kopii zapasowej, aby dodać kopię zapasową portfela. Jeśli ustawione jako katalog, każda kopia zapasowa generuje plik ze znacznikiem czasu. Jeśli jest ustawiony jako plik, przepisuje do tego pliku każdą kopię zapasową.</translation>
+    </message>
+    <message>
+        <source>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
+        <translation>SwiftX wymaga danych wejściowych z co najmniej 6 potwierdzeniami, być może trzeba będzie poczekać kilka minut i spróbować ponownie.</translation>
+    </message>
+    <message>
         <source>&lt;category&gt; can be:</source>
         <translation>&lt;category&gt;może być:</translation>
+    </message>
+    <message>
+        <source>Attempt to force blockchain corruption recovery</source>
+        <translation>Spróbuj wymusić blockchain corruption recovery</translation>
+    </message>
+    <message>
+        <source>CoinSpend: Accumulator witness does not verify</source>
+        <translation>CoinSpend: Accumulator witness nie weryfikuje</translation>
     </message>
     <message>
         <source>Display the stake modifier calculations in the debug.log file.</source>
@@ -5574,6 +5675,14 @@ Proszę być cierpliwym...</translation>
         <translation>Włącz publish raw transaction w &lt;address&gt;</translation>
     </message>
     <message>
+        <source>Enable staking functionality (0-1, default: %u)</source>
+        <translation>Włącz funkcję staking (0-1, domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Error: A fatal internal error occurred, see debug.log for details</source>
+        <translation>Błąd: Wystąpił krytyczny błąd wewnętrzny, zobacz szczegóły w pliku debug.log</translation>
+    </message>
+    <message>
         <source>Error: No valid utxo!</source>
         <translation>Błąd: brak prawidłowego utxo!</translation>
     </message>
@@ -5590,8 +5699,28 @@ Proszę być cierpliwym...</translation>
         <translation>Nie udało się wybrać zerocoin</translation>
     </message>
     <message>
+        <source>Failed to wipe zerocoinDB</source>
+        <translation>Nie można wyczyścić zerocoinDB</translation>
+    </message>
+    <message>
+        <source>Failed to write coin serial number into wallet</source>
+        <translation>Nie udało się zapisać numeru seryjnego monety w portfelu</translation>
+    </message>
+    <message>
+        <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
+        <translation>Zachowaj &lt;n&gt; najczęściej używanych transakcji w pamięci (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Limit size of signature cache to &lt;n&gt; entries (default: %u)</source>
+        <translation>Ogranicz rozmiar pamięci podręcznej podpisu do &lt;n&gt; wpisów (domyślnie: %u)</translation>
+    </message>
+    <message>
         <source>Line: %d</source>
         <translation>Linia: %d</translation>
+    </message>
+    <message>
+        <source>Listen for connections on &lt;port&gt; (default: %u or testnet: %u)</source>
+        <translation>Nasłuchuj włączone połączenia &lt;port&gt; (domyślnie: %u lub testnet: %u)</translation>
     </message>
     <message>
         <source>Loading addresses...</source>
@@ -5606,6 +5735,14 @@ Proszę być cierpliwym...</translation>
         <translation>Ładowanie cache budżetu ...</translation>
     </message>
     <message>
+        <source>Loading masternode cache...</source>
+        <translation>Ładowanie pamięci podręcznej masternode ...</translation>
+    </message>
+    <message>
+        <source>Loading masternode payment cache...</source>
+        <translation>Ładowanie pamięci podręcznej płatności masternode ...</translation>
+    </message>
+    <message>
         <source>Loading sporks...</source>
         <translation>Ładowanie sporks ...</translation>
     </message>
@@ -5618,44 +5755,56 @@ Proszę być cierpliwym...</translation>
         <translation>Ładowanie portfela ...</translation>
     </message>
     <message>
-        <source>Lock is already in place.</source>
-        <translation>Blokada jest już na miejscu.</translation>
+        <source>Location of the auth cookie (default: data dir)</source>
+        <translation>Lokalizacja auth cookie (domyślnie: data dir)</translation>
+    </message>
+    <message>
+        <source>Lock masternodes from masternode configuration file (default: %u)</source>
+        <translation>Zablokuj masternody z pliku konfiguracyjnego (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Maintain at most &lt;n&gt; connections to peers (default: %u)</source>
+        <translation>Utrzymuj co najwyżej &lt;n&gt; połączeń z peerami (domyślnie: %u)</translation>
     </message>
     <message>
         <source>Masternode options:</source>
         <translation>Opcje Masternode:</translation>
     </message>
     <message>
-        <source>Masternode queue is full.</source>
-        <translation>Kolejka Masternode jest pełna.</translation>
+        <source>Mint did not make it into blockchain</source>
+        <translation>Mint nie przeszło do blockchain</translation>
     </message>
     <message>
-        <source>Masternode:</source>
-        <translation>Masternode:</translation>
+        <source>Need address because change is not exact</source>
+        <translation>Potrzebuje adresu, ponieważ reszta nie jest określona</translation>
     </message>
     <message>
-        <source>Mixing in progress...</source>
-        <translation>Trwa miksowanie ...</translation>
+        <source>Need to specify a port with -whitebind: '%s'</source>
+        <translation>Musisz określić port za pomocą -whitebind: '%s'</translation>
     </message>
     <message>
-        <source>No Masternodes detected.</source>
-        <translation>Nie wykryto żadnych Masternodes.</translation>
+        <source>Node relay options:</source>
+        <translation>Opcje przekazywania węzłów:</translation>
+    </message>
+    <message>
+        <source>Not enough file descriptors available.</source>
+        <translation>Za mało dostępnych deskryptorów plików.</translation>
     </message>
     <message>
         <source>Number of automatic wallet backups (default: 10)</source>
         <translation>Liczba automatycznych kopii zapasowych portfela (domyślnie: 10)</translation>
     </message>
     <message>
-        <source>Obfuscation is idle.</source>
-        <translation>Obfuscation jest bezczynne</translation>
+        <source>Number of custom location backups to retain (default: %d)</source>
+        <translation>Liczba lokalizacji kopii zapasowych do zachowania (domyślnie: %d)</translation>
     </message>
     <message>
-        <source>Obfuscation request complete:</source>
-        <translation>Obfuscation żądanie kompletne:</translation>
+        <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
+        <translation>Akceptuj tylko wbudowane punkty kontrolne łańcucha bloków (domyślnie: %u)</translation>
     </message>
     <message>
-        <source>Obfuscation request incomplete:</source>
-        <translation>Obfuscation żądanie niekompletne:</translation>
+        <source>Only connect to nodes in network &lt;net&gt; (ipv4, ipv6 or onion)</source>
+        <translation>Połącz tylko z węzłami w sieci (ipv4, ipv6 lub onion)</translation>
     </message>
     <message>
         <source>Options:</source>
@@ -5666,8 +5815,16 @@ Proszę być cierpliwym...</translation>
         <translation>Hasło dla połączeń JSON-RPC</translation>
     </message>
     <message>
+        <source>Use block spam filter (default: %u)</source>
+        <translation>Użyj block spam filter (domyślnie: %u)</translation>
+    </message>
+    <message>
         <source>Preparing for resync...</source>
         <translation>Przygotowanie do ponownej synchronizacji ...</translation>
+    </message>
+    <message>
+        <source>Prepend debug output with timestamp (default: %u)</source>
+        <translation>Przygotuj wyjście debugowania ze znacznikiem czasu (domyślnie: %u)</translation>
     </message>
     <message>
         <source>Print version and exit</source>
@@ -5678,16 +5835,56 @@ Proszę być cierpliwym...</translation>
         <translation>Opcje serwera RPC:</translation>
     </message>
     <message>
+        <source>Rebuild block chain index from current blk000??.dat files</source>
+        <translation>Przebuduj indeks łańcucha bloków z bieżących plików blk000??.dat</translation>
+    </message>
+    <message>
+        <source>Receive and display P2P network alerts (default: %u)</source>
+        <translation>Odbieranie i wyświetlanie alertów sieciowych P2P (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Reindex the accumulator database</source>
+        <translation>Ponownie zindeksuj bazę danych akumulatora</translation>
+    </message>
+    <message>
+        <source>Rescan the block chain for missing wallet transactions</source>
+        <translation>Ponownie zeskanuj łańcuch bloków w poszukiwaniu brakujących transakcji portfela</translation>
+    </message>
+    <message>
         <source>Rescanning...</source>
         <translation>Ponowne skanowanie ...</translation>
     </message>
     <message>
-        <source>Session not complete!</source>
-        <translation>Sesja nie została ukończona!</translation>
+        <source>ResetMintZerocoin finished: </source>
+        <translation>ResetMintZerocoin zakończony:</translation>
+    </message>
+    <message>
+        <source>ResetSpentZerocoin finished: </source>
+        <translation>ResetSpentZerocoin zakończony:</translation>
+    </message>
+    <message>
+        <source>Run in the background as a daemon and accept commands</source>
+        <translation>Uruchom w tle jako demon i przyjmuj polecenia</translation>
+    </message>
+    <message>
+        <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
+        <translation>Wysyłaj transakcje jako transakcje bez opłat, jeśli to możliwe (domyślnie: %u)</translation>
     </message>
     <message>
         <source>Session timed out.</source>
         <translation>Sesja skończyła się.</translation>
+    </message>
+    <message>
+        <source>Set key pool size to &lt;n&gt; (default: %u)</source>
+        <translation>Ustaw key pool size na (domyślnie: %u)</translation>
+    </message>
+    <message>
+        <source>Set maximum block size in bytes (default: %d)</source>
+        <translation>Ustaw maksymalny rozmiar bloku w bajtach (domyślnie: %d)</translation>
+    </message>
+    <message>
+        <source>Set minimum block size in bytes (default: %u)</source>
+        <translation>Ustaw minimalny rozmiar bloku w bajtach (domyślnie: %u)</translation>
     </message>
     <message>
         <source>Signing failed.</source>
@@ -5708,6 +5905,10 @@ Proszę być cierpliwym...</translation>
     <message>
         <source>Specify data directory</source>
         <translation>Określ katalog danych</translation>
+    </message>
+    <message>
+        <source>Specify masternode configuration file (default: %s)</source>
+        <translation>Określ plik konfiguracyjny masternode (domyślnie: %s)</translation>
     </message>
     <message>
         <source>Specify pid file (default: %s)</source>
@@ -5778,10 +5979,6 @@ Proszę być cierpliwym...</translation>
         <translation>To jest oprogramowanie eksperymentalne.</translation>
     </message>
     <message>
-        <source>This is not a Masternode.</source>
-        <translation>To nie jest Masternode.</translation>
-    </message>
-    <message>
         <source>Too many spends needed</source>
         <translation>Zbyt wiele potrzebnych środków</translation>
     </message>
@@ -5806,28 +6003,12 @@ Proszę być cierpliwym...</translation>
         <translation>Kwoty transakcji muszą być dodatnie</translation>
     </message>
     <message>
-        <source>Transaction created successfully.</source>
-        <translation>Transakcja została pomyślnie utworzona.</translation>
-    </message>
-    <message>
-        <source>Transaction fees are too high.</source>
-        <translation>Opłaty za transakcje są zbyt wysokie.</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>Transakcja nie jest ważna.</translation>
-    </message>
-    <message>
         <source>Transaction too large for fee policy</source>
         <translation>Transakcja zbyt duża dla zasad płatności</translation>
     </message>
     <message>
         <source>Transaction too large</source>
         <translation>Transakcja zbyt duża</translation>
-    </message>
-    <message>
-        <source>Transmitting final transaction.</source>
-        <translation>Przesyłanie ostatecznej transakcji.</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -5854,10 +6035,6 @@ Proszę być cierpliwym...</translation>
         <translation>Weryfikuję portfel ...</translation>
     </message>
     <message>
-        <source>Wallet is locked.</source>
-        <translation>Portfel jest zablokowany.</translation>
-    </message>
-    <message>
         <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
         <translation>Portfel musiał zostać przepisany: zrestartuj PIVX Core, aby zakończyć</translation>
     </message>
@@ -5878,24 +6055,12 @@ Proszę być cierpliwym...</translation>
         <translation>Ostrzeżenie: ta wersja jest przestarzała, wymagana jest aktualizacja!</translation>
     </message>
     <message>
-        <source>Will retry...</source>
-        <translation>Spróbuję ponownie ...</translation>
-    </message>
-    <message>
         <source>You don't have enough Zerocoins in your wallet</source>
         <translation>Nie masz wystarczającej liczby Zerocoins w swoim portfelu</translation>
     </message>
     <message>
         <source>You need to rebuild the database using -reindex to change -txindex</source>
         <translation>Musisz przebudować bazę danych za pomocą -reindex, aby zmienić -txindeks</translation>
-    </message>
-    <message>
-        <source>Your entries added successfully.</source>
-        <translation>Twoje wpisy zostały dodane pomyślnie.</translation>
-    </message>
-    <message>
-        <source>Your transaction was accepted into the pool!</source>
-        <translation>Twoja transakcja została przyjęta do puli!</translation>
     </message>
     <message>
         <source>Zerocoin options:</source>

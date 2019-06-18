@@ -616,10 +616,6 @@
         <source>&amp;Command-line options</source>
         <translation>&amp;Options en ligne de commande </translation>
     </message>
-    <message numerus="yes">
-        <source>Processed %n blocks of transaction history.</source>
-        <translation><numerusform>Parcouru %n blocs dans l'historique des transactions</numerusform><numerusform>Parcouru %n blocs dans l'historique des transactions</numerusform></translation>
-    </message>
     <message>
         <source>Synchronizing additional data: %p%</source>
         <translation>Synchronisation des données additionnelles : %p%</translation>
@@ -747,10 +743,6 @@
     <message>
         <source>PIVX Core client</source>
         <translation>PIVX Core client</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n active connection(s) to PIVX network</source>
-        <translation><numerusform>%n connection(s) active(s) au réseau PIVX</numerusform><numerusform>%n connection(s) active(s) au réseau PIVX</numerusform></translation>
     </message>
     <message>
         <source>Synchronizing with network...</source>
@@ -1251,6 +1243,10 @@ Adresse : %4
         <translation>Blocs restants jusqu'au Super block suivant:</translation>
     </message>
     <message>
+        <source>Days to budget payout (estimate):</source>
+        <translation>Jours avant le paiement du budget (estimation) :</translation>
+    </message>
+    <message>
         <source>Allotted budget:</source>
         <translation>Budget alloué:</translation>
     </message>
@@ -1302,6 +1298,10 @@ Adresse : %4
         <translation>Choisir le répertoire de données au démarrage (par défaut: %u)</translation>
     </message>
     <message>
+        <source>Show splash screen on startup (default: %u)</source>
+        <translation>Afficher l'écran de démarrage au démarrage (par défaut: %u)</translation>
+    </message>
+    <message>
         <source>Set language, for example "de_DE" (default: system locale)</source>
         <translation>Définir la langue, par exemple "de_DE" (par défaut: paramètres régionaux du système)</translation>
     </message>
@@ -1327,6 +1327,10 @@ Adresse : %4
     <message>
         <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
         <translation>Comme c'est la première fois que le programme est lancé, vous pouvez choisir où PIVX Core va stocker ses données.</translation>
+    </message>
+    <message>
+        <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>PIVX Core téléchargera et stockera une copie de la chaîne de blocs PIVX. Au moins %1 Go de données sera stocké dans ce répertoire, et il va augmenter au fil du temps. Le portefeuille sera également stocké dans ce répertoire.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1471,6 +1475,10 @@ Adresse : %4
         <translation>Entrer un nombre entier 1 - 100</translation>
     </message>
     <message>
+        <source>Enter % to Give (1-100)</source>
+        <translation>Entrez le % age à donner (1 -100)</translation>
+    </message>
+    <message>
         <source>Enter Address to Send to</source>
         <translation>Saisir l'adresse à laquelle envoyer</translation>
     </message>
@@ -1613,6 +1621,10 @@ SVP vérifiez l'adresse et essayez à nouveau.</translation>
     <message>
         <source>Unable to activate MultiSend, check MultiSend vector</source>
         <translation>Impossible d'activer l'envoi multple, vérifiez le vecteur d'envoi</translation>
+    </message>
+    <message>
+        <source>Need to select to send on stake and/or masternode rewards</source>
+        <translation>Besoin de sélectionner pour envoyer les récompenses du Staking ou du Masternode</translation>
     </message>
     <message>
         <source>MultiSend activated but writing settings to DB failed</source>
@@ -1808,73 +1820,6 @@ S'il vous plaît soyez patient après avoir cliqué sur l'importation.</translat
     <message>
         <source>Maximum (15)</source>
         <translation>Maximum (15)</translation>
-    </message>
-</context>
-<context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Configurer Obfuscation</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Confidentialité de base</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Haute confidentialité</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Confidentialité maximum</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Veuillez sélectionner un niveau de confidentialité.</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Utiliser 2 masternodes différentes pour mélanger les fonds jusqu'a 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Utiliser 8 masternodes différentes pour mélanger les fonds jusqu'a 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Utiliser 16 masternodes différents</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Cette option est la plus rapide, et coutera ~0.025 PIV pour anonymiser 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Cette option est moyennement rapide, et coutera 0.05 PIV pour anonymiser 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Il s'agit de l'option la plus lente est la plus sécurisé. Utiliser l'anonymat maximum coutera</translation>
-    </message>
-    <message>
-        <source>0.1 PIV per 10000 PIV you anonymize.</source>
-        <translation>0.1 PIV par 10000 PIV vous anonymisez.</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Configuration de l'Obfuscation</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>L'Obfuscation a été réglé avec succès à base (%1 et 2 tours). Vous pouvez changer ce paramètre à tout moment depuis l'écran de configuration PIVX.</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>L'Obfuscation a été réglé avec succès à élevé (%1 et 8 tours). Vous pouvez changer ce paramètre à tout moment depuis l'écran de configuration PIVX.</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>L'Obfuscation a été réglé avec succès à maximum (%1 et 16 tours). Vous pouvez changer ce paramètre à tout moment depuis l'écran de configuration PIVX.</translation>
     </message>
 </context>
 <context>
@@ -2087,10 +2032,6 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>User Interface Theme:</source>
         <translation>Thème de l'interface utilisateur:</translation>
-    </message>
-    <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>Unité pour afficher les montants:</translation>
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
@@ -2463,36 +2404,12 @@ Pour activer Auto-monnayage, changez 'enablezeromint = 0' en 'enablezeromint = 1
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</source>
-        <translation>Disponible pour monnayage sont des pièces qui sont confirmées et non verrouillées ou collatéraux Masternode.</translation>
-    </message>
-    <message>
-        <source>Available for Minting:</source>
-        <translation>Disponible :</translation>
-    </message>
-    <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset Zerocoin Wallet DB. Deletes transactions that did not make it into the blockchain.</source>
         <translation>Réinitialiser la base de données du portefeuille Zerocoin.  Supprime les transactions qui ne sont pas entrées dans la blockchain.</translation>
     </message>
     <message>
         <source>Reset</source>
         <translation>Réinitialiser</translation>
-    </message>
-    <message>
-        <source>Coin Control...</source>
-        <translation>Choisir les pièces...</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Quantité :</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Montant :</translation>
     </message>
     <message>
         <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
@@ -2509,10 +2426,6 @@ Pour activer Auto-monnayage, changez 'enablezeromint = 0' en 'enablezeromint = 1
     <message>
         <source>PRIVACY</source>
         <translation>CONFIDENTIALITÉ</translation>
-    </message>
-    <message>
-        <source>Enter an amount of Piv to convert to zPIV</source>
-        <translation>Entrez un montant de PIV à convertir en zPIV</translation>
     </message>
     <message>
         <source>zPIV Control</source>
@@ -2831,24 +2744,10 @@ Pour changer le pourcentage (pas de redémarrage requis):
         <translation>Auto-monnayage Statut: OK</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Copier la quantité</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Copier le montant</translation>
-    </message>
-    <message>
         <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
 Please be patient...</source>
         <translation>Démarrage de ResetMonnayerZerocoin: réanalyser blockchain complète, cela prendra jusqu'à 30 minutes selon votre matériel.
 S'il vous plaît soyez patient ...</translation>
-    </message>
-    <message>
-        <source>) needed.
-Maximum allowed: </source>
-        <translation>) demandées.
-Maximum autorisé:</translation>
     </message>
     <message>
         <source>zPIV Spend #: </source>
@@ -2947,32 +2846,6 @@ Maximum autorisé:</translation>
         <translation>Dénom. &lt;b&gt;5000&lt;/b&gt;:</translation>
     </message>
     <message>
-        <source>Error: Your wallet is locked. Please enter the wallet passphrase first.</source>
-        <translation>Erreur: Votre portefeuille est verrouillé. Veuillez d'abord entrer la phrase secrète du portefeuille.</translation>
-    </message>
-    <message>
-        <source>Message: Enter an amount &gt; 0.</source>
-        <translation>Message: Entrez un montant &gt;0.</translation>
-    </message>
-    <message>
-        <source>Minting </source>
-        <translation>Monnayage</translation>
-    </message>
-    <message>
-        <source>Successfully minted </source>
-        <translation>Auto-monnayage réussi</translation>
-    </message>
-    <message>
-        <source> zPIV in </source>
-        <translation>zPIV en</translation>
-    </message>
-    <message>
-        <source> sec. Used denominations:
-</source>
-        <translation>sec. Dénominations utilisées:
-</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>Durée</translation>
     </message>
@@ -3021,16 +2894,6 @@ Maximum autorisé:</translation>
     <message>
         <source>Failed to fetch mint associated with serial hash</source>
         <translation>Impossible de récupérer la monnaie associée au hash</translation>
-    </message>
-    <message>
-        <source>Too much inputs (</source>
-        <translation>Trop d'entrées (</translation>
-    </message>
-    <message>
-        <source>
-Either mint higher denominations (so fewer inputs are needed) or reduce the amount to spend.</source>
-        <translation>
-Monnayez des dénominations plus élevées (moins d'intrants sont nécessaires), ou réduisez le montant à dépenser.</translation>
     </message>
     <message>
         <source>Spend Zerocoin failed with status = </source>
@@ -4440,10 +4303,6 @@ S'il vous plaît soyez patient ...</translation>
 </context>
 <context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Ouvert pour %n blocs supplémentaires</numerusform><numerusform>Ouvert pour %n blocs supplémentaires</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>Ouvrir jusqu'à %1</translation>
@@ -4504,10 +4363,6 @@ S'il vous plaît soyez patient ...</translation>
         <source>, has not been successfully broadcast yet</source>
         <translation>, n'a pas encore été diffusé avec succès</translation>
     </message>
-    <message numerus="yes">
-        <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, diffusion à travers %n noeuds</numerusform><numerusform>, diffusion à travers %n noeuds</numerusform></translation>
-    </message>
     <message>
         <source>Date</source>
         <translation>Date</translation>
@@ -4547,10 +4402,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Credit</source>
         <translation>Crédit</translation>
-    </message>
-    <message numerus="yes">
-        <source>matures in %n more block(s)</source>
-        <translation><numerusform>mature dans %n blocs supplémentaires</numerusform><numerusform>mature dans %n blocs supplémentaires</numerusform></translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -4650,10 +4501,6 @@ S'il vous plaît soyez patient ...</translation>
         <source>Address</source>
         <translation>Adresse</translation>
     </message>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Ouvert pour %n blocs supplémentaires</numerusform><numerusform>Ouvert pour %n blocs supplémentaires</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>Ouvrir jusqu'à %1</translation>
@@ -4709,6 +4556,22 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>zPIV Stake</source>
         <translation>zPIV Stake</translation>
+    </message>
+    <message>
+        <source>Obfuscation Denominate</source>
+        <translation>Unités cryptées</translation>
+    </message>
+    <message>
+        <source>Obfuscation Collateral Payment</source>
+        <translation>Paiement collatéral crypté</translation>
+    </message>
+    <message>
+        <source>Obfuscation Make Collateral Inputs</source>
+        <translation>Le cryptage a généré des entrées collatérales</translation>
+    </message>
+    <message>
+        <source>Obfuscation Create Denominations</source>
+        <translation>Le cryptage créé des unités</translation>
     </message>
     <message>
         <source>Converted PIV to zPIV</source>
@@ -5096,12 +4959,20 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Supprimer toutes les transactions de portefeuille et ne récupérer ces parties de la blockchain que via -rescan au démarrage</translation>
     </message>
     <message>
+        <source>Delete all zerocoin spends and mints that have been recorded to the blockchain database and reindex them (0-1, default: %u)</source>
+        <translation>Supprimez toutes les dépenses de zerocoin et monnayez qui ont été enregistrées dans la base de données blockchain et réindexez-les (0-1, par défaut: %u)</translation>
+    </message>
+    <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Distribué sous la licence du logiciel MIT, consultez le fichier d'accompagnement COPYING ou &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
     </message>
     <message>
         <source>Enable automatic Zerocoin minting from specific addresses (0-1, default: %u)</source>
         <translation>Activer la frappe automatique de monnaie à partir d’adresses spécifiques (0-1, par défaut: %u)</translation>
+    </message>
+    <message>
+        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
+        <translation>Activer les sauvegardes automatiques de portefeuille déclenchées après chaque frappe zPIV (0-1, par défaut: %u)</translation>
     </message>
     <message>
         <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
@@ -5156,10 +5027,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Vider l'activité de la base de données du pool de mémoire vers le journal du disque tous les &lt;n&gt;mégaoctets (par défaut: %u)</translation>
     </message>
     <message>
-        <source>Found unconfirmed denominated outputs, will wait till they confirm to continue.</source>
-        <translation>Les sorties libellées non confirmées attendront jusqu'à ce qu'elles se confirment pour continuer.</translation>
-    </message>
-    <message>
         <source>If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)</source>
         <translation>Si paytxfee n'est pas défini, incluez suffisamment de frais pour que les transactions commencent la confirmation en moyenne dans les n blocs (par défaut: %u)</translation>
     </message>
@@ -5188,8 +5055,16 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Maintenir un index de transaction complet, utilisé par l'appel rpc de getrawtransaction (par défaut: %u)</translation>
     </message>
     <message>
+        <source>Maximum average size of an index occurrence in the block spam filter (default: %u)</source>
+        <translation>L'index a atteint sa taille maximale dans le filtre de bloc spammé (défaut: %u)</translation>
+    </message>
+    <message>
         <source>Maximum size of data in data carrier transactions we relay and mine (default: %u)</source>
         <translation>Taille maximale des données dans les transactions de support de données que nous transmettons et minons (par défaut: %u)</translation>
+    </message>
+    <message>
+        <source>Maximum size of the list of indexes in the block spam filter (default: %u)</source>
+        <translation>Taille maximale de la liste des index dans le filtre de bloc spammé (défaut: %u)</translation>
     </message>
     <message>
         <source>Maximum total fees to use in a single wallet transaction, setting too low may abort large transactions (default: %s)</source>
@@ -5228,6 +5103,10 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Définir la taille maximale des transactions à priorité élevée / faible tarif en octets (par défaut: %d)</translation>
     </message>
     <message>
+        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
+        <translation>Indiquez le nombre de blocs inclus à pré-calculer par cycle. (minimum: %d) (maximum: %d) (défaut: %d)</translation>
+    </message>
+    <message>
         <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
         <translation>Définir le nombre de threads de vérification de script (%u à %d, 0 = auto, &lt;0 = laisse autant de cœurs libres, par défaut: %d)</translation>
     </message>
@@ -5242,6 +5121,10 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Support filtering of blocks and transaction with bloom filters (default: %u)</source>
         <translation>Supporter le filtrage des blocs et des transactions avec des filtres de Bloom (par défaut: %u)</translation>
+    </message>
+    <message>
+        <source>The block database contains a block which appears to be from the future. This may be due to your computer's date and time being set incorrectly. Only rebuild the block database if you are sure that your computer's date and time are correct</source>
+        <translation>La base de donnée des blocs contient un bloc qui semble être venu du futur. C'est peut être à cause de la date et de l'heure qui ne sont pas configurés correctement sur votre ordinateur. Rechargez la base de donnée des blocs seulement si vous êtes certain que la date et l'heure de votre ordinateur est correcte.</translation>
     </message>
     <message>
         <source>This product includes software developed by the OpenSSL Project for use in the OpenSSL Toolkit &lt;https://www.openssl.org/&gt; and cryptographic software written by Eric Young and UPnP software written by Thomas Bernard.</source>
@@ -5348,10 +5231,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Autoriser les recherches DNS pour -addnode, -seednode et -connect</translation>
     </message>
     <message>
-        <source>Already have that input.</source>
-        <translation>Vous avez déjà cette entrée.</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>Toujours rechercher les adresses des pairs via une recherche DNS (par défaut: %u)</translation>
     </message>
@@ -5376,18 +5255,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Calcul des accumulateurs manquants...</translation>
     </message>
     <message>
-        <source>Can't denominate: no compatible inputs left.</source>
-        <translation>Ne peut dénommer: aucune entrée compatible laissée.</translation>
-    </message>
-    <message>
-        <source>Can't find random Masternode.</source>
-        <translation>Ne peut pas trouver un Masternode aléatoire</translation>
-    </message>
-    <message>
-        <source>Can't mix while sync in progress.</source>
-        <translation>Ne peut pas mélanger lorsqu'une sycnhronisation est en cours</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Ne peut pas rétrograder le portefeuille</translation>
     </message>
@@ -5408,8 +5275,8 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Impossible d'écrire l'adresse par défaut</translation>
     </message>
     <message>
-        <source>Collateral not valid.</source>
-        <translation>Collatéral invalide.</translation>
+        <source>CoinSpend: failed check</source>
+        <translation>Dépense de coin: vérification échouée</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -5480,6 +5347,14 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Chargement effectué</translation>
     </message>
     <message>
+        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
+        <translation>Activer la frappe automatique Zerocoin (0-1, par défaut: %u)</translation>
+    </message>
+    <message>
+        <source>Enable precomputation of zPIV spends and stakes (0-1, default %u)</source>
+        <translation>Autoriser le pré-calcul des ZPIV dépensés et stakés (0-1, défaut %u)</translation>
+    </message>
+    <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
         <translation>Activer la publication du hash des transactions (vérouillées via SwiftX) dans &lt;address&gt;</translation>
     </message>
@@ -5490,14 +5365,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Enable the client to act as a masternode (0-1, default: %u)</source>
         <translation>Activer le client pour agir en tant que Masternode (0-1, défaut: %u)</translation>
-    </message>
-    <message>
-        <source>Entries are full.</source>
-        <translation>Les entrées sont complètes.</translation>
-    </message>
-    <message>
-        <source>Error connecting to Masternode.</source>
-        <translation>Erreur de connection au Masternode.</translation>
     </message>
     <message>
         <source>Error initializing block database</source>
@@ -5548,10 +5415,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Erreur: Une erreur interne fatale est survenue, voir debug.log pour plus de détails</translation>
     </message>
     <message>
-        <source>Error: Can't select current denominated inputs</source>
-        <translation>Erreur: Impossible de sélectionner les entrées spécifiées</translation>
-    </message>
-    <message>
         <source>Error: Disk space is low!</source>
         <translation>Erreur: Espace disque faible!</translation>
     </message>
@@ -5562,10 +5425,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
         <translation>Erreur: Portefeuille vérouillé, impossible de créer une transaction!</translation>
-    </message>
-    <message>
-        <source>Error: You already have pending entries in the Obfuscation pool</source>
-        <translation>Erreur: Vous avez déjà des enregistrements en attente de la pool d'obfuscation</translation>
     </message>
     <message>
         <source>Failed to calculate accumulator checkpoint</source>
@@ -5588,20 +5447,8 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Frais (en PIV/kB) à ajouter aux transactions envoyées (défaut: %s)</translation>
     </message>
     <message>
-        <source>Finalizing transaction.</source>
-        <translation>Finalisation de la transaction.</translation>
-    </message>
-    <message>
         <source>Force safe mode (default: %u)</source>
         <translation>Forcer le mode sans échec (défaut: %u)</translation>
-    </message>
-    <message>
-        <source>Found enough users, signing ( waiting %s )</source>
-        <translation>Trouvé assez d'utilisateurs, signature en cours ( attente %s)</translation>
-    </message>
-    <message>
-        <source>Found enough users, signing ...</source>
-        <translation>Trouvé assez d'utilisateurs, signature en cours ...</translation>
     </message>
     <message>
         <source>Generate coins (default: %u)</source>
@@ -5628,14 +5475,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Inclure les adresses IP dans les informations de déboguage (par défaut: %u)</translation>
     </message>
     <message>
-        <source>Incompatible mode.</source>
-        <translation>Mode incompatible.</translation>
-    </message>
-    <message>
-        <source>Incompatible version.</source>
-        <translation>Version incompatible.</translation>
-    </message>
-    <message>
         <source>Incorrect or no genesis block found. Wrong datadir for network?</source>
         <translation>Bloc de genèse incorrect ou non trouvé. Peut-être un mauvais datadir pour le réseau ?</translation>
     </message>
@@ -5646,10 +5485,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
         <translation>Échec de la vérification de l'initialisation. PIVX Core va fermer.</translation>
-    </message>
-    <message>
-        <source>Input is not valid.</source>
-        <translation>L'entrée n'est pas valide.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -5708,8 +5543,20 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Clé privée incorrecte.</translation>
     </message>
     <message>
-        <source>Invalid script detected.</source>
-        <translation>Script incorrect détecté.</translation>
+        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
+        <translation>Pourcentage de Zerocoin Auto-monnayé (1-100, par défaut: %u)</translation>
+    </message>
+    <message>
+        <source>Recalculating PIV supply...</source>
+        <translation>Recalcule de PIV émis</translation>
+    </message>
+    <message>
+        <source>Recalculating minted ZPIV...</source>
+        <translation>Recalcule des ZPIV générés</translation>
+    </message>
+    <message>
+        <source>Recalculating spent ZPIV...</source>
+        <translation>Recalcule des ZPIV dépensés</translation>
     </message>
     <message>
         <source>Reindex the PIV and zPIV money supply statistics</source>
@@ -5726,6 +5573,10 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Selected coins value is less than payment target</source>
         <translation>La valeur des monnaies choisies est inférieure au montant projeté</translation>
+    </message>
+    <message>
+        <source>Support the zerocoin light node protocol (default: %u)</source>
+        <translation>Supporte les nœuds légers en protocole zerocoin (défaut: %u)</translation>
     </message>
     <message>
         <source>SwiftX options:</source>
@@ -5783,6 +5634,10 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
         <translation>Dans quelques rares cas, une dépense de 7 monnaies dépasse la taille maximale autorisée pour une transation, SVP réessayez en choisissant 6 monnaies ou moins</translation>
+    </message>
+    <message>
+        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
+        <translation>Dénomination préférée pour les Zerocoin Auto-monnayés (1/5/10/50/100/500/1000/5000), 0 pour aucune préférence. par défaut: %u)</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
@@ -5869,14 +5724,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Conserver au maximum &lt;n&gt; transactions non connectables en mémoire (par défaut: %u)</translation>
     </message>
     <message>
-        <source>Last Obfuscation was too recent.</source>
-        <translation>La dernière Obfuscation est trop récente.</translation>
-    </message>
-    <message>
-        <source>Last successful Obfuscation action was too recent.</source>
-        <translation>La dernière Obfuscation réussie est trop récente.</translation>
-    </message>
-    <message>
         <source>Limit size of signature cache to &lt;n&gt; entries (default: %u)</source>
         <translation>Limiter la taille du cache de signature à &lt;n&gt; entrées (par défaut: %u)</translation>
     </message>
@@ -5929,10 +5776,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Emplacement du cookie d'authentification (par défaut: répertoire de données)</translation>
     </message>
     <message>
-        <source>Lock is already in place.</source>
-        <translation>Le vérouillage est déjà actif.</translation>
-    </message>
-    <message>
         <source>Lock masternodes from masternode configuration file (default: %u)</source>
         <translation>Verrouiller les masternodes à partir du fichier de configuration masternode (par défaut: %u)</translation>
     </message>
@@ -5949,14 +5792,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Options Masternode:</translation>
     </message>
     <message>
-        <source>Masternode queue is full.</source>
-        <translation>La file d'attente Masternode est pleine.</translation>
-    </message>
-    <message>
-        <source>Masternode:</source>
-        <translation>Masternode:</translation>
-    </message>
-    <message>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: %u)</source>
         <translation>Tampon de réception maximum par connexion, * 1000 octets (par défaut: %u)</translation>
     </message>
@@ -5969,14 +5804,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Monnayés ne pas fait entre dans la blockchain</translation>
     </message>
     <message>
-        <source>Missing input transaction information.</source>
-        <translation>Informations manquantes pour la transaction entrante</translation>
-    </message>
-    <message>
-        <source>Mixing in progress...</source>
-        <translation>Mélange en cours...</translation>
-    </message>
-    <message>
         <source>Need address because change is not exact</source>
         <translation>Nécessite une adresse pour rendre la monnaie</translation>
     </message>
@@ -5985,40 +5812,12 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Nécessite de vérifier un port avec -whitebind: '%s'</translation>
     </message>
     <message>
-        <source>No Masternodes detected.</source>
-        <translation>Aucun Masternode détecté.</translation>
-    </message>
-    <message>
-        <source>No compatible Masternode found.</source>
-        <translation>Aucun Masternode compatible trouvé.</translation>
-    </message>
-    <message>
-        <source>No funds detected in need of denominating.</source>
-        <translation>Aucun fonds détecté nécessitant une dénomination.</translation>
-    </message>
-    <message>
-        <source>No matching denominations found for mixing.</source>
-        <translation>Aucune dénomination adéquate trouvée pour le mélange.</translation>
-    </message>
-    <message>
         <source>Node relay options:</source>
         <translation>Options de relais de noeud:</translation>
     </message>
     <message>
-        <source>Non-standard public key detected.</source>
-        <translation>Clé publique non standard détectée.</translation>
-    </message>
-    <message>
-        <source>Not compatible with existing transactions.</source>
-        <translation>Incompatible avec les transactions existantes.</translation>
-    </message>
-    <message>
         <source>Not enough file descriptors available.</source>
         <translation>Pas assez de descripteurs de fichiers disponibles.</translation>
-    </message>
-    <message>
-        <source>Not in the Masternode list.</source>
-        <translation>Absent de la liste Masternodes.</translation>
     </message>
     <message>
         <source>Number of automatic wallet backups (default: 10)</source>
@@ -6027,18 +5826,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>Nombre de sauvegardes à conserver (par défaut: %d)</translation>
-    </message>
-    <message>
-        <source>Obfuscation is idle.</source>
-        <translation>L'Obfuscation est inactive.</translation>
-    </message>
-    <message>
-        <source>Obfuscation request complete:</source>
-        <translation>Demande d'obfuscation complète:</translation>
-    </message>
-    <message>
-        <source>Obfuscation request incomplete:</source>
-        <translation>Demande d'obfuscation incomplète:</translation>
     </message>
     <message>
         <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
@@ -6055,6 +5842,14 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Password for JSON-RPC connections</source>
         <translation>Mot de passe pour les connexions JSON-RPC</translation>
+    </message>
+    <message>
+        <source>Use block spam filter (default: %u)</source>
+        <translation>Utilise le filtre de bloc spammé (défaut: %u)</translation>
+    </message>
+    <message>
+        <source>could not get lock on cs_spendcache</source>
+        <translation>ne peut pas être verrouillé sur cs_spendcache</translation>
     </message>
     <message>
         <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
@@ -6131,10 +5926,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>Envoyer des transaction sans frais si possible (défaut: %u)</translation>
-    </message>
-    <message>
-        <source>Session not complete!</source>
-        <translation>Session incomplète!</translation>
     </message>
     <message>
         <source>Session timed out.</source>
@@ -6241,18 +6032,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Arrêter l'exécution après l'importation des blocs du disque (défaut: %u)</translation>
     </message>
     <message>
-        <source>Submitted following entries to masternode: %u / %d</source>
-        <translation>Entrées soumises au masternode: %u / %d</translation>
-    </message>
-    <message>
-        <source>Submitted to masternode, waiting for more entries ( %u / %d ) %s</source>
-        <translation>Soumis au masternode, en attente d'entrées supplémentaires ( %u / %d ) %s</translation>
-    </message>
-    <message>
-        <source>Submitted to masternode, waiting in queue %s</source>
-        <translation>Soumis au masternode, en file d'attente %s</translation>
-    </message>
-    <message>
         <source>Synchronization failed</source>
         <translation>Synchronisation échouée</translation>
     </message>
@@ -6305,10 +6084,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Ceci est destiné aux outils de test de régression et au développement d'applications.</translation>
     </message>
     <message>
-        <source>This is not a Masternode.</source>
-        <translation>Ceci n'est pas un Masternode.</translation>
-    </message>
-    <message>
         <source>Threshold for disconnecting misbehaving peers (default: %u)</source>
         <translation>Seuil pour déconnecter les pairs avec un comportement suspicieux (par défaut: %u)</translation>
     </message>
@@ -6341,18 +6116,6 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Le montant de la transaction doit être positif</translation>
     </message>
     <message>
-        <source>Transaction created successfully.</source>
-        <translation>Transaction créée avec succès.</translation>
-    </message>
-    <message>
-        <source>Transaction fees are too high.</source>
-        <translation>Les frais de transaction sont trop élevés.</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>Transaction non valide.</translation>
-    </message>
-    <message>
         <source>Transaction too large for fee policy</source>
         <translation>Transaction trop importante pour la politique de frais</translation>
     </message>
@@ -6361,24 +6124,12 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Transaction trop importante</translation>
     </message>
     <message>
-        <source>Transmitting final transaction.</source>
-        <translation>Transmission de la transaction finale.</translation>
-    </message>
-    <message>
-        <source>Try to spend with a higher security level to include more coins</source>
-        <translation>Essayez de dépenser avec un niveau de sécurité plus élevé pour inclure plus de pièces</translation>
-    </message>
-    <message>
         <source>Trying to spend an already spent serial #, try again.</source>
         <translation>Le portefeuille essaye de dépenser un numéro de série déjà dépensé, réessayez.</translation>
     </message>
     <message>
         <source>Unable to bind to %s on this computer (bind returned error %s)</source>
         <translation>Impossible de joindre %s sur cet ordinateur (la liaison a retourné l'erreur %s)</translation>
-    </message>
-    <message>
-        <source>Unable to find transaction containing mint</source>
-        <translation>Impossible de trouver la transaction contenant de la monnayez</translation>
     </message>
     <message>
         <source>Unable to sign spork message, wrong key?</source>
@@ -6391,10 +6142,6 @@ S'il vous plaît soyez patient ...</translation>
     <message>
         <source>Unknown network specified in -onlynet: '%s'</source>
         <translation>Le réseau spécifié dans -onlynet: '%s' est inconnu</translation>
-    </message>
-    <message>
-        <source>Unknown state: id = %u</source>
-        <translation>État inconnu: id = %u</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -6429,20 +6176,12 @@ S'il vous plaît soyez patient ...</translation>
         <translation>La valeur est inférieure à la plus petite dénomination disponible (= 1) de zPIV</translation>
     </message>
     <message>
-        <source>Value more than Obfuscation pool maximum allows.</source>
-        <translation>Valeur supérieure au maximum permis par le pool d'Obfuscation.</translation>
-    </message>
-    <message>
         <source>Verifying blocks...</source>
         <translation>Vérification des blocs...</translation>
     </message>
     <message>
         <source>Verifying wallet...</source>
         <translation>Vérification du portefeuille...</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>Le portefeuille est vérouillé.</translation>
     </message>
     <message>
         <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
@@ -6473,24 +6212,12 @@ S'il vous plaît soyez patient ...</translation>
         <translation>Avertissement: argument non pris en charge -debugnet ignoré, utilisez -debug=net.</translation>
     </message>
     <message>
-        <source>Will retry...</source>
-        <translation>Va réessayer ...</translation>
-    </message>
-    <message>
         <source>You don't have enough Zerocoins in your wallet</source>
         <translation>Vous n'avez pas assez de Zerocoins dans votre portefeuille</translation>
     </message>
     <message>
         <source>You need to rebuild the database using -reindex to change -txindex</source>
         <translation>Vous devez reconstruire la base de données en utilisant -reindex pour modifier -txindex</translation>
-    </message>
-    <message>
-        <source>Your entries added successfully.</source>
-        <translation>Vos entrées ajoutées avec succès.</translation>
-    </message>
-    <message>
-        <source>Your transaction was accepted into the pool!</source>
-        <translation>Votre transaction a été acceptée dans la pool!</translation>
     </message>
     <message>
         <source>Zapping all transactions from wallet...</source>

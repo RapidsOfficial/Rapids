@@ -1563,37 +1563,6 @@ Muktisendi: %1</translation>
     </message>
 </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Baza privateco</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Alta privateco</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Maximuma privateco</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Bonvolu elekti privata nivelo.</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Tion opcion estas la plej rapida kaji kostos ~0.025 PIV por anonimigi 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Tion opcion estas moderebla rapide kaj kostos ĉirkaŭ 0.05 PIV por anonimigi 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Ĉi tio estas plej malrapida kaj plej sekura opcio. Uzante maximuma anonimeco kostos</translation>
-    </message>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1691,10 +1660,6 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>User Interface Theme:</source>
         <translation>Usanto interfaco temo:</translation>
-    </message>
-    <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>&amp;Uneco per montri kvantojn:</translation>
     </message>
     <message>
         <source>Hide empty balances</source>
@@ -1827,20 +1792,8 @@ Nematura: konfirmita, sed malpli ol 1 minto el la samo nomado post ĝin estis mi
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset</source>
         <translation>Restarigi</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Kvanto</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Kvanto:</translation>
     </message>
     <message>
         <source>zPIV Control</source>
@@ -1933,14 +1886,6 @@ Nematura: konfirmita, sed malpli ol 1 minto el la samo nomado post ĝin estis mi
         <translation>Ŝanĝu:</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Kopi kvanto</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopii kvanto</translation>
-    </message>
-    <message>
         <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
         <translation>&lt;b&gt;ebligita&lt;/b&gt;.</translation>
     </message>
@@ -1949,24 +1894,12 @@ Nematura: konfirmita, sed malpli ol 1 minto el la samo nomado post ĝin estis mi
         <translation>&lt;b&gt;malebligita&lt;/b&gt;.</translation>
     </message>
     <message>
-        <source>Error: Your wallet is locked. Please enter the wallet passphrase first.</source>
-        <translation>Eraro: vian monujo estas fermita. Bonvolu eniri monujon pasfrazon unue.</translation>
-    </message>
-    <message>
-        <source>Message: Enter an amount &gt; 0.</source>
-        <translation>Mesaĝo: eniri kvanto &gt; 0.</translation>
-    </message>
-    <message>
         <source>Invalid Pivx Address</source>
         <translation>Nevalida Pivx adreso</translation>
     </message>
     <message>
         <source>Confirm send coins</source>
         <translation>Konfirmu sendi monojn</translation>
-    </message>
-    <message>
-        <source>Too much inputs (</source>
-        <translation>Tro eniroj (</translation>
     </message>
     <message>
         <source>address: </source>
@@ -2658,24 +2591,8 @@ Nematura: konfirmita, sed malpli ol 1 minto el la samo nomado post ĝin estis mi
         <translation>Ĉi tio estas eksperimenta programaro.</translation>
     </message>
     <message>
-        <source>Transaction created successfully.</source>
-        <translation>Transakcio verkita sukcese.</translation>
-    </message>
-    <message>
-        <source>Transaction fees are too high.</source>
-        <translation>Transakcio krompago estas tro alta.</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>Transakcio nevalida.</translation>
-    </message>
-    <message>
         <source>Transaction too large</source>
         <translation>Tro longa transakcio</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>Monujo estas ŝlosita.</translation>
     </message>
     <message>
         <source>Wallet options:</source>
@@ -2686,16 +2603,8 @@ Nematura: konfirmita, sed malpli ol 1 minto el la samo nomado post ĝin estis mi
         <translation>Averto</translation>
     </message>
     <message>
-        <source>Will retry...</source>
-        <translation>Reprovos</translation>
-    </message>
-    <message>
         <source>You don't have enough Zerocoins in your wallet</source>
         <translation>Vi ne havas sufiĉan Zeromonojn en vian monujon</translation>
-    </message>
-    <message>
-        <source>Your entries added successfully.</source>
-        <translation>Vian enirojn aldonis sukcese.</translation>
     </message>
     <message>
         <source>Zerocoin options:</source>
