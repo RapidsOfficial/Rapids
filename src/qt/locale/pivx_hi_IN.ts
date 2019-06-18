@@ -123,9 +123,6 @@
     </message>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -142,14 +139,6 @@
     </context>
 <context>
     <name>PrivacyDialog</name>
-    <message>
-        <source>Quantity:</source>
-        <translation>मात्रा:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>राशि:</translation>
-    </message>
     <message>
         <source>Fee:</source>
         <translation>फ़ीस:</translation>

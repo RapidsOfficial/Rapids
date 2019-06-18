@@ -919,9 +919,6 @@ MultiSend: %1</translation>
     </message>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -938,14 +935,6 @@ MultiSend: %1</translation>
     </context>
 <context>
     <name>PrivacyDialog</name>
-    <message>
-        <source>Quantity:</source>
-        <translation>Množstvo:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Suma:</translation>
-    </message>
     <message>
         <source>Choose previously used address</source>
         <translation>Vyberte predtým použitú adresu</translation>
@@ -981,10 +970,6 @@ MultiSend: %1</translation>
     <message>
         <source>Change:</source>
         <translation>Zmena:</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Skopírovať sumu</translation>
     </message>
     </context>
 <context>

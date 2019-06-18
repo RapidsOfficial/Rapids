@@ -1115,57 +1115,6 @@
     </message>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Configura ofuscació</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Privacitat bàsica</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Privacitat alta</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Privacitat màxima</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Si us plau, selecciona un nivell de privacitat.</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Utilitza 2 masternodes diferents per mesclar fons de fins a 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Utilitza 8 masternodes diferents per mesclar fons de fins a 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Utilitza 16 masternodes diferents</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Aquesta opció és la més ràpida i té un cost d'uns ~0.025 PIV per anonimitzar 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Aquesta opció és moderadament ràpida i té un cost d'uns 0.05 PIV per anonimitzar 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Aquesta és l'opció més lenta però més segura. Usar l'anonimitzat màxim té un cost de</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Configuració de l'ofuscació</translation>
-    </message>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1295,20 +1244,8 @@
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset</source>
         <translation>Restableix</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Quantitat:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Import:</translation>
     </message>
     <message>
         <source>0 zPIV</source>
@@ -1353,14 +1290,6 @@
     <message>
         <source>Change:</source>
         <translation>Canvi:</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Copia la quantitat</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Copia l'import</translation>
     </message>
     </context>
 <context>
@@ -1984,16 +1913,8 @@
 <context>
     <name>pivx-core</name>
     <message>
-        <source>Can't mix while sync in progress.</source>
-        <translation>No es pot mesclar mentre s'està sincronitzant.</translation>
-    </message>
-    <message>
         <source>Connection options:</source>
         <translation>Opcions de connexió:</translation>
-    </message>
-    <message>
-        <source>Error connecting to Masternode.</source>
-        <translation>Error connectant al Masternode.</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2020,22 +1941,6 @@
         <translation>S'està carregant el moneder...</translation>
     </message>
     <message>
-        <source>Masternode:</source>
-        <translation>Masternode:</translation>
-    </message>
-    <message>
-        <source>Mixing in progress...</source>
-        <translation>Mescla en curs...</translation>
-    </message>
-    <message>
-        <source>No Masternodes detected.</source>
-        <translation>No s'han detectat masternodes.</translation>
-    </message>
-    <message>
-        <source>No compatible Masternode found.</source>
-        <translation>No s'han trobat masternodes compatibles.</translation>
-    </message>
-    <message>
         <source>Options:</source>
         <translation>Opcions:</translation>
     </message>
@@ -2048,18 +1953,6 @@
         <translation>S'està reescanejant...</translation>
     </message>
     <message>
-        <source>Submitted following entries to masternode: %u / %d</source>
-        <translation>S'ha enviat les següents entrades al masternode: %u /%d</translation>
-    </message>
-    <message>
-        <source>Submitted to masternode, waiting for more entries ( %u / %d ) %s</source>
-        <translation>Enviat al masternode, esperant més entrades ( %u / %d ) %s</translation>
-    </message>
-    <message>
-        <source>Submitted to masternode, waiting in queue %s</source>
-        <translation>Enviat al masternode, esperant a la cua %s</translation>
-    </message>
-    <message>
         <source>Synchronization failed</source>
         <translation>La sincronització ha fallat</translation>
     </message>
@@ -2068,20 +1961,12 @@
         <translation>Sincronització finalitzada</translation>
     </message>
     <message>
-        <source>Transaction not valid.</source>
-        <translation>Transacció no vàlida.</translation>
-    </message>
-    <message>
         <source>Verifying blocks...</source>
         <translation>Verificant blocs...</translation>
     </message>
     <message>
         <source>Verifying wallet...</source>
         <translation>Verificant moneder...</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>El moneder està bloquejat.</translation>
     </message>
     <message>
         <source>Warning</source>

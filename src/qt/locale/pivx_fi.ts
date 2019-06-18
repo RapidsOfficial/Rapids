@@ -1088,61 +1088,6 @@
     </message>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Konfiguroi Hämäys</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Perus Yksityisyys</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Korkea Yksityisyys</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Maksimi Yksityisyys</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Valitse yksityisyyden taso.</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Käytä 2 erillistä masternodea sekoittaaksesi enintään 10000 PIVX</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Käytä 8 erillistä masternodea sekoittaaksesi enintään 10000 PIVX</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Käytä 16 erillistä masternodea</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Tämä vaihtoehto on nopein ja maksaa noin ~0.025 PIV anonymoidaksesi 10000 PIVX</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Tämä vaihtoehto on suhteellisen nopea ja maksaa 0.05 PIVX anonymoidaksesi 10000 PIVX</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Tämä on hitain ja turvallisin vaihtoehto. Täydesti anonymisoiminen ei maksa mitään.</translation>
-    </message>
-    <message>
-        <source>0.1 PIV per 10000 PIV you anonymize.</source>
-        <translation>0.1 per 10000 PIVX, jotka anonymisoit.</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Hämäys konfiguraatio</translation>
-    </message>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1264,10 +1209,6 @@
         <translation>Käyttöliittymän teema:</translation>
     </message>
     <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>&amp;Yksikkö jossa määrä näytetään:</translation>
-    </message>
-    <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
         <translation>Käytä oletus vähennysyksikköä käyttöliittymässä ja kolikoita lähettäessä.</translation>
     </message>
@@ -1376,14 +1317,6 @@
         <translation>0</translation>
     </message>
     <message>
-        <source>Quantity:</source>
-        <translation>Määrä:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Määrä:</translation>
-    </message>
-    <message>
         <source>Choose previously used address</source>
         <translation>Valitse aikaisemmin käytetty osoite</translation>
     </message>
@@ -1442,14 +1375,6 @@
     <message>
         <source>Change:</source>
         <translation>Muutos:</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Kopioi määrä</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopioi määrä</translation>
     </message>
     <message>
         <source>Confirm send coins</source>
@@ -2545,10 +2470,6 @@
         <translation>Lataus valmis</translation>
     </message>
     <message>
-        <source>Error connecting to Masternode.</source>
-        <translation>Virhe Masternodeen yhdistyksessä</translation>
-    </message>
-    <message>
         <source>Error initializing block database</source>
         <translation>Virhe aloittaessa lohko tietokantaa</translation>
     </message>
@@ -2585,20 +2506,8 @@
         <translation>Virhe: Lompakko lukittu, ei voida luoda rahansiirtoa!</translation>
     </message>
     <message>
-        <source>Finalizing transaction.</source>
-        <translation>Viimeistellään rahansiirto.</translation>
-    </message>
-    <message>
         <source>Importing...</source>
         <translation>Tuodaan...</translation>
-    </message>
-    <message>
-        <source>Incompatible mode.</source>
-        <translation>Yhteensopimaton tila.</translation>
-    </message>
-    <message>
-        <source>Incompatible version.</source>
-        <translation>Yhteensopimaton versio.</translation>
     </message>
     <message>
         <source>Information</source>
@@ -2611,10 +2520,6 @@
     <message>
         <source>Invalid private key.</source>
         <translation>Virheellinen yksityisavain.</translation>
-    </message>
-    <message>
-        <source>Invalid script detected.</source>
-        <translation>Virheellinen skripti havaittu.</translation>
     </message>
     <message>
         <source>&lt;category&gt; can be:</source>
@@ -2633,20 +2538,12 @@
         <translation>Lataa lompakkoa...</translation>
     </message>
     <message>
-        <source>Lock is already in place.</source>
-        <translation>Lukitus on jo käytössä.</translation>
-    </message>
-    <message>
         <source>Options:</source>
         <translation>Vaihtoehdot:</translation>
     </message>
     <message>
         <source>Rescanning...</source>
         <translation>Skannaa uudelleen...</translation>
-    </message>
-    <message>
-        <source>Session not complete!</source>
-        <translation>Sessio ei valmis!</translation>
     </message>
     <message>
         <source>Session timed out.</source>
@@ -2693,28 +2590,12 @@
         <translation>Rahansiirtojen tulee olla positiivisia</translation>
     </message>
     <message>
-        <source>Transaction created successfully.</source>
-        <translation>Rahansiirto luotu onnistuneesti.</translation>
-    </message>
-    <message>
-        <source>Transaction fees are too high.</source>
-        <translation>Rahansiirron taksat ovat liian korkeat.</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>Rahansiirto ei onnistu</translation>
-    </message>
-    <message>
         <source>Transaction too large for fee policy</source>
         <translation>Rahansiirto liian iso taksaan nähden</translation>
     </message>
     <message>
         <source>Transaction too large</source>
         <translation>Rahansiirto liian suuri</translation>
-    </message>
-    <message>
-        <source>Transmitting final transaction.</source>
-        <translation>Lähetetään viimeinen rahansiirto.</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -2733,10 +2614,6 @@
         <translation>Tarkistaa lompakkoa...</translation>
     </message>
     <message>
-        <source>Wallet is locked.</source>
-        <translation>Lompakko on lukittu.</translation>
-    </message>
-    <message>
         <source>Wallet options:</source>
         <translation>Lompakon vaihtoehdot:</translation>
     </message>
@@ -2747,10 +2624,6 @@
     <message>
         <source>Warning: This version is obsolete, upgrade required!</source>
         <translation>Varoitus: Tämä versio on vanha, päivitys vaadittu!</translation>
-    </message>
-    <message>
-        <source>Will retry...</source>
-        <translation>Yrittää uudelleen...</translation>
     </message>
     <message>
         <source>on startup</source>

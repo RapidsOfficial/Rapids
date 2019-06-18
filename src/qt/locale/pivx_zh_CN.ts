@@ -681,6 +681,10 @@
         <translation>最新</translation>
     </message>
     <message>
+        <source>%1 and %2</source>
+        <translation>%1 和 %2</translation>
+    </message>
+    <message>
         <source>Catching up...</source>
         <translation>追赶…</translation>
     </message>
@@ -899,9 +903,6 @@ Address: %4
     <name>MultisigDialog</name>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -989,10 +990,6 @@ Address: %4
     <message>
         <source>User Interface Theme:</source>
         <translation>界面主题（语言包）:</translation>
-    </message>
-    <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>&amp;单位显示金额</translation>
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
@@ -1590,14 +1587,6 @@ Address: %4
     <message>
         <source>Warning</source>
         <translation>注意</translation>
-    </message>
-    <message>
-        <source>Your entries added successfully.</source>
-        <translation>您的输入成功添加。</translation>
-    </message>
-    <message>
-        <source>Your transaction was accepted into the pool!</source>
-        <translation>您的交易被矿池接受！</translation>
     </message>
     </context>
 </TS>

@@ -1436,6 +1436,16 @@ Adres: %4
         <translation>Gönderim adresi girin</translation>
     </message>
     <message>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other PIVX addresses after it matures.
+To Add: enter percentage to give and PIVX address to add to the MultiSend vector.
+To Delete: Enter address to delete and press delete.
+MultiSend will not be activated unless you have clicked Activate</source>
+        <translation>ÇokluGönderi, olgunlaştıktan sonra diğer PIVX adreslerinin bir listesine staking ya da masternode ödülünüzün 100% 'ünü otomatik olarak göndermenize olanak tanır.
+Eklemek için: Verilecek yüzdeyi ve ÇokluGönderi vektörüne eklemek için PIVX adresi girin.
+Silme: Silinecek adresi girin ve silmek için basın.
+ÇokluGönderi, Etkinleştir'i tıklamadığınız sürece etkinleştirilmeyecektir</translation>
+    </message>
+    <message>
         <source>Add to MultiSend Vector</source>
         <translation>ÇokluGönderi Vektörüne Ekle</translation>
     </message>
@@ -1730,73 +1740,6 @@ Unutmayın, cüzdan, yeni adresi içeren işlemleri bulmak için blok zinciri ye
     </message>
 </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Şaşırtmayı Yapılandır</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Temel Gizlilik</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Yüksek Gizlilik</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Maksimum Gizlilik</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Lütfen bir gizlilik düzeyi seçin.</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>10000 PIV'e kadar fonları karıştırmak için 2 ayrı matternod kullanın</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>10000 PIV'ye kadar olan fonları karıştırmak için 8 ayrı matternod kullanın</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>16 ayrı matternod kullan</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Bu seçenek en hızlıdır ve 10000 PIV'yi anonimleştirmek için ~ 0.025 PIV'lik bir maliyeti olacaktır</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Bu seçenek orta derecede hızlıdır ve 10000 PIV'yi anonimleştirmek için yaklaşık 0.05 PIV'e mal olur</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Bu en yavaş ve en güvenli seçenektir. Maksimum anonimlik kullanmak maliyete gelecek</translation>
-    </message>
-    <message>
-        <source>0.1 PIV per 10000 PIV you anonymize.</source>
-        <translation>0.1 PIV her 10000 PIV anonimleştirmeye.</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Şaşırtma ayarlama</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Şaşırtma başarıyla temele ayarlandı. (%1 ve  2 turlar) Bunu istediğiniz zaman değiştirmek için PIVX in ayarlar ekranını açmanız yeterli</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Şaşırtma başarıyla Yüksek e ayarlandı. (%1 ve 8 turlar) Bunu istediğiniz zaman değiştirmek için PIVX in ayarlar ekranını açmanız yeterli</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Şaşırtma başarıyla maksimuma ayarlandı. (%1 ve 16 turlar) Bunu istediğiniz zaman değiştirmek için PIVX in ayarlar ekranını açmanız yeterli</translation>
-    </message>
-</context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1994,10 +1937,6 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>User Interface Theme:</source>
         <translation>Kullanıcı Arabirimi Teması:</translation>
-    </message>
-    <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>&amp; Birim tutarları göstermek için:</translation>
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
@@ -2362,36 +2301,12 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf<
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</source>
-        <translation>Minting için teyit edilmiş ve kilitli olmayan paralar veya Masternode teminatları mevcuttur.</translation>
-    </message>
-    <message>
-        <source>Available for Minting:</source>
-        <translation>Mintinge hazır</translation>
-    </message>
-    <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset Zerocoin Wallet DB. Deletes transactions that did not make it into the blockchain.</source>
         <translation>Zerocoin Cüzdan DB'yi sıfırlayın. Blok zincirine sokmayan işlemleri siler.</translation>
     </message>
     <message>
         <source>Reset</source>
         <translation>Sıfırla</translation>
-    </message>
-    <message>
-        <source>Coin Control...</source>
-        <translation>Coin kontrol...</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Miktar</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Tutar:</translation>
     </message>
     <message>
         <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
@@ -2408,10 +2323,6 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf<
     <message>
         <source>PRIVACY</source>
         <translation>GİZLİLİK</translation>
-    </message>
-    <message>
-        <source>Enter an amount of Piv to convert to zPIV</source>
-        <translation>ZPiv'e dönüştürmek için bir miktar Piv girin</translation>
     </message>
     <message>
         <source>zPIV Control</source>
@@ -2529,7 +2440,7 @@ zPIV, 20'den fazla teyit bulunduğunda olgunlaşır ve bundan sonra aynı mezhep
         <source>Unconfirmed: less than 20 confirmations
 Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
         <translation>Doğrulanmamış: 20'den az doğrulama
-Olgunlaşmamış: onaylandı, ancak basıldıktan sonra aynı ölçü biriminden 1 basım daha az miktarda.</translation>
+Olgunlaşmamış: onaylandı, ancak basıldıktan sonra aynı ölçü biriminden 1 taneden daha az basım bulunmakta.</translation>
     </message>
     <message>
         <source>AutoMint Status</source>
@@ -2664,24 +2575,10 @@ Olgunlaşmamış: onaylandı, ancak basıldıktan sonra aynı ölçü biriminden
         <translation>Mint Durumu: Tamam</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Miktarı kopyala</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Miktarı kopyala</translation>
-    </message>
-    <message>
         <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
 Please be patient...</source>
         <translation>ResetMintZerocoin: tam blok zinciri yeniden tarama, bu donanımınıza bağlı olarak 30 dakika kadar sürmelidir.
 Lütfen sabırlı olun...</translation>
-    </message>
-    <message>
-        <source>) needed.
-Maximum allowed: </source>
-        <translation>) gerekli.
-Maksimum bırakılan: </translation>
     </message>
     <message>
         <source>zPIV is currently disabled due to maintenance.</source>
@@ -2694,32 +2591,6 @@ Maksimum bırakılan: </translation>
     <message>
         <source>AutoMint Status:</source>
         <translation>Otomatik Basım Durumu:</translation>
-    </message>
-    <message>
-        <source>Error: Your wallet is locked. Please enter the wallet passphrase first.</source>
-        <translation>Hata: Cüzdan kilitlendi. Lütfen önce cüzdan parolasını girin.</translation>
-    </message>
-    <message>
-        <source>Message: Enter an amount &gt; 0.</source>
-        <translation>Mesaj: Değer girin  &gt; 0.</translation>
-    </message>
-    <message>
-        <source>Minting </source>
-        <translation>Minting </translation>
-    </message>
-    <message>
-        <source>Successfully minted </source>
-        <translation>Başarılı şekilde mint edildi</translation>
-    </message>
-    <message>
-        <source> zPIV in </source>
-        <translation> zPIV in </translation>
-    </message>
-    <message>
-        <source> sec. Used denominations:
-</source>
-        <translation> sec. Used denominations:
-</translation>
     </message>
     <message>
         <source>Duration: </source>
@@ -2766,16 +2637,6 @@ Maksimum bırakılan: </translation>
     <message>
         <source>Confirm send coins</source>
         <translation>Coin gönderimini onayla</translation>
-    </message>
-    <message>
-        <source>Too much inputs (</source>
-        <translation>Çok fazla girdi (</translation>
-    </message>
-    <message>
-        <source>
-Either mint higher denominations (so fewer inputs are needed) or reduce the amount to spend.</source>
-        <translation>
-Ya daha yüksek mezhepleri daraltın (daha az girdi gereklidir) veya harcama miktarını azaltın.</translation>
     </message>
     <message>
         <source>Spend Zerocoin failed with status = </source>
@@ -4615,10 +4476,6 @@ Ya daha yüksek mezhepleri daraltın (daha az girdi gereklidir) veya harcama mik
         <translation>Bellek havuzundan disk günlüğüne her veritabanı aktivitesini temizle&lt;n&gt; megabytes (default: %u)</translation>
     </message>
     <message>
-        <source>Found unconfirmed denominated outputs, will wait till they confirm to continue.</source>
-        <translation>Teyit edilmemiş isimler buldular, devam ettiklerini onaylayana kadar bekleyecekler.</translation>
-    </message>
-    <message>
         <source>If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)</source>
         <translation>Paytxfee belirlenmemişse, işlemlerin ortalama n blokta onaylanmaya başlaması için yeterli ücret ekleyin (varsayılan: %u)</translation>
     </message>
@@ -4653,14 +4510,6 @@ Ya daha yüksek mezhepleri daraltın (daha az girdi gereklidir) veya harcama mik
     <message>
         <source>Done loading</source>
         <translation>Yükleme tamamlandı</translation>
-    </message>
-    <message>
-        <source>Entries are full.</source>
-        <translation>Girişler full</translation>
-    </message>
-    <message>
-        <source>Error connecting to Masternode.</source>
-        <translation>Masternod'a bağlanırken hata oluştu.</translation>
     </message>
     <message>
         <source>Error initializing block database</source>
@@ -4737,10 +4586,6 @@ Ya daha yüksek mezhepleri daraltın (daha az girdi gereklidir) veya harcama mik
         <translation>Masternode seçenekleri:</translation>
     </message>
     <message>
-        <source>Masternode:</source>
-        <translation>Masternode:</translation>
-    </message>
-    <message>
         <source>Rescanning...</source>
         <translation>Yeniden taranıyor...</translation>
     </message>
@@ -4757,16 +4602,8 @@ Ya daha yüksek mezhepleri daraltın (daha az girdi gereklidir) veya harcama mik
         <translation>Bu yardım mesajı</translation>
     </message>
     <message>
-        <source>This is not a Masternode.</source>
-        <translation>Bu masternod değil</translation>
-    </message>
-    <message>
         <source>Transaction amount too small</source>
         <translation>İşlem miktarı çok düşük</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>İşlem geçersiz</translation>
     </message>
     <message>
         <source>Verifying blocks...</source>
@@ -4775,10 +4612,6 @@ Ya daha yüksek mezhepleri daraltın (daha az girdi gereklidir) veya harcama mik
     <message>
         <source>Verifying wallet...</source>
         <translation>Cüzdan doğrulanıyor..</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>Cüzdan kilitli.</translation>
     </message>
     <message>
         <source>Wallet options:</source>

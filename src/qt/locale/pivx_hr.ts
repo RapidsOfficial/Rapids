@@ -983,9 +983,6 @@
     </message>
     </context>
 <context>
-    <name>ObfuscationConfig</name>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     </context>
 <context>
@@ -1005,14 +1002,6 @@
     <message>
         <source>0</source>
         <translation>0</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Količina:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Iznos:</translation>
     </message>
     <message>
         <source>Choose previously used address</source>
@@ -1049,14 +1038,6 @@
     <message>
         <source>Change:</source>
         <translation>Ostatak:</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Kopiraj količinu</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopiraj iznos</translation>
     </message>
     </context>
 <context>
@@ -1624,20 +1605,12 @@
         <translation>Transakcija stvorena</translation>
     </message>
     <message>
-        <source>Transaction not valid.</source>
-        <translation>Transakcija nije valjana.</translation>
-    </message>
-    <message>
         <source>Transaction too large for fee policy</source>
         <translation>Transakcija je prevelika za trenutnu naknadu</translation>
     </message>
     <message>
         <source>Transaction too large</source>
         <translation>Transakcija je prevelika</translation>
-    </message>
-    <message>
-        <source>Unable to find transaction containing mint</source>
-        <translation>Nije moguće pronaći transakciju koja sadrži novcic</translation>
     </message>
     <message>
         <source>Use the test network</source>
@@ -1650,10 +1623,6 @@
     <message>
         <source>Verifying wallet...</source>
         <translation>Provjera novčanika...</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>Novčanik je zaključan.</translation>
     </message>
     <message>
         <source>Wallet options:</source>

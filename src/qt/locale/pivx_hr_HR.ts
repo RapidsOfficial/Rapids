@@ -1707,73 +1707,6 @@ Budite strpljivi nakon što kliknete uvoz.</translation>
     </message>
 </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Konfiguriraj Obfuscation</translation>
-    </message>
-    <message>
-        <source>Basic Privacy</source>
-        <translation>Osnovna privatnost</translation>
-    </message>
-    <message>
-        <source>High Privacy</source>
-        <translation>Visoka privatnost</translation>
-    </message>
-    <message>
-        <source>Maximum Privacy</source>
-        <translation>Maksimalna privatnost</translation>
-    </message>
-    <message>
-        <source>Please select a privacy level.</source>
-        <translation>Odaberi razinu privatnosti.</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Koristite 2 odvojene masternode za miješanje sredstava do 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Koristite 8 zasebnih masternoda za miješanje sredstava do 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Koristite 16 zasebnih masternodova</translation>
-    </message>
-    <message>
-        <source>This option is the quickest and will cost about ~0.025 PIV to anonymize 10000 PIV</source>
-        <translation>Ova je opcija najbrža i košta oko 0,025 PIV da anonimizira 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This option is moderately fast and will cost about 0.05 PIV to anonymize 10000 PIV</source>
-        <translation>Ova je opcija umjereno brza i košta oko 0,05 PIV da anonimizira 10000 PIV</translation>
-    </message>
-    <message>
-        <source>This is the slowest and most secure option. Using maximum anonymity will cost</source>
-        <translation>Ovo je najsporiji i najsigurniji izbor. Korištenje maksimalne anonimnosti košta</translation>
-    </message>
-    <message>
-        <source>0.1 PIV per 10000 PIV you anonymize.</source>
-        <translation>0,1 PIV po 10000 PIV za anonimizaciju.</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Obfuscation Konfiguracija</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to basic (%1 and 2 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Obfuscation je uspješno postavljen na osnovne (%1 i 2 runde). To možete promijeniti u bilo kojem trenutku otvaranjem zaslona za konfiguraciju PIVX-a.</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to high (%1 and 8 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Obfuscation je uspješno postavljen na visoku razinu (%1 i 8 krugova). To možete promijeniti u bilo kojem trenutku otvaranjem zaslona za konfiguraciju PIVX-a</translation>
-    </message>
-    <message>
-        <source>Obfuscation was successfully set to maximum (%1 and 16 rounds). You can change this at any time by opening PIVX's configuration screen.</source>
-        <translation>Obfuscation je uspješno postavljen na maksimalnu razinu (%1 i 16 krugova). To možete promijeniti u bilo kojem trenutku otvaranjem zaslona za konfiguraciju PIVX-a.</translation>
-    </message>
-</context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1976,10 +1909,6 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     <message>
         <source>User Interface Theme:</source>
         <translation>Tema sučelja korisnika:</translation>
-    </message>
-    <message>
-        <source>&amp;Unit to show amounts in:</source>
-        <translation>Jedinica za prikaz količine:</translation>
     </message>
     <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
@@ -2344,36 +2273,12 @@ Da biste omogućili, promjenite postavke AutoMint 'enablezeromint=0' na 'enablez
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>Available for minting are coins which are confirmed and not locked or Masternode collaterals.</source>
-        <translation>Dostupne za mintanje su kovanice koje su potvrđene i nisu zaključane ili Masternode kolateralne.</translation>
-    </message>
-    <message>
-        <source>Available for Minting:</source>
-        <translation>Dostupno za Minting:</translation>
-    </message>
-    <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset Zerocoin Wallet DB. Deletes transactions that did not make it into the blockchain.</source>
         <translation>Ponovno postavite Zerocoin Wallet DB. Briše transakcije koje nisu dospjele u blockchain.</translation>
     </message>
     <message>
         <source>Reset</source>
         <translation>Reset</translation>
-    </message>
-    <message>
-        <source>Coin Control...</source>
-        <translation>Upravljanje novčićem...</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Količina:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Iznos:</translation>
     </message>
     <message>
         <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
@@ -2390,10 +2295,6 @@ Da biste omogućili, promjenite postavke AutoMint 'enablezeromint=0' na 'enablez
     <message>
         <source>PRIVACY</source>
         <translation>PRIVATNOST</translation>
-    </message>
-    <message>
-        <source>Enter an amount of Piv to convert to zPIV</source>
-        <translation>Unesite iznos Piv za pretvorbu u zPIV</translation>
     </message>
     <message>
         <source>zPIV Control</source>
@@ -2698,23 +2599,9 @@ Promjena postotka (nije potrebno ponovno pokretanje):
         <translation>Mint Status: U redu</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Kopirajte količinu</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopiraj iznos</translation>
-    </message>
-    <message>
         <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
 Please be patient...</source>
         <translation>Pokretanje ResetMintZerocoin: ponovno skeniranje potpunog blockchain, to će trajati i do 30 minuta, ovisno o vašem hardveru.</translation>
-    </message>
-    <message>
-        <source>) needed.
-Maximum allowed: </source>
-        <translation>) potrebno.
-Maksimalno dopušteno:</translation>
     </message>
     <message>
         <source>zPIV Spend #: </source>
@@ -2813,31 +2700,6 @@ Maksimalno dopušteno:</translation>
         <translation>Denom. &lt;b&gt;5000&lt;/b&gt;:</translation>
     </message>
     <message>
-        <source>Error: Your wallet is locked. Please enter the wallet passphrase first.</source>
-        <translation>Pogreška: vaš je novčanik zaključan. Najprije unesite zaporku novčanika.</translation>
-    </message>
-    <message>
-        <source>Message: Enter an amount &gt; 0.</source>
-        <translation>Poruka: unesite iznos&gt; 0.</translation>
-    </message>
-    <message>
-        <source>Minting </source>
-        <translation>Minting </translation>
-    </message>
-    <message>
-        <source>Successfully minted </source>
-        <translation>Uspješno mintano</translation>
-    </message>
-    <message>
-        <source> zPIV in </source>
-        <translation> ulazni zPIV </translation>
-    </message>
-    <message>
-        <source> sec. Used denominations:
-</source>
-        <translation>sek. Upotrijebljene denominacije:</translation>
-    </message>
-    <message>
         <source>Duration: </source>
         <translation>Trajanje:</translation>
     </message>
@@ -2886,15 +2748,6 @@ Maksimalno dopušteno:</translation>
     <message>
         <source>Failed to fetch mint associated with serial hash</source>
         <translation>Neuspjelo dohvaćanje minta asociranog s serijskim hashom</translation>
-    </message>
-    <message>
-        <source>Too much inputs (</source>
-        <translation>Previše unosa (</translation>
-    </message>
-    <message>
-        <source>
-Either mint higher denominations (so fewer inputs are needed) or reduce the amount to spend.</source>
-        <translation>Ili mintaj više vrijedne denominacije (tako da je potrebno manje ulaza) ili smanjiti iznos potrošnje</translation>
     </message>
     <message>
         <source>Spend Zerocoin failed with status = </source>
@@ -4895,10 +4748,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Ispraznite aktivnost baze podataka iz baze memorije na dnevnik diska svakog megabajta (zadano: %u)</translation>
     </message>
     <message>
-        <source>Found unconfirmed denominated outputs, will wait till they confirm to continue.</source>
-        <translation>Pronađeni su nepotvrđeni denonimi izlaza, čekat će dok ne potvrde nastavak.</translation>
-    </message>
-    <message>
         <source>If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)</source>
         <translation>Ako paytxfee nije postavljen, uključite dovoljnu naknadu kako bi transakcije započele potvrdu u prosjeku unutar n blokova (zadana vrijednost: %u)</translation>
     </message>
@@ -5083,10 +4932,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Dopustite traženja DNS-a za -addnode, -seednode i -connect</translation>
     </message>
     <message>
-        <source>Already have that input.</source>
-        <translation>Već imate taj unos.</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>Uvijek se upita za peer adrese putem DNS pretraživanja (zadano: %u)</translation>
     </message>
@@ -5107,18 +4952,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Izračun akumulatora koji nedostaju ...</translation>
     </message>
     <message>
-        <source>Can't denominate: no compatible inputs left.</source>
-        <translation>Nije moguće denominirati: nema kompatibilnih ulaza.</translation>
-    </message>
-    <message>
-        <source>Can't find random Masternode.</source>
-        <translation>Nije moguće pronaći slučajni Masternode.</translation>
-    </message>
-    <message>
-        <source>Can't mix while sync in progress.</source>
-        <translation>Nije moguće miješati dok je sinkronizacija u tijeku.</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Nije moguće novčanik vratiti na nižu verziju</translation>
     </message>
@@ -5137,10 +4970,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Cannot write default address</source>
         <translation>Ne možete zapisati zadanu adresu</translation>
-    </message>
-    <message>
-        <source>Collateral not valid.</source>
-        <translation>Zalog nije valjan.</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -5228,14 +5057,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Omogućite klijentu da djeluje kao masternode (0-1, zadano: %u)</translation>
     </message>
     <message>
-        <source>Entries are full.</source>
-        <translation>Unosi su puni.</translation>
-    </message>
-    <message>
-        <source>Error connecting to Masternode.</source>
-        <translation>Pogreška pri povezivanju s Masternodeom.</translation>
-    </message>
-    <message>
         <source>Error initializing block database</source>
         <translation>Pogreška prilikom inicijalizacije baze blokova</translation>
     </message>
@@ -5284,10 +5105,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Pogreška: Došlo je do kobne interne pogreške, pogledajte detalje o debug.logu</translation>
     </message>
     <message>
-        <source>Error: Can't select current denominated inputs</source>
-        <translation>Pogreška: Nije moguće odabrati trenutne unose</translation>
-    </message>
-    <message>
         <source>Error: Disk space is low!</source>
         <translation>Pogreška: prostor na disku je nizak!</translation>
     </message>
@@ -5298,10 +5115,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
         <translation>Pogreška: Novčanik zaključan, ne može stvoriti transakciju!</translation>
-    </message>
-    <message>
-        <source>Error: You already have pending entries in the Obfuscation pool</source>
-        <translation>Pogreška: već imate unose čekanja u grupi za Prekrivanje</translation>
     </message>
     <message>
         <source>Failed to calculate accumulator checkpoint</source>
@@ -5320,20 +5133,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Naknada (u PIV / kB) za dodavanje transakcija koje šaljete (zadano: %s)</translation>
     </message>
     <message>
-        <source>Finalizing transaction.</source>
-        <translation>Završavanje transakcije.</translation>
-    </message>
-    <message>
         <source>Force safe mode (default: %u)</source>
         <translation>Prisilno poktretanje sigurnosnog načina rada (zadano: %u)</translation>
-    </message>
-    <message>
-        <source>Found enough users, signing ( waiting %s )</source>
-        <translation>Pronađeno dovoljno korisnika, potpisivanje (čekanje %s)</translation>
-    </message>
-    <message>
-        <source>Found enough users, signing ...</source>
-        <translation>Pronađeno dovoljno korisnika, potpisivanje ...</translation>
     </message>
     <message>
         <source>Generate coins (default: %u)</source>
@@ -5360,14 +5161,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Uključi IP adrese u izlaz za ispravljanje pogrešaka (zadano: %u)</translation>
     </message>
     <message>
-        <source>Incompatible mode.</source>
-        <translation>Nepodudarni način rada.</translation>
-    </message>
-    <message>
-        <source>Incompatible version.</source>
-        <translation>Nepodudarna verzija.</translation>
-    </message>
-    <message>
         <source>Incorrect or no genesis block found. Wrong datadir for network?</source>
         <translation>Netočan ili nijedan blok geneze nije pronađen. Pogrešan datadir za mrežu?</translation>
     </message>
@@ -5378,10 +5171,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
         <translation>Provjera ispravnosti inicijalizacije nije uspjela. PIVX Core se zatvara.</translation>
-    </message>
-    <message>
-        <source>Input is not valid.</source>
-        <translation>Unos nije valjan.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -5438,10 +5227,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Invalid private key.</source>
         <translation>Nevažeći privatni ključ.</translation>
-    </message>
-    <message>
-        <source>Invalid script detected.</source>
-        <translation>Otkriven nevažeća skripta.</translation>
     </message>
     <message>
         <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
@@ -5607,14 +5392,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Zadržite najviše &lt;n&gt; neprenosive transakcije u memoriji (zadano: %u)</translation>
     </message>
     <message>
-        <source>Last Obfuscation was too recent.</source>
-        <translation>Poslijednje prikrivanje je bilo nedavno.</translation>
-    </message>
-    <message>
-        <source>Last successful Obfuscation action was too recent.</source>
-        <translation>Posljednje uspješno Prikrivanje je bilo nedavno.</translation>
-    </message>
-    <message>
         <source>Limit size of signature cache to &lt;n&gt; entries (default: %u)</source>
         <translation>Ograničite veličinu predmemorije potpisa na 1 unosa (zadano: %u)</translation>
     </message>
@@ -5667,10 +5444,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Lokacija autentičnog kolačića (zadano: dir. Podataka)</translation>
     </message>
     <message>
-        <source>Lock is already in place.</source>
-        <translation>Zaključavanje na mjestu.</translation>
-    </message>
-    <message>
         <source>Lock masternodes from masternode configuration file (default: %u)</source>
         <translation>Zaključaj masternode iz masternode konfiguracijske datoteke (zadano: %u)</translation>
     </message>
@@ -5687,14 +5460,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Opcije Masternoda:</translation>
     </message>
     <message>
-        <source>Masternode queue is full.</source>
-        <translation>Niz Masternoda je pun.</translation>
-    </message>
-    <message>
-        <source>Masternode:</source>
-        <translation>Masternode:</translation>
-    </message>
-    <message>
         <source>Maximum per-connection receive buffer, &lt;n&gt;*1000 bytes (default: %u)</source>
         <translation>Maksimalni međuspremnik za primanje veze, &lt;n&gt;* 1000 bajta (zadano: %u)</translation>
     </message>
@@ -5707,14 +5472,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Kovanje nije ušlo u blockchain</translation>
     </message>
     <message>
-        <source>Missing input transaction information.</source>
-        <translation>Nedostaju informacije o ulaznoj transakciji.</translation>
-    </message>
-    <message>
-        <source>Mixing in progress...</source>
-        <translation>Miješanje u tijeku ...</translation>
-    </message>
-    <message>
         <source>Need address because change is not exact</source>
         <translation>Trebate adresu, jer ostatak nije točan</translation>
     </message>
@@ -5723,40 +5480,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Morate navesti vezu s -whitebind: '%s'</translation>
     </message>
     <message>
-        <source>No Masternodes detected.</source>
-        <translation>Masternode nije pronađen.</translation>
-    </message>
-    <message>
-        <source>No compatible Masternode found.</source>
-        <translation>Nema kompatibilnog Masternoda.</translation>
-    </message>
-    <message>
-        <source>No funds detected in need of denominating.</source>
-        <translation>Nema otkrivenih sredstava kojima je potrebna denominacija.</translation>
-    </message>
-    <message>
-        <source>No matching denominations found for mixing.</source>
-        <translation>Za miješanje nisu pronađeni odgovarajući apoeni.</translation>
-    </message>
-    <message>
         <source>Node relay options:</source>
         <translation>Opcije releja čvorova:</translation>
     </message>
     <message>
-        <source>Non-standard public key detected.</source>
-        <translation>Otkriven je nestandardni javni ključ.</translation>
-    </message>
-    <message>
-        <source>Not compatible with existing transactions.</source>
-        <translation>Nije kompatibilno s postojećim transakcijama.</translation>
-    </message>
-    <message>
         <source>Not enough file descriptors available.</source>
         <translation>Nije dostupno dovoljno deskriptora datoteka.</translation>
-    </message>
-    <message>
-        <source>Not in the Masternode list.</source>
-        <translation>Nije na popisu Masternode.</translation>
     </message>
     <message>
         <source>Number of automatic wallet backups (default: 10)</source>
@@ -5765,18 +5494,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>Broj sigurnosnih kopija prilagođenih lokacija za zadržavanje (zadano: %d)</translation>
-    </message>
-    <message>
-        <source>Obfuscation is idle.</source>
-        <translation>Prikrivanje je u stanju mirovanja.</translation>
-    </message>
-    <message>
-        <source>Obfuscation request complete:</source>
-        <translation>Zahtjev za Prikrivanje dovršeno:</translation>
-    </message>
-    <message>
-        <source>Obfuscation request incomplete:</source>
-        <translation>Nedovršeni zahtjevi za Prikrivanje:</translation>
     </message>
     <message>
         <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
@@ -5869,10 +5586,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>Ako je moguće, pošaljite transakcije kao transakcije s nultom naknadom (zadano: %u)</translation>
-    </message>
-    <message>
-        <source>Session not complete!</source>
-        <translation>Sjednica nije dovršena!</translation>
     </message>
     <message>
         <source>Session timed out.</source>
@@ -5979,18 +5692,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Prestani prikazivati nakon uvoza blokova s diska (zadano: %u)</translation>
     </message>
     <message>
-        <source>Submitted following entries to masternode: %u / %d</source>
-        <translation>Sljedeće unose podnesi na masternode: %u / %d</translation>
-    </message>
-    <message>
-        <source>Submitted to masternode, waiting for more entries ( %u / %d ) %s</source>
-        <translation>Poslano na masternode, čeka se više unosa ( %u / %d ) %s</translation>
-    </message>
-    <message>
-        <source>Submitted to masternode, waiting in queue %s</source>
-        <translation>poslano na masternode, čeka se %s</translation>
-    </message>
-    <message>
         <source>Synchronization failed</source>
         <translation>Sinkronizacija neuspjela</translation>
     </message>
@@ -6043,10 +5744,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>To je namijenjeno alatima za test regresije i razvoju aplikacija.</translation>
     </message>
     <message>
-        <source>This is not a Masternode.</source>
-        <translation>Ovo nije Masternode.</translation>
-    </message>
-    <message>
         <source>Threshold for disconnecting misbehaving peers (default: %u)</source>
         <translation>Prag za odspajanje loših vršnjaka (zadano: %u)</translation>
     </message>
@@ -6079,18 +5776,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Iznos transakcije mora biti pozitivan</translation>
     </message>
     <message>
-        <source>Transaction created successfully.</source>
-        <translation>Transakcija uspješno stvorena.</translation>
-    </message>
-    <message>
-        <source>Transaction fees are too high.</source>
-        <translation>Previsoka naknada za transakciju.</translation>
-    </message>
-    <message>
-        <source>Transaction not valid.</source>
-        <translation>Transakcija nije valjana.</translation>
-    </message>
-    <message>
         <source>Transaction too large for fee policy</source>
         <translation>Transakcija prevelika da bi bila besplatna</translation>
     </message>
@@ -6099,24 +5784,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Transakcija prevelika</translation>
     </message>
     <message>
-        <source>Transmitting final transaction.</source>
-        <translation>Šaljem finalnu transakciju. </translation>
-    </message>
-    <message>
-        <source>Try to spend with a higher security level to include more coins</source>
-        <translation>Pokušajte potrošiti s višom razinom sigurnosti kako biste uključili više novca</translation>
-    </message>
-    <message>
         <source>Trying to spend an already spent serial #, try again.</source>
         <translation>Pokušavate potrošiti već utrošeni serijski broj #, pokušajte ponovo.</translation>
     </message>
     <message>
         <source>Unable to bind to %s on this computer (bind returned error %s)</source>
         <translation>Nije moguće vezati se na %s na ovom računalu (vezanje vraćene pogreške %s)</translation>
-    </message>
-    <message>
-        <source>Unable to find transaction containing mint</source>
-        <translation>Nije moguće pronaći transakciju koja sadrži mintanje</translation>
     </message>
     <message>
         <source>Unable to sign spork message, wrong key?</source>
@@ -6129,10 +5802,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Unknown network specified in -onlynet: '%s'</source>
         <translation>Nepoznata mreža specificirana u -onlynet: '%s'</translation>
-    </message>
-    <message>
-        <source>Unknown state: id = %u</source>
-        <translation>Nepoznato stanje: id = %u</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -6163,10 +5832,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Vrijednost je niža od najmanje dostupne denominacije (= 1) zPIV-a</translation>
     </message>
     <message>
-        <source>Value more than Obfuscation pool maximum allows.</source>
-        <translation>Vrijednost veća od maksimalnog broja Prikrivanja zbirnih sredstava.</translation>
-    </message>
-    <message>
         <source>Verifying blocks...</source>
         <translation>Provjera blokova ...</translation>
     </message>
@@ -6177,10 +5842,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Wallet %s resides outside data directory %s</source>
         <translation>Novčanik %s nalazi se izvan direktorija podataka %s</translation>
-    </message>
-    <message>
-        <source>Wallet is locked.</source>
-        <translation>Novčanik zaključan.</translation>
     </message>
     <message>
         <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
@@ -6211,24 +5872,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Upozorenje: nepodržani argument -debugnet ignoriran, upotrijebite -debug=net.</translation>
     </message>
     <message>
-        <source>Will retry...</source>
-        <translation>Ponovno pokušati...</translation>
-    </message>
-    <message>
         <source>You don't have enough Zerocoins in your wallet</source>
         <translation>Nemate dovoljno Zerocoina u novčaniku</translation>
     </message>
     <message>
         <source>You need to rebuild the database using -reindex to change -txindex</source>
         <translation>orate obnoviti bazu podataka koristeći -index za promjenu -txindexa</translation>
-    </message>
-    <message>
-        <source>Your entries added successfully.</source>
-        <translation>Unosi uspješno dodani.</translation>
-    </message>
-    <message>
-        <source>Your transaction was accepted into the pool!</source>
-        <translation>Vaša transakcija je prihvaćena u bazen!</translation>
     </message>
     <message>
         <source>Zapping all transactions from wallet...</source>

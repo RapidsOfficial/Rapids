@@ -1613,29 +1613,6 @@ MultiSend non verrà attivato a meno che tu non prema su Attiva</translation>
     </message>
 </context>
 <context>
-    <name>ObfuscationConfig</name>
-    <message>
-        <source>Configure Obfuscation</source>
-        <translation>Configura Offuscamento</translation>
-    </message>
-    <message>
-        <source>Use 2 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Usa 2 masternodi diversi per mescolare fino a 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 8 separate masternodes to mix funds up to 10000 PIV</source>
-        <translation>Usa 8 masternodi diversi per mixare fino a 10000 PIV</translation>
-    </message>
-    <message>
-        <source>Use 16 separate masternodes</source>
-        <translation>Usa 16 masternodi diversi</translation>
-    </message>
-    <message>
-        <source>Obfuscation Configuration</source>
-        <translation>Configurazione Offuscamento</translation>
-    </message>
-    </context>
-<context>
     <name>OpenURIDialog</name>
     <message>
         <source>Open URI</source>
@@ -1885,32 +1862,12 @@ Per attivare il Conio automatico cambiare 'enablezeromint=0' in 'enablezeromint=
         <translation>zPIV</translation>
     </message>
     <message>
-        <source>0.000 000 00 PIV</source>
-        <translation>0.000 000 00 PIV</translation>
-    </message>
-    <message>
         <source>Reset</source>
         <translation>Reset</translation>
     </message>
     <message>
-        <source>Coin Control...</source>
-        <translation>Controllo Monete...</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Quantità:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Totale:</translation>
-    </message>
-    <message>
         <source>PRIVACY</source>
         <translation>PRIVACY</translation>
-    </message>
-    <message>
-        <source>Enter an amount of Piv to convert to zPIV</source>
-        <translation>Immetti un importo di PIV da convertire in zPIV</translation>
     </message>
     <message>
         <source>zPIV Control</source>
@@ -2151,14 +2108,6 @@ Per cambiare la percentuale (riavvio non necessario):
     <message>
         <source>Change:</source>
         <translation>Differenza:</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Copia importo</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Copia ammontare</translation>
     </message>
     <message>
         <source>zPIV Mint</source>
