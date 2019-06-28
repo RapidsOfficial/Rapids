@@ -295,7 +295,7 @@ bool IsValidSerial(const ZerocoinParams* params, const CBigNum& bnSerial)
 
 bool IsValidCommitmentToCoinRange(const ZerocoinParams* params, const CBigNum& bnCommitment)
 {
-    return bnCommitment > CBigNum(0) && bnCommitment < params->serialNumberSoKCommitmentGroup.modulus;
+    return bnCommitment > BN_ZERO && bnCommitment < params->serialNumberSoKCommitmentGroup.modulus;
 }
 
 
