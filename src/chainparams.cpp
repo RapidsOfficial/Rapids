@@ -129,6 +129,13 @@ bool CChainParams::HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t
     return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
 }
 
+int CChainParams::Zerocoin_PublicSpendVersion(const int nHeight) const
+{
+    if (nHeight < nPublicZCSpendsV4)
+        return 3;
+    return 4;
+}
+
 class CMainParams : public CChainParams
 {
 public:
@@ -182,6 +189,7 @@ public:
         nBlockStakeModifierlV2 = 1967000;
         // Public coin spend enforcement
         nPublicZCSpends = 1880000;
+        nPublicZCSpendsV4 = 2880000;
 
         // New P2P messages signatures
         nBlockEnforceNewMessageSignatures = 2967000;
@@ -320,6 +328,7 @@ public:
         nBlockStakeModifierlV2 = 1214000;
         // Public coin spend enforcement
         nPublicZCSpends = 1106100;
+        nPublicZCSpendsV4 = 2106100;
 
         // New P2P messages signatures
         nBlockEnforceNewMessageSignatures = 2214000;
@@ -416,6 +425,7 @@ public:
         nBlockStakeModifierlV2 = std::numeric_limits<int>::max(); // max integer value (never switch on regtest)
         // Public coin spend enforcement
         nPublicZCSpends = 350;
+        nPublicZCSpendsV4 = 450;
 
         // New P2P messages signatures
         nBlockEnforceNewMessageSignatures = 1;
