@@ -9,6 +9,7 @@
 #include "libzerocoin/Denominations.h"
 #include "libzerocoin/CoinSpend.h"
 #include "libzerocoin/Coin.h"
+#include "libzerocoin/CoinRandomnessSchnorrSignature.h"
 #include "libzerocoin/SpendType.h"
 #include "primitives/transaction.h"
 #include "script/script.h"
@@ -19,28 +20,21 @@
 #include "zpiv/zerocoin.h"
 #include "chainparams.h"
 
-static int const COIN_SPEND_PUBLIC_SPEND_VERSION = 3;
+static int const PUBSPEND_SCHNORR = 4;
 
-class PublicCoinSpend : public libzerocoin::CoinSpend{
+class PublicCoinSpend : public libzerocoin::CoinSpend {
 public:
 
-    PublicCoinSpend(libzerocoin::ZerocoinParams* params):pubCoin(params){};
+    PublicCoinSpend(libzerocoin::ZerocoinParams* params): pubCoin(params) {};
 
-    PublicCoinSpend(libzerocoin::ZerocoinParams* params,
-            CBigNum serial, CBigNum randomness, CPubKey pubkey):pubCoin(params){
-        this->coinSerialNumber = serial;
-        this->randomness = randomness;
-        this->pubkey = pubkey;
-        this->spendType = libzerocoin::SpendType::SPEND;
-        this->version = COIN_SPEND_PUBLIC_SPEND_VERSION;
-    };
+    PublicCoinSpend(libzerocoin::ZerocoinParams* params, const uint8_t version, const CBigNum& serial, const CBigNum& randomness, const uint256& ptxHash, CPubKey* pubkey);
 
     ~PublicCoinSpend(){};
 
     template <typename Stream>
     PublicCoinSpend(
             libzerocoin::ZerocoinParams* params,
-            Stream& strm):pubCoin(params){
+            Stream& strm): pubCoin(params) {
         strm >> *this;
         this->spendType = libzerocoin::SpendType::SPEND;
     }
@@ -52,6 +46,7 @@ public:
 
     // Members
     CBigNum randomness;
+    libzerocoin::CoinRandomnessSchnorrSignature schnorrSig;
     // prev out values
     uint256 txHash = 0;
     unsigned int outputIndex = -1;
@@ -63,9 +58,14 @@ public:
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
         READWRITE(version);
         READWRITE(coinSerialNumber);
-        READWRITE(randomness);
-        READWRITE(pubkey);
-        READWRITE(vchSig);
+        if (version < PUBSPEND_SCHNORR)
+            READWRITE(randomness);
+        else
+            READWRITE(schnorrSig);
+        if (libzerocoin::ExtractVersionFromSerial(coinSerialNumber) >= libzerocoin::PrivateCoin::PUBKEY_VERSION) {
+            READWRITE(pubkey);
+            READWRITE(vchSig);
+        }
     }
 };
 
@@ -73,7 +73,7 @@ public:
 class CValidationState;
 
 namespace ZPIVModule {
-    bool createInput(CTxIn &in, CZerocoinMint& mint, uint256 hashTxOut);
+    bool createInput(CTxIn &in, CZerocoinMint& mint, uint256 hashTxOut, const int spendVersion);
     PublicCoinSpend parseCoinSpend(const CTxIn &in);
     bool parseCoinSpend(const CTxIn &in, const CTransaction& tx, const CTxOut &prevOut, PublicCoinSpend& publicCoinSpend);
     bool validateInput(const CTxIn &in, const CTxOut &prevOut, const CTransaction& tx, PublicCoinSpend& ret);
