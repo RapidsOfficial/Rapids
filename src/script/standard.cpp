@@ -11,8 +11,6 @@
 #include "util.h"
 #include "utilstrencodings.h"
 
-
-
 typedef std::vector<unsigned char> valtype;
 
 unsigned nMaxDatacarrierBytes = MAX_OP_RETURN_RELAY;
@@ -28,6 +26,7 @@ const char* GetTxnOutputType(txnouttype t)
     case TX_PUBKEYHASH: return "pubkeyhash";
     case TX_SCRIPTHASH: return "scripthash";
     case TX_MULTISIG: return "multisig";
+    case TX_COLDSTAKE: return "coldstake";
     case TX_NULL_DATA: return "nulldata";
     case TX_ZEROCOINMINT: return "zerocoinmint";
     }
@@ -51,6 +50,10 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<std::v
 
         // Sender provides N pubkeys, receivers provides M signatures
         mTemplates.insert(std::make_pair(TX_MULTISIG, CScript() << OP_SMALLINTEGER << OP_PUBKEYS << OP_SMALLINTEGER << OP_CHECKMULTISIG));
+
+        // Cold Staking: sender provides P2CS scripts, receiver provides signature, staking-flag and pubkey
+        mTemplates.insert(std::make_pair(TX_COLDSTAKE, CScript() << OP_DUP << OP_HASH160 << OP_ROT << OP_IF << OP_CHECKCOLDSTAKEVERIFY <<
+                OP_PUBKEYHASH << OP_ELSE << OP_PUBKEYHASH << OP_ENDIF << OP_EQUALVERIFY << OP_CHECKSIG));
     }
 
     // Shortcut for pay-to-script-hash, which are more constrained than the other types:
@@ -179,6 +182,8 @@ int ScriptSigArgsExpected(txnouttype t, const std::vector<std::vector<unsigned c
         return 1;
     case TX_PUBKEYHASH:
         return 2;
+    case TX_COLDSTAKE:
+        return 3;
     case TX_MULTISIG:
         if (vSolutions.size() < 1 || vSolutions[0].size() < 1)
             return -1;
@@ -268,8 +273,17 @@ bool ExtractDestinations(const CScript& scriptPubKey, txnouttype& typeRet, std::
 
         if (addressRet.empty())
             return false;
-    }
-    else
+
+    } else if (typeRet == TX_COLDSTAKE)
+    {
+        if (vSolutions.size() < 2)
+            return false;
+        nRequiredRet = 2;
+        addressRet.push_back(CKeyID(uint160(vSolutions[0])));
+        addressRet.push_back(CKeyID(uint160(vSolutions[1])));
+        return true;
+
+    } else
     {
         nRequiredRet = 1;
         CTxDestination address;
@@ -314,6 +328,16 @@ CScript GetScriptForDestination(const CTxDestination& dest)
     CScript script;
 
     boost::apply_visitor(CScriptVisitor(&script), dest);
+    return script;
+}
+
+CScript GetScriptForStakeDelegation(const CKeyID& stakingKey, const CKeyID& spendingKey)
+{
+    CScript script;
+    script << OP_DUP << OP_HASH160 << OP_ROT <<
+            OP_IF << OP_CHECKCOLDSTAKEVERIFY << ToByteVector(stakingKey) <<
+            OP_ELSE << ToByteVector(spendingKey) << OP_ENDIF <<
+            OP_EQUALVERIFY << OP_CHECKSIG;
     return script;
 }
 
