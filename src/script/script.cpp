@@ -138,22 +138,25 @@ const char* GetOpName(opcodetype opcode)
     case OP_CHECKMULTISIG          : return "OP_CHECKMULTISIG";
     case OP_CHECKMULTISIGVERIFY    : return "OP_CHECKMULTISIGVERIFY";
 
-    // expanson
-    case OP_NOP1                   : return "OP_NOP1";
-    case OP_NOP2                   : return "OP_NOP2";
-    case OP_NOP3                   : return "OP_NOP3";
-    case OP_NOP4                   : return "OP_NOP4";
-    case OP_NOP5                   : return "OP_NOP5";
-    case OP_NOP6                   : return "OP_NOP6";
-    case OP_NOP7                   : return "OP_NOP7";
-    case OP_NOP8                   : return "OP_NOP8";
-    case OP_NOP9                   : return "OP_NOP9";
-    case OP_NOP10                  : return "OP_NOP10";
+    // expansion
+    case OP_NOP1                   : return "OP_NOP1";                  // OP_NOP1
+    case OP_CHECKLOCKTIMEVERIFY    : return "OP_CHECKLOCKTIMEVERIFY";   // OP_NOP2
+    case OP_NOP3                   : return "OP_NOP3";                  // OP_NOP3
+    case OP_NOP4                   : return "OP_NOP4";                  // OP_NOP4
+    case OP_NOP5                   : return "OP_NOP5";                  // OP_NOP5
+    case OP_NOP6                   : return "OP_NOP6";                  // OP_NOP6
+    case OP_NOP7                   : return "OP_NOP7";                  // OP_NOP7
+    case OP_NOP8                   : return "OP_NOP8";                  // OP_NOP8
+    case OP_NOP9                   : return "OP_NOP9";                  // OP_NOP9
+    case OP_NOP10                  : return "OP_NOP10";                 // OP_NOP10
 
     // zerocoin
     case OP_ZEROCOINMINT           : return "OP_ZEROCOINMINT";
     case OP_ZEROCOINSPEND          : return "OP_ZEROCOINSPEND";
-    case OP_ZEROCOINPUBLICSPEND          : return "OP_ZEROCOINPUBLICSPEND";
+    case OP_ZEROCOINPUBLICSPEND    : return "OP_ZEROCOINPUBLICSPEND";
+
+    // cold staking
+    case OP_CHECKCOLDSTAKEVERIFY   : return "OP_CHECKCOLDSTAKEVERIFY";
 
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 

@@ -283,6 +283,7 @@ public:
     }
 
     bool IsCoinStake() const;
+    bool CheckColdStake() const;
 
     friend bool operator==(const CTransaction& a, const CTransaction& b)
     {

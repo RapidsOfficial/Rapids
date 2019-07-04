@@ -209,6 +209,32 @@ bool CTransaction::IsCoinStake() const
     return (vout.size() >= 2 && vout[0].IsEmpty());
 }
 
+bool CTransaction::CheckColdStake() const
+{
+    // tx is a coinstake tx
+    if (!IsCoinStake())
+        return false;
+
+    // all inputs have the same pubKeyScript
+    CScript firstScript = vin[0].scriptSig;
+    if (vin.size() > 1) {
+        for (unsigned int i=1; i<vin.size(); i++)
+            if (vin[i].scriptSig != firstScript) return false;
+    }
+
+    // all outputs except first (coinstake marker) and last (masternode payout)
+    // have the same pubKeyScript
+    firstScript = vout[0].scriptPubKey;
+    if (vout.size() > 3) {
+        for (unsigned int i=1; i<vout.size()-1; i++)
+            if (vout[i].scriptPubKey != firstScript) return false;
+    }
+
+    // additional checks in CheckTransaction
+    return true;
+
+}
+
 CAmount CTransaction::GetValueOut() const
 {
     CAmount nValueOut = 0;
