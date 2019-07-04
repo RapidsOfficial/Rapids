@@ -80,6 +80,28 @@ std::string AccountFromValue(const UniValue& value)
     return strAccount;
 }
 
+CBitcoinAddress GetNewAddressFromAccount(const std::string name, const bool fStakeAddr, const UniValue &params)
+{
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+    // Parse the account first so we don't generate a key if there's an error
+    std::string strAccount;
+    if (!params.isNull() && params.size() > 0)
+        strAccount = AccountFromValue(params[0]);
+
+    if (!pwalletMain->IsLocked())
+        pwalletMain->TopUpKeyPool();
+
+    // Generate a new key that is added to wallet
+    CPubKey newKey;
+    if (!pwalletMain->GetKeyFromPool(newKey))
+        throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
+    CKeyID keyID = newKey.GetID();
+
+    pwalletMain->SetAddressBook(keyID, strAccount, name);
+
+    return CBitcoinAddress(keyID, fStakeAddr);
+}
+
 UniValue getnewaddress(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() > 1)
@@ -99,25 +121,29 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
             HelpExampleCli("getnewaddress", "") + HelpExampleCli("getnewaddress", "\"\"") +
             HelpExampleCli("getnewaddress", "\"myaccount\"") + HelpExampleRpc("getnewaddress", "\"myaccount\""));
 
-    LOCK2(cs_main, pwalletMain->cs_wallet);
+    return GetNewAddressFromAccount("receive", false, params).ToString();
+}
 
-    // Parse the account first so we don't generate a key if there's an error
-    std::string strAccount;
-    if (params.size() > 0)
-        strAccount = AccountFromValue(params[0]);
+UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw std::runtime_error(
+            "getnewstakingaddress ( \"account\" )\n"
+            "\nReturns a new PIVX cold staking address for receiving delegated stakes.\n"
+            "If 'account' is specified (recommended), it is added to the address book \n"
+            "so payments received with the address will be credited to 'account'.\n"
 
-    if (!pwalletMain->IsLocked())
-        pwalletMain->TopUpKeyPool();
+            "\nArguments:\n"
+            "1. \"account\"        (string, optional) The account name for the address to be linked to. if not provided, the default account \"\" is used. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.\n"
 
-    // Generate a new key that is added to wallet
-    CPubKey newKey;
-    if (!pwalletMain->GetKeyFromPool(newKey))
-        throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
-    CKeyID keyID = newKey.GetID();
+            "\nResult:\n"
+            "\"pivxaddress\"    (string) The new pivx address\n"
 
-    pwalletMain->SetAddressBook(keyID, strAccount, "receive");
+            "\nExamples:\n" +
+            HelpExampleCli("getnewstakingaddress", "") + HelpExampleCli("getnewstakingaddress", "\"\"") +
+            HelpExampleCli("getnewstakingaddress", "\"myaccount\"") + HelpExampleRpc("getnewstakingaddress", "\"myaccount\""));
 
-    return CBitcoinAddress(keyID).ToString();
+    return GetNewAddressFromAccount("coldstaking", true, params).ToString();
 }
 
 
@@ -399,6 +425,210 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
     SendMoney(address.Get(), nAmount, wtx);
 
     return wtx.GetHash().GetHex();
+}
+
+bool CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CReserveKey& reservekey)
+{
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    // Check that Cold Staking has been enforced or fForceNotEnabled = true
+    bool fForceNotEnabled = false;
+    if (params.size() > 5 && !params[5].isNull())
+        fForceNotEnabled = params[5].get_bool();
+
+    int nBestHeight = chainActive.Height();
+    if (!Params().Cold_Staking_Enabled(nBestHeight) && !fForceNotEnabled) {
+        std::string errMsg = strprintf("Cold Staking not enforced yet at block %d.\n"
+                "If the wallet is syncing, you may force the stake delegation setting fForceNotEnabled to true.\n"
+                "WARNING: If the network hasn't reached the activation height, this tx will be rejected resulting in a ban.\n", nBestHeight);
+        throw JSONRPCError(RPC_WALLET_ERROR, errMsg);
+    }
+
+    // Get Staking Address
+    CBitcoinAddress stakeAddr(params[0].get_str());
+    CKeyID stakeKey;
+    if (!stakeAddr.IsValid() || !stakeAddr.IsStakingAddress())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX staking address");
+    if (!stakeAddr.GetKeyID(stakeKey))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Unable to get stake pubkey hash from stakingaddress");
+
+    // Get Amount
+    CAmount nValue = AmountFromValue(params[1]);
+    if (nValue <= 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount");
+
+    // Get Owner Address
+    CBitcoinAddress ownerAddr;
+    CKeyID ownerKey;
+    if (params.size() > 2 && !params[2].isNull() && !params[2].get_str().empty()) {
+        // Address provided
+        ownerAddr.SetString(params[2].get_str());
+        if (!ownerAddr.IsValid() || ownerAddr.IsStakingAddress())
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX spending address");
+        if (!ownerAddr.GetKeyID(ownerKey))
+            throw JSONRPCError(RPC_WALLET_ERROR, "Unable to get spend pubkey hash from owneraddress");
+        // Check that the owner address belongs to this wallet, or fForceExternalAddr is true
+        bool fForceExternalAddr = params.size() > 3 && !params[3].isNull() ? params[3].get_bool() : false;
+        if (!fForceExternalAddr && !pwalletMain->HaveKey(ownerKey)) {
+            std::string errMsg = strprintf("The provided owneraddress \"%s\" is not present in this wallet.\n"
+                    "Set 'fExternalOwner' argument to true, in order to force the stake delegation to an external owner address.\n"
+                    "e.g. delegatestake stakingaddress amount owneraddress true.\n"
+                    "WARNING: Only the owner of the key to owneraddress will be allowed to spend these coins after the delegation.",
+                    ownerAddr.ToString());
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, errMsg);
+        }
+
+    } else {
+        // Get new owner address from keypool
+        ownerAddr = GetNewAddressFromAccount("delegated", false, NullUniValue);
+        if (!ownerAddr.GetKeyID(ownerKey))
+            throw JSONRPCError(RPC_WALLET_ERROR, "Unable to get spend pubkey hash from owneraddress");
+    }
+
+    // Get P2CS script for addresses
+    CScript scriptPubKey = GetScriptForStakeDelegation(stakeKey, ownerKey);
+
+    // include already delegated coins
+    bool fUseDelegated = false;
+    if (params.size() > 4 && !params[4].isNull())
+        fUseDelegated = params[4].get_bool();
+
+    // Check amount
+    CAmount currBalance = pwalletMain->GetBalance() + (fUseDelegated ? pwalletMain->GetDelegatedBalance() : 0);
+    if (nValue > currBalance)
+        throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
+
+    std::string strError;
+    EnsureWalletIsUnlocked();
+
+    // Create the transaction
+    CAmount nFeeRequired;
+    if (!pwalletMain->CreateTransaction(scriptPubKey, nValue, wtxNew, reservekey, nFeeRequired, strError, NULL, ALL_COINS, /*fUseIX*/ false, (CAmount)0, fUseDelegated)) {
+        if (nValue + nFeeRequired > currBalance)
+            strError = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
+        LogPrintf("%s : %s\n", __func__, strError);
+        throw JSONRPCError(RPC_WALLET_ERROR, strError);
+    }
+
+    UniValue result(UniValue::VOBJ);
+    result.push_back(Pair("owner_address", ownerAddr.ToString()));
+    result.push_back(Pair("staker_address", stakeAddr.ToString()));
+    return result;
+}
+
+UniValue delegatestake(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 2 || params.size() > 6)
+        throw std::runtime_error(
+            "delegatestake \"stakingaddress\" amount ( \"owneraddress\" fExternalOwner fUseDelegated fForceNotEnabled )\n"
+            "\nDelegate an amount to a given address for cold staking. The amount is a real and is rounded to the nearest 0.00000001\n" +
+            HelpRequiringPassphrase() + "\n"
+
+            "\nArguments:\n"
+            "1. \"stakingaddress\"      (string, required) The pivx staking address to delegate.\n"
+            "2. \"amount\"              (numeric, required) The amount in PIV to delegate for staking. eg 100\n"
+            "3. \"owneraddress\"        (string, optional) The pivx address corresponding to the key that will be able to spend the stake. \n"
+            "                               If not provided, or empty string, a new wallet address is generated.\n"
+            "4. \"fExternalOwner\"      (boolean, optional, default = false) use the provided 'owneraddress' anyway, even if not present in this wallet.\n"
+            "                               WARNING: The owner of the keys to 'owneraddress' will be the only one allowed to spend these coins.\n"
+            "5. \"fUseDelegated\"       (boolean, optional, default = false) include already delegated inputs if needed."
+            "6. \"fForceNotEnabled\"    (boolean, optional, default = false) force the creation before the activation height (during sync)."
+
+            "\nResult:\n"
+            "{\n"
+            "   \"owner_address\": \"xxx\"   (string) The owner (delegator) owneraddress.\n"
+            "   \"staker_address\": \"xxx\"  (string) The cold staker (delegate) stakingaddress.\n"
+            "   \"txid\": \"xxx\"            (string) The stake delegation transaction id.\n"
+            "}\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("delegatestake", "\"S1t2a3kab9c8c71VA78xxxy4MxZg6vgeS6\" 100") +
+            HelpExampleCli("delegatestake", "\"S1t2a3kab9c8c71VA78xxxy4MxZg6vgeS6\" 1000 \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg34fk\"") +
+            HelpExampleRpc("delegatestake", "\"S1t2a3kab9c8c71VA78xxxy4MxZg6vgeS6\", 1000, \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg34fk\""));
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    CWalletTx wtx;
+    CReserveKey reservekey(pwalletMain);
+    CreateColdStakeDelegation(params, wtx, reservekey);
+
+    if (!pwalletMain->CommitTransaction(wtx, reservekey, "tx"))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+
+    return wtx.GetHash().GetHex();
+}
+
+UniValue rawdelegatestake(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() < 2 || params.size() > 5)
+        throw std::runtime_error(
+            "rawdelegatestake \"stakingaddress\" amount ( \"owneraddress\" fExternalOwner fUseDelegated )\n"
+            "\nDelegate an amount to a given address for cold staking. The amount is a real and is rounded to the nearest 0.00000001\n"
+            "\nDelegate transaction is returned as json object." +
+            HelpRequiringPassphrase() + "\n"
+
+            "\nArguments:\n"
+            "1. \"stakingaddress\"      (string, required) The pivx staking address to delegate.\n"
+            "2. \"amount\"              (numeric, required) The amount in PIV to delegate for staking. eg 100\n"
+            "3. \"owneraddress\"        (string, optional) The pivx address corresponding to the key that will be able to spend the stake. \n"
+            "                               If not provided, or empty string, a new wallet address is generated.\n"
+            "4. \"fExternalOwner\"      (boolean, optional, default = false) use the provided 'owneraddress' anyway, even if not present in this wallet.\n"
+            "                               WARNING: The owner of the keys to 'owneraddress' will be the only one allowed to spend these coins.\n"
+            "5. \"fUseDelegated         (boolean, optional, default = false) include already delegated inputs if needed."
+
+            "\nResult:\n"
+            "{\n"
+            "  \"txid\" : \"id\",        (string) The transaction id (same as provided)\n"
+            "  \"version\" : n,          (numeric) The version\n"
+            "  \"size\" : n,             (numeric) The serialized transaction size\n"
+            "  \"locktime\" : ttt,       (numeric) The lock time\n"
+            "  \"vin\" : [               (array of json objects)\n"
+            "     {\n"
+            "       \"txid\": \"id\",    (string) The transaction id\n"
+            "       \"vout\": n,         (numeric) \n"
+            "       \"scriptSig\": {     (json object) The script\n"
+            "         \"asm\": \"asm\",  (string) asm\n"
+            "         \"hex\": \"hex\"   (string) hex\n"
+            "       },\n"
+            "       \"sequence\": n      (numeric) The script sequence number\n"
+            "     }\n"
+            "     ,...\n"
+            "  ],\n"
+            "  \"vout\" : [              (array of json objects)\n"
+            "     {\n"
+            "       \"value\" : x.xxx,            (numeric) The value in btc\n"
+            "       \"n\" : n,                    (numeric) index\n"
+            "       \"scriptPubKey\" : {          (json object)\n"
+            "         \"asm\" : \"asm\",          (string) the asm\n"
+            "         \"hex\" : \"hex\",          (string) the hex\n"
+            "         \"reqSigs\" : n,            (numeric) The required sigs\n"
+            "         \"type\" : \"pubkeyhash\",  (string) The type, eg 'pubkeyhash'\n"
+            "         \"addresses\" : [           (json array of string)\n"
+            "           \"pivxaddress\"        (string) pivx address\n"
+            "           ,...\n"
+            "         ]\n"
+            "       }\n"
+            "     }\n"
+            "     ,...\n"
+            "  ],\n"
+            "  \"hex\" : \"data\",       (string) The serialized, hex-encoded data for 'txid'\n"
+            "}\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("rawdelegatestake", "\"S1t2a3kab9c8c71VA78xxxy4MxZg6vgeS6\" 100") +
+            HelpExampleCli("rawdelegatestake", "\"S1t2a3kab9c8c71VA78xxxy4MxZg6vgeS6\" 1000 \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg34fk\"") +
+            HelpExampleRpc("rawdelegatestake", "\"S1t2a3kab9c8c71VA78xxxy4MxZg6vgeS6\", 1000, \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg34fk\""));
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    CWalletTx wtx;
+    CReserveKey reservekey(pwalletMain);
+    CreateColdStakeDelegation(params, wtx, reservekey);
+
+    UniValue result(UniValue::VOBJ);
+    TxToUniv(wtx, 0, result);
+
+    return result;
 }
 
 UniValue sendtoaddressix(const UniValue& params, bool fHelp)
