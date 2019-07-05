@@ -441,7 +441,6 @@ public:
     CAmount GetUnconfirmedWatchOnlyBalance() const;
     CAmount GetImmatureWatchOnlyBalance() const;
     CAmount GetLockedWatchOnlyBalance() const;
-    bool CreateTransaction(CScript scriptPubKey, int64_t nValue, CWalletTx& wtxNew, CReserveKey& reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl);
     bool CreateTransaction(const std::vector<std::pair<CScript, CAmount> >& vecSend,
         CWalletTx& wtxNew,
         CReserveKey& reservekey,
@@ -725,6 +724,7 @@ public:
     mutable bool fColdCreditCached;
     mutable bool fDelegatedDebitCached;
     mutable bool fDelegatedCreditCached;
+    mutable bool fStakeDelegationVoided;
     mutable CAmount nDebitCached;
     mutable CAmount nCreditCached;
     mutable CAmount nImmatureCreditCached;
