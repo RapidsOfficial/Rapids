@@ -256,7 +256,7 @@ public:
         UniValue obj(UniValue::VOBJ);
         CPubKey vchPubKey;
         obj.push_back(Pair("isscript", false));
-        if (mine == ISMINE_SPENDABLE) {
+        if (bool(mine & ISMINE_ALL)) {
             pwalletMain->GetPubKey(keyID, vchPubKey);
             obj.push_back(Pair("pubkey", HexStr(vchPubKey)));
             obj.push_back(Pair("iscompressed", vchPubKey.IsCompressed()));

@@ -1108,6 +1108,24 @@ CAmount CWalletTx::GetDebit(const isminefilter& filter) const
             debit += nWatchDebitCached;
         }
     }
+    if (filter & ISMINE_COLD) {
+        if (fColdDebitCached)
+            debit += nColdDebitCached;
+        else {
+            nColdDebitCached = pwallet->GetDebit(*this, ISMINE_COLD);
+            fColdDebitCached = true;
+            debit += nColdDebitCached;
+        }
+    }
+    if (filter & ISMINE_SPENDABLE_DELEGATED) {
+        if (fDelegatedDebitCached)
+            debit += nDelegatedDebitCached;
+        else {
+            nDelegatedDebitCached = pwallet->GetDebit(*this, ISMINE_SPENDABLE_DELEGATED);
+            fDelegatedDebitCached = true;
+            debit += nDelegatedDebitCached;
+        }
+    }
     return debit;
 }
 
@@ -1137,6 +1155,24 @@ CAmount CWalletTx::GetCredit(const isminefilter& filter) const
             credit += nWatchCreditCached;
         }
     }
+    if (filter & ISMINE_COLD) {
+        if (fColdCreditCached)
+            credit += nColdCreditCached;
+        else {
+            nColdCreditCached = pwallet->GetCredit(*this, ISMINE_COLD);
+            fColdCreditCached = true;
+            credit += nColdCreditCached;
+        }
+    }
+    if (filter & ISMINE_SPENDABLE_DELEGATED) {
+        if (fDelegatedCreditCached)
+            credit += nDelegatedCreditCached;
+        else {
+            nDelegatedCreditCached = pwallet->GetCredit(*this, ISMINE_SPENDABLE_DELEGATED);
+            fDelegatedCreditCached = true;
+            credit += nDelegatedCreditCached;
+        }
+    }
     return credit;
 }
 
@@ -1154,6 +1190,22 @@ CAmount CWalletTx::GetImmatureCredit(bool fUseCache) const
     return 0;
 }
 
+// Helper function for GetAvailableCredit / GetColdStakingCredit / GetStakeDelegationCredit
+CAmount CWalletTx::CreditFor(const isminetype& minetype) const
+{
+    const uint256 hashTx = GetHash();
+    CAmount nCredit = 0;
+    for (unsigned int i = 0; i < vout.size(); i++) {
+        if (!pwallet->IsSpent(hashTx, i)) {
+            const CTxOut& txout = vout[i];
+            nCredit += pwallet->GetCredit(txout, minetype);
+            if (!MoneyRange(nCredit))
+                throw std::runtime_error("CWalletTx::GetAvailableCredit() : value out of range");
+        }
+    }
+    return nCredit;
+}
+
 CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
 {
     if (pwallet == 0)
@@ -1166,19 +1218,45 @@ CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
     if (fUseCache && fAvailableCreditCached)
         return nAvailableCreditCached;
 
-    CAmount nCredit = 0;
-    uint256 hashTx = GetHash();
-    for (unsigned int i = 0; i < vout.size(); i++) {
-        if (!pwallet->IsSpent(hashTx, i)) {
-            const CTxOut& txout = vout[i];
-            nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
-            if (!MoneyRange(nCredit))
-                throw std::runtime_error("CWalletTx::GetAvailableCredit() : value out of range");
-        }
-    }
-
+    CAmount nCredit = CreditFor(ISMINE_SPENDABLE);
     nAvailableCreditCached = nCredit;
     fAvailableCreditCached = true;
+    return nCredit;
+}
+
+CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
+{
+    if (pwallet == 0)
+        return 0;
+
+    // Must wait until coinbase is safely deep enough in the chain before valuing it
+    if (IsCoinBase() && GetBlocksToMaturity() > 0)
+        return 0;
+
+    if (fUseCache && fColdCreditCached)
+        return nColdCreditCached;
+
+    CAmount nCredit = CreditFor(ISMINE_COLD);
+    nColdCreditCached = nCredit;
+    fColdCreditCached = true;
+    return nCredit;
+}
+
+CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
+{
+    if (pwallet == 0)
+        return 0;
+
+    // Must wait until coinbase is safely deep enough in the chain before valuing it
+    if (IsCoinBase() && GetBlocksToMaturity() > 0)
+        return 0;
+
+    if (fUseCache && fDelegatedCreditCached)
+        return nDelegatedCreditCached;
+
+    CAmount nCredit = CreditFor(ISMINE_SPENDABLE_DELEGATED);
+    nDelegatedCreditCached = nCredit;
+    fDelegatedCreditCached = true;
     return nCredit;
 }
 
@@ -1643,6 +1721,38 @@ CAmount CWallet::GetBalance() const
     return nTotal;
 }
 
+CAmount CWallet::GetColdStakingBalance() const
+{
+    CAmount nTotal = 0;
+    {
+        LOCK2(cs_main, cs_wallet);
+        for (std::map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it) {
+            const CWalletTx* pcoin = &(*it).second;
+
+            if (pcoin->IsTrusted())
+                nTotal += pcoin->GetColdStakingCredit();
+        }
+    }
+
+    return nTotal;
+}
+
+CAmount CWallet::GetDelegatedBalance() const
+{
+    CAmount nTotal = 0;
+    {
+        LOCK2(cs_main, cs_wallet);
+        for (std::map<uint256, CWalletTx>::const_iterator it = mapWallet.begin(); it != mapWallet.end(); ++it) {
+            const CWalletTx* pcoin = &(*it).second;
+
+            if (pcoin->IsTrusted())
+                nTotal += pcoin->GetStakeDelegationCredit();
+        }
+    }
+
+    return nTotal;
+}
+
 //std::map<libzerocoin::CoinDenomination, int> mapMintMaturity;
 //int nLastMaturityCheck = 0;
 
@@ -1825,7 +1935,9 @@ void CWallet::AvailableCoins(
         bool fIncludeZeroValue,
         AvailableCoinsType nCoinType,
         bool fUseIX,
-        int nWatchonlyConfig) const
+        int nWatchonlyConfig,
+        bool fIncludeColdStaking,
+        bool fIncludeDelegated) const
 {
     vCoins.clear();
 
@@ -1895,11 +2007,10 @@ void CWallet::AvailableCoins(
                 if (coinControl && coinControl->HasSelected() && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
                     continue;
 
-                bool fIsSpendable = false;
-                if ((mine & ISMINE_SPENDABLE) != ISMINE_NO)
-                    fIsSpendable = true;
-                if ((mine & ISMINE_MULTISIG) != ISMINE_NO)
-                    fIsSpendable = true;
+                bool fIsSpendable = (
+                        ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
+                        ((mine & (ISMINE_MULTISIG | (fIncludeColdStaking ? ISMINE_COLD : ISMINE_NO) |
+                                (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO));
 
                 vCoins.emplace_back(COutput(pcoin, i, nDepth, fIsSpendable));
             }
@@ -5528,6 +5639,10 @@ void CWalletTx::Init(const CWallet* pwalletIn)
     fImmatureWatchCreditCached = false;
     fAvailableWatchCreditCached = false;
     fChangeCached = false;
+    fColdDebitCached = false;
+    fColdCreditCached = false;
+    fDelegatedDebitCached = false;
+    fDelegatedCreditCached = false;
     nDebitCached = 0;
     nCreditCached = 0;
     nImmatureCreditCached = 0;
@@ -5540,6 +5655,10 @@ void CWalletTx::Init(const CWallet* pwalletIn)
     nWatchCreditCached = 0;
     nAvailableWatchCreditCached = 0;
     nImmatureWatchCreditCached = 0;
+    nColdDebitCached = 0;
+    nColdCreditCached = 0;
+    nDelegatedDebitCached = 0;
+    nDelegatedCreditCached = 0;
     nChangeCached = 0;
     nOrderPos = -1;
 }
@@ -5599,6 +5718,10 @@ void CWalletTx::MarkDirty()
     fImmatureWatchCreditCached = false;
     fDebitCached = false;
     fChangeCached = false;
+    fColdDebitCached = false;
+    fColdCreditCached = false;
+    fDelegatedDebitCached = false;
+    fDelegatedCreditCached = false;
 }
 
 void CWalletTx::BindWallet(CWallet* pwalletIn)
