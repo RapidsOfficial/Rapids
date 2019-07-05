@@ -216,30 +216,31 @@ bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType)
     return whichType != TX_NONSTANDARD;
 }
 
-bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet)
+bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet, bool fColdStake)
 {
     std::vector<valtype> vSolutions;
     txnouttype whichType;
     if (!Solver(scriptPubKey, whichType, vSolutions))
         return false;
 
-    if (whichType == TX_PUBKEY)
-    {
+    if (whichType == TX_PUBKEY) {
         CPubKey pubKey(vSolutions[0]);
         if (!pubKey.IsValid())
             return false;
 
         addressRet = pubKey.GetID();
         return true;
-    }
-    else if (whichType == TX_PUBKEYHASH)
-    {
+
+    } else if (whichType == TX_PUBKEYHASH) {
         addressRet = CKeyID(uint160(vSolutions[0]));
         return true;
-    }
-    else if (whichType == TX_SCRIPTHASH)
-    {
+
+    } else if (whichType == TX_SCRIPTHASH) {
         addressRet = CScriptID(uint160(vSolutions[0]));
+        return true;
+    } else if (whichType == TX_COLDSTAKE) {
+        int sol = fColdStake ? 0 : 1;
+        addressRet = CKeyID(uint160(vSolutions[sol]));
         return true;
     }
     // Multisig txns have more than one address...

@@ -199,26 +199,30 @@ bool CPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmoun
     std::vector<valtype> vSolutions;
     txnouttype whichType;
     CScript scriptPubKeyKernel = txFrom.vout[nPosition].scriptPubKey;
-    if (!Solver(scriptPubKeyKernel, whichType, vSolutions)) {
-        LogPrintf("CreateCoinStake : failed to parse kernel\n");
-        return false;
-    }
+    if (!Solver(scriptPubKeyKernel, whichType, vSolutions))
+        return error("%s: failed to parse kernel", __func__);
 
-    if (whichType != TX_PUBKEY && whichType != TX_PUBKEYHASH)
-        return false; // only support pay to public key and pay to address
+    if (whichType != TX_PUBKEY && whichType != TX_PUBKEYHASH && whichType != TX_COLDSTAKE)
+        return error("%s: type=%d (%s) not supported for scriptPubKeyKernel", __func__, whichType, GetTxnOutputType(whichType));
 
     CScript scriptPubKey;
-    if (whichType == TX_PUBKEYHASH) // pay to address type
-    {
-        //convert to pay to public key type
-        CKey key;
-        CKeyID keyID = CKeyID(uint160(vSolutions[0]));
-        if (!pwallet->GetKey(keyID, key))
-            return false;
+    CKey key;
+    if (whichType == TX_PUBKEYHASH) {
+        // if P2PKH check that we have the input private key
+        if (!pwallet->GetKey(CKeyID(uint160(vSolutions[0])), key))
+            return error("%s: Unable to get staking private key", __func__);
 
+        // convert to P2PK inputs
         scriptPubKey << key.GetPubKey() << OP_CHECKSIG;
-    } else
+
+    } else {
+        // if P2CS, check that we have the coldstaking private key
+        if ( whichType == TX_COLDSTAKE && !pwallet->GetKey(CKeyID(uint160(vSolutions[0])), key) )
+            return error("%s: Unable to get cold staking private key", __func__);
+
+        // keep the same script
         scriptPubKey = scriptPubKeyKernel;
+    }
 
     vout.emplace_back(CTxOut(0, scriptPubKey));
 

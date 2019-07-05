@@ -538,7 +538,7 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
     return false;
 }
 
-bool CWallet::GetVinAndKeysFromOutput(COutput out, CTxIn& txinRet, CPubKey& pubKeyRet, CKey& keyRet)
+bool CWallet::GetVinAndKeysFromOutput(COutput out, CTxIn& txinRet, CPubKey& pubKeyRet, CKey& keyRet, bool fColdStake)
 {
     // wait for reindex and/or import to finish
     if (fImporting || fReindex) return false;
@@ -549,7 +549,7 @@ bool CWallet::GetVinAndKeysFromOutput(COutput out, CTxIn& txinRet, CPubKey& pubK
     pubScript = out.tx->vout[out.i].scriptPubKey; // the inputs PubKey
 
     CTxDestination address1;
-    ExtractDestination(pubScript, address1);
+    ExtractDestination(pubScript, address1, fColdStake);
     CBitcoinAddress address2(address1);
 
     CKeyID keyID;
@@ -1434,10 +1434,11 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
             continue;
 
         // In either case, we need to get the destination address
+        const bool fColdStake = (filter & ISMINE_COLD);
         CTxDestination address;
         if (txout.IsZerocoinMint()) {
             address = CNoDestination();
-        } else if (!ExtractDestination(txout.scriptPubKey, address)) {
+        } else if (!ExtractDestination(txout.scriptPubKey, address, fColdStake)) {
             if (!IsCoinStake() && !IsCoinBase()) {
                 LogPrintf("CWalletTx::GetAmounts: Unknown transaction type found, txid %s\n", this->GetHash().ToString());
             }
@@ -1997,6 +1998,18 @@ void CWallet::AvailableCoins(
                 if (mine == ISMINE_NO)
                     continue;
 
+                // skip cold coins
+                if (!fIncludeColdStaking && mine == ISMINE_COLD)
+                    continue;
+
+                // skip delegated coins
+                if (!fIncludeDelegated && mine == ISMINE_SPENDABLE_DELEGATED)
+                    continue;
+
+                // skip auto-delegated coins
+                if (!fIncludeColdStaking && !fIncludeDelegated && mine == ISMINE_SPENDABLE_STAKEABLE)
+                    continue;
+
                 if ((mine == ISMINE_MULTISIG || mine == ISMINE_SPENDABLE) && nWatchonlyConfig == 2)
                     continue;
 
@@ -2010,12 +2023,12 @@ void CWallet::AvailableCoins(
                 if (coinControl && coinControl->HasSelected() && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
                     continue;
 
-                bool fIsSpendable = (
+                bool fIsValid = (
                         ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
                         ((mine & (ISMINE_MULTISIG | (fIncludeColdStaking ? ISMINE_COLD : ISMINE_NO) |
                                 (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO));
 
-                vCoins.emplace_back(COutput(pcoin, i, nDepth, fIsSpendable));
+                vCoins.emplace_back(COutput(pcoin, i, nDepth, fIsValid));
             }
         }
     }
@@ -2024,7 +2037,7 @@ void CWallet::AvailableCoins(
 std::map<CBitcoinAddress, std::vector<COutput> > CWallet::AvailableCoinsByAddress(bool fConfirmed, CAmount maxCoinValue)
 {
     std::vector<COutput> vCoins;
-    // include delegated and cold
+    // include cold and delegated coins
     AvailableCoins(vCoins, fConfirmed, nullptr, false, ALL_COINS, false, 1, true, true);
 
     std::map<CBitcoinAddress, std::vector<COutput> > mapCoins;
@@ -2033,10 +2046,16 @@ std::map<CBitcoinAddress, std::vector<COutput> > CWallet::AvailableCoinsByAddres
             continue;
 
         CTxDestination address;
-        if (!ExtractDestination(out.tx->vout[out.i].scriptPubKey, address))
-            continue;
+        bool fColdStakeAddr = false;
+        if (!ExtractDestination(out.tx->vout[out.i].scriptPubKey, address, fColdStakeAddr)) {
+            // check if we have the staking key
+            fColdStakeAddr = true;
+            if ( !out.tx->vout[out.i].scriptPubKey.IsPayToColdStaking() ||
+                    !ExtractDestination(out.tx->vout[out.i].scriptPubKey, address, fColdStakeAddr) )
+                continue;
+        }
 
-        mapCoins[CBitcoinAddress(address)].push_back(out);
+        mapCoins[CBitcoinAddress(address, fColdStakeAddr)].push_back(out);
     }
 
     return mapCoins;
@@ -2490,6 +2509,7 @@ bool CWallet::CreateTransaction(const std::vector<std::pair<CScript, CAmount> >&
 
                 for (PAIRTYPE(const CWalletTx*, unsigned int) pcoin : setCoins) {
                     if(pcoin.first->vout[pcoin.second].scriptPubKey.IsPayToColdStaking())
+                        // P2CS contract is being spent
                         wtxNew.fStakeDelegationVoided = true;
                     CAmount nCredit = pcoin.first->vout[pcoin.second].nValue;
                     //The coin age after the next block (depth+1) is used instead of the current,
@@ -2658,7 +2678,7 @@ bool CWallet::CreateCoinStake(
     txNew.vout.push_back(CTxOut(0, scriptEmpty));
 
     // Choose coins to use
-    CAmount nBalance = GetBalance();
+    CAmount nBalance = GetBalance() + GetColdStakingBalance();
 
     if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
         return error("CreateCoinStake : invalid reserve balance amount");
@@ -2720,7 +2740,7 @@ bool CWallet::CreateCoinStake(
             // Create the output transaction(s)
             std::vector<CTxOut> vout;
             if (!stakeInput->CreateTxOuts(this, vout, nCredit)) {
-                LogPrintf("%s : failed to get scriptPubKey\n", __func__);
+                LogPrintf("%s : failed to create output\n", __func__);
                 continue;
             }
             txNew.vout.insert(txNew.vout.end(), vout.begin(), vout.end());
@@ -3160,7 +3180,8 @@ std::map<CTxDestination, CAmount> CWallet::GetAddressBalances()
                 CTxDestination addr;
                 if (!IsMine(pcoin->vout[i]))
                     continue;
-                if (!ExtractDestination(pcoin->vout[i].scriptPubKey, addr))
+                if ( !ExtractDestination(pcoin->vout[i].scriptPubKey, addr) &&
+                        !ExtractDestination(pcoin->vout[i].scriptPubKey, addr, true) )
                     continue;
 
                 CAmount n = IsSpent(walletEntry.first, i) ? 0 : pcoin->vout[i].nValue;
