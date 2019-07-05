@@ -396,7 +396,7 @@ UniValue validateaddress(const UniValue& params, bool fHelp)
 
 #ifdef ENABLE_WALLET
         isminetype mine = pwalletMain ? IsMine(*pwalletMain, dest) : ISMINE_NO;
-        ret.push_back(Pair("ismine", bool(mine & ISMINE_SPENDABLE)));
+        ret.push_back(Pair("ismine", bool(mine & ISMINE_SPENDABLE_ALL)));
         ret.push_back(Pair("iswatchonly", bool(mine & ISMINE_WATCH_ONLY)));
         UniValue detail = boost::apply_visitor(DescribeAddressVisitor(mine), dest);
         ret.pushKVs(detail);

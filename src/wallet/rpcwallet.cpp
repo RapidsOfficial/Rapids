@@ -926,9 +926,9 @@ CAmount GetAccountBalance(const std::string& strAccount, int nMinDepth, const is
 
 UniValue getbalance(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() > 3)
+    if (fHelp || params.size() > 4)
         throw std::runtime_error(
-            "getbalance ( \"account\" minconf includeWatchonly )\n"
+            "getbalance ( \"account\" minconf includeWatchonly includeDelegated )\n"
             "\nIf account is not specified, returns the server's total available balance (excluding zerocoins).\n"
             "If account is specified, returns the balance in the account.\n"
             "Note that the account \"\" is not the same as leaving the parameter out.\n"
@@ -938,6 +938,7 @@ UniValue getbalance(const UniValue& params, bool fHelp)
             "1. \"account\"      (string, optional) The selected account, or \"*\" for entire wallet. It may be the default account using \"\".\n"
             "2. minconf          (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
             "3. includeWatchonly (bool, optional, default=false) Also include balance in watchonly addresses (see 'importaddress')\n"
+            "4. includeDelegated (bool, optional, default=true) Also include balance delegated to cold stakers\n"
 
             "\nResult:\n"
             "amount              (numeric) The total amount in PIV received for this account.\n"
@@ -963,9 +964,10 @@ UniValue getbalance(const UniValue& params, bool fHelp)
     if (params.size() > 1)
         nMinDepth = params[1].get_int();
     isminefilter filter = ISMINE_SPENDABLE;
-    if (params.size() > 2)
-        if (params[2].get_bool())
-            filter = filter | ISMINE_WATCH_ONLY;
+    if ( params.size() > 2 && params[2].get_bool() )
+        filter = filter | ISMINE_WATCH_ONLY;
+    if ( !(params.size() > 3) || params[3].get_bool() )
+        filter = filter | ISMINE_SPENDABLE_DELEGATED;
 
     if (params[0].get_str() == "*") {
         // Calculate total balance a different way from GetBalance()
@@ -1088,9 +1090,9 @@ UniValue movecmd(const UniValue& params, bool fHelp)
 
 UniValue sendfrom(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 3 || params.size() > 6)
+    if (fHelp || params.size() < 3 || params.size() > 7)
         throw std::runtime_error(
-            "sendfrom \"fromaccount\" \"topivxaddress\" amount ( minconf \"comment\" \"comment-to\" )\n"
+            "sendfrom \"fromaccount\" \"topivxaddress\" amount ( minconf \"comment\" \"comment-to\" includeDelegated)\n"
             "\nSent an amount from an account to a pivx address.\n"
             "The amount is a real and is rounded to the nearest 0.00000001." +
             HelpRequiringPassphrase() + "\n"
@@ -1105,6 +1107,7 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
             "6. \"comment-to\"        (string, optional) An optional comment to store the name of the person or organization \n"
             "                                     to which you're sending the transaction. This is not part of the transaction, \n"
             "                                     it is just kept in your wallet.\n"
+            "7. includeDelegated     (bool, optional, default=false) Also include balance delegated to cold stakers\n"
 
             "\nResult:\n"
             "\"transactionid\"        (string) The transaction id.\n"
@@ -1135,10 +1138,14 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
     if (params.size() > 5 && !params[5].isNull() && !params[5].get_str().empty())
         wtx.mapValue["to"] = params[5].get_str();
 
+    isminefilter filter = ISMINE_SPENDABLE;
+    if ( params.size() > 6 && params[6].get_bool() )
+        filter = filter | ISMINE_SPENDABLE_DELEGATED;
+
     EnsureWalletIsUnlocked();
 
     // Check funds
-    CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, ISMINE_SPENDABLE);
+    CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, filter);
     if (nAmount > nBalance)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Account has insufficient funds");
 
@@ -1150,9 +1157,9 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
 
 UniValue sendmany(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 2 || params.size() > 4)
+    if (fHelp || params.size() < 2 || params.size() > 5)
         throw std::runtime_error(
-            "sendmany \"fromaccount\" {\"address\":amount,...} ( minconf \"comment\" )\n"
+            "sendmany \"fromaccount\" {\"address\":amount,...} ( minconf \"comment\" includeDelegated )\n"
             "\nSend multiple times. Amounts are double-precision floating point numbers." +
             HelpRequiringPassphrase() + "\n"
 
@@ -1165,6 +1172,7 @@ UniValue sendmany(const UniValue& params, bool fHelp)
             "    }\n"
             "3. minconf                 (numeric, optional, default=1) Only use the balance confirmed at least this many times.\n"
             "4. \"comment\"             (string, optional) A comment\n"
+            "5. includeDelegated     (bool, optional, default=false) Also include balance delegated to cold stakers\n"
 
             "\nResult:\n"
             "\"transactionid\"          (string) The transaction id for the send. Only 1 transaction is created regardless of \n"
@@ -1211,6 +1219,10 @@ UniValue sendmany(const UniValue& params, bool fHelp)
 
         vecSend.push_back(std::make_pair(scriptPubKey, nAmount));
     }
+
+    isminefilter filter = ISMINE_SPENDABLE;
+    if ( params.size() > 5 && params[5].get_bool() )
+        filter = filter | ISMINE_SPENDABLE_DELEGATED;
 
     EnsureWalletIsUnlocked();
 
@@ -1305,7 +1317,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
     if (params.size() > 1)
         fIncludeEmpty = params[1].get_bool();
 
-    isminefilter filter = ISMINE_SPENDABLE;
+    isminefilter filter = ISMINE_SPENDABLE_ALL;
     if (params.size() > 2)
         if (params[2].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
@@ -1562,9 +1574,9 @@ void AcentryToJSON(const CAccountingEntry& acentry, const std::string& strAccoun
 
 UniValue listtransactions(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() > 4)
+    if (fHelp || params.size() > 6)
         throw std::runtime_error(
-            "listtransactions ( \"account\" count from includeWatchonly)\n"
+            "listtransactions ( \"account\" count from includeWatchonly includeDelegated )\n"
             "\nReturns up to 'count' most recent transactions skipping the first 'from' transactions for account 'account'.\n"
 
             "\nArguments:\n"
@@ -1573,6 +1585,8 @@ UniValue listtransactions(const UniValue& params, bool fHelp)
             "2. count          (numeric, optional, default=10) The number of transactions to return\n"
             "3. from           (numeric, optional, default=0) The number of transactions to skip\n"
             "4. includeWatchonly (bool, optional, default=false) Include transactions to watchonly addresses (see 'importaddress')\n"
+            "5. includeDelegated     (bool, optional, default=true) Also include balance delegated to cold stakers\n"
+            "6. includeCold     (bool, optional, default=true) Also include delegated balance received as cold-staker by this node\n"
 
             "\nResult:\n"
             "[\n"
@@ -1635,9 +1649,12 @@ UniValue listtransactions(const UniValue& params, bool fHelp)
     if (params.size() > 2)
         nFrom = params[2].get_int();
     isminefilter filter = ISMINE_SPENDABLE;
-    if (params.size() > 3)
-        if (params[3].get_bool())
+    if ( params.size() > 3 && params[3].get_bool() )
             filter = filter | ISMINE_WATCH_ONLY;
+    if ( !(params.size() > 4) || params[4].get_bool() )
+        filter = filter | ISMINE_SPENDABLE_DELEGATED;
+    if ( !(params.size() > 5) || params[5].get_bool() )
+        filter = filter | ISMINE_COLD;
 
     if (nCount < 0)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Negative count");
@@ -1807,7 +1824,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
 
     CBlockIndex* pindex = NULL;
     int target_confirms = 1;
-    isminefilter filter = ISMINE_SPENDABLE;
+    isminefilter filter = ISMINE_SPENDABLE_ALL | ISMINE_COLD;
 
     if (params.size() > 0) {
         uint256 blockId = 0;
@@ -1895,7 +1912,7 @@ UniValue gettransaction(const UniValue& params, bool fHelp)
     uint256 hash;
     hash.SetHex(params[0].get_str());
 
-    isminefilter filter = ISMINE_SPENDABLE;
+    isminefilter filter = ISMINE_SPENDABLE_ALL | ISMINE_COLD;
     if (params.size() > 1)
         if (params[1].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
