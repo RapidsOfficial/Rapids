@@ -118,7 +118,7 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
             "\"pivxaddress\"    (string) The new pivx address\n"
 
             "\nExamples:\n" +
-            HelpExampleCli("getnewaddress", "") + HelpExampleCli("getnewaddress", "\"\"") +
+            HelpExampleCli("getnewaddress", "") + HelpExampleRpc("getnewaddress", "\"\"") +
             HelpExampleCli("getnewaddress", "\"myaccount\"") + HelpExampleRpc("getnewaddress", "\"myaccount\""));
 
     return GetNewAddressFromAccount("receive", false, params).ToString();
@@ -126,21 +126,21 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
 
 UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
 {
+
     if (fHelp || params.size() > 1)
         throw std::runtime_error(
             "getnewstakingaddress ( \"account\" )\n"
-            "\nReturns a new PIVX cold staking address for receiving delegated stakes.\n"
-            "If 'account' is specified (recommended), it is added to the address book \n"
-            "so payments received with the address will be credited to 'account'.\n"
+            "\nReturns a new PIVX cold staking address for receiving delegated cold stakes.\n"
 
             "\nArguments:\n"
             "1. \"account\"        (string, optional) The account name for the address to be linked to. if not provided, the default account \"\" is used. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created if there is no account by the given name.\n"
+
 
             "\nResult:\n"
             "\"pivxaddress\"    (string) The new pivx address\n"
 
             "\nExamples:\n" +
-            HelpExampleCli("getnewstakingaddress", "") + HelpExampleCli("getnewstakingaddress", "\"\"") +
+            HelpExampleCli("getnewstakingaddress", "") + HelpExampleRpc("getnewstakingaddress", "\"\"") +
             HelpExampleCli("getnewstakingaddress", "\"myaccount\"") + HelpExampleRpc("getnewstakingaddress", "\"myaccount\""));
 
     return GetNewAddressFromAccount("coldstaking", true, params).ToString();
@@ -407,7 +407,7 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     CBitcoinAddress address(params[0].get_str());
-    if (!address.IsValid())
+    if (!address.IsValid() || address.IsStakingAddress())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
     // Amount
@@ -427,7 +427,7 @@ UniValue sendtoaddress(const UniValue& params, bool fHelp)
     return wtx.GetHash().GetHex();
 }
 
-bool CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CReserveKey& reservekey)
+UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CReserveKey& reservekey)
 {
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
@@ -550,12 +550,13 @@ UniValue delegatestake(const UniValue& params, bool fHelp)
 
     CWalletTx wtx;
     CReserveKey reservekey(pwalletMain);
-    CreateColdStakeDelegation(params, wtx, reservekey);
+    UniValue ret = CreateColdStakeDelegation(params, wtx, reservekey);
 
     if (!pwalletMain->CommitTransaction(wtx, reservekey, "tx"))
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
 
-    return wtx.GetHash().GetHex();
+    ret.push_back(Pair("txid", wtx.GetHash().GetHex()));
+    return ret;
 }
 
 UniValue rawdelegatestake(const UniValue& params, bool fHelp)
@@ -659,7 +660,7 @@ UniValue sendtoaddressix(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     CBitcoinAddress address(params[0].get_str());
-    if (!address.IsValid())
+    if (!address.IsValid() || address.IsStakingAddress())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
     // Amount
@@ -1005,6 +1006,69 @@ UniValue getbalance(const UniValue& params, bool fHelp)
     return ValueFromAmount(nBalance);
 }
 
+UniValue getcoldstakingbalance(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() > 1)
+        throw std::runtime_error(
+            "getcoldstakingbalance ( \"account\" )\n"
+            "\nIf account is not specified, returns the server's total available cold balance.\n"
+            "If account is specified, returns the cold balance in the account.\n"
+            "Note that the account \"\" is not the same as leaving the parameter out.\n"
+            "The server total may be different to the balance in the default \"\" account.\n"
+
+            "\nArguments:\n"
+            "1. \"account\"      (string, optional) The selected account, or \"*\" for entire wallet. It may be the default account using \"\".\n"
+
+            "\nResult:\n"
+            "amount              (numeric) The total amount in PIV received for this account in P2CS contracts.\n"
+
+            "\nExamples:\n"
+            "\nThe total amount in the server across all accounts\n" +
+            HelpExampleCli("getcoldstakingbalance", "") +
+            "\nThe total amount in the account named tabby\n" +
+            HelpExampleCli("getcoldstakingbalance", "\"tabby\"") +
+            "\nAs a json rpc call\n" +
+            HelpExampleRpc("getcoldstakingbalance", "\"tabby\""));
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    if (params.size() == 0)
+        return ValueFromAmount(pwalletMain->GetColdStakingBalance());
+
+    const int nMinDepth = 1;
+
+    if (params[0].get_str() == "*") {
+        // Calculate total balance a different way from GetBalance()
+        // (GetBalance() sums up all unspent TxOuts)
+        CAmount nBalance = 0;
+        for (std::map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
+            const CWalletTx& wtx = (*it).second;
+            if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || wtx.GetDepthInMainChain() < 0)
+                continue;
+
+            CAmount allFee;
+            std::string strSentAccount;
+            std::list<COutputEntry> listReceived;
+            std::list<COutputEntry> listSent;
+            wtx.GetAmounts(listReceived, listSent, allFee, strSentAccount, ISMINE_COLD);
+            if (wtx.GetDepthInMainChain() >= nMinDepth) {
+                for (const COutputEntry& r : listReceived)
+                    nBalance += r.amount;
+            }
+            for (const COutputEntry& s : listSent)
+                nBalance -= s.amount;
+            nBalance -= allFee;
+        }
+        return ValueFromAmount(nBalance);
+    }
+
+    std::string strAccount = AccountFromValue(params[0]);
+
+    CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, ISMINE_COLD);
+
+    return ValueFromAmount(nBalance);
+}
+
 UniValue getunconfirmedbalance(const UniValue &params, bool fHelp)
 {
     if (fHelp || params.size() > 0)
@@ -1124,7 +1188,7 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
 
     std::string strAccount = AccountFromValue(params[0]);
     CBitcoinAddress address(params[1].get_str());
-    if (!address.IsValid())
+    if (!address.IsValid() || address.IsStakingAddress())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
     CAmount nAmount = AmountFromValue(params[2]);
     int nMinDepth = 1;
@@ -1206,7 +1270,7 @@ UniValue sendmany(const UniValue& params, bool fHelp)
     std::vector<std::string> keys = sendTo.getKeys();
     for (const std::string& name_ : keys) {
         CBitcoinAddress address(name_);
-        if (!address.IsValid())
+        if (!address.IsValid() || address.IsStakingAddress())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid PIVX address: ")+name_);
 
         if (setAddress.count(address))
@@ -2414,7 +2478,9 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
             "\nResult:\n"
             "{\n"
             "  \"walletversion\": xxxxx,     (numeric) the wallet version\n"
-            "  \"balance\": xxxxxxx,         (numeric) the total PIV balance of the wallet\n"
+            "  \"balance\": xxxxxxx,         (numeric) the total PIV balance of the wallet (cold balance excluded)\n"
+            "  \"delegated_balance\": xxxxx, (numeric) the PIV balance held in P2CS (cold staking) contracts\n"
+            "  \"cold_staking_balance\": xx, (numeric) the PIV balance held in cold staking addresses\n"
             "  \"unconfirmed_balance\": xxx, (numeric) the total unconfirmed balance of the wallet in PIV\n"
             "  \"immature_balance\": xxxxxx, (numeric) the total immature balance of the wallet in PIV\n"
             "  \"txcount\": xxxxxxx,         (numeric) the total number of transactions in the wallet\n"
@@ -2433,6 +2499,8 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
     UniValue obj(UniValue::VOBJ);
     obj.push_back(Pair("walletversion", pwalletMain->GetVersion()));
     obj.push_back(Pair("balance", ValueFromAmount(pwalletMain->GetBalance())));
+    obj.push_back(Pair("delegated_balance", ValueFromAmount(pwalletMain->GetDelegatedBalance())));
+    obj.push_back(Pair("cold_staking_balance", ValueFromAmount(pwalletMain->GetColdStakingBalance())));
     obj.push_back(Pair("unconfirmed_balance", ValueFromAmount(pwalletMain->GetUnconfirmedBalance())));
     obj.push_back(Pair("immature_balance",    ValueFromAmount(pwalletMain->GetImmatureBalance())));
     obj.push_back(Pair("txcount", (int)pwalletMain->mapWallet.size()));
@@ -3288,7 +3356,7 @@ UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
         // Destination address was supplied as params[4]. Optional parameters MUST be at the end
         // to avoid type confusion from the JSON interpreter
         address = CBitcoinAddress(params[3].get_str());
-        if(!address.IsValid())
+        if(!address.IsValid() || address.IsStakingAddress())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
     }
 
@@ -3311,7 +3379,7 @@ extern UniValue DoZpivSpend(const CAmount nAmount, bool fMintChange, bool fMinim
     std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
     if(address_str != "") { // Spend to supplied destination address
         address = CBitcoinAddress(address_str);
-        if(!address.IsValid())
+        if(!address.IsValid() || address.IsStakingAddress())
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
         outputs.push_back(std::pair<CBitcoinAddress*, CAmount>(&address, nAmount));
     }
