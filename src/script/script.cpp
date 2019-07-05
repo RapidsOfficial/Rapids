@@ -251,6 +251,18 @@ bool CScript::IsPayToScriptHash() const
             this->at(22) == OP_EQUAL);
 }
 
+bool CScript::IsPayToColdStaking() const
+{
+    // Extra-fast test for pay-to-cold-staking CScripts:
+    return (this->size() == 51 &&
+            this->at(2) == OP_ROT &&
+            this->at(4) == OP_CHECKCOLDSTAKEVERIFY &&
+            this->at(5) == 0x14 &&
+            this->at(27) == 0x14 &&
+            this->at(49) == OP_EQUALVERIFY &&
+            this->at(50) == OP_CHECKSIG);
+}
+
 bool CScript::StartsWithOpcode(const opcodetype opcode) const
 {
     return (!this->empty() && this->at(0) == opcode);
