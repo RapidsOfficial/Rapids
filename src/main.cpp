@@ -1175,6 +1175,23 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
     return fValidated;
 }
 
+
+bool CheckColdStake(const CTransaction& tx, CValidationState& state)
+{
+    CTxOut prevOut;
+    if(!GetOutput(tx.vin[0].prevout.hash, tx.vin[0].prevout.n, state, prevOut))
+        return state.DoS(100, error("%s : invalid input", __func__), REJECT_INVALID, "bad-txns-inputs");
+
+    if (!prevOut.scriptPubKey.IsPayToColdStaking())
+    	return true;
+
+    // spending to the same contract
+   	if (prevOut.scriptPubKey != tx.vout[1].scriptPubKey)
+        return state.DoS(100, error("%s : invalid scripts", __func__), REJECT_INVALID, "bad-txns-cold-stake");
+
+    return true;
+}
+
 bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state, bool fFakeSerialAttack)
 {
     // Basic checks that don't depend on any context
@@ -1214,14 +1231,18 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
         }
     }
 
+    // Additional check for cold staking
+    if(tx.IsCoinStake() && !tx.HasZerocoinSpendInputs() && !CheckColdStake(tx, state))
+        return state.DoS(100, error("CheckTransaction() : invalid cold stake"), REJECT_INVALID, "bad-txns-cold-stake");
+
     std::set<COutPoint> vInOutPoints;
     std::set<CBigNum> vZerocoinSpendSerials;
     int nZCSpendCount = 0;
+
     for (const CTxIn& txin : tx.vin) {
         // Check for duplicate inputs
         if (vInOutPoints.count(txin.prevout))
-            return state.DoS(100, error("CheckTransaction() : duplicate inputs"),
-                REJECT_INVALID, "bad-txns-inputs-duplicate");
+            return state.DoS(100, error("CheckTransaction() : duplicate inputs"), REJECT_INVALID, "bad-txns-inputs-duplicate");
 
         //duplicate zcspend serials are checked in CheckZerocoinSpend()
         if (!txin.IsZerocoinSpend()) {

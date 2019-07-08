@@ -965,6 +965,7 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                     if(!checker.CheckColdStake()) {
                         return set_error(serror, SCRIPT_ERR_CHECKCOLDSTAKEVERIFY);
                     }
+                    // CheckTransaction verifies that prevout scripts match with out scripts
                 }
                 break;
 
