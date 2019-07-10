@@ -55,6 +55,7 @@ TEST_EXIT_SKIPPED = 77
 BASE_SCRIPTS= [
     # Scripts that are run by the travis build process.
     # Longest test should go first, to favor running tests in parallel
+    'feature_coldStaking.py',
     'wallet_basic.py',
     'wallet_backup.py',
 
@@ -69,6 +70,7 @@ BASE_SCRIPTS= [
     'wallet_txn_clone.py --mineblock',
     'interface_rest.py',
     'feature_proxy.py',
+
     'p2p_pos_fakestake.py',
     'p2p_pos_fakestake_accepted.py',
     #'p2p_zpos_fakestake.py',
