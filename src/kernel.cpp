@@ -147,6 +147,11 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
 {
     nStakeModifier = 0;
     fGeneratedStakeModifier = false;
+
+    // modifier 0 on RegTest
+    if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+        return true;
+    }
     if (!pindexPrev) {
         fGeneratedStakeModifier = true;
         return true; // genesis block's modifier is 0
@@ -240,6 +245,10 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
 bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int& nStakeModifierHeight, int64_t& nStakeModifierTime, bool fPrintProofOfStake)
 {
     nStakeModifier = 0;
+    // modifier 0 on RegTest
+    if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+        return true;
+    }
     if (!mapBlockIndex.count(hashBlockFrom))
         return error("%s : block not indexed", __func__);
     const CBlockIndex* pindexFrom = mapBlockIndex[hashBlockFrom];
