@@ -2127,7 +2127,7 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
     std::vector<COutput> vCoins;
 
     // include cold, exclude delegated
-    AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS, false, 1, true, false);
+    AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS, false, 1, GetBoolArg("-coldstaking", true), false);
 
     CAmount nAmountSelected = 0;
     if (GetBoolArg("-pivstake", true) && !fPrecompute) {
