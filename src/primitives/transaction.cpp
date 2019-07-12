@@ -232,7 +232,15 @@ bool CTransaction::CheckColdStake() const
 
     // additional checks in CheckTransaction
     return true;
+}
 
+bool CTransaction::HasP2CSOutputs() const
+{
+    for(const CTxOut& txout : vout) {
+        if (txout.scriptPubKey.IsPayToColdStaking())
+            return true;
+    }
+    return false;
 }
 
 CAmount CTransaction::GetValueOut() const

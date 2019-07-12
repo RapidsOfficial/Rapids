@@ -78,14 +78,14 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
         break;
     }
     case TX_COLDSTAKE: {
-        keyID = CKeyID(uint160(vSolutions[0]));
-        bool stakeKeyIsMine = keystore.HaveKey(keyID);
-        keyID = CKeyID(uint160(vSolutions[1]));
-        bool spendKeyIsMine = keystore.HaveKey(keyID);
+        CKeyID stakeKeyID = CKeyID(uint160(vSolutions[0]));
+        bool stakeKeyIsMine = keystore.HaveKey(stakeKeyID);
+        CKeyID ownerKeyID = CKeyID(uint160(vSolutions[1]));
+        bool spendKeyIsMine = keystore.HaveKey(ownerKeyID);
 
         if (spendKeyIsMine && stakeKeyIsMine)
             return ISMINE_SPENDABLE_STAKEABLE;
-        else if (stakeKeyIsMine)
+        else if (stakeKeyIsMine && keystore.HaveDelegator(ownerKeyID))
             return ISMINE_COLD;
         else if (spendKeyIsMine)
             return ISMINE_SPENDABLE_DELEGATED;

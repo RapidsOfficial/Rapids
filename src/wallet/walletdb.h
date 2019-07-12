@@ -113,6 +113,9 @@ public:
     bool WriteMultiSig(const CScript& script);
     bool EraseMultiSig(const CScript& script);
 
+    bool WriteDelegator(const CKeyID& keyID);
+    bool EraseDelegator(const CKeyID& keyID);
+
     bool WriteBestBlock(const CBlockLocator& locator);
     bool ReadBestBlock(CBlockLocator& locator);
 

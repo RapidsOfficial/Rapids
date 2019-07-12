@@ -258,6 +258,36 @@ bool CWallet::RemoveWatchOnly(const CScript& dest)
     return true;
 }
 
+bool CWallet::AddDelegator(const CKeyID& keyID)
+{
+    if (!CCryptoKeyStore::AddDelegator(keyID))
+        return false;
+    nTimeFirstKey = 1; // No birthday information for cold keys.
+    NotifyDelegatorChanged(true);
+    if (!fFileBacked)
+        return true;
+    return CWalletDB(strWalletFile).WriteDelegator(keyID);
+}
+
+bool CWallet::RemoveDelegator(const CKeyID& keyID)
+{
+    AssertLockHeld(cs_wallet);
+    if (!CCryptoKeyStore::RemoveDelegator(keyID))
+        return false;
+    if (!HaveDelegator())
+        NotifyDelegatorChanged(false);
+    if (fFileBacked)
+        if (!CWalletDB(strWalletFile).EraseDelegator(keyID))
+            return false;
+
+    return true;
+}
+
+bool CWallet::LoadDelegator(const CKeyID& keyID)
+{
+    return CCryptoKeyStore::AddDelegator(keyID);
+}
+
 bool CWallet::LoadWatchOnly(const CScript& dest)
 {
     return CCryptoKeyStore::AddWatchOnly(dest);
@@ -762,8 +792,28 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet, CWalletD
  * pblock is optional, but should be provided if the transaction is known to be in a block.
  * If fUpdate is true, existing transactions will be updated.
  */
-bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate)
+bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate, bool fOnlyCold)
 {
+    // if fOnlyCold=true, skip stakes or txes with no P2CS script
+    if (fOnlyCold) {
+        bool hasP2CS = true;
+        if (!tx.HasP2CSOutputs()) {
+            hasP2CS = false;
+            for (const CTxIn& in : tx.vin) {
+                // check the inputs. if none is spending a P2CS, skip
+                CTransaction prevtx;
+                uint256 hashBlock = 0;
+                if (!GetTransaction(in.prevout.hash, prevtx, hashBlock))
+                    continue;
+                if (prevtx.HasP2CSOutputs()) {
+                    hasP2CS = true;
+                    break;
+                }
+            }
+        }
+        if (!hasP2CS)
+            return false;
+    }
     {
         AssertLockHeld(cs_wallet);
 
@@ -3010,6 +3060,7 @@ bool CWallet::DelAddressBook(const CTxDestination& address)
             for (const PAIRTYPE(std::string, std::string) & item : mapAddressBook[address].destdata) {
                 CWalletDB(strWalletFile).EraseDestData(strAddress, item.first);
             }
+
         }
         mapAddressBook.erase(address);
     }
