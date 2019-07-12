@@ -501,7 +501,7 @@ public:
     /** should probably be renamed to IsRelevantToMe */
     bool IsFromMe(const CTransaction& tx) const;
     CAmount GetDebit(const CTransaction& tx, const isminefilter& filter) const;
-    CAmount GetCredit(const CTransaction& tx, const isminefilter& filter) const;
+    CAmount GetCredit(const CTransaction& tx, const isminefilter& filter, const bool fUnspent = false) const;
     CAmount GetChange(const CTransaction& tx) const;
     void SetBestChain(const CBlockLocator& loc);
 
@@ -802,7 +802,7 @@ public:
 
     //! filter decides which addresses will count towards the debit
     CAmount GetDebit(const isminefilter& filter) const;
-    CAmount GetCredit(const isminefilter& filter) const;
+    CAmount GetCredit(const isminefilter& filter, const bool fUnspent = false) const;
     CAmount GetImmatureCredit(bool fUseCache = true) const;
     CAmount GetAvailableCredit(bool fUseCache = true) const;
     // Return sum of unlocked coins
