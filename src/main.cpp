@@ -1074,7 +1074,6 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
     return true;
 }
 
-
 bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidationState& state, bool fFakeSerialAttack)
 {
     //max needed non-mint outputs should be 2 - one for redemption address and a possible 2nd for change
@@ -1118,7 +1117,7 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
                 return state.DoS(100, error("CheckZerocoinSpend(): public zerocoin spend parse failed"));
             }
             newSpend = publicSpend;
-        }else {
+        } else {
             newSpend = TxInToZerocoinSpend(txin);
         }
 
@@ -1175,7 +1174,6 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
     return fValidated;
 }
 
-
 bool CheckColdStake(const CTransaction& tx, CValidationState& state, bool fColdStakingActive)
 {
     CTxOut prevOut;
@@ -1183,13 +1181,13 @@ bool CheckColdStake(const CTransaction& tx, CValidationState& state, bool fColdS
         return state.DoS(100, error("%s : invalid input", __func__), REJECT_INVALID, "bad-txns-inputs");
 
     if (!prevOut.scriptPubKey.IsPayToColdStaking())
-    	return true;
+        return true;
 
     if (!fColdStakingActive)
         return state.DoS(100, error("%s : invalid input", __func__), REJECT_INVALID, "coldstake-not-active");
 
     // spending to the same contract
-   	if (prevOut.scriptPubKey != tx.vout[1].scriptPubKey)
+    if (prevOut.scriptPubKey != tx.vout[1].scriptPubKey)
         return state.DoS(100, error("%s : invalid scripts", __func__), REJECT_INVALID, "bad-txns-cold-stake");
 
     return true;
