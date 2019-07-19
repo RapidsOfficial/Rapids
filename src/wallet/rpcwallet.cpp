@@ -220,7 +220,7 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
         throw std::runtime_error(
             "delegatorremove \"addr\"\n"
             "\nRemoves the provided address <addr> from the allowed delegators keystore.\n"
-            "This disbles the staking of coins delegated to this wallet, owned by <addr>\n"
+            "This disables the staking of coins delegated to this wallet, owned by <addr>\n"
 
             "\nArguments:\n"
             "1. \"addr\"        (string, required) The address to whitelist\n"
