@@ -169,4 +169,11 @@ std::vector<unsigned char> CoinSpend::ParseSerial(CDataStream& s) {
     return coinSerialNumber.getvch();
 }
 
+void CoinSpend::setPubKey(CPubKey pkey, bool fUpdateSerial) {
+    this->pubkey = pkey;
+    if (fUpdateSerial) {
+        this->coinSerialNumber = libzerocoin::ExtractSerialFromPubKey(this->pubkey);
+    }
+}
+
 } /* namespace libzerocoin */

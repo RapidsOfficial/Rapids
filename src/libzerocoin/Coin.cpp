@@ -299,4 +299,12 @@ bool IsValidCommitmentToCoinRange(const ZerocoinParams* params, const CBigNum& b
 }
 
 
+CBigNum ExtractSerialFromPubKey(const CPubKey pubkey)
+{
+    uint256 hashedPubkey = Hash(pubkey.begin(), pubkey.end()) >> PrivateCoin::V2_BITSHIFT;
+    uint256 uintSerial = (uint256(0xF) << (256 - PrivateCoin::V2_BITSHIFT)) | hashedPubkey;
+    return CBigNum(uintSerial);
+}
+
+
 } /* namespace libzerocoin */

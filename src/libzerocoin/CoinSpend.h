@@ -130,6 +130,7 @@ public:
     bool HasValidSignature() const;
     void setTxOutHash(uint256 txOutHash) { this->ptxHash = txOutHash; };
     void setDenom(libzerocoin::CoinDenomination denom) { this->denomination = denom; }
+    void setPubKey(CPubKey pkey, bool fUpdateSerial = false);
 
     CBigNum CalculateValidSerial(ZerocoinParams* params);
     std::string ToString() const;
