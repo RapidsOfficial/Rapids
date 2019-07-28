@@ -59,6 +59,7 @@ BASE_SCRIPTS= [
     'wallet_backup.py',
 
     # vv Tests less than 5m vv
+    'wallet_abandonconflict.py',
     'rpc_rawtransaction.py',
     'wallet_zapwallettxes.py',
     'wallet_keypool_topup.py',
@@ -84,8 +85,7 @@ BASE_SCRIPTS= [
 
     # vv Tests less than 60s vv
     #'wallet_importmulti.py',
-    #'mempool_limit.py', # We currently don't limit our mempool
-    #'wallet_abandonconflict.py',
+    #'mempool_limit.py', # We currently don't limit our mempool_reorg
     'feature_reindex.py',
     'rpc_bip38.py',
 
