@@ -512,8 +512,9 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     // Get Amount
     CAmount nValue = AmountFromValue(params[1]);
-    if (nValue <= 0)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount");
+    if (nValue <= Params().GetMinColdStakingAmount())
+        throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Invalid amount (%d). Min amount: %d",
+                nValue, Params().GetMinColdStakingAmount()));
 
     // Get Owner Address
     CBitcoinAddress ownerAddr;

@@ -125,6 +125,13 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         assert(res is not None and res != "")
         self.log.info("Good. Warning NOT triggered.")
         self.log.info("Now delegate with internal owner address..")
+        self.log.info("Try first with a value (5) below the threshold")
+        try:
+            self.nodes[0].delegatestake(staker_address, 5, owner_address)
+            assert(False)
+        except JSONRPCException as e:
+            assert("Invalid amount" in str(e))
+            self.log.info("Nice. it was not possible.")
         self.log.info("Creating %d stake-delegation txes..." % NUM_OF_INPUTS)
         for i in range(NUM_OF_INPUTS):
             res = self.nodes[0].delegatestake(staker_address, INPUT_VALUE, owner_address)

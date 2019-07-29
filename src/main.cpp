@@ -1210,13 +1210,13 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
         return state.DoS(100, error("CheckTransaction() : size limits failed"),
             REJECT_INVALID, "bad-txns-oversize");
 
+    const CAmount minColdStakingAmount = Params().GetMinColdStakingAmount();
+
     // Check for negative or overflow output values
     CAmount nValueOut = 0;
     for (const CTxOut& txout : tx.vout) {
         if (txout.IsEmpty() && !tx.IsCoinBase() && !tx.IsCoinStake())
             return state.DoS(100, error("CheckTransaction(): txout empty for user transaction"));
-        if (txout.scriptPubKey.IsPayToColdStaking() && !fColdStakingActive)
-            return state.DoS(100, error("CheckTransaction(): cold staking not active"));
         if (txout.nValue < 0)
             return state.DoS(100, error("CheckTransaction() : txout.nValue negative"),
                 REJECT_INVALID, "bad-txns-vout-negative");
@@ -1231,11 +1231,19 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
             if(!CheckZerocoinMint(tx.GetHash(), txout, state, true))
                 return state.DoS(100, error("CheckTransaction() : invalid zerocoin mint"));
         }
+        // check cold staking enforcement and value out
+        if (txout.scriptPubKey.IsPayToColdStaking()) {
+            if (!fColdStakingActive)
+                return state.DoS(100, error("%s: cold staking not active", __func__), REJECT_INVALID, "bad-txns-cold-stake");
+            if (txout.nValue < minColdStakingAmount)
+                return state.DoS(100, error("%s: dust amount (%d) not allowed for cold staking. Min amount: %d",
+                        __func__, txout.nValue, minColdStakingAmount), REJECT_INVALID, "bad-txns-cold-stake");
+        }
     }
 
     // Additional check for cold staking
     if (tx.IsCoinStake() && !tx.HasZerocoinSpendInputs() && !CheckColdStake(tx, state, fColdStakingActive))
-        return state.DoS(100, error("CheckTransaction() : invalid cold stake"), REJECT_INVALID, "bad-txns-cold-stake");
+        return state.DoS(100, error("%s: invalid cold stake", __func__), REJECT_INVALID, "bad-txns-cold-stake");
 
     std::set<COutPoint> vInOutPoints;
     std::set<CBigNum> vZerocoinSpendSerials;
