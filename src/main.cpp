@@ -4461,6 +4461,14 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
         for (unsigned int i = 2; i < block.vtx.size(); i++)
             if (block.vtx[i].IsCoinStake())
                 return state.DoS(100, error("%s : more than one coinstake", __func__));
+
+        // if MN payment is disabled. Check that the last output is not abused by cold staker
+        if (!IsInitialBlockDownload() && block.vtx[1].HasP2CSOutputs() && !sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
+            const int outputs = block.vtx[1].vout.size();
+            if (outputs >=3 && block.vtx[1].vout[outputs-1].scriptPubKey != block.vtx[1].vout[outputs-2].scriptPubKey)
+                return state.DoS(100, error("%s: Wrong cold staking outputs when masternode payment enforcement is disabled on tx %s",
+                        __func__, block.vtx[1].ToString().c_str()));
+        }
     }
 
     // ----------- swiftTX transaction scanning -----------
