@@ -1,8 +1,8 @@
 # Copyright (c) 2018-2019 The Ion developers
 # Copyright (c) 2019 The PIVX developers
-name: pivx
+name: pivx-core
 base: core18
-version: 3.2.99
+version: 3.4.99
 summary:   PIVX (Private – Instant – Verified – Transaction)
 description: |
   PIVX is an MIT licensed,
@@ -21,18 +21,14 @@ apps:
     desktop: pivxd.desktop
     environment:
       XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
+      HOME: $SNAP_USER_COMMON
   daemon-testnet:
     command: pivxd --testnet
     plugs: [network, network-bind, home, removable-media]
     desktop: pivxd_testnet.desktop
     environment:
       XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
-  daemon-regtest:
-    command: pivxd --regtest
-    plugs: [network, network-bind, home, removable-media]
-    desktop: pivxd_regtest.desktop
-    environment:
-      XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
+      HOME: $SNAP_USER_COMMON
   qt:
     command: pivx-qt
     plugs: [network, network-bind, network-status, unity7, desktop, desktop-legacy, wayland, x11, mir, opengl, home, gsettings, removable-media, screen-inhibit-control, pulseaudio, media-hub]
@@ -40,6 +36,7 @@ apps:
     environment:
       QT_XKB_CONFIG_ROOT: $SNAP_USER_DATA:$SNAP/usr/share:$QT_XKB_CONFIG_ROOT
       XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
+      HOME: $SNAP_USER_COMMON
   qt-testnet:
     command: pivx-qt --testnet
     plugs: [network, network-bind, network-status, unity7, desktop, desktop-legacy, wayland, x11, mir, opengl, home, gsettings, removable-media, screen-inhibit-control, pulseaudio, media-hub]
@@ -47,28 +44,19 @@ apps:
     environment:
       QT_XKB_CONFIG_ROOT: $SNAP_USER_DATA:$SNAP/usr/share:$QT_XKB_CONFIG_ROOT
       XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
-  qt-regtest:
-    command: pivx-qt --regtest
-    plugs: [network, network-bind, network-status, unity7, desktop, desktop-legacy, wayland, x11, mir, opengl, home, gsettings, removable-media, screen-inhibit-control, pulseaudio, media-hub]
-    desktop: pivx-qt_regtest.desktop
-    environment:
-      QT_XKB_CONFIG_ROOT: $SNAP_USER_DATA:$SNAP/usr/share:$QT_XKB_CONFIG_ROOT
-      XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
+      HOME: $SNAP_USER_COMMON
   cli:
     command: pivx-cli
     plugs: [network, network-bind, home, removable-media]
     environment:
       XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
+      HOME: $SNAP_USER_COMMON
   cli-testnet:
     command: pivx-cli --testnet
     plugs: [network, network-bind, home, removable-media]
     environment:
       XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
-  cli-regtest:
-    command: pivx-cli --regtest
-    plugs: [network, network-bind, home, removable-media]
-    environment:
-      XDG_DATA_DIRS: $SNAP_USER_DATA:$SNAP/usr/share:$XDG_DATA_DIRS
+      HOME: $SNAP_USER_COMMON
   tx:
     command: pivx-tx
     plugs: [home]
@@ -79,7 +67,7 @@ apps:
     command: test_pivx-qt
     plugs: [home]
 parts:
-  pivx:
+  pivx-core:
     source: https://github.com/PIVX-Project/PIVX
     source-type: git
     source-tag: master
@@ -92,7 +80,7 @@ parts:
       #    project is called ioncore because ion exists already as package. For anybody
       #    offering non official release and using own SNAP, this variable should be used
       #    default value is "false", to enable it, use your projects binary prefix
-      OVERRIDEBINPREFIX="false"
+      OVERRIDEBINPREFIX="pivx"
       OVERRIDEDATADIR="false"
       OVERRIDECONF="${OVERRIDEDATADIR}"
       COPYCONF=0    # copy example config into users data folder, 1 = enabled
@@ -100,7 +88,7 @@ parts:
       PATCH=1       # 1 = enabled
       SPLASHPNGS=0  # patch pngs to differ visaully from those installed from self compilation or other source like deb
       FIXPPCBUILD=1 # if ppc builds fail due to failed qt, apps part will return error and build will fail, 1 = enabled
-      EXTRALOG=1    # prints env and all installed files at the end of current script
+      EXTRALOG=0    # prints env and all installed files at the end of current script
       RUNTESTS=1    # run make check after post install part
       echo "-----------------------------------------------"
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
@@ -140,7 +128,6 @@ parts:
       cd ${SNAPCRAFT_PART_BUILD}
       if [ $PATCH = 1 ]; then
         echo "apply patches:"
-        git apply $SNAPCRAFT_PART_BUILD/build-aux/snap/local/patches/X001-default_data_dir.patch
         git apply $SNAPCRAFT_PART_BUILD/build-aux/snap/local/patches/X002-fix-bdb-tmp-folder.patch
         git apply $SNAPCRAFT_PART_BUILD/build-aux/snap/local/patches/X003-fix-use-snap-instead-of-dirty.patch
         sed -i 's/tar --strip-components/tar --no-same-owner --strip-components/' ${SNAPCRAFT_PART_BUILD}/depends/funcs.mk
@@ -195,6 +182,8 @@ parts:
       echo "INSTALLATION OF ${BINPREF}-${SNAPCRAFT_PROJECT_VERSION}" # run make install with a prefix where to install
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
       make install prefix=${SNAPCRAFT_PART_INSTALL}
+      install -m 0644 -D -T $SNAPCRAFT_PART_BUILD/src/qt/res/icons/bitcoin.png $SNAPCRAFT_PART_INSTALL/share/pixmaps/pivx.png
+      install -m 0644 -D -T $SNAPCRAFT_PART_BUILD/src/qt/res/icons/bitcoin_testnet.png $SNAPCRAFT_PART_INSTALL/share/pixmaps/pivx_testnet.png
       echo "-----------------------------------------------"
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
       echo "POST INSTALL SCRIPTS OF ${BINPREF}-${SNAPCRAFT_PROJECT_VERSION}" # run make install with a prefix where to install
@@ -241,10 +230,12 @@ parts:
       echo "RUN TESTS" # if tests fail to pass, build and release will fail
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
       cd ${SNAPCRAFT_PART_BUILD}
-      if [ $RUNTESTS = 1 ]; then
-        make check
-      else
-        echo "RUN TESTS disabled, skipping"
+      if [ ! $SNAPCRAFT_ARCH_TRIPLET = "s390x-linux-gnu" ]; then
+        if [ $RUNTESTS = 1 ]; then
+          make check
+        else
+          echo "RUN TESTS disabled, skipping"
+        fi
       fi
       echo "-----------------------------------------------"
       echo "+++++++++++++++++++++++++++++++++++++++++++++++"
@@ -254,7 +245,7 @@ parts:
         find ${SNAPCRAFT_PART_INSTALL} -type f
         env
       else
-        echo "RUN TESTS disabled, skipping"
+        echo "EXTRA LOG disabled, skipping"
       fi
       echo "-----------------------------------------------+"
     build-packages:
