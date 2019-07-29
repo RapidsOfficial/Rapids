@@ -85,7 +85,7 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
 
         if (spendKeyIsMine && stakeKeyIsMine)
             return ISMINE_SPENDABLE_STAKEABLE;
-        else if (stakeKeyIsMine && keystore.HaveDelegator(ownerKeyID))
+        else if (stakeKeyIsMine)
             return ISMINE_COLD;
         else if (spendKeyIsMine)
             return ISMINE_SPENDABLE_DELEGATED;

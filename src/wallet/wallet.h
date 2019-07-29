@@ -399,11 +399,6 @@ public:
     //! Adds a watch-only address to the store, without saving it to disk (used by LoadWallet)
     bool LoadWatchOnly(const CScript& dest);
 
-    //! Delegator addresseses for cold staking
-    bool AddDelegator(const CKeyID& keyID);
-    bool RemoveDelegator(const CKeyID& keyID);
-    bool LoadDelegator(const CKeyID& keyID);
-
     //! Adds a MultiSig address to the store, and saves it to disk.
     bool AddMultiSig(const CScript& dest);
     bool RemoveMultiSig(const CScript& dest);
@@ -426,7 +421,7 @@ public:
     void MarkDirty();
     bool AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet, CWalletDB* pwalletdb);
     void SyncTransaction(const CTransaction& tx, const CBlock* pblock);
-    bool AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate, bool fOnlyCold = false);
+    bool AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate);
     void EraseFromWallet(const uint256& hash);
     int ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate = false, bool fromStartup = false);
     void ReacceptWalletTransactions(bool fFirstLoad = false);
@@ -514,6 +509,8 @@ public:
 
     bool SetAddressBook(const CTxDestination& address, const std::string& strName, const std::string& purpose);
     bool DelAddressBook(const CTxDestination& address);
+    bool HasAddressBook(const CTxDestination& address) const;
+    bool HasDelegator(const CTxOut& out) const;
 
     bool UpdatedTransaction(const uint256& hashTx);
 
@@ -556,9 +553,6 @@ public:
 
     /** MultiSig address added */
     boost::signals2::signal<void(bool fHaveMultiSig)> NotifyMultiSigChanged;
-
-    /** Delegator address added */
-    boost::signals2::signal<void(bool fHaveDelegator)> NotifyDelegatorChanged;
 
     /** zPIV reset */
     boost::signals2::signal<void()> NotifyzPIVReset;

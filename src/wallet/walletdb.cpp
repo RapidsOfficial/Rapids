@@ -194,19 +194,6 @@ bool CWalletDB::EraseMultiSig(const CScript& dest)
     return Erase(std::make_pair(std::string("multisig"), dest));
 }
 
-bool CWalletDB::WriteDelegator(const CKeyID& keyID)
-{
-    nWalletDBUpdated++;
-    return Write(std::make_pair(std::string("delegator"), keyID), '1');
-}
-
-bool CWalletDB::EraseDelegator(const CKeyID& keyID)
-{
-    nWalletDBUpdated++;
-    return Erase(std::make_pair(std::string("delegator"), keyID));
-}
-
-
 bool CWalletDB::WriteBestBlock(const CBlockLocator& locator)
 {
     nWalletDBUpdated++;
@@ -559,13 +546,6 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             // MultiSig addresses have no birthday information for now,
             // so set the wallet birthday to the beginning of time.
             pwallet->nTimeFirstKey = 1;
-        } else if (strType == "delegator") {
-            CKeyID keyID;
-            ssKey >> keyID;
-            char fYes;
-            ssValue >> fYes;
-            if (fYes == '1')
-                pwallet->LoadDelegator(keyID);
         } else if (strType == "key" || strType == "wkey") {
             CPubKey vchPubKey;
             ssKey >> vchPubKey;

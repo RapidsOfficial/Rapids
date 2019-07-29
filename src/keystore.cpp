@@ -113,32 +113,6 @@ bool CBasicKeyStore::HaveMultiSig() const
     return (!setMultiSig.empty());
 }
 
-bool CBasicKeyStore::AddDelegator(const CKeyID& keyID)
-{
-    LOCK(cs_KeyStore);
-    setDelegators.insert(keyID);
-    return true;
-}
-
-bool CBasicKeyStore::RemoveDelegator(const CKeyID& keyID)
-{
-    LOCK(cs_KeyStore);
-    setDelegators.erase(keyID);
-    return true;
-}
-
-bool CBasicKeyStore::HaveDelegator(const CKeyID& keyID) const
-{
-    LOCK(cs_KeyStore);
-    return setDelegators.count(keyID) > 0;
-}
-
-bool CBasicKeyStore::HaveDelegator() const
-{
-    LOCK(cs_KeyStore);
-    return (!setDelegators.empty());
-}
-
 bool CBasicKeyStore::HaveKey(const CKeyID& address) const
 {
     bool result;

@@ -258,36 +258,6 @@ bool CWallet::RemoveWatchOnly(const CScript& dest)
     return true;
 }
 
-bool CWallet::AddDelegator(const CKeyID& keyID)
-{
-    if (!CCryptoKeyStore::AddDelegator(keyID))
-        return false;
-    nTimeFirstKey = 1; // No birthday information for cold keys.
-    NotifyDelegatorChanged(true);
-    if (!fFileBacked)
-        return true;
-    return CWalletDB(strWalletFile).WriteDelegator(keyID);
-}
-
-bool CWallet::RemoveDelegator(const CKeyID& keyID)
-{
-    AssertLockHeld(cs_wallet);
-    if (!CCryptoKeyStore::RemoveDelegator(keyID))
-        return false;
-    if (!HaveDelegator())
-        NotifyDelegatorChanged(false);
-    if (fFileBacked)
-        if (!CWalletDB(strWalletFile).EraseDelegator(keyID))
-            return false;
-
-    return true;
-}
-
-bool CWallet::LoadDelegator(const CKeyID& keyID)
-{
-    return CCryptoKeyStore::AddDelegator(keyID);
-}
-
 bool CWallet::LoadWatchOnly(const CScript& dest)
 {
     return CCryptoKeyStore::AddWatchOnly(dest);
@@ -792,28 +762,8 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet, CWalletD
  * pblock is optional, but should be provided if the transaction is known to be in a block.
  * If fUpdate is true, existing transactions will be updated.
  */
-bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate, bool fOnlyCold)
+bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate)
 {
-    // if fOnlyCold=true, skip stakes or txes with no P2CS script
-    if (fOnlyCold) {
-        bool hasP2CS = true;
-        if (!tx.HasP2CSOutputs()) {
-            hasP2CS = false;
-            for (const CTxIn& in : tx.vin) {
-                // check the inputs. if none is spending a P2CS, skip
-                CTransaction prevtx;
-                uint256 hashBlock = 0;
-                if (!GetTransaction(in.prevout.hash, prevtx, hashBlock))
-                    continue;
-                if (prevtx.HasP2CSOutputs()) {
-                    hasP2CS = true;
-                    break;
-                }
-            }
-        }
-        if (!hasP2CS)
-            return false;
-    }
     {
         AssertLockHeld(cs_wallet);
 
@@ -2050,8 +2000,12 @@ void CWallet::AvailableCoins(
                     continue;
 
                 // skip cold coins
-                if (!fIncludeColdStaking && mine == ISMINE_COLD)
-                    continue;
+                if (mine == ISMINE_COLD) {
+                    if (!fIncludeColdStaking)
+                        continue;
+                    if (!HasDelegator(pcoin->vout[i]))
+                        continue;
+                }
 
                 // skip delegated coins
                 if (!fIncludeDelegated && mine == ISMINE_SPENDABLE_DELEGATED)
@@ -3031,11 +2985,9 @@ DBErrors CWallet::ZapWalletTx(std::vector<CWalletTx>& vWtx)
 
 bool CWallet::SetAddressBook(const CTxDestination& address, const std::string& strName, const std::string& strPurpose)
 {
-    bool fUpdated = false;
+    bool fUpdated = HasAddressBook(address);
     {
         LOCK(cs_wallet); // mapAddressBook
-        std::map<CTxDestination, CAddressBookData>::iterator mi = mapAddressBook.find(address);
-        fUpdated = mi != mapAddressBook.end();
         mapAddressBook[address].name = strName;
         if (!strPurpose.empty()) /* update purpose only if requested */
             mapAddressBook[address].purpose = strPurpose;
@@ -3072,6 +3024,28 @@ bool CWallet::DelAddressBook(const CTxDestination& address)
     CWalletDB(strWalletFile).ErasePurpose(CBitcoinAddress(address).ToString());
     return CWalletDB(strWalletFile).EraseName(CBitcoinAddress(address).ToString());
 }
+
+bool CWallet::HasAddressBook(const CTxDestination& address) const
+{
+    LOCK(cs_wallet); // mapAddressBook
+    std::map<CTxDestination, CAddressBookData>::const_iterator mi = mapAddressBook.find(address);
+    return mi != mapAddressBook.end();
+}
+
+bool CWallet::HasDelegator(const CTxOut& out) const
+{
+    CTxDestination delegator;
+    if (!ExtractDestination(out.scriptPubKey, delegator, false))
+        return false;
+    {
+        LOCK(cs_wallet); // mapAddressBook
+        std::map<CTxDestination, CAddressBookData>::const_iterator mi = mapAddressBook.find(delegator);
+        if (mi == mapAddressBook.end())
+            return false;
+        return (*mi).second.purpose == "delegator";
+    }
+}
+
 
 /**
  * Mark old keypool keys as used,

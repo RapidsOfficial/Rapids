@@ -146,41 +146,16 @@ UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
     return GetNewAddressFromAccount("coldstaking", true, params).ToString();
 }
 
-int RescanStakeDelegations()
-{
-    int ret = 0;
-    LOCK2(cs_main, pwalletMain->cs_wallet);
-    if (!Params().Cold_Staking_Enabled(chainActive.Tip()->nHeight))
-        return ret;
-
-    CBlockIndex *pindex = chainActive[Params().Block_Enforce_Cold_Staking()];
-
-    while(pindex) {
-        CBlock block;
-        ReadBlockFromDisk(block, pindex);
-        for (CTransaction& tx : block.vtx) {
-            if (pwalletMain->AddToWalletIfInvolvingMe(tx, &block, true, true))
-                ret++;
-        }
-        pindex = chainActive.Next(pindex);
-    }
-    return ret;
-
-}
-
 UniValue delegatoradd(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 2)
+    if (fHelp || params.size() != 1)
         throw std::runtime_error(
             "delegatoradd \"addr\" ( fRescan )\n"
-            "\nAdd the provided address <addr> into the allowed delegators keystore.\n"
+            "\nAdd the provided address <addr> into the allowed delegators AddressBook.\n"
             "This enables the staking of coins delegated to this wallet, owned by <addr>\n"
 
             "\nArguments:\n"
             "1. \"addr\"        (string, required) The address to whitelist\n"
-            "2. fRescan         (bool, optional, default=false) rescan blockchain. Set to true only if\n"
-            "                       some stake-delegation from this address has already been sent.\n"
-            "                       If set to true, it might take few minutes to complete the scan.\n"
 
             "\nResult:\n"
             "true|false           (boolean) true if successful.\n"
@@ -194,24 +169,11 @@ UniValue delegatoradd(const UniValue& params, bool fHelp)
     if (!address.IsValid() || address.IsStakingAddress())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
-    bool fRescan = params.size() > 1 && !params[1].isNull() ? params[1].get_bool() : false;
-
     CKeyID keyID;
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from PIVX address");
 
-    if (pwalletMain->HaveDelegator(keyID))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Delegator already whitelisted");
-
-    bool res = pwalletMain->AddDelegator(keyID);
-
-    if (res && fRescan) {
-        // trigger rescan
-        int ret = RescanStakeDelegations();
-        LogPrintf("%s: Rescan for Stake delegation complete. %d inputs added/modified", __func__, ret);
-    }
-
-    return res;
+    return pwalletMain->SetAddressBook(keyID, "", "delegator");
 }
 
 UniValue delegatorremove(const UniValue& params, bool fHelp)
@@ -240,10 +202,7 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from PIVX address");
 
-    if (!pwalletMain->HaveDelegator(keyID))
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Delegator not whitelisted");
-
-    return pwalletMain->RemoveDelegator(keyID);
+    return pwalletMain->DelAddressBook(keyID);
 }
 
 CBitcoinAddress GetAccountAddress(std::string strAccount, bool bForceNew = false)

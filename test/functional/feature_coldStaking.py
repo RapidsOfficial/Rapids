@@ -136,7 +136,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("%d Txes created." % NUM_OF_INPUTS)
         # check balances:
         self.expected_balance = NUM_OF_INPUTS * INPUT_VALUE
-        self.checkBalances(0)
+        self.checkBalances()
 
 
         # 5) check that the owner (nodes[0]) can spend the coins.
@@ -153,7 +153,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.sync_all()
         # check balances after spend.
         self.expected_balance -= float(u["amount"])
-        self.checkBalances(0)
+        self.checkBalances()
         self.log.info("Balances check out after spend")
 
 
@@ -176,16 +176,9 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
             self.log.info("Nice. Cold staker was NOT able to create the block yet.")
             pass
         self.log.info("Whitelisting the owner...")
-        self.nodes[1].delegatoradd(owner_address, True)
+        ret = self.nodes[1].delegatoradd(owner_address)
+        assert(ret)
         self.log.info("Delegator address %s whitelisted" % owner_address)
-        # check that's been whitelisted for real
-        try:
-            self.nodes[1].delegatoradd(owner_address)
-            assert(False)
-        except JSONRPCException as e:
-            assert("Delegator already whitelisted" in str(e))
-        # check balances (delegated in nodes[0] and cold in nodes[1])
-        self.checkBalances()
 
 
         # 7) check that the staker CANNOT spend the coins.
@@ -310,21 +303,17 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
 
 
 
-    def checkBalances(self, cold=None):
+    def checkBalances(self):
         w_info = self.nodes[0].getwalletinfo()
         self.log.info("OWNER - Delegated %f / Cold %f" % (
             float(w_info["delegated_balance"]), w_info["cold_staking_balance"]))
         assert(float(w_info["delegated_balance"]) == self.expected_balance)
         assert (float(w_info["cold_staking_balance"]) == 0)
-        if cold != None:
-            coldbal = cold
-        else:
-            coldbal = self.expected_balance
         w_info = self.nodes[1].getwalletinfo()
         self.log.info("STAKER - Delegated %f / Cold %f" % (
             float(w_info["delegated_balance"]), w_info["cold_staking_balance"]))
         assert(float(w_info["delegated_balance"]) == 0)
-        assert (float(w_info["cold_staking_balance"]) == coldbal)
+        assert (float(w_info["cold_staking_balance"]) == self.expected_balance)
 
 
 
