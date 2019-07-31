@@ -416,7 +416,7 @@ calculateGroupModulusAndOrder(uint256 seed, uint32_t pLen, uint32_t qLen,
         CBigNum a = generateIntegerFromSeed(pLen, pseed, &iterations);
         pseed += iterations + 1;
 
-        // Set a = 2 + (a mod (resultModulusâ€“3)).
+        // Set a = 2 + (a mod (resultModulus - 3)).
         a = BN_TWO + (a % ((*resultModulus) - CBigNum(3)));
 
         // Set z = a^{2 * t * resultGroupOrder} mod resultModulus
@@ -576,7 +576,7 @@ generateRandomPrime(uint32_t primeBitLen, uint256 in_seed, uint256 *out_seed,
         for (uint32_t testNum = 0; testNum < MAX_PRIMEGEN_ATTEMPTS; testNum++) {
 
             // If ((2 * t * c0) + 1 > 2^{primeBitLen}),
-            // then t = 2^{primeBitLen} � 1 / (2 * c0)
+            // then t = (2^{primeBitLen} - 1) / (2 * c0)
             if ((BN_TWO * t * c0) > (BN_TWO.pow(CBigNum(primeBitLen)))) {
                 t = ((BN_TWO.pow(CBigNum(primeBitLen))) - BN_ONE) / (BN_TWO * c0);
             }
