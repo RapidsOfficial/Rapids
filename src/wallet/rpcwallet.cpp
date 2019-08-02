@@ -560,11 +560,10 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
     if (params.size() > 5 && !params[5].isNull())
         fForceNotEnabled = params[5].get_bool();
 
-    int nBestHeight = chainActive.Height();
-    if (!Params().Cold_Staking_Enabled(nBestHeight) && !fForceNotEnabled) {
-        std::string errMsg = strprintf("Cold Staking not enforced yet at block %d.\n"
-                "If the wallet is syncing, you may force the stake delegation setting fForceNotEnabled to true.\n"
-                "WARNING: If the network hasn't reached the activation height, this tx will be rejected resulting in a ban.\n", nBestHeight);
+    if (!sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) && !fForceNotEnabled) {
+        std::string errMsg = "Cold Staking disabled with SPORK 17.\n"
+                "You may force the stake delegation setting fForceNotEnabled to true.\n"
+                "WARNING: If relayed before activation, this tx will be rejected resulting in a ban.\n";
         throw JSONRPCError(RPC_WALLET_ERROR, errMsg);
     }
 
@@ -657,7 +656,7 @@ UniValue delegatestake(const UniValue& params, bool fHelp)
             "4. \"fExternalOwner\"      (boolean, optional, default = false) use the provided 'owneraddress' anyway, even if not present in this wallet.\n"
             "                               WARNING: The owner of the keys to 'owneraddress' will be the only one allowed to spend these coins.\n"
             "5. \"fUseDelegated\"       (boolean, optional, default = false) include already delegated inputs if needed."
-            "6. \"fForceNotEnabled\"    (boolean, optional, default = false) force the creation before the activation height (during sync)."
+            "6. \"fForceNotEnabled\"    (boolean, optional, default = false) force the creation even if SPORK 17 is disabled (for tests)."
 
             "\nResult:\n"
             "{\n"
