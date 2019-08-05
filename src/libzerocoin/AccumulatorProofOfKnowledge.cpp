@@ -43,7 +43,7 @@ AccumulatorProofOfKnowledge::AccumulatorProofOfKnowledge(const AccumulatorAndPro
     this->C_r = g_n.pow_mod(r_2, params->accumulatorModulus) * h_n.pow_mod(r_3, params->accumulatorModulus);
 
     CBigNum r_alpha = CBigNum::randBignum(params->maxCoinValue * aR);
-    if(!(CBigNum::randBignum(CBigNum(3)) % 2)) {
+    if(!(CBigNum::randBignum(BN_THREE) % 2)) {
         r_alpha = 0-r_alpha;
     }
 
@@ -54,24 +54,24 @@ AccumulatorProofOfKnowledge::AccumulatorProofOfKnowledge(const AccumulatorAndPro
     CBigNum r_xi = CBigNum::randBignum(params->accumulatorPoKCommitmentGroup.modulus);
 
     CBigNum r_epsilon =  CBigNum::randBignum(aR_t_aM_4);
-    if(!(CBigNum::randBignum(CBigNum(3)) % 2)) {
+    if(!(CBigNum::randBignum(BN_THREE) % 2)) {
         r_epsilon = 0-r_epsilon;
     }
     CBigNum r_eta = CBigNum::randBignum(aR_t_aM_4);
-    if(!(CBigNum::randBignum(CBigNum(3)) % 2)) {
+    if(!(CBigNum::randBignum(BN_THREE) % 2)) {
         r_eta = 0-r_eta;
     }
     CBigNum r_zeta = CBigNum::randBignum(aR_t_aM_4);
-    if(!(CBigNum::randBignum(CBigNum(3)) % 2)) {
+    if(!(CBigNum::randBignum(BN_THREE) % 2)) {
         r_zeta = 0-r_zeta;
     }
 
     CBigNum r_beta = CBigNum::randBignum(aR_t_aM_4 * params->accumulatorPoKCommitmentGroup.modulus);
-    if(!(CBigNum::randBignum(CBigNum(3)) % 2)) {
+    if(!(CBigNum::randBignum(BN_THREE) % 2)) {
         r_beta = 0-r_beta;
     }
     CBigNum r_delta = CBigNum::randBignum(aR_t_aM_4 * params->accumulatorPoKCommitmentGroup.modulus);
-    if(!(CBigNum::randBignum(CBigNum(3)) % 2)) {
+    if(!(CBigNum::randBignum(BN_THREE) % 2)) {
         r_delta = 0-r_delta;
     }
 

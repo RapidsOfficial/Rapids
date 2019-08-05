@@ -417,7 +417,7 @@ calculateGroupModulusAndOrder(uint256 seed, uint32_t pLen, uint32_t qLen,
         pseed += iterations + 1;
 
         // Set a = 2 + (a mod (resultModulus - 3)).
-        a = BN_TWO + (a % ((*resultModulus) - CBigNum(3)));
+        a = BN_TWO + (a % ((*resultModulus) - BN_THREE));
 
         // Set z = a^{2 * t * resultGroupOrder} mod resultModulus
         CBigNum z = a.pow_mod(BN_TWO * t * (*resultGroupOrder), (*resultModulus));
@@ -590,7 +590,7 @@ generateRandomPrime(uint32_t primeBitLen, uint256 in_seed, uint256 *out_seed,
             // Test "c" for primality as follows:
             // 1. First pick an integer "a" in between 2 and (c - 2)
             CBigNum a = generateIntegerFromSeed(c.bitSize(), (*out_seed), &numIterations);
-            a = BN_TWO + (a % (c - CBigNum(3)));
+            a = BN_TWO + (a % (c - BN_THREE));
             (*out_seed) += (numIterations + 1);
 
             // 2. Compute "z" = a^{2*t} mod c
