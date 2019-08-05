@@ -8,6 +8,10 @@ set(CMAKE_AUTOUIC ON)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
     set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+    execute_process(
+            COMMAND sed -i /HAVE_DECL_BSWAP/d pivx-config.h
+            WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}/src/config
+    )
 endif ()
 
 find_package(Qrcode)
@@ -16,39 +20,44 @@ if (QRCODE_FOUND)
     link_directories ( ${QRCODE_LIBRARY_DIRS} )
 endif()
 
-if($ENV{target} MATCHES "Windows")
-    find_package(Qt5)
-else()
-    unset(Qt5Enables)
-    foreach(comp Widgets Core Gui Network LinguistTools DBus)
-        find_package(Qt5${comp})
-        set(Qt5Enables "${Qt5Enables};Qt5${comp}_FOUND")
-        if(Qt5${comp}_FOUND)
-            MESSAGE(STATUS "FOUND QT5${comp}")
-            include_directories(${include_directories} ${Qt5${comp}_INCLUDE_DIRS} ${QT_USE_FILE})
-            add_definitions(${Qt5${comp}_DEFINITIONS})
-            list(APPEND Qt5_LIBRARIES ${Qt5${comp}_LIBRARIES})
-        else()
-            MESSAGE(WARNING "Cant find Qt5${comp}")
-        endif()
-    endforeach(comp)
-
-    find_package(Qt5DBus)
-    if (Qt5DBus_FOUND)
-        include_directories(${include_directories} "/usr/local/opt/qt5/include/QtDBus/")
-        add_compile_options("-DUSE_DBUS")
+unset(Qt5Enables)
+foreach(comp Widgets Core Gui Network LinguistTools DBus)
+    find_package(Qt5${comp})
+    set(Qt5Enables "${Qt5Enables};Qt5${comp}_FOUND")
+    if(Qt5${comp}_FOUND)
+        MESSAGE(STATUS "FOUND QT5${comp}")
+        include_directories(${include_directories} ${Qt5${comp}_INCLUDE_DIRS} ${QT_USE_FILE})
+        add_definitions(${Qt5${comp}_DEFINITIONS})
+        list(APPEND Qt5_LIBRARIES ${Qt5${comp}_LIBRARIES})
+    else()
+        MESSAGE(WARNING "Cant find Qt5${comp}")
     endif()
+endforeach(comp)
+
+#find_package(Qt5DBus)
+if (Qt5DBus_FOUND)
+#    include_directories(${include_directories} "/usr/local/opt/qt5/include/QtDBus/")
+    add_compile_options("-DUSE_DBUS")
 endif()
 
 # Why isn't this done automatically??
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_AUTOMOC_MOC_OPTIONS "-DQ_OS_MAC")
 endif()
+if($ENV{target} MATCHES "Windows")
+    set(CMAKE_AUTOMOC_MOC_OPTIONS "-DQ_OS_WIN")
+    include_directories(${CMAKE_SOURCE_DIR}/depends/$ENV{triple}/include)
+    set(CMAKE_EXE_LINKER_FLAGS "-pthread -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -pie -mwindows")
+endif()
 
 file(GLOB LOCAL_QT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
 source_group("QtHeaders" FILES ${LOCAL_QT_HEADERS})
 
 find_package(Protobuf REQUIRED)
+if(Protobuf_FOUND)
+    message(STATUS "Found Protobuf compiler: ${Protobuf_PROTOC_EXECUTABLE}")
+    message(STATUS "Found Protobuf library: ${Protobuf_LIBRARIES}")
+endif()
 include_directories(${PROTOBUF_INCLUDE_DIRS})
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
@@ -146,12 +155,19 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/macnotificationhandler.mm)
 endif()
 
-if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-    list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/winshutdownmonitor.cpp)
+if ($ENV{target} MATCHES "Windows")
+    list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/winshutdownmonitor.cpp ${CMAKE_CURRENT_SOURCE_DIR}/res/pivx-qt-res.rc)
 endif ()
 
 add_library(qt_stuff STATIC ${BitcoinHeaders} ${QtHeaders} ${QT_SOURCES} ${PROTO_SRCS} ${PROTO_HDRS})
-target_include_directories(qt_stuff PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(qt_stuff PUBLIC ${CMAKE_SOURCE_DIR}/src
+        ${CMAKE_SOURCE_DIR}/src/leveldb/include
+        ${CMAKE_SOURCE_DIR}/src/univalue/include
+        ${CMAKE_SOURCE_DIR}/src/secp256k1/include
+        ${CMAKE_CURRENT_SOURCE_DIR}
+        ${OPENSSL_INCLUDE_DIR}
+        ${BerkeleyDB_INCLUDE_DIRS}
+        )
 set_property(TARGET qt_stuff PROPERTY CXX_STANDARD 11)
 
 file(GLOB QT_TRANSLATIONS_FILES ${CMAKE_CURRENT_SOURCE_DIR}/locale/*.ts)
@@ -171,29 +187,37 @@ target_link_libraries(pivx-qt
         qt_stuff
         univalue
         SERVER_A UTIL_A WALLET_A CLI_A COMMON_A BITCOIN_CRYPTO_A ZEROCOIN_A
-        leveldb leveldb_sse42 memenv miniupnpc secp256k1
+        leveldb leveldb_sse42 memenv secp256k1
         ${BerkeleyDB_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${PROTOBUF_LIBRARIES} ${LIBEVENT_LIB}
         pthread
         )
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     target_link_libraries(pivx-qt "-framework Cocoa")
 endif()
+if($ENV{target} MATCHES "Windows")
+#    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/depends/$ENV{triple}/lib)
+    #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wstack-protector -fstack-protector-all -fPIE -pipe -O2 -pthread -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -pie --static")
+    target_link_libraries(pivx-qt -L${CMAKE_CURRENT_SOURCE_DIR}/depends/$ENV{triple}/lib ${WINDOWS_QT_LDADD} ${WINDOWS_LDADD})
+endif()
 if(GMP_FOUND)
     target_link_libraries(pivx-qt ${GMP_LIBRARY})
+    target_include_directories(pivx-qt PUBLIC ${GMP_INCLUDE_DIR})
 endif()
 if(ZMQ_FOUND)
     target_link_libraries(pivx-qt ZMQ_A ${ZMQ_LIB})
+    target_include_directories(pivx-qt PUBLIC ${ZMQ_INCLUDE_DIR})
 endif()
 if (QRCODE_FOUND)
     target_link_libraries(pivx-qt ${QRCODE_LIB})
+    target_include_directories(pivx-qt PUBLIC ${QRCODE_INCLUDE_DIR})
+endif()
+if(MINIUPNP_FOUND)
+    target_compile_definitions(pivx-qt PUBLIC "-DSTATICLIB -DMINIUPNP_STATICLIB")
+    target_link_libraries(pivx-qt ${MINIUPNP_LIBRARY})
+    target_include_directories(pivx-qt PUBLIC ${MINIUPNP_INCLUDE_DIR})
 endif()
 
-QT5_USE_Modules(pivx-qt Gui)
-QT5_USE_Modules(pivx-qt Core)
-QT5_USE_Modules(pivx-qt Widgets)
-QT5_USE_Modules(pivx-qt Test)
-QT5_USE_Modules(pivx-qt PrintSupport)
-QT5_USE_Modules(pivx-qt Network)
+target_link_libraries(pivx-qt Qt5::Gui Qt5::Core Qt5::Widgets Qt5::Network ${QT_LIBRARIES})
 if (Qt5DBus_FOUND)
-    QT5_USE_Modules(pivx-qt DBus)
+    target_link_libraries(pivx-qt Qt5::DBus ${QT_LIBRARIES})
 endif()
