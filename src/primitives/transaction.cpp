@@ -224,9 +224,9 @@ bool CTransaction::CheckColdStake() const
 
     // all outputs except first (coinstake marker) and last (masternode payout)
     // have the same pubKeyScript
-    firstScript = vout[0].scriptPubKey;
+    firstScript = vout[1].scriptPubKey;
     if (vout.size() > 3) {
-        for (unsigned int i=1; i<vout.size()-1; i++)
+        for (unsigned int i=2; i<vout.size()-1; i++)
             if (vout[i].scriptPubKey != firstScript) return false;
     }
 
