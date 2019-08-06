@@ -517,6 +517,19 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
         throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Invalid amount (%d). Min amount: %d",
                 nValue, Params().GetMinColdStakingAmount()));
 
+    // include already delegated coins
+    bool fUseDelegated = false;
+    if (params.size() > 4 && !params[4].isNull())
+        fUseDelegated = params[4].get_bool();
+
+    // Check amount
+    CAmount currBalance = pwalletMain->GetBalance() + (fUseDelegated ? pwalletMain->GetDelegatedBalance() : 0);
+    if (nValue > currBalance)
+        throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
+
+    std::string strError;
+    EnsureWalletIsUnlocked();
+
     // Get Owner Address
     CBitcoinAddress ownerAddr;
     CKeyID ownerKey;
@@ -547,19 +560,6 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     // Get P2CS script for addresses
     CScript scriptPubKey = GetScriptForStakeDelegation(stakeKey, ownerKey);
-
-    // include already delegated coins
-    bool fUseDelegated = false;
-    if (params.size() > 4 && !params[4].isNull())
-        fUseDelegated = params[4].get_bool();
-
-    // Check amount
-    CAmount currBalance = pwalletMain->GetBalance() + (fUseDelegated ? pwalletMain->GetDelegatedBalance() : 0);
-    if (nValue > currBalance)
-        throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
-
-    std::string strError;
-    EnsureWalletIsUnlocked();
 
     // Create the transaction
     CAmount nFeeRequired;
