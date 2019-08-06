@@ -2516,9 +2516,6 @@ bool CWallet::CreateTransaction(const std::vector<std::pair<CScript, CAmount> >&
 
 
                 for (PAIRTYPE(const CWalletTx*, unsigned int) pcoin : setCoins) {
-                    if(pcoin.first->vout[pcoin.second].scriptPubKey.IsPayToColdStaking())
-                        // P2CS contract is being spent
-                        wtxNew.fStakeDelegationVoided = true;
                     CAmount nCredit = pcoin.first->vout[pcoin.second].nValue;
                     //The coin age after the next block (depth+1) is used instead of the current,
                     //reflecting an assumption the user would accept a bit more delay for
@@ -5699,7 +5696,6 @@ void CWalletTx::Init(const CWallet* pwalletIn)
     fColdCreditCached = false;
     fDelegatedDebitCached = false;
     fDelegatedCreditCached = false;
-    fStakeDelegationVoided = false;
     nDebitCached = 0;
     nCreditCached = 0;
     nImmatureCreditCached = 0;

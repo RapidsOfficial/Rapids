@@ -239,8 +239,7 @@ bool ExtractDestination(const CScript& scriptPubKey, CTxDestination& addressRet,
         addressRet = CScriptID(uint160(vSolutions[0]));
         return true;
     } else if (whichType == TX_COLDSTAKE) {
-        int sol = fColdStake ? 0 : 1;
-        addressRet = CKeyID(uint160(vSolutions[sol]));
+        addressRet = CKeyID(uint160(vSolutions[!fColdStake]));
         return true;
     }
     // Multisig txns have more than one address...
