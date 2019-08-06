@@ -93,7 +93,8 @@ bool Solver(const CKeyStore& keystore, const CScript& scriptPubKey, uint256 hash
         else
         {
             CPubKey vch;
-            keystore.GetPubKey(keyID, vch);
+            if (!keystore.GetPubKey(keyID, vch))
+                return error("%s : Unable to get public key from keyID", __func__);
             scriptSigRet << ToByteVector(vch);
         }
         return true;
@@ -116,7 +117,8 @@ bool Solver(const CKeyStore& keystore, const CScript& scriptPubKey, uint256 hash
             return error("*** %s: failed to sign with the %s key.",
                     __func__, fColdStake ? "cold staker" : "owner");
         CPubKey vch;
-        keystore.GetPubKey(keyID, vch);
+        if (!keystore.GetPubKey(keyID, vch))
+            return error("%s : Unable to get public key from keyID", __func__);
         scriptSigRet << (fColdStake ? (int)OP_TRUE : OP_FALSE) << ToByteVector(vch);
         return true;
     }
