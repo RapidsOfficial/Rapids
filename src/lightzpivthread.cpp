@@ -59,7 +59,7 @@ void CLightWorker::ThreadLightZPIVSimplified() {
                                 heightStop
                         );
 
-                    } catch (NotEnoughMintsException e) {
+                    } catch (NotEnoughMintsException& e) {
                         LogPrintStr(std::string("ThreadLightZPIVSimplified: ") + e.message + "\n");
                         rejectWork(genWit, blockHeight, NOT_ENOUGH_MINTS);
                         continue;
