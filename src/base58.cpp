@@ -224,39 +224,36 @@ class CBitcoinAddressVisitor : public boost::static_visitor<bool>
 {
 private:
     CBitcoinAddress* addr;
-    bool IsColdStakingAddr = false;
+    CChainParams::Base58Type type;
 
 public:
-    CBitcoinAddressVisitor(CBitcoinAddress* addrIn, const bool fStakingAddr = false) :
+    CBitcoinAddressVisitor(CBitcoinAddress* addrIn,
+            const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS) :
         addr(addrIn),
-        IsColdStakingAddr(fStakingAddr){};
+        type(addrType){};
 
-    bool operator()(const CKeyID& id) const { return addr->Set(id, IsColdStakingAddr); }
-    bool operator()(const CScriptID& id) const { return addr->Set(id, IsColdStakingAddr); }
+    bool operator()(const CKeyID& id) const { return addr->Set(id, type); }
+    bool operator()(const CScriptID& id) const { return addr->Set(id); }
     bool operator()(const CNoDestination& no) const { return false; }
 };
 
 } // anon namespace
 
-bool CBitcoinAddress::Set(const CKeyID& id, const bool fStakingAddr)
+bool CBitcoinAddress::Set(const CKeyID& id, const CChainParams::Base58Type addrType)
 {
-    if (fStakingAddr) {
-        SetData(Params().Base58Prefix(CChainParams::STAKING_ADDRESS), &id, 20);
-    } else {
-        SetData(Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS), &id, 20);
-    }
+    SetData(Params().Base58Prefix(addrType), &id, 20);
     return true;
 }
 
-bool CBitcoinAddress::Set(const CScriptID& id, const bool fStakingAddr)
+bool CBitcoinAddress::Set(const CScriptID& id)
 {
     SetData(Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS), &id, 20);
     return true;
 }
 
-bool CBitcoinAddress::Set(const CTxDestination& dest, const bool fStakingAddr)
+bool CBitcoinAddress::Set(const CTxDestination& dest, const CChainParams::Base58Type addrType)
 {
-    return boost::apply_visitor(CBitcoinAddressVisitor(this, fStakingAddr), dest);
+    return boost::apply_visitor(CBitcoinAddressVisitor(this, addrType), dest);
 }
 
 bool CBitcoinAddress::IsValid() const

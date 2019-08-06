@@ -2053,14 +2053,14 @@ std::map<CBitcoinAddress, std::vector<COutput> > CWallet::AvailableCoinsByAddres
         CTxDestination address;
         bool fColdStakeAddr = false;
         if (!ExtractDestination(out.tx->vout[out.i].scriptPubKey, address, fColdStakeAddr)) {
-            // check if we have the staking key
+            // if this is a P2CS we don't have the owner key - check if we have the staking key
             fColdStakeAddr = true;
             if ( !out.tx->vout[out.i].scriptPubKey.IsPayToColdStaking() ||
                     !ExtractDestination(out.tx->vout[out.i].scriptPubKey, address, fColdStakeAddr) )
                 continue;
         }
 
-        mapCoins[CBitcoinAddress(address, fColdStakeAddr)].push_back(out);
+        mapCoins[CBitcoinAddress(address, fColdStakeAddr ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)].push_back(out);
     }
 
     return mapCoins;

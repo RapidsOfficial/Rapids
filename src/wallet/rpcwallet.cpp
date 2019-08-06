@@ -80,7 +80,8 @@ std::string AccountFromValue(const UniValue& value)
     return strAccount;
 }
 
-CBitcoinAddress GetNewAddressFromAccount(const std::string name, const bool fStakeAddr, const UniValue &params)
+CBitcoinAddress GetNewAddressFromAccount(const std::string name, const UniValue &params,
+        const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS)
 {
     LOCK2(cs_main, pwalletMain->cs_wallet);
     // Parse the account first so we don't generate a key if there's an error
@@ -99,7 +100,7 @@ CBitcoinAddress GetNewAddressFromAccount(const std::string name, const bool fSta
 
     pwalletMain->SetAddressBook(keyID, strAccount, name);
 
-    return CBitcoinAddress(keyID, fStakeAddr);
+    return CBitcoinAddress(keyID, addrType);
 }
 
 UniValue getnewaddress(const UniValue& params, bool fHelp)
@@ -121,7 +122,7 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
             HelpExampleCli("getnewaddress", "") + HelpExampleRpc("getnewaddress", "\"\"") +
             HelpExampleCli("getnewaddress", "\"myaccount\"") + HelpExampleRpc("getnewaddress", "\"myaccount\""));
 
-    return GetNewAddressFromAccount("receive", false, params).ToString();
+    return GetNewAddressFromAccount("receive", params).ToString();
 }
 
 UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
@@ -143,7 +144,7 @@ UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
             HelpExampleCli("getnewstakingaddress", "") + HelpExampleRpc("getnewstakingaddress", "\"\"") +
             HelpExampleCli("getnewstakingaddress", "\"myaccount\"") + HelpExampleRpc("getnewstakingaddress", "\"myaccount\""));
 
-    return GetNewAddressFromAccount("coldstaking", true, params).ToString();
+    return GetNewAddressFromAccount("coldstaking", params, CChainParams::STAKING_ADDRESS).ToString();
 }
 
 UniValue delegatoradd(const UniValue& params, bool fHelp)
@@ -539,7 +540,7 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     } else {
         // Get new owner address from keypool
-        ownerAddr = GetNewAddressFromAccount("delegated", false, NullUniValue);
+        ownerAddr = GetNewAddressFromAccount("delegated", NullUniValue);
         if (!ownerAddr.GetKeyID(ownerKey))
             throw JSONRPCError(RPC_WALLET_ERROR, "Unable to get spend pubkey hash from owneraddress");
     }

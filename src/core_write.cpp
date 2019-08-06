@@ -82,8 +82,8 @@ void ScriptPubKeyToUniv(const CScript& scriptPubKey,
 
     UniValue a(UniValue::VARR);
     if (type == TX_COLDSTAKE && addresses.size() == 2) {
-        a.push_back(CBitcoinAddress(addresses[0], true).ToString());
-        a.push_back(CBitcoinAddress(addresses[1], false).ToString());
+        a.push_back(CBitcoinAddress(addresses[0], CChainParams::STAKING_ADDRESS).ToString());
+        a.push_back(CBitcoinAddress(addresses[1], CChainParams::PUBKEY_ADDRESS).ToString());
     } else {
         for (const CTxDestination& addr : addresses)
             a.push_back(CBitcoinAddress(addr).ToString());
