@@ -209,13 +209,14 @@ bool CTransaction::IsCoinStake() const
     return (vout.size() >= 2 && vout[0].IsEmpty());
 }
 
-bool CTransaction::CheckColdStake() const
+bool CTransaction::CheckColdStake(const CScript& script) const
 {
+
     // tx is a coinstake tx
     if (!IsCoinStake())
         return false;
 
-    // all inputs have the same pubKeyScript
+    // all inputs have the same scriptSig
     CScript firstScript = vin[0].scriptSig;
     if (vin.size() > 1) {
         for (unsigned int i=1; i<vin.size(); i++)
@@ -223,14 +224,13 @@ bool CTransaction::CheckColdStake() const
     }
 
     // all outputs except first (coinstake marker) and last (masternode payout)
-    // have the same pubKeyScript
-    firstScript = vout[1].scriptPubKey;
-    if (vout.size() > 3) {
+    // have the same pubKeyScript and it matches the script we are spending
+    if (vout[1].scriptPubKey != script) return false;
+    if (vin.size() > 3) {
         for (unsigned int i=2; i<vout.size()-1; i++)
-            if (vout[i].scriptPubKey != firstScript) return false;
+            if (vout[i].scriptPubKey != script) return false;
     }
 
-    // additional checks in CheckTransaction
     return true;
 }
 

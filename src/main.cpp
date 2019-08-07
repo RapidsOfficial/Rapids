@@ -1174,25 +1174,6 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
     return fValidated;
 }
 
-bool CheckColdStake(const CTransaction& tx, CValidationState& state, bool fColdStakingActive)
-{
-    CTxOut prevOut;
-    if(!GetOutput(tx.vin[0].prevout.hash, tx.vin[0].prevout.n, state, prevOut))
-        return state.DoS(100, error("%s : invalid input", __func__), REJECT_INVALID, "bad-txns-inputs");
-
-    if (!prevOut.scriptPubKey.IsPayToColdStaking())
-        return true;
-
-    if (!fColdStakingActive)
-        return state.DoS(100, error("%s : invalid input", __func__), REJECT_INVALID, "coldstake-not-active");
-
-    // spending to the same contract
-    if (prevOut.scriptPubKey != tx.vout[1].scriptPubKey)
-        return state.DoS(100, error("%s : invalid scripts", __func__), REJECT_INVALID, "bad-txns-cold-stake");
-
-    return true;
-}
-
 bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state, bool fFakeSerialAttack, bool fColdStakingActive)
 {
     // Basic checks that don't depend on any context
@@ -1240,10 +1221,6 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
                         __func__, txout.nValue, minColdStakingAmount), REJECT_INVALID, "bad-txns-cold-stake");
         }
     }
-
-    // Additional check for cold staking
-    if (tx.IsCoinStake() && !tx.HasZerocoinSpendInputs() && !CheckColdStake(tx, state, fColdStakingActive))
-        return state.DoS(100, error("%s: invalid cold stake", __func__), REJECT_INVALID, "bad-txns-cold-stake");
 
     std::set<COutPoint> vInOutPoints;
     std::set<CBigNum> vZerocoinSpendSerials;
@@ -4474,8 +4451,9 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
         if (!IsInitialBlockDownload() && block.vtx[1].HasP2CSOutputs() && !sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
             const int outputs = block.vtx[1].vout.size();
             if (outputs >=3 && block.vtx[1].vout[outputs-1].scriptPubKey != block.vtx[1].vout[outputs-2].scriptPubKey)
-                return state.DoS(100, error("%s: Wrong cold staking outputs when masternode payment enforcement is disabled on tx %s",
-                        __func__, block.vtx[1].ToString().c_str()));
+                return state.DoS(100, error("%s: Wrong cold staking outputs when masternode payment enforcement is disabled: "
+                        "script[-1] (%s) != script[-2] (%s)", __func__,
+                        HexStr(block.vtx[1].vout[outputs-1].scriptPubKey), HexStr(block.vtx[1].vout[outputs-2].scriptPubKey)));
         }
     }
 

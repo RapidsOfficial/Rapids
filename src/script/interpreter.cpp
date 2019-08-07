@@ -962,10 +962,9 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                 case OP_CHECKCOLDSTAKEVERIFY:
                 {
                     // check it is used in a valid cold stake transaction.
-                    if(!checker.CheckColdStake()) {
+                    if(!checker.CheckColdStake(script)) {
                         return set_error(serror, SCRIPT_ERR_CHECKCOLDSTAKEVERIFY);
                     }
-                    // CheckTransaction verifies that prevout scripts match with out scripts
                 }
                 break;
 
