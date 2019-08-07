@@ -253,19 +253,19 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         # 10) check that the staker cannot stake a block changing the coinstake scriptPubkey.
         # ----------------------------------------------------------------------------------
         print("*** 10 ***")
-        self.log.info("Generating one invalid cold-stake block (changing coinstake output)...")
+        self.log.info("Generating one invalid cold-stake block (changing first coinstake output)...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
         block_n = self.nodes[1].getblockcount()
         block_hash = self.nodes[1].getblockhash(block_n)
         prevouts = self.get_prevouts(stakeable_coins, 1)
         assert(len(prevouts) > 0)
         # Create the block
-        new_block = self.create_block(block_hash, prevouts, block_n+1, 1, staker_address, fInvalid=True)
+        new_block = self.create_block(block_hash, prevouts, block_n+1, 1, staker_address, fInvalid=1)
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
         # Try to submit the block
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
         self.log.info("Block %s submitted." % new_block.hash)
-        assert("bad-txns-cold-stake" in ret)
+        assert("rejected" in ret)
         # Verify that nodes[0] rejects it
         self.sync_all()
         try:
@@ -276,12 +276,38 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
             pass
 
 
-        # 11) Now node[0] gets mad and spends all the delegated coins, voiding the P2CS contracts.
+        # 11) neither adding different outputs to the coinstake.
+        # ------------------------------------------------------
+        print("*** 11 ***")
+        self.log.info("Generating another invalid cold-stake block (adding coinstake output)...")
+        stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
+        block_n = self.nodes[1].getblockcount()
+        block_hash = self.nodes[1].getblockhash(block_n)
+        prevouts = self.get_prevouts(stakeable_coins, 1)
+        assert(len(prevouts) > 0)
+        # Create the block
+        new_block = self.create_block(block_hash, prevouts, block_n+1, 1, staker_address, fInvalid=2)
+        self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
+        # Try to submit the block
+        ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
+        self.log.info("Block %s submitted." % new_block.hash)
+        assert("rejected" in ret)
+        # Verify that nodes[0] rejects it
+        self.sync_all()
+        try:
+            self.nodes[0].getblock(new_block.hash)
+        except JSONRPCException as e:
+            assert("Block not found" in str(e))
+            self.log.info("Great. Malicious cold-staked block was NOT accepted!")
+            pass
+
+
+        # 12) Now node[0] gets mad and spends all the delegated coins, voiding the P2CS contracts.
         # ----------------------------------------------------------------------------------------
         self.log.info("Let's void the contracts.")
         self.nodes[0].generate(1)
         self.sync_all()
-        print("*** 11 ***")
+        print("*** 12 ***")
         self.log.info("Cancel the stake delegation spending the cold stakes...")
         delegated_utxos = getDelegatedUtxos(self.nodes[0].listunspent())
         txhash = self.spendUTXOsWithNode(delegated_utxos, 0)
@@ -295,9 +321,9 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("Balances check out after the delegations have been voided.")
 
 
-        # 12) check that coinstaker is empty and can no longer stake.
+        # 13) check that coinstaker is empty and can no longer stake.
         # -----------------------------------------------------------
-        print("*** 12 ***")
+        print("*** 13 ***")
         self.log.info("Trying to generate one cold-stake block again...")
         try:
             self.nodes[1].generate(1)
@@ -367,7 +393,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
 
 
 
-    def create_block(self, prev_hash, staking_prevouts, height, node_n, s_address, fInvalid=False):
+    def create_block(self, prev_hash, staking_prevouts, height, node_n, s_address, fInvalid=0):
         api = self.nodes[node_n]
         # Get current time
         current_time = int(time.time())
@@ -397,7 +423,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         stake_tx_unsigned.vout.append(CTxOut())
         stake_tx_unsigned.vout.append(CTxOut(outNValue, hex_str_to_bytes(prevScript)))
 
-        if fInvalid:
+        if fInvalid == 1:
             # Create a new private key and get the corresponding public key
             block_sig_key = CECKey()
             block_sig_key.set_secretbytes(hash256(pack('<I', 0xffff)))
@@ -412,6 +438,13 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
             # check the address
             addy = key_to_p2pkh(bytes_to_hex_str(block_sig_key.get_pubkey()), False, True)
             assert (addy == s_address)
+            if fInvalid == 2:
+                # add a new output with 100 coins from the pot
+                new_key = CECKey()
+                new_key.set_secretbytes(hash256(pack('<I', 0xffff)))
+                pubkey = new_key.get_pubkey()
+                stake_tx_unsigned.vout.append(CTxOut(100 * COIN, CScript([pubkey, OP_CHECKSIG])))
+                stake_tx_unsigned.vout[1].nValue = outNValue - 100 * COIN
 
         # Sign coinstake TX and add it to the block
         stake_tx_signed_raw_hex = api.signrawtransaction(bytes_to_hex_str(stake_tx_unsigned.serialize()))['hex']

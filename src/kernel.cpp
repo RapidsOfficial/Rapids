@@ -449,8 +449,13 @@ bool initStakeInput(const CBlock block, std::unique_ptr<CStakeInput>& stake, int
                          __func__, txin.prevout.hash.GetHex(), block.GetHash().GetHex());
 
         //verify signature and script
-        if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0)))
-            return error("%s : VerifySignature failed on coinstake %s", __func__, tx.GetHash().ToString().c_str());
+        ScriptError serror;
+        if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0), &serror)) {
+            std::string strErr = "";
+            if (serror && ScriptErrorString(serror))
+                strErr = strprintf("with the following error: %s", ScriptErrorString(serror));
+            return error("%s : VerifyScript failed on coinstake %s %s", __func__, tx.GetHash().ToString(), strErr);
+        }
 
         CPivStake* pivInput = new CPivStake();
         pivInput->SetInput(txPrev, txin.prevout.n);
