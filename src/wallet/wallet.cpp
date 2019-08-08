@@ -2001,6 +2001,9 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
             if (out.tx->vin[0].IsZerocoinSpend() && !out.tx->IsInMainChain())
                 continue;
 
+            if (!out.tx->hashBlock)
+                continue;
+
             CBlockIndex* utxoBlock = mapBlockIndex.at(out.tx->hashBlock);
             //check for maturity (min age/depth)
             if (!Params().HasStakeMinAgeOrDepth(blockHeight, GetAdjustedTime(), utxoBlock->nHeight, utxoBlock->GetBlockTime()))
