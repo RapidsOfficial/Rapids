@@ -149,6 +149,8 @@ public:
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 259200;
+        nPivxBadBlockTime = 1471401614; // Skip nBit validation of Block 259201 per PR #915
+        nPivxBadBlocknBits = 0x1c056dac; // Skip nBit validation of Block 259201 per PR #915
         nModifierUpdateBlock = 615800;
         nZerocoinStartHeight = 863787;
         nZerocoinStartTime = 1508214600; // October 17, 2017 4:30:00 AM
@@ -279,6 +281,8 @@ public:
         nTargetTimespan = 1 * 60; // PIVX: 1 day
         nTargetSpacing = 1 * 60;  // PIVX: 1 minute
         nLastPOWBlock = 200;
+        nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 259201 per PR #915
+        nPivxBadBlocknBits = 0x1e0a20bd; // Skip nBit validation of Block 201 per PR #915
         nMaturity = 15;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT

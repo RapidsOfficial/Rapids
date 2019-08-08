@@ -4511,9 +4511,7 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
 
     if (block.nBits != nBitsRequired) {
         // Pivx Specific reference to the block with the wrong threshold was used.
-        static const int64_t PivxBadBlockTime = 1471401614;
-        static const unsigned int PivxBadBlocknBits = 0x1c056dac;
-        if ((block.nTime == PivxBadBlockTime) && (block.nBits == PivxBadBlocknBits)) {
+        if ((block.nTime == Params().PivxBadBlockTime()) && (block.nBits == Params().PivxBadBlocknBits())) {
             // accept PIVX block minted with incorrect proof of work threshold
             return true;
         }
