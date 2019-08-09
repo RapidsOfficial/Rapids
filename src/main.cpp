@@ -4509,8 +4509,15 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
         return true;
     }
 
-    if (block.nBits != nBitsRequired)
+    if (block.nBits != nBitsRequired) {
+        // Pivx Specific reference to the block with the wrong threshold was used.
+        if ((block.nTime == Params().PivxBadBlockTime()) && (block.nBits == Params().PivxBadBlocknBits())) {
+            // accept PIVX block minted with incorrect proof of work threshold
+            return true;
+        }
+
         return error("%s : incorrect proof of work at %d", __func__, pindexPrev->nHeight + 1);
+    }
 
     return true;
 }
