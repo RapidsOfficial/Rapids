@@ -91,6 +91,7 @@ BASE_SCRIPTS= [
 
     # vv Tests less than 30s vv
     'rpc_spork.py',
+    'rpc_budget.py',
     #'interface_zmq.py',
     'interface_bitcoin_cli.py',
     'mempool_resurrect.py',
