@@ -12,9 +12,6 @@
 
 // MODIFIER_INTERVAL: time to elapse before new modifier is computed
 static const unsigned int MODIFIER_INTERVAL = 60;
-static const unsigned int MODIFIER_INTERVAL_TESTNET = 60;
-extern unsigned int nModifierInterval;
-extern unsigned int getIntervalVersion(bool fTestNet);
 
 // MODIFIER_INTERVAL_RATIO:
 // ratio of group interval length between the last group and the first group
@@ -40,9 +37,6 @@ unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex);
 
 // Check stake modifier hard checkpoints
 bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierChecksum);
-
-// Get time weight using supplied timestamps
-int64_t GetWeight(int64_t nIntervalBeginning, int64_t nIntervalEnd);
 
 bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake);
 
