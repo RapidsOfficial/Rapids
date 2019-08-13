@@ -16,7 +16,7 @@ class CWalletTx;
 class CStakeInput
 {
 protected:
-    CBlockIndex* pindexFrom;
+    CBlockIndex* pindexFrom = nullptr;
 
 public:
     virtual ~CStakeInput(){};
@@ -48,7 +48,6 @@ public:
     {
         this->denom = denom;
         this->hashSerial = hashSerial;
-        this->pindexFrom = nullptr;
         fMint = true;
     }
 
@@ -74,11 +73,13 @@ class CPivStake : public CStakeInput
 private:
     CTransaction txFrom;
     unsigned int nPosition;
+
+    // cached data
+    uint64_t nStakeModifier = 0;
+    int nStakeModifierHeight = 0;
+    int64_t nStakeModifierTime = 0;
 public:
-    CPivStake()
-    {
-        this->pindexFrom = nullptr;
-    }
+    CPivStake(){}
 
     bool SetInput(CTransaction txPrev, unsigned int n);
 

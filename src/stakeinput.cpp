@@ -15,7 +15,6 @@ CZPivStake::CZPivStake(const libzerocoin::CoinSpend& spend)
     this->denom = spend.getDenomination();
     uint256 nSerial = spend.getCoinSerialNumber().getuint256();
     this->hashSerial = Hash(nSerial.begin(), nSerial.end());
-    this->pindexFrom = nullptr;
     fMint = false;
 }
 
@@ -232,15 +231,16 @@ bool CPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmoun
 
 bool CPivStake::GetModifier(uint64_t& nStakeModifier)
 {
-    int nStakeModifierHeight = 0;
-    int64_t nStakeModifierTime = 0;
-    GetIndexFrom();
-    if (!pindexFrom)
-        return error("%s: failed to get index from", __func__);
-
-    if (!GetKernelStakeModifier(pindexFrom->GetBlockHash(), nStakeModifier, nStakeModifierHeight, nStakeModifierTime, false))
-        return error("CheckStakeKernelHash(): failed to get kernel stake modifier \n");
-
+    if (this->nStakeModifier == 0) {
+        // look for the modifier
+        GetIndexFrom();
+        if (!pindexFrom)
+            return error("%s: failed to get index from", __func__);
+        // TODO: This method must be removed from here in the short terms.. it's a call to an static method in kernel.cpp when this class method is only called from kernel.cpp, no comments..
+        if (!GetKernelStakeModifier(pindexFrom->GetBlockHash(), this->nStakeModifier, this->nStakeModifierHeight, this->nStakeModifierTime, false))
+            return error("CheckStakeKernelHash(): failed to get kernel stake modifier \n");
+    }
+    nStakeModifier = this->nStakeModifier;
     return true;
 }
 
@@ -255,6 +255,8 @@ CDataStream CPivStake::GetUniqueness()
 //The block that the UTXO was added to the chain
 CBlockIndex* CPivStake::GetIndexFrom()
 {
+    if (pindexFrom)
+        return pindexFrom;
     uint256 hashBlock = 0;
     CTransaction tx;
     if (GetTransaction(txFrom.GetHash(), tx, hashBlock, true)) {
