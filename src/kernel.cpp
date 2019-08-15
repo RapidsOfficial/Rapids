@@ -322,13 +322,14 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
 
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, unsigned int nTimeBlockFrom, unsigned int& nTimeTx, uint256& hashProofOfStake)
 {
+    int nextStakedBlock = pindexPrev->nHeight + 1;
     if(Params().NetworkID() != CBaseChainParams::REGTEST) {
         if (nTimeTx < nTimeBlockFrom)
             return error("%s : nTime violation", __func__);
 
-        if (nTimeBlockFrom + Params().StakeMinAge() > nTimeTx) // Min age requirement
+        if (nTimeBlockFrom + Params().StakeMinAge(nextStakedBlock) > nTimeTx) // Min age requirement
             return error("%s : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d",
-                         __func__, nTimeBlockFrom, Params().StakeMinAge(), nTimeTx);
+                         __func__, nTimeBlockFrom, Params().StakeMinAge(nextStakedBlock), nTimeTx);
     }
 
     //grab difficulty
@@ -443,9 +444,9 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
         //Equivalent for zPIV is checked above in ContextualCheckZerocoinStake()
         if (nTxTime < nBlockFromTime) // Transaction timestamp nTxTime
             return error("%s : nTime violation - nBlockFromTime=%d nTimeTx=%d", __func__, nBlockFromTime, nTxTime);
-        if (nBlockFromTime + Params().StakeMinAge() > nTxTime) // Min age requirement
+        if (nBlockFromTime + Params().StakeMinAge(nPreviousBlockHeight + 1) > nTxTime) // Min age requirement
             return error("%s : min age violation - nBlockFromTime=%d nStakeMinAge=%d nTimeTx=%d",
-                    __func__, nBlockFromTime, Params().StakeMinAge(), nTxTime);
+                    __func__, nBlockFromTime, Params().StakeMinAge(nPreviousBlockHeight + 1), nTxTime);
     }
 
     if (!CheckStakeKernelHash(pindexPrev, block.nBits, stake.get(), nTxTime, hashProofOfStake))

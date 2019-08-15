@@ -56,7 +56,10 @@ public:
     int RejectBlockOutdatedMajority() const { return nRejectBlockOutdatedMajority; }
     int ToCheckBlockUpgradeMajority() const { return nToCheckBlockUpgradeMajority; }
     int MaxReorganizationDepth() const { return nMaxReorganizationDepth; }
-    int StakeMinAge() const { return nStakeMinAge; }
+
+    int StakeMinAge(int height) const {
+        return IsStakeModifierV2(height) ? nStakeMinAgeV2Modifier : nStakeMinAge;
+    }
 
     /** Used if GenerateBitcoins is called with a negative number of threads */
     int DefaultMinerThreads() const { return nMinerThreads; }
@@ -75,7 +78,12 @@ public:
     bool RequireStandard() const { return fRequireStandard; }
     int64_t TargetTimespan() const { return nTargetTimespan; }
     int64_t TargetSpacing() const { return nTargetSpacing; }
-    int COINBASE_MATURITY() const { return nMaturity; }
+
+    /** returns the coinbase maturity **/
+    int COINBASE_MATURITY(int height) const {
+        return IsStakeModifierV2(height) ? nMaturityV2Modifier : nMaturity;
+    }
+
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
@@ -163,6 +171,10 @@ protected:
     unsigned int nPivxBadBlocknBits;
     int nMasternodeCountDrift;
     int nMaturity;
+
+    int nMaturityV2Modifier;
+    int nStakeMinAgeV2Modifier;
+
     int nModifierUpdateBlock;
     CAmount nMaxMoneyOut;
     int nMinerThreads;

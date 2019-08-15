@@ -148,6 +148,9 @@ public:
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
 
+        nMaturityV2Modifier = 600;      // 10hs
+        nStakeMinAgeV2Modifier = 36000; // 10hs
+
         /** Height or Time Based Activations **/
         nLastPOWBlock = 259200;
         nPivxBadBlockTime = 1471401614; // Skip nBit validation of Block 259201 per PR #915
@@ -289,6 +292,11 @@ public:
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
+
+        nMaturityV2Modifier = 300;      // 5hs
+        nStakeMinAgeV2Modifier = 18000; // 5hs
+
+
         nZerocoinStartHeight = 201576;
         nZerocoinStartTime = 1501776000;
         nBlockEnforceSerialRange = 1; //Enforce serial range starting this block
@@ -470,7 +478,6 @@ public:
     virtual void setSkipProofOfWorkCheck(bool afSkipProofOfWorkCheck) { fSkipProofOfWorkCheck = afSkipProofOfWorkCheck; }
 };
 static CUnitTestParams unitTestParams;
-
 
 static CChainParams* pCurrentParams = 0;
 
