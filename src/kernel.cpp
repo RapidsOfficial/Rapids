@@ -320,29 +320,34 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
     return hashProofOfStake < bnTarget;
 }
 
-bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, unsigned int nTimeBlockFrom, unsigned int& nTimeTx, uint256& hashProofOfStake)
+bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, unsigned int& nTimeTx, uint256& hashProofOfStake)
 {
-    int nextStakedBlock = pindexPrev->nHeight + 1;
-    if(Params().NetworkID() != CBaseChainParams::REGTEST &&
-            nTimeBlockFrom + Params().StakeMinAge(nextStakedBlock) > nTimeTx) {
-        // Min age requirement
-        return error("%s : min age violation - height=%d - nTimeBlockFrom=%d, nStakeMinAge=%d, nTimeTx=%d",
-                         __func__, nextStakedBlock, nTimeBlockFrom, Params().StakeMinAge(nextStakedBlock), nTimeTx);
-    }
+    int prevHeight = pindexPrev->nHeight;
+
+    // get stake input pindex
+    CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
+    if (!pindexFrom || pindexFrom->nHeight < 1) return error("%s : no pindexfrom\n", __func__);
+
+    const uint32_t nTimeBlockFrom = pindexFrom->GetBlockHeader().GetBlockTime();
+    const int nHeightBlockFrom = pindexFrom->nHeight;
+
+    //check for maturity (min age/depth) requirements
+    if (!Params().HasStakeMinAgeOrDepth(prevHeight + 1, nTimeTx, nHeightBlockFrom, nTimeBlockFrom))
+        return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
+                         __func__, prevHeight + 1, nTimeTx, nTimeBlockFrom, nHeightBlockFrom);
 
     //grab difficulty
     uint256 bnTargetPerCoinDay;
     bnTargetPerCoinDay.SetCompact(nBits);
 
     //grab stake modifier
-    int nHeightStart = chainActive.Height();
     bool fSuccess = false;
     unsigned int nTryTime = 0;
     int nHashDrift = 60;
     for (int i = 0; i < nHashDrift; i++) //iterate the hashing
     {
         //new block came in, move on
-        if (chainActive.Height() != nHeightStart)
+        if (chainActive.Height() != prevHeight)
             break;
 
         //hash this iteration
@@ -437,14 +442,13 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
 
     unsigned int nBlockFromTime = blockfrom.nTime;
     unsigned int nTxTime = block.nTime;
+    const int nBlockFromHeight = pindexfrom->nHeight;
 
     if (!txin.IsZerocoinSpend() && nPreviousBlockHeight >= Params().Zerocoin_Block_Public_Spend_Enabled() - 1) {
-        //Equivalent for zPIV is checked above in ContextualCheckZerocoinStake()
-        if (nTxTime < nBlockFromTime) // Transaction timestamp nTxTime
-            return error("%s : nTime violation - nBlockFromTime=%d nTimeTx=%d", __func__, nBlockFromTime, nTxTime);
-        if (nBlockFromTime + Params().StakeMinAge(nPreviousBlockHeight + 1) > nTxTime) // Min age requirement
-            return error("%s : min age violation - nBlockFromTime=%d nStakeMinAge=%d nTimeTx=%d",
-                    __func__, nBlockFromTime, Params().StakeMinAge(nPreviousBlockHeight + 1), nTxTime);
+        //check for maturity (min age/depth) requirements
+        if (!Params().HasStakeMinAgeOrDepth(nPreviousBlockHeight+1, nTxTime, nBlockFromHeight, nBlockFromTime))
+            return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
+                             __func__, nPreviousBlockHeight, nTxTime, nBlockFromTime, nBlockFromHeight);
     }
 
     if (!CheckStakeKernelHash(pindexPrev, block.nBits, stake.get(), nTxTime, hashProofOfStake))

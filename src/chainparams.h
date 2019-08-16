@@ -57,10 +57,6 @@ public:
     int ToCheckBlockUpgradeMajority() const { return nToCheckBlockUpgradeMajority; }
     int MaxReorganizationDepth() const { return nMaxReorganizationDepth; }
 
-    int StakeMinAge(int height) const {
-        return IsStakeModifierV2(height) ? nStakeMinAgeV2Modifier : nStakeMinAge;
-    }
-
     /** Used if GenerateBitcoins is called with a negative number of threads */
     int DefaultMinerThreads() const { return nMinerThreads; }
     const CBlock& GenesisBlock() const { return genesis; }
@@ -80,9 +76,11 @@ public:
     int64_t TargetSpacing() const { return nTargetSpacing; }
 
     /** returns the coinbase maturity **/
-    int COINBASE_MATURITY(int height) const {
-        return IsStakeModifierV2(height) ? nMaturityV2Modifier : nMaturity;
-    }
+    int COINBASE_MATURITY(int height) const { return nMaturity; }
+
+    /** returns the coinstake maturity (min depth required) **/
+    int COINSTAKE_MIN_DEPTH() const { return nStakeMinDepth; }
+    bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
 
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
@@ -158,7 +156,6 @@ protected:
     std::vector<unsigned char> vAlertPubKey;
     int nDefaultPort;
     uint256 bnProofOfWorkLimit;
-    int nStakeMinAge;
     int nMaxReorganizationDepth;
     int nSubsidyHalvingInterval;
     int nEnforceBlockUpgradeMajority;
@@ -171,9 +168,7 @@ protected:
     unsigned int nPivxBadBlocknBits;
     int nMasternodeCountDrift;
     int nMaturity;
-
-    int nMaturityV2Modifier;
-    int nStakeMinAgeV2Modifier;
+    int nStakeMinDepth;
 
     int nModifierUpdateBlock;
     CAmount nMaxMoneyOut;
