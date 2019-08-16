@@ -323,13 +323,11 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, unsigned int nTimeBlockFrom, unsigned int& nTimeTx, uint256& hashProofOfStake)
 {
     int nextStakedBlock = pindexPrev->nHeight + 1;
-    if(Params().NetworkID() != CBaseChainParams::REGTEST) {
-        if (nTimeTx < nTimeBlockFrom)
-            return error("%s : nTime violation", __func__);
-
-        if (nTimeBlockFrom + Params().StakeMinAge(nextStakedBlock) > nTimeTx) // Min age requirement
-            return error("%s : min age violation - nTimeBlockFrom=%d nStakeMinAge=%d nTimeTx=%d",
-                         __func__, nTimeBlockFrom, Params().StakeMinAge(nextStakedBlock), nTimeTx);
+    if(Params().NetworkID() != CBaseChainParams::REGTEST &&
+            nTimeBlockFrom + Params().StakeMinAge(nextStakedBlock) > nTimeTx) {
+        // Min age requirement
+        return error("%s : min age violation - height=%d - nTimeBlockFrom=%d, nStakeMinAge=%d, nTimeTx=%d",
+                         __func__, nextStakedBlock, nTimeBlockFrom, Params().StakeMinAge(nextStakedBlock), nTimeTx);
     }
 
     //grab difficulty
