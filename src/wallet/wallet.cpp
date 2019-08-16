@@ -1787,7 +1787,8 @@ bool less_then_denom(const COutput& out1, const COutput& out2)
     return (!found1 && found2);
 }
 
-bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount, int blockHeight, bool fPrecompute)
+bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount,
+        int blockHeight, bool fPrecompute)
 {
     LOCK(cs_main);
     //Add PIV
@@ -1800,16 +1801,14 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
             if (nAmountSelected + out.tx->vout[out.i].nValue > nTargetAmount)
                 continue;
 
-            //if zerocoinspend, then use the block time
-            int64_t nTxTime = out.tx->GetTxTime();
-            if (out.tx->vin[0].IsZerocoinSpend()) {
-                if (!out.tx->IsInMainChain())
-                    continue;
-                nTxTime = mapBlockIndex.at(out.tx->hashBlock)->GetBlockTime();
-            }
+            if (out.tx->vin[0].IsZerocoinSpend() && !out.tx->IsInMainChain())
+                continue;
+
+            int64_t nTxTime = mapBlockIndex.at(out.tx->hashBlock)->GetBlockTime();
 
             //check for min age
-            if (GetAdjustedTime() - nTxTime < Params().StakeMinAge(blockHeight) && Params().NetworkID() != CBaseChainParams::REGTEST)
+            if (GetAdjustedTime() - nTxTime < Params().StakeMinAge(blockHeight) &&
+                    Params().NetworkID() != CBaseChainParams::REGTEST)
                 continue;
 
             //check that it is matured
@@ -3697,7 +3696,11 @@ int CMerkleTx::GetBlocksToMaturity() const
     LOCK(cs_main);
     if (!(IsCoinBase() || IsCoinStake()))
         return 0;
-    return std::max(0, (Params().COINBASE_MATURITY(chainActive.Tip()->nHeight) + 1) - GetDepthInMainChain());
+    const int nHeight = chainActive.Height();
+    const int nMaturity = Params().COINBASE_MATURITY(nHeight + 1);      // current maturity
+    // new (future) maturity
+    const int nMaturityV2 = Params().COINBASE_MATURITY(std::max(0, nHeight + 1 + nMaturity - GetDepthInMainChain()));
+    return std::max(0, (nMaturityV2 - GetDepthInMainChain()));
 }
 
 
