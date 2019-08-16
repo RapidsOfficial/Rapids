@@ -32,6 +32,19 @@ PIVX Core should also work on most other Unix-like systems but is not frequently
 Notable Changes
 ==============
 
+### Block indexing improvement
+
+Block index writes are now down in a batch. Thus allowing for less frequent disk access. Meaning improved performances and less data corruption risks.
+
+
+### Functional testing readability
+
+Several changes have been introduced to the travis script in order to make the output more readable. Specificaly it now lists tests left to run and prints the output of failing scripts.
+
+### OpenSSL configure information
+
+When the configure step fails because of an unsupported OpenSSL (or other library), it now displays more information to use a flag and compile anyway. The long term plan is to ensure that the consensus doesn't depend on OpenSSL in anyway and then remove this configure step and this flag.
+
 *version* Change log
 ==============
 
