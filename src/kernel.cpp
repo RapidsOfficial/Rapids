@@ -293,7 +293,7 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
     CDataStream modifier_ss(SER_GETHASH, 0);
 
     // Hash the modifier
-    if (!Params().IsStakeModifierV2(pindexPrev->nHeight)) {
+    if (!Params().IsStakeModifierV2(pindexPrev->nHeight + 1)) {
         // Modifier v1
         uint64_t nStakeModifier = 0;
         if (!stake->GetModifier(nStakeModifier))
@@ -444,12 +444,7 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
     if (!pindexfrom)
         return error("%s : Failed to find the block index for stake origin", __func__);
 
-    // Read block header
-    CBlock blockfrom;
-    if (!ReadBlockFromDisk(blockfrom, pindexfrom->GetBlockPos()))
-        return error("%s : INFO: failed to find block", __func__);
-
-    unsigned int nBlockFromTime = blockfrom.nTime;
+    unsigned int nBlockFromTime = pindexfrom->nTime;
     unsigned int nTxTime = block.nTime;
     const int nBlockFromHeight = pindexfrom->nHeight;
 
