@@ -281,7 +281,7 @@ bool stakeTargetHit(const uint256& hashProofOfStake, const int64_t& nValueIn, co
     return hashProofOfStake < (bnCoinDayWeight * bnTargetPerCoinDay);
 }
 
-bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake)
+bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fDebug)
 {
     CBlockIndex* pindexfrom = stake->GetIndexFrom();
     if (!pindexfrom) return error("%s : Failed to find the block index for stake origin", __func__);
@@ -290,7 +290,7 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
     const CAmount& nValueIn = stake->GetValue();
     const unsigned int nTimeBlockFrom = pindexfrom->nTime;
 
-    CDataStream ss(SER_GETHASH, 0);
+    CDataStream modifier_ss(SER_GETHASH, 0);
 
     // Hash the modifier
     if (!Params().IsStakeModifierV2(pindexPrev->nHeight)) {
@@ -298,11 +298,13 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
         uint64_t nStakeModifier = 0;
         if (!stake->GetModifier(nStakeModifier))
             return error("%s : Failed to get kernel stake modifier", __func__);
-        ss << nStakeModifier;
+        modifier_ss << nStakeModifier;
     } else {
         // Modifier v2
-        ss << pindexPrev->nStakeModifierV2;
+        modifier_ss << pindexPrev->nStakeModifierV2;
     }
+
+    CDataStream ss(modifier_ss);
 
     // Base target
     uint256 bnTarget;
@@ -317,7 +319,14 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
     hashProofOfStake = Hash(ss.begin(), ss.end());
 
     // Check if proof-of-stake hash meets target protocol
-    return hashProofOfStake < bnTarget;
+    const bool res = (hashProofOfStake < bnTarget);
+    if (fDebug || res)
+        LogPrintf("%s : nStakeModifier=%s,  nTimeBlockFrom=%d,  ssUniqueID=%s,  nTimeTx=%d"
+                "\n       ----> hashProofOfStake=%s"
+                "\nnBits=%d,  weight=%d  ----> bnTarget=%s  (res: %d)\n",
+                __func__, HexStr(modifier_ss), nTimeBlockFrom, HexStr(ssUniqueID), nTimeTx, hashProofOfStake.GetHex(),
+                nBits, nValueIn, bnTarget.GetHex(), res);
+    return res;
 }
 
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, unsigned int& nTimeTx, uint256& hashProofOfStake)
@@ -354,7 +363,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
         nTryTime = nTimeTx + nHashDrift - i;
 
         // if stake hash does not meet the target then continue to next iteration
-        if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake))
+        if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTryTime, hashProofOfStake))
             continue;
 
         fSuccess = true; // if we make it this far then we have successfully created a stake hash
@@ -451,7 +460,7 @@ bool CheckProofOfStake(const CBlock block, uint256& hashProofOfStake, std::uniqu
                              __func__, nPreviousBlockHeight, nTxTime, nBlockFromTime, nBlockFromHeight);
     }
 
-    if (!CheckStakeKernelHash(pindexPrev, block.nBits, stake.get(), nTxTime, hashProofOfStake))
+    if (!CheckStakeKernelHash(pindexPrev, block.nBits, stake.get(), nTxTime, hashProofOfStake, true))
         return error("%s : INFO: check kernel failed on coinstake %s, hashProof=%s", __func__,
                      tx.GetHash().GetHex(), hashProofOfStake.GetHex());
 
