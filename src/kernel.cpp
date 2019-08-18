@@ -321,9 +321,10 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
     // Check if proof-of-stake hash meets target protocol
     const bool res = (hashProofOfStake < bnTarget);
     if (fDebug || res)
-        LogPrintf("%s : nStakeModifier=%s,  nTimeBlockFrom=%d,  ssUniqueID=%s,  nTimeTx=%d"
-                "\n       ----> hashProofOfStake=%s"
-                "\nnBits=%d,  weight=%d  ----> bnTarget=%s  (res: %d)\n",
+        LogPrintf("%s : Proof Of Stake:"
+                "\nnStakeModifier=%s\nnTimeBlockFrom=%d\nssUniqueID=%s\nnTimeTx=%d"
+                "\n----> hashProofOfStake=%s"
+                "\nnBits=%d,\nweight=%d\n----> bnTarget=%s (res: %d)\n\n",
                 __func__, HexStr(modifier_ss), nTimeBlockFrom, HexStr(ssUniqueID), nTimeTx, hashProofOfStake.GetHex(),
                 nBits, nValueIn, bnTarget.GetHex(), res);
     return res;
