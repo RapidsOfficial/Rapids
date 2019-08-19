@@ -122,7 +122,7 @@ uint256 ComputeStakeModifier(const CBlockIndex* pindexPrev, const uint256& kerne
     ss << kernel;
 
     // switch with old modifier on upgrade block
-    if (pindexPrev->nStakeModifierV2 == uint256() && pindexPrev->nStakeModifier)
+    if (!Params().IsStakeModifierV2(pindexPrev->nHeight + 1))
         ss << pindexPrev->nStakeModifier;
     else
         ss << pindexPrev->nStakeModifierV2;
@@ -271,16 +271,6 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
     return true;
 }
 
-//test hash vs target
-bool stakeTargetHit(const uint256& hashProofOfStake, const int64_t& nValueIn, const uint256& bnTargetPerCoinDay)
-{
-    //get the stake weight - weight is equal to coin amount
-    uint256 bnCoinDayWeight = uint256(nValueIn) / 100;
-
-    // Now check if proof-of-stake hash meets target protocol
-    return hashProofOfStake < (bnCoinDayWeight * bnTargetPerCoinDay);
-}
-
 bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fDebug)
 {
     CBlockIndex* pindexfrom = stake->GetIndexFrom();
@@ -338,7 +328,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
     if (!pindexFrom || pindexFrom->nHeight < 1) return error("%s : no pindexfrom\n", __func__);
 
-    const uint32_t nTimeBlockFrom = pindexFrom->GetBlockHeader().GetBlockTime();
+    const uint32_t nTimeBlockFrom = pindexFrom->nTime;
     const int nHeightBlockFrom = pindexFrom->nHeight;
 
     //check for maturity (min age/depth) requirements
