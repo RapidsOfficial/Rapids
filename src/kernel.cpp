@@ -257,7 +257,7 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
     while (nStakeModifierTime < pindexFrom->GetBlockTime() + OLD_MODIFIER_INTERVAL) {
         if (!pindexNext) {
             // Should never happen
-            return error("Null pindexNext\n");
+            return error("%s : Null pindexNext", __func__);
         }
 
         pindex = pindexNext;
@@ -326,7 +326,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 
     // get stake input pindex
     CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
-    if (!pindexFrom || pindexFrom->nHeight < 1) return error("%s : no pindexfrom\n", __func__);
+    if (!pindexFrom || pindexFrom->nHeight < 1) return error("%s : no pindexfrom", __func__);
 
     const uint32_t nTimeBlockFrom = pindexFrom->nTime;
     const int nHeightBlockFrom = pindexFrom->nHeight;

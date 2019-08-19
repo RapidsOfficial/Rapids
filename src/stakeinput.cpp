@@ -120,7 +120,7 @@ bool CZPivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
 
     CZerocoinSpendReceipt receipt;
     if (!pwallet->MintToTxIn(mint, hashTxOut, txIn, receipt, libzerocoin::SpendType::STAKE, pindexCheckpoint))
-        return error("%s\n", receipt.GetStatusMessage());
+        return error("%s", receipt.GetStatusMessage());
 
     return true;
 }
@@ -238,7 +238,7 @@ bool CPivStake::GetModifier(uint64_t& nStakeModifier)
             return error("%s: failed to get index from", __func__);
         // TODO: This method must be removed from here in the short terms.. it's a call to an static method in kernel.cpp when this class method is only called from kernel.cpp, no comments..
         if (!GetKernelStakeModifier(pindexFrom->GetBlockHash(), this->nStakeModifier, this->nStakeModifierHeight, this->nStakeModifierTime, false))
-            return error("CheckStakeKernelHash(): failed to get kernel stake modifier \n");
+            return error("CheckStakeKernelHash(): failed to get kernel stake modifier");
     }
     nStakeModifier = this->nStakeModifier;
     return true;
