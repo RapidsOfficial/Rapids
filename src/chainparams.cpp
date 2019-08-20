@@ -155,6 +155,8 @@ public:
         nTargetSpacing = 1 * 60;        // 1 minute
         nMaturity = 100;
         nStakeMinDepth = 600;
+        nFutureTimeDriftPoW = 7200;
+        nFutureTimeDriftPoS = 180;
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
 

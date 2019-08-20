@@ -81,6 +81,10 @@ public:
     int COINSTAKE_MIN_DEPTH() const { return nStakeMinDepth; }
     bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
 
+    /** returns the max future time (and drift in seconds) allowed for a block in the future **/
+    int FutureBlockTimeDrift(const bool isPoS) const { return isPoS ? nFutureTimeDriftPoS : nFutureTimeDriftPoW; }
+    uint32_t MaxFutureBlockTime(uint32_t time, const bool isPoS) const { return time + FutureBlockTimeDrift(isPoS); }
+
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
@@ -167,6 +171,8 @@ protected:
     int nMasternodeCountDrift;
     int nMaturity;
     int nStakeMinDepth;
+    int nFutureTimeDriftPoW;
+    int nFutureTimeDriftPoS;
 
     int nModifierUpdateBlock;
     CAmount nMaxMoneyOut;
