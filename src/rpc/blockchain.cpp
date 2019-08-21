@@ -164,7 +164,10 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
     UniValue stakeData(UniValue::VOBJ);
+    stakeData.push_back(Pair("CS block from id", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
+    stakeData.push_back(Pair("CS block from height", stake.get()->GetIndexFrom()->nHeight));
     stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
+    stakeData.push_back(Pair("stakeModifierHeight", ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight()))));
     result.push_back(Pair("Coin Stake", stakeData));
 
     return result;
