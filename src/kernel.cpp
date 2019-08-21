@@ -346,34 +346,33 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     const uint32_t nTimeBlockFrom = pindexFrom->nTime;
     const int nHeightBlockFrom = pindexFrom->nHeight;
 
-    //check for maturity (min age/depth) requirements
+    // check for maturity (min age/depth) requirements
     if (!Params().HasStakeMinAgeOrDepth(prevHeight + 1, nTimeTx, nHeightBlockFrom, nTimeBlockFrom))
         return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
                          __func__, prevHeight + 1, nTimeTx, nTimeBlockFrom, nHeightBlockFrom);
 
-    //grab difficulty
-    uint256 bnTargetPerCoinDay;
-    bnTargetPerCoinDay.SetCompact(nBits);
-
-    //grab stake modifier
+    // iterate the hashing
     bool fSuccess = false;
-    unsigned int nTryTime = 0;
-    int nHashDrift = 60;
-    for (int i = 0; i < nHashDrift; i++) //iterate the hashing
+    const unsigned int nHashDrift = 60;
+    unsigned int nTryTime = nTimeTx - 1;
+    // iterate from nTimeTx up to nTimeTx + nHashDrift
+    // but not after the max allowed future blocktime drift (3 minutes for PoS)
+    const unsigned int maxTime = std::min(nTimeTx + nHashDrift, Params().MaxFutureBlockTime(GetAdjustedTime(), true));
+
+    while (nTryTime < maxTime)
     {
         //new block came in, move on
         if (chainActive.Height() != prevHeight)
             break;
 
-        //hash this iteration
-        nTryTime = nTimeTx + nHashDrift - i;
+        ++nTryTime;
 
         // if stake hash does not meet the target then continue to next iteration
         if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTryTime, hashProofOfStake))
             continue;
 
-        fSuccess = true; // if we make it this far then we have successfully created a stake hash
-        //LogPrintf("%s : hashproof=%s\n", __func__, hashProofOfStake.GetHex());
+        // if we made it this far, then we have successfully found a valid kernel hash
+        fSuccess = true;
         nTimeTx = nTryTime;
         break;
     }
