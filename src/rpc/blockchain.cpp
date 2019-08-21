@@ -8,6 +8,7 @@
 #include "base58.h"
 #include "checkpoints.h"
 #include "clientversion.h"
+#include "kernel.h"
 #include "main.h"
 #include "rpc/server.h"
 #include "sync.h"
@@ -145,6 +146,26 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     }
     zpivObj.push_back(Pair("total", ValueFromAmount(blockindex->GetZerocoinSupply())));
     result.push_back(Pair("zPIVsupply", zpivObj));
+
+    //////////
+    ////////// Coin stake data ////////////////
+    /////////
+
+    // First grab it
+    uint256 hashProofOfStakeRet;
+    std::unique_ptr<CStakeInput> stake;
+    // Initialize the stake object (we should look for this in some other place and not initialize it every time..)
+    if(!initStakeInput(block, stake, blockindex->nHeight - 1 ))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot initialize stake input");
+
+    unsigned int nTxTime = block.nTime;
+    // todo: Add the debug as param..
+    if(!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, true, hashProofOfStakeRet))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
+
+    UniValue stakeData(UniValue::VOBJ);
+    stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
+    result.push_back(Pair("Coin Stake", stakeData));
 
     return result;
 }
