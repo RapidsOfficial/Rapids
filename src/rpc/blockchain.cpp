@@ -150,25 +150,27 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     //////////
     ////////// Coin stake data ////////////////
     /////////
+    if (block.IsProofOfStake()) {
+        // First grab it
+        uint256 hashProofOfStakeRet;
+        std::unique_ptr <CStakeInput> stake;
+        // Initialize the stake object (we should look for this in some other place and not initialize it every time..)
+        if (!initStakeInput(block, stake, blockindex->nHeight - 1))
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot initialize stake input");
 
-    // First grab it
-    uint256 hashProofOfStakeRet;
-    std::unique_ptr<CStakeInput> stake;
-    // Initialize the stake object (we should look for this in some other place and not initialize it every time..)
-    if(!initStakeInput(block, stake, blockindex->nHeight - 1 ))
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot initialize stake input");
+        unsigned int nTxTime = block.nTime;
+        // todo: Add the debug as param..
+        if (!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, true, hashProofOfStakeRet))
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
-    unsigned int nTxTime = block.nTime;
-    // todo: Add the debug as param..
-    if(!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, true, hashProofOfStakeRet))
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
-
-    UniValue stakeData(UniValue::VOBJ);
-    stakeData.push_back(Pair("CS block from id", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
-    stakeData.push_back(Pair("CS block from height", stake.get()->GetIndexFrom()->nHeight));
-    stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
-    stakeData.push_back(Pair("stakeModifierHeight", ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight()))));
-    result.push_back(Pair("Coin Stake", stakeData));
+        UniValue stakeData(UniValue::VOBJ);
+        stakeData.push_back(Pair("CS block from id", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
+        stakeData.push_back(Pair("CS block from height", stake.get()->GetIndexFrom()->nHeight));
+        stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
+        stakeData.push_back(Pair("stakeModifierHeight", ((stake->IsZPIV()) ? "Not available" : std::to_string(
+                stake->getStakeModifierHeight()))));
+        result.push_back(Pair("Coin Stake", stakeData));
+    }
 
     return result;
 }
