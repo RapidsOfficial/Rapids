@@ -251,22 +251,22 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
         return true;
     }
     const CBlockIndex* pindex = pindexFrom;
-    CBlockIndex* pindexNext = chainActive[pindexFrom->nHeight + 1];
+    CBlockIndex* pindexNext = chainActive[pindex->nHeight + 1];;
 
     // loop to find the stake modifier later by a selection interval
-    while (nStakeModifierTime < pindexFrom->GetBlockTime() + OLD_MODIFIER_INTERVAL) {
+    do {
         if (!pindexNext) {
             // Should never happen
-            return error("%s : Null pindexNext", __func__);
+            return error("%s : Null pindexNext, current block %s ", __func__, pindex->phashBlock->GetHex());
         }
-
         pindex = pindexNext;
-        pindexNext = chainActive[pindexNext->nHeight + 1];
         if (pindex->GeneratedStakeModifier()) {
             nStakeModifierHeight = pindex->nHeight;
             nStakeModifierTime = pindex->GetBlockTime();
         }
-    }
+        pindexNext = chainActive[pindex->nHeight + 1];
+    } while (nStakeModifierTime < pindexFrom->GetBlockTime() + OLD_MODIFIER_INTERVAL);
+
     nStakeModifier = pindex->nStakeModifier;
     return true;
 }
@@ -392,8 +392,9 @@ bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake)
         if (!pindexFrom)
             return error("%s : failed to get index associated with zPIV stake checksum", __func__);
 
-        if (chainActive.Height() - pindexFrom->nHeight < Params().Zerocoin_RequiredStakeDepth())
-            return error("%s : zPIV stake does not have required confirmation depth. Current height %d,  stakeInput height %d.", __func__, chainActive.Height(), pindexFrom->nHeight);
+        int depth = (nPreviousBlockHeight + 1) - pindexFrom->nHeight;
+        if (depth < Params().Zerocoin_RequiredStakeDepth())
+            return error("%s : zPIV stake does not have required confirmation depth. Current height %d,  stakeInput height %d.", __func__, nPreviousBlockHeight, pindexFrom->nHeight);
 
         //The checksum needs to be the exact checksum from 200 blocks ago
         uint256 nCheckpoint200 = chainActive[nPreviousBlockHeight - Params().Zerocoin_RequiredStakeDepth()]->nAccumulatorCheckpoint;
