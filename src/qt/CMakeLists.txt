@@ -34,20 +34,13 @@ foreach(comp Widgets Core Gui Network LinguistTools DBus)
     endif()
 endforeach(comp)
 
-#find_package(Qt5DBus)
 if (Qt5DBus_FOUND)
-#    include_directories(${include_directories} "/usr/local/opt/qt5/include/QtDBus/")
     add_compile_options("-DUSE_DBUS")
 endif()
 
 # Why isn't this done automatically??
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     set(CMAKE_AUTOMOC_MOC_OPTIONS "-DQ_OS_MAC")
-endif()
-if($ENV{target} MATCHES "Windows")
-    set(CMAKE_AUTOMOC_MOC_OPTIONS "-DQ_OS_WIN")
-    include_directories(${CMAKE_SOURCE_DIR}/depends/$ENV{triple}/include)
-    set(CMAKE_EXE_LINKER_FLAGS "-pthread -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -pie -mwindows")
 endif()
 
 file(GLOB LOCAL_QT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/*.h)
@@ -155,10 +148,6 @@ if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/macnotificationhandler.mm)
 endif()
 
-if ($ENV{target} MATCHES "Windows")
-    list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/winshutdownmonitor.cpp ${CMAKE_CURRENT_SOURCE_DIR}/res/pivx-qt-res.rc)
-endif ()
-
 add_library(qt_stuff STATIC ${BitcoinHeaders} ${QtHeaders} ${QT_SOURCES} ${PROTO_SRCS} ${PROTO_HDRS})
 target_include_directories(qt_stuff PUBLIC ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/src/leveldb/include
@@ -193,11 +182,6 @@ target_link_libraries(pivx-qt
         )
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     target_link_libraries(pivx-qt "-framework Cocoa")
-endif()
-if($ENV{target} MATCHES "Windows")
-#    link_directories(${CMAKE_CURRENT_SOURCE_DIR}/depends/$ENV{triple}/lib)
-    #set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -Wstack-protector -fstack-protector-all -fPIE -pipe -O2 -pthread -Wl,--dynamicbase -Wl,--nxcompat -Wl,--high-entropy-va -pie --static")
-    target_link_libraries(pivx-qt -L${CMAKE_CURRENT_SOURCE_DIR}/depends/$ENV{triple}/lib ${WINDOWS_QT_LDADD} ${WINDOWS_LDADD})
 endif()
 if(GMP_FOUND)
     target_link_libraries(pivx-qt ${GMP_LIBRARY})
