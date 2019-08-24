@@ -160,7 +160,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
 
         unsigned int nTxTime = block.nTime;
         // todo: Add the debug as param..
-        if (!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, true, hashProofOfStakeRet))
+        if (!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, false, hashProofOfStakeRet))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
         UniValue stakeData(UniValue::VOBJ);

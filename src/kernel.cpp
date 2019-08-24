@@ -271,10 +271,10 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
     return true;
 }
 
-bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fDebug)
+bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fVerify)
 {
     // Calculate the proof of stake hash
-    if (!GetHashProofOfStake(pindexPrev, stake, nTimeTx, fDebug, hashProofOfStake)) {
+    if (!GetHashProofOfStake(pindexPrev, stake, nTimeTx, fVerify, hashProofOfStake)) {
         return error("%s : Failed to calculate the proof of stake hash", __func__);
     }
 
@@ -291,17 +291,22 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
 
     // Check if proof-of-stake hash meets target protocol
     const bool res = (hashProofOfStake < bnTarget);
-    if (fDebug || res)
-        LogPrintf("%s : Proof Of Stake:"
-                "\nssUniqueID=%s\nnTimeTx=%d"
-                "\n----> hashProofOfStake=%s"
-                "\nnBits=%d,\nweight=%d\n----> bnTarget=%s (res: %d)\n\n",
-                __func__, HexStr(ssUniqueID), nTimeTx, hashProofOfStake.GetHex(),
-                nBits, nValueIn, bnTarget.GetHex(), res);
+
+    if (fVerify || res) {
+        LogPrint("staking", "%s : Proof Of Stake:"
+                            "\nssUniqueID=%s"
+                            "\nnTimeTx=%d"
+                            "\nhashProofOfStake=%s"
+                            "\nnBits=%d"
+                            "\nweight=%d"
+                            "\nbnTarget=%s (res: %d)\n\n",
+            __func__, HexStr(ssUniqueID), nTimeTx, hashProofOfStake.GetHex(),
+            nBits, nValueIn, bnTarget.GetHex(), res);
+    }
     return res;
 }
 
-bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, const unsigned int nTimeTx, const bool fDebug, uint256& hashProofOfStakeRet) {
+bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, const unsigned int nTimeTx, const bool fVerify, uint256& hashProofOfStakeRet) {
     // Grab the stake data
     CBlockIndex* pindexfrom = stake->GetIndexFrom();
     if (!pindexfrom) return error("%s : Failed to find the block index for stake origin", __func__);
@@ -326,12 +331,12 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
     ss << nTimeBlockFrom << ssUniqueID << nTimeTx;
     hashProofOfStakeRet = Hash(ss.begin(), ss.end());
 
-    if (fDebug) {
-        LogPrintf("%s :{ nStakeModifier=%s\n"
-                  "nStakeModifierHeight=%s\n"
-                  "}\n", __func__, HexStr(modifier_ss), ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight())));
+    if (fVerify) {
+        LogPrint("staking", "%s :{ nStakeModifier=%s\n"
+                            "nStakeModifierHeight=%s\n"
+                            "}\n",
+            __func__, HexStr(modifier_ss), ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight())));
     }
-
     return true;
 }
 
