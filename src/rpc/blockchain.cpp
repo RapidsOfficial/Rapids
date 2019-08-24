@@ -164,12 +164,12 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
         UniValue stakeData(UniValue::VOBJ);
-        stakeData.push_back(Pair("CS block from id", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
-        stakeData.push_back(Pair("CS block from height", stake.get()->GetIndexFrom()->nHeight));
+        stakeData.push_back(Pair("BlockFromHash", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
+        stakeData.push_back(Pair("BlockFromHeight", stake.get()->GetIndexFrom()->nHeight));
         stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
         stakeData.push_back(Pair("stakeModifierHeight", ((stake->IsZPIV()) ? "Not available" : std::to_string(
                 stake->getStakeModifierHeight()))));
-        result.push_back(Pair("Coin Stake", stakeData));
+        result.push_back(Pair("CoinStake", stakeData));
     }
 
     return result;
@@ -610,6 +610,12 @@ UniValue getblock(const UniValue& params, bool fHelp)
             "     \"1000\" : n,         (numeric) supply of 1000 zPIV denomination\n"
             "     \"5000\" : n,         (numeric) supply of 5000 zPIV denomination\n"
             "     \"total\" : n,        (numeric) The total supply of all zPIV denominations\n"
+            "  },\n"
+            "  \"CoinStake\" :\n"
+            "    \"BlockFromHash\" : \"hash\",      (string) Block hash of the coin stake input\n"
+            "    \"BlockFromHeight\" : n,           (numeric) Block Height of the coin stake input\n"
+            "    \"hashProofOfStake\" : \"hash\",   (string) Proof of Stake hash\n"
+            "    \"stakeModifierHeight\" : \"nnn\"  (string) Stake modifier block height\n"
             "  }\n"
             "}\n"
 
