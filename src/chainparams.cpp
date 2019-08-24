@@ -177,8 +177,7 @@ public:
         nBlockDoubleAccumulated = 1050010;
         nEnforceNewSporkKey = 1525158000; //!> Sporks signed after (GMT): Tuesday, May 1, 2018 7:00:00 AM GMT must use the new spork key
         nRejectOldSporkKey = 1527811200; //!> Fully reject old spork key after (GMT): Friday, June 1, 2018 12:00:00 AM
-        nBlockStakeModifierlV2 = 2880000; // !TODO: change me (and add others for Testnet and RegTest)
-
+        nBlockStakeModifierlV2 = 1964000;
         // Public coin spend enforcement
         nPublicZCSpends = 1880000;
 
@@ -313,7 +312,7 @@ public:
         nBlockZerocoinV2 = 444020; //!> The block that zerocoin v2 becomes active
         nEnforceNewSporkKey = 1521604800; //!> Sporks signed after Wednesday, March 21, 2018 4:00:00 AM GMT must use the new spork key
         nRejectOldSporkKey = 1522454400; //!> Reject old spork key after Saturday, March 31, 2018 12:00:00 AM GMT
-
+        nBlockStakeModifierlV2 = 1214000;
         // Public coin spend enforcement
         nPublicZCSpends = 1106100;
 
@@ -406,7 +405,7 @@ public:
         nBlockRecalculateAccumulators = 999999999; //Trigger a recalculation of accumulators
         nBlockFirstFraudulent = 999999999; //First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
-
+        nBlockStakeModifierlV2 = -1;
         // Public coin spend enforcement
         nPublicZCSpends = 350;
 
