@@ -14,6 +14,7 @@
 #include <assert.h>
 
 #include <boost/assign/list_of.hpp>
+#include <limits>
 
 
 struct SeedSpec6 {
@@ -405,7 +406,7 @@ public:
         nBlockRecalculateAccumulators = 999999999; //Trigger a recalculation of accumulators
         nBlockFirstFraudulent = 999999999; //First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
-        nBlockStakeModifierlV2 = -1;
+        nBlockStakeModifierlV2 = std::numeric_limits<int>::max(); // max integer value (never switch on regtest)
         // Public coin spend enforcement
         nPublicZCSpends = 350;
 
