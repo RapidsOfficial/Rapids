@@ -28,108 +28,61 @@ Apple released it's last Mountain Lion update August 13, 2015, and officially en
 
 PIVX Core should also work on most other Unix-like systems but is not frequently tested on them.
 
- 
+
 Notable Changes
 ==============
 
-## zPIV Public Spends
+## Internal (Core) Changes
 
-Recent exploits of the Zerocoin protocol (Wrapped serials and broken P1 proof) required us to enable the zerocoin spork and deactivate zPIV functionality in order to secure the supply until the pertinent review process was completed.
+### Version 2 Stake Modifier
 
-Moving forward from this undesired situation, we are enabling a secure and chain storage friendly solution for the zerocoin public spend (aka zPIV to PIV conversion).
+A new 256-bits modifier for the proof of stake protocol has been defined, `CBlockIndex::nStakeModifierV2`.
+It is computed at every block, by taking the hash of the modifier of previous block along with the coinstake input.
+To meet the protocol, the PoS kernel must comprise the modifier of the previous block.
 
-The explanation of how this works can be found in #891
+Changeover enforcement of this new modifier is set to occur at block `1214000` for testnet and block `1967000` for mainnet.
 
-After block `1,880,000` has past, `SPORK_16` will be deactivated to allow zPIV spends to occur using this new public spend method for version 2 zPIV (version 1 zPIV won't be spendable, see note below). zPIV public spends, as the name suggests, are **NOT** private, they reveal the input mint that is being spent. The minting of **NEW** zPIV, as well as zPIV staking will remain disabled for the time being.
+### Block index batch writing
 
-It is advised that users spend/convert their existing zPIV to PIV, which can be done via the GUI or RPC as it was prior to the disabling of zPIV. Note that with the public spend method, the restriction on the number of denominations per transaction (previously 7) has been lifted, and now allows for several hundred denominations per transaction.
+Block index writes are now done in a batch. This allows for less frequent disk access, meaning improved performances and less data corruption risks.
 
-*Note on version 1 zPIV*: Version 1 zPIV was only available to me minted between versions v3.0.0 (Oct 6, 2017) and v3.1.0 (May 8, 2018). The announcement that version 1 zPIV was deprecated went out on May 1, 2018 with a recommendation for users to spend/convert their version 1 zPIV.
+### Eliminate needless key generation
 
-Version 1 zPIV will be made spendable at a later date due to the extra work required in order to make these version 1 mints spendable.
+The staking process has been improved to no longer request a new (unused) key from the keypool. This should reduce wallet file size bloat as well as slightly improve staking efficiency.
+
+### Fix crash scenario at wallet startup
+
+A program crash bug that happens when the wallet.dat file contains a zc public spend transaction (input) and the user had removed the chain data has been fixed.
 
 ## GUI Changes
 
-### Options Dialog Cleanup
+### Removal of zero-fee transaction option
 
-The options/settings UI dialog has been cleaned up to no longer show settings that are wallet related when running in "disable wallet" (`-disablewallet`) mode.
+The long term viability of acceptable zero-fee transaction conditions is in need of review. As such, we are temporarily disabling the ability to create zero-fee transactions.
 
-### Privacy Tab
+### Show latest block hash and datadir information tab
 
-Notice text has been added to the privacy tab indicating that zPIV minting is disabled, as well as the removal of UI elements that supported such functionality. Notice text has also been added indicating that zPIV spends are currently **NOT** private.
+A QoL addition has been made to the Information tab of the UI's console window which adds the display of both the current data directory and the latest block hash seen by the client.
 
 ## RPC Changes
 
-### Removal of Deprecated Commands
+### Require valid URL scheme when preparing/submitting a proposal
 
-The `masternode` and `mnbudget` RPC commands, which were marked as deprecated in PIVX Core v2.3.1 (September 19, 2017), have now been completely removed from PIVX Core.
+The `preparebudget` and `submitbudget` RPC commands now require the inclusion of a canonical URL scheme as part of their `url` parameter. Strings that don't include either `http://` or `https://` will be rejected.
 
-Several new commands were added in v2.3.1 to replace the two aforementioned commands, reference the [v2.3.1 Release Notes](https://github.com/PIVX-Project/PIVX/blob/master/doc/release-notes/release-notes-2.3.1.md#rpc-changes) for further details.
+The 64 character limit for the `url` field is inclusive of this change, so the use of a URL shortening service may be needed.
 
-### New `getblockindexstats` Command
+## Testing Suite Changes
 
-A new RPC command (`getblockindexstats`) has been introduced which serves the purpose of obtaining statistical information on a range of blocks. The information returned is as follows:
-  * transaction count (not including coinbase/coinstake txes)
-  * transaction count (including coinbase/coinstake txes)
-  * zPIV per-denom mint count
-  * zPIV per-denom spend count
-  * total transaction bytes
-  * total fees in block range
-  * average fee per kB
+### Functional testing readability
 
-Command Reference:
-```$xslt
-getblockindexstats height range ( fFeeOnly )
-nReturns aggregated BlockIndex data for blocks
-height, height+1, height+2, ..., height+range-1]
-
-nArguments:
-1. height             (numeric, required) block height where the search starts.
-2. range              (numeric, required) number of blocks to include.
-3. fFeeOnly           (boolean, optional, default=False) return only fee info.
-```
-Result:
-```
-{
-  first_block: x,              (integer) First counted block
-  last_block: x,               (integer) Last counted block
-  txcount: xxxxx,              (numeric) tx count (excluding coinbase/coinstake)
-  txcount_all: xxxxx,          (numeric) tx count (including coinbase/coinstake)
-  mintcount: {              [if fFeeOnly=False]
-        denom_1: xxxx,         (numeric) number of mints of denom_1 occurred over the block range
-        denom_5: xxxx,         (numeric) number of mints of denom_5 occurred over the block range
-         ...                    ... number of mints of other denominations: ..., 10, 50, 100, 500, 1000, 5000
-  },
-  spendcount: {             [if fFeeOnly=False]
-        denom_1: xxxx,         (numeric) number of spends of denom_1 occurred over the block range
-        denom_5: xxxx,         (numeric) number of spends of denom_5 occurred over the block range
-         ...                    ... number of spends of other denominations: ..., 10, 50, 100, 500, 1000, 5000
-  },
-  pubspendcount: {          [if fFeeOnly=False]
-        denom_1: xxxx,         (numeric) number of PUBLIC spends of denom_1 occurred over the block range
-        denom_5: xxxx,         (numeric) number of PUBLIC spends of denom_5 occurred over the block range
-         ...                   ... number of PUBLIC spends of other denominations: ..., 10, 50, 100, 500, 1000, 5000
-  },
-  txbytes: xxxxx,              (numeric) Sum of the size of all txes (zPIV excluded) over block range
-  ttlfee: xxxxx,               (numeric) Sum of the fee amount of all txes (zPIV mints excluded) over block range
-  ttlfee_all: xxxxx,           (numeric) Sum of the fee amount of all txes (zPIV mints included) over block range
-  feeperkb: xxxxx,             (numeric) Average fee per kb (excluding zc txes)
-}
-```
+Several changes have been introduced to the travis script in order to make the output more readable. Specifically it now lists tests left to run and prints the output of failing scripts.
 
 ## Build System Changes
 
-### New Architectures for Depends
+### OpenSSL configure information
 
-The depends system has new added support for the `s390x` and `ppc64el` architectures. This is done in order to support the future integration with [Snapcraft](https://www.snapcraft.io), as well as to support any developers who may use systems based on such architectures.
-
-### Basic CMake Support
-
-While the existing Autotools based build system is our standard build system, and will continue to be so, we have added basic support for compiling with CMake on macOS and linux systems.
-
-This is intended to be used in conjunction with IDEs like CLion (which relies heavily on CMake) in order to streamline the development process. Developers can now use, for example, CLion's internal debugger and profiling tools.
-
-Note that it is still required to have relevant dependencies installed on the system for this to function properly.
+When the configure step fails because of an unsupported OpenSSL (or other library), it now displays more information on using an override flag to compile anyways. The long term plan is to ensure that the consensus code doesn't depend on OpenSSL in any way and then remove this configure step and related override flag.
 
 *version* Change log
 ==============
@@ -139,18 +92,18 @@ Detailed release notes follow. This overview includes changes that affect behavi
 ### Core Features
 
 ### Build System
- 
+
 ### P2P Protocol and Network Code
 
 ### GUI
- 
+
 ### RPC/REST
 
 ### Wallet
- 
+
 ### Miscellaneous
- 
- 
+
+
 ## Credits
 
 Thanks to everyone who directly contributed to this release:
