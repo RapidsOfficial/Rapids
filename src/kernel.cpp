@@ -376,7 +376,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     while (nTryTime < maxTime)
     {
         //new block came in, move on
-        if (chainActive.Height() != prevHeight)
+        if (chainActive.Height() != prevHeight && Params().NetworkID() == CBaseChainParams::REGTEST)
             break;
 
         ++nTryTime;
