@@ -345,7 +345,12 @@ public:
 
     int64_t MaxFutureBlockTime() const
     {
-        return GetAdjustedTime() + Params().FutureBlockTimeDrift(nHeight);
+        return GetAdjustedTime() + Params().FutureBlockTimeDrift(nHeight+1);
+    }
+
+    int64_t MinPastBlockTime() const
+    {
+        return Params().IsTimeProtocolV2(nHeight+1) ? GetBlockTime() : GetMedianTimePast()+1;
     }
 
     bool IsProofOfWork() const

@@ -4635,6 +4635,31 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
     return true;
 }
 
+bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIndex* const pindexPrev)
+{
+    // Not enforced on RegTest
+    if (Params().NetworkID() == CBaseChainParams::REGTEST)
+        return true;
+
+    const int64_t blockTime = block.GetBlockTime();
+    const int blockHeight = pindexPrev->nHeight + 1;
+
+    // Check blocktime against future drift (WANT: blk_time <= Now + MaxDrift)
+    if (blockTime > pindexPrev->MaxFutureBlockTime())
+        return state.Invalid(error("%s : block timestamp too far in the future", __func__), REJECT_INVALID, "time-too-new");
+
+    // Check blocktime against prev (WANT: blk_time >= MinPastBlockTime)
+    if (blockTime < pindexPrev->MinPastBlockTime())
+        return state.DoS(50, error("%s : block timestamp too old", __func__), REJECT_INVALID, "time-too-old");
+
+    // Check blocktime mask
+    if (!Params().IsValidBlockTimeStamp(blockTime, blockHeight))
+        return state.DoS(100, error("%s : block timestamp mask not valid", __func__), REJECT_INVALID, "invalid-time-mask");
+
+    // All good
+    return true;
+}
+
 bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& state, CBlockIndex* const pindexPrev)
 {
     uint256 hash = block.GetHash();
@@ -4651,15 +4676,9 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (chainActive.Height() - nHeight >= nMaxReorgDepth)
         return state.DoS(1, error("%s: forked chain older than max reorganization depth (height %d)", __func__, chainActive.Height() - nHeight));
 
-    // Check blocktime against future drift (WANT: blk_time <= Now + MaxDrift)
-    if (Params().NetworkID() != CBaseChainParams::REGTEST &&
-            block.GetBlockTime() > pindexPrev->MaxFutureBlockTime())
-        return state.Invalid(error("%s : block timestamp too far in the future", __func__), REJECT_INVALID, "time-too-new");
-
-    // Check blocktime against prev (WANT: blk_time > MedianTimePast)
-    if (Params().NetworkID() != CBaseChainParams::REGTEST &&
-            block.GetBlockTime() <= pindexPrev->GetMedianTimePast())
-        return state.DoS(50, error("%s : block timestamp too old", __func__), REJECT_INVALID, "time-too-old");
+    // Check blocktime (past limit, future limit and mask)
+    if (!CheckBlockTime(block, state, pindexPrev))
+        return false;
 
     // Check that the block chain matches the known block chain up to a checkpoint
     if (!Checkpoints::CheckBlock(nHeight, hash))
