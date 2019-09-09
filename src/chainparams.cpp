@@ -185,12 +185,13 @@ public:
         nRejectOldSporkKey = 1569538800; //!> Fully reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
         nBlockStakeModifierlV2 = 1967000;
         nBIP65ActivationHeight = 1808634;
+        nBlockTimeProtocolV2 = 2967000;
 
         // Public coin spend enforcement
         nPublicZCSpends = 1880000;
 
         // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = 2967000;
+        nBlockEnforceNewMessageSignatures = nBlockTimeProtocolV2;
 
         // Fake Serial Attack
         nFakeSerialBlockheightEnd = 1686229;
@@ -326,12 +327,13 @@ public:
         nRejectOldSporkKey = 1569538800; //!> Reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
         nBlockStakeModifierlV2 = 1214000;
         nBIP65ActivationHeight = 851019;
+        nBlockTimeProtocolV2 = 2214000;
 
         // Public coin spend enforcement
         nPublicZCSpends = 1106100;
 
         // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = 2214000;
+        nBlockEnforceNewMessageSignatures = nBlockTimeProtocolV2;
 
         // Fake Serial Attack
         nFakeSerialBlockheightEnd = -1;
@@ -423,7 +425,8 @@ public:
         nBlockRecalculateAccumulators = 999999999; //Trigger a recalculation of accumulators
         nBlockFirstFraudulent = 999999999; //First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
-        nBlockStakeModifierlV2 = std::numeric_limits<int>::max(); // max integer value (never switch on regtest)
+        nBlockStakeModifierlV2 = 351;
+        nBlockTimeProtocolV2 = 999999999;
 
         // Public coin spend enforcement
         nPublicZCSpends = 350;

@@ -86,6 +86,9 @@ public:
     int FutureBlockTimeDrift(const bool isPoS) const { return isPoS ? nFutureTimeDriftPoS : nFutureTimeDriftPoW; }
     uint32_t MaxFutureBlockTime(uint32_t time, const bool isPoS) const { return time + FutureBlockTimeDrift(isPoS); }
 
+    /** Time Protocol V2 **/
+    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= nBlockTimeProtocolV2; }
+
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
@@ -229,6 +232,7 @@ protected:
     int nBlockDoubleAccumulated;
     int nPublicZCSpends;
     int nBlockStakeModifierlV2;
+    int nBlockTimeProtocolV2;
     int nBlockEnforceNewMessageSignatures;
 
     CAmount nMinColdStakingAmount;
