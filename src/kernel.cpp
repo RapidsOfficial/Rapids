@@ -10,7 +10,6 @@
 #include "db.h"
 #include "kernel.h"
 #include "script/interpreter.h"
-#include "timedata.h"
 #include "util.h"
 #include "stakeinput.h"
 #include "utilmoneystr.h"
@@ -367,38 +366,17 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
         return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
                          __func__, prevHeight + 1, nTimeTx, nTimeBlockFrom, nHeightBlockFrom);
 
-    // iterate the hashing
-    bool fSuccess = false;
-    const unsigned int nHashDrift = 60;
-    int64_t nTryTime = nTimeTx - 1;
-    // iterate from nTimeTx up to nTimeTx + nHashDrift
-    // but not after the max allowed future blocktime drift
-    const int64_t maxTime = std::min(
-            nTimeTx + nHashDrift,
-            pindexPrev->MaxFutureBlockTime()
-            );
+    nTimeTx = GetMaskedTime();
 
-    while (nTryTime < maxTime)
-    {
-        //new block came in, move on
-        if (chainActive.Height() != prevHeight && Params().NetworkID() == CBaseChainParams::REGTEST)
-            break;
-
-        ++nTryTime;
-
-        // if stake hash does not meet the target then continue to next iteration
-        if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTryTime, hashProofOfStake))
-            continue;
-
-        // if we made it this far, then we have successfully found a valid kernel hash
-        fSuccess = true;
-        nTimeTx = nTryTime;
-        break;
-    }
+    // new block came in, move on
+    if (chainActive.Height() != prevHeight)
+        return false;
 
     mapHashedBlocks.clear();
-    mapHashedBlocks[chainActive.Tip()->nHeight] = GetTime(); //store a time stamp of when we last hashed on this block
-    return fSuccess;
+    mapHashedBlocks[chainActive.Tip()->nHeight] = nTimeTx; //store a time stamp of when we last hashed on this block
+
+    // check stake hash target protocol
+    return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
 }
 
 bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake)
@@ -525,3 +503,10 @@ bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierCheck
     }
     return true;
 }
+
+// Timestamp mask (timeprotocol V2: 15 - last four bits)
+int64_t GetMaskedTime()
+{
+    return (GetAdjustedTime() & ~int64_t(Params().StakeTimestampMask()));
+}
+
