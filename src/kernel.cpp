@@ -351,7 +351,7 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
     return true;
 }
 
-bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, unsigned int& nTimeTx, uint256& hashProofOfStake)
+bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake)
 {
     int prevHeight = pindexPrev->nHeight;
 
@@ -370,10 +370,13 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     // iterate the hashing
     bool fSuccess = false;
     const unsigned int nHashDrift = 60;
-    unsigned int nTryTime = nTimeTx - 1;
+    int64_t nTryTime = nTimeTx - 1;
     // iterate from nTimeTx up to nTimeTx + nHashDrift
-    // but not after the max allowed future blocktime drift (3 minutes for PoS)
-    const unsigned int maxTime = std::min(nTimeTx + nHashDrift, Params().MaxFutureBlockTime(GetAdjustedTime(), true));
+    // but not after the max allowed future blocktime drift
+    const int64_t maxTime = std::min(
+            nTimeTx + nHashDrift,
+            pindexPrev->MaxFutureBlockTime()
+            );
 
     while (nTryTime < maxTime)
     {

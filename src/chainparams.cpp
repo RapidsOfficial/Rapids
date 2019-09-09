@@ -121,15 +121,37 @@ libzerocoin::ZerocoinParams* CChainParams::Zerocoin_Params(bool useModulusV1) co
 bool CChainParams::HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime,
         const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
 {
+    // Age not required on regtest
     if (NetworkID() == CBaseChainParams::REGTEST)
         return true;
 
-    // before stake modifier V2, the age required was 60 * 60 (1 hour) / not required on regtest
+    // before stake modifier V2, the age required was 60 * 60 (1 hour)
     if (!IsStakeModifierV2(contextHeight))
         return (utxoFromBlockTime + 3600 <= contextTime);
 
     // after stake modifier V2, we require the utxo to be nStakeMinDepth deep in the chain
     return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
+}
+
+int CChainParams::FutureBlockTimeDrift(const int nHeight) const
+{
+    if (IsTimeProtocolV2(nHeight))
+        // PoS (TimeV2): 15 seconds
+        return nFutureTimeDriftPoS_V2;
+
+    // PoS (TimeV1): 3 minutes
+    // PoW: 2 hours
+    return (nHeight > LAST_POW_BLOCK()) ? nFutureTimeDriftPoS : nFutureTimeDriftPoW;
+}
+
+bool CChainParams::IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
+{
+    // Before time protocol V2, blocks can have arbitrary timestamps
+    if (!IsTimeProtocolV2(nHeight))
+        return true;
+
+    // Time protocol v2 requires a masked blocktime
+    return (nTime & StakeTimestampMask()) == 0;
 }
 
 class CMainParams : public CChainParams
@@ -162,6 +184,7 @@ public:
         nStakeMinDepth = 600;
         nFutureTimeDriftPoW = 7200;
         nFutureTimeDriftPoS = 180;
+        nFutureTimeDriftPoS_V2 = 15;
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
         nMinColdStakingAmount = 1 * COIN;

@@ -13,6 +13,7 @@
 #include "chainparams.h"
 #include "pow.h"
 #include "primitives/block.h"
+#include "timedata.h"
 #include "tinyformat.h"
 #include "uint256.h"
 #include "util.h"
@@ -340,6 +341,11 @@ public:
 
         std::sort(pbegin, pend);
         return pbegin[(pend - pbegin) / 2];
+    }
+
+    int64_t MaxFutureBlockTime() const
+    {
+        return GetAdjustedTime() + Params().FutureBlockTimeDrift(nHeight);
     }
 
     bool IsProofOfWork() const

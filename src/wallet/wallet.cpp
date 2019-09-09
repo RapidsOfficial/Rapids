@@ -2619,7 +2619,7 @@ bool CWallet::CreateCoinStake(
         unsigned int nBits,
         int64_t nSearchInterval,
         CMutableTransaction& txNew,
-        unsigned int& nTxNewTime
+        int64_t& nTxNewTime
         )
 {
     // The following split & combine thresholds are important to security
