@@ -261,7 +261,7 @@ bool GetKernelStakeModifier(uint256 hashBlockFrom, uint64_t& nStakeModifier, int
         return true;
     }
     const CBlockIndex* pindex = pindexFrom;
-    CBlockIndex* pindexNext = chainActive[pindex->nHeight + 1];;
+    CBlockIndex* pindexNext = chainActive[pindex->nHeight + 1];
 
     // loop to find the stake modifier later by a selection interval
     do {
