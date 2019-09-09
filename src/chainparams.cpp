@@ -165,6 +165,7 @@ public:
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
         nMinColdStakingAmount = 1 * COIN;
+        nStakeTimestampMask = 0xf;
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 259200;

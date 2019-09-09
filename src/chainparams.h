@@ -88,6 +88,7 @@ public:
 
     /** Time Protocol V2 **/
     bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= nBlockTimeProtocolV2; }
+    int StakeTimestampMask() const { return nStakeTimestampMask; }
 
     CAmount MaxMoneyOut() const { return nMaxMoneyOut; }
     /** The masternode count that we will allow the see-saw reward payments to be off by */
@@ -181,6 +182,7 @@ protected:
     int nStakeMinDepth;
     int nFutureTimeDriftPoW;
     int nFutureTimeDriftPoS;
+    int nStakeTimestampMask;
 
     int nModifierUpdateBlock;
     CAmount nMaxMoneyOut;
