@@ -34,10 +34,9 @@ extern CSporkManager sporkManager;
 class CSporkMessage
 {
 private:
-
+    std::vector<unsigned char> vchSig;
 
 public:
-    std::vector<unsigned char> vchSig;
     SporkId nSporkID;
     int64_t nValue;
     int64_t nTimeSigned;
