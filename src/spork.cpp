@@ -66,6 +66,14 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
         std::string strSpork = sporkManager.GetSporkNameByID(spork.nSporkID);
         if (strSpork == "Unknown") return;
 
+        // Do not accept sporks signed way too far into the future
+        if (spork.nTimeSigned > GetAdjustedTime() + 2 * 60 * 60) {
+            LOCK(cs_main);
+            LogPrintf("%s -- ERROR: too far into the future\n", __func__);
+            Misbehaving(pfrom->GetId(), 100);
+            return;
+        }
+
         uint256 hash = spork.GetHash();
         {
             LOCK(cs);
