@@ -28,4 +28,14 @@ enum SporkId : int32_t {
     SPORK_INVALID                               = -1
 };
 
+// Default values
+struct CSporkDef
+{
+    CSporkDef(): sporkId(SPORK_INVALID), defaultValue(0) {}
+    CSporkDef(SporkId id, int64_t val, std::string n): sporkId(id), defaultValue(val), name(n) {}
+    SporkId sporkId;
+    int64_t defaultValue;
+    std::string name;
+};
+
 #endif

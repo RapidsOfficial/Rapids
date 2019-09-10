@@ -6,6 +6,8 @@
 #ifndef SPORK_H
 #define SPORK_H
 
+#include <unordered_map>
+
 #include "base58.h"
 #include "hash.h"
 #include "key.h"
@@ -17,17 +19,6 @@
 
 #include "obfuscation.h"
 #include "protocol.h"
-
-#define SPORK_2_SWIFTTX_DEFAULT 978307200                         //2001-1-1
-#define SPORK_3_SWIFTTX_BLOCK_FILTERING_DEFAULT 1424217600        //2015-2-18
-#define SPORK_5_MAX_VALUE_DEFAULT 1000                            //1000 PIV
-#define SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT_DEFAULT 4070908800 //OFF
-#define SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT_DEFAULT 4070908800  //OFF
-#define SPORK_10_MASTERNODE_PAY_UPDATED_NODES_DEFAULT 4070908800  //OFF
-#define SPORK_13_ENABLE_SUPERBLOCKS_DEFAULT 4070908800            //OFF
-#define SPORK_14_NEW_PROTOCOL_ENFORCEMENT_DEFAULT 4070908800      //OFF
-#define SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2_DEFAULT 4070908800    //OFF
-#define SPORK_16_ZEROCOIN_MAINTENANCE_MODE_DEFAULT 4070908800     //OFF
 
 class CSporkMessage;
 class CSporkManager;
@@ -77,10 +68,12 @@ class CSporkManager
 private:
     mutable CCriticalSection cs;
     std::string strMasterPrivKey;
+    std::unordered_map<SporkId, CSporkDef*> sporkDefsById;
+    std::unordered_map<std::string, CSporkDef*> sporkDefsByName;
     std::map<int, CSporkMessage> mapSporksActive;
 
 public:
-    CSporkManager() {}
+    CSporkManager();
 
     ADD_SERIALIZE_METHODS;
 
