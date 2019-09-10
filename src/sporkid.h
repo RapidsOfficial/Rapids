@@ -23,8 +23,6 @@ enum SporkId : int32_t {
     SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2         = 10014,
     SPORK_16_ZEROCOIN_MAINTENANCE_MODE          = 10015,
 
-    SPORK_START                                 = SPORK_2_SWIFTTX,
-    SPORK_END                                   = SPORK_16_ZEROCOIN_MAINTENANCE_MODE,
     SPORK_INVALID                               = -1
 };
 

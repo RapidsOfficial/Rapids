@@ -23,6 +23,7 @@
 class CSporkMessage;
 class CSporkManager;
 
+extern std::vector<CSporkDef> sporkDefs;
 extern std::map<uint256, CSporkMessage> mapSporks;
 extern CSporkManager sporkManager;
 

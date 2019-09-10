@@ -27,6 +27,8 @@
 
 #include <univalue.h>
 
+extern std::vector<CSporkDef> sporkDefs;
+
 
 /**
  * @note Do not add or change anything in the information returned by this
@@ -289,27 +291,23 @@ public:
 */
 UniValue spork(const UniValue& params, bool fHelp)
 {
-    SporkId nSporkID;
     if (params.size() == 1 && params[0].get_str() == "show") {
         UniValue ret(UniValue::VOBJ);
-        for (int i = SPORK_START; i <= SPORK_END; i++) {
-            nSporkID = (SporkId) i;
-            if (sporkManager.GetSporkNameByID((SporkId) nSporkID) != "Unknown")
-                ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), sporkManager.GetSporkValue(nSporkID)));
+        for (const auto& sporkDef : sporkDefs) {
+            ret.push_back(Pair(sporkDef.name, sporkManager.GetSporkValue(sporkDef.sporkId)));
         }
         return ret;
     } else if (params.size() == 1 && params[0].get_str() == "active") {
         UniValue ret(UniValue::VOBJ);
-        for (int i = SPORK_START; i <= SPORK_END; i++) {
-            nSporkID = (SporkId) i;
-            if (sporkManager.GetSporkNameByID(nSporkID) != "Unknown")
-                ret.push_back(Pair(sporkManager.GetSporkNameByID(nSporkID), sporkManager.IsSporkActive(nSporkID)));
+        for (const auto& sporkDef : sporkDefs) {
+            ret.push_back(Pair(sporkDef.name, sporkManager.IsSporkActive(sporkDef.sporkId)));
         }
         return ret;
     } else if (params.size() == 2) {
-        nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
+        // advanced mode, update spork values
+        SporkId nSporkID = sporkManager.GetSporkIDByName(params[0].get_str());
         if (nSporkID == SPORK_INVALID) {
-            return "Invalid spork name";
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid spork name");
         }
 
         // SPORK VALUE
