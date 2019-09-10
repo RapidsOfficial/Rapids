@@ -100,14 +100,23 @@ public:
 class CSporkManager
 {
 private:
-    CCriticalSection cs;
-    std::vector<unsigned char> vchSig;
+    mutable CCriticalSection cs;
     std::string strMasterPrivKey;
     std::map<int, CSporkMessage> mapSporksActive;
 
 public:
     CSporkManager() {}
 
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(mapSporksActive);
+        // we don't serialize private key to prevent its leakage
+    }
+
+    void Clear();
     void LoadSporksFromDB();
 
     void ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
@@ -120,6 +129,7 @@ public:
     int GetSporkIDByName(std::string strName);
 
     bool SetPrivKey(std::string strPrivKey);
+    std::string ToString() const;
 };
 
 #endif

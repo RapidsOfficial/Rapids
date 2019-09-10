@@ -16,6 +16,12 @@ CSporkManager sporkManager;
 
 std::map<uint256, CSporkMessage> mapSporks;
 
+void CSporkManager::Clear()
+{
+    strMasterPrivKey = "";
+    mapSporksActive.clear();
+}
+
 // PIVX: on startup load spork values from previous session if they exist in the sporkDB
 void CSporkManager::LoadSporksFromDB()
 {
@@ -211,6 +217,12 @@ bool CSporkManager::SetPrivKey(std::string strPrivKey)
     }
 
     return false;
+}
+
+std::string CSporkManager::ToString() const
+{
+    LOCK(cs);
+    return strprintf("Sporks: %llu", mapSporksActive.size());
 }
 
 bool CSporkMessage::Sign(std::string strSignKey)
