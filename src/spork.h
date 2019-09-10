@@ -100,6 +100,7 @@ public:
 class CSporkManager
 {
 private:
+    CCriticalSection cs;
     std::vector<unsigned char> vchSig;
     std::string strMasterPrivKey;
     std::map<int, CSporkMessage> mapSporksActive;
