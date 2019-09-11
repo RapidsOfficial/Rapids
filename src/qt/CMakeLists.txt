@@ -1,7 +1,7 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.10)
 
-set(CMAKE_INCLUDE_CURRENT_DIR OFF)
-set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/forms)
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOUIC_SEARCH_PATHS ${CMAKE_CURRENT_SOURCE_DIR}/forms ${CMAKE_CURRENT_SOURCE_DIR}/pivx/forms ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/forms)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
@@ -21,7 +21,7 @@ if (QRCODE_FOUND)
 endif()
 
 unset(Qt5Enables)
-foreach(comp Widgets Core Gui Network LinguistTools DBus)
+foreach(comp Widgets Core Gui Network LinguistTools DBus Svg Charts)
     find_package(Qt5${comp})
     set(Qt5Enables "${Qt5Enables};Qt5${comp}_FOUND")
     if(Qt5${comp}_FOUND)
@@ -37,6 +37,19 @@ endforeach(comp)
 if (Qt5DBus_FOUND)
     add_compile_options("-DUSE_DBUS")
 endif()
+
+if (Qt5Charts_FOUND)
+    add_compile_options("-DUSE_QTCHARTS")
+endif()
+
+find_program(MOC_BIN NAMES moc moc-qt5 qt5-moc
+        PATHS /usr/lib/qt5/bin /usr/lib/x86_64-linux-gnu/qt5/bin /usr/local/opt/qt/bin /usr/local/opt/qt5/bin
+        NO_DEFAULT_PATH
+        NO_SYSTEM_ENVIRONMENT_PATH)
+if (MOC_BIN)
+    MESSAGE(STATUS "FOUND MOC ${MOC_BIN}")
+
+endif ()
 
 # Why isn't this done automatically??
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
@@ -56,41 +69,12 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${CMAKE_CURRENT_SOURCE_DIR}/paymentrequest.proto)
 
-set(GUI_FORMS
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/addressbookpage.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/askpassphrasedialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/bip38tooldialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/coincontroldialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/governancepage.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/zpivcontroldialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/blockexplorer.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/editaddressdialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/helpmessagedialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/intro.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/masternodelist.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/multisenddialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/obfuscationconfig.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/privacydialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/openuridialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/optionsdialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/overviewpage.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/receivecoinsdialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/receiverequestdialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/rpcconsole.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/sendcoinsdialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/sendcoinsentry.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/signverifymessagedialog.ui
-        ${CMAKE_CURRENT_SOURCE_DIR}/forms/transactiondescdialog.ui
-        )
-
 SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/multisenddialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bantablemodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/bip38tooldialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/blockexplorer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinaddressvalidator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinamountfield.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/bitcoingui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinunits.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/clientmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/csvmodelwriter.cpp
@@ -128,7 +112,6 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/receivecoinsdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/receiverequestdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/recentrequeststablemodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/sendcoinsdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/sendcoinsentry.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/signverifymessagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactiondesc.cpp
@@ -137,11 +120,74 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/transactionrecord.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactiontablemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactionview.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/walletframe.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/walletmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/walletmodeltransaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/walletview.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/zpivcontroldialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/pivxgui.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/loadingdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/pwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/snackbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/navmenuwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/lockunlock.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/receivedialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/furabstractlistitemdelegate.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/txviewholder.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/qtutils.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/expandablebutton.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/walletpassworddialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/topbar.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/txrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addressfilterproxymodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/dashboardwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/coincontrolpivwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addresslabelrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/contactdropdownrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/contactsdropdown.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/optionbutton.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/mninfodialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/mnmodel.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/masternodewizarddialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/mnrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/masternodeswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/sendchangeaddressdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/sendconfirmdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/sendcustomfeedialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/sendchangeaddressdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/sendmultirow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/send.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addnewaddressdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addnewcontactdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/requestdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/receivewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/myaddressrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/tooltipmenu.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addresseswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/defaultdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/denomgenerationdialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/privacywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsbackupwallet.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsbittoolwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsconsolewidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsdisplayoptionswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsfaqwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsinformationwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsmainoptionswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsmultisenddialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsmultisendwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingssignmessagewidgets.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingswalletoptionswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingswalletrepairwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingswidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/welcomecontentwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/splash.cpp
         )
+
+# Workaround until the old rpcconsole UI window is fully removed
+set_property(SOURCE ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsconsolewidget.cpp PROPERTY SKIP_AUTOMOC ON)
+execute_process(
+        COMMAND ${MOC_BIN} -o moc_settingsconsolewidget.cpp settingsconsolewidget.h
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings
+)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/macdockiconhandler.mm)
@@ -154,6 +200,8 @@ target_include_directories(qt_stuff PUBLIC ${CMAKE_SOURCE_DIR}/src
         ${CMAKE_SOURCE_DIR}/src/univalue/include
         ${CMAKE_SOURCE_DIR}/src/secp256k1/include
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings
         ${OPENSSL_INCLUDE_DIR}
         ${BerkeleyDB_INCLUDE_DIRS}
         )
@@ -201,7 +249,10 @@ if(MINIUPNP_FOUND)
     target_include_directories(pivx-qt PUBLIC ${MINIUPNP_INCLUDE_DIR})
 endif()
 
-target_link_libraries(pivx-qt Qt5::Gui Qt5::Core Qt5::Widgets Qt5::Network ${QT_LIBRARIES})
+target_link_libraries(pivx-qt Qt5::Gui Qt5::Core Qt5::Widgets Qt5::Network Qt5::Svg ${QT_LIBRARIES})
 if (Qt5DBus_FOUND)
     target_link_libraries(pivx-qt Qt5::DBus ${QT_LIBRARIES})
+endif()
+if (Qt5Charts_FOUND)
+    target_link_libraries(pivx-qt Qt5::Charts ${QT_LIBRARIES})
 endif()
