@@ -50,8 +50,6 @@ public:
     MyAddressRow* cachedRow = nullptr;
 };
 
-#include "qt/pivx/moc_receivewidget.cpp"
-
 ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     PWidget(parent),
     ui(new Ui::ReceiveWidget)

@@ -4,7 +4,6 @@
 
 #include "qt/pivx/pwidget.h"
 #include "qt/pivx/qtutils.h"
-#include "qt/pivx/moc_pwidget.cpp"
 #include "qt/pivx/loadingdialog.h"
 #include <QRunnable>
 #include <QThreadPool>

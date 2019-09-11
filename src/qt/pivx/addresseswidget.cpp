@@ -55,7 +55,6 @@ public:
     AddressLabelRow* cachedRow = nullptr;
 };
 
-#include "qt/pivx/moc_addresseswidget.cpp"
 
 AddressesWidget::AddressesWidget(PIVXGUI* parent) :
     PWidget(parent),
