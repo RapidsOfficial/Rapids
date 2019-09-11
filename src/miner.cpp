@@ -94,7 +94,7 @@ public:
 void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
 {
     if (Params().IsTimeProtocolV2(pindexPrev->nHeight+1)) {
-        pblock->nTime = GetMaskedTime();
+        pblock->nTime = GetCurrentTimeSlot();
     } else {
         pblock->nTime = std::max(pindexPrev->GetMedianTimePast() + 1, GetAdjustedTime());
     }
@@ -704,7 +704,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             {
                 int64_t tipHashTime = mapHashedBlocks[chainActive.Tip()->nHeight];
                 // 1 second check until we get to the next time slot
-                while (GetMaskedTime() <= tipHashTime)
+                while (GetCurrentTimeSlot() <= tipHashTime)
                 {
                     MilliSleep(1000);
                     continue;

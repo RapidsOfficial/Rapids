@@ -366,7 +366,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
         return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
                          __func__, prevHeight + 1, nTimeTx, nTimeBlockFrom, nHeightBlockFrom);
 
-    nTimeTx = GetMaskedTime();
+    nTimeTx = GetCurrentTimeSlot();
 
     // new block came in, move on
     if (chainActive.Height() != prevHeight)
@@ -504,9 +504,17 @@ bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierCheck
     return true;
 }
 
-// Timestamp mask (timeprotocol V2: 15 - last four bits)
-int64_t GetMaskedTime()
+// Timestamp for time protocol V2: slot duration 15 seconds
+int64_t GetTimeSlot(const int64_t nTime)
 {
-    return (GetAdjustedTime() & ~int64_t(Params().StakeTimestampMask()));
+    const int slotLen = Params().TimeSlotLength();
+    return (nTime / slotLen) * slotLen;
 }
+
+int64_t GetCurrentTimeSlot()
+{
+    return GetTimeSlot(GetAdjustedTime());
+}
+
+
 

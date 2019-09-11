@@ -42,6 +42,7 @@ bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierCheck
 
 bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake);
 
-int64_t GetMaskedTime();
+int64_t GetTimeSlot(const int64_t nTime);
+int64_t GetCurrentTimeSlot();
 
 #endif // BITCOIN_KERNEL_H

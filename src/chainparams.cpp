@@ -150,8 +150,8 @@ bool CChainParams::IsValidBlockTimeStamp(const int64_t nTime, const int nHeight)
     if (!IsTimeProtocolV2(nHeight))
         return true;
 
-    // Time protocol v2 requires a masked blocktime
-    return (nTime & StakeTimestampMask()) == 0;
+    // Time protocol v2 requires time in slots
+    return (nTime % TimeSlotLength()) == 0;
 }
 
 class CMainParams : public CChainParams
@@ -193,7 +193,7 @@ public:
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
         nMinColdStakingAmount = 1 * COIN;
-        nStakeTimestampMask = 0xf;
+        nTimeSlotLength = 15;           // 15 seconds
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 259200;
@@ -442,9 +442,9 @@ public:
         nLastPOWBlock = 250;
         nMaturity = 100;
         nStakeMinDepth = 0;
-        nStakeTimestampMask = 0;        // time not masked on RegNet
+        nTimeSlotLength = 1;            // time not masked on RegNet
         nMasternodeCountDrift = 4;
-        nModifierUpdateBlock = 0; //approx Mon, 17 Apr 2017 04:00:00 GMT
+        nModifierUpdateBlock = 0;       //approx Mon, 17 Apr 2017 04:00:00 GMT
         nMaxMoneyOut = 43199500 * COIN;
         nZerocoinStartHeight = 300;
         nBlockZerocoinV2 = 300;
