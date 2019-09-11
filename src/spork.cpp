@@ -131,7 +131,7 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
     }
     if (strCommand == "getsporks") {
         LOCK(cs);
-        std::map<int, CSporkMessage>::iterator it = mapSporksActive.begin();
+        std::map<SporkId, CSporkMessage>::iterator it = mapSporksActive.begin();
 
         while (it != mapSporksActive.end()) {
             pfrom->PushMessage("spork", it->second);
