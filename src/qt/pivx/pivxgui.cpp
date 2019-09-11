@@ -53,6 +53,7 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         windowTitle += tr("Node");
     }
 
+    windowTitle += " " + networkStyle->getTitleAddText();
     setWindowTitle(windowTitle);
 
 #ifndef Q_OS_MAC
