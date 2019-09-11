@@ -187,7 +187,6 @@ protected:
     int nStakeMinDepth;
     int nFutureTimeDriftPoW;
     int nFutureTimeDriftPoS;
-    int nFutureTimeDriftPoS_V2;
     int nTimeSlotLength;
 
     int nModifierUpdateBlock;
