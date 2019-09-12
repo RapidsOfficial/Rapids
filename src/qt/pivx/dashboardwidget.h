@@ -128,7 +128,7 @@ private slots:
     void changeChartColors();
     void onChartYearChanged(const QString&);
     void onChartMonthChanged(const QString&);
-    void onChartArrowClicked();
+    void onChartArrowClicked(bool goLeft);
 #endif
 
 private:
