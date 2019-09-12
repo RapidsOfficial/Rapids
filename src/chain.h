@@ -350,7 +350,18 @@ public:
 
     int64_t MinPastBlockTime() const
     {
-        return Params().IsTimeProtocolV2(nHeight+1) ? GetBlockTime() : GetMedianTimePast()+1;
+        // Time Protocol v1: pindexPrev->MedianTimePast + 1
+        if (!Params().IsTimeProtocolV2(nHeight+1))
+            return GetMedianTimePast()+1;
+
+        // on the transition from Time Protocol v1 to v2
+        // pindexPrev->nTime might be in the future (up to the allowed drift)
+        // so we allow the nBlockTimeProtocolV2 to be at most (180-14) seconds earlier than previous block
+        if (nHeight + 1 == Params().BlockStartTimeProtocolV2())
+            return GetBlockTime() - Params().FutureBlockTimeDrift(nHeight) + Params().FutureBlockTimeDrift(nHeight + 1);
+
+        // Time Protocol v2: pindexPrev->nTime
+        return GetBlockTime();
     }
 
     bool IsProofOfWork() const

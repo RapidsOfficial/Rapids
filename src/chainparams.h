@@ -85,7 +85,8 @@ public:
     bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
 
     /** Time Protocol V2 **/
-    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= nBlockTimeProtocolV2; }
+    int BlockStartTimeProtocolV2() const { return nBlockTimeProtocolV2; }
+    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= BlockStartTimeProtocolV2(); }
     int TimeSlotLength() const { return nTimeSlotLength; }
     int FutureBlockTimeDrift(const int nHeight) const;
     bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const;
