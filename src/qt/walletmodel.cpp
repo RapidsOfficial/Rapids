@@ -832,15 +832,11 @@ int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address){
 }
 
 CBitcoinAddress WalletModel::getNewAddress(std::string label) const{
-    if (!wallet->IsLocked())
-        wallet->TopUpKeyPool();
+    return wallet->getNewAddress(label);
+}
 
-    // Generate a new key that is added to wallet
-    CPubKey newKey = wallet->GenerateNewKey();
-    CKeyID keyID = newKey.GetID();
-
-    pwalletMain->SetAddressBook(keyID, label, "receive");
-    return CBitcoinAddress(keyID);
+CBitcoinAddress WalletModel::getNewStakingAddress(std::string label) const{
+    return wallet->getNewStakingAddress(label);
 }
 
 // returns a list of COutputs from COutPoints

@@ -101,6 +101,31 @@ std::vector<CWalletTx> CWallet::getWalletTxs()
     return result;
 }
 
+CBitcoinAddress CWallet::getNewAddress(std::string label){
+    return getNewAddress(label, "receive");
+}
+
+CBitcoinAddress CWallet::getNewStakingAddress(std::string label){
+    return getNewAddress(label, "coldstaking", CChainParams::Base58Type::STAKING_ADDRESS);
+}
+
+CBitcoinAddress CWallet::getNewAddress(const std::string addressLabel, const std::string purpose,
+                                         const CChainParams::Base58Type addrType)
+{
+    LOCK2(cs_main, cs_wallet);
+
+    if (!pwalletMain->IsLocked())
+        pwalletMain->TopUpKeyPool();
+
+    // Generate a new key that is added to wallet
+    CPubKey newKey = GenerateNewKey();
+    CKeyID keyID = newKey.GetID();
+
+    pwalletMain->SetAddressBook(keyID, addressLabel, purpose);
+
+    return CBitcoinAddress(keyID, addrType);
+}
+
 CPubKey CWallet::GenerateNewKey()
 {
     AssertLockHeld(cs_wallet);                                 // mapKeyMetadata
