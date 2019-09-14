@@ -220,9 +220,13 @@ void DashboardWidget::loadWalletModel(){
 #ifdef USE_QTCHARTS
         // chart filter
         stakesFilter = new TransactionFilterProxy();
+        stakesFilter->setDynamicSortFilter(true);
+        stakesFilter->setSortCaseSensitivity(Qt::CaseInsensitive);
+        stakesFilter->setFilterCaseSensitivity(Qt::CaseInsensitive);
+        stakesFilter->setSortRole(Qt::EditRole);
+        stakesFilter->setOnlyStakes(true);
         stakesFilter->setSourceModel(txModel);
         stakesFilter->sort(TransactionTableModel::Date, Qt::AscendingOrder);
-        stakesFilter->setOnlyStakes(true);
         loadChart();
 #endif
     }
