@@ -1548,8 +1548,7 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 *[cssClass="container-splash"] {
     background-color:transparent;
-    border-image: url("://bg-splash-png") 0 0 0 0 stretch stretch;
-    border-radius: 4px;
+    background-image: url("://bg-splash-png");
 }
 
 *[cssClass="img-splash-logo"] {
