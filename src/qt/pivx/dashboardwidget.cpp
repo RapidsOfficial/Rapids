@@ -23,8 +23,6 @@
 #define REQUEST_LOAD_TASK 1
 #define CHART_LOAD_MIN_TIME_INTERVAL 15
 
-#include "moc_dashboardwidget.cpp"
-
 DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     PWidget(parent),
     ui(new Ui::DashboardWidget)
