@@ -88,10 +88,10 @@ const CWalletTx* CWallet::GetWalletTx(const uint256& hash) const
     return &(it->second);
 }
 
-std::vector<const CWalletTx> CWallet::getWalletTxs()
+std::vector<CWalletTx> CWallet::getWalletTxs()
 {
     LOCK(cs_wallet);
-    std::vector<const CWalletTx> result;
+    std::vector<CWalletTx> result;
     result.reserve(mapWallet.size());
     for (const auto& entry : mapWallet) {
         result.emplace_back(entry.second);

@@ -83,14 +83,14 @@ public:
         qDebug() << "TransactionTablePriv::refreshWallet";
         cachedWallet.clear();
 
-        std::vector<const CWalletTx> walletTxes = wallet->getWalletTxs();
+        std::vector<CWalletTx> walletTxes = wallet->getWalletTxs();
 
         // Divide the work between multiple threads to speedup the process if the vector is larger than 4k txes
-        int txesSize = walletTxes.size();
+        std::size_t txesSize = walletTxes.size();
         if (txesSize > SINGLE_THREAD_MAX_TXES_SIZE) {
 
             // Simple way to get the processors count
-            int threadsCount = (QThreadPool::globalInstance()->maxThreadCount() / 2 ) + 1;
+            std::size_t threadsCount = (QThreadPool::globalInstance()->maxThreadCount() / 2 ) + 1;
 
             // Size of the tx subsets
             std::size_t const subsetSize = txesSize / (threadsCount + 1);
@@ -98,16 +98,23 @@ public:
             QList<QFuture<QList<TransactionRecord>>> tasks;
 
             // Subsets + run task
-            for (int i = 0; i < threadsCount; ++i) {
-                std::vector<const CWalletTx> subset(walletTxes.begin() + totalSumSize, walletTxes.begin() + totalSumSize + subsetSize);
+            for (std::size_t i = 0; i < threadsCount; ++i) {
+                tasks.append(
+                        QtConcurrent::run(
+                                convertTxToRecords,
+                                this,
+                                wallet,
+                                std::vector<CWalletTx>(walletTxes.begin() + totalSumSize, walletTxes.begin() + totalSumSize + subsetSize)
+                        )
+                 );
                 totalSumSize += subsetSize;
-                tasks.append(QtConcurrent::run(convertTxToRecords, this, wallet, subset));
             }
 
             // Now take the remaining ones and do the work here
             std::size_t const remainingSize = txesSize - totalSumSize;
-            std::vector<const CWalletTx> subsetLast(walletTxes.end() - remainingSize, walletTxes.end());
-            cachedWallet.append(convertTxToRecords(this, wallet, subsetLast));
+            cachedWallet.append(convertTxToRecords(this, wallet,
+                                                   std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
+                                                   ));
 
             for (QFuture<QList<TransactionRecord>> &future : tasks) {
                 future.waitForFinished();
@@ -119,7 +126,7 @@ public:
         }
     }
 
-    static QList<TransactionRecord> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<const CWalletTx>& walletTxes) {
+    static QList<TransactionRecord> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<CWalletTx>& walletTxes) {
         QList<TransactionRecord> cachedWallet;
         bool hasZcTxes = tablePriv->hasZcTxes;
         for (const auto &tx : walletTxes) {
@@ -132,6 +139,7 @@ public:
                         if (hasZcTxes) break;
                     }
                 }
+
                 cachedWallet.append(records);
             }
         }

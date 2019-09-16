@@ -762,7 +762,7 @@ void DashboardWidget::run(int type) {
     }
 #endif
 }
-void DashboardWidget::onError(int type, QString error) {
+void DashboardWidget::onError(QString error, int type) {
     inform(tr("Error loading chart: %1").arg(error));
 }
 

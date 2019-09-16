@@ -102,7 +102,7 @@ public:
     void loadChart();
 
     void run(int type) override;
-    void onError(int type, QString error) override;
+    void onError(QString error, int type) override;
 
 public slots:
     void walletSynced(bool isSync);

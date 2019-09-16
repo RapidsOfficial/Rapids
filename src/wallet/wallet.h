@@ -412,7 +412,7 @@ public:
 
     const CWalletTx* GetWalletTx(const uint256& hash) const;
 
-    std::vector<const CWalletTx> getWalletTxs();
+    std::vector<CWalletTx> getWalletTxs();
 
     void PrecomputeSpends();
 
