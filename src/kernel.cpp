@@ -352,7 +352,7 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
 
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake)
 {
-    int prevHeight = pindexPrev->nHeight;
+    const int nHeight = pindexPrev->nHeight + 1;
 
     // get stake input pindex
     CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
@@ -362,21 +362,50 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     const int nHeightBlockFrom = pindexFrom->nHeight;
 
     // check for maturity (min age/depth) requirements
-    if (!Params().HasStakeMinAgeOrDepth(prevHeight + 1, nTimeTx, nHeightBlockFrom, nTimeBlockFrom))
+    if (!Params().HasStakeMinAgeOrDepth(nHeight, nTimeTx, nHeightBlockFrom, nTimeBlockFrom))
         return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
-                         __func__, prevHeight + 1, nTimeTx, nTimeBlockFrom, nHeightBlockFrom);
+                         __func__, nHeight, nTimeTx, nTimeBlockFrom, nHeightBlockFrom);
 
-    nTimeTx = GetCurrentTimeSlot();
+    // Time protocol V2: one-try
+    if (Params().IsTimeProtocolV2(nHeight)) {
+        nTimeTx = GetCurrentTimeSlot();
+        mapHashedBlocks.clear();
+        mapHashedBlocks[pindexPrev->nHeight] = nTimeTx; //store a time stamp of when we last hashed on this block
+        return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
+    }
 
-    // new block came in, move on
-    if (chainActive.Height() != prevHeight)
-        return false;
+    // Time protocol V1: iterate the hashing (can be removed after hard-fork)
+    return StakeV1(pindexPrev, stakeInput, nBits, nTimeTx, hashProofOfStake);
+}
+
+bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake)
+{
+    bool fSuccess = false;
+    nTimeTx = pindexPrev->nTime;
+    unsigned int nTryTime = nTimeTx;
+    // iterate from nTimeTx up to nTimeTx + nHashDrift
+    // but not after the max allowed future blocktime drift (3 minutes for PoS)
+    const unsigned int maxTime = GetAdjustedTime() + 180;
+
+    while (nTryTime < maxTime) {
+        //new block came in, move on
+        if (chainActive.Height() != pindexPrev->nHeight) break;
+
+        ++nTryTime;
+        // if stake hash does not meet the target then continue to next iteration
+        if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTryTime, hashProofOfStake))
+             continue;
+
+        // if we made it this far, then we have successfully found a valid kernel hash
+        fSuccess = true;
+        nTimeTx = nTryTime;
+        break;
+    }
 
     mapHashedBlocks.clear();
-    mapHashedBlocks[chainActive.Tip()->nHeight] = nTimeTx; //store a time stamp of when we last hashed on this block
+    mapHashedBlocks[pindexPrev->nHeight] = GetTime(); //store a time stamp of when we last hashed on this block
 
-    // check stake hash target protocol
-    return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
+    return fSuccess;
 }
 
 bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake)

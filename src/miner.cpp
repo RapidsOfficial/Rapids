@@ -699,14 +699,16 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 }
             }
 
+            const bool fTimeV2 = Params().IsTimeProtocolV2(chainActive.Height()+1);
             //search our map of hashed blocks, see if bestblock has been hashed yet
-            if (mapHashedBlocks.count(chainActive.Tip()->nHeight) && !fLastLoopOrphan)
+            const int chainHeight = chainActive.Height();
+            if (mapHashedBlocks.count(chainHeight) && !fLastLoopOrphan)
             {
-                int64_t tipHashTime = mapHashedBlocks[chainActive.Tip()->nHeight];
-                // 1 second check until we get to the next time slot
-                while (GetCurrentTimeSlot() <= tipHashTime)
+                int64_t tipHashTime = mapHashedBlocks[chainHeight];
+                if (    (!fTimeV2 && GetTime() < tipHashTime + 22) ||
+                        (fTimeV2 && GetCurrentTimeSlot() <= tipHashTime) )
                 {
-                    MilliSleep(1000);
+                    MilliSleep(2000);
                     continue;
                 }
             }
