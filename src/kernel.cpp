@@ -381,26 +381,25 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake)
 {
     bool fSuccess = false;
-    nTimeTx = pindexPrev->nTime;
-    unsigned int nTryTime = nTimeTx;
-    // iterate from nTimeTx up to nTimeTx + nHashDrift
-    // but not after the max allowed future blocktime drift (3 minutes for PoS)
-    const unsigned int maxTime = GetAdjustedTime() + 180;
+    // iterate from maxTime down to pindexPrev->nTime
+    const unsigned int maxTime = pindexPrev->MaxFutureBlockTime();
+    unsigned int nTryTime = maxTime;
 
-    while (nTryTime < maxTime) {
+    while (nTryTime > pindexPrev->nTime) {
         //new block came in, move on
         if (chainActive.Height() != pindexPrev->nHeight) break;
 
-        ++nTryTime;
+        --nTryTime;
         // if stake hash does not meet the target then continue to next iteration
         if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTryTime, hashProofOfStake))
              continue;
 
         // if we made it this far, then we have successfully found a valid kernel hash
         fSuccess = true;
-        nTimeTx = nTryTime;
         break;
     }
+
+    nTimeTx = nTryTime;
 
     mapHashedBlocks.clear();
     mapHashedBlocks[pindexPrev->nHeight] = GetTime(); //store a time stamp of when we last hashed on this block
