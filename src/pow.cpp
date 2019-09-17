@@ -43,10 +43,6 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         const int64_t nTargetSpacing = Params().TargetSpacing();
         const int64_t nTargetTimespan = Params().TargetTimespan(fTimeV2);
 
-        // on first block with V2 time protocol, return the limit
-        if (fTimeV2 && !Params().IsTimeProtocolV2(pindexLast->nHeight))
-            return bnTargetLimit.GetCompact();
-
         int64_t nActualSpacing = 0;
         if (pindexLast->nHeight != 0)
             nActualSpacing = pindexLast->GetBlockTime() - pindexLast->pprev->GetBlockTime();
@@ -58,7 +54,12 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         // ppcoin: target change every block
         // ppcoin: retarget with exponential moving toward target spacing
         uint256 bnNew;
-        bnNew.SetCompact(pindexLast->nBits);
+        // on first block with V2 time protocol, reduce the difficulty by a factor 16
+        if (fTimeV2 && !Params().IsTimeProtocolV2(pindexLast->nHeight)) {
+            bnNew.SetCompact(pindexLast->nBits << 4);
+        } else {
+            bnNew.SetCompact(pindexLast->nBits);
+        }
 
         int64_t nInterval = nTargetTimespan / nTargetSpacing;
         bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
