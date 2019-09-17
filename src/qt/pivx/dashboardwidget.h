@@ -12,6 +12,7 @@
 #include "qt/pivx/txviewholder.h"
 #include "transactionfilterproxy.h"
 
+#include <atomic>
 #include <cstdlib>
 #include <QWidget>
 #include <QLineEdit>
@@ -143,6 +144,7 @@ private:
 #ifdef USE_QTCHARTS
 
     int64_t lastRefreshTime = 0;
+    std::atomic<bool> isLoading;
 
     // Chart
     TransactionFilterProxy* stakesFilter = nullptr;
@@ -169,6 +171,7 @@ private:
     void showHideEmptyChart(bool show, bool loading, bool forceView = false);
     bool refreshChart();
     void tryChartRefresh();
+    void updateStakeFilter();
     QMap<int, std::pair<qint64, qint64>> getAmountBy();
     void loadChartData(bool withMonthNames);
     void updateAxisX(const QStringList *arg = nullptr);

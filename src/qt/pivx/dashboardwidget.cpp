@@ -157,6 +157,7 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
 bool hasCharts = false;
 #ifdef USE_QTCHARTS
     hasCharts = true;
+    isLoading = false;
     setChartShow(YEAR);
     connect(ui->pushButtonYear, &QPushButton::clicked, [this](){setChartShow(YEAR);});
     connect(ui->pushButtonMonth, &QPushButton::clicked, [this](){setChartShow(MONTH);});
@@ -372,11 +373,18 @@ void DashboardWidget::loadChart(){
 
 void DashboardWidget::showHideEmptyChart(bool showEmpty, bool loading, bool forceView) {
     if (stakesFilter->rowCount() > SHOW_EMPTY_CHART_VIEW_THRESHOLD || forceView) {
-        if (!ui->layoutChart->isVisible()) {
+        if (ui->emptyContainerChart->isVisible() != showEmpty) {
             ui->layoutChart->setVisible(!showEmpty);
             ui->emptyContainerChart->setVisible(showEmpty);
         }
     }
+    // Enable/Disable sort buttons
+    bool invLoading = !loading;
+    ui->comboBoxMonths->setEnabled(invLoading);
+    ui->comboBoxYears->setEnabled(invLoading);
+    ui->pushButtonMonth->setEnabled(invLoading);
+    ui->pushButtonAll->setEnabled(invLoading);
+    ui->pushButtonYear->setEnabled(invLoading);
     ui->labelEmptyChart->setText(loading ? tr("Loading chart..") : tr("You have no staking rewards"));
 }
 
@@ -434,8 +442,7 @@ void DashboardWidget::changeChartColors(){
     if (set1) set1->setBorderColor(gridLineColorX);
 }
 
-// pair PIV, zPIV
-QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
+void DashboardWidget::updateStakeFilter() {
     if (chartShow != ALL) {
         bool filterByMonth = false;
         if (monthFilter != 0 && chartShow == MONTH) {
@@ -468,6 +475,11 @@ QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
     } else {
         stakesFilter->clearDateRange();
     }
+}
+
+// pair PIV, zPIV
+QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
+    updateStakeFilter();
     int size = stakesFilter->rowCount();
     QMap<int, std::pair<qint64, qint64>> amountBy;
     // Get all of the stakes
@@ -576,6 +588,8 @@ void DashboardWidget::onChartMonthChanged(const QString& monthStr) {
 }
 
 bool DashboardWidget::refreshChart(){
+    if (isLoading) return false;
+    isLoading = true;
     isChartMin = width() < 1300;
     isChartInitialized = false;
     showHideEmptyChart(true, true);
@@ -678,6 +692,7 @@ void DashboardWidget::onChartRefreshed() {
     // back to normal
     isChartInitialized = true;
     showHideEmptyChart(false, false, true);
+    isLoading = false;
 }
 
 std::pair<int, int> DashboardWidget::getChartRange(QMap<int, std::pair<qint64, qint64>> amountsBy) {
