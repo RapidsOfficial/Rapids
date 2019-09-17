@@ -369,6 +369,9 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     // Time protocol V2: one-try
     if (Params().IsTimeProtocolV2(nHeight)) {
         nTimeTx = GetCurrentTimeSlot();
+        // double check that we are not on the same slot as prev block
+        if (nTimeTx <= pindexPrev->nTime)
+            return false;
         mapHashedBlocks.clear();
         mapHashedBlocks[pindexPrev->nHeight] = nTimeTx; //store a time stamp of when we last hashed on this block
         return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);

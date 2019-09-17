@@ -4648,8 +4648,8 @@ bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIn
     if (blockTime > pindexPrev->MaxFutureBlockTime())
         return state.Invalid(error("%s : block timestamp too far in the future", __func__), REJECT_INVALID, "time-too-new");
 
-    // Check blocktime against prev (WANT: blk_time >= MinPastBlockTime)
-    if (blockTime < pindexPrev->MinPastBlockTime())
+    // Check blocktime against prev (WANT: blk_time > MinPastBlockTime)
+    if (blockTime <= pindexPrev->MinPastBlockTime())
         return state.DoS(50, error("%s : block timestamp too old", __func__), REJECT_INVALID, "time-too-old");
 
     // Check blocktime mask

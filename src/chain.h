@@ -352,7 +352,7 @@ public:
     {
         // Time Protocol v1: pindexPrev->MedianTimePast + 1
         if (!Params().IsTimeProtocolV2(nHeight+1))
-            return GetMedianTimePast()+1;
+            return GetMedianTimePast();
 
         // on the transition from Time Protocol v1 to v2
         // pindexPrev->nTime might be in the future (up to the allowed drift)
