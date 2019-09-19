@@ -88,6 +88,17 @@ const CWalletTx* CWallet::GetWalletTx(const uint256& hash) const
     return &(it->second);
 }
 
+std::vector<CWalletTx> CWallet::getWalletTxs()
+{
+    LOCK(cs_wallet);
+    std::vector<CWalletTx> result;
+    result.reserve(mapWallet.size());
+    for (const auto& entry : mapWallet) {
+        result.emplace_back(entry.second);
+    }
+    return result;
+}
+
 CPubKey CWallet::GenerateNewKey()
 {
     AssertLockHeld(cs_wallet);                                 // mapKeyMetadata

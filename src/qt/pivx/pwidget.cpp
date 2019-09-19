@@ -78,7 +78,7 @@ public:
 
 bool PWidget::execute(int type){
     Worker* worker = new Worker(this, type);
-    connect(worker, SIGNAL (error(QString&)), this, SLOT (errorString(QString)));
+    connect(worker, SIGNAL (error(QString, int)), this, SLOT (errorString(QString, int)));
     connect(worker, SIGNAL (finished()), worker, SLOT (deleteLater()));
 
     WorkerTask* task = new WorkerTask(worker);
@@ -93,6 +93,10 @@ bool PWidget::verifyWalletUnlocked(){
         return false;
     }
     return true;
+}
+
+void PWidget::errorString(QString error, int type) {
+    onError(error, type);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -115,6 +119,6 @@ void PWidget::changeTheme(bool isLightTheme, QString& theme){
 void PWidget::run(int type) {
     // override
 }
-void PWidget::onError(int type, QString error) {
+void PWidget::onError(QString error, int type) {
     // override
 }
