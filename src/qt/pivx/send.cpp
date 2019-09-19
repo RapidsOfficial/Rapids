@@ -802,7 +802,7 @@ void SendWidget::onDeleteClicked(){
         focusedEntry->deleteLater();
         int entryNumber = focusedEntry->getNumber();
 
-        // Refresh amount total + rest of rows numbers.
+        // remove selected entry and update row number for the others
         QMutableListIterator<SendMultiRow*> it(entries);
         while (it.hasNext()) {
             SendMultiRow* entry = it.next();
@@ -820,6 +820,9 @@ void SendWidget::onDeleteClicked(){
         }
 
         focusedEntry = nullptr;
+
+        // Update total amounts
+        refreshAmounts();
     }
 }
 
