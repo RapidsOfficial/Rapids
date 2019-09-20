@@ -12,6 +12,7 @@ CoinRandomnessSchnorrSignature::CoinRandomnessSchnorrSignature(
     const CBigNum p = zcparams->coinCommitmentGroup.modulus;
     const CBigNum q = zcparams->coinCommitmentGroup.groupOrder;
     const CBigNum h = zcparams->coinCommitmentGroup.h;
+    const CBigNum pk = h.pow_mod(randomness, p);
 
     alpha = 0;
     beta = 0;
@@ -25,7 +26,7 @@ CoinRandomnessSchnorrSignature::CoinRandomnessSchnorrSignature(
 
         // challenge hash
         CHashWriter hasher(0,0);
-        hasher << *zcparams << r << msghash;
+        hasher << *zcparams << pk << r << msghash;
         alpha = CBigNum(hasher.GetHash()) % q;
         beta = (k - alpha.mul_mod(randomness, q)) % q;
     }
@@ -51,7 +52,7 @@ bool CoinRandomnessSchnorrSignature::Verify(
     // Signature verification.
     const CBigNum rv = (pk.pow_mod(alpha,p)).mul_mod(h.pow_mod(beta,p),p);
     CHashWriter hasher(0,0);
-    hasher << *zcparams << rv << msghash;
+    hasher << *zcparams << pk << rv << msghash;
 
     if (CBigNum(hasher.GetHash()) % q != alpha)
         return error("%s: Schnorr signature does not verify", __func__);
