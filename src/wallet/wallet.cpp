@@ -4031,7 +4031,7 @@ bool CWallet::MintsToInputVector(std::map<CBigNum, CZerocoinMint>& mapMintsSelec
 
                 int64_t nTime5 = GetTimeMicros();
                 LogPrint("bench", "        - CoinSpend verified in %.2fms\n", 0.001 * (nTime5 - nTime4));
-            } catch (const std::exception &) {
+            } catch (const std::exception&) {
                 receipt.SetStatus(_("CoinSpend: Accumulator witness does not verify"), ZPIV_INVALID_WITNESS);
                 return error("%s : %s", __func__, receipt.GetStatusMessage());
             }
@@ -4830,7 +4830,7 @@ void ThreadPrecomputeSpends()
     try {
         pwallet->PrecomputeSpends();
         boost::this_thread::interruption_point();
-    } catch (std::exception& e) {
+    } catch (const std::exception& e) {
         LogPrintf("ThreadPrecomputeSpends() exception: %s \n", e.what());
     } catch (...) {
         LogPrintf("ThreadPrecomputeSpends() error \n");
