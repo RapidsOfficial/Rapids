@@ -151,6 +151,7 @@ public:
     bool IsStakeModifierV2(const int nHeight) const { return nHeight >= nBlockStakeModifierlV2; }
     int NewSigsActive(const int nHeight) const { return nHeight >= nBlockEnforceNewMessageSignatures; }
     int BIP65ActivationHeight() const { return nBIP65ActivationHeight; }
+    int Block_V7_StartHeight() const { return nBlockV7StartHeight; }
 
     // fake serial attack
     int Zerocoin_Block_EndFakeSerial() const { return nFakeSerialBlockheightEnd; }
@@ -243,6 +244,7 @@ protected:
     int nBlockStakeModifierlV2;
     int nBlockTimeProtocolV2;
     int nBlockEnforceNewMessageSignatures;
+    int nBlockV7StartHeight;
 
     CAmount nMinColdStakingAmount;
 
