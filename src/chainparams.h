@@ -161,6 +161,7 @@ public:
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
 
     int Zerocoin_Block_Public_Spend_Enabled() const { return nPublicZCSpends; }
+    int Zerocoin_Block_Last_Checkpoint() const { return nBlockLastAccumulatorCheckpoint; }
 
 protected:
     CChainParams() {}
@@ -245,6 +246,7 @@ protected:
     int nBlockTimeProtocolV2;
     int nBlockEnforceNewMessageSignatures;
     int nBlockV7StartHeight;
+    int nBlockLastAccumulatorCheckpoint;
 
     CAmount nMinColdStakingAmount;
 
