@@ -85,7 +85,7 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
         // Do not accept sporks signed way too far into the future
         if (spork.nTimeSigned > GetAdjustedTime() + 2 * 60 * 60) {
             LOCK(cs_main);
-            LogPrintf("%s -- ERROR: too far into the future\n", __func__);
+            LogPrintf("%s : ERROR: too far into the future\n", __func__);
             Misbehaving(pfrom->GetId(), 100);
             return;
         }
@@ -186,7 +186,7 @@ SporkId CSporkManager::GetSporkIDByName(std::string strName)
 {
     auto it = sporkDefsByName.find(strName);
     if (it == sporkDefsByName.end()) {
-        LogPrintf("%s -- Unknown Spork name '%s'\n", __func__, strName);
+        LogPrintf("%s : Unknown Spork name '%s'\n", __func__, strName);
         return SPORK_INVALID;
     }
     return it->second->sporkId;
@@ -196,7 +196,7 @@ std::string CSporkManager::GetSporkNameByID(SporkId nSporkID)
 {
     auto it = sporkDefsById.find(nSporkID);
     if (it == sporkDefsById.end()) {
-        LogPrint("%s -- Unknown Spork ID %d\n", __func__, nSporkID);
+        LogPrint("%s : Unknown Spork ID %d\n", __func__, nSporkID);
         return "Unknown";
     }
     return it->second->name;
@@ -212,7 +212,7 @@ bool CSporkManager::SetPrivKey(std::string strPrivKey)
     if (spork.CheckSignature(fRequireNew)) {
         LOCK(cs);
         // Test signing successful, proceed
-        LogPrintf("%s : -- Successfully initialized as spork signer\n", __func__);
+        LogPrintf("%s : Successfully initialized as spork signer\n", __func__);
         strMasterPrivKey = strPrivKey;
         return true;
     }
