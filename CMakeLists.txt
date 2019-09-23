@@ -411,6 +411,7 @@ set(ZEROCOIN_SOURCES
         ./src/libzerocoin/bignum.h
         ./src/libzerocoin/bignum.cpp
         ./src/libzerocoin/Coin.h
+        ./src/libzerocoin/CoinRandomnessSchnorrSignature.h
         ./src/libzerocoin/CoinSpend.h
         ./src/libzerocoin/Commitment.h
         ./src/libzerocoin/Denominations.h
@@ -422,6 +423,7 @@ set(ZEROCOIN_SOURCES
         ./src/libzerocoin/Accumulator.cpp
         ./src/libzerocoin/AccumulatorProofOfKnowledge.cpp
         ./src/libzerocoin/Coin.cpp
+        ./src/libzerocoin/CoinRandomnessSchnorrSignature.cpp
         ./src/libzerocoin/Denominations.cpp
         ./src/libzerocoin/CoinSpend.cpp
         ./src/libzerocoin/Commitment.cpp
