@@ -3756,14 +3756,14 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, CBlock* 
     return true;
 }
 
-bool DisconnectBlocks(int blocks)
+bool DisconnectBlocks(int nBlocks)
 {
     LOCK(cs_main);
 
     CValidationState state;
 
-    LogPrintf("%s: Got command to replay %d blocks\n", __func__, blocks);
-    for (int i = 0; i <= blocks; i++)
+    LogPrintf("%s: Got command to replay %d blocks\n", __func__, nBlocks);
+    for (int i = 0; i <= nBlocks; i++)
         DisconnectTip(state);
 
     return true;
