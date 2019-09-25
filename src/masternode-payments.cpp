@@ -518,7 +518,7 @@ bool CMasternodePaymentWinner::CheckSignature() const
     std::string strMessage = GetStrMessage();
 
     if (!CMessageSigner::VerifyMessage(pmn->pubKeyMasternode, vchSig, strMessage, strError)) {
-        return error("%s - Got bad masternode signature for %s: %s\n", __func__,
+        return error("%s : Got bad masternode signature for %s: %s\n", __func__,
                 vinMasternode.prevout.hash.ToString(), strError);
     }
 
