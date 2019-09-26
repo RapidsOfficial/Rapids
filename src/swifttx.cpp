@@ -480,6 +480,7 @@ uint256 CConsensusVote::GetHash() const
 uint256 CConsensusVote::GetSignatureHash() const
 {
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
+    ss << nMessVersion;
     ss << vinMasternode;
     ss << txHash;
     ss << nBlockHeight;

@@ -43,7 +43,7 @@ std::string CObfuScationRelay::ToString()
 uint256 CObfuScationRelay::GetSignatureHash() const
 {
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-    ss << in << out;
+    ss << nMessVersion << in << out;
     return ss.GetHash();
 }
 
