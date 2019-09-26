@@ -1442,7 +1442,7 @@ bool AppInit2()
 
                 // PIVX: load previous sessions sporks if we have them.
                 uiInterface.InitMessage(_("Loading sporks..."));
-                LoadSporksFromDB();
+                sporkManager.LoadSporksFromDB();
 
                 uiInterface.InitMessage(_("Loading block index..."));
                 std::string strBlockIndexError = "";
