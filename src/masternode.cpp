@@ -394,7 +394,7 @@ CMasternodeBroadcast::CMasternodeBroadcast(const CMasternode& mn)
     addr = mn.addr;
     pubKeyCollateralAddress = mn.pubKeyCollateralAddress;
     pubKeyMasternode = mn.pubKeyMasternode;
-    vchSig = mn.vchSig;
+    vchSig = mn.GetVchSig();
     activeState = mn.activeState;
     sigTime = mn.sigTime;
     lastPing = mn.lastPing;
@@ -760,10 +760,10 @@ bool CMasternodeBroadcast::CheckSignature() const
 }
 
 CMasternodePing::CMasternodePing() :
+        vchSig(),
         vin(),
         blockHash(0),
-        sigTime(0),
-        vchSig()
+        sigTime(0)
 {
     int nHeight;
     {
@@ -774,9 +774,9 @@ CMasternodePing::CMasternodePing() :
 }
 
 CMasternodePing::CMasternodePing(CTxIn& newVin) :
+        vchSig(),
         vin(),
-        sigTime(0),
-        vchSig()
+        sigTime(0)
 {
     int nHeight;
     {

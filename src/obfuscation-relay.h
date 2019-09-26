@@ -13,10 +13,12 @@
 
 class CObfuScationRelay
 {
-public:
-    CTxIn vinMasternode;
+private:
     std::vector<unsigned char> vchSig;
     std::vector<unsigned char> vchSig2;
+
+public:
+    CTxIn vinMasternode;
     int nBlockHeight;
     int nRelayType;
     CTxIn in;
