@@ -1755,24 +1755,25 @@ void CBudgetProposalBroadcast::Relay()
     RelayInv(inv);
 }
 
-CBudgetVote::CBudgetVote()
-{
-    vin = CTxIn();
-    nProposalHash = 0;
-    nVote = VOTE_ABSTAIN;
-    nTime = 0;
-    fValid = true;
-    fSynced = false;
-}
+CBudgetVote::CBudgetVote() :
+        fValid(true),
+        fSynced(false),
+        vin(),
+        nProposalHash(0),
+        nVote(VOTE_ABSTAIN),
+        nTime(0),
+        vchSig()
+{ }
 
-CBudgetVote::CBudgetVote(CTxIn vinIn, uint256 nProposalHashIn, int nVoteIn)
+CBudgetVote::CBudgetVote(CTxIn vinIn, uint256 nProposalHashIn, int nVoteIn) :
+        fValid(true),
+        fSynced(false),
+        vin(vinIn),
+        nProposalHash(nProposalHashIn),
+        nVote(nVoteIn),
+        vchSig()
 {
-    vin = vinIn;
-    nProposalHash = nProposalHashIn;
-    nVote = nVoteIn;
     nTime = GetAdjustedTime();
-    fValid = true;
-    fSynced = false;
 }
 
 void CBudgetVote::Relay()
@@ -2317,24 +2318,23 @@ void CFinalizedBudgetBroadcast::Relay()
     RelayInv(inv);
 }
 
-CFinalizedBudgetVote::CFinalizedBudgetVote()
-{
-    vin = CTxIn();
-    nBudgetHash = 0;
-    nTime = 0;
-    vchSig.clear();
-    fValid = true;
-    fSynced = false;
-}
+CFinalizedBudgetVote::CFinalizedBudgetVote() :
+        fValid(true),
+        fSynced(false),
+        vin(),
+        nBudgetHash(0),
+        nTime(0),
+        vchSig()
+{ }
 
-CFinalizedBudgetVote::CFinalizedBudgetVote(CTxIn vinIn, uint256 nBudgetHashIn)
+CFinalizedBudgetVote::CFinalizedBudgetVote(CTxIn vinIn, uint256 nBudgetHashIn) :
+        fValid(true),
+        fSynced(false),
+        vin(vinIn),
+        nBudgetHash(nBudgetHashIn),
+        vchSig()
 {
-    vin = vinIn;
-    nBudgetHash = nBudgetHashIn;
     nTime = GetAdjustedTime();
-    vchSig.clear();
-    fValid = true;
-    fSynced = false;
 }
 
 void CFinalizedBudgetVote::Relay()
