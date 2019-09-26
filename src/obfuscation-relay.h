@@ -18,6 +18,7 @@ private:
     std::vector<unsigned char> vchSig2;
 
 public:
+    int nMessVersion;
     CTxIn vinMasternode;
     int nBlockHeight;
     int nRelayType;
@@ -32,13 +33,26 @@ public:
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
     {
-        READWRITE(vinMasternode);
-        READWRITE(vchSig);
-        READWRITE(vchSig2);
-        READWRITE(nBlockHeight);
-        READWRITE(nRelayType);
-        READWRITE(in);
-        READWRITE(out);
+        try
+        {
+            READWRITE(nMessVersion);
+            READWRITE(vinMasternode);
+            READWRITE(vchSig);
+            READWRITE(vchSig2);
+            READWRITE(nBlockHeight);
+            READWRITE(nRelayType);
+            READWRITE(in);
+            READWRITE(out);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+            READWRITE(vinMasternode);
+            READWRITE(vchSig);
+            READWRITE(vchSig2);
+            READWRITE(nBlockHeight);
+            READWRITE(nRelayType);
+            READWRITE(in);
+            READWRITE(out);
+        }
     }
 
     std::string ToString();
