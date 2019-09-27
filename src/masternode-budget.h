@@ -55,13 +55,9 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
 // CBudgetVote - Allow a masternode node to vote and broadcast throughout the network
 //
 
-class CBudgetVote
+class CBudgetVote : public CSignedMessage
 {
-private:
-    std::vector<unsigned char> vchSig;
-
 public:
-    int nMessVersion;
     bool fValid;  //if the vote is currently valid / counted
     bool fSynced; //if we've sent this to our peers
     CTxIn vin;
@@ -72,9 +68,6 @@ public:
     CBudgetVote();
     CBudgetVote(CTxIn vin, uint256 nProposalHash, int nVoteIn);
 
-    bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
-    bool CheckSignature(bool fSignatureCheck) const;
-    void SetVchSig(const std::vector<unsigned char>& vchSigIn) { vchSig = vchSigIn; }
     void Relay();
 
     std::string GetVoteString()
@@ -86,9 +79,11 @@ public:
     }
 
     uint256 GetHash() const;
-    uint256 GetSignatureHash() const { return GetHash(); }
-    std::string GetStrMessage() const;
 
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override { return GetHash(); }
+    std::string GetStrMessage() const override;
+    const CPubKey* GetPublicKey(std::string& strErrorRet) const override;
 
     ADD_SERIALIZE_METHODS;
 
@@ -118,13 +113,9 @@ public:
 // CFinalizedBudgetVote - Allow a masternode node to vote and broadcast throughout the network
 //
 
-class CFinalizedBudgetVote
+class CFinalizedBudgetVote : public CSignedMessage
 {
-private:
-    std::vector<unsigned char> vchSig;
-
 public:
-    int nMessVersion;
     bool fValid;  //if the vote is currently valid / counted
     bool fSynced; //if we've sent this to our peers
     CTxIn vin;
@@ -134,13 +125,13 @@ public:
     CFinalizedBudgetVote();
     CFinalizedBudgetVote(CTxIn vinIn, uint256 nBudgetHashIn);
 
-    bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
-    bool CheckSignature(bool fSignatureCheck) const;
     void Relay();
-
     uint256 GetHash() const;
-    uint256 GetSignatureHash() const { return GetHash(); }
-    std::string GetStrMessage() const;
+
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override { return GetHash(); }
+    std::string GetStrMessage() const override;
+    const CPubKey* GetPublicKey(std::string& strErrorRet) const override;
 
     ADD_SERIALIZE_METHODS;
 
