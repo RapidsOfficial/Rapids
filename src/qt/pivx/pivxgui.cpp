@@ -8,7 +8,7 @@
 #include "macdockiconhandler.h"
 #endif
 
-#include <qt/guiutil.h>
+#include "qt/guiutil.h"
 #include "clientmodel.h"
 #include "optionsmodel.h"
 #include "networkstyle.h"
@@ -24,6 +24,7 @@
 #include <QColor>
 #include <QShortcut>
 #include <QKeySequence>
+#include <QWindowStateChangeEvent>
 
 #include "util.h"
 
