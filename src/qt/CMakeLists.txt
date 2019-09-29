@@ -66,7 +66,6 @@ include_directories(${CMAKE_CURRENT_BINARY_DIR})
 PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${CMAKE_CURRENT_SOURCE_DIR}/paymentrequest.proto)
 
 SET(QT_SOURCES
-        ${CMAKE_CURRENT_SOURCE_DIR}/multisenddialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bantablemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/blockexplorer.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinaddressvalidator.cpp
@@ -77,8 +76,6 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/governancepage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/guiutil.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/intro.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/multisigdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/masternodelist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/networkstyle.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/notificator.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/optionsdialog.cpp
@@ -97,25 +94,16 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/coincontroldialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zpivcontroldialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/coincontroltreewidget.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/privacydialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/proposalframe.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/editaddressdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/masternodelist.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/openuridialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/overviewpage.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/paymentrequestplus.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/paymentserver.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/receivecoinsdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/receiverequestdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/recentrequeststablemodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/sendcoinsentry.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/signverifymessagedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactiondesc.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/transactiondescdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactionfilterproxy.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactionrecord.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/transactiontablemodel.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/transactionview.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/walletmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/walletmodeltransaction.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/zpivcontroldialog.cpp
