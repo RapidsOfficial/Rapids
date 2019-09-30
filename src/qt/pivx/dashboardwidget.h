@@ -173,7 +173,7 @@ private:
     void tryChartRefresh();
     void updateStakeFilter();
     QMap<int, std::pair<qint64, qint64>> getAmountBy();
-    void loadChartData(bool withMonthNames);
+    bool loadChartData(bool withMonthNames);
     void updateAxisX(const QStringList *arg = nullptr);
     void setChartShow(ChartShowType type);
     std::pair<int, int> getChartRange(QMap<int, std::pair<qint64, qint64>> amountsBy);

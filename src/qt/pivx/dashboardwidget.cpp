@@ -522,7 +522,7 @@ QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
     return amountBy;
 }
 
-void DashboardWidget::loadChartData(bool withMonthNames) {
+bool DashboardWidget::loadChartData(bool withMonthNames) {
 
     if (chartData) {
         delete chartData;
@@ -530,9 +530,14 @@ void DashboardWidget::loadChartData(bool withMonthNames) {
     }
 
     chartData = new ChartData();
-
     chartData->amountsByCache = getAmountBy(); // pair PIV, zPIV
+
     std::pair<int,int> range = getChartRange(chartData->amountsByCache);
+    if (range.first == 0 && range.second == 0) {
+        // Problem loading the chart.
+        return false;
+    }
+
     bool isOrderedByMonth = chartShow == MONTH;
     int daysInMonth = QDate(yearFilter, monthFilter, 1).daysInMonth();
 
@@ -558,6 +563,8 @@ void DashboardWidget::loadChartData(bool withMonthNames) {
             chartData->maxValue = max;
         }
     }
+
+    return true;
 }
 
 void DashboardWidget::onChartYearChanged(const QString& yearStr) {
@@ -699,6 +706,11 @@ std::pair<int, int> DashboardWidget::getChartRange(QMap<int, std::pair<qint64, q
             return std::make_pair(1, 13);
         case ALL: {
             QList<int> keys = amountsBy.uniqueKeys();
+            if (keys.isEmpty()) {
+                // This should never happen, ALL means from the beginning of time and if this is called then it must have at least one stake..
+                inform(tr("Error loading chart, invalid data"));
+                return std::make_pair(0, 0);
+            }
             qSort(keys);
             return std::make_pair(keys.first(), keys.last() + 1);
         }
@@ -770,8 +782,8 @@ void DashboardWidget::run(int type) {
 #ifdef USE_QTCHARTS
     if (type == REQUEST_LOAD_TASK) {
         bool withMonthNames = !isChartMin && (chartShow == YEAR);
-        loadChartData(withMonthNames);
-        QMetaObject::invokeMethod(this, "onChartRefreshed", Qt::QueuedConnection);
+        if (loadChartData(withMonthNames))
+            QMetaObject::invokeMethod(this, "onChartRefreshed", Qt::QueuedConnection);
     }
 #endif
 }
