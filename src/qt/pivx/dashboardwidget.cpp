@@ -226,6 +226,7 @@ void DashboardWidget::loadWalletModel(){
         stakesFilter->setOnlyStakes(true);
         stakesFilter->setSourceModel(txModel);
         stakesFilter->sort(TransactionTableModel::Date, Qt::AscendingOrder);
+        hasStakes = stakesFilter->rowCount() > 0;
         loadChart();
 #endif
     }
@@ -236,8 +237,12 @@ void DashboardWidget::loadWalletModel(){
 void DashboardWidget::onTxArrived(const QString& hash) {
     showList();
 #ifdef USE_QTCHARTS
-    if (walletModel->isCoinStakeMine(hash))
+    if (walletModel->isCoinStakeMine(hash)) {
+        // Update value if this is our first stake
+        if (!hasStakes)
+            hasStakes = stakesFilter->rowCount() > 0;
         tryChartRefresh();
+    }
 #endif
 }
 
@@ -327,12 +332,17 @@ void DashboardWidget::changeTheme(bool isLightTheme, QString& theme){
 #ifdef USE_QTCHARTS
 
 void DashboardWidget::tryChartRefresh() {
-    if (hasStakes()) {
-        // Check for min update time to not reload the UI so often if the node is syncing.
-        int64_t now = GetTime();
-        if (lastRefreshTime + CHART_LOAD_MIN_TIME_INTERVAL < now) {
-            lastRefreshTime = now;
-            refreshChart();
+    if (hasStakes) {
+        // First check that everything was loaded properly.
+        if (!chart) {
+            loadChart();
+        } else {
+            // Check for min update time to not reload the UI so often if the node is syncing.
+            int64_t now = GetTime();
+            if (lastRefreshTime + CHART_LOAD_MIN_TIME_INTERVAL < now) {
+                lastRefreshTime = now;
+                refreshChart();
+            }
         }
     }
 }
@@ -350,7 +360,7 @@ void DashboardWidget::setChartShow(ChartShowType type) {
 const QStringList monthsNames = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 
 void DashboardWidget::loadChart(){
-    if (hasStakes()) {
+    if (hasStakes) {
         if (!chart) {
             showHideEmptyChart(false, false);
             initChart();
@@ -743,7 +753,7 @@ void DashboardWidget::onChartArrowClicked() {
 }
 
 void DashboardWidget::windowResizeEvent(QResizeEvent *event){
-    if (hasStakes() > 0 && axisX) {
+    if (hasStakes && axisX) {
         if (width() > 1300) {
             if (isChartMin) {
                 isChartMin = false;
@@ -770,10 +780,6 @@ void DashboardWidget::windowResizeEvent(QResizeEvent *event){
             }
         }
     }
-}
-
-bool DashboardWidget::hasStakes() {
-    return stakesFilter->rowCount() > 0;
 }
 
 #endif

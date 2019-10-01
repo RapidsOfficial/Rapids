@@ -166,6 +166,7 @@ private:
     bool hasZpivStakes = false;
 
     ChartData* chartData = nullptr;
+    bool hasStakes = false;
 
     void initChart();
     void showHideEmptyChart(bool show, bool loading, bool forceView = false);
@@ -177,7 +178,6 @@ private:
     void updateAxisX(const QStringList *arg = nullptr);
     void setChartShow(ChartShowType type);
     std::pair<int, int> getChartRange(QMap<int, std::pair<qint64, qint64>> amountsBy);
-    bool hasStakes();
 
 private slots:
     void onChartRefreshed();
