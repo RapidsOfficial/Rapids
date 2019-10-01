@@ -129,6 +129,16 @@ CAmount WalletModel::getWatchImmatureBalance() const
     return wallet->GetImmatureWatchOnlyBalance();
 }
 
+CAmount WalletModel::getDelegatedBalance() const
+{
+    return wallet->GetDelegatedBalance();
+}
+
+CAmount WalletModel::getColdStakedBalance() const
+{
+    return wallet->GetColdStakingBalance();
+}
+
 void WalletModel::updateStatus()
 {
     EncryptionStatus newEncryptionStatus = getEncryptionStatus();
@@ -173,10 +183,12 @@ void WalletModel::pollBalanceChanged()
 
 void WalletModel::emitBalanceChanged()
 {
+    // TODO: Improve all of this..
     // Force update of UI elements even when no values have changed
     emit balanceChanged(cachedBalance, cachedUnconfirmedBalance, cachedImmatureBalance,
                         cachedZerocoinBalance, cachedUnconfirmedZerocoinBalance, cachedImmatureZerocoinBalance,
-                        cachedWatchOnlyBalance, cachedWatchUnconfBalance, cachedWatchImmatureBalance);
+                        cachedWatchOnlyBalance, cachedWatchUnconfBalance, cachedWatchImmatureBalance,
+                        cachedDelegatedBalance, cachedColdStakedBalance);
 }
 
 void WalletModel::checkBalanceChanged()
@@ -193,6 +205,11 @@ void WalletModel::checkBalanceChanged()
     CAmount newWatchOnlyBalance = 0;
     CAmount newWatchUnconfBalance = 0;
     CAmount newWatchImmatureBalance = 0;
+    // Cold staking
+    CAmount newColdStakedBalance =  getColdStakedBalance();
+    CAmount newDelegatedBalance = getDelegatedBalance();
+
+
     if (haveWatchOnly()) {
         newWatchOnlyBalance = getWatchBalance();
         newWatchUnconfBalance = getWatchUnconfirmedBalance();
@@ -202,7 +219,7 @@ void WalletModel::checkBalanceChanged()
     if (cachedBalance != newBalance || cachedUnconfirmedBalance != newUnconfirmedBalance || cachedImmatureBalance != newImmatureBalance ||
         cachedZerocoinBalance != newZerocoinBalance || cachedUnconfirmedZerocoinBalance != newUnconfirmedZerocoinBalance || cachedImmatureZerocoinBalance != newImmatureZerocoinBalance ||
         cachedWatchOnlyBalance != newWatchOnlyBalance || cachedWatchUnconfBalance != newWatchUnconfBalance || cachedWatchImmatureBalance != newWatchImmatureBalance ||
-        cachedTxLocks != nCompleteTXLocks ) {
+        cachedTxLocks != nCompleteTXLocks || cachedDelegatedBalance != newDelegatedBalance || cachedColdStakedBalance != newColdStakedBalance) {
         cachedBalance = newBalance;
         cachedUnconfirmedBalance = newUnconfirmedBalance;
         cachedImmatureBalance = newImmatureBalance;
@@ -213,9 +230,12 @@ void WalletModel::checkBalanceChanged()
         cachedWatchOnlyBalance = newWatchOnlyBalance;
         cachedWatchUnconfBalance = newWatchUnconfBalance;
         cachedWatchImmatureBalance = newWatchImmatureBalance;
+        cachedColdStakedBalance = newColdStakedBalance;
+        cachedDelegatedBalance = newDelegatedBalance;
         emit balanceChanged(newBalance, newUnconfirmedBalance, newImmatureBalance,
                             newZerocoinBalance, newUnconfirmedZerocoinBalance, newImmatureZerocoinBalance,
-                            newWatchOnlyBalance, newWatchUnconfBalance, newWatchImmatureBalance);
+                            newWatchOnlyBalance, newWatchUnconfBalance, newWatchImmatureBalance,
+                            newDelegatedBalance, newColdStakedBalance);
     }
 }
 

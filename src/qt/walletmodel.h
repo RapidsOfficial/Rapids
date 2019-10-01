@@ -147,6 +147,10 @@ public:
     CAmount getWatchBalance() const;
     CAmount getWatchUnconfirmedBalance() const;
     CAmount getWatchImmatureBalance() const;
+
+    CAmount getDelegatedBalance() const;
+    CAmount getColdStakedBalance() const;
+
     EncryptionStatus getEncryptionStatus() const;
     bool isWalletUnlocked() const;
     CKey generateNewKey() const; //for temporary paper wallet key generation
@@ -295,6 +299,9 @@ private:
     CAmount cachedWatchOnlyBalance;
     CAmount cachedWatchUnconfBalance;
     CAmount cachedWatchImmatureBalance;
+    CAmount cachedDelegatedBalance;
+    CAmount cachedColdStakedBalance;
+
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
     int cachedTxLocks;
@@ -310,7 +317,8 @@ signals:
     // Signal that balance in wallet changed
     void balanceChanged(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                         const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
-                        const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance);
+                        const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
+                        const CAmount& delegatedBalance, const CAmount& coldStakingBalance);
 
     // Encryption status of wallet changed
     void encryptionStatusChanged(int status);
