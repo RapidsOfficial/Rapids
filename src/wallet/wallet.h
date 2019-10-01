@@ -15,6 +15,7 @@
 #include "key.h"
 #include "keystore.h"
 #include "main.h"
+#include "pairresult.h"
 #include "primitives/block.h"
 #include "primitives/transaction.h"
 #include "zpiv/zerocoin.h"
@@ -366,10 +367,10 @@ public:
     //  keystore implementation
     // Generate a new key
     CPubKey GenerateNewKey();
-    CBitcoinAddress getNewAddress(const std::string addressLabel, const std::string purpose,
+    PairResult getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,
                                            const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
-    CBitcoinAddress getNewAddress(std::string label);
-    CBitcoinAddress getNewStakingAddress(std::string label);
+    PairResult getNewAddress(CBitcoinAddress& ret, std::string label);
+    PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label);
     CBitcoinAddress GenerateNewAutoMintKey();
     int64_t GetKeyCreationTime(CPubKey pubkey);
     int64_t GetKeyCreationTime(const CBitcoinAddress& address);

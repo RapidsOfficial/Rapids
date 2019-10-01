@@ -92,7 +92,17 @@ void RequestDialog::onNextClicked(){
         info = new SendCoinsRecipient();
         info->label = ui->lineEditLabel->text();
         info->message = ui->lineEditDescription->text();
-        info->address = QString::fromStdString(walletModel->getNewAddress((info->label.isEmpty() ? "" : info->label.toStdString())).ToString());
+
+        CBitcoinAddress address;
+        PairResult r = walletModel->getNewAddress(address, (info->label.isEmpty() ? "" : info->label.toStdString()));
+
+        if (!r.result) {
+            // TODO: notify user about this error
+            close();
+            return;
+        }
+
+        info->address = QString::fromStdString(address.ToString());
         int displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
         bool isValueValid = true;
         CAmount value = GUIUtil::parseValue(

@@ -831,12 +831,12 @@ int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address){
     return 0;
 }
 
-CBitcoinAddress WalletModel::getNewAddress(std::string label) const{
-    return wallet->getNewAddress(label);
+PairResult WalletModel::getNewAddress(CBitcoinAddress& ret, std::string label) const{
+    return wallet->getNewAddress(ret, label);
 }
 
-CBitcoinAddress WalletModel::getNewStakingAddress(std::string label) const{
-    return wallet->getNewStakingAddress(label);
+PairResult WalletModel::getNewStakingAddress(CBitcoinAddress& ret,std::string label) const{
+    return wallet->getNewStakingAddress(ret, label);
 }
 
 // returns a list of COutputs from COutPoints
