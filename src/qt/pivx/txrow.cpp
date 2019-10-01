@@ -84,6 +84,14 @@ void TxRow::setType(bool isLightTheme, int type, bool isConfirmed){
             path = "://ic-transaction-mint";
             css = "text-list-amount-send";
             break;
+        case TransactionRecord::StakeDelegated:
+            path = "://ic-transaction-stake-delegated";
+            css = "text-list-amount-receive";
+            break;
+        case TransactionRecord::StakeHot:
+            path = "://ic-transaction-stake-hot";
+            css = "text-list-amount-unconfirmed";
+            break;
         default:
             path = "://ic-pending";
             sameIcon = true;

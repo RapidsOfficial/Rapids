@@ -578,6 +578,8 @@ RES_ICONS = \
   qt/pivx/res/img/ic-arrow-drop-up-purple.svg \
   qt/pivx/res/img/ic-check-liliac-indeterminate.svg \
   qt/pivx/res/img/ic-check-box-liliac-indeterminate.svg \
+  qt/pivx/res/img/ic-transaction-stake-delegated.svg \
+  qt/pivx/res/img/ic-transaction-stake-hot.svg \
   qt/pivx/res/img/ic-check-box-indeterminate.svg \
   qt/pivx/res/img/ani-loading-dark.gif \
   qt/pivx/res/img/ani-loading.gif

@@ -51,6 +51,13 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
 
     if (wtx.IsCoinStake()) {
         TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+        // Check for cold stakes.
+        if (wtx.HasP2CSOutputs()) {
+            loadHotOrColdStake(wallet, wtx, sub);
+            parts.append(sub);
+            return parts;
+        }
+
         CTxDestination address;
         if (!wtx.HasZerocoinSpendInputs() && !ExtractDestination(wtx.vout[1].scriptPubKey, address))
             return parts;
@@ -313,6 +320,28 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     }
 
     return parts;
+}
+
+void TransactionRecord::loadHotOrColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record)
+{
+    record.involvesWatchAddress = false;
+    CTxOut p2csUtxo = wtx.vout[1];
+    bool isSpendable = wallet->IsMine(p2csUtxo) & ISMINE_SPENDABLE_DELEGATED;
+    if (isSpendable) {
+        record.type = TransactionRecord::StakeDelegated;
+        record.credit = wtx.nDelegatedCreditCached;
+    } else {
+        record.type = TransactionRecord::StakeHot;
+        record.credit = wtx.nColdCreditCached;
+    }
+
+    CTxDestination address;
+    if (!ExtractDestination(p2csUtxo.scriptPubKey, address, isSpendable)) {
+        // this shouldn't happen..
+        record.address = "No available staking address";
+    } else {
+        record.address = CBitcoinAddress(address).ToString();
+    }
 }
 
 bool IsZPIVType(TransactionRecord::Type type)
