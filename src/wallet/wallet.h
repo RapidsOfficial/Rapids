@@ -428,7 +428,8 @@ public:
     void ResendWalletTransactions();
     CAmount GetBalance() const;
     CAmount GetColdStakingBalance() const;  // delegated coins for which we have the staking key
-    CAmount GetDelegatedBalance() const;  // delegated coins for which we have the spending key
+    CAmount GetStakingBalance(const bool fIncludeColdStaking = true) const;
+    CAmount GetDelegatedBalance() const;    // delegated coins for which we have the spending key
     CAmount GetZerocoinBalance(bool fMatureOnly) const;
     CAmount GetUnconfirmedZerocoinBalance() const;
     CAmount GetImmatureZerocoinBalance() const;

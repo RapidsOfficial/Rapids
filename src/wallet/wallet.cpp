@@ -1742,6 +1742,11 @@ CAmount CWallet::GetColdStakingBalance() const
     return nTotal;
 }
 
+CAmount CWallet::GetStakingBalance(const bool fIncludeColdStaking) const
+{
+    return GetBalance() + (fIncludeColdStaking ? GetColdStakingBalance() : 0);
+}
+
 CAmount CWallet::GetDelegatedBalance() const
 {
     CAmount nTotal = 0;
@@ -2197,7 +2202,7 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
 bool CWallet::MintableCoins()
 {
     LOCK(cs_main);
-    CAmount nBalance = GetBalance() + GetColdStakingBalance();
+    CAmount nBalance = GetStakingBalance(GetBoolArg("-coldstaking", true));
     CAmount nZpivBalance = GetZerocoinBalance(false);
 
     int chainHeight = chainActive.Height();
@@ -2684,7 +2689,7 @@ bool CWallet::CreateCoinStake(
     txNew.vout.push_back(CTxOut(0, scriptEmpty));
 
     // Choose coins to use
-    CAmount nBalance = GetBalance() + GetColdStakingBalance();
+    CAmount nBalance = GetStakingBalance();
 
     if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
         return error("CreateCoinStake : invalid reserve balance amount");
