@@ -1132,38 +1132,12 @@ CAmount CWalletTx::GetDebit(const isminefilter& filter) const
 
 CAmount CWalletTx::GetColdStakingDebit(bool fUseCache) const
 {
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    if (fUseCache && fColdDebitCached)
-        return nColdDebitCached;
-
-    CAmount nDebit = GetDebit(ISMINE_COLD);
-    nColdDebitCached = nDebit;
-    fColdDebitCached = true;
-    return nDebit;
+    return UpdateAmount(nColdDebitCached, fColdDebitCached, fUseCache, ISMINE_SPENDABLE_DELEGATED, false);
 }
 
 CAmount CWalletTx::GetStakeDelegationDebit(bool fUseCache) const
 {
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    if (fUseCache && fDelegatedDebitCached)
-        return nDelegatedDebitCached;
-
-    CAmount nDebit = GetDebit(ISMINE_SPENDABLE_DELEGATED);
-    nDelegatedDebitCached = nDebit;
-    fDelegatedDebitCached = true;
-    return nDebit;
+    return UpdateAmount(nDelegatedDebitCached, fDelegatedDebitCached, fUseCache, ISMINE_SPENDABLE_DELEGATED, false);
 }
 
 CAmount CWalletTx::GetCredit(const isminefilter& filter, const bool fUnspent) const
@@ -1229,42 +1203,20 @@ CAmount CWalletTx::GetImmatureCredit(bool fUseCache) const
 
 CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
 {
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    if (fUseCache && fAvailableCreditCached)
-        return nAvailableCreditCached;
-
-    CAmount nCredit = GetCredit(ISMINE_SPENDABLE, true);
-    nAvailableCreditCached = nCredit;
-    fAvailableCreditCached = true;
-    return nCredit;
-}
+    return UpdateAmount(nAvailableCreditCached, fAvailableCreditCached, fUseCache, ISMINE_SPENDABLE);}
 
 CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
 {
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    if (fUseCache && fColdCreditCached)
-        return nColdCreditCached;
-
-    CAmount nCredit = GetCredit(ISMINE_COLD, true);
-    nColdCreditCached = nCredit;
-    fColdCreditCached = true;
-    return nCredit;
+    return UpdateAmount(nColdCreditCached, fColdCreditCached, fUseCache, ISMINE_COLD);
 }
 
 CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
 {
+    return UpdateAmount(nDelegatedCreditCached, fDelegatedCreditCached, fUseCache, ISMINE_SPENDABLE_DELEGATED);
+}
+
+CAmount CWalletTx::UpdateAmount(CAmount& amountToUpdate, bool& cacheFlagToUpdate, bool fUseCache, isminetype mimeType, bool fCredit) const
+{
     if (pwallet == 0)
         return 0;
 
@@ -1272,13 +1224,17 @@ CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
     if (IsCoinBase() && GetBlocksToMaturity() > 0)
         return 0;
 
-    if (fUseCache && fDelegatedCreditCached)
-        return nDelegatedCreditCached;
+    if (fUseCache && cacheFlagToUpdate)
+        return amountToUpdate;
 
-    CAmount nCredit = GetCredit(ISMINE_SPENDABLE_DELEGATED, true);
-    nDelegatedCreditCached = nCredit;
-    fDelegatedCreditCached = true;
-    return nCredit;
+    CAmount amount;
+    if (!fCredit)
+        amount = GetDebit(mimeType);
+    else
+        amount = GetCredit(mimeType, true);
+    amountToUpdate = amount;
+    cacheFlagToUpdate = true;
+    return amount;
 }
 
 // Return sum of unlocked coins
