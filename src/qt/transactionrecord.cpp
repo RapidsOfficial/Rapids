@@ -53,7 +53,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
         TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
         // Check for cold stakes.
         if (wtx.HasP2CSOutputs()) {
-            loadHotOrColdStake(wallet, wtx, sub);
+            loadHotOrColdStakeOrContract(wallet, wtx, sub);
             parts.append(sub);
             return parts;
         }
@@ -156,6 +156,13 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
             sub.idx = parts.size();
             parts.append(sub);
         }
+    } else if (wtx.HasP2CSOutputs()) {
+        // Delegate tx.
+        // TODO: Think this well..
+        TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+        loadHotOrColdStakeOrContract(wallet, wtx, sub, true);
+        parts.append(sub);
+        return parts;
     } else if (nNet > 0 || wtx.IsCoinBase()) {
         //
         // Credit
@@ -322,17 +329,40 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     return parts;
 }
 
-void TransactionRecord::loadHotOrColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record)
+void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract)
 {
     record.involvesWatchAddress = false;
-    CTxOut p2csUtxo = wtx.vout[1];
+
+    // Get the p2cs
+    CTxOut p2csUtxo;
+    for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
+        const CTxOut &txout = wtx.vout[nOut];
+        if (txout.scriptPubKey.IsPayToColdStaking()) {
+            p2csUtxo = txout;
+            break;
+        }
+    }
     bool isSpendable = wallet->IsMine(p2csUtxo) & ISMINE_SPENDABLE_DELEGATED;
-    if (isSpendable) {
-        record.type = TransactionRecord::StakeDelegated;
+
+    if (isContract) {
+        record.type = TransactionRecord::P2CSDelegation;
+        record.debit = wtx.nDelegatedDebitCached;
         record.credit = wtx.nDelegatedCreditCached;
+        if (isSpendable) {
+            // Means that this wallet can redeem the p2cs, this was a send to yourself..
+            // TODO: add some way to represent this..
+        }
+
     } else {
-        record.type = TransactionRecord::StakeHot;
-        record.credit = wtx.nColdCreditCached;
+        // Stake
+        if (isSpendable) {
+            record.type = TransactionRecord::StakeDelegated;
+            record.credit = wtx.nDelegatedCreditCached;
+            record.debit = wtx.nDelegatedDebitCached;
+        } else {
+            record.type = TransactionRecord::StakeHot;
+            record.credit = wtx.nColdCreditCached;
+        }
     }
 
     CTxDestination address;

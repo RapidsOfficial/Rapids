@@ -442,6 +442,8 @@ QString TransactionTableModel::formatTxType(const TransactionRecord* wtx) const
         return tr("zPIV Stake");
     case TransactionRecord::StakeHot:
         return tr("PIV Stake in behalf of");
+    case TransactionRecord::P2CSDelegation:
+        return tr("Stake delegation");
     case TransactionRecord::Generated:
         return tr("Mined");
     case TransactionRecord::ObfuscationDenominate:
@@ -520,6 +522,7 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, b
     case TransactionRecord::ZerocoinSpend_Change_zPiv:
     case TransactionRecord::StakeZPIV:
         return tr("Anonymous");
+    case TransactionRecord::P2CSDelegation:
     case TransactionRecord::SendToSelf: {
         QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
         return label.isEmpty() ? "" : label;

@@ -307,5 +307,7 @@
         <file alias="ic-pending">pivx/res/img/ic-pending.svg</file>
         <file alias="ic-transaction-stake-delegated">pivx/res/img/ic-transaction-stake-delegated.svg</file>
         <file alias="ic-transaction-stake-hot">pivx/res/img/ic-transaction-stake-hot.svg</file>
+        <file alias="ic-transaction-cs-contract">pivx/res/img/ic-transaction-cs-contract.svg</file>
+
     </qresource>
 </RCC>
