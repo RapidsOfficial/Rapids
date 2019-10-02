@@ -52,7 +52,7 @@ public:
             return outputIndex;
         }
 
-        bool castOutputIndex(int& n);
+        bool castOutputIndex(int& n) const;
 
         void setOutputIndex(const std::string& outputIndex)
         {
