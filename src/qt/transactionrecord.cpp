@@ -347,7 +347,7 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
     if (isContract) {
         record.type = TransactionRecord::P2CSDelegation;
         record.debit = wtx.nDelegatedDebitCached;
-        record.credit = wtx.nDelegatedCreditCached;
+        record.credit = wtx.GetStakeDelegationCredit();
         if (isSpendable) {
             // Means that this wallet can redeem the p2cs, this was a send to yourself..
             // TODO: add some way to represent this..
@@ -357,20 +357,23 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
         // Stake
         if (isSpendable) {
             record.type = TransactionRecord::StakeDelegated;
-            record.credit = wtx.nDelegatedCreditCached;
             record.debit = wtx.nDelegatedDebitCached;
+            record.credit = wtx.GetStakeDelegationCredit();
         } else {
             record.type = TransactionRecord::StakeHot;
-            record.credit = wtx.nColdCreditCached;
+            record.credit = wtx.GetColdStakingCredit();
         }
     }
 
     CTxDestination address;
-    if (!ExtractDestination(p2csUtxo.scriptPubKey, address, isSpendable)) {
+    if (!ExtractDestination(p2csUtxo.scriptPubKey, address, !isSpendable)) {
         // this shouldn't happen..
         record.address = "No available staking address";
     } else {
-        record.address = CBitcoinAddress(address).ToString();
+        record.address = CBitcoinAddress(
+                address,
+                ((isSpendable) ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)
+        ).ToString();
     }
 }
 
