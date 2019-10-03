@@ -83,6 +83,7 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     ui->pushButtonYear->setChecked(true);
 
     setCssProperty(ui->pushButtonChartArrow, "btn-chart-arrow");
+    setCssProperty(ui->pushButtonChartRight, "btn-chart-arrow-right");
 
     connect(ui->comboBoxYears, SIGNAL(currentIndexChanged(const QString&)), this,SLOT(onChartYearChanged(const QString&)));
 
@@ -370,7 +371,8 @@ void DashboardWidget::loadChart(){
             for (int i = 1; i < 13; ++i) ui->comboBoxMonths->addItem(QString(monthsNames[i-1]), QVariant(i));
             ui->comboBoxMonths->setCurrentIndex(monthFilter - 1);
             connect(ui->comboBoxMonths, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onChartMonthChanged(const QString&)));
-            connect(ui->pushButtonChartArrow, SIGNAL(clicked()), this, SLOT(onChartArrowClicked()));
+            connect(ui->pushButtonChartArrow, &QPushButton::clicked, [this](){ onChartArrowClicked(true); });
+            connect(ui->pushButtonChartRight, &QPushButton::clicked, [this](){ onChartArrowClicked(false); });
         }
         refreshChart();
         changeChartColors();
@@ -744,10 +746,18 @@ void DashboardWidget::updateAxisX(const QStringList* args) {
     axisX->append(months);
 }
 
-void DashboardWidget::onChartArrowClicked() {
-    dayStart--;
-    if (dayStart == 0) {
-        dayStart = QDate(yearFilter, monthFilter, 1).daysInMonth();
+void DashboardWidget::onChartArrowClicked(bool goLeft) {
+    if (goLeft) {
+        dayStart--;
+        if (dayStart == 0) {
+            dayStart = QDate(yearFilter, monthFilter, 1).daysInMonth();
+        }
+    } else {
+        int dayInMonth = QDate(yearFilter, monthFilter, dayStart).daysInMonth();
+        dayStart++;
+        if (dayStart > dayInMonth) {
+            dayStart = 1;
+        }
     }
     refreshChart();
 }
