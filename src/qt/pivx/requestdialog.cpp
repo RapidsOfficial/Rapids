@@ -10,6 +10,7 @@
 #include "qt/pivx/qtutils.h"
 #include "guiutil.h"
 #include "amount.h"
+#include "pairresult.h"
 #include "optionsmodel.h"
 
 RequestDialog::RequestDialog(QWidget *parent) :
@@ -31,10 +32,6 @@ RequestDialog::RequestDialog(QWidget *parent) :
     // Combo Coins
     setCssProperty(ui->comboBoxCoin, "btn-combo-coins");
     setCssProperty(ui->comboContainer, "container-purple");
-
-    ui->comboBoxCoin->addItem("PIV", 0);
-    ui->comboBoxCoin->addItem("zPIV", 1);
-    ui->comboBoxCoin->setView(new QListView());
 
     // Label
     ui->labelSubtitleLabel->setText(tr("Label"));
@@ -86,6 +83,13 @@ void RequestDialog::setWalletModel(WalletModel *model){
     this->walletModel = model;
 }
 
+void RequestDialog::setPaymentRequest(bool isPaymentRequest) {
+    this->isPaymentRequest = isPaymentRequest;
+    if (!this->isPaymentRequest) {
+        ui->labelMessage->setText(tr("Creates an address to receive coin delegations and be able to stake them."));
+        ui->labelTitle->setText(tr("New Cold Staking Address"));
+    }
+}
 
 void RequestDialog::onNextClicked(){
     if(walletModel) {
@@ -93,16 +97,7 @@ void RequestDialog::onNextClicked(){
         info->label = ui->lineEditLabel->text();
         info->message = ui->lineEditDescription->text();
 
-        CBitcoinAddress address;
-        PairResult r = walletModel->getNewAddress(address, (info->label.isEmpty() ? "" : info->label.toStdString()));
-
-        if (!r.result) {
-            // TODO: notify user about this error
-            close();
-            return;
-        }
-
-        info->address = QString::fromStdString(address.ToString());
+        //Amount
         int displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
         bool isValueValid = true;
         CAmount value = GUIUtil::parseValue(
@@ -115,7 +110,30 @@ void RequestDialog::onNextClicked(){
         if(value <= 0 || !isValueValid){
             return;
         }
-        ui->labelTitle->setText("Request for " + BitcoinUnits::format(displayUnit, value, false, BitcoinUnits::separatorAlways) + " PIV");
+
+        // address
+        std::string label = info->label.isEmpty() ? "" : info->label.toStdString();
+        QString title;
+
+        CBitcoinAddress address;
+        PairResult r(false);
+        if (this->isPaymentRequest) {
+            r = walletModel->getNewAddress(address, label);
+            title = "Request for " + BitcoinUnits::format(displayUnit, value, false, BitcoinUnits::separatorAlways) + " PIV";
+        } else {
+            r = walletModel->getNewStakingAddress(address, label);
+            title = "Cold Staking Address Generated";
+        }
+
+        if (!r.result) {
+            // TODO: notify user about this error
+            close();
+            return;
+        }
+
+        info->address = QString::fromStdString(address.ToString());
+        ui->labelTitle->setText(title);
+
         updateQr(info->address);
         ui->labelAddress->setText(info->address);
         ui->buttonsStack->setVisible(false);

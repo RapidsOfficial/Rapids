@@ -25,6 +25,7 @@ public:
     ~RequestDialog();
 
     void setWalletModel(WalletModel *model);
+    void setPaymentRequest(bool isPaymentRequest);
     int res = -1;
 
 private slots:
@@ -35,6 +36,7 @@ private slots:
 private:
     Ui::RequestDialog *ui;
     int pos = 0;
+    bool isPaymentRequest = true;
     WalletModel *walletModel;
     // Cached last address
     SendCoinsRecipient *info = nullptr;

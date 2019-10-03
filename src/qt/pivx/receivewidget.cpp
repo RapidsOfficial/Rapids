@@ -95,6 +95,10 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     ui->btnRequest->setSubTitleClassAndText("text-subtitle", "Request payment with a fixed amount.");
     ui->btnRequest->layout()->setMargin(0);
 
+    ui->btnColdStaking->setTitleClassAndText("btn-title-grey", "Create Cold Stake Address");
+    ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", "Creates an address to receive coin\ndelegations and be able to stake them.");
+    ui->btnColdStaking->layout()->setMargin(0);
+
     ui->pushButtonLabel->setText(tr("Add Label"));
     ui->pushButtonLabel->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonLabel, "btn-secundary-label");
@@ -126,6 +130,7 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     connect(ui->pushButtonNewAddress, SIGNAL(clicked()), this, SLOT(onNewAddressClicked()));
     connect(ui->listViewAddress, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
     connect(ui->btnRequest, SIGNAL(clicked()), this, SLOT(onRequestClicked()));
+    connect(ui->btnColdStaking, SIGNAL(clicked()), this, SLOT(onColdStakeClicked()));
     connect(ui->btnMyAddresses, SIGNAL(clicked()), this, SLOT(onMyAddressesClicked()));
 }
 
@@ -261,12 +266,21 @@ void ReceiveWidget::onCopyClicked(){
 
 
 void ReceiveWidget::onRequestClicked(){
+    showAddressGenerationDialog(true);
+}
+
+void ReceiveWidget::onColdStakeClicked() {
+    showAddressGenerationDialog(false);
+}
+
+void ReceiveWidget::showAddressGenerationDialog(bool isPaymentRequest) {
     if(walletModel && !isShowingDialog) {
         if (!verifyWalletUnlocked()) return;
         isShowingDialog = true;
         showHideOp(true);
         RequestDialog *dialog = new RequestDialog(window);
         dialog->setWalletModel(walletModel);
+        dialog->setPaymentRequest(isPaymentRequest);
         openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 12);
         if (dialog->res == 1){
             inform(tr("URI copied to clipboard"));

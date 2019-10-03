@@ -30,6 +30,7 @@ private slots:
     void onPrivacyClicked();
     void onAddressClicked();
     void onMasterNodesClicked();
+    void onColdStakingClicked();
     void onSettingsClicked();
     void onReceiveClicked();
     void updateButtonStyles();

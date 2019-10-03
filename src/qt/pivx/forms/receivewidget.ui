@@ -364,6 +364,9 @@
            <widget class="OptionButton" name="btnRequest" native="true"/>
           </item>
           <item>
+           <widget class="OptionButton" name="btnColdStaking" native="true"/>
+          </item>
+          <item>
            <widget class="OptionButton" name="btnMyAddresses" native="true">
             <property name="sizePolicy">
              <sizepolicy hsizetype="Preferred" vsizetype="Minimum">

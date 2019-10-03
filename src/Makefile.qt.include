@@ -88,6 +88,7 @@ QT_FORMS_UI = \
   qt/pivx/forms/defaultdialog.ui \
   qt/pivx/forms/denomgenerationdialog.ui \
   qt/pivx/forms/privacywidget.ui \
+  qt/pivx/forms/coldstakingwidget.ui \
   qt/pivx/settings/forms/settingsbackupwallet.ui \
   qt/pivx/settings/forms/settingsbittoolwidget.ui \
   qt/pivx/settings/forms/settingsconsolewidget.ui \
@@ -181,6 +182,7 @@ QT_MOC_CPP = \
   qt/pivx/moc_defaultdialog.cpp \
   qt/pivx/moc_denomgenerationdialog.cpp \
   qt/pivx/moc_privacywidget.cpp \
+  qt/pivx/moc_coldstakingwidget.cpp \
   qt/pivx/settings/moc_settingsbackupwallet.cpp \
   qt/pivx/settings/moc_settingsbittoolwidget.cpp \
   qt/pivx/settings/moc_settingsconsolewidget.cpp \
@@ -306,6 +308,7 @@ BITCOIN_QT_H = \
   qt/pivx/defaultdialog.h \
   qt/pivx/denomgenerationdialog.h \
   qt/pivx/privacywidget.h \
+  qt/pivx/coldstakingwidget.h \
   qt/pivx/settings/settingsbackupwallet.h \
   qt/pivx/settings/settingsbittoolwidget.h \
   qt/pivx/settings/settingsconsolewidget.h \
@@ -402,6 +405,8 @@ RES_ICONS = \
   qt/pivx/res/img/ic-update.svg \
   qt/pivx/res/img/bg-multi-number.svg \
   qt/pivx/res/img/ic-check-mint-off.svg \
+  qt/pivx/res/img/ic-nav-cold-staking.svg \
+  qt/pivx/res/img/ic-nav-cold-staking-active.svg \
   qt/pivx/res/img/ic-nav-dashboard-active.svg \
   qt/pivx/res/img/ic-wallet-status-locked.svg \
   qt/pivx/res/img/bg-splash.svg \
@@ -676,6 +681,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/defaultdialog.cpp \
   qt/pivx/denomgenerationdialog.cpp \
   qt/pivx/privacywidget.cpp \
+  qt/pivx/coldstakingwidget.cpp \
   qt/pivx/settings/settingsbackupwallet.cpp \
   qt/pivx/settings/settingsbittoolwidget.cpp \
   qt/pivx/settings/settingsconsolewidget.cpp \

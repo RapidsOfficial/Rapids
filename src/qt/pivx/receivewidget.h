@@ -37,6 +37,7 @@ public:
 
 public slots:
     void onRequestClicked();
+    void onColdStakeClicked();
     void onMyAddressesClicked();
     void onNewAddressClicked();
 
@@ -62,6 +63,7 @@ private:
 
     void updateQr(QString address);
     void updateLabel();
+    void showAddressGenerationDialog(bool isPaymentRequest);
 
     bool isShowingDialog = false;
 
