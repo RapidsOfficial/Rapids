@@ -32,6 +32,11 @@ public:
 
     void run(int type) override;
     void onError(QString error, int type) override;
+    void emitMessage(const QString& title, const QString& message, unsigned int style, bool* ret = nullptr);
+
+    QString translate(const char *msg) {
+        return tr(msg);
+    }
 
 signals:
     void message(const QString& title, const QString& body, unsigned int style, bool* ret = nullptr);
@@ -56,7 +61,6 @@ protected:
     void warn(const QString& title, const QString& message);
     bool ask(const QString& title, const QString& message);
     void showDialog(QDialog *dialog, int xDiv = 3, int yDiv = 5);
-    void emitMessage(const QString& title, const QString& message, unsigned int style, bool* ret = nullptr);
 
     bool verifyWalletUnlocked();
 
