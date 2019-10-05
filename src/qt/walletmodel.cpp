@@ -351,7 +351,30 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             setAddress.insert(rcp.address);
             ++nAddresses;
 
-            CScript scriptPubKey = GetScriptForDestination(CBitcoinAddress(rcp.address.toStdString()).Get());
+            CScript scriptPubKey;
+            CBitcoinAddress out = CBitcoinAddress(rcp.address.toStdString());
+
+            if (rcp.isP2CS) {
+                CBitcoinAddress ownerAdd;
+                if (rcp.ownerAddress.isEmpty()) {
+                    // Create new internal owner address
+                    if (!getNewAddress(ownerAdd).result)
+                        return CannotCreateInternalAddress;
+                } else {
+                    ownerAdd = CBitcoinAddress(rcp.ownerAddress.toStdString());
+                }
+
+                CKeyID stakerId;
+                CKeyID ownerId;
+                if(!out.GetKeyID(stakerId) || !ownerAdd.GetKeyID(ownerId)) {
+                    return InvalidAddress;
+                }
+
+                scriptPubKey = GetScriptForStakeDelegation(stakerId, ownerId);
+            } else {
+                // Regular P2PK or P2PKH
+                scriptPubKey = GetScriptForDestination(out.Get());
+            }
             vecSend.push_back(std::pair<CScript, CAmount>(scriptPubKey, rcp.amount));
 
             total += rcp.amount;
@@ -418,9 +441,11 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
         return AnonymizeOnlyUnlocked;
     }
 
+    bool fColdStakingActive = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT);
+
     // Double check tx before do anything
     CValidationState state;
-    if(!CheckTransaction(*transaction.getTransaction(), true, true, state, true)){
+    if(!CheckTransaction(*transaction.getTransaction(), true, true, state, true, fColdStakingActive)){
         return TransactionCommitFailed;
     }
 

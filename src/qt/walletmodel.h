@@ -54,6 +54,12 @@ public:
     QString label;
     AvailableCoinsType inputType;
     bool useSwiftTX = false;
+
+    // Cold staking.
+    bool isP2CS = false;
+    QString ownerAddress;
+
+    // Amount
     CAmount amount;
     // If from a payment request, this is used for storing the memo
     QString message;
@@ -119,7 +125,8 @@ public:
         TransactionCreationFailed, // Error returned when wallet is still locked
         TransactionCommitFailed,
         AnonymizeOnlyUnlocked,
-        InsaneFee
+        InsaneFee,
+        CannotCreateInternalAddress
     };
 
     enum EncryptionStatus {
@@ -209,6 +216,18 @@ public:
             bool fMinimizeChange,
             CZerocoinSpendReceipt &receipt
     );
+
+    // ###################
+    // Cold Staking
+    // ###################
+
+
+
+    // ###################
+    // End Cold Staking
+    // ###################
+
+
 
     // Wallet encryption
     bool setWalletEncrypted(bool encrypted, const SecureString& passphrase);
