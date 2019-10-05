@@ -49,6 +49,10 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->labelSubtitle1->setText(tr("You can delegate your PIVs and let a hot node (24/7 online node)\nstake in your behalf, keeping the keys in a secure place offline."));
     setCssSubtitleScreen(ui->labelSubtitle1);
 
+    setCssProperty(ui->labelSubtitleDescription, "text-title");
+    ui->lineEditOwnerAddress->setPlaceholderText(tr("Add owner address"));
+    initCssEditLine(ui->lineEditOwnerAddress);
+
     ui->labelSubtitle2->setText(tr("Delegate or Accept PIV delegation"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
@@ -119,7 +123,11 @@ void ColdStakingWidget::loadWalletModel(){
 
         updateDisplayUnit();
         // Show list
-        showList(filter->rowCount() > 0);
+        //showList(filter->rowCount() > 0);
+        // invisible for now
+        ui->containerHistoryLabel->setVisible(false);
+        ui->emptyContainer->setVisible(false);
+        ui->listView->setVisible(false);
     }
 
 }
@@ -161,13 +169,13 @@ void ColdStakingWidget::onSendClicked(){
     SendCoinsRecipient dest = sendMultiRow->getValue();
     dest.isP2CS = true;
 
-    // TODO: Add field for owner address. Meanwhile will create one here
-    CBitcoinAddress address;
-    if (!walletModel->getNewAddress(address).result) {
-        inform(tr("Error generating address"));
+    QString inputOwner = ui->lineEditOwnerAddress->text();
+    if (!inputOwner.isEmpty() && !walletModel->validateAddress(inputOwner)) {
+        inform(tr("Owner address invalid"));
         return;
     }
-    dest.ownerAddress = QString::fromStdString(address.ToString());
+
+    dest.ownerAddress = inputOwner;
     QList<SendCoinsRecipient> recipients;
     recipients.append(dest);
 
