@@ -378,6 +378,7 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients){
         if (sendStatus.status == WalletModel::OK) {
             clearAll();
             inform(tr("Transaction sent"));
+            dialog->deleteLater();
             return true;
         }
     }
