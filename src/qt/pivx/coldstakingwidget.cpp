@@ -115,6 +115,7 @@ void ColdStakingWidget::loadWalletModel(){
         filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
         filter->setSortRole(Qt::EditRole);
         filter->setOnlyColdStakes(true);
+        filter->setTypeFilter(TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
         filter->setSourceModel(txModel);
         filter->sort(TransactionTableModel::Date, Qt::DescendingOrder);
         txHolder->setDisplayUnit(walletModel->getOptionsModel()->getDisplayUnit());
@@ -136,10 +137,15 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
     if(delegate){
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
+        ui->containerBtn->setVisible(true);
+        ui->emptyContainer->setVisible(false);
+        ui->listView->setVisible(false);
+        ui->containerHistoryLabel->setVisible(false);
     }else{
         ui->btnCoinControl->setVisible(false);
         ui->containerSend->setVisible(false);
-        // change list row for the whitelisted addresses
+        ui->containerBtn->setVisible(false);
+        showList(filter->rowCount() > 0);
     }
 }
 
@@ -155,6 +161,7 @@ void ColdStakingWidget::updateDisplayUnit() {
 void ColdStakingWidget::showList(bool show){
     ui->emptyContainer->setVisible(!show);
     ui->listView->setVisible(show);
+    ui->containerHistoryLabel->setVisible(show);
 }
 
 void ColdStakingWidget::onSendClicked(){
