@@ -6,13 +6,13 @@
 #include "qt/pivx/forms/ui_coldstakingwidget.h"
 #include "qt/pivx/qtutils.h"
 #include "guiutil.h"
-#include "qt/pivx/denomgenerationdialog.h"
 #include "qt/pivx/txviewholder.h"
+#include "qt/pivx/sendconfirmdialog.h"
+#include "qt/pivx/guitransactionsutils.h"
 #include "walletmodel.h"
 #include "optionsmodel.h"
 #include "coincontroldialog.h"
 #include "coincontrol.h"
-#include "zpiv/accumulators.h"
 
 #define DECORATION_SIZE 65
 #define NUM_ITEMS 3
@@ -52,11 +52,12 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->labelSubtitle2->setText(tr("Delegate or Accept PIV delegation"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
+    setCssBtnPrimary(ui->pushButtonSend);
 
     ui->labelEditTitle->setText(tr("Add the delegator address"));
     setCssProperty(ui->labelEditTitle, "text-title");
     sendMultiRow = new SendMultiRow(this);
-    ui->containerSend->layout()->addWidget(sendMultiRow);
+    ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
     //connect(sendMultiRow, &SendMultiRow::onContactsClicked, this, &SendWidget::onContactsClicked);
     //connect(sendMultiRow, &SendMultiRow::onMenuClicked, this, &SendWidget::onMenuClicked);
     //connect(sendMultiRow, &SendMultiRow::onValueChanged, this, &SendWidget::onValueChanged);
@@ -94,6 +95,8 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->listView->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
     ui->listView->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
 }
 
 void ColdStakingWidget::loadWalletModel(){
@@ -124,8 +127,10 @@ void ColdStakingWidget::loadWalletModel(){
 void ColdStakingWidget::onDelegateSelected(bool delegate){
     if(delegate){
         ui->btnCoinControl->setVisible(true);
+        ui->containerSend->setVisible(true);
     }else{
         ui->btnCoinControl->setVisible(false);
+        ui->containerSend->setVisible(false);
         // change list row for the whitelisted addresses
     }
 }
@@ -145,15 +150,75 @@ void ColdStakingWidget::showList(bool show){
 }
 
 void ColdStakingWidget::onSendClicked(){
-    if (!walletModel || !walletModel->getOptionsModel())
+    if (!walletModel || !walletModel->getOptionsModel() || !verifyWalletUnlocked())
         return;
 
+    if (!sendMultiRow->validate()) {
+        inform(tr("Invalid Entry"));
+        return;
+    }
+
+    SendCoinsRecipient dest = sendMultiRow->getValue();
+    dest.isP2CS = true;
+
+    // TODO: Add field for owner address. Meanwhile will create one here
+    CBitcoinAddress address;
+    if (!walletModel->getNewAddress(address).result) {
+        inform(tr("Error generating address"));
+        return;
+    }
+    dest.ownerAddress = QString::fromStdString(address.ToString());
+    QList<SendCoinsRecipient> recipients;
+    recipients.append(dest);
+
+    // Prepare transaction for getting txFee earlier
+    WalletModelTransaction currentTransaction(recipients);
+    WalletModel::SendCoinsReturn prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl);
+
+    // process prepareStatus and on error generate message shown to user
+    GuiTransactionsUtils::ProcessSendCoinsReturn(
+            this,
+            prepareStatus,
+            walletModel,
+            BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(),
+                                         currentTransaction.getTransactionFee()),
+            true
+    );
+
+    if (prepareStatus.status != WalletModel::OK) {
+        inform(tr("Cannot create transaction."));
+        return;
+    }
+
+    showHideOp(true);
+    TxDetailDialog* dialog = new TxDetailDialog(window);
+    dialog->setDisplayUnit(walletModel->getOptionsModel()->getDisplayUnit());
+    dialog->setData(walletModel, currentTransaction);
+    dialog->adjustSize();
+    openDialogWithOpaqueBackgroundY(dialog, window, 3, 5);
+
+    if(dialog->isConfirm()){
+        // now send the prepared transaction
+        WalletModel::SendCoinsReturn sendStatus = dialog->getStatus();
+        // process sendStatus and on error generate message shown to user
+        GuiTransactionsUtils::ProcessSendCoinsReturn(
+                this,
+                sendStatus,
+                walletModel
+        );
+
+        if (sendStatus.status == WalletModel::OK) {
+            clearAll();
+            inform(tr("Coins delegated"));
+        }
+    }
+
+    dialog->deleteLater();
 }
 
-void ColdStakingWidget::delegateBalance(CAmount value, QString address, QString label){
-    inform(tr("Complete me.. delegation."));
+void ColdStakingWidget::clearAll() {
+    if (sendMultiRow) sendMultiRow->clear();
 }
-
 
 void ColdStakingWidget::onCoinControlClicked(){
     if(ui->pushRight->isChecked()) {

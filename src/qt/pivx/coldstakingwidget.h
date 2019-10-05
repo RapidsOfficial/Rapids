@@ -55,7 +55,7 @@ private:
     SendMultiRow *sendMultiRow = nullptr;
 
     int nDisplayUnit;
-    void delegateBalance(CAmount value, QString address, QString label);
+    void clearAll();
 };
 
 #endif // COLDSTAKINGWIDGET_H
