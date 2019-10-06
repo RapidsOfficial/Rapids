@@ -116,8 +116,10 @@ static bool SelectBlockFromCandidates(
 // must hash with a future stake modifier to generate the proof.
 uint256 ComputeStakeModifier(const CBlockIndex* pindexPrev, const uint256& kernel)
 {
-    if (!pindexPrev)
-        return uint256(); // genesis block's modifier is 0
+    // genesis block's modifier is 0
+    // all block's modifiers are 0 on regtest
+    if (!pindexPrev || Params().NetworkID() == CBaseChainParams::REGTEST)
+        return uint256();
 
     CHashWriter ss(SER_GETHASH, 0);
     ss << kernel;
@@ -371,7 +373,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 
         nTimeTx = GetCurrentTimeSlot();
         // double check that we are not on the same slot as prev block
-        if (nTimeTx <= pindexPrev->nTime)
+        if (nTimeTx <= pindexPrev->nTime && Params().NetworkID() != CBaseChainParams::REGTEST)
             return false;
 
         // check stake kernel
@@ -389,7 +391,9 @@ bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, const uint3
     // iterate from maxTime down to pindexPrev->nTime (or min time due to maturity, 60 min after blockFrom)
     const unsigned int prevBlockTime = pindexPrev->nTime;
     const unsigned int maxTime = pindexPrev->MaxFutureBlockTime();
-    const unsigned int minTime = std::max(prevBlockTime, nTimeBlockFrom + 3600);
+    unsigned int minTime = std::max(prevBlockTime, nTimeBlockFrom + 3600);
+    if (Params().NetworkID() == CBaseChainParams::REGTEST)
+        minTime = prevBlockTime;
     unsigned int nTryTime = maxTime;
 
     // check required maturity for stake
