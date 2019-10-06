@@ -151,7 +151,7 @@ UniValue delegatoradd(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
         throw std::runtime_error(
-            "delegatoradd \"addr\" ( fRescan )\n"
+            "delegatoradd \"addr\"\n"
             "\nAdd the provided address <addr> into the allowed delegators AddressBook.\n"
             "This enables the staking of coins delegated to this wallet, owned by <addr>\n"
 
@@ -163,7 +163,6 @@ UniValue delegatoradd(const UniValue& params, bool fHelp)
 
             "\nExamples:\n" +
             HelpExampleCli("delegatoradd", "DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6") +
-            HelpExampleCli("delegatoradd", "DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6 true") +
             HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
 
     CBitcoinAddress address(params[0].get_str());
