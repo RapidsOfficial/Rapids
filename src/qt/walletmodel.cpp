@@ -139,6 +139,12 @@ CAmount WalletModel::getColdStakedBalance() const
     return wallet->GetColdStakingBalance();
 }
 
+bool WalletModel::isColdStaking() const
+{
+    // TODO: Complete me..
+    return false;
+}
+
 void WalletModel::updateStatus()
 {
     EncryptionStatus newEncryptionStatus = getEncryptionStatus();

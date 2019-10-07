@@ -7,11 +7,11 @@
 #include "qt/pivx/pivxgui.h"
 #include "qt/pivx/qtutils.h"
 #include "clientversion.h"
+#include "optionsmodel.h"
 
 NavMenuWidget::NavMenuWidget(PIVXGUI *mainWindow, QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::NavMenuWidget),
-    window(mainWindow)
+    PWidget(mainWindow, parent),
+    ui(new Ui::NavMenuWidget)
 {
     ui->setupUi(this);
     this->setFixedWidth(100);
@@ -59,6 +59,12 @@ NavMenuWidget::NavMenuWidget(PIVXGUI *mainWindow, QWidget *parent) :
     onNavSelected(ui->btnDashboard, true);
 
     connectActions();
+}
+
+void NavMenuWidget::loadWalletModel() {
+    if (walletModel && walletModel->getOptionsModel()) {
+        ui->btnColdStaking->setVisible(walletModel->getOptionsModel()->isColdStakingScreenEnabled());
+    }
 }
 
 /**
@@ -137,8 +143,13 @@ void NavMenuWidget::onNavSelected(QWidget* active, bool startup) {
     if (!startup) updateButtonStyles();
 }
 
-void NavMenuWidget::selectSettings(){
+void NavMenuWidget::selectSettings() {
     onSettingsClicked();
+}
+
+void NavMenuWidget::onShowHideColdStakingChanged(bool show) {
+    ui->btnColdStaking->setVisible(show);
+    window->setMinimumHeight(show ? 780 : 740);
 }
 
 void NavMenuWidget::updateButtonStyles(){

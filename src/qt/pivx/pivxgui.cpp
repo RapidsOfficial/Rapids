@@ -28,6 +28,9 @@
 
 #include "util.h"
 
+#define BASE_WINDOW_WIDTH 1200
+#define BASE_WINDOW_HEIGHT 740
+
 
 const QString PIVXGUI::DEFAULT_WALLET = "~Default";
 
@@ -37,10 +40,9 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
     /* Open CSS when configured */
     this->setStyleSheet(GUIUtil::loadStyleSheet());
-    this->setMinimumSize(1200, 740);
-    GUIUtil::restoreWindowGeometry("nWindow", QSize(1200, 740), this);
+    this->setMinimumSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
+    GUIUtil::restoreWindowGeometry("nWindow", QSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT), this);
 
-    QString windowTitle = tr("PIVX Core") + " - ";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
     enableWallet = !GetBoolArg("-disablewallet", false);
@@ -48,12 +50,8 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
     enableWallet = false;
 #endif // ENABLE_WALLET
 
-    if (enableWallet) {
-        windowTitle += tr("Wallet");
-    } else {
-        windowTitle += tr("Node");
-    }
-
+    QString windowTitle = tr("PIVX Core") + " - ";
+    windowTitle += ((enableWallet) ? tr("Wallet") : tr("Node"));
     windowTitle += " " + networkStyle->getTitleAddText();
     setWindowTitle(windowTitle);
 
@@ -72,8 +70,8 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
     if(enableWallet){
 
         QFrame* centralWidget = new QFrame(this);
-        this->setMinimumWidth(1200);
-        this->setMinimumHeight(740);
+        this->setMinimumWidth(BASE_WINDOW_WIDTH);
+        this->setMinimumHeight(BASE_WINDOW_HEIGHT);
         QHBoxLayout* centralWidgetLayouot = new QHBoxLayout();
         centralWidget->setLayout(centralWidgetLayouot);
         centralWidgetLayouot->setContentsMargins(0,0,0,0);
@@ -186,6 +184,7 @@ void PIVXGUI::connectActions() {
     });
     connect(topBar, &TopBar::showHide, this, &PIVXGUI::showHide);
     connect(topBar, &TopBar::themeChanged, this, &PIVXGUI::changeTheme);
+    connect(topBar, &TopBar::onShowHideColdStakingChanged, navMenu, &NavMenuWidget::onShowHideColdStakingChanged);
     connect(settingsWidget, &SettingsWidget::showHide, this, &PIVXGUI::showHide);
     connect(sendWidget, &SendWidget::showHide, this, &PIVXGUI::showHide);
     connect(receiveWidget, &ReceiveWidget::showHide, this, &PIVXGUI::showHide);
@@ -571,6 +570,7 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     //connect(walletView, SIGNAL(showNormalIfMinimized()), gui, SLOT(showNormalIfMinimized()));
 
     // set the model for every view
+    navMenu->setWalletModel(walletModel);
     dashboard->setWalletModel(walletModel);
     topBar->setWalletModel(walletModel);
     receiveWidget->setWalletModel(walletModel);

@@ -6,6 +6,7 @@
 #define NAVMENUWIDGET_H
 
 #include <QWidget>
+#include "qt/pivx/pwidget.h"
 
 class PIVXGUI;
 
@@ -13,7 +14,7 @@ namespace Ui {
 class NavMenuWidget;
 }
 
-class NavMenuWidget : public QWidget
+class NavMenuWidget : public PWidget
 {
     Q_OBJECT
 
@@ -21,8 +22,11 @@ public:
     explicit NavMenuWidget(PIVXGUI* mainWindow, QWidget *parent = nullptr);
     ~NavMenuWidget();
 
+    void loadWalletModel() override;
+
 public slots:
     void selectSettings();
+    void onShowHideColdStakingChanged(bool show);
 
 private slots:
     void onSendClicked();
@@ -36,7 +40,6 @@ private slots:
     void updateButtonStyles();
 private:
     Ui::NavMenuWidget *ui;
-    PIVXGUI* window;
     QList<QWidget*> btns;
 
     void connectActions();
