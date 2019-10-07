@@ -1,9 +1,9 @@
-//
-// Created by furszy on 2019-10-07.
-//
+// Copyright (c) 2019 The PIVX developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef FURSZY_PIVX_ADDRESSBOOK_H
-#define FURSZY_PIVX_ADDRESSBOOK_H
+#ifndef PIVX_ADDRESSBOOK_H
+#define PIVX_ADDRESSBOOK_H
 
 #include <map>
 #include <string>
@@ -34,4 +34,4 @@ public:
     StringMap destdata;
 };
 
-#endif //FURSZY_PIVX_ADDRESSBOOK_H
+#endif //PIVX_ADDRESSBOOK_H
