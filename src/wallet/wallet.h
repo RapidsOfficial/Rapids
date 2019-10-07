@@ -8,6 +8,7 @@
 #ifndef BITCOIN_WALLET_H
 #define BITCOIN_WALLET_H
 
+#include "addressbook.h"
 #include "amount.h"
 #include "base58.h"
 #include "crypter.h"
@@ -145,22 +146,6 @@ public:
         READWRITE(nTime);
         READWRITE(vchPubKey);
     }
-};
-
-/** Address book data */
-class CAddressBookData
-{
-public:
-    std::string name;
-    std::string purpose;
-
-    CAddressBookData()
-    {
-        purpose = "unknown";
-    }
-
-    typedef std::map<std::string, std::string> StringMap;
-    StringMap destdata;
 };
 
 /**
