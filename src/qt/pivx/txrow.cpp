@@ -95,7 +95,6 @@ void TxRow::setType(bool isLightTheme, int type, bool isConfirmed){
         case TransactionRecord::P2CSDelegation:
             path = "://ic-transaction-cs-contract";
             css = "text-list-amount-unconfirmed";
-            sameIcon = true;
             break;
         default:
             path = "://ic-pending";

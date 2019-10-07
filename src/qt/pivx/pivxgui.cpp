@@ -565,10 +565,6 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     if(!stackedContainer || !clientModel || !walletModel)
         return false;
 
-    // todo: show out of sync warning..
-    // todo: complete this next method
-    //connect(walletView, SIGNAL(showNormalIfMinimized()), gui, SLOT(showNormalIfMinimized()));
-
     // set the model for every view
     navMenu->setWalletModel(walletModel);
     dashboard->setWalletModel(walletModel);

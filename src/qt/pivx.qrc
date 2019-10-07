@@ -308,6 +308,7 @@
         <file alias="ic-transaction-stake-delegated">pivx/res/img/ic-transaction-stake-delegated.svg</file>
         <file alias="ic-transaction-stake-hot">pivx/res/img/ic-transaction-stake-hot.svg</file>
         <file alias="ic-transaction-cs-contract">pivx/res/img/ic-transaction-cs-contract.svg</file>
+        <file alias="ic-transaction-cs-contract-dark">pivx/res/img/dark/ic-transaction-cs-contract.svg</file>
         <file alias="ic-transaction-cs-contract-inactive">pivx/res/img/ic-transaction-cs-contract-inactive.svg</file>
         <file alias="ic-nav-cold-staking">pivx/res/img/ic-nav-cold-staking.svg</file>
         <file alias="ic-nav-cold-staking-active">pivx/res/img/ic-nav-cold-staking-active.svg</file>

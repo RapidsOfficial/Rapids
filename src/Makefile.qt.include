@@ -551,6 +551,7 @@ RES_ICONS = \
   qt/pivx/res/img/ic-check-cold-staking.svg \
   qt/pivx/res/img/ic-check-cold-staking-off.svg \
   qt/pivx/res/img/ic-check-cold-staking-enabled.svg \
+  qt/pivx/res/img/dark/ic-transaction-cs-contract.svg \
   qt/pivx/res/img/img-qr.svg \
   qt/pivx/res/img/ic-check-connect-off.svg \
   qt/pivx/res/img/ic-label.svg \
