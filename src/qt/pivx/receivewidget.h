@@ -37,7 +37,6 @@ public:
 
 public slots:
     void onRequestClicked();
-    void onColdStakeClicked();
     void onMyAddressesClicked();
     void onNewAddressClicked();
 
