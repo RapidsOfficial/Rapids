@@ -93,8 +93,21 @@ void RequestDialog::setPaymentRequest(bool isPaymentRequest) {
 
 void RequestDialog::onNextClicked(){
     if(walletModel) {
+
+        QString labelStr = ui->lineEditLabel->text();;
+
+        if (!this->isPaymentRequest) {
+
+            // Add specific checks for cold staking address creation
+            if (labelStr.isEmpty()) {
+                inform("Address label cannot be empty");
+                return;
+            }
+
+        }
+
         info = new SendCoinsRecipient();
-        info->label = ui->lineEditLabel->text();
+        info->label = labelStr;
         info->message = ui->lineEditDescription->text();
 
         //Amount
@@ -169,6 +182,14 @@ void RequestDialog::updateQr(QString str){
     }else{
         ui->labelQrImg->setText(!error.isEmpty() ? error : "Error encoding address");
     }
+}
+
+void RequestDialog::inform(QString text){
+    if (!snackBar)
+        snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(text);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
 }
 
 RequestDialog::~RequestDialog(){

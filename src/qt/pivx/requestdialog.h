@@ -8,6 +8,7 @@
 #include <QDialog>
 #include <QPixmap>
 #include "walletmodel.h"
+#include "qt/pivx/snackbar.h"
 
 class WalletModel;
 class PIVXGUI;
@@ -38,12 +39,14 @@ private:
     int pos = 0;
     bool isPaymentRequest = true;
     WalletModel *walletModel;
+    SnackBar *snackBar = nullptr;
     // Cached last address
     SendCoinsRecipient *info = nullptr;
 
     QPixmap *qrImage = nullptr;
 
     void updateQr(QString str);
+    void inform(QString text);
 };
 
 #endif // REQUESTDIALOG_H
