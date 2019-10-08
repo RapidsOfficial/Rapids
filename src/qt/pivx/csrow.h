@@ -19,7 +19,7 @@ public:
     explicit CSRow(QWidget *parent = nullptr);
     ~CSRow();
 
-    void updateView(QString address, QString label, QString active, QString amount);
+    void updateView(QString address, QString label, bool isStaking, QString amount);
     void updateState(bool isLightTheme, bool isHovered, bool isSelected);
 protected:
     virtual void enterEvent(QEvent *);

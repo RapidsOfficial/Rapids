@@ -921,9 +921,9 @@ bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID) {
 std::string WalletModel::getLabelForAddress(const CBitcoinAddress& address) {
     std::string label = "";
     {
-        LOCK(pwalletMain->cs_wallet);
-        std::map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
-        if (mi != pwalletMain->mapAddressBook.end()) {
+        LOCK(wallet->cs_wallet);
+        std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address.Get());
+        if (mi != wallet->mapAddressBook.end()) {
             label = mi->second.name;
         }
     }

@@ -43,7 +43,7 @@ public:
         if (label.isEmpty()) {
             label = "Address with no label";
         }
-        QString isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED_STRING).data(Qt::DisplayRole).toString();
+        bool isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
         QString amount = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT).data(Qt::DisplayRole).toString();
         row->updateView(address, label, isWhitelisted, amount);
     }
@@ -314,14 +314,14 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
     pos.setX(pos.x() - (DECORATION_SIZE * 2));
     pos.setY(pos.y() + (DECORATION_SIZE * 2.45));
 
+    bool adjustSize = false;
     if(!this->menu){
         this->menu = new TooltipMenu(window, this);
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
         this->menu->setCopyBtnText(tr("Info"));
         this->menu->setMinimumHeight(75);
-        this->menu->setDeleteBtnVisible(false);
-        this->menu->adjustSize();
+        adjustSize = true;
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
@@ -330,9 +330,10 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu->hide();
     }
 
-    bool isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
+    bool isWhitelisted = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
     this->menu->setDeleteBtnVisible(isWhitelisted);
     this->menu->setEditBtnVisible(!isWhitelisted);
+    if (adjustSize) this->menu->adjustSize();
 
     this->index = rIndex;
     menu->move(pos);

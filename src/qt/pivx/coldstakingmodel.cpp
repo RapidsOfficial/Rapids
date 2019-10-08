@@ -49,7 +49,7 @@ QVariant ColdStakingModel::data(const QModelIndex &index, int role) const
             case DELEGATED_ADDRESS_LABEL:
                 return addressTableModel->labelForAddress(QString::fromStdString(rec.delegatedAddress));
             case IS_WHITELISTED:
-                return addressTableModel->purposeForAddress(rec.delegatedAddress) == CAddressBookData::AddressBookPurpose::DELEGATOR;
+                return addressTableModel->purposeForAddress(rec.delegatedAddress).compare(CAddressBookData::AddressBookPurpose::DELEGATOR) == 0;
             case IS_WHITELISTED_STRING:
                 return (addressTableModel->purposeForAddress(rec.delegatedAddress) == CAddressBookData::AddressBookPurpose::DELEGATOR ? "Staking" : "Not staking");
             case TOTAL_STACKEABLE_AMOUNT:
