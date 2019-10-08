@@ -6,6 +6,7 @@
 #include "uint256.h"
 #include "bitcoinunits.h"
 #include "guiutil.h"
+#include <iostream>
 #include "addressbook.h"
 
 ColdStakingModel::ColdStakingModel(WalletModel* _model,
@@ -16,7 +17,7 @@ ColdStakingModel::ColdStakingModel(WalletModel* _model,
 }
 
 void ColdStakingModel::updateCSList(){
-    emit dataChanged(index(0, 0, QModelIndex()), index(end, 6, QModelIndex()) );
+    emit dataChanged(index(0, 0, QModelIndex()), index(tableModel->csRowCount(), 6, QModelIndex()) );
 }
 
 int ColdStakingModel::rowCount(const QModelIndex &parent) const

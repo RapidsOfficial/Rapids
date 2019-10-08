@@ -312,13 +312,16 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
     QRect rect = ui->listView->visualRect(rIndex);
     QPoint pos = rect.topRight();
     pos.setX(pos.x() - (DECORATION_SIZE * 2));
-    pos.setY(pos.y() + (DECORATION_SIZE * 2));
+    pos.setY(pos.y() + (DECORATION_SIZE * 2.45));
 
     if(!this->menu){
         this->menu = new TooltipMenu(window, this);
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
         this->menu->setCopyBtnText(tr("Info"));
+        this->menu->setMinimumHeight(75);
+        this->menu->setDeleteBtnVisible(false);
+        this->menu->adjustSize();
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
