@@ -506,6 +506,20 @@ const CWalletTx* WalletModel::getTx(uint256 id){
     return wallet->GetWalletTx(id);
 }
 
+bool WalletModel::isDelegatedToMe(QString id) {
+    uint256 hashTx;
+    hashTx.SetHex(id.toStdString());
+    const CWalletTx* tx = getTx(hashTx);
+    if (tx && tx->HasP2CSOutputs()) {
+        for (auto out : tx->vout) {
+            if (wallet->IsMine(out) & ISMINE_COLD) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
 bool WalletModel::mintCoins(CAmount value, CCoinControl* coinControl ,std::string &strError){
     CWalletTx wtx;
     std::vector<CDeterministicMint> vMints;

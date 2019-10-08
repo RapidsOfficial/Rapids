@@ -152,16 +152,7 @@ public:
 
                     // Check for delegations
                     if (record.type == TransactionRecord::P2CSDelegation) {
-                        CSDelegation delegation(false, record.address);
-                        delegation.cachedTotalAmount += record.credit;
-                        int index = cachedDelegations.indexOf(delegation);
-                        if (index == -1) {
-                            cachedDelegations.append(delegation);
-                        } else {
-                            CSDelegation del = cachedDelegations[index];
-                            del.delegatedUtxo.append(record.getTxID());
-                            del.cachedTotalAmount += record.credit;
-                        }
+                        checkForDelegations(record, cachedDelegations);
                     }
                 }
 
@@ -173,6 +164,20 @@ public:
             tablePriv->hasZcTxes = true;
 
         return std::make_pair(cachedWallet, cachedDelegations);
+    }
+
+    static void checkForDelegations(const TransactionRecord& record, QList<CSDelegation>& cachedDelegations) {
+        CSDelegation delegation(false, record.address);
+        delegation.cachedTotalAmount += record.credit;
+        int index = cachedDelegations.indexOf(delegation);
+        if (index == -1) {
+            cachedDelegations.append(delegation);
+        } else {
+            CSDelegation del = cachedDelegations[index];
+            del.delegatedUtxo.append(record.getTxID());
+            del.cachedTotalAmount += record.credit;
+        }
+
     }
 
     static bool HasZcTxesIfNeeded(const TransactionRecord& record) {
@@ -235,6 +240,12 @@ public:
                         for (const TransactionRecord& rec : toInsert) {
                             cachedWallet.insert(insert_idx, rec);
                             if (!hasZcTxes) hasZcTxes = HasZcTxesIfNeeded(rec);
+
+                            // Check for delegations
+                            if (rec.type == TransactionRecord::P2CSDelegation) {
+                                checkForDelegations(rec, cachedDelegations);
+                            }
+
                             insert_idx += 1;
                             // Return record
                             ret = rec;
