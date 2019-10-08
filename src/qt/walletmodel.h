@@ -276,6 +276,13 @@ public:
      * Return a new address used to receive for delegated cold stake purpose.
      */
     PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label = "") const;
+
+    bool whitelistAddressFromColdStaking(const QString &addressStr);
+    bool blacklistAddressFromColdStaking(const QString &address);
+    bool updateAddressBookPurpose(const QString &addressStr, const std::string& purpose);
+    std::string getLabelForAddress(const CBitcoinAddress& address);
+    bool getKeyId(const CBitcoinAddress& address, CKeyID& keyID);
+
     bool isMine(CBitcoinAddress address);
     bool isUsed(CBitcoinAddress address);
     void getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs);

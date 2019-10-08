@@ -890,6 +890,44 @@ PairResult WalletModel::getNewStakingAddress(CBitcoinAddress& ret,std::string la
     return wallet->getNewStakingAddress(ret, label);
 }
 
+bool WalletModel::whitelistAddressFromColdStaking(const QString &addressStr) {
+    return updateAddressBookPurpose(addressStr, CAddressBookData::AddressBookPurpose::DELEGATOR);
+}
+
+bool WalletModel::blacklistAddressFromColdStaking(const QString &addressStr) {
+    return updateAddressBookPurpose(addressStr, CAddressBookData::AddressBookPurpose::DELEGABLE);
+}
+
+bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std::string& purpose) {
+    CBitcoinAddress address(addressStr.toStdString());
+    CKeyID keyID;
+    if (!getKeyId(address, keyID))
+        return false;
+    return pwalletMain->SetAddressBook(keyID, getLabelForAddress(address), purpose);
+}
+
+bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID) {
+    if (!address.IsValid() || address.IsStakingAddress())
+        return error("Invalid PIVX address");
+
+    if (!address.GetKeyID(keyID))
+        return error("Unable to get KeyID from PIVX address");
+
+    return true;
+}
+
+std::string WalletModel::getLabelForAddress(const CBitcoinAddress& address) {
+    std::string label = "";
+    {
+        LOCK(pwalletMain->cs_wallet);
+        std::map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
+        if (mi != pwalletMain->mapAddressBook.end()) {
+            label = mi->second.name;
+        }
+    }
+    return label;
+}
+
 // returns a list of COutputs from COutPoints
 void WalletModel::getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs)
 {
