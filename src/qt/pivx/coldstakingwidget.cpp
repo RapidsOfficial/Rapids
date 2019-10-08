@@ -158,6 +158,8 @@ void ColdStakingWidget::loadWalletModel(){
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
         ui->listView->setModel(csModel);
 
+        connect(txModel, &TransactionTableModel::txArrived, this, &ColdStakingWidget::onTxArrived);
+
         updateDisplayUnit();
 
         ui->containerHistoryLabel->setVisible(false);
@@ -165,6 +167,14 @@ void ColdStakingWidget::loadWalletModel(){
         ui->listView->setVisible(false);
     }
 
+}
+
+void ColdStakingWidget::onTxArrived(const QString& hash) {
+    if (walletModel->isDelegatedToMe(hash)) {
+        csModel->updateCSList();
+        if (ui->pushLeft->isChecked())
+            showList(true);
+    }
 }
 
 void ColdStakingWidget::onDelegateSelected(bool delegate){
@@ -267,6 +277,7 @@ void ColdStakingWidget::onSendClicked(){
 
 void ColdStakingWidget::clearAll() {
     if (sendMultiRow) sendMultiRow->clear();
+    ui->lineEditOwnerAddress->clear();
 }
 
 void ColdStakingWidget::onCoinControlClicked(){
@@ -330,12 +341,13 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu->hide();
     }
 
+    this->index = rIndex;
+
     bool isWhitelisted = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
     this->menu->setDeleteBtnVisible(isWhitelisted);
     this->menu->setEditBtnVisible(!isWhitelisted);
     if (adjustSize) this->menu->adjustSize();
 
-    this->index = rIndex;
     menu->move(pos);
     menu->show();
 }

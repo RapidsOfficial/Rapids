@@ -50,6 +50,7 @@ private slots:
     void onEditClicked();
     void onDeleteClicked();
     void onCopyClicked();
+    void onTxArrived(const QString& hash);
 
 private:
     Ui::ColdStakingWidget *ui;
