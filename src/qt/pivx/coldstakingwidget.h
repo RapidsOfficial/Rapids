@@ -8,9 +8,10 @@
 #include "qt/pivx/pwidget.h"
 #include "qt/pivx/furabstractlistitemdelegate.h"
 #include "qt/pivx/txviewholder.h"
+#include "qt/pivx/tooltipmenu.h"
 #include "qt/pivx/sendmultirow.h"
+#include "qt/pivx/coldstakingmodel.h"
 #include "transactiontablemodel.h"
-#include "transactionfilterproxy.h"
 #include "coincontroldialog.h"
 
 #include <QLabel>
@@ -18,6 +19,7 @@
 
 class PIVXGUI;
 class WalletModel;
+class CSDelegationHolder;
 
 namespace Ui {
 class ColdStakingWidget;
@@ -38,24 +40,36 @@ public:
     void loadWalletModel() override;
 private slots:
     void changeTheme(bool isLightTheme, QString &theme) override;
+    void handleAddressClicked(const QModelIndex &index);
     void onCoinControlClicked();
+    void onColdStakeClicked();
     void updateDisplayUnit();
     void showList(bool show);
     void onSendClicked();
     void onDelegateSelected(bool delegate);
+    void onEditClicked();
+    void onDeleteClicked();
+    void onCopyClicked();
 
 private:
     Ui::ColdStakingWidget *ui;
     FurAbstractListItemDelegate *delegate = nullptr;
     TransactionTableModel* txModel = nullptr;
-    TxViewHolder *txHolder = nullptr;
-    TransactionFilterProxy* filter = nullptr;
+    ColdStakingModel* csModel = nullptr;
+    CSDelegationHolder *txHolder = nullptr;
     CoinControlDialog *coinControlDialog = nullptr;
 
+    TooltipMenu* menu = nullptr;
     SendMultiRow *sendMultiRow = nullptr;
+    bool isShowingDialog;
+
+    // Cached index
+    QModelIndex index;
 
     int nDisplayUnit;
     void clearAll();
+
+    void showAddressGenerationDialog(bool isPaymentRequest);
 };
 
 #endif // COLDSTAKINGWIDGET_H

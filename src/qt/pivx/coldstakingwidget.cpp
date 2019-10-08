@@ -6,6 +6,9 @@
 #include "qt/pivx/forms/ui_coldstakingwidget.h"
 #include "qt/pivx/qtutils.h"
 #include "guiutil.h"
+#include "qt/pivx/requestdialog.h"
+#include "qt/pivx/tooltipmenu.h"
+#include "qt/pivx/furlistrow.h"
 #include "qt/pivx/txviewholder.h"
 #include "qt/pivx/sendconfirmdialog.h"
 #include "qt/pivx/guitransactionsutils.h"
@@ -13,9 +16,48 @@
 #include "optionsmodel.h"
 #include "coincontroldialog.h"
 #include "coincontrol.h"
+#include "qt/pivx/csrow.h"
 
-#define DECORATION_SIZE 65
+#define DECORATION_SIZE 70
 #define NUM_ITEMS 3
+
+
+class CSDelegationHolder : public FurListRow<QWidget*>
+{
+public:
+    CSDelegationHolder();
+
+    explicit CSDelegationHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme){}
+
+    CSRow* createHolder(int pos) override{
+        if (!cachedRow) cachedRow = new CSRow();
+        return cachedRow;
+    }
+
+    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override{
+        CSRow *row = static_cast<CSRow*>(holder);
+        row->updateState(isLightTheme, isHovered, isSelected);
+
+        QString address = index.data(Qt::DisplayRole).toString();
+        QString label = index.sibling(index.row(), ColdStakingModel::DELEGATED_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
+        if (label.isEmpty()) {
+            label = "Address with no label";
+        }
+        QString isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED_STRING).data(Qt::DisplayRole).toString();
+        QString amount = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT).data(Qt::DisplayRole).toString();
+        row->updateView(address, label, isWhitelisted, amount);
+    }
+
+    QColor rectColor(bool isHovered, bool isSelected) override{
+        return getRowColor(isLightTheme, isHovered, isSelected);
+    }
+
+    ~CSDelegationHolder() override{}
+
+    bool isLightTheme;
+private:
+    CSRow *cachedRow = nullptr;
+};
 
 ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     PWidget(parent),
@@ -62,9 +104,9 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     setCssProperty(ui->labelEditTitle, "text-title");
     sendMultiRow = new SendMultiRow(this);
     ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
-    //connect(sendMultiRow, &SendMultiRow::onContactsClicked, this, &SendWidget::onContactsClicked);
-    //connect(sendMultiRow, &SendMultiRow::onMenuClicked, this, &SendWidget::onMenuClicked);
-    //connect(sendMultiRow, &SendMultiRow::onValueChanged, this, &SendWidget::onValueChanged);
+    //connect(sendMultiRow, &SendMultiRow::onContactsClicked, this, &ColdStakingWidget::onContactsClicked);
+    //connect(sendMultiRow, &SendMultiRow::onMenuClicked, this, &ColdStakingWidget::onMenuClicked);
+    //connect(sendMultiRow, &SendMultiRow::onValueChanged, this, &ColdStakingWidget::onValueChanged);
 
     // List
     ui->labelListHistory->setText(tr("Delegated balance history"));
@@ -78,7 +120,12 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->btnCoinControl->setTitleClassAndText("btn-title-grey", "Coin Control");
     ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select PIV outputs to delegate.");
 
+    ui->btnColdStaking->setTitleClassAndText("btn-title-grey", "Create Cold Stake Address");
+    ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", "Creates an address to receive coin\ndelegations and be able to stake them.");
+    ui->btnColdStaking->layout()->setMargin(0);
+
     connect(ui->btnCoinControl, SIGNAL(clicked()), this, SLOT(onCoinControlClicked()));
+    connect(ui->btnColdStaking, SIGNAL(clicked()), this, SLOT(onColdStakeClicked()));
 
     onDelegateSelected(true);
     ui->pushRight->setChecked(true);
@@ -87,7 +134,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
 
     // List
     setCssProperty(ui->listView, "container");
-    txHolder = new TxViewHolder(isLightTheme());
+    txHolder = new CSDelegationHolder(isLightTheme());
     delegate = new FurAbstractListItemDelegate(
                 DECORATION_SIZE,
                 txHolder,
@@ -101,31 +148,18 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
+    connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
 }
 
 void ColdStakingWidget::loadWalletModel(){
     if(walletModel) {
         sendMultiRow->setWalletModel(this->walletModel);
-
         txModel = walletModel->getTransactionTableModel();
-        // Set up transaction list
-        filter = new TransactionFilterProxy();
-        filter->setDynamicSortFilter(true);
-        filter->setSortCaseSensitivity(Qt::CaseInsensitive);
-        filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
-        filter->setSortRole(Qt::EditRole);
-        filter->setOnlyColdStakes(true);
-        filter->setTypeFilter(TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
-        filter->setSourceModel(txModel);
-        filter->sort(TransactionTableModel::Date, Qt::DescendingOrder);
-        txHolder->setDisplayUnit(walletModel->getOptionsModel()->getDisplayUnit());
-        txHolder->setFilter(filter);
-        ui->listView->setModel(filter);
+        csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
+        ui->listView->setModel(csModel);
 
         updateDisplayUnit();
-        // Show list
-        //showList(filter->rowCount() > 0);
-        // invisible for now
+
         ui->containerHistoryLabel->setVisible(false);
         ui->emptyContainer->setVisible(false);
         ui->listView->setVisible(false);
@@ -141,19 +175,19 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->emptyContainer->setVisible(false);
         ui->listView->setVisible(false);
         ui->containerHistoryLabel->setVisible(false);
+        ui->btnColdStaking->setVisible(false);
     }else{
         ui->btnCoinControl->setVisible(false);
         ui->containerSend->setVisible(false);
         ui->containerBtn->setVisible(false);
-        showList(filter->rowCount() > 0);
+        ui->btnColdStaking->setVisible(true);
+        showList(true);
     }
 }
 
 void ColdStakingWidget::updateDisplayUnit() {
     if (walletModel && walletModel->getOptionsModel()) {
         nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
-
-        txHolder->setDisplayUnit(nDisplayUnit);
         ui->listView->update();
     }
 }
@@ -250,6 +284,87 @@ void ColdStakingWidget::onCoinControlClicked(){
     }
 }
 
+void ColdStakingWidget::onColdStakeClicked() {
+    showAddressGenerationDialog(false);
+}
+
+void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest) {
+    if(walletModel && !isShowingDialog) {
+        if (!verifyWalletUnlocked()) return;
+        isShowingDialog = true;
+        showHideOp(true);
+        RequestDialog *dialog = new RequestDialog(window);
+        dialog->setWalletModel(walletModel);
+        dialog->setPaymentRequest(isPaymentRequest);
+        openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 12);
+        if (dialog->res == 1){
+            inform(tr("URI copied to clipboard"));
+        } else if (dialog->res == 2){
+            inform(tr("Address copied to clipboard"));
+        }
+        dialog->deleteLater();
+        isShowingDialog = false;
+    }
+}
+
+void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
+    ui->listView->setCurrentIndex(rIndex);
+    QRect rect = ui->listView->visualRect(rIndex);
+    QPoint pos = rect.topRight();
+    pos.setX(pos.x() - (DECORATION_SIZE * 2));
+    pos.setY(pos.y() + (DECORATION_SIZE * 2));
+
+    if(!this->menu){
+        this->menu = new TooltipMenu(window, this);
+        this->menu->setEditBtnText(tr("Stake"));
+        this->menu->setDeleteBtnText(tr("Blacklist"));
+        this->menu->setCopyBtnText(tr("Info"));
+        connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
+        connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
+        connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
+        connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onCopyClicked()));
+    }else {
+        this->menu->hide();
+    }
+
+    bool isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
+    this->menu->setDeleteBtnVisible(isWhitelisted);
+    this->menu->setEditBtnVisible(!isWhitelisted);
+
+    this->index = rIndex;
+    menu->move(pos);
+    menu->show();
+}
+
+void ColdStakingWidget::onEditClicked() {
+    // whitelist address
+    if (!csModel->whitelist(index)) {
+        inform(tr("Whitelist failed, please check the logs"));
+        return;
+    }
+    QString label = index.sibling(index.row(), ColdStakingModel::DELEGATED_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
+    if (label.isEmpty()) {
+        label = index.data(Qt::DisplayRole).toString();
+    }
+    inform(label + tr(" staking!"));
+}
+
+void ColdStakingWidget::onDeleteClicked() {
+    // blacklist address
+    if (!csModel->blacklist(index)) {
+        inform(tr("Blacklist failed, please check the logs"));
+        return;
+    }
+    QString label = index.sibling(index.row(), ColdStakingModel::DELEGATED_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
+    if (label.isEmpty()) {
+        label = index.data(Qt::DisplayRole).toString();
+    }
+    inform(label + tr(" blacklisted from staking"));
+}
+
+void ColdStakingWidget::onCopyClicked() {
+    // show address info
+}
 
 void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme){
     static_cast<TxViewHolder*>(this->delegate->getRowFactory())->isLightTheme = isLightTheme;

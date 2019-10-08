@@ -465,8 +465,8 @@ margin-left:20px;</string>
             <property name="enabled">
              <bool>true</bool>
             </property>
-            <property name="focusPolicy">
-             <enum>Qt::NoFocus</enum>
+            <property name="mouseTracking">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -618,6 +618,9 @@ margin-left:20px;</string>
          </size>
         </property>
        </widget>
+      </item>
+      <item>
+       <widget class="OptionButton" name="btnColdStaking" native="true"/>
       </item>
       <item>
        <layout class="QVBoxLayout" name="verticalLayout_4">

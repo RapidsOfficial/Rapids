@@ -36,6 +36,7 @@ public:
     void setCopyBtnText(QString btnText);
     void setCopyBtnVisible(bool visible);
     void setDeleteBtnVisible(bool visible);
+    void setEditBtnVisible(bool visible);
 
 signals:
     void onDeleteClicked();

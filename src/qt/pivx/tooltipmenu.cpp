@@ -41,6 +41,10 @@ void TooltipMenu::setDeleteBtnVisible(bool visible){
     ui->btnDelete->setVisible(visible);
 }
 
+void TooltipMenu::setEditBtnVisible(bool visible) {
+    ui->btnEdit->setVisible(visible);
+}
+
 void TooltipMenu::deleteClicked(){
     hide();
     emit onDeleteClicked();

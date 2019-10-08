@@ -73,6 +73,7 @@ QT_FORMS_UI = \
   qt/pivx/forms/mnrow.ui \
   qt/pivx/forms/masternodeswidget.ui \
   qt/pivx/forms/myaddressrow.ui \
+  qt/pivx/forms/csrow.ui \
   qt/pivx/forms/sendchangeaddressdialog.ui \
   qt/pivx/forms/sendconfirmdialog.ui \
   qt/pivx/forms/sendcustomfeedialog.ui \
@@ -161,11 +162,13 @@ QT_MOC_CPP = \
   qt/pivx/moc_contactdropdownrow.cpp \
   qt/pivx/moc_mninfodialog.cpp \
   qt/pivx/moc_optionbutton.cpp \
+  qt/pivx/moc_coldstakingmodel.cpp \
   qt/pivx/moc_mnmodel.cpp \
   qt/pivx/moc_masternodewizarddialog.cpp \
   qt/pivx/moc_mnrow.cpp \
   qt/pivx/moc_masternodeswidget.cpp \
   qt/pivx/moc_myaddressrow.cpp \
+  qt/pivx/moc_csrow.cpp \
   qt/pivx/moc_contactsdropdown.cpp \
   qt/pivx/moc_sendchangeaddressdialog.cpp \
   qt/pivx/moc_sendconfirmdialog.cpp \
@@ -288,11 +291,13 @@ BITCOIN_QT_H = \
   qt/pivx/contactdropdownrow.h \
   qt/pivx/mninfodialog.h \
   qt/pivx/optionbutton.h \
+  qt/pivx/coldstakingmodel.h \
   qt/pivx/mnmodel.h \
   qt/pivx/masternodewizarddialog.h \
   qt/pivx/mnrow.h \
   qt/pivx/masternodeswidget.h \
   qt/pivx/myaddressrow.h \
+  qt/pivx/csrow.h \
   qt/pivx/contactsdropdown.h \
   qt/pivx/sendchangeaddressdialog.h \
   qt/pivx/sendconfirmdialog.h \
@@ -667,11 +672,13 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/contactsdropdown.cpp \
   qt/pivx/optionbutton.cpp \
   qt/pivx/mninfodialog.cpp \
+  qt/pivx/coldstakingmodel.cpp \
   qt/pivx/mnmodel.cpp \
   qt/pivx/masternodewizarddialog.cpp \
   qt/pivx/mnrow.cpp \
   qt/pivx/masternodeswidget.cpp \
   qt/pivx/myaddressrow.cpp \
+  qt/pivx/csrow.cpp \
   qt/pivx/sendchangeaddressdialog.cpp \
   qt/pivx/sendconfirmdialog.cpp \
   qt/pivx/sendcustomfeedialog.cpp \
