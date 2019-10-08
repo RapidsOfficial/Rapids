@@ -382,6 +382,9 @@ margin-left:20px;</string>
            </size>
           </property>
           <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="rightMargin">
+            <number>20</number>
+           </property>
            <item>
             <spacer name="horizontalSpacer_2">
              <property name="orientation">
