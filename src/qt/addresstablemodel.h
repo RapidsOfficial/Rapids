@@ -77,6 +77,11 @@ public:
      */
     int lookupAddress(const QString& address) const;
 
+    /*
+     * Look up purpose for address in address book, if not found return empty string
+     */
+    std::string purposeForAddress(const std::string& address) const;
+
     /**
      * Return last unused address
      */

@@ -487,6 +487,21 @@ QString AddressTableModel::labelForAddress(const QString& address) const
     return QString();
 }
 
+/* Look up purpose for address in address book
+ */
+std::string AddressTableModel::purposeForAddress(const std::string& address) const
+{
+    {
+        LOCK(wallet->cs_wallet);
+        CBitcoinAddress address_parsed(address);
+        std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
+        if (mi != wallet->mapAddressBook.end()) {
+            return mi->second.purpose;
+        }
+    }
+    return "";
+}
+
 int AddressTableModel::lookupAddress(const QString& address) const
 {
     QModelIndexList lst = match(index(0, Address, QModelIndex()),

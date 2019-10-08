@@ -75,6 +75,11 @@ public:
     QList<TransactionRecord> cachedWallet;
     bool hasZcTxes = false;
 
+    /**
+     * List with all of the grouped delegations received by this wallet
+     */
+    QList<CSDelegation> cachedDelegations;
+
 
     /* Query entire wallet anew from core.
      */
@@ -95,7 +100,7 @@ public:
             // Size of the tx subsets
             std::size_t const subsetSize = txesSize / (threadsCount + 1);
             std::size_t totalSumSize = 0;
-            QList<QFuture<QList<TransactionRecord>>> tasks;
+            QList<QFuture<std::pair<QList<TransactionRecord>, QList<CSDelegation>>>> tasks;
 
             // Subsets + run task
             for (std::size_t i = 0; i < threadsCount; ++i) {
@@ -112,31 +117,51 @@ public:
 
             // Now take the remaining ones and do the work here
             std::size_t const remainingSize = txesSize - totalSumSize;
-            cachedWallet.append(convertTxToRecords(this, wallet,
-                                                   std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
-                                                   ));
+            auto resPair = convertTxToRecords(this, wallet,
+                                              std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
+            );
+            cachedWallet.append(resPair.first);
 
-            for (QFuture<QList<TransactionRecord>> &future : tasks) {
+            for (auto &future : tasks) {
                 future.waitForFinished();
-                cachedWallet.append(future.result());
+                auto res = future.result();
+                cachedWallet.append(res.first);
             }
         } else {
             // Single thread flow
-            cachedWallet.append(convertTxToRecords(this, wallet, walletTxes));
+            auto resPair = convertTxToRecords(this, wallet, walletTxes);
+            cachedWallet.append(resPair.first);
+            cachedDelegations.append(resPair.second);
         }
     }
 
-    static QList<TransactionRecord> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<CWalletTx>& walletTxes) {
+    static std::pair<QList<TransactionRecord>,QList<CSDelegation>> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<CWalletTx>& walletTxes) {
         QList<TransactionRecord> cachedWallet;
+        QList<CSDelegation> cachedDelegations;
+
         bool hasZcTxes = tablePriv->hasZcTxes;
         for (const auto &tx : walletTxes) {
             if (TransactionRecord::showTransaction(tx)) {
                 QList<TransactionRecord> records = TransactionRecord::decomposeTransaction(wallet, tx);
 
-                if (!hasZcTxes) {
-                    for (const TransactionRecord &record : records) {
+                for (const TransactionRecord &record : records) {
+                    // Check for zc txes.
+                    if (!hasZcTxes) {
                         hasZcTxes = HasZcTxesIfNeeded(record);
-                        if (hasZcTxes) break;
+                    }
+
+                    // Check for delegations
+                    if (record.type == TransactionRecord::P2CSDelegation) {
+                        CSDelegation delegation(false, record.address);
+                        delegation.cachedTotalAmount += record.credit;
+                        int index = cachedDelegations.indexOf(delegation);
+                        if (index == -1) {
+                            cachedDelegations.append(delegation);
+                        } else {
+                            CSDelegation del = cachedDelegations[index];
+                            del.delegatedUtxo.append(record.getTxID());
+                            del.cachedTotalAmount += record.credit;
+                        }
                     }
                 }
 
@@ -147,7 +172,7 @@ public:
         if (hasZcTxes) // Only update it if it's true, multi-thread operation.
             tablePriv->hasZcTxes = true;
 
-        return cachedWallet;
+        return std::make_pair(cachedWallet, cachedDelegations);
     }
 
     static bool HasZcTxesIfNeeded(const TransactionRecord& record) {
@@ -349,6 +374,14 @@ int TransactionTableModel::columnCount(const QModelIndex& parent) const
 
 int TransactionTableModel::size() const{
     return priv->size();
+}
+
+int TransactionTableModel::csRowCount() {
+    return priv->cachedDelegations.size();
+}
+
+CSDelegation TransactionTableModel::getDelegation(int row) {
+    return priv->cachedDelegations[row];
 }
 
 bool TransactionTableModel::hasZcTxes() {
