@@ -314,42 +314,61 @@
               </spacer>
              </item>
              <item>
-              <widget class="QLabel" name="labelSubtitleDescription">
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>20</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">margin-bottom:2px;
-       margin-left:0.05px;
-       padding:0px;
-margin-right:20px; 
-margin-left:20px;</string>
-               </property>
-               <property name="text">
-                <string>Owner Address (optional)</string>
-               </property>
-              </widget>
-             </item>
-             <item>
-              <widget class="QLineEdit" name="lineEditOwnerAddress">
-               <property name="minimumSize">
-                <size>
-                 <width>0</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="maximumSize">
-                <size>
-                 <width>16777215</width>
-                 <height>50</height>
-                </size>
-               </property>
-               <property name="styleSheet">
-                <string notr="true">margin-right:20px; margin-left:20px;</string>
-               </property>
+              <widget class="QWidget" name="containerOwner" native="true">
+               <layout class="QVBoxLayout" name="vContainerOwner">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <property name="leftMargin">
+                 <number>20</number>
+                </property>
+                <property name="topMargin">
+                 <number>0</number>
+                </property>
+                <property name="rightMargin">
+                 <number>20</number>
+                </property>
+                <property name="bottomMargin">
+                 <number>0</number>
+                </property>
+                <item>
+                 <widget class="QLabel" name="labelSubtitleDescription">
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true">margin-bottom:2px;
+                   margin-left:0.05px;
+                   padding:0px;</string>
+                  </property>
+                  <property name="text">
+                   <string>Owner Address (optional)</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lineEditOwnerAddress">
+                  <property name="minimumSize">
+                   <size>
+                    <width>0</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>16777215</width>
+                    <height>50</height>
+                   </size>
+                  </property>
+                  <property name="styleSheet">
+                   <string notr="true"/>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
               </widget>
              </item>
             </layout>

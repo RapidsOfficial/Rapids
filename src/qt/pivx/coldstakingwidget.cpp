@@ -93,7 +93,10 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
 
     setCssProperty(ui->labelSubtitleDescription, "text-title");
     ui->lineEditOwnerAddress->setPlaceholderText(tr("Add owner address"));
-    initCssEditLine(ui->lineEditOwnerAddress);
+    btnOwnerContact = ui->lineEditOwnerAddress->addAction(QIcon("://ic-contact-arrow-down"), QLineEdit::TrailingPosition);
+    setCssProperty(ui->lineEditOwnerAddress, "edit-primary-multi-book");
+    ui->lineEditOwnerAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
+    setShadow(ui->lineEditOwnerAddress);
 
     ui->labelSubtitle2->setText(tr("Delegate or Accept PIV delegation"));
     setCssSubtitleScreen(ui->labelSubtitle2);
@@ -104,15 +107,11 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     setCssProperty(ui->labelEditTitle, "text-title");
     sendMultiRow = new SendMultiRow(this);
     ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
-    //connect(sendMultiRow, &SendMultiRow::onContactsClicked, this, &ColdStakingWidget::onContactsClicked);
-    //connect(sendMultiRow, &SendMultiRow::onMenuClicked, this, &ColdStakingWidget::onMenuClicked);
-    //connect(sendMultiRow, &SendMultiRow::onValueChanged, this, &ColdStakingWidget::onValueChanged);
+    connect(sendMultiRow, &SendMultiRow::onContactsClicked, [this](){ onContactsClicked(false); });
 
     // List
     ui->labelListHistory->setText(tr("Delegated balance history"));
     setCssProperty(ui->labelListHistory, "text-title");
-
-    //ui->emptyContainer->setVisible(false);
     setCssProperty(ui->pushImgEmpty, "img-empty-transactions");
     ui->labelEmpty->setText(tr("No delegations yet"));
     setCssProperty(ui->labelEmpty, "text-empty");
@@ -148,6 +147,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
+    connect(btnOwnerContact, &QAction::triggered, [this](){ onContactsClicked(true); });
     connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
 }
 
@@ -175,6 +175,11 @@ void ColdStakingWidget::onTxArrived(const QString& hash) {
         if (ui->pushLeft->isChecked())
             showList(true);
     }
+}
+
+void ColdStakingWidget::onContactsClicked(bool ownerAdd) {
+    isContactOwnerSelected = ownerAdd;
+    // TODO: complete me..
 }
 
 void ColdStakingWidget::onDelegateSelected(bool delegate){

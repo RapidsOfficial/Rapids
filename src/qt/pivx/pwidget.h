@@ -32,6 +32,8 @@ public:
 
     void run(int type) override;
     void onError(QString error, int type) override;
+
+    void inform(const QString& message);
     void emitMessage(const QString& title, const QString& message, unsigned int style, bool* ret = nullptr);
 
     QString translate(const char *msg) {
@@ -57,7 +59,6 @@ protected:
 
     void showHideOp(bool show);
     bool execute(int type);
-    void inform(const QString& message);
     void warn(const QString& title, const QString& message);
     bool ask(const QString& title, const QString& message);
     void showDialog(QDialog *dialog, int xDiv = 3, int yDiv = 5);

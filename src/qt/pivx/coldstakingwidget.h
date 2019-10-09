@@ -11,9 +11,11 @@
 #include "qt/pivx/tooltipmenu.h"
 #include "qt/pivx/sendmultirow.h"
 #include "qt/pivx/coldstakingmodel.h"
+#include "qt/pivx/contactsdropdown.h"
 #include "transactiontablemodel.h"
 #include "coincontroldialog.h"
 
+#include <QAction>
 #include <QLabel>
 #include <QWidget>
 
@@ -51,6 +53,7 @@ private slots:
     void onDeleteClicked();
     void onCopyClicked();
     void onTxArrived(const QString& hash);
+    void onContactsClicked(bool ownerAdd);
 
 private:
     Ui::ColdStakingWidget *ui;
@@ -59,10 +62,14 @@ private:
     ColdStakingModel* csModel = nullptr;
     CSDelegationHolder *txHolder = nullptr;
     CoinControlDialog *coinControlDialog = nullptr;
+    QAction *btnOwnerContact;
 
+    ContactsDropdown *menuContacts = nullptr;
     TooltipMenu* menu = nullptr;
     SendMultiRow *sendMultiRow = nullptr;
     bool isShowingDialog;
+
+    bool isContactOwnerSelected;
 
     // Cached index
     QModelIndex index;
