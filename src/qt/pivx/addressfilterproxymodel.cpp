@@ -11,10 +11,8 @@ bool AddressFilterProxyModel::filterAcceptsRow(int row, const QModelIndex& paren
     auto label = model->index(row, AddressTableModel::Label, parent);
 
     auto type = model->data(label, AddressTableModel::TypeRole).toString();
-    if (type != m_type) {
-        std::cout << "Type:" << type.toStdString() << "=" << m_type.toStdString() << std::endl;
+    if (type != m_type)
         return false;
-    }
 
     auto address = model->index(row, AddressTableModel::Address, parent);
 

@@ -78,6 +78,7 @@ private:
     void clearAll();
 
     void showAddressGenerationDialog(bool isPaymentRequest);
+    void onContactsClicked();
 };
 
 #endif // COLDSTAKINGWIDGET_H

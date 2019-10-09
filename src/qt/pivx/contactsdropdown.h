@@ -31,7 +31,8 @@ public:
     explicit ContactsDropdown(int minWidth, int minHeight, PWidget *parent = nullptr);
 
     void resizeList(int minWidth, int mintHeight);
-    void setWalletModel(WalletModel* _model, QString type);
+    void setWalletModel(WalletModel* _model, const QString& type);
+    void setType(const QString& type);
     void changeTheme(bool isLightTheme, QString& theme) override;
 signals:
     void contactSelected(QString address, QString label);

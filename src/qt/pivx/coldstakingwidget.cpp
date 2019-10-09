@@ -179,7 +179,72 @@ void ColdStakingWidget::onTxArrived(const QString& hash) {
 
 void ColdStakingWidget::onContactsClicked(bool ownerAdd) {
     isContactOwnerSelected = ownerAdd;
-    // TODO: complete me..
+    onContactsClicked();
+}
+
+void ColdStakingWidget::onContactsClicked(){
+
+    if(menu && menu->isVisible()){
+        menu->hide();
+    }
+
+    int contactsSize = isContactOwnerSelected ? walletModel->getAddressTableModel()->sizeSend() : walletModel->getAddressTableModel()->sizeDell();
+    if(contactsSize == 0) {
+        inform(tr("No contacts available, you can go to the contacts screen and add some there!"));
+        return;
+    }
+
+    int height;
+    int width;
+    QPoint pos;
+
+    if (isContactOwnerSelected) {
+        height = ui->lineEditOwnerAddress->height();
+        width = ui->lineEditOwnerAddress->width();
+        pos = ui->containerSend->rect().bottomLeft();
+        pos.setY((pos.y() + (height - 12) * 3));
+    } else {
+        height = sendMultiRow->getEditHeight();
+        width = sendMultiRow->getEditWidth();
+        pos = sendMultiRow->getEditLineRect().bottomLeft();
+        pos.setY((pos.y() + (height - 14) * 4));
+    }
+
+    pos.setX(pos.x() + 40);
+    height = (contactsSize <= 2) ? height * ( 2 * (contactsSize + 1 )) : height * 4;
+
+    if(!menuContacts){
+        menuContacts = new ContactsDropdown(
+                width,
+                height,
+                this
+        );
+        connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label){
+            if (isContactOwnerSelected) {
+                ui->lineEditOwnerAddress->setText(address);
+            } else {
+                sendMultiRow->setLabel(label);
+                sendMultiRow->setAddress(address);
+            }
+        });
+    }
+
+    if(menuContacts->isVisible()){
+        menuContacts->hide();
+        return;
+    }
+
+    if (isContactOwnerSelected) {
+        menuContacts->setWalletModel(walletModel, AddressTableModel::Send);
+    } else {
+        menuContacts->setWalletModel(walletModel, AddressTableModel::Delegators);
+    }
+
+    menuContacts->resizeList(width, height);
+    menuContacts->setStyleSheet(this->styleSheet());
+    menuContacts->adjustSize();
+    menuContacts->move(pos);
+    menuContacts->show();
 }
 
 void ColdStakingWidget::onDelegateSelected(bool delegate){

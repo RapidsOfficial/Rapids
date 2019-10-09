@@ -100,6 +100,7 @@ public:
                 const std::string& strName = item.second.name;
 
                 uint creationTime = 0;
+
                 if(item.second.purpose == "receive"){
                     creationTime = static_cast<uint>(wallet->GetKeyCreationTime(address));
                     recvNum++;
@@ -108,13 +109,27 @@ public:
                 } else if (item.second.purpose == CAddressBookData::AddressBookPurpose::DELEGABLE
                             || item.second.purpose == CAddressBookData::AddressBookPurpose::DELEGATOR) {
                     dellNum++;
+
+                    // TODO: Remove this when addresses are well parsed, this is a dirty dirty way to fix things quickly only for testing purposes..
+                    CKeyID keyID;
+                    if (address.GetKeyID(keyID)) {
+                        CBitcoinAddress stakingAddress(keyID, CChainParams::STAKING_ADDRESS);
+                        cachedAddressTable.append(
+                                AddressTableEntry(addressType,
+                                                  QString::fromStdString(strName),
+                                                  QString::fromStdString(stakingAddress.ToString()),
+                                                  creationTime
+                                )
+                        );
+                    }
+                    continue;
                 }
 
                 cachedAddressTable.append(
                         AddressTableEntry(addressType,
-                                  QString::fromStdString(strName),
-                                  QString::fromStdString(address.ToString()),
-                                  creationTime
+                                          QString::fromStdString(strName),
+                                          QString::fromStdString(address.ToString()),
+                                          creationTime
                         )
                 );
             }

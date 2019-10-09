@@ -317,7 +317,7 @@
               <widget class="QWidget" name="containerOwner" native="true">
                <layout class="QVBoxLayout" name="vContainerOwner">
                 <property name="spacing">
-                 <number>0</number>
+                 <number>4</number>
                 </property>
                 <property name="leftMargin">
                  <number>20</number>
@@ -345,7 +345,7 @@
                    padding:0px;</string>
                   </property>
                   <property name="text">
-                   <string>Owner Address (optional)</string>
+                   <string>Owner Address (optional, if empty a new address will be created)</string>
                   </property>
                  </widget>
                 </item>
