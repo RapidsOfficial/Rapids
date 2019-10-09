@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addresstablemodel.h"
+#include "addressbook.h"
 
 #include "guiutil.h"
 #include "walletmodel.h"
@@ -19,12 +20,14 @@
 const QString AddressTableModel::Send = "S";
 const QString AddressTableModel::Receive = "R";
 const QString AddressTableModel::Zerocoin = "X";
+const QString AddressTableModel::Delegators = "D";
 
 struct AddressTableEntry {
     enum Type {
         Sending,
         Receiving,
         Zerocoin,
+        Delegators,
         Hidden /* QSortFilterProxyModel will filter these out */
     };
 
@@ -63,6 +66,9 @@ static AddressTableEntry::Type translateTransactionType(const QString& strPurpos
         addressType = AddressTableEntry::Sending;
     else if (strPurpose == "receive")
         addressType = AddressTableEntry::Receiving;
+    else if (strPurpose == QString::fromStdString(CAddressBookData::AddressBookPurpose::DELEGATOR)
+            || strPurpose == QString::fromStdString(CAddressBookData::AddressBookPurpose::DELEGABLE))
+        addressType = AddressTableEntry::Delegators;
     else if (strPurpose == "unknown" || strPurpose == "") // if purpose not set, guess
         addressType = (isMine ? AddressTableEntry::Receiving : AddressTableEntry::Sending);
     return addressType;
@@ -76,6 +82,7 @@ public:
     QList<AddressTableEntry> cachedAddressTable;
     int sendNum = 0;
     int recvNum = 0;
+    int dellNum = 0;
     AddressTableModel* parent;
 
     AddressTablePriv(CWallet* wallet, AddressTableModel* parent) : wallet(wallet), parent(parent) {}
@@ -96,8 +103,11 @@ public:
                 if(item.second.purpose == "receive"){
                     creationTime = static_cast<uint>(wallet->GetKeyCreationTime(address));
                     recvNum++;
-                }else if(item.second.purpose == "send"){
+                } else if(item.second.purpose == "send"){
                     sendNum++;
+                } else if (item.second.purpose == CAddressBookData::AddressBookPurpose::DELEGABLE
+                            || item.second.purpose == CAddressBookData::AddressBookPurpose::DELEGATOR) {
+                    dellNum++;
                 }
 
                 cachedAddressTable.append(
@@ -223,6 +233,10 @@ public:
         return recvNum;
     }
 
+    int sizeDell(){
+        return dellNum;
+    }
+
     AddressTableEntry* index(int idx)
     {
         if (idx >= 0 && idx < cachedAddressTable.size()) {
@@ -264,6 +278,10 @@ int AddressTableModel::sizeRecv() const{
     return priv->sizeRecv();
 }
 
+int AddressTableModel::sizeDell() const {
+    return priv->sizeDell();
+}
+
 QVariant AddressTableModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
@@ -292,12 +310,14 @@ QVariant AddressTableModel::data(const QModelIndex& index, int role) const
         return font;
     } else if (role == TypeRole) {
         switch (rec->type) {
-        case AddressTableEntry::Sending:
-            return Send;
-        case AddressTableEntry::Receiving:
-            return Receive;
-        default:
-            break;
+            case AddressTableEntry::Sending:
+                return Send;
+            case AddressTableEntry::Receiving:
+                return Receive;
+            case AddressTableEntry::Delegators:
+                return Delegators;
+            default:
+                break;
         }
     }
     return QVariant();

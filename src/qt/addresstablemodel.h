@@ -48,6 +48,7 @@ public:
     static const QString Send;    /**< Specifies send address */
     static const QString Receive; /**< Specifies receive address */
     static const QString Zerocoin; /**< Specifies stealth address */
+    static const QString Delegators;
 
     /** @name Methods overridden from QAbstractTableModel
         @{*/
@@ -55,6 +56,7 @@ public:
     int columnCount(const QModelIndex& parent) const;
     int sizeSend() const;
     int sizeRecv() const;
+    int sizeDell() const;
     QVariant data(const QModelIndex& index, int role) const;
     bool setData(const QModelIndex& index, const QVariant& value, int role);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
