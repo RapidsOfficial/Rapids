@@ -37,8 +37,8 @@ public:
 signals:
     void contactSelected(QString address, QString label);
 private:
-    FurAbstractListItemDelegate* delegate;
-    AddressTableModel* model;
+    FurAbstractListItemDelegate* delegate = nullptr;
+    AddressTableModel* model = nullptr;
     AddressFilterProxyModel *filter = nullptr;
     QListView *list;
     QFrame *frameList;

@@ -5,6 +5,7 @@
 #include "qt/pivx/coldstakingwidget.h"
 #include "qt/pivx/forms/ui_coldstakingwidget.h"
 #include "qt/pivx/qtutils.h"
+#include "amount.h"
 #include "guiutil.h"
 #include "qt/pivx/requestdialog.h"
 #include "qt/pivx/tooltipmenu.h"
@@ -44,8 +45,8 @@ public:
             label = "Address with no label";
         }
         bool isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
-        QString amount = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT).data(Qt::DisplayRole).toString();
-        row->updateView(address, label, isWhitelisted, amount);
+        QString amountStr = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT_STR).data(Qt::DisplayRole).toString();
+        row->updateView(address, label, isWhitelisted, amountStr);
     }
 
     QColor rectColor(bool isHovered, bool isSelected) override{
@@ -103,7 +104,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
     setCssBtnPrimary(ui->pushButtonSend);
 
-    ui->labelEditTitle->setText(tr("Add the delegator address"));
+    ui->labelEditTitle->setText(tr("Add the staking address"));
     setCssProperty(ui->labelEditTitle, "text-title");
     sendMultiRow = new SendMultiRow(this);
     ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
@@ -283,12 +284,18 @@ void ColdStakingWidget::onSendClicked(){
         return;
 
     if (!sendMultiRow->validate()) {
-        inform(tr("Invalid Entry"));
+        inform(tr("Invalid entry"));
         return;
     }
 
     SendCoinsRecipient dest = sendMultiRow->getValue();
     dest.isP2CS = true;
+
+    // Amount must be < 10 PIV, check chainparams minColdStakingAmount
+    if (dest.amount < (COIN * 10)) {
+        inform(tr("Invalid entry, minimum delegable amount is 10 PIV"));
+        return;
+    }
 
     QString inputOwner = ui->lineEditOwnerAddress->text();
     if (!inputOwner.isEmpty() && !walletModel->validateAddress(inputOwner)) {

@@ -94,7 +94,12 @@ void RequestDialog::setPaymentRequest(bool isPaymentRequest) {
 void RequestDialog::onNextClicked(){
     if(walletModel) {
 
-        QString labelStr = ui->lineEditLabel->text();;
+        QString labelStr = ui->lineEditLabel->text();
+
+        //Amount
+        int displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
+        bool isValueValid = true;
+        CAmount value = 0;
 
         if (!this->isPaymentRequest) {
 
@@ -103,26 +108,23 @@ void RequestDialog::onNextClicked(){
                 inform("Address label cannot be empty");
                 return;
             }
-
+        } else {
+            // Payment request
+            value = GUIUtil::parseValue(
+                    ui->lineEditAmount->text(),
+                    displayUnit,
+                    &isValueValid
+            );
+            if (value <= 0 || !isValueValid) {
+                inform("Invalid amount");
+                return;
+            }
         }
 
         info = new SendCoinsRecipient();
         info->label = labelStr;
-        info->message = ui->lineEditDescription->text();
-
-        //Amount
-        int displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
-        bool isValueValid = true;
-        CAmount value = GUIUtil::parseValue(
-                ui->lineEditAmount->text(),
-                displayUnit,
-                &isValueValid
-        );
         info->amount = value;
-
-        if(value <= 0 || !isValueValid){
-            return;
-        }
+        info->message = ui->lineEditDescription->text();
 
         // address
         std::string label = info->label.isEmpty() ? "" : info->label.toStdString();
