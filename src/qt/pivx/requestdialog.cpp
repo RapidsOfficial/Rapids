@@ -99,7 +99,11 @@ void RequestDialog::onNextClicked(){
         //Amount
         int displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
         bool isValueValid = true;
-        CAmount value = 0;
+        CAmount value = GUIUtil::parseValue(
+                ui->lineEditAmount->text(),
+                displayUnit,
+                &isValueValid
+        );
 
         if (!this->isPaymentRequest) {
 
@@ -108,17 +112,11 @@ void RequestDialog::onNextClicked(){
                 inform("Address label cannot be empty");
                 return;
             }
-        } else {
-            // Payment request
-            value = GUIUtil::parseValue(
-                    ui->lineEditAmount->text(),
-                    displayUnit,
-                    &isValueValid
-            );
-            if (value <= 0 || !isValueValid) {
-                inform("Invalid amount");
-                return;
-            }
+        }
+
+        if (value < 0 || !isValueValid) {
+            inform("Invalid amount");
+            return;
         }
 
         info = new SendCoinsRecipient();
