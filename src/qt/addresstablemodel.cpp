@@ -66,8 +66,8 @@ static AddressTableEntry::Type translateTransactionType(const QString& strPurpos
         addressType = AddressTableEntry::Sending;
     else if (strPurpose == "receive")
         addressType = AddressTableEntry::Receiving;
-    else if (strPurpose == QString::fromStdString(CAddressBookData::AddressBookPurpose::DELEGATOR)
-            || strPurpose == QString::fromStdString(CAddressBookData::AddressBookPurpose::DELEGABLE))
+    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGATOR)
+            || strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGABLE))
         addressType = AddressTableEntry::Delegators;
     else if (strPurpose == "unknown" || strPurpose == "") // if purpose not set, guess
         addressType = (isMine ? AddressTableEntry::Receiving : AddressTableEntry::Sending);
@@ -92,7 +92,7 @@ public:
         cachedAddressTable.clear();
         {
             LOCK(wallet->cs_wallet);
-            for (const PAIRTYPE(CTxDestination, CAddressBookData) & item : wallet->mapAddressBook) {
+            for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : wallet->mapAddressBook) {
                 const CBitcoinAddress& address = item.first;
                 bool fMine = IsMine(*wallet, address.Get());
                 AddressTableEntry::Type addressType = translateTransactionType(
@@ -106,8 +106,8 @@ public:
                     recvNum++;
                 } else if(item.second.purpose == "send"){
                     sendNum++;
-                } else if (item.second.purpose == CAddressBookData::AddressBookPurpose::DELEGABLE
-                            || item.second.purpose == CAddressBookData::AddressBookPurpose::DELEGATOR) {
+                } else if (item.second.purpose == AddressBook::AddressBookPurpose::DELEGABLE
+                            || item.second.purpose == AddressBook::AddressBookPurpose::DELEGATOR) {
                     dellNum++;
 
                     // TODO: Remove this when addresses are well parsed, this is a dirty dirty way to fix things quickly only for testing purposes..
@@ -516,7 +516,7 @@ QString AddressTableModel::labelForAddress(const QString& address) const
         {
             LOCK(wallet->cs_wallet);
             CBitcoinAddress address_parsed(address.toStdString());
-            std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
+            std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
             if (mi != wallet->mapAddressBook.end()) {
                 return QString::fromStdString(mi->second.name);
             }
@@ -532,7 +532,7 @@ std::string AddressTableModel::purposeForAddress(const std::string& address) con
     {
         LOCK(wallet->cs_wallet);
         CBitcoinAddress address_parsed(address);
-        std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
+        std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
         if (mi != wallet->mapAddressBook.end()) {
             return mi->second.purpose;
         }
@@ -558,7 +558,7 @@ int AddressTableModel::lookupAddress(const QString& address) const
 QString AddressTableModel::getLastUnusedAddress() const{
     LOCK(wallet->cs_wallet);
     if(!wallet->mapAddressBook.empty()) {
-        for (std::map<CTxDestination, CAddressBookData>::iterator it = wallet->mapAddressBook.end(); it != wallet->mapAddressBook.begin(); --it) {
+        for (std::map<CTxDestination, AddressBook::CAddressBookData>::iterator it = wallet->mapAddressBook.end(); it != wallet->mapAddressBook.begin(); --it) {
             if(it != wallet->mapAddressBook.end()) {
                 if (it->second.purpose == "receive") {
                     const CBitcoinAddress &address = it->first;

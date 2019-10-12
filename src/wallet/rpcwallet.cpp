@@ -167,7 +167,7 @@ UniValue delegatoradd(const UniValue& params, bool fHelp)
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from PIVX address");
 
-    return pwalletMain->SetAddressBook(keyID, "", CAddressBookData::AddressBookPurpose::DELEGATOR);
+    return pwalletMain->SetAddressBook(keyID, "", AddressBook::AddressBookPurpose::DELEGATOR);
 }
 
 UniValue delegatorremove(const UniValue& params, bool fHelp)
@@ -202,13 +202,13 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
     std::string label = "";
     {
         LOCK(pwalletMain->cs_wallet);
-        std::map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
+        std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
         if (mi != pwalletMain->mapAddressBook.end()) {
             label = mi->second.name;
         }
     }
 
-    return pwalletMain->SetAddressBook(keyID, label, CAddressBookData::AddressBookPurpose::DELEGABLE);
+    return pwalletMain->SetAddressBook(keyID, label, AddressBook::AddressBookPurpose::DELEGABLE);
 }
 
 UniValue ListaddressesForPurpose(const std::string strPurpose)
@@ -436,7 +436,7 @@ UniValue getaccount(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
     std::string strAccount;
-    std::map<CTxDestination, CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
+    std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = pwalletMain->mapAddressBook.find(address.Get());
     if (mi != pwalletMain->mapAddressBook.end() && !(*mi).second.name.empty())
         strAccount = (*mi).second.name;
     return strAccount;
@@ -468,7 +468,7 @@ UniValue getaddressesbyaccount(const UniValue& params, bool fHelp)
 
     // Find all addresses that have the given account
     UniValue ret(UniValue::VARR);
-    for (const PAIRTYPE(CBitcoinAddress, CAddressBookData) & item : pwalletMain->mapAddressBook) {
+    for (const PAIRTYPE(CBitcoinAddress, AddressBook::CAddressBookData) & item : pwalletMain->mapAddressBook) {
         const CBitcoinAddress& address = item.first;
         const std::string& strName = item.second.name;
         if (strName == strAccount)
@@ -1543,7 +1543,7 @@ UniValue ListReceived(const UniValue& params, bool fByAccounts)
     // Reply
     UniValue ret(UniValue::VARR);
     std::map<std::string, tallyitem> mapAccountTally;
-    for (const PAIRTYPE(CBitcoinAddress, CAddressBookData) & item : pwalletMain->mapAddressBook) {
+    for (const PAIRTYPE(CBitcoinAddress, AddressBook::CAddressBookData) & item : pwalletMain->mapAddressBook) {
         const CBitcoinAddress& address = item.first;
         const std::string& strAccount = item.second.name;
         std::map<CBitcoinAddress, tallyitem>::iterator it = mapTally.find(address);
@@ -1999,7 +1999,7 @@ UniValue listaccounts(const UniValue& params, bool fHelp)
             includeWatchonly = includeWatchonly | ISMINE_WATCH_ONLY;
 
     std::map<std::string, CAmount> mapAccountBalances;
-    for (const PAIRTYPE(CTxDestination, CAddressBookData) & entry : pwalletMain->mapAddressBook) {
+    for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & entry : pwalletMain->mapAddressBook) {
         if (IsMine(*pwalletMain, entry.first) & includeWatchonly) // This address belongs to me
             mapAccountBalances[entry.second.name] = 0;
     }

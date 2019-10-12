@@ -1502,7 +1502,7 @@ void CWalletTx::GetAccountAmounts(const std::string& strAccount, CAmount& nRecei
         LOCK(pwallet->cs_wallet);
         for (const COutputEntry& r : listReceived) {
             if (pwallet->mapAddressBook.count(r.destination)) {
-                std::map<CTxDestination, CAddressBookData>::const_iterator mi = pwallet->mapAddressBook.find(r.destination);
+                std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = pwallet->mapAddressBook.find(r.destination);
                 if (mi != pwallet->mapAddressBook.end() && (*mi).second.name == strAccount)
                     nReceived += r.amount;
             } else if (strAccount.empty()) {
@@ -3005,7 +3005,7 @@ bool CWallet::DelAddressBook(const CTxDestination& address)
 bool CWallet::HasAddressBook(const CTxDestination& address) const
 {
     LOCK(cs_wallet); // mapAddressBook
-    std::map<CTxDestination, CAddressBookData>::const_iterator mi = mapAddressBook.find(address);
+    std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = mapAddressBook.find(address);
     return mi != mapAddressBook.end();
 }
 
@@ -3016,7 +3016,7 @@ bool CWallet::HasDelegator(const CTxOut& out) const
         return false;
     {
         LOCK(cs_wallet); // mapAddressBook
-        std::map<CTxDestination, CAddressBookData>::const_iterator mi = mapAddressBook.find(delegator);
+        std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = mapAddressBook.find(delegator);
         if (mi == mapAddressBook.end())
             return false;
         return (*mi).second.purpose == "delegator";
@@ -3289,7 +3289,7 @@ std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) co
 {
     LOCK(cs_wallet);
     std::set<CTxDestination> result;
-    for (const PAIRTYPE(CTxDestination, CAddressBookData) & item : mapAddressBook) {
+    for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : mapAddressBook) {
         const CTxDestination& address = item.first;
         const std::string& strName = item.second.name;
         if (strName == strAccount)

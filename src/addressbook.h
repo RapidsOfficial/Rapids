@@ -8,30 +8,31 @@
 #include <map>
 #include <string>
 
-/** Address book data */
-class CAddressBookData
-{
-public:
+namespace AddressBook {
 
-    class AddressBookPurpose {
-    public:
+    namespace AddressBookPurpose {
         inline static const std::string UNKNOWN = "unknown";
         inline static const std::string RECEIVE = "receive";
         inline static const std::string SEND = "send";
         inline static const std::string DELEGABLE = "delegable";
         inline static const std::string DELEGATOR = "delegator";
-    };
-
-    std::string name;
-    std::string purpose;
-
-    CAddressBookData()
-    {
-        purpose = AddressBookPurpose::UNKNOWN;
     }
 
-    typedef std::map<std::string, std::string> StringMap;
-    StringMap destdata;
-};
+/** Address book data */
+    class CAddressBookData {
+    public:
+
+        std::string name;
+        std::string purpose;
+
+        CAddressBookData() {
+            purpose = AddressBook::AddressBookPurpose::UNKNOWN;
+        }
+
+        typedef std::map<std::string, std::string> StringMap;
+        StringMap destdata;
+    };
+
+}
 
 #endif //PIVX_ADDRESSBOOK_H

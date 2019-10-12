@@ -317,7 +317,7 @@ public:
     int64_t nOrderPosNext;
     std::map<uint256, int> mapRequestCount;
 
-    std::map<CTxDestination, CAddressBookData> mapAddressBook;
+    std::map<CTxDestination, AddressBook::CAddressBookData> mapAddressBook;
 
     std::set<COutPoint> setLockedCoins;
 
