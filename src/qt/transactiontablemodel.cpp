@@ -151,7 +151,7 @@ public:
                     }
 
                     // Check for delegations
-                    if (record.type == TransactionRecord::P2CSDelegation) {
+                    if (record.type == TransactionRecord::P2CSDelegation || record.type == TransactionRecord::P2CSDelegationSent) {
                         checkForDelegations(record, cachedDelegations);
                     }
                 }
@@ -168,14 +168,15 @@ public:
 
     static void checkForDelegations(const TransactionRecord& record, QList<CSDelegation>& cachedDelegations) {
         CSDelegation delegation(false, record.address);
-        delegation.cachedTotalAmount += record.credit;
         int index = cachedDelegations.indexOf(delegation);
         if (index == -1) {
+            delegation.cachedTotalAmount += record.credit + record.debit;
+            delegation.isSpendable = record.type == TransactionRecord::P2CSDelegationSent;
             cachedDelegations.append(delegation);
         } else {
             CSDelegation del = cachedDelegations[index];
             del.delegatedUtxo.append(record.getTxID());
-            del.cachedTotalAmount += record.credit;
+            del.cachedTotalAmount += record.credit + record.debit;
         }
 
     }
@@ -241,10 +242,10 @@ public:
                             cachedWallet.insert(insert_idx, rec);
                             if (!hasZcTxes) hasZcTxes = HasZcTxesIfNeeded(rec);
 
-                            // Check for delegations
-                            if (rec.type == TransactionRecord::P2CSDelegation) {
-                                checkForDelegations(rec, cachedDelegations);
-                            }
+                        // Check for delegations
+                        if (rec.type == TransactionRecord::P2CSDelegation || rec.type == TransactionRecord::P2CSDelegationSent) {
+                            checkForDelegations(rec, cachedDelegations);
+                        }
 
                             insert_idx += 1;
                             // Return record
@@ -486,6 +487,7 @@ QString TransactionTableModel::formatTxType(const TransactionRecord* wtx) const
         return tr("zPIV Stake");
     case TransactionRecord::StakeHot:
         return tr("PIV Stake in behalf of");
+    case TransactionRecord::P2CSDelegationSent:
     case TransactionRecord::P2CSDelegation:
         return tr("Stake delegation");
     case TransactionRecord::Generated:

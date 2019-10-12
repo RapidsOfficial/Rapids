@@ -23,7 +23,11 @@ public:
     bool isWhitelisted;
     std::string delegatedAddress;
     QList<QString> delegatedUtxo;
+    // Sum of all delegations to this staking address
     CAmount cachedTotalAmount;
+
+    // coin owner side, set to true if it can be spend
+    bool isSpendable;
 
     bool operator==(const CSDelegation& obj) {
         return obj.delegatedAddress == delegatedAddress;

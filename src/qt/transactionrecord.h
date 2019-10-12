@@ -97,7 +97,8 @@ public:
         Obfuscated,
         StakeDelegated, // Received cold stake (owner)
         StakeHot, // Staked via a delegated P2CS.
-        P2CSDelegation
+        P2CSDelegation, // Non-spendable P2CS, staker side.
+        P2CSDelegationSent // Spendable P2CS delegated utxo. (coin-owner)
     };
 
     /** Number of confirmation recommended for accepting a transaction */

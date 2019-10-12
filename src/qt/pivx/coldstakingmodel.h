@@ -25,7 +25,8 @@ public:
         IS_WHITELISTED_STRING = 3,
         DELEGATED_UTXO_IDS = 4,
         TOTAL_STACKEABLE_AMOUNT_STR = 5,
-        TOTAL_STACKEABLE_AMOUNT = 6
+        TOTAL_STACKEABLE_AMOUNT = 6,
+        IS_RECEIVED_DELEGATION = 7
     };
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

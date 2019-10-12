@@ -299,8 +299,23 @@ void ColdStakingWidget::onSendClicked(){
     }
 
     QString inputOwner = ui->lineEditOwnerAddress->text();
-    if (!inputOwner.isEmpty() && !walletModel->validateAddress(inputOwner)) {
+    bool isOwnerEmpty = inputOwner.isEmpty();
+    if (!isOwnerEmpty && !walletModel->validateAddress(inputOwner)) {
         inform(tr("Owner address invalid"));
+        return;
+    }
+
+
+    bool isStakingAddressFromThisWallet = walletModel->isMine(dest.address);
+    bool isOwnerAddressFromThisWallet = isOwnerEmpty;
+
+    if (!isOwnerAddressFromThisWallet) {
+        isOwnerAddressFromThisWallet = walletModel->isMine(inputOwner);
+    }
+
+    // Don't try to delegate the balance if both addresses are from this wallet
+    if (isStakingAddressFromThisWallet && isOwnerAddressFromThisWallet) {
+        inform(tr("Staking address corresponds to this wallet, change it to an external node"));
         return;
     }
 
@@ -421,9 +436,20 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
 
     this->index = rIndex;
 
-    bool isWhitelisted = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
-    this->menu->setDeleteBtnVisible(isWhitelisted);
-    this->menu->setEditBtnVisible(!isWhitelisted);
+    bool isReceivedDelegation = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
+
+    if (isReceivedDelegation) {
+        bool isWhitelisted = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_WHITELISTED).data(
+                Qt::DisplayRole).toBool();
+        this->menu->setDeleteBtnVisible(isWhitelisted);
+        this->menu->setEditBtnVisible(!isWhitelisted);
+        this->menu->setMinimumHeight(75);
+    } else {
+        // owner side
+        this->menu->setDeleteBtnVisible(false);
+        this->menu->setEditBtnVisible(false);
+        this->menu->setMinimumHeight(60);
+    }
     if (adjustSize) this->menu->adjustSize();
 
     menu->move(pos);

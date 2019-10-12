@@ -345,14 +345,9 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
     bool isSpendable = wallet->IsMine(p2csUtxo) & ISMINE_SPENDABLE_DELEGATED;
 
     if (isContract) {
-        record.type = TransactionRecord::P2CSDelegation;
+        record.type = (isSpendable ? TransactionRecord::P2CSDelegationSent : TransactionRecord::P2CSDelegation);
         record.debit = wtx.nDelegatedDebitCached;
         record.credit = wtx.GetStakeDelegationCredit();
-        if (isSpendable) {
-            // Means that this wallet can redeem the p2cs, this was a send to yourself..
-            // TODO: add some way to represent this..
-        }
-
     } else {
         // Stake
         if (isSpendable) {
@@ -362,6 +357,7 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
         } else {
             record.type = TransactionRecord::StakeHot;
             record.credit = wtx.GetColdStakingCredit();
+            record.debit = wtx.nColdDebitCached;
         }
     }
 

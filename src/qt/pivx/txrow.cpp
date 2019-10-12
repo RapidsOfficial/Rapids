@@ -92,6 +92,7 @@ void TxRow::setType(bool isLightTheme, int type, bool isConfirmed){
             path = "://ic-transaction-stake-hot";
             css = "text-list-amount-unconfirmed";
             break;
+        case TransactionRecord::P2CSDelegationSent:
         case TransactionRecord::P2CSDelegation:
             path = "://ic-transaction-cs-contract";
             css = "text-list-amount-unconfirmed";
