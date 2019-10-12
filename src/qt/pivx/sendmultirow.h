@@ -41,6 +41,7 @@ public:
 
     /** Return whether the entry is still empty and unedited */
     bool isClear();
+    void setOnlyStakingAddressAccepted(bool onlyStakingAddress);
     CAmount getAmountValue(QString str);
 
     void setAddress(const QString& address);
@@ -85,6 +86,7 @@ private:
     int displayUnit;
     int number = 0;
     bool isExpanded = false;
+    bool onlyStakingAddressAccepted = false;
 
     SendCoinsRecipient recipient;
 
