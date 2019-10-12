@@ -250,6 +250,9 @@ void ColdStakingWidget::onContactsClicked(){
 }
 
 void ColdStakingWidget::onDelegateSelected(bool delegate){
+    if (menu && menu->isVisible()) {
+        menu->hide();
+    }
     if(delegate){
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
