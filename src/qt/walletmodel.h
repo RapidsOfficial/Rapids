@@ -290,6 +290,7 @@ public:
     bool getKeyId(const CBitcoinAddress& address, CKeyID& keyID);
 
     bool isMine(CBitcoinAddress address);
+    bool isMine(const QString& addressStr);
     bool isUsed(CBitcoinAddress address);
     void getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs);
     bool isSpent(const COutPoint& outpoint) const;
