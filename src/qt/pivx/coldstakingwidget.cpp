@@ -107,6 +107,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->labelEditTitle->setText(tr("Add the staking address"));
     setCssProperty(ui->labelEditTitle, "text-title");
     sendMultiRow = new SendMultiRow(this);
+    sendMultiRow->setOnlyStakingAddressAccepted(true);
     ((QVBoxLayout*)ui->containerSend->layout())->insertWidget(1, sendMultiRow);
     connect(sendMultiRow, &SendMultiRow::onContactsClicked, [this](){ onContactsClicked(false); });
 
