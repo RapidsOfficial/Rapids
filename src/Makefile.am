@@ -264,6 +264,7 @@ libbitcoin_wallet_a_SOURCES = \
   obfuscation.cpp \
   obfuscation-relay.cpp \
   wallet/db.cpp \
+  addressbook.cpp \
   crypter.cpp \
   swifttx.cpp \
   masternode.cpp \

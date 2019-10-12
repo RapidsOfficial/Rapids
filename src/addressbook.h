@@ -11,11 +11,11 @@
 namespace AddressBook {
 
     namespace AddressBookPurpose {
-        inline static const std::string UNKNOWN = "unknown";
-        inline static const std::string RECEIVE = "receive";
-        inline static const std::string SEND = "send";
-        inline static const std::string DELEGABLE = "delegable";
-        inline static const std::string DELEGATOR = "delegator";
+        extern const std::string UNKNOWN;
+        extern const std::string RECEIVE;
+        extern const std::string SEND;
+        extern const std::string DELEGABLE;
+        extern const std::string DELEGATOR;
     }
 
 /** Address book data */
