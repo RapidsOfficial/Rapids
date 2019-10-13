@@ -51,12 +51,6 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
 
     if (wtx.IsCoinStake()) {
         TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
-        // Check for cold stakes.
-        if (wtx.HasP2CSOutputs()) {
-            loadHotOrColdStakeOrContract(wallet, wtx, sub);
-            parts.append(sub);
-            return parts;
-        }
 
         CTxDestination address;
         if (!wtx.HasZerocoinSpendInputs() && !ExtractDestination(wtx.vout[1].scriptPubKey, address))
@@ -74,11 +68,19 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
             }
             sub.debit -= wtx.vin[0].nSequence * COIN;
         } else if (isminetype mine = wallet->IsMine(wtx.vout[1])) {
-            // PIV stake reward
-            sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-            sub.type = TransactionRecord::StakeMint;
-            sub.address = CBitcoinAddress(address).ToString();
-            sub.credit = nNet;
+
+            // Check for cold stakes.
+            if (wtx.HasP2CSOutputs()) {
+                loadHotOrColdStakeOrContract(wallet, wtx, sub);
+                parts.append(sub);
+                return parts;
+            } else {
+                // PIV stake reward
+                sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
+                sub.type = TransactionRecord::StakeMint;
+                sub.address = CBitcoinAddress(address).ToString();
+                sub.credit = nNet;
+            }
         } else {
             //Masternode reward
             CTxDestination destMN;
