@@ -205,6 +205,39 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
     return pwalletMain->DelAddressBook(keyID);
 }
 
+UniValue listdelegators(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw std::runtime_error(
+            "listdelegators \"addr\"\n"
+            "\nShows the list of allowed delegator addresses for cold staking.\n"
+
+            "\nResult:\n"
+            "[\n"
+            "   {\n"
+            "   \"label\": \"yyy\",  (string) account label\n"
+            "   \"address\": \"xxx\",  (string) PIVX address string\n"
+            "   }\n"
+            "  ...\n"
+            "]\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("listdelegators" , "") +
+            HelpExampleRpc("listdelegators", ""));
+
+    UniValue ret(UniValue::VARR);
+    LOCK(pwalletMain->cs_wallet);
+    for (const auto& addr : pwalletMain->mapAddressBook) {
+        if (addr.second.purpose != "delegator") continue;
+        UniValue entry(UniValue::VOBJ);
+        entry.push_back(Pair("label", addr.second.name));
+        entry.push_back(Pair("address", CBitcoinAddress(addr.first).ToString()));
+        ret.push_back(entry);
+    }
+
+    return ret;
+}
+
 CBitcoinAddress GetAccountAddress(std::string strAccount, bool bForceNew = false)
 {
     CWalletDB walletdb(pwalletMain->strWalletFile);
