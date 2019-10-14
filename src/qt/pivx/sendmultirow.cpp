@@ -146,6 +146,7 @@ void SendMultiRow::clear() {
     ui->lineEditAddress->clear();
     ui->lineEditAmount->clear();
     ui->lineEditDescription->clear();
+    setCssProperty(ui->lineEditAddress, "edit-primary-multi-book", true);
 }
 
 bool SendMultiRow::validate()

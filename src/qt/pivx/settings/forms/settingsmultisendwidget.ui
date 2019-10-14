@@ -130,7 +130,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>PushButton</string>
+                 <string/>
                 </property>
                 <property name="checkable">
                  <bool>true</bool>
@@ -155,7 +155,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>PushButton</string>
+                 <string/>
                 </property>
                 <property name="checkable">
                  <bool>true</bool>
@@ -429,7 +429,7 @@
              </size>
             </property>
             <property name="text">
-             <string>PushButton</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -464,7 +464,7 @@
              </size>
             </property>
             <property name="text">
-             <string>PushButton</string>
+             <string/>
             </property>
            </widget>
           </item>

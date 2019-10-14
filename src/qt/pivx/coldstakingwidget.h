@@ -54,6 +54,7 @@ private slots:
     void onCopyClicked();
     void onTxArrived(const QString& hash);
     void onContactsClicked(bool ownerAdd);
+    void clearAll();
 
 private:
     Ui::ColdStakingWidget *ui;
@@ -75,7 +76,6 @@ private:
     QModelIndex index;
 
     int nDisplayUnit;
-    void clearAll();
 
     void showAddressGenerationDialog(bool isPaymentRequest);
     void onContactsClicked();

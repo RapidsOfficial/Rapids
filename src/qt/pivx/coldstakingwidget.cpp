@@ -102,7 +102,13 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->labelSubtitle2->setText(tr("Delegate or Accept PIV delegation"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
+
+    ui->pushButtonSend->setText(tr("Delegate"));
+    ui->pushButtonClear->setText(tr("Clear All"));
     setCssBtnPrimary(ui->pushButtonSend);
+    setCssBtnSecondary(ui->pushButtonClear);
+
+    connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(clearAll()));
 
     ui->labelEditTitle->setText(tr("Add the staking address"));
     setCssProperty(ui->labelEditTitle, "text-title");
@@ -374,6 +380,10 @@ void ColdStakingWidget::onSendClicked(){
 void ColdStakingWidget::clearAll() {
     if (sendMultiRow) sendMultiRow->clear();
     ui->lineEditOwnerAddress->clear();
+    if (CoinControlDialog::coinControl) {
+        CoinControlDialog::coinControl->SetNull();
+        ui->btnCoinControl->setActive(false);
+    }
 }
 
 void ColdStakingWidget::onCoinControlClicked(){
