@@ -22,7 +22,8 @@ public:
 
     bool isWhitelisted;
     std::string delegatedAddress;
-    QList<QString> delegatedUtxo;
+    /// Map of txId --> index num for stakeable utxo delegations
+    QMap<QString, int> delegatedUtxo;
     // Sum of all delegations to this staking address
     CAmount cachedTotalAmount;
 

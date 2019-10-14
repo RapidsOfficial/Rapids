@@ -121,11 +121,20 @@ public:
                                               std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
             );
             cachedWallet.append(resPair.first);
+            cachedDelegations.append(resPair.second);
 
             for (auto &future : tasks) {
                 future.waitForFinished();
                 auto res = future.result();
                 cachedWallet.append(res.first);
+
+                if (!res.second.isEmpty()) {
+                    // Check if the delegation exist in the cached list and append it if it does.
+                    // This is done progressively because of the possibility of several delegations to the same staking address
+                    for (auto& delegation : res.second) {
+                        updateOrAppendDelegation(delegation, cachedDelegations);
+                    }
+                }
             }
         } else {
             // Single thread flow
@@ -152,7 +161,7 @@ public:
 
                     // Check for delegations
                     if (record.type == TransactionRecord::P2CSDelegation || record.type == TransactionRecord::P2CSDelegationSent) {
-                        checkForDelegations(record, cachedDelegations);
+                        checkForDelegations(record, wallet, cachedDelegations);
                     }
                 }
 
@@ -166,19 +175,54 @@ public:
         return std::make_pair(cachedWallet, cachedDelegations);
     }
 
-    static void checkForDelegations(const TransactionRecord& record, QList<CSDelegation>& cachedDelegations) {
+    static void checkForDelegations(const TransactionRecord& record, const CWallet* wallet, QList<CSDelegation>& cachedDelegations) {
         CSDelegation delegation(false, record.address);
+        delegation.isSpendable = record.type == TransactionRecord::P2CSDelegationSent;
+
+        // Append only stakeable utxo and not every output of the record
+        const QString& hashTxId = record.getTxID();
+        const CWalletTx* tx = wallet->GetWalletTx(record.hash);
+        for (int i = 0; i < (int) tx->vout.size(); ++i) {
+            auto out =  tx->vout[i];
+            if (out.scriptPubKey.IsPayToColdStaking()) {
+                {
+                    LOCK(cs_main);
+                    CCoinsViewCache &view = *pcoinsTip;
+                    if (view.IsOutputAvailable(record.hash, i)) {
+                        delegation.cachedTotalAmount += out.nValue;
+                        delegation.delegatedUtxo.insert(hashTxId, i);
+                    }
+                }
+            }
+        }
+
+        // If there are no available p2cs delegations then don't try to add them
+        if (delegation.delegatedUtxo.isEmpty())
+            return;
+
         int index = cachedDelegations.indexOf(delegation);
         if (index == -1) {
-            delegation.cachedTotalAmount += record.credit + record.debit;
-            delegation.isSpendable = record.type == TransactionRecord::P2CSDelegationSent;
             cachedDelegations.append(delegation);
         } else {
             CSDelegation del = cachedDelegations[index];
-            del.delegatedUtxo.append(record.getTxID());
-            del.cachedTotalAmount += record.credit + record.debit;
+            del.delegatedUtxo.unite(delegation.delegatedUtxo);
+            del.cachedTotalAmount += delegation.cachedTotalAmount;
         }
+    }
 
+    /**
+     * @returns the index of the delegation in the list
+     */
+    static int updateOrAppendDelegation(const CSDelegation& delegation, QList<CSDelegation>& cachedDelegations) {
+        int index = cachedDelegations.indexOf(delegation);
+        if (index != -1) {
+            CSDelegation del = cachedDelegations[index];
+            del.delegatedUtxo.unite(delegation.delegatedUtxo);
+            del.cachedTotalAmount += delegation.cachedTotalAmount;
+        } else {
+            cachedDelegations.append(delegation);
+        }
+        return index;
     }
 
     static bool HasZcTxesIfNeeded(const TransactionRecord& record) {
@@ -244,12 +288,12 @@ public:
 
                         // Check for delegations
                         if (rec.type == TransactionRecord::P2CSDelegation || rec.type == TransactionRecord::P2CSDelegationSent) {
-                            checkForDelegations(rec, cachedDelegations);
+                            checkForDelegations(rec, wallet, cachedDelegations);
                         }
 
-                            insert_idx += 1;
-                            // Return record
-                            ret = rec;
+                        insert_idx += 1;
+                        // Return record
+                        ret = rec;
                         }
                         parent->endInsertRows();
                     }
