@@ -347,16 +347,26 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
     bool isSpendable = wallet->IsMine(p2csUtxo) & ISMINE_SPENDABLE_DELEGATED;
 
     if (isContract) {
-        record.type = (isSpendable ? TransactionRecord::P2CSDelegationSent : TransactionRecord::P2CSDelegation);
-        record.debit = wtx.nDelegatedDebitCached;
-        record.credit = wtx.GetStakeDelegationCredit();
+        if (isSpendable) {
+            // Wallet delegating balance
+            record.type = TransactionRecord::P2CSDelegationSent;
+            record.debit = wtx.nDelegatedDebitCached;
+            record.credit = wtx.GetStakeDelegationCredit();
+        } else {
+            // Wallet receiving a delegation
+            record.type = TransactionRecord::P2CSDelegation;
+            record.debit = wtx.nColdDebitCached;
+            record.credit = wtx.GetColdStakingCredit();
+        }
     } else {
         // Stake
         if (isSpendable) {
+            // Offline wallet receiving an stake due a delegation
             record.type = TransactionRecord::StakeDelegated;
             record.debit = wtx.nDelegatedDebitCached;
             record.credit = wtx.GetStakeDelegationCredit();
         } else {
+            // Online wallet receiving an stake due a received utxo delegation that won a block.
             record.type = TransactionRecord::StakeHot;
             record.credit = wtx.GetColdStakingCredit();
             record.debit = wtx.nColdDebitCached;
