@@ -299,12 +299,14 @@ bool CBitcoinAddress::GetKeyID(CKeyID& keyID) const
 
 bool CBitcoinAddress::IsScript() const
 {
-    return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+    bool fCorrectSize = vchData.size() == 20;
+    return fCorrectSize && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
 }
 
 bool CBitcoinAddress::IsStakingAddress() const
 {
-    return IsValid() && vchVersion == Params().Base58Prefix(CChainParams::STAKING_ADDRESS);
+    bool fCorrectSize = vchData.size() == 20;
+    return fCorrectSize && vchVersion == Params().Base58Prefix(CChainParams::STAKING_ADDRESS);
 }
 
 void CBitcoinSecret::SetKey(const CKey& vchSecret)
