@@ -205,6 +205,26 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
     return pwalletMain->DelAddressBook(keyID);
 }
 
+UniValue ListaddressesForPurpose(const std::string strPurpose)
+{
+    const CChainParams::Base58Type addrType =
+            strPurpose == "coldstaking" ?
+            CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS;
+    UniValue ret(UniValue::VARR);
+    {
+        LOCK(pwalletMain->cs_wallet);
+        for (const auto& addr : pwalletMain->mapAddressBook) {
+            if (addr.second.purpose != strPurpose) continue;
+            UniValue entry(UniValue::VOBJ);
+            entry.push_back(Pair("label", addr.second.name));
+            entry.push_back(Pair("address", CBitcoinAddress(addr.first, addrType).ToString()));
+            ret.push_back(entry);
+        }
+    }
+
+    return ret;
+}
+
 UniValue listdelegators(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 0)
@@ -225,17 +245,30 @@ UniValue listdelegators(const UniValue& params, bool fHelp)
             HelpExampleCli("listdelegators" , "") +
             HelpExampleRpc("listdelegators", ""));
 
-    UniValue ret(UniValue::VARR);
-    LOCK(pwalletMain->cs_wallet);
-    for (const auto& addr : pwalletMain->mapAddressBook) {
-        if (addr.second.purpose != "delegator") continue;
-        UniValue entry(UniValue::VOBJ);
-        entry.push_back(Pair("label", addr.second.name));
-        entry.push_back(Pair("address", CBitcoinAddress(addr.first).ToString()));
-        ret.push_back(entry);
-    }
+    return ListaddressesForPurpose("delegator");
+}
 
-    return ret;
+UniValue liststakingaddresses(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw std::runtime_error(
+            "liststakingaddresses \"addr\"\n"
+            "\nShows the list of staking addresses for this wallet.\n"
+
+            "\nResult:\n"
+            "[\n"
+            "   {\n"
+            "   \"label\": \"yyy\",  (string) account label\n"
+            "   \"address\": \"xxx\",  (string) PIVX address string\n"
+            "   }\n"
+            "  ...\n"
+            "]\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("liststakingaddresses" , "") +
+            HelpExampleRpc("liststakingaddresses", ""));
+
+    return ListaddressesForPurpose("coldstaking");
 }
 
 CBitcoinAddress GetAccountAddress(std::string strAccount, bool bForceNew = false)
