@@ -814,9 +814,11 @@ public:
     CAmount GetLockedWatchOnlyCredit() const;
     CAmount GetChange() const;
 
-    // Cold staking contracts credit
+    // Cold staking contracts credit/debit
     CAmount GetColdStakingCredit(bool fUseCache = true) const;
+    CAmount GetColdStakingDebit(bool fUseCache = true) const;
     CAmount GetStakeDelegationCredit(bool fUseCache = true) const;
+    CAmount GetStakeDelegationDebit(bool fUseCache = true) const;
 
     void GetAmounts(std::list<COutputEntry>& listReceived,
         std::list<COutputEntry>& listSent,
@@ -839,9 +841,6 @@ public:
     int GetRequestCount() const;
     void RelayWalletTransaction(std::string strCommand = "tx");
     std::set<uint256> GetConflicts() const;
-
-protected:
-    CAmount CreditFor(const isminetype& minetype) const;
 };
 
 

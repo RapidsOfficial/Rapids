@@ -1130,6 +1130,42 @@ CAmount CWalletTx::GetDebit(const isminefilter& filter) const
     return debit;
 }
 
+CAmount CWalletTx::GetColdStakingDebit(bool fUseCache) const
+{
+    if (pwallet == 0)
+        return 0;
+
+    // Must wait until coinbase is safely deep enough in the chain before valuing it
+    if (IsCoinBase() && GetBlocksToMaturity() > 0)
+        return 0;
+
+    if (fUseCache && fColdDebitCached)
+        return nColdDebitCached;
+
+    CAmount nDebit = GetDebit(ISMINE_COLD);
+    nColdDebitCached = nDebit;
+    fColdDebitCached = true;
+    return nDebit;
+}
+
+CAmount CWalletTx::GetStakeDelegationDebit(bool fUseCache) const
+{
+    if (pwallet == 0)
+        return 0;
+
+    // Must wait until coinbase is safely deep enough in the chain before valuing it
+    if (IsCoinBase() && GetBlocksToMaturity() > 0)
+        return 0;
+
+    if (fUseCache && fDelegatedDebitCached)
+        return nDelegatedDebitCached;
+
+    CAmount nDebit = GetDebit(ISMINE_SPENDABLE_DELEGATED);
+    nDelegatedDebitCached = nDebit;
+    fDelegatedDebitCached = true;
+    return nDebit;
+}
+
 CAmount CWalletTx::GetCredit(const isminefilter& filter) const
 {
     // Must wait until coinbase is safely deep enough in the chain before valuing it
@@ -1191,22 +1227,6 @@ CAmount CWalletTx::GetImmatureCredit(bool fUseCache) const
     return 0;
 }
 
-// Helper function for GetAvailableCredit / GetColdStakingCredit / GetStakeDelegationCredit
-CAmount CWalletTx::CreditFor(const isminetype& minetype) const
-{
-    const uint256 hashTx = GetHash();
-    CAmount nCredit = 0;
-    for (unsigned int i = 0; i < vout.size(); i++) {
-        if (!pwallet->IsSpent(hashTx, i)) {
-            const CTxOut& txout = vout[i];
-            nCredit += pwallet->GetCredit(txout, minetype);
-            if (!MoneyRange(nCredit))
-                throw std::runtime_error("CWalletTx::GetAvailableCredit() : value out of range");
-        }
-    }
-    return nCredit;
-}
-
 CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
 {
     if (pwallet == 0)
@@ -1219,7 +1239,7 @@ CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
     if (fUseCache && fAvailableCreditCached)
         return nAvailableCreditCached;
 
-    CAmount nCredit = CreditFor(ISMINE_SPENDABLE);
+    CAmount nCredit = GetCredit(ISMINE_SPENDABLE);
     nAvailableCreditCached = nCredit;
     fAvailableCreditCached = true;
     return nCredit;
@@ -1237,7 +1257,7 @@ CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
     if (fUseCache && fColdCreditCached)
         return nColdCreditCached;
 
-    CAmount nCredit = CreditFor(ISMINE_COLD);
+    CAmount nCredit = GetCredit(ISMINE_COLD);
     nColdCreditCached = nCredit;
     fColdCreditCached = true;
     return nCredit;
@@ -1255,7 +1275,7 @@ CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
     if (fUseCache && fDelegatedCreditCached)
         return nDelegatedCreditCached;
 
-    CAmount nCredit = CreditFor(ISMINE_SPENDABLE_DELEGATED);
+    CAmount nCredit = GetCredit(ISMINE_SPENDABLE_DELEGATED);
     nDelegatedCreditCached = nCredit;
     fDelegatedCreditCached = true;
     return nCredit;
@@ -5618,9 +5638,9 @@ CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter) c
     CAmount nCredit = 0;
     for (const CTxOut& txout : tx.vout) {
         nCredit += GetCredit(txout, filter);
-        if (!MoneyRange(nCredit))
-            throw std::runtime_error("CWallet::GetCredit() : value out of range");
     }
+    if (!MoneyRange(nCredit))
+        throw std::runtime_error("CWallet::GetCredit() : value out of range");
     return nCredit;
 }
 
