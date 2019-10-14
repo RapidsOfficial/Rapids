@@ -46,7 +46,8 @@ public:
         }
         bool isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
         QString amountStr = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT_STR).data(Qt::DisplayRole).toString();
-        row->updateView(address, label, isWhitelisted, amountStr);
+        bool isReceivedDelegation = index.sibling(index.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
+        row->updateView(address, label, isWhitelisted, isReceivedDelegation, amountStr);
     }
 
     QColor rectColor(bool isHovered, bool isSelected) override{

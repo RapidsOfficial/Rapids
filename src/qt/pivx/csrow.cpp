@@ -16,12 +16,16 @@ CSRow::CSRow(QWidget *parent) :
     ui->labelAmount->setProperty("cssClass", "text-list-amount-unconfirmed");
 }
 
-void CSRow::updateView(QString address, QString label, bool isStaking, QString amount) {
+void CSRow::updateView(const QString& address, const QString& label, bool isStaking, bool isReceivedDelegation, const QString& amount) {
     ui->labelName->setText(label);
     ui->labelAddress->setText(address);
     ui->labelAmount->setText(amount);
-    ui->labelStaking->setText((isStaking ? "Staking" : "Not staking"));
-    //ui->labelStaking->setProperty("cssClass", (isStaking) ? "text-list-caption-medium-green" : "text-list-caption-medium");
+
+    if (isReceivedDelegation) {
+        ui->labelStaking->setText(tr(isStaking ? "Staking" : "Not staking"));
+    } else {
+        ui->labelStaking->setText(tr("Delegation"));
+    }
 }
 
 void CSRow::updateState(bool isLightTheme, bool isHovered, bool isSelected) {
