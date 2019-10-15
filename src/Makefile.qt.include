@@ -595,7 +595,13 @@ RES_ICONS = \
   qt/pivx/res/img/ic-check-liliac-indeterminate.svg \
   qt/pivx/res/img/ic-check-box-liliac-indeterminate.svg \
   qt/pivx/res/img/ic-transaction-stake-delegated.svg \
+  qt/pivx/res/img/ic-transaction-stake-delegated-inactive.svg \
   qt/pivx/res/img/ic-transaction-stake-hot.svg \
+  qt/pivx/res/img/ic-transaction-stake-hot-inactive.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-hot.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-hot-inactive.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-delegated.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-delegated-inactive.svg \
   qt/pivx/res/img/ic-transaction-cs-contract.svg \
   qt/pivx/res/img/ic-transaction-cs-contract-inactive.svg \
   qt/pivx/res/img/ic-check-box-indeterminate.svg \

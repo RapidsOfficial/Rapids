@@ -306,7 +306,13 @@
         <file alias="ani-loading">pivx/res/img/ani-loading.gif</file>
         <file alias="ic-pending">pivx/res/img/ic-pending.svg</file>
         <file alias="ic-transaction-stake-delegated">pivx/res/img/ic-transaction-stake-delegated.svg</file>
+        <file alias="ic-transaction-stake-delegated-inactive">pivx/res/img/ic-transaction-stake-delegated-inactive.svg</file>
+        <file alias="ic-transaction-stake-delegated-dark">pivx/res/img/dark/ic-transaction-stake-delegated.svg</file>
+        <file alias="ic-transaction-stake-delegated-dark-inactive">pivx/res/img/dark/ic-transaction-stake-delegated-inactive.svg</file>
         <file alias="ic-transaction-stake-hot">pivx/res/img/ic-transaction-stake-hot.svg</file>
+        <file alias="ic-transaction-stake-hot-inactive">pivx/res/img/ic-transaction-stake-hot-inactive.svg</file>
+        <file alias="ic-transaction-stake-hot-dark">pivx/res/img/dark/ic-transaction-stake-hot.svg</file>
+        <file alias="ic-transaction-stake-hot-dark-inactive">pivx/res/img/dark/ic-transaction-stake-hot-inactive.svg</file>
         <file alias="ic-transaction-cs-contract">pivx/res/img/ic-transaction-cs-contract.svg</file>
         <file alias="ic-transaction-cs-contract-dark">pivx/res/img/dark/ic-transaction-cs-contract.svg</file>
         <file alias="ic-transaction-cs-contract-dark-inactive">pivx/res/img/dark/ic-transaction-cs-contract-inactive.svg</file>
