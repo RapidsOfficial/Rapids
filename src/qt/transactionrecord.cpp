@@ -341,16 +341,19 @@ void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWallet
     record.involvesWatchAddress = false;
 
     // Get the p2cs
-    CTxIn prevP2csUtxo;
-    for (unsigned int nIn = 0; nIn < wtx.vin.size(); nIn++) {
-        const auto &input = wtx.vin[nIn];
-        if (input.prevPubKey.IsPayToColdStaking()) {
-            prevP2csUtxo = input;
+    const CScript* p2csScript = nullptr;
+    bool isSpendable = false;
+
+    for (const auto &input : wtx.vin) {
+        const CWalletTx* tx = wallet->GetWalletTx(input.prevout.hash);
+        if (tx && tx->vout[input.prevout.n].scriptPubKey.IsPayToColdStaking()) {
+            p2csScript = &tx->vout[input.prevout.n].scriptPubKey;
+            isSpendable = wallet->IsMine(input) & ISMINE_SPENDABLE_ALL;
             break;
         }
     }
 
-    bool isSpendable = wallet->IsMine(prevP2csUtxo) & ISMINE_SPENDABLE_ALL;
+
     if (isSpendable) {
         // owner unlocked the cold stake
         record.type = TransactionRecord::P2CSUnlockOwner;
@@ -364,7 +367,7 @@ void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWallet
     }
 
     CTxDestination address;
-    if (!ExtractDestination(prevP2csUtxo.prevPubKey, address, !isSpendable)) {
+    if (!ExtractDestination(*p2csScript, address, !isSpendable)) {
         // this shouldn't happen..
         record.address = "No available staking address";
     } else {
