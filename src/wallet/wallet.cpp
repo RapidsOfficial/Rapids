@@ -1921,6 +1921,10 @@ void CWallet::AvailableCoins(
         bool fIncludeDelegated) const
 {
     vCoins.clear();
+    const bool fCoinsSelected = (coinControl != nullptr) && coinControl->HasSelected();
+    // include delegated coins when coinControl is active
+    if (!fIncludeDelegated && fCoinsSelected)
+        fIncludeDelegated = true;
 
     {
         LOCK2(cs_main, cs_wallet);
@@ -1975,22 +1979,6 @@ void CWallet::AvailableCoins(
                 if (mine == ISMINE_NO)
                     continue;
 
-                // skip cold coins
-                if (mine == ISMINE_COLD) {
-                    if (!fIncludeColdStaking)
-                        continue;
-                    if (!HasDelegator(pcoin->vout[i]))
-                        continue;
-                }
-
-                // skip delegated coins
-                if (!fIncludeDelegated && mine == ISMINE_SPENDABLE_DELEGATED)
-                    continue;
-
-                // skip auto-delegated coins
-                if (!fIncludeColdStaking && !fIncludeDelegated && mine == ISMINE_SPENDABLE_STAKEABLE)
-                    continue;
-
                 if ((mine == ISMINE_MULTISIG || mine == ISMINE_SPENDABLE) && nWatchonlyConfig == 2)
                     continue;
 
@@ -2001,8 +1989,16 @@ void CWallet::AvailableCoins(
                     continue;
                 if (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue)
                     continue;
-                if (coinControl && coinControl->HasSelected() && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
+                if (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
                     continue;
+
+                // --Skip P2CS outputs
+                // skip cold coins
+                if (mine == ISMINE_COLD && (!fIncludeColdStaking || !HasDelegator(pcoin->vout[i]))) continue;
+                // skip delegated coins
+                if (mine == ISMINE_SPENDABLE_DELEGATED && !fIncludeDelegated) continue;
+                // skip auto-delegated coins
+                if (mine == ISMINE_SPENDABLE_STAKEABLE && !fIncludeColdStaking && !fIncludeDelegated) continue;
 
                 bool fIsValid = (
                         ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
