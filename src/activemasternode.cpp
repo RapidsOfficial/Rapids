@@ -163,7 +163,7 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
     CKey keyMasternode;
 
     if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, keyMasternode, pubKeyMasternode)) {
-        errorMessage = "Error upon calling SetKey.\n";
+        errorMessage = "Error upon calling GetKeysFromSecret.\n";
         return false;
     }
 
