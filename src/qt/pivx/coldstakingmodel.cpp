@@ -22,15 +22,13 @@ void ColdStakingModel::updateCSList(){
 
 int ColdStakingModel::rowCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return 0;
+    Q_UNUSED(parent);
     return tableModel->csRowCount();
 }
 
 int ColdStakingModel::columnCount(const QModelIndex &parent) const
 {
-    if (parent.isValid())
-        return 0;
+    Q_UNUSED(parent);
     return COLUMN_COUNT;
 }
 
