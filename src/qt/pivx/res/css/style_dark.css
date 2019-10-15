@@ -70,14 +70,12 @@ QPushButton[cssClass="img-nav-logo"] {
     url("://ic-nav-receive-active") on;
     qproperty-iconSize: 24px 40px;
     background-color:transparent;
-    padding-top: 25px;
     font-size:14px;
     color: #938da5;
 }
 
 *[cssClass="btn-nav-receive"]:checked {
     background-color: #0f0b16;
-    padding-top: 25px;
     font-size:14px;
     color: #B088FF;
 }
