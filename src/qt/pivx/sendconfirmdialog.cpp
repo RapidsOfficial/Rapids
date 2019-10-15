@@ -70,16 +70,16 @@ TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, const QSt
         ui->labelDivider3->setVisible(false);
         ui->labelDivider9->setVisible(false);
 
-        connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
+        connect(ui->btnCancel, &QPushButton::clicked, this, &TxDetailDialog::close);
         connect(ui->btnSave, &QPushButton::clicked, [this](){acceptTx();});
     }else{
         ui->labelTitle->setText(tr("Transaction Details"));
         ui->containerButtons->setVisible(false);
     }
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(closeDialog()));
-    connect(ui->pushInputs, SIGNAL(clicked()), this, SLOT(onInputsClicked()));
-    connect(ui->pushOutputs, SIGNAL(clicked()), this, SLOT(onOutputsClicked()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &TxDetailDialog::closeDialog);
+    connect(ui->pushInputs, &QPushButton::clicked, this, &TxDetailDialog::onInputsClicked);
+    connect(ui->pushOutputs, &QPushButton::clicked, this, &TxDetailDialog::onOutputsClicked);
 }
 
 void TxDetailDialog::showEvent(QShowEvent *event)

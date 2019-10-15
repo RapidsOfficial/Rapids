@@ -7,6 +7,8 @@
 
 #include <QDialog>
 
+class PIVXGUI;
+
 namespace Ui {
 class SettingsFaqWidget;
 }
@@ -16,7 +18,7 @@ class SettingsFaqWidget : public QDialog
     Q_OBJECT
 
 public:
-    explicit SettingsFaqWidget(QWidget *parent = nullptr);
+    explicit SettingsFaqWidget(PIVXGUI *parent = nullptr);
     ~SettingsFaqWidget();
 
     void showEvent(QShowEvent *event) override;

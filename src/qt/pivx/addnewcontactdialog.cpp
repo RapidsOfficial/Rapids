@@ -35,9 +35,9 @@ AddNewContactDialog::AddNewContactDialog(QWidget *parent) :
     ui->btnOk->setText(tr("SAVE"));
     ui->btnOk->setProperty("cssClass", "btn-primary");
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnOk, SIGNAL(clicked()), this, SLOT(ok()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &AddNewContactDialog::close);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &AddNewContactDialog::close);
+    connect(ui->btnOk, &QPushButton::clicked, this, &AddNewContactDialog::ok);
 }
 
 void AddNewContactDialog::setTexts(QString title, const char* message) {

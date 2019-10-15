@@ -123,9 +123,9 @@ AddressesWidget::AddressesWidget(PIVXGUI* parent) :
     ui->btnSave->setText(tr("SAVE"));
     setCssBtnPrimary(ui->btnSave);
 
-    connect(ui->listAddresses, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
-    connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(onStoreContactClicked()));
-    connect(ui->btnAddContact, SIGNAL(clicked()), this, SLOT(onAddContactShowHideClicked()));
+    connect(ui->listAddresses, &QListView::clicked, this, &AddressesWidget::handleAddressClicked);
+    connect(ui->btnSave, &QPushButton::clicked, this, &AddressesWidget::onStoreContactClicked);
+    connect(ui->btnAddContact, &OptionButton::clicked, this, &AddressesWidget::onAddContactShowHideClicked);
 }
 
 void AddressesWidget::handleAddressClicked(const QModelIndex &index){
@@ -140,9 +140,9 @@ void AddressesWidget::handleAddressClicked(const QModelIndex &index){
     if(!this->menu){
         this->menu = new TooltipMenu(window, this);
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
-        connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
-        connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
-        connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onCopyClicked()));
+        connect(this->menu, &TooltipMenu::onEditClicked, this, &AddressesWidget::onEditClicked);
+        connect(this->menu, &TooltipMenu::onDeleteClicked, this, &AddressesWidget::onDeleteClicked);
+        connect(this->menu, &TooltipMenu::onCopyClicked, this, &AddressesWidget::onCopyClicked);
     }else {
         this->menu->hide();
     }

@@ -28,9 +28,9 @@ LockUnlock::LockUnlock(QWidget *parent) :
     ui->pushButtonStaking->setText(tr("Staking Only"));
 
     // Connect
-    connect(ui->pushButtonUnlocked, SIGNAL(clicked()), this, SLOT(onUnlockClicked()));
-    connect(ui->pushButtonLocked, SIGNAL(clicked()), this, SLOT(onLockClicked()));
-    connect(ui->pushButtonStaking, SIGNAL(clicked()), this, SLOT(onStakingClicked()));
+    connect(ui->pushButtonUnlocked, &QPushButton::clicked, this, &LockUnlock::onUnlockClicked);
+    connect(ui->pushButtonLocked, &QPushButton::clicked, this, &LockUnlock::onLockClicked);
+    connect(ui->pushButtonStaking, &QPushButton::clicked, this, &LockUnlock::onStakingClicked);
 }
 
 LockUnlock::~LockUnlock()

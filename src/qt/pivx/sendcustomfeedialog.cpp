@@ -11,7 +11,7 @@
 #include <QListView>
 #include <QComboBox>
 
-SendCustomFeeDialog::SendCustomFeeDialog(QWidget *parent) :
+SendCustomFeeDialog::SendCustomFeeDialog(PIVXGUI *parent) :
     QDialog(parent),
     ui(new Ui::SendCustomFeeDialog)
 {
@@ -47,13 +47,15 @@ SendCustomFeeDialog::SendCustomFeeDialog(QWidget *parent) :
     ui->btnSave->setText(tr("SAVE"));
     setCssBtnPrimary(ui->btnSave);
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(accept()));
-    connect(ui->checkBoxCustom, SIGNAL(clicked()), this, SLOT(onCustomChecked()));
-    connect(ui->checkBoxRecommended, SIGNAL(clicked()), this, SLOT(onRecommendedChecked()));
-    connect(ui->comboBoxRecommended, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(updateFee()));
-    if(parent) connect(parent, SIGNAL(themeChanged(bool, QString&)), this, SLOT(onChangeTheme(bool, QString&)));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &SendCustomFeeDialog::close);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &SendCustomFeeDialog::close);
+    connect(ui->btnSave, &QPushButton::clicked, this, &SendCustomFeeDialog::accept);
+    connect(ui->checkBoxCustom, &QCheckBox::clicked, this, &SendCustomFeeDialog::onCustomChecked);
+    connect(ui->checkBoxRecommended, &QCheckBox::clicked, this, &SendCustomFeeDialog::onRecommendedChecked);
+    connect(ui->comboBoxRecommended, static_cast<void (QComboBox::*)(const QString &)>(&QComboBox::currentIndexChanged),
+        this, &SendCustomFeeDialog::updateFee);
+    if (parent)
+        connect(parent, &PIVXGUI::themeChanged, this, &SendCustomFeeDialog::onChangeTheme);
     ui->checkBoxRecommended->setChecked(true);
 }
 

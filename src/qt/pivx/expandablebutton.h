@@ -53,9 +53,6 @@ protected:
     virtual void enterEvent(QEvent *);
     virtual void leaveEvent(QEvent *);
 
-    //virtual void mouseMoveEvent(QMouseEvent *ev);
-    virtual void mousePressEvent(QMouseEvent *ev);
-
 private Q_SLOTS:
 
     void on_pushButton_clicked(bool checked);

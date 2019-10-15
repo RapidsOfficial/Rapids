@@ -35,8 +35,8 @@ DefaultDialog::DefaultDialog(QWidget *parent) :
     ui->btnSave->setText("OK");
     ui->btnSave->setProperty("cssClass", "btn-primary");
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &DefaultDialog::close);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &DefaultDialog::close);
     connect(ui->btnSave, &QPushButton::clicked, this, &DefaultDialog::accept);
 }
 

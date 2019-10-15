@@ -121,7 +121,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     setCssBtnPrimary(ui->pushButtonSend);
     setCssBtnSecondary(ui->pushButtonClear);
 
-    connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(clearAll()));
+    connect(ui->pushButtonClear, &QPushButton::clicked, this, &ColdStakingWidget::clearAll);
 
     ui->labelEditTitle->setText(tr("Cold Staking address"));
     setCssProperty(ui->labelEditTitle, "text-title");
@@ -145,8 +145,8 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", "Creates an address to receive delegated coins\nand stake them on their owner's behalf.");
     ui->btnColdStaking->layout()->setMargin(0);
 
-    connect(ui->btnCoinControl, SIGNAL(clicked()), this, SLOT(onCoinControlClicked()));
-    connect(ui->btnColdStaking, SIGNAL(clicked()), this, SLOT(onColdStakeClicked()));
+    connect(ui->btnCoinControl, &OptionButton::clicked, this, &ColdStakingWidget::onCoinControlClicked);
+    connect(ui->btnColdStaking, &OptionButton::clicked, this, &ColdStakingWidget::onColdStakeClicked);
 
     onDelegateSelected(true);
     ui->pushRight->setChecked(true);
@@ -194,9 +194,9 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
 
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
     connect(btnOwnerContact, &QAction::triggered, [this](){ onContactsClicked(true); });
-    connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
-    connect(ui->listViewStakingAddress, SIGNAL(clicked(QModelIndex)), this, SLOT(handleMyColdAddressClicked(QModelIndex)));
-    connect(ui->btnMyStakingAddresses, SIGNAL(clicked()), this, SLOT(onMyStakingAddressesClicked()));
+    connect(ui->listView, &QListView::clicked, this, &ColdStakingWidget::handleAddressClicked);
+    connect(ui->listViewStakingAddress, &QListView::clicked, this, &ColdStakingWidget::handleMyColdAddressClicked);
+    connect(ui->btnMyStakingAddresses, &OptionButton::clicked, this, &ColdStakingWidget::onMyStakingAddressesClicked);
 }
 
 void ColdStakingWidget::loadWalletModel()
@@ -591,8 +591,8 @@ void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index)
         menuAddresses->setCopyBtnVisible(false);
         menuAddresses->adjustSize();
         connect(menuAddresses, &TooltipMenu::message, this, &AddressesWidget::message);
-        connect(menuAddresses, SIGNAL(onEditClicked()), this, SLOT(onAddressCopyClicked()));
-        connect(menuAddresses, SIGNAL(onDeleteClicked()), this, SLOT(onAddressEditClicked()));
+        connect(menuAddresses, &TooltipMenu::onEditClicked, this, &ColdStakingWidget::onAddressCopyClicked);
+        connect(menuAddresses, &TooltipMenu::onDeleteClicked, this, &ColdStakingWidget::onAddressEditClicked);
     } else {
         menuAddresses->hide();
     }
@@ -624,10 +624,10 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex)
         this->menu->setFixedHeight(157);
         this->menu->setMinimumWidth(125);
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
-        connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
-        connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
-        connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onLabelClicked()));
-        connect(this->menu, SIGNAL(onLastClicked()), this, SLOT(onCopyOwnerClicked()));
+        connect(this->menu, &TooltipMenu::onEditClicked, this, &ColdStakingWidget::onEditClicked);
+        connect(this->menu, &TooltipMenu::onDeleteClicked, this, &ColdStakingWidget::onDeleteClicked);
+        //connect(this->menu, &TooltipMenu::onCopyClicked, this, &ColdStakingWidget::onLabelClicked);
+        connect(this->menu, &TooltipMenu::onLastClicked, this, &ColdStakingWidget::onCopyOwnerClicked);
     } else {
         this->menu->hide();
     }

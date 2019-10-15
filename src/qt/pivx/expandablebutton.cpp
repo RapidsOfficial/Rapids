@@ -21,7 +21,7 @@ ExpandableButton::ExpandableButton(QWidget *parent) :
     ui->pushButton->setCheckable(true);
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(mousePressEvent()));
+    connect(ui->pushButton, &QPushButton::clicked, this, &ExpandableButton::mousePressEvent);
 }
 
 void ExpandableButton::setButtonClassStyle(const char *name, const QVariant &value, bool forceUpdate)
@@ -101,11 +101,6 @@ void ExpandableButton::leaveEvent(QEvent *) {
 }
 
 void ExpandableButton::mousePressEvent(){
-    Q_EMIT Mouse_Pressed();
-}
-
-void ExpandableButton::mousePressEvent(QMouseEvent *ev)
-{
     Q_EMIT Mouse_Pressed();
 }
 

@@ -6,6 +6,7 @@
 #define SNACKBAR_H
 
 #include <QDialog>
+#include <QResizeEvent>
 
 class PIVXGUI;
 
@@ -26,7 +27,7 @@ public:
     void setText(QString text);
 private Q_SLOTS:
     void hideAnim();
-    void windowResizeEvent(QResizeEvent *event);
+    void windowResizeEvent(QResizeEvent* event);
 private:
     Ui::SnackBar *ui;
     PIVXGUI* window = nullptr;

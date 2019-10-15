@@ -72,13 +72,13 @@ SettingsWalletRepairWidget::SettingsWalletRepairWidget(PIVXGUI* _window, QWidget
 
 
     // Wallet Repair Buttons
-    connect(ui->pushButtonSalvage, SIGNAL(clicked()), this, SLOT(walletSalvage()));
-    connect(ui->pushButtonRescan, SIGNAL(clicked()), this, SLOT(walletRescan()));
-    connect(ui->pushButtonRecover1, SIGNAL(clicked()), this, SLOT(walletZaptxes1()));
-    connect(ui->pushButtonRecover2, SIGNAL(clicked()), this, SLOT(walletZaptxes2()));
-    connect(ui->pushButtonUpgrade, SIGNAL(clicked()), this, SLOT(walletUpgrade()));
-    connect(ui->pushButtonRebuild, SIGNAL(clicked()), this, SLOT(walletReindex()));
-    connect(ui->pushButtonDelete, SIGNAL(clicked()), this, SLOT(walletResync()));
+    connect(ui->pushButtonSalvage, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletSalvage);
+    connect(ui->pushButtonRescan, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletRescan);
+    connect(ui->pushButtonRecover1, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletZaptxes1);
+    connect(ui->pushButtonRecover2, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletZaptxes2);
+    connect(ui->pushButtonUpgrade, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletUpgrade);
+    connect(ui->pushButtonRebuild, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletReindex);
+    connect(ui->pushButtonDelete, &QPushButton::clicked, this, &SettingsWalletRepairWidget::walletResync);
 }
 
 /** Restart wallet with "-salvagewallet" */

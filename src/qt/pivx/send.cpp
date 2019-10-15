@@ -94,10 +94,10 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     ui->btnUri->setTitleClassAndText("btn-title-grey", "Open URI");
     ui->btnUri->setSubTitleClassAndText("text-subtitle", "Parse a payment request.");
 
-    connect(ui->pushButtonFee, SIGNAL(clicked()), this, SLOT(onChangeCustomFeeClicked()));
-    connect(ui->btnCoinControl, SIGNAL(clicked()), this, SLOT(onCoinControlClicked()));
-    connect(ui->btnChangeAddress, SIGNAL(clicked()), this, SLOT(onChangeAddressClicked()));
-    connect(ui->btnUri, SIGNAL(clicked()), this, SLOT(onOpenUriClicked()));
+    connect(ui->pushButtonFee, &QPushButton::clicked, this, &SendWidget::onChangeCustomFeeClicked);
+    connect(ui->btnCoinControl, &OptionButton::clicked, this, &SendWidget::onCoinControlClicked);
+    connect(ui->btnChangeAddress, &OptionButton::clicked, this, &SendWidget::onChangeAddressClicked);
+    connect(ui->btnUri, &OptionButton::clicked, this, &SendWidget::onOpenUriClicked);
     connect(ui->pushButtonReset, &QPushButton::clicked, [this](){ onResetCustomOptions(true); });
 
     setCssProperty(ui->coinWidget, "container-coin-type");
@@ -137,9 +137,9 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     // Connect
     connect(ui->pushLeft, &QPushButton::clicked, [this](){onPIVSelected(true);});
     connect(ui->pushRight,  &QPushButton::clicked, [this](){onPIVSelected(false);});
-    connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(onSendClicked()));
-    connect(ui->pushButtonAddRecipient, SIGNAL(clicked()), this, SLOT(onAddEntryClicked()));
-    connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(clearAll()));
+    connect(ui->pushButtonSave, &QPushButton::clicked, this, &SendWidget::onSendClicked);
+    connect(ui->pushButtonAddRecipient, &QPushButton::clicked, this, &SendWidget::onAddEntryClicked);
+    connect(ui->pushButtonClear, &QPushButton::clicked, this, &SendWidget::clearAll);
 }
 
 void SendWidget::refreshView()
@@ -217,7 +217,7 @@ void SendWidget::loadWalletModel() {
 
         // TODO: This only happen when the coin control features are modified in other screen, check before do this if the wallet has another screen modifying it.
         // Coin Control
-        //connect(model->getOptionsModel(), SIGNAL(coinControlFeaturesChanged(bool)), this, SLOT(coinControlFeatureChanged(bool)));
+        //connect(walletModel->getOptionsModel(), &OptionsModel::coinControlFeaturesChanged, [this](){});
         //ui->frameCoinControl->setVisible(model->getOptionsModel()->getCoinControlFeatures());
         //coinControlUpdateLabels();
     }
@@ -722,8 +722,8 @@ void SendWidget::onMenuClicked(SendMultiRow* entry)
         this->menu->setEditBtnText(tr("Save contact"));
         this->menu->setMinimumSize(this->menu->width() + 30,this->menu->height());
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
-        connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onContactMultiClicked()));
-        connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
+        connect(this->menu, &TooltipMenu::onEditClicked, this, &SendWidget::onContactMultiClicked);
+        connect(this->menu, &TooltipMenu::onDeleteClicked, this, &SendWidget::onDeleteClicked);
     } else {
         this->menu->hide();
     }

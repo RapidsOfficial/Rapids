@@ -191,8 +191,8 @@ SettingsMultisendWidget::SettingsMultisendWidget(PWidget *parent) :
     setCssBtnPrimary(ui->pushButtonSave);
     setCssBtnSecondary(ui->pushButtonClear);
 
-    connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(onAddRecipientClicked()));
-    connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(clearAll()));
+    connect(ui->pushButtonSave, &QPushButton::clicked, this, &SettingsMultisendWidget::onAddRecipientClicked);
+    connect(ui->pushButtonClear, &QPushButton::clicked, this, &SettingsMultisendWidget::clearAll);
 }
 
 void SettingsMultisendWidget::showEvent(QShowEvent *event)
@@ -213,10 +213,10 @@ void SettingsMultisendWidget::loadWalletModel()
         ui->pushLeft->setChecked(pwalletMain->isMultiSendEnabled());
         ui->checkBoxStake->setChecked(pwalletMain->fMultiSendStake);
         ui->checkBoxRewards->setChecked(pwalletMain->fMultiSendMasternodeReward);
-        connect(ui->checkBoxStake, SIGNAL(stateChanged(int)), this, SLOT(checkBoxChanged()));
-        connect(ui->checkBoxRewards, SIGNAL(stateChanged(int)), this, SLOT(checkBoxChanged()));
-        connect(ui->pushLeft, SIGNAL(clicked()), this, SLOT(activate()));
-        connect(ui->pushRight, SIGNAL(clicked()), this, SLOT(deactivate()));
+        connect(ui->checkBoxStake, &QCheckBox::stateChanged, this, &SettingsMultisendWidget::checkBoxChanged);
+        connect(ui->checkBoxRewards, &QCheckBox::stateChanged, this, &SettingsMultisendWidget::checkBoxChanged);
+        connect(ui->pushLeft, &QPushButton::clicked, this, &SettingsMultisendWidget::activate);
+        connect(ui->pushRight, &QPushButton::clicked, this, &SettingsMultisendWidget::deactivate);
 
         updateListState();
     }

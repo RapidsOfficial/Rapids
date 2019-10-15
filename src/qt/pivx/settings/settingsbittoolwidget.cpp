@@ -118,11 +118,11 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     ui->statusLabel_DEC->setStyleSheet("QLabel { color: transparent; }");
 
     connect(ui->pushButtonEncrypt, &QPushButton::clicked, this, &SettingsBitToolWidget::onEncryptKeyButtonENCClicked);
-    connect(ui->pushButtonDecrypt, SIGNAL(clicked()), this, SLOT(onDecryptClicked()));
-    connect(ui->pushButtonImport, SIGNAL(clicked()), this, SLOT(importAddressFromDecKey()));
-    connect(btnContact, SIGNAL(triggered()), this, SLOT(onAddressesClicked()));
+    connect(ui->pushButtonDecrypt, &QPushButton::clicked, this, &SettingsBitToolWidget::onDecryptClicked);
+    connect(ui->pushButtonImport, &QPushButton::clicked, this, &SettingsBitToolWidget::importAddressFromDecKey);
+    connect(btnContact, &QAction::triggered, this, &SettingsBitToolWidget::onAddressesClicked);
     connect(ui->pushButtonClear, &QPushButton::clicked, this, &SettingsBitToolWidget::onClearAll);
-    connect(ui->pushButtonDecryptClear, SIGNAL(clicked()), this, SLOT(onClearDecrypt()));
+    connect(ui->pushButtonDecryptClear, &QPushButton::clicked, this, &SettingsBitToolWidget::onClearDecrypt);
 }
 
 void SettingsBitToolWidget::setAddress_ENC(const QString& address)

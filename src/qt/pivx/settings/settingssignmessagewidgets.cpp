@@ -84,9 +84,9 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
 
     ui->statusLabel_SM->setStyleSheet("QLabel { color: transparent; }");
 
-    connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(onGoClicked()));
-    connect(btnContact, SIGNAL(triggered()), this, SLOT(onAddressesClicked()));
-    connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(onClearAll()));
+    connect(ui->pushButtonSave, &QPushButton::clicked, this, &SettingsSignMessageWidgets::onGoClicked);
+    connect(btnContact, &QAction::triggered, this, &SettingsSignMessageWidgets::onAddressesClicked);
+    connect(ui->pushButtonClear, &QPushButton::clicked, this, &SettingsSignMessageWidgets::onClearAll);
     connect(ui->pushSign, &QPushButton::clicked, [this](){onModeSelected(true);});
     connect(ui->pushVerify,  &QPushButton::clicked, [this](){onModeSelected(false);});
 }

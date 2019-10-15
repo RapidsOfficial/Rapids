@@ -67,12 +67,12 @@ RequestDialog::RequestDialog(QWidget *parent) :
     setCssBtnPrimary(ui->btnCopyAddress);
     setCssBtnPrimary(ui->btnCopyUrl);
 
-    connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(onNextClicked()));
+    connect(ui->btnCancel, &QPushButton::clicked, this, &RequestDialog::close);
+    connect(ui->btnEsc, &QPushButton::clicked, this, &RequestDialog::close);
+    connect(ui->btnSave, &QPushButton::clicked, this, &RequestDialog::onNextClicked);
     // TODO: Change copy address for save image (the method is already implemented in other class called exportQr or something like that)
-    connect(ui->btnCopyAddress, SIGNAL(clicked()), this, SLOT(onCopyClicked()));
-    connect(ui->btnCopyUrl, SIGNAL(clicked()), this, SLOT(onCopyUriClicked()));
+    connect(ui->btnCopyAddress, &QPushButton::clicked, this, &RequestDialog::onCopyClicked);
+    connect(ui->btnCopyUrl, &QPushButton::clicked, this, &RequestDialog::onCopyUriClicked);
 }
 
 void RequestDialog::setWalletModel(WalletModel *model){

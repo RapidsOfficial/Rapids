@@ -35,8 +35,8 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
     ui->btnSave->setText("SAVE");
     setCssBtnPrimary(ui->btnSave);
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
     connect(ui->btnSave, &QPushButton::clicked, [this](){ selected = true; accept(); });
 }
 

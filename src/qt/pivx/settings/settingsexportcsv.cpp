@@ -55,10 +55,10 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     setFilterAddressBook(ui->comboBoxSortAddressType, lineEditAddressBook);
     ui->comboBoxSortAddressType->setCurrentIndex(0);
 
-    connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(exportClicked()));
+    connect(ui->pushButtonSave, &QPushButton::clicked, this, &SettingsExportCSV::exportClicked);
     connect(ui->pushButtonDocuments, &QPushButton::clicked, [this](){selectFileOutput(true);});
 
-    connect(ui->pushButtonExportAddress, SIGNAL(clicked()), this, SLOT(onExportAddressesClicked()));
+    connect(ui->pushButtonExportAddress, &QPushButton::clicked, this, &SettingsExportCSV::onExportAddressesClicked);
     connect(ui->pushButtonAddressDocuments, &QPushButton::clicked, [this](){selectFileOutput(false);});
 }
 

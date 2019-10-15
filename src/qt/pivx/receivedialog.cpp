@@ -50,8 +50,8 @@ ReceiveDialog::ReceiveDialog(QWidget *parent) :
     ui->btnCancel->setVisible(false);
 
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnSave, SIGNAL(clicked()), this, SLOT(onCopy()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &ReceiveDialog::close);
+    connect(ui->btnSave, &QPushButton::clicked, this, &ReceiveDialog::onCopy);
 }
 
 void ReceiveDialog::updateQr(QString address){

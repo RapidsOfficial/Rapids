@@ -51,8 +51,8 @@ SettingsMultisendDialog::SettingsMultisendDialog(QWidget *parent) :
     ui->btnSave->setText("ADD");
     setCssBtnPrimary(ui->btnSave);
 
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnCancel, SIGNAL(clicked()), this, SLOT(close()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &SettingsMultisendDialog::close);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &SettingsMultisendDialog::close);
     connect(ui->btnSave, &QPushButton::clicked, [this](){
         this->isOk = true;
         accept();
