@@ -243,6 +243,15 @@ bool CTransaction::HasP2CSOutputs() const
     return false;
 }
 
+bool CTransaction::HasP2CSInputs() const
+{
+    for(const auto& in : vin) {
+        if (in.prevPubKey.IsPayToColdStaking())
+            return true;
+    }
+    return false;
+}
+
 CAmount CTransaction::GetValueOut() const
 {
     CAmount nValueOut = 0;
