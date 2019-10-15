@@ -181,7 +181,11 @@ public:
 
         // Append only stakeable utxo and not every output of the record
         const QString& hashTxId = record.getTxID();
-        const CWalletTx* tx = wallet->GetWalletTx(record.hash);
+        const CWalletTx *tx = wallet->GetWalletTx(record.hash);
+
+        if (!tx)
+            return;
+
         for (int i = 0; i < (int) tx->vout.size(); ++i) {
             auto out =  tx->vout[i];
             if (out.scriptPubKey.IsPayToColdStaking()) {

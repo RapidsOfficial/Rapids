@@ -273,7 +273,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->containerSend->setVisible(false);
         ui->containerBtn->setVisible(false);
         ui->btnColdStaking->setVisible(true);
-        showList(true);
+        showList(csModel->rowCount() > 0);
     }
 }
 
