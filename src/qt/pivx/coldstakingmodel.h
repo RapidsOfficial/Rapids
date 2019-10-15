@@ -26,7 +26,8 @@ public:
         DELEGATED_UTXO_IDS = 4,
         TOTAL_STACKEABLE_AMOUNT_STR = 5,
         TOTAL_STACKEABLE_AMOUNT = 6,
-        IS_RECEIVED_DELEGATION = 7
+        IS_RECEIVED_DELEGATION = 7,
+        COLUMN_COUNT = 8
     };
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;

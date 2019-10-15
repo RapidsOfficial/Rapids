@@ -17,7 +17,7 @@ ColdStakingModel::ColdStakingModel(WalletModel* _model,
 }
 
 void ColdStakingModel::updateCSList(){
-    emit dataChanged(index(0, 0, QModelIndex()), index(tableModel->csRowCount(), 7, QModelIndex()) );
+    emit dataChanged(index(0, 0, QModelIndex()), index(tableModel->csRowCount(), COLUMN_COUNT, QModelIndex()) );
 }
 
 int ColdStakingModel::rowCount(const QModelIndex &parent) const
@@ -31,7 +31,7 @@ int ColdStakingModel::columnCount(const QModelIndex &parent) const
 {
     if (parent.isValid())
         return 0;
-    return 7;
+    return COLUMN_COUNT;
 }
 
 
@@ -70,7 +70,7 @@ bool ColdStakingModel::whitelist(const QModelIndex& modelIndex) {
     beginRemoveRows(QModelIndex(), idx, idx);
     bool ret = model->whitelistAddressFromColdStaking(address);
     endRemoveRows();
-    emit dataChanged(index(idx, 0, QModelIndex()), index(idx, 7, QModelIndex()) );
+    emit dataChanged(index(idx, 0, QModelIndex()), index(idx, COLUMN_COUNT, QModelIndex()) );
     return ret;
 }
 
@@ -80,6 +80,6 @@ bool ColdStakingModel::blacklist(const QModelIndex& modelIndex) {
     beginRemoveRows(QModelIndex(), idx, idx);
     bool ret = model->blacklistAddressFromColdStaking(address);
     endRemoveRows();
-    emit dataChanged(index(idx, 0, QModelIndex()), index(idx, 7, QModelIndex()) );
+    emit dataChanged(index(idx, 0, QModelIndex()), index(idx, COLUMN_COUNT, QModelIndex()) );
     return ret;
 }

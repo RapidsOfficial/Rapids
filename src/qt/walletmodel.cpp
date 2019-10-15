@@ -928,8 +928,8 @@ bool WalletModel::blacklistAddressFromColdStaking(const QString &addressStr) {
 
 bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std::string& purpose) {
     CBitcoinAddress address(addressStr.toStdString());
-    if (!address.IsStakingAddress())
-        return error("Invalid PIVX address, not cold staking address");
+    if (address.IsStakingAddress())
+        return error("Invalid PIVX address, cold staking address");
     CKeyID keyID;
     if (!getKeyId(address, keyID))
         return false;
