@@ -164,6 +164,12 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
         loadHotOrColdStakeOrContract(wallet, wtx, sub, true);
         parts.append(sub);
         return parts;
+    } else if (wtx.HasP2CSInputs()) {
+        // Delegation unlocked
+        TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+        loadUnlockColdStake(wallet, wtx, sub);
+        parts.append(sub);
+        return parts;
     } else if (nNet > 0 || wtx.IsCoinBase()) {
         //
         // Credit
@@ -328,6 +334,45 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     }
 
     return parts;
+}
+
+void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record)
+{
+    record.involvesWatchAddress = false;
+
+    // Get the p2cs
+    CTxIn prevP2csUtxo;
+    for (unsigned int nIn = 0; nIn < wtx.vin.size(); nIn++) {
+        const auto &input = wtx.vin[nIn];
+        if (input.prevPubKey.IsPayToColdStaking()) {
+            prevP2csUtxo = input;
+            break;
+        }
+    }
+
+    bool isSpendable = wallet->IsMine(prevP2csUtxo) & ISMINE_SPENDABLE_ALL;
+    if (isSpendable) {
+        // owner unlocked the cold stake
+        record.type = TransactionRecord::P2CSUnlockOwner;
+        record.debit = -(wtx.GetStakeDelegationDebit());
+        record.credit = wtx.GetCredit(ISMINE_ALL);
+    } else {
+        // hot node watching the unlock
+        record.type = TransactionRecord::P2CSUnlockStaker;
+        record.debit = -(wtx.GetColdStakingDebit());
+        record.credit = -(wtx.GetColdStakingCredit());
+    }
+
+    CTxDestination address;
+    if (!ExtractDestination(prevP2csUtxo.prevPubKey, address, !isSpendable)) {
+        // this shouldn't happen..
+        record.address = "No available staking address";
+    } else {
+        record.address = CBitcoinAddress(
+                address,
+                ((isSpendable) ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)
+        ).ToString();
+    }
 }
 
 void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract)

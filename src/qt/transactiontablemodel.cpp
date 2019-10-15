@@ -161,7 +161,8 @@ public:
 
                     // Check for delegations
                     if (record.type == TransactionRecord::P2CSDelegation || record.type == TransactionRecord::P2CSDelegationSent
-                        || record.type == TransactionRecord::StakeDelegated || record.type == TransactionRecord::StakeHot) {
+                        || record.type == TransactionRecord::StakeDelegated || record.type == TransactionRecord::StakeHot
+                        || record.type == TransactionRecord::P2CSUnlockOwner || record.type == TransactionRecord::P2CSUnlockStaker) {
                         checkForDelegations(record, wallet, cachedDelegations);
                     }
                 }
@@ -293,7 +294,8 @@ public:
 
                         // Check for delegations
                         if (rec.type == TransactionRecord::P2CSDelegation || rec.type == TransactionRecord::P2CSDelegationSent
-                            || rec.type == TransactionRecord::StakeDelegated || rec.type == TransactionRecord::StakeHot) {
+                            || rec.type == TransactionRecord::StakeDelegated || rec.type == TransactionRecord::StakeHot
+                            || rec.type == TransactionRecord::P2CSUnlockOwner || rec.type == TransactionRecord::P2CSUnlockStaker) {
                             checkForDelegations(rec, wallet, cachedDelegations);
                         }
 

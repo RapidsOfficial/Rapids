@@ -98,7 +98,9 @@ public:
         StakeDelegated, // Received cold stake (owner)
         StakeHot, // Staked via a delegated P2CS.
         P2CSDelegation, // Non-spendable P2CS, staker side.
-        P2CSDelegationSent // Spendable P2CS delegated utxo. (coin-owner)
+        P2CSDelegationSent, // Spendable P2CS delegated utxo. (coin-owner)
+        P2CSUnlockOwner, // Coin-owner spent the delegated utxo
+        P2CSUnlockStaker // Staker watching the owner spent the delegated utxo
     };
 
     /** Number of confirmation recommended for accepting a transaction */
@@ -172,6 +174,7 @@ public:
 
 private:
     static void loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract = false);
+    static void loadUnlockColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record);
 };
 
 #endif // BITCOIN_QT_TRANSACTIONRECORD_H
