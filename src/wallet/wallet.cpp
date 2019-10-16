@@ -1909,6 +1909,45 @@ CAmount CWallet::GetLockedWatchOnlyBalance() const
     });
 }
 
+void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
+    vCoins.clear();
+    {
+        LOCK2(cs_main, cs_wallet);
+        for (const auto& it : mapWallet) {
+            const uint256& wtxid = it.first;
+            const CWalletTx* pcoin = &it.second;
+
+            if (!pcoin->IsTrusted())
+                continue;
+
+            if (pcoin->IsCoinBase() && pcoin->GetBlocksToMaturity() > 0)
+                continue;
+
+            int nDepth = pcoin->GetDepthInMainChain(false);
+
+            // We should not consider coins which aren't at least in our mempool
+            // It's possible for these to be conflicted via ancestors which we may never be able to detect
+            if (nDepth == 0 && !pcoin->InMempool())
+                continue;
+
+            if (pcoin->HasP2CSOutputs()) {
+                for (unsigned int i = 0; i < (int) pcoin->vout.size(); i++) {
+                    const auto &utxo = pcoin->vout[i];
+                    isminetype mine = IsMine(utxo);
+                    if (IsSpent(wtxid, i))
+                        continue;
+
+                    if (utxo.scriptPubKey.IsPayToColdStaking()) {
+                        bool fIsValid = mine & ISMINE_COLD || mine & ISMINE_SPENDABLE_DELEGATED;
+                        vCoins.emplace_back(COutput(pcoin, i, nDepth, fIsValid));
+                    }
+                }
+            }
+        }
+    }
+
+}
+
 /**
  * populate vCoins with vector of available COutputs.
  */
