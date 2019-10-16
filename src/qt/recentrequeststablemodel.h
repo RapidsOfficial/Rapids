@@ -91,7 +91,7 @@ public:
     void addNewRequest(const std::string& recipient);
     void addNewRequest(RecentRequestEntry& recipient);
 
-public slots:
+public Q_SLOTS:
     void sort(int column, Qt::SortOrder order = Qt::AscendingOrder);
     void updateDisplayUnit();
 

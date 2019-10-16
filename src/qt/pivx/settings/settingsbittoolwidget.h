@@ -23,7 +23,7 @@ public:
     ~SettingsBitToolWidget();
 protected:
     void resizeEvent(QResizeEvent *event) override;
-public slots:
+public Q_SLOTS:
     void onEncryptSelected(bool isEncr);
     void setAddress_ENC(const QString& address);
     void onEncryptKeyButtonENCClicked();

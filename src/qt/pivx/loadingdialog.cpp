@@ -13,16 +13,16 @@ void Worker::process(){
         } catch (std::exception &e) {
             QString errorStr = QString::fromStdString(e.what());
             runnable->onError(errorStr, type);
-            emit error(errorStr, type);
+            Q_EMIT error(errorStr, type);
         } catch (...) {
             QString errorStr = QString::fromStdString("Unknown error running background task");
             runnable->onError(errorStr, type);
-            emit error(errorStr, type);
+            Q_EMIT error(errorStr, type);
         }
     } else {
-        emit error("Null runnable", type);
+        Q_EMIT error("Null runnable", type);
     }
-    emit finished();
+    Q_EMIT finished();
 };
 
 LoadingDialog::LoadingDialog(QWidget *parent) :

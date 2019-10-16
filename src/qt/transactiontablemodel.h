@@ -79,7 +79,7 @@ public:
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     bool processingQueuedTransactions() { return fProcessingQueuedTransactions; }
 
-signals:
+Q_SIGNALS:
     void txArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType);
 
 private:
@@ -104,7 +104,7 @@ private:
     QVariant txWatchonlyDecoration(const TransactionRecord* wtx) const;
     QVariant txAddressDecoration(const TransactionRecord* wtx) const;
 
-public slots:
+public Q_SLOTS:
     /* New transaction, or transaction changed status */
     void updateTransaction(const QString& hash, int status, bool showTransaction);
     void updateConfirmations();

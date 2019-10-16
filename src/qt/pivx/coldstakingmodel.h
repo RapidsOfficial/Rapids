@@ -72,7 +72,7 @@ public:
 
     void refresh();
 
-public slots:
+public Q_SLOTS:
     void emitDataSetChanged();
 
 private:

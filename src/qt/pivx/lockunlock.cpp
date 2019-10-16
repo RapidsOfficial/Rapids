@@ -62,29 +62,29 @@ void LockUnlock::updateStatus(WalletModel::EncryptionStatus status){
 
 void LockUnlock::onLockClicked(){
     lock = 0;
-    emit lockClicked(StateClicked::LOCK);
+    Q_EMIT lockClicked(StateClicked::LOCK);
 }
 
 void LockUnlock::onUnlockClicked(){
     lock = 1;
-    emit lockClicked(StateClicked::UNLOCK);
+    Q_EMIT lockClicked(StateClicked::UNLOCK);
 }
 
 void LockUnlock::onStakingClicked(){
     lock = 2;
-    emit lockClicked(StateClicked::UNLOCK_FOR_STAKING);
+    Q_EMIT lockClicked(StateClicked::UNLOCK_FOR_STAKING);
 }
 
 void LockUnlock::enterEvent(QEvent *)
 {
     isOnHover = true;
-    emit Mouse_Entered();
+    Q_EMIT Mouse_Entered();
 }
 
 void LockUnlock::leaveEvent(QEvent *)
 {
     isOnHover = false;
-    emit Mouse_Leave();
+    Q_EMIT Mouse_Leave();
 }
 
 bool LockUnlock::isHovered(){

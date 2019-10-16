@@ -35,7 +35,7 @@ public:
     void loadClientModel() override;
 
     void encryptWallet();
-public slots:
+public Q_SLOTS:
     void updateBalances(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                         const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
                         const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
@@ -47,14 +47,14 @@ public slots:
     void setStakingStatusActive(bool fActive);
     void updateStakingStatus();
 
-signals:
+Q_SIGNALS:
     void themeChanged(bool isLight);
     void walletSynced(bool isSync);
     void onShowHideColdStakingChanged(bool show);
 
 protected:
     void resizeEvent(QResizeEvent *event) override;
-private slots:
+private Q_SLOTS:
     void onBtnReceiveClicked();
     void onThemeClicked();
     void onBtnLockClicked();

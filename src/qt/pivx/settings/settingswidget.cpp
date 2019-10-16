@@ -145,7 +145,7 @@ SettingsWidget::SettingsWidget(PIVXGUI* parent) :
     connect(ui->pushButtonHelp2, SIGNAL(clicked()), this, SLOT(onAboutClicked()));
 
     // Get restart command-line parameters and handle restart
-    connect(settingsWalletRepairWidget, &SettingsWalletRepairWidget::handleRestart, [this](QStringList arg){emit handleRestart(arg);});
+    connect(settingsWalletRepairWidget, &SettingsWalletRepairWidget::handleRestart, [this](QStringList arg){Q_EMIT handleRestart(arg);});
 
     connect(settingsBackupWallet,&SettingsBackupWallet::message,this, &SettingsWidget::message);
     connect(settingsBackupWallet, &SettingsBackupWallet::showHide, this, &SettingsWidget::showHide);
@@ -223,7 +223,7 @@ void SettingsWidget::onSaveOptionsClicked(){
                 args.removeAll(UPGRADEWALLET);
                 args.removeAll(REINDEX);
 
-                emit handleRestart(args);
+                Q_EMIT handleRestart(args);
             } else {
                 inform(tr("Options will be applied on next wallet restart"));
             }
