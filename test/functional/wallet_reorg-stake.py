@@ -106,12 +106,12 @@ class ReorgStakeTest(BitcoinTestFramework):
 
         # check balance of node-0
         balance0 = initial_balance + 250 * 12  # mined blocks matured (250*12)
-        assert_equal(self.nodes[0].getbalance(), balance0)          # <--- !!! THIS FAILS
+        assert_equal(self.nodes[0].getbalance(), balance0)          # <--- !!! THIS FAILS before PR #1043
         self.log.info("Balance for node 0 checks out: %d" % balance0)
 
         # check that NOW the original stakeinput is present and spendable
         res, utxo = self.findUtxoInList(stakeinput["txid"], stakeinput["vout"], self.nodes[0].listunspent())
-        assert (res and utxo["spendable"])                          # <--- !!! THIS FAILS
+        assert (res and utxo["spendable"])                          # <--- !!! THIS FAILS before PR #1043
         self.log.info("Coinstake input %s...%s-%d is spendable again." % (
             stakeinput["txid"][:9], stakeinput["txid"][-4:], stakeinput["vout"]))
         self.nodes[0].sendrawtransaction(rawtx["hex"])
