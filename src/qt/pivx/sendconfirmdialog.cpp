@@ -52,6 +52,8 @@ TxDetailDialog::TxDetailDialog(QWidget *parent, bool isConfirmDialog, QString wa
         if (!warningStr.isEmpty()) {
             ui->labelWarning->setVisible(true);
             ui->labelWarning->setText(warningStr);
+        } else {
+            ui->labelWarning->setVisible(false);
         }
 
         // hide change address for now
