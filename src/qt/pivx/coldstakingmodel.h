@@ -6,9 +6,30 @@
 #define COLDSTAKINGMODEL_H
 
 #include <QAbstractTableModel>
+#include "amount.h"
 #include "transactiontablemodel.h"
 #include "addresstablemodel.h"
+#include "transactionrecord.h"
 #include "walletmodel.h"
+
+class CSDelegation {
+public:
+    CSDelegation(bool _isWhitelisted, std::string _delegatedAddress) : isWhitelisted(_isWhitelisted), delegatedAddress(_delegatedAddress), cachedTotalAmount(0) {}
+
+    bool isWhitelisted;
+    std::string delegatedAddress;
+    /// Map of txId --> index num for stakeable utxo delegations
+    QMap<QString, int> delegatedUtxo;
+    // Sum of all delegations to this staking address
+    CAmount cachedTotalAmount;
+
+    // coin owner side, set to true if it can be spend
+    bool isSpendable;
+
+    bool operator==(const CSDelegation& obj) {
+        return obj.delegatedAddress == delegatedAddress;
+    }
+};
 
 class ColdStakingModel : public QAbstractTableModel
 {
@@ -37,12 +58,20 @@ public:
     bool blacklist(const QModelIndex& index);
     void updateCSList();
 
+    void refresh();
+
 
 private:
-    WalletModel* model;
-    TransactionTableModel* tableModel;
-    AddressTableModel* addressTableModel;
+    WalletModel* model = nullptr;
+    TransactionTableModel* tableModel = nullptr;
+    AddressTableModel* addressTableModel = nullptr;
 
+    /**
+     * List with all of the grouped delegations received by this wallet
+     */
+    QList<CSDelegation> cachedDelegations;
+
+    void checkForDelegations(const TransactionRecord& record, const CWallet* wallet, QList<CSDelegation>& cachedDelegations);
 };
 
 #endif // COLDSTAKINGMODEL_H

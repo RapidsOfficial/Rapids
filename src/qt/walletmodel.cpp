@@ -526,12 +526,20 @@ bool WalletModel::isDelegatedToMe(QString id) {
     const CWalletTx* tx = getTx(hashTx);
     if (tx && tx->HasP2CSOutputs()) {
         for (auto out : tx->vout) {
-            if (wallet->IsMine(out) & ISMINE_COLD) {
+            isminetype isminetype = wallet->IsMine(out);
+            if (isminetype & ISMINE_COLD || isminetype & ISMINE_SPENDABLE_DELEGATED) {
                 return true;
             }
         }
     }
     return false;
+}
+
+bool WalletModel::isP2CSSpend(QString txId) {
+    uint256 hashTx;
+    hashTx.SetHex(txId.toStdString());
+    const CWalletTx* tx = getTx(hashTx);
+    return tx && tx->HasP2CSInputs() && !tx->HasP2CSOutputs();
 }
 
 bool WalletModel::mintCoins(CAmount value, CCoinControl* coinControl ,std::string &strError){

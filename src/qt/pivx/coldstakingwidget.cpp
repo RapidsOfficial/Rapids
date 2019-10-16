@@ -179,7 +179,7 @@ void ColdStakingWidget::loadWalletModel(){
 }
 
 void ColdStakingWidget::onTxArrived(const QString& hash) {
-    if (walletModel->isDelegatedToMe(hash)) {
+    if (walletModel->isDelegatedToOrFromMe(hash) || walletModel->isP2CSSpend(hash)) {
         csModel->updateCSList();
         if (ui->pushLeft->isChecked())
             showList(true);

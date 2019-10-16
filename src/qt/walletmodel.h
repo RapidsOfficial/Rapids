@@ -281,7 +281,8 @@ public:
     /**
      * If the wallet has the tx and it was a stakes delegation to this wallet
      */
-    bool isDelegatedToMe(QString txId);
+    bool isDelegatedToOrFromMe(QString txId);
+    bool isP2CSSpend(QString txId);
 
     bool whitelistAddressFromColdStaking(const QString &addressStr);
     bool blacklistAddressFromColdStaking(const QString &address);

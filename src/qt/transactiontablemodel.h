@@ -16,25 +16,6 @@ class WalletModel;
 
 class CWallet;
 
-class CSDelegation {
-public:
-    CSDelegation(bool _isWhitelisted, std::string _delegatedAddress) : isWhitelisted(_isWhitelisted), delegatedAddress(_delegatedAddress), cachedTotalAmount(0) {}
-
-    bool isWhitelisted;
-    std::string delegatedAddress;
-    /// Map of txId --> index num for stakeable utxo delegations
-    QMap<QString, int> delegatedUtxo;
-    // Sum of all delegations to this staking address
-    CAmount cachedTotalAmount;
-
-    // coin owner side, set to true if it can be spend
-    bool isSpendable;
-
-    bool operator==(const CSDelegation& obj) {
-        return obj.delegatedAddress == delegatedAddress;
-    }
-};
-
 /** UI model for the transaction table of a wallet.
  */
 class TransactionTableModel : public QAbstractTableModel
@@ -96,10 +77,6 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
     QModelIndex index(int row, int column, const QModelIndex& parent = QModelIndex()) const;
     bool processingQueuedTransactions() { return fProcessingQueuedTransactions; }
-
-    /// Cold staking
-    int csRowCount();
-    CSDelegation getDelegation(int row);
 
 signals:
     void txArrived(const QString& hash, const bool& isCoinStake);

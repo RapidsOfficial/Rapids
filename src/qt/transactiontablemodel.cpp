@@ -75,12 +75,6 @@ public:
     QList<TransactionRecord> cachedWallet;
     bool hasZcTxes = false;
 
-    /**
-     * List with all of the grouped delegations received by this wallet
-     */
-    QList<CSDelegation> cachedDelegations;
-
-
     /* Query entire wallet anew from core.
      */
     void refreshWallet()
@@ -100,7 +94,7 @@ public:
             // Size of the tx subsets
             std::size_t const subsetSize = txesSize / (threadsCount + 1);
             std::size_t totalSumSize = 0;
-            QList<QFuture<std::pair<QList<TransactionRecord>, QList<CSDelegation>>>> tasks;
+            QList<QFuture<QList<TransactionRecord>>> tasks;
 
             // Subsets + run task
             for (std::size_t i = 0; i < threadsCount; ++i) {
@@ -117,36 +111,23 @@ public:
 
             // Now take the remaining ones and do the work here
             std::size_t const remainingSize = txesSize - totalSumSize;
-            auto resPair = convertTxToRecords(this, wallet,
+            auto res = convertTxToRecords(this, wallet,
                                               std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
             );
-            cachedWallet.append(resPair.first);
-            cachedDelegations.append(resPair.second);
+            cachedWallet.append(res);
 
             for (auto &future : tasks) {
                 future.waitForFinished();
-                auto res = future.result();
-                cachedWallet.append(res.first);
-
-                if (!res.second.isEmpty()) {
-                    // Check if the delegation exist in the cached list and append it if it does.
-                    // This is done progressively because of the possibility of several delegations to the same staking address
-                    for (auto& delegation : res.second) {
-                        updateOrAppendDelegation(delegation, cachedDelegations);
-                    }
-                }
+                cachedWallet.append(future.result());
             }
         } else {
             // Single thread flow
-            auto resPair = convertTxToRecords(this, wallet, walletTxes);
-            cachedWallet.append(resPair.first);
-            cachedDelegations.append(resPair.second);
+            cachedWallet.append(convertTxToRecords(this, wallet, walletTxes));
         }
     }
 
-    static std::pair<QList<TransactionRecord>,QList<CSDelegation>> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<CWalletTx>& walletTxes) {
+    static QList<TransactionRecord> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<CWalletTx>& walletTxes) {
         QList<TransactionRecord> cachedWallet;
-        QList<CSDelegation> cachedDelegations;
 
         bool hasZcTxes = tablePriv->hasZcTxes;
         for (const auto &tx : walletTxes) {
@@ -158,13 +139,6 @@ public:
                     if (!hasZcTxes) {
                         hasZcTxes = HasZcTxesIfNeeded(record);
                     }
-
-                    // Check for delegations
-                    if (record.type == TransactionRecord::P2CSDelegation || record.type == TransactionRecord::P2CSDelegationSent
-                        || record.type == TransactionRecord::StakeDelegated || record.type == TransactionRecord::StakeHot
-                        || record.type == TransactionRecord::P2CSUnlockOwner || record.type == TransactionRecord::P2CSUnlockStaker) {
-                        checkForDelegations(record, wallet, cachedDelegations);
-                    }
                 }
 
                 cachedWallet.append(records);
@@ -174,61 +148,7 @@ public:
         if (hasZcTxes) // Only update it if it's true, multi-thread operation.
             tablePriv->hasZcTxes = true;
 
-        return std::make_pair(cachedWallet, cachedDelegations);
-    }
-
-    static void checkForDelegations(const TransactionRecord& record, const CWallet* wallet, QList<CSDelegation>& cachedDelegations) {
-        CSDelegation delegation(false, record.address);
-        delegation.isSpendable = record.type == TransactionRecord::P2CSDelegationSent || record.type == TransactionRecord::StakeDelegated;
-
-        // Append only stakeable utxo and not every output of the record
-        const QString& hashTxId = record.getTxID();
-        const CWalletTx *tx = wallet->GetWalletTx(record.hash);
-
-        if (!tx)
-            return;
-
-        for (int i = 0; i < (int) tx->vout.size(); ++i) {
-            auto out =  tx->vout[i];
-            if (out.scriptPubKey.IsPayToColdStaking()) {
-                {
-                    LOCK(cs_main);
-                    CCoinsViewCache &view = *pcoinsTip;
-                    if (view.IsOutputAvailable(record.hash, i)) {
-                        delegation.cachedTotalAmount += out.nValue;
-                        delegation.delegatedUtxo.insert(hashTxId, i);
-                    }
-                }
-            }
-        }
-
-        // If there are no available p2cs delegations then don't try to add them
-        if (delegation.delegatedUtxo.isEmpty())
-            return;
-
-        int index = cachedDelegations.indexOf(delegation);
-        if (index == -1) {
-            cachedDelegations.append(delegation);
-        } else {
-            CSDelegation& del = cachedDelegations[index];
-            del.delegatedUtxo.unite(delegation.delegatedUtxo);
-            del.cachedTotalAmount += delegation.cachedTotalAmount;
-        }
-    }
-
-    /**
-     * @returns the index of the delegation in the list
-     */
-    static int updateOrAppendDelegation(const CSDelegation& delegation, QList<CSDelegation>& cachedDelegations) {
-        int index = cachedDelegations.indexOf(delegation);
-        if (index != -1) {
-            CSDelegation del = cachedDelegations[index];
-            del.delegatedUtxo.unite(delegation.delegatedUtxo);
-            del.cachedTotalAmount += delegation.cachedTotalAmount;
-        } else {
-            cachedDelegations.append(delegation);
-        }
-        return index;
+        return cachedWallet;
     }
 
     static bool HasZcTxesIfNeeded(const TransactionRecord& record) {
@@ -292,12 +212,14 @@ public:
                             cachedWallet.insert(insert_idx, rec);
                             if (!hasZcTxes) hasZcTxes = HasZcTxesIfNeeded(rec);
 
+                        /*
                         // Check for delegations
                         if (rec.type == TransactionRecord::P2CSDelegation || rec.type == TransactionRecord::P2CSDelegationSent
                             || rec.type == TransactionRecord::StakeDelegated || rec.type == TransactionRecord::StakeHot
                             || rec.type == TransactionRecord::P2CSUnlockOwner || rec.type == TransactionRecord::P2CSUnlockStaker) {
                             checkForDelegations(rec, wallet, cachedDelegations);
                         }
+                         */
 
                         insert_idx += 1;
                         // Return record
@@ -438,14 +360,6 @@ int TransactionTableModel::columnCount(const QModelIndex& parent) const
 
 int TransactionTableModel::size() const{
     return priv->size();
-}
-
-int TransactionTableModel::csRowCount() {
-    return priv->cachedDelegations.size();
-}
-
-CSDelegation TransactionTableModel::getDelegation(int row) {
-    return priv->cachedDelegations[row];
 }
 
 bool TransactionTableModel::hasZcTxes() {
