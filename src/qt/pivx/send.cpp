@@ -359,7 +359,11 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients){
     }
 
     showHideOp(true);
-    TxDetailDialog* dialog = new TxDetailDialog(window);
+    QString warningStr = QString();
+    if (currentTransaction.getTransaction()->fStakeDelegationVoided)
+        warningStr = tr("WARNING:\nTransaction spends a cold-stake delegation, voiding it.\n"
+                     "These coins will no longer be cold-staked.");
+    TxDetailDialog* dialog = new TxDetailDialog(window, true, warningStr);
     dialog->setDisplayUnit(walletModel->getOptionsModel()->getDisplayUnit());
     dialog->setData(walletModel, currentTransaction);
     dialog->adjustSize();

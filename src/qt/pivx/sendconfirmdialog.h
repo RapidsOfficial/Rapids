@@ -25,7 +25,7 @@ class TxDetailDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TxDetailDialog(QWidget *parent = nullptr, bool isConfirmDialog = true);
+    explicit TxDetailDialog(QWidget *parent = nullptr, bool isConfirmDialog = true, QString warningStr = QString());
     ~TxDetailDialog();
 
     bool isConfirm() { return this->confirm;}
