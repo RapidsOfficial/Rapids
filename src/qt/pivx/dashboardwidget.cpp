@@ -492,9 +492,9 @@ void DashboardWidget::updateStakeFilter() {
 }
 
 // pair PIV, zPIV
-QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
+const QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
     updateStakeFilter();
-    int size = stakesFilter->rowCount();
+    const int size = stakesFilter->rowCount();
     QMap<int, std::pair<qint64, qint64>> amountBy;
     // Get all of the stakes
     for (int i = 0; i < size; ++i) {

@@ -353,7 +353,6 @@ void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWallet
         }
     }
 
-
     if (isSpendable) {
         // owner unlocked the cold stake
         record.type = TransactionRecord::P2CSUnlockOwner;
@@ -366,16 +365,7 @@ void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWallet
         record.credit = -(wtx.GetColdStakingCredit());
     }
 
-    CTxDestination address;
-    if (!ExtractDestination(*p2csScript, address, !isSpendable)) {
-        // this shouldn't happen..
-        record.address = "No available staking address";
-    } else {
-        record.address = CBitcoinAddress(
-                address,
-                ((isSpendable) ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)
-        ).ToString();
-    }
+    ExtractAddress(*p2csScript, !isSpendable, record.address);
 }
 
 void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract)
@@ -421,15 +411,22 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
         }
     }
 
+    // Extract and set the address
+    ExtractAddress(p2csUtxo.scriptPubKey, !isSpendable, record.address);
+}
+
+bool TransactionRecord::ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr) {
     CTxDestination address;
-    if (!ExtractDestination(p2csUtxo.scriptPubKey, address, !isSpendable)) {
+    if (!ExtractDestination(scriptPubKey, address, fColdStake)) {
         // this shouldn't happen..
-        record.address = "No available staking address";
+        addressStr = "No available address";
+        return false;
     } else {
-        record.address = CBitcoinAddress(
+        addressStr = CBitcoinAddress(
                 address,
-                ((isSpendable) ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)
+                (fColdStake ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)
         ).ToString();
+        return true;
     }
 }
 

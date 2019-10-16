@@ -125,6 +125,9 @@ public:
     static bool showTransaction(const CWalletTx& wtx);
     static QList<TransactionRecord> decomposeTransaction(const CWallet* wallet, const CWalletTx& wtx);
 
+    /// Helper
+    static bool ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr);
+
     /** @name Immutable transaction attributes
       @{*/
     uint256 hash;
