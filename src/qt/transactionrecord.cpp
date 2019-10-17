@@ -365,7 +365,7 @@ void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWallet
         record.credit = -(wtx.GetColdStakingCredit());
     }
 
-    ExtractAddress(*p2csScript, !isSpendable, record.address);
+    ExtractAddress(*p2csScript, true, record.address);
 }
 
 void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract)
@@ -412,7 +412,7 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
     }
 
     // Extract and set the address
-    ExtractAddress(p2csUtxo.scriptPubKey, !isSpendable, record.address);
+    ExtractAddress(p2csUtxo.scriptPubKey, true, record.address);
 }
 
 bool TransactionRecord::ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr) {
