@@ -5810,6 +5810,12 @@ void CWalletTx::BindWallet(CWallet* pwalletIn)
     MarkDirty();
 }
 
+
+bool CWalletTx::HasP2CSInputs() const
+{
+    return GetStakeDelegationDebit(true) > 0 || GetColdStakingDebit(true) > 0;
+}
+
 CAmount CWalletTx::GetChange() const
 {
     if (fChangeCached)
