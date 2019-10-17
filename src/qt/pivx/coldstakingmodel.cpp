@@ -22,6 +22,7 @@ void ColdStakingModel::updateCSList() {
 }
 
 void ColdStakingModel::refresh() {
+    cachedDelegations.clear();
     // First get all of the p2cs utxo inside the wallet
     std::vector<COutput> utxoList;
     pwalletMain->GetAvailableP2CSCoins(utxoList);

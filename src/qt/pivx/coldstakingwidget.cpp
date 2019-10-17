@@ -426,6 +426,12 @@ void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest) {
 }
 
 void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
+
+    bool isReceivedDelegation = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
+
+    if (!isReceivedDelegation)
+        return; // Do not show the menu for coin-owners for now.
+
     ui->listView->setCurrentIndex(rIndex);
     QRect rect = ui->listView->visualRect(rIndex);
     QPoint pos = rect.topRight();
@@ -437,7 +443,8 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu = new TooltipMenu(window, this);
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
-        this->menu->setCopyBtnText(tr("Info"));
+        //this->menu->setCopyBtnText(tr("Info"));
+        this->menu->setCopyBtnVisible(false);
         this->menu->setMinimumHeight(75);
         adjustSize = true;
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
@@ -449,8 +456,6 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
     }
 
     this->index = rIndex;
-
-    bool isReceivedDelegation = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
 
     if (isReceivedDelegation) {
         bool isWhitelisted = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_WHITELISTED).data(
