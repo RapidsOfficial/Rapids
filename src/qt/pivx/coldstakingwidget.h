@@ -55,6 +55,7 @@ private slots:
     void onTxArrived(const QString& hash);
     void onContactsClicked(bool ownerAdd);
     void clearAll();
+    void onLabelClicked();
 
 private:
     Ui::ColdStakingWidget *ui;

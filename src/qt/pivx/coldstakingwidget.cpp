@@ -12,6 +12,7 @@
 #include "qt/pivx/furlistrow.h"
 #include "qt/pivx/txviewholder.h"
 #include "qt/pivx/sendconfirmdialog.h"
+#include "qt/pivx/addnewcontactdialog.h"
 #include "qt/pivx/guitransactionsutils.h"
 #include "walletmodel.h"
 #include "optionsmodel.h"
@@ -445,14 +446,14 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu = new TooltipMenu(window, this);
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
-        //this->menu->setCopyBtnText(tr("Info"));
-        this->menu->setCopyBtnVisible(false);
+        this->menu->setCopyBtnText(tr("Edit Label"));
         this->menu->setMinimumHeight(75);
+        this->menu->setMinimumWidth(menu->minimumWidth() + 6);
         adjustSize = true;
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
-        connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onCopyClicked()));
+        connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onLabelClicked()));
     }else {
         this->menu->hide();
     }
@@ -469,6 +470,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         // owner side
         this->menu->setDeleteBtnVisible(false);
         this->menu->setEditBtnVisible(false);
+        this->menu->setCopyBtnVisible(false);
         this->menu->setMinimumHeight(60);
     }
     if (adjustSize) this->menu->adjustSize();
@@ -505,6 +507,35 @@ void ColdStakingWidget::onDeleteClicked() {
 
 void ColdStakingWidget::onCopyClicked() {
     // show address info
+}
+
+void ColdStakingWidget::onLabelClicked(){
+    if(walletModel && !isShowingDialog) {
+        isShowingDialog = true;
+        showHideOp(true);
+        AddNewContactDialog *dialog = new AddNewContactDialog(window);
+        dialog->setTexts(tr("Edit Owner Address Label"));
+        QString qAddress = index.data(Qt::DisplayRole).toString();
+        dialog->setData(qAddress, walletModel->getAddressTableModel()->labelForAddress(qAddress));
+        if (openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 6)) {
+            QString label = dialog->getLabel();
+            std::string stdString = qAddress.toStdString();
+            std::string purpose = walletModel->getAddressTableModel()->purposeForAddress(stdString);
+            const CBitcoinAddress address = CBitcoinAddress(stdString.data());
+            if (!label.isEmpty() && walletModel->updateAddressBookLabels(
+                    address.Get(),
+                    label.toUtf8().constData(),
+                    purpose
+            )
+                    ) {
+                csModel->updateCSList();
+                inform(tr("Owner address label saved"));
+            } else {
+                inform(tr("Error storing address label"));
+            }
+        }
+        isShowingDialog = false;
+    }
 }
 
 void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme){
