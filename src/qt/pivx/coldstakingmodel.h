@@ -14,20 +14,23 @@
 
 class CSDelegation {
 public:
-    CSDelegation(bool _isWhitelisted, std::string _delegatedAddress) : isWhitelisted(_isWhitelisted), delegatedAddress(_delegatedAddress), cachedTotalAmount(0) {}
 
-    bool isWhitelisted;
-    std::string delegatedAddress;
+    CSDelegation(){}
+    CSDelegation(const std::string& _stakingAddress, const std::string& _ownerAddress) :
+                stakingAddress(_stakingAddress), ownerAddress(_ownerAddress), cachedTotalAmount(0) {}
+
+    std::string stakingAddress;
+    std::string ownerAddress;
     /// Map of txId --> index num for stakeable utxo delegations
     QMap<QString, int> delegatedUtxo;
-    // Sum of all delegations to this staking address
+    // Sum of all delegations to this owner address
     CAmount cachedTotalAmount;
 
     // coin owner side, set to true if it can be spend
     bool isSpendable;
 
     bool operator==(const CSDelegation& obj) {
-        return obj.delegatedAddress == delegatedAddress;
+        return obj.ownerAddress == ownerAddress;
     }
 };
 
@@ -40,15 +43,17 @@ public:
     ~ColdStakingModel() override{}
 
     enum ColumnIndex {
-        DELEGATED_ADDRESS = 0,
-        DELEGATED_ADDRESS_LABEL = 1,
-        IS_WHITELISTED = 2,
-        IS_WHITELISTED_STRING = 3,
-        DELEGATED_UTXO_IDS = 4,
-        TOTAL_STACKEABLE_AMOUNT_STR = 5,
-        TOTAL_STACKEABLE_AMOUNT = 6,
-        IS_RECEIVED_DELEGATION = 7,
-        COLUMN_COUNT = 8
+        OWNER_ADDRESS = 0,
+        OWNER_ADDRESS_LABEL = 1,
+        STAKING_ADDRESS = 2,
+        STAKING_ADDRESS_LABEL = 3,
+        IS_WHITELISTED = 4,
+        IS_WHITELISTED_STRING = 5,
+        DELEGATED_UTXO_IDS = 6,
+        TOTAL_STACKEABLE_AMOUNT_STR = 7,
+        TOTAL_STACKEABLE_AMOUNT = 8,
+        IS_RECEIVED_DELEGATION = 9,
+        COLUMN_COUNT = 10
     };
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -71,7 +76,7 @@ private:
      */
     QList<CSDelegation> cachedDelegations;
 
-    void checkForDelegations(const TransactionRecord& record, const CWallet* wallet, QList<CSDelegation>& cachedDelegations);
+    bool parseCSDelegation(const CTxOut& out, CSDelegation& ret, const QString& txId, const int& utxoIndex);
 };
 
 #endif // COLDSTAKINGMODEL_H

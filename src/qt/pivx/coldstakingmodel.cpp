@@ -28,33 +28,62 @@ void ColdStakingModel::refresh() {
     pwalletMain->GetAvailableP2CSCoins(utxoList);
 
     if (!utxoList.empty()) {
-        // Parse the COutput into CSDelegations
+        // Loop over each COutput into a CSDelegation
         for (const auto& utxo : utxoList) {
 
             const auto *wtx = utxo.tx;
-            uint256 hash = wtx->GetHash();
-            int64_t nTime = wtx->GetComputedTxTime();
+            const QString txId = QString::fromStdString(wtx->GetHash().GetHex());
+            const CTxOut& out = wtx->vout[utxo.i];
 
-            TransactionRecord record(hash, nTime, wtx->GetTotalSize());
+            // First parse the cs delegation
+            CSDelegation delegation;
+            if (!parseCSDelegation(out, delegation, txId, utxo.i))
+                continue;
 
-            // First parse the record
-            if (wtx->IsCoinStake()) {
-                if (isminetype mine = pwalletMain->IsMine(wtx->vout[1])) {
-                    if (wtx->HasP2CSOutputs()) {
-                        TransactionRecord::loadHotOrColdStakeOrContract(pwalletMain, *wtx, record);
-                    }
-                }
-            } else if (wtx->HasP2CSOutputs()) {
-                // Delegation record.
-                TransactionRecord::loadHotOrColdStakeOrContract(pwalletMain, *wtx, record, true);
-            } else if (wtx->HasP2CSInputs()){
-                TransactionRecord::loadUnlockColdStake(pwalletMain, *wtx, record);
+            // it's spendable only when this wallet has the keys to spend it, a.k.a is the owner
+            delegation.isSpendable = pwalletMain->IsMine(out) & ISMINE_SPENDABLE_DELEGATED;
+            delegation.cachedTotalAmount += out.nValue;
+            delegation.delegatedUtxo.insert(txId, utxo.i);
+
+            // Now verify if the delegation exists in the cached list
+            int indexDel = cachedDelegations.indexOf(delegation);
+            if (indexDel == -1) {
+                // If it doesn't, let's append it.
+                cachedDelegations.append(delegation);
+            } else {
+                CSDelegation& del = cachedDelegations[indexDel];
+                del.delegatedUtxo.unite(delegation.delegatedUtxo);
+                del.cachedTotalAmount += delegation.cachedTotalAmount;
             }
-
-            // Once the record is parsed, load the cached map
-            checkForDelegations(record, pwalletMain, cachedDelegations);
         }
     }
+}
+
+bool ColdStakingModel::parseCSDelegation(const CTxOut& out, CSDelegation& ret, const QString& txId, const int& utxoIndex) {
+    CTxDestination stakingAddressDest;
+    CTxDestination ownerAddressDest;
+
+    if (!ExtractDestination(out.scriptPubKey, stakingAddressDest, true)) {
+        return error("Error extracting staking destination for: %1 , output index: %2", txId.toStdString(), utxoIndex);
+    }
+
+    if (!ExtractDestination(out.scriptPubKey, ownerAddressDest, false)) {
+        return error("Error extracting owner destination for: %1 , output index: %2", txId.toStdString(), utxoIndex);
+    }
+
+    std::string stakingAddressStr = CBitcoinAddress(
+            stakingAddressDest,
+            CChainParams::STAKING_ADDRESS
+    ).ToString();
+
+    std::string ownerAddressStr = CBitcoinAddress(
+            ownerAddressDest,
+            CChainParams::PUBKEY_ADDRESS
+    ).ToString();
+
+    ret = CSDelegation(stakingAddressStr, ownerAddressStr);
+
+    return true;
 }
 
 int ColdStakingModel::rowCount(const QModelIndex &parent) const
@@ -79,14 +108,18 @@ QVariant ColdStakingModel::data(const QModelIndex &index, int role) const
     CSDelegation rec = cachedDelegations[row];
     if (role == Qt::DisplayRole || role == Qt::EditRole) {
         switch (index.column()) {
-            case DELEGATED_ADDRESS:
-                return QString::fromStdString(rec.delegatedAddress);
-            case DELEGATED_ADDRESS_LABEL:
-                return addressTableModel->labelForAddress(QString::fromStdString(rec.delegatedAddress));
+            case OWNER_ADDRESS:
+                return QString::fromStdString(rec.ownerAddress);
+            case OWNER_ADDRESS_LABEL:
+                return addressTableModel->labelForAddress(QString::fromStdString(rec.ownerAddress));
+            case STAKING_ADDRESS:
+                return QString::fromStdString(rec.stakingAddress);
+            case STAKING_ADDRESS_LABEL:
+                return addressTableModel->labelForAddress(QString::fromStdString(rec.stakingAddress));
             case IS_WHITELISTED:
-                return addressTableModel->purposeForAddress(rec.delegatedAddress).compare(AddressBook::AddressBookPurpose::DELEGATOR) == 0;
+                return addressTableModel->purposeForAddress(rec.ownerAddress).compare(AddressBook::AddressBookPurpose::DELEGATOR) == 0;
             case IS_WHITELISTED_STRING:
-                return (addressTableModel->purposeForAddress(rec.delegatedAddress) == AddressBook::AddressBookPurpose::DELEGATOR ? "Staking" : "Not staking");
+                return (addressTableModel->purposeForAddress(rec.ownerAddress) == AddressBook::AddressBookPurpose::DELEGATOR ? "Staking" : "Not staking");
             case TOTAL_STACKEABLE_AMOUNT_STR:
                 return GUIUtil::formatBalance(rec.cachedTotalAmount);
             case TOTAL_STACKEABLE_AMOUNT:
@@ -117,44 +150,4 @@ bool ColdStakingModel::blacklist(const QModelIndex& modelIndex) {
     endRemoveRows();
     emit dataChanged(index(idx, 0, QModelIndex()), index(idx, COLUMN_COUNT, QModelIndex()) );
     return ret;
-}
-
-
-void ColdStakingModel::checkForDelegations(const TransactionRecord& record, const CWallet* wallet, QList<CSDelegation>& cachedDelegations) {
-    CSDelegation delegation(false, record.address);
-    delegation.isSpendable = record.type == TransactionRecord::P2CSDelegationSent || record.type == TransactionRecord::StakeDelegated;
-
-    // Append only stakeable utxo and not every output of the record
-    const QString& hashTxId = record.getTxID();
-    const CWalletTx *tx = wallet->GetWalletTx(record.hash);
-
-    if (!tx)
-        return;
-
-    for (int i = 0; i < (int) tx->vout.size(); ++i) {
-        auto out =  tx->vout[i];
-        if (out.scriptPubKey.IsPayToColdStaking()) {
-            {
-                LOCK(cs_main);
-                CCoinsViewCache &view = *pcoinsTip;
-                if (view.IsOutputAvailable(record.hash, i)) {
-                    delegation.cachedTotalAmount += out.nValue;
-                    delegation.delegatedUtxo.insert(hashTxId, i);
-                }
-            }
-        }
-    }
-
-    // If there are no available p2cs delegations then don't try to add them
-    if (delegation.delegatedUtxo.isEmpty())
-        return;
-
-    int index = cachedDelegations.indexOf(delegation);
-    if (index == -1) {
-        cachedDelegations.append(delegation);
-    } else {
-        CSDelegation& del = cachedDelegations[index];
-        del.delegatedUtxo.unite(delegation.delegatedUtxo);
-        del.cachedTotalAmount += delegation.cachedTotalAmount;
-    }
 }

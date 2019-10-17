@@ -40,7 +40,7 @@ public:
         row->updateState(isLightTheme, isHovered, isSelected);
 
         QString address = index.data(Qt::DisplayRole).toString();
-        QString label = index.sibling(index.row(), ColdStakingModel::DELEGATED_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
+        QString label = index.sibling(index.row(), ColdStakingModel::OWNER_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
         if (label.isEmpty()) {
             label = "Address with no label";
         }
@@ -48,6 +48,7 @@ public:
         QString amountStr = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT_STR).data(Qt::DisplayRole).toString();
         bool isReceivedDelegation = index.sibling(index.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
         row->updateView(address, label, isWhitelisted, isReceivedDelegation, amountStr);
+        row->showMenuButton(isReceivedDelegation);
     }
 
     QColor rectColor(bool isHovered, bool isSelected) override{
@@ -166,6 +167,7 @@ void ColdStakingWidget::loadWalletModel(){
         txModel = walletModel->getTransactionTableModel();
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
         ui->listView->setModel(csModel);
+        ui->listView->setModelColumn(ColdStakingModel::OWNER_ADDRESS);
 
         connect(txModel, &TransactionTableModel::txArrived, this, &ColdStakingWidget::onTxArrived);
 
@@ -481,7 +483,7 @@ void ColdStakingWidget::onEditClicked() {
         inform(tr("Whitelist failed, please check the logs"));
         return;
     }
-    QString label = index.sibling(index.row(), ColdStakingModel::DELEGATED_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
+    QString label = index.sibling(index.row(), ColdStakingModel::OWNER_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
     if (label.isEmpty()) {
         label = index.data(Qt::DisplayRole).toString();
     }
@@ -494,7 +496,7 @@ void ColdStakingWidget::onDeleteClicked() {
         inform(tr("Blacklist failed, please check the logs"));
         return;
     }
-    QString label = index.sibling(index.row(), ColdStakingModel::DELEGATED_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
+    QString label = index.sibling(index.row(), ColdStakingModel::OWNER_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
     if (label.isEmpty()) {
         label = index.data(Qt::DisplayRole).toString();
     }

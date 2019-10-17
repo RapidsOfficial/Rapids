@@ -21,12 +21,15 @@ public:
 
     void updateView(const QString& address, const QString& label, bool isStaking, bool isReceivedDelegation, const QString& amount);
     void updateState(bool isLightTheme, bool isHovered, bool isSelected);
+    void showMenuButton(bool show);
 protected:
     virtual void enterEvent(QEvent *);
     virtual void leaveEvent(QEvent *);
 
 private:
     Ui::CSRow *ui;
+
+    bool fShowMenuButton = true;
 };
 
 #endif // CSROW_H

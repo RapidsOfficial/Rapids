@@ -24,23 +24,33 @@ void CSRow::updateView(const QString& address, const QString& label, bool isStak
     if (isReceivedDelegation) {
         ui->labelStaking->setText(tr(isStaking ? "Staking" : "Not staking"));
     } else {
-        ui->labelStaking->setText(tr("Delegation"));
+        ui->labelStaking->setText(tr("Own delegation"));
     }
 }
 
 void CSRow::updateState(bool isLightTheme, bool isHovered, bool isSelected) {
     ui->lblDivisory->setStyleSheet((isLightTheme) ?  "background-color:#bababa" : "background-color:#40ffffff");
-    ui->pushButtonMenu->setVisible(isHovered);
+    if (fShowMenuButton) {
+        ui->pushButtonMenu->setVisible(isHovered);
+    }
+}
+
+void CSRow::showMenuButton(bool show) {
+    this->fShowMenuButton = show;
 }
 
 void CSRow::enterEvent(QEvent *) {
-    ui->pushButtonMenu->setVisible(true);
-    update();
+    if (fShowMenuButton) {
+        ui->pushButtonMenu->setVisible(true);
+        update();
+    }
 }
 
 void CSRow::leaveEvent(QEvent *) {
-    ui->pushButtonMenu->setVisible(false);
-    update();
+    if (fShowMenuButton) {
+        ui->pushButtonMenu->setVisible(false);
+        update();
+    }
 }
 
 CSRow::~CSRow(){
