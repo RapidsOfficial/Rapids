@@ -432,14 +432,11 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
 
     bool isReceivedDelegation = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
 
-    if (!isReceivedDelegation)
-        return; // Do not show the menu for coin-owners for now.
-
     ui->listView->setCurrentIndex(rIndex);
     QRect rect = ui->listView->visualRect(rIndex);
     QPoint pos = rect.topRight();
     pos.setX(pos.x() - (DECORATION_SIZE * 2));
-    pos.setY(pos.y() + (DECORATION_SIZE * 2.45));
+    pos.setY(pos.y() + (DECORATION_SIZE * 2));
 
     bool adjustSize = false;
     if(!this->menu){
@@ -447,13 +444,17 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
         this->menu->setCopyBtnText(tr("Edit Label"));
-        this->menu->setMinimumHeight(75);
-        this->menu->setMinimumWidth(menu->minimumWidth() + 6);
+        this->menu->setLastBtnText(tr("Copy staking\naddress"), 40);
+        this->menu->setLastBtnVisible(true);
+        this->menu->setMinimumHeight(157);
+        this->menu->setFixedHeight(157);
+        this->menu->setMinimumWidth(125);
         adjustSize = true;
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
         connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onLabelClicked()));
+        connect(this->menu, SIGNAL(onLastClicked()), this, SLOT(onCopyStakingClicked()));
     }else {
         this->menu->hide();
     }
@@ -465,13 +466,13 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
                 Qt::DisplayRole).toBool();
         this->menu->setDeleteBtnVisible(isWhitelisted);
         this->menu->setEditBtnVisible(!isWhitelisted);
-        this->menu->setMinimumHeight(75);
+        this->menu->setMinimumHeight(157);
     } else {
         // owner side
         this->menu->setDeleteBtnVisible(false);
         this->menu->setEditBtnVisible(false);
         this->menu->setCopyBtnVisible(false);
-        this->menu->setMinimumHeight(60);
+        this->menu->setMinimumHeight(50);
     }
     if (adjustSize) this->menu->adjustSize();
 
@@ -507,6 +508,12 @@ void ColdStakingWidget::onDeleteClicked() {
 
 void ColdStakingWidget::onCopyClicked() {
     // show address info
+}
+
+void ColdStakingWidget::onCopyStakingClicked() {
+    QString owner = index.sibling(index.row(), ColdStakingModel::STAKING_ADDRESS).data(Qt::DisplayRole).toString();
+    GUIUtil::setClipboard(owner);
+    inform(tr("Staking address copied"));
 }
 
 void ColdStakingWidget::onLabelClicked(){

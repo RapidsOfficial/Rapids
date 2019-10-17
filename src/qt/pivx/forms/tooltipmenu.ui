@@ -143,6 +143,34 @@
         </property>
        </widget>
       </item>
+      <item alignment="Qt::AlignLeft">
+       <widget class="QPushButton" name="btnLast">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
+        <property name="text">
+         <string>Last</string>
+        </property>
+       </widget>
+      </item>
      </layout>
     </widget>
    </item>

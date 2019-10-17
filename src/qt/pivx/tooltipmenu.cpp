@@ -14,11 +14,13 @@ TooltipMenu::TooltipMenu(PIVXGUI *_window, QWidget *parent) :
     ui(new Ui::TooltipMenu)
 {
     ui->setupUi(this);
+    ui->btnLast->setVisible(false);
     setCssProperty(ui->container, "container-list-menu");
-    setCssProperty({ui->btnCopy, ui->btnDelete, ui->btnEdit}, "btn-list-menu");
+    setCssProperty({ui->btnCopy, ui->btnDelete, ui->btnEdit, ui->btnLast}, "btn-list-menu");
     connect(ui->btnCopy, SIGNAL(clicked()), this, SLOT(copyClicked()));
     connect(ui->btnDelete, SIGNAL(clicked()), this, SLOT(deleteClicked()));
     connect(ui->btnEdit, SIGNAL(clicked()), this, SLOT(editClicked()));
+    connect(ui->btnLast, SIGNAL(clicked()), this, SLOT(lastClicked()));
 }
 
 void TooltipMenu::setEditBtnText(QString btnText){
@@ -33,6 +35,11 @@ void TooltipMenu::setCopyBtnText(QString btnText){
     ui->btnCopy->setText(btnText);
 }
 
+void TooltipMenu::setLastBtnText(QString btnText, int minHeight){
+    ui->btnLast->setText(btnText);
+    ui->btnLast->setMinimumHeight(minHeight);
+}
+
 void TooltipMenu::setCopyBtnVisible(bool visible){
     ui->btnCopy->setVisible(visible);
 }
@@ -43,6 +50,10 @@ void TooltipMenu::setDeleteBtnVisible(bool visible){
 
 void TooltipMenu::setEditBtnVisible(bool visible) {
     ui->btnEdit->setVisible(visible);
+}
+
+void TooltipMenu::setLastBtnVisible(bool visible) {
+    ui->btnLast->setVisible(visible);
 }
 
 void TooltipMenu::deleteClicked(){
@@ -58,6 +69,11 @@ void TooltipMenu::copyClicked(){
 void TooltipMenu::editClicked(){
     hide();
     emit onEditClicked();
+}
+
+void TooltipMenu::lastClicked() {
+    hide();
+    emit onLastClicked();
 }
 
 void TooltipMenu::showEvent(QShowEvent *event){
