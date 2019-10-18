@@ -444,7 +444,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
         this->menu->setCopyBtnText(tr("Edit Label"));
-        this->menu->setLastBtnText(tr("Copy staking\naddress"), 40);
+        this->menu->setLastBtnText(tr("Copy owner\naddress"), 40);
         this->menu->setLastBtnVisible(true);
         this->menu->setMinimumHeight(157);
         this->menu->setFixedHeight(157);
@@ -454,7 +454,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
         connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onLabelClicked()));
-        connect(this->menu, SIGNAL(onLastClicked()), this, SLOT(onCopyStakingClicked()));
+        connect(this->menu, SIGNAL(onLastClicked()), this, SLOT(onCopyOwnerClicked()));
     }else {
         this->menu->hide();
     }
@@ -472,7 +472,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
         this->menu->setDeleteBtnVisible(false);
         this->menu->setEditBtnVisible(false);
         this->menu->setCopyBtnVisible(false);
-        this->menu->setMinimumHeight(50);
+        this->menu->setMinimumHeight(60);
     }
     if (adjustSize) this->menu->adjustSize();
 
@@ -510,10 +510,10 @@ void ColdStakingWidget::onCopyClicked() {
     // show address info
 }
 
-void ColdStakingWidget::onCopyStakingClicked() {
-    QString owner = index.sibling(index.row(), ColdStakingModel::STAKING_ADDRESS).data(Qt::DisplayRole).toString();
+void ColdStakingWidget::onCopyOwnerClicked() {
+    QString owner = index.data(Qt::DisplayRole).toString();
     GUIUtil::setClipboard(owner);
-    inform(tr("Staking address copied"));
+    inform(tr("Owner address copied"));
 }
 
 void ColdStakingWidget::onLabelClicked(){

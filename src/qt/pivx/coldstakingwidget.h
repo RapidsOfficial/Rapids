@@ -52,7 +52,7 @@ private slots:
     void onEditClicked();
     void onDeleteClicked();
     void onCopyClicked();
-    void onCopyStakingClicked();
+    void onCopyOwnerClicked();
     void onTxArrived(const QString& hash);
     void onContactsClicked(bool ownerAdd);
     void clearAll();
