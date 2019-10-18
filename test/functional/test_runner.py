@@ -60,6 +60,7 @@ BASE_SCRIPTS= [
 
     # vv Tests less than 5m vv
     'wallet_abandonconflict.py',
+    'wallet_reorg-stake.py',
     'rpc_rawtransaction.py',
     'wallet_zapwallettxes.py',
     'wallet_keypool_topup.py',
