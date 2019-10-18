@@ -1132,7 +1132,7 @@ CAmount CWalletTx::GetDebit(const isminefilter& filter) const
 
 CAmount CWalletTx::GetColdStakingDebit(bool fUseCache) const
 {
-    return UpdateAmount(nColdDebitCached, fColdDebitCached, fUseCache, ISMINE_SPENDABLE_DELEGATED, false);
+    return UpdateAmount(nColdDebitCached, fColdDebitCached, fUseCache, ISMINE_COLD, false);
 }
 
 CAmount CWalletTx::GetStakeDelegationDebit(bool fUseCache) const
