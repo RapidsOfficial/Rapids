@@ -102,11 +102,11 @@ std::vector<CWalletTx> CWallet::getWalletTxs()
 }
 
 PairResult CWallet::getNewAddress(CBitcoinAddress& ret, std::string label){
-    return getNewAddress(ret, label, "receive");
+    return getNewAddress(ret, label, AddressBook::AddressBookPurpose::RECEIVE);
 }
 
 PairResult CWallet::getNewStakingAddress(CBitcoinAddress& ret, std::string label){
-    return getNewAddress(ret, label, "coldstaking", CChainParams::Base58Type::STAKING_ADDRESS);
+    return getNewAddress(ret, label, AddressBook::AddressBookPurpose::COLD_STAKING, CChainParams::Base58Type::STAKING_ADDRESS);
 }
 
 PairResult CWallet::getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,

@@ -13,6 +13,7 @@ namespace AddressBook {
         const std::string SEND{"send"};
         const std::string DELEGABLE{"delegable"};
         const std::string DELEGATOR{"delegator"};
+        const std::string COLD_STAKING{"coldstaking"};
     }
 }
 

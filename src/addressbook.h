@@ -16,6 +16,7 @@ namespace AddressBook {
         extern const std::string SEND;
         extern const std::string DELEGABLE;
         extern const std::string DELEGATOR;
+        extern const std::string COLD_STAKING;
     }
 
 /** Address book data */
