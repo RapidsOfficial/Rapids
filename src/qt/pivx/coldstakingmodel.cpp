@@ -60,24 +60,22 @@ void ColdStakingModel::refresh() {
 }
 
 bool ColdStakingModel::parseCSDelegation(const CTxOut& out, CSDelegation& ret, const QString& txId, const int& utxoIndex) {
-    CTxDestination stakingAddressDest;
-    CTxDestination ownerAddressDest;
+    txnouttype type;
+    std::vector<CTxDestination> addresses;
+    int nRequired;
 
-    if (!ExtractDestination(out.scriptPubKey, stakingAddressDest, true)) {
-        return error("Error extracting staking destination for: %1 , output index: %2", txId.toStdString(), utxoIndex);
-    }
-
-    if (!ExtractDestination(out.scriptPubKey, ownerAddressDest, false)) {
-        return error("Error extracting owner destination for: %1 , output index: %2", txId.toStdString(), utxoIndex);
+    if (!ExtractDestinations(out.scriptPubKey, type, addresses, nRequired) || addresses.size() != 2) {
+        return error("%s : Error extracting P2CS destinations for utxo: %s-%d",
+                __func__, txId.toStdString(), utxoIndex);
     }
 
     std::string stakingAddressStr = CBitcoinAddress(
-            stakingAddressDest,
+            addresses[0],
             CChainParams::STAKING_ADDRESS
     ).ToString();
 
     std::string ownerAddressStr = CBitcoinAddress(
-            ownerAddressDest,
+            addresses[1],
             CChainParams::PUBKEY_ADDRESS
     ).ToString();
 
