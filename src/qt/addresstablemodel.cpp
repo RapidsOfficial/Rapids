@@ -21,6 +21,7 @@ const QString AddressTableModel::Send = "S";
 const QString AddressTableModel::Receive = "R";
 const QString AddressTableModel::Zerocoin = "X";
 const QString AddressTableModel::Delegators = "D";
+const QString AddressTableModel::ColdStaking = "C";
 
 struct AddressTableEntry {
     enum Type {
@@ -28,6 +29,7 @@ struct AddressTableEntry {
         Receiving,
         Zerocoin,
         Delegators,
+        ColdStaking,
         Hidden /* QSortFilterProxyModel will filter these out */
     };
 
@@ -62,13 +64,15 @@ static AddressTableEntry::Type translateTransactionType(const QString& strPurpos
 {
     AddressTableEntry::Type addressType = AddressTableEntry::Hidden;
     // "refund" addresses aren't shown, and change addresses aren't in mapAddressBook at all.
-    if (strPurpose == "send")
+    if (strPurpose ==  QString::fromStdString(AddressBook::AddressBookPurpose::SEND))
         addressType = AddressTableEntry::Sending;
-    else if (strPurpose == "receive")
+    else if (strPurpose ==  QString::fromStdString(AddressBook::AddressBookPurpose::RECEIVE))
         addressType = AddressTableEntry::Receiving;
     else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGATOR)
             || strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGABLE))
         addressType = AddressTableEntry::Delegators;
+    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::COLD_STAKING))
+        addressType = AddressTableEntry::ColdStaking;
     else if (strPurpose == "unknown" || strPurpose == "") // if purpose not set, guess
         addressType = (isMine ? AddressTableEntry::Receiving : AddressTableEntry::Sending);
     return addressType;
@@ -107,7 +111,8 @@ public:
                 } else if(item.second.purpose == "send"){
                     sendNum++;
                 } else if (item.second.purpose == AddressBook::AddressBookPurpose::DELEGABLE
-                            || item.second.purpose == AddressBook::AddressBookPurpose::DELEGATOR) {
+                            || item.second.purpose == AddressBook::AddressBookPurpose::DELEGATOR
+                            || item.second.purpose == AddressBook::AddressBookPurpose::COLD_STAKING) {
                     dellNum++;
 
                     // TODO: Remove this when addresses are well parsed, this is a dirty dirty way to fix things quickly only for testing purposes..
@@ -331,6 +336,8 @@ QVariant AddressTableModel::data(const QModelIndex& index, int role) const
                 return Receive;
             case AddressTableEntry::Delegators:
                 return Delegators;
+            case AddressTableEntry::ColdStaking:
+                return ColdStaking;
             default:
                 break;
         }

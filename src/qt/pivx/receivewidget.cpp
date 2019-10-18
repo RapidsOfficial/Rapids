@@ -9,6 +9,7 @@
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/myaddressrow.h"
 #include "qt/pivx/furlistrow.h"
+#include "qt/pivx/addressholder.h"
 #include "walletmodel.h"
 #include "guiutil.h"
 #include "pairresult.h"
@@ -19,37 +20,6 @@
 
 #define DECORATION_SIZE 70
 #define NUM_ITEMS 3
-
-class AddressHolder : public FurListRow<QWidget*>
-{
-public:
-    AddressHolder();
-
-    explicit AddressHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme){}
-
-    MyAddressRow* createHolder(int pos) override{
-        if (!cachedRow) cachedRow = new MyAddressRow();
-        return cachedRow;
-    }
-
-    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override{
-        MyAddressRow *row = static_cast<MyAddressRow*>(holder);
-        QString address = index.data(Qt::DisplayRole).toString();
-        QString label = index.sibling(index.row(), AddressTableModel::Label).data(Qt::DisplayRole).toString();
-        uint time = index.sibling(index.row(), AddressTableModel::Date).data(Qt::DisplayRole).toUInt();
-        QString date = (time == 0) ? "" : GUIUtil::dateTimeStr(QDateTime::fromTime_t(time));
-        row->updateView(address, label, date);
-    }
-
-    QColor rectColor(bool isHovered, bool isSelected) override{
-        return getRowColor(isLightTheme, isHovered, isSelected);
-    }
-
-    ~AddressHolder() override{}
-
-    bool isLightTheme;
-    MyAddressRow* cachedRow = nullptr;
-};
 
 ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     PWidget(parent),

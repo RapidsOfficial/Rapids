@@ -49,6 +49,7 @@ public:
     static const QString Receive; /**< Specifies receive address */
     static const QString Zerocoin; /**< Specifies stealth address */
     static const QString Delegators;
+    static const QString ColdStaking;
 
     /** @name Methods overridden from QAbstractTableModel
         @{*/

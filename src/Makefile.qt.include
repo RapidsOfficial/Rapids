@@ -284,6 +284,7 @@ BITCOIN_QT_H = \
   qt/pivx/walletpassworddialog.h \
   qt/pivx/topbar.h \
   qt/pivx/txrow.h \
+  qt/pivx/addressholder.h \
   qt/pivx/addressfilterproxymodel.h \
   qt/pivx/dashboardwidget.h \
   qt/pivx/coincontrolpivwidget.h \
@@ -671,6 +672,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/walletpassworddialog.cpp \
   qt/pivx/topbar.cpp \
   qt/pivx/txrow.cpp \
+  qt/pivx/addressholder.cpp \
   qt/pivx/addressfilterproxymodel.cpp \
   qt/pivx/dashboardwidget.cpp \
   qt/pivx/coincontrolpivwidget.cpp \

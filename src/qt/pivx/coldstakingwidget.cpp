@@ -74,7 +74,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     setCssProperty(ui->left, "container");
     ui->left->setContentsMargins(0,20,0,0);
     setCssProperty(ui->right, "container-right");
-    ui->right->setContentsMargins(20,10,20,20);
+    ui->right->setContentsMargins(0,10,0,20);
 
     /* Light Font */
     QFont fontLight;
@@ -94,6 +94,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     /* Subtitle */
     ui->labelSubtitle1->setText(tr("You can delegate your PIVs and let a hot node (24/7 online node)\nstake in your behalf, keeping the keys in a secure place offline."));
     setCssSubtitleScreen(ui->labelSubtitle1);
+    spacer = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Expanding);
 
     setCssProperty(ui->labelSubtitleDescription, "text-title");
     ui->lineEditOwnerAddress->setPlaceholderText(tr("Add owner address"));
@@ -151,15 +152,40 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
                 this
     );
 
+    addressHolder = new AddressHolder(isLightTheme());
+    addressDelegate = new FurAbstractListItemDelegate(
+            DECORATION_SIZE,
+            addressHolder,
+            this
+    );
+
     ui->listView->setItemDelegate(delegate);
     ui->listView->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
     ui->listView->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
     ui->listView->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
+    ui->btnMyStakingAddresses->setChecked(true);
+    ui->rightContainer->addItem(spacer);
+    ui->listViewStakingAddress->setVisible(false);
+
+    ui->btnMyStakingAddresses->setTitleClassAndText("btn-title-grey", "My staking addresses");
+    ui->btnMyStakingAddresses->setSubTitleClassAndText("text-subtitle", "List your own staking addresses.");
+    ui->btnMyStakingAddresses->layout()->setMargin(0);
+    ui->btnMyStakingAddresses->setRightIconClass("ic-arrow");
+
+    // List Addresses
+    setCssProperty(ui->listViewStakingAddress, "container");
+    ui->listViewStakingAddress->setItemDelegate(addressDelegate);
+    ui->listViewStakingAddress->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
+    ui->listViewStakingAddress->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
+    ui->listViewStakingAddress->setAttribute(Qt::WA_MacShowFocusRect, false);
+    ui->listViewStakingAddress->setSelectionBehavior(QAbstractItemView::SelectRows);
+
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
     connect(btnOwnerContact, &QAction::triggered, [this](){ onContactsClicked(true); });
     connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
+    connect(ui->btnMyStakingAddresses, SIGNAL(clicked()), this, SLOT(onMyStakingAddressesClicked()));
 }
 
 void ColdStakingWidget::loadWalletModel(){
@@ -169,6 +195,12 @@ void ColdStakingWidget::loadWalletModel(){
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
         ui->listView->setModel(csModel);
         ui->listView->setModelColumn(ColdStakingModel::OWNER_ADDRESS);
+
+        addressTableModel = walletModel->getAddressTableModel();
+        addressesFilter = new AddressFilterProxyModel(AddressTableModel::ColdStaking, this);
+        addressesFilter->setSourceModel(addressTableModel);
+        ui->listViewStakingAddress->setModel(addressesFilter);
+        ui->listViewStakingAddress->setModelColumn(AddressTableModel::Address);
 
         connect(txModel, &TransactionTableModel::txArrived, this, &ColdStakingWidget::onTxArrived);
 
@@ -271,12 +303,18 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->listView->setVisible(false);
         ui->containerHistoryLabel->setVisible(false);
         ui->btnColdStaking->setVisible(false);
+        ui->btnMyStakingAddresses->setVisible(false);
+        ui->listViewStakingAddress->setVisible(false);
+        ui->rightContainer->addItem(spacer);
     }else{
         ui->btnCoinControl->setVisible(false);
         ui->containerSend->setVisible(false);
         ui->containerBtn->setVisible(false);
         ui->btnColdStaking->setVisible(true);
         showList(csModel->rowCount() > 0);
+
+        ui->btnMyStakingAddresses->setVisible(true);
+        ui->listViewStakingAddress->setVisible(false);
     }
 }
 
@@ -542,6 +580,20 @@ void ColdStakingWidget::onLabelClicked(){
             }
         }
         isShowingDialog = false;
+    }
+}
+
+void ColdStakingWidget::onMyStakingAddressesClicked(){
+    bool isVisible = ui->listViewStakingAddress->isVisible();
+    if(!isVisible){
+        ui->btnMyStakingAddresses->setRightIconClass("btn-dropdown", true);
+        ui->listViewStakingAddress->setVisible(true);
+        ui->rightContainer->removeItem(spacer);
+        ui->listViewStakingAddress->update();
+    }else{
+        ui->btnMyStakingAddresses->setRightIconClass("ic-arrow", true);
+        ui->rightContainer->addItem(spacer);
+        ui->listViewStakingAddress->setVisible(false);
     }
 }
 

@@ -12,12 +12,16 @@
 #include "qt/pivx/sendmultirow.h"
 #include "qt/pivx/coldstakingmodel.h"
 #include "qt/pivx/contactsdropdown.h"
+#include "qt/pivx/addressholder.h"
 #include "transactiontablemodel.h"
+#include "addresstablemodel.h"
+#include "addressfilterproxymodel.h"
 #include "coincontroldialog.h"
 
 #include <QAction>
 #include <QLabel>
 #include <QWidget>
+#include <QSpacerItem>
 
 class PIVXGUI;
 class WalletModel;
@@ -57,15 +61,21 @@ private slots:
     void onContactsClicked(bool ownerAdd);
     void clearAll();
     void onLabelClicked();
+    void onMyStakingAddressesClicked();
 
 private:
     Ui::ColdStakingWidget *ui;
     FurAbstractListItemDelegate *delegate = nullptr;
+    FurAbstractListItemDelegate *addressDelegate = nullptr;
     TransactionTableModel* txModel = nullptr;
+    AddressHolder* addressHolder = nullptr;
+    AddressTableModel* addressTableModel = nullptr;
+    AddressFilterProxyModel *addressesFilter = nullptr;
     ColdStakingModel* csModel = nullptr;
     CSDelegationHolder *txHolder = nullptr;
     CoinControlDialog *coinControlDialog = nullptr;
     QAction *btnOwnerContact;
+    QSpacerItem *spacer = nullptr;
 
     ContactsDropdown *menuContacts = nullptr;
     TooltipMenu* menu = nullptr;
