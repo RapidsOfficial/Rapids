@@ -123,6 +123,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
 
     // List
     ui->labelListHistory->setText(tr("Delegated balance history"));
+    setCssProperty(ui->labelStakingTotal, "text-title-right");
     setCssProperty(ui->labelListHistory, "text-title");
     setCssProperty(ui->pushImgEmpty, "img-empty-transactions");
     ui->labelEmpty->setText(tr("No delegations yet"));
@@ -195,6 +196,16 @@ void ColdStakingWidget::loadWalletModel(){
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
         ui->listView->setModel(csModel);
         ui->listView->setModelColumn(ColdStakingModel::OWNER_ADDRESS);
+
+        if (csModel->rowCount() > 0) {
+            CAmount coldStaking = walletModel->getColdStakedBalance();
+            ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
+                    (coldStaking == 0) ? "0.00 PIV" : GUIUtil::formatBalance(coldStaking, nDisplayUnit))
+            );
+            ui->labelStakingTotal->setVisible(true);
+        } else {
+            ui->labelStakingTotal->setVisible(false);
+        }
 
         addressTableModel = walletModel->getAddressTableModel();
         addressesFilter = new AddressFilterProxyModel(AddressTableModel::ColdStaking, this);

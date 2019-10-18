@@ -902,6 +902,11 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     font-size:16px;
 }
 
+*[cssClass="text-title-right"] {
+    color:#b088ff;
+    font-size:14px;
+}
+
 *[cssClass="text-title-white"] {
     color:#FFFFFF;
     font-size:16px;
