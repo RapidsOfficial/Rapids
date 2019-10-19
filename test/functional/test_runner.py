@@ -55,13 +55,13 @@ TEST_EXIT_SKIPPED = 77
 BASE_SCRIPTS= [
     # Scripts that are run by the travis build process.
     # Longest test should go first, to favor running tests in parallel
-    'feature_coldStaking.py',
     'wallet_basic.py',
     'wallet_backup.py',
 
     # vv Tests less than 5m vv
     'wallet_abandonconflict.py',
     'wallet_reorg-stake.py',
+    'feature_coldStaking.py',
     'rpc_rawtransaction.py',
     'wallet_zapwallettxes.py',
     'wallet_keypool_topup.py',

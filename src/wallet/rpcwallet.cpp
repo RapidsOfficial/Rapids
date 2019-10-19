@@ -1707,9 +1707,11 @@ UniValue listcoldutxos(const UniValue& params, bool fHelp)
         if (!CheckFinalTx(*pcoin) || !pcoin->IsTrusted())
             continue;
 
+        // if this tx has no unspent P2CS outputs for us, skip it
+        if(pcoin->GetColdStakingCredit() == 0 && pcoin->GetStakeDelegationCredit() == 0)
+            continue;
+
         for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
-            if(pwalletMain->IsSpent(wtxid, i))
-                continue;
             const CTxOut& out = pcoin->vout[i];
             isminetype mine = pwalletMain->IsMine(out);
             if (!bool(mine & ISMINE_COLD) && !bool(mine & ISMINE_SPENDABLE_DELEGATED))
