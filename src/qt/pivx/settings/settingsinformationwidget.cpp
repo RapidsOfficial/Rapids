@@ -49,6 +49,7 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
         ui->labelTitleConnections,
         ui->labelTitleBlockNumber,
         ui->labelTitleBlockTime,
+        ui->labelTitleBlockHash,
         ui->labelTitleNumberTransactions,
         ui->labelInfoNumberTransactions,
         ui->labelInfoClient,
@@ -71,6 +72,7 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
     ui->labelTitleBlockchain->setText(tr("Blockchain"));
     ui->labelTitleBlockNumber->setText(tr("Current number of blocks:"));
     ui->labelTitleBlockTime->setText(tr("Last block time:"));
+    ui->labelTitleBlockHash->setText(tr("Last block hash:"));
 
     ui->labelTitleMemory->setText(tr("Memory Pool"));
     ui->labelTitleMemory->setVisible(false);
@@ -90,6 +92,7 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
     ui->labelInfoBlockNumber->setText("0");
     ui->labelInfoBlockTime->setText("Sept 6, 2018. Thursday, 8:21:49 PM");
     ui->labelInfoBlockTime->setProperty("cssClass", "text-main-grey");
+    ui->labelInfoBlockHash->setProperty("cssClass", "text-main-hash");
 
     // Buttons
     ui->pushButtonFile->setText(tr("Wallet Conf"));
@@ -149,8 +152,10 @@ void SettingsInformationWidget::setNumConnections(int count){
 
 void SettingsInformationWidget::setNumBlocks(int count){
     ui->labelInfoBlockNumber->setText(QString::number(count));
-    if (clientModel)
+    if (clientModel) {
         ui->labelInfoBlockTime->setText(clientModel->getLastBlockDate().toString());
+        ui->labelInfoBlockHash->setText(clientModel->getLastBlockHash());
+    }
 }
 
 void SettingsInformationWidget::openNetworkMonitor(){
