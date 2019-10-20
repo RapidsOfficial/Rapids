@@ -248,6 +248,12 @@
              </item>
              <item>
               <widget class="QLabel" name="labelInfoClient">
+               <property name="cursor">
+                <cursorShape>IBeamCursor</cursorShape>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -281,6 +287,12 @@
              </item>
              <item>
               <widget class="QLabel" name="labelInfoAgent">
+               <property name="cursor">
+                <cursorShape>IBeamCursor</cursorShape>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -314,6 +326,12 @@
              </item>
              <item>
               <widget class="QLabel" name="labelInfoBerkeley">
+               <property name="cursor">
+                <cursorShape>IBeamCursor</cursorShape>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -347,6 +365,12 @@
              </item>
              <item>
               <widget class="QLabel" name="labelInfoDataDir">
+               <property name="cursor">
+                <cursorShape>IBeamCursor</cursorShape>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -383,6 +407,12 @@
              </item>
              <item>
               <widget class="QLabel" name="labelInfoTime">
+               <property name="cursor">
+                <cursorShape>IBeamCursor</cursorShape>
+               </property>
+               <property name="textInteractionFlags">
+                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+               </property>
                <property name="text">
                 <string>TextLabel</string>
                </property>
@@ -442,6 +472,12 @@
           </item>
           <item>
            <widget class="QLabel" name="labelInfoName">
+            <property name="cursor">
+             <cursorShape>IBeamCursor</cursorShape>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+            </property>
             <property name="text">
              <string>TextLabel</string>
             </property>
@@ -488,6 +524,12 @@
            </item>
            <item>
             <widget class="QLabel" name="labelInfoConnections">
+             <property name="cursor">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+             </property>
              <property name="text">
               <string>TextLabel</string>
              </property>
@@ -545,6 +587,12 @@
           </item>
           <item>
            <widget class="QLabel" name="labelInfoBlockNumber">
+            <property name="cursor">
+             <cursorShape>IBeamCursor</cursorShape>
+            </property>
+            <property name="textInteractionFlags">
+             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+            </property>
             <property name="text">
              <string>TextLabel</string>
             </property>
@@ -591,6 +639,12 @@
            </item>
            <item>
             <widget class="QLabel" name="labelInfoBlockTime">
+             <property name="cursor">
+              <cursorShape>IBeamCursor</cursorShape>
+             </property>
+             <property name="textInteractionFlags">
+              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
+             </property>
              <property name="text">
               <string>TextLabel</string>
              </property>
