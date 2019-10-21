@@ -146,6 +146,59 @@ CMasternodePaymentDB::ReadResult CMasternodePaymentDB::Read(CMasternodePayments&
     return Ok;
 }
 
+uint256 CMasternodePaymentWinner::GetHash() const
+{
+    CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
+    ss << payee;
+    ss << nBlockHeight;
+    ss << vinMasternode.prevout;
+    return ss.GetHash();
+}
+
+std::string CMasternodePaymentWinner::GetStrMessage() const
+{
+    return vinMasternode.prevout.ToStringShort() + std::to_string(nBlockHeight) + payee.ToString();
+}
+
+bool CMasternodePaymentWinner::IsValid(CNode* pnode, std::string& strError)
+{
+    CMasternode* pmn = mnodeman.Find(vinMasternode);
+
+    if (!pmn) {
+        strError = strprintf("Unknown Masternode %s", vinMasternode.prevout.hash.ToString());
+        LogPrint("masternode","CMasternodePaymentWinner::IsValid - %s\n", strError);
+        mnodeman.AskForMN(pnode, vinMasternode);
+        return false;
+    }
+
+    if (pmn->protocolVersion < ActiveProtocol()) {
+        strError = strprintf("Masternode protocol too old %d - req %d", pmn->protocolVersion, ActiveProtocol());
+        LogPrint("masternode","CMasternodePaymentWinner::IsValid - %s\n", strError);
+        return false;
+    }
+
+    int n = mnodeman.GetMasternodeRank(vinMasternode, nBlockHeight - 100, ActiveProtocol());
+
+    if (n > MNPAYMENTS_SIGNATURES_TOTAL) {
+        //It's common to have masternodes mistakenly think they are in the top 10
+        // We don't want to print all of these messages, or punish them unless they're way off
+        if (n > MNPAYMENTS_SIGNATURES_TOTAL * 2) {
+            strError = strprintf("Masternode not in the top %d (%d)", MNPAYMENTS_SIGNATURES_TOTAL * 2, n);
+            LogPrint("masternode","CMasternodePaymentWinner::IsValid - %s\n", strError);
+            //if (masternodeSync.IsSynced()) Misbehaving(pnode->GetId(), 20);
+        }
+        return false;
+    }
+
+    return true;
+}
+
+void CMasternodePaymentWinner::Relay()
+{
+    CInv inv(MSG_MASTERNODE_WINNER, GetHash());
+    RelayInv(inv);
+}
+
 void DumpMasternodePayments()
 {
     int64_t nStart = GetTimeMillis();
@@ -415,6 +468,12 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             return;
         }
 
+        // reject old signatures 6000 blocks after hard-fork
+        if (winner.nMessVersion != MessageVersion::MESS_VER_HASH && Params().NewSigsActive(winner.nBlockHeight - 6000)) {
+            LogPrintf("%s : nMessVersion=%d not accepted anymore at block %d\n", __func__, winner.nMessVersion, nHeight);
+            return;
+        }
+
         std::string strError = "";
         if (!winner.IsValid(pfrom, strError)) {
             // if(strError != "") LogPrint("masternode","mnw - invalid message - %s\n", strError);
@@ -426,7 +485,7 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             return;
         }
 
-        if (!winner.SignatureValid()) {
+        if (!winner.CheckSignature()) {
             if (masternodeSync.IsSynced()) {
                 LogPrintf("CMasternodePayments::ProcessMessageMasternodePayments() : mnw - invalid signature\n");
                 Misbehaving(pfrom->GetId(), 20);
@@ -447,26 +506,6 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             masternodeSync.AddedMasternodeWinner(winner.GetHash());
         }
     }
-}
-
-bool CMasternodePaymentWinner::Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode)
-{
-    std::string errorMessage;
-    std::string strMasterNodeSignMessage;
-
-    std::string strMessage = vinMasternode.prevout.ToStringShort() + std::to_string(nBlockHeight) + payee.ToString();
-
-    if (!obfuScationSigner.SignMessage(strMessage, errorMessage, vchSig, keyMasternode)) {
-        LogPrint("masternode","CMasternodePing::Sign() - Error: %s\n", errorMessage.c_str());
-        return false;
-    }
-
-    if (!obfuScationSigner.VerifyMessage(pubKeyMasternode, vchSig, strMessage, errorMessage)) {
-        LogPrint("masternode","CMasternodePing::Sign() - Error: %s\n", errorMessage.c_str());
-        return false;
-    }
-
-    return true;
 }
 
 bool CMasternodePayments::GetBlockPayee(int nBlockHeight, CScript& payee)
@@ -670,39 +709,6 @@ void CMasternodePayments::CleanPaymentList()
     }
 }
 
-bool CMasternodePaymentWinner::IsValid(CNode* pnode, std::string& strError)
-{
-    CMasternode* pmn = mnodeman.Find(vinMasternode);
-
-    if (!pmn) {
-        strError = strprintf("Unknown Masternode %s", vinMasternode.prevout.hash.ToString());
-        LogPrint("masternode","CMasternodePaymentWinner::IsValid - %s\n", strError);
-        mnodeman.AskForMN(pnode, vinMasternode);
-        return false;
-    }
-
-    if (pmn->protocolVersion < ActiveProtocol()) {
-        strError = strprintf("Masternode protocol too old %d - req %d", pmn->protocolVersion, ActiveProtocol());
-        LogPrint("masternode","CMasternodePaymentWinner::IsValid - %s\n", strError);
-        return false;
-    }
-
-    int n = mnodeman.GetMasternodeRank(vinMasternode, nBlockHeight - 100, ActiveProtocol());
-
-    if (n > MNPAYMENTS_SIGNATURES_TOTAL) {
-        //It's common to have masternodes mistakenly think they are in the top 10
-        // We don't want to print all of these messages, or punish them unless they're way off
-        if (n > MNPAYMENTS_SIGNATURES_TOTAL * 2) {
-            strError = strprintf("Masternode not in the top %d (%d)", MNPAYMENTS_SIGNATURES_TOTAL * 2, n);
-            LogPrint("masternode","CMasternodePaymentWinner::IsValid - %s\n", strError);
-            //if (masternodeSync.IsSynced()) Misbehaving(pnode->GetId(), 20);
-        }
-        return false;
-    }
-
-    return true;
-}
-
 bool CMasternodePayments::ProcessBlock(int nBlockHeight)
 {
     if (!fMasterNode) return false;
@@ -756,13 +762,15 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
     CPubKey pubKeyMasternode;
     CKey keyMasternode;
 
-    if (!obfuScationSigner.SetKey(strMasterNodePrivKey, errorMessage, keyMasternode, pubKeyMasternode)) {
-        LogPrint("masternode","CMasternodePayments::ProcessBlock() - Error upon calling SetKey: %s\n", errorMessage.c_str());
+    if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, keyMasternode, pubKeyMasternode)) {
+        LogPrint("masternode","CMasternodePayments::ProcessBlock() - Error upon calling GetKeysFromSecret.\n");
         return false;
     }
 
+    const bool fNewSigs = Params().NewSigsActive(nBlockHeight - 20);
+
     LogPrint("masternode","CMasternodePayments::ProcessBlock() - Signing Winner\n");
-    if (newWinner.Sign(keyMasternode, pubKeyMasternode)) {
+    if (newWinner.Sign(keyMasternode, pubKeyMasternode, fNewSigs)) {
         LogPrint("masternode","CMasternodePayments::ProcessBlock() - AddWinningMasternode\n");
 
         if (AddWinningMasternode(newWinner)) {
@@ -770,30 +778,6 @@ bool CMasternodePayments::ProcessBlock(int nBlockHeight)
             nLastBlockHeight = nBlockHeight;
             return true;
         }
-    }
-
-    return false;
-}
-
-void CMasternodePaymentWinner::Relay()
-{
-    CInv inv(MSG_MASTERNODE_WINNER, GetHash());
-    RelayInv(inv);
-}
-
-bool CMasternodePaymentWinner::SignatureValid()
-{
-    CMasternode* pmn = mnodeman.Find(vinMasternode);
-
-    if (pmn != NULL) {
-        std::string strMessage = vinMasternode.prevout.ToStringShort() + std::to_string(nBlockHeight) + payee.ToString();
-
-        std::string errorMessage = "";
-        if (!obfuScationSigner.VerifyMessage(pmn->pubKeyMasternode, vchSig, strMessage, errorMessage)) {
-            return error("CMasternodePaymentWinner::SignatureValid() - Got bad Masternode address signature %s\n", vinMasternode.prevout.hash.ToString());
-        }
-
-        return true;
     }
 
     return false;

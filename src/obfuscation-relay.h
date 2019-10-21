@@ -11,12 +11,13 @@
 #include "masternodeman.h"
 
 
-class CObfuScationRelay
+class CObfuScationRelay : public CSignedMessage
 {
+private:
+    std::vector<unsigned char> vchSig2;
+
 public:
     CTxIn vinMasternode;
-    std::vector<unsigned char> vchSig;
-    std::vector<unsigned char> vchSig2;
     int nBlockHeight;
     int nRelayType;
     CTxIn in;
@@ -37,12 +38,22 @@ public:
         READWRITE(nRelayType);
         READWRITE(in);
         READWRITE(out);
+        try
+        {
+            READWRITE(nMessVersion);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+        }
     }
 
     std::string ToString();
 
-    bool Sign(std::string strSharedKey);
-    bool VerifyMessage(std::string strSharedKey);
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override;
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override { return vinMasternode; };
+    bool Sign(std::string strSharedKey);   // use vchSig2
+
     void Relay();
     void RelayThroughNode(int nRank);
 };

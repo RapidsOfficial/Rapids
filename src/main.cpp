@@ -22,6 +22,7 @@
 #include "masternode-payments.h"
 #include "masternodeman.h"
 #include "merkleblock.h"
+#include "messagesigner.h"
 #include "net.h"
 #include "obfuscation.h"
 #include "pow.h"
@@ -1340,21 +1341,23 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
     //Temporarily disable zerocoin for maintenance
     if (sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE) && tx.ContainsZerocoins())
-        return state.DoS(10, error("AcceptToMemoryPool : Zerocoin transactions are temporarily disabled for maintenance"), REJECT_INVALID, "bad-tx");
+        return state.DoS(10, error("%s : Zerocoin transactions are temporarily disabled for maintenance",
+                __func__), REJECT_INVALID, "bad-tx");
 
     int chainHeight = chainActive.Height();
     if (!CheckTransaction(tx, chainHeight >= Params().Zerocoin_StartHeight(), true, state, isBlockBetweenFakeSerialAttackRange(chainHeight)))
-        return state.DoS(100, error("AcceptToMemoryPool: : CheckTransaction failed"), REJECT_INVALID, "bad-tx");
+        return state.DoS(100, error("%s : CheckTransaction failed",
+                __func__), REJECT_INVALID, "bad-tx");
 
     // Coinbase is only valid in a block, not as a loose transaction
     if (tx.IsCoinBase())
-        return state.DoS(100, error("AcceptToMemoryPool: : coinbase as individual tx"),
-            REJECT_INVALID, "coinbase");
+        return state.DoS(100, error("%s : coinbase as individual tx",
+                __func__), REJECT_INVALID, "coinbase");
 
     //Coinstake is also only valid in a block, not as a loose transaction
     if (tx.IsCoinStake())
-        return state.DoS(100, error("AcceptToMemoryPool: coinstake as individual tx. txid=%s", tx.GetHash().GetHex()),
-            REJECT_INVALID, "coinstake");
+        return state.DoS(100, error("%s : coinstake as individual tx (id=%s): %s",
+                __func__, tx.GetHash().GetHex(), tx.ToString()), REJECT_INVALID, "coinstake");
 
     // Only accept nLockTime-using transactions that can be mined in the next
     // block; we don't want our mempool filled up with transactions that can't
@@ -1365,9 +1368,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     // Rather not work on nonstandard transactions (unless -testnet/-regtest)
     std::string reason;
     if (Params().RequireStandard() && !IsStandardTx(tx, reason))
-        return state.DoS(0,
-            error("AcceptToMemoryPool : nonstandard transaction: %s", reason),
-            REJECT_NONSTANDARD, reason);
+        return state.DoS(0, error("%s : nonstandard transaction: %s",
+                    __func__, reason), REJECT_NONSTANDARD, reason);
     // is it already in the memory pool?
     uint256 hash = tx.GetHash();
     if (pool.exists(hash)) {
@@ -1381,8 +1383,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         if (mapLockedInputs.count(in.prevout)) {
             if (mapLockedInputs[in.prevout] != tx.GetHash()) {
                 return state.DoS(0,
-                    error("AcceptToMemoryPool : conflicts with existing transaction lock: %s", reason),
-                    REJECT_INVALID, "tx-lock-conflict");
+                    error("%s : conflicts with existing transaction lock: %s",
+                            __func__, reason), REJECT_INVALID, "tx-lock-conflict");
             }
         }
     }
@@ -1411,8 +1413,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
             //Check that txid is not already in the chain
             int nHeightTx = 0;
             if (IsTransactionInChain(tx.GetHash(), nHeightTx))
-                return state.Invalid(error("AcceptToMemoryPool : zPIV spend tx %s already in block %d",
-                                           tx.GetHash().GetHex(), nHeightTx), REJECT_DUPLICATE, "bad-txns-inputs-spent");
+                return state.Invalid(error("%s : zPIV spend tx %s already in block %d",
+                        __func__, tx.GetHash().GetHex(), nHeightTx), REJECT_DUPLICATE, "bad-txns-inputs-spent");
 
             //Check for double spending of serial #'s
             for (const CTxIn& txIn : tx.vin) {
@@ -1420,14 +1422,14 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                 bool isPublicSpend = txIn.IsZerocoinPublicSpend();
                 bool isPrivZerocoinSpend = txIn.IsZerocoinSpend();
                 if (!isPrivZerocoinSpend && !isPublicSpend) {
-                    return state.Invalid(error("%s: AcceptToMemoryPool failed for tx %s, every input must be a zcspend or zcpublicspend", __func__,
-                                        tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                    return state.Invalid(error("%s: failed for tx %s, every input must be a zcspend or zcpublicspend",
+                            __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
                 }
 
                 // Check enforcement
                 if (!CheckPublicCoinSpendEnforced(chainActive.Height(), isPublicSpend)){
-                    return state.Invalid(error("%s: AcceptToMemoryPool failed for tx %s", __func__,
-                                               tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                    return state.Invalid(error("%s: CheckPublicCoinSpendEnforced failed for tx %s",
+                            __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
                 }
 
                 if (isPublicSpend) {
@@ -1437,13 +1439,13 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                         return false;
                     }
                     if (!ContextualCheckZerocoinSpend(tx, &publicSpend, chainActive.Tip(), 0))
-                        return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s", __func__,
-                                                   tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                        return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s",
+                                __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
                 } else {
                     libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txIn);
                     if (!ContextualCheckZerocoinSpend(tx, &spend, chainActive.Tip(), 0))
-                        return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s", __func__,
-                                                   tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                        return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s",
+                                __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
                 }
 
             }
@@ -1468,8 +1470,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
                 //Check for invalid/fraudulent inputs
                 if (!ValidOutPoint(txin.prevout, chainActive.Height())) {
-                    return state.Invalid(error("%s : tried to spend invalid input %s in tx %s", __func__, txin.prevout.ToString(),
-                                                tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-inputs");
+                    return state.Invalid(error("%s : tried to spend invalid input %s in tx %s",
+                            __func__, txin.prevout.ToString(), tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-inputs");
                 }
             }
 
@@ -1480,7 +1482,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
                 libzerocoin::PublicCoin coin(Params().Zerocoin_Params(false));
                 if (!TxOutToPublicCoin(out, coin, state))
-                    return state.Invalid(error("%s: failed final check of zerocoinmint for tx %s", __func__, tx.GetHash().GetHex()));
+                    return state.Invalid(error("%s: failed final check of zerocoinmint for tx %s",
+                            __func__, tx.GetHash().GetHex()));
 
                 if (!ContextualCheckZerocoinMint(tx, coin, chainActive.Tip()))
                     return state.Invalid(error("%s: zerocoin mint failed contextual check", __func__));
@@ -1488,8 +1491,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
             // are the actual inputs available?
             if (!view.HaveInputs(tx))
-                return state.Invalid(error("AcceptToMemoryPool : inputs already spent"),
-                                     REJECT_DUPLICATE, "bad-txns-inputs-spent");
+                return state.Invalid(error("%s : inputs already spent",
+                        __func__), REJECT_DUPLICATE, "bad-txns-inputs-spent");
 
             // Bring the best block into scope
             view.GetBestBlock();
@@ -1502,7 +1505,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
         // Check for non-standard pay-to-script-hash in inputs
         if (Params().RequireStandard() && !AreInputsStandard(tx, view))
-            return error("AcceptToMemoryPool: : nonstandard transaction input");
+            return error("%s : nonstandard transaction input", __func__);
 
         // Check that the transaction doesn't have an excessive number of
         // sigops, making it impossible to mine. Since the coinbase transaction
@@ -1514,10 +1517,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
             unsigned int nMaxSigOps = MAX_TX_SIGOPS_CURRENT;
             nSigOps += GetP2SHSigOpCount(tx, view);
             if(nSigOps > nMaxSigOps)
-                return state.DoS(0,
-                                 error("AcceptToMemoryPool : too many sigops %s, %d > %d",
-                                       hash.ToString(), nSigOps, nMaxSigOps),
-                                 REJECT_NONSTANDARD, "bad-txns-too-many-sigops");
+                return state.DoS(0, error("%s : too many sigops %s, %d > %d",
+                        __func__, hash.ToString(), nSigOps, nMaxSigOps), REJECT_NONSTANDARD, "bad-txns-too-many-sigops");
         }
 
         CAmount nValueOut = tx.GetValueOut();
@@ -1536,9 +1537,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         } else if (!ignoreFees) {
             CAmount txMinFee = GetMinRelayFee(tx, nSize, true);
             if (fLimitFree && nFees < txMinFee && !tx.HasZerocoinSpendInputs())
-                return state.DoS(0, error("AcceptToMemoryPool : not enough fees %s, %d < %d",
-                                        hash.ToString(), nFees, txMinFee),
-                    REJECT_INSUFFICIENTFEE, "insufficient fee");
+                return state.DoS(0, error("%s : not enough fees %s, %d < %d",
+                        __func__, hash.ToString(), nFees, txMinFee), REJECT_INSUFFICIENTFEE, "insufficient fee");
 
             // Require that free transactions have sufficient priority to be mined in the next block.
             if (tx.HasZerocoinMintOutputs()) {
@@ -1565,27 +1565,24 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                 // -limitfreerelay unit is thousand-bytes-per-minute
                 // At default rate it would take over a month to fill 1GB
                 if (dFreeCount >= GetArg("-limitfreerelay", 30) * 10 * 1000)
-                    return state.DoS(0, error("AcceptToMemoryPool : free transaction rejected by rate limiter"),
-                        REJECT_INSUFFICIENTFEE, "rate limited free transaction");
+                    return state.DoS(0, error("%s : free transaction rejected by rate limiter",
+                            __func__), REJECT_INSUFFICIENTFEE, "rate limited free transaction");
                 LogPrint("mempool", "Rate limit dFreeCount: %g => %g\n", dFreeCount, dFreeCount + nSize);
                 dFreeCount += nSize;
             }
         }
 
         if (fRejectInsaneFee && nFees > ::minRelayTxFee.GetFee(nSize) * 10000)
-            return error("AcceptToMemoryPool: : insane fees %s, %d > %d",
-                hash.ToString(),
-                nFees, ::minRelayTxFee.GetFee(nSize) * 10000);
+            return error("%s : insane fees %s, %d > %d",
+                    __func__, hash.ToString(), nFees, ::minRelayTxFee.GetFee(nSize) * 10000);
 
         // As zero fee transactions are not going to be accepted in the near future (4.0) and the code will be fully refactored soon.
         // This is just a quick inline towards that goal, the mempool by default will not accept them. Blocking
         // any subsequent network relay.
         if ((Params().NetworkID() != CBaseChainParams::REGTEST) &&
             nFees == 0 && !tx.HasZerocoinSpendInputs()) {
-            return error("%s: zero fees not accepted %s, %d > %d",
-                         __func__,
-                         hash.ToString(),
-                         nFees, ::minRelayTxFee.GetFee(nSize) * 10000);
+            return error("%s : zero fees not accepted %s, %d > %d",
+                    __func__, hash.ToString(), nFees, ::minRelayTxFee.GetFee(nSize) * 10000);
         }
 
         bool fCLTVHasMajority = CBlockIndex::IsSuperMajority(5, chainActive.Tip(), Params().EnforceBlockUpgradeMajority());
@@ -1596,7 +1593,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         if (fCLTVHasMajority)
             flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
         if (!CheckInputs(tx, state, view, true, flags, true)) {
-            return error("AcceptToMemoryPool: : ConnectInputs failed %s", hash.ToString());
+            return error("%s : ConnectInputs failed %s", __func__, hash.ToString());
         }
 
         // Check again against just the consensus-critical mandatory script
@@ -1612,7 +1609,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         if (fCLTVHasMajority)
             flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
         if (!CheckInputs(tx, state, view, true, flags, true)) {
-            return error("AcceptToMemoryPool: : BUG! PLEASE REPORT THIS! ConnectInputs failed against MANDATORY but not STANDARD flags %s", hash.ToString());
+            return error("%s : BUG! PLEASE REPORT THIS! ConnectInputs failed against MANDATORY but not STANDARD flags %s",
+                    __func__, hash.ToString());
         }
 
         // Store transaction in memory
@@ -6577,10 +6575,8 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 std::string strMessage = tx.GetHash().ToString() + std::to_string(sigTime);
 
                 std::string errorMessage = "";
-                if (!obfuScationSigner.VerifyMessage(pmn->pubKeyMasternode, vchSig, strMessage, errorMessage)) {
-                    LogPrintf("dstx: Got bad masternode address signature %s \n", vin.ToString());
-                    //pfrom->Misbehaving(20);
-                    return false;
+                if (!CMessageSigner::VerifyMessage(pmn->pubKeyMasternode, vchSig, strMessage, errorMessage)) {
+                    return error("dstx: Got bad masternode address signature %s, error: %s", vin.ToString(), errorMessage);
                 }
 
                 LogPrintf("dstx: Got Masternode transaction %s\n", tx.GetHash().ToString());

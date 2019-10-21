@@ -9,6 +9,7 @@
 #include "base58.h"
 #include "key.h"
 #include "main.h"
+#include "messagesigner.h"
 #include "net.h"
 #include "sync.h"
 #include "timedata.h"
@@ -35,14 +36,12 @@ bool GetBlockHash(uint256& hash, int nBlockHeight);
 // The Masternode Ping Class : Contains a different serialize method for sending pings from masternodes throughout the network
 //
 
-class CMasternodePing
+class CMasternodePing : public CSignedMessage
 {
 public:
     CTxIn vin;
     uint256 blockHash;
     int64_t sigTime; //mnb message times
-    std::vector<unsigned char> vchSig;
-    //removed stop
 
     CMasternodePing();
     CMasternodePing(CTxIn& newVin);
@@ -56,23 +55,28 @@ public:
         READWRITE(blockHash);
         READWRITE(sigTime);
         READWRITE(vchSig);
+        try
+        {
+            READWRITE(nMessVersion);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+        }
     }
+
+    uint256 GetHash() const;
+
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override { return GetHash(); }
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override  { return vin; };
 
     bool CheckAndUpdate(int& nDos, bool fRequireEnabled = true, bool fCheckSigTimeOnly = false);
-    bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
-    bool VerifySignature(CPubKey& pubKeyMasternode, int &nDos);
     void Relay();
-
-    uint256 GetHash()
-    {
-        CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-        ss << vin;
-        ss << sigTime;
-        return ss.GetHash();
-    }
 
     void swap(CMasternodePing& first, CMasternodePing& second) // nothrow
     {
+        CSignedMessage::swap(first, second);
+
         // enable ADL (not necessary in our case, but good practice)
         using std::swap;
 
@@ -81,7 +85,6 @@ public:
         swap(first.vin, second.vin);
         swap(first.blockHash, second.blockHash);
         swap(first.sigTime, second.sigTime);
-        swap(first.vchSig, second.vchSig);
     }
 
     CMasternodePing& operator=(CMasternodePing from)
@@ -103,7 +106,7 @@ public:
 // The Masternode Class. For managing the Obfuscation process. It contains the input of the 10000 PIV, signature to prove
 // it's the one who own that ip address and code for calculating the payment election.
 //
-class CMasternode
+class CMasternode : public CSignedMessage
 {
 private:
     // critical section to protect the inner data structures
@@ -130,7 +133,6 @@ public:
     CPubKey pubKeyMasternode;
     CPubKey pubKeyCollateralAddress1;
     CPubKey pubKeyMasternode1;
-    std::vector<unsigned char> sig;
     int activeState;
     int64_t sigTime; //mnb message time
     int cacheInputAge;
@@ -149,11 +151,17 @@ public:
 
     CMasternode();
     CMasternode(const CMasternode& other);
-    CMasternode(const CMasternodeBroadcast& mnb);
 
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override;
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override { return vin; };
+    const CPubKey GetPublicKey(std::string& strErrorRet) const override { return pubKeyCollateralAddress; }
 
     void swap(CMasternode& first, CMasternode& second) // nothrow
     {
+        CSignedMessage::swap(first, second);
+
         // enable ADL (not necessary in our case, but good practice)
         using std::swap;
 
@@ -163,7 +171,6 @@ public:
         swap(first.addr, second.addr);
         swap(first.pubKeyCollateralAddress, second.pubKeyCollateralAddress);
         swap(first.pubKeyMasternode, second.pubKeyMasternode);
-        swap(first.sig, second.sig);
         swap(first.activeState, second.activeState);
         swap(first.sigTime, second.sigTime);
         swap(first.lastPing, second.lastPing);
@@ -204,7 +211,7 @@ public:
         READWRITE(addr);
         READWRITE(pubKeyCollateralAddress);
         READWRITE(pubKeyMasternode);
-        READWRITE(sig);
+        READWRITE(vchSig);
         READWRITE(sigTime);
         READWRITE(protocolVersion);
         READWRITE(activeState);
@@ -284,6 +291,9 @@ public:
 
     int64_t GetLastPaid();
     bool IsValidNetAddr();
+
+    /// Is the input associated with collateral public key? (and there is 10000 PIV - checking if valid masternode)
+    bool IsInputAssociatedWithPubkey() const;
 };
 
 
@@ -300,10 +310,15 @@ public:
 
     bool CheckAndUpdate(int& nDoS);
     bool CheckInputsAndAdd(int& nDos);
-    bool Sign(CKey& keyCollateralAddress);
-    bool VerifySignature();
+
+    uint256 GetHash() const;
+
     void Relay();
-    std::string GetStrMessage();
+
+    // special sign/verify
+    bool Sign(const CKey& key, const CPubKey& pubKey, const bool fNewSigs);
+    bool Sign(const std::string strSignKey, const bool fNewSigs);
+    bool CheckSignature() const;
 
     ADD_SERIALIZE_METHODS;
 
@@ -314,19 +329,13 @@ public:
         READWRITE(addr);
         READWRITE(pubKeyCollateralAddress);
         READWRITE(pubKeyMasternode);
-        READWRITE(sig);
+        READWRITE(vchSig);
         READWRITE(sigTime);
         READWRITE(protocolVersion);
         READWRITE(lastPing);
-        READWRITE(nLastDsq);
-    }
-
-    uint256 GetHash()
-    {
-        CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-        ss << sigTime;
-        ss << pubKeyCollateralAddress;
-        return ss.GetHash();
+        READWRITE(nMessVersion);    // abuse nLastDsq (which will be removed) for old serialization
+        if (ser_action.ForRead())
+            nLastDsq = 0;
     }
 
     /// Create Masternode broadcast, needs to be relayed manually after that

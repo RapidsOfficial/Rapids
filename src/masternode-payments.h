@@ -157,49 +157,41 @@ public:
 };
 
 // for storing the winning payments
-class CMasternodePaymentWinner
+class CMasternodePaymentWinner : public CSignedMessage
 {
 public:
     CTxIn vinMasternode;
-
     int nBlockHeight;
     CScript payee;
-    std::vector<unsigned char> vchSig;
 
-    CMasternodePaymentWinner()
-    {
-        nBlockHeight = 0;
-        vinMasternode = CTxIn();
-        payee = CScript();
-    }
+    CMasternodePaymentWinner() :
+        CSignedMessage(),
+        vinMasternode(),
+        nBlockHeight(0),
+        payee()
+    {}
 
-    CMasternodePaymentWinner(CTxIn vinIn)
-    {
-        nBlockHeight = 0;
-        vinMasternode = vinIn;
-        payee = CScript();
-    }
+    CMasternodePaymentWinner(CTxIn vinIn) :
+        CSignedMessage(),
+        vinMasternode(vinIn),
+        nBlockHeight(0),
+        payee()
+    {}
 
-    uint256 GetHash()
-    {
-        CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-        ss << payee;
-        ss << nBlockHeight;
-        ss << vinMasternode.prevout;
+    uint256 GetHash() const;
 
-        return ss.GetHash();
-    }
+    // override CSignedMessage functions
+    uint256 GetSignatureHash() const override { return GetHash(); }
+    std::string GetStrMessage() const override;
+    const CTxIn GetVin() const override { return vinMasternode; };
 
-    bool Sign(CKey& keyMasternode, CPubKey& pubKeyMasternode);
     bool IsValid(CNode* pnode, std::string& strError);
-    bool SignatureValid();
     void Relay();
 
     void AddPayee(CScript payeeIn)
     {
         payee = payeeIn;
     }
-
 
     ADD_SERIALIZE_METHODS;
 
@@ -210,6 +202,12 @@ public:
         READWRITE(nBlockHeight);
         READWRITE(payee);
         READWRITE(vchSig);
+        try
+        {
+            READWRITE(nMessVersion);
+        } catch (...) {
+            nMessVersion = MessageVersion::MESS_VER_STRMESS;
+        }
     }
 
     std::string ToString()
