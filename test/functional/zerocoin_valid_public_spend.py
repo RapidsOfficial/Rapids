@@ -14,7 +14,7 @@ from fake_stake.util import TestNode
 
 from test_framework.authproxy import JSONRPCException
 from test_framework.test_framework import BitcoinTestFramework
-from test_framework.util import p2p_port
+from test_framework.util import p2p_port, assert_equal, assert_raises_rpc_error, assert_greater_than_or_equal
 
 
 class zPIVValidCoinSpendTest(BitcoinTestFramework):
@@ -41,18 +41,17 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
             self.test_nodes[i].peer_connect('127.0.0.1', p2p_port(i))
 
 
-    def generateBlocks(self, n):
-        nGenerated = 0
-        while (nGenerated < n):
+    def generateBlocks(self, n=1):
+        fStaked = False
+        while (not fStaked):
             try:
-                self.nodes[0].generate(1)
-                nGenerated += 1
+                self.nodes[0].generate(n)
+                fStaked = True
             except JSONRPCException as e:
                 if ("Couldn't create new block" in str(e)):
-                    # Sleep 5 seconds and retry
-                    self.log.warning(str(e))
+                    # Sleep 2 seconds and retry
                     self.log.info("waiting...")
-                    sleep(5)
+                    sleep(2)
                 else:
                     raise e
 
@@ -60,7 +59,6 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
     def mintZerocoin(self, denom):
         self.nodes[0].mintzerocoin(denom)
         self.generateBlocks(5)
-        sleep(1)
 
 
     def setV4SpendEnforcement(self, fEnable=True):
@@ -71,7 +69,7 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
         self.log.info(mess)
         res = self.nodes[0].spork("SPORK_18_ZEROCOIN_PUBLICSPEND_V4", new_val)
         self.log.info(res)
-        assert (res == "success")
+        assert_equal(res, "success")
         sleep(1)
 
 
@@ -85,33 +83,27 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
 
         # 1) Start mining blocks
         self.log.info("Mining/Staking %d first blocks..." % INITAL_MINED_BLOCKS)
-        for i in range(6):
-            self.generateBlocks(50)
-            self.log.info("%d blocks generated." % int(50*(i+1)))
-        sleep(2)
-        self.generateBlocks(INITAL_MINED_BLOCKS-300)
+        self.generateBlocks(INITAL_MINED_BLOCKS)
 
 
         # 2) Mint zerocoins
         self.log.info("Minting %d-denom zPIVs..." % DENOM_TO_USE)
         for i in range(5):
             self.mintZerocoin(DENOM_TO_USE)
-        sleep(1)
 
 
         # 3) Mine more blocks and collect the mint
         self.log.info("Mining %d more blocks..." % MORE_MINED_BLOCKS)
         self.generateBlocks(MORE_MINED_BLOCKS)
-        sleep(2)
         list = self.nodes[0].listmintedzerocoins(True, True)
         serial_ids = [mint["serial hash"] for mint in list]
-        assert(len(serial_ids) >= 3)
+        assert_greater_than_or_equal(len(serial_ids), 3)
 
 
         # 4) Get the raw zerocoin data - save a v3 spend for later
         exported_zerocoins = self.nodes[0].exportzerocoins(False)
         zc = [x for x in exported_zerocoins if x["id"] in serial_ids]
-        assert (len(zc) >= 3)
+        assert_greater_than_or_equal(len(zc), 3)
         saved_mint = zc[2]["id"]
         old_spend_v3 = self.nodes[0].createrawzerocoinpublicspend(saved_mint)
 
@@ -124,44 +116,33 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
         txid = self.nodes[0].spendzerocoinmints([zc[0]["id"]])['txid']
         self.log.info("Spent on tx %s" % txid)
         self.generateBlocks(6)
-        sleep(2)
         rawTx = self.nodes[0].getrawtransaction(txid, 1)
         if rawTx is None:
             self.log.warning("rawTx not found for: %s" % txid)
             raise AssertionError("TEST FAILED")
         else:
-            assert (rawTx["confirmations"] == 6)
+            assert_equal(rawTx["confirmations"], 6)
         self.log.info("%s: VALID PUBLIC COIN SPEND (v3) PASSED" % self.__class__.__name__)
 
 
         # 6) Check double spends - spend v3
         self.log.info("%s: Trying to spend the serial twice now" % self.__class__.__name__)
-        tx = None
-        try:
-            tx = self.nodes[0].spendrawzerocoin(serial_0, randomness_0, DENOM_TO_USE, privkey_0)
-        except JSONRPCException as e:
-            self.log.info("GOOD: Double-spending transaction did not verify (%s)" % str(e))
-            assert("Trying to spend an already spent serial" in str(e))
-        if tx is not None:
-            self.log.warning("Tx is: %s" % tx)
-            raise AssertionError("TEST FAILED")
+        assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
+                                self.nodes[0].spendrawzerocoin, serial_0, randomness_0, DENOM_TO_USE, privkey_0)
+        self.log.info("GOOD: Double-spending transaction did not verify.")
 
 
         # 7) Check spend v2 disabled
         self.log.info("%s: Trying to spend using the old coin spend method.." % self.__class__.__name__)
-        try:
-            self.nodes[0].spendzerocoin(DENOM_TO_USE, False, False, "", False)
-            raise AssertionError("TEST FAILED, old coinSpend spent")
-        except JSONRPCException as e:
-            self.log.info("GOOD: spendzerocoin old spend did not verify")
-        self.log.info("%s: OLD COIN SPEND NON USABLE ANYMORE, TEST PASSED" % self.__class__.__name__)
+        assert_raises_rpc_error(-4, "Couldn't generate the accumulator witness",
+                                self.nodes[0].spendzerocoin, DENOM_TO_USE, False, False, "", False)
+        self.log.info("GOOD: spendzerocoin old spend did not verify.")
 
 
         # 8) Activate v4 spends with SPORK_18
         self.log.info("Activating V4 spends with SPORK_18...")
         self.setV4SpendEnforcement(True)
         self.generateBlocks(2)
-        sleep(1)
 
 
         # 9) Spend the minted coin (mine six more blocks) - spend v4
@@ -172,69 +153,50 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
         txid = self.nodes[0].spendzerocoinmints([zc[1]["id"]])['txid']
         self.log.info("Spent on tx %s" % txid)
         self.generateBlocks(6)
-        sleep(2)
         rawTx = self.nodes[0].getrawtransaction(txid, 1)
         if rawTx is None:
             self.log.warning("rawTx not found for: %s" % txid)
             raise AssertionError("TEST FAILED")
         else:
-            assert (rawTx["confirmations"] == 6)
+            assert_equal(rawTx["confirmations"], 6)
         self.log.info("%s: VALID PUBLIC COIN SPEND (v4) PASSED" % self.__class__.__name__)
 
 
         # 10) Check double spends - spend v4
         self.log.info("%s: Trying to spend the serial twice now" % self.__class__.__name__)
-        tx = None
-        try:
-            tx = self.nodes[0].spendrawzerocoin(serial_1, randomness_1, DENOM_TO_USE, privkey_1)
-        except JSONRPCException as e:
-            self.log.info("GOOD: Double-spending transaction did not verify (%s)" % str(e))
-            assert ("Trying to spend an already spent serial" in str(e))
-        if tx is not None:
-            self.log.warning("Tx is: %s" % tx)
-            raise AssertionError("TEST FAILED")
+        assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
+                                self.nodes[0].spendrawzerocoin, serial_1, randomness_1, DENOM_TO_USE, privkey_1)
+        self.log.info("GOOD: Double-spending transaction did not verify.")
 
 
         # 11) Try to relay old v3 spend now
         self.log.info("%s: Trying to send old v3 spend now" % self.__class__.__name__)
-        try:
-            tx = self.nodes[0].sendrawtransaction(old_spend_v3)
-            print(str(tx))
-            assert(False)
-        except JSONRPCException as e:
-            self.log.info("GOOD: Old transaction not sent (%s)" % str(e))
-            assert ("bad-txns-invalid-zpiv" in str(e))
+        assert_raises_rpc_error(-26, "bad-txns-invalid-zpiv",
+                                self.nodes[0].sendrawtransaction, old_spend_v3)
+        self.log.info("GOOD: Old transaction not sent.")
 
 
         # 12) Try to double spend with v4 a mint already spent with v3
         self.log.info("%s: Trying to double spend v4 against v3" % self.__class__.__name__)
-        tx = None
-        try:
-            tx = self.nodes[0].spendrawzerocoin(serial_0, randomness_0, DENOM_TO_USE, privkey_0)
-        except JSONRPCException as e:
-            self.log.info("GOOD: Double-spending transaction did not verify (%s)" % str(e))
-            assert ("Trying to spend an already spent serial" in str(e))
-        if tx is not None:
-            self.log.warning("Tx is: %s" % tx)
-            raise AssertionError("TEST FAILED")
+        assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
+                                self.nodes[0].spendrawzerocoin, serial_0, randomness_0, DENOM_TO_USE, privkey_0)
+        self.log.info("GOOD: Double-spending transaction did not verify.")
 
 
         # 13) Reactivate v3 spends and try to spend the old saved one
         self.log.info("Activating V3 spends with SPORK_18...")
         self.setV4SpendEnforcement(False)
         self.generateBlocks(2)
-        sleep(1)
         self.log.info("%s: Trying to send old v3 spend now" % self.__class__.__name__)
         txid = self.nodes[0].sendrawtransaction(old_spend_v3)
         self.log.info("Spent on tx %s" % txid)
         self.generateBlocks(6)
-        sleep(2)
         rawTx = self.nodes[0].getrawtransaction(txid, 1)
         if rawTx is None:
             self.log.warning("rawTx not found for: %s" % txid)
             raise AssertionError("TEST FAILED")
         else:
-            assert (rawTx["confirmations"] == 6)
+            assert_equal(rawTx["confirmations"], 6)
         self.log.info("%s: VALID PUBLIC COIN SPEND (v3) PASSED" % self.__class__.__name__)
 
 
