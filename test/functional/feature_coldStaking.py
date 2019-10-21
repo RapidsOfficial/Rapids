@@ -119,12 +119,16 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("Good. Warning NOT triggered.")
 
         self.log.info("Now delegate with internal owner address..")
-        self.log.info("Try first with a value (5) below the threshold")
+        self.log.info("Try first with a value (0.99) below the threshold")
         assert_raises_rpc_error(-8, "Invalid amount",
-                                self.nodes[0].delegatestake, staker_address, 5, owner_address)
+                                self.nodes[0].delegatestake, staker_address, 0.99, owner_address)
         self.log.info("Nice. it was not possible.")
+        self.log.info("Then try (creating but not sending) with the threshold value (1.00)")
+        res = self.nodes[0].rawdelegatestake(staker_address, 1.00, owner_address)
+        assert(res is not None and res != "")
+        self.log.info("Good. Warning NOT triggered.")
 
-        self.log.info("Creating %d stake-delegation txes..." % NUM_OF_INPUTS)
+        self.log.info("Now creating %d real stake-delegation txes..." % NUM_OF_INPUTS)
         for i in range(NUM_OF_INPUTS):
             res = self.nodes[0].delegatestake(staker_address, INPUT_VALUE, owner_address)
             assert(res != None and res["txid"] != None and res["txid"] != "")

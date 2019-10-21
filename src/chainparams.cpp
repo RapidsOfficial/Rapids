@@ -171,7 +171,7 @@ public:
         nFutureTimeDriftPoS = 180;
         nMasternodeCountDrift = 20;
         nMaxMoneyOut = 21000000 * COIN;
-        nMinColdStakingAmount = 10 * COIN;
+        nMinColdStakingAmount = 1 * COIN;
 
         /** Height or Time Based Activations **/
         nLastPOWBlock = 259200;
