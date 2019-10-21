@@ -18,7 +18,7 @@ from test_framework.pivx_node import PivxTestNode
 from test_framework.script import CScript, OP_CHECKSIG
 from test_framework.test_framework import BitcoinTestFramework
 from test_framework.util import hash256, connect_nodes_bi, p2p_port, bytes_to_hex_str, \
-    hex_str_to_bytes, assert_equal, assert_greater_than, sync_chain
+    hex_str_to_bytes, assert_equal, assert_greater_than, sync_chain, assert_raises_rpc_error
 
 # filter utxos based on first 5 bytes of scriptPubKey
 def getDelegatedUtxos(utxos):
@@ -97,13 +97,9 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         # ---------------------
         print("*** 3 ***")
         self.log.info("Creating a stake-delegation tx before cold staking enforcement...")
-        try:
-            self.nodes[0].delegatestake(staker_address, INPUT_VALUE, owner_address, False, False, True)
-            assert(False)
-        except JSONRPCException as e:
-            assert("The transaction was rejected!" in str(e))
-            self.log.info("Good. Cold Staking NOT ACTIVE yet.")
-            pass
+        assert_raises_rpc_error(-4, "The transaction was rejected!",
+                                self.nodes[0].delegatestake, staker_address, INPUT_VALUE, owner_address, False, False, True)
+        self.log.info("Good. Cold Staking NOT ACTIVE yet.")
         self.log.info("Mining 51 blocks to get to cold staking activation...")
         self.generateBlock(51)
         sync_chain(self.nodes)
@@ -113,24 +109,21 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         # ------------------------------------------------------------------
         print("*** 4 ***")
         self.log.info("First check warning when using external addresses...")
-        try:
-            self.nodes[0].delegatestake(staker_address, INPUT_VALUE, "yCgCXC8N5VThhfiaVuKaNLkNnrWduzVnoT")
-            assert(False)
-        except JSONRPCException as e:
-            assert("Set 'fExternalOwner' argument to true, in order to force the stake delegation" in str(e))
-            self.log.info("Good. Warning triggered.")
+        assert_raises_rpc_error(-5, "Only the owner of the key to owneraddress will be allowed to spend these coins",
+                                self.nodes[0].delegatestake, staker_address, INPUT_VALUE, "yCgCXC8N5VThhfiaVuKaNLkNnrWduzVnoT")
+        self.log.info("Good. Warning triggered.")
+
         self.log.info("Now force the use of external address creating (but not sending) the delegation...")
         res = self.nodes[0].rawdelegatestake(staker_address, INPUT_VALUE, "yCgCXC8N5VThhfiaVuKaNLkNnrWduzVnoT", True)
         assert(res is not None and res != "")
         self.log.info("Good. Warning NOT triggered.")
+
         self.log.info("Now delegate with internal owner address..")
         self.log.info("Try first with a value (5) below the threshold")
-        try:
-            self.nodes[0].delegatestake(staker_address, 5, owner_address)
-            assert(False)
-        except JSONRPCException as e:
-            assert("Invalid amount" in str(e))
-            self.log.info("Nice. it was not possible.")
+        assert_raises_rpc_error(-8, "Invalid amount",
+                                self.nodes[0].delegatestake, staker_address, 5, owner_address)
+        self.log.info("Nice. it was not possible.")
+
         self.log.info("Creating %d stake-delegation txes..." % NUM_OF_INPUTS)
         for i in range(NUM_OF_INPUTS):
             res = self.nodes[0].delegatestake(staker_address, INPUT_VALUE, owner_address)
@@ -156,6 +149,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         txhash = self.spendUTXOwithNode(u, 0)
         assert(txhash != None)
         self.log.info("Good. Owner was able to spend - tx: %s" % str(txhash))
+
         self.generateBlock()
         sync_chain(self.nodes)
         # check balances after spend.
@@ -172,6 +166,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("Trying to generate a cold-stake block before whitelisting the owner...")
         assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], False)
         self.log.info("Nice. Cold staker was NOT able to create the block yet.")
+
         self.log.info("Whitelisting the owner...")
         ret = self.nodes[1].delegatoradd(owner_address)
         assert(ret)
@@ -185,16 +180,11 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         delegated_utxos = getDelegatedUtxos(self.nodes[0].listunspent())
         assert_greater_than(len(delegated_utxos), 0)
         u = delegated_utxos[0]
-        try:
-            self.spendUTXOwithNode(u, 1)
-            assert(False)
-        except JSONRPCException as e:
-            assert("Script failed an OP_CHECKCOLDSTAKEVERIFY operation" in str(e))
-            self.log.info("Good. Cold staker was NOT able to spend (failed OP_CHECKCOLDSTAKEVERIFY)")
-            pass
+        assert_raises_rpc_error(-26, "mandatory-script-verify-flag-failed (Script failed an OP_CHECKCOLDSTAKEVERIFY operation",
+                                self.spendUTXOwithNode, u, 1)
+        self.log.info("Good. Cold staker was NOT able to spend (failed OP_CHECKCOLDSTAKEVERIFY)")
         self.generateBlock()
         sync_chain(self.nodes)
-
 
 
         # 8) check that the staker can use the coins to stake a block with internal miner.
@@ -206,11 +196,13 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("New block created by cold-staking. Trying to submit...")
         newblockhash = self.nodes[1].getbestblockhash()
         self.log.info("Block %s submitted" % newblockhash)
+
         # Verify that nodes[0] accepts it
         sync_chain(self.nodes)
         assert_equal(self.nodes[0].getblockcount(), self.nodes[1].getblockcount())
         assert_equal(newblockhash, self.nodes[0].getbestblockhash())
         self.log.info("Great. Cold-staked block was accepted!")
+
         # check balances after staked block.
         self.expected_balance += 250
         self.checkBalances()
@@ -233,11 +225,13 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
         self.log.info("Block %s submitted." % new_block.hash)
         assert(ret is None)
+
         # Verify that nodes[0] accepts it
         sync_chain(self.nodes)
         assert_equal(self.nodes[0].getblockcount(), self.nodes[1].getblockcount())
         assert_equal(new_block.hash, self.nodes[0].getbestblockhash())
         self.log.info("Great. Cold-staked block was accepted!")
+
         # check balances after staked block.
         self.expected_balance += 250
         self.checkBalances()
@@ -260,14 +254,11 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
         self.log.info("Block %s submitted." % new_block.hash)
         assert("rejected" in ret)
+
         # Verify that nodes[0] rejects it
         sync_chain(self.nodes)
-        try:
-            self.nodes[0].getblock(new_block.hash)
-        except JSONRPCException as e:
-            assert("Block not found" in str(e))
-            self.log.info("Great. Malicious cold-staked block was NOT accepted!")
-            pass
+        assert_raises_rpc_error(-5, "Block not found", self.nodes[0].getblock, new_block.hash)
+        self.log.info("Great. Malicious cold-staked block was NOT accepted!")
         self.checkBalances()
         self.log.info("Balances check out after (non) staked block")
 
@@ -287,17 +278,15 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         # Try to submit the block
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
         self.log.info("Block %s submitted." % new_block.hash)
-        assert("rejected" in ret)
+        assert_equal(ret, "bad-p2cs-outs")
+
         # Verify that nodes[0] rejects it
         sync_chain(self.nodes)
-        try:
-            self.nodes[0].getblock(new_block.hash)
-        except JSONRPCException as e:
-            assert("Block not found" in str(e))
-            self.log.info("Great. Malicious cold-staked block was NOT accepted!")
-            pass
+        assert_raises_rpc_error(-5, "Block not found", self.nodes[0].getblock, new_block.hash)
+        self.log.info("Great. Malicious cold-staked block was NOT accepted!")
         self.checkBalances()
         self.log.info("Balances check out after (non) staked block")
+
 
         # 12) Now node[0] gets mad and spends all the delegated coins, voiding the P2CS contracts.
         # ----------------------------------------------------------------------------------------
@@ -312,6 +301,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("Good. Owner was able to void the stake delegations - tx: %s" % str(txhash))
         self.generateBlock()
         sync_chain(self.nodes)
+
         # check balances after big spend.
         self.expected_balance = 2 * (INPUT_VALUE + 250)
         self.checkBalances()

@@ -4379,6 +4379,32 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
     return true;
 }
 
+bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
+{
+    if (!tx.HasP2CSOutputs())
+        return true;
+
+    const unsigned int outs = tx.vout.size();
+    const CTxOut& lastOut = tx.vout[outs-1];
+    if (outs >=3 && lastOut.scriptPubKey != tx.vout[outs-2].scriptPubKey) {
+        // last output can either be a mn reward or a budget payment
+        // cold staking is active much after nPublicZCSpends so GetMasternodePayment is always 3 PIV.
+        // TODO: double check this if/when MN rewards change
+        if (lastOut.nValue == 3 * COIN)
+            return true;
+
+        if (budget.IsBudgetPaymentBlock(nHeight) &
+                sporkManager.IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS) &&
+                sporkManager.IsSporkActive(SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT))
+            return true;
+
+        return error("%s: Wrong cold staking outputs: vout[%d].scriptPubKey (%s) != vout[%d].scriptPubKey (%s) - value: %s",
+                __func__, outs-1, HexStr(lastOut.scriptPubKey), outs-2, HexStr(tx.vout[outs-2].scriptPubKey), FormatMoney(lastOut.nValue).c_str());
+    }
+
+    return true;
+}
+
 bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bool fCheckMerkleRoot, bool fCheckSig)
 {
     // These are checks that are independent of context.
@@ -4446,15 +4472,6 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
         for (unsigned int i = 2; i < block.vtx.size(); i++)
             if (block.vtx[i].IsCoinStake())
                 return state.DoS(100, error("%s : more than one coinstake", __func__));
-
-        // if MN payment is disabled. Check that the last output is not abused by cold staker
-        if (!IsInitialBlockDownload() && block.vtx[1].HasP2CSOutputs() && !sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
-            const int outputs = block.vtx[1].vout.size();
-            if (outputs >=3 && block.vtx[1].vout[outputs-1].scriptPubKey != block.vtx[1].vout[outputs-2].scriptPubKey)
-                return state.DoS(100, error("%s: Wrong cold staking outputs when masternode payment enforcement is disabled: "
-                        "script[-1] (%s) != script[-2] (%s)", __func__,
-                        HexStr(block.vtx[1].vout[outputs-1].scriptPubKey), HexStr(block.vtx[1].vout[outputs-2].scriptPubKey)));
-        }
     }
 
     // ----------- swiftTX transaction scanning -----------
@@ -4498,6 +4515,14 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
         // The case also exists that the sending peer could not have enough data to see
         // that this block is invalid, so don't issue an outright ban.
         if (nHeight != 0 && !IsInitialBlockDownload()) {
+            // Last output of Cold-Stake is not abused
+            if (IsPoS && !CheckColdStakeFreeOutput(block.vtx[1], nHeight)) {
+                mapRejectedBlocks.insert(std::make_pair(block.GetHash(), GetTime()));
+                return state.DoS(0, error("%s : Cold stake outputs not valid", __func__),
+                        REJECT_INVALID, "bad-p2cs-outs");
+            }
+
+            // Valid masternode/budget payment
             if (!IsBlockPayeeValid(block, nHeight)) {
                 mapRejectedBlocks.insert(std::make_pair(block.GetHash(), GetTime()));
                 return state.DoS(0, error("%s : Couldn't find masternode/budget payment", __func__),
