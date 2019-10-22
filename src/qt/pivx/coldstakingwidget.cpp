@@ -10,7 +10,6 @@
 #include "qt/pivx/requestdialog.h"
 #include "qt/pivx/tooltipmenu.h"
 #include "qt/pivx/furlistrow.h"
-#include "qt/pivx/txviewholder.h"
 #include "qt/pivx/sendconfirmdialog.h"
 #include "qt/pivx/addnewcontactdialog.h"
 #include "qt/pivx/guitransactionsutils.h"
@@ -56,7 +55,10 @@ public:
         return getRowColor(isLightTheme, isHovered, isSelected);
     }
 
-    ~CSDelegationHolder() override{}
+    ~CSDelegationHolder() override {
+        if (cachedRow)
+            delete cachedRow;
+    }
 
     bool isLightTheme;
 private:
@@ -94,7 +96,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     /* Subtitle */
     ui->labelSubtitle1->setText(tr("You can delegate your PIVs and let a hot node (24/7 online node)\nstake in your behalf, keeping the keys in a secure place offline."));
     setCssSubtitleScreen(ui->labelSubtitle1);
-    spacer = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Expanding);
+    spacerDiv = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Expanding);
 
     setCssProperty(ui->labelSubtitleDescription, "text-title");
     ui->lineEditOwnerAddress->setPlaceholderText(tr("Add owner address"));
@@ -167,7 +169,6 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
 
     ui->btnMyStakingAddresses->setChecked(true);
-    ui->rightContainer->addItem(spacer);
     ui->listViewStakingAddress->setVisible(false);
 
     ui->btnMyStakingAddresses->setTitleClassAndText("btn-title-grey", "My staking addresses");
@@ -191,7 +192,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
 
 void ColdStakingWidget::loadWalletModel(){
     if(walletModel) {
-        sendMultiRow->setWalletModel(this->walletModel);
+        sendMultiRow->setWalletModel(walletModel);
         txModel = walletModel->getTransactionTableModel();
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
         ui->listView->setModel(csModel);
@@ -296,7 +297,7 @@ void ColdStakingWidget::onContactsClicked(){
     }
 
     menuContacts->resizeList(width, height);
-    menuContacts->setStyleSheet(this->styleSheet());
+    menuContacts->setStyleSheet(styleSheet());
     menuContacts->adjustSize();
     menuContacts->move(pos);
     menuContacts->show();
@@ -316,7 +317,8 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->btnColdStaking->setVisible(false);
         ui->btnMyStakingAddresses->setVisible(false);
         ui->listViewStakingAddress->setVisible(false);
-        ui->rightContainer->addItem(spacer);
+        if (ui->rightContainer->count() == 2)
+            ui->rightContainer->addItem(spacerDiv);
     }else{
         ui->btnCoinControl->setVisible(false);
         ui->containerSend->setVisible(false);
@@ -599,20 +601,32 @@ void ColdStakingWidget::onMyStakingAddressesClicked(){
     if(!isVisible){
         ui->btnMyStakingAddresses->setRightIconClass("btn-dropdown", true);
         ui->listViewStakingAddress->setVisible(true);
-        ui->rightContainer->removeItem(spacer);
+        ui->rightContainer->removeItem(spacerDiv);
         ui->listViewStakingAddress->update();
     }else{
         ui->btnMyStakingAddresses->setRightIconClass("ic-arrow", true);
-        ui->rightContainer->addItem(spacer);
+        ui->rightContainer->addItem(spacerDiv);
         ui->listViewStakingAddress->setVisible(false);
     }
 }
 
 void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme){
-    static_cast<TxViewHolder*>(this->delegate->getRowFactory())->isLightTheme = isLightTheme;
+    static_cast<CSDelegationHolder*>(delegate->getRowFactory())->isLightTheme = isLightTheme;
+    static_cast<AddressHolder*>(addressDelegate->getRowFactory())->isLightTheme = isLightTheme;
     ui->listView->update();
 }
 
 ColdStakingWidget::~ColdStakingWidget(){
+    if (sendMultiRow)
+        delete sendMultiRow;
+    if (txHolder)
+        delete txHolder;
+    if (csModel)
+        delete csModel;
+    if (addressHolder)
+        delete addressHolder;
+
+    ui->rightContainer->removeItem(spacerDiv);
+    delete spacerDiv;
     delete ui;
 }

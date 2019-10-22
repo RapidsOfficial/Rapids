@@ -28,7 +28,10 @@ public:
 
     QColor rectColor(bool isHovered, bool isSelected) override;
 
-    ~AddressHolder() override{}
+    ~AddressHolder() override {
+        if (cachedRow)
+            delete cachedRow;
+    }
 
     bool isLightTheme;
     MyAddressRow* cachedRow = nullptr;

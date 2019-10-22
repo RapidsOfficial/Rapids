@@ -64,7 +64,7 @@ private slots:
     void onMyStakingAddressesClicked();
 
 private:
-    Ui::ColdStakingWidget *ui;
+    Ui::ColdStakingWidget *ui = nullptr;
     FurAbstractListItemDelegate *delegate = nullptr;
     FurAbstractListItemDelegate *addressDelegate = nullptr;
     TransactionTableModel* txModel = nullptr;
@@ -74,8 +74,8 @@ private:
     ColdStakingModel* csModel = nullptr;
     CSDelegationHolder *txHolder = nullptr;
     CoinControlDialog *coinControlDialog = nullptr;
-    QAction *btnOwnerContact;
-    QSpacerItem *spacer = nullptr;
+    QAction *btnOwnerContact = nullptr;
+    QSpacerItem *spacerDiv = nullptr;
 
     ContactsDropdown *menuContacts = nullptr;
     TooltipMenu* menu = nullptr;

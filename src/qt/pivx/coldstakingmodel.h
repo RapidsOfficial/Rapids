@@ -40,7 +40,12 @@ class ColdStakingModel : public QAbstractTableModel
 
 public:
     explicit ColdStakingModel(WalletModel* model, TransactionTableModel* _tableModel, AddressTableModel* _addressTableModel, QObject *parent = nullptr);
-    ~ColdStakingModel() override{}
+    ~ColdStakingModel() override {
+        model = nullptr;
+        tableModel = nullptr;
+        addressTableModel = nullptr;
+        cachedDelegations.clear();
+    }
 
     enum ColumnIndex {
         OWNER_ADDRESS = 0,
