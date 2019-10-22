@@ -21,6 +21,8 @@
 
 #define DECORATION_SIZE 70
 #define NUM_ITEMS 3
+#define LOAD_MIN_TIME_INTERVAL 15
+#define REQUEST_LOAD_TASK 1
 
 
 class CSDelegationHolder : public FurListRow<QWidget*>
@@ -227,10 +229,44 @@ void ColdStakingWidget::loadWalletModel(){
 
 void ColdStakingWidget::onTxArrived(const QString& hash) {
     if (walletModel->isDelegatedToOrFromMe(hash) || walletModel->isP2CSSpend(hash)) {
-        csModel->updateCSList();
-        if (ui->pushLeft->isChecked())
-            showList(true);
+        tryRefreshDelegations();
     }
+}
+
+void ColdStakingWidget::walletSynced(bool sync) {
+    tryRefreshDelegations();
+}
+
+void ColdStakingWidget::tryRefreshDelegations() {
+    // Check for min update time to not reload the UI so often if the node is syncing.
+    int64_t now = GetTime();
+    if (lastRefreshTime + LOAD_MIN_TIME_INTERVAL < now) {
+        lastRefreshTime = now;
+        refreshDelegations();
+    }
+}
+
+bool ColdStakingWidget::refreshDelegations(){
+    if (isLoading) return false;
+    isLoading = true;
+    return execute(REQUEST_LOAD_TASK);
+}
+
+void ColdStakingWidget::onDelegationsRefreshed() {
+    isLoading = false;
+    if (ui->pushLeft->isChecked())
+        showList(csModel->rowCount() > 0);
+}
+
+void ColdStakingWidget::run(int type) {
+    if (type == REQUEST_LOAD_TASK) {
+        csModel->updateCSList();
+        QMetaObject::invokeMethod(this, "onDelegationsRefreshed", Qt::QueuedConnection);
+    }
+}
+void ColdStakingWidget::onError(QString error, int type) {
+    isLoading = false;
+    inform(tr("Error loading delegations: %1").arg(error));
 }
 
 void ColdStakingWidget::onContactsClicked(bool ownerAdd) {

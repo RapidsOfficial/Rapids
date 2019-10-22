@@ -13,7 +13,6 @@ ColdStakingModel::ColdStakingModel(WalletModel* _model,
                                    TransactionTableModel* _tableModel,
                                    AddressTableModel* _addressTableModel,
                                    QObject *parent) : QAbstractTableModel(parent), model(_model), tableModel(_tableModel), addressTableModel(_addressTableModel){
-    updateCSList();
 }
 
 void ColdStakingModel::updateCSList() {

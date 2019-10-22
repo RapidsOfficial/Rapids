@@ -22,6 +22,7 @@
 #include <QLabel>
 #include <QWidget>
 #include <QSpacerItem>
+#include <atomic>
 
 class PIVXGUI;
 class WalletModel;
@@ -44,6 +45,12 @@ public:
     ~ColdStakingWidget();
 
     void loadWalletModel() override;
+    void run(int type) override;
+    void onError(QString error, int type) override;
+
+public slots:
+    void walletSynced(bool sync);
+
 private slots:
     void changeTheme(bool isLightTheme, QString &theme) override;
     void handleAddressClicked(const QModelIndex &index);
@@ -62,6 +69,7 @@ private slots:
     void clearAll();
     void onLabelClicked();
     void onMyStakingAddressesClicked();
+    void onDelegationsRefreshed();
 
 private:
     Ui::ColdStakingWidget *ui = nullptr;
@@ -83,6 +91,8 @@ private:
     bool isShowingDialog;
 
     bool isContactOwnerSelected;
+    int64_t lastRefreshTime = 0;
+    std::atomic<bool> isLoading;
 
     // Cached index
     QModelIndex index;
@@ -91,6 +101,8 @@ private:
 
     void showAddressGenerationDialog(bool isPaymentRequest);
     void onContactsClicked();
+    void tryRefreshDelegations();
+    bool refreshDelegations();
 };
 
 #endif // COLDSTAKINGWIDGET_H
