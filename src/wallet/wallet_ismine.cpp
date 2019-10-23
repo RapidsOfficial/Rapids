@@ -77,6 +77,20 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
         }
         break;
     }
+    case TX_COLDSTAKE: {
+        CKeyID stakeKeyID = CKeyID(uint160(vSolutions[0]));
+        bool stakeKeyIsMine = keystore.HaveKey(stakeKeyID);
+        CKeyID ownerKeyID = CKeyID(uint160(vSolutions[1]));
+        bool spendKeyIsMine = keystore.HaveKey(ownerKeyID);
+
+        if (spendKeyIsMine && stakeKeyIsMine)
+            return ISMINE_SPENDABLE_STAKEABLE;
+        else if (stakeKeyIsMine)
+            return ISMINE_COLD;
+        else if (spendKeyIsMine)
+            return ISMINE_SPENDABLE_DELEGATED;
+        break;
+    }
     case TX_MULTISIG: {
         // Only consider transactions "mine" if we own ALL the
         // keys involved. multi-signature transactions that are
