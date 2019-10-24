@@ -18,6 +18,7 @@
 #include "obfuscation.h"
 #include "protocol.h"
 
+
 class CSporkMessage;
 class CSporkManager;
 

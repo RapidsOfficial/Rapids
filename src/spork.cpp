@@ -24,6 +24,7 @@ std::vector<CSporkDef> sporkDefs = {
     MAKE_SPORK_DEF(SPORK_14_NEW_PROTOCOL_ENFORCEMENT,       4070908800ULL), // OFF
     MAKE_SPORK_DEF(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2,     4070908800ULL), // OFF
     MAKE_SPORK_DEF(SPORK_16_ZEROCOIN_MAINTENANCE_MODE,      4070908800ULL), // OFF
+    MAKE_SPORK_DEF(SPORK_17_COLDSTAKING_ENFORCEMENT,        4070908800ULL), // OFF
 };
 
 CSporkManager sporkManager;
@@ -171,6 +172,7 @@ bool CSporkManager::UpdateSpork(SporkId nSporkID, int64_t nValue)
         LOCK(cs_main);
         fNewSigs = chainActive.NewSigsActive();
     }
+
 
     CSporkMessage spork = CSporkMessage(nSporkID, nValue, GetTime());
 
