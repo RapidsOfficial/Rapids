@@ -93,7 +93,7 @@ void TxDetailDialog::setData(WalletModel *model, QModelIndex &index){
             ui->textSend->setText(QString::number(tx->vout.size()) + " recipients");
         }
         ui->textInputs->setText(QString::number(tx->vin.size()));
-        ui->textConfirmations->setText(QString::number(tx->GetDepthInMainChain()));
+        ui->textConfirmations->setText(QString::number(rec->status.depth));
         ui->textDate->setText(GUIUtil::dateTimeStrWithSeconds(date));
         ui->textStatus->setText(QString::fromStdString(rec->statusToString()));
         ui->textSize->setText(QString::number(rec->size) + " bytes");
