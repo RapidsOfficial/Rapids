@@ -147,6 +147,7 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/receivewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/myaddressrow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/csrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addressholder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/tooltipmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addresseswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/defaultdialog.cpp
