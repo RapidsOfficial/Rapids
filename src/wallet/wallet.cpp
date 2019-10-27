@@ -118,12 +118,15 @@ PairResult CWallet::getNewAddress(CBitcoinAddress& ret, const std::string addres
     if (IsLocked())
         return PairResult(false, new std::string("Cannot create key, wallet locked"));
 
-    pwalletMain->TopUpKeyPool();
+    TopUpKeyPool();
     // Generate a new key that is added to wallet
-    CPubKey newKey = GenerateNewKey();
+    CPubKey newKey;
+    if (!GetKeyFromPool(newKey))
+        newKey = GenerateNewKey();
     CKeyID keyID = newKey.GetID();
 
-    pwalletMain->SetAddressBook(keyID, addressLabel, purpose);
+    if (!SetAddressBook(keyID, addressLabel, purpose))
+        throw std::runtime_error("CWallet::getNewAddress() : SetAddressBook failed");
 
     ret = CBitcoinAddress(keyID, addrType);
     return PairResult(true);
