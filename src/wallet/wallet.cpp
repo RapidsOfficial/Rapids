@@ -114,15 +114,17 @@ PairResult CWallet::getNewAddress(CBitcoinAddress& ret, const std::string addres
 {
     LOCK2(cs_main, cs_wallet);
 
-    // Perform all the possibly checks before try to get/generate a key and fail with a runtime-error.
-    if (IsLocked())
-        return PairResult(false, new std::string("Cannot create key, wallet locked"));
+    // Refill keypool if wallet is unlocked
+    if (!IsLocked())
+        TopUpKeyPool();
 
-    TopUpKeyPool();
-    // Generate a new key that is added to wallet
     CPubKey newKey;
-    if (!GetKeyFromPool(newKey))
-        newKey = GenerateNewKey();
+    // Get a key
+    if (!GetKeyFromPool(newKey)) {
+        // inform the user to top-up the keypool or unlock the wallet
+        return PairResult(false, new std::string(
+                "Keypool ran out, please call keypoolrefill first, or unlock the wallet."));
+    }
     CKeyID keyID = newKey.GetID();
 
     if (!SetAddressBook(keyID, addressLabel, purpose))
