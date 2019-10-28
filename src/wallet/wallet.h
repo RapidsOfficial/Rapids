@@ -838,6 +838,9 @@ public:
 
     bool InMempool() const;
 
+    // True if only scriptSigs are different
+    bool IsEquivalentTo(const CWalletTx& tx) const;
+
     bool IsTrusted() const;
 
     bool WriteToDisk(CWalletDB *pwalletdb);
