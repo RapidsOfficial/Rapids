@@ -1832,7 +1832,7 @@ CAmount CWallet::GetUnconfirmedBalance() const
 CAmount CWallet::GetImmatureBalance() const
 {
     return loopTxsBalance([](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal) {
-            nTotal += pcoin.GetImmatureCredit();
+            nTotal += pcoin.GetImmatureCredit(false);
     });
 }
 
