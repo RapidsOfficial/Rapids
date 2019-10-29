@@ -43,13 +43,21 @@ class ReorgStakeTest(BitcoinTestFramework):
         sync_mempools(self.nodes)
 
         # Check balances
-        balance0 = self.nodes[0].getbalance()
-        balance1 = self.nodes[1].getbalance()
+        balance0 = 250.0 * (125 - 50)
+        balance1 = 250.0 * (125 - 50)
         # Last two 25-blocks bursts (for each node) are not mature: NMATURITY = 2 * (2 * 25)
-        assert_equal(balance0, 250.0 * (125 - 50))
-        assert_equal(balance1, 250.0 * (125 - 50))
-        self.log.info("Balances check out (%d, %d)" % (balance0, balance1))
+        immature_balance0 = 250.0 * 50
+        immature_balance1 = 250.0 * 50
+        w_info = self.nodes[0].getwalletinfo()
+        assert_equal(w_info["balance"], balance0)
+        assert_equal(w_info["immature_balance"], immature_balance0)
+        self.log.info("Balance for node 0 checks out: %f [%f]" % (balance0, immature_balance0))
+        w_info = self.nodes[1].getwalletinfo()
+        assert_equal(w_info["balance"], balance1)
+        assert_equal(w_info["immature_balance"], immature_balance1)
+        self.log.info("Balance for node 1 checks out: %f [%f]" % (balance1, immature_balance1))
         initial_balance = balance0
+        initial_immature_balance = immature_balance0
         initial_unspent = self.nodes[0].listunspent()
 
         # PoS start reached (block 250) - disconnect nodes
@@ -78,9 +86,12 @@ class ReorgStakeTest(BitcoinTestFramework):
         # Stake 10 more blocks with node-0 and check balances
         self.log.info("Staking 10 more blocks with node 0...")
         self.generateBatchBlocks(0, 10)
-        balance0 = initial_balance + 500 * 11       # mined blocks matured + staked blocks (250*11 + 250*11)
-        assert_equal(self.nodes[0].getbalance(), balance0)
-        self.log.info("Balance for node 0 checks out: %d" % balance0)
+        balance0 = initial_balance + 0          # mined blocks matured (250*11) - staked blocks inputs (250*11)
+        immature_balance0 += 250 * 11           # -mined blocks matured (250*11) + staked blocks (500*11)
+        w_info = self.nodes[0].getwalletinfo()
+        assert_equal(w_info["balance"], balance0)
+        assert_equal(w_info["immature_balance"], immature_balance0)
+        self.log.info("Balance for node 0 checks out: %f [%f]" % (balance0, immature_balance0))
 
         # verify that the stakeinput can't be spent
         rawtx_unsigned = self.nodes[0].createrawtransaction(
@@ -93,9 +104,12 @@ class ReorgStakeTest(BitcoinTestFramework):
         # Stake 12 blocks with node-1
         self.log.info("Staking 12 blocks with node 1...")
         self.generateBatchBlocks(1, 12)
-        balance1 += 250 * 12                        # staked blocks only (250*12)
-        assert_equal(self.nodes[1].getbalance(), balance1)
-        self.log.info("Balance for node 1 checks out: %d" % balance1)
+        balance1 -= 250 * 12                       # 0 - staked blocks inputs (250*12)
+        immature_balance1 += 500 * 12              # + staked blocks (500 * 12)
+        w_info = self.nodes[1].getwalletinfo()
+        assert_equal(w_info["balance"], balance1)
+        assert_equal(w_info["immature_balance"], immature_balance1)
+        self.log.info("Balance for node 1 checks out: %f [%f]" % (balance1, immature_balance1))
         new_best_hash = self.nodes[1].getbestblockhash()
 
         # re-connect and sync nodes and check that node-0 gets on the other chain
@@ -105,9 +119,12 @@ class ReorgStakeTest(BitcoinTestFramework):
         assert_equal(self.nodes[0].getbestblockhash(), new_best_hash)
 
         # check balance of node-0
-        balance0 = initial_balance + 250 * 12  # mined blocks matured (250*12)
-        assert_equal(self.nodes[0].getbalance(), balance0)          # <--- !!! THIS FAILS before PR #1043
-        self.log.info("Balance for node 0 checks out: %d" % balance0)
+        balance0 = initial_balance + 250 * 12                       # + mined blocks matured (250*12)
+        immature_balance0 = initial_immature_balance - 250 * 12     # - mined blocks matured (250*12)
+        w_info = self.nodes[0].getwalletinfo()
+        assert_equal(w_info["balance"], balance0)                   # <--- !!! THIS FAILS before PR #1043
+        assert_equal(w_info["immature_balance"], immature_balance0)
+        self.log.info("Balance for node 0 checks out: %f [%f]" % (balance0, immature_balance0))
 
         # check that NOW the original stakeinput is present and spendable
         res, utxo = self.findUtxoInList(stakeinput["txid"], stakeinput["vout"], self.nodes[0].listunspent())
