@@ -21,7 +21,7 @@ void CoinControlTreeWidget::keyPressEvent(QKeyEvent* event)
     } else if (event->key() == Qt::Key_Escape) // press esc -> close dialog
     {
         event->ignore();
-        CoinControlDialog* coinControlDialog = (CoinControlDialog*)this->parentWidget();
+        auto* coinControlDialog = (CoinControlDialog*) this->parentWidget()->parentWidget();
         coinControlDialog->done(QDialog::Accepted);
     } else {
         this->QTreeWidget::keyPressEvent(event);
