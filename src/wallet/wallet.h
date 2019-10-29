@@ -430,8 +430,10 @@ public:
     CAmount loopTxsBalance(std::function<void(const uint256&, const CWalletTx&, CAmount&)>method) const;
     CAmount GetBalance() const;
     CAmount GetColdStakingBalance() const;  // delegated coins for which we have the staking key
+    CAmount GetImmatureColdStakingBalance() const;
     CAmount GetStakingBalance(const bool fIncludeColdStaking = true) const;
     CAmount GetDelegatedBalance() const;    // delegated coins for which we have the spending key
+    CAmount GetImmatureDelegatedBalance() const;
     CAmount GetZerocoinBalance(bool fMatureOnly) const;
     CAmount GetUnconfirmedZerocoinBalance() const;
     CAmount GetImmatureZerocoinBalance() const;
@@ -807,7 +809,7 @@ public:
     CAmount GetDebit(const isminefilter& filter) const;
     CAmount GetCredit(const isminefilter& filter) const;
     CAmount GetUnspentCredit(const isminefilter& filter) const;
-    CAmount GetImmatureCredit(bool fUseCache = true) const;
+    CAmount GetImmatureCredit(bool fUseCache = true, const isminefilter& filter = ISMINE_SPENDABLE_ALL) const;
     CAmount GetAvailableCredit(bool fUseCache = true) const;
     // Return sum of unlocked coins
     CAmount GetUnlockedCredit() const;
