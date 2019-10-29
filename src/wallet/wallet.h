@@ -805,7 +805,8 @@ public:
 
     //! filter decides which addresses will count towards the debit
     CAmount GetDebit(const isminefilter& filter) const;
-    CAmount GetCredit(const isminefilter& filter, const bool fUnspent = false) const;
+    CAmount GetCredit(const isminefilter& filter) const;
+    CAmount GetUnspentCredit(const isminefilter& filter) const;
     CAmount GetImmatureCredit(bool fUseCache = true) const;
     CAmount GetAvailableCredit(bool fUseCache = true) const;
     // Return sum of unlocked coins

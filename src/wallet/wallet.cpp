@@ -1147,19 +1147,37 @@ CAmount CWalletTx::GetStakeDelegationDebit(bool fUseCache) const
     return UpdateAmount(nDelegatedDebitCached, fDelegatedDebitCached, fUseCache, ISMINE_SPENDABLE_DELEGATED, false);
 }
 
-CAmount CWalletTx::GetCredit(const isminefilter& filter, const bool fUnspent) const
+CAmount CWalletTx::GetUnspentCredit(const isminefilter& filter) const
 {
     // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
+    if (GetBlocksToMaturity() > 0)
         return 0;
 
+    CAmount credit = 0;
+    if (filter & ISMINE_SPENDABLE) {
+        credit += pwallet->GetCredit(*this, ISMINE_SPENDABLE, true);
+    }
+    if (filter & ISMINE_WATCH_ONLY) {
+        credit += pwallet->GetCredit(*this, ISMINE_WATCH_ONLY, true);
+    }
+    if (filter & ISMINE_COLD) {
+        credit += pwallet->GetCredit(*this, ISMINE_COLD, true);
+    }
+    if (filter & ISMINE_SPENDABLE_DELEGATED) {
+        credit += pwallet->GetCredit(*this, ISMINE_SPENDABLE_DELEGATED, true);
+    }
+    return credit;
+}
+
+CAmount CWalletTx::GetCredit(const isminefilter& filter) const
+{
     CAmount credit = 0;
     if (filter & ISMINE_SPENDABLE) {
         // GetBalance can assume transactions in mapWallet won't change
         if (fCreditCached)
             credit += nCreditCached;
         else {
-            nCreditCached = pwallet->GetCredit(*this, ISMINE_SPENDABLE, fUnspent);
+            nCreditCached = pwallet->GetCredit(*this, ISMINE_SPENDABLE, false);
             fCreditCached = true;
             credit += nCreditCached;
         }
@@ -1168,7 +1186,7 @@ CAmount CWalletTx::GetCredit(const isminefilter& filter, const bool fUnspent) co
         if (fWatchCreditCached)
             credit += nWatchCreditCached;
         else {
-            nWatchCreditCached = pwallet->GetCredit(*this, ISMINE_WATCH_ONLY, fUnspent);
+            nWatchCreditCached = pwallet->GetCredit(*this, ISMINE_WATCH_ONLY, false);
             fWatchCreditCached = true;
             credit += nWatchCreditCached;
         }
@@ -1177,7 +1195,7 @@ CAmount CWalletTx::GetCredit(const isminefilter& filter, const bool fUnspent) co
         if (fColdCreditCached)
             credit += nColdCreditCached;
         else {
-            nColdCreditCached = pwallet->GetCredit(*this, ISMINE_COLD, fUnspent);
+            nColdCreditCached = pwallet->GetCredit(*this, ISMINE_COLD, false);
             fColdCreditCached = true;
             credit += nColdCreditCached;
         }
@@ -1186,7 +1204,7 @@ CAmount CWalletTx::GetCredit(const isminefilter& filter, const bool fUnspent) co
         if (fDelegatedCreditCached)
             credit += nDelegatedCreditCached;
         else {
-            nDelegatedCreditCached = pwallet->GetCredit(*this, ISMINE_SPENDABLE_DELEGATED, fUnspent);
+            nDelegatedCreditCached = pwallet->GetCredit(*this, ISMINE_SPENDABLE_DELEGATED, false);
             fDelegatedCreditCached = true;
             credit += nDelegatedCreditCached;
         }
@@ -1210,16 +1228,17 @@ CAmount CWalletTx::GetImmatureCredit(bool fUseCache) const
 
 CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
 {
-    return UpdateAmount(nAvailableCreditCached, fAvailableCreditCached, fUseCache, ISMINE_SPENDABLE);}
+    return GetUnspentCredit( ISMINE_SPENDABLE);
+}
 
 CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
 {
-    return UpdateAmount(nColdCreditCached, fColdCreditCached, fUseCache, ISMINE_COLD);
+    return GetUnspentCredit(ISMINE_COLD);
 }
 
 CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
 {
-    return UpdateAmount(nDelegatedCreditCached, fDelegatedCreditCached, fUseCache, ISMINE_SPENDABLE_DELEGATED);
+    return GetUnspentCredit(ISMINE_SPENDABLE_DELEGATED);
 }
 
 CAmount CWalletTx::UpdateAmount(CAmount& amountToUpdate, bool& cacheFlagToUpdate, bool fUseCache, isminetype mimeType, bool fCredit) const
@@ -1234,7 +1253,7 @@ CAmount CWalletTx::UpdateAmount(CAmount& amountToUpdate, bool& cacheFlagToUpdate
     if (fUseCache && cacheFlagToUpdate)
         return amountToUpdate;
 
-    amountToUpdate = (fCredit) ? GetCredit(mimeType, true) : GetDebit(mimeType);
+    amountToUpdate = (fCredit) ? GetCredit(mimeType) : GetDebit(mimeType);
     cacheFlagToUpdate = true;
     return amountToUpdate;
 }
