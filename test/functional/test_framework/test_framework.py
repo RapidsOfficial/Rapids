@@ -41,7 +41,10 @@ TEST_EXIT_PASSED = 0
 TEST_EXIT_FAILED = 1
 TEST_EXIT_SKIPPED = 77
 
-class BitcoinTestFramework():
+TMPDIR_PREFIX = "pivx_func_test_"
+
+
+class PivxTestFramework():
     """Base class for a pivx test script.
 
     Individual pivx test scripts should subclass this class and override the set_test_params() and run_test() methods.
@@ -110,7 +113,7 @@ class BitcoinTestFramework():
             self.options.tmpdir = os.path.abspath(self.options.tmpdir)
             os.makedirs(self.options.tmpdir, exist_ok=False)
         else:
-            self.options.tmpdir = tempfile.mkdtemp(prefix="test")
+            self.options.tmpdir = tempfile.mkdtemp(prefix=TMPDIR_PREFIX)
         self._start_logging()
 
         success = TestStatus.FAILED
@@ -451,7 +454,7 @@ class BitcoinTestFramework():
         for i in range(self.num_nodes):
             initialize_datadir(self.options.tmpdir, i)
 
-class ComparisonTestFramework(BitcoinTestFramework):
+class ComparisonTestFramework(PivxTestFramework):
     """Test framework for doing p2p comparison testing
 
     Sets up some pivxd binaries:

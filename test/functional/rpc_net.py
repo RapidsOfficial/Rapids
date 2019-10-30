@@ -7,7 +7,7 @@
 Tests correspond to code in rpc/net.cpp.
 """
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
     assert_greater_than_or_equal,
@@ -18,7 +18,7 @@ from test_framework.util import (
     wait_until,
 )
 
-class NetTest(BitcoinTestFramework):
+class NetTest(PivxTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2

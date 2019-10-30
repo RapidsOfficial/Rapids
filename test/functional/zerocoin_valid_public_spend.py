@@ -13,11 +13,11 @@ from time import sleep
 from fake_stake.util import TestNode
 
 from test_framework.authproxy import JSONRPCException
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PivxTestFramework
 from test_framework.util import p2p_port, assert_equal, assert_raises_rpc_error, assert_greater_than_or_equal
 
 
-class zPIVValidCoinSpendTest(BitcoinTestFramework):
+class zPIVValidCoinSpendTest(PivxTestFramework):
 
     def set_test_params(self):
         self.setup_clean_chain = True
