@@ -17,19 +17,6 @@
 #include <iostream>
 #include <stdint.h>
 
-/* Return positive answer if transaction should be shown in list.
- */
-bool TransactionRecord::showTransaction(const CWalletTx& wtx)
-{
-    if (wtx.IsCoinBase()) {
-        // Ensures we show generated coins / mined transactions at depth 1
-        if (!wtx.IsInMainChain()) {
-            return false;
-        }
-    }
-    return true;
-}
-
 /*
  * Decompose CWallet transaction to model transaction records.
  */
