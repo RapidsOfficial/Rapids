@@ -25,10 +25,11 @@ from .util import (
     connect_nodes_bi,
     disconnect_nodes,
     get_datadir_path,
+    generate_pos,
     initialize_datadir,
-    p2p_port,
     set_node_times,
     sync_blocks,
+    sync_chain,
     sync_mempools,
 )
 
@@ -96,7 +97,7 @@ class PivxTestFramework():
         parser.add_option("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
                           help="Attach a python debugger if test fails")
         parser.add_option("--usecli", dest="usecli", default=False, action="store_true",
-                          help="use bitcoin-cli instead of RPC for all commands")
+                          help="use pivx-cli instead of RPC for all commands")
         self.add_options(parser)
         (self.options, self.args) = parser.parse_args()
 
@@ -336,10 +337,9 @@ class PivxTestFramework():
         blockchain.  If the cached version of the blockchain is used without
         mocktime then the mempools will not sync due to IBD.
 
-        For backwared compatibility of the python scripts with previous
-        versions of the cache, this helper function sets mocktime to Jan 1,
-        2014 + (201 * 10 * 60)"""
-        self.mocktime = 1454124732 + (201 * 10 * 60)
+        Sets mocktime to Tuesday, October 31, 2017 6:21:20 PM GMT (1572546080)
+        """
+        self.mocktime = 1572546080
 
     def disable_mocktime(self):
         self.mocktime = 0
@@ -374,50 +374,110 @@ class PivxTestFramework():
             rpc_handler.setLevel(logging.DEBUG)
             rpc_logger.addHandler(rpc_handler)
 
-    def _initialize_chain(self):
+    def _initialize_chain(self, toPosPhase=False):
         """Initialize a pre-mined blockchain for use by the test.
 
         Create a cache of a 200-block-long chain (with wallet) for MAX_NODES
         Afterward, create num_nodes copies from the cache."""
 
-        assert self.num_nodes <= MAX_NODES
-        create_cache = False
-        for i in range(MAX_NODES):
-            if not os.path.isdir(get_datadir_path(self.options.cachedir, i)):
-                create_cache = True
-                break
+        def create_cachedir(cachedir):
+            if os.path.isdir(cachedir):
+                shutil.rmtree(cachedir)
+            os.makedirs(cachedir)
 
-        if create_cache:
-            self.log.debug("Creating data directories from cached datadir")
+        def copy_cachedir(origin, destination, num_nodes=MAX_NODES):
+            for i in range(num_nodes):
+                from_dir = get_datadir_path(origin, i)
+                to_dir = get_datadir_path(destination, i)
+                shutil.copytree(from_dir, to_dir)
+                initialize_datadir(destination, i)  # Overwrite port/rpcport in pivx.conf
 
-            # find and delete old cache directories if any exist
+        def cachedir_valid(cachedir):
             for i in range(MAX_NODES):
-                if os.path.isdir(get_datadir_path(self.options.cachedir, i)):
-                    shutil.rmtree(get_datadir_path(self.options.cachedir, i))
+                if not os.path.isdir(get_datadir_path(cachedir, i)):
+                    return False
+            # nodes directories exist. check if the first one has the .incomplete flagfile
+            return (not os.path.exists(os.path.join(get_datadir_path(cachedir, 0), ".incomplete")))
 
-            # Create cache directories, run bitcoinds:
+        def clean_cache_subdir(cachedir):
+            os.remove(os.path.join(get_datadir_path(cachedir, 0), ".incomplete"))
+
+            def cache_path(n, *paths):
+                return os.path.join(get_datadir_path(cachedir, n), "regtest", *paths)
+
             for i in range(MAX_NODES):
-                datadir = initialize_datadir(self.options.cachedir, i)
-                args = [os.getenv("BITCOIND", "pivxd"), "-spendzeroconfchange=1", "-server", "-keypool=1", "-datadir=" + datadir, "-discover=0"]
-                if i > 0:
-                    args.append("-connect=127.0.0.1:" + str(p2p_port(0)))
-                self.nodes.append(TestNode(i, self.options.cachedir, extra_args=[], rpchost=None, timewait=None, binary=None, stderr=None, mocktime=self.mocktime, coverage_dir=None))
+                for entry in os.listdir(cache_path(i)):
+                    if entry not in ['wallet.dat', 'chainstate', 'blocks', 'sporks', 'zerocoin', 'backups']:
+                        os.remove(cache_path(i, entry))
+
+        def clean_cache_dir():
+            if os.path.isdir(self.options.cachedir):
+                # migrate old cache dir
+                if cachedir_valid(self.options.cachedir):
+                    powcachedir = os.path.join(self.options.cachedir, "pow")
+                    self.log.info("Found old cachedir. Migrating to %s" % str(powcachedir))
+                    copy_cachedir(self.options.cachedir, powcachedir)
+                # remove everything except pow and pos subdirs
+                for entry in os.listdir(self.options.cachedir):
+                    if entry not in ['pow', 'pos']:
+                        entry_path = os.path.join(self.options.cachedir, entry)
+                        if os.path.isfile(entry_path):
+                            os.remove(entry_path)
+                        elif os.path.isdir(entry_path):
+                            shutil.rmtree(entry_path)
+            # no cachedir found
+            else:
+                os.makedirs(self.options.cachedir)
+
+        def start_nodes_from_dir(ddir):
+            self.log.info("Starting %d nodes..." % MAX_NODES)
+            for i in range(MAX_NODES):
+                datadir = initialize_datadir(ddir, i)
+                if i == 0:
+                    # Add .incomplete flagfile
+                    # (removed at the end during clean_cache_subdir)
+                    open(os.path.join(datadir, ".incomplete"), 'a').close()
+                args = [os.getenv("BITCOIND", "pivxd"), "-spendzeroconfchange=1", "-server", "-keypool=1",
+                        "-datadir=" + datadir, "-discover=0"]
+                self.nodes.append(
+                    TestNode(i, ddir, extra_args=[], rpchost=None, timewait=None, binary=None, stderr=None,
+                             mocktime=self.mocktime, coverage_dir=None))
                 self.nodes[i].args = args
                 self.start_node(i)
-
+                self.log.info("Node %d started." % i)
             # Wait for RPC connections to be ready
-            for node in self.nodes:
-                node.wait_for_rpc_connection()
+            self.log.info("Nodes started. Waiting for RPC connections...")
+            for node in range(4):
+                self.nodes[node].wait_for_rpc_connection()
+            self.log.info("Connecting nodes")
+            for node in range(4):
+                for j in range(node+1, MAX_NODES):
+                    connect_nodes_bi(self.nodes, node, j)
 
+        def stop_and_clean_cache_dir(ddir):
+            self.stop_nodes()
+            self.nodes = []
+            clean_cache_subdir(ddir)
+
+        def generate_pow_cache():
+            ### POW Cache ###
             # Create a 200-block-long chain; each of the 4 first nodes
             # gets 25 mature blocks and 25 immature.
             # Note: To preserve compatibility with older versions of
             # initialize_chain, only 4 nodes will generate coins.
             #
-            # blocks are created with timestamps 10 minutes apart
-            # starting from 2010 minutes in the past
+            # blocks are created with timestamps 1 minutes apart
+            # starting from 331 minutes in the past
+
+            # Create cache directories, run pivxds:
+            create_cachedir(powcachedir)
+            self.log.info("Creating 'PoW-chain': 200 blocks")
+            start_nodes_from_dir(powcachedir)
+
+            # Mine the blocks
+            self.log.info("Mining 200 blocks")
             self.enable_mocktime()
-            block_time = self.mocktime - (201 * 60)
+            block_time = self.mocktime - (331 * 60)
             for i in range(2):
                 for peer in range(4):
                     for j in range(25):
@@ -428,23 +488,113 @@ class PivxTestFramework():
                     sync_blocks(self.nodes)
 
             # Shut them down, and clean up cache directories:
-            self.stop_nodes()
-            self.nodes = []
+            self.log.info("Stopping nodes")
+            stop_and_clean_cache_dir(powcachedir)
+            self.log.info("---> pow cache created")
             self.disable_mocktime()
 
-            def cache_path(n, *paths):
-                return os.path.join(get_datadir_path(self.options.cachedir, n), "regtest", *paths)
 
-            for i in range(MAX_NODES):
-                for entry in os.listdir(cache_path(i)):
-                    if entry not in ['wallet.dat', 'chainstate', 'blocks', 'sporks', 'zerocoin', 'backups']:
-                        os.remove(cache_path(i, entry))
+        assert self.num_nodes <= MAX_NODES
 
-        for i in range(self.num_nodes):
-            from_dir = get_datadir_path(self.options.cachedir, i)
-            to_dir = get_datadir_path(self.options.tmpdir, i)
-            shutil.copytree(from_dir, to_dir)
-            initialize_datadir(self.options.tmpdir, i)  # Overwrite port/rpcport in bitcoin.conf
+        clean_cache_dir()
+        powcachedir = os.path.join(self.options.cachedir, "pow")
+        is_powcache_valid = cachedir_valid(powcachedir)
+        poscachedir = os.path.join(self.options.cachedir, "pos")
+        is_poscache_valid = cachedir_valid(poscachedir)
+
+        if not toPosPhase and not is_powcache_valid:
+            self.log.info("PoW-CACHE NOT FOUND or INVALID.")
+            self.log.info("Creating new cached blockchain data.")
+            generate_pow_cache()
+
+        elif toPosPhase and not is_poscache_valid:
+            self.log.info("PoS-CACHE NOT FOUND or INVALID.")
+            self.log.info("Creating new cached blockchain data.")
+
+            # check if first 200 blocks (pow cache) is present. if not generate it.
+            if not is_powcache_valid:
+                self.log.info("PoW-CACHE NOT FOUND or INVALID. Generating it first.")
+                generate_pow_cache()
+
+            self.enable_mocktime()
+            block_time = self.mocktime - (131 * 60)
+
+            ### POS Cache ###
+            # Create a 330-block-long chain
+            # First 200 PoW blocks are copied from PoW chain.
+            # The next 48 PoW blocks are mined in 6-blocks bursts by the first 4 nodes (2 times).
+            # The last 2 PoW blocks are then mined by the first node (Node 0).
+            # Then 80 PoS blocks are generated in 5-blocks bursts by the first 4 nodes (4 times).
+            #
+            # - Node 0 gets 84 blocks:
+            # 62 mature blocks (pow) and 22 immature (2 pow + 20 pos)
+            # 42 rewards spendable (62 mature blocks - 20 spent rewards)
+            # - Nodes 1 to 3 get 82 blocks each:
+            # 56 mature blocks (pow) and 26 immature (6 pow + 20 pos)
+            # 36 rewards spendable (56 mature blocks - 20 spent rewards)
+            #
+            # Block 331-332 will mature last 2 pow blocks mined by node 0.
+            # Then 333-338 will mature last 6 pow blocks mined by node 1.
+            # Then 339-344 will mature last 6 pow blocks mined by node 2.
+            # Then 345-350 will mature last 6 pow blocks mined by node 3.
+            # Then staked blocks start maturing at height 351.
+
+            # Create cache directories, run pivxds:
+            create_cachedir(poscachedir)
+            self.log.info("Creating 'PoS-chain': 330 blocks")
+            self.log.info("Copying 200 initial blocks from pow cache")
+            copy_cachedir(powcachedir, poscachedir)
+            # Change datadir and restart the nodes
+            start_nodes_from_dir(poscachedir)
+
+            # Mine 50 more blocks to reach PoS start.
+            self.log.info("Mining 50 more blocks to reach PoS phase")
+            for i in range(2):
+                for peer in range(4):
+                    for j in range(6):
+                        set_node_times(self.nodes, block_time)
+                        self.nodes[peer].generate(1)
+                        block_time += 60
+                    # Must sync before next peer starts generating blocks
+                    sync_blocks(self.nodes)
+            set_node_times(self.nodes, block_time)
+            self.nodes[0].generate(2)
+            block_time += 60
+            sync_blocks(self.nodes)
+
+            # Then stake 80 blocks.
+            self.log.info("Staking 80 blocks...")
+            for i in range(4):
+                for peer in range(4):
+                    for j in range(5):
+                        block_time = generate_pos(self.nodes, peer, block_time)
+                    # Must sync before next peer starts generating blocks
+                    sync_chain(self.nodes)
+                    time.sleep(1)
+
+                self.log.info("%d blocks staked" % int((i+1)*20))
+
+            # Verify height and balances
+            self.test_PoS_chain_balances(5)
+
+            # Shut nodes down, and clean up cache directories:
+            self.log.info("Stopping nodes")
+            stop_and_clean_cache_dir(poscachedir)
+            self.log.info("--> pos cache created")
+            self.disable_mocktime()
+
+        else:
+            self.log.info("CACHE FOUND.")
+
+        # Copy requested cache to tempdir
+        if toPosPhase:
+            self.log.info("Copying datadir from %s to %s" % (poscachedir, self.options.tmpdir))
+            copy_cachedir(poscachedir, self.options.tmpdir, self.num_nodes)
+        else:
+            self.log.info("Copying datadir from %s to %s" % (powcachedir, self.options.tmpdir))
+            copy_cachedir(powcachedir, self.options.tmpdir, self.num_nodes)
+
+
 
     def _initialize_chain_clean(self):
         """Initialize empty blockchain for use by the test.
@@ -453,6 +603,40 @@ class PivxTestFramework():
         Useful if a test case wants complete control over initialization."""
         for i in range(self.num_nodes):
             initialize_datadir(self.options.tmpdir, i)
+
+
+    def test_PoS_chain_balances(self, num_nodes):
+        # 330 blocks
+        # - Node 0 gets 84 blocks:
+        # 64 pow + 20 pos (22 immature)
+        # - Nodes 1 to 3 get 82 blocks each:
+        # 62 pow + 20 pos (26 immature)
+        num_nodes = min(5, num_nodes)
+        # each node has the same height and tip
+        best_block = self.nodes[0].getbestblockhash()
+        for i in range(num_nodes):
+            assert_equal(self.nodes[i].getblockcount(), 330)
+            if i > 0:
+                assert_equal(self.nodes[i].getbestblockhash(), best_block)
+        # balance is mature pow blocks rewards minus stake inputs (spent)
+        w_info = [self.nodes[i].getwalletinfo() for i in range(num_nodes)]
+        assert_equal(w_info[0]["balance"], 250.0 * (62 - 20))
+        for i in range(1, num_nodes):
+            if i < 4:
+                assert_equal(w_info[i]["balance"], 250.0 * (56 - 20))
+            else:
+                assert_equal(w_info[i]["balance"], 0)
+        # immature balance is immature pow blocks rewards plus
+        # immature stakes (outputs=inputs+rewards)
+        assert_equal(w_info[0]["immature_balance"], (250.0 * 2) + (500.0 * 20))
+        for i in range(1, num_nodes):
+            if i < 4:
+                assert_equal(w_info[i]["immature_balance"], (250.0 * 6) + (500.0 * 20))
+            else:
+                assert_equal(w_info[i]["immature_balance"], 0)
+        self.log.info("Balances of first %d nodes check out" % num_nodes)
+
+
 
 class ComparisonTestFramework(PivxTestFramework):
     """Test framework for doing p2p comparison testing

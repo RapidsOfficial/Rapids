@@ -284,7 +284,7 @@ def rpc_url(datadir, i, rpchost=None):
 ################
 
 def initialize_datadir(dirname, n):
-    datadir = os.path.join(dirname, "node" + str(n))
+    datadir = get_datadir_path(dirname, n)
     if not os.path.isdir(datadir):
         os.makedirs(datadir)
     rpc_u, rpc_p = rpc_auth_pair(n)
@@ -425,6 +425,34 @@ def sync_mempools(rpc_connections, *, wait=1, timeout=60, flush_scheduler=True):
         time.sleep(wait)
         timeout -= wait
     raise AssertionError("Mempool sync failed")
+
+def generate_pos(rpc_connections, n, btime=None):
+    if btime is not None:
+        next_btime = btime+60
+    fStaked = False
+    while not fStaked:
+        try:
+            rpc_connections[n].generate(1)
+            fStaked = True
+        except JSONRPCException as e:
+            # couldn't generate block. check that this node can stake
+            ss = rpc_connections[n].getstakingstatus()
+            if not (ss["validtime"] and ss["haveconnections"] and ss["walletunlocked"] and
+                    ss["mintablecoins"] and ss["enoughcoins"]):
+                raise AssertionError("Node %d unable to stake!" % n)
+            # try to stake one sec in the future
+            sync_chain(rpc_connections)
+            if btime is not None:
+                btime += 1
+            else:
+                time.sleep(1)
+    # block generated. adjust block time
+    if btime is not None:
+        btime = max(btime + 1, next_btime)
+        set_node_times(rpc_connections, btime)
+        return btime
+    else:
+        return None
 
 # Transaction/Block functions
 #############################

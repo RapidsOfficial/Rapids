@@ -13,6 +13,10 @@ from test_framework.test_framework import PivxTestFramework
 
 class CreateCache(PivxTestFramework):
     # Test network and test nodes are not required:
+    def setup_chain(self):
+        self.log.info("Initializing test directory " + self.options.tmpdir)
+        # Initialize PoS chain (it will automatically generate PoW chain too)
+        self._initialize_chain(toPosPhase=True)
 
     def set_test_params(self):
         self.num_nodes = 0
