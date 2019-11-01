@@ -384,6 +384,11 @@ void ColdStakingWidget::onSendClicked(){
     if (!walletModel || !walletModel->getOptionsModel() || !verifyWalletUnlocked())
         return;
 
+    if (!walletModel->isColdStakingNetworkelyEnabled()) {
+        inform(tr("Cold staking is networkely disabled"));
+        return;
+    }
+
     if (!sendMultiRow->validate()) {
         inform(tr("Invalid entry"));
         return;

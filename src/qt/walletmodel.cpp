@@ -62,6 +62,10 @@ bool WalletModel::isTestnet() const {
     return Params().NetworkID() == CBaseChainParams::TESTNET;
 }
 
+bool WalletModel::isColdStakingNetworkelyEnabled() const {
+    return sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT);
+}
+
 CAmount WalletModel::getBalance(const CCoinControl* coinControl) const
 {
     if (coinControl) {
