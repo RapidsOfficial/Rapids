@@ -54,6 +54,7 @@ public slots:
 private slots:
     void changeTheme(bool isLightTheme, QString &theme) override;
     void handleAddressClicked(const QModelIndex &index);
+    void handleMyColdAddressClicked(const QModelIndex &rIndex);
     void onCoinControlClicked();
     void onColdStakeClicked();
     void updateDisplayUnit();
@@ -64,6 +65,8 @@ private slots:
     void onDeleteClicked();
     void onCopyClicked();
     void onCopyOwnerClicked();
+    void onAddressCopyClicked();
+    void onAddressEditClicked();
     void onTxArrived(const QString& hash);
     void onContactsClicked(bool ownerAdd);
     void clearAll();
@@ -87,8 +90,9 @@ private:
 
     ContactsDropdown *menuContacts = nullptr;
     TooltipMenu* menu = nullptr;
+    TooltipMenu* menuAddresses = nullptr;
     SendMultiRow *sendMultiRow = nullptr;
-    bool isShowingDialog;
+    bool isShowingDialog = false;
 
     bool isContactOwnerSelected;
     int64_t lastRefreshTime = 0;
@@ -96,6 +100,8 @@ private:
 
     // Cached index
     QModelIndex index;
+    QModelIndex addressIndex;
+
 
     int nDisplayUnit;
 
@@ -103,6 +109,7 @@ private:
     void onContactsClicked();
     void tryRefreshDelegations();
     bool refreshDelegations();
+    void onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses);
 };
 
 #endif // COLDSTAKINGWIDGET_H

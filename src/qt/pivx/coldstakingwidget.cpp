@@ -189,6 +189,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
     connect(btnOwnerContact, &QAction::triggered, [this](){ onContactsClicked(true); });
     connect(ui->listView, SIGNAL(clicked(QModelIndex)), this, SLOT(handleAddressClicked(QModelIndex)));
+    connect(ui->listViewStakingAddress, SIGNAL(clicked(QModelIndex)), this, SLOT(handleMyColdAddressClicked(QModelIndex)));
     connect(ui->btnMyStakingAddresses, SIGNAL(clicked()), this, SLOT(onMyStakingAddressesClicked()));
 }
 
@@ -520,7 +521,36 @@ void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest) {
     }
 }
 
-void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
+void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index) {
+
+    ui->listViewStakingAddress->setCurrentIndex(_index);
+    QModelIndex rIndex = addressesFilter->mapToSource(_index);
+
+    QRect rect = ui->listViewStakingAddress->visualRect(rIndex);
+    QPoint pos = rect.topRight();
+    pos.setX( parentWidget()->rect().right() - (DECORATION_SIZE * 1.5) );
+    pos.setY(pos.y() + (DECORATION_SIZE * 2.5));
+
+    if(!menuAddresses){
+        menuAddresses = new TooltipMenu(window, this);
+        menuAddresses->setEditBtnText(tr("Copy"));
+        menuAddresses->setDeleteBtnText(tr("Edit"));
+        menuAddresses->setCopyBtnVisible(false);
+        menuAddresses->adjustSize();
+        connect(menuAddresses, &TooltipMenu::message, this, &AddressesWidget::message);
+        connect(menuAddresses, SIGNAL(onEditClicked()), this, SLOT(onAddressCopyClicked()));
+        connect(menuAddresses, SIGNAL(onDeleteClicked()), this, SLOT(onAddressEditClicked()));
+    }else {
+        menuAddresses->hide();
+    }
+
+    this->addressIndex = rIndex;
+
+    menuAddresses->move(pos);
+    menuAddresses->show();
+}
+
+void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
 
     bool isReceivedDelegation = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
 
@@ -572,6 +602,18 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex){
     menu->show();
 }
 
+void ColdStakingWidget::onAddressCopyClicked() {
+    GUIUtil::setClipboard(addressIndex.data(Qt::DisplayRole).toString());
+    inform(tr("Address copied"));
+}
+void ColdStakingWidget::onAddressEditClicked() {
+    onLabelClicked(
+            tr("Edit Cold Address Label"),
+            addressIndex,
+            false
+    );
+}
+
 void ColdStakingWidget::onEditClicked() {
     // whitelist address
     if (!csModel->whitelist(index)) {
@@ -609,11 +651,19 @@ void ColdStakingWidget::onCopyOwnerClicked() {
 }
 
 void ColdStakingWidget::onLabelClicked(){
+    onLabelClicked(
+            tr("Edit Owner Address Label"),
+            index,
+            false
+    );
+}
+
+void ColdStakingWidget::onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses) {
     if(walletModel && !isShowingDialog) {
         isShowingDialog = true;
         showHideOp(true);
         AddNewContactDialog *dialog = new AddNewContactDialog(window);
-        dialog->setTexts(tr("Edit Owner Address Label"));
+        dialog->setTexts(dialogTitle);
         QString qAddress = index.data(Qt::DisplayRole).toString();
         dialog->setData(qAddress, walletModel->getAddressTableModel()->labelForAddress(qAddress));
         if (openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 6)) {
@@ -625,10 +675,12 @@ void ColdStakingWidget::onLabelClicked(){
                     address.Get(),
                     label.toUtf8().constData(),
                     purpose
-            )
-                    ) {
-                csModel->updateCSList();
-                inform(tr("Owner address label saved"));
+            )) {
+                if (isMyColdStakingAddresses) {
+                    addressTableModel->notifyChange(index);
+                } else
+                    csModel->updateCSList();
+                inform(tr("Address label saved"));
             } else {
                 inform(tr("Error storing address label"));
             }
