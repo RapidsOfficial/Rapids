@@ -454,6 +454,26 @@ def generate_pos(rpc_connections, n, btime=None):
     else:
         return None
 
+
+SPORK_ACTIVATION_TIME = 1563253447
+SPORK_DEACTIVATION_TIME = 4070908800
+
+def set_spork(rpc_connections, n, sporkName, value):
+    return rpc_connections[n].spork(sporkName, value)
+
+def get_spork(rpc_connections, n, sporkName):
+    return rpc_connections[n].spork("show")[sporkName]
+
+def activate_spork(rpc_connections, n, sporkName):
+    return set_spork(rpc_connections, n, sporkName, SPORK_ACTIVATION_TIME)
+
+def deactivate_spork(rpc_connections, n, sporkName):
+    return set_spork(rpc_connections, n, sporkName, SPORK_DEACTIVATION_TIME)
+
+def is_spork_active(rpc_connections, n, sporkName):
+    return rpc_connections[n].spork("active")[sporkName]
+
+
 # Transaction/Block functions
 #############################
 

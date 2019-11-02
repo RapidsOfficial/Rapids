@@ -15,7 +15,7 @@ from fake_stake.util import TestNode
 from test_framework.authproxy import JSONRPCException
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import sync_chain, assert_equal, assert_raises_rpc_error, \
-    assert_greater_than, generate_pos, set_node_times
+    assert_greater_than, generate_pos, set_node_times, activate_spork, deactivate_spork, is_spork_active
 
 
 class zPIVValidCoinSpendTest(PivxTestFramework):
@@ -38,16 +38,18 @@ class zPIVValidCoinSpendTest(PivxTestFramework):
         self.log.info("\n\n%s\n%s\n%s\n", title, underline, description)
 
     def setV4SpendEnforcement(self, btime, fEnable=True):
-        new_val = 1563253447 if fEnable else 4070908800
+        sporkName = "SPORK_18_ZEROCOIN_PUBLICSPEND_V4"
         # update spork 18 with node[0]
-        mess = "Enabling v4" if fEnable else "Enabling v3"
-        mess += " PublicSpend version with SPORK 18..."
-        self.log.info(mess)
-        res = self.nodes[0].spork("SPORK_18_ZEROCOIN_PUBLICSPEND_V4", new_val)
+        if fEnable:
+            self.log.info("Enabling v4 PublicSpend version with SPORK 18...")
+            res = activate_spork(self.nodes, 0, sporkName)
+        else:
+            self.log.info("Enabling v3 PublicSpend version with SPORK 18...")
+            res = deactivate_spork(self.nodes, 0, sporkName)
         assert_equal(res, "success")
         sleep(1)
         # check that node[1] receives it
-        assert_equal(new_val, self.nodes[1].spork("show")["SPORK_18_ZEROCOIN_PUBLICSPEND_V4"])
+        assert_equal(fEnable, is_spork_active(self.nodes, 1, sporkName))
         self.log.info("done")
 
     def run_test(self):
