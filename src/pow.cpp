@@ -54,12 +54,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         // ppcoin: target change every block
         // ppcoin: retarget with exponential moving toward target spacing
         uint256 bnNew;
+        bnNew.SetCompact(pindexLast->nBits);
+
         // on first block with V2 time protocol, reduce the difficulty by a factor 16
-        if (fTimeV2 && !Params().IsTimeProtocolV2(pindexLast->nHeight)) {
-            bnNew.SetCompact(pindexLast->nBits << 4);
-        } else {
-            bnNew.SetCompact(pindexLast->nBits);
-        }
+        if (fTimeV2 && !Params().IsTimeProtocolV2(pindexLast->nHeight))
+            bnNew <<= 4;
 
         int64_t nInterval = nTargetTimespan / nTargetSpacing;
         bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
