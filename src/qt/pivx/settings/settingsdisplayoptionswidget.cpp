@@ -44,6 +44,8 @@ SettingsDisplayOptionsWidget::SettingsDisplayOptionsWidget(PIVXGUI* _window, QWi
 
     ui->labelTitleUrl->setText(tr("Third party transactions URLs"));
     ui->labelTitleUrl->setProperty("cssClass", "text-main-settings");
+    // TODO: Reconnect this option to an action. Hide it for now
+    ui->labelTitleUrl->hide();
 
     // Switch
     ui->pushButtonSwitchBalance->setText(tr("Hide empty balances"));
@@ -87,6 +89,8 @@ SettingsDisplayOptionsWidget::SettingsDisplayOptionsWidget(PIVXGUI* _window, QWi
     // Urls
     ui->lineEditUrl->setPlaceholderText("e.g. https://example.com/tx/%s");
     initCssEditLine(ui->lineEditUrl);
+    // TODO: Reconnect this option to an action. Hide it for now
+    ui->lineEditUrl->hide();
 
     // Buttons
     ui->pushButtonSave->setText(tr("SAVE"));
