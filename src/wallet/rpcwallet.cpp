@@ -2666,18 +2666,20 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
-            "  \"walletversion\": xxxxx,     (numeric) the wallet version\n"
-            "  \"balance\": xxxxxxx,         (numeric) the total PIV balance of the wallet (cold balance excluded)\n"
-            "  \"delegated_balance\": xxxxx, (numeric) the PIV balance held in P2CS (cold staking) contracts\n"
-            "  \"cold_staking_balance\": xx, (numeric) the PIV balance held in cold staking addresses\n"
-            "  \"unconfirmed_balance\": xxx, (numeric) the total unconfirmed balance of the wallet in PIV\n"
-            "  \"immature_balance\": xxxxxx, (numeric) the total immature balance of the wallet in PIV\n"
-            "  \"txcount\": xxxxxxx,         (numeric) the total number of transactions in the wallet\n"
-            "  \"keypoololdest\": xxxxxx,    (numeric) the timestamp (seconds since GMT epoch) of the oldest pre-generated key in the key pool\n"
-            "  \"keypoolsize\": xxxx,        (numeric) how many new keys are pre-generated\n"
-            "  \"unlocked_until\": ttt,      (numeric) the timestamp in seconds since epoch (midnight Jan 1 1970 GMT) that the wallet is unlocked for transfers, or 0 if the wallet is locked\n"
-            "  \"paytxfee\": x.xxxx,         (numeric) the transaction fee configuration, set in PIV/kB\n"
-            "  \"automintaddresses\": status (boolean) the status of automint addresses (true if enabled, false if disabled)\n"
+            "  \"walletversion\": xxxxx,                  (numeric) the wallet version\n"
+            "  \"balance\": xxxxxxx,                      (numeric) the total PIV balance of the wallet (cold balance excluded)\n"
+            "  \"delegated_balance\": xxxxx,              (numeric) the PIV balance held in P2CS (cold staking) contracts\n"
+            "  \"cold_staking_balance\": xx,              (numeric) the PIV balance held in cold staking addresses\n"
+            "  \"unconfirmed_balance\": xxx,              (numeric) the total unconfirmed balance of the wallet in PIV\n"
+            "  \"immature_delegated_balance\": xxxxxx,    (numeric) the delegated immature balance of the wallet in PIV\n"
+            "  \"immature_cold_staking_balance\": xxxxxx, (numeric) the cold-staking immature balance of the wallet in PIV\n"
+            "  \"immature_balance\": xxxxxx,              (numeric) the total immature balance of the wallet in PIV\n"
+            "  \"txcount\": xxxxxxx,                      (numeric) the total number of transactions in the wallet\n"
+            "  \"keypoololdest\": xxxxxx,                 (numeric) the timestamp (seconds since GMT epoch) of the oldest pre-generated key in the key pool\n"
+            "  \"keypoolsize\": xxxx,                     (numeric) how many new keys are pre-generated\n"
+            "  \"unlocked_until\": ttt,                   (numeric) the timestamp in seconds since epoch (midnight Jan 1 1970 GMT) that the wallet is unlocked for transfers, or 0 if the wallet is locked\n"
+            "  \"paytxfee\": x.xxxx,                      (numeric) the transaction fee configuration, set in PIV/kB\n"
+            "  \"automintaddresses\": status              (boolean) the status of automint addresses (true if enabled, false if disabled)\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -2692,6 +2694,8 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
     obj.push_back(Pair("cold_staking_balance", ValueFromAmount(pwalletMain->GetColdStakingBalance())));
     obj.push_back(Pair("unconfirmed_balance", ValueFromAmount(pwalletMain->GetUnconfirmedBalance())));
     obj.push_back(Pair("immature_balance",    ValueFromAmount(pwalletMain->GetImmatureBalance())));
+    obj.push_back(Pair("immature_delegated_balance",    ValueFromAmount(pwalletMain->GetImmatureDelegatedBalance())));
+    obj.push_back(Pair("immature_cold_staking_balance",    ValueFromAmount(pwalletMain->GetImmatureColdStakingBalance())));
     obj.push_back(Pair("txcount", (int)pwalletMain->mapWallet.size()));
     obj.push_back(Pair("keypoololdest", pwalletMain->GetOldestKeyPoolTime()));
     obj.push_back(Pair("keypoolsize", (int)pwalletMain->GetKeyPoolSize()));

@@ -165,6 +165,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("%d Txes created." % NUM_OF_INPUTS)
         # check balances:
         self.expected_balance = NUM_OF_INPUTS * INPUT_VALUE
+        self.expected_immature_balance = 0
         self.checkBalances()
 
 
@@ -234,7 +235,8 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("Great. Cold-staked block was accepted!")
 
         # check balances after staked block.
-        self.expected_balance += 250
+        self.expected_balance -= 50
+        self.expected_immature_balance += 300
         self.checkBalances()
         self.log.info("Balances check out after staked block")
 
@@ -263,7 +265,8 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         self.log.info("Great. Cold-staked block was accepted!")
 
         # check balances after staked block.
-        self.expected_balance += 250
+        self.expected_balance -= 50
+        self.expected_immature_balance += 300
         self.checkBalances()
         self.log.info("Balances check out after staked block")
 
@@ -344,7 +347,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         sync_chain(self.nodes)
 
         # check balances after big spend.
-        self.expected_balance = 2 * (INPUT_VALUE + 250)
+        self.expected_balance = 0
         self.checkBalances()
         self.log.info("Balances check out after the delegations have been voided.")
         # re-activate SPORK17
@@ -357,7 +360,19 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
         print("*** 13 ***")
         self.log.info("Trying to generate one cold-stake block again...")
         assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], False)
-        self.log.info("Cigar. Cold staker was NOT able to create any more blocks.\n")
+        self.log.info("Cigar. Cold staker was NOT able to create any more blocks.")
+
+
+        # 14) check balances when mature.
+        # -----------------------------------------------------------
+        print("*** 14 ***")
+        self.log.info("Staking 100 blocks to mature last 2...")
+        self.generateBlock(100)
+        self.expected_balance = self.expected_immature_balance
+        self.expected_immature_balance = 0
+        self.checkBalances()
+        self.log.info("Balances check out after maturation.\n")
+
 
 
     def generateBlock(self, n=1, nodeid=2):
@@ -378,15 +393,19 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
 
     def checkBalances(self):
         w_info = self.nodes[0].getwalletinfo()
-        self.log.info("OWNER - Delegated %f / Cold %f" % (
-            float(w_info["delegated_balance"]), w_info["cold_staking_balance"]))
+        self.log.info("OWNER - Delegated %f / Cold %f   [%f / %f]" % (
+            float(w_info["delegated_balance"]), w_info["cold_staking_balance"],
+            float(w_info["immature_delegated_balance"]), w_info["immature_cold_staking_balance"]))
         assert_equal(float(w_info["delegated_balance"]), self.expected_balance)
+        assert_equal(float(w_info["immature_delegated_balance"]), self.expected_immature_balance)
         assert_equal(float(w_info["cold_staking_balance"]), 0)
         w_info = self.nodes[1].getwalletinfo()
-        self.log.info("STAKER - Delegated %f / Cold %f" % (
-            float(w_info["delegated_balance"]), w_info["cold_staking_balance"]))
+        self.log.info("STAKER - Delegated %f / Cold %f   [%f / %f]" % (
+            float(w_info["delegated_balance"]), w_info["cold_staking_balance"],
+            float(w_info["immature_delegated_balance"]), w_info["immature_cold_staking_balance"]))
         assert_equal(float(w_info["delegated_balance"]), 0)
         assert_equal(float(w_info["cold_staking_balance"]), self.expected_balance)
+        assert_equal(float(w_info["immature_cold_staking_balance"]), self.expected_immature_balance)
 
 
 
