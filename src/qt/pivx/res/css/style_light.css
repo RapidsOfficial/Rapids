@@ -2402,6 +2402,15 @@ QPushButton[cssClass="btn-settings-options"]:checked {
     text-align:left;
 }
 
+QPushButton[cssClass="btn-settings-options"]:hover {
+    background-color: rgba(135, 123, 159, 0.7);
+    border:none;
+    font-size:20px;
+    color: #FFFFFF;
+    padding:0 20px;
+    text-align:left;
+}
+
 /*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 HH      Icons
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
