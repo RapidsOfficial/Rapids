@@ -527,13 +527,13 @@ void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBa
                             const CAmount& delegatedBalance, const CAmount& coldStakedBalance){
 
     CAmount nLockedBalance = 0;
-    if (!walletModel) {
+    if (walletModel) {
         nLockedBalance = walletModel->getLockedBalance();
     }
 
     // PIV Balance
-    //CAmount nTotalBalance = balance + unconfirmedBalance;
-    CAmount pivAvailableBalance = balance + delegatedBalance - immatureBalance - nLockedBalance;
+    //CAmount nTotalBalance = balance + unconfirmedBalance + immatureBalance;
+    CAmount pivAvailableBalance = balance + delegatedBalance - nLockedBalance;
 
     // zPIV Balance
     CAmount matureZerocoinBalance = zerocoinBalance - unconfirmedZerocoinBalance - immatureZerocoinBalance;
