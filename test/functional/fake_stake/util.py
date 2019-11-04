@@ -12,7 +12,6 @@ from test_framework.mininode import P2PInterface, mininode_lock
 from test_framework.script import CScript
 from test_framework.util import wait_until
 
-nBlockStakeModifierlV2 = 255
 
 ''' -------------------------------------------------------------------------
 TestNode CLASS --------------------------------------------------------------
@@ -116,29 +115,4 @@ def create_transaction(outPoint, sig, value, nTime, scriptPubKey=CScript()):
     tx.nTime = nTime
     tx.calc_sha256()
     return tx
-
-
-def utxo_to_stakingPrevOuts(utxo, stakingPrevOuts, txBlocktime, zpos=False):
-    '''
-    Updates a map of unspent outputs to (amount, blocktime) to be used as stake inputs
-    :param   utxo:     <if zpos=False>  (map) utxo JSON object returned from listunspent
-                       <if zpos=True>   (map) mint JSON object returned from listmintedzerocoins
-             stakingPrevOuts:   ({COutPoint --> (int, int, int, str)} dictionary)
-                                map outpoints to amount, block_time, hashStake hex
-             txBlocktime:       (int) block time of the utxo
-             zpos:              (bool) if true, utxo holds a zerocoin serial hash
-    :return
-    '''
-
-    COINBASE_MATURITY = 200 if zpos else 100
-    if utxo['confirmations'] > COINBASE_MATURITY:
-        if zpos:
-            outPoint = utxo["serial hash"]
-            stakingPrevOuts[outPoint] = (int(utxo["denomination"]) * COIN, txBlocktime, utxo['hash stake'])
-        else:
-            outPoint = COutPoint(int(utxo['txid'], 16), utxo['vout'])
-            stakingPrevOuts[outPoint] = (int(utxo['amount'])*COIN, txBlocktime, "")
-
-    return
-
 

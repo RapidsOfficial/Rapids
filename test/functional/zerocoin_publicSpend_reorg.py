@@ -194,8 +194,8 @@ class ZerocoinPublicSpendReorg(PIVX_FakeStakeTest):
             prev_block.rehash()
         staking_utxo_list = [self.unspent.pop()]
         pastBlockHash = prev_block.hash
-        stakingPrevOuts = self.get_prevouts(staking_utxo_list, block_count)
-        block = self.create_spam_block(pastBlockHash, stakingPrevOuts, block_count + 1)
+        stakeMap = self.get_stakeMap(staking_utxo_list)
+        block = self.create_spam_block(pastBlockHash, stakeMap, block_count + 1)
         if zcspend is not None:
             block.vtx.append(zcspend)
             block.hashMerkleRoot = block.calc_merkle_root()

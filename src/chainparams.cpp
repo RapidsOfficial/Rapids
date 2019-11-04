@@ -458,7 +458,7 @@ public:
         nBlockRecalculateAccumulators = 999999999; //Trigger a recalculation of accumulators
         nBlockFirstFraudulent = 999999999; //First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
-        nBlockStakeModifierlV2 = 255;
+        nBlockStakeModifierlV2 = nLastPOWBlock + 1; // start with modifier V2 on testnet
         nBlockTimeProtocolV2 = 999999999;
 
         // Public coin spend enforcement

@@ -435,17 +435,20 @@ def generate_pos(rpc_connections, n, btime=None):
             rpc_connections[n].generate(1)
             fStaked = True
         except JSONRPCException as e:
-            # couldn't generate block. check that this node can stake
-            ss = rpc_connections[n].getstakingstatus()
-            if not (ss["validtime"] and ss["haveconnections"] and ss["walletunlocked"] and
-                    ss["mintablecoins"] and ss["enoughcoins"]):
-                raise AssertionError("Node %d unable to stake!" % n)
-            # try to stake one sec in the future
-            sync_chain(rpc_connections)
-            if btime is not None:
-                btime += 1
+            if ("Couldn't create new block" in str(e)):
+                # couldn't generate block. check that this node can stake
+                ss = rpc_connections[n].getstakingstatus()
+                if not (ss["validtime"] and ss["haveconnections"] and ss["walletunlocked"] and
+                        ss["mintablecoins"] and ss["enoughcoins"]):
+                    raise AssertionError("Node %d unable to stake!" % n)
+                # try to stake one sec in the future
+                if btime is not None:
+                    btime += 1
+                    set_node_times(rpc_connections, btime)
+                else:
+                    time.sleep(1)
             else:
-                time.sleep(1)
+                raise e
     # block generated. adjust block time
     if btime is not None:
         btime = max(btime + 1, next_btime)

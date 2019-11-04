@@ -29,7 +29,6 @@ from .util import (
     initialize_datadir,
     set_node_times,
     sync_blocks,
-    sync_chain,
     sync_mempools,
 )
 
@@ -569,7 +568,7 @@ class PivxTestFramework():
                     for j in range(5):
                         block_time = generate_pos(self.nodes, peer, block_time)
                     # Must sync before next peer starts generating blocks
-                    sync_chain(self.nodes)
+                    sync_blocks(self.nodes)
                     time.sleep(1)
 
                 self.log.info("%d blocks staked" % int((i+1)*20))

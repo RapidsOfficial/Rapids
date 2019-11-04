@@ -10,15 +10,15 @@ from random import randint, choice
 import time
 
 from test_framework.authproxy import JSONRPCException
-from test_framework.blocktools import create_coinbase, create_block
+from test_framework.blocktools import create_coinbase_pos, stake_block, stake_next_block, get_prevouts, make_txes, DUMMY_KEY
 from test_framework.key import CECKey
-from test_framework.messages import CTransaction, CTxOut, CTxIn, COIN, msg_block
+from test_framework.messages import CTransaction, CTxOut, CTxIn, COutPoint, COIN, msg_block
 from test_framework.mininode import network_thread_start
 from test_framework.test_framework import PivxTestFramework
 from test_framework.script import CScript, OP_CHECKSIG
 from test_framework.util import hash256, bytes_to_hex_str, hex_str_to_bytes, connect_nodes_bi, p2p_port
 
-from .util import TestNode, create_transaction, utxo_to_stakingPrevOuts, dir_size, nBlockStakeModifierlV2
+from .util import TestNode, create_transaction, dir_size
 ''' -------------------------------------------------------------------------
 PIVX_FakeStakeTest CLASS ----------------------------------------------------
 
@@ -33,18 +33,7 @@ class PIVX_FakeStakeTest(PivxTestFramework):
         '''
         self.setup_clean_chain = True
         self.num_nodes = 1
-        self.extra_args = [['-staking=1', '-debug=net']]*self.num_nodes
 
-
-    def setup_network(self):
-        ''' Can't rely on syncing all the nodes when staking=1
-        :param:
-        :return:
-        '''
-        self.setup_nodes()
-        for i in range(self.num_nodes - 1):
-            for j in range(i+1, self.num_nodes):
-                connect_nodes_bi(self.nodes, i, j)
 
     def init_test(self):
         ''' Initializes test parameters
@@ -81,76 +70,6 @@ class PIVX_FakeStakeTest(PivxTestFramework):
         self.description = ""
         self.init_test()
         return
-
-
-
-    def create_spam_block(self, hashPrevBlock, stakingPrevOuts, height, fStakeDoubleSpent=False, fZPoS=False, spendingPrevOuts={}):
-        ''' creates a block to spam the network with
-        :param   hashPrevBlock:      (hex string) hash of previous block
-                 stakingPrevOuts:    ({COutPoint --> (int, int, int, str)} dictionary)
-                                      map outpoints (to be used as staking inputs) to amount, block_time, nStakeModifier, hashStake
-                 height:             (int) block height
-                 fStakeDoubleSpent:  (bool) spend the coinstake input inside the block
-                 fZPoS:              (bool) stake the block with zerocoin
-                 spendingPrevOuts:   ({COutPoint --> (int, int, int, str)} dictionary)
-                                      map outpoints (to be used as tx inputs) to amount, block_time, nStakeModifier, hashStake
-        :return  block:              (CBlock) generated block
-        '''
-
-        # If not given inputs to create spam txes, use a copy of the staking inputs
-        if len(spendingPrevOuts) == 0:
-            spendingPrevOuts = dict(stakingPrevOuts)
-
-        # Get current time
-        current_time = int(time.time())
-        nTime = current_time & 0xfffffff0
-
-        # Create coinbase TX
-        # Even if PoS blocks have empty coinbase vout, the height is required for the vin script
-        coinbase = create_coinbase(height)
-        coinbase.vout[0].nValue = 0
-        coinbase.vout[0].scriptPubKey = b""
-        coinbase.nTime = nTime
-        coinbase.rehash()
-
-        # Create Block with coinbase
-        block = create_block(int(hashPrevBlock, 16), coinbase, nTime)
-
-        # Find valid kernel hash - Create a new private key used for block signing.
-        if not block.solve_stake(stakingPrevOuts, (height >= nBlockStakeModifierlV2)):
-            raise Exception("Not able to solve for any prev_outpoint")
-
-        # Sign coinstake TX and add it to the block
-        signed_stake_tx = self.sign_stake_tx(block, stakingPrevOuts[block.prevoutStake][0], fZPoS)
-        block.vtx.append(signed_stake_tx)
-
-        # Remove coinstake input prevout unless we want to try double spending in the same block.
-        # Skip for zPoS as the spendingPrevouts are just regular UTXOs
-        if not fZPoS and not fStakeDoubleSpent:
-            del spendingPrevOuts[block.prevoutStake]
-
-        # remove a random prevout from the list
-        # (to randomize block creation if the same height is picked two times)
-        if len(spendingPrevOuts) > 0:
-            del spendingPrevOuts[choice(list(spendingPrevOuts))]
-
-        # Create spam for the block. Sign the spendingPrevouts
-        for outPoint in spendingPrevOuts:
-            value_out = int(spendingPrevOuts[outPoint][0] - self.DEFAULT_FEE * COIN)
-            tx = create_transaction(outPoint, b"", value_out, nTime, scriptPubKey=CScript([self.block_sig_key.get_pubkey(), OP_CHECKSIG]))
-            # sign txes
-            signed_tx_hex = self.node.signrawtransaction(bytes_to_hex_str(tx.serialize()))['hex']
-            signed_tx = CTransaction()
-            signed_tx.deserialize(BytesIO(hex_str_to_bytes(signed_tx_hex)))
-            block.vtx.append(signed_tx)
-
-        # Get correct MerkleRoot and rehash block
-        block.hashMerkleRoot = block.calc_merkle_root()
-        block.rehash()
-
-        # Sign block with coinstake key and return it
-        block.sign_block(self.block_sig_key)
-        return block
 
 
     def spend_utxo(self, utxo, address_list):
@@ -285,44 +204,6 @@ class PIVX_FakeStakeTest(PivxTestFramework):
         return stake_tx_signed
 
 
-    def get_prevouts(self, utxo_list, blockHeight, zpos=False):
-        ''' get prevouts (map) for each utxo in a list
-        :param   utxo_list: <if zpos=False> (JSON list) utxos returned from listunspent used as input
-                            <if zpos=True>  (JSON list) mints returned from listmintedzerocoins used as input
-                 blockHeight:               (int) height of the previous block
-                 zpos:                      (bool) type of utxo_list
-        :return: stakingPrevOuts:           ({COutPoint --> (int, int, int, str)} dictionary)
-                                            map outpoints to amount, block_time, nStakeModifier, hashStake
-        '''
-        zerocoinDenomList = [1, 5, 10, 50, 100, 500, 1000, 5000]
-        stakingPrevOuts = {}
-
-        for utxo in utxo_list:
-            if zpos:
-                # get mint checkpoint
-                checkpointHeight = blockHeight - 200
-                checkpointBlock = self.node.getblock(self.node.getblockhash(checkpointHeight), True)
-                checkpoint = int(checkpointBlock['acc_checkpoint'], 16)
-                # parse checksum and get checksumblock
-                pos = zerocoinDenomList.index(utxo['denomination'])
-                checksum = (checkpoint >> (32 * (len(zerocoinDenomList) - 1 - pos))) & 0xFFFFFFFF
-                checksumBlock = self.node.getchecksumblock(hex(checksum), utxo['denomination'], True)
-                # get block hash and block time
-                txBlockhash = checksumBlock['hash']
-                txBlocktime = checksumBlock['time']
-            else:
-                # get raw transaction for current input
-                utxo_tx = self.node.getrawtransaction(utxo['txid'], 1)
-                # get block hash and block time
-                txBlocktime = utxo_tx['blocktime']
-                txBlockhash = utxo_tx['blockhash']
-
-            # assemble prevout object
-            utxo_to_stakingPrevOuts(utxo, stakingPrevOuts, txBlocktime, zpos)
-
-        return stakingPrevOuts
-
-
 
     def log_data_dir_size(self):
         ''' Prints the size of the '/regtest/blocks' directory.
@@ -369,14 +250,17 @@ class PIVX_FakeStakeTest(PivxTestFramework):
                 randomCount = randint(block_count - randomRange, block_count - randomRange2)
                 pastBlockHash = self.node.getblockhash(randomCount)
 
-            # Get spending prevouts and staking prevouts for the height of current block
-            current_block_n = randomCount + 1
-            stakingPrevOuts = self.get_prevouts(staking_utxo_list, randomCount, zpos=fZPoS)
-            spendingPrevOuts = self.get_prevouts(spending_utxo_list, randomCount)
+            # Make spam txes (if not provided, copy the staking input) to DUMMY_KEY address
+            if len(spending_utxo_list) == 0:
+                spending_utxo_list = staking_utxo_list
+            spending_prevouts = get_prevouts(self.node, spending_utxo_list)
+            block_txes = make_txes(self.node, spending_prevouts, DUMMY_KEY.get_pubkey())
 
-            # Create the spam block
-            block = self.create_spam_block(pastBlockHash, stakingPrevOuts, current_block_n,
-                                           fStakeDoubleSpent=fDoubleSpend, fZPoS=fZPoS, spendingPrevOuts=spendingPrevOuts)
+            # Get staking prevouts and stake block (use DUMMY_KEY "" to stake)
+            current_block_n = randomCount + 1
+            stakeInputs = get_prevouts(self.node, staking_utxo_list, fZPoS, current_block_n)
+            block = stake_block(current_block_n, pastBlockHash, self.node,
+                                stakeInputs, None, "", block_txes, fDoubleSpend)
 
             # Log time and size of the block
             block_time = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(block.nTime))
@@ -425,6 +309,15 @@ class PIVX_FakeStakeTest(PivxTestFramework):
                 self.log.error(exc_msg)
                 err_msgs.append(exc_msg)
 
+            # Remove the used coinstake input
+            if fZPoS:
+                staking_utxo_list = [x for x in staking_utxo_list if
+                                     x['hash stake'] != block.prevoutStake[::-1].hex()]
+            else:
+                staking_utxo_list = [x for x in staking_utxo_list if
+                                     COutPoint(
+                                         int(x['txid'], 16), x['vout']
+                                     ).serialize_uniqueness() != block.prevoutStake]
 
         self.log.info("Sent all %s blocks." % str(self.NUM_BLOCKS))
         # Log final datadir size

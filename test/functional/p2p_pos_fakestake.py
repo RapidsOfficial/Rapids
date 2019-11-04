@@ -9,7 +9,9 @@ Covers the scenario of a PoS block where the coinstake input prevout is already 
 
 from time import sleep
 
+from test_framework.blocktools import get_prevouts, stake_next_block, stake_block
 from fake_stake.base_test import PIVX_FakeStakeTest
+from test_framework.util import bytes_to_hex_str
 
 class PoSFakeStake(PIVX_FakeStakeTest):
 

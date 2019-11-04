@@ -32,7 +32,10 @@ class PoSDoubleSpend(PIVX_FakeStakeTest):
 
         # 3) Spam Blocks on the main chain
         self.log.info("-- Main chain blocks first")
-        self.test_spam("Main", staking_utxo_list, fDoubleSpend=True)
+        self.test_spam("Main",
+                       staking_utxo_list,
+                       fDoubleSpend=True,
+                       spending_utxo_list=staking_utxo_list)
         sleep(2)
 
         # 4) Mine some block as buffer
@@ -42,7 +45,12 @@ class PoSDoubleSpend(PIVX_FakeStakeTest):
 
         # 5) Spam Blocks on a forked chain
         self.log.info("-- Forked chain blocks now")
-        err_msgs = self.test_spam("Forked", staking_utxo_list, fRandomHeight=True, randomRange=FORK_DEPTH, fDoubleSpend=True)
+        err_msgs = self.test_spam("Forked",
+                                  staking_utxo_list,
+                                  fRandomHeight=True,
+                                  randomRange=FORK_DEPTH,
+                                  fDoubleSpend=True,
+                                  spending_utxo_list=staking_utxo_list)
 
         if not len(err_msgs) == 0:
             self.log.error("result: " + " | ".join(err_msgs))
