@@ -449,17 +449,20 @@ public:
         nStakeMinAge = 0;
         nStakeMinDepth = 0;
         nMasternodeCountDrift = 4;
-        nModifierUpdateBlock = 0;       //approx Mon, 17 Apr 2017 04:00:00 GMT
+        nModifierUpdateBlock = 0;
         nMaxMoneyOut = 43199500 * COIN;
         nZerocoinStartHeight = 300;
         nBlockZerocoinV2 = 300;
         nZerocoinStartTime = 1501776000;
-        nBlockEnforceSerialRange = 1; //Enforce serial range starting this block
-        nBlockRecalculateAccumulators = 999999999; //Trigger a recalculation of accumulators
-        nBlockFirstFraudulent = 999999999; //First block that bad serials emerged
-        nBlockLastGoodCheckpoint = 999999999; //Last valid accumulator checkpoint
+        nBlockEnforceSerialRange = 1;               // Enforce serial range starting this block
+        nBlockRecalculateAccumulators = 999999999;  // Trigger a recalculation of accumulators
+        nBlockFirstFraudulent = 999999999;          // First block that bad serials emerged
+        nBlockLastGoodCheckpoint = 999999999;       // Last valid accumulator checkpoint
         nBlockStakeModifierlV2 = nLastPOWBlock + 1; // start with modifier V2 on testnet
         nBlockTimeProtocolV2 = 999999999;
+
+        nMintRequiredConfirmations = 10;
+        nZerocoinRequiredStakeDepth = nMintRequiredConfirmations;
 
         // Public coin spend enforcement
         nPublicZCSpends = 400;
