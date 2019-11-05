@@ -258,7 +258,7 @@ class PIVX_FakeStakeTest(PivxTestFramework):
 
             # Get staking prevouts and stake block (use DUMMY_KEY "" to stake)
             current_block_n = randomCount + 1
-            stakeInputs = get_prevouts(self.node, staking_utxo_list, fZPoS, current_block_n)
+            stakeInputs = get_prevouts(self.node, staking_utxo_list, fZPoS, randomCount)
             block = stake_block(current_block_n, pastBlockHash, self.node,
                                 stakeInputs, None, "", block_txes, fDoubleSpend)
 

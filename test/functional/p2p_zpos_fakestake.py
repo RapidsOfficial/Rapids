@@ -21,8 +21,8 @@ class zPoSFakeStake(PIVX_FakeStakeTest):
         self.init_test()
 
         DENOM_TO_USE = 5000         # zc denomination
-        INITAL_MINED_BLOCKS = 321   # First mined blocks (rewards collected to mint)
-        MORE_MINED_BLOCKS = 301     # More blocks mined before spending zerocoins
+        INITAL_MINED_BLOCKS = 330   # First mined blocks (rewards collected to mint)
+        MORE_MINED_BLOCKS = 25      # More blocks mined before spending zerocoins
         self.NUM_BLOCKS = 2         # Number of spammed blocks
 
         # 1) Starting mining blocks
@@ -72,7 +72,7 @@ class zPoSFakeStake(PIVX_FakeStakeTest):
             mint_arg = []
             mint_arg.append(mint)
             try:
-                self.node.spendzerocoinmints(mint_arg)
+                self.node.spendzerocoinmints(mint_arg, "", False)
                 sleep(1)
                 spends += 1
                 spent_mints.append(mint)
