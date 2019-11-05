@@ -462,7 +462,7 @@ public:
         nBlockTimeProtocolV2 = 999999999;
 
         // Public coin spend enforcement
-        nPublicZCSpends = 350;
+        nPublicZCSpends = 400;
 
         // Blocks v7
         nBlockV7StartHeight = nPublicZCSpends + 1;
