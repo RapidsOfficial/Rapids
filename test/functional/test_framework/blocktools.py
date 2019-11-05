@@ -106,6 +106,7 @@ def get_legacy_sigopcount_tx(tx, fAccurate=True):
     return count
 
 ### PIVX specific blocktools ###
+vZC_DENOMS = [1, 5, 10, 50, 100, 500, 1000, 5000]
 
 def get_prevouts(rpc_conn, utxo_list, zpos=False, nHeight=-1):
     ''' get prevouts (map) for each utxo in a list
@@ -120,7 +121,6 @@ def get_prevouts(rpc_conn, utxo_list, zpos=False, nHeight=-1):
                                to (amount, prevScript, timeBlockFrom).
                                For zpiv prevScript is replaced with serialHash hex string.
     '''
-    vZC_DENOMS = [1, 5, 10, 50, 100, 500, 1000, 5000]
     prevouts = {}
 
     for utxo in utxo_list:

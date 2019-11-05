@@ -636,3 +636,7 @@ def mine_large_block(node, utxos=None):
     fee = 100 * node.getnetworkinfo()["relayfee"]
     create_lots_of_big_transactions(node, txouts, utxos, num, fee=fee)
     node.generate(1)
+
+# Return Decimal from float for equality checks against rpc outputs
+def DecimalAmt(x):
+    return Decimal("{:0.8f}".format(x))

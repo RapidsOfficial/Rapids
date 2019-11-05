@@ -15,12 +15,14 @@ import tempfile
 import time
 
 from .authproxy import JSONRPCException
+from .blocktools import vZC_DENOMS
 from . import coverage
 from .test_node import TestNode
 from .util import (
     MAX_NODES,
     PortSeed,
     assert_equal,
+    assert_greater_than,
     check_json_precision,
     connect_nodes_bi,
     disconnect_nodes,
@@ -531,6 +533,8 @@ class PivxTestFramework():
             # - Nodes 1 to 3 get 82 blocks each:
             # 56 mature blocks (pow) and 26 immature (6 pow + 20 pos)
             # 36 rewards spendable (56 mature blocks - 20 spent rewards)
+            # - Nodes 2 and 3 both mint one zerocoin for each denom (tot 6666 PIV) on block 301/302
+            # 8 mature zc + 9 rewards spendable (36 - 27 spent) + change 83.92
             #
             # Block 331-332 will mature last 2 pow blocks mined by node 0.
             # Then 333-338 will mature last 6 pow blocks mined by node 1.
@@ -563,18 +567,35 @@ class PivxTestFramework():
 
             # Then stake 80 blocks.
             self.log.info("Staking 80 blocks...")
+            nBlocks = 250
+            res = []    # used to save the two txids for change outputs of mints (locked)
             for i in range(4):
                 for peer in range(4):
                     for j in range(5):
+                        # Stake block
                         block_time = generate_pos(self.nodes, peer, block_time)
+                        nBlocks += 1
+                        # Mint zerocoins with node-2 at block 301
+                        # Mint zerocoins with node-3 at block 302
+                        if nBlocks == 301 or nBlocks == 302:
+                            # mints 7 zerocoins, one for each denom (tot 6666 PIV), fee = 0.01 * 8
+                            # consumes 27 utxos (tot 6750 PIV), change = 6750 - 6666 - fee
+                            res.append(self.nodes[nBlocks-299].mintzerocoin(6666))
+                            self.sync_all()
+                            # lock the change output (so it's not used as stake input in generate_pos)
+                            assert (self.nodes[nBlocks-299].lockunspent(False, [{"txid": res[-1]['txid'], "vout": 8}]))
                     # Must sync before next peer starts generating blocks
                     sync_blocks(self.nodes)
                     time.sleep(1)
 
                 self.log.info("%d blocks staked" % int((i+1)*20))
 
+            # Unlock previously locked change outputs
+            for peer in [2, 3]:
+                assert (self.nodes[peer].lockunspent(True, [{"txid": res[peer-2]['txid'], "vout": 8}]))
+
             # Verify height and balances
-            self.test_PoS_chain_balances(5)
+            self.test_PoS_chain_balances()
 
             # Shut nodes down, and clean up cache directories:
             self.log.info("Stopping nodes")
@@ -604,35 +625,71 @@ class PivxTestFramework():
             initialize_datadir(self.options.tmpdir, i)
 
 
-    def test_PoS_chain_balances(self, num_nodes):
+    def test_PoS_chain_balances(self):
+        from .util import DecimalAmt
         # 330 blocks
         # - Node 0 gets 84 blocks:
         # 64 pow + 20 pos (22 immature)
         # - Nodes 1 to 3 get 82 blocks each:
         # 62 pow + 20 pos (26 immature)
-        num_nodes = min(5, num_nodes)
+        # - Nodes 2 and 3 have 6666 PIV worth of zerocoins
+        zc_tot = sum(vZC_DENOMS)
+        zc_fee = len(vZC_DENOMS) * 0.01
+        used_utxos = (zc_tot // 250) + 1
+        zc_change = 250 * used_utxos - zc_tot - zc_fee
+
+        # check at least 1 node and at most 5
+        num_nodes = min(5, len(self.nodes))
+        assert_greater_than(num_nodes, 0)
+
         # each node has the same height and tip
         best_block = self.nodes[0].getbestblockhash()
         for i in range(num_nodes):
             assert_equal(self.nodes[i].getblockcount(), 330)
             if i > 0:
                 assert_equal(self.nodes[i].getbestblockhash(), best_block)
+
         # balance is mature pow blocks rewards minus stake inputs (spent)
         w_info = [self.nodes[i].getwalletinfo() for i in range(num_nodes)]
         assert_equal(w_info[0]["balance"], 250.0 * (62 - 20))
+        mature_balance = 250.0 * (56 - 20)
         for i in range(1, num_nodes):
             if i < 4:
-                assert_equal(w_info[i]["balance"], 250.0 * (56 - 20))
+                if i < 2:
+                    assert_equal(w_info[i]["balance"], DecimalAmt(mature_balance))
+                else:
+                    # node 2 and 3 have minted zerocoins
+                    assert_equal(w_info[i]["balance"], DecimalAmt(mature_balance - (used_utxos * 250) + zc_change))
             else:
-                assert_equal(w_info[i]["balance"], 0)
+                # only first 4 nodes have mined/staked
+                assert_equal(w_info[i]["balance"], DecimalAmt(0))
+
         # immature balance is immature pow blocks rewards plus
         # immature stakes (outputs=inputs+rewards)
-        assert_equal(w_info[0]["immature_balance"], (250.0 * 2) + (500.0 * 20))
+        assert_equal(w_info[0]["immature_balance"], DecimalAmt((250.0 * 2) + (500.0 * 20)))
         for i in range(1, num_nodes):
             if i < 4:
-                assert_equal(w_info[i]["immature_balance"], (250.0 * 6) + (500.0 * 20))
+                assert_equal(w_info[i]["immature_balance"], DecimalAmt((250.0 * 6) + (500.0 * 20)))
             else:
-                assert_equal(w_info[i]["immature_balance"], 0)
+                assert_equal(w_info[i]["immature_balance"], DecimalAmt(0))
+
+        # check zerocoin balances / mints
+        for peer in [2, 3]:
+            if num_nodes > peer:
+                zcBalance = self.nodes[peer].getzerocoinbalance()
+                zclist = self.nodes[peer].listmintedzerocoins(True)
+                zclist_spendable = self.nodes[peer].listmintedzerocoins(True, True)
+                assert_equal(len(zclist), len(vZC_DENOMS))
+                assert_equal(zcBalance['Total'], 6666)
+                assert_equal(zcBalance['Immature'], 0)
+                if peer == 2:
+                    assert_equal(len(zclist), len(zclist_spendable))
+                else:
+                    # last mints added on accumulators - not spendable
+                    assert_equal(0, len(zclist_spendable))
+                assert_equal(set([x['denomination'] for x in zclist]), set(vZC_DENOMS))
+                assert_equal([x['confirmations'] for x in zclist], [30-peer] * len(vZC_DENOMS))
+
         self.log.info("Balances of first %d nodes check out" % num_nodes)
 
 
