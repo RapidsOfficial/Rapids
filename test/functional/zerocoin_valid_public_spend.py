@@ -14,17 +14,17 @@ from fake_stake.util import TestNode
 
 from test_framework.authproxy import JSONRPCException
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import sync_chain, assert_equal, assert_raises_rpc_error, \
+from test_framework.util import sync_blocks, assert_equal, assert_raises_rpc_error, \
     assert_greater_than, generate_pos, set_node_times, activate_spork, deactivate_spork, is_spork_active
 
 
 class zPIVValidCoinSpendTest(PivxTestFramework):
 
     def set_test_params(self):
-        self.num_nodes = 2
-        # node 0 moves the chain and sets the sporks - node 1 does the spends
-        self.extra_args = [['-staking=0', '-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi'],
-                           ['-staking=0']]
+        self.num_nodes = 3
+        # node 0 moves the chain and sets the sporks - node 1 does the spends - node 2 is another staker
+        self.extra_args = [['-staking=0']]*self.num_nodes
+        self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
 
     def setup_chain(self):
         # Start with PoS cache: 330 blocks
@@ -63,20 +63,21 @@ class zPIVValidCoinSpendTest(PivxTestFramework):
         for i in range(5):
             self.nodes[1].mintzerocoin(DENOM)
             block_time = generate_pos(self.nodes, 0, block_time)
-        sync_chain(self.nodes)
+        sync_blocks(self.nodes)
 
         # 2) Stake 25 blocks (till block 360) to mature the mints (GetMintMaturityHeight)
         # 359 - 20 - (339 % 10) = 330 (no mints yet)
         # 360 - 20 - (340 % 10) = 340 (all mints included)
         self.log.info("Staking 25 blocks to mature the mints")
-        for i in range(24):
-            block_time = generate_pos(self.nodes, 0, block_time)
-        sync_chain(self.nodes)
+        for peer in [0, 2]:
+            for i in range(12):
+                block_time = generate_pos(self.nodes, peer, block_time)
+            sync_blocks(self.nodes)
         # stakes are still immature
         assert_equal(5, len(self.nodes[1].listmintedzerocoins(True, False)))
         assert_equal(0, len(self.nodes[1].listmintedzerocoins(True, True)))
         block_time = generate_pos(self.nodes, 0, block_time)
-        sync_chain(self.nodes)
+        sync_blocks(self.nodes)
         list = self.nodes[1].listmintedzerocoins(True, True)
         # mature now (except last one added)
         assert_equal(5, len(self.nodes[1].listmintedzerocoins(True, False)))
@@ -84,10 +85,18 @@ class zPIVValidCoinSpendTest(PivxTestFramework):
         self.log.info("collecting the zerocoins...")
         serial_ids = [mint["serial hash"] for mint in list]
 
-        # 3) Get the raw zerocoin data - save a v3 spend for later
+        # 3) Get the raw zerocoin data - save a v3 spend for later - stake 41 blocks
         exported_zerocoins = [x for x in self.nodes[1].exportzerocoins(False) if x["id"] in serial_ids]
         assert_equal(4, len(exported_zerocoins))
         saved_mint = exported_zerocoins[2]["id"]
+        self.log.info("Staking 41 blocks to get to public spend activation")
+        for j in range(2):
+            for peer in [0, 2]:
+                for i in range(10):
+                    block_time = generate_pos(self.nodes, peer, block_time)
+                sync_blocks(self.nodes)
+        block_time = generate_pos(self.nodes, 2, block_time)
+        sync_blocks(self.nodes)
         old_spend_v3 = self.nodes[1].createrawzerocoinpublicspend(saved_mint)
 
         # 4) Spend one minted coin - spend v3
@@ -97,10 +106,12 @@ class zPIVValidCoinSpendTest(PivxTestFramework):
         self.log.info("Spending the minted coin with serial %s..." % serial_0)
         txid = self.nodes[1].spendzerocoinmints([id_0])['txid']
         self.log.info("Spent on tx %s" % txid)
-        self.log.info("Staking 5 blocks to include the spend...")
-        for i in range(5):
+        self.log.info("Staking 4 blocks to include the spend...")
+        for i in range(2):
             block_time = generate_pos(self.nodes, 0, block_time)
-        sync_chain(self.nodes)
+            sync_blocks(self.nodes)
+            block_time = generate_pos(self.nodes, 2, block_time)
+            sync_blocks(self.nodes)
         rawTx = self.nodes[0].getrawtransaction(txid, 1)
         assert_greater_than(rawTx["confirmations"], 0)
         self.log.info("%s: VALID PUBLIC COIN SPEND (v3) PASSED" % self.__class__.__name__)
@@ -135,10 +146,12 @@ class zPIVValidCoinSpendTest(PivxTestFramework):
         self.log.info("Spending the minted coin with serial %s..." % serial_0)
         txid = self.nodes[1].spendzerocoinmints([id_1])['txid']
         self.log.info("Spent on tx %s" % txid)
-        self.log.info("Staking 5 blocks to include the spend...")
-        for i in range(5):
+        self.log.info("Staking 4 blocks to include the spend...")
+        for i in range(2):
             block_time = generate_pos(self.nodes, 0, block_time)
-        sync_chain(self.nodes)
+            sync_blocks(self.nodes)
+            block_time = generate_pos(self.nodes, 2, block_time)
+            sync_blocks(self.nodes)
         rawTx = self.nodes[0].getrawtransaction(txid, 1)
         assert_greater_than(rawTx["confirmations"], 0)
         self.log.info("%s: VALID PUBLIC COIN SPEND (v4) PASSED" % self.__class__.__name__)
@@ -167,10 +180,12 @@ class zPIVValidCoinSpendTest(PivxTestFramework):
         self.log.info("%s: Trying to send old v3 spend now" % self.__class__.__name__)
         txid = self.nodes[1].sendrawtransaction(old_spend_v3)
         self.log.info("Spent on tx %s" % txid)
-        self.log.info("Staking 5 blocks to include the spend...")
-        for i in range(5):
+        self.log.info("Staking 4 blocks to include the spend...")
+        for i in range(2):
             block_time = generate_pos(self.nodes, 0, block_time)
-        sync_chain(self.nodes)
+            sync_blocks(self.nodes)
+            block_time = generate_pos(self.nodes, 2, block_time)
+            sync_blocks(self.nodes)
         rawTx = self.nodes[0].getrawtransaction(txid, 2)
         assert_greater_than(rawTx["confirmations"], 0)
         self.log.info("%s: VALID PUBLIC COIN SPEND (v3) PASSED" % self.__class__.__name__)
