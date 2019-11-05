@@ -73,7 +73,7 @@ BASE_SCRIPTS= [
 
     'p2p_pos_fakestake.py',
     'p2p_pos_fakestake_accepted.py',
-    'zerocoin_valid_public_spend.py',
+    'zerocoin_spends.py',
     'p2p_zpos_fakestake.py',
     #'p2p_zpos_fakestake_accepted.py',
     #'zerocoin_wrapped_serials.py',
