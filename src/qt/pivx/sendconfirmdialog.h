@@ -32,7 +32,7 @@ public:
     WalletModel::SendCoinsReturn getStatus() { return this->sendStatus;}
 
     void setData(WalletModel *model, WalletModelTransaction &tx);
-    void setData(WalletModel *model, QModelIndex &index);
+    void setData(WalletModel *model, const QModelIndex &index);
     void setDisplayUnit(int unit){this->nDisplayUnit = unit;};
 
 public slots:

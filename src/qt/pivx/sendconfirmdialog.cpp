@@ -80,7 +80,7 @@ TxDetailDialog::TxDetailDialog(QWidget *parent, bool isConfirmDialog, QString wa
     connect(ui->pushOutputs, SIGNAL(clicked()), this, SLOT(onOutputsClicked()));
 }
 
-void TxDetailDialog::setData(WalletModel *model, QModelIndex &index){
+void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index){
     this->model = model;
     TransactionRecord *rec = static_cast<TransactionRecord*>(index.internalPointer());
     QDateTime date = index.data(TransactionTableModel::DateRole).toDateTime();
@@ -195,8 +195,9 @@ void TxDetailDialog::onOutputsClicked() {
                     QLabel *label = nullptr;
                     QString labelRes;
                     CTxDestination dest;
-                    if (ExtractDestination(out.scriptPubKey, dest)) {
-                        std::string address = CBitcoinAddress(dest).ToString();
+                    bool isCsAddress = out.scriptPubKey.IsPayToColdStaking();
+                    if (ExtractDestination(out.scriptPubKey, dest, isCsAddress)) {
+                        std::string address = ((isCsAddress) ? CBitcoinAddress::newCSInstance(dest) : CBitcoinAddress::newInstance(dest)).ToString();
                         labelRes = QString::fromStdString(address);
                         labelRes = labelRes.left(16) + "..." + labelRes.right(16);
                     } else {
