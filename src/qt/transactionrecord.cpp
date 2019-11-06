@@ -71,6 +71,8 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
 
             // Check for cold stakes.
             if (wtx.HasP2CSOutputs()) {
+                sub.credit = nCredit;
+                sub.debit = -nDebit;
                 loadHotOrColdStakeOrContract(wallet, wtx, sub);
                 parts.append(sub);
                 return parts;
@@ -161,6 +163,8 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     } else if (wtx.HasP2CSOutputs()) {
         // Delegate tx.
         TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+        sub.credit = nCredit;
+        sub.debit = -nDebit;
         loadHotOrColdStakeOrContract(wallet, wtx, sub, true);
         parts.append(sub);
         return parts;
@@ -369,7 +373,11 @@ void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWallet
     ExtractAddress(*p2csScript, false, record.address);
 }
 
-void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract)
+void TransactionRecord::loadHotOrColdStakeOrContract(
+        const CWallet* wallet,
+        const CWalletTx& wtx,
+        TransactionRecord& record,
+        bool isContract)
 {
     record.involvesWatchAddress = false;
 
@@ -383,9 +391,6 @@ void TransactionRecord::loadHotOrColdStakeOrContract(const CWallet* wallet, cons
         }
     }
     bool isSpendable = wallet->IsMine(p2csUtxo) & ISMINE_SPENDABLE_DELEGATED;
-
-    record.credit = isSpendable ? wtx.GetStakeDelegationCredit() : wtx.GetColdStakingCredit();
-    record.debit = -(isSpendable ? wtx.GetStakeDelegationDebit() : wtx.GetColdStakingDebit());
 
     if (isContract) {
         if (isSpendable) {

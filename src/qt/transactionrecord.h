@@ -127,7 +127,8 @@ public:
 
     /// Helpers
     static bool ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr);
-    static void loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract = false);
+    static void loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx,
+                                            TransactionRecord& record, bool isContract = false);
     static void loadUnlockColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record);
 
     /** @name Immutable transaction attributes
