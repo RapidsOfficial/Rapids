@@ -125,6 +125,16 @@ public:
     bool GetKeyID(CKeyID& keyID) const;
     bool IsScript() const;
     bool IsStakingAddress() const;
+
+
+    // Helpers
+    static const CBitcoinAddress newCSInstance(const CTxDestination& dest) {
+        return CBitcoinAddress(dest, CChainParams::STAKING_ADDRESS);
+    }
+
+    static const CBitcoinAddress newInstance(const CTxDestination& dest) {
+        return CBitcoinAddress(dest, CChainParams::PUBKEY_ADDRESS);
+    }
 };
 
 /**
