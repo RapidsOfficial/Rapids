@@ -126,7 +126,7 @@ class ZerocoinSpendTest(PivxTestFramework):
                 for i in range(7):
                     block_time = generate_pos(self.nodes, peer, block_time)
                 sync_blocks(self.nodes)
-        old_spend_v3 = self.nodes[2].createrawzerocoinpublicspend(id_1)
+        old_spend_v3 = self.nodes[2].createrawzerocoinspend(id_1)
 
         # 4) Check spend v2 disabled
         serial_2, randomness_2, privkey_2, id_2, denom_2, tx_2 = get_zerocoin_data(exported_zerocoins[2])

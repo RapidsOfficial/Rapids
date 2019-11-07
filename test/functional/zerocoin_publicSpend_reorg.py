@@ -53,21 +53,21 @@ class ZerocoinPublicSpendReorg(PIVX_FakeStakeTest):
 
         # 5) get the raw zerocoin spend txes
         self.log.info("Getting the raw zerocoin public spends...")
-        public_spend_A = self.node.createrawzerocoinpublicspend(mints[0].get("serial hash"))
+        public_spend_A = self.node.createrawzerocoinspend(mints[0].get("serial hash"))
         tx_A = CTransaction()
         tx_A.deserialize(BytesIO(hex_str_to_bytes(public_spend_A)))
         tx_A.rehash()
-        public_spend_B = self.node.createrawzerocoinpublicspend(mints[1].get("serial hash"))
+        public_spend_B = self.node.createrawzerocoinspend(mints[1].get("serial hash"))
         tx_B = CTransaction()
         tx_B.deserialize(BytesIO(hex_str_to_bytes(public_spend_B)))
         tx_B.rehash()
         # Spending same coins to different recipients to get different txids
         my_addy = "yAVWM5urwaTyhiuFQHP2aP47rdZsLUG5PH"
-        public_spend_A2 = self.node.createrawzerocoinpublicspend(mints[0].get("serial hash"), my_addy)
+        public_spend_A2 = self.node.createrawzerocoinspend(mints[0].get("serial hash"), my_addy)
         tx_A2 = CTransaction()
         tx_A2.deserialize(BytesIO(hex_str_to_bytes(public_spend_A2)))
         tx_A2.rehash()
-        public_spend_B2 = self.node.createrawzerocoinpublicspend(mints[1].get("serial hash"), my_addy)
+        public_spend_B2 = self.node.createrawzerocoinspend(mints[1].get("serial hash"), my_addy)
         tx_B2 = CTransaction()
         tx_B2.deserialize(BytesIO(hex_str_to_bytes(public_spend_B2)))
         tx_B2.rehash()
