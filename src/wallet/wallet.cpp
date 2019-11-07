@@ -1934,9 +1934,10 @@ void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
 
                     if (utxo.scriptPubKey.IsPayToColdStaking()) {
                         isminetype mine = IsMine(utxo);
-                        if (mine & ISMINE_COLD || mine & ISMINE_SPENDABLE_DELEGATED)
+                        bool isMineSpendable = mine & ISMINE_SPENDABLE_DELEGATED;
+                        if (mine & ISMINE_COLD || isMineSpendable)
                             // Depth is not used, no need waste resources and set it for now.
-                            vCoins.emplace_back(COutput(pcoin, i, 0, true));
+                            vCoins.emplace_back(COutput(pcoin, i, 0, isMineSpendable));
                     }
                 }
             }
