@@ -7,8 +7,7 @@
 from time import sleep
 
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import connect_nodes_bi, set_node_times, assert_equal, \
-    set_spork, get_spork, is_spork_active, activate_spork, deactivate_spork
+from test_framework.util import set_node_times, assert_equal
 
 
 class PIVX_RPCSporkTest(PivxTestFramework):
@@ -36,36 +35,36 @@ class PIVX_RPCSporkTest(PivxTestFramework):
         sporkName = "SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT"
 
         # 0 - check SPORK 8 status from node 1 (must be inactive)
-        assert_equal(False, is_spork_active(self.nodes, 1, sporkName))
+        assert_equal(False, self.is_spork_active(1, sporkName))
 
         # 1 - activate SPORK 8 with nodes[0]
-        assert_equal("success", activate_spork(self.nodes, 0, sporkName))
+        assert_equal("success", self.activate_spork(0, sporkName))
         sleep(1)
         # check SPORK 8 status from nodes[1] (must be active)
-        assert_equal(True, is_spork_active(self.nodes, 1, sporkName))
+        assert_equal(True, self.is_spork_active(1, sporkName))
 
         # 2 - Adjust time to 1 sec in the future and deactivate SPORK 8 with node[0]
         self.mocktime += 1
         set_node_times(self.nodes, self.mocktime)
-        assert_equal("success", deactivate_spork(self.nodes, 0, sporkName))
+        assert_equal("success", self.deactivate_spork(0, sporkName))
         sleep(1)
         # check SPORK 8 value from nodes[1] (must be inactive again)
-        assert_equal(False, is_spork_active(self.nodes, 1, sporkName))
+        assert_equal(False, self.is_spork_active(1, sporkName))
 
         # 3 - Adjust time to 1 sec in the future and set new value (mocktime) for SPORK 8 with node[0]
         self.mocktime += 1
         set_node_times(self.nodes, self.mocktime)
-        assert_equal("success", set_spork(self.nodes, 0, sporkName, self.mocktime))
+        assert_equal("success", self.set_spork(0, sporkName, self.mocktime))
         sleep(1)
         # check SPORK 8 value from nodes[1] (must be equal to mocktime)
-        assert_equal(self.mocktime, get_spork(self.nodes, 1, sporkName))
+        assert_equal(self.mocktime, self.get_spork(1, sporkName))
 
         # 4 - Stop nodes and check value again after restart
         self.log.info("Stopping nodes...")
         self.stop_nodes()
         self.log.info("Restarting node 1...")
         self.start_node(1, [])
-        assert_equal(self.mocktime, get_spork(self.nodes, 1, sporkName))
+        assert_equal(self.mocktime, self.get_spork(1, sporkName))
         self.log.info("%s: TEST PASSED" % self.__class__.__name__)
 
 

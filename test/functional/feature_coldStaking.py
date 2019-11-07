@@ -5,10 +5,9 @@
 # -*- coding: utf-8 -*-
 
 from io import BytesIO
-import time
+from time import sleep
 
 from test_framework.authproxy import JSONRPCException
-from test_framework.blocktools import DUMMY_KEY, get_prevouts, stake_next_block
 from test_framework.messages import CTransaction, CTxIn, CTxOut, COIN, COutPoint
 from test_framework.mininode import network_thread_start
 from test_framework.pivx_node import PivxTestNode
@@ -39,7 +38,6 @@ class PIVX_ColdStakingTest(PivxTestFramework):
             for j in range(i+1, self.num_nodes):
                 connect_nodes_bi(self.nodes, i, j)
 
-
     def init_test(self):
         title = "*** Starting %s ***" % self.__class__.__name__
         underline = "-" * len(title)
@@ -57,25 +55,24 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         for i in range(self.num_nodes):
             self.test_nodes[i].wait_for_verack()
 
-
-
     def setColdStakingEnforcement(self, fEnable=True):
-        new_val = 1563253447 if fEnable else 4070908800
-        # update spork 17 and mine 1 more block
-        mess = "Enabling" if fEnable else "Disabling"
-        mess += " cold staking with SPORK 17..."
-        self.log.info(mess)
-        res = self.nodes[0].spork("SPORK_17_COLDSTAKING_ENFORCEMENT", new_val)
-        self.log.info(res)
-        assert (res == "success")
-        time.sleep(1)
-        sync_blocks(self.nodes)
-
+        sporkName = "SPORK_17_COLDSTAKING_ENFORCEMENT"
+        # update spork 17 with node[0]
+        if fEnable:
+            self.log.info("Enabling cold staking with SPORK 17...")
+            res = self.activate_spork(0, sporkName)
+        else:
+            self.log.info("Disabling cold staking with SPORK 17...")
+            res = self.deactivate_spork(0, sporkName)
+        assert_equal(res, "success")
+        sleep(1)
+        # check that node[1] receives it
+        assert_equal(fEnable, self.is_spork_active(1, sporkName))
+        self.log.info("done")
 
     def isColdStakingEnforced(self):
         # verify from node[1]
-        active = self.nodes[1].spork("active")
-        return active["SPORK_17_COLDSTAKING_ENFORCEMENT"]
+        return self.is_spork_active(1, "SPORK_17_COLDSTAKING_ENFORCEMENT")
 
 
 
@@ -236,10 +233,10 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         print("*** 9 ***")
         self.log.info("Generating another valid cold-stake block...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
-        stakeInputs = get_prevouts(self.nodes[1], stakeable_coins)
+        stakeInputs = self.get_prevouts(1, stakeable_coins)
         assert_greater_than(len(stakeInputs), 0)
         # Create the block
-        new_block = stake_next_block(self.nodes[1], stakeInputs, None, staker_privkey)
+        new_block = self.stake_next_block(1, stakeInputs, None, staker_privkey)
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
         # Try to submit the block
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
@@ -263,10 +260,10 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         print("*** 10 ***")
         self.log.info("Generating one invalid cold-stake block (changing first coinstake output)...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
-        stakeInputs = get_prevouts(self.nodes[1], stakeable_coins)
+        stakeInputs = self.get_prevouts(1, stakeable_coins)
         assert_greater_than(len(stakeInputs), 0)
         # Create the block (with dummy key)
-        new_block = stake_next_block(self.nodes[1], stakeInputs, None, "")
+        new_block = self.stake_next_block(1, stakeInputs, None, "")
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
         # Try to submit the block
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
@@ -285,10 +282,10 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         print("*** 11 ***")
         self.log.info("Generating another invalid cold-stake block (adding coinstake output)...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
-        stakeInputs = get_prevouts(self.nodes[1], stakeable_coins)
+        stakeInputs = self.get_prevouts(1, stakeable_coins)
         assert_greater_than(len(stakeInputs), 0)
         # Create the block
-        new_block = stake_next_block(self.nodes[1], stakeInputs, None, staker_privkey)
+        new_block = self.stake_next_block(1, stakeInputs, None, staker_privkey)
         # Add output (dummy key address) to coinstake (taking 100 PIV from the pot)
         self.add_output_to_coinstake(new_block, 100)
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
@@ -370,8 +367,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
             except JSONRPCException as e:
                 if ("Couldn't create new block" in str(e)):
                     # Sleep two seconds and retry
-                    self.log.info("Waiting...")
-                    time.sleep(2)
+                    sleep(2)
                 else:
                     raise e
 
@@ -416,8 +412,10 @@ class PIVX_ColdStakingTest(PivxTestFramework):
 
     def add_output_to_coinstake(self, block, value, peer=1):
         coinstake = block.vtx[1]
+        if not hasattr(self, 'DUMMY_KEY'):
+            self.init_dummy_key()
         coinstake.vout.append(
-            CTxOut(value * COIN, CScript([DUMMY_KEY.get_pubkey(), OP_CHECKSIG])))
+            CTxOut(value * COIN, CScript([self.DUMMY_KEY.get_pubkey(), OP_CHECKSIG])))
         coinstake.vout[1].nValue -= value * COIN
         # re-sign coinstake
         prevout = COutPoint()

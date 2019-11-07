@@ -7,7 +7,6 @@
 Tests v2, v3 and v4 Zerocoin Spends
 '''
 
-
 from time import sleep
 
 from test_framework.authproxy import JSONRPCException
@@ -15,13 +14,8 @@ from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     sync_blocks,
     assert_equal,
-    assert_greater_than,
     assert_raises_rpc_error,
-    generate_pos,
     set_node_times,
-    activate_spork,
-    deactivate_spork,
-    is_spork_active,
     DecimalAmt
 )
 
@@ -46,19 +40,19 @@ class ZerocoinSpendTest(PivxTestFramework):
         description = "Tests v2, v3 and v4 Zerocoin Spends."
         self.log.info("\n\n%s\n%s\n%s\n", title, underline, description)
 
-    def setV4SpendEnforcement(self, btime, fEnable=True):
-        sporkId = "SPORK_18_ZEROCOIN_PUBLICSPEND_V4"
+    def setV4SpendEnforcement(self, fEnable=True):
+        sporkName = "SPORK_18_ZEROCOIN_PUBLICSPEND_V4"
         # update spork 18 with node[0]
         if fEnable:
             self.log.info("Enabling v4 PublicSpend version with SPORK 18...")
-            res = activate_spork(self.nodes, 0, sporkId)
+            res = self.activate_spork(0, sporkName)
         else:
             self.log.info("Enabling v3 PublicSpend version with SPORK 18...")
-            res = deactivate_spork(self.nodes, 0, sporkId)
+            res = self.deactivate_spork(0, sporkName)
         assert_equal(res, "success")
         sleep(1)
         # check that node[1] receives it
-        assert_equal(fEnable, is_spork_active(self.nodes, 1, sporkId))
+        assert_equal(fEnable, self.is_spork_active(1, sporkName))
         self.log.info("done")
 
     def run_test(self):
@@ -77,13 +71,9 @@ class ZerocoinSpendTest(PivxTestFramework):
         def stake_4_blocks(block_time):
             for peer in range(2):
                 for i in range(2):
-                    block_time = generate_pos(self.nodes, peer, block_time)
+                    block_time = self.generate_pos(peer, block_time)
                 sync_blocks(self.nodes)
             return block_time
-
-        def check_tx_in_chain(txid):
-            rawTx = self.nodes[0].getrawtransaction(txid, 1)
-            assert_greater_than(rawTx["confirmations"], 0)
 
         self.log_title()
         block_time = self.mocktime
@@ -114,7 +104,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         txid = self.nodes[2].spendzerocoin(denom_0, False, False, "", False)['txid']
         # stake 4 blocks - check it gets included on chain and check balances
         block_time = stake_4_blocks(block_time)
-        check_tx_in_chain(txid)
+        self.check_tx_in_chain(0, txid)
         zpiv_balance, balance = check_balances(denom_0, zpiv_balance, balance)
         self.log.info("--> VALID COIN SPEND (v2) PASSED")
 
@@ -124,7 +114,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         for j in range(5):
             for peer in range(2):
                 for i in range(7):
-                    block_time = generate_pos(self.nodes, peer, block_time)
+                    block_time = self.generate_pos(peer, block_time)
                 sync_blocks(self.nodes)
         old_spend_v3 = self.nodes[2].createrawzerocoinspend(id_1)
 
@@ -149,7 +139,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         txid = self.nodes[2].spendzerocoinmints([id_2])['txid']
         # stake 4 blocks - check it gets included on chain and check balances
         block_time = stake_4_blocks(block_time)
-        check_tx_in_chain(txid)
+        self.check_tx_in_chain(0, txid)
         zpiv_balance, balance = check_balances(denom_2, zpiv_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v3) PASSED")
 
@@ -160,7 +150,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         self.log.info("GOOD: Double-spending transaction did not verify.")
 
         # 7) Activate v4 spends with SPORK_18
-        self.setV4SpendEnforcement(block_time)
+        self.setV4SpendEnforcement()
 
         # 8) Spend one minted coin - spend v4 (serial_3)
         serial_3, randomness_3, privkey_3, id_3, denom_3, tx_3 = get_zerocoin_data(exported_zerocoins[3])
@@ -168,7 +158,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         txid = self.nodes[2].spendzerocoinmints([id_3])['txid']
         # stake 4 blocks - check it gets included on chain and check balances
         block_time = stake_4_blocks(block_time)
-        check_tx_in_chain(txid)
+        self.check_tx_in_chain(0, txid)
         zpiv_balance, balance = check_balances(denom_3, zpiv_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v4) PASSED")
 
@@ -191,12 +181,12 @@ class ZerocoinSpendTest(PivxTestFramework):
         self.log.info("GOOD: Double-spending transaction did not verify.")
 
         # 12) Reactivate v3 spends and try to spend the old saved one (serial_1) again
-        self.setV4SpendEnforcement(block_time, False)
+        self.setV4SpendEnforcement(False)
         self.log.info("Trying to send old v3 spend now (serial: %s...)" % serial_1[:16])
         txid = self.nodes[2].sendrawtransaction(old_spend_v3)
         # stake 4 blocks - check it gets included on chain and check balances
         _ = stake_4_blocks(block_time)
-        check_tx_in_chain(txid)
+        self.check_tx_in_chain(0, txid)
         # need to reset spent mints since this was a raw broadcast
         self.nodes[2].resetmintzerocoin()
         _, _ = check_balances(denom_1, zpiv_balance, balance)

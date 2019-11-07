@@ -426,56 +426,6 @@ def sync_mempools(rpc_connections, *, wait=1, timeout=60, flush_scheduler=True):
         timeout -= wait
     raise AssertionError("Mempool sync failed")
 
-def generate_pos(rpc_connections, n, btime=None):
-    if btime is not None:
-        next_btime = btime+60
-    fStaked = False
-    while not fStaked:
-        try:
-            rpc_connections[n].generate(1)
-            fStaked = True
-        except JSONRPCException as e:
-            if ("Couldn't create new block" in str(e)):
-                # couldn't generate block. check that this node can stake
-                ss = rpc_connections[n].getstakingstatus()
-                if not (ss["validtime"] and ss["haveconnections"] and ss["walletunlocked"] and
-                        ss["mintablecoins"] and ss["enoughcoins"]):
-                    raise AssertionError("Node %d unable to stake!" % n)
-                # try to stake one sec in the future
-                if btime is not None:
-                    btime += 1
-                    set_node_times(rpc_connections, btime)
-                else:
-                    time.sleep(1)
-            else:
-                raise e
-    # block generated. adjust block time
-    if btime is not None:
-        btime = max(btime + 1, next_btime)
-        set_node_times(rpc_connections, btime)
-        return btime
-    else:
-        return None
-
-
-SPORK_ACTIVATION_TIME = 1563253447
-SPORK_DEACTIVATION_TIME = 4070908800
-
-def set_spork(rpc_connections, n, sporkName, value):
-    return rpc_connections[n].spork(sporkName, value)
-
-def get_spork(rpc_connections, n, sporkName):
-    return rpc_connections[n].spork("show")[sporkName]
-
-def activate_spork(rpc_connections, n, sporkName):
-    return set_spork(rpc_connections, n, sporkName, SPORK_ACTIVATION_TIME)
-
-def deactivate_spork(rpc_connections, n, sporkName):
-    return set_spork(rpc_connections, n, sporkName, SPORK_DEACTIVATION_TIME)
-
-def is_spork_active(rpc_connections, n, sporkName):
-    return rpc_connections[n].spork("active")[sporkName]
-
 
 # Transaction/Block functions
 #############################
@@ -637,6 +587,14 @@ def mine_large_block(node, utxos=None):
     create_lots_of_big_transactions(node, txouts, utxos, num, fee=fee)
     node.generate(1)
 
-# Return Decimal from float for equality checks against rpc outputs
+### PIVX specific utils ###
+vZC_DENOMS = [1, 5, 10, 50, 100, 500, 1000, 5000]
+DEFAULT_FEE = 0.01
+SPORK_ACTIVATION_TIME = 1563253447
+SPORK_DEACTIVATION_TIME = 4070908800
+
 def DecimalAmt(x):
+    """Return Decimal from float for equality checks against rpc outputs"""
     return Decimal("{:0.8f}".format(x))
+
+
