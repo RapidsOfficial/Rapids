@@ -365,9 +365,6 @@ class FakeStakeTest(PivxTestFramework):
             self.log.info("Trying to send block [%s...] with height=%d" % (block.hash[:16], nHeight))
             var = self.nodes[1].submitblock(bytes_to_hex_str(block.serialize()))
             sleep(1)
-            if (isZPoS and not isMainChain and i < 2):
-                # !TODO: fix this last case failing (this must NOT be accepted)
-                fMustBeAccepted = True
             if (not fMustBeAccepted and var not in [None, "rejected", "bad-txns-invalid-zpiv"]):
                 raise AssertionError("Error, block submitted (%s) in %s chain" % (var, chainName))
             elif (fMustBeAccepted and var != "inconclusive"):
