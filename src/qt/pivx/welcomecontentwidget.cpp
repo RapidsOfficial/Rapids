@@ -27,7 +27,12 @@ WelcomeContentWidget::WelcomeContentWidget(QWidget *parent) :
     this->setStyleSheet(GUIUtil::loadStyleSheet());
 
     ui->frame->setProperty("cssClass", "container-welcome-stack");
+#ifdef Q_OS_MAC
+    ui->frame_2->load("://bg-welcome");
+    ui->frame_2->setProperty("cssClass", "container-welcome-no-image");
+#else
     ui->frame_2->setProperty("cssClass", "container-welcome");
+#endif
 
     backButton = new QPushButton(ui->container);
     nextButton = new QPushButton(ui->container);

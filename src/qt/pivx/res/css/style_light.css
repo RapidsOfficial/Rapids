@@ -358,7 +358,11 @@ HH       TOP BAR
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 *[cssClass="container-top"] {
+    background-color:#000000;
     border-image: url("://bg-dashboard-banner") 0 0 0 0 stretch stretch;
+}
+
+*[cssClass="container-topbar-no-image"] {
     background-color:#000000;
 }
 
@@ -2748,7 +2752,11 @@ QPushButton[cssClass="ic-step-confirm-welcome"] {
 
 
 *[cssClass="container-welcome"] {
+    background-color: #000000;
     border-image: url("://bg-welcome") 0 0 0 0 stretch stretch;
+}
+
+*[cssClass="container-welcome-no-image"] {
     background-color:#000000;
 }
 

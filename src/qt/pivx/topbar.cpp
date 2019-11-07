@@ -30,10 +30,14 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
 
     // Set parent stylesheet
     this->setStyleSheet(_mainWindow->styleSheet());
-
     /* Containers */
+    ui->containerTop->setContentsMargins(10, 4, 10, 10);
+#ifdef Q_OS_MAC
+    ui->containerTop->load("://bg-dashboard-banner");
+    setCssProperty(ui->containerTop,"container-topbar-no-image");
+#else
     ui->containerTop->setProperty("cssClass", "container-top");
-    ui->containerTop->setContentsMargins(10,4,10,10);
+#endif
 
     std::initializer_list<QWidget*> lblTitles = {ui->labelTitle1, ui->labelTitle2, ui->labelTitle3, ui->labelTitle4, ui->labelTitle5, ui->labelTitle6};
     setCssProperty(lblTitles, "text-title-topbar");
@@ -478,7 +482,6 @@ void TopBar::loadWalletModel(){
             SLOT(updateBalances(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
     connect(walletModel, &WalletModel::encryptionStatusChanged, this, &TopBar::refreshStatus);
-
     // update the display unit, to not use the default ("PIVX")
     updateDisplayUnit();
 
