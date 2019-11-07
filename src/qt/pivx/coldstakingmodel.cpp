@@ -17,7 +17,11 @@ ColdStakingModel::ColdStakingModel(WalletModel* _model,
 
 void ColdStakingModel::updateCSList() {
     refresh();
-    emit dataChanged(index(0, 0, QModelIndex()), index(rowCount(), COLUMN_COUNT, QModelIndex()) );
+    QMetaObject::invokeMethod(this, "emitDataSetChanged", Qt::QueuedConnection);
+}
+
+void ColdStakingModel::emitDataSetChanged() {
+    emit dataChanged(index(0, 0, QModelIndex()), index(cachedDelegations.size(), COLUMN_COUNT, QModelIndex()) );
 }
 
 void ColdStakingModel::refresh() {
@@ -40,7 +44,7 @@ void ColdStakingModel::refresh() {
                 continue;
 
             // it's spendable only when this wallet has the keys to spend it, a.k.a is the owner
-            delegation.isSpendable = pwalletMain->IsMine(out) & ISMINE_SPENDABLE_DELEGATED;
+            delegation.isSpendable = utxo.fSpendable;
             delegation.cachedTotalAmount += out.nValue;
             delegation.delegatedUtxo.insert(txId, utxo.i);
 

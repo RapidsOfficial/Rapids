@@ -228,8 +228,8 @@ void ColdStakingWidget::loadWalletModel(){
 
 }
 
-void ColdStakingWidget::onTxArrived(const QString& hash) {
-    if (walletModel->isDelegatedToOrFromMe(hash) || walletModel->isP2CSSpend(hash)) {
+void ColdStakingWidget::onTxArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType) {
+    if (isCSAnyType) {
         tryRefreshDelegations();
     }
 }
@@ -328,7 +328,7 @@ void ColdStakingWidget::onContactsClicked(){
     }
 
     if (isContactOwnerSelected) {
-        menuContacts->setWalletModel(walletModel, AddressTableModel::Send);
+        menuContacts->setWalletModel(walletModel, AddressTableModel::Receive);
     } else {
         menuContacts->setWalletModel(walletModel, AddressTableModel::Delegators);
     }
@@ -344,6 +344,11 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
     if (menu && menu->isVisible()) {
         menu->hide();
     }
+
+    if (menuAddresses && menuAddresses->isVisible()) {
+        menuAddresses->hide();
+    }
+
     if(delegate){
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
@@ -560,7 +565,6 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
     pos.setX(pos.x() - (DECORATION_SIZE * 2));
     pos.setY(pos.y() + (DECORATION_SIZE * 2));
 
-    bool adjustSize = false;
     if(!this->menu){
         this->menu = new TooltipMenu(window, this);
         this->menu->setEditBtnText(tr("Stake"));
@@ -571,7 +575,6 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
         this->menu->setMinimumHeight(157);
         this->menu->setFixedHeight(157);
         this->menu->setMinimumWidth(125);
-        adjustSize = true;
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, SIGNAL(onEditClicked()), this, SLOT(onEditClicked()));
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
@@ -588,6 +591,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
                 Qt::DisplayRole).toBool();
         this->menu->setDeleteBtnVisible(isWhitelisted);
         this->menu->setEditBtnVisible(!isWhitelisted);
+        this->menu->setCopyBtnVisible(true);
         this->menu->setMinimumHeight(157);
     } else {
         // owner side
@@ -596,7 +600,8 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
         this->menu->setCopyBtnVisible(false);
         this->menu->setMinimumHeight(60);
     }
-    if (adjustSize) this->menu->adjustSize();
+
+    this->menu->adjustSize();
 
     menu->move(pos);
     menu->show();

@@ -67,7 +67,7 @@ private slots:
     void onCopyOwnerClicked();
     void onAddressCopyClicked();
     void onAddressEditClicked();
-    void onTxArrived(const QString& hash);
+    void onTxArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType);
     void onContactsClicked(bool ownerAdd);
     void clearAll();
     void onLabelClicked();

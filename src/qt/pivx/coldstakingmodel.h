@@ -70,6 +70,8 @@ public:
 
     void refresh();
 
+public slots:
+    void emitDataSetChanged();
 
 private:
     WalletModel* model = nullptr;

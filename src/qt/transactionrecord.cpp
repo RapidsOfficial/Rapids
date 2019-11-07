@@ -537,6 +537,13 @@ bool TransactionRecord::isCoinStake() const
     return (type == TransactionRecord::StakeMint || type == TransactionRecord::Generated || type == TransactionRecord::StakeZPIV);
 }
 
+bool TransactionRecord::isAnyColdStakingType() const
+{
+    return (type == TransactionRecord::P2CSDelegation || type == TransactionRecord::P2CSDelegationSent
+           || type == TransactionRecord::StakeDelegated || type == TransactionRecord::StakeHot
+           || type == TransactionRecord::P2CSUnlockOwner || type == TransactionRecord::P2CSUnlockStaker);
+}
+
 bool TransactionRecord::isNull() const
 {
     return hash.IsNull() || size == 0;
