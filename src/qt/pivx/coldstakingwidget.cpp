@@ -529,12 +529,13 @@ void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest) {
 void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index) {
 
     ui->listViewStakingAddress->setCurrentIndex(_index);
-    QModelIndex rIndex = addressesFilter->mapToSource(_index);
 
-    QRect rect = ui->listViewStakingAddress->visualRect(rIndex);
+    QRect rect = ui->listViewStakingAddress->visualRect(_index);
     QPoint pos = rect.topRight();
     pos.setX( parentWidget()->rect().right() - (DECORATION_SIZE * 1.5) );
     pos.setY(pos.y() + (DECORATION_SIZE * 2.5));
+
+    QModelIndex rIndex = addressesFilter->mapToSource(_index);
 
     if(!menuAddresses){
         menuAddresses = new TooltipMenu(window, this);
