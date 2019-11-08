@@ -280,12 +280,6 @@ public:
      */
     PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label = "") const;
 
-    /**
-     * If the wallet has the tx and it was a stakes delegation to this wallet
-     */
-    bool isDelegatedToOrFromMe(QString txId);
-    bool isP2CSSpend(QString txId);
-
     bool whitelistAddressFromColdStaking(const QString &addressStr);
     bool blacklistAddressFromColdStaking(const QString &address);
     bool updateAddressBookPurpose(const QString &addressStr, const std::string& purpose);
