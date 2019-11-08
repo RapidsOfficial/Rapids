@@ -57,7 +57,8 @@ SettingsBackupWallet::SettingsBackupWallet(PIVXGUI* _window, QWidget *parent) :
     connect(ui->pushButtonSave_2, SIGNAL(clicked()), this, SLOT(changePassphrase()));
 }
 
-void SettingsBackupWallet::selectFileOutput(){
+void SettingsBackupWallet::selectFileOutput()
+{
     QString filenameRet = GUIUtil::getSaveFileName(this,
                                         tr("Backup Wallet"), QString(),
                                         tr("Wallet Data (*.dat)"), NULL);
@@ -68,7 +69,8 @@ void SettingsBackupWallet::selectFileOutput(){
     }
 }
 
-void SettingsBackupWallet::backupWallet(){
+void SettingsBackupWallet::backupWallet()
+{
     if(walletModel && !filename.isEmpty()) {
         inform(walletModel->backupWallet(filename) ? tr("Backup created") : tr("Backup creation failed"));
         filename = QString();
@@ -78,21 +80,23 @@ void SettingsBackupWallet::backupWallet(){
     }
 }
 
-void SettingsBackupWallet::changePassphrase(){
+void SettingsBackupWallet::changePassphrase()
+{
     showHideOp(true);
     AskPassphraseDialog *dlg = nullptr;
     if (walletModel->getEncryptionStatus() == WalletModel::Unencrypted) {
-        dlg = new AskPassphraseDialog(AskPassphraseDialog::Mode::ChangePass, window,
-                                  walletModel, AskPassphraseDialog::Context::ChangePass);
-    } else {
         dlg = new AskPassphraseDialog(AskPassphraseDialog::Mode::Encrypt, window,
-                                      walletModel, AskPassphraseDialog::Context::Encrypt);
+                walletModel, AskPassphraseDialog::Context::Encrypt);
+    } else {
+        dlg = new AskPassphraseDialog(AskPassphraseDialog::Mode::ChangePass, window,
+                walletModel, AskPassphraseDialog::Context::ChangePass);
     }
     dlg->adjustSize();
     emit execDialog(dlg);
     dlg->deleteLater();
 }
 
-SettingsBackupWallet::~SettingsBackupWallet(){
+SettingsBackupWallet::~SettingsBackupWallet()
+{
     delete ui;
 }
