@@ -177,10 +177,6 @@ public:
      */
     bool isNull() const;
 
-
-private:
-    static void loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record, bool isContract = false);
-    static void loadUnlockColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record);
 };
 
 #endif // BITCOIN_QT_TRANSACTIONRECORD_H

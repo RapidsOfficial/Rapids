@@ -204,26 +204,14 @@ public:
                     // Added -- insert at the right position
                     QList<TransactionRecord> toInsert =
                         TransactionRecord::decomposeTransaction(wallet, mi->second);
-                    if (!toInsert.isEmpty()) /* only if something to insert */
-                    {
+                    if (!toInsert.isEmpty()) { /* only if something to insert */
                         parent->beginInsertRows(QModelIndex(), lowerIndex, lowerIndex + toInsert.size() - 1);
                         int insert_idx = lowerIndex;
                         for (const TransactionRecord& rec : toInsert) {
                             cachedWallet.insert(insert_idx, rec);
                             if (!hasZcTxes) hasZcTxes = HasZcTxesIfNeeded(rec);
-
-                        /*
-                        // Check for delegations
-                        if (rec.type == TransactionRecord::P2CSDelegation || rec.type == TransactionRecord::P2CSDelegationSent
-                            || rec.type == TransactionRecord::StakeDelegated || rec.type == TransactionRecord::StakeHot
-                            || rec.type == TransactionRecord::P2CSUnlockOwner || rec.type == TransactionRecord::P2CSUnlockStaker) {
-                            checkForDelegations(rec, wallet, cachedDelegations);
-                        }
-                         */
-
-                        insert_idx += 1;
-                        // Return record
-                        ret = rec;
+                            insert_idx += 1;
+                            ret = rec; // Return record
                         }
                         parent->endInsertRows();
                     }

@@ -524,7 +524,7 @@ const CWalletTx* WalletModel::getTx(uint256 id){
     return wallet->GetWalletTx(id);
 }
 
-bool WalletModel::isDelegatedToMe(QString id) {
+bool WalletModel::isDelegatedToOrFromMe(QString id) {
     uint256 hashTx;
     hashTx.SetHex(id.toStdString());
     const CWalletTx* tx = getTx(hashTx);
