@@ -137,7 +137,8 @@ AskPassphraseDialog::AskPassphraseDialog(Mode mode, QWidget* parent, WalletModel
     connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(close()));
 }
 
-void AskPassphraseDialog::onWatchClicked(){
+void AskPassphraseDialog::onWatchClicked()
+{
     int state = btnWatch->checkState();
     ui->passEdit3->setEchoMode(state == Qt::Checked ? QLineEdit::Normal : QLineEdit::Password );
     ui->passEdit2->setEchoMode(state== Qt::Checked ? QLineEdit::Normal : QLineEdit::Password );
@@ -308,7 +309,8 @@ bool AskPassphraseDialog::eventFilter(QObject* object, QEvent* event)
     return QDialog::eventFilter(object, event);
 }
 
-bool AskPassphraseDialog::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn){
+bool AskPassphraseDialog::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn)
+{
     PIVXGUI* gui = static_cast<PIVXGUI*>(parentWidget());
     DefaultDialog *confirmDialog = new DefaultDialog(gui);
     confirmDialog->setText(title, body, okBtn, cancelBtn);
@@ -319,7 +321,8 @@ bool AskPassphraseDialog::openStandardDialog(QString title, QString body, QStrin
     return ret;
 }
 
-void AskPassphraseDialog::warningMessage() {
+void AskPassphraseDialog::warningMessage()
+{
     hide();
     static_cast<PIVXGUI*>(parentWidget())->showHide(true);
     openStandardDialog(
@@ -339,12 +342,14 @@ void AskPassphraseDialog::warningMessage() {
     QApplication::quit();
 }
 
-void AskPassphraseDialog::errorEncryptingWallet() {
+void AskPassphraseDialog::errorEncryptingWallet()
+{
     QMessageBox::critical(this, tr("Wallet encryption failed"),
                           tr("Wallet encryption failed due to an internal error. Your wallet was not encrypted."));
 }
 
-void AskPassphraseDialog::run(int type){
+void AskPassphraseDialog::run(int type)
+{
     if (type == 1) {
         if (!newpassCache.empty()) {
             QMetaObject::invokeMethod(this, "hide", Qt::QueuedConnection);
@@ -358,11 +363,13 @@ void AskPassphraseDialog::run(int type){
         }
     }
 }
-void AskPassphraseDialog::onError(QString error, int type){
+void AskPassphraseDialog::onError(QString error, int type)
+{
     newpassCache = "";
 }
 
-void AskPassphraseDialog::initWatch(QWidget *parent) {
+void AskPassphraseDialog::initWatch(QWidget *parent)
+{
     btnWatch = new QCheckBox(parent);
     setCssProperty(btnWatch, "btn-watch-password");
     btnWatch->setChecked(false);
