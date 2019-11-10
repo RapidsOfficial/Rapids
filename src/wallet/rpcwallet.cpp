@@ -185,8 +185,8 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
             "true|false           (boolean) true if successful.\n"
 
             "\nExamples:\n" +
-            HelpExampleCli("whitelistdelegator", "DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6") +
-            HelpExampleRpc("whitelistdelegator", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
+            HelpExampleCli("delegatorremove", "DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6") +
+            HelpExampleRpc("delegatorremove", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid() || address.IsStakingAddress())
