@@ -122,7 +122,7 @@ private slots:
     void onSortTypeChanged(const QString& value);
     void updateDisplayUnit();
     void showList();
-    void onTxArrived(const QString& hash, const bool& isCoinStake);
+    void onTxArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType);
 
 #ifdef USE_QTCHARTS
     void windowResizeEvent(QResizeEvent *event);
@@ -173,7 +173,7 @@ private:
     bool refreshChart();
     void tryChartRefresh();
     void updateStakeFilter();
-    QMap<int, std::pair<qint64, qint64>> getAmountBy();
+    const QMap<int, std::pair<qint64, qint64>> getAmountBy();
     bool loadChartData(bool withMonthNames);
     void updateAxisX(const QStringList *arg = nullptr);
     void setChartShow(ChartShowType type);

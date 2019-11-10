@@ -73,6 +73,7 @@ QT_FORMS_UI = \
   qt/pivx/forms/mnrow.ui \
   qt/pivx/forms/masternodeswidget.ui \
   qt/pivx/forms/myaddressrow.ui \
+  qt/pivx/forms/csrow.ui \
   qt/pivx/forms/sendchangeaddressdialog.ui \
   qt/pivx/forms/sendconfirmdialog.ui \
   qt/pivx/forms/sendcustomfeedialog.ui \
@@ -88,6 +89,7 @@ QT_FORMS_UI = \
   qt/pivx/forms/defaultdialog.ui \
   qt/pivx/forms/denomgenerationdialog.ui \
   qt/pivx/forms/privacywidget.ui \
+  qt/pivx/forms/coldstakingwidget.ui \
   qt/pivx/settings/forms/settingsbackupwallet.ui \
   qt/pivx/settings/forms/settingsbittoolwidget.ui \
   qt/pivx/settings/forms/settingsconsolewidget.ui \
@@ -160,11 +162,13 @@ QT_MOC_CPP = \
   qt/pivx/moc_contactdropdownrow.cpp \
   qt/pivx/moc_mninfodialog.cpp \
   qt/pivx/moc_optionbutton.cpp \
+  qt/pivx/moc_coldstakingmodel.cpp \
   qt/pivx/moc_mnmodel.cpp \
   qt/pivx/moc_masternodewizarddialog.cpp \
   qt/pivx/moc_mnrow.cpp \
   qt/pivx/moc_masternodeswidget.cpp \
   qt/pivx/moc_myaddressrow.cpp \
+  qt/pivx/moc_csrow.cpp \
   qt/pivx/moc_contactsdropdown.cpp \
   qt/pivx/moc_sendchangeaddressdialog.cpp \
   qt/pivx/moc_sendconfirmdialog.cpp \
@@ -181,6 +185,7 @@ QT_MOC_CPP = \
   qt/pivx/moc_defaultdialog.cpp \
   qt/pivx/moc_denomgenerationdialog.cpp \
   qt/pivx/moc_privacywidget.cpp \
+  qt/pivx/moc_coldstakingwidget.cpp \
   qt/pivx/settings/moc_settingsbackupwallet.cpp \
   qt/pivx/settings/moc_settingsbittoolwidget.cpp \
   qt/pivx/settings/moc_settingsconsolewidget.cpp \
@@ -266,6 +271,7 @@ BITCOIN_QT_H = \
   qt/winshutdownmonitor.h \
   qt/zpivcontroldialog.h \
   qt/pivx/pwidget.h \
+  qt/pivx/guitransactionsutils.h \
   qt/pivx/snackbar.h \
   qt/pivx/navmenuwidget.h \
   qt/pivx/lockunlock.h \
@@ -278,6 +284,7 @@ BITCOIN_QT_H = \
   qt/pivx/walletpassworddialog.h \
   qt/pivx/topbar.h \
   qt/pivx/txrow.h \
+  qt/pivx/addressholder.h \
   qt/pivx/addressfilterproxymodel.h \
   qt/pivx/dashboardwidget.h \
   qt/pivx/coincontrolpivwidget.h \
@@ -285,11 +292,13 @@ BITCOIN_QT_H = \
   qt/pivx/contactdropdownrow.h \
   qt/pivx/mninfodialog.h \
   qt/pivx/optionbutton.h \
+  qt/pivx/coldstakingmodel.h \
   qt/pivx/mnmodel.h \
   qt/pivx/masternodewizarddialog.h \
   qt/pivx/mnrow.h \
   qt/pivx/masternodeswidget.h \
   qt/pivx/myaddressrow.h \
+  qt/pivx/csrow.h \
   qt/pivx/contactsdropdown.h \
   qt/pivx/sendchangeaddressdialog.h \
   qt/pivx/sendconfirmdialog.h \
@@ -306,6 +315,7 @@ BITCOIN_QT_H = \
   qt/pivx/defaultdialog.h \
   qt/pivx/denomgenerationdialog.h \
   qt/pivx/privacywidget.h \
+  qt/pivx/coldstakingwidget.h \
   qt/pivx/settings/settingsbackupwallet.h \
   qt/pivx/settings/settingsbittoolwidget.h \
   qt/pivx/settings/settingsconsolewidget.h \
@@ -402,6 +412,8 @@ RES_ICONS = \
   qt/pivx/res/img/ic-update.svg \
   qt/pivx/res/img/bg-multi-number.svg \
   qt/pivx/res/img/ic-check-mint-off.svg \
+  qt/pivx/res/img/ic-nav-cold-staking.svg \
+  qt/pivx/res/img/ic-nav-cold-staking-active.svg \
   qt/pivx/res/img/ic-nav-dashboard-active.svg \
   qt/pivx/res/img/ic-wallet-status-locked.svg \
   qt/pivx/res/img/bg-splash.svg \
@@ -542,6 +554,11 @@ RES_ICONS = \
   qt/pivx/res/img/ic-transaction-warning.svg \
   qt/pivx/res/img/ic-transaction-mint.svg \
   qt/pivx/res/img/ic-transaction-mint-inactive.svg \
+  qt/pivx/res/img/ic-check-cold-staking.svg \
+  qt/pivx/res/img/ic-check-cold-staking-off.svg \
+  qt/pivx/res/img/ic-check-cold-staking-enabled.svg \
+  qt/pivx/res/img/dark/ic-transaction-cs-contract.svg \
+  qt/pivx/res/img/dark/ic-transaction-cs-contract-inactive.svg \
   qt/pivx/res/img/img-qr.svg \
   qt/pivx/res/img/ic-check-connect-off.svg \
   qt/pivx/res/img/ic-label.svg \
@@ -578,6 +595,16 @@ RES_ICONS = \
   qt/pivx/res/img/ic-arrow-drop-up-purple.svg \
   qt/pivx/res/img/ic-check-liliac-indeterminate.svg \
   qt/pivx/res/img/ic-check-box-liliac-indeterminate.svg \
+  qt/pivx/res/img/ic-transaction-stake-delegated.svg \
+  qt/pivx/res/img/ic-transaction-stake-delegated-inactive.svg \
+  qt/pivx/res/img/ic-transaction-stake-hot.svg \
+  qt/pivx/res/img/ic-transaction-stake-hot-inactive.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-hot.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-hot-inactive.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-delegated.svg \
+  qt/pivx/res/img/dark/ic-transaction-stake-delegated-inactive.svg \
+  qt/pivx/res/img/ic-transaction-cs-contract.svg \
+  qt/pivx/res/img/ic-transaction-cs-contract-inactive.svg \
   qt/pivx/res/img/ic-check-box-indeterminate.svg \
   qt/pivx/res/img/ani-loading-dark.gif \
   qt/pivx/res/img/ani-loading.gif
@@ -633,6 +660,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/loadingdialog.cpp \
   qt/zpivcontroldialog.cpp \
   qt/pivx/pwidget.cpp \
+  qt/pivx/guitransactionsutils.cpp \
   qt/pivx/snackbar.cpp \
   qt/pivx/navmenuwidget.cpp \
   qt/pivx/lockunlock.cpp \
@@ -644,6 +672,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/walletpassworddialog.cpp \
   qt/pivx/topbar.cpp \
   qt/pivx/txrow.cpp \
+  qt/pivx/addressholder.cpp \
   qt/pivx/addressfilterproxymodel.cpp \
   qt/pivx/dashboardwidget.cpp \
   qt/pivx/coincontrolpivwidget.cpp \
@@ -652,11 +681,13 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/contactsdropdown.cpp \
   qt/pivx/optionbutton.cpp \
   qt/pivx/mninfodialog.cpp \
+  qt/pivx/coldstakingmodel.cpp \
   qt/pivx/mnmodel.cpp \
   qt/pivx/masternodewizarddialog.cpp \
   qt/pivx/mnrow.cpp \
   qt/pivx/masternodeswidget.cpp \
   qt/pivx/myaddressrow.cpp \
+  qt/pivx/csrow.cpp \
   qt/pivx/sendchangeaddressdialog.cpp \
   qt/pivx/sendconfirmdialog.cpp \
   qt/pivx/sendcustomfeedialog.cpp \
@@ -672,6 +703,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/defaultdialog.cpp \
   qt/pivx/denomgenerationdialog.cpp \
   qt/pivx/privacywidget.cpp \
+  qt/pivx/coldstakingwidget.cpp \
   qt/pivx/settings/settingsbackupwallet.cpp \
   qt/pivx/settings/settingsbittoolwidget.cpp \
   qt/pivx/settings/settingsconsolewidget.cpp \

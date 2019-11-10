@@ -11,7 +11,6 @@
 
 class AddressFilterProxyModel final : public QSortFilterProxyModel
 {
-    const QString m_type;
 
 public:
     AddressFilterProxyModel(const QString& type, QObject* parent)
@@ -24,8 +23,13 @@ public:
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
+    void setType(const QString& type);
+
 protected:
     bool filterAcceptsRow(int row, const QModelIndex& parent) const override;
+
+private:
+    QString m_type;
 };
 
 

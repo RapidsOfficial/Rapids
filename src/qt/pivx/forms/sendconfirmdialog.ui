@@ -202,9 +202,9 @@ background:transparent;
             <property name="geometry">
              <rect>
               <x>0</x>
-              <y>0</y>
+              <y>-178</y>
               <width>556</width>
-              <height>650</height>
+              <height>680</height>
              </rect>
             </property>
             <property name="autoFillBackground">
@@ -847,6 +847,16 @@ background:transparent;
                    </size>
                   </property>
                  </spacer>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelWarning">
+                  <property name="text">
+                   <string>TextLabel</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignCenter</set>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </widget>

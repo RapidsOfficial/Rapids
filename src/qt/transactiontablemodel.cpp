@@ -75,7 +75,6 @@ public:
     QList<TransactionRecord> cachedWallet;
     bool hasZcTxes = false;
 
-
     /* Query entire wallet anew from core.
      */
     void refreshWallet()
@@ -112,11 +111,12 @@ public:
 
             // Now take the remaining ones and do the work here
             std::size_t const remainingSize = txesSize - totalSumSize;
-            cachedWallet.append(convertTxToRecords(this, wallet,
-                                                   std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
-                                                   ));
+            auto res = convertTxToRecords(this, wallet,
+                                              std::vector<CWalletTx>(walletTxes.end() - remainingSize, walletTxes.end())
+            );
+            cachedWallet.append(res);
 
-            for (QFuture<QList<TransactionRecord>> &future : tasks) {
+            for (auto &future : tasks) {
                 future.waitForFinished();
                 cachedWallet.append(future.result());
             }
@@ -128,15 +128,16 @@ public:
 
     static QList<TransactionRecord> convertTxToRecords(TransactionTablePriv* tablePriv, const CWallet* wallet, const std::vector<CWalletTx>& walletTxes) {
         QList<TransactionRecord> cachedWallet;
+
         bool hasZcTxes = tablePriv->hasZcTxes;
         for (const auto &tx : walletTxes) {
             if (TransactionRecord::showTransaction(tx)) {
                 QList<TransactionRecord> records = TransactionRecord::decomposeTransaction(wallet, tx);
 
-                if (!hasZcTxes) {
-                    for (const TransactionRecord &record : records) {
+                for (const TransactionRecord &record : records) {
+                    // Check for zc txes.
+                    if (!hasZcTxes) {
                         hasZcTxes = HasZcTxesIfNeeded(record);
-                        if (hasZcTxes) break;
                     }
                 }
 
@@ -203,16 +204,14 @@ public:
                     // Added -- insert at the right position
                     QList<TransactionRecord> toInsert =
                         TransactionRecord::decomposeTransaction(wallet, mi->second);
-                    if (!toInsert.isEmpty()) /* only if something to insert */
-                    {
+                    if (!toInsert.isEmpty()) { /* only if something to insert */
                         parent->beginInsertRows(QModelIndex(), lowerIndex, lowerIndex + toInsert.size() - 1);
                         int insert_idx = lowerIndex;
                         for (const TransactionRecord& rec : toInsert) {
                             cachedWallet.insert(insert_idx, rec);
                             if (!hasZcTxes) hasZcTxes = HasZcTxesIfNeeded(rec);
                             insert_idx += 1;
-                            // Return record
-                            ret = rec;
+                            ret = rec; // Return record
                         }
                         parent->endInsertRows();
                     }
@@ -322,7 +321,7 @@ void TransactionTableModel::updateTransaction(const QString& hash, int status, b
     priv->updateWallet(updated, status, showTransaction, rec);
 
     if (!rec.isNull())
-        emit txArrived(hash, rec.isCoinStake());
+        emit txArrived(hash, rec.isCoinStake(), rec.isAnyColdStakingType());
 }
 
 void TransactionTableModel::updateConfirmations()
@@ -439,6 +438,13 @@ QString TransactionTableModel::formatTxType(const TransactionRecord* wtx) const
         return tr("PIV Stake");
     case TransactionRecord::StakeZPIV:
         return tr("zPIV Stake");
+    case TransactionRecord::StakeDelegated:
+        return tr("PIV Cold Stake");
+    case TransactionRecord::StakeHot:
+        return tr("PIV Stake in behalf of");
+    case TransactionRecord::P2CSDelegationSent:
+    case TransactionRecord::P2CSDelegation:
+        return tr("Stake delegation");
     case TransactionRecord::Generated:
         return tr("Mined");
     case TransactionRecord::ObfuscationDenominate:
@@ -517,6 +523,10 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, b
     case TransactionRecord::ZerocoinSpend_Change_zPiv:
     case TransactionRecord::StakeZPIV:
         return tr("Anonymous");
+    case TransactionRecord::P2CSDelegation:
+    case TransactionRecord::P2CSDelegationSent:
+    case TransactionRecord::StakeDelegated:
+    case TransactionRecord::StakeHot:
     case TransactionRecord::SendToSelf: {
         QString label = walletModel->getAddressTableModel()->labelForAddress(QString::fromStdString(wtx->address));
         return label.isEmpty() ? "" : label;

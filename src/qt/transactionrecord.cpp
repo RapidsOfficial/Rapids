@@ -51,6 +51,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
 
     if (wtx.IsCoinStake()) {
         TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+
         CTxDestination address;
         if (!wtx.HasZerocoinSpendInputs() && !ExtractDestination(wtx.vout[1].scriptPubKey, address))
             return parts;
@@ -67,11 +68,21 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
             }
             sub.debit -= wtx.vin[0].nSequence * COIN;
         } else if (isminetype mine = wallet->IsMine(wtx.vout[1])) {
-            // PIV stake reward
-            sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-            sub.type = TransactionRecord::StakeMint;
-            sub.address = CBitcoinAddress(address).ToString();
-            sub.credit = nNet;
+
+            // Check for cold stakes.
+            if (wtx.HasP2CSOutputs()) {
+                sub.credit = nCredit;
+                sub.debit = -nDebit;
+                loadHotOrColdStakeOrContract(wallet, wtx, sub);
+                parts.append(sub);
+                return parts;
+            } else {
+                // PIV stake reward
+                sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
+                sub.type = TransactionRecord::StakeMint;
+                sub.address = CBitcoinAddress(address).ToString();
+                sub.credit = nNet;
+            }
         } else {
             //Masternode reward
             CTxDestination destMN;
@@ -149,6 +160,20 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
             sub.idx = parts.size();
             parts.append(sub);
         }
+    } else if (wtx.HasP2CSOutputs()) {
+        // Delegate tx.
+        TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+        sub.credit = nCredit;
+        sub.debit = -nDebit;
+        loadHotOrColdStakeOrContract(wallet, wtx, sub, true);
+        parts.append(sub);
+        return parts;
+    } else if (wtx.HasP2CSInputs()) {
+        // Delegation unlocked
+        TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
+        loadUnlockColdStake(wallet, wtx, sub);
+        parts.append(sub);
+        return parts;
     } else if (nNet > 0 || wtx.IsCoinBase()) {
         //
         // Credit
@@ -315,6 +340,97 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     return parts;
 }
 
+void TransactionRecord::loadUnlockColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record)
+{
+    record.involvesWatchAddress = false;
+
+    // Get the p2cs
+    const CScript* p2csScript = nullptr;
+    bool isSpendable = false;
+
+    for (const auto &input : wtx.vin) {
+        const CWalletTx* tx = wallet->GetWalletTx(input.prevout.hash);
+        if (tx && tx->vout[input.prevout.n].scriptPubKey.IsPayToColdStaking()) {
+            p2csScript = &tx->vout[input.prevout.n].scriptPubKey;
+            isSpendable = wallet->IsMine(input) & ISMINE_SPENDABLE_ALL;
+            break;
+        }
+    }
+
+    if (isSpendable) {
+        // owner unlocked the cold stake
+        record.type = TransactionRecord::P2CSUnlockOwner;
+        record.debit = -(wtx.GetStakeDelegationDebit());
+        record.credit = wtx.GetCredit(ISMINE_ALL);
+    } else {
+        // hot node watching the unlock
+        record.type = TransactionRecord::P2CSUnlockStaker;
+        record.debit = -(wtx.GetColdStakingDebit());
+        record.credit = -(wtx.GetColdStakingCredit());
+    }
+
+    // Extract and set the owner address
+    ExtractAddress(*p2csScript, false, record.address);
+}
+
+void TransactionRecord::loadHotOrColdStakeOrContract(
+        const CWallet* wallet,
+        const CWalletTx& wtx,
+        TransactionRecord& record,
+        bool isContract)
+{
+    record.involvesWatchAddress = false;
+
+    // Get the p2cs
+    CTxOut p2csUtxo;
+    for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
+        const CTxOut &txout = wtx.vout[nOut];
+        if (txout.scriptPubKey.IsPayToColdStaking()) {
+            p2csUtxo = txout;
+            break;
+        }
+    }
+    bool isSpendable = wallet->IsMine(p2csUtxo) & ISMINE_SPENDABLE_DELEGATED;
+
+    if (isContract) {
+        if (isSpendable) {
+            // Wallet delegating balance
+            record.type = TransactionRecord::P2CSDelegationSent;
+        } else {
+            // Wallet receiving a delegation
+            record.type = TransactionRecord::P2CSDelegation;
+        }
+    } else {
+        // Stake
+        if (isSpendable) {
+            // Offline wallet receiving an stake due a delegation
+            record.type = TransactionRecord::StakeDelegated;
+
+        } else {
+            // Online wallet receiving an stake due a received utxo delegation that won a block.
+            record.type = TransactionRecord::StakeHot;
+        }
+    }
+
+    // Extract and set the owner address
+    ExtractAddress(p2csUtxo.scriptPubKey, false, record.address);
+}
+
+bool TransactionRecord::ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr) {
+    CTxDestination address;
+    if (!ExtractDestination(scriptPubKey, address, fColdStake)) {
+        // this shouldn't happen..
+        addressStr = "No available address";
+        return false;
+    } else {
+        addressStr = CBitcoinAddress(
+                address,
+                (fColdStake ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS)
+        ).ToString();
+        return true;
+    }
+}
+
 bool IsZPIVType(TransactionRecord::Type type)
 {
     switch (type) {
@@ -419,6 +535,13 @@ int TransactionRecord::getOutputIndex() const
 bool TransactionRecord::isCoinStake() const
 {
     return (type == TransactionRecord::StakeMint || type == TransactionRecord::Generated || type == TransactionRecord::StakeZPIV);
+}
+
+bool TransactionRecord::isAnyColdStakingType() const
+{
+    return (type == TransactionRecord::P2CSDelegation || type == TransactionRecord::P2CSDelegationSent
+           || type == TransactionRecord::StakeDelegated || type == TransactionRecord::StakeHot
+           || type == TransactionRecord::P2CSUnlockOwner || type == TransactionRecord::P2CSUnlockStaker);
 }
 
 bool TransactionRecord::isNull() const

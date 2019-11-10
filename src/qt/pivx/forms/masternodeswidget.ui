@@ -113,7 +113,11 @@
          <layout class="QVBoxLayout" name="verticalLayout_6"/>
         </item>
         <item>
-         <widget class="QListView" name="listMn"/>
+         <widget class="QListView" name="listMn">
+          <property name="mouseTracking">
+           <bool>true</bool>
+          </property>
+         </widget>
         </item>
         <item>
          <widget class="QFrame" name="emptyContainer">

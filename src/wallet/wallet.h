@@ -8,6 +8,7 @@
 #ifndef BITCOIN_WALLET_H
 #define BITCOIN_WALLET_H
 
+#include "addressbook.h"
 #include "amount.h"
 #include "base58.h"
 #include "crypter.h"
@@ -15,6 +16,7 @@
 #include "key.h"
 #include "keystore.h"
 #include "main.h"
+#include "pairresult.h"
 #include "primitives/block.h"
 #include "primitives/transaction.h"
 #include "zpiv/zerocoin.h"
@@ -144,22 +146,6 @@ public:
         READWRITE(nTime);
         READWRITE(vchPubKey);
     }
-};
-
-/** Address book data */
-class CAddressBookData
-{
-public:
-    std::string name;
-    std::string purpose;
-
-    CAddressBookData()
-    {
-        purpose = "unknown";
-    }
-
-    typedef std::map<std::string, std::string> StringMap;
-    StringMap destdata;
 };
 
 /**
@@ -331,7 +317,7 @@ public:
     int64_t nOrderPosNext;
     std::map<uint256, int> mapRequestCount;
 
-    std::map<CTxDestination, CAddressBookData> mapAddressBook;
+    std::map<CTxDestination, AddressBook::CAddressBookData> mapAddressBook;
 
     std::set<COutPoint> setLockedCoins;
 
@@ -347,6 +333,10 @@ public:
     bool CanSupportFeature(enum WalletFeature wf);
 
     void AvailableCoins(std::vector<COutput>& vCoins, bool fOnlyConfirmed = true, const CCoinControl* coinControl = NULL, bool fIncludeZeroValue = false, AvailableCoinsType nCoinType = ALL_COINS, bool fUseIX = false, int nWatchonlyConfig = 1, bool fIncludeColdStaking=false, bool fIncludeDelegated=true) const;
+
+    // Get available p2cs utxo
+    void GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const;
+
     std::map<CBitcoinAddress, std::vector<COutput> > AvailableCoinsByAddress(bool fConfirmed = true, CAmount maxCoinValue = 0);
     bool SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int nConfTheirs, std::vector<COutput> vCoins, std::set<std::pair<const CWalletTx*, unsigned int> >& setCoinsRet, CAmount& nValueRet) const;
 
@@ -366,6 +356,10 @@ public:
     //  keystore implementation
     // Generate a new key
     CPubKey GenerateNewKey();
+    PairResult getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,
+                                           const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
+    PairResult getNewAddress(CBitcoinAddress& ret, std::string label);
+    PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label);
     CBitcoinAddress GenerateNewAutoMintKey();
     int64_t GetKeyCreationTime(CPubKey pubkey);
     int64_t GetKeyCreationTime(const CBitcoinAddress& address);
@@ -802,6 +796,8 @@ public:
     void MarkDirty();
 
     void BindWallet(CWallet* pwalletIn);
+    //! checks whether a tx has P2CS inputs or not
+    bool HasP2CSInputs() const;
 
     int GetDepthAndMempool(bool& fConflicted, bool enableIX = true) const;
 

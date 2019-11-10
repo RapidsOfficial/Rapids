@@ -94,7 +94,13 @@ public:
         ObfuscationCollateralPayment,
         ObfuscationMakeCollaterals,
         ObfuscationCreateDenominations,
-        Obfuscated
+        Obfuscated,
+        StakeDelegated, // Received cold stake (owner)
+        StakeHot, // Staked via a delegated P2CS.
+        P2CSDelegation, // Non-spendable P2CS, staker side.
+        P2CSDelegationSent, // Spendable P2CS delegated utxo. (coin-owner)
+        P2CSUnlockOwner, // Coin-owner spent the delegated utxo
+        P2CSUnlockStaker // Staker watching the owner spent the delegated utxo
     };
 
     /** Number of confirmation recommended for accepting a transaction */
@@ -118,6 +124,12 @@ public:
      */
     static bool showTransaction(const CWalletTx& wtx);
     static QList<TransactionRecord> decomposeTransaction(const CWallet* wallet, const CWalletTx& wtx);
+
+    /// Helpers
+    static bool ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr);
+    static void loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx,
+                                            TransactionRecord& record, bool isContract = false);
+    static void loadUnlockColdStake(const CWallet* wallet, const CWalletTx& wtx, TransactionRecord& record);
 
     /** @name Immutable transaction attributes
       @{*/
@@ -161,9 +173,14 @@ public:
      */
     bool isCoinStake() const;
 
+    /** Return true if the tx is a any cold staking type tx.
+     */
+    bool isAnyColdStakingType() const;
+
     /** Return true if the tx hash is null and/or if the size is 0
      */
     bool isNull() const;
+
 };
 
 #endif // BITCOIN_QT_TRANSACTIONRECORD_H

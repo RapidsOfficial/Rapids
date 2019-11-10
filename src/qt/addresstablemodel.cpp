@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "addresstablemodel.h"
+#include "addressbook.h"
 
 #include "guiutil.h"
 #include "walletmodel.h"
@@ -19,12 +20,16 @@
 const QString AddressTableModel::Send = "S";
 const QString AddressTableModel::Receive = "R";
 const QString AddressTableModel::Zerocoin = "X";
+const QString AddressTableModel::Delegators = "D";
+const QString AddressTableModel::ColdStaking = "C";
 
 struct AddressTableEntry {
     enum Type {
         Sending,
         Receiving,
         Zerocoin,
+        Delegators,
+        ColdStaking,
         Hidden /* QSortFilterProxyModel will filter these out */
     };
 
@@ -59,10 +64,15 @@ static AddressTableEntry::Type translateTransactionType(const QString& strPurpos
 {
     AddressTableEntry::Type addressType = AddressTableEntry::Hidden;
     // "refund" addresses aren't shown, and change addresses aren't in mapAddressBook at all.
-    if (strPurpose == "send")
+    if (strPurpose ==  QString::fromStdString(AddressBook::AddressBookPurpose::SEND))
         addressType = AddressTableEntry::Sending;
-    else if (strPurpose == "receive")
+    else if (strPurpose ==  QString::fromStdString(AddressBook::AddressBookPurpose::RECEIVE))
         addressType = AddressTableEntry::Receiving;
+    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGATOR)
+            || strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGABLE))
+        addressType = AddressTableEntry::Delegators;
+    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::COLD_STAKING))
+        addressType = AddressTableEntry::ColdStaking;
     else if (strPurpose == "unknown" || strPurpose == "") // if purpose not set, guess
         addressType = (isMine ? AddressTableEntry::Receiving : AddressTableEntry::Sending);
     return addressType;
@@ -76,6 +86,7 @@ public:
     QList<AddressTableEntry> cachedAddressTable;
     int sendNum = 0;
     int recvNum = 0;
+    int dellNum = 0;
     AddressTableModel* parent;
 
     AddressTablePriv(CWallet* wallet, AddressTableModel* parent) : wallet(wallet), parent(parent) {}
@@ -85,7 +96,7 @@ public:
         cachedAddressTable.clear();
         {
             LOCK(wallet->cs_wallet);
-            for (const PAIRTYPE(CTxDestination, CAddressBookData) & item : wallet->mapAddressBook) {
+            for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : wallet->mapAddressBook) {
                 const CBitcoinAddress& address = item.first;
                 bool fMine = IsMine(*wallet, address.Get());
                 AddressTableEntry::Type addressType = translateTransactionType(
@@ -93,18 +104,37 @@ public:
                 const std::string& strName = item.second.name;
 
                 uint creationTime = 0;
+
                 if(item.second.purpose == "receive"){
                     creationTime = static_cast<uint>(wallet->GetKeyCreationTime(address));
                     recvNum++;
-                }else if(item.second.purpose == "send"){
+                } else if(item.second.purpose == "send"){
                     sendNum++;
+                } else if (item.second.purpose == AddressBook::AddressBookPurpose::DELEGABLE
+                            || item.second.purpose == AddressBook::AddressBookPurpose::DELEGATOR
+                            || item.second.purpose == AddressBook::AddressBookPurpose::COLD_STAKING) {
+                    dellNum++;
+
+                    // TODO: Remove this when addresses are well parsed, this is a dirty dirty way to fix things quickly only for testing purposes..
+                    CKeyID keyID;
+                    if (address.GetKeyID(keyID)) {
+                        CBitcoinAddress stakingAddress(keyID, CChainParams::STAKING_ADDRESS);
+                        cachedAddressTable.append(
+                                AddressTableEntry(addressType,
+                                                  QString::fromStdString(strName),
+                                                  QString::fromStdString(stakingAddress.ToString()),
+                                                  creationTime
+                                )
+                        );
+                    }
+                    continue;
                 }
 
                 cachedAddressTable.append(
                         AddressTableEntry(addressType,
-                                  QString::fromStdString(strName),
-                                  QString::fromStdString(address.ToString()),
-                                  creationTime
+                                          QString::fromStdString(strName),
+                                          QString::fromStdString(address.ToString()),
+                                          creationTime
                         )
                 );
             }
@@ -223,6 +253,10 @@ public:
         return recvNum;
     }
 
+    int sizeDell(){
+        return dellNum;
+    }
+
     AddressTableEntry* index(int idx)
     {
         if (idx >= 0 && idx < cachedAddressTable.size()) {
@@ -264,6 +298,10 @@ int AddressTableModel::sizeRecv() const{
     return priv->sizeRecv();
 }
 
+int AddressTableModel::sizeDell() const {
+    return priv->sizeDell();
+}
+
 QVariant AddressTableModel::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
@@ -292,12 +330,16 @@ QVariant AddressTableModel::data(const QModelIndex& index, int role) const
         return font;
     } else if (role == TypeRole) {
         switch (rec->type) {
-        case AddressTableEntry::Sending:
-            return Send;
-        case AddressTableEntry::Receiving:
-            return Receive;
-        default:
-            break;
+            case AddressTableEntry::Sending:
+                return Send;
+            case AddressTableEntry::Receiving:
+                return Receive;
+            case AddressTableEntry::Delegators:
+                return Delegators;
+            case AddressTableEntry::ColdStaking:
+                return ColdStaking;
+            default:
+                break;
         }
     }
     return QVariant();
@@ -476,15 +518,33 @@ bool AddressTableModel::removeRows(int row, int count, const QModelIndex& parent
  */
 QString AddressTableModel::labelForAddress(const QString& address) const
 {
-    {
-        LOCK(wallet->cs_wallet);
-        CBitcoinAddress address_parsed(address.toStdString());
-        std::map<CTxDestination, CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
-        if (mi != wallet->mapAddressBook.end()) {
-            return QString::fromStdString(mi->second.name);
+    // TODO: Check why do we have empty addresses..
+    if (!address.isEmpty()) {
+        {
+            LOCK(wallet->cs_wallet);
+            CBitcoinAddress address_parsed(address.toStdString());
+            std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
+            if (mi != wallet->mapAddressBook.end()) {
+                return QString::fromStdString(mi->second.name);
+            }
         }
     }
     return QString();
+}
+
+/* Look up purpose for address in address book
+ */
+std::string AddressTableModel::purposeForAddress(const std::string& address) const
+{
+    {
+        LOCK(wallet->cs_wallet);
+        CBitcoinAddress address_parsed(address);
+        std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address_parsed.Get());
+        if (mi != wallet->mapAddressBook.end()) {
+            return mi->second.purpose;
+        }
+    }
+    return "";
 }
 
 int AddressTableModel::lookupAddress(const QString& address) const
@@ -505,7 +565,7 @@ int AddressTableModel::lookupAddress(const QString& address) const
 QString AddressTableModel::getLastUnusedAddress() const{
     LOCK(wallet->cs_wallet);
     if(!wallet->mapAddressBook.empty()) {
-        for (std::map<CTxDestination, CAddressBookData>::iterator it = wallet->mapAddressBook.end(); it != wallet->mapAddressBook.begin(); --it) {
+        for (std::map<CTxDestination, AddressBook::CAddressBookData>::iterator it = wallet->mapAddressBook.end(); it != wallet->mapAddressBook.begin(); --it) {
             if(it != wallet->mapAddressBook.end()) {
                 if (it->second.purpose == "receive") {
                     const CBitcoinAddress &address = it->first;
@@ -523,4 +583,9 @@ QString AddressTableModel::getLastUnusedAddress() const{
 void AddressTableModel::emitDataChanged(int idx)
 {
     emit dataChanged(index(idx, 0, QModelIndex()), index(idx, columns.length() - 1, QModelIndex()));
+}
+
+void AddressTableModel::notifyChange(const QModelIndex &_index) {
+    int idx = _index.row();
+    emitDataChanged(idx);
 }

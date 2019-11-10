@@ -335,6 +335,7 @@ set(WALLET_SOURCES
         ./src/obfuscation.cpp
         ./src/obfuscation-relay.cpp
         ./src/wallet/db.cpp
+        ./src/addressbook.cpp
         ./src/crypter.cpp
         ./src/swifttx.cpp
         ./src/masternode.cpp

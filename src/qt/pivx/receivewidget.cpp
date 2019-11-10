@@ -9,8 +9,10 @@
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/myaddressrow.h"
 #include "qt/pivx/furlistrow.h"
+#include "qt/pivx/addressholder.h"
 #include "walletmodel.h"
 #include "guiutil.h"
+#include "pairresult.h"
 
 #include <QModelIndex>
 #include <QColor>
@@ -18,37 +20,6 @@
 
 #define DECORATION_SIZE 70
 #define NUM_ITEMS 3
-
-class AddressHolder : public FurListRow<QWidget*>
-{
-public:
-    AddressHolder();
-
-    explicit AddressHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme){}
-
-    MyAddressRow* createHolder(int pos) override{
-        if (!cachedRow) cachedRow = new MyAddressRow();
-        return cachedRow;
-    }
-
-    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override{
-        MyAddressRow *row = static_cast<MyAddressRow*>(holder);
-        QString address = index.data(Qt::DisplayRole).toString();
-        QString label = index.sibling(index.row(), AddressTableModel::Label).data(Qt::DisplayRole).toString();
-        uint time = index.sibling(index.row(), AddressTableModel::Date).data(Qt::DisplayRole).toUInt();
-        QString date = (time == 0) ? "" : GUIUtil::dateTimeStr(QDateTime::fromTime_t(time));
-        row->updateView(address, label, date);
-    }
-
-    QColor rectColor(bool isHovered, bool isSelected) override{
-        return getRowColor(isLightTheme, isHovered, isSelected);
-    }
-
-    ~AddressHolder() override{}
-
-    bool isLightTheme;
-    MyAddressRow* cachedRow = nullptr;
-};
 
 ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     PWidget(parent),
@@ -147,8 +118,17 @@ void ReceiveWidget::loadWalletModel(){
 void ReceiveWidget::refreshView(QString refreshAddress){
     try {
         QString latestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getLastUnusedAddress() : refreshAddress;
-        if (latestAddress.isEmpty()) // new default address
-           latestAddress = QString::fromStdString(walletModel->getNewAddress("Default").ToString());
+        if (latestAddress.isEmpty()) { // new default address
+            CBitcoinAddress newAddress;
+            PairResult r = walletModel->getNewAddress(newAddress, "Default");
+            // Check for generation errors
+            if (!r.result) {
+                ui->labelQrImg->setText(tr("No available address, try unlocking the wallet"));
+                inform(tr("Error generating address"));
+                return;
+            }
+            latestAddress = QString::fromStdString(newAddress.ToString());
+        }
         ui->labelAddress->setText(latestAddress);
         int64_t time = walletModel->getKeyCreationTime(CBitcoinAddress(latestAddress.toStdString()));
         ui->labelDate->setText(GUIUtil::dateTimeStr(QDateTime::fromTime_t(static_cast<uint>(time))));
@@ -225,7 +205,15 @@ void ReceiveWidget::onLabelClicked(){
 void ReceiveWidget::onNewAddressClicked(){
     try {
         if (!verifyWalletUnlocked()) return;
-        CBitcoinAddress address = walletModel->getNewAddress("");
+        CBitcoinAddress address;
+        PairResult r = walletModel->getNewAddress(address, "");
+
+        // Check for validity
+        if(!r.result) {
+            inform(r.status->c_str());
+            return;
+        }
+
         updateQr(QString::fromStdString(address.ToString()));
         ui->labelAddress->setText(!info->address.isEmpty() ? info->address : tr("No address"));
         updateLabel();
@@ -243,12 +231,17 @@ void ReceiveWidget::onCopyClicked(){
 
 
 void ReceiveWidget::onRequestClicked(){
+    showAddressGenerationDialog(true);
+}
+
+void ReceiveWidget::showAddressGenerationDialog(bool isPaymentRequest) {
     if(walletModel && !isShowingDialog) {
         if (!verifyWalletUnlocked()) return;
         isShowingDialog = true;
         showHideOp(true);
         RequestDialog *dialog = new RequestDialog(window);
         dialog->setWalletModel(walletModel);
+        dialog->setPaymentRequest(isPaymentRequest);
         openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 12);
         if (dialog->res == 1){
             inform(tr("URI copied to clipboard"));

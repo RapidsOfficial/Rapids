@@ -70,14 +70,12 @@ QPushButton[cssClass="img-nav-logo"] {
     url("://ic-nav-receive-active") on;
     qproperty-iconSize: 24px 40px;
     background-color:transparent;
-    padding-top: 25px;
     font-size:14px;
     color: #938da5;
 }
 
 *[cssClass="btn-nav-receive"]:checked {
     background-color: #0f0b16;
-    padding-top: 25px;
     font-size:14px;
     color: #B088FF;
 }
@@ -99,6 +97,101 @@ QPushButton[cssClass="img-nav-logo"] {
     font-size:14px;
     color: #B088FF;
 }
+
+/*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+!############# Cold staking Nav
+ ################################*/
+
+*[cssClass="btn-nav-cold-staking"] {
+    qproperty-icon: url("://ic-nav-cold-staking") off,
+    url("://ic-nav-cold-staking-active") on;
+    qproperty-iconSize: 24px 40px;
+    background-color:transparent;
+    font-size:14px;
+    color: #938da5;
+}
+
+*[cssClass="btn-nav-cold-staking"]:checked {
+    background-color: #0f0b16;
+    font-size:14px;
+    color: #B088FF;
+}
+
+*[cssClass="btn-nav-cold-staking"]:checked:hover {
+    background-color: #0f0b16;
+    color: #B088FF;
+}
+
+*[cssClass="btn-nav-cold-staking"]:hover {
+    qproperty-icon: url("://ic-nav-cold-staking-hover");
+    qproperty-iconSize: 24px 40px;
+    background-color: #1A000000;
+    color: #938da5;
+}
+
+*[cssClass="btn-nav-cold-staking-active"] {
+    qproperty-icon:url("://ic-nav-cold-staking-active")  ;
+    qproperty-iconSize: 24px 40px;
+    background-color: #0f0b16;
+    font-size:14px;
+    color: #B088FF;
+}
+
+/*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+!#############
+ ################################*/
+
+/*******************
+******cold staking top bar*********
+ ********************/
+
+QPushButton[cssClass="btn-check-cold-staking"] {
+    qproperty-icon: url("://ic-check-cold-staking");
+    qproperty-iconSize: 24px 24px;
+    color:#ffffff;
+    background-color:#505c4b7d;
+    border-bottom:2px solid #5C4B7D;
+    border-radius:2px;
+}
+
+
+QPushButton[cssClass="btn-check-cold-staking-inactive"] {
+    qproperty-icon: url("://ic-check-cold-staking-off");
+    qproperty-iconSize: 24px 24px;
+    color:#B3FFFFFF;
+    background-color:#405c4b7d;
+    border-bottom:2px solid #5C4B7D;
+    border-radius:2px;
+}
+
+QPushButton[cssClass="btn-check-cold-staking-checked"] {
+    qproperty-icon: url("://ic-check-cold-staking-enabled");
+    qproperty-iconSize: 24px 24px;
+    background-color:#505c4b7d;
+    color:#ffffff;
+    border-bottom:2px solid #b088ff;
+}
+
+QPushButton[cssClass="btn-check-cold-staking-unchecked"] {
+    qproperty-icon: url("://ic-check-cold-staking-enabled");
+    qproperty-iconSize: 24px 24px;
+    color:#B3FFFFFF;
+    background-color:#405c4b7d;
+    border-bottom:2px solid #5C4B7D;
+    border-radius:2px;
+}
+
+QPushButton[cssClass="btn-check-cold-staking"]:checked {
+    qproperty-icon: url("://ic-check-cold-staking-enabled");
+    qproperty-iconSize: 24px 24px;
+    background-color:#505c4b7d;
+    color:#ffffff;
+    border-bottom:2px solid #b088ff;
+}
+
+/*******************
+******end cold staking*********
+ ********************/
 
 *[cssClass="btn-nav-settings"] {
     qproperty-icon: url("://ic-nav-settings") off,
@@ -280,7 +373,6 @@ QPushButton[cssClass="img-nav-logo"] {
 *[cssClass="btn-nav-master"]:checked {
     qproperty-icon: url("://ic-nav-master-active");
     background-color: #0f0b16;
-    padding-top: 32px;
     font-size:14px;
     color: #B088FF;
 }
@@ -759,6 +851,11 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     font-size:14px;
 }
 
+*[cssClass="text-list-caption-medium-green"] {
+    color:#008d36;
+    font-size:14px;
+}
+
 *[cssClass="text-list-caption-unconfirmed"] {
     color:#B6B6B6;
 }
@@ -803,6 +900,11 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 *[cssClass="text-title"] {
     color:#b088ff;
     font-size:16px;
+}
+
+*[cssClass="text-title-right"] {
+    color:#b088ff;
+    font-size:14px;
 }
 
 *[cssClass="text-title-white"] {
@@ -1867,6 +1969,14 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 QComboBox[cssClass="btn-combo-coins"] {
     background-color:#5c4b7d;
     padding:10px 20px 10px 10px;
+    font-size:16px;
+    border:1px solid #5c4b7d;
+    color: #FFFFFF;
+}
+
+QLabel[cssClass="btn-combo-coins"] {
+    background-color:#5c4b7d;
+    padding:10px 10px 10px 10px;
     font-size:16px;
     border:1px solid #5c4b7d;
     color: #FFFFFF;

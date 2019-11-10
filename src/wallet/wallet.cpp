@@ -101,6 +101,39 @@ std::vector<CWalletTx> CWallet::getWalletTxs()
     return result;
 }
 
+PairResult CWallet::getNewAddress(CBitcoinAddress& ret, std::string label){
+    return getNewAddress(ret, label, AddressBook::AddressBookPurpose::RECEIVE);
+}
+
+PairResult CWallet::getNewStakingAddress(CBitcoinAddress& ret, std::string label){
+    return getNewAddress(ret, label, AddressBook::AddressBookPurpose::COLD_STAKING, CChainParams::Base58Type::STAKING_ADDRESS);
+}
+
+PairResult CWallet::getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,
+                                         const CChainParams::Base58Type addrType)
+{
+    LOCK2(cs_main, cs_wallet);
+
+    // Refill keypool if wallet is unlocked
+    if (!IsLocked())
+        TopUpKeyPool();
+
+    CPubKey newKey;
+    // Get a key
+    if (!GetKeyFromPool(newKey)) {
+        // inform the user to top-up the keypool or unlock the wallet
+        return PairResult(false, new std::string(
+                "Keypool ran out, please call keypoolrefill first, or unlock the wallet."));
+    }
+    CKeyID keyID = newKey.GetID();
+
+    if (!SetAddressBook(keyID, addressLabel, purpose))
+        throw std::runtime_error("CWallet::getNewAddress() : SetAddressBook failed");
+
+    ret = CBitcoinAddress(keyID, addrType);
+    return PairResult(true);
+}
+
 CPubKey CWallet::GenerateNewKey()
 {
     AssertLockHeld(cs_wallet);                                 // mapKeyMetadata
@@ -1474,7 +1507,7 @@ void CWalletTx::GetAccountAmounts(const std::string& strAccount, CAmount& nRecei
         LOCK(pwallet->cs_wallet);
         for (const COutputEntry& r : listReceived) {
             if (pwallet->mapAddressBook.count(r.destination)) {
-                std::map<CTxDestination, CAddressBookData>::const_iterator mi = pwallet->mapAddressBook.find(r.destination);
+                std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = pwallet->mapAddressBook.find(r.destination);
                 if (mi != pwallet->mapAddressBook.end() && (*mi).second.name == strAccount)
                     nReceived += r.amount;
             } else if (strAccount.empty()) {
@@ -1879,6 +1912,38 @@ CAmount CWallet::GetLockedWatchOnlyBalance() const
             if (pcoin.IsTrusted() && pcoin.GetDepthInMainChain() > 0)
                 nTotal += pcoin.GetLockedWatchOnlyCredit();
     });
+}
+
+void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
+    vCoins.clear();
+    {
+        LOCK2(cs_main, cs_wallet);
+        for (const auto& it : mapWallet) {
+            const uint256& wtxid = it.first;
+            const CWalletTx* pcoin = &it.second;
+
+            if (!pcoin->IsTrusted())
+                continue;
+
+            if (pcoin->HasP2CSOutputs()) {
+                for (int i = 0; i < (int) pcoin->vout.size(); i++) {
+                    const auto &utxo = pcoin->vout[i];
+
+                    if (IsSpent(wtxid, i))
+                        continue;
+
+                    if (utxo.scriptPubKey.IsPayToColdStaking()) {
+                        isminetype mine = IsMine(utxo);
+                        bool isMineSpendable = mine & ISMINE_SPENDABLE_DELEGATED;
+                        if (mine & ISMINE_COLD || isMineSpendable)
+                            // Depth is not used, no need waste resources and set it for now.
+                            vCoins.emplace_back(COutput(pcoin, i, 0, isMineSpendable));
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 /**
@@ -2977,7 +3042,7 @@ bool CWallet::DelAddressBook(const CTxDestination& address)
 bool CWallet::HasAddressBook(const CTxDestination& address) const
 {
     LOCK(cs_wallet); // mapAddressBook
-    std::map<CTxDestination, CAddressBookData>::const_iterator mi = mapAddressBook.find(address);
+    std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = mapAddressBook.find(address);
     return mi != mapAddressBook.end();
 }
 
@@ -2988,7 +3053,7 @@ bool CWallet::HasDelegator(const CTxOut& out) const
         return false;
     {
         LOCK(cs_wallet); // mapAddressBook
-        std::map<CTxDestination, CAddressBookData>::const_iterator mi = mapAddressBook.find(delegator);
+        std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = mapAddressBook.find(delegator);
         if (mi == mapAddressBook.end())
             return false;
         return (*mi).second.purpose == "delegator";
@@ -3261,7 +3326,7 @@ std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) co
 {
     LOCK(cs_wallet);
     std::set<CTxDestination> result;
-    for (const PAIRTYPE(CTxDestination, CAddressBookData) & item : mapAddressBook) {
+    for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : mapAddressBook) {
         const CTxDestination& address = item.first;
         const std::string& strName = item.second.name;
         if (strName == strAccount)
@@ -5741,6 +5806,12 @@ void CWalletTx::BindWallet(CWallet* pwalletIn)
 {
     pwallet = pwalletIn;
     MarkDirty();
+}
+
+
+bool CWalletTx::HasP2CSInputs() const
+{
+    return GetStakeDelegationDebit(true) > 0 || GetColdStakingDebit(true) > 0;
 }
 
 CAmount CWalletTx::GetChange() const

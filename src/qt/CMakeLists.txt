@@ -110,6 +110,7 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/pivxgui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/loadingdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/pwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/guitransactionsutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/snackbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/navmenuwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/lockunlock.cpp
@@ -129,6 +130,7 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/contactsdropdown.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/optionbutton.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/mninfodialog.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/coldstakingmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/mnmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/masternodewizarddialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/mnrow.cpp
@@ -144,11 +146,14 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/requestdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/receivewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/myaddressrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/csrow.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addressholder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/tooltipmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addresseswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/defaultdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/denomgenerationdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/privacywidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/coldstakingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsbackupwallet.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsbittoolwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsconsolewidget.cpp

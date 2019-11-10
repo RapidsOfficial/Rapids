@@ -48,6 +48,8 @@ public:
     static const QString Send;    /**< Specifies send address */
     static const QString Receive; /**< Specifies receive address */
     static const QString Zerocoin; /**< Specifies stealth address */
+    static const QString Delegators;
+    static const QString ColdStaking;
 
     /** @name Methods overridden from QAbstractTableModel
         @{*/
@@ -55,6 +57,8 @@ public:
     int columnCount(const QModelIndex& parent) const;
     int sizeSend() const;
     int sizeRecv() const;
+    int sizeDell() const;
+    void notifyChange(const QModelIndex &index);
     QVariant data(const QModelIndex& index, int role) const;
     bool setData(const QModelIndex& index, const QVariant& value, int role);
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
@@ -76,6 +80,11 @@ public:
        Return -1 if not found.
      */
     int lookupAddress(const QString& address) const;
+
+    /*
+     * Look up purpose for address in address book, if not found return empty string
+     */
+    std::string purposeForAddress(const std::string& address) const;
 
     /**
      * Return last unused address

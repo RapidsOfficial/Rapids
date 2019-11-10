@@ -28,6 +28,9 @@
 
 #include "util.h"
 
+#define BASE_WINDOW_WIDTH 1200
+#define BASE_WINDOW_HEIGHT 740
+
 
 const QString PIVXGUI::DEFAULT_WALLET = "~Default";
 
@@ -37,10 +40,9 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
     /* Open CSS when configured */
     this->setStyleSheet(GUIUtil::loadStyleSheet());
-    this->setMinimumSize(1200, 740);
-    GUIUtil::restoreWindowGeometry("nWindow", QSize(1200, 740), this);
+    this->setMinimumSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
+    GUIUtil::restoreWindowGeometry("nWindow", QSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT), this);
 
-    QString windowTitle = tr("PIVX Core") + " - ";
 #ifdef ENABLE_WALLET
     /* if compiled with wallet support, -disablewallet can still disable the wallet */
     enableWallet = !GetBoolArg("-disablewallet", false);
@@ -48,12 +50,8 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
     enableWallet = false;
 #endif // ENABLE_WALLET
 
-    if (enableWallet) {
-        windowTitle += tr("Wallet");
-    } else {
-        windowTitle += tr("Node");
-    }
-
+    QString windowTitle = tr("PIVX Core") + " - ";
+    windowTitle += ((enableWallet) ? tr("Wallet") : tr("Node"));
     windowTitle += " " + networkStyle->getTitleAddText();
     setWindowTitle(windowTitle);
 
@@ -72,8 +70,8 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
     if(enableWallet){
 
         QFrame* centralWidget = new QFrame(this);
-        this->setMinimumWidth(1200);
-        this->setMinimumHeight(740);
+        this->setMinimumWidth(BASE_WINDOW_WIDTH);
+        this->setMinimumHeight(BASE_WINDOW_HEIGHT);
         QHBoxLayout* centralWidgetLayouot = new QHBoxLayout();
         centralWidget->setLayout(centralWidgetLayouot);
         centralWidgetLayouot->setContentsMargins(0,0,0,0);
@@ -119,6 +117,7 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         addressesWidget = new AddressesWidget(this);
         privacyWidget = new PrivacyWidget(this);
         masterNodesWidget = new MasterNodesWidget(this);
+        coldStakingWidget = new ColdStakingWidget(this);
         settingsWidget = new SettingsWidget(this);
 
         // Add to parent
@@ -128,6 +127,7 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         stackedContainer->addWidget(addressesWidget);
         stackedContainer->addWidget(privacyWidget);
         stackedContainer->addWidget(masterNodesWidget);
+        stackedContainer->addWidget(coldStakingWidget);
         stackedContainer->addWidget(settingsWidget);
         stackedContainer->setCurrentWidget(dashboard);
 
@@ -184,6 +184,7 @@ void PIVXGUI::connectActions() {
     });
     connect(topBar, &TopBar::showHide, this, &PIVXGUI::showHide);
     connect(topBar, &TopBar::themeChanged, this, &PIVXGUI::changeTheme);
+    connect(topBar, &TopBar::onShowHideColdStakingChanged, navMenu, &NavMenuWidget::onShowHideColdStakingChanged);
     connect(settingsWidget, &SettingsWidget::showHide, this, &PIVXGUI::showHide);
     connect(sendWidget, &SendWidget::showHide, this, &PIVXGUI::showHide);
     connect(receiveWidget, &ReceiveWidget::showHide, this, &PIVXGUI::showHide);
@@ -191,6 +192,8 @@ void PIVXGUI::connectActions() {
     connect(privacyWidget, &PrivacyWidget::showHide, this, &PIVXGUI::showHide);
     connect(masterNodesWidget, &MasterNodesWidget::showHide, this, &PIVXGUI::showHide);
     connect(masterNodesWidget, &MasterNodesWidget::execDialog, this, &PIVXGUI::execDialog);
+    connect(coldStakingWidget, &ColdStakingWidget::showHide, this, &PIVXGUI::showHide);
+    connect(coldStakingWidget, &ColdStakingWidget::execDialog, this, &PIVXGUI::execDialog);
     connect(settingsWidget, &SettingsWidget::execDialog, this, &PIVXGUI::execDialog);
 }
 
@@ -243,6 +246,7 @@ void PIVXGUI::setClientModel(ClientModel* clientModel) {
         // Receive and report messages from client model
         connect(clientModel, SIGNAL(message(QString, QString, unsigned int)), this, SLOT(message(QString, QString, unsigned int)));
         connect(topBar, SIGNAL(walletSynced(bool)), dashboard, SLOT(walletSynced(bool)));
+        connect(topBar, SIGNAL(walletSynced(bool)), coldStakingWidget, SLOT(walletSynced(bool)));
 
         // Get restart command-line parameters and handle restart
         connect(settingsWidget, &SettingsWidget::handleRestart, [this](QStringList arg){handleRestart(arg);});
@@ -471,6 +475,10 @@ void PIVXGUI::goToMasterNodes(){
     showTop(masterNodesWidget);
 }
 
+void PIVXGUI::goToColdStaking(){
+    showTop(coldStakingWidget);
+}
+
 void PIVXGUI::goToSettings(){
     showTop(settingsWidget);
 }
@@ -558,11 +566,8 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     if(!stackedContainer || !clientModel || !walletModel)
         return false;
 
-    // todo: show out of sync warning..
-    // todo: complete this next method
-    //connect(walletView, SIGNAL(showNormalIfMinimized()), gui, SLOT(showNormalIfMinimized()));
-
     // set the model for every view
+    navMenu->setWalletModel(walletModel);
     dashboard->setWalletModel(walletModel);
     topBar->setWalletModel(walletModel);
     receiveWidget->setWalletModel(walletModel);
@@ -570,11 +575,13 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     addressesWidget->setWalletModel(walletModel);
     privacyWidget->setWalletModel(walletModel);
     masterNodesWidget->setWalletModel(walletModel);
+    coldStakingWidget->setWalletModel(walletModel);
     settingsWidget->setWalletModel(walletModel);
 
     // Connect actions..
     connect(privacyWidget, &PrivacyWidget::message, this, &PIVXGUI::message);
     connect(masterNodesWidget, &MasterNodesWidget::message, this, &PIVXGUI::message);
+    connect(coldStakingWidget, &MasterNodesWidget::message, this, &PIVXGUI::message);
     connect(topBar, &TopBar::message, this, &PIVXGUI::message);
     connect(sendWidget, &SendWidget::message,this, &PIVXGUI::message);
     connect(receiveWidget, &ReceiveWidget::message,this, &PIVXGUI::message);

@@ -55,6 +55,7 @@ public:
         ShowMasternodesTab,  // bool
         Listen,              // bool
         StakeSplitThreshold, // int
+        ShowColdStakingScreen, // bool
         OptionIDRowCount,
     };
 
@@ -84,6 +85,16 @@ public:
     bool isRestartRequired();
     bool resetSettings;
 
+    bool isColdStakingScreenEnabled() { return showColdStakingScreen; }
+    bool invertColdStakingScreenStatus() {
+        setData(
+                createIndex(ShowColdStakingScreen, 0),
+                !isColdStakingScreenEnabled(),
+                Qt::EditRole
+        );
+        return showColdStakingScreen;
+    }
+
     // Reset
     void setMainDefaultOptions(QSettings& settings, bool reset = false);
     void setWalletDefaultOptions(QSettings& settings, bool reset = false);
@@ -99,6 +110,7 @@ private:
     int nDisplayUnit;
     QString strThirdPartyTxUrls;
     bool fCoinControlFeatures;
+    bool showColdStakingScreen;
     bool fHideZeroBalances;
     bool fHideOrphans;
     /* settings that were overriden by command-line */
@@ -115,6 +127,7 @@ signals:
     void preferredDenomChanged(int);
     void anonymizePivxAmountChanged(int);
     void coinControlFeaturesChanged(bool);
+    void showHideColdStakingScreen(bool);
     void hideZeroBalancesChanged(bool);
     void hideOrphansChanged(bool);
 };

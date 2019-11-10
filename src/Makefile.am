@@ -104,6 +104,8 @@ BITCOIN_CORE_H = \
   primitives/transaction.h \
   core_io.h \
   crypter.h \
+  pairresult.h \
+  addressbook.h \
   denomination_functions.h \
   obfuscation.h \
   obfuscation-relay.h \
@@ -262,6 +264,7 @@ libbitcoin_wallet_a_SOURCES = \
   obfuscation.cpp \
   obfuscation-relay.cpp \
   wallet/db.cpp \
+  addressbook.cpp \
   crypter.cpp \
   swifttx.cpp \
   masternode.cpp \

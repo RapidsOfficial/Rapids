@@ -69,6 +69,9 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     ui->pushButtonStack->setButtonClassStyle("cssClass", "btn-check-stack-inactive");
     ui->pushButtonStack->setButtonText("Staking Disabled");
 
+    ui->pushButtonColdStaking->setButtonClassStyle("cssClass", "btn-check-cold-staking-inactive");
+    ui->pushButtonColdStaking->setButtonText("Cold Staking Disabled");
+
     ui->pushButtonMint->setButtonClassStyle("cssClass", "btn-check-mint-inactive");
     ui->pushButtonMint->setButtonText("Automint Enabled");
     ui->pushButtonMint->setVisible(false);
@@ -107,6 +110,7 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     connect(ui->pushButtonLock, SIGNAL(Mouse_Pressed()), this, SLOT(onBtnLockClicked()));
     connect(ui->pushButtonTheme, SIGNAL(Mouse_Pressed()), this, SLOT(onThemeClicked()));
     connect(ui->pushButtonFAQ, SIGNAL(Mouse_Pressed()), _mainWindow, SLOT(openFAQ()));
+    connect(ui->pushButtonColdStaking, SIGNAL(Mouse_Pressed()), this, SLOT(onColdStakingClicked()));
 }
 
 void TopBar::onThemeClicked(){
@@ -277,6 +281,34 @@ void TopBar::showBottom(){
     this->adjustSize();
 }
 
+void TopBar::onColdStakingClicked() {
+
+    bool isColdStakingEnabled = walletModel->isColdStaking();
+    ui->pushButtonColdStaking->setChecked(isColdStakingEnabled);
+
+    bool show = (isInitializing) ? walletModel->getOptionsModel()->isColdStakingScreenEnabled() :
+            walletModel->getOptionsModel()->invertColdStakingScreenStatus();
+    QString className;
+    QString text;
+
+    if (isColdStakingEnabled) {
+        text = "Cold Staking Active";
+        className = (show) ? "btn-check-cold-staking-checked" : "btn-check-cold-staking-unchecked";
+    } else if (show) {
+        className = "btn-check-cold-staking";
+        text = "Cold Staking Enabled";
+    } else {
+        className = "btn-check-cold-staking-inactive";
+        text = "Cold Staking Disabled";
+    }
+
+    ui->pushButtonColdStaking->setButtonClassStyle("cssClass", className, true);
+    ui->pushButtonColdStaking->setButtonText(text);
+    updateStyle(ui->pushButtonColdStaking);
+
+    emit onShowHideColdStakingChanged(show);
+}
+
 TopBar::~TopBar(){
     if(timerStakingIcon){
         timerStakingIcon->stop();
@@ -430,8 +462,8 @@ void TopBar::setNumBlocks(int count) {
 }
 
 void TopBar::loadWalletModel(){
-    connect(walletModel, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this,
-            SLOT(updateBalances(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
+    connect(walletModel, SIGNAL(balanceChanged(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)), this,
+            SLOT(updateBalances(CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount, CAmount)));
     connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
     connect(walletModel, &WalletModel::encryptionStatusChanged, this, &TopBar::refreshStatus);
 
@@ -439,6 +471,9 @@ void TopBar::loadWalletModel(){
     updateDisplayUnit();
 
     refreshStatus();
+    onColdStakingClicked();
+
+    isInitializing = false;
 }
 
 void TopBar::refreshStatus(){
@@ -477,13 +512,15 @@ void TopBar::updateDisplayUnit()
         if (displayUnitPrev != nDisplayUnit)
             updateBalances(walletModel->getBalance(), walletModel->getUnconfirmedBalance(), walletModel->getImmatureBalance(),
                            walletModel->getZerocoinBalance(), walletModel->getUnconfirmedZerocoinBalance(), walletModel->getImmatureZerocoinBalance(),
-                           walletModel->getWatchBalance(), walletModel->getWatchUnconfirmedBalance(), walletModel->getWatchImmatureBalance());
+                           walletModel->getWatchBalance(), walletModel->getWatchUnconfirmedBalance(), walletModel->getWatchImmatureBalance(),
+                           walletModel->getDelegatedBalance(), walletModel->getColdStakedBalance());
     }
 }
 
 void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                             const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
-                            const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance){
+                            const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
+                            const CAmount& delegatedBalance, const CAmount& coldStakedBalance){
 
     CAmount nLockedBalance = 0;
     if (!walletModel) {
@@ -492,7 +529,7 @@ void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBa
 
     // PIV Balance
     //CAmount nTotalBalance = balance + unconfirmedBalance;
-    CAmount pivAvailableBalance = balance - immatureBalance - nLockedBalance;
+    CAmount pivAvailableBalance = balance + delegatedBalance - immatureBalance - nLockedBalance;
 
     // zPIV Balance
     CAmount matureZerocoinBalance = zerocoinBalance - unconfirmedZerocoinBalance - immatureZerocoinBalance;

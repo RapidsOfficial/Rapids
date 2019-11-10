@@ -319,18 +319,12 @@
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QComboBox" name="comboBoxCoin">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>50</height>
-                      </size>
+                    <widget class="QLabel" name="comboBoxCoin">
+                     <property name="text">
+                      <string>PIV</string>
                      </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>50</height>
-                      </size>
+                     <property name="alignment">
+                      <set>Qt::AlignCenter</set>
                      </property>
                     </widget>
                    </item>

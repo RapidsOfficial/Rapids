@@ -305,5 +305,22 @@
         <file alias="ani-loading-dark">pivx/res/img/ani-loading-dark.gif</file>
         <file alias="ani-loading">pivx/res/img/ani-loading.gif</file>
         <file alias="ic-pending">pivx/res/img/ic-pending.svg</file>
+        <file alias="ic-transaction-stake-delegated">pivx/res/img/ic-transaction-stake-delegated.svg</file>
+        <file alias="ic-transaction-stake-delegated-inactive">pivx/res/img/ic-transaction-stake-delegated-inactive.svg</file>
+        <file alias="ic-transaction-stake-delegated-dark">pivx/res/img/dark/ic-transaction-stake-delegated.svg</file>
+        <file alias="ic-transaction-stake-delegated-dark-inactive">pivx/res/img/dark/ic-transaction-stake-delegated-inactive.svg</file>
+        <file alias="ic-transaction-stake-hot">pivx/res/img/ic-transaction-stake-hot.svg</file>
+        <file alias="ic-transaction-stake-hot-inactive">pivx/res/img/ic-transaction-stake-hot-inactive.svg</file>
+        <file alias="ic-transaction-stake-hot-dark">pivx/res/img/dark/ic-transaction-stake-hot.svg</file>
+        <file alias="ic-transaction-stake-hot-dark-inactive">pivx/res/img/dark/ic-transaction-stake-hot-inactive.svg</file>
+        <file alias="ic-transaction-cs-contract">pivx/res/img/ic-transaction-cs-contract.svg</file>
+        <file alias="ic-transaction-cs-contract-dark">pivx/res/img/dark/ic-transaction-cs-contract.svg</file>
+        <file alias="ic-transaction-cs-contract-dark-inactive">pivx/res/img/dark/ic-transaction-cs-contract-inactive.svg</file>
+        <file alias="ic-transaction-cs-contract-inactive">pivx/res/img/ic-transaction-cs-contract-inactive.svg</file>
+        <file alias="ic-nav-cold-staking">pivx/res/img/ic-nav-cold-staking.svg</file>
+        <file alias="ic-nav-cold-staking-active">pivx/res/img/ic-nav-cold-staking-active.svg</file>
+        <file alias="ic-check-cold-staking">pivx/res/img/ic-check-cold-staking.svg</file>
+        <file alias="ic-check-cold-staking-off">pivx/res/img/ic-check-cold-staking-off.svg</file>
+        <file alias="ic-check-cold-staking-enabled">pivx/res/img/ic-check-cold-staking-enabled.svg</file>
     </qresource>
 </RCC>

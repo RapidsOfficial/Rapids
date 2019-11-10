@@ -3,15 +3,16 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "qt/pivx/addressfilterproxymodel.h"
+#include <iostream>
 
 bool AddressFilterProxyModel::filterAcceptsRow(int row, const QModelIndex& parent) const
 {
     auto model = sourceModel();
     auto label = model->index(row, AddressTableModel::Label, parent);
 
-    if (model->data(label, AddressTableModel::TypeRole).toString() != m_type) {
+    auto type = model->data(label, AddressTableModel::TypeRole).toString();
+    if (type != m_type)
         return false;
-    }
 
     auto address = model->index(row, AddressTableModel::Address, parent);
 
@@ -21,6 +22,12 @@ bool AddressFilterProxyModel::filterAcceptsRow(int row, const QModelIndex& paren
     }
 
     return true;
+}
+
+void AddressFilterProxyModel::setType(const QString& type)
+{
+    this->m_type = type;
+    invalidateFilter();
 }
 
 int AddressFilterProxyModel::rowCount(const QModelIndex& parent) const

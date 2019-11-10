@@ -23,7 +23,8 @@ class KeyPoolTest(BitcoinTestFramework):
         # Keep creating keys
         addr = nodes[0].getnewaddress()
         addr_data = nodes[0].validateaddress(addr)
-        assert_raises_rpc_error(-12, "Error: Keypool ran out, please call keypoolrefill first", nodes[0].getnewaddress)
+        assert_raises_rpc_error(-12, "Keypool ran out, please call keypoolrefill first, or unlock the wallet.",
+                                nodes[0].getnewaddress)
 
         # put six (plus 2) new keys in the keypool (100% external-, +100% internal-keys, 1 in min)
         nodes[0].walletpassphrase('test', 12000)

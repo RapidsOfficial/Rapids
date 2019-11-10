@@ -110,6 +110,10 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     ui->comboBoxSortType->addItem(tr("Minted"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
     ui->comboBoxSortType->addItem(tr("MN reward"), TransactionFilterProxy::TYPE(TransactionRecord::MNReward));
     ui->comboBoxSortType->addItem(tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
+    ui->comboBoxSortType->addItem(tr("Cold stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeDelegated));
+    ui->comboBoxSortType->addItem(tr("Hot stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeHot));
+    ui->comboBoxSortType->addItem(tr("Delegated"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSent));
+    ui->comboBoxSortType->addItem(tr("Delegations"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
     ui->comboBoxSortType->setCurrentIndex(0);
     connect(ui->comboBoxSortType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onSortTypeChanged(const QString&)));
 
@@ -235,7 +239,7 @@ void DashboardWidget::loadWalletModel(){
     updateDisplayUnit();
 }
 
-void DashboardWidget::onTxArrived(const QString& hash, const bool& isCoinStake) {
+void DashboardWidget::onTxArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType) {
     showList();
 #ifdef USE_QTCHARTS
     if (isCoinStake) {
@@ -488,9 +492,9 @@ void DashboardWidget::updateStakeFilter() {
 }
 
 // pair PIV, zPIV
-QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
+const QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy() {
     updateStakeFilter();
-    int size = stakesFilter->rowCount();
+    const int size = stakesFilter->rowCount();
     QMap<int, std::pair<qint64, qint64>> amountBy;
     // Get all of the stakes
     for (int i = 0; i < size; ++i) {
