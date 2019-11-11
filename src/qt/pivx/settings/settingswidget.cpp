@@ -206,8 +206,12 @@ void SettingsWidget::onSaveOptionsClicked(){
     if(mapper->submit()) {
         pwalletMain->MarkDirty();
         if (this->clientModel->getOptionsModel()->isRestartRequired()) {
+            // Get command-line arguments and remove the application name
+            QStringList args = QApplication::arguments();
+            args.removeFirst();
+
             openStandardDialog(tr("Restart required"), tr("You wallet will be restarted to apply the changes\n"), tr("OK"));
-            emit handleRestart(QStringList());
+            emit handleRestart(args);
         } else {
             inform(tr("Options stored"));
         }
