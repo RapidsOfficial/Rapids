@@ -210,6 +210,14 @@ void SettingsWidget::onSaveOptionsClicked(){
             QStringList args = QApplication::arguments();
             args.removeFirst();
 
+            // Remove existing repair-options
+            args.removeAll(SALVAGEWALLET);
+            args.removeAll(RESCAN);
+            args.removeAll(ZAPTXES1);
+            args.removeAll(ZAPTXES2);
+            args.removeAll(UPGRADEWALLET);
+            args.removeAll(REINDEX);
+
             openStandardDialog(tr("Restart required"), tr("You wallet will be restarted to apply the changes\n"), tr("OK"));
             emit handleRestart(args);
         } else {

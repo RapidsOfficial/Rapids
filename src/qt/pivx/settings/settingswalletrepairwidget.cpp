@@ -6,15 +6,6 @@
 #include "qt/pivx/settings/forms/ui_settingswalletrepairwidget.h"
 #include "qt/pivx/qtutils.h"
 
-// Repair parameters
-const QString SALVAGEWALLET("-salvagewallet");
-const QString RESCAN("-rescan");
-const QString ZAPTXES1("-zapwallettxes=1");
-const QString ZAPTXES2("-zapwallettxes=2");
-const QString UPGRADEWALLET("-upgradewallet");
-const QString REINDEX("-reindex");
-const QString RESYNC("-resync");
-
 SettingsWalletRepairWidget::SettingsWalletRepairWidget(PIVXGUI* _window, QWidget *parent) :
     PWidget(_window, parent),
     ui(new Ui::SettingsWalletRepairWidget)
