@@ -11,7 +11,7 @@ bool AddressFilterProxyModel::filterAcceptsRow(int row, const QModelIndex& paren
     auto label = model->index(row, AddressTableModel::Label, parent);
 
     auto type = model->data(label, AddressTableModel::TypeRole).toString();
-    if (type != m_type)
+    if (!m_types.contains(type))
         return false;
 
     auto address = model->index(row, AddressTableModel::Address, parent);
@@ -26,7 +26,12 @@ bool AddressFilterProxyModel::filterAcceptsRow(int row, const QModelIndex& paren
 
 void AddressFilterProxyModel::setType(const QString& type)
 {
-    this->m_type = type;
+    setType(QStringList(type));
+}
+
+void AddressFilterProxyModel::setType(const QStringList& types)
+{
+    this->m_types = types;
     invalidateFilter();
 }
 
