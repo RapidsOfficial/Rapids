@@ -17,11 +17,8 @@ namespace AddressBook {
         const std::string COLD_STAKING_SEND{"coldstaking_send"};
     }
 
-
-    bool CAddressBookData::isColdStakingPurpose() const {
-        return purpose == AddressBookPurpose::DELEGABLE
-               || purpose == AddressBookPurpose::DELEGATOR
-               || purpose == AddressBookPurpose::COLD_STAKING
+    bool IsColdStakingPurpose(const std::string& purpose) {
+        return purpose == AddressBookPurpose::COLD_STAKING
                || purpose == AddressBookPurpose::COLD_STAKING_SEND;
     }
 

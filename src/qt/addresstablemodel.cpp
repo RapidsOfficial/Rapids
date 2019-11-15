@@ -104,7 +104,7 @@ public:
             for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : wallet->mapAddressBook) {
 
                 const CChainParams::Base58Type addrType =
-                        item.second.isColdStakingPurpose() ?
+                        AddressBook::IsColdStakingPurpose(item.second.purpose) ?
                         CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS;
                 const CBitcoinAddress address = CBitcoinAddress(item.first, addrType);
 
