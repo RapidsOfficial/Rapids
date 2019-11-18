@@ -23,7 +23,7 @@ SendCustomFeeDialog::SendCustomFeeDialog(QWidget *parent) :
 
     // Text
     ui->labelTitle->setText(tr("Customize Fee"));
-    ui->labelMessage->setText(tr("Customize the transaction fee at your to your liking, depending on the fee value your transaction will be included or not in the blockchain."));
+    ui->labelMessage->setText(tr("Customize the transaction fee, depending on the fee value your transaction will be included or not in the blockchain."));
     setCssProperty(ui->labelTitle, "text-title-dialog");
     setCssProperty(ui->labelMessage, "text-main-grey");
 
