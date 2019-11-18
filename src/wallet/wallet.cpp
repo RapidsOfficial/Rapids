@@ -3782,6 +3782,10 @@ void CWallet::AutoCombineDust()
             if (out.tx->IsCoinStake() && out.tx->GetDepthInMainChain() < Params().COINBASE_MATURITY() + 1)
                 continue;
 
+            // no p2cs accepted, those coins are "locked"
+            if (out.tx->vout[out.i].scriptPubKey.IsPayToColdStaking())
+                continue;
+
             COutPoint outpt(out.tx->GetHash(), out.i);
             coinControl->Select(outpt);
             vRewardCoins.push_back(out);
