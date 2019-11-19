@@ -255,7 +255,7 @@ void TopBar::lockDropdownMouseLeave(){
 
 void TopBar::onBtnReceiveClicked(){
     if(walletModel) {
-        QString addressStr = walletModel->getAddressTableModel()->getLastUnusedAddress();
+        QString addressStr = walletModel->getAddressTableModel()->getAddressToShow();
         if (addressStr.isNull()) {
             inform(tr("Error generating address"));
             return;
