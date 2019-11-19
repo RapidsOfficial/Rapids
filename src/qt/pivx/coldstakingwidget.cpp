@@ -140,6 +140,8 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", "Creates an address to receive coin\ndelegations and be able to stake them.");
     ui->btnColdStaking->layout()->setMargin(0);
 
+    setCssProperty(ui->labelListWarning, "text-violet-warning");
+
     connect(ui->btnCoinControl, SIGNAL(clicked()), this, SLOT(onCoinControlClicked()));
     connect(ui->btnColdStaking, SIGNAL(clicked()), this, SLOT(onColdStakeClicked()));
 
@@ -235,7 +237,10 @@ void ColdStakingWidget::onTxArrived(const QString& hash, const bool& isCoinStake
 }
 
 void ColdStakingWidget::walletSynced(bool sync) {
-    tryRefreshDelegations();
+    if (this->isChainSync != sync) {
+        this->isChainSync = sync;
+        tryRefreshDelegations();
+    }
 }
 
 void ColdStakingWidget::tryRefreshDelegations() {
@@ -359,6 +364,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->btnColdStaking->setVisible(false);
         ui->btnMyStakingAddresses->setVisible(false);
         ui->listViewStakingAddress->setVisible(false);
+        ui->labelListWarning->setVisible(false);
         if (ui->rightContainer->count() == 2)
             ui->rightContainer->addItem(spacerDiv);
     }else{
@@ -367,7 +373,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->containerBtn->setVisible(false);
         ui->btnColdStaking->setVisible(true);
         showList(csModel->rowCount() > 0);
-
+        ui->labelListWarning->setVisible(true);
         ui->btnMyStakingAddresses->setVisible(true);
         ui->listViewStakingAddress->setVisible(false);
     }
