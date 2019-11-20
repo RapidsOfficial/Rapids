@@ -255,10 +255,14 @@ void TopBar::lockDropdownMouseLeave(){
 
 void TopBar::onBtnReceiveClicked(){
     if(walletModel) {
+        QString addressStr = walletModel->getAddressTableModel()->getAddressToShow();
+        if (addressStr.isNull()) {
+            inform(tr("Error generating address"));
+            return;
+        }
         showHideOp(true);
         ReceiveDialog *receiveDialog = new ReceiveDialog(window);
-
-        receiveDialog->updateQr(walletModel->getAddressTableModel()->getLastUnusedAddress());
+        receiveDialog->updateQr(addressStr);
         if (openDialogWithOpaqueBackground(receiveDialog, window)) {
             inform(tr("Address Copied"));
         }

@@ -559,25 +559,29 @@ int AddressTableModel::lookupAddress(const QString& address) const
 }
 
 /**
- * Return last created unused address --> TODO: complete "unused"..
+ * Return last created unused address --> TODO: complete "unused" and "last".. basically everything..
  * @return
  */
-QString AddressTableModel::getLastUnusedAddress() const{
+QString AddressTableModel::getAddressToShow() const{
+    QString addressStr;
     LOCK(wallet->cs_wallet);
     if(!wallet->mapAddressBook.empty()) {
-        for (std::map<CTxDestination, AddressBook::CAddressBookData>::iterator it = wallet->mapAddressBook.end(); it != wallet->mapAddressBook.begin(); --it) {
-            if(it != wallet->mapAddressBook.end()) {
-                if (it->second.purpose == "receive") {
-                    const CBitcoinAddress &address = it->first;
-                    bool fMine = IsMine(*wallet, address.Get());
-                    if (fMine) {
-                        return QString::fromStdString(address.ToString());
-                    }
+        for (auto it = wallet->mapAddressBook.rbegin(); it != wallet->mapAddressBook.rend(); ++it ) {
+            if (it->second.purpose == AddressBook::AddressBookPurpose::RECEIVE) {
+                const CBitcoinAddress &address = it->first;
+                if (address.IsValid() && IsMine(*wallet, address.Get())) {
+                    addressStr = QString::fromStdString(address.ToString());
                 }
             }
         }
+    } else {
+        // For some reason we don't have any address in our address book, let's create one
+        CBitcoinAddress newAddress;
+        if (walletModel->getNewAddress(newAddress, "Default").result) {
+            addressStr = QString::fromStdString(newAddress.ToString());
+        }
     }
-    return QString();
+    return addressStr;
 }
 
 void AddressTableModel::emitDataChanged(int idx)
