@@ -588,6 +588,7 @@ void ThreadCheckObfuScationPool()
 
     // Make this thread recognisable as the wallet flushing thread
     RenameThread("pivx-obfuscation");
+    LogPrintf("Masternodes thread started\n");
 
     unsigned int c = 0;
 
