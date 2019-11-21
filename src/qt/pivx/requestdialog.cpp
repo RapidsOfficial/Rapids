@@ -5,7 +5,6 @@
 #include "qt/pivx/requestdialog.h"
 #include "qt/pivx/forms/ui_requestdialog.h"
 #include <QListView>
-#include <QDoubleValidator>
 
 #include "qt/pivx/qtutils.h"
 #include "guiutil.h"
@@ -44,10 +43,7 @@ RequestDialog::RequestDialog(QWidget *parent) :
     setCssProperty(ui->labelSubtitleAmount, "text-title2-dialog");
     ui->lineEditAmount->setPlaceholderText("0.00 PIV");
     setCssEditLineDialog(ui->lineEditAmount, true);
-
-    QDoubleValidator *doubleValidator = new QDoubleValidator(0, 9999999, 7, this);
-    doubleValidator->setNotation(QDoubleValidator::StandardNotation);
-    ui->lineEditAmount->setValidator(doubleValidator);
+    GUIUtil::setupAmountWidget(ui->lineEditAmount, this);
 
     // Description
     ui->labelSubtitleDescription->setText(tr("Description (optional)"));

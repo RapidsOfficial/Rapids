@@ -49,7 +49,9 @@
 #include <QDateTime>
 #include <QDesktopServices>
 #include <QDesktopWidget>
-#include <QDoubleValidator>
+#include <QRegExp>
+#include <QRegularExpression>
+#include <QRegularExpressionValidator>
 #include <QFileDialog>
 #include <QFont>
 #include <QLineEdit>
@@ -145,11 +147,17 @@ void setupAddressWidget(QValidatedLineEdit* widget, QWidget* parent)
 
 void setupAmountWidget(QLineEdit* widget, QWidget* parent)
 {
-    QDoubleValidator* amountValidator = new QDoubleValidator(parent);
-    amountValidator->setDecimals(8);
-    amountValidator->setBottom(0.0);
-    widget->setValidator(amountValidator);
-    widget->setAlignment(Qt::AlignRight | Qt::AlignVCenter);
+    QRegularExpression rx("^(\\d{0,8})((\\.|,)\\d{1,8})?$");
+    QValidator *validator = new QRegularExpressionValidator(rx, widget);
+    widget->setValidator(validator);
+}
+
+void updateWidgetTextAndCursorPosition(QLineEdit* widget, const QString& str)
+{
+    const int cpos = widget->cursorPosition();
+    widget->setText(str);
+    if (cpos > str.size()) return;
+    widget->setCursorPosition(cpos);
 }
 
 bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)

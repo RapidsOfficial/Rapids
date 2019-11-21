@@ -189,7 +189,7 @@
            </size>
           </property>
           <property name="maxLength">
-           <number>16</number>
+           <number>17</number>
           </property>
           <property name="alignment">
            <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
