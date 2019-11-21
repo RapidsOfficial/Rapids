@@ -48,8 +48,9 @@ public:
     static const QString Send;    /**< Specifies send address */
     static const QString Receive; /**< Specifies receive address */
     static const QString Zerocoin; /**< Specifies stealth address */
-    static const QString Delegators;
-    static const QString ColdStaking;
+    static const QString Delegators; /**< Specifies cold staking addresses which delegated tokens to this wallet */
+    static const QString ColdStaking; /**< Specifies cold staking own addresses */
+    static const QString ColdStakingSend; /**< Specifies send cold staking addresses (simil 'contacts')*/
 
     /** @name Methods overridden from QAbstractTableModel
         @{*/
@@ -58,6 +59,7 @@ public:
     int sizeSend() const;
     int sizeRecv() const;
     int sizeDell() const;
+    int sizeColdSend() const;
     void notifyChange(const QModelIndex &index);
     QVariant data(const QModelIndex& index, int role) const;
     bool setData(const QModelIndex& index, const QVariant& value, int role);

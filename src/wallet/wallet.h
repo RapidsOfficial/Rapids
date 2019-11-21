@@ -506,10 +506,14 @@ public:
     DBErrors LoadWallet(bool& fFirstRunRet);
     DBErrors ZapWalletTx(std::vector<CWalletTx>& vWtx);
 
+    static CBitcoinAddress ParseIntoAddress(const CTxDestination& dest, const std::string& purpose);
+
     bool SetAddressBook(const CTxDestination& address, const std::string& strName, const std::string& purpose);
-    bool DelAddressBook(const CTxDestination& address);
+    bool DelAddressBook(const CTxDestination& address, const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
     bool HasAddressBook(const CTxDestination& address) const;
     bool HasDelegator(const CTxOut& out) const;
+
+    std::string purposeForAddress(const CTxDestination& address) const;
 
     bool UpdatedTransaction(const uint256& hashTx);
 
