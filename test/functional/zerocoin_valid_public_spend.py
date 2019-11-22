@@ -134,8 +134,17 @@ class zPIVValidCoinSpendTest(BitcoinTestFramework):
 
         # 7) Check spend v2 disabled
         self.log.info("%s: Trying to spend using the old coin spend method.." % self.__class__.__name__)
-        assert_raises_rpc_error(-4, "Couldn't generate the accumulator witness",
-                                self.nodes[0].spendzerocoin, DENOM_TO_USE, False, False, "", False)
+        try:
+            res = self.nodes[0].spendzerocoin(DENOM_TO_USE, False, False, "", False)
+        except JSONRPCException as e:
+            # JSONRPCException was thrown as expected. Check the code and message values are correct.
+            if e.error["code"] != -4:
+                raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
+            if ("Couldn't generate the accumulator witness" not in e.error['message'])\
+                    and ("The transaction was rejected!" not in e.error['message']):
+                raise AssertionError("Expected substring not found:" + e.error['message'])
+        except Exception as e:
+            raise AssertionError("Unexpected exception raised: " + type(e).__name__)
         self.log.info("GOOD: spendzerocoin old spend did not verify.")
 
 

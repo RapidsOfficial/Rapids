@@ -1,6 +1,9 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
+// Copyright (c) 2011-2013 The PPCoin developers
+// Copyright (c) 2013-2014 The NovaCoin Developers
+// Copyright (c) 2014-2018 The BlackCoin Developers
 // Copyright (c) 2015-2019 The PIVX developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -90,7 +93,11 @@ public:
 
 void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
 {
-    pblock->nTime = std::max(pindexPrev->GetMedianTimePast() + 1, GetAdjustedTime());
+    if (Params().IsTimeProtocolV2(pindexPrev->nHeight+1)) {
+        pblock->nTime = GetCurrentTimeSlot();
+    } else {
+        pblock->nTime = std::max(pindexPrev->GetMedianTimePast() + 1, GetAdjustedTime());
+    }
 
     // Updating time can change work required on testnet:
     if (Params().AllowMinDifficultyBlocks())
@@ -113,6 +120,11 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     {   // Don't keep cs_main locked
         LOCK(cs_main);
         pindexPrev = chainActive.Tip();
+        if (!pindexPrev)
+            return nullptr;
+        // Do not pass in the chain tip, because it can change.
+        // Instead pass the blockindex directly from mapblockindex, which is const
+        pindexPrev = mapBlockIndex.at(pindexPrev->GetBlockHash());
     }
 
     const int nHeight = pindexPrev->nHeight + 1;
@@ -157,8 +169,8 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         int64_t nSearchTime = pblock->nTime; // search to current time
         bool fStakeFound = false;
         if (nSearchTime >= nLastCoinStakeSearchTime) {
-            unsigned int nTxNewTime = 0;
-            if (pwallet->CreateCoinStake(*pwallet, pblock->nBits, nSearchTime - nLastCoinStakeSearchTime, txCoinStake, nTxNewTime)) {
+            int64_t nTxNewTime = 0;
+            if (pwallet->CreateCoinStake(*pwallet, pindexPrev, pblock->nBits, nSearchTime - nLastCoinStakeSearchTime, txCoinStake, nTxNewTime)) {
                 pblock->nTime = nTxNewTime;
                 pblock->vtx[0].vout[0].SetEmpty();
                 pblock->vtx.push_back(CTransaction(txCoinStake));
@@ -692,13 +704,16 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 }
             }
 
+            const bool fTimeV2 = Params().IsTimeProtocolV2(chainActive.Height()+1);
             //search our map of hashed blocks, see if bestblock has been hashed yet
-            if (mapHashedBlocks.count(chainActive.Tip()->nHeight) && !fLastLoopOrphan)
+            const int chainHeight = chainActive.Height();
+            if (mapHashedBlocks.count(chainHeight) && !fLastLoopOrphan)
             {
-                // wait half of the nHashDrift with max wait of 3 minutes
-                if (GetTime() - mapHashedBlocks[chainActive.Tip()->nHeight] < std::max(pwallet->nHashInterval, (unsigned int)1))
+                int64_t tipHashTime = mapHashedBlocks[chainHeight];
+                if (    (!fTimeV2 && GetTime() < tipHashTime + 22) ||
+                        (fTimeV2 && GetCurrentTimeSlot() <= tipHashTime) )
                 {
-                    MilliSleep(5000);
+                    MilliSleep(2000);
                     continue;
                 }
             }

@@ -384,6 +384,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
             except JSONRPCException as e:
                 if ("Couldn't create new block" in str(e)):
                     # Sleep two seconds and retry
+                    self.log.info("Waiting...")
                     time.sleep(2)
                 else:
                     raise e
@@ -442,12 +443,10 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
             prevtx = api.getrawtransaction(utxo['txid'], 1)
             prevScript = prevtx['vout'][utxo['vout']]['scriptPubKey']['hex']
             prevtx_btime = prevtx['blocktime']
-            prevtx_bhash = prevtx['blockhash']
-            modifier = 0
             if utxo['confirmations'] < confs:
                 continue
             o = COutPoint(int(utxo['txid'], 16), utxo['vout'])
-            prevouts[o] = (int(utxo['amount']) * COIN, prevtx_btime, modifier, prevScript)
+            prevouts[o] = (int(utxo['amount']) * COIN, prevtx_btime, prevScript)
         return prevouts
 
 
@@ -473,7 +472,7 @@ class PIVX_ColdStakingTest(BitcoinTestFramework):
             raise Exception("Not able to solve for any prev_outpoint")
 
         # Create coinstake TX
-        amount, prev_time, modifier, prevScript = staking_prevouts[block.prevoutStake]
+        amount, prev_time, prevScript = staking_prevouts[block.prevoutStake]
         outNValue = int(amount + 250 * COIN)
         stake_tx_unsigned = CTransaction()
         stake_tx_unsigned.nTime = block.nTime
