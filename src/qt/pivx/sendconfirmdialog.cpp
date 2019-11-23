@@ -182,7 +182,7 @@ void TxDetailDialog::onOutputsClicked() {
             layoutVertical->setSpacing(6);
             ui->container_outputs_base->setLayout(layoutVertical);
 
-            const CWalletTx* tx = model->getTx(this->txHash);
+            const CWalletTx* tx = (this->tx) ? this->tx->getTransaction() : model->getTx(this->txHash);
             if(tx) {
                 for (const CTxOut &out : tx->vout) {
                     QFrame *frame = new QFrame(ui->container_outputs_base);
