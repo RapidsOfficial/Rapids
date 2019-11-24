@@ -63,6 +63,8 @@ private slots:
     void refreshStatus();
     void openLockUnlock();
     void onColdStakingClicked();
+    void refreshProgressBarSize();
+    void expandSync();
 private:
     Ui::TopBar *ui;
     LockUnlock *lockUnlockWidget = nullptr;
