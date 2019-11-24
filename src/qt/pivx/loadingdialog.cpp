@@ -7,17 +7,20 @@
 #include <QMovie>
 
 void Worker::process(){
-    try {
-        if (runnable)
+    if (runnable) {
+        try {
             runnable->run(type);
-    } catch (std::exception& e) {
-        QString errorStr = QString::fromStdString(e.what());
-        runnable->onError(errorStr, type);
-        emit error(errorStr, type);
-    } catch (...) {
-        QString errorStr = QString::fromStdString("Unknown error running background task");
-        runnable->onError(errorStr, type);
-        emit error(errorStr, type);
+        } catch (std::exception &e) {
+            QString errorStr = QString::fromStdString(e.what());
+            runnable->onError(errorStr, type);
+            emit error(errorStr, type);
+        } catch (...) {
+            QString errorStr = QString::fromStdString("Unknown error running background task");
+            runnable->onError(errorStr, type);
+            emit error(errorStr, type);
+        }
+    } else {
+        emit error("Null runnable", type);
     }
     emit finished();
 };
