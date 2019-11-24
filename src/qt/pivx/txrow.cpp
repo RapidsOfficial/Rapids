@@ -115,7 +115,7 @@ void TxRow::setType(bool isLightTheme, int type, bool isConfirmed){
     }else{
         setConfirmStatus(true);
     }
-    setCssProperty(ui->lblAmount, css);
+    setCssProperty(ui->lblAmount, css, true);
     ui->icon->setIcon(QIcon(path));
 }
 
