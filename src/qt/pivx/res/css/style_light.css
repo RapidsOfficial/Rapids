@@ -1691,6 +1691,11 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     font-size:16px;
 }
 
+*[cssClass="text-violet-warning"] {
+    color: #877B9F;;
+    font-size:13px;
+}
+
 *[cssClass="ic-warning"] {
     qproperty-icon: url("://ic-transaction-warning") off,
     url("://ic-transaction-warning") on ;

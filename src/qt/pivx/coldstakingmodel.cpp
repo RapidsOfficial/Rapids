@@ -12,7 +12,7 @@
 ColdStakingModel::ColdStakingModel(WalletModel* _model,
                                    TransactionTableModel* _tableModel,
                                    AddressTableModel* _addressTableModel,
-                                   QObject *parent) : QAbstractTableModel(parent), model(_model), tableModel(_tableModel), addressTableModel(_addressTableModel){
+                                   QObject *parent) : QAbstractTableModel(parent), model(_model), tableModel(_tableModel), addressTableModel(_addressTableModel), cachedAmount(0){
 }
 
 void ColdStakingModel::updateCSList() {
@@ -26,6 +26,7 @@ void ColdStakingModel::emitDataSetChanged() {
 
 void ColdStakingModel::refresh() {
     cachedDelegations.clear();
+    cachedAmount = 0;
     // First get all of the p2cs utxo inside the wallet
     std::vector<COutput> utxoList;
     pwalletMain->GetAvailableP2CSCoins(utxoList);
@@ -58,6 +59,7 @@ void ColdStakingModel::refresh() {
                 del.delegatedUtxo.unite(delegation.delegatedUtxo);
                 del.cachedTotalAmount += delegation.cachedTotalAmount;
             }
+            cachedAmount += delegation.cachedTotalAmount;
         }
     }
 }
