@@ -33,7 +33,7 @@ HelpMessageDialog::HelpMessageDialog(QWidget* parent, bool about) : QDialog(pare
                                                                     ui(new Ui::HelpMessageDialog)
 {
     ui->setupUi(this);
-    this->setStyleSheet(parent->styleSheet());
+    if (parent) this->setStyleSheet(parent->styleSheet());
     GUIUtil::restoreWindowGeometry("nHelpMessageDialogWindow", this->size(), this);
 
     QString version = tr("PIVX Core") + " " + tr("version") + " " + QString::fromStdString(FormatFullVersion());
