@@ -58,8 +58,8 @@ WalletModel::~WalletModel()
     unsubscribeFromCoreSignals();
 }
 
-bool WalletModel::isTestnet() const {
-    return Params().NetworkID() == CBaseChainParams::TESTNET;
+bool WalletModel::isTestNetwork() const {
+    return Params().NetworkID() == CBaseChainParams::TESTNET || Params().NetworkID() == CBaseChainParams::REGTEST;
 }
 
 bool WalletModel::isColdStakingNetworkelyEnabled() const {
@@ -306,7 +306,7 @@ bool WalletModel::validateStakingAddress(const QString& address) {
     if (validateAddress(address)) {
         // check for staking only addresses
         QChar firstLetter = address.at(0).toLower();
-        if (isTestnet() && firstLetter == 'w')
+        if (isTestNetwork() && firstLetter == 'w')
             return true;
 
         // mainnet check
