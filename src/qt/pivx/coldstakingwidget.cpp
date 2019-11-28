@@ -423,6 +423,16 @@ void ColdStakingWidget::onSendClicked(){
 
     if (!isOwnerAddressFromThisWallet) {
         isOwnerAddressFromThisWallet = walletModel->isMine(inputOwner);
+
+        // Warn the user if the owner address is not from this wallet
+        if (!isOwnerAddressFromThisWallet &&
+            !ask(tr("ALERT!"),
+                    tr("Delegating to an external owner address!\n\n"
+                       "The delegated coins will NOT be spendable by this wallet.\nSpending these coins will need to be done from the wallet or\ndevice containing the owner address.\n\n"
+                       "Do you wish to proceed?"))
+            ) {
+                return;
+        }
     }
 
     // Don't try to delegate the balance if both addresses are from this wallet
