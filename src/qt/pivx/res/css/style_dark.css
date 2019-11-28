@@ -2869,7 +2869,7 @@ HH        Tooltip
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 
-QToolTip { color: white; background-color: #b088ff; border: none;padding:10px; border-radius:2px;}
+QToolTip { color: white; background-color: #b088ff; border: none;padding:4px; border-radius:2px;}
 
 
 /*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
