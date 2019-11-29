@@ -134,7 +134,7 @@ public:
     }
 
     void updatePurposeCachedCounted(std::string purpose, bool add) {
-        int *var;
+        int *var = nullptr;
         if (purpose == AddressBook::AddressBookPurpose::RECEIVE) {
             var = &recvNum;
         } else if (purpose == AddressBook::AddressBookPurpose::SEND) {
@@ -143,8 +143,12 @@ public:
             var = &coldSendNum;
         } else if (purpose == AddressBook::AddressBookPurpose::DELEGABLE || purpose == AddressBook::AddressBookPurpose::DELEGATOR) {
             var = &dellNum;
+        } else {
+            return;
         }
-        if (add) (*var)++; else (*var)--;
+        if (var != nullptr) {
+            if (add) (*var)++; else (*var)--;
+        }
     }
 
     void updateEntry(const QString& address, const QString& label, bool isMine, const QString& purpose, int status)
