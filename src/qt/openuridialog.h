@@ -6,6 +6,7 @@
 #define BITCOIN_QT_OPENURIDIALOG_H
 
 #include <QDialog>
+#include "qt/pivx/snackbar.h"
 
 namespace Ui
 {
@@ -31,6 +32,8 @@ private slots:
 
 private:
     Ui::OpenURIDialog* ui;
+    SnackBar *snackBar = nullptr;
+    void inform(const QString& str);
 };
 
 #endif // BITCOIN_QT_OPENURIDIALOG_H
