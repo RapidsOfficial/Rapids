@@ -10,6 +10,7 @@
 #include "activemasternode.h"
 #include <QFile>
 #include <QIntValidator>
+#include <QHostAddress>
 #include <QRegExpValidator>
 
 MasterNodeWizardDialog::MasterNodeWizardDialog(WalletModel *model, QWidget *parent) :
@@ -283,6 +284,13 @@ bool MasterNodeWizardDialog::createMN(){
                     return false;
                 }
                 std::string indexOutStr = std::to_string(indexOut);
+
+                // Check IP address type
+                QHostAddress hostAddress(addressStr);
+                QAbstractSocket::NetworkLayerProtocol layerProtocol = hostAddress.protocol();
+                if (layerProtocol == QAbstractSocket::IPv6Protocol) {
+                    ipAddress = "["+ipAddress+"]";
+                }
 
                 boost::filesystem::path pathConfigFile("masternode_temp.conf");
                 if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir() / pathConfigFile;
