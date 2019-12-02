@@ -679,6 +679,17 @@ bool WalletModel::setWalletLocked(bool locked, const SecureString& passPhrase, b
     }
 }
 
+bool WalletModel::lockForStakingOnly(const SecureString& passPhrase)
+{
+    if (!wallet->IsLocked()) {
+        wallet->fWalletUnlockAnonymizeOnly = true;
+        return true;
+    } else {
+        setWalletLocked(false, passPhrase, true);
+    }
+    return false;
+}
+
 bool WalletModel::isAnonymizeOnlyUnlocked()
 {
     return wallet->fWalletUnlockAnonymizeOnly;
