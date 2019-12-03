@@ -34,7 +34,7 @@ SettingsBackupWallet::SettingsBackupWallet(PIVXGUI* _window, QWidget *parent) :
     ui->labelSubtitle1->setText(tr("Keep your wallet safe doing regular backups, store your backup file externally.\nThis option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device."));
     ui->labelSubtitle1->setProperty("cssClass", "text-subtitle");
 
-    ui->labelSubtitle_2->setText(tr("Change your wallet encryption passphrase for another one that you like. This will decrypt and encrypt your whole data under the new passphrase.\nRemember to write it down to not lose access to your funds."));
+    ui->labelSubtitle_2->setText(tr("This will decrypt the whole wallet data and encrypt it back with the new passphrase.\nRemember to write it down and store it safely, otherwise you might lose access to your funds."));
     ui->labelSubtitle_2->setProperty("cssClass", "text-subtitle");
 
     // Location
