@@ -25,6 +25,7 @@ public:
     bool getAddress(WalletModel *model, QString *retAddress);
     bool selected = false;
 
+    void showEvent(QShowEvent *event) override;
 private:
     Ui::SendChangeAddressDialog *ui;
 };

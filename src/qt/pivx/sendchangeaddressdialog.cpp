@@ -53,6 +53,11 @@ bool SendChangeAddressDialog::getAddress(WalletModel *model, QString *retAddress
     return false;
 }
 
+void SendChangeAddressDialog::showEvent(QShowEvent *event)
+{
+    if (ui->lineEditAddress) ui->lineEditAddress->setFocus();
+}
+
 SendChangeAddressDialog::~SendChangeAddressDialog(){
     delete ui;
 }
