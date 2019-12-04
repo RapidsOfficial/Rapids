@@ -620,12 +620,7 @@ QVariant TransactionTableModel::txWatchonlyDecoration(const TransactionRecord* w
 
 QString TransactionTableModel::formatTooltip(const TransactionRecord* rec) const
 {
-    QString tooltip = formatTxStatus(rec) + QString("\n") + formatTxType(rec);
-    if (rec->type == TransactionRecord::RecvFromOther || rec->type == TransactionRecord::SendToOther ||
-        rec->type == TransactionRecord::SendToAddress || rec->type == TransactionRecord::RecvWithAddress || rec->type == TransactionRecord::MNReward) {
-        tooltip += QString(" ") + formatTxToAddress(rec, true);
-    }
-    return tooltip;
+    return formatTxStatus(rec);
 }
 
 QVariant TransactionTableModel::data(const QModelIndex& index, int role) const
