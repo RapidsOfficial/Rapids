@@ -240,7 +240,7 @@ void MasterNodesWidget::onInfoMNClicked(){
                 ))) {
             // export data
             QString exportedMN = "masternode=1\n"
-                                 "externalip=" + address.split(":")[0] + "\n" +
+                                 "externalip=" + address.left(address.lastIndexOf(":")) + "\n" +
                                  "masternodeaddr=" + address + + "\n" +
                                  "masternodeprivkey=" + index.sibling(index.row(), MNModel::PRIV_KEY).data(Qt::DisplayRole).toString() + "\n";
             GUIUtil::setClipboard(exportedMN);
