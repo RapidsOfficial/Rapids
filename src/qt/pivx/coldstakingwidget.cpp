@@ -252,16 +252,20 @@ bool ColdStakingWidget::refreshDelegations(){
 
 void ColdStakingWidget::onDelegationsRefreshed() {
     isLoading = false;
-    if (ui->pushLeft->isChecked()) {
-        bool hasDel = csModel->rowCount() > 0;
+    bool hasDel = csModel->rowCount() > 0;
+
+    // Try to update the total value.
+    if (hasDel) {
+        CAmount total = csModel->getTotalAmount();
+        ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
+                (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
+        );
+    }
+
+    // Update list if we are showing that section.
+    if (!isInDelegation) {
         showList(hasDel);
         ui->labelStakingTotal->setVisible(hasDel);
-        if (hasDel) {
-            CAmount total = csModel->getTotalAmount();
-            ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
-                    (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
-            );
-        }
     }
 }
 
@@ -342,6 +346,7 @@ void ColdStakingWidget::onContactsClicked(){
 }
 
 void ColdStakingWidget::onDelegateSelected(bool delegate){
+    isInDelegation = delegate;
     if (menu && menu->isVisible()) {
         menu->hide();
     }
@@ -500,7 +505,7 @@ void ColdStakingWidget::clearAll() {
 }
 
 void ColdStakingWidget::onCoinControlClicked(){
-    if(ui->pushRight->isChecked()) {
+    if(isInDelegation) {
         if (walletModel->getBalance() > 0) {
             if (!coinControlDialog) {
                 coinControlDialog = new CoinControlDialog();
