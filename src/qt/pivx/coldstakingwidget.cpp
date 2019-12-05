@@ -404,9 +404,11 @@ void ColdStakingWidget::onSendClicked(){
     SendCoinsRecipient dest = sendMultiRow->getValue();
     dest.isP2CS = true;
 
-    // Amount must be < 10 PIV, check chainparams minColdStakingAmount
-    if (dest.amount < (COIN * 10)) {
-        inform(tr("Invalid entry, minimum delegable amount is 10 PIV"));
+    // Amount must be < minColdStakingAmount
+    const int minColdStakingAmount = Params().GetMinColdStakingAmount();
+    if (dest.amount < minColdStakingAmount) {
+        inform(tr("Invalid entry, minimum delegable amount is ") +
+               BitcoinUnits::formatWithUnit(nDisplayUnit, minColdStakingAmount));
         return;
     }
 
