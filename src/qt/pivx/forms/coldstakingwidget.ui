@@ -534,13 +534,6 @@
                 </property>
                </widget>
               </item>
-              <item>
-               <widget class="QLabel" name="labelListWarning">
-                <property name="text">
-                 <string>Unconfirmed balance will not be shown</string>
-                </property>
-               </widget>
-              </item>
              </layout>
             </widget>
            </item>
