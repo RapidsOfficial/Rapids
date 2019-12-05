@@ -116,6 +116,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="pushButtonMenu">
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">border:none; background-color:transparent; padding:0px;</string>
         </property>

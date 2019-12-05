@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>438</width>
-    <height>574</height>
+    <height>579</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -158,8 +158,11 @@
                      <height>30</height>
                     </size>
                    </property>
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
                    <property name="text">
-                    <string>PushButton</string>
+                    <string/>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -183,8 +186,11 @@
                      <height>30</height>
                     </size>
                    </property>
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
                    <property name="text">
-                    <string>PushButton</string>
+                    <string/>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -481,6 +487,9 @@
                <height>50</height>
               </size>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="text">
               <string>Clear</string>
              </property>
@@ -500,8 +509,11 @@
                <height>50</height>
               </size>
              </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
              <property name="text">
-              <string>PushButton</string>
+              <string/>
              </property>
             </widget>
            </item>

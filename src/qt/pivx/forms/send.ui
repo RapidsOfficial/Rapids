@@ -143,8 +143,11 @@
                    <height>30</height>
                   </size>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
-                  <string>PushButton</string>
+                  <string/>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -168,8 +171,11 @@
                    <height>30</height>
                   </size>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
-                  <string>PushButton</string>
+                  <string/>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -378,6 +384,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonFee">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>PushButton</string>
             </property>
@@ -401,6 +410,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonClear">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="layoutDirection">
              <enum>Qt::RightToLeft</enum>
             </property>
@@ -427,6 +439,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="pushButtonAddRecipient">
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
              <string>PushButton</string>
             </property>
@@ -657,8 +672,11 @@
               <height>50</height>
              </size>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
+            </property>
             <property name="text">
-             <string>PushButton</string>
+             <string/>
             </property>
            </widget>
           </item>
@@ -760,6 +778,9 @@
               <width>200</width>
               <height>50</height>
              </size>
+            </property>
+            <property name="focusPolicy">
+             <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
              <string>PushButton</string>

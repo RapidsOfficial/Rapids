@@ -153,6 +153,9 @@
           <height>32</height>
          </size>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">border:none; background-color:transparent;</string>
         </property>
@@ -160,7 +163,7 @@
          <string/>
         </property>
         <property name="icon">
-         <iconset resource="resource.qrc">
+         <iconset>
           <normaloff>://ic-menu-hover</normaloff>://ic-menu-hover</iconset>
         </property>
         <property name="iconSize">

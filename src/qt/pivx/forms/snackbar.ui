@@ -95,6 +95,9 @@ color:white;</string>
           <height>24</height>
          </size>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::NoFocus</enum>
+        </property>
         <property name="autoFillBackground">
          <bool>true</bool>
         </property>

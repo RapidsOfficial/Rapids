@@ -79,6 +79,9 @@
          </property>
          <item>
           <widget class="QPushButton" name="icon">
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="styleSheet">
             <string notr="true">border:none;</string>
            </property>

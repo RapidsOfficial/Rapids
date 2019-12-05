@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>474</width>
-    <height>454</height>
+    <height>464</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -109,6 +109,9 @@
                  <height>40</height>
                 </size>
                </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>Network Monitor</string>
                </property>
@@ -127,6 +130,9 @@
                  <width>120</width>
                  <height>40</height>
                 </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
                 <string/>
@@ -152,6 +158,9 @@
                  <width>125</width>
                  <height>40</height>
                 </size>
+               </property>
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
                 <string/>
