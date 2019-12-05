@@ -74,6 +74,7 @@ void AddTimeData(const CNetAddr& ip, int64_t nOffsetSample, int nOffsetLimit)
         // Only let other nodes change our time by so much
         if (abs64(nMedian) < nOffsetLimit) {
             nTimeOffset = nMedian;
+            strMiscWarning = "";
         } else {
             nTimeOffset = (nMedian > 0 ? 1 : -1) * nOffsetLimit;
             std::string strMessage = _("Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.");
