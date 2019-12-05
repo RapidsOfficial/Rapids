@@ -254,13 +254,11 @@ void ColdStakingWidget::onDelegationsRefreshed() {
     isLoading = false;
     bool hasDel = csModel->rowCount() > 0;
 
-    // Try to update the total value.
-    if (hasDel) {
-        CAmount total = csModel->getTotalAmount();
-        ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
-                (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
-        );
-    }
+    // Update the total value.
+    CAmount total = csModel->getTotalAmount();
+    ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
+            (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
+    );
 
     // Update list if we are showing that section.
     if (!isInDelegation) {
@@ -355,7 +353,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         menuAddresses->hide();
     }
 
-    if(delegate){
+    if(isInDelegation){
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
         ui->containerBtn->setVisible(true);
