@@ -404,8 +404,8 @@ void ColdStakingWidget::onSendClicked(){
     SendCoinsRecipient dest = sendMultiRow->getValue();
     dest.isP2CS = true;
 
-    // Amount must be < minColdStakingAmount
-    const int minColdStakingAmount = walletModel->getMinColdStakingAmount();
+    // Amount must be >= minColdStakingAmount
+    const CAmount& minColdStakingAmount = walletModel->getMinColdStakingAmount();
     if (dest.amount < minColdStakingAmount) {
         inform(tr("Invalid entry, minimum delegable amount is ") +
                BitcoinUnits::formatWithUnit(nDisplayUnit, minColdStakingAmount));
