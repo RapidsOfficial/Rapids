@@ -1,27 +1,108 @@
 #!/usr/bin/env python3
+# Copyright (c) 2018-2019 The Bitcoin Core developers
+# Copyright (c) 2019 The PIVX developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 import argparse
 import os
 import subprocess
 import sys
 
-def setup():
+
+def setup_linux():
     global args, workdir
-    programs = ['ruby', 'git', 'make', 'wget', 'curl']
-    if args.kvm:
-        programs += ['apt-cacher-ng', 'python-vm-builder', 'qemu-kvm', 'qemu-utils']
-    elif args.docker and not os.path.isfile('/lib/systemd/system/docker.service'):
-        dockers = ['docker.io', 'docker-ce']
-        for i in dockers:
-            return_code = subprocess.call(['sudo', 'apt-get', 'install', '-qq', i])
-            if return_code == 0:
-                break
-        if return_code != 0:
-            print('Cannot find any way to install Docker.', file=sys.stderr)
+    if os.path.isfile('/usr/bin/apt-get'):
+        programs = ['ruby', 'git', 'make', 'wget', 'curl']
+        if args.kvm:
+            programs += ['apt-cacher-ng', 'python-vm-builder', 'qemu-kvm', 'qemu-utils']
+        elif args.docker:
+            if not os.path.isfile('/lib/systemd/system/docker.service'):
+                dockers = ['docker.io', 'docker-ce']
+                for i in dockers:
+                    return_code = subprocess.call(['sudo', 'apt-get', 'install', '-qq', i])
+                    if return_code == 0:
+                        subprocess.check_call(['sudo', 'usermod', '-aG', 'docker', os.environ['USER']])
+                        print('Docker installed, restart your computer and re-run this script to continue the setup process.')
+                        sys.exit(0)
+                if return_code != 0:
+                    print('Cannot find any way to install Docker.', file=sys.stderr)
+                    sys.exit(1)
+        else:
+            programs += ['apt-cacher-ng', 'lxc', 'debootstrap']
+        subprocess.check_call(['sudo', 'apt-get', 'install', '-qq'] + programs)
+        setup_repos()
+    elif args.is_fedora:
+        pkgmgr = 'dnf'
+        repourl = 'https://download.docker.com/linux/fedora/docker-ce.repo'
+    elif args.is_centos:
+        pkgmgr = 'yum'
+        repourl = 'https://download.docker.com/linux/centos/docker-ce.repo'
+
+    if args.is_fedora or args.is_centos:
+        programs = ['ruby', 'make', 'wget', 'curl']
+        if args.kvm:
+            print('KVM not supported with Fedora/CentOS yet.')
             sys.exit(1)
+        elif args.docker:
+            if not os.path.isfile('/lib/systemd/system/docker.service'):
+                user = os.environ['USER']
+                dockers = ['docker-ce', 'docker-ce-cli', 'containerd.io']
+                if args.is_fedora:
+                    subprocess.check_call(['sudo', pkgmgr, 'install', '-y', 'dnf-plugins-core'])
+                    subprocess.check_call(['sudo', pkgmgr, 'config-manager', '--add-repo', repourl])
+                elif args.is_centos:
+                    reqs = ['yum-utils', 'device-mapper-persistent-data', 'lvm2']
+                    subprocess.check_call(['sudo', pkgmgr, 'install', '-y'] + reqs)
+                    subprocess.check_call(['sudo', 'yum-config-manager', '--add-repo', repourl])
+                subprocess.check_call(['sudo', pkgmgr, 'install', '-y'] + dockers)
+                subprocess.check_call(['sudo', 'usermod', '-aG', 'docker', user])
+                subprocess.check_call(['sudo', 'systemctl', 'enable', 'docker'])
+                print('Docker installed, restart your computer and re-run this script to continue the setup process.')
+                sys.exit(0)
+            subprocess.check_call(['sudo', 'systemctl', 'start', 'docker'])
+        else:
+            print('LXC not supported with Fedora/CentOS yet.')
+            sys.exit(1)
+
+        if args.is_fedora:
+            programs += ['git']
+        if args.is_centos:
+            # CentOS ships with an insanely outdated version of git that is no longer compatible with gitian builds
+            # Check current version and update if necessary
+            oldgit = b'2.' not in subprocess.check_output(['git', '--version'])
+            if oldgit:
+                subprocess.check_call(['sudo', pkgmgr, 'remove', '-y', 'git*'])
+                subprocess.check_call(['sudo', pkgmgr, 'install', '-y', 'https://centos7.iuscommunity.org/ius-release.rpm'])
+                programs += ['git2u-all']
+        subprocess.check_call(['sudo', pkgmgr, 'install', '-y'] + programs)
+        setup_repos()
     else:
-        programs += ['apt-cacher-ng', 'lxc', 'debootstrap']
-    subprocess.check_call(['sudo', 'apt-get', 'install', '-qq'] + programs)
+        print('Unsupported system/OS type.')
+        sys.exit(1)
+
+
+def setup_darwin():
+    global args, workdir
+    programs = []
+    if not os.path.isfile('/usr/local/bin/wget'):
+        programs += ['wget']
+    if not os.path.isfile('/usr/local/bin/git'):
+        programs += ['git']
+    if not os.path.isfile('/usr/local/bin/gsha256sum'):
+        programs += ['coreutils']
+    if args.docker:
+        print('Experimental setup for macOS host')
+        if len(programs) > 0:
+            subprocess.check_call(['brew', 'install'] + programs)
+            os.environ['PATH'] = '/usr/local/opt/coreutils/libexec/gnubin' + os.pathsep + os.environ['PATH']
+    elif args.kvm or not args.docker:
+        print('KVM and LXC are not supported under macOS at this time.')
+        sys.exit(0)
+    setup_repos()
+
+
+def setup_repos():
     if not os.path.isdir('gitian.sigs'):
         subprocess.check_call(['git', 'clone', 'https://github.com/pivx-Project/gitian.sigs.git'])
     if not os.path.isdir('pivx-detached-sigs'):
@@ -36,12 +117,22 @@ def setup():
         make_image_prog += ['--docker']
     elif not args.kvm:
         make_image_prog += ['--lxc']
+    if args.host_os == 'darwin':
+        subprocess.check_call(['sed', '-i.old', '/50cacher/d', 'bin/make-base-vm'])
+    if args.host_os == 'linux':
+        if args.is_fedora or args.is_centos:
+            subprocess.check_call(['sed', '-i', '/50cacher/d', 'bin/make-base-vm'])
     subprocess.check_call(make_image_prog)
+    subprocess.check_call(['git', 'checkout', 'bin/make-base-vm'])
     os.chdir(workdir)
-    if args.is_bionic and not args.kvm and not args.docker:
-        subprocess.check_call(['sudo', 'sed', '-i', 's/lxcbr0/br0/', '/etc/default/lxc-net'])
-        print('Reboot is required')
-        sys.exit(0)
+    if args.host_os == 'linux':
+        if args.is_bionic and not args.kvm and not args.docker:
+            subprocess.check_call(['sudo', 'sed', '-i', 's/lxcbr0/br0/', '/etc/default/lxc-net'])
+            print('Reboot is required')
+
+    print('Setup complete!')
+    sys.exit(0)
+
 
 def build():
     global args, workdir
@@ -88,34 +179,43 @@ def build():
         subprocess.check_call(['git', 'commit', '-m', 'Add '+args.version+' unsigned sigs for '+args.signer])
         os.chdir(workdir)
 
+
 def sign():
     global args, workdir
     os.chdir('gitian-builder')
 
-    if args.windows:
-        print('\nSigning ' + args.version + ' Windows')
-        subprocess.check_call('cp inputs/pivx-' + args.version + '-win-unsigned.tar.gz inputs/pivx-win-unsigned.tar.gz', shell=True)
-        subprocess.check_call(['bin/gbuild', '--skip-image', '--upgrade', '--commit', 'signature='+args.commit, '../pivx/contrib/gitian-descriptors/gitian-win-signer.yml'])
-        subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-win-signed', '--destination', '../gitian.sigs/', '../pivx/contrib/gitian-descriptors/gitian-win-signer.yml'])
-        subprocess.check_call('mv build/out/pivx-*win64-setup.exe ../pivx-binaries/'+args.version, shell=True)
-        subprocess.check_call('mv build/out/pivx-*win32-setup.exe ../pivx-binaries/'+args.version, shell=True)
+    # TODO: Skip making signed windows sigs until we actually start producing signed windows binaries
+    #print('\nSigning ' + args.version + ' Windows')
+    #subprocess.check_call('cp inputs/pivx-' + args.version + '-win-unsigned.tar.gz inputs/pivx-win-unsigned.tar.gz', shell=True)
+    #subprocess.check_call(['bin/gbuild', '--skip-image', '--upgrade', '--commit', 'signature='+args.commit, '../pivx/contrib/gitian-descriptors/gitian-win-signer.yml'])
+    #subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-win-signed', '--destination', '../gitian.sigs/', '../pivx/contrib/gitian-descriptors/gitian-win-signer.yml'])
+    #subprocess.check_call('mv build/out/pivx-*win64-setup.exe ../pivx-binaries/'+args.version, shell=True)
+    #subprocess.check_call('mv build/out/pivx-*win32-setup.exe ../pivx-binaries/'+args.version, shell=True)
 
-    if args.macos:
-        print('\nSigning ' + args.version + ' MacOS')
-        subprocess.check_call('cp inputs/pivx-' + args.version + '-osx-unsigned.tar.gz inputs/pivx-osx-unsigned.tar.gz', shell=True)
-        subprocess.check_call(['bin/gbuild', '--skip-image', '--upgrade', '--commit', 'signature='+args.commit, '../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml'])
-        subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-osx-signed', '--destination', '../gitian.sigs/', '../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml'])
-        subprocess.check_call('mv build/out/pivx-osx-signed.dmg ../pivx-binaries/'+args.version+'/pivx-'+args.version+'-osx.dmg', shell=True)
+    print('\nSigning ' + args.version + ' MacOS')
+    subprocess.check_call('cp inputs/pivx-' + args.version + '-osx-unsigned.tar.gz inputs/pivx-osx-unsigned.tar.gz', shell=True)
+    subprocess.check_call(['bin/gbuild', '--skip-image', '--upgrade', '--commit', 'signature='+args.commit, '../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml'])
+    subprocess.check_call(['bin/gsign', '-p', args.sign_prog, '--signer', args.signer, '--release', args.version+'-osx-signed', '--destination', '../gitian.sigs/', '../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml'])
+    subprocess.check_call('mv build/out/pivx-osx-signed.dmg ../pivx-binaries/'+args.version+'/pivx-'+args.version+'-osx.dmg', shell=True)
 
     os.chdir(workdir)
 
     if args.commit_files:
-        print('\nCommitting '+args.version+' Signed Sigs\n')
         os.chdir('gitian.sigs')
-        subprocess.check_call(['git', 'add', args.version+'-win-signed/'+args.signer])
-        subprocess.check_call(['git', 'add', args.version+'-osx-signed/'+args.signer])
-        subprocess.check_call(['git', 'commit', '-a', '-m', 'Add '+args.version+' signed binary sigs for '+args.signer])
+        commit = False
+        if os.path.isfile(args.version+'-win-signed/'+args.signer+'/pivx-win-signer-build.assert.sig'):
+            subprocess.check_call(['git', 'add', args.version+'-win-signed/'+args.signer])
+            commit = True
+        if os.path.isfile(args.version+'-osx-signed/'+args.signer+'/pivx-dmg-signer-build.assert.sig'):
+            subprocess.check_call(['git', 'add', args.version+'-osx-signed/'+args.signer])
+            commit = True
+        if commit:
+            print('\nCommitting '+args.version+' Signed Sigs\n')
+            subprocess.check_call(['git', 'commit', '-a', '-m', 'Add '+args.version+' signed binary sigs for '+args.signer])
+        else:
+            print('\nNothing to commit\n')
         os.chdir(workdir)
+
 
 def verify():
     global args, workdir
@@ -137,10 +237,11 @@ def verify():
         print('Verifying v'+args.version+' MacOS FAILED\n')
         rc = 1
 
-    print('\nVerifying v'+args.version+' Signed Windows\n')
-    if subprocess.call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version+'-win-signed', '../pivx/contrib/gitian-descriptors/gitian-win-signer.yml']):
-        print('Verifying v'+args.version+' Signed Windows FAILED\n')
-        rc = 1
+    # TODO: Skip checking signed windows sigs until we actually start producing signed windows binaries
+    #print('\nVerifying v'+args.version+' Signed Windows\n')
+    #if subprocess.call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version+'-win-signed', '../pivx/contrib/gitian-descriptors/gitian-win-signer.yml']):
+    #    print('Verifying v'+args.version+' Signed Windows FAILED\n')
+    #    rc = 1
 
     print('\nVerifying v'+args.version+' Signed MacOS\n')
     if subprocess.call(['bin/gverify', '-v', '-d', '../gitian.sigs/', '-r', args.version+'-osx-signed', '../pivx/contrib/gitian-descriptors/gitian-osx-signer.yml']):
@@ -149,6 +250,7 @@ def verify():
 
     os.chdir(workdir)
     return rc
+
 
 def main():
     global args, workdir
@@ -175,7 +277,23 @@ def main():
     args = parser.parse_args()
     workdir = os.getcwd()
 
-    args.is_bionic = b'bionic' in subprocess.check_output(['lsb_release', '-cs'])
+    args.host_os = sys.platform
+
+    if args.host_os == 'win32' or args.host_os == 'cygwin':
+        raise Exception('Error: Native Windows is not supported by this script, use WSL')
+
+    if args.host_os == 'linux':
+        if os.environ['USER'] == 'root':
+            raise Exception('Error: Do not run this script as the root user')
+        args.is_bionic = False
+        args.is_fedora = False
+        args.is_centos = False
+        if os.path.isfile('/usr/bin/lsb_release'):
+            args.is_bionic = b'bionic' in subprocess.check_output(['lsb_release', '-cs'])
+        if os.path.isfile('/etc/fedora-release'):
+            args.is_fedora = True
+        if os.path.isfile('/etc/centos-release'):
+            args.is_centos = True
 
     if args.kvm and args.docker:
         raise Exception('Error: cannot have both kvm and docker')
@@ -195,7 +313,10 @@ def main():
             os.environ['LXC_GUEST_IP'] = '10.0.3.5'
 
     if args.setup:
-        setup()
+        if args.host_os == 'linux':
+            setup_linux()
+        elif args.host_os == 'darwin':
+            setup_darwin()
 
     if args.buildsign:
         args.build = True
@@ -203,6 +324,9 @@ def main():
 
     if not args.build and not args.sign and not args.verify:
         sys.exit(0)
+
+    if args.host_os == 'darwin':
+        os.environ['PATH'] = '/usr/local/opt/coreutils/libexec/gnubin' + os.pathsep + os.environ['PATH']
 
     args.linux = 'l' in args.os
     args.windows = 'w' in args.os
@@ -214,6 +338,8 @@ def main():
         args.macos = False
 
     args.sign_prog = 'true' if args.detach_sign else 'gpg --detach-sign'
+    if args.detach_sign:
+        args.commit_files = False
 
     script_name = os.path.basename(sys.argv[0])
     if not args.signer:
@@ -233,7 +359,11 @@ def main():
     os.chdir('pivx')
     if args.pull:
         subprocess.check_call(['git', 'fetch', args.url, 'refs/pull/'+args.version+'/merge'])
+        if not os.path.isdir('../gitian-builder/inputs/pivx'):
+            os.makedirs('../gitian-builder/inputs/pivx')
         os.chdir('../gitian-builder/inputs/pivx')
+        if not os.path.isdir('.git'):
+            subprocess.check_call(['git', 'init'])
         subprocess.check_call(['git', 'fetch', args.url, 'refs/pull/'+args.version+'/merge'])
         args.commit = subprocess.check_output(['git', 'show', '-s', '--format=%H', 'FETCH_HEAD'], universal_newlines=True, encoding='utf8').strip()
         args.version = 'pull-' + args.version
@@ -257,6 +387,7 @@ def main():
         subprocess.check_call(['git', 'pull'])
         os.chdir(workdir)
         sys.exit(verify())
+
 
 if __name__ == '__main__':
     main()
