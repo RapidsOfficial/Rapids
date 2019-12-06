@@ -140,8 +140,6 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", "Creates an address to receive coin\ndelegations and be able to stake them.");
     ui->btnColdStaking->layout()->setMargin(0);
 
-    setCssProperty(ui->labelListWarning, "text-violet-warning");
-
     connect(ui->btnCoinControl, SIGNAL(clicked()), this, SLOT(onCoinControlClicked()));
     connect(ui->btnColdStaking, SIGNAL(clicked()), this, SLOT(onColdStakeClicked()));
 
@@ -252,16 +250,18 @@ bool ColdStakingWidget::refreshDelegations(){
 
 void ColdStakingWidget::onDelegationsRefreshed() {
     isLoading = false;
-    if (ui->pushLeft->isChecked()) {
-        bool hasDel = csModel->rowCount() > 0;
+    bool hasDel = csModel->rowCount() > 0;
+
+    // Update the total value.
+    CAmount total = csModel->getTotalAmount();
+    ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
+            (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
+    );
+
+    // Update list if we are showing that section.
+    if (!isInDelegation) {
         showList(hasDel);
         ui->labelStakingTotal->setVisible(hasDel);
-        if (hasDel) {
-            CAmount total = csModel->getTotalAmount();
-            ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
-                    (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
-            );
-        }
     }
 }
 
@@ -342,6 +342,7 @@ void ColdStakingWidget::onContactsClicked(){
 }
 
 void ColdStakingWidget::onDelegateSelected(bool delegate){
+    isInDelegation = delegate;
     if (menu && menu->isVisible()) {
         menu->hide();
     }
@@ -350,7 +351,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         menuAddresses->hide();
     }
 
-    if(delegate){
+    if(isInDelegation){
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
         ui->containerBtn->setVisible(true);
@@ -360,7 +361,6 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->btnColdStaking->setVisible(false);
         ui->btnMyStakingAddresses->setVisible(false);
         ui->listViewStakingAddress->setVisible(false);
-        ui->labelListWarning->setVisible(false);
         if (ui->rightContainer->count() == 2)
             ui->rightContainer->addItem(spacerDiv);
     }else{
@@ -369,7 +369,6 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->containerBtn->setVisible(false);
         ui->btnColdStaking->setVisible(true);
         showList(csModel->rowCount() > 0);
-        ui->labelListWarning->setVisible(true);
         ui->btnMyStakingAddresses->setVisible(true);
         ui->listViewStakingAddress->setVisible(false);
     }
@@ -500,7 +499,7 @@ void ColdStakingWidget::clearAll() {
 }
 
 void ColdStakingWidget::onCoinControlClicked(){
-    if(ui->pushRight->isChecked()) {
+    if(isInDelegation) {
         if (walletModel->getBalance() > 0) {
             if (!coinControlDialog) {
                 coinControlDialog = new CoinControlDialog();

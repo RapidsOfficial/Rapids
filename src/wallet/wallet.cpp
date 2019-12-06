@@ -1924,7 +1924,10 @@ void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
             const uint256& wtxid = it.first;
             const CWalletTx* pcoin = &it.second;
 
-            if (!pcoin->IsTrusted())
+            bool fConflicted;
+            int nDepth = pcoin->GetDepthAndMempool(fConflicted);
+
+            if (fConflicted || nDepth < 0)
                 continue;
 
             if (pcoin->HasP2CSOutputs()) {
