@@ -403,9 +403,11 @@ void ColdStakingWidget::onSendClicked(){
     SendCoinsRecipient dest = sendMultiRow->getValue();
     dest.isP2CS = true;
 
-    // Amount must be < 10 PIV, check chainparams minColdStakingAmount
-    if (dest.amount < (COIN * 10)) {
-        inform(tr("Invalid entry, minimum delegable amount is 10 PIV"));
+    // Amount must be >= minColdStakingAmount
+    const CAmount& minColdStakingAmount = walletModel->getMinColdStakingAmount();
+    if (dest.amount < minColdStakingAmount) {
+        inform(tr("Invalid entry, minimum delegable amount is ") +
+               BitcoinUnits::formatWithUnit(nDisplayUnit, minColdStakingAmount));
         return;
     }
 
@@ -453,8 +455,7 @@ void ColdStakingWidget::onSendClicked(){
             this,
             prepareStatus,
             walletModel,
-            BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(),
-                                         currentTransaction.getTransactionFee()),
+            BitcoinUnits::formatWithUnit(nDisplayUnit, currentTransaction.getTransactionFee()),
             true
     );
 
@@ -465,7 +466,7 @@ void ColdStakingWidget::onSendClicked(){
 
     showHideOp(true);
     TxDetailDialog* dialog = new TxDetailDialog(window);
-    dialog->setDisplayUnit(walletModel->getOptionsModel()->getDisplayUnit());
+    dialog->setDisplayUnit(nDisplayUnit);
     dialog->setData(walletModel, currentTransaction);
     dialog->adjustSize();
     openDialogWithOpaqueBackgroundY(dialog, window, 3, 5);

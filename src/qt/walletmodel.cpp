@@ -82,6 +82,11 @@ CAmount WalletModel::getBalance(const CCoinControl* coinControl) const
     return wallet->GetBalance();
 }
 
+CAmount WalletModel::getMinColdStakingAmount() const
+{
+    return Params().GetMinColdStakingAmount();
+}
+
 CAmount WalletModel::getUnconfirmedBalance() const
 {
     return wallet->GetUnconfirmedBalance();
