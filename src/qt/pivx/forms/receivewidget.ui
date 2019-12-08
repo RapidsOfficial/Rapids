@@ -262,6 +262,9 @@
             <layout class="QHBoxLayout" name="horizontalLayout_4">
              <item alignment="Qt::AlignHCenter">
               <widget class="QPushButton" name="pushButtonLabel">
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>Add Label</string>
                </property>
@@ -269,6 +272,9 @@
              </item>
              <item alignment="Qt::AlignHCenter">
               <widget class="QPushButton" name="pushButtonNewAddress">
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>Generate Address</string>
                </property>
@@ -276,6 +282,9 @@
              </item>
              <item alignment="Qt::AlignHCenter">
               <widget class="QPushButton" name="pushButtonCopy">
+               <property name="focusPolicy">
+                <enum>Qt::NoFocus</enum>
+               </property>
                <property name="text">
                 <string>Copy</string>
                </property>

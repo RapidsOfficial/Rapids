@@ -55,6 +55,9 @@
        <height>36</height>
       </size>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::NoFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">padding-right:5px;padding-left:5px;</string>
      </property>

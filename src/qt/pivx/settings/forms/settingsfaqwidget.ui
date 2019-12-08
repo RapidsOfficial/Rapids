@@ -159,6 +159,9 @@
                        <height>50</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string>1) What is PIVX?</string>
                      </property>
@@ -187,6 +190,9 @@
                        <height>50</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string>2) Why are my PIV unspendable?</string>
                      </property>
@@ -211,6 +217,9 @@
                        <width>16777215</width>
                        <height>16777215</height>
                       </size>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
                       <string>3) PIVX privacy? What is Zerocoin (zPIV)?</string>
@@ -237,6 +246,9 @@
                        <height>16777215</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string>4) Why are my zPIV unspendable?</string>
                      </property>
@@ -255,6 +267,9 @@
                        <width>0</width>
                        <height>50</height>
                       </size>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
                       <string>5) Why did my wallet convert the balance
@@ -276,6 +291,9 @@
                        <height>50</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string>6) How do I receive PIV/zPIV?</string>
                      </property>
@@ -294,6 +312,9 @@
                        <width>0</width>
                        <height>50</height>
                       </size>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
                       <string>7) How do I stake PIV/zPIV?</string>
@@ -314,6 +335,9 @@
                        <height>50</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string>8) Where I should go if I need support?</string>
                      </property>
@@ -333,6 +357,9 @@
                        <height>50</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string>9) What is a Master Node?</string>
                      </property>
@@ -351,6 +378,9 @@
                        <width>0</width>
                        <height>50</height>
                       </size>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
                       <string>10) What is a Master Node Controller?</string>
@@ -409,6 +439,9 @@
                </item>
                <item>
                 <widget class="QPushButton" name="pushButtonWebLink">
+                 <property name="focusPolicy">
+                  <enum>Qt::NoFocus</enum>
+                 </property>
                  <property name="text">
                   <string>PushButton</string>
                  </property>

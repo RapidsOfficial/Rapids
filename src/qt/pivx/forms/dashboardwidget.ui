@@ -399,6 +399,9 @@
                 <height>100</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -447,8 +450,11 @@
              <height>50</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
            <property name="text">
-            <string>PushButton</string>
+            <string/>
            </property>
           </widget>
          </item>
@@ -847,6 +853,9 @@
                            <height>19</height>
                           </size>
                          </property>
+                         <property name="focusPolicy">
+                          <enum>Qt::NoFocus</enum>
+                         </property>
                          <property name="styleSheet">
                           <string notr="true"/>
                          </property>
@@ -868,6 +877,9 @@
                            <width>19</width>
                            <height>19</height>
                           </size>
+                         </property>
+                         <property name="focusPolicy">
+                          <enum>Qt::NoFocus</enum>
                          </property>
                          <property name="styleSheet">
                           <string notr="true"/>
@@ -968,6 +980,9 @@ margin:0px;</string>
                      <height>16777215</height>
                     </size>
                    </property>
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
+                   </property>
                    <property name="text">
                     <string>Days</string>
                    </property>
@@ -992,6 +1007,9 @@ margin:0px;</string>
                      <width>16777215</width>
                      <height>16777215</height>
                     </size>
+                   </property>
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="text">
                     <string>Months</string>
@@ -1023,6 +1041,9 @@ margin:0px;</string>
                      <width>16777215</width>
                      <height>16777215</height>
                     </size>
+                   </property>
+                   <property name="focusPolicy">
+                    <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="text">
                     <string>Years</string>
@@ -1249,6 +1270,9 @@ margin:0px;</string>
                   <width>100</width>
                   <height>100</height>
                  </size>
+                </property>
+                <property name="focusPolicy">
+                 <enum>Qt::NoFocus</enum>
                 </property>
                 <property name="text">
                  <string/>

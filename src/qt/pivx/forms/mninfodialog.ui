@@ -289,6 +289,9 @@ background:transparent;
                        <height>34</height>
                       </size>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
+                     </property>
                      <property name="text">
                       <string/>
                      </property>
@@ -409,6 +412,9 @@ background:transparent;
                        <width>34</width>
                        <height>34</height>
                       </size>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
                       <string/>
@@ -571,6 +577,9 @@ background:transparent;
                        <width>34</width>
                        <height>34</height>
                       </size>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
                       <string/>

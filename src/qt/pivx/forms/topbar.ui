@@ -641,6 +641,9 @@ border:none;</string>
                 <height>70</height>
                </size>
               </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
+              </property>
               <property name="text">
                <string/>
               </property>
@@ -681,6 +684,9 @@ border:none;</string>
                 <width>36</width>
                 <height>36</height>
                </size>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::NoFocus</enum>
               </property>
               <property name="text">
                <string/>
