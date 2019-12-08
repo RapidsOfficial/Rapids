@@ -287,9 +287,12 @@ void ColdStakingWidget::onContactsClicked(){
         menu->hide();
     }
 
-    int contactsSize = isContactOwnerSelected ? walletModel->getAddressTableModel()->sizeSend() : walletModel->getAddressTableModel()->sizeColdSend();
+    int contactsSize = isContactOwnerSelected ? walletModel->getAddressTableModel()->sizeRecv() : walletModel->getAddressTableModel()->sizeColdSend();
     if(contactsSize == 0) {
-        inform(tr("No contacts available, you can go to the contacts screen and add some there!"));
+        inform(isContactOwnerSelected ?
+                 tr( "No receive addresses available, you can go to the receive screen and create some there!") :
+                 tr("No contacts available, you can go to the contacts screen and add some there!")
+        );
         return;
     }
 
