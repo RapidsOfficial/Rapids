@@ -21,6 +21,7 @@ public:
 
     void setTexts(QString title, const char* message = nullptr);
     void setData(QString address, QString label);
+    void showEvent(QShowEvent *event) override;
     QString getLabel();
 
     bool res = false;
