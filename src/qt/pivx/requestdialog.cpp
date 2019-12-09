@@ -88,6 +88,7 @@ void RequestDialog::setPaymentRequest(bool isPaymentRequest) {
     if (!this->isPaymentRequest) {
         ui->labelMessage->setText(tr("Creates an address to receive coin delegations and be able to stake them."));
         ui->labelTitle->setText(tr("New Cold Staking Address"));
+        ui->labelSubtitleAmount->setText(tr("Amount (optional)"));
     }
 }
 
@@ -99,14 +100,12 @@ void RequestDialog::onNextClicked(){
         //Amount
         int displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
         bool isValueValid = true;
-        CAmount value = GUIUtil::parseValue(
-                ui->lineEditAmount->text(),
-                displayUnit,
-                &isValueValid
-        );
+        CAmount value = (ui->lineEditAmount->text().isEmpty() ?
+                            0 :
+                            GUIUtil::parseValue(ui->lineEditAmount->text(), displayUnit, &isValueValid)
+                        );
 
         if (!this->isPaymentRequest) {
-
             // Add specific checks for cold staking address creation
             if (labelStr.isEmpty()) {
                 inform("Address label cannot be empty");
