@@ -32,12 +32,12 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
     ui->labelTitleGeneral->setText(tr("General"));
     ui->labelTitleClient->setText(tr("Client Version: "));
     ui->labelTitleAgent->setText(tr("User Agent:"));
-    ui->labelTitleBerkeley->setText(tr("Using BerkeleyDB version:"));
+    ui->labelTitleBerkeley->setText(tr("BerkeleyDB version:"));
     ui->labelTitleDataDir->setText(tr("Datadir: "));
-    ui->labelTitleTime->setText(tr("Startup Time:  "));
+    ui->labelTitleTime->setText(tr("Startup time:  "));
     ui->labelTitleNetwork->setText(tr("Network"));
     ui->labelTitleName->setText(tr("Name:"));
-    ui->labelTitleConnections->setText(tr("Number Connections:"));
+    ui->labelTitleConnections->setText(tr("Connections:"));
 
     setCssProperty({
         ui->labelTitleDataDir,
@@ -69,13 +69,13 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
     },"text-title");
 
     ui->labelTitleBlockchain->setText(tr("Blockchain"));
-    ui->labelTitleBlockNumber->setText(tr("Current Number of Blocks:"));
-    ui->labelTitleBlockTime->setText(tr("Last Block Time:"));
+    ui->labelTitleBlockNumber->setText(tr("Current number of blocks:"));
+    ui->labelTitleBlockTime->setText(tr("Last block time:"));
 
     ui->labelTitleMemory->setText(tr("Memory Pool"));
     ui->labelTitleMemory->setVisible(false);
 
-    ui->labelTitleNumberTransactions->setText(tr("Current Number of Transactions:"));
+    ui->labelTitleNumberTransactions->setText(tr("Current number of transactions:"));
     ui->labelTitleNumberTransactions->setVisible(false);
 
     ui->labelInfoNumberTransactions->setText("0");

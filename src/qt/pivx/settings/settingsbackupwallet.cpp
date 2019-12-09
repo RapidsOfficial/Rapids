@@ -31,7 +31,7 @@ SettingsBackupWallet::SettingsBackupWallet(PIVXGUI* _window, QWidget *parent) :
     ui->labelDivider->setProperty("cssClass", "container-divider");
 
     // Subtitle
-    ui->labelSubtitle1->setText(tr("Keep your wallet safe doing regular backups, store your backup file externally.\nThis option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device."));
+    ui->labelSubtitle1->setText(tr("Keep your wallet safe by doing regular backups and storing your backup file externally.\nThis option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) on another device."));
     ui->labelSubtitle1->setProperty("cssClass", "text-subtitle");
 
     ui->labelSubtitle_2->setText(tr("This will decrypt the whole wallet data and encrypt it back with the new passphrase.\nRemember to write it down and store it safely, otherwise you might lose access to your funds."));
@@ -41,7 +41,7 @@ SettingsBackupWallet::SettingsBackupWallet(PIVXGUI* _window, QWidget *parent) :
     ui->labelSubtitleLocation->setText(tr("Where"));
     ui->labelSubtitleLocation->setProperty("cssClass", "text-title");
 
-    ui->pushButtonDocuments->setText(tr("Set a folder location"));
+    ui->pushButtonDocuments->setText(tr("Select folder..."));
     ui->pushButtonDocuments->setProperty("cssClass", "btn-edit-primary-folder");
     setShadow(ui->pushButtonDocuments);
 
@@ -74,7 +74,7 @@ void SettingsBackupWallet::backupWallet()
     if(walletModel && !filename.isEmpty()) {
         inform(walletModel->backupWallet(filename) ? tr("Backup created") : tr("Backup creation failed"));
         filename = QString();
-        ui->pushButtonDocuments->setText(tr("Set a folder location"));
+        ui->pushButtonDocuments->setText(tr("Select folder..."));
     } else {
         inform(tr("Please select a folder to export the backup first."));
     }

@@ -147,7 +147,7 @@ void ReceiveWidget::updateLabel(){
         if (!label.isEmpty()) {
             ui->labelLabel->setVisible(true);
             ui->labelLabel->setText(label);
-            ui->pushButtonLabel->setText(tr("Change Label"));
+            ui->pushButtonLabel->setText(tr("Edit Label"));
         }else{
             ui->labelLabel->setVisible(false);
         }

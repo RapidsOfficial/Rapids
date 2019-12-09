@@ -690,7 +690,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Create New Master Node Controller</string>
+             <string>Create New Masternode Controller</string>
             </property>
            </widget>
           </item>
@@ -802,7 +802,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Set Master Node’s Name</string>
+             <string>Set Masternode Name</string>
             </property>
            </widget>
           </item>
@@ -885,7 +885,7 @@
              </size>
             </property>
             <property name="text">
-             <string>Set Master Node’s IP and port</string>
+             <string>Set Masternode IP and Port</string>
             </property>
            </widget>
           </item>
@@ -966,7 +966,7 @@
           <item>
            <widget class="QLabel" name="labelSubtitlePort">
             <property name="text">
-             <string>Enter Port</string>
+             <string>Enter port</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>

@@ -39,10 +39,10 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
     ui->labelSubtitle1->setProperty("cssClass", "text-subtitle");
 
     // Address
-    ui->labelSubtitleAddress->setText(tr("Enter a PIVX address or contact label"));
+    ui->labelSubtitleAddress->setText(tr("PIVX address or contact label"));
     ui->labelSubtitleAddress->setProperty("cssClass", "text-title");
 
-    ui->addressIn_SM->setPlaceholderText(tr("Add address"));
+    ui->addressIn_SM->setPlaceholderText(tr("Enter address"));
     ui->addressIn_SM->setProperty("cssClass", "edit-primary-multi-book");
     ui->addressIn_SM->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->addressIn_SM);
@@ -62,7 +62,7 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
     ui->labelSubtitleMessage->setProperty("cssClass", "text-title");
 
 #if QT_VERSION >= 0x050300
-    ui->messageIn_SM->setPlaceholderText(tr("Write a message"));
+    ui->messageIn_SM->setPlaceholderText(tr("Write message"));
 #endif
     ui->messageIn_SM->setProperty("cssClass","edit-primary");
     setShadow(ui->messageIn_SM);
