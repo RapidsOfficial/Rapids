@@ -170,6 +170,11 @@ void RequestDialog::onCopyUriClicked(){
     }
 }
 
+void RequestDialog::showEvent(QShowEvent *event)
+{
+    if (ui->lineEditAmount) ui->lineEditAmount->setFocus();
+}
+
 void RequestDialog::updateQr(QString str){
     QString uri = GUIUtil::formatBitcoinURI(*info);
     ui->labelQrImg->setText("");

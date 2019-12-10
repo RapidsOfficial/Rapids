@@ -97,6 +97,11 @@ SettingsSignMessageWidgets::~SettingsSignMessageWidgets(){
     delete ui;
 }
 
+void SettingsSignMessageWidgets::showEvent(QShowEvent *event)
+{
+    if (ui->addressIn_SM) ui->addressIn_SM->setFocus();
+}
+
 void SettingsSignMessageWidgets::onModeSelected(bool isSign){
     this->isSign = isSign;
     updateMode();

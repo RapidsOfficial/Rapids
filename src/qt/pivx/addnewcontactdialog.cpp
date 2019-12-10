@@ -56,6 +56,11 @@ void AddNewContactDialog::setData(QString address, QString label){
     if (!label.isEmpty()) ui->lineEditName->setText(label);
 }
 
+void AddNewContactDialog::showEvent(QShowEvent *event)
+{
+    if (ui->lineEditName) ui->lineEditName->setFocus();
+}
+
 void AddNewContactDialog::ok() {
     this->res = true;
     accept();

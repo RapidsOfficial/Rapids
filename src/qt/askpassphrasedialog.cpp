@@ -156,7 +156,8 @@ AskPassphraseDialog::~AskPassphraseDialog()
 
 void AskPassphraseDialog::showEvent(QShowEvent *event)
 {
-    if (ui->passEdit1) ui->passEdit1->setFocus();
+    if (mode == Mode::Encrypt && ui->passEdit2) ui->passEdit2->setFocus();
+    else if (ui->passEdit1) ui->passEdit1->setFocus();
 }
 
 void AskPassphraseDialog::accept()

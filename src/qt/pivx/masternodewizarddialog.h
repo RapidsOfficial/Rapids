@@ -24,6 +24,7 @@ class MasterNodeWizardDialog : public QDialog
 public:
     explicit MasterNodeWizardDialog(WalletModel *walletMode, QWidget *parent = nullptr);
     ~MasterNodeWizardDialog();
+    void showEvent(QShowEvent *event) override;
 
     QString returnStr = "";
     bool isOk = false;
