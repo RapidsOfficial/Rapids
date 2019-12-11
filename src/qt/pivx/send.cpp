@@ -592,7 +592,7 @@ void SendWidget::onCoinControlClicked(){
                 coinControlDialog = new CoinControlDialog();
                 coinControlDialog->setModel(walletModel);
             } else {
-                coinControlDialog->updateView();
+                coinControlDialog->refreshDialog();
             }
             coinControlDialog->exec();
             ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
