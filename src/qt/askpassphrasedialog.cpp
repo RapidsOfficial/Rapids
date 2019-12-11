@@ -265,21 +265,20 @@ void AskPassphraseDialog::textChanged()
 
 bool AskPassphraseDialog::event(QEvent* event)
 {
-    // Detect Caps Lock key press.
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+        // Detect Caps Lock key press.
         if (ke->key() == Qt::Key_CapsLock) {
             fCapsLock = !fCapsLock;
+            ui->capsLabel->setVisible(fCapsLock);
+            fCapsLock ? ui->capsLabel->setText(tr("Warning: The Caps Lock key is on!")) : ui->capsLabel->clear();
         }
-        if (fCapsLock) {
-            ui->capsLabel->setText(tr("Warning: The Caps Lock key is on!"));
-            ui->capsLabel->setVisible(true);
-        } else {
-            ui->capsLabel->clear();
-            ui->capsLabel->setVisible(false);
+        // Detect Enter key press
+        if ((ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) && ui->pushButtonOk->isEnabled()) {
+            accept();
         }
     }
-    return QWidget::event(event);
+    return QDialog::event(event);
 }
 
 bool AskPassphraseDialog::eventFilter(QObject* object, QEvent* event)
