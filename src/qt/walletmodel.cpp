@@ -999,7 +999,8 @@ void WalletModel::listCoins(std::map<QString, std::vector<COutput> >& mapCoins) 
         int nDepth = wallet->mapWallet[outpoint.hash].GetDepthAndMempool(fConflicted);
         if (nDepth < 0 || fConflicted) continue;
         COutput out(&wallet->mapWallet[outpoint.hash], outpoint.n, nDepth, true);
-        if (outpoint.n < out.tx->vout.size() && wallet->IsMine(out.tx->vout[outpoint.n]) == ISMINE_SPENDABLE)
+        if (outpoint.n < out.tx->vout.size() &&
+                (wallet->IsMine(out.tx->vout[outpoint.n]) & ISMINE_SPENDABLE_ALL) != ISMINE_NO)
             vCoins.push_back(out);
     }
 
