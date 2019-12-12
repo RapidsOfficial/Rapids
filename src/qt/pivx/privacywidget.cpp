@@ -309,6 +309,8 @@ void PrivacyWidget::onCoinControlClicked(){
             if (!coinControlDialog) {
                 coinControlDialog = new CoinControlDialog();
                 coinControlDialog->setModel(walletModel);
+            } else {
+                coinControlDialog->refreshDialog();
             }
             coinControlDialog->exec();
             ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());

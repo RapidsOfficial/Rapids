@@ -49,6 +49,7 @@ public:
     void setModel(WalletModel* model);
     void updateDialogLabels();
     void updateView();
+    void refreshDialog();
 
     // static because also called from sendcoinsdialog
     static void updateLabels(WalletModel*, QDialog*);
