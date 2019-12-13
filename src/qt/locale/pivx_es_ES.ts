@@ -1,5 +1,15 @@
 <TS language="es_ES" version="2.1">
 <context>
+    <name>AddNewAddressDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>Dirección</translation>
+    </message>
+    </context>
+<context>
+    <name>AddNewContactDialog</name>
+    </context>
+<context>
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
@@ -99,6 +109,9 @@
     </message>
 </context>
 <context>
+    <name>AddressLabelRow</name>
+    </context>
+<context>
     <name>AddressTableModel</name>
     <message>
         <source>Label</source>
@@ -114,30 +127,13 @@
     </message>
 </context>
 <context>
+    <name>AddressesWidget</name>
+    </context>
+<context>
     <name>AskPassphraseDialog</name>
     <message>
         <source>Passphrase Dialog</source>
         <translation>Clave de seguridad</translation>
-    </message>
-    <message>
-        <source>Enter passphrase</source>
-        <translation>Introduzca clave de seguridad</translation>
-    </message>
-    <message>
-        <source>New passphrase</source>
-        <translation>Nueva clave de seguridad</translation>
-    </message>
-    <message>
-        <source>Repeat new passphrase</source>
-        <translation>Repita la clave de seguridad</translation>
-    </message>
-    <message>
-        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation>Sirve simplemente para deshabilitar el envío de dinero cuando la cuenta del SO ha sido comprometida. No suministra seguridad real.</translation>
-    </message>
-    <message>
-        <source>For anonymization, automint, and staking only</source>
-        <translation>Para solo anonimizar, automint y staking</translation>
     </message>
     <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
@@ -240,102 +236,174 @@
     </message>
 </context>
 <context>
-    <name>Bip38ToolDialog</name>
+    <name>BlockExplorer</name>
+    </context>
+<context>
+    <name>CSRow</name>
+    </context>
+<context>
+    <name>ClientModel</name>
+    </context>
+<context>
+    <name>CoinControlDialog</name>
     <message>
-        <source>BIP 38 Tool</source>
-        <translation>Utilidad BIP 38</translation>
+        <source>(no label)</source>
+        <translation>(sin etiqueta)</translation>
+    </message>
+    </context>
+<context>
+    <name>CoinControlPivWidget</name>
+    <message>
+        <source>Label</source>
+        <translation>Etiqueta</translation>
     </message>
     <message>
-        <source>&amp;BIP 38 Encrypt</source>
-        <translation>Encriptar &amp;BIP 38</translation>
+        <source>Address</source>
+        <translation>Dirección</translation>
+    </message>
+    </context>
+<context>
+    <name>ColdStakingWidget</name>
+    </context>
+<context>
+    <name>ContactDropdownRow</name>
+    </context>
+<context>
+    <name>DashboardWidget</name>
+    </context>
+<context>
+    <name>DefaultDialog</name>
+    </context>
+<context>
+    <name>DenomGenerationDialog</name>
+    </context>
+<context>
+    <name>EditAddressDialog</name>
+    </context>
+<context>
+    <name>ExpandableButton</name>
+    </context>
+<context>
+    <name>FreespaceChecker</name>
+    </context>
+<context>
+    <name>GovernancePage</name>
+    </context>
+<context>
+    <name>HelpMessageDialog</name>
+    </context>
+<context>
+    <name>Intro</name>
+    </context>
+<context>
+    <name>LoadingDialog</name>
+    </context>
+<context>
+    <name>LockUnlock</name>
+    </context>
+<context>
+    <name>MNRow</name>
+    </context>
+<context>
+    <name>MasterNodeWizardDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>Dirección</translation>
+    </message>
+    </context>
+<context>
+    <name>MasterNodesWidget</name>
+    </context>
+<context>
+    <name>MnInfoDialog</name>
+    </context>
+<context>
+    <name>MyAddressRow</name>
+    </context>
+<context>
+    <name>NavMenuWidget</name>
+    </context>
+<context>
+    <name>OpenURIDialog</name>
+    </context>
+<context>
+    <name>OptionButton</name>
+    </context>
+<context>
+    <name>OptionsDialog</name>
+    </context>
+<context>
+    <name>PIVXGUI</name>
+    </context>
+<context>
+    <name>PWidget</name>
+    </context>
+<context>
+    <name>PaymentServer</name>
+    </context>
+<context>
+    <name>PeerTableModel</name>
+    </context>
+<context>
+    <name>PrivacyWidget</name>
+    </context>
+<context>
+    <name>ProposalFrame</name>
+    </context>
+<context>
+    <name>QObject</name>
+    </context>
+<context>
+    <name>RPCConsole</name>
+    </context>
+<context>
+    <name>ReceiveDialog</name>
+    </context>
+<context>
+    <name>ReceiveWidget</name>
+    </context>
+<context>
+    <name>RecentRequestsTableModel</name>
+    <message>
+        <source>Label</source>
+        <translation>Etiqueta</translation>
     </message>
     <message>
-        <source>Address:</source>
-        <translation>Dirección:</translation>
+        <source>Address</source>
+        <translation>Dirección</translation>
     </message>
     <message>
-        <source>Enter a PIVX Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
-        <translation>Ingrese una dirección PIVX que le gustaría encriptar usando BIP 38. Ingrese una contraseña en el cuadro del medio. Presione encriptar para calcular la clave privada encriptada.</translation>
+        <source>(no label)</source>
+        <translation>(sin etiqueta)</translation>
     </message>
+    </context>
+<context>
+    <name>RequestDialog</name>
     <message>
-        <source>The PIVX address to encrypt</source>
-        <translation>La dirección PIVX a encriptar</translation>
+        <source>Label</source>
+        <translation>Etiqueta</translation>
     </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Escoja una dirección usada previamente</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Pegar dirección del portapapeles</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    <message>
-        <source>Passphrase: </source>
-        <translation>Clave de seguridad:</translation>
-    </message>
-    <message>
-        <source>Encrypted Key:</source>
-        <translation>Clave encriptada:</translation>
-    </message>
-    <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>Copiar la firma actual al portapapeles del sistema</translation>
-    </message>
-    <message>
-        <source>Encrypt the private key for this PIVX address</source>
-        <translation>Cifrar la llave privada para esta dirección PIVX</translation>
-    </message>
-    <message>
-        <source>Reset all fields</source>
-        <translation>Limpiar todos los campos</translation>
-    </message>
-    <message>
-        <source>The encrypted private key</source>
-        <translation>La llave privada cifrada</translation>
-    </message>
-    <message>
-        <source>Decrypt the entered key using the passphrase</source>
-        <translation>Descifrar la llave ingresada usando la frase de contraseña</translation>
-    </message>
-    <message>
-        <source>Encrypt &amp;Key</source>
-        <translation>Encriptar Clave</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Limpiar todo</translation>
-    </message>
-    <message>
-        <source>&amp;BIP 38 Decrypt</source>
-        <translation>Desencriptar BIP 38</translation>
-    </message>
-    <message>
-        <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking 'Import Address' will add this private key to the wallet.</source>
-        <translation>Ingrese la clave privada cifrada BIP 38. Ingrese la frase de contraseña en el cuadro del medio. Haga clic en Descifrar clave para calcular la clave privada. Después de descifrar la clave, al hacer clic en "Importar dirección" para agregar esta clave privada al monedero.</translation>
-    </message>
-    <message>
-        <source>Decrypt &amp;Key</source>
-        <translation>Descifrar clave</translation>
-    </message>
-    <message>
-        <source>Decrypted Key:</source>
-        <translation>Clave descifrada:</translation>
-    </message>
+    </context>
+<context>
+    <name>SendChangeAddressDialog</name>
+    </context>
+<context>
+    <name>SendCustomFeeDialog</name>
+    </context>
+<context>
+    <name>SendMultiRow</name>
+    </context>
+<context>
+    <name>SendWidget</name>
+    </context>
+<context>
+    <name>SettingsBackupWallet</name>
+    </context>
+<context>
+    <name>SettingsBitToolWidget</name>
     <message>
         <source>Import Address</source>
         <translation>Importar dirección</translation>
-    </message>
-    <message>
-        <source>Click "Decrypt Key" to compute key</source>
-        <translation>Haga clic en "Descifrar clave" para calcular la clave</translation>
     </message>
     <message>
         <source>The entered passphrase is invalid. </source>
@@ -367,211 +435,28 @@
     </message>
     </context>
 <context>
-    <name>BitcoinGUI</name>
-    <message>
-        <source>Unlock wallet</source>
-        <translation>Desbloquear monedero</translation>
-    </message>
+    <name>SettingsConsoleWidget</name>
     </context>
 <context>
-    <name>BlockExplorer</name>
+    <name>SettingsDisplayOptionsWidget</name>
     </context>
 <context>
-    <name>ClientModel</name>
+    <name>SettingsFaqWidget</name>
     </context>
 <context>
-    <name>CoinControlDialog</name>
-    <message>
-        <source>(no label)</source>
-        <translation>(sin etiqueta)</translation>
-    </message>
+    <name>SettingsInformationWidget</name>
     </context>
 <context>
-    <name>EditAddressDialog</name>
+    <name>SettingsMainOptionsWidget</name>
     </context>
 <context>
-    <name>FreespaceChecker</name>
+    <name>SettingsMultisendDialog</name>
     </context>
 <context>
-    <name>GovernancePage</name>
+    <name>SettingsMultisendWidget</name>
     </context>
 <context>
-    <name>HelpMessageDialog</name>
-    </context>
-<context>
-    <name>Intro</name>
-    </context>
-<context>
-    <name>MasternodeList</name>
-    <message>
-        <source>Address</source>
-        <translation>Dirección</translation>
-    </message>
-    </context>
-<context>
-    <name>MultiSendDialog</name>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation>Dirección:</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(sin etiqueta)</translation>
-    </message>
-    </context>
-<context>
-    <name>MultisigDialog</name>
-    </context>
-<context>
-    <name>OpenURIDialog</name>
-    </context>
-<context>
-    <name>OptionsDialog</name>
-    </context>
-<context>
-    <name>OverviewPage</name>
-    </context>
-<context>
-    <name>PaymentServer</name>
-    </context>
-<context>
-    <name>PeerTableModel</name>
-    </context>
-<context>
-    <name>PrivacyDialog</name>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Escoja una dirección usada previamente</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Pegar dirección del portapapeles</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    </context>
-<context>
-    <name>ProposalFrame</name>
-    </context>
-<context>
-    <name>QObject</name>
-    </context>
-<context>
-    <name>QRImageWidget</name>
-    </context>
-<context>
-    <name>RPCConsole</name>
-    </context>
-<context>
-    <name>ReceiveCoinsDialog</name>
-    </context>
-<context>
-    <name>ReceiveRequestDialog</name>
-    <message>
-        <source>Address</source>
-        <translation>Dirección</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Etiqueta</translation>
-    </message>
-    </context>
-<context>
-    <name>RecentRequestsTableModel</name>
-    <message>
-        <source>Label</source>
-        <translation>Etiqueta</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Dirección</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(sin etiqueta)</translation>
-    </message>
-    </context>
-<context>
-    <name>SendCoinsDialog</name>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Limpiar todo</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(sin etiqueta)</translation>
-    </message>
-</context>
-<context>
-    <name>SendCoinsEntry</name>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Escoja una dirección usada previamente</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Pegar dirección del portapapeles</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    </context>
-<context>
-    <name>ShutdownWindow</name>
-    </context>
-<context>
-    <name>SignVerifyMessageDialog</name>
-    <message>
-        <source>The PIVX address to sign the message with</source>
-        <translation>Dirección PIVX con la que firmar el mensaje</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Escoja una dirección usada previamente</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Pegar dirección del portapapeles</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>Copiar la firma actual al portapapeles del sistema</translation>
-    </message>
-    <message>
-        <source>Sign the message to prove you own this PIVX address</source>
-        <translation>Firme el mensaje para probar que Ud. es el propietario de esta dirección PIVX</translation>
-    </message>
-    <message>
-        <source>Reset all sign message fields</source>
-        <translation>Limpiar todos los campos de firma de mensaje</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Limpiar todo</translation>
-    </message>
+    <name>SettingsSignMessageWidgets</name>
     <message>
         <source>The entered address is invalid.</source>
         <translation>La dirección introducida es inválida.</translation>
@@ -594,16 +479,37 @@
     </message>
     </context>
 <context>
+    <name>SettingsWalletOptionsWidget</name>
+    </context>
+<context>
+    <name>SettingsWalletRepairWidget</name>
+    </context>
+<context>
+    <name>SettingsWidget</name>
+    </context>
+<context>
+    <name>ShutdownWindow</name>
+    </context>
+<context>
+    <name>SnackBar</name>
+    </context>
+<context>
+    <name>Splash</name>
+    </context>
+<context>
     <name>SplashScreen</name>
+    </context>
+<context>
+    <name>TooltipMenu</name>
+    </context>
+<context>
+    <name>TopBar</name>
     </context>
 <context>
     <name>TrafficGraphWidget</name>
     </context>
 <context>
     <name>TransactionDesc</name>
-    </context>
-<context>
-    <name>TransactionDescDialog</name>
     </context>
 <context>
     <name>TransactionTableModel</name>
@@ -613,43 +519,19 @@
     </message>
     </context>
 <context>
-    <name>TransactionView</name>
-    <message>
-        <source>Comma separated file (*.csv)</source>
-        <translation>Archivo de valores separados por comas (*.csv)</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Etiqueta</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Dirección</translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation>La exportación falló</translation>
-    </message>
+    <name>TxDetailDialog</name>
     </context>
 <context>
-    <name>UnitDisplayStatusBarControl</name>
-    </context>
-<context>
-    <name>WalletFrame</name>
+    <name>TxRow</name>
     </context>
 <context>
     <name>WalletModel</name>
     </context>
 <context>
-    <name>WalletView</name>
-    <message>
-        <source>&amp;Export</source>
-        <translation>Exportar</translation>
-    </message>
-    <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation>Exportar los datos de la pestaña actual a un archivo</translation>
-    </message>
+    <name>WalletPasswordDialog</name>
+    </context>
+<context>
+    <name>WelcomeContentWidget</name>
     </context>
 <context>
     <name>ZPivControlDialog</name>
@@ -677,4 +559,7 @@
         <translation>wallet.dat corrupto, recuperación fallida</translation>
     </message>
 </context>
+<context>
+    <name>send</name>
+    </context>
 </TS>

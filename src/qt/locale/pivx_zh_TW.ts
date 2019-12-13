@@ -1,5 +1,19 @@
 <TS language="zh_TW" version="2.1">
 <context>
+    <name>AddNewAddressDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>位址</translation>
+    </message>
+    </context>
+<context>
+    <name>AddNewContactDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
@@ -99,6 +113,9 @@
     </message>
 </context>
 <context>
+    <name>AddressLabelRow</name>
+    </context>
+<context>
     <name>AddressTableModel</name>
     <message>
         <source>Label</source>
@@ -114,22 +131,21 @@
     </message>
 </context>
 <context>
+    <name>AddressesWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
     <name>AskPassphraseDialog</name>
     <message>
         <source>Passphrase Dialog</source>
         <translation>密碼輸入欄</translation>
     </message>
     <message>
-        <source>Enter passphrase</source>
-        <translation>輸入密碼</translation>
-    </message>
-    <message>
-        <source>New passphrase</source>
-        <translation>新的密碼</translation>
-    </message>
-    <message>
-        <source>Repeat new passphrase</source>
-        <translation>重複新密碼</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     <message>
         <source>Encrypt wallet</source>
@@ -220,74 +236,278 @@
     <name>BanTableModel</name>
     </context>
 <context>
-    <name>Bip38ToolDialog</name>
+    <name>BlockExplorer</name>
     <message>
-        <source>BIP 38 Tool</source>
-        <translation>BIP 38 工具</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>CSRow</name>
+    </context>
+<context>
+    <name>ClientModel</name>
+    </context>
+<context>
+    <name>CoinControlDialog</name>
+    <message>
+        <source>(no label)</source>
+        <translation>(沒有標記)</translation>
+    </message>
+    </context>
+<context>
+    <name>CoinControlPivWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     <message>
-        <source>&amp;BIP 38 Encrypt</source>
-        <translation>&amp;BIP 38 加密</translation>
+        <source>Label</source>
+        <translation>標記</translation>
     </message>
     <message>
-        <source>Address:</source>
-        <translation>位址:</translation>
+        <source>Address</source>
+        <translation>位址</translation>
+    </message>
+    </context>
+<context>
+    <name>ColdStakingWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>ContactDropdownRow</name>
+    </context>
+<context>
+    <name>DashboardWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>DefaultDialog</name>
+    </context>
+<context>
+    <name>DenomGenerationDialog</name>
+    </context>
+<context>
+    <name>EditAddressDialog</name>
+    </context>
+<context>
+    <name>ExpandableButton</name>
+    </context>
+<context>
+    <name>FreespaceChecker</name>
+    </context>
+<context>
+    <name>GovernancePage</name>
+    </context>
+<context>
+    <name>HelpMessageDialog</name>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
+    </message>
+    </context>
+<context>
+    <name>Intro</name>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
+    </message>
+    </context>
+<context>
+    <name>LoadingDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>LockUnlock</name>
+    </context>
+<context>
+    <name>MNRow</name>
+    </context>
+<context>
+    <name>MasterNodeWizardDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>位址</translation>
+    </message>
+    </context>
+<context>
+    <name>MasterNodesWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>MnInfoDialog</name>
+    </context>
+<context>
+    <name>MyAddressRow</name>
+    </context>
+<context>
+    <name>NavMenuWidget</name>
+    </context>
+<context>
+    <name>OpenURIDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>OptionButton</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+</context>
+<context>
+    <name>OptionsDialog</name>
+    </context>
+<context>
+    <name>PIVXGUI</name>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation>選擇之前用過的位址</translation>
+        <source>Wallet</source>
+        <translation>錢包</translation>
     </message>
     <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
+        <source>Node</source>
+        <translation>節點</translation>
     </message>
     <message>
-        <source>Paste address from clipboard</source>
-        <translation>從剪貼簿貼上</translation>
+        <source>&amp;Show / Hide</source>
+        <translation>&amp;顯示 / 隱藏</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <source>Show or hide the main Window</source>
+        <translation>顯示或隱藏主視窗</translation>
     </message>
     <message>
-        <source>Passphrase: </source>
-        <translation>密碼:</translation>
+        <source>E&amp;xit</source>
+        <translation>&amp;退出</translation>
     </message>
     <message>
-        <source>Encrypted Key:</source>
-        <translation>已加密鑰匙:</translation>
+        <source>Quit application</source>
+        <translation>關閉程式</translation>
     </message>
     <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>拷貝目前的簽章到系統剪貼簿</translation>
+        <source>PIVX Core client</source>
+        <translation>PIVX Core 客戶端</translation>
+    </message>
+    </context>
+<context>
+    <name>PWidget</name>
+    </context>
+<context>
+    <name>PaymentServer</name>
+    </context>
+<context>
+    <name>PeerTableModel</name>
+    </context>
+<context>
+    <name>PrivacyWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>ProposalFrame</name>
+    </context>
+<context>
+    <name>QObject</name>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
+    </message>
+    </context>
+<context>
+    <name>RPCConsole</name>
+    <message>
+        <source>&amp;Information</source>
+        <translation>&amp;資訊</translation>
+    </message>
+    </context>
+<context>
+    <name>ReceiveDialog</name>
+    </context>
+<context>
+    <name>ReceiveWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>RecentRequestsTableModel</name>
+    <message>
+        <source>Label</source>
+        <translation>標記</translation>
     </message>
     <message>
-        <source>Encrypt &amp;Key</source>
-        <translation>加密 &amp;鑰匙</translation>
+        <source>Address</source>
+        <translation>位址</translation>
     </message>
     <message>
-        <source>Clear &amp;All</source>
-        <translation>清除 &amp;全部</translation>
+        <source>(no label)</source>
+        <translation>(沒有標記)</translation>
+    </message>
+    </context>
+<context>
+    <name>RequestDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     <message>
-        <source>&amp;BIP 38 Decrypt</source>
-        <translation>&amp;BIP 38 解密</translation>
+        <source>Label</source>
+        <translation>標記</translation>
     </message>
+    </context>
+<context>
+    <name>SendChangeAddressDialog</name>
+    </context>
+<context>
+    <name>SendCustomFeeDialog</name>
+    </context>
+<context>
+    <name>SendMultiRow</name>
     <message>
-        <source>Decrypt &amp;Key</source>
-        <translation>解密 &amp;鑰匙</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
+    </context>
+<context>
+    <name>SendWidget</name>
+    </context>
+<context>
+    <name>SettingsBackupWallet</name>
     <message>
-        <source>Decrypted Key:</source>
-        <translation>已解密鑰匙:</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsBitToolWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     <message>
         <source>Import Address</source>
         <translation>匯入位址:</translation>
-    </message>
-    <message>
-        <source>Click "Decrypt Key" to compute key</source>
-        <translation>點 "解密鑰匙" 來產生</translation>
     </message>
     <message>
         <source>The entered passphrase is invalid. </source>
@@ -337,548 +557,61 @@
         <source>Please wait while key is imported</source>
         <translation>鑰匙正在匯入中, 請稍候</translation>
     </message>
-    <message>
-        <source>Key Already Held By Wallet</source>
-        <translation>私鑰已被錢包保管</translation>
-    </message>
-    <message>
-        <source>Error Adding Key To Wallet</source>
-        <translation>私鑰加入錢包發生錯誤</translation>
-    </message>
-    <message>
-        <source>Successfully Added Private Key To Wallet</source>
-        <translation>私鑰加入錢包成功</translation>
-    </message>
-</context>
-<context>
-    <name>BitcoinGUI</name>
-    <message>
-        <source>Wallet</source>
-        <translation>錢包</translation>
-    </message>
-    <message>
-        <source>Node</source>
-        <translation>節點</translation>
-    </message>
-    <message>
-        <source>&amp;Overview</source>
-        <translation>&amp;總覽</translation>
-    </message>
-    <message>
-        <source>Show general overview of wallet</source>
-        <translation>顯示錢包資訊</translation>
-    </message>
-    <message>
-        <source>&amp;Send</source>
-        <translation>&amp;發送</translation>
-    </message>
-    <message>
-        <source>&amp;Receive</source>
-        <translation>&amp;接收</translation>
-    </message>
-    <message>
-        <source>&amp;Transactions</source>
-        <translation>&amp;交易</translation>
-    </message>
-    <message>
-        <source>Browse transaction history</source>
-        <translation>瀏覽交易紀錄</translation>
-    </message>
-    <message>
-        <source>E&amp;xit</source>
-        <translation>&amp;退出</translation>
-    </message>
-    <message>
-        <source>Quit application</source>
-        <translation>關閉程式</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>關於 &amp;Qt</translation>
-    </message>
-    <message>
-        <source>Show information about Qt</source>
-        <translation>顯示 Qt 資訊</translation>
-    </message>
-    <message>
-        <source>&amp;Options...</source>
-        <translation>&amp;選項</translation>
-    </message>
-    <message>
-        <source>&amp;Show / Hide</source>
-        <translation>&amp;顯示 / 隱藏</translation>
-    </message>
-    <message>
-        <source>Show or hide the main Window</source>
-        <translation>顯示或隱藏主視窗</translation>
-    </message>
-    <message>
-        <source>&amp;Encrypt Wallet...</source>
-        <translation>&amp;錢包加密</translation>
-    </message>
-    <message>
-        <source>Encrypt the private keys that belong to your wallet</source>
-        <translation>將你錢包中的私鑰加密</translation>
-    </message>
-    <message>
-        <source>&amp;Backup Wallet...</source>
-        <translation>&amp;備份錢包</translation>
-    </message>
-    <message>
-        <source>Backup wallet to another location</source>
-        <translation>備份錢包到另外的位置</translation>
-    </message>
-    <message>
-        <source>&amp;Change Passphrase...</source>
-        <translation>&amp;更改密碼</translation>
-    </message>
-    <message>
-        <source>Change the passphrase used for wallet encryption</source>
-        <translation>更改使用中的錢包密碼</translation>
-    </message>
-    <message>
-        <source>&amp;Unlock Wallet...</source>
-        <translation>&amp;錢包解鎖</translation>
-    </message>
-    <message>
-        <source>Unlock wallet</source>
-        <translation>錢包解鎖</translation>
-    </message>
-    <message>
-        <source>&amp;Lock Wallet</source>
-        <translation>&amp;錢包上鎖</translation>
-    </message>
-    <message>
-        <source>Sign &amp;message...</source>
-        <translation>&amp;訊息簽章</translation>
-    </message>
-    <message>
-        <source>&amp;Verify message...</source>
-        <translation>&amp;查驗訊息</translation>
-    </message>
-    <message>
-        <source>&amp;Information</source>
-        <translation>&amp;資訊</translation>
-    </message>
-    <message>
-        <source>Show diagnostic information</source>
-        <translation>顯示診斷訊息</translation>
-    </message>
-    <message>
-        <source>&amp;Debug console</source>
-        <translation>&amp;除錯命令列</translation>
-    </message>
-    <message>
-        <source>Open debugging console</source>
-        <translation>開啟除錯命令列</translation>
-    </message>
-    <message>
-        <source>&amp;Network Monitor</source>
-        <translation>&amp;網路監控</translation>
-    </message>
-    <message>
-        <source>Show network monitor</source>
-        <translation>顯示網路監控</translation>
-    </message>
-    <message>
-        <source>&amp;Peers list</source>
-        <translation>&amp;接點(Peers)列表</translation>
-    </message>
-    <message>
-        <source>Show peers info</source>
-        <translation>顯示接點(Peers)資訊</translation>
-    </message>
-    <message>
-        <source>Wallet &amp;Repair</source>
-        <translation>&amp;錢包修復</translation>
-    </message>
-    <message>
-        <source>Show wallet repair options</source>
-        <translation>顯示錢包修復選項</translation>
-    </message>
-    <message>
-        <source>Open configuration file</source>
-        <translation>打開設定檔</translation>
-    </message>
-    <message>
-        <source>Show Automatic &amp;Backups</source>
-        <translation>&amp;顯示自動備份</translation>
-    </message>
-    <message>
-        <source>Show automatically created wallet backups</source>
-        <translation>顯示自動建立的錢包備份</translation>
-    </message>
-    <message>
-        <source>&amp;Sending addresses...</source>
-        <translation>&amp;發送地址</translation>
-    </message>
-    <message>
-        <source>Show the list of used sending addresses and labels</source>
-        <translation>顯示曾經使用的發送地址及標籤</translation>
-    </message>
-    <message>
-        <source>&amp;Receiving addresses...</source>
-        <translation>&amp;接收地址</translation>
-    </message>
-    <message>
-        <source>Show the list of used receiving addresses and labels</source>
-        <translation>顯示曾經使用過的接收地址</translation>
-    </message>
-    <message>
-        <source>Open &amp;URI...</source>
-        <translation>&amp;打開網址</translation>
-    </message>
-    <message>
-        <source>&amp;Command-line options</source>
-        <translation>&amp;命令列工具</translation>
-    </message>
-    <message>
-        <source>Synchronizing additional data: %p%</source>
-        <translation>其他資料同步中: %p%</translation>
-    </message>
-    <message>
-        <source>&amp;File</source>
-        <translation>&amp;檔案</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;設定</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation>&amp;工具</translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation>&amp;幫助</translation>
-    </message>
-    <message>
-        <source>Tabs toolbar</source>
-        <translation>Tabs 工具列</translation>
-    </message>
-    <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
-    </message>
-    <message>
-        <source>Send coins to a PIVX address</source>
-        <translation>送出錢幣到 PIVX 地址</translation>
-    </message>
-    <message>
-        <source>Request payments (generates QR codes and pivx: URIs)</source>
-        <translation>請求付款 (會產生 QR Code跟 pivx 位址)</translation>
-    </message>
-    <message>
-        <source>&amp;Masternodes</source>
-        <translation>&amp;Masternodes</translation>
-    </message>
-    <message>
-        <source>Browse masternodes</source>
-        <translation>瀏覽 Masternodes</translation>
-    </message>
-    <message>
-        <source>&amp;About PIVX Core</source>
-        <translation>&amp;關於 PIVX Core</translation>
-    </message>
-    <message>
-        <source>Show information about PIVX Core</source>
-        <translation>顯示 PIVX Core 相關資訊</translation>
-    </message>
-    <message>
-        <source>Modify configuration options for PIVX</source>
-        <translation>修改 PIVX 設定</translation>
-    </message>
-    <message>
-        <source>Sign messages with your PIVX addresses to prove you own them</source>
-        <translation>使用你的 PIVX 位址對訊息簽章, 來證明你是擁有者</translation>
-    </message>
-    <message>
-        <source>Verify messages to ensure they were signed with specified PIVX addresses</source>
-        <translation>驗證訊息簽章與 PIVX 位址吻合</translation>
-    </message>
-    <message>
-        <source>&amp;BIP38 tool</source>
-        <translation>&amp;BIP38 工具</translation>
-    </message>
-    <message>
-        <source>Encrypt and decrypt private keys using a passphrase</source>
-        <translation>使用密碼對私鑰加密解密</translation>
-    </message>
-    <message>
-        <source>&amp;MultiSend</source>
-        <translation>&amp;多重發送</translation>
-    </message>
-    <message>
-        <source>MultiSend Settings</source>
-        <translation>多重發送設定</translation>
-    </message>
-    <message>
-        <source>Open Wallet &amp;Configuration File</source>
-        <translation>&amp;打開錢包設定檔</translation>
-    </message>
-    <message>
-        <source>Open &amp;Masternode Configuration File</source>
-        <translation>&amp;打開Masternode設定檔</translation>
-    </message>
-    <message>
-        <source>Open Masternode configuration file</source>
-        <translation>打開Masternode設定檔</translation>
-    </message>
-    <message>
-        <source>Open a PIVX: URI or payment request</source>
-        <translation>打開PIVX: 位址或付款請求 </translation>
-    </message>
-    <message>
-        <source>&amp;Blockchain explorer</source>
-        <translation>&amp;區塊鏈瀏覽</translation>
-    </message>
-    <message>
-        <source>Block explorer window</source>
-        <translation>區塊鏈瀏覽視窗</translation>
-    </message>
-    <message>
-        <source>Show the PIVX Core help message to get a list with possible PIVX command-line options</source>
-        <translation>顯示 PIVX Core 幫助訊息以取得 PIVX 命令列表選項</translation>
-    </message>
-    <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX Core 客戶端</translation>
-    </message>
     </context>
 <context>
-    <name>BlockExplorer</name>
+    <name>SettingsConsoleWidget</name>
     <message>
         <source>TextLabel</source>
         <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>ClientModel</name>
-    </context>
-<context>
-    <name>CoinControlDialog</name>
-    <message>
-        <source>(no label)</source>
-        <translation>(沒有標記)</translation>
-    </message>
-    </context>
-<context>
-    <name>EditAddressDialog</name>
-    </context>
-<context>
-    <name>FreespaceChecker</name>
-    </context>
-<context>
-    <name>GovernancePage</name>
-    </context>
-<context>
-    <name>HelpMessageDialog</name>
-    <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
-    </message>
-    </context>
-<context>
-    <name>Intro</name>
-    <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
-    </message>
-    </context>
-<context>
-    <name>MasternodeList</name>
-    <message>
-        <source>Address</source>
-        <translation>位址</translation>
-    </message>
-    </context>
-<context>
-    <name>MultiSendDialog</name>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation>位址:</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(沒有標記)</translation>
-    </message>
-    </context>
-<context>
-    <name>MultisigDialog</name>
-    </context>
-<context>
-    <name>OpenURIDialog</name>
-    </context>
-<context>
-    <name>OptionsDialog</name>
-    </context>
-<context>
-    <name>OverviewPage</name>
-    </context>
-<context>
-    <name>PaymentServer</name>
-    </context>
-<context>
-    <name>PeerTableModel</name>
-    </context>
-<context>
-    <name>PrivacyDialog</name>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>選擇之前用過的位址</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>從剪貼簿貼上</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
+    <name>SettingsDisplayOptionsWidget</name>
     <message>
         <source>TextLabel</source>
         <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>ProposalFrame</name>
-    </context>
-<context>
-    <name>QObject</name>
+    <name>SettingsFaqWidget</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>QRImageWidget</name>
-    </context>
-<context>
-    <name>RPCConsole</name>
+    <name>SettingsInformationWidget</name>
     <message>
-        <source>&amp;Information</source>
-        <translation>&amp;資訊</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>ReceiveCoinsDialog</name>
-    </context>
-<context>
-    <name>ReceiveRequestDialog</name>
+    <name>SettingsMainOptionsWidget</name>
     <message>
-        <source>Address</source>
-        <translation>位址</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>標記</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>RecentRequestsTableModel</name>
+    <name>SettingsMultisendDialog</name>
     <message>
-        <source>Label</source>
-        <translation>標記</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>位址</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(沒有標記)</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>SendCoinsDialog</name>
+    <name>SettingsMultisendWidget</name>
     <message>
-        <source>Clear &amp;All</source>
-        <translation>清除 &amp;全部</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(沒有標記)</translation>
-    </message>
-</context>
-<context>
-    <name>SendCoinsEntry</name>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>選擇之前用過的位址</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>從剪貼簿貼上</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>ShutdownWindow</name>
-    </context>
-<context>
-    <name>SignVerifyMessageDialog</name>
+    <name>SettingsSignMessageWidgets</name>
     <message>
-        <source>The PIVX address to sign the message with</source>
-        <translation>對訊息簽名的 PIVX 位址</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>選擇之前用過的位址</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>從剪貼簿貼上</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>拷貝目前的簽章到系統剪貼簿</translation>
-    </message>
-    <message>
-        <source>Sign the message to prove you own this PIVX address</source>
-        <translation>使用簽章來證明你是該  PIVX 位址的擁有者,</translation>
-    </message>
-    <message>
-        <source>The PIVX address the message was signed with</source>
-        <translation>此訊息之 PIVX 位址已簽章於</translation>
-    </message>
-    <message>
-        <source>Verify the message to ensure it was signed with the specified PIVX address</source>
-        <translation>驗證訊息以確保該  PIVX 位址已被簽章</translation>
-    </message>
-    <message>
-        <source>Reset all sign message fields</source>
-        <translation>重設所有已簽章訊息</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>清除 &amp;全部</translation>
-    </message>
-    <message>
-        <source>Reset all verify message fields</source>
-        <translation>重設所有驗證訊息的欄位</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     <message>
         <source>The entered address is invalid.</source>
@@ -902,6 +635,48 @@
     </message>
     </context>
 <context>
+    <name>SettingsWalletOptionsWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>錢包</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsWalletRepairWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsWidget</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>錢包</translation>
+    </message>
+    </context>
+<context>
+    <name>ShutdownWindow</name>
+    </context>
+<context>
+    <name>SnackBar</name>
+    </context>
+<context>
+    <name>Splash</name>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
+    </message>
+</context>
+<context>
     <name>SplashScreen</name>
     <message>
         <source>PIVX Core</source>
@@ -909,13 +684,16 @@
     </message>
     </context>
 <context>
+    <name>TooltipMenu</name>
+    </context>
+<context>
+    <name>TopBar</name>
+    </context>
+<context>
     <name>TrafficGraphWidget</name>
     </context>
 <context>
     <name>TransactionDesc</name>
-    </context>
-<context>
-    <name>TransactionDescDialog</name>
     </context>
 <context>
     <name>TransactionTableModel</name>
@@ -925,52 +703,39 @@
     </message>
     </context>
 <context>
-    <name>TransactionView</name>
+    <name>TxDetailDialog</name>
     <message>
-        <source>Comma separated file (*.csv)</source>
-        <translation>逗號區隔資料檔 (*.csv)</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>標記</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>位址</translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation>資料匯出有誤</translation>
-    </message>
-    <message>
-        <source>Exporting Successful</source>
-        <translation>資料匯出成功</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
     </context>
 <context>
-    <name>UnitDisplayStatusBarControl</name>
-    </context>
-<context>
-    <name>WalletFrame</name>
+    <name>TxRow</name>
     </context>
 <context>
     <name>WalletModel</name>
     </context>
 <context>
-    <name>WalletView</name>
+    <name>WalletPasswordDialog</name>
     <message>
-        <source>&amp;Export</source>
-        <translation>&amp;匯出</translation>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
     </message>
-    <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation>匯出目前面板中的資料</translation>
-    </message>
+    </context>
+<context>
+    <name>WelcomeContentWidget</name>
     </context>
 <context>
     <name>ZPivControlDialog</name>
     </context>
 <context>
     <name>pivx-core</name>
+    </context>
+<context>
+    <name>send</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>文字標籤</translation>
+    </message>
     </context>
 </TS>

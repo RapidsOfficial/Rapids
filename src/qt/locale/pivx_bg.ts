@@ -1,5 +1,19 @@
 <TS language="bg" version="2.1">
 <context>
+    <name>AddNewAddressDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    </context>
+<context>
+    <name>AddNewContactDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    </context>
+<context>
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
@@ -99,6 +113,13 @@
     </message>
 </context>
 <context>
+    <name>AddressLabelRow</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
     <name>AddressTableModel</name>
     <message>
         <source>Label</source>
@@ -109,10 +130,25 @@
         <translation>Адрес</translation>
     </message>
     <message>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(без етикет)</translation>
     </message>
 </context>
+<context>
+    <name>AddressesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    </context>
 <context>
     <name>AskPassphraseDialog</name>
     <message>
@@ -120,24 +156,8 @@
         <translation>Поле за парола</translation>
     </message>
     <message>
-        <source>Enter passphrase</source>
-        <translation>Въведете парола</translation>
-    </message>
-    <message>
-        <source>New passphrase</source>
-        <translation>Нова парола</translation>
-    </message>
-    <message>
-        <source>Repeat new passphrase</source>
-        <translation>Повторете новата парола</translation>
-    </message>
-    <message>
-        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation>Служи за изключване на възможността пари да бъдат превеждани, когато акаунта на операционната система е компрометиран. Не предоставя съществено ниво на сигурност.</translation>
-    </message>
-    <message>
-        <source>For anonymization, automint, and staking only</source>
-        <translation>За анонимизация, авто-емитиране, и единствено съхранение</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
@@ -240,608 +260,6 @@
     </message>
 </context>
 <context>
-    <name>Bip38ToolDialog</name>
-    <message>
-        <source>BIP 38 Tool</source>
-        <translation>BIP 38 инструменти</translation>
-    </message>
-    <message>
-        <source>&amp;BIP 38 Encrypt</source>
-        <translation>&amp;BIP 38 Шифриране</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation>Адрес:</translation>
-    </message>
-    <message>
-        <source>Enter a PIVX Address that you would like to encrypt using BIP 38. Enter a passphrase in the middle box. Press encrypt to compute the encrypted private key.</source>
-        <translation>Въведете Pivx адрес, който искате да криптиране с BIP 38. Въведете парола в средното поле. Натиснете 'криптирай', за да се изчисли криптирания таен ключ. </translation>
-    </message>
-    <message>
-        <source>The PIVX address to encrypt</source>
-        <translation>PIVX Адреса за криптиране</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Изберете предишноизползван адрес</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Алт+А</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Постави адреса от буфера</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Алт+П</translation>
-    </message>
-    <message>
-        <source>Passphrase: </source>
-        <translation>Парола:</translation>
-    </message>
-    <message>
-        <source>Encrypted Key:</source>
-        <translation>Шифриран ключ:</translation>
-    </message>
-    <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>Копирай сегашния подпис в системния буфер</translation>
-    </message>
-    <message>
-        <source>Encrypt the private key for this PIVX address</source>
-        <translation>Криптирай тайния ключ за този PIVX адрес</translation>
-    </message>
-    <message>
-        <source>Reset all fields</source>
-        <translation>Нулирай всички полета</translation>
-    </message>
-    <message>
-        <source>The encrypted private key</source>
-        <translation>Криптирания таен ключ</translation>
-    </message>
-    <message>
-        <source>Decrypt the entered key using the passphrase</source>
-        <translation>Разшифровай въведения ключ с парола</translation>
-    </message>
-    <message>
-        <source>Encrypt &amp;Key</source>
-        <translation>Шифрирай &amp;ключ</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Изчисти &amp;Всички</translation>
-    </message>
-    <message>
-        <source>&amp;BIP 38 Decrypt</source>
-        <translation>&amp;BIP 38 Дешфриране</translation>
-    </message>
-    <message>
-        <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking 'Import Address' will add this private key to the wallet.</source>
-        <translation>Въведете личният си BIP 38 ключ. Въведете тайната фраза в средното поле. Избери Дешифриращия Ключ за да изчислим личния ключ. След като ключа се дешифрира, за да добаите ключа към портфейла, кликнете "Импортирай адрес".</translation>
-    </message>
-    <message>
-        <source>Decrypt &amp;Key</source>
-        <translation>Дешифрирай &amp;Ключ</translation>
-    </message>
-    <message>
-        <source>Decrypted Key:</source>
-        <translation>Дешифриран Ключ:</translation>
-    </message>
-    <message>
-        <source>Import Address</source>
-        <translation>Импортирай Адрес</translation>
-    </message>
-    <message>
-        <source>Click "Decrypt Key" to compute key</source>
-        <translation>Избери "Дешифрирай Ключ" за да изчислим ключа</translation>
-    </message>
-    <message>
-        <source>The entered passphrase is invalid. </source>
-        <translation>Въведената фраза е невалидна.</translation>
-    </message>
-    <message>
-        <source>Allowed: 0-9,a-z,A-Z,</source>
-        <translation>Използвайте: числата 0-9, латински букви от a do z и малки или главни букви</translation>
-    </message>
-    <message>
-        <source>The entered address is invalid.</source>
-        <translation>Въведения адрес е невалиден.</translation>
-    </message>
-    <message>
-        <source>Please check the address and try again.</source>
-        <translation>Моля проверете адреса и опитайте отново.</translation>
-    </message>
-    <message>
-        <source>The entered address does not refer to a key.</source>
-        <translation>Въведеният адрес не е свързан с ключ.</translation>
-    </message>
-    <message>
-        <source>Wallet unlock was cancelled.</source>
-        <translation>Отключването на портфейла бе прекратено.</translation>
-    </message>
-    <message>
-        <source>Private key for the entered address is not available.</source>
-        <translation>Личният ключ за въведеният адрес е неналичен.</translation>
-    </message>
-    <message>
-        <source>Failed to decrypt.</source>
-        <translation>Неуспешно дешифриране.</translation>
-    </message>
-    <message>
-        <source>Please check the key and passphrase and try again.</source>
-        <translation>Моля проверете ключа и фразата и опитайте отново.</translation>
-    </message>
-    <message>
-        <source>Data Not Valid.</source>
-        <translation>Невалидни данни.</translation>
-    </message>
-    <message>
-        <source>Please try again.</source>
-        <translation>Моля опитайте отново.</translation>
-    </message>
-    <message>
-        <source>Please wait while key is imported</source>
-        <translation>Моля изчакайте докато импортираме ключа.</translation>
-    </message>
-    <message>
-        <source>Key Already Held By Wallet</source>
-        <translation>Ключът вече се съдържа в портфейла.</translation>
-    </message>
-    <message>
-        <source>Error Adding Key To Wallet</source>
-        <translation>Добавянето на ключа е неуспешно.</translation>
-    </message>
-    <message>
-        <source>Successfully Added Private Key To Wallet</source>
-        <translation>Ключа е успешно добавен в портфейла.</translation>
-    </message>
-</context>
-<context>
-    <name>BitcoinGUI</name>
-    <message>
-        <source>Wallet</source>
-        <translation>Портфейл</translation>
-    </message>
-    <message>
-        <source>Node</source>
-        <translation>Ноуд</translation>
-    </message>
-    <message>
-        <source>&amp;Overview</source>
-        <translation>&amp;Общ Изглед</translation>
-    </message>
-    <message>
-        <source>Show general overview of wallet</source>
-        <translation>Покажи общия изглед на портфейла</translation>
-    </message>
-    <message>
-        <source>&amp;Send</source>
-        <translation>&amp;Изпрати</translation>
-    </message>
-    <message>
-        <source>&amp;Receive</source>
-        <translation>&amp;Получи</translation>
-    </message>
-    <message>
-        <source>&amp;Transactions</source>
-        <translation>&amp;Tранзакции</translation>
-    </message>
-    <message>
-        <source>Browse transaction history</source>
-        <translation>История на транзакциите</translation>
-    </message>
-    <message>
-        <source>Privacy Actions for zPIV</source>
-        <translation>Поверителни Действия за ZPIV</translation>
-    </message>
-    <message>
-        <source>E&amp;xit</source>
-        <translation>Из&amp;ход</translation>
-    </message>
-    <message>
-        <source>Quit application</source>
-        <translation>Затоври приложението</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>Относно &amp;Qt</translation>
-    </message>
-    <message>
-        <source>Show information about Qt</source>
-        <translation>Покази информация за Qt</translation>
-    </message>
-    <message>
-        <source>&amp;Options...</source>
-        <translation>&amp;Опции...</translation>
-    </message>
-    <message>
-        <source>&amp;Show / Hide</source>
-        <translation>&amp;Покажи / Скрий</translation>
-    </message>
-    <message>
-        <source>Show or hide the main Window</source>
-        <translation>Покажи или скрий главния прозорец</translation>
-    </message>
-    <message>
-        <source>&amp;Encrypt Wallet...</source>
-        <translation>&amp;Шифрирай Портфейла...</translation>
-    </message>
-    <message>
-        <source>Encrypt the private keys that belong to your wallet</source>
-        <translation>Шифрирай личните ключове на портфейла</translation>
-    </message>
-    <message>
-        <source>&amp;Backup Wallet...</source>
-        <translation>&amp;Резерва на портфейла...</translation>
-    </message>
-    <message>
-        <source>Backup wallet to another location</source>
-        <translation>Направи резерва на друго място</translation>
-    </message>
-    <message>
-        <source>&amp;Change Passphrase...</source>
-        <translation>&amp;Промени фразата...</translation>
-    </message>
-    <message>
-        <source>Change the passphrase used for wallet encryption</source>
-        <translation>Промени фразата използвана за шифриране</translation>
-    </message>
-    <message>
-        <source>&amp;Unlock Wallet...</source>
-        <translation>&amp;Отключи Портфейла...</translation>
-    </message>
-    <message>
-        <source>Unlock wallet</source>
-        <translation>Отключване на портфейла</translation>
-    </message>
-    <message>
-        <source>&amp;Lock Wallet</source>
-        <translation>&amp;Заключи портфейла</translation>
-    </message>
-    <message>
-        <source>Sign &amp;message...</source>
-        <translation>Подпиши &amp;съобщение...</translation>
-    </message>
-    <message>
-        <source>&amp;Verify message...</source>
-        <translation>&amp;Провери съобщение...</translation>
-    </message>
-    <message>
-        <source>&amp;Information</source>
-        <translation>&amp;Информация</translation>
-    </message>
-    <message>
-        <source>Show diagnostic information</source>
-        <translation>Покажи диагностична информация</translation>
-    </message>
-    <message>
-        <source>&amp;Debug console</source>
-        <translation>Конзолен &amp;Дебъг</translation>
-    </message>
-    <message>
-        <source>Open debugging console</source>
-        <translation>Отвори дебъг конзола</translation>
-    </message>
-    <message>
-        <source>&amp;Network Monitor</source>
-        <translation>&amp;Мрежови мониторинг</translation>
-    </message>
-    <message>
-        <source>Show network monitor</source>
-        <translation>Покажи мрежовия монитор</translation>
-    </message>
-    <message>
-        <source>&amp;Peers list</source>
-        <translation>&amp;Списък с участници</translation>
-    </message>
-    <message>
-        <source>Show peers info</source>
-        <translation>Покажи информация за участниците</translation>
-    </message>
-    <message>
-        <source>Wallet &amp;Repair</source>
-        <translation>&amp;Поправка на Портфейла</translation>
-    </message>
-    <message>
-        <source>Show wallet repair options</source>
-        <translation>Покажи опции за ремонт на портфейла</translation>
-    </message>
-    <message>
-        <source>Open configuration file</source>
-        <translation>Отвори конфигурационния файл</translation>
-    </message>
-    <message>
-        <source>Show Automatic &amp;Backups</source>
-        <translation>Покажи автоматичните &amp;Резерви</translation>
-    </message>
-    <message>
-        <source>Show automatically created wallet backups</source>
-        <translation>Покажи автоматично създадените резерви</translation>
-    </message>
-    <message>
-        <source>&amp;Sending addresses...</source>
-        <translation>&amp;Изпращане на адреси...</translation>
-    </message>
-    <message>
-        <source>Show the list of used sending addresses and labels</source>
-        <translation>Покази списък с използваните адреси и етикети</translation>
-    </message>
-    <message>
-        <source>&amp;Receiving addresses...</source>
-        <translation>&amp;Получаващи адреси...</translation>
-    </message>
-    <message>
-        <source>Show the list of used receiving addresses and labels</source>
-        <translation>Покажи списък с използваните получаващи адреси</translation>
-    </message>
-    <message>
-        <source>&amp;Multisignature creation...</source>
-        <translation>Създаване на &amp;Мултиподпис</translation>
-    </message>
-    <message>
-        <source>Create a new multisignature address and add it to this wallet</source>
-        <translation>Създаване на нов мултиподписен адрес и добавянето му към този портфейл</translation>
-    </message>
-    <message>
-        <source>&amp;Multisignature spending...</source>
-        <translation>Разход с &amp;Мултиподпис...</translation>
-    </message>
-    <message>
-        <source>Spend from a multisignature address</source>
-        <translation>Направи разход от адрес с мултиподпис</translation>
-    </message>
-    <message>
-        <source>&amp;Multisignature signing...</source>
-        <translation>Подписване с &amp;Мултиподпис...</translation>
-    </message>
-    <message>
-        <source>Sign with a multisignature address</source>
-        <translation>Подпиши с мултиподписен адрес</translation>
-    </message>
-    <message>
-        <source>Open &amp;URI...</source>
-        <translation>Отвори &amp;URI...</translation>
-    </message>
-    <message>
-        <source>&amp;Command-line options</source>
-        <translation>Опции за &amp;Командното-поле</translation>
-    </message>
-    <message>
-        <source>Synchronizing additional data: %p%</source>
-        <translation>Синхронизиране на допълнитенни данни: %p%</translation>
-    </message>
-    <message>
-        <source>%1 behind. Scanning block %2</source>
-        <translation>Изостава с %1. Сканира блок %2</translation>
-    </message>
-    <message>
-        <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt; for anonymization and staking only</source>
-        <translation>Портфейла е &lt;b&gt;криптиран&lt;/b&gt; и в момента &lt;b&gt;отключен&lt;/b&gt; за анонимизация и съхранение.</translation>
-    </message>
-    <message>
-        <source>&amp;File</source>
-        <translation>&amp;Файл</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>&amp;Настройки</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation>&amp;Инструменти</translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation>&amp;Помощ</translation>
-    </message>
-    <message>
-        <source>Tabs toolbar</source>
-        <translation>Колан с инструменти</translation>
-    </message>
-    <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Ядро</translation>
-    </message>
-    <message>
-        <source>Send coins to a PIVX address</source>
-        <translation>Изпратете монети до PIVX адрес</translation>
-    </message>
-    <message>
-        <source>Request payments (generates QR codes and pivx: URIs)</source>
-        <translation>Поискай плащане (генерира QR кодове и  PIVX:URI)</translation>
-    </message>
-    <message>
-        <source>&amp;Privacy</source>
-        <translation>&amp;Поверителност</translation>
-    </message>
-    <message>
-        <source>&amp;Masternodes</source>
-        <translation>&amp;Мастърноуд</translation>
-    </message>
-    <message>
-        <source>Browse masternodes</source>
-        <translation>Разгледай мастърноудове</translation>
-    </message>
-    <message>
-        <source>&amp;About PIVX Core</source>
-        <translation>&amp;Относно PIVX Ядрото</translation>
-    </message>
-    <message>
-        <source>Show information about PIVX Core</source>
-        <translation>Информациза за PIVX Ядрото</translation>
-    </message>
-    <message>
-        <source>Modify configuration options for PIVX</source>
-        <translation>Промени PIVX конфигурацията</translation>
-    </message>
-    <message>
-        <source>Sign messages with your PIVX addresses to prove you own them</source>
-        <translation>Подпишете съобщения със своте PIVX адреси, за да докажете че са Ваши</translation>
-    </message>
-    <message>
-        <source>Verify messages to ensure they were signed with specified PIVX addresses</source>
-        <translation>Проеврете съобщения, за да се убедите, че са подписани с указаните PIVX адреси</translation>
-    </message>
-    <message>
-        <source>&amp;BIP38 tool</source>
-        <translation>&amp;BIP38 инструмент</translation>
-    </message>
-    <message>
-        <source>Encrypt and decrypt private keys using a passphrase</source>
-        <translation>Шифрирай и дешифрирай личните ключове с фраза</translation>
-    </message>
-    <message>
-        <source>&amp;MultiSend</source>
-        <translation>&amp;МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>MultiSend Settings</source>
-        <translation>Настройки за МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>Open Wallet &amp;Configuration File</source>
-        <translation>Отвори &amp;Конфигурационния Файл на Портфейла</translation>
-    </message>
-    <message>
-        <source>Open &amp;Masternode Configuration File</source>
-        <translation>Отвори &amp;Мастърноуд Конфигурационния Файл</translation>
-    </message>
-    <message>
-        <source>Open Masternode configuration file</source>
-        <translation>Отвори Мастърноуд конфигурационния файл</translation>
-    </message>
-    <message>
-        <source>Open a PIVX: URI or payment request</source>
-        <translation>Отвори PIVX:URI платежно нареждане</translation>
-    </message>
-    <message>
-        <source>&amp;Blockchain explorer</source>
-        <translation>&amp;Блокчейн сонда</translation>
-    </message>
-    <message>
-        <source>Block explorer window</source>
-        <translation>Прозорец на блок сондата</translation>
-    </message>
-    <message>
-        <source>Show the PIVX Core help message to get a list with possible PIVX command-line options</source>
-        <translation>Разкрийте Помощ за PIVX Ядрото, за да видите списък с възможни писмени команди.</translation>
-    </message>
-    <message>
-        <source>PIVX Core client</source>
-        <translation>Клиент PIVX Ядро</translation>
-    </message>
-    <message>
-        <source>Synchronizing with network...</source>
-        <translation>Синхронизиране с мрежата...</translation>
-    </message>
-    <message>
-        <source>Importing blocks from disk...</source>
-        <translation>Импортиране на блокове от диска...</translation>
-    </message>
-    <message>
-        <source>Reindexing blocks on disk...</source>
-        <translation>Повторно индексиране на блокове от диска...</translation>
-    </message>
-    <message>
-        <source>No block source available...</source>
-        <translation>Не е намерен източник на блокове...</translation>
-    </message>
-    <message>
-        <source>Up to date</source>
-        <translation>Актуален</translation>
-    </message>
-    <message>
-        <source>%1 and %2</source>
-        <translation>%1 и %2</translation>
-    </message>
-    <message>
-        <source>Catching up...</source>
-        <translation>Наваксване...</translation>
-    </message>
-    <message>
-        <source>Last received block was generated %1 ago.</source>
-        <translation>Последният получен блок е бил генериран преди %1 години.</translation>
-    </message>
-    <message>
-        <source>Transactions after this will not yet be visible.</source>
-        <translation>Преводите след този няма да бъдат видими все още.</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Грешка</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation>Внимание</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation>Информация</translation>
-    </message>
-    <message>
-        <source>Sent transaction</source>
-        <translation>Изпратен превод</translation>
-    </message>
-    <message>
-        <source>Incoming transaction</source>
-        <translation>Входящ превод</translation>
-    </message>
-    <message>
-        <source>Sent MultiSend transaction</source>
-        <translation>Изпратени Мулти транзакции</translation>
-    </message>
-    <message>
-        <source>Date: %1
-Amount: %2
-Type: %3
-Address: %4
-</source>
-        <translation>Дата: %1
-Сума: %2
-Вид: %3
-Адрес: %4
-</translation>
-    </message>
-    <message>
-        <source>Staking is active
- MultiSend: %1</source>
-        <translation>Стейкинга е активиран
-МултиИзпращане: %1</translation>
-    </message>
-    <message>
-        <source>Active</source>
-        <translation>Активен</translation>
-    </message>
-    <message>
-        <source>Not Active</source>
-        <translation>Неактивен</translation>
-    </message>
-    <message>
-        <source>Staking is not active
- MultiSend: %1</source>
-        <translation>Не стейква
-МултиИзпращане: %1</translation>
-    </message>
-    <message>
-        <source>AutoMint is currently enabled and set to </source>
-        <translation>АвтоЕмисията е включена и настроена на</translation>
-    </message>
-    <message>
-        <source>AutoMint is disabled</source>
-        <translation>АвтоЕмитирането е изключено</translation>
-    </message>
-    <message>
-        <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;unlocked&lt;/b&gt;</source>
-        <translation>Портфейла е &lt;b&gt;шифриран&lt;/b&gt;и в момента е&lt;b&gt;отключен&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>Wallet is &lt;b&gt;encrypted&lt;/b&gt; and currently &lt;b&gt;locked&lt;/b&gt;</source>
-        <translation>Портфейла е &lt;b&gt;шифриран&lt;/b&gt; и в момента е &lt;b&gt;отключен&lt;/b&gt;</translation>
-    </message>
-    </context>
-<context>
     <name>BlockExplorer</name>
     <message>
         <source>Blockchain Explorer</source>
@@ -873,6 +291,13 @@ Address: %4
     </message>
 </context>
 <context>
+    <name>CSRow</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
     <name>ClientModel</name>
     <message>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
@@ -894,14 +319,6 @@ Address: %4
         <translation>Байтове:</translation>
     </message>
     <message>
-        <source>Amount:</source>
-        <translation>Сума:</translation>
-    </message>
-    <message>
-        <source>Priority:</source>
-        <translation>Приоритет:</translation>
-    </message>
-    <message>
         <source>Fee:</source>
         <translation>Такса:</translation>
     </message>
@@ -914,20 +331,8 @@ Address: %4
         <translation>Остатък:</translation>
     </message>
     <message>
-        <source>After Fee:</source>
-        <translation>След Такси:</translation>
-    </message>
-    <message>
         <source>Change:</source>
         <translation>Ресто:</translation>
-    </message>
-    <message>
-        <source>(un)select all</source>
-        <translation>избери всички</translation>
-    </message>
-    <message>
-        <source>toggle lock state</source>
-        <translation>превкл. заключ.</translation>
     </message>
     <message>
         <source>Tree mode</source>
@@ -946,16 +351,16 @@ Address: %4
         <translation>Сума</translation>
     </message>
     <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
         <source>Received with label</source>
         <translation>Получени с етикет</translation>
     </message>
     <message>
         <source>Received with address</source>
         <translation>Получени с адрес</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Вид</translation>
     </message>
     <message>
         <source>Date</source>
@@ -968,10 +373,6 @@ Address: %4
     <message>
         <source>Confirmed</source>
         <translation>Потвърдени</translation>
-    </message>
-    <message>
-        <source>Priority</source>
-        <translation>Приоритет</translation>
     </message>
     <message>
         <source>Copy address</source>
@@ -1123,6 +524,136 @@ Address: %4
     </message>
 </context>
 <context>
+    <name>CoinControlPivWidget</name>
+    <message>
+        <source>PIV:</source>
+        <translation>PIV:</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    <message>
+        <source>Quantity:</source>
+        <translation>Количество:</translation>
+    </message>
+    <message>
+        <source>Fee:</source>
+        <translation>Такса:</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>Сума</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Етикет</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Вид</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>Потвърждения</translation>
+    </message>
+    <message>
+        <source>Bytes:</source>
+        <translation>Байтове:</translation>
+    </message>
+    <message>
+        <source>Dust:</source>
+        <translation>Остатък:</translation>
+    </message>
+    <message>
+        <source>Change:</source>
+        <translation>Ресто:</translation>
+    </message>
+    </context>
+<context>
+    <name>ColdStakingWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    </context>
+<context>
+    <name>ContactDropdownRow</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
+    <name>DashboardWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation>Внимание</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    <message>
+        <source>zPIV</source>
+        <translation>zPIV</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>Всички</translation>
+    </message>
+    <message>
+        <source>Received</source>
+        <translation>Получени</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Изпратени</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>Изсечени</translation>
+    </message>
+    <message>
+        <source>Minted</source>
+        <translation>Изсечени</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>Към себе си</translation>
+    </message>
+    </context>
+<context>
+    <name>DefaultDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
+    <name>DenomGenerationDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
     <name>EditAddressDialog</name>
     <message>
         <source>Edit Address</source>
@@ -1175,6 +706,13 @@ Address: %4
     <message>
         <source>New key generation failed.</source>
         <translation>Неуспешно генериране на нов ключ.</translation>
+    </message>
+</context>
+<context>
+    <name>ExpandableButton</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
 </context>
 <context>
@@ -1265,7 +803,7 @@ Address: %4
         <source>Set SSL root certificates for payment request (default: -system-)</source>
         <translation>Задай SSL root сертификати за платежни нареждания (default: -system)</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>Intro</name>
     <message>
@@ -1289,10 +827,6 @@ Address: %4
         <translation>Използвай папката за данни, по подразбиране</translation>
     </message>
     <message>
-        <source>Use a custom data directory:</source>
-        <translation>Задай своя папка за данни:</translation>
-    </message>
-    <message>
         <source>PIVX Core</source>
         <translation>PIVX Ядро</translation>
     </message>
@@ -1314,396 +848,121 @@ Address: %4
     </message>
 </context>
 <context>
-    <name>MasternodeList</name>
+    <name>LoadingDialog</name>
     <message>
         <source>Form</source>
         <translation>От</translation>
     </message>
     <message>
-        <source>MASTERNODES</source>
-        <translation>ГЛАВНИ ВЪЗЛИ</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
+    </context>
+<context>
+    <name>LockUnlock</name>
     <message>
-        <source>Note: Status of your masternodes in local wallet can potentially be slightly incorrect.&lt;br /&gt;Always wait for wallet to sync additional data and then double check from another node&lt;br /&gt;if your node should be running but you still see "MISSING" in "Status" field.</source>
-        <translation>Внимание: Състоянието на Вашите мастърноудове в локалния портфейла може би да се показва леко некоректно. &lt;br /&gt;Винаги изчакайте за портфейла да се синхронизира напълно и после проверете с друг ноуд &lt;br /&gt;ако Вашия ноуд работи, но получавате "ЛИПСВАЩ" в полето за "Състояние".</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
+    </context>
+<context>
+    <name>MNRow</name>
     <message>
-        <source>Alias</source>
-        <translation>Псевдоним</translation>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
+    <name>MasterNodeWizardDialog</name>
+    <message>
+        <source>Name</source>
+        <translation>Име</translation>
     </message>
     <message>
         <source>Address</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <source>Protocol</source>
-        <translation>Протокол</translation>
+        <source>The recipient address is not valid, please recheck.</source>
+        <translation>Адреса на получателя е недвалиден. Моля преверете.</translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation>Състояние</translation>
+        <source>The amount to pay must be larger than 0.</source>
+        <translation>Сумата на превода трябва да е по-голяма от 0.</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>Активен</translation>
+        <source>The amount exceeds your balance.</source>
+        <translation>Сумата надхвърля наличността.</translation>
     </message>
     <message>
-        <source>Last Seen (UTC)</source>
-        <translation>Последно видян (GMT)</translation>
+        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
+        <translation>Сумата надхвърля наличността, когато преводната такса %1 е включена.</translation>
     </message>
     <message>
-        <source>Pubkey</source>
-        <translation>Публичен адрес</translation>
+        <source>Duplicate address found, can only send to each address once per send operation.</source>
+        <translation>Наличие на един и същи адрес два пъти. Можем да изпращане до всеки адрес само по веднъж по време на всяка отделна операция по изпращане.</translation>
     </message>
     <message>
-        <source>S&amp;tart alias</source>
-        <translation>&amp;Започни псевдоним</translation>
+        <source>Transaction creation failed!</source>
+        <translation>Неуспешен превод.</translation>
     </message>
     <message>
-        <source>Start &amp;all</source>
-        <translation>Започни &amp;всички</translation>
+        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
+        <translation>Превода бе отказам! Това може да се случи ако част от монетите в портфейла вече са биле изпратени, като например ако сте използвали копие на wallet.dat файла и монетите са биле похарчени там, но не са  биле маркирани като изпратени тук.</translation>
     </message>
     <message>
-        <source>Start &amp;MISSING</source>
-        <translation>Започни &amp;ЛИПСВАЩ</translation>
+        <source>Error: The wallet was unlocked only to anonymize coins.</source>
+        <translation>Грешка: Портфейла е отключен само за анонимизиране на монети.</translation>
     </message>
     <message>
-        <source>&amp;Update status</source>
-        <translation>&amp;Обнови състояние</translation>
+        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
+        <translation>Такса %1 пъти по-голяма от %2 за кБ се счита неразумно голяма такса.</translation>
     </message>
     <message>
-        <source>Status will be updated automatically in (sec):</source>
-        <translation>Състоянието ще се обнови автоматично след (сек): </translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Start alias</source>
-        <translation>Започни псевдоним</translation>
-    </message>
-    <message>
-        <source>Confirm masternode start</source>
-        <translation>Потвърди стартиране на мастърноуда</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to start masternode %1?</source>
-        <translation>Сигурни ли сте, че искате да стартирате мастърноуд %1?</translation>
-    </message>
-    <message>
-        <source>Confirm all masternodes start</source>
-        <translation>Потвърдете започването на всички мастърноудове</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to start ALL masternodes?</source>
-        <translation>Сигурни ли сте, че желате да стартирате ВСИЧКИ мастърноудове?</translation>
-    </message>
-    <message>
-        <source>Command is not available right now</source>
-        <translation>Тази команда не е разрешена в момента</translation>
-    </message>
-    <message>
-        <source>You can't use this command until masternode list is synced</source>
-        <translation>Тази команда не е разрешена преди списъка с мастърноудове да е напълно синхронизиран.</translation>
-    </message>
-    <message>
-        <source>Confirm missing masternodes start</source>
-        <translation>Потвърдете стартиране на липсващите мастърноудове</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to start MISSING masternodes?</source>
-        <translation>Сигурни ли сте, че искате да стартирате ЛИПСВАЩИТЕ мастърноудове?</translation>
+        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
+        <translation>Грешка: Портфейла е отключен само за анонимизиране на монети. Отключването спряно.</translation>
     </message>
 </context>
 <context>
-    <name>MultiSendDialog</name>
+    <name>MasterNodesWidget</name>
     <message>
-        <source>MultiSend</source>
-        <translation>МултиИзпращане</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Enter whole numbers 1 - 100</source>
-        <translation>Въведете цели числа 1 - 100</translation>
-    </message>
-    <message>
-        <source>Enter % to Give (1-100)</source>
-        <translation>Въведете % за да Дадете (1-100)</translation>
-    </message>
-    <message>
-        <source>Enter Address to Send to</source>
-        <translation>Въведете адреса на Получателя</translation>
-    </message>
-    <message>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other PIVX addresses after it matures.
-To Add: enter percentage to give and PIVX address to add to the MultiSend vector.
-To Delete: Enter address to delete and press delete.
-MultiSend will not be activated unless you have clicked Activate</source>
-        <translation>МултиИзпращане Ви позволява автоматично да изпращате до 100% от вашите стейк или мастърноуд възнаграждения към списък от други PIVX адреси.
-Да Добавите: въведете процент и задайте PIVX адрес към вектора за МултиИзпращане
-Да Прамахнете: Въведете адрес за изстриване и натиснете истрий (del).
-МултиИзпращането няма да бъде активирано докато не кликнете "Активирай"</translation>
-    </message>
-    <message>
-        <source>Add to MultiSend Vector</source>
-        <translation>Добави към вектора по МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>Add</source>
-        <translation>Добави</translation>
-    </message>
-    <message>
-        <source>Deactivate MultiSend</source>
-        <translation>Изключи МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>Deactivate</source>
-        <translation>Изключи</translation>
-    </message>
-    <message>
-        <source>Choose an address from the address book</source>
-        <translation>Изберете адрес от адресната книга</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Алт+А</translation>
-    </message>
-    <message>
-        <source>Percentage of stake to send</source>
-        <translation>Процент от стейка, който да се изпраща</translation>
-    </message>
-    <message>
-        <source>Percentage:</source>
-        <translation>Процент:</translation>
-    </message>
-    <message>
-        <source>Address to send portion of stake to</source>
-        <translation>Адреса на който да се изпраща процент от стейка</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation>Адрес:</translation>
-    </message>
-    <message>
-        <source>Label:</source>
-        <translation>Етикет:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Задайте етикет на този адрес, с който да бъде добавен във Вашата Адресна Книга</translation>
-    </message>
-    <message>
-        <source>Delete Address From MultiSend Vector</source>
-        <translation>Изтрий адреса от вектора по МултиИзпращане</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
         <source>Delete</source>
         <translation>Изтрий</translation>
     </message>
-    <message>
-        <source>Activate MultiSend</source>
-        <translation>Активирай МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>Activate</source>
-        <translation>Активирай</translation>
-    </message>
-    <message>
-        <source>View MultiSend Vector</source>
-        <translation>Виж вектора по МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>View MultiSend</source>
-        <translation>Виж МултиИзпращане</translation>
-    </message>
-    <message>
-        <source>Send For Stakes</source>
-        <translation>Изпрати за Стейк</translation>
-    </message>
-    <message>
-        <source>Send For Masternode Rewards</source>
-        <translation>Изпрати за Мастърноуд награди</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(без етикет)</translation>
-    </message>
-    <message>
-        <source>Please Enter 1 - 100 for percent.</source>
-        <translation>Използвайте числата 1 - 100 за процент.</translation>
-    </message>
-</context>
+    </context>
 <context>
-    <name>MultisigDialog</name>
+    <name>MnInfoDialog</name>
     <message>
-        <source>Multisignature Address Interactions</source>
-        <translation>Взаимодействия с Мултиподписния Адрес</translation>
-    </message>
-    <message>
-        <source>Create MultiSignature &amp;Address</source>
-        <translation>Създай МултиПодпис &amp;Адрес</translation>
-    </message>
-    <message>
-        <source>How many people must sign to verify a transaction</source>
-        <translation>Колко души трябва да подпишат за да потвърдят превода</translation>
-    </message>
-    <message>
-        <source>Enter the minimum number of signatures required to sign transactions</source>
-        <translation>Въведете минимален брой подписа, нужни за оторизиране на преводите</translation>
-    </message>
-    <message>
-        <source>Address Label:</source>
-        <translation>Етикет за Адреса:</translation>
-    </message>
-    <message>
-        <source>Add another address that could sign to verify a transaction from the multisig address.</source>
-        <translation>Добави друг адрес, който може да подпише за оторизация на превод от мултиподписния адрес.</translation>
-    </message>
-    <message>
-        <source>&amp;Add Address / Key</source>
-        <translation>&amp;Добави Адрес / Ключ</translation>
-    </message>
-    <message>
-        <source>Local addresses or public keys that can sign:</source>
-        <translation>Локални адреси или публични ключове, които могат да подпишат:</translation>
-    </message>
-    <message>
-        <source>Create a new multisig address</source>
-        <translation>Създай нов мултиподписен адрес</translation>
-    </message>
-    <message>
-        <source>C&amp;reate</source>
-        <translation>Съ&amp;здай</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
         <source>Status:</source>
         <translation>Състояние</translation>
     </message>
+    </context>
+<context>
+    <name>MyAddressRow</name>
     <message>
-        <source>Use below to quickly import an address by its redeem. Don't forget to add a label before clicking import!
-Keep in mind, the wallet will rescan the blockchain to find transactions containing the new address.
-Please be patient after clicking import.</source>
-        <translation>Използвайте долното за да импортираш адрес по погасяване. Не забравяйте да сложите и етикет преди да кликнете Импортирай!
-Помнете, че портфейла ще сканира целия блокчейн за да намери преводи съдържащи новият адрес.
-Бъдете търпеливи след старта на Импортирането.</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
+    </context>
+<context>
+    <name>NavMenuWidget</name>
     <message>
-        <source>&amp;Import Redeem</source>
-        <translation>&amp;Импортирай Погасяване</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
-    <message>
-        <source>&amp;Create MultiSignature Tx</source>
-        <translation>&amp;Създай МултиПодписна Т-я</translation>
-    </message>
-    <message>
-        <source>Inputs:</source>
-        <translation>Входящи</translation>
-    </message>
-    <message>
-        <source>Coin Control</source>
-        <translation>Монетен контрол...</translation>
-    </message>
-    <message>
-        <source>Quantity Selected:</source>
-        <translation>Избратно Количество:</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Сума:</translation>
-    </message>
-    <message>
-        <source>Add an input to fund the outputs</source>
-        <translation>Добави вход. да захрани изходящите</translation>
-    </message>
-    <message>
-        <source>Add a Raw Input</source>
-        <translation>Добави Груб Вход.</translation>
-    </message>
-    <message>
-        <source>Address / Amount:</source>
-        <translation>Адрес / Сума:</translation>
-    </message>
-    <message>
-        <source>Add destinations to send PIV to</source>
-        <translation>Добави получател на PIV</translation>
-    </message>
-    <message>
-        <source>Add &amp;Destination</source>
-        <translation>Добави &amp;Получател</translation>
-    </message>
-    <message>
-        <source>Create a transaction object using the given inputs to the given outputs</source>
-        <translation>Създай преводен обект със зададените вход. към зададените изходи</translation>
-    </message>
-    <message>
-        <source>Cr&amp;eate</source>
-        <translation>Съ&amp;здай</translation>
-    </message>
-    <message>
-        <source>&amp;Sign MultiSignature Tx</source>
-        <translation>&amp;Подпиши МултиПодписна т-я</translation>
-    </message>
-    <message>
-        <source>Transaction Hex:</source>
-        <translation>Хекс на транзакцията:</translation>
-    </message>
-    <message>
-        <source>Sign the transaction from this wallet or from provided private keys</source>
-        <translation>Подпиши транзакцията от този портфейл или от зададения таен ключ</translation>
-    </message>
-    <message>
-        <source>S&amp;ign</source>
-        <translation>П&amp;одпиши</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;DISABLED until transaction has been signed enough times.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;ИЗКЛЮЧЕН докато превода се подпише нужния брой пъти.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Co&amp;mmit</source>
-        <translation>Анга&amp;жирай</translation>
-    </message>
-    <message>
-        <source>Add private keys to sign the transaction with</source>
-        <translation>Добави тайни ключове, с които ще се подписва превода</translation>
-    </message>
-    <message>
-        <source>Add Private &amp;Key</source>
-        <translation>Добави Таен &amp;Ключ</translation>
-    </message>
-    <message>
-        <source>Sign with only private keys (Not Recommened)</source>
-        <translation>Подпиши със собствените тайни ключове (Не Се Препоръчва)</translation>
-    </message>
-    <message>
-        <source>Invalid Tx Hash.</source>
-        <translation>Грешен хаш на т-я.</translation>
-    </message>
-    <message>
-        <source>Vout position must be positive.</source>
-        <translation>VOUT позицията трябва да е положително число.</translation>
-    </message>
-    <message>
-        <source>Maximum possible addresses reached. (15)</source>
-        <translation>Достигнат е максималния брой адреси. (15)</translation>
-    </message>
-    <message>
-        <source>Vout Position: </source>
-        <translation>VOUT Позиция:</translation>
-    </message>
-    <message>
-        <source>Amount: </source>
-        <translation>Сума:</translation>
-    </message>
-    <message>
-        <source>Maximum (15)</source>
-        <translation>Максимум (15)</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>OpenURIDialog</name>
     <message>
@@ -1715,8 +974,8 @@ Please be patient after clicking import.</source>
         <translation>Отвори платежно нареждане от URI или файл</translation>
     </message>
     <message>
-        <source>URI:</source>
-        <translation>URI:</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
         <source>Select payment request file</source>
@@ -1725,6 +984,17 @@ Please be patient after clicking import.</source>
     <message>
         <source>Select payment request file to open</source>
         <translation>Изберете файл с платежно нареждане, който да бъде отворен</translation>
+    </message>
+    </context>
+<context>
+    <name>OptionButton</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
 </context>
 <context>
@@ -1989,150 +1259,79 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
 </context>
 <context>
-    <name>OverviewPage</name>
+    <name>PIVXGUI</name>
     <message>
-        <source>Form</source>
-        <translation>От</translation>
+        <source>PIVX Core</source>
+        <translation>PIVX Ядро</translation>
     </message>
     <message>
-        <source>Available:</source>
-        <translation>Налични:</translation>
+        <source>Wallet</source>
+        <translation>Портфейл</translation>
     </message>
     <message>
-        <source>Your current spendable balance</source>
-        <translation>Налични за харечене:</translation>
+        <source>Node</source>
+        <translation>Ноуд</translation>
     </message>
     <message>
-        <source>Total Balance, including all unavailable coins.</source>
-        <translation>Обща Наличност, включително и неналичните монети.</translation>
+        <source>&amp;Show / Hide</source>
+        <translation>&amp;Покажи / Скрий</translation>
     </message>
     <message>
-        <source>PIV Balance</source>
-        <translation>PIV Наличности</translation>
+        <source>Show or hide the main Window</source>
+        <translation>Покажи или скрий главния прозорец</translation>
     </message>
     <message>
-        <source>Pending:</source>
-        <translation>В изчакване:</translation>
+        <source>E&amp;xit</source>
+        <translation>Из&amp;ход</translation>
     </message>
     <message>
-        <source>Total of transactions that have yet to be confirmed, and do not yet count toward the spendable balance</source>
-        <translation>Всички преводи, които предстои да бъдат потвърдени и все още не се зачитат към наличния баланс за харчене.</translation>
+        <source>Quit application</source>
+        <translation>Затоври приложението</translation>
     </message>
     <message>
-        <source>Immature:</source>
-        <translation>Неузрели:</translation>
+        <source>PIVX Core client</source>
+        <translation>Клиент PIVX Ядро</translation>
     </message>
     <message>
-        <source>Staked or masternode rewards that has not yet matured</source>
-        <translation>Възнаграждение от стейкване или мастърноуд, които все още не са узрели.</translation>
+        <source>Error</source>
+        <translation>Грешка</translation>
     </message>
     <message>
-        <source>Current locked balance in watch-only addresses</source>
-        <translation>Сегашния баланс по портфейли в режим на наблюдение само</translation>
+        <source>Warning</source>
+        <translation>Внимание</translation>
     </message>
     <message>
-        <source>Your current PIVX balance, unconfirmed and immature transactions included</source>
-        <translation>Вашите PIVX наличности, включително непотвърдените и неузрели преводи</translation>
+        <source>Information</source>
+        <translation>Информация</translation>
     </message>
     <message>
-        <source>zPIV Balance</source>
-        <translation>zPIV Наличности</translation>
+        <source>Sent MultiSend transaction</source>
+        <translation>Изпратени Мулти транзакции</translation>
     </message>
     <message>
-        <source>Mature: more than 20 confirmation and more than 1 mint of the same denomination after it was minted.
-These zPIV are spendable.</source>
-        <translation>Узрели: повече от 20 потвърждения и повече от 1 емисии от същата деноминация след като е била емитирана.
-Тези zPIV могат да се похарчат.</translation>
+        <source>Sent transaction</source>
+        <translation>Изпратен превод</translation>
     </message>
     <message>
-        <source>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
-        <translation>Непотвърдени: по-малко от 20 потвърждения
-Неузрели: потвърдени, но с по-малко от 1 емисии от същата деноминация след като са биле емитирани</translation>
+        <source>Incoming transaction</source>
+        <translation>Входящ превод</translation>
     </message>
     <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Информацията на вашия екран може би е стара. Вашия портфейла синхронизира автоматично с PIVX мрежата след като има успешна свръзка, но процеса отнема време и не е завършил все още.</translation>
+        <source>Date: %1
+Amount: %2
+Type: %3
+Address: %4
+</source>
+        <translation>Дата: %1
+Сума: %2
+Вид: %3
+Адрес: %4
+</translation>
     </message>
-    <message>
-        <source>OVERVIEW</source>
-        <translation>ПРЕГЛЕД</translation>
-    </message>
-    <message>
-        <source>Combined Balance (including unconfirmed and immature coins)</source>
-        <translation>Комбинирани Наличности (включително непотвърдени и неузрели монети)</translation>
-    </message>
-    <message>
-        <source>Combined Balance</source>
-        <translation>Комбинирани Наличности</translation>
-    </message>
-    <message>
-        <source>Unconfirmed transactions to watch-only addresses</source>
-        <translation>Непотвърдени преводи от портфейли, които само се набюдават</translation>
-    </message>
-    <message>
-        <source>Staked or masternode rewards in watch-only addresses that has not yet matured</source>
-        <translation>Възнаграждения от стейкване или мастърноуд портфейли, кото само се наблюдават и все още не са узрели за употреба</translation>
-    </message>
-    <message>
-        <source>Total:</source>
-        <translation>Общо:</translation>
-    </message>
-    <message>
-        <source>Current total balance in watch-only addresses</source>
-        <translation>Сегашния баланс по портфейли в режим на наблюдение само</translation>
-    </message>
-    <message>
-        <source>Watch-only:</source>
-        <translation>Наблюдение само:</translation>
-    </message>
-    <message>
-        <source>Your current balance in watch-only addresses</source>
-        <translation>Вашата налична сума по портфейлите за наблюдение само</translation>
-    </message>
-    <message>
-        <source>Spendable:</source>
-        <translation>Налични за харчене:</translation>
-    </message>
-    <message>
-        <source>Locked PIV or Masternode collaterals. These are excluded from zPIV minting.</source>
-        <translation>Заключен PIV или допълнителни гаранции в Главни Възли. Тези не са включени в zPIV емитирането.</translation>
-    </message>
-    <message>
-        <source>Locked:</source>
-        <translation>Заключени:</translation>
-    </message>
-    <message>
-        <source>Unconfirmed:</source>
-        <translation>Непотвърден</translation>
-    </message>
-    <message>
-        <source>Your current zPIV balance, unconfirmed and immature zPIV included.</source>
-        <translation>Вашите zPIV наличности, включеително непотвърдените и неузрелите zPIV.</translation>
-    </message>
-    <message>
-        <source>Recent transactions</source>
-        <translation>Наскорошни преводи</translation>
-    </message>
-    <message>
-        <source>out of sync</source>
-        <translation>не е синхронизиран</translation>
-    </message>
-    <message>
-        <source>AutoMint is currently enabled and set to </source>
-        <translation>АвтоЕмисията е включена и настроена на</translation>
-    </message>
-    <message>
-        <source>To disable AutoMint add 'enablezeromint=0' in pivx.conf.</source>
-        <translation>Да изключите АвтоЕмисия добавете  'enablezeromint=0' в pivx.conf файла.</translation>
-    </message>
-    <message>
-        <source>AutoMint is currently disabled.
-To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf</source>
-        <translation>АвтоЕмисия е изключено.
-За да включите АвтоЕмисия сменете 'enablezeromint=0' на 'enablezeromint=1' в pivx.conf файла.</translation>
-    </message>
-</context>
+    </context>
+<context>
+    <name>PWidget</name>
+    </context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -2240,543 +1439,16 @@ To enable AutoMint change 'enablezeromint=0' to 'enablezeromint=1' in pivx.conf<
     </message>
 </context>
 <context>
-    <name>PrivacyDialog</name>
+    <name>PrivacyWidget</name>
     <message>
-        <source>Zerocoin Actions:</source>
-        <translation>Zerocoin Действия:</translation>
-    </message>
-    <message>
-        <source>The displayed information may be out of date. Your wallet automatically synchronizes with the PIVX network after a connection is established, but this process has not completed yet.</source>
-        <translation>Информацията на вашия екран може би е стара. Вашия портфейла синхронизира автоматично с PIVX мрежата след като има успешна свръзка, но процеса отнема време и не е завършил все още.</translation>
-    </message>
-    <message>
-        <source>Mint Zerocoin</source>
-        <translation>Сечене на Zerocoin</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
-    </message>
-    <message>
-        <source>Reset Zerocoin Wallet DB. Deletes transactions that did not make it into the blockchain.</source>
-        <translation>Ресетна базата данни на Zerocoin Портфейла. Изтрива преводите, които не са успели да се качат на блокчена.</translation>
-    </message>
-    <message>
-        <source>Reset</source>
-        <translation>Ресет</translation>
-    </message>
-    <message>
-        <source>Rescan the complete blockchain for  Zerocoin mints and their meta-data.</source>
-        <translation>Сканирай повторно блокчена за Zerocoin монети и техните мета-данни.</translation>
-    </message>
-    <message>
-        <source>ReScan</source>
-        <translation>Сканирай</translation>
-    </message>
-    <message>
-        <source>Status and/or Mesages from the last Mint Action.</source>
-        <translation>Състояния и/или Съобщения от последните действия по сечене на монети.</translation>
-    </message>
-    <message>
-        <source>PRIVACY</source>
-        <translation>КОНФИДЕНЦИАЛНОСТ</translation>
-    </message>
-    <message>
-        <source>zPIV Control</source>
-        <translation>zPIV Контрол</translation>
-    </message>
-    <message>
-        <source>zPIV Selected:</source>
-        <translation>Избрани zPIV:</translation>
-    </message>
-    <message>
-        <source>Quantity Selected:</source>
-        <translation>Избратно Количество:</translation>
-    </message>
-    <message>
-        <source>Spend Zerocoin. Without 'Pay To:' address creates payments to yourself.</source>
-        <translation>Похарчи Zerocoin. Без "Плати до: адрес - плащането е към себе си.</translation>
-    </message>
-    <message>
-        <source>Spend Zerocoin</source>
-        <translation>Похарчи Zerocoin</translation>
-    </message>
-    <message>
-        <source>Available (mature and spendable) zPIV for spending</source>
-        <translation>Налични (узрели и готови за харчене) zPIV за употреба</translation>
-    </message>
-    <message>
-        <source>Available Balance:</source>
-        <translation>Налични:</translation>
-    </message>
-    <message>
-        <source>Available (mature and spendable) zPIV for spending
-
-zPIV are mature when they have more than 20 confirmations AND more than 2 mints of the same denomination after them were minted</source>
-        <translation>Налични (узрели и готови за харчене) zPIV за употреба
-
-zPIV са узрели, тогава когато имат повече от 20 потвърждения И повече от 2 емисии от същата деноминация след като са биле емитирани</translation>
-    </message>
-    <message>
-        <source>0 zPIV</source>
-        <translation>0 zPIV</translation>
-    </message>
-    <message>
-        <source>Pay &amp;To:</source>
-        <translation>Плати На:</translation>
-    </message>
-    <message>
-        <source>The PIVX address to send the payment to. Creates local payment to yourself when empty.</source>
-        <translation>Адреса на който да изпратим плащането. Ако е празно - плащането е до себе си.</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Изберете предишноизползван адрес</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Алт+А</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Постави адреса от буфера</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Алт+П</translation>
-    </message>
-    <message>
-        <source>&amp;Label:</source>
-        <translation>Етикет:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to the list of used addresses</source>
-        <translation>Въведете етикет за този адрес.</translation>
-    </message>
-    <message>
-        <source>A&amp;mount:</source>
-        <translation>Сума:</translation>
-    </message>
-    <message>
-        <source>Convert Change to Zerocoin (might cost additional fees)</source>
-        <translation>Изсечи zPIV от рестото (ще струва допълнително заради таксите)</translation>
-    </message>
-    <message>
-        <source>If checked, the wallet tries to minimize the returning change instead of minimizing the number of spent denominations.</source>
-        <translation>Ако е избрана опцията, портфейла се опитва да намали върнатото ресто вместо да намали броя на похарчените деноминации.</translation>
-    </message>
-    <message>
-        <source>Minimize Change</source>
-        <translation>Намали Рестото</translation>
-    </message>
-    <message>
-        <source>Information about the available Zerocoin funds.</source>
-        <translation>Информация за наличните Zerocoin средства.</translation>
-    </message>
-    <message>
-        <source>Zerocoin Stats:</source>
-        <translation>Zerocoin статистика:</translation>
-    </message>
-    <message>
-        <source>Total Balance including unconfirmed and immature zPIV</source>
-        <translation>Обща Наличност включеително непотвърдените и неузрели zPIV</translation>
-    </message>
-    <message>
-        <source>Total Zerocoin  Balance:</source>
-        <translation>Обща Zeroicoin наличност:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 1:</source>
-        <translation>Деноминации от 1:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 1:</source>
-        <translation>Деном. със стойност 1:</translation>
-    </message>
-    <message>
-        <source>Unconfirmed: less than 20 confirmations
-Immature: confirmed, but less than 1 mint of the same denomination after it was minted</source>
-        <translation>Непотвърдени: по-малко от 20 потвърждения
-Неузрели: потвърдени, но с по-малко от 1 емисии от същата деноминация след като са биле емитирани</translation>
-    </message>
-    <message>
-        <source>Show the current status of automatic zPIV minting.
-
-To change the status (restart required):
-- enable: add 'enablezeromint=1' to pivx.conf
-- disable: add 'enablezeromint=0' to pivx.conf
-
-To change the percentage (no restart required):
-- menu Settings-&gt;Options-&gt;Percentage of autominted zPIV
-
-</source>
-        <translation>Покажи състоянието на автоматичното zPIV емитиране.
-
-За да пормените състоянието (изисква рестарт):
-- вклчване: добавете 'enablezeromint=1' в pivx.conf
-- изключване: добавете 'enablezeromint=0' в pivx.conf
-
-За промяна в процентите (не изисква рестарт):
-- меню Настройки -&gt; Опции -&gt; Процент на автоемитиран zPIV
-</translation>
-    </message>
-    <message>
-        <source>AutoMint Status</source>
-        <translation>Състояние АвтоЕмисия</translation>
-    </message>
-    <message>
-        <source>Global Supply:</source>
-        <translation>Глобални наличности:</translation>
-    </message>
-    <message>
-        <source>Denom. 1:</source>
-        <translation>Деном. със стойност 1:</translation>
-    </message>
-    <message>
-        <source>Denom. 5:</source>
-        <translation>Деном. със стойност 5:</translation>
-    </message>
-    <message>
-        <source>Denom. 10:</source>
-        <translation>Деном. със стойност от 10:</translation>
-    </message>
-    <message>
-        <source>Denom. 50:</source>
-        <translation>Деном. със стойност от 50:</translation>
-    </message>
-    <message>
-        <source>Denom. 100:</source>
-        <translation>Деном. със стойност от 100:</translation>
-    </message>
-    <message>
-        <source>Denom. 500:</source>
-        <translation>Деном. със стойност от 500:</translation>
-    </message>
-    <message>
-        <source>Denom. 1000:</source>
-        <translation>Деном. със стойност от 1000:</translation>
-    </message>
-    <message>
-        <source>Denom. 5000:</source>
-        <translation>Деном. със стойност от 5000:</translation>
-    </message>
-    <message>
-        <source>0 x</source>
-        <translation>0 х</translation>
-    </message>
-    <message>
-        <source>Denominations with value 5:</source>
-        <translation>Деноминации от 5:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 5:</source>
-        <translation>Деном. със стойност 5:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 10:</source>
-        <translation>Деноминации от 10:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 10:</source>
-        <translation>Деном. със стойност от 10:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 50:</source>
-        <translation>Деноминации от 50:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 50:</source>
-        <translation>Деном. със стойност от 50:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 100:</source>
-        <translation>Деноминации от 100:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 100:</source>
-        <translation>Деном. със стойност от 100:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 500:</source>
-        <translation>Деноминации от 500:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 500:</source>
-        <translation>Деном. със стойност от 500:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 1000:</source>
-        <translation>Деноминации от 1000:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 1000:</source>
-        <translation>Деном. със стойност от 1000:</translation>
-    </message>
-    <message>
-        <source>Denominations with value 5000:</source>
-        <translation>Деноминации от 5000:</translation>
-    </message>
-    <message>
-        <source>Denom. with value 5000:</source>
-        <translation>Деном. със стойност от 5000:</translation>
-    </message>
-    <message>
-        <source>Priority:</source>
-        <translation>Приоритет:</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
         <source>TextLabel</source>
         <translation>ТекстовЕтикет</translation>
     </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Такса:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>Остатък:</translation>
-    </message>
-    <message>
-        <source>no</source>
-        <translation>не</translation>
-    </message>
-    <message>
-        <source>Bytes:</source>
-        <translation>Байтове:</translation>
-    </message>
-    <message>
-        <source>Insufficient funds!</source>
-        <translation>Средсвтата Ви не достигат!</translation>
-    </message>
-    <message>
-        <source>Coins automatically selected</source>
-        <translation>Автоматично избрани монети</translation>
-    </message>
-    <message>
-        <source>medium</source>
-        <translation>среден</translation>
-    </message>
-    <message>
-        <source>Coin Control Features</source>
-        <translation>Насйтройки Монетен Контрол</translation>
-    </message>
-    <message>
-        <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
-        <translation>Ако това е включено, но адреса за ресто е невалиден, рестото ще се изпраща в новогенериран адрес.</translation>
-    </message>
-    <message>
-        <source>Custom change address</source>
-        <translation>Друг адрес за ресто</translation>
-    </message>
-    <message>
-        <source>Amount After Fee:</source>
-        <translation>Сума след Такси:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Ресто:</translation>
-    </message>
-    <message>
-        <source>out of sync</source>
-        <translation>не е синхронизиран</translation>
-    </message>
-    <message>
-        <source>Mint Status: Okay</source>
-        <translation>Състояние на монето-сечене: OK</translation>
-    </message>
-    <message>
-        <source>Starting ResetMintZerocoin: rescanning complete blockchain, this will need up to 30 minutes depending on your hardware.
-Please be patient...</source>
-        <translation>Стартиране на ResetMintZerocoin: сканираме цялия блокчейн, това ще изисква около 30 минути, в зависимост от вашия компютър.
-Моля изчакате...</translation>
-    </message>
-    <message>
-        <source>zPIV Spend #: </source>
-        <translation>zPIV Похарчени #:</translation>
-    </message>
-    <message>
-        <source>zPIV Mint</source>
-        <translation>Сечене на zPIV</translation>
-    </message>
-    <message>
-        <source> &lt;b&gt;enabled&lt;/b&gt;.</source>
-        <translation>&lt;b&gt;включено&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <source> &lt;b&gt;disabled&lt;/b&gt;.</source>
-        <translation>&lt;b&gt;изключено&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <source> Configured target percentage: &lt;b&gt;</source>
-        <translation>Конфигуриран целеви процент: &lt;b&gt;</translation>
-    </message>
-    <message>
-        <source>zPIV is currently disabled due to maintenance.</source>
-        <translation>В момента zPIV не работи поради ремонт.</translation>
-    </message>
-    <message>
-        <source>zPIV is currently undergoing maintenance.</source>
-        <translation>В момента zPIV е в ремонт.</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;1&lt;/b&gt;:</source>
-        <translation>Деном. със стойност &lt;b&gt;1&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;5&lt;/b&gt;:</source>
-        <translation>Деном. със стойност &lt;b&gt;5&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;10&lt;/b&gt;:</source>
-        <translation>Деном. със стойност от &lt;b&gt;10&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;50&lt;/b&gt;:</source>
-        <translation>Деном. със стойност от &lt;b&gt;50&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;100&lt;/b&gt;:</source>
-        <translation>Деном. със стойност от &lt;b&gt;100&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;500&lt;/b&gt;:</source>
-        <translation>Деном. със стойност от &lt;b&gt;500&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;1000&lt;/b&gt;:</source>
-        <translation>Деном. със стойност от &lt;b&gt;1000&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. with value &lt;b&gt;5000&lt;/b&gt;:</source>
-        <translation>Деном. със стойност от &lt;b&gt;5000&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>AutoMint Status:</source>
-        <translation>Състояние АвтоЕмисия:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;1&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;1&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;5&lt;/b&gt;:</source>
-        <translation>Деноминация.  &lt;b&gt;5&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;10&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;10&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;50&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;50&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;100&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;100&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;500&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;500&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;1000&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;1000&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Denom. &lt;b&gt;5000&lt;/b&gt;:</source>
-        <translation>Деноминация. &lt;b&gt;5000&lt;/b&gt;:</translation>
-    </message>
-    <message>
-        <source>Duration: </source>
-        <translation>Времетраене:</translation>
-    </message>
-    <message>
-        <source> sec.
-</source>
-        <translation>сек.
-</translation>
-    </message>
-    <message>
-        <source>Starting ResetSpentZerocoin: </source>
-        <translation>Стартиране на ResetMintZerocoin:</translation>
-    </message>
-    <message>
-        <source>No 'Pay To' address provided, creating local payment</source>
-        <translation>Без 'Плати На' адрес, плащането е локално</translation>
-    </message>
-    <message>
-        <source>Invalid Pivx Address</source>
-        <translation>Невалиден PIVX адрес</translation>
-    </message>
-    <message>
-        <source>Invalid Send Amount</source>
-        <translation>Невалидна сума за изпращане</translation>
-    </message>
-    <message>
-        <source>Confirm additional Fees</source>
-        <translation>Потвърдете допълнителни такси</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to send?&lt;br /&gt;&lt;br /&gt;</source>
-        <translation>Сигурни ли сте, че желаете да изпратите? &lt;br /&gt;&lt;br /&gt;</translation>
-    </message>
-    <message>
-        <source> to address </source>
-        <translation>на адрес</translation>
-    </message>
-    <message>
-        <source> to a newly generated (unused and therefore anonymous) local address &lt;br /&gt;</source>
-        <translation>на ново-генериран (неизползван до сега и поради това - анонимен) локален адрес &lt;br /&gt;</translation>
-    </message>
-    <message>
-        <source>Confirm send coins</source>
-        <translation>Потвърждаване на изпращането</translation>
-    </message>
-    <message>
-        <source>Failed to fetch mint associated with serial hash</source>
-        <translation>Неуспешно извличане на мента, свързана със сериен хеш</translation>
-    </message>
-    <message>
-        <source>Spend Zerocoin failed with status = </source>
-        <translation>Харченето на Zerocoin се провали със статус =</translation>
-    </message>
-    <message>
-        <source>denomination: </source>
-        <translation>деноминация:</translation>
-    </message>
-    <message>
-        <source>serial: </source>
-        <translation>сериен номер:</translation>
-    </message>
-    <message>
-        <source>Spend is 1 of : </source>
-        <translation>Харча е 1 от:</translation>
-    </message>
-    <message>
-        <source>value out: </source>
-        <translation>изходна стойност:</translation>
-    </message>
-    <message>
-        <source>address: </source>
-        <translation>адрес:</translation>
-    </message>
-    <message>
-        <source>Sending successful, return code: </source>
-        <translation>Изпращането успешно, програмен код: </translation>
-    </message>
-    <message>
-        <source>txid: </source>
-        <translation>номер на транзакцията:</translation>
-    </message>
-    <message>
-        <source>fee: </source>
-        <translation>такса:</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>ProposalFrame</name>
     </context>
@@ -2836,25 +1508,6 @@ Please be patient...</source>
     </message>
     </context>
 <context>
-    <name>QRImageWidget</name>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation>&amp;Запази Картинката...</translation>
-    </message>
-    <message>
-        <source>&amp;Copy Image</source>
-        <translation>&amp;Копирай Картинката</translation>
-    </message>
-    <message>
-        <source>Save QR Code</source>
-        <translation>Запази QR кода</translation>
-    </message>
-    <message>
-        <source>PNG Image (*.png)</source>
-        <translation>PNG изображение (*.png)</translation>
-    </message>
-</context>
-<context>
     <name>RPCConsole</name>
     <message>
         <source>Tools window</source>
@@ -2903,10 +1556,6 @@ Please be patient...</source>
     <message>
         <source>Debug log file</source>
         <translation>Дебъг лог файл</translation>
-    </message>
-    <message>
-        <source>Using OpenSSL version</source>
-        <translation>Open SSL версия в употреба</translation>
     </message>
     <message>
         <source>Build date</source>
@@ -3250,155 +1899,19 @@ Please be patient...</source>
     </message>
 </context>
 <context>
-    <name>ReceiveCoinsDialog</name>
-    <message>
-        <source>Reuse one of the previously used receiving addresses.&lt;br&gt;Reusing addresses has security and privacy issues.&lt;br&gt;Do not use this unless re-generating a payment request made before.</source>
-        <translation>Използвайте отновно един от предходно използваните адреси за получаване. &lt;br&gt;Повторното използване на адреси може да застраши сигурността и поверителността на преводите. &lt;br&gt;Не използвайте тази функция, освен ако не генерирате повторно, платежно нареждане правено преди.</translation>
-    </message>
-    <message>
-        <source>R&amp;euse an existing receiving address (not recommended)</source>
-        <translation>Повторно използване на съществуващ адрес за получаване (не се препоръчва)</translation>
-    </message>
-    <message>
-        <source>&amp;Message:</source>
-        <translation>&amp;Съобщение:</translation>
-    </message>
-    <message>
-        <source>An optional label to associate with the new receiving address.</source>
-        <translation>Незадължителен етикет, който да асоциираме с адреса за получаване.</translation>
-    </message>
-    <message>
-        <source>A&amp;mount:</source>
-        <translation>Сума:</translation>
-    </message>
-    <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened. Note: The message will not be sent with the payment over the PIVX network.</source>
-        <translation>Съобщение свободен текст, което да се прикачи към платежното нареждане, за да бъде показано когато нареждането се отвори от клиента на когото е изпратено. Обърнете внимание, че съобщението няма да бъде изпратено заедно с плащането по PIVX мрежата.</translation>
-    </message>
-    <message>
-        <source>RECEIVE</source>
-        <translation>ПОЛУЧИ</translation>
-    </message>
-    <message>
-        <source>An optional message to attach to the payment request, which will be displayed when the request is opened.&lt;br&gt;Note: The message will not be sent with the payment over the PIVX network.</source>
-        <translation>Съобщение свободен текст, което да се прикачи към платежното нареждане, за да бъде показано когато нареждането се отвори от клиента на когото е изпратено. &lt;br&gt;Обърнете внимание, че съобщението няма да бъде изпратено заедно с плащането по PIVX мрежата.</translation>
-    </message>
-    <message>
-        <source>Use this form to request payments. All fields are &lt;b&gt;optional&lt;/b&gt;.</source>
-        <translation>Използвайте този формуляр за да изисквате плащания. Всички полета са &lt;b&gt;по желание&lt;/b&gt;.</translation>
-    </message>
-    <message>
-        <source>&amp;Label:</source>
-        <translation>Етикет:</translation>
-    </message>
-    <message>
-        <source>An optional amount to request. Leave this empty or zero to not request a specific amount.</source>
-        <translation>Незадължителна сума за поискване. Оставете полето празно или напишете нула, за да не изисквате определена сума.</translation>
-    </message>
-    <message>
-        <source>&amp;Request payment</source>
-        <translation>&amp;Поискай плащане</translation>
-    </message>
-    <message>
-        <source>Clear all fields of the form.</source>
-        <translation>Изчисти всичко полета.</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation>Изчисти</translation>
-    </message>
-    <message>
-        <source>Requested payments history</source>
-        <translation>История с поисканите плащания</translation>
-    </message>
-    <message>
-        <source>Show the selected request (does the same as double clicking an entry)</source>
-        <translation>Покажи избраното нареждане (същото като двоен клик)</translation>
-    </message>
-    <message>
-        <source>Show</source>
-        <translation>Покажи</translation>
-    </message>
-    <message>
-        <source>Remove the selected entries from the list</source>
-        <translation>Премахни избраните от списъка</translation>
-    </message>
-    <message>
-        <source>Remove</source>
-        <translation>Премахни</translation>
-    </message>
-    <message>
-        <source>Copy label</source>
-        <translation>Копирай етикет</translation>
-    </message>
-    <message>
-        <source>Copy message</source>
-        <translation>Копира съобщение</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Копирай сумата</translation>
-    </message>
-    <message>
-        <source>Copy address</source>
-        <translation>Копирай адрес</translation>
-    </message>
-</context>
+    <name>ReceiveDialog</name>
+    </context>
 <context>
-    <name>ReceiveRequestDialog</name>
+    <name>ReceiveWidget</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR код</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Copy &amp;URI</source>
-        <translation>Копирай &amp;URI</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
-    <message>
-        <source>Copy &amp;Address</source>
-        <translation>Копирай &amp;Адрес</translation>
-    </message>
-    <message>
-        <source>&amp;Save Image...</source>
-        <translation>&amp;Запази Картинката...</translation>
-    </message>
-    <message>
-        <source>Request payment to %1</source>
-        <translation>Поискай плащане към %1</translation>
-    </message>
-    <message>
-        <source>Payment information</source>
-        <translation>Информация за плащането</translation>
-    </message>
-    <message>
-        <source>URI</source>
-        <translation>URI</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Адрес</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Сума</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Етикет</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Съобщение</translation>
-    </message>
-    <message>
-        <source>Resulting URI too long, try to reduce the text for label / message.</source>
-        <translation>Получилото се URI е твърде дълго, опитайте с къс етикет или по-кратко съобщение.</translation>
-    </message>
-    <message>
-        <source>Error encoding URI into QR Code.</source>
-        <translation>Грешка при превръщането на URI в QR код.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -3435,507 +1948,316 @@ Please be patient...</source>
     </message>
 </context>
 <context>
-    <name>SendCoinsDialog</name>
+    <name>RequestDialog</name>
     <message>
-        <source>Send Coins</source>
-        <translation>Изпрати Монети</translation>
+        <source>Amount</source>
+        <translation>Сума</translation>
     </message>
     <message>
-        <source>SEND</source>
-        <translation>ИЗПРАТИ</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>Coin Control Features</source>
-        <translation>Насйтройки Монетен Контрол</translation>
+        <source>Label</source>
+        <translation>Етикет</translation>
     </message>
     <message>
-        <source>Insufficient funds!</source>
-        <translation>Средсвтата Ви не достигат!</translation>
+        <source>Error</source>
+        <translation>Грешка</translation>
     </message>
+    </context>
+<context>
+    <name>SendChangeAddressDialog</name>
+    </context>
+<context>
+    <name>SendCustomFeeDialog</name>
     <message>
-        <source>Quantity:</source>
-        <translation>Количество:</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
+    </context>
+<context>
+    <name>SendMultiRow</name>
     <message>
-        <source>Bytes:</source>
-        <translation>Байтове:</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Amount:</source>
-        <translation>Сума:</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
+    </context>
+<context>
+    <name>SendWidget</name>
     <message>
-        <source>Priority:</source>
-        <translation>Приоритет:</translation>
+        <source>Amount</source>
+        <translation>Сума</translation>
     </message>
     <message>
-        <source>medium</source>
-        <translation>среден</translation>
+        <source>Spend Zerocoin</source>
+        <translation>Похарчи Zerocoin</translation>
     </message>
     <message>
-        <source>Fee:</source>
-        <translation>Такса:</translation>
+        <source>zPIV is currently undergoing maintenance.</source>
+        <translation>В момента zPIV е в ремонт.</translation>
     </message>
     <message>
-        <source>Dust:</source>
-        <translation>Остатък:</translation>
+        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <translation>Версия 1 zPIV изисква ниво на сигурност от 100 за успешно изразходване.</translation>
     </message>
     <message>
-        <source>no</source>
-        <translation>не</translation>
+        <source>Too much inputs (</source>
+        <translation>Твърде много входящи (</translation>
     </message>
     <message>
-        <source>After Fee:</source>
-        <translation>След Такси:</translation>
+        <source>) needed.
+Maximum allowed: </source>
+        <translation>) нужни.
+Максимум позволени:</translation>
     </message>
     <message>
-        <source>Change:</source>
-        <translation>Ресто:</translation>
+        <source>
+Either mint higher denominations (so fewer inputs are needed) or reduce the amount to spend.</source>
+        <translation>
+Или емитирайте по-големи деноминации (за да се ползват по малко входящи) или намалете сумата за плащане.</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsBackupWallet</name>
     <message>
-        <source>If this is activated, but the change address is empty or invalid, change will be sent to a newly generated address.</source>
-        <translation>Ако това е включено, но адреса за ресто е невалиден, рестото ще се изпраща в новогенериран адрес.</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Custom change address</source>
-        <translation>Друг адрес за ресто</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>Split UTXO</source>
-        <translation>Раздели UTXO</translation>
+        <source>Backup Wallet</source>
+        <translation>Направи резерва на Портфейла</translation>
     </message>
     <message>
-        <source># of outputs</source>
-        <translation># изходящи</translation>
+        <source>Wallet Data (*.dat)</source>
+        <translation>Wallet Data формат (*.dat)</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsBitToolWidget</name>
     <message>
-        <source>UTXO Size:</source>
-        <translation>Размер на UTXO:</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>0 PIV</source>
-        <translation>0 PIV</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>Transaction Fee:</source>
-        <translation>Такса Превод:</translation>
+        <source>Import Address</source>
+        <translation>Импортирай Адрес</translation>
     </message>
     <message>
-        <source>Choose...</source>
-        <translation>Избери...</translation>
+        <source>Clear</source>
+        <translation>Изчисти</translation>
     </message>
     <message>
-        <source>collapse fee-settings</source>
-        <translation>закрий свободни-настройки</translation>
+        <source>The entered passphrase is invalid. </source>
+        <translation>Въведената фраза е невалидна.</translation>
     </message>
     <message>
-        <source>Minimize</source>
-        <translation>Минимизирай</translation>
+        <source>Allowed: 0-9,a-z,A-Z,</source>
+        <translation>Използвайте: числата 0-9, латински букви от a do z и малки или главни букви</translation>
     </message>
     <message>
-        <source>per kilobyte</source>
-        <translation>за килобайт</translation>
+        <source>The entered address is invalid.</source>
+        <translation>Въведения адрес е невалиден.</translation>
     </message>
     <message>
-        <source>total at least</source>
-        <translation>минимална сума</translation>
+        <source>Please check the address and try again.</source>
+        <translation>Моля проверете адреса и опитайте отново.</translation>
     </message>
     <message>
-        <source>(read the tooltip)</source>
-        <translation>(прочети балончето)</translation>
+        <source>The entered address does not refer to a key.</source>
+        <translation>Въведеният адрес не е свързан с ключ.</translation>
     </message>
     <message>
-        <source>Custom:</source>
-        <translation>Собствен:</translation>
+        <source>Wallet unlock was cancelled.</source>
+        <translation>Отключването на портфейла бе прекратено.</translation>
     </message>
     <message>
-        <source>(Smart fee not initialized yet. This usually takes a few blocks...)</source>
-        <translation>(Умната такса не е инициализирана все още. Това изисква по няколко блока...)</translation>
+        <source>Private key for the entered address is not available.</source>
+        <translation>Личният ключ за въведеният адрес е неналичен.</translation>
     </message>
     <message>
-        <source>SwiftX</source>
-        <translation>SwiftX</translation>
+        <source>Failed to decrypt.</source>
+        <translation>Неуспешно дешифриране.</translation>
     </message>
     <message>
-        <source>Confirmation time:</source>
-        <translation>Време на потвърждение:</translation>
+        <source>Please check the key and passphrase and try again.</source>
+        <translation>Моля проверете ключа и фразата и опитайте отново.</translation>
     </message>
     <message>
-        <source>Open Coin Control...</source>
-        <translation>Отвори Монетен Контрол...</translation>
+        <source>Data Not Valid.</source>
+        <translation>Невалидни данни.</translation>
     </message>
     <message>
-        <source>Coins automatically selected</source>
-        <translation>Автоматично избрани монети</translation>
+        <source>Please try again.</source>
+        <translation>Моля опитайте отново.</translation>
     </message>
     <message>
-        <source>If the custom fee is set to 1000 uPIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uPIVs in fee,&lt;br /&gt;while "at least" pays 1000 uPIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Ако собствената такса е настроена на 1000 uPIV и превода е само 250 байта, то тогава "за килобайт" само плаща 250 uPIV входяща такса, &lt;br /&gt;докато "минимална сума" плаща 1000 uPIV. За транзакции по-големи от килобайт, и двете плащат за килобайт.</translation>
+        <source>Please wait while key is imported</source>
+        <translation>Моля изчакайте докато импортираме ключа.</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsConsoleWidget</name>
     <message>
-        <source>If the custom fee is set to 1000 uPIVs and the transaction is only 250 bytes, then "per kilobyte" only pays 250 uPIVs in fee,&lt;br /&gt;while "total at least" pays 1000 uPIVs. For transactions bigger than a kilobyte both pay by kilobyte.</source>
-        <translation>Ако собствената такса е настроена на 1000 uPIV и превода е само 250 байта, то тогава "за килобайт" само плаща 250 uPIV входяща такса,&lt;br /&gt; докато "минимална сума" плаща 1000 uPIV. За транзакции по-големи от килобайт, и двете плащат за килобайт.</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Paying only the minimum fee is just fine as long as there is less transaction volume than space in the blocks.&lt;br /&gt;But be aware that this can end up in a never confirming transaction once there is more demand for PIVX transactions than the network can process.</source>
-        <translation>Няма проблем да платите минималната такса, стига обема преводи да е по-малък от наличното място в блоковете. &lt;br /&gt;Но имайте впредвид, че това може да се окаже в превод, който никога не получава потвърждение ако заявките за преводи са повече от колкото мрежата може да понесе.</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>normal</source>
-        <translation>нормален</translation>
+        <source>Welcome to the PIVX RPC console.</source>
+        <translation>Добре Дошли в RPC конзолата на PIVX.</translation>
     </message>
     <message>
-        <source>fast</source>
-        <translation>бърз</translation>
+        <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
+        <translation>Напишете &lt;b&gt;help&lt;/b&gt; за списък с възможните команди.</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsDisplayOptionsWidget</name>
     <message>
-        <source>Recommended</source>
-        <translation>Препоръчителен</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Send as zero-fee transaction if possible</source>
-        <translation>При възможнст изпратете без такса</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>(confirmation may take longer)</source>
-        <translation>(потвърждението може да отнеме повече време)</translation>
+        <source>Decimal digits</source>
+        <translation>Десетични единици</translation>
     </message>
     <message>
-        <source>Confirm the send action</source>
-        <translation>Потвърди изпращането</translation>
+        <source>Hide empty balances</source>
+        <translation>Скрий нулевите наличности</translation>
     </message>
     <message>
-        <source>S&amp;end</source>
-        <translation>Изпрати</translation>
+        <source>default</source>
+        <translation>по подразбиране</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsFaqWidget</name>
     <message>
-        <source>Clear all fields of the form.</source>
-        <translation>Изчисти всичко полета.</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Clear &amp;All</source>
-        <translation>Изчисти &amp;Всички</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsInformationWidget</name>
     <message>
-        <source>Send to multiple recipients at once</source>
-        <translation>Изпрати до няколко получателя едновременно</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Add &amp;Recipient</source>
-        <translation>Добави Получател</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>Anonymized PIV</source>
-        <translation>Анонимизиран PIV</translation>
+        <source>Information</source>
+        <translation>Информация</translation>
     </message>
     <message>
-        <source>Balance:</source>
-        <translation>Наличност:</translation>
+        <source>General</source>
+        <translation>Главни</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Копирай количеството</translation>
+        <source>Network</source>
+        <translation>Мрежа</translation>
     </message>
     <message>
-        <source>Copy amount</source>
-        <translation>Копирай сумата</translation>
+        <source>In:</source>
+        <translation>Входящи:</translation>
     </message>
     <message>
-        <source>Copy fee</source>
-        <translation>Копирай таксата</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>Копирай чисто</translation>
-    </message>
-    <message>
-        <source>Copy bytes</source>
-        <translation>Копирай байтовете</translation>
-    </message>
-    <message>
-        <source>Copy priority</source>
-        <translation>Копирай приоритета</translation>
-    </message>
-    <message>
-        <source>Copy dust</source>
-        <translation>Копирай остатъка</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>Копирай рестото</translation>
-    </message>
-    <message>
-        <source>The split block tool does not work when sending to outside addresses. Try again.</source>
-        <translation>Инструмента за разделяна на блока не работи, когато се изпраща към вуншен адрес. Опитайте пак.</translation>
-    </message>
-    <message>
-        <source>The split block tool does not work with multiple addresses. Try again.</source>
-        <translation>Инструмента за разделяне на блока не работи, когато се изпраща до няколко адреса едновременно. Опитайте пак.</translation>
-    </message>
-    <message>
-        <source>Warning: Invalid PIVX address</source>
-        <translation>Предупреждение: Невалиден PIV адрес</translation>
-    </message>
-    <message>
-        <source>%1 to %2</source>
-        <translation>%1 към %2</translation>
-    </message>
-    <message>
-        <source>Are you sure you want to send?</source>
-        <translation>Потвърдете изпращане</translation>
-    </message>
-    <message>
-        <source>are added as transaction fee</source>
-        <translation>са добавени като преводна такса</translation>
-    </message>
-    <message>
-        <source>Total Amount = &lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;= %2</source>
-        <translation>Обща сума = &lt;b&gt;%1&lt;/b&gt;&lt;br /&gt;=%2</translation>
-    </message>
-    <message>
-        <source>Confirm send coins</source>
-        <translation>Потвърждаване на изпращането</translation>
-    </message>
-    <message>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation>Такса %1 пъти по-голяма от %2 за кБ се счита неразумно голяма такса.</translation>
-    </message>
-    <message>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation>Адреса на получателя е недвалиден. Моля преверете.</translation>
-    </message>
-    <message>
-        <source>using SwiftX</source>
-        <translation>използвайки SwiftX</translation>
-    </message>
-    <message>
-        <source> split into %1 outputs using the UTXO splitter.</source>
-        <translation>разделено в %1 изходящи използвайки UTXO разделите.</translation>
-    </message>
-    <message>
-        <source>&lt;b&gt;(%1 of %2 entries displayed)&lt;/b&gt;</source>
-        <translation>&lt;b&gt;(%1 от %2 полета)&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation>Сумата на превода трябва да е по-голяма от 0.</translation>
-    </message>
-    <message>
-        <source>The amount exceeds your balance.</source>
-        <translation>Сумата надхвърля наличността.</translation>
-    </message>
-    <message>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>Сумата надхвърля наличността, когато преводната такса %1 е включена.</translation>
-    </message>
-    <message>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>Наличие на един и същи адрес два пъти. Можем да изпращане до всеки адрес само по веднъж по време на всяка отделна операция по изпращане.</translation>
-    </message>
-    <message>
-        <source>Transaction creation failed!</source>
-        <translation>Неуспешен превод.</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Превода бе отказам! Това може да се случи ако част от монетите в портфейла вече са биле изпратени, като например ако сте използвали копие на wallet.dat файла и монетите са биле похарчени там, но не са  биле маркирани като изпратени тук.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation>Грешка: Портфейла е отключен само за анонимизиране на монети.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
-        <translation>Грешка: Портфейла е отключен само за анонимизиране на монети. Отключването спряно.</translation>
-    </message>
-    <message>
-        <source>Pay only the minimum fee of %1</source>
-        <translation>Плати само минималната такса от %1</translation>
-    </message>
-    <message>
-        <source>Warning: Unknown change address</source>
-        <translation>Предупреждение: Непознат адрес за ресто</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(без етикет)</translation>
+        <source>Out:</source>
+        <translation>Изходящи:</translation>
     </message>
 </context>
 <context>
-    <name>SendCoinsEntry</name>
+    <name>SettingsMainOptionsWidget</name>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>Това е нормално плащане.</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Pay &amp;To:</source>
-        <translation>Плати На:</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
-    <message>
-        <source>The PIVX address to send the payment to</source>
-        <translation>PIVX адреса - получател на плащането</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Изберете предишноизползван адрес</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Алт+А</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Постави адреса от буфера</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Алт+П</translation>
-    </message>
-    <message>
-        <source>Remove this entry</source>
-        <translation>Изтрий</translation>
-    </message>
-    <message>
-        <source>&amp;Label:</source>
-        <translation>Етикет:</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to the list of used addresses</source>
-        <translation>Въведете етикет за този адрес.</translation>
-    </message>
-    <message>
-        <source>A&amp;mount:</source>
-        <translation>Сума:</translation>
-    </message>
-    <message>
-        <source>Message:</source>
-        <translation>Съобщение:</translation>
-    </message>
-    <message>
-        <source>A message that was attached to the PIVX: URI which will be stored with the transaction for your reference. Note: This message will not be sent over the PIVX network.</source>
-        <translation>Съобщение, което е било прикачено към PIVX:URI и което ще бъде запазено заедно с превода за ваша информация. Внимание: Това съобщение е само за Вас, то няма да бъде изпратено по PIVX мрежата.</translation>
-    </message>
-    <message>
-        <source>This is an unverified payment request.</source>
-        <translation>Това е непреворено платежно нареждане.</translation>
-    </message>
-    <message>
-        <source>Pay To:</source>
-        <translation>Плати На:</translation>
-    </message>
-    <message>
-        <source>Memo:</source>
-        <translation>Бележка:</translation>
-    </message>
-    <message>
-        <source>This is a verified payment request.</source>
-        <translation>Това проверено платежно нареждане.</translation>
-    </message>
-    <message>
-        <source>Enter a label for this address to add it to your address book</source>
-        <translation>Задайте етикет на този адрес, с който да бъде добавен във Вашата Адресна Книга</translation>
-    </message>
-</context>
+    </context>
 <context>
-    <name>ShutdownWindow</name>
+    <name>SettingsMultisendDialog</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>Изключване на PIVX Ядрото...</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Do not shut down the computer until this window disappears.</source>
-        <translation>Не изключвайте компютъра, докато този прозорец не изчезне.</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
-</context>
+    </context>
 <context>
-    <name>SignVerifyMessageDialog</name>
+    <name>SettingsMultisendWidget</name>
     <message>
-        <source>Signatures - Sign / Verify a Message</source>
-        <translation>Подписи - Подпиши / Провери Съобщение</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>&amp;Sign Message</source>
-        <translation>&amp;Подпиши Съобщение</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
-        <translation>Може да подписвате съобщения с Вашите адреси, за да докажете че сте техен притежател. Внимавайте да не подписвате нищо съмнително, тъй като има хакерски атаки, които целят да придобият вашата самоличност. Само подписвайте пълен и ясен текст, с който сте напълно съгласни.</translation>
+        <source>Active</source>
+        <translation>Активен</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsSignMessageWidgets</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>The PIVX address to sign the message with</source>
-        <translation>PIVX адреса, с който да подпишете съобщението</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation>Изберете предишноизползван адрес</translation>
+        <source>Clear</source>
+        <translation>Изчисти</translation>
     </message>
     <message>
-        <source>Alt+A</source>
-        <translation>Алт+А</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Постави адреса от буфера</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Алт+П</translation>
-    </message>
-    <message>
-        <source>Enter the message you want to sign here</source>
-        <translation>Напишете съобщението, което желаете да подпишете.</translation>
+        <source>Message</source>
+        <translation>Съобщение</translation>
     </message>
     <message>
         <source>Signature</source>
         <translation>Подпис</translation>
     </message>
     <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>Копирай сегашния подпис в системния буфер</translation>
-    </message>
-    <message>
-        <source>Sign the message to prove you own this PIVX address</source>
-        <translation>Подпишете съобщението, за да докажете, че притежавате този PIVX адрес</translation>
-    </message>
-    <message>
-        <source>The PIVX address the message was signed with</source>
-        <translation>PIVX адреса, който е подписано съобщението</translation>
-    </message>
-    <message>
-        <source>Verify the message to ensure it was signed with the specified PIVX address</source>
-        <translation>Поверете съобщението, за да се уверите, че е подписано със зададения PIVX адрес</translation>
-    </message>
-    <message>
-        <source>Sign &amp;Message</source>
-        <translation>Подпиши &amp;Съобщение</translation>
-    </message>
-    <message>
-        <source>Reset all sign message fields</source>
-        <translation>Ресет на всички полета</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Изчисти &amp;Всички</translation>
-    </message>
-    <message>
-        <source>&amp;Verify Message</source>
-        <translation>Провери Съобщение</translation>
+        <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
+        <translation>Може да подписвате съобщения с Вашите адреси, за да докажете че сте техен притежател. Внимавайте да не подписвате нищо съмнително, тъй като има хакерски атаки, които целят да придобият вашата самоличност. Само подписвайте пълен и ясен текст, с който сте напълно съгласни.</translation>
     </message>
     <message>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>
         <translation>Въведете одписващия адрес, съобщението и подписа по-долу за да проверите съобщението. Внимавайте да не четете повече от подписа от колкото има в самото съобщение, за да избегнете "man in the middle" атака.</translation>
-    </message>
-    <message>
-        <source>Verify &amp;Message</source>
-        <translation>Провери Съобщение</translation>
-    </message>
-    <message>
-        <source>Reset all verify message fields</source>
-        <translation>Ресет на всички полета за проверка</translation>
-    </message>
-    <message>
-        <source>Click "Sign Message" to generate signature</source>
-        <translation>Кликнете "Подпиши Съобщение" зада генерирате подпис</translation>
     </message>
     <message>
         <source>The entered address is invalid.</source>
@@ -3985,6 +2307,160 @@ Please be patient...</source>
         <source>Message verified.</source>
         <translation>Съобщението е проверено.</translation>
     </message>
+    </context>
+<context>
+    <name>SettingsWalletOptionsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>Портфейл</translation>
+    </message>
+    <message>
+        <source>Stake split threshold:</source>
+        <translation>Праг на споделеното съхранение:</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation>Мрежа</translation>
+    </message>
+    <message>
+        <source>Allow incoming connections</source>
+        <translation>Приемай входящи свръзки</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsWalletRepairWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    <message>
+        <source>Attempt to recover private keys from a corrupt wallet.dat.</source>
+        <translation>Опит за възтановяване на лични ключове от повреден wallet.dat файл.</translation>
+    </message>
+    <message>
+        <source>Recover transactions from blockchain (drop meta-data).</source>
+        <translation>Възстанови преводи от блокчена (без мета данни).</translation>
+    </message>
+    <message>
+        <source>Deletes all local blockchain folders so the wallet synchronizes from scratch.</source>
+        <translation>Изтрий всички локални папки на блокчейна, така че портфейла да се синхронизира от самото начало.</translation>
+    </message>
+    <message>
+        <source>Salvage wallet</source>
+        <translation>Спаси портфейл</translation>
+    </message>
+    <message>
+        <source>Recover transactions 1</source>
+        <translation>Възстанови преводи 1</translation>
+    </message>
+    <message>
+        <source>Recover transactions 2</source>
+        <translation>Възстанови преводи 2</translation>
+    </message>
+    <message>
+        <source>Upgrade wallet format</source>
+        <translation>Надграждане формата на портфейла.</translation>
+    </message>
+    <message>
+        <source>Rebuild index</source>
+        <translation>Потворно изграждане на индекса</translation>
+    </message>
+    <message>
+        <source>This will delete your local blockchain folders and the wallet will synchronize the complete Blockchain from scratch.&lt;br /&gt;&lt;br /&gt;</source>
+        <translation>Това ще истрие Вашите локални блокчейн папки и портфейла ще се синхронизира с целия блокчейн от самото начало.</translation>
+    </message>
+    <message>
+        <source>This needs quite some time and downloads a lot of data.&lt;br /&gt;&lt;br /&gt;</source>
+        <translation>Това изисква доста време и тегленето на много данни. &lt;br /&gt;&lt;br /&gt;</translation>
+    </message>
+    <message>
+        <source>Your transactions and funds will be visible again after the download has completed.&lt;br /&gt;&lt;br /&gt;</source>
+        <translation>Вашите преводи и средства ще бъдат видими отново след като тегленето приключи. &lt;br /&gt;&lt;br /&gt;</translation>
+    </message>
+    <message>
+        <source>Do you want to continue?.&lt;br /&gt;</source>
+        <translation>Сигурни ли сте, че желаете да изпратите? &lt;br /&gt;&lt;br /&gt;</translation>
+    </message>
+    <message>
+        <source>Confirm resync Blockchain</source>
+        <translation>Потвърдете ресинх на Блокчейна</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>Портфейл</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation>Опции</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation>Информация</translation>
+    </message>
+    <message>
+        <source>Confirm options reset</source>
+        <translation>Потвърди нулиране</translation>
+    </message>
+    <message>
+        <source>Client restart required to activate changes.</source>
+        <translation>Трябва да рестартирате програмата.</translation>
+    </message>
+    <message>
+        <source>Client will be shutdown, do you want to proceed?</source>
+        <translation>Програмата ще се изключи. Продължаване?</translation>
+    </message>
+    </context>
+<context>
+    <name>ShutdownWindow</name>
+    <message>
+        <source>PIVX Core is shutting down...</source>
+        <translation>Изключване на PIVX Ядрото...</translation>
+    </message>
+    <message>
+        <source>Do not shut down the computer until this window disappears.</source>
+        <translation>Не изключвайте компютъра, докато този прозорец не изчезне.</translation>
+    </message>
+</context>
+<context>
+    <name>SnackBar</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    </context>
+<context>
+    <name>Splash</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Ядро</translation>
+    </message>
 </context>
 <context>
     <name>SplashScreen</name>
@@ -4013,6 +2489,28 @@ Please be patient...</source>
         <translation>[тестнет]</translation>
     </message>
 </context>
+<context>
+    <name>TooltipMenu</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Изтрий</translation>
+    </message>
+    </context>
+<context>
+    <name>TopBar</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>%1 and %2</source>
+        <translation>%1 и %2</translation>
+    </message>
+    </context>
 <context>
     <name>TrafficGraphWidget</name>
     <message>
@@ -4167,10 +2665,6 @@ Please be patient...</source>
         <translation>Търговец</translation>
     </message>
     <message>
-        <source>Generated coins must mature %1 blocks before they can be spent. When you generated this block, it was broadcast to the network to be added to the block chain. If it fails to get into the chain, its state will change to "not accepted" and it won't be spendable. This may occasionally happen if another node generates a block within a few seconds of yours.</source>
-        <translation>Генерираните монети трябва да узреят поне %1 блока преди да бъдат налични за харчене. Когато генерирахте този блок, той бе обявен към мрежата за добавяне в блокчейна. Ако не успее да се закачи към блокчейна, статуса му ще се промени в "неприет" и средствата няма да бъдат налични за харчене. Това може да се случи от време на време ако друг ноуд генерира блок в същото време като Вашия.</translation>
-    </message>
-    <message>
         <source>Debug information</source>
         <translation>Дебъг информация</translation>
     </message>
@@ -4193,17 +2687,6 @@ Please be patient...</source>
     <message>
         <source>false</source>
         <translation>грешно</translation>
-    </message>
-</context>
-<context>
-    <name>TransactionDescDialog</name>
-    <message>
-        <source>Transaction details</source>
-        <translation>Подробности около превода</translation>
-    </message>
-    <message>
-        <source>This pane shows a detailed description of the transaction</source>
-        <translation>Това поле показва подробно описание на превода</translation>
     </message>
 </context>
 <context>
@@ -4313,14 +2796,6 @@ Please be patient...</source>
         <translation>Конвертиран zPIV във PIV</translation>
     </message>
     <message>
-        <source>Anonymous (zPIV Transaction)</source>
-        <translation>Анонимен (транзакция zPIV)</translation>
-    </message>
-    <message>
-        <source>Anonymous (zPIV Stake)</source>
-        <translation>Анонимен (zPIV Stake)</translation>
-    </message>
-    <message>
         <source>Sent to</source>
         <translation>Изпратени до</translation>
     </message>
@@ -4374,194 +2849,39 @@ Please be patient...</source>
     </message>
 </context>
 <context>
-    <name>TransactionView</name>
+    <name>TxDetailDialog</name>
     <message>
-        <source>All</source>
-        <translation>Всички</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
     <message>
-        <source>Today</source>
-        <translation>Днес</translation>
+        <source>Fee:</source>
+        <translation>Такса:</translation>
     </message>
     <message>
-        <source>This week</source>
-        <translation>Тази седмица</translation>
+        <source>Status:</source>
+        <translation>Състояние</translation>
     </message>
     <message>
-        <source>This month</source>
-        <translation>Този месец</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
     </message>
     <message>
-        <source>Last month</source>
-        <translation>Миналия месец</translation>
+        <source>SEND</source>
+        <translation>ИЗПРАТИ</translation>
     </message>
     <message>
-        <source>This year</source>
-        <translation>Тази година</translation>
-    </message>
-    <message>
-        <source>Range...</source>
-        <translation>Порядък...</translation>
-    </message>
-    <message>
-        <source>Most Common</source>
-        <translation>Най Общи</translation>
-    </message>
-    <message>
-        <source>Received with</source>
-        <translation>Получен с</translation>
-    </message>
-    <message>
-        <source>Sent to</source>
-        <translation>Изпратени до</translation>
-    </message>
-    <message>
-        <source>To yourself</source>
-        <translation>Към себе си</translation>
-    </message>
-    <message>
-        <source>Mined</source>
-        <translation>Изсечени</translation>
-    </message>
-    <message>
-        <source>Minted</source>
-        <translation>Изсечени</translation>
-    </message>
-    <message>
-        <source>Masternode Reward</source>
-        <translation>Мастърноуд възнаграждение</translation>
-    </message>
-    <message>
-        <source>Zerocoin Mint</source>
-        <translation>Сечене на Zerocoin</translation>
-    </message>
-    <message>
-        <source>Zerocoin Spend</source>
-        <translation>Харчене на Zerocoin</translation>
-    </message>
-    <message>
-        <source>Zerocoin Spend to Self</source>
-        <translation>Харчене на Zerocoin за себе си</translation>
-    </message>
-    <message>
-        <source>Other</source>
-        <translation>Други</translation>
-    </message>
-    <message>
-        <source>Enter address or label to search</source>
-        <translation>Въведете адрес или етикет за търсене</translation>
-    </message>
-    <message>
-        <source>Min amount</source>
-        <translation>Минимална сума</translation>
-    </message>
-    <message>
-        <source>Copy address</source>
-        <translation>Копирай адрес</translation>
-    </message>
-    <message>
-        <source>Copy label</source>
-        <translation>Копирай етикет</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Копирай сумата</translation>
-    </message>
-    <message>
-        <source>Copy transaction ID</source>
-        <translation>Копирай номер на превода</translation>
-    </message>
-    <message>
-        <source>Edit label</source>
-        <translation>Редактирай етикета</translation>
-    </message>
-    <message>
-        <source>Show transaction details</source>
-        <translation>Покази подробности по превода</translation>
-    </message>
-    <message>
-        <source>Export Transaction History</source>
-        <translation>Експортирай История на Преводите</translation>
-    </message>
-    <message>
-        <source>Comma separated file (*.csv)</source>
-        <translation>Файлове разделени чрез запетая (*.csv)</translation>
-    </message>
-    <message>
-        <source>Confirmed</source>
-        <translation>Потвърдени</translation>
-    </message>
-    <message>
-        <source>Watch-only</source>
-        <translation>Наблюдение-само</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Дата</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Вид</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Етикет</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Адрес</translation>
-    </message>
-    <message>
-        <source>ID</source>
-        <translation>Идентификатор</translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation>Експортирането провалено</translation>
-    </message>
-    <message>
-        <source>There was an error trying to save the transaction history to %1.</source>
-        <translation>Получи се грешка при опита да се запази преводната история в %1.</translation>
-    </message>
-    <message>
-        <source>Exporting Successful</source>
-        <translation>Експортирането Успешно</translation>
-    </message>
-    <message>
-        <source>Received PIV from zPIV</source>
-        <translation>Получен PIV от zPIV</translation>
-    </message>
-    <message>
-        <source>Zerocoin Spend, Change in zPIV</source>
-        <translation>Харчене на Zerocoin, Ресто в zPIV</translation>
-    </message>
-    <message>
-        <source>The transaction history was successfully saved to %1.</source>
-        <translation>Преводната история бе успешно запазена в %1.</translation>
-    </message>
-    <message>
-        <source>Range:</source>
-        <translation>Диапазон:</translation>
-    </message>
-    <message>
-        <source>to</source>
-        <translation>до</translation>
+        <source>Unknown</source>
+        <translation>Непознат</translation>
     </message>
 </context>
 <context>
-    <name>UnitDisplayStatusBarControl</name>
+    <name>TxRow</name>
     <message>
-        <source>Unit to show amounts in. Click to select another unit.</source>
-        <translation>Единици в които да показва сумата. Кликнете за да промените.</translation>
+        <source>Form</source>
+        <translation>От</translation>
     </message>
-</context>
-<context>
-    <name>WalletFrame</name>
-    <message>
-        <source>No wallet has been loaded.</source>
-        <translation>Няма зареден портфейл.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>WalletModel</name>
     <message>
@@ -4574,30 +2894,21 @@ Please be patient...</source>
     </message>
 </context>
 <context>
-    <name>WalletView</name>
+    <name>WalletPasswordDialog</name>
     <message>
-        <source>HISTORY</source>
-        <translation>ИСТОРИЯ</translation>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    </context>
+<context>
+    <name>WelcomeContentWidget</name>
+    <message>
+        <source>Welcome</source>
+        <translation>Привет</translation>
     </message>
     <message>
-        <source>&amp;Export</source>
-        <translation>&amp;Експортиране</translation>
-    </message>
-    <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation>Експортиране информацията от сегашния таб във файл</translation>
-    </message>
-    <message>
-        <source>Selected amount:</source>
-        <translation>Избрано количество:</translation>
-    </message>
-    <message>
-        <source>Backup Wallet</source>
-        <translation>Направи резерва на Портфейла</translation>
-    </message>
-    <message>
-        <source>Wallet Data (*.dat)</source>
-        <translation>Wallet Data формат (*.dat)</translation>
+        <source>default</source>
+        <translation>по подразбиране</translation>
     </message>
 </context>
 <context>
@@ -4607,16 +2918,24 @@ Please be patient...</source>
         <translation>Изберете zPIV за Изпращане</translation>
     </message>
     <message>
-        <source>Quantity</source>
-        <translation>Количество</translation>
+        <source>Coin Control</source>
+        <translation>Монетен контрол...</translation>
+    </message>
+    <message>
+        <source>zPiv</source>
+        <translation>zPIV</translation>
+    </message>
+    <message>
+        <source>Quantity:</source>
+        <translation>Количество:</translation>
+    </message>
+    <message>
+        <source>Is Spendable</source>
+        <translation>В Налични за харечене</translation>
     </message>
     <message>
         <source>0</source>
         <translation>0</translation>
-    </message>
-    <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
     </message>
     <message>
         <source>Select/Deselect All</source>
@@ -4954,10 +3273,6 @@ Please be patient...</source>
         <translation>Не можем да разрешим -whitebind адрес: '%s'</translation>
     </message>
     <message>
-        <source>Cannot write default address</source>
-        <translation>Не можем да запишем адреса по подразбиране</translation>
-    </message>
-    <message>
         <source>Connect only to the specified node(s)</source>
         <translation>Свързвай се само към зададените възли(възел).</translation>
     </message>
@@ -5072,10 +3387,6 @@ Please be patient...</source>
     <message>
         <source>Error reading from database, shutting down.</source>
         <translation>Грешка в четенето от базата данни. Изключвам се!</translation>
-    </message>
-    <message>
-        <source>Error recovering public key.</source>
-        <translation>Грешка във възтановяването на публичния ключ.</translation>
     </message>
     <message>
         <source>Error</source>
@@ -5204,10 +3515,6 @@ Please be patient...</source>
     <message>
         <source>Invalid port detected in masternode.conf</source>
         <translation>Невалиден порт, засечен в masternode.conf</translation>
-    </message>
-    <message>
-        <source>Invalid private key.</source>
-        <translation>Грешен личен ключ.</translation>
     </message>
     <message>
         <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
@@ -5454,10 +3761,6 @@ Please be patient...</source>
         <translation>Емисията не успя да се включи в блокчейна</translation>
     </message>
     <message>
-        <source>Need address because change is not exact</source>
-        <translation>Необходим е адрес, понеже рестото не е кръгла сума</translation>
-    </message>
-    <message>
         <source>Need to specify a port with -whitebind: '%s'</source>
         <translation>Нужно е да се зададе порт с -whitebind: '%s'</translation>
     </message>
@@ -5616,10 +3919,6 @@ Please be patient...</source>
     <message>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Намали debug.log файла при стартиране на портфейла (по подразбиране: 1 когато няма -debug)</translation>
-    </message>
-    <message>
-        <source>Signing failed.</source>
-        <translation>Неуспешено подписване.</translation>
     </message>
     <message>
         <source>Signing timed out.</source>
@@ -5882,4 +4181,15 @@ Please be patient...</source>
         <translation>wallet.dat е повреден, неуспешно спасяване</translation>
     </message>
 </context>
+<context>
+    <name>send</name>
+    <message>
+        <source>Form</source>
+        <translation>От</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>ТекстовЕтикет</translation>
+    </message>
+    </context>
 </TS>
