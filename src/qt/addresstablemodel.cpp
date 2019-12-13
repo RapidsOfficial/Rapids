@@ -564,6 +564,11 @@ int AddressTableModel::lookupAddress(const QString& address) const
     }
 }
 
+bool AddressTableModel::isWhitelisted(const std::string& address) const
+{
+    return purposeForAddress(address).compare(AddressBook::AddressBookPurpose::DELEGATOR) == 0;
+}
+
 /**
  * Return last created unused address --> TODO: complete "unused" and "last".. basically everything..
  * @return

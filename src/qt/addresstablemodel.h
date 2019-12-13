@@ -89,6 +89,11 @@ public:
     std::string purposeForAddress(const std::string& address) const;
 
     /**
+     * Checks if the address is whitelisted
+     */
+    bool isWhitelisted(const std::string& address) const;
+
+    /**
      * Return last unused address
      */
     QString getAddressToShow() const;

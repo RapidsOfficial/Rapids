@@ -113,6 +113,7 @@ private:
     void tryRefreshDelegations();
     bool refreshDelegations();
     void onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses);
+    void updateStakingTotalLabel();
 };
 
 #endif // COLDSTAKINGWIDGET_H

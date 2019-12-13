@@ -252,11 +252,7 @@ void ColdStakingWidget::onDelegationsRefreshed() {
     isLoading = false;
     bool hasDel = csModel->rowCount() > 0;
 
-    // Update the total value.
-    CAmount total = csModel->getTotalAmount();
-    ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
-            (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
-    );
+    updateStakingTotalLabel();
 
     // Update list if we are showing that section.
     if (!isInDelegation) {
@@ -646,6 +642,7 @@ void ColdStakingWidget::onEditClicked() {
     if (label.isEmpty()) {
         label = index.data(Qt::DisplayRole).toString();
     }
+    updateStakingTotalLabel();
     inform(label + tr(" staking!"));
 }
 
@@ -659,6 +656,7 @@ void ColdStakingWidget::onDeleteClicked() {
     if (label.isEmpty()) {
         label = index.data(Qt::DisplayRole).toString();
     }
+    updateStakingTotalLabel();
     inform(label + tr(" blacklisted from staking"));
 }
 
@@ -729,6 +727,14 @@ void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme){
     static_cast<CSDelegationHolder*>(delegate->getRowFactory())->isLightTheme = isLightTheme;
     static_cast<AddressHolder*>(addressDelegate->getRowFactory())->isLightTheme = isLightTheme;
     ui->listView->update();
+}
+
+void ColdStakingWidget::updateStakingTotalLabel()
+{
+    const CAmount& total = csModel->getTotalAmount();
+    ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
+            (total == 0) ? "0.00 PIV" : GUIUtil::formatBalance(total, nDisplayUnit))
+    );
 }
 
 ColdStakingWidget::~ColdStakingWidget(){
