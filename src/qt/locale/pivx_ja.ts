@@ -1,5 +1,15 @@
 <TS language="ja" version="2.1">
 <context>
+    <name>AddNewAddressDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>アドレス</translation>
+    </message>
+    </context>
+<context>
+    <name>AddNewContactDialog</name>
+    </context>
+<context>
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
@@ -75,6 +85,9 @@
     </message>
     </context>
 <context>
+    <name>AddressLabelRow</name>
+    </context>
+<context>
     <name>AddressTableModel</name>
     <message>
         <source>Address</source>
@@ -82,15 +95,10 @@
     </message>
     </context>
 <context>
+    <name>AddressesWidget</name>
+    </context>
+<context>
     <name>AskPassphraseDialog</name>
-    <message>
-        <source>New passphrase</source>
-        <translation>新しいパスワード</translation>
-    </message>
-    <message>
-        <source>Repeat new passphrase</source>
-        <translation>新しいパスワードの確認</translation>
-    </message>
     <message>
         <source>Encrypt wallet</source>
         <translation>財布を暗号化</translation>
@@ -112,25 +120,10 @@
     <name>BanTableModel</name>
     </context>
 <context>
-    <name>Bip38ToolDialog</name>
-    <message>
-        <source>Address:</source>
-        <translation>アドレス：</translation>
-    </message>
-    <message>
-        <source>Passphrase: </source>
-        <translation>パスワード：</translation>
-    </message>
-    <message>
-        <source>Encrypted Key:</source>
-        <translation>暗号化されたキー</translation>
-    </message>
-    </context>
-<context>
-    <name>BitcoinGUI</name>
-    </context>
-<context>
     <name>BlockExplorer</name>
+    </context>
+<context>
+    <name>CSRow</name>
     </context>
 <context>
     <name>ClientModel</name>
@@ -139,7 +132,32 @@
     <name>CoinControlDialog</name>
     </context>
 <context>
+    <name>CoinControlPivWidget</name>
+    <message>
+        <source>Address</source>
+        <translation>アドレス</translation>
+    </message>
+    </context>
+<context>
+    <name>ColdStakingWidget</name>
+    </context>
+<context>
+    <name>ContactDropdownRow</name>
+    </context>
+<context>
+    <name>DashboardWidget</name>
+    </context>
+<context>
+    <name>DefaultDialog</name>
+    </context>
+<context>
+    <name>DenomGenerationDialog</name>
+    </context>
+<context>
     <name>EditAddressDialog</name>
+    </context>
+<context>
+    <name>ExpandableButton</name>
     </context>
 <context>
     <name>FreespaceChecker</name>
@@ -154,30 +172,47 @@
     <name>Intro</name>
     </context>
 <context>
-    <name>MasternodeList</name>
+    <name>LoadingDialog</name>
+    </context>
+<context>
+    <name>LockUnlock</name>
+    </context>
+<context>
+    <name>MNRow</name>
+    </context>
+<context>
+    <name>MasterNodeWizardDialog</name>
     <message>
         <source>Address</source>
         <translation>アドレス</translation>
     </message>
     </context>
 <context>
-    <name>MultiSendDialog</name>
-    <message>
-        <source>Address:</source>
-        <translation>アドレス：</translation>
-    </message>
+    <name>MasterNodesWidget</name>
     </context>
 <context>
-    <name>MultisigDialog</name>
+    <name>MnInfoDialog</name>
+    </context>
+<context>
+    <name>MyAddressRow</name>
+    </context>
+<context>
+    <name>NavMenuWidget</name>
     </context>
 <context>
     <name>OpenURIDialog</name>
     </context>
 <context>
+    <name>OptionButton</name>
+    </context>
+<context>
     <name>OptionsDialog</name>
     </context>
 <context>
-    <name>OverviewPage</name>
+    <name>PIVXGUI</name>
+    </context>
+<context>
+    <name>PWidget</name>
     </context>
 <context>
     <name>PaymentServer</name>
@@ -186,7 +221,7 @@
     <name>PeerTableModel</name>
     </context>
 <context>
-    <name>PrivacyDialog</name>
+    <name>PrivacyWidget</name>
     </context>
 <context>
     <name>ProposalFrame</name>
@@ -195,20 +230,13 @@
     <name>QObject</name>
     </context>
 <context>
-    <name>QRImageWidget</name>
-    </context>
-<context>
     <name>RPCConsole</name>
     </context>
 <context>
-    <name>ReceiveCoinsDialog</name>
+    <name>ReceiveDialog</name>
     </context>
 <context>
-    <name>ReceiveRequestDialog</name>
-    <message>
-        <source>Address</source>
-        <translation>アドレス</translation>
-    </message>
+    <name>ReceiveWidget</name>
     </context>
 <context>
     <name>RecentRequestsTableModel</name>
@@ -218,28 +246,82 @@
     </message>
     </context>
 <context>
-    <name>SendCoinsDialog</name>
+    <name>RequestDialog</name>
     </context>
 <context>
-    <name>SendCoinsEntry</name>
+    <name>SendChangeAddressDialog</name>
+    </context>
+<context>
+    <name>SendCustomFeeDialog</name>
+    </context>
+<context>
+    <name>SendMultiRow</name>
+    </context>
+<context>
+    <name>SendWidget</name>
+    </context>
+<context>
+    <name>SettingsBackupWallet</name>
+    </context>
+<context>
+    <name>SettingsBitToolWidget</name>
+    </context>
+<context>
+    <name>SettingsConsoleWidget</name>
+    </context>
+<context>
+    <name>SettingsDisplayOptionsWidget</name>
+    </context>
+<context>
+    <name>SettingsFaqWidget</name>
+    </context>
+<context>
+    <name>SettingsInformationWidget</name>
+    </context>
+<context>
+    <name>SettingsMainOptionsWidget</name>
+    </context>
+<context>
+    <name>SettingsMultisendDialog</name>
+    </context>
+<context>
+    <name>SettingsMultisendWidget</name>
+    </context>
+<context>
+    <name>SettingsSignMessageWidgets</name>
+    </context>
+<context>
+    <name>SettingsWalletOptionsWidget</name>
+    </context>
+<context>
+    <name>SettingsWalletRepairWidget</name>
+    </context>
+<context>
+    <name>SettingsWidget</name>
     </context>
 <context>
     <name>ShutdownWindow</name>
     </context>
 <context>
-    <name>SignVerifyMessageDialog</name>
+    <name>SnackBar</name>
+    </context>
+<context>
+    <name>Splash</name>
     </context>
 <context>
     <name>SplashScreen</name>
+    </context>
+<context>
+    <name>TooltipMenu</name>
+    </context>
+<context>
+    <name>TopBar</name>
     </context>
 <context>
     <name>TrafficGraphWidget</name>
     </context>
 <context>
     <name>TransactionDesc</name>
-    </context>
-<context>
-    <name>TransactionDescDialog</name>
     </context>
 <context>
     <name>TransactionTableModel</name>
@@ -249,36 +331,27 @@
     </message>
     </context>
 <context>
-    <name>TransactionView</name>
-    <message>
-        <source>Address</source>
-        <translation>アドレス</translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation>エクスポート失敗</translation>
-    </message>
+    <name>TxDetailDialog</name>
     </context>
 <context>
-    <name>UnitDisplayStatusBarControl</name>
-    </context>
-<context>
-    <name>WalletFrame</name>
+    <name>TxRow</name>
     </context>
 <context>
     <name>WalletModel</name>
     </context>
 <context>
-    <name>WalletView</name>
-    <message>
-        <source>&amp;Export</source>
-        <translation>＆エクスポート</translation>
-    </message>
+    <name>WalletPasswordDialog</name>
+    </context>
+<context>
+    <name>WelcomeContentWidget</name>
     </context>
 <context>
     <name>ZPivControlDialog</name>
     </context>
 <context>
     <name>pivx-core</name>
+    </context>
+<context>
+    <name>send</name>
     </context>
 </TS>

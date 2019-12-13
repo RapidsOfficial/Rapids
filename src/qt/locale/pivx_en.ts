@@ -24,12 +24,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -43,17 +43,17 @@
     </message>
     <message>
         <location line="+78"/>
-        <location line="+74"/>
+        <location line="+77"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+78"/>
+        <location line="+81"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -266,7 +266,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+154"/>
         <source>No active Master Node yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -282,7 +282,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+52"/>
+        <location line="+55"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -397,7 +397,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+77"/>
+        <location line="+90"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
@@ -449,7 +449,7 @@ for staking</source>
         <translation>Enter the old and new passphrase to the wallet.</translation>
     </message>
     <message>
-        <location line="+60"/>
+        <location line="+61"/>
         <source>Confirm wallet encryption</source>
         <translation>Confirm wallet encryption</translation>
     </message>
@@ -464,12 +464,12 @@ for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+145"/>
+        <location line="+144"/>
         <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-146"/>
+        <location line="-145"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Are you sure you wish to encrypt your wallet?</translation>
     </message>
@@ -480,7 +480,7 @@ for staking</source>
     </message>
     <message>
         <location line="+46"/>
-        <location line="+98"/>
+        <location line="+97"/>
         <source>Wallet encrypted</source>
         <translation>Wallet encrypted</translation>
     </message>
@@ -490,10 +490,10 @@ for staking</source>
         <translation>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</translation>
     </message>
     <message>
-        <location line="-139"/>
+        <location line="-138"/>
         <location line="+38"/>
         <location line="+4"/>
-        <location line="+109"/>
+        <location line="+108"/>
         <source>Wallet encryption failed</source>
         <translation>Wallet encryption failed</translation>
     </message>
@@ -508,7 +508,7 @@ for staking</source>
         <translation>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</translation>
     </message>
     <message>
-        <location line="-151"/>
+        <location line="-150"/>
         <location line="+42"/>
         <source>The supplied passphrases do not match.</source>
         <translation>The supplied passphrases do not match.</translation>
@@ -538,7 +538,7 @@ for staking</source>
         <translation>Wallet passphrase was successfully changed.</translation>
     </message>
     <message>
-        <location line="+43"/>
+        <location line="+42"/>
         <location line="+26"/>
         <source>Warning: The Caps Lock key is on!</source>
         <translation>Warning: The Caps Lock key is on!</translation>
@@ -1060,12 +1060,12 @@ for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+62"/>
+        <location line="+65"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1084,38 +1084,27 @@ for staking</source>
     </message>
     <message>
         <location line="+13"/>
-        <location line="+117"/>
+        <location line="+123"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-44"/>
-        <location line="+25"/>
-        <source>PushButton</source>
+        <location line="+331"/>
+        <source>Total Staking:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="-214"/>
         <source>Owner Address (optional, if empty a new address will be created)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+164"/>
+        <location line="+191"/>
         <source>List of delegated balance by address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
-        <source>Total</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+28"/>
-        <source>Unconfirmed balance will not be shown</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+155"/>
+        <location line="+168"/>
         <source>No balance delegated</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1176,17 +1165,22 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+128"/>
+        <location line="+124"/>
         <source>Total Staking: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+19"/>
         <source>Error loading delegations: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
+        <source>No receive addresses available, you can go to the receive screen and create some there!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1201,12 +1195,12 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
-        <source>Invalid entry, minimum delegable amount is 10 PIV</source>
+        <location line="+10"/>
+        <source>Invalid entry, minimum delegable amount is </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>Owner address invalid</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1232,7 +1226,7 @@ Do you wish to proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+22"/>
         <source>Cannot create transaction.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1379,17 +1373,12 @@ address</source>
         <translation type="unfinished">Warning</translation>
     </message>
     <message>
-        <location line="+158"/>
+        <location line="+161"/>
         <source>No transactions</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+32"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+58"/>
+        <location line="+93"/>
         <location filename="../pivx/dashboardwidget.cpp" line="+49"/>
         <source>Staking Rewards</source>
         <translation type="unfinished"></translation>
@@ -1398,12 +1387,12 @@ address</source>
         <location line="+7"/>
         <location line="+48"/>
         <location line="+10"/>
-        <location line="+728"/>
+        <location line="+746"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-650"/>
+        <location line="-668"/>
         <source>Staking statistics</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1418,22 +1407,22 @@ address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+212"/>
+        <location line="+218"/>
         <source>Sort by</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+30"/>
         <source>Days</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Months</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+34"/>
         <source>Years</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1443,7 +1432,7 @@ address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+211"/>
+        <location line="+214"/>
         <source>LabelText</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1535,17 +1524,17 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+23"/>
-        <location line="+236"/>
+        <location line="+235"/>
         <source>You have no staking rewards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-234"/>
+        <location line="-233"/>
         <source>No charts library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+234"/>
+        <location line="+233"/>
         <source>Loading chart..</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1580,17 +1569,17 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+66"/>
         <source>Text Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+59"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>SAVE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1608,12 +1597,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
+        <location line="+66"/>
         <source>This will unlock your wallet fully, so that anyone with access to it can spend until the wallet is closed or locked again.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1663,12 +1647,12 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+52"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>SAVE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2055,7 +2039,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+179"/>
+        <location line="+182"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2070,17 +2054,17 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+113"/>
+        <location line="+116"/>
         <source>Intro</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+44"/>
         <source>Name</source>
         <translation type="unfinished">Name</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>Address</source>
         <translation type="unfinished">Address</translation>
     </message>
@@ -2130,17 +2114,17 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+86"/>
+        <location line="+89"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pivx/masternodewizarddialog.cpp" line="+50"/>
+        <location filename="../pivx/masternodewizarddialog.cpp" line="+51"/>
         <source>e.g user_masternode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2155,7 +2139,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+82"/>
         <source>address label cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2190,7 +2174,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+32"/>
         <source>Master node created!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2200,7 +2184,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+51"/>
         <source>The recipient address is not valid, please recheck.</source>
         <translation type="unfinished">The recipient address is not valid, please recheck.</translation>
     </message>
@@ -2264,13 +2248,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+151"/>
+        <location line="+154"/>
         <source>No active Master Node yet</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+49"/>
-        <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2407,7 +2386,7 @@ Are you sure?</source>
     </message>
     <message>
         <location line="+7"/>
-        <location line="+121"/>
+        <location line="+124"/>
         <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2427,7 +2406,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+73"/>
+        <location line="+76"/>
         <source>Output index:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2483,7 +2462,7 @@ Are you sure?</source>
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+273"/>
+        <location line="+276"/>
         <source>V 1.0.0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3173,10 +3152,10 @@ Address: %4
     </message>
     <message>
         <location line="+13"/>
-        <location line="+117"/>
+        <location line="+123"/>
         <location line="+53"/>
-        <location line="+83"/>
-        <location line="+254"/>
+        <location line="+86"/>
+        <location line="+257"/>
         <location line="+7"/>
         <location line="+14"/>
         <location line="+7"/>
@@ -3196,14 +3175,14 @@ Address: %4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-588"/>
-        <location line="+25"/>
-        <location line="+116"/>
+        <location line="-597"/>
+        <location line="+28"/>
+        <location line="+119"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+180"/>
+        <location line="+183"/>
         <source>No active Master Node yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3304,7 +3283,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+19"/>
         <source>You don&apos;t have any PIV to select.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3426,12 +3405,12 @@ transaction history, making transactions untraceable </source>
         <translation>Amount</translation>
     </message>
     <message>
-        <location filename="../guiutil.cpp" line="+141"/>
+        <location filename="../guiutil.cpp" line="+143"/>
         <source>Enter a PIVX address (e.g. %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+777"/>
+        <location line="+783"/>
         <source>%1 d</source>
         <translation>%1 d</translation>
     </message>
@@ -4080,22 +4059,17 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+63"/>
+        <location line="+104"/>
         <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+50"/>
+        <location line="+53"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4122,19 +4096,19 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+31"/>
         <location filename="../pivx/receivewidget.cpp" line="-150"/>
         <source>Add Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <location filename="../pivx/receivewidget.cpp" line="+4"/>
         <source>Generate Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+10"/>
         <location filename="../pivx/receivewidget.cpp" line="+4"/>
         <source>Copy</source>
         <translation type="unfinished"></translation>
@@ -4259,12 +4233,12 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+81"/>
-        <location filename="../pivx/requestdialog.cpp" line="+26"/>
+        <location filename="../pivx/requestdialog.cpp" line="+25"/>
         <source>New Request Payment</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+115"/>
+        <location line="+118"/>
         <source>Lorem ipsum dolor sit amet, consectur cling elit, sed do </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4301,12 +4275,12 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+54"/>
+        <location line="+57"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>REQUEST</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4326,7 +4300,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+11"/>
         <source>Description (optional)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4355,6 +4329,11 @@ transaction history, making transactions untraceable </source>
         <source>New Cold Staking Address</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location line="+1"/>
+        <source>Amount (optional)</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>SendChangeAddressDialog</name>
@@ -4369,22 +4348,17 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+31"/>
+        <location line="+72"/>
         <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+79"/>
+        <location line="+82"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4437,12 +4411,12 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+49"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4485,17 +4459,17 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+261"/>
+        <location line="+264"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pivx/sendmultirow.cpp" line="+23"/>
+        <location filename="../pivx/sendmultirow.cpp" line="+22"/>
         <source>Add address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+12"/>
         <source>Add description</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4767,16 +4741,9 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <location line="+41"/>
         <location line="+7"/>
         <location line="+30"/>
-        <location line="+133"/>
+        <location line="+139"/>
         <location line="+7"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-121"/>
-        <location line="+55"/>
-        <location line="+121"/>
-        <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4858,7 +4825,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
     <message>
         <location line="+51"/>
         <location line="+7"/>
-        <location line="+191"/>
+        <location line="+197"/>
         <location line="+54"/>
         <location line="+327"/>
         <location line="+71"/>
@@ -4868,15 +4835,12 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-685"/>
-        <location line="+25"/>
-        <location line="+409"/>
-        <location line="+336"/>
+        <location line="-251"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-509"/>
+        <location line="-173"/>
         <source>Decrypt Address Result</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4888,7 +4852,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
     </message>
     <message>
         <location line="+75"/>
-        <location line="+336"/>
+        <location line="+339"/>
         <source>Clear</source>
         <translation type="unfinished">Clear</translation>
     </message>
@@ -5106,7 +5070,7 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+137"/>
+        <location line="+142"/>
         <source>Welcome to the PIVX RPC console.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5139,24 +5103,18 @@ Verify that you have installed a predetermined text editor.</source>
         <location line="+32"/>
         <location line="+56"/>
         <location line="+56"/>
-        <location line="+91"/>
+        <location line="+94"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-31"/>
-        <location line="+134"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-48"/>
+        <location line="+58"/>
         <location filename="../pivx/settings/settingsdisplayoptionswidget.cpp" line="+97"/>
         <source>Reset to default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5220,69 +5178,69 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+47"/>
-        <location line="+329"/>
+        <location line="+359"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-309"/>
-        <location line="+332"/>
+        <location line="-339"/>
+        <location line="+365"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-250"/>
+        <location line="-280"/>
         <source>1) What is PIVX?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+31"/>
         <source>2) Why are my PIV unspendable?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>3) PIVX privacy? What is Zerocoin (zPIV)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>4) Why are my zPIV unspendable?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>5) Why did my wallet convert the balance
     into zPIV automatically?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+23"/>
         <source>6) How do I receive PIV/zPIV?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>7) How do I stake PIV/zPIV?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>8) Where I should go if I need support?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>9) What is a Master Node?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>10) What is a Master Node Controller?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+192"/>
+        <location line="+195"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5486,10 +5444,10 @@ Verify that you have installed a predetermined text editor.</source>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
                            We have support channels in most of our official chat groups, for example
-                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://Discord.PIVX.com&apos;&gt;
+                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://discord.PIVX.org&apos;&gt;
                            #support in our Discord&lt;/a&gt;.
                            If you prefer to submit a ticket, One can be
-                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://PIVX.FreshDesk.com&apos;&gt;
+                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://PIVX.freshdesk.com&apos;&gt;
                            our Freshdesk support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
@@ -5591,7 +5549,7 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+46"/>
-        <location line="+152"/>
+        <location line="+161"/>
         <location line="+24"/>
         <location line="+7"/>
         <location line="+26"/>
@@ -5619,7 +5577,7 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-530"/>
+        <location line="-536"/>
         <location filename="../pivx/settings/settingsinformationwidget.cpp" line="+96"/>
         <source>Network Monitor</source>
         <translation type="unfinished"></translation>
@@ -5772,18 +5730,18 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+37"/>
+        <location line="+40"/>
         <location filename="../pivx/settings/settingsmainoptionswidget.cpp" line="+81"/>
         <source>Reset to default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>Discard changes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+38"/>
         <location filename="../pivx/settings/settingsmainoptionswidget.cpp" line="-1"/>
         <source>SAVE</source>
         <translation type="unfinished"></translation>
@@ -5850,19 +5808,19 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+107"/>
+        <location line="+110"/>
         <location line="+64"/>
         <location line="+58"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+68"/>
+        <location line="+71"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+22"/>
         <source>SAVE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5901,7 +5859,7 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+219"/>
+        <location line="+228"/>
         <source>No active Master Node yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6029,7 +5987,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     <message>
         <location line="+64"/>
         <location line="+7"/>
-        <location line="+188"/>
+        <location line="+194"/>
         <location line="+59"/>
         <location line="+80"/>
         <location line="+23"/>
@@ -6037,14 +5995,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-273"/>
-        <location line="+25"/>
-        <location line="+317"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-19"/>
+        <location line="+53"/>
         <source>Clear</source>
         <translation type="unfinished">Clear</translation>
     </message>
@@ -6096,17 +6047,17 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     </message>
     <message>
         <location line="+9"/>
-        <location line="+36"/>
+        <location line="+41"/>
         <source>SIGN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="-40"/>
         <source>CLEAR ALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+34"/>
+        <location line="+39"/>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation type="unfinished">You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</translation>
     </message>
@@ -6223,19 +6174,14 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+136"/>
+        <location line="+139"/>
         <location filename="../pivx/settings/settingswalletoptionswidget.cpp" line="+69"/>
         <source>Reset to default</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>Discard changes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+35"/>
-        <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6319,25 +6265,14 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     <message>
         <location line="+94"/>
         <location line="+7"/>
-        <location line="+61"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+68"/>
+        <location line="+64"/>
+        <location line="+65"/>
+        <location line="+65"/>
+        <location line="+65"/>
+        <location line="+65"/>
+        <location line="+65"/>
+        <location line="+71"/>
         <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-387"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <location line="+62"/>
-        <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -6459,83 +6394,83 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+152"/>
+        <location line="+155"/>
         <source>Wallet Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
-        <location line="+246"/>
+        <location line="+48"/>
+        <location line="+267"/>
         <source>Wallet</source>
         <translation type="unfinished">Wallet</translation>
     </message>
     <message>
-        <location line="-221"/>
+        <location line="-239"/>
         <source>Multisend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Sign/Verify Message</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>BIP38 Tool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>Options</source>
         <translation type="unfinished">Options</translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+53"/>
+        <location line="+59"/>
         <source>Display</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>Debug</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+31"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+28"/>
         <source>Wallet Repair</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+42"/>
         <source>Help</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+48"/>
         <source>FAQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+31"/>
         <source>About PIVX</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6772,12 +6707,12 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../pivx/topbar.cpp" line="+232"/>
+        <location filename="../pivx/topbar.cpp" line="+240"/>
         <source>Wallet Unlocked for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+28"/>
         <source>Error generating address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7319,7 +7254,7 @@ Are you sure?
         <translation>(n/a)</translation>
     </message>
     <message>
-        <location line="+215"/>
+        <location line="+210"/>
         <source>Transaction status. Hover over this field to show number of confirmations.</source>
         <translation>Transaction status. Hover over this field to show number of confirmations.</translation>
     </message>
@@ -7352,18 +7287,18 @@ Are you sure?
 <context>
     <name>TxDetailDialog</name>
     <message>
-        <location filename="../pivx/forms/sendconfirmdialog.ui" line="+20"/>
+        <location filename="../pivx/forms/sendconfirmdialog.ui" line="+26"/>
         <source>Form</source>
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+90"/>
         <location filename="../pivx/sendconfirmdialog.cpp" line="+74"/>
         <source>Transaction Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+160"/>
+        <location line="+163"/>
         <source>ID:</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7373,7 +7308,7 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+69"/>
+        <location line="+72"/>
         <source>Sending to: </source>
         <translation type="unfinished"></translation>
     </message>
@@ -7383,7 +7318,7 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+93"/>
+        <location line="+96"/>
         <source>Total amount</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7403,7 +7338,7 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+47"/>
+        <location line="+50"/>
         <source>Previous Transaction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7478,12 +7413,12 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+51"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7516,7 +7451,7 @@ Are you sure?
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+90"/>
+        <location line="+93"/>
         <source>Received from Bob</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7534,7 +7469,7 @@ Are you sure?
 <context>
     <name>WalletModel</name>
     <message>
-        <location filename="../walletmodel.cpp" line="+429"/>
+        <location filename="../walletmodel.cpp" line="+434"/>
         <location line="+9"/>
         <location line="+9"/>
         <source>Send Coins</source>
@@ -7556,28 +7491,23 @@ Are you sure?
     </message>
     <message>
         <location line="+81"/>
-        <location line="+112"/>
+        <location line="+115"/>
         <location line="+113"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-187"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+31"/>
+        <location line="-156"/>
         <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+219"/>
+        <location line="+222"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+16"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7590,42 +7520,42 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+227"/>
+        <location line="+230"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+86"/>
         <source>2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+86"/>
         <source>3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+83"/>
+        <location line="+86"/>
         <source>4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+111"/>
+        <location line="+114"/>
         <source>Language</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+44"/>
         <source>Welcome</source>
         <translation type="unfinished">Welcome</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>Privacy</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+41"/>
         <source>Masternodes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -9428,10 +9358,10 @@ PIVX Core Wallet</source>
     </message>
     <message>
         <location line="+10"/>
-        <location line="+107"/>
+        <location line="+113"/>
         <location line="+50"/>
         <location line="+23"/>
-        <location line="+271"/>
+        <location line="+280"/>
         <location line="+7"/>
         <location line="+65"/>
         <location line="+7"/>
@@ -9439,13 +9369,10 @@ PIVX Core Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-467"/>
-        <location line="+25"/>
-        <location line="+210"/>
+        <location line="-238"/>
+        <location line="+29"/>
         <location line="+26"/>
-        <location line="+23"/>
-        <location line="+230"/>
-        <location line="+104"/>
+        <location line="+340"/>
         <source>PushButton</source>
         <translation type="unfinished"></translation>
     </message>

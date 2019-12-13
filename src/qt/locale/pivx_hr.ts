@@ -1,5 +1,65 @@
 <TS language="hr" version="2.1">
 <context>
+    <name>AddNewAddressDialog</name>
+    <message>
+        <source>My Address</source>
+        <translation>Moja adresa</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Adresa</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+</context>
+<context>
+    <name>AddNewContactDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+    <message>
+        <source>Edit Contact</source>
+        <translation>Uredi Kontakt</translation>
+    </message>
+    <message>
+        <source>Set a label for the selected address</source>
+        <translation>Postavi oznaku za označenu adresu</translation>
+    </message>
+    <message>
+        <source>Enter a name for the address (e.g Exchange)</source>
+        <translation>Unesi ime za adresu (npr. Mjenjačnica)</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+    <message>
+        <source>Edit label for the selected address:
+%1</source>
+        <translation>Uredi oznaku za označenu adresu:
+%1</translation>
+    </message>
+</context>
+<context>
     <name>AddressBookPage</name>
     <message>
         <source>Right-click to edit address or label</source>
@@ -39,7 +99,7 @@
     </message>
     <message>
         <source>C&amp;lose</source>
-        <translation>&amp;Zatvori</translation>
+        <translation>Z&amp;atvori</translation>
     </message>
     <message>
         <source>Choose the address to send coins to</source>
@@ -51,7 +111,7 @@
     </message>
     <message>
         <source>C&amp;hoose</source>
-        <translation>Izaberi</translation>
+        <translation>O&amp;daberi</translation>
     </message>
     <message>
         <source>Sending addresses</source>
@@ -99,6 +159,21 @@
     </message>
 </context>
 <context>
+    <name>AddressLabelRow</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Bob Allen</source>
+        <translation>Bob Allen</translation>
+    </message>
+    <message>
+        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
+        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+    </message>
+</context>
+<context>
     <name>AddressTableModel</name>
     <message>
         <source>Label</source>
@@ -109,8 +184,103 @@
         <translation>Adresa</translation>
     </message>
     <message>
+        <source>Date</source>
+        <translation>Datum</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(nema oznake)</translation>
+    </message>
+</context>
+<context>
+    <name>AddressesWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Pošalji</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>No active Master Node yet</source>
+        <translation>Još nema aktivnih Master Nodeova</translation>
+    </message>
+    <message>
+        <source>Contact name</source>
+        <translation>Ime kontakta</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation>Unesi adresu</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+    <message>
+        <source>Contacts</source>
+        <translation>Kontakti</translation>
+    </message>
+    <message>
+        <source>No contacts yet</source>
+        <translation>Još nema kontakata</translation>
+    </message>
+    <message>
+        <source>e.g. John Doe</source>
+        <translation>npr. Ivan Ivić</translation>
+    </message>
+    <message>
+        <source>Enter a PIVX address</source>
+        <translation>Unesite PIVX adresu</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+    <message>
+        <source>Invalid Contact Address</source>
+        <translation>Pogrešna adresa kontakta</translation>
+    </message>
+    <message>
+        <source>Cannot store your own address as contact</source>
+        <translation>Ne možete spremiti vlastitu adresu kao kontakt</translation>
+    </message>
+    <message>
+        <source>Address already stored, label: %1</source>
+        <translation>Adresa je već spremljena, oznaka: %1</translation>
+    </message>
+    <message>
+        <source>New Contact Stored</source>
+        <translation>Novi kontakt spremljen</translation>
+    </message>
+    <message>
+        <source>Error Storing Contact</source>
+        <translation>Greška pri spremanju kontakta</translation>
+    </message>
+    <message>
+        <source>Contact edited</source>
+        <translation>Kontakt izmijenjen.</translation>
+    </message>
+    <message>
+        <source>Contact edit failed</source>
+        <translation>Neuspjelo uređivanje kontakta</translation>
+    </message>
+    <message>
+        <source>Delete Contact</source>
+        <translation>Izbriši kontakt</translation>
+    </message>
+    <message>
+        <source>Contact Deleted</source>
+        <translation>Kontakt izbrisan</translation>
+    </message>
+    <message>
+        <source>Address copied</source>
+        <translation>Adresa kopirana</translation>
     </message>
 </context>
 <context>
@@ -120,20 +290,12 @@
         <translation>Dijalog zaporke</translation>
     </message>
     <message>
-        <source>Enter passphrase</source>
-        <translation>Unesite zaporku</translation>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>New passphrase</source>
-        <translation>Nova zaporka</translation>
-    </message>
-    <message>
-        <source>Repeat new passphrase</source>
-        <translation>Ponovite novu zaporku</translation>
-    </message>
-    <message>
-        <source>Serves to disable the trivial sendmoney when OS account compromised. Provides no real security.</source>
-        <translation>Služi za onemogućavanje trivijalnog slanja novca kada je OS račun ugrožen. Ne pruža nikakvu stvarnu sigurnost</translation>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
     </message>
     <message>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
@@ -172,6 +334,14 @@
         <translation>Potvrdite šifriranje novčanika</translation>
     </message>
     <message>
+        <source>ENCRYPT</source>
+        <translation>ŠIFRIRAJ</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
         <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
         <translation>PIVX se sada zatvara kako bi dovršio proces šifriranja. Ne zaboravite da šifriranje vašeg novčanika ne može u potpunosti zaštititi vaše PIV od krađe zlonamjernog softvera koji zarazi vaše računalo.</translation>
     </message>
@@ -181,7 +351,7 @@
     </message>
     <message>
         <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
-        <translation>Upozorenje: Ako šifrirate svoj novčanik i izgubite vašu zaporku, vi ćete1 IZGUBITI ĆE TE SAV VAŠ PIV1!</translation>
+        <translation>Upozorenje: Ako šifrirate svoj novčanik i izgubite vašu zaporku, vi ćete &lt;b&gt;IZGUBITI ĆE TE SAV VAŠ PIV&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -194,6 +364,10 @@
     <message>
         <source>Wallet encryption failed</source>
         <translation>Šifriranje novčanika nije uspjelo</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
     </message>
     <message>
         <source>Wallet encryption failed due to an internal error. Your wallet was not encrypted.</source>
@@ -228,504 +402,6 @@
     <name>BanTableModel</name>
     </context>
 <context>
-    <name>Bip38ToolDialog</name>
-    <message>
-        <source>BIP 38 Tool</source>
-        <translation>BIP 38 Alat</translation>
-    </message>
-    <message>
-        <source>&amp;BIP 38 Encrypt</source>
-        <translation>&amp;BIP 38 Šifriranje</translation>
-    </message>
-    <message>
-        <source>Address:</source>
-        <translation>Adresa:</translation>
-    </message>
-    <message>
-        <source>Choose previously used address</source>
-        <translation>Odaberi prethodno korištenu adresu</translation>
-    </message>
-    <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
-    </message>
-    <message>
-        <source>Paste address from clipboard</source>
-        <translation>Zaljepi adresu iz međuspremnika</translation>
-    </message>
-    <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    <message>
-        <source>Passphrase: </source>
-        <translation>Zaporka:</translation>
-    </message>
-    <message>
-        <source>Encrypted Key:</source>
-        <translation>Šifrirani ključ:</translation>
-    </message>
-    <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>Kopirajte trenutačni potpis u međuspremnik sustava</translation>
-    </message>
-    <message>
-        <source>Reset all fields</source>
-        <translation>Resetiraj sva polja</translation>
-    </message>
-    <message>
-        <source>The encrypted private key</source>
-        <translation>Šifrirani privatni ključ</translation>
-    </message>
-    <message>
-        <source>Decrypt the entered key using the passphrase</source>
-        <translation>Dešifriraj uneseni ključ pomoću zaporke</translation>
-    </message>
-    <message>
-        <source>Encrypt &amp;Key</source>
-        <translation>Šifriranje &amp;Ključ</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Očistiti &amp;Sve</translation>
-    </message>
-    <message>
-        <source>&amp;BIP 38 Decrypt</source>
-        <translation>&amp; BIP 38 Dešifriranje</translation>
-    </message>
-    <message>
-        <source>Enter the BIP 38 encrypted private key. Enter the passphrase in the middle box. Click Decrypt Key to compute the private key. After the key is decrypted, clicking 'Import Address' will add this private key to the wallet.</source>
-        <translation>Unesite BIP 38 šifrirani privatni ključ. Unesite zaporku u srednji okvir. Pritisnite Dešifrujte Ključ da biste izračunali privatni ključ. Nakon dešifriranja ključa, klikom na "Import Address" dodati će taj privatni ključ u novčanik.</translation>
-    </message>
-    <message>
-        <source>Decrypt &amp;Key</source>
-        <translation>Dešifrujte &amp;Kljuc</translation>
-    </message>
-    <message>
-        <source>Decrypted Key:</source>
-        <translation>Dešifrirani Kljuc:</translation>
-    </message>
-    <message>
-        <source>Import Address</source>
-        <translation>Importiraj adresu</translation>
-    </message>
-    <message>
-        <source>Click "Decrypt Key" to compute key</source>
-        <translation>Pritisnite "Dešifrujte Ključ" za izračunavanje ključa</translation>
-    </message>
-    <message>
-        <source>The entered passphrase is invalid. </source>
-        <translation>Utipkana šifra nije važeča</translation>
-    </message>
-    <message>
-        <source>Allowed: 0-9,a-z,A-Z,</source>
-        <translation>Dozvoljeno: 0-9,a-z,A-Z,</translation>
-    </message>
-    <message>
-        <source>The entered address is invalid.</source>
-        <translation>Utipkana adresa nije važeča</translation>
-    </message>
-    <message>
-        <source>Please check the address and try again.</source>
-        <translation>Molimo da provjerite adresu i probajte isponova</translation>
-    </message>
-    <message>
-        <source>The entered address does not refer to a key.</source>
-        <translation>Unesena adresa ne odnosi se na ključ.</translation>
-    </message>
-    <message>
-        <source>Wallet unlock was cancelled.</source>
-        <translation>Otklučavanje novčanika ukinuto</translation>
-    </message>
-    <message>
-        <source>Private key for the entered address is not available.</source>
-        <translation>Privatni ključ za unesenu adresu nije dostupan.</translation>
-    </message>
-    <message>
-        <source>Failed to decrypt.</source>
-        <translation>Nije uspjelo dešifriranje.</translation>
-    </message>
-    <message>
-        <source>Please check the key and passphrase and try again.</source>
-        <translation>Molimo vas provjerite ključ i zaporku i pokušajte ponovo.</translation>
-    </message>
-    <message>
-        <source>Data Not Valid.</source>
-        <translation>Podaci nisu važeći.</translation>
-    </message>
-    <message>
-        <source>Please try again.</source>
-        <translation>Moli te ponovi</translation>
-    </message>
-    <message>
-        <source>Please wait while key is imported</source>
-        <translation>Pričekajte dok se ključevi importiraju</translation>
-    </message>
-    <message>
-        <source>Key Already Held By Wallet</source>
-        <translation>Ključ već pohranjen novčanikom</translation>
-    </message>
-    <message>
-        <source>Error Adding Key To Wallet</source>
-        <translation>Greška kod dodavanja ključa u novčanik</translation>
-    </message>
-    <message>
-        <source>Successfully Added Private Key To Wallet</source>
-        <translation>Uspješno dodan privatni ključ na novčanik</translation>
-    </message>
-</context>
-<context>
-    <name>BitcoinGUI</name>
-    <message>
-        <source>Wallet</source>
-        <translation>Novčanik</translation>
-    </message>
-    <message>
-        <source>Node</source>
-        <translation>Čvor</translation>
-    </message>
-    <message>
-        <source>&amp;Overview</source>
-        <translation>&amp;Pregled</translation>
-    </message>
-    <message>
-        <source>Show general overview of wallet</source>
-        <translation>Pokaži opći pregled novčanika</translation>
-    </message>
-    <message>
-        <source>&amp;Send</source>
-        <translation>&amp;Pošalji</translation>
-    </message>
-    <message>
-        <source>&amp;Receive</source>
-        <translation>&amp;Primite</translation>
-    </message>
-    <message>
-        <source>&amp;Transactions</source>
-        <translation>&amp;Transakcije</translation>
-    </message>
-    <message>
-        <source>Browse transaction history</source>
-        <translation>Pregledajte povijest transakcija</translation>
-    </message>
-    <message>
-        <source>Privacy Actions for zPIV</source>
-        <translation>Aktivnosti na privatnost za zPIV</translation>
-    </message>
-    <message>
-        <source>E&amp;xit</source>
-        <translation>E&amp;Izlaz</translation>
-    </message>
-    <message>
-        <source>Quit application</source>
-        <translation>Napusti aplikaciju</translation>
-    </message>
-    <message>
-        <source>About &amp;Qt</source>
-        <translation>O &amp;Qt</translation>
-    </message>
-    <message>
-        <source>Show information about Qt</source>
-        <translation>Prikaži informacije o Qt</translation>
-    </message>
-    <message>
-        <source>&amp;Options...</source>
-        <translation>&amp;Opcije ...</translation>
-    </message>
-    <message>
-        <source>&amp;Show / Hide</source>
-        <translation>&amp;Prikaži / Sakrij</translation>
-    </message>
-    <message>
-        <source>Show or hide the main Window</source>
-        <translation>Prikaži ili sakrij glavni prozor</translation>
-    </message>
-    <message>
-        <source>&amp;Encrypt Wallet...</source>
-        <translation>&amp;Šifrirajte novčanik ...</translation>
-    </message>
-    <message>
-        <source>Encrypt the private keys that belong to your wallet</source>
-        <translation>Šifriranje privatnih ključeva koji pripadaju vašem novčaniku</translation>
-    </message>
-    <message>
-        <source>&amp;Backup Wallet...</source>
-        <translation>Sigurnosna kopija novčanika ...</translation>
-    </message>
-    <message>
-        <source>Backup wallet to another location</source>
-        <translation>Sigurnosna kopija novčanika na drugu lokaciju</translation>
-    </message>
-    <message>
-        <source>&amp;Change Passphrase...</source>
-        <translation>&amp; Promijeni zaporku ...</translation>
-    </message>
-    <message>
-        <source>Change the passphrase used for wallet encryption</source>
-        <translation>Promjena zaporke koja se koristi za šifriranje novčanika.</translation>
-    </message>
-    <message>
-        <source>&amp;Unlock Wallet...</source>
-        <translation>&amp; Otključaj novčanik ...</translation>
-    </message>
-    <message>
-        <source>Unlock wallet</source>
-        <translation>Otključaj novčanik</translation>
-    </message>
-    <message>
-        <source>&amp;Lock Wallet</source>
-        <translation>&amp; Zaključaj novčanik</translation>
-    </message>
-    <message>
-        <source>Sign &amp;message...</source>
-        <translation>Prijava i poruka ...</translation>
-    </message>
-    <message>
-        <source>&amp;Verify message...</source>
-        <translation>&amp; Potvrdite poruku ...</translation>
-    </message>
-    <message>
-        <source>&amp;Information</source>
-        <translation>&amp;Informacije</translation>
-    </message>
-    <message>
-        <source>Show diagnostic information</source>
-        <translation>Prikaz dijagnostičkih podataka</translation>
-    </message>
-    <message>
-        <source>&amp;Debug console</source>
-        <translation>&amp;Konzola za uklanjanje pogrešaka</translation>
-    </message>
-    <message>
-        <source>Open debugging console</source>
-        <translation>Otvorite konzolu za uklanjanje pogrešaka</translation>
-    </message>
-    <message>
-        <source>&amp;Network Monitor</source>
-        <translation>&amp; Monitor mreže</translation>
-    </message>
-    <message>
-        <source>Show network monitor</source>
-        <translation>Prikaži mrežni monitor</translation>
-    </message>
-    <message>
-        <source>&amp;Peers list</source>
-        <translation>&amp; Popis suradnika</translation>
-    </message>
-    <message>
-        <source>Show peers info</source>
-        <translation>Prikaži podatke o suradnicima</translation>
-    </message>
-    <message>
-        <source>Wallet &amp;Repair</source>
-        <translation>Novčanik i popravak</translation>
-    </message>
-    <message>
-        <source>Show wallet repair options</source>
-        <translation>Prikaz opcija popravka novčanika</translation>
-    </message>
-    <message>
-        <source>Open configuration file</source>
-        <translation>Otvori konfiguracijsku datoteku</translation>
-    </message>
-    <message>
-        <source>Show Automatic &amp;Backups</source>
-        <translation>Prikaži automatsko i sigurnosno kopiranje</translation>
-    </message>
-    <message>
-        <source>Show automatically created wallet backups</source>
-        <translation>Prikaži automatski stvorene sigurnosne kopije za novčanik.</translation>
-    </message>
-    <message>
-        <source>&amp;Sending addresses...</source>
-        <translation>&amp; Slanje adresa ...</translation>
-    </message>
-    <message>
-        <source>Show the list of used sending addresses and labels</source>
-        <translation>Prikaz popisa upotrijebljenih poslanih adresa i oznaka</translation>
-    </message>
-    <message>
-        <source>&amp;Receiving addresses...</source>
-        <translation>Primanje adresa ...</translation>
-    </message>
-    <message>
-        <source>Show the list of used receiving addresses and labels</source>
-        <translation>Prikaz popisa upotrijebljenih primljenih adresa i oznaka</translation>
-    </message>
-    <message>
-        <source>&amp;Multisignature creation...</source>
-        <translation>&amp; Stvaranje višestruke oznake ...</translation>
-    </message>
-    <message>
-        <source>Create a new multisignature address and add it to this wallet</source>
-        <translation>Izradite novu adresu s višestrukim adresama i dodajte je u taj novčanik</translation>
-    </message>
-    <message>
-        <source>&amp;Multisignature spending...</source>
-        <translation>&amp; Izdaci za više osoba ...</translation>
-    </message>
-    <message>
-        <source>Spend from a multisignature address</source>
-        <translation>Potrošite s adrese s više adresa</translation>
-    </message>
-    <message>
-        <source>&amp;Multisignature signing...</source>
-        <translation>Potpisivanje više znakova ...</translation>
-    </message>
-    <message>
-        <source>Sign with a multisignature address</source>
-        <translation>Prijavite se s adresom s više adresa</translation>
-    </message>
-    <message>
-        <source>Open &amp;URI...</source>
-        <translation>Otvori &amp; URI ...</translation>
-    </message>
-    <message>
-        <source>&amp;Command-line options</source>
-        <translation>&amp;Opcije-naredbene linije</translation>
-    </message>
-    <message>
-        <source>Synchronizing additional data: %p%</source>
-        <translation>Usklađivanje dodatnih podataka: %p%</translation>
-    </message>
-    <message>
-        <source>%1 behind. Scanning block %2</source>
-        <translation>%1 iza. Skeniranje blokiranjem %2</translation>
-    </message>
-    <message>
-        <source>Tor is &lt;b&gt;enabled&lt;/b&gt;: %1</source>
-        <translation>Tor je &lt;b&gt; omogućen &lt;b&gt;: %1</translation>
-    </message>
-    <message>
-        <source>&amp;File</source>
-        <translation>&amp;Datoteka</translation>
-    </message>
-    <message>
-        <source>&amp;Settings</source>
-        <translation>&amp; Postavke</translation>
-    </message>
-    <message>
-        <source>&amp;Tools</source>
-        <translation>&amp;Alati</translation>
-    </message>
-    <message>
-        <source>&amp;Help</source>
-        <translation>&amp;Pomoc</translation>
-    </message>
-    <message>
-        <source>Tabs toolbar</source>
-        <translation>Alatna traka kartica</translation>
-    </message>
-    <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
-    </message>
-    <message>
-        <source>Send coins to a PIVX address</source>
-        <translation>Pošaljite kovanice na PIVX adresu</translation>
-    </message>
-    <message>
-        <source>Request payments (generates QR codes and pivx: URIs)</source>
-        <translation>Zahtjev za plaćanja (generira QR kodove i pivx: URI)</translation>
-    </message>
-    <message>
-        <source>&amp;Privacy</source>
-        <translation>&amp;Privatnost</translation>
-    </message>
-    <message>
-        <source>&amp;Masternodes</source>
-        <translation>&amp;Masternode</translation>
-    </message>
-    <message>
-        <source>Browse masternodes</source>
-        <translation>Pregledajte masternode</translation>
-    </message>
-    <message>
-        <source>&amp;About PIVX Core</source>
-        <translation>&amp; O PIVX Coreu</translation>
-    </message>
-    <message>
-        <source>Show information about PIVX Core</source>
-        <translation>Prikaz informacija o PIVX Coreu</translation>
-    </message>
-    <message>
-        <source>Modify configuration options for PIVX</source>
-        <translation>Izmijenite opcije konfiguracije za PIVX</translation>
-    </message>
-    <message>
-        <source>Sign messages with your PIVX addresses to prove you own them</source>
-        <translation>Potpišite poruke s vašim PIVX adresama kako biste dokazali da ih posjedujete</translation>
-    </message>
-    <message>
-        <source>Verify messages to ensure they were signed with specified PIVX addresses</source>
-        <translation>Potvrdite poruke kako biste bili sigurni da su potpisani s određenim PIVX adresama</translation>
-    </message>
-    <message>
-        <source>&amp;BIP38 tool</source>
-        <translation>&amp;BIP38 alat</translation>
-    </message>
-    <message>
-        <source>Encrypt and decrypt private keys using a passphrase</source>
-        <translation>Šifriranje i dešifriranje privatnih ključeva pomoću zaporke</translation>
-    </message>
-    <message>
-        <source>&amp;MultiSend</source>
-        <translation>&amp;MultiSend</translation>
-    </message>
-    <message>
-        <source>MultiSend Settings</source>
-        <translation>MultiSend postavke</translation>
-    </message>
-    <message>
-        <source>Open Wallet &amp;Configuration File</source>
-        <translation>Otvori novčanik i konfiguracijsku datoteku</translation>
-    </message>
-    <message>
-        <source>Open Masternode configuration file</source>
-        <translation>Otvori konfiguracijsku datoteku za Masternode</translation>
-    </message>
-    <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX Core klijent</translation>
-    </message>
-    <message>
-        <source>Importing blocks from disk...</source>
-        <translation>Unos blokova s diska</translation>
-    </message>
-    <message>
-        <source>Up to date</source>
-        <translation>Ažurirano</translation>
-    </message>
-    <message>
-        <source>Error</source>
-        <translation>Greška</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation>Upozorenje</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation>Informacija</translation>
-    </message>
-    <message>
-        <source>Sent transaction</source>
-        <translation>Poslana transakcija</translation>
-    </message>
-    <message>
-        <source>Incoming transaction</source>
-        <translation>Nadolazeća tranksakcija</translation>
-    </message>
-    <message>
-        <source>Active</source>
-        <translation>Aktivan</translation>
-    </message>
-    <message>
-        <source>Not Active</source>
-        <translation>Neaktivan</translation>
-    </message>
-    </context>
-<context>
     <name>BlockExplorer</name>
     <message>
         <source>Back</source>
@@ -743,6 +419,17 @@
         <source>Search</source>
         <translation>Traži</translation>
     </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    </context>
+<context>
+    <name>CSRow</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
     </context>
 <context>
     <name>ClientModel</name>
@@ -754,28 +441,24 @@
         <translation>Količina:</translation>
     </message>
     <message>
-        <source>Amount:</source>
-        <translation>Iznos:</translation>
-    </message>
-    <message>
-        <source>Priority:</source>
-        <translation>Prioritet:</translation>
+        <source>Bytes:</source>
+        <translation>Bajtova:</translation>
     </message>
     <message>
         <source>Fee:</source>
         <translation>Naknada:</translation>
     </message>
     <message>
-        <source>After Fee:</source>
-        <translation>Nakon naknade:</translation>
+        <source>Coin Selection</source>
+        <translation>Odabir novčića</translation>
+    </message>
+    <message>
+        <source>Dust:</source>
+        <translation>Sitniš:</translation>
     </message>
     <message>
         <source>Change:</source>
         <translation>Ostatak:</translation>
-    </message>
-    <message>
-        <source>(un)select all</source>
-        <translation>(od)znači sve</translation>
     </message>
     <message>
         <source>Tree mode</source>
@@ -794,12 +477,32 @@
         <translation>Iznos</translation>
     </message>
     <message>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>0.00 PIV</source>
+        <translation>0.00 PIV</translation>
+    </message>
+    <message>
+        <source>0</source>
+        <translation>0</translation>
+    </message>
+    <message>
+        <source>Received with label</source>
+        <translation>Primljeno s oznakom</translation>
+    </message>
+    <message>
         <source>Received with address</source>
         <translation>Primljeno s adresom</translation>
     </message>
     <message>
-        <source>Type</source>
-        <translation>Tip</translation>
+        <source>OK</source>
+        <translation>U redu</translation>
     </message>
     <message>
         <source>Date</source>
@@ -812,10 +515,6 @@
     <message>
         <source>Confirmed</source>
         <translation>Potvrđeno</translation>
-    </message>
-    <message>
-        <source>Priority</source>
-        <translation>Prioritet</translation>
     </message>
     <message>
         <source>Copy address</source>
@@ -854,8 +553,16 @@
         <translation>Kopiraj nakon naknade</translation>
     </message>
     <message>
+        <source>Copy dust</source>
+        <translation>Kopiraj sitniš:</translation>
+    </message>
+    <message>
         <source>Copy change</source>
         <translation>Kopiraj naknadu</translation>
+    </message>
+    <message>
+        <source>Unselect all</source>
+        <translation>Odznači sve</translation>
     </message>
     <message>
         <source>highest</source>
@@ -898,6 +605,18 @@
         <translation>ne</translation>
     </message>
     <message>
+        <source>This label turns red, if the transaction size is greater than 1000 bytes.</source>
+        <translation>Ova oznaka postaje crvena ako je veličina transakcije veća od 1000 bajtova.</translation>
+    </message>
+    <message>
+        <source>This label turns red, if the priority is smaller than "medium".</source>
+        <translation>Ova oznaka postaje crvena ako je prioritet manji od "srednjeg".</translation>
+    </message>
+    <message>
+        <source>This label turns red, if any recipient receives an amount smaller than %1.</source>
+        <translation>Ova oznaka postaje crvena ako primatelj prima iznos manji od %1.</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(nema oznake)</translation>
     </message>
@@ -907,27 +626,424 @@
     </message>
 </context>
 <context>
+    <name>CoinControlPivWidget</name>
+    <message>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>Quantity:</source>
+        <translation>Količina:</translation>
+    </message>
+    <message>
+        <source>Fee:</source>
+        <translation>Naknada:</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>Iznos</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Oznaka</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Adresa</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Tip</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Datum</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>Potvrde</translation>
+    </message>
+    <message>
+        <source>Bytes:</source>
+        <translation>Bajtova:</translation>
+    </message>
+    <message>
+        <source>Dust:</source>
+        <translation>Sitniš:</translation>
+    </message>
+    <message>
+        <source>Change:</source>
+        <translation>Ostatak:</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+</context>
+<context>
+    <name>ColdStakingWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>No contacts available, you can go to the contacts screen and add some there!</source>
+        <translation>Nema dostupnih kontakata, možete ići na ekran s kontaktima i dodati neke!</translation>
+    </message>
+    <message>
+        <source>Address copied to clipboard</source>
+        <translation>Adresa kopirana u međuspremnik</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopiraj</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Uredi</translation>
+    </message>
+    <message>
+        <source>Address copied</source>
+        <translation>Adresa kopirana</translation>
+    </message>
+    <message>
+        <source>Address label saved</source>
+        <translation>Oznaka adrese spremljena</translation>
+    </message>
+    <message>
+        <source>Error storing address label</source>
+        <translation>Greška pri spremanju oznake</translation>
+    </message>
+</context>
+<context>
+    <name>ContactDropdownRow</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Bob Allen</source>
+        <translation>Bob Allen</translation>
+    </message>
+    <message>
+        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
+        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+    </message>
+</context>
+<context>
+    <name>DashboardWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Transactions</source>
+        <translation>Transakcije</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation>Upozorenje</translation>
+    </message>
+    <message>
+        <source>No transactions</source>
+        <translation>Nema transakcija</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PIV</source>
+        <translation>PIV</translation>
+    </message>
+    <message>
+        <source>zPIV</source>
+        <translation>zPIV</translation>
+    </message>
+    <message>
+        <source>Sort by</source>
+        <translation>Sortiraj po</translation>
+    </message>
+    <message>
+        <source>Days</source>
+        <translation>Dani</translation>
+    </message>
+    <message>
+        <source>Months</source>
+        <translation>Mjeseci</translation>
+    </message>
+    <message>
+        <source>Years</source>
+        <translation>Godine</translation>
+    </message>
+    <message>
+        <source>Filter by</source>
+        <translation>Filtriraj po</translation>
+    </message>
+    <message>
+        <source>LabelText</source>
+        <translation>TekstOznake</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>Sve</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Poslano</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>Izrudareno</translation>
+    </message>
+    <message>
+        <source>MN reward</source>
+        <translation>MN nagrade</translation>
+    </message>
+    <message>
+        <source>No transactions yet</source>
+        <translation>Još nema transakcija</translation>
+    </message>
+    <message>
+        <source>How to get PIV or zPIV</source>
+        <translation>Kako dobiti PIV ili zPIV</translation>
+    </message>
+    <message>
+        <source>Loading chart..</source>
+        <translation>Učitavanje dijagrama...</translation>
+    </message>
+    <message>
+        <source>Error loading chart: %1</source>
+        <translation>Greška pri učitavanju dijagrama: %1</translation>
+    </message>
+</context>
+<context>
+    <name>DefaultDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>Text Label</source>
+        <translation>Tekst oznake</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+</context>
+<context>
+    <name>DenomGenerationDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>5000</source>
+        <translation>5000</translation>
+    </message>
+    <message>
+        <source>100</source>
+        <translation>100</translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation>10</translation>
+    </message>
+    <message>
+        <source>1000</source>
+        <translation>1000</translation>
+    </message>
+    <message>
+        <source>50</source>
+        <translation>50</translation>
+    </message>
+    <message>
+        <source>500</source>
+        <translation>500</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation>5</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>Select All</source>
+        <translation>Označi sve</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+</context>
+<context>
     <name>EditAddressDialog</name>
+    <message>
+        <source>Edit Address</source>
+        <translation>Uredi adresu</translation>
+    </message>
+    <message>
+        <source>&amp;Label</source>
+        <translation>&amp;Oznaka</translation>
+    </message>
+    <message>
+        <source>&amp;Address</source>
+        <translation>&amp;Adresa</translation>
+    </message>
+    <message>
+        <source>New receiving address</source>
+        <translation>Nova adresa za primanje</translation>
+    </message>
+    <message>
+        <source>New sending address</source>
+        <translation>Nova adresa za slanje</translation>
+    </message>
+    <message>
+        <source>Edit receiving address</source>
+        <translation>Uredi adresu za primanje</translation>
+    </message>
+    <message>
+        <source>Edit sending address</source>
+        <translation>Uredi adresu za slanje</translation>
+    </message>
+    <message>
+        <source>Could not unlock wallet.</source>
+        <translation>Ne mogu otključati novčanik.</translation>
+    </message>
     </context>
 <context>
+    <name>ExpandableButton</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+</context>
+<context>
     <name>FreespaceChecker</name>
+    <message>
+        <source>name</source>
+        <translation>ime</translation>
+    </message>
     </context>
 <context>
     <name>GovernancePage</name>
     <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>GOVERNANCE</source>
+        <translation>GLASOVANJE</translation>
+    </message>
+    <message>
+        <source>Next super block:</source>
+        <translation>Sljedeći super blok:</translation>
+    </message>
+    <message>
         <source>0</source>
         <translation>0</translation>
     </message>
-    </context>
+    <message>
+        <source>Days to budget payout (estimate):</source>
+        <translation>Preostalo dana do isplate (procjena):</translation>
+    </message>
+    <message>
+        <source>Allotted budget:</source>
+        <translation>Raspodijeljeno budžeta:</translation>
+    </message>
+    <message>
+        <source>Budget left:</source>
+        <translation>Preostalo budžeta:</translation>
+    </message>
+    <message>
+        <source>Masternodes count:</source>
+        <translation>Broj masternodeova:</translation>
+    </message>
+</context>
 <context>
     <name>HelpMessageDialog</name>
     <message>
         <source>PIVX Core</source>
         <translation>PIVX Core</translation>
     </message>
-    </context>
+    <message>
+        <source>About PIVX Core</source>
+        <translation>O PIVX Core-u</translation>
+    </message>
+    <message>
+        <source>Usage:</source>
+        <translation>Korištenje:</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+</context>
 <context>
     <name>Intro</name>
+    <message>
+        <source>Welcome</source>
+        <translation>Dobrodošli</translation>
+    </message>
+    <message>
+        <source>Welcome to PIVX Core.</source>
+        <translation>Dobrodošli u PIVX Core.</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
     <message>
         <source>PIVX Core</source>
         <translation>PIVX Core</translation>
@@ -938,106 +1054,355 @@
     </message>
     </context>
 <context>
-    <name>MasternodeList</name>
+    <name>LoadingDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>.</source>
+        <translation>.</translation>
+    </message>
+</context>
+<context>
+    <name>LockUnlock</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    </context>
+<context>
+    <name>MNRow</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Address: 88.26.164.88:51474</source>
+        <translation>Adresa: 88.26.164.88:51474</translation>
+    </message>
+    </context>
+<context>
+    <name>MasterNodeWizardDialog</name>
+    <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>Name</source>
+        <translation>Ime</translation>
+    </message>
     <message>
         <source>Address</source>
         <translation>Adresa</translation>
     </message>
     <message>
-        <source>Status</source>
-        <translation>Status</translation>
+        <source>Enter IP address</source>
+        <translation>Unesi IP adresu</translation>
     </message>
     <message>
-        <source>Active</source>
-        <translation>Aktivan</translation>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
     </message>
     <message>
-        <source>0</source>
-        <translation>0</translation>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+    <message>
+        <source>e.g user_masternode</source>
+        <translation>npr. masternode_korisnik</translation>
+    </message>
+    <message>
+        <source>address label cannot be empty</source>
+        <translation>oznaka adrese ne može biti prazna</translation>
+    </message>
+    <message>
+        <source>Prepare master node failed..</source>
+        <translation>Priprema masternodea neuspjela...</translation>
+    </message>
+    <message>
+        <source>Invalid masternode.conf file</source>
+        <translation>Neispravna masternode.conf datoteka</translation>
+    </message>
+    <message>
+        <source>masternode.conf file doesn't exists</source>
+        <translation>masternode.conf datoteka ne postoji</translation>
+    </message>
+    <message>
+        <source>The amount to pay must be larger than 0.</source>
+        <translation>Iznos koji plaćate mora biti veći od 0.</translation>
+    </message>
+    <message>
+        <source>The amount exceeds your balance.</source>
+        <translation>Iznos premašuje vaš saldo.</translation>
+    </message>
+    <message>
+        <source>Error: The wallet was unlocked only to anonymize coins.</source>
+        <translation>Greška. Novčanik je otključan jedino za anonimizaciju novčića.</translation>
     </message>
     </context>
 <context>
-    <name>MultiSendDialog</name>
+    <name>MasterNodesWidget</name>
     <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
+        <source>Form</source>
+        <translation>Obrazac</translation>
     </message>
     <message>
-        <source>Address:</source>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>No active Master Node yet</source>
+        <translation>Još nema aktivnih Master Nodeova</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Izbriši</translation>
+    </message>
+    <message>
+        <source>Invalid masternode.conf file</source>
+        <translation>Neispravna masternode.conf datoteka</translation>
+    </message>
+    <message>
+        <source>masternode.conf file doesn't exists</source>
+        <translation>masternode.conf datoteka ne postoji</translation>
+    </message>
+    </context>
+<context>
+    <name>MnInfoDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
+        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</translation>
+    </message>
+    <message>
+        <source>Address: </source>
         <translation>Adresa:</translation>
     </message>
     <message>
-        <source>(no label)</source>
-        <translation>(nema oznake)</translation>
+        <source>127.0.0.2:43223</source>
+        <translation>127.0.0.2:43223</translation>
     </message>
     </context>
 <context>
-    <name>MultisigDialog</name>
+    <name>MyAddressRow</name>
     <message>
-        <source>0</source>
-        <translation>0</translation>
+        <source>Form</source>
+        <translation>Obrazac</translation>
     </message>
     <message>
-        <source>Amount:</source>
-        <translation>Iznos:</translation>
+        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
+        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+    </message>
+</context>
+<context>
+    <name>NavMenuWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>V 1.0.0</source>
+        <translation>V 1.0.0</translation>
     </message>
     </context>
 <context>
     <name>OpenURIDialog</name>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
     </context>
+<context>
+    <name>OptionButton</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+</context>
 <context>
     <name>OptionsDialog</name>
+    <message>
+        <source>Options</source>
+        <translation>Opcije</translation>
+    </message>
+    <message>
+        <source>MB</source>
+        <translation>MB</translation>
+    </message>
+    <message>
+        <source>W&amp;allet</source>
+        <translation>N&amp;ovčanik</translation>
+    </message>
+    <message>
+        <source>Expert</source>
+        <translation>Stručnjak</translation>
+    </message>
+    <message>
+        <source>Automatically start PIVX after logging in to the system.</source>
+        <translation>Automatski pokreni PIVX nakon ulogiravanja u računalo.</translation>
+    </message>
+    <message>
+        <source>&amp;Network</source>
+        <translation>&amp;Mreža</translation>
+    </message>
+    <message>
+        <source>IP address of the proxy (e.g. IPv4: 127.0.0.1 / IPv6: ::1)</source>
+        <translation>IP adresa poslužitelja (npr. IPv4: 127.0.0.1 / IPv6: ::1)</translation>
+    </message>
+    <message>
+        <source>&amp;Window</source>
+        <translation>&amp;Prozor</translation>
+    </message>
+    <message>
+        <source>Unit to show amounts in:</source>
+        <translation>Jedinica za prikaz iznosa u:</translation>
+    </message>
+    <message>
+        <source>Decimal digits</source>
+        <translation>Decimalne znamenke</translation>
+    </message>
+    <message>
+        <source>&amp;OK</source>
+        <translation>&amp;U redu</translation>
+    </message>
+    <message>
+        <source>&amp;Cancel</source>
+        <translation>&amp;Poništi</translation>
+    </message>
+    <message>
+        <source>Confirm options reset</source>
+        <translation>Potvrdi mogućnosti resetiranja</translation>
+    </message>
     </context>
 <context>
-    <name>OverviewPage</name>
+    <name>PIVXGUI</name>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>Novčanik</translation>
+    </message>
+    <message>
+        <source>Node</source>
+        <translation>Čvor</translation>
+    </message>
+    <message>
+        <source>&amp;Show / Hide</source>
+        <translation>&amp;Prikaži / Sakrij</translation>
+    </message>
+    <message>
+        <source>Show or hide the main Window</source>
+        <translation>Prikaži ili sakrij glavni prozor</translation>
+    </message>
+    <message>
+        <source>E&amp;xit</source>
+        <translation>E&amp;Izlaz</translation>
+    </message>
+    <message>
+        <source>Quit application</source>
+        <translation>Napusti aplikaciju</translation>
+    </message>
+    <message>
+        <source>PIVX Core client</source>
+        <translation>PIVX Core klijent</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Greška</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation>Upozorenje</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation>Informacija</translation>
+    </message>
+    <message>
+        <source>Sent transaction</source>
+        <translation>Poslana transakcija</translation>
+    </message>
+    <message>
+        <source>Incoming transaction</source>
+        <translation>Nadolazeća tranksakcija</translation>
+    </message>
+    </context>
+<context>
+    <name>PWidget</name>
     </context>
 <context>
     <name>PaymentServer</name>
+    <message>
+        <source>Payment request error</source>
+        <translation>Greška pri zahtjevu za plaćanjem</translation>
+    </message>
+    <message>
+        <source>Payment request has expired.</source>
+        <translation>Zahtjev za plaćanje je istekao.</translation>
+    </message>
+    <message>
+        <source>Payment request is not initialized.</source>
+        <translation>Zahtjev za plaćanje nije započet.</translation>
+    </message>
+    <message>
+        <source>Requested payment amount of %1 is too small (considered dust).</source>
+        <translation>Zatraženi iznos plaćanja od %1 je premali (smatra se presitnim).</translation>
+    </message>
     </context>
 <context>
     <name>PeerTableModel</name>
+    <message>
+        <source>Version</source>
+        <translation>Inačica</translation>
+    </message>
     </context>
 <context>
-    <name>PrivacyDialog</name>
+    <name>PrivacyWidget</name>
     <message>
-        <source>0</source>
-        <translation>0</translation>
+        <source>Form</source>
+        <translation>Obrazac</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation>Odaberi prethodno korištenu adresu</translation>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
     </message>
     <message>
-        <source>Paste address from clipboard</source>
-        <translation>Zaljepi adresu iz međuspremnika</translation>
+        <source>No active Master Node yet</source>
+        <translation>Još nema aktivnih Master Nodeova</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
-    </message>
-    <message>
-        <source>Priority:</source>
-        <translation>Prioritet:</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Naknada:</translation>
-    </message>
-    <message>
-        <source>no</source>
-        <translation>ne</translation>
-    </message>
-    <message>
-        <source>medium</source>
-        <translation>Srednji</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Ostatak:</translation>
+        <source>No transactions yet</source>
+        <translation>Još nema transakcija</translation>
     </message>
     </context>
 <context>
@@ -1050,6 +1415,10 @@
         <translation>Iznos</translation>
     </message>
     <message>
+        <source>Enter a PIVX address (e.g. %1)</source>
+        <translation>Unesi PIVX adresu (npr. %1)</translation>
+    </message>
+    <message>
         <source>NETWORK</source>
         <translation>MREŽA</translation>
     </message>
@@ -1060,13 +1429,6 @@
     <message>
         <source>PIVX Core</source>
         <translation>PIVX Core</translation>
-    </message>
-    </context>
-<context>
-    <name>QRImageWidget</name>
-    <message>
-        <source>Save QR Code</source>
-        <translation>Spremi QR Kod</translation>
     </message>
     </context>
 <context>
@@ -1096,6 +1458,38 @@
         <translation>Verzija klijenta</translation>
     </message>
     <message>
+        <source>Sent</source>
+        <translation>Poslano</translation>
+    </message>
+    <message>
+        <source>Version</source>
+        <translation>Inačica</translation>
+    </message>
+    <message>
+        <source>Salvage wallet</source>
+        <translation>Novčanik za spašavanje</translation>
+    </message>
+    <message>
+        <source>Recover transactions 1</source>
+        <translation>Oporavak transakcija 1</translation>
+    </message>
+    <message>
+        <source>Recover transactions 2</source>
+        <translation>Oporavak transakcija 2</translation>
+    </message>
+    <message>
+        <source>Wallet repair options.</source>
+        <translation>Opcije popravka novčanika.</translation>
+    </message>
+    <message>
+        <source>Upgrade wallet to latest format on startup. (Note: this is NOT an update of the wallet itself!)</source>
+        <translation>Ažurirajte novčanik na posljednju verziju pri pokretanju. (Važno: ovo NIJE automatsko ažuriranje novčanika!)</translation>
+    </message>
+    <message>
+        <source>Confirm resync Blockchain</source>
+        <translation>Potvrdi ponovnu sinkronizaciju Blockchaina</translation>
+    </message>
+    <message>
         <source>%1 B</source>
         <translation>%1 B</translation>
     </message>
@@ -1117,67 +1511,87 @@
     </message>
     </context>
 <context>
-    <name>ReceiveCoinsDialog</name>
+    <name>ReceiveDialog</name>
     <message>
-        <source>Clear all fields of the form.</source>
-        <translation>Obiši sva polja obrasca.</translation>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
     </message>
     <message>
-        <source>Remove</source>
-        <translation>Ukloni</translation>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
     </message>
     <message>
-        <source>Copy label</source>
-        <translation>Kopiraj oznaku</translation>
+        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
+        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
     </message>
     <message>
-        <source>Copy message</source>
-        <translation>Kopiraj poruku</translation>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
     </message>
     <message>
-        <source>Copy amount</source>
-        <translation>Kopiraj iznos</translation>
-    </message>
-    <message>
-        <source>Copy address</source>
-        <translation>Kopiraj adrese</translation>
+        <source>OK</source>
+        <translation>U redu</translation>
     </message>
 </context>
 <context>
-    <name>ReceiveRequestDialog</name>
+    <name>ReceiveWidget</name>
     <message>
-        <source>QR Code</source>
-        <translation>QR Kod</translation>
+        <source>Form</source>
+        <translation>Obrazac</translation>
     </message>
     <message>
-        <source>Copy &amp;URI</source>
-        <translation>Kopiraj &amp;URI</translation>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>Copy &amp;Address</source>
-        <translation>Kopiraj &amp;Adresu</translation>
+        <source>No address</source>
+        <translation>Nema adrese</translation>
     </message>
     <message>
-        <source>URI</source>
-        <translation>URI</translation>
+        <source>Add Label</source>
+        <translation>Dodaj oznaku</translation>
     </message>
     <message>
-        <source>Address</source>
-        <translation>Adresa</translation>
+        <source>Copy</source>
+        <translation>Kopiraj</translation>
     </message>
     <message>
-        <source>Amount</source>
-        <translation>Iznos</translation>
+        <source>No address </source>
+        <translation>Nema adrese</translation>
     </message>
     <message>
-        <source>Label</source>
-        <translation>Oznaka</translation>
+        <source>Error generating address</source>
+        <translation>Greška pri stvaranju adrese</translation>
     </message>
     <message>
-        <source>Message</source>
-        <translation>Poruka</translation>
+        <source>Change Label</source>
+        <translation>Promjeni oznaku</translation>
     </message>
-    </context>
+    <message>
+        <source>Edit Address Label</source>
+        <translation>Uredi oznaku adrese</translation>
+    </message>
+    <message>
+        <source>Address label saved</source>
+        <translation>Oznaka adrese spremljena</translation>
+    </message>
+    <message>
+        <source>Error storing address label</source>
+        <translation>Greška pri spremanju oznake</translation>
+    </message>
+    <message>
+        <source>New address created</source>
+        <translation>Nova adresa stvorena</translation>
+    </message>
+    <message>
+        <source>Address copied</source>
+        <translation>Adresa kopirana</translation>
+    </message>
+    <message>
+        <source>Address copied to clipboard</source>
+        <translation>Adresa kopirana u međuspremnik</translation>
+    </message>
+</context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -1208,177 +1622,258 @@
         <source>(no message)</source>
         <translation>(nema poruke)</translation>
     </message>
-    </context>
-<context>
-    <name>SendCoinsDialog</name>
     <message>
-        <source>Quantity:</source>
-        <translation>Količina:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>Iznos:</translation>
-    </message>
-    <message>
-        <source>Priority:</source>
-        <translation>Prioritet:</translation>
-    </message>
-    <message>
-        <source>medium</source>
-        <translation>Srednji</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Naknada:</translation>
-    </message>
-    <message>
-        <source>no</source>
-        <translation>ne</translation>
-    </message>
-    <message>
-        <source>After Fee:</source>
-        <translation>Nakon naknade:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Ostatak:</translation>
-    </message>
-    <message>
-        <source>0 PIV</source>
-        <translation>0 PIV</translation>
-    </message>
-    <message>
-        <source>Confirmation time:</source>
-        <translation>Vrijeme potvrde:</translation>
-    </message>
-    <message>
-        <source>Clear all fields of the form.</source>
-        <translation>Obiši sva polja obrasca.</translation>
-    </message>
-    <message>
-        <source>Clear &amp;All</source>
-        <translation>Očistiti &amp;Sve</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Kopiraj količinu</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopiraj iznos</translation>
-    </message>
-    <message>
-        <source>Copy fee</source>
-        <translation>Kopiraj naknadu</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>Kopiraj nakon naknade</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>Kopiraj naknadu</translation>
-    </message>
-    <message>
-        <source>%1 to %2</source>
-        <translation>%1 do %2</translation>
-    </message>
-    <message>
-        <source>(no label)</source>
-        <translation>(nema oznake)</translation>
+        <source>(no amount)</source>
+        <translation>(nema iznosa)</translation>
     </message>
 </context>
 <context>
-    <name>SendCoinsEntry</name>
+    <name>RequestDialog</name>
     <message>
-        <source>Choose previously used address</source>
-        <translation>Odaberi prethodno korištenu adresu</translation>
+        <source>New Request Payment</source>
+        <translation>Novi zahtjev za plaćanje</translation>
     </message>
     <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
+        <source>Amount</source>
+        <translation>Iznos</translation>
     </message>
     <message>
-        <source>Paste address from clipboard</source>
-        <translation>Zaljepi adresu iz međuspremnika</translation>
+        <source>PIV</source>
+        <translation>PIV</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>Remove this entry</source>
-        <translation>Ukloni ovaj unos</translation>
+        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
+        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
     </message>
     <message>
-        <source>Message:</source>
-        <translation>Poruka:</translation>
+        <source>COPY ADDRESS</source>
+        <translation>KOPIRAJ ADRESU</translation>
     </message>
     <message>
-        <source>Memo:</source>
-        <translation>Memo:</translation>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>REQUEST</source>
+        <translation>ZATRAŽI</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Oznaka</translation>
+    </message>
+    <message>
+        <source>Enter a label to be saved within the address</source>
+        <translation>Unesi oznaku da bude spremljena međju adrese</translation>
+    </message>
+    <message>
+        <source>Add description </source>
+        <translation>Dodaj opis</translation>
+    </message>
+    <message>
+        <source>Error</source>
+        <translation>Greška</translation>
     </message>
     </context>
 <context>
-    <name>ShutdownWindow</name>
+    <name>SendChangeAddressDialog</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>PIVX Core se gasi...</translation>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
     </message>
     </context>
 <context>
-    <name>SignVerifyMessageDialog</name>
+    <name>SendCustomFeeDialog</name>
     <message>
-        <source>The PIVX address to sign the message with</source>
-        <translation>PIVX adresa za potpisivanje poruke s</translation>
+        <source>Form</source>
+        <translation>Obrazac</translation>
     </message>
     <message>
-        <source>Choose previously used address</source>
-        <translation>Odaberi prethodno korištenu adresu</translation>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
     </message>
     <message>
-        <source>Alt+A</source>
-        <translation>Alt+A</translation>
+        <source>0.00 KB</source>
+        <translation>0.00 KB</translation>
     </message>
     <message>
-        <source>Paste address from clipboard</source>
-        <translation>Zaljepi adresu iz međuspremnika</translation>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
     </message>
     <message>
-        <source>Alt+P</source>
-        <translation>Alt+P</translation>
+        <source>OK</source>
+        <translation>U redu</translation>
     </message>
     <message>
-        <source>Copy the current signature to the system clipboard</source>
-        <translation>Kopirajte trenutačni potpis u međuspremnik sustava</translation>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+</context>
+<context>
+    <name>SendMultiRow</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
     </message>
     <message>
-        <source>Sign the message to prove you own this PIVX address</source>
-        <translation>Potpišite poruku da biste dokazali da ste vlasnik ove PIVX adrese</translation>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>The PIVX address the message was signed with</source>
-        <translation>PIVX adresa s kojom je potpisana poruka</translation>
+        <source>Add address</source>
+        <translation>Dodaj adresu</translation>
     </message>
     <message>
-        <source>Verify the message to ensure it was signed with the specified PIVX address</source>
-        <translation>Potvrdite poruku kako biste bili sigurni da je potpisan s navedenom PIVX adresom</translation>
+        <source>Add description</source>
+        <translation>Dodaj opis</translation>
+    </message>
+</context>
+<context>
+    <name>SendWidget</name>
+    <message>
+        <source>Send</source>
+        <translation>Pošalji</translation>
     </message>
     <message>
-        <source>Reset all sign message fields</source>
-        <translation>Ponovno postavite sva polja s obavijestima o znakovima</translation>
+        <source>Enter a PIVX address or contact label</source>
+        <translation>Unesite PIVX adresu ili oznaku kontakta</translation>
     </message>
     <message>
-        <source>Clear &amp;All</source>
-        <translation>Očistiti &amp;Sve</translation>
+        <source>Amount</source>
+        <translation>Iznos</translation>
     </message>
     <message>
-        <source>Reset all verify message fields</source>
-        <translation>Ponovno postavite sva polja za potvrdu poruka</translation>
+        <source>Clear all</source>
+        <translation>Očisti sve</translation>
+    </message>
+    <message>
+        <source>Add recipient</source>
+        <translation>Dodaj primatelja</translation>
+    </message>
+    <message>
+        <source>Cannot send, wallet locked</source>
+        <translation>Ne mogu poslati, novčanik je zaključan</translation>
+    </message>
+    <message>
+        <source>No contacts available, you can go to the contacts screen and add some there!</source>
+        <translation>Nema dostupnih kontakata, možete ići na ekran s kontaktima i dodati neke!</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>Neispravna adresa</translation>
+    </message>
+    <message>
+        <source>Cannot store your own address as contact</source>
+        <translation>Ne možete spremiti vlastitu adresu kao kontakt</translation>
+    </message>
+    <message>
+        <source>New Contact Stored</source>
+        <translation>Novi kontakt spremljen</translation>
+    </message>
+    <message>
+        <source>Error Storing Contact</source>
+        <translation>Greška pri spremanju kontakta</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsBackupWallet</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Backup Wallet </source>
+        <translation>Pohrani novčanik</translation>
+    </message>
+    <message>
+        <source>Backup</source>
+        <translation>Sigurnosna kopija</translation>
+    </message>
+    <message>
+        <source>Backup Wallet</source>
+        <translation>Pohrani novčanik</translation>
+    </message>
+    <message>
+        <source>Backup created</source>
+        <translation>Sigurnosna kopija stvorena.</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>Stvaranje sigurnosna kopije neuspjelo.</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsBitToolWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Import Address</source>
+        <translation>Uvezi adresu</translation>
+    </message>
+    <message>
+        <source>BIP38 Tool</source>
+        <translation>BIP38 alat</translation>
+    </message>
+    <message>
+        <source>Decrypted Address</source>
+        <translation>Dešifriraj adresu</translation>
+    </message>
+    <message>
+        <source>Enter a PIVX address</source>
+        <translation>Unesite PIVX adresu</translation>
+    </message>
+    <message>
+        <source>Add address</source>
+        <translation>Dodaj adresu</translation>
+    </message>
+    <message>
+        <source>ENCRYPT</source>
+        <translation>ŠIFRIRAJ</translation>
+    </message>
+    <message>
+        <source>The entered passphrase is invalid. </source>
+        <translation>Unesena šifra nije ispravna.</translation>
+    </message>
+    <message>
+        <source>Allowed: 0-9,a-z,A-Z,</source>
+        <translation>Dozvoljeno: 0-9,a-z,A-Z,</translation>
     </message>
     <message>
         <source>The entered address is invalid.</source>
-        <translation>Utipkana adresa nije važeča</translation>
+        <translation>Unesena adresa nije ispravna.</translation>
     </message>
     <message>
         <source>Please check the address and try again.</source>
@@ -1397,12 +1892,426 @@
         <translation>Privatni ključ za unesenu adresu nije dostupan.</translation>
     </message>
     <message>
+        <source>Address encrypted.</source>
+        <translation>Adresa dešifrirana.</translation>
+    </message>
+    <message>
+        <source>Failed to decrypt.</source>
+        <translation>Nije uspjelo dešifriranje.</translation>
+    </message>
+    <message>
+        <source>Please check the key and passphrase and try again.</source>
+        <translation>Molimo vas provjerite ključ i zaporku i pokušajte ponovo.</translation>
+    </message>
+    <message>
+        <source>Data Not Valid.</source>
+        <translation>Podaci nisu važeći.</translation>
+    </message>
+    <message>
+        <source>Please try again.</source>
+        <translation>Moli te ponovi</translation>
+    </message>
+    <message>
+        <source>Please wait while key is imported</source>
+        <translation>Pričekajte dok se ključevi importiraju</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsConsoleWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsDisplayOptionsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Discard changes</source>
+        <translation>Odbaci promjene</translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation>Prikaz</translation>
+    </message>
+    <message>
+        <source>Decimal digits</source>
+        <translation>Decimalne znamenke</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsFaqWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>5</source>
+        <translation>5</translation>
+    </message>
+    <message>
+        <source>10</source>
+        <translation>10</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsInformationWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation>Informacija</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation>Mreža</translation>
+    </message>
+    <message>
+        <source>Backups</source>
+        <translation>Sigurnosne kopije</translation>
+    </message>
+    <message>
+        <source>No information</source>
+        <translation>Nema informacija</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsMainOptionsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>Discard changes</source>
+        <translation>Odbaci promjene</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsMultisendDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+    <message>
+        <source>Label (optional)</source>
+        <translation>Oznaka (neobavezno)</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsMultisendWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>No active Master Node yet</source>
+        <translation>Još nema aktivnih Master Nodeova</translation>
+    </message>
+    <message>
+        <source>Active</source>
+        <translation>Aktivan</translation>
+    </message>
+    <message>
+        <source>ADD RECIPIENT</source>
+        <translation>DODAJ PRIMATELJA</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsSignMessageWidgets</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Enter a PIVX address or contact label</source>
+        <translation>Unesite PIVX adresu ili oznaku kontakta</translation>
+    </message>
+    <message>
+        <source>Add address</source>
+        <translation>Dodaj adresu</translation>
+    </message>
+    <message>
+        <source>Message</source>
+        <translation>Poruka</translation>
+    </message>
+    <message>
+        <source>The entered address is invalid.</source>
+        <translation>Unesena adresa nije ispravna.</translation>
+    </message>
+    <message>
+        <source>Please check the address and try again.</source>
+        <translation>Molimo da provjerite adresu i probajte isponova</translation>
+    </message>
+    <message>
+        <source>The entered address does not refer to a key.</source>
+        <translation>Unesena adresa ne odnosi se na ključ.</translation>
+    </message>
+    <message>
+        <source>Wallet unlock was cancelled.</source>
+        <translation>Otključavanje novčanika je poništeno.</translation>
+    </message>
+    <message>
+        <source>Private key for the entered address is not available.</source>
+        <translation>Privatni ključ za unesenu adresu nije dostupan.</translation>
+    </message>
+    <message>
+        <source>Message signing failed.</source>
+        <translation>Potpisivanje poruke neuspjelo.</translation>
+    </message>
+    <message>
         <source>Message signed.</source>
         <translation>Poruka potpisana.</translation>
     </message>
     <message>
+        <source>The signature could not be decoded.</source>
+        <translation>Potpis ne može biti dekodiran.</translation>
+    </message>
+    <message>
+        <source>Message verification failed.</source>
+        <translation>Ovjera poruke neuspjela.</translation>
+    </message>
+    <message>
         <source>Message verified.</source>
         <translation>Poruka verificirana.</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsWalletOptionsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>Discard changes</source>
+        <translation>Odbaci promjene</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>Novčanik</translation>
+    </message>
+    <message>
+        <source>Network</source>
+        <translation>Mreža</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SPREMI</translation>
+    </message>
+    </context>
+<context>
+    <name>SettingsWalletRepairWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>Salvage wallet</source>
+        <translation>Novčanik za spašavanje</translation>
+    </message>
+    <message>
+        <source>Rescan blockchain file</source>
+        <translation>Preskeniraj blockchain datoteku</translation>
+    </message>
+    <message>
+        <source>Recover transactions 1</source>
+        <translation>Oporavak transakcija 1</translation>
+    </message>
+    <message>
+        <source>Recover transactions 2</source>
+        <translation>Oporavak transakcija 2</translation>
+    </message>
+    <message>
+        <source>Delete local blockchain </source>
+        <translation>Obriši lokalni blockchain</translation>
+    </message>
+    <message>
+        <source>Confirm resync Blockchain</source>
+        <translation>Potvrdi ponovnu sinkronizaciju Blockchaina</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsWidget</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>Wallet Data</source>
+        <translation>Podaci novčanika</translation>
+    </message>
+    <message>
+        <source>Wallet</source>
+        <translation>Novčanik</translation>
+    </message>
+    <message>
+        <source>BIP38 Tool</source>
+        <translation>BIP38 alat</translation>
+    </message>
+    <message>
+        <source>Options</source>
+        <translation>Opcije</translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation>Prikaz</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation>Informacija</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>Pomoć</translation>
+    </message>
+    <message>
+        <source>FAQ</source>
+        <translation>Često postavljena pitanja</translation>
+    </message>
+    <message>
+        <source>About PIVX</source>
+        <translation>O PIVX-u</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>Postavke</translation>
+    </message>
+    <message>
+        <source>Confirm options reset</source>
+        <translation>Potvrdi mogućnosti resetiranja</translation>
+    </message>
+    <message>
+        <source>Options stored</source>
+        <translation>Postavke spremljene</translation>
+    </message>
+    <message>
+        <source>Options store failed</source>
+        <translation>Neuspjelo spremanje postavki</translation>
+    </message>
+    </context>
+<context>
+    <name>ShutdownWindow</name>
+    <message>
+        <source>PIVX Core is shutting down...</source>
+        <translation>PIVX Core se gasi...</translation>
+    </message>
+    </context>
+<context>
+    <name>SnackBar</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Contact Stored</source>
+        <translation>Kontrakt spremljen</translation>
+    </message>
+</context>
+<context>
+    <name>Splash</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Loading…</source>
+        <translation>Učitavanje...</translation>
+    </message>
+    <message>
+        <source>PIVX Core</source>
+        <translation>PIVX Core</translation>
     </message>
 </context>
 <context>
@@ -1416,10 +2325,84 @@
         <translation>Verzija %1</translation>
     </message>
     <message>
+        <source>The Bitcoin Core developers</source>
+        <translation>Bitcoin Core developeri</translation>
+    </message>
+    <message>
+        <source>The Dash Core developers</source>
+        <translation>Dash Core developeri</translation>
+    </message>
+    <message>
+        <source>The PIVX Core developers</source>
+        <translation>PIVX Core developeri</translation>
+    </message>
+    <message>
         <source>[testnet]</source>
         <translation>[testnet]</translation>
     </message>
 </context>
+<context>
+    <name>TooltipMenu</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>Kopiraj</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>Uredi</translation>
+    </message>
+    <message>
+        <source>Delete</source>
+        <translation>Izbriši</translation>
+    </message>
+    </context>
+<context>
+    <name>TopBar</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>480.0685 PIV</source>
+        <translation>480.0685 PIV</translation>
+    </message>
+    <message>
+        <source>1,000 zPIV</source>
+        <translation>1,000 zPIV</translation>
+    </message>
+    <message>
+        <source>Available</source>
+        <translation>Dostupno</translation>
+    </message>
+    <message>
+        <source>6.943 PIV</source>
+        <translation>6.943 PIV</translation>
+    </message>
+    <message>
+        <source>10 PIV</source>
+        <translation>10 PIV</translation>
+    </message>
+    <message>
+        <source>60 zPIV</source>
+        <translation>60 zPIV</translation>
+    </message>
+    <message>
+        <source>10 zPIV</source>
+        <translation>10 zPIV</translation>
+    </message>
+    <message>
+        <source>Error generating address</source>
+        <translation>Greška pri stvaranju adrese</translation>
+    </message>
+    <message>
+        <source>Address Copied</source>
+        <translation>Adresa kopirana</translation>
+    </message>
+    </context>
 <context>
     <name>TrafficGraphWidget</name>
     <message>
@@ -1442,6 +2425,18 @@
         <translation>Izvor</translation>
     </message>
     <message>
+        <source>label</source>
+        <translation>oznaka</translation>
+    </message>
+    <message>
+        <source>Credit</source>
+        <translation>Kredit</translation>
+    </message>
+    <message>
+        <source>Total credit</source>
+        <translation>Ukupni kredit</translation>
+    </message>
+    <message>
         <source>Message</source>
         <translation>Poruka</translation>
     </message>
@@ -1449,9 +2444,6 @@
         <source>Amount</source>
         <translation>Iznos</translation>
     </message>
-    </context>
-<context>
-    <name>TransactionDescDialog</name>
     </context>
 <context>
     <name>TransactionTableModel</name>
@@ -1468,99 +2460,119 @@
         <translation>Adresa</translation>
     </message>
     <message>
+        <source>Mined</source>
+        <translation>Izrudareno</translation>
+    </message>
+    <message>
+        <source>No information</source>
+        <translation>Nema informacija</translation>
+    </message>
+    <message>
         <source>(n/a)</source>
         <translation>(n/a)</translation>
     </message>
-    </context>
-<context>
-    <name>TransactionView</name>
     <message>
-        <source>Today</source>
-        <translation>Danas</translation>
-    </message>
-    <message>
-        <source>This week</source>
-        <translation>Ovaj tjedan</translation>
-    </message>
-    <message>
-        <source>This month</source>
-        <translation>Ovaj mjesec</translation>
-    </message>
-    <message>
-        <source>Last month</source>
-        <translation>Prošli mjesec</translation>
-    </message>
-    <message>
-        <source>Copy address</source>
-        <translation>Kopiraj adrese</translation>
-    </message>
-    <message>
-        <source>Copy label</source>
-        <translation>Kopiraj oznaku</translation>
-    </message>
-    <message>
-        <source>Copy amount</source>
-        <translation>Kopiraj iznos</translation>
-    </message>
-    <message>
-        <source>Copy transaction ID</source>
-        <translation>Kopiraj ID transakcije</translation>
-    </message>
-    <message>
-        <source>Comma separated file (*.csv)</source>
-        <translation>Comma separated file (*.csv)</translation>
-    </message>
-    <message>
-        <source>Confirmed</source>
-        <translation>Potvrđeno</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Datum</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Tip</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Oznaka</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Adresa</translation>
-    </message>
-    <message>
-        <source>ID</source>
-        <translation>ID</translation>
-    </message>
-    <message>
-        <source>Exporting Failed</source>
-        <translation>Izvoz Nije Uspio</translation>
+        <source>Type of transaction.</source>
+        <translation>Tip transakcije.</translation>
     </message>
     </context>
 <context>
-    <name>UnitDisplayStatusBarControl</name>
+    <name>TxDetailDialog</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Transaction Details</source>
+        <translation>Detalji o transakciji</translation>
+    </message>
+    <message>
+        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
+        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</translation>
+    </message>
+    <message>
+        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
+        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
+    </message>
+    <message>
+        <source>Fee:</source>
+        <translation>Naknada:</translation>
+    </message>
+    <message>
+        <source>0.0001 PIV</source>
+        <translation>0.0001 PIV</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
     </context>
 <context>
-    <name>WalletFrame</name>
-    </context>
+    <name>TxRow</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>+0.000585 PIV</source>
+        <translation>+0.000585 PIV</translation>
+    </message>
+</context>
 <context>
     <name>WalletModel</name>
     </context>
 <context>
-    <name>WalletView</name>
+    <name>WalletPasswordDialog</name>
     <message>
-        <source>&amp;Export</source>
-        <translation>&amp;Izvezi</translation>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>Export the data in the current tab to a file</source>
-        <translation>Izvezi podatke iz trenutne kartice u datoteku</translation>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>CANCEL</source>
+        <translation>PONIŠTI</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation>U redu</translation>
+    </message>
+</context>
+<context>
+    <name>WelcomeContentWidget</name>
+    <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>Welcome</source>
+        <translation>Dobrodošli</translation>
     </message>
     </context>
 <context>
     <name>ZPivControlDialog</name>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+    <message>
+        <source>0.00 </source>
+        <translation>0.00</translation>
+    </message>
+    <message>
+        <source>Quantity:</source>
+        <translation>Količina:</translation>
+    </message>
     <message>
         <source>0</source>
         <translation>0</translation>
@@ -1568,6 +2580,10 @@
     </context>
 <context>
     <name>pivx-core</name>
+    <message>
+        <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
+        <translation>Otkrij svoju IP adresu (zadano: 1 kada sluša i nema -externalip)</translation>
+    </message>
     <message>
         <source>Error</source>
         <translation>Greška</translation>
@@ -1577,8 +2593,52 @@
         <translation>Informacija</translation>
     </message>
     <message>
+        <source>Insufficient funds.</source>
+        <translation>Nedovoljno sredstava.</translation>
+    </message>
+    <message>
+        <source>Recalculating PIV supply...</source>
+        <translation>Preračunavanje ponude PIV-a...</translation>
+    </message>
+    <message>
+        <source>Loading addresses...</source>
+        <translation>Učitavanje adresa...</translation>
+    </message>
+    <message>
+        <source>Loading budget cache...</source>
+        <translation>Učitavanje predmemorije budžeta...</translation>
+    </message>
+    <message>
+        <source>Loading masternode cache...</source>
+        <translation>Učitavanje masternode predmemorije...</translation>
+    </message>
+    <message>
+        <source>Loading wallet... (%3.2f %%)</source>
+        <translation>Učitavanje novčanika... (%3.2f %%)</translation>
+    </message>
+    <message>
+        <source>Loading wallet...</source>
+        <translation>Učitavanje novčanika...</translation>
+    </message>
+    <message>
+        <source>Number of automatic wallet backups (default: 10)</source>
+        <translation>Broj automatskih sigurnosnih kopija novčanika (zadano: 10)</translation>
+    </message>
+    <message>
         <source>Options:</source>
         <translation>Mogućnosti:</translation>
+    </message>
+    <message>
+        <source>Preparing for resync...</source>
+        <translation>Pripremanje za resinkronizaciju...</translation>
+    </message>
+    <message>
+        <source>Rescanning...</source>
+        <translation>Preskeniranje...</translation>
+    </message>
+    <message>
+        <source>Specify your own public address</source>
+        <translation>Odredi svoju vlastitu javnu adresu</translation>
     </message>
     <message>
         <source>Synchronization failed</source>
@@ -1637,4 +2697,23 @@
         <translation>Zerocoin opcije:</translation>
     </message>
     </context>
+<context>
+    <name>send</name>
+    <message>
+        <source>Form</source>
+        <translation>Obrazac</translation>
+    </message>
+    <message>
+        <source>Send</source>
+        <translation>Pošalji</translation>
+    </message>
+    <message>
+        <source>TextLabel</source>
+        <translation>TekstualnaOznaka</translation>
+    </message>
+    <message>
+        <source>PushButton</source>
+        <translation>PritisniTipku</translation>
+    </message>
+</context>
 </TS>

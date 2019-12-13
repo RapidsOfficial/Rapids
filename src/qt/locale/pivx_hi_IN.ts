@@ -1,5 +1,15 @@
 <TS language="hi_IN" version="2.1">
 <context>
+    <name>AddNewAddressDialog</name>
+    <message>
+        <source>Address</source>
+        <translation>पता</translation>
+    </message>
+    </context>
+<context>
+    <name>AddNewContactDialog</name>
+    </context>
+<context>
     <name>AddressBookPage</name>
     <message>
         <source>Create a new address</source>
@@ -19,6 +29,9 @@
     </message>
     </context>
 <context>
+    <name>AddressLabelRow</name>
+    </context>
+<context>
     <name>AddressTableModel</name>
     <message>
         <source>Label</source>
@@ -28,26 +41,19 @@
         <source>Address</source>
         <translation>पता</translation>
     </message>
+    <message>
+        <source>Date</source>
+        <translation>मिति</translation>
+    </message>
+    </context>
+<context>
+    <name>AddressesWidget</name>
     </context>
 <context>
     <name>AskPassphraseDialog</name>
     </context>
 <context>
     <name>BanTableModel</name>
-    </context>
-<context>
-    <name>Bip38ToolDialog</name>
-    </context>
-<context>
-    <name>BitcoinGUI</name>
-    <message>
-        <source>Warning</source>
-        <translation>चेतावनी</translation>
-    </message>
-    <message>
-        <source>Information</source>
-        <translation>जानकारी</translation>
-    </message>
     </context>
 <context>
     <name>BlockExplorer</name>
@@ -61,6 +67,9 @@
     </message>
     </context>
 <context>
+    <name>CSRow</name>
+    </context>
+<context>
     <name>ClientModel</name>
     </context>
 <context>
@@ -68,10 +77,6 @@
     <message>
         <source>Quantity:</source>
         <translation>मात्रा:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>राशि:</translation>
     </message>
     <message>
         <source>Fee:</source>
@@ -91,7 +96,56 @@
     </message>
     </context>
 <context>
+    <name>CoinControlPivWidget</name>
+    <message>
+        <source>Quantity:</source>
+        <translation>मात्रा:</translation>
+    </message>
+    <message>
+        <source>Fee:</source>
+        <translation>फ़ीस:</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>लेबल</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>पता</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>मिति</translation>
+    </message>
+    <message>
+        <source>Dust:</source>
+        <translation>धूल:</translation>
+    </message>
+    </context>
+<context>
+    <name>ColdStakingWidget</name>
+    </context>
+<context>
+    <name>ContactDropdownRow</name>
+    </context>
+<context>
+    <name>DashboardWidget</name>
+    <message>
+        <source>Warning</source>
+        <translation>चेतावनी</translation>
+    </message>
+    </context>
+<context>
+    <name>DefaultDialog</name>
+    </context>
+<context>
+    <name>DenomGenerationDialog</name>
+    </context>
+<context>
     <name>EditAddressDialog</name>
+    </context>
+<context>
+    <name>ExpandableButton</name>
     </context>
 <context>
     <name>FreespaceChecker</name>
@@ -106,30 +160,55 @@
     <name>Intro</name>
     </context>
 <context>
-    <name>MasternodeList</name>
+    <name>LoadingDialog</name>
+    </context>
+<context>
+    <name>LockUnlock</name>
+    </context>
+<context>
+    <name>MNRow</name>
+    </context>
+<context>
+    <name>MasterNodeWizardDialog</name>
     <message>
         <source>Address</source>
         <translation>पता</translation>
     </message>
     </context>
 <context>
-    <name>MultiSendDialog</name>
+    <name>MasterNodesWidget</name>
     </context>
 <context>
-    <name>MultisigDialog</name>
-    <message>
-        <source>Amount:</source>
-        <translation>राशि:</translation>
-    </message>
+    <name>MnInfoDialog</name>
+    </context>
+<context>
+    <name>MyAddressRow</name>
+    </context>
+<context>
+    <name>NavMenuWidget</name>
     </context>
 <context>
     <name>OpenURIDialog</name>
     </context>
 <context>
+    <name>OptionButton</name>
+    </context>
+<context>
     <name>OptionsDialog</name>
     </context>
 <context>
-    <name>OverviewPage</name>
+    <name>PIVXGUI</name>
+    <message>
+        <source>Warning</source>
+        <translation>चेतावनी</translation>
+    </message>
+    <message>
+        <source>Information</source>
+        <translation>जानकारी</translation>
+    </message>
+    </context>
+<context>
+    <name>PWidget</name>
     </context>
 <context>
     <name>PaymentServer</name>
@@ -138,28 +217,13 @@
     <name>PeerTableModel</name>
     </context>
 <context>
-    <name>PrivacyDialog</name>
-    <message>
-        <source>Fee:</source>
-        <translation>फ़ीस:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>धूल:</translation>
-    </message>
-    <message>
-        <source>medium</source>
-        <translation>मध्यम</translation>
-    </message>
+    <name>PrivacyWidget</name>
     </context>
 <context>
     <name>ProposalFrame</name>
     </context>
 <context>
     <name>QObject</name>
-    </context>
-<context>
-    <name>QRImageWidget</name>
     </context>
 <context>
     <name>RPCConsole</name>
@@ -173,26 +237,10 @@
     </message>
     </context>
 <context>
-    <name>ReceiveCoinsDialog</name>
+    <name>ReceiveDialog</name>
     </context>
 <context>
-    <name>ReceiveRequestDialog</name>
-    <message>
-        <source>QR Code</source>
-        <translation>QR कोड</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>पता</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>लेबल</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>संदेश</translation>
-    </message>
+    <name>ReceiveWidget</name>
     </context>
 <context>
     <name>RecentRequestsTableModel</name>
@@ -214,59 +262,96 @@
     </message>
     </context>
 <context>
-    <name>SendCoinsDialog</name>
+    <name>RequestDialog</name>
     <message>
-        <source>Quantity:</source>
-        <translation>मात्रा:</translation>
-    </message>
-    <message>
-        <source>Amount:</source>
-        <translation>राशि:</translation>
-    </message>
-    <message>
-        <source>medium</source>
-        <translation>मध्यम</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>फ़ीस:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>धूल:</translation>
-    </message>
-    <message>
-        <source>normal</source>
-        <translation>साधारण</translation>
-    </message>
-    <message>
-        <source>fast</source>
-        <translation>तेज</translation>
-    </message>
-    <message>
-        <source>Balance:</source>
-        <translation>शेष राशि:</translation>
+        <source>Label</source>
+        <translation>लेबल</translation>
     </message>
     </context>
 <context>
-    <name>SendCoinsEntry</name>
+    <name>SendChangeAddressDialog</name>
+    </context>
+<context>
+    <name>SendCustomFeeDialog</name>
+    </context>
+<context>
+    <name>SendMultiRow</name>
+    </context>
+<context>
+    <name>SendWidget</name>
+    </context>
+<context>
+    <name>SettingsBackupWallet</name>
+    </context>
+<context>
+    <name>SettingsBitToolWidget</name>
+    </context>
+<context>
+    <name>SettingsConsoleWidget</name>
+    </context>
+<context>
+    <name>SettingsDisplayOptionsWidget</name>
+    </context>
+<context>
+    <name>SettingsFaqWidget</name>
+    </context>
+<context>
+    <name>SettingsInformationWidget</name>
     <message>
-        <source>This is a normal payment.</source>
-        <translation>यह एक सामान्य भुगतान है |</translation>
+        <source>Information</source>
+        <translation>जानकारी</translation>
     </message>
     </context>
 <context>
-    <name>ShutdownWindow</name>
+    <name>SettingsMainOptionsWidget</name>
     </context>
 <context>
-    <name>SignVerifyMessageDialog</name>
+    <name>SettingsMultisendDialog</name>
+    </context>
+<context>
+    <name>SettingsMultisendWidget</name>
+    </context>
+<context>
+    <name>SettingsSignMessageWidgets</name>
+    <message>
+        <source>Message</source>
+        <translation>संदेश</translation>
+    </message>
     <message>
         <source>Signature</source>
         <translation>हस्ताक्षर</translation>
     </message>
     </context>
 <context>
+    <name>SettingsWalletOptionsWidget</name>
+    </context>
+<context>
+    <name>SettingsWalletRepairWidget</name>
+    </context>
+<context>
+    <name>SettingsWidget</name>
+    <message>
+        <source>Information</source>
+        <translation>जानकारी</translation>
+    </message>
+    </context>
+<context>
+    <name>ShutdownWindow</name>
+    </context>
+<context>
+    <name>SnackBar</name>
+    </context>
+<context>
+    <name>Splash</name>
+    </context>
+<context>
     <name>SplashScreen</name>
+    </context>
+<context>
+    <name>TooltipMenu</name>
+    </context>
+<context>
+    <name>TopBar</name>
     </context>
 <context>
     <name>TrafficGraphWidget</name>
@@ -283,9 +368,6 @@
     </message>
     </context>
 <context>
-    <name>TransactionDescDialog</name>
-    </context>
-<context>
     <name>TransactionTableModel</name>
     <message>
         <source>Date</source>
@@ -297,34 +379,30 @@
     </message>
     </context>
 <context>
-    <name>TransactionView</name>
+    <name>TxDetailDialog</name>
     <message>
-        <source>Date</source>
-        <translation>मिति</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>लेबल</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>पता</translation>
+        <source>Fee:</source>
+        <translation>फ़ीस:</translation>
     </message>
     </context>
 <context>
-    <name>UnitDisplayStatusBarControl</name>
-    </context>
-<context>
-    <name>WalletFrame</name>
+    <name>TxRow</name>
     </context>
 <context>
     <name>WalletModel</name>
     </context>
 <context>
-    <name>WalletView</name>
+    <name>WalletPasswordDialog</name>
+    </context>
+<context>
+    <name>WelcomeContentWidget</name>
     </context>
 <context>
     <name>ZPivControlDialog</name>
+    <message>
+        <source>Quantity:</source>
+        <translation>मात्रा:</translation>
+    </message>
     </context>
 <context>
     <name>pivx-core</name>
@@ -336,5 +414,8 @@
         <source>Warning</source>
         <translation>चेतावनी</translation>
     </message>
+    </context>
+<context>
+    <name>send</name>
     </context>
 </TS>
