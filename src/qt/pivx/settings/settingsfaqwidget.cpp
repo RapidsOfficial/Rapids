@@ -18,7 +18,12 @@ SettingsFaqWidget::SettingsFaqWidget(QWidget *parent) :
 
     ui->labelTitle->setText(tr("Frequently Asked Questions"));
     ui->labelWebLink->setText(tr("You can read more here"));
+#ifdef Q_OS_MAC
+    ui->container->load("://bg-welcome");
+    setCssProperty(ui->container, "container-welcome-no-image");
+#else
     setCssProperty(ui->container, "container-welcome");
+#endif
     setCssProperty(ui->labelTitle, "text-title-faq");
     setCssProperty(ui->labelWebLink, "text-content-white");
 

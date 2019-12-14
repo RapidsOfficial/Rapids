@@ -189,6 +189,7 @@ void SettingsWidget::loadWalletModel(){
     this->settingsSingMessageWidgets->setWalletModel(this->walletModel);
     this->settingsBitToolWidget->setWalletModel(this->walletModel);
     this->settingsMultisendWidget->setWalletModel(this->walletModel);
+    this->settingsDisplayOptionsWidget->setWalletModel(this->walletModel);
 }
 
 void SettingsWidget::onResetAction(){

@@ -178,6 +178,12 @@ execute_process(
         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings
 )
 
+execute_process(
+        COMMAND ${MOC_BIN} -o moc_pfborderimage.cpp pfborderimage.h
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/pivx
+)
+list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/pivx/moc_pfborderimage.cpp)
+
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/macdockiconhandler.mm)
     list(APPEND QT_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/macnotificationhandler.mm)
