@@ -59,6 +59,11 @@ void ColdStakingModel::refresh() {
                 del.delegatedUtxo.unite(delegation.delegatedUtxo);
                 del.cachedTotalAmount += delegation.cachedTotalAmount;
             }
+
+            // add amount to cachedAmount if either:
+            // - this is a owned delegation
+            // - this is a staked delegation, and the owner is whitelisted
+            if (!delegation.isSpendable && !addressTableModel->isWhitelisted(delegation.ownerAddress)) continue;
             cachedAmount += delegation.cachedTotalAmount;
         }
     }
@@ -135,22 +140,44 @@ QVariant ColdStakingModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-bool ColdStakingModel::whitelist(const QModelIndex& modelIndex) {
+bool ColdStakingModel::whitelist(const QModelIndex& modelIndex)
+{
     QString address = modelIndex.data(Qt::DisplayRole).toString();
-    int idx = modelIndex.row();
-    beginRemoveRows(QModelIndex(), idx, idx);
-    bool ret = model->whitelistAddressFromColdStaking(address);
-    endRemoveRows();
-    emit dataChanged(index(idx, 0, QModelIndex()), index(idx, COLUMN_COUNT, QModelIndex()) );
-    return ret;
+    if (addressTableModel->isWhitelisted(address.toStdString())) {
+        return error("trying to whitelist already whitelisted address");
+    }
+
+    if (!model->whitelistAddressFromColdStaking(address)) return false;
+
+    // address whitelisted - update cached amount and row data
+    const int idx = modelIndex.row();
+    cachedAmount += cachedDelegations[idx].cachedTotalAmount;
+    removeRowAndEmitDataChanged(idx);
+
+    return true;
 }
 
-bool ColdStakingModel::blacklist(const QModelIndex& modelIndex) {
+bool ColdStakingModel::blacklist(const QModelIndex& modelIndex)
+{
     QString address = modelIndex.data(Qt::DisplayRole).toString();
-    int idx = modelIndex.row();
+    if (!addressTableModel->isWhitelisted(address.toStdString())) {
+        return error("trying to blacklist already blacklisted address");
+    }
+
+    if (!model->blacklistAddressFromColdStaking(address)) return false;
+
+    // address blacklisted - update cached amount and row data
+    const int idx = modelIndex.row();
+    cachedAmount -= cachedDelegations[idx].cachedTotalAmount;
+    removeRowAndEmitDataChanged(idx);
+
+    return true;
+}
+
+void ColdStakingModel::removeRowAndEmitDataChanged(const int idx)
+{
     beginRemoveRows(QModelIndex(), idx, idx);
-    bool ret = model->blacklistAddressFromColdStaking(address);
     endRemoveRows();
     emit dataChanged(index(idx, 0, QModelIndex()), index(idx, COLUMN_COUNT, QModelIndex()) );
-    return ret;
 }
+
