@@ -206,21 +206,22 @@ bool MasterNodeWizardDialog::createMN(){
 
         prepareStatus = walletModel->prepareTransaction(currentTransaction);
 
+        QString returnMsg = "Unknown error";
         // process prepareStatus and on error generate message shown to user
-        processSendCoinsReturn(prepareStatus,
+        returnMsg = processSendCoinsReturn(prepareStatus,
                                BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(),
                                                             currentTransaction.getTransactionFee()),
                                true
         );
 
         if (prepareStatus.status != WalletModel::OK) {
-            returnStr = tr("Prepare master node failed..");
+            returnStr = tr("Prepare master node failed.\n\n%1\n").arg(returnMsg);
             return false;
         }
 
         WalletModel::SendCoinsReturn sendStatus = walletModel->sendCoins(currentTransaction);
         // process sendStatus and on error generate message shown to user
-        processSendCoinsReturn(sendStatus);
+        returnMsg = processSendCoinsReturn(sendStatus);
 
         if (sendStatus.status == WalletModel::OK) {
             // now change the conf
@@ -286,7 +287,7 @@ bool MasterNodeWizardDialog::createMN(){
                     }
                 }
                 if (indexOut == -1) {
-                    returnStr = tr("Invalid collaterall output index");
+                    returnStr = tr("Invalid collateral output index");
                     return false;
                 }
                 std::string indexOutStr = std::to_string(indexOut);
@@ -323,6 +324,8 @@ bool MasterNodeWizardDialog::createMN(){
             } else{
                 returnStr = tr("masternode.conf file doesn't exists");
             }
+        } else {
+            returnStr = tr("Cannot send collateral transaction.\n\n%1").arg(returnMsg);
         }
     }
     return false;
@@ -359,7 +362,7 @@ void MasterNodeWizardDialog::onBackClicked(){
     }
 }
 
-void MasterNodeWizardDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn& sendCoinsReturn, const QString& msgArg, bool fPrepare)
+QString MasterNodeWizardDialog::processSendCoinsReturn(const WalletModel::SendCoinsReturn& sendCoinsReturn, const QString& msgArg, bool fPrepare)
 {
     bool fAskForUnlock = false;
 
@@ -408,7 +411,7 @@ void MasterNodeWizardDialog::processSendCoinsReturn(const WalletModel::SendCoins
             // included to prevent a compiler warning.
         case WalletModel::OK:
         default:
-            return;
+            return msgParams.first;
     }
 
     // Unlock wallet if it wasn't fully unlocked already
@@ -419,11 +422,11 @@ void MasterNodeWizardDialog::processSendCoinsReturn(const WalletModel::SendCoins
         }
         else {
             // Wallet unlocked
-            return;
+            return msgParams.first;
         }
     }
 
-    inform(msgParams.first);
+    return msgParams.first;
 }
 
 void MasterNodeWizardDialog::inform(QString text){
