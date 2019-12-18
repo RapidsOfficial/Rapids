@@ -74,17 +74,13 @@ Now, you can either build from self-compiled [depends](/depends/README.md) or in
 
     sudo apt-get install libssl-dev libgmp-dev libevent-dev libboost-all-dev
 
-**Note:** For Ubuntu versions starting with Bionic (18.04), or Debian versions starting with Stretch, use `libssl1.0-dev`
-above instead of `libssl-dev`. PIVX Core does not support the use of OpenSSL 1.1, though compilation is still possible
-by passing `--with-incompatible-ssl` to configure (NOT RECOMMENDED!).
-
 BerkeleyDB is required for the wallet.
 
- **For Ubuntu only:** db4.8 packages are available [here](https://launchpad.net/~bitcoin/+archive/bitcoin).
+ **For Ubuntu only:** db4.8 packages are available [here](https://launchpad.net/~pivx/+archive/pivx).
  You can add the repository using the following command:
 
     sudo apt-get install software-properties-common
-    sudo add-apt-repository ppa:bitcoin/bitcoin
+    sudo add-apt-repository ppa:pivx/pivx
     sudo apt-get update
     sudo apt-get install libdb4.8-dev libdb4.8++-dev
 
@@ -116,6 +112,8 @@ To build with Qt 5 you need the following:
 
     sudo apt-get install libqt5gui5 libqt5core5a libqt5dbus5 libqt5svg5-dev libqt5charts5-dev qttools5-dev qttools5-dev-tools libprotobuf-dev protobuf-compiler libqrencode-dev
 
+**Note:** Ubuntu versions prior to Bionic (18.04), and Debian version prior to Buster, do not have the `libqt5charts5-dev` package. If you are compiling on one of these older versions, you will need to omit `libqt5charts5-dev` from the above command.
+
 Once these are installed, they will be found by configure and a pivx-qt executable will be
 built by default.
 
@@ -134,7 +132,7 @@ Optional:
 
 To build with Qt 5 you need the following:
 
-    sudo dnf install qt5-qttools-devel qt5-qtbase-devel protobuf-devel qrencode-devel
+    sudo dnf install qt5-qttools-devel qt5-qtbase-devel qt5-qtsvg-devel qt5-qtcharts-devel protobuf-devel qrencode-devel
 
 Notes
 -----
