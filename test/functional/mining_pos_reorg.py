@@ -3,11 +3,6 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-from time import sleep
-import urllib
-
-from test_framework.authproxy import JSONRPCException
-from test_framework.messages import COutPoint
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     sync_blocks,
@@ -16,7 +11,6 @@ from test_framework.util import (
     connect_nodes_bi,
     connect_nodes_clique,
     disconnect_nodes,
-    bytes_to_hex_str,
     set_node_times,
     DecimalAmt,
 )
@@ -92,16 +86,18 @@ class ReorgStakeTest(PivxTestFramework):
         self.log.info("Balances ok.")
 
         # create the raw zerocoin spend txes
+        addy = self.nodes[2].getnewaddress()
         self.log.info("Creating the raw zerocoin public spends...")
         mints = self.nodes[2].listmintedzerocoins(True, True)
-        tx_A0 = self.nodes[2].createrawzerocoinspend(mints[0]["serial hash"])
-        tx_A1 = self.nodes[2].createrawzerocoinspend(mints[1]["serial hash"])
+        tx_A0 = self.nodes[2].createrawzerocoinspend(mints[0]["serial hash"], addy)
+        tx_A1 = self.nodes[2].createrawzerocoinspend(mints[1]["serial hash"], addy)
         # Spending same coins to different recipients to get different txids
-        my_addy = "yAVWM5urwaTyhiuFQHP2aP47rdZsLUG5PH"
-        tx_B0 = self.nodes[2].createrawzerocoinspend(mints[0]["serial hash"], my_addy)
-        tx_B1 = self.nodes[2].createrawzerocoinspend(mints[1]["serial hash"], my_addy)
+        new_addy = "yAVWM5urwaTyhiuFQHP2aP47rdZsLUG5PH"
+        tx_B0 = self.nodes[2].createrawzerocoinspend(mints[0]["serial hash"], new_addy)
+        tx_B1 = self.nodes[2].createrawzerocoinspend(mints[1]["serial hash"], new_addy)
 
         # Disconnect nodes
+        minted_amount = mints[0]["denomination"] + mints[1]["denomination"]
         self.disconnect_all()
 
         # Stake one block with node-0 and save the stake input
@@ -126,8 +122,8 @@ class ReorgStakeTest(PivxTestFramework):
             stakeinput["txid"][:9], stakeinput["txid"][-4:], stakeinput["vout"]))
 
         # Relay zerocoin spends
-        txid_A0 = self.nodes[0].sendrawtransaction(tx_A0)
-        txid_A1 = self.nodes[0].sendrawtransaction(tx_A1)
+        self.nodes[0].sendrawtransaction(tx_A0)
+        self.nodes[0].sendrawtransaction(tx_A1)
 
         # Stake 10 more blocks with node-0 and check balances
         self.log.info("Staking 10 more blocks with node 0...")
@@ -138,10 +134,14 @@ class ReorgStakeTest(PivxTestFramework):
         self.log.info("Balance for node 0 checks out.")
 
         # Connect with node 2, sync and check zerocoin balance
+        self.log.info("Reconnecting node 0 and node 2")
         connect_nodes_bi(self.nodes, 0, 2)
         sync_blocks([self.nodes[i] for i in [0, 2]])
-        assert_equal(self.get_tot_balance(2), initial_balance[2] + DecimalAmt(6666))
-        assert_equal(self.nodes[2].getzerocoinbalance()['Total'], DecimalAmt(0))
+        self.log.info("Resetting zerocoin mints on node 2")
+        self.nodes[2].resetmintzerocoin(True)
+        assert_equal(self.get_tot_balance(2), initial_balance[2] + DecimalAmt(minted_amount))
+        assert_equal(self.nodes[2].getzerocoinbalance()['Total'], DecimalAmt(6666-minted_amount))
+        self.log.info("Balance for node 2 checks out.")
 
         # Double spending txes not possible
         assert_raises_rpc_error(-26, "bad-txns-invalid-zpiv",
@@ -150,16 +150,18 @@ class ReorgStakeTest(PivxTestFramework):
                                 self.nodes[0].sendrawtransaction, tx_B1)
 
         # verify that the stakeinput can't be spent
+        stakeinput_tx_json = self.nodes[0].getrawtransaction(stakeinput["txid"], True)
+        stakeinput_amount = float(stakeinput_tx_json["vout"][int(stakeinput["vout"])]["value"])
         rawtx_unsigned = self.nodes[0].createrawtransaction(
-            [{"txid": str(stakeinput["txid"]), "vout": int(stakeinput["vout"])}],
-            {"xxncEuJK27ygNh7imNfaX8JV6ZQUnoBqzN": 249.99})
+            [{"txid": stakeinput["txid"], "vout": int(stakeinput["vout"])}],
+            {"xxncEuJK27ygNh7imNfaX8JV6ZQUnoBqzN": (stakeinput_amount-0.01)})
         rawtx = self.nodes[0].signrawtransaction(rawtx_unsigned)
         assert(rawtx["complete"])
-        assert_raises_rpc_error(-25, "Missing inputs",self.nodes[0].sendrawtransaction, rawtx["hex"])
+        assert_raises_rpc_error(-26, "bad-txns-inputs-spent", self.nodes[0].sendrawtransaction, rawtx["hex"])
 
         # Spend tx_B0 and tx_B1 on the other chain
-        txid_B0 = self.nodes[1].sendrawtransaction(tx_B0)
-        txid_B1 = self.nodes[1].sendrawtransaction(tx_B1)
+        self.nodes[1].sendrawtransaction(tx_B0)
+        self.nodes[1].sendrawtransaction(tx_B1)
 
         # Stake 12 blocks with node-1
         set_node_times(self.nodes, block_time_1)
@@ -167,8 +169,7 @@ class ReorgStakeTest(PivxTestFramework):
         for i in range(12):
             block_time_1 = self.generate_pos(1, block_time_1)
         expected_balance_1 = initial_balance[1] + DecimalAmt(12 * 250.0)
-        w_info = self.nodes[1].getwalletinfo()
-        assert_equal(w_info["balance"] + w_info["immature_balance"], expected_balance_1)
+        assert_equal(self.get_tot_balance(1), expected_balance_1)
         self.log.info("Balance for node 1 checks out.")
 
         # re-connect and sync nodes and check that node-0 and node-2 get on the other chain
@@ -180,19 +181,8 @@ class ReorgStakeTest(PivxTestFramework):
         for i in [0, 2]:
             assert_equal(self.nodes[i].getbestblockhash(), new_best_hash)
 
-        # check that old zc spends have been removed and new one are present
-        for i in range(self.num_nodes):
-            print(i)
-            try:
-                print(self.nodes[i].getrawtransaction(txid_A0))
-                print(self.nodes[i].getrawtransaction(txid_A1))
-            except Exception as e:
-                print(str(e))
-
         # check balance of node-0
-        balance_0 = initial_balance[0]
-        w_info = self.nodes[0].getwalletinfo()
-        assert_equal(w_info["balance"] + w_info["immature_balance"], initial_balance[0])
+        assert_equal(self.get_tot_balance(0), initial_balance[0])
         self.log.info("Balance for node 0 checks out.")
 
         # check that NOW the original stakeinput is present and spendable

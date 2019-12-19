@@ -61,7 +61,7 @@ BASE_SCRIPTS= [
     # vv Tests less than 5m vv
     'wallet_abandonconflict.py',
     'mining_pos_reorg.py',
-    'feature_coldStaking.py',
+    'mining_pos_coldStaking.py',
     'rpc_rawtransaction.py',
     'wallet_zapwallettxes.py',
     'wallet_keypool_topup.py',

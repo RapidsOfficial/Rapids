@@ -368,6 +368,12 @@ def connect_nodes_bi(nodes, a, b):
     connect_nodes(nodes[a], b)
     connect_nodes(nodes[b], a)
 
+def connect_nodes_clique(nodes):
+    l = len(nodes)
+    for a in range(l):
+        for b in range(a, l):
+            connect_nodes_bi(nodes, a, b)
+
 def sync_blocks(rpc_connections, *, wait=1, timeout=60):
     """
     Wait until everybody has the same tip.
