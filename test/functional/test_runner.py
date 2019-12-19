@@ -55,79 +55,78 @@ TEST_EXIT_SKIPPED = 77
 BASE_SCRIPTS= [
     # Scripts that are run by the travis build process.
     # Longest test should go first, to favor running tests in parallel
-    'wallet_basic.py',
-    'wallet_backup.py',
+    'wallet_basic.py',                          # ~ 1155 sec
+    'wallet_backup.py',                         # ~ 459 sec
+    'mining_pos_reorg.py',                      # ~ 305 sec
+    'zerocoin_spends.py',                       # ~ 301 sec
 
     # vv Tests less than 5m vv
-    'wallet_abandonconflict.py',
-    'mining_pos_reorg.py',
-    'mining_pos_coldStaking.py',
-    'rpc_rawtransaction.py',
-    'wallet_zapwallettxes.py',
-    'wallet_keypool_topup.py',
-    'wallet_txn_doublespend.py --mineblock',
-    'wallet_txn_clone.py --mineblock',
-    'interface_rest.py',
-    'feature_proxy.py',
-
-    'mining_pos_fakestake.py',
-    'zerocoin_spends.py',
-    #'zerocoin_wrapped_serials.py',
-    #'feature_block.py',
-    #'rpc_fundrawtransaction.py',
+    'mining_pos_coldStaking.py',                # ~ 289 sec
+    'p2p_time_offset.py',                       # ~ 263 sec
+    'wallet_abandonconflict.py',                # ~ 208 sec
+    'rpc_rawtransaction.py',                    # ~ 190 sec
+    'wallet_zapwallettxes.py',                  # ~ 172 sec
+    'wallet_keypool_topup.py',                  # ~ 167 sec
+    'wallet_txn_doublespend.py --mineblock',    # ~ 157 sec
+    'wallet_txn_clone.py --mineblock',          # ~ 157 sec
+    'interface_rest.py',                        # ~ 154 sec
+    'rpc_spork.py',                             # ~ 149 sec
+    'feature_proxy.py',                         # ~ 143 sec
+    'mining_pos_fakestake.py',                  # ~ 123 sec
 
     # vv Tests less than 2m vv
-    'feature_uacomment.py',
-    'wallet_listreceivedby.py',
-    'wallet_accounts.py',
-    'wallet_dump.py',
-    'rpc_listtransactions.py',
+    'feature_uacomment.py',                     # ~ 130 sec
+    'p2p_disconnect_ban.py',                    # ~ 118 sec
+    'wallet_listreceivedby.py',                 # ~ 117 sec
+    'feature_reindex.py',                       # ~ 110 sec
+    'interface_http.py',                        # ~ 105 sec
+    'rpc_listtransactions.py',                  # ~ 97 sec
+    'mempool_reorg.py',                         # ~ 92 sec
+    'wallet_encryption.py',                     # ~ 89 sec
+    'wallet_keypool.py',                        # ~ 88 sec
+    'wallet_dump.py',                           # ~ 83 sec
+    'rpc_net.py',                               # ~ 83 sec
+    'rpc_bip38.py',                             # ~ 82 sec
+    'interface_bitcoin_cli.py',                 # ~ 80 sec
 
     # vv Tests less than 60s vv
-    #'wallet_importmulti.py',
-    #'mempool_limit.py', # We currently don't limit our mempool_reorg
-    'feature_reindex.py',
-    'rpc_bip38.py',
+    'wallet_accounts.py',                       # ~ 55 sec
+    'mempool_resurrect.py',                     # ~ 51 sec
+    'rpc_budget.py',                            # ~ 50 sec
+    'mempool_spend_coinbase.py',                # ~ 50 sec
+    'rpc_signrawtransaction.py',                # ~ 50 sec
+    'rpc_decodescript.py',                      # ~ 50 sec
+    'rpc_blockchain.py',                        # ~ 50 sec
+    'wallet_disable.py',                        # ~ 50 sec
+    'rpc_signmessage.py',                       # ~ 50 sec
+    'feature_help.py',                          # ~ 30 sec
 
-    # vv Tests less than 30s vv
-    'rpc_spork.py',
-    'rpc_budget.py',
-    #'interface_zmq.py',
-    'interface_bitcoin_cli.py',
-    'mempool_resurrect.py',
-    #'rpc_getchaintips.py',
-    'mempool_spend_coinbase.py',
-    'mempool_reorg.py',
-    #'mempool_persist.py', # Not yet implemented
-    'interface_http.py',
-    #'rpc_users.py',
-    'rpc_signrawtransaction.py',
-    'p2p_disconnect_ban.py',
-    'rpc_decodescript.py',
-    'rpc_blockchain.py',
-    #'rpc_deprecated.py',
-    'wallet_disable.py',
-    'rpc_net.py',
-    'p2p_time_offset.py',
-    'wallet_keypool.py',
-    #'p2p_mempool.py',
-    #'mining_prioritisetransaction.py',
-    #'p2p_invalid_block.py',
-    #'p2p_invalid_tx.py',
-    'rpc_signmessage.py',
-    #'wallet_import_rescan.py',
-    #'mining_basic.py',
-    #'wallet_bumpfee.py',
-    #'wallet_listsinceblock.py',
-    #'p2p_leak.py',
-    'wallet_encryption.py',
-    #'feature_cltv.py',
-    #'wallet_resendwallettransactions.py',
-    #'feature_minchainwork.py',
-    #'p2p_fingerprint.py',
-    #'p2p_unrequested_blocks.py',
-    #'feature_config_args.py',
-    'feature_help.py',
+    # 'zerocoin_wrapped_serials.py',
+    # 'feature_block.py',
+    # 'rpc_fundrawtransaction.py',
+    # 'wallet_importmulti.py',
+    # 'mempool_limit.py', # We currently don't limit our mempool_reorg
+    # 'interface_zmq.py',
+    # 'rpc_getchaintips.py',
+    # 'mempool_persist.py',
+    # 'rpc_users.py',
+    # 'rpc_deprecated.py',
+    # 'p2p_mempool.py',
+    # 'mining_prioritisetransaction.py',
+    # 'p2p_invalid_block.py',
+    # 'p2p_invalid_tx.py',
+    # 'wallet_import_rescan.py',
+    # 'mining_basic.py',
+    # 'wallet_bumpfee.py',
+    # 'wallet_listsinceblock.py',
+    # 'p2p_leak.py',
+    # 'feature_cltv.py',
+    # 'wallet_resendwallettransactions.py',
+    # 'feature_minchainwork.py',
+    # 'p2p_fingerprint.py',
+    # 'p2p_unrequested_blocks.py',
+    # 'feature_config_args.py',
+
     # Don't append tests at the end to avoid merge conflicts
     # Put them in a random line within the section that fits their approximate run-time
 ]
