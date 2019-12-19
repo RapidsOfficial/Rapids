@@ -54,6 +54,7 @@ TEST_EXIT_SKIPPED = 77
 
 BASE_SCRIPTS= [
     # Scripts that are run by the travis build process.
+
     # Longest test should go first, to favor running tests in parallel
     'wallet_basic.py',                          # ~ 1155 sec
     'wallet_backup.py',                         # ~ 459 sec
@@ -72,6 +73,7 @@ BASE_SCRIPTS= [
     'interface_rest.py',                        # ~ 154 sec
     'rpc_spork.py',                             # ~ 149 sec
     'feature_proxy.py',                         # ~ 143 sec
+    'zerocoin_wrapped_serials.py',              # ~ 137 sec
     'mining_pos_fakestake.py',                  # ~ 123 sec
 
     # vv Tests less than 2m vv
@@ -101,7 +103,8 @@ BASE_SCRIPTS= [
     'rpc_signmessage.py',                       # ~ 50 sec
     'feature_help.py',                          # ~ 30 sec
 
-    # 'zerocoin_wrapped_serials.py',
+    # Don't append tests at the end to avoid merge conflicts
+    # Put them in a random line within the section that fits their approximate run-time
     # 'feature_block.py',
     # 'rpc_fundrawtransaction.py',
     # 'wallet_importmulti.py',
@@ -127,8 +130,6 @@ BASE_SCRIPTS= [
     # 'p2p_unrequested_blocks.py',
     # 'feature_config_args.py',
 
-    # Don't append tests at the end to avoid merge conflicts
-    # Put them in a random line within the section that fits their approximate run-time
 ]
 
 EXTENDED_SCRIPTS = [
