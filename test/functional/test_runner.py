@@ -74,10 +74,10 @@ BASE_SCRIPTS= [
     'rpc_spork.py',                             # ~ 149 sec
     'feature_proxy.py',                         # ~ 143 sec
     'zerocoin_wrapped_serials.py',              # ~ 137 sec
+    'feature_uacomment.py',                     # ~ 130 sec
     'mining_pos_fakestake.py',                  # ~ 123 sec
 
     # vv Tests less than 2m vv
-    'feature_uacomment.py',                     # ~ 130 sec
     'p2p_disconnect_ban.py',                    # ~ 118 sec
     'wallet_listreceivedby.py',                 # ~ 117 sec
     'feature_reindex.py',                       # ~ 110 sec
