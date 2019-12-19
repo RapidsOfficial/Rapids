@@ -30,6 +30,12 @@
 
 #define SINGLE_THREAD_MAX_TXES_SIZE 4000
 
+// Maximum amount of loaded records in ram in the first load.
+// If the user has more and want to load them, could add a load on demand in pages.
+// but.. to be realistic, it's not useful anyway, why someone would ever want to have more than 20,000 txs loaded in the UI??
+// The person would be essentially spamming himself..
+#define MAX_AMOUNT_LOADED_RECORDS 20000
+
 // Amount column is right-aligned it contains numbers
 static int column_alignments[] = {
     Qt::AlignLeft | Qt::AlignVCenter, /* status */
@@ -87,6 +93,21 @@ public:
         // Divide the work between multiple threads to speedup the process if the vector is larger than 4k txes
         std::size_t txesSize = walletTxes.size();
         if (txesSize > SINGLE_THREAD_MAX_TXES_SIZE) {
+
+            // First check if the amount of txs exceeds the UI limit
+            if (txesSize > MAX_AMOUNT_LOADED_RECORDS) {
+                // Sort the txs by date just to be really really sure that them are ordered.
+                // (this extra calculation should be removed in the future if can ensure that
+                // txs are stored in order in the db, which is what should be happening)
+                sort(walletTxes.begin(), walletTxes.end(),
+                        [](const CWalletTx & a, const CWalletTx & b) -> bool {
+                         return a.GetComputedTxTime() < b.GetComputedTxTime();
+                     });
+
+                // Only latest ones.
+                walletTxes = std::vector<CWalletTx>(walletTxes.begin(), walletTxes.begin() + MAX_AMOUNT_LOADED_RECORDS);
+                txesSize = walletTxes.size();
+            };
 
             // Simple way to get the processors count
             std::size_t threadsCount = (QThreadPool::globalInstance()->maxThreadCount() / 2 ) + 1;
