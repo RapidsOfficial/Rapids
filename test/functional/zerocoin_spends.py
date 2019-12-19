@@ -55,6 +55,20 @@ class ZerocoinSpendTest(PivxTestFramework):
         assert_equal(fEnable, self.is_spork_active(1, sporkName))
         self.log.info("done")
 
+    def check_double_spend(self, node_id, serial, randomness, denom, privkey, tx):
+        try:
+            self.nodes[node_id].spendrawzerocoin(serial, randomness, denom, privkey, "", tx)
+        except JSONRPCException as e:
+            # JSONRPCException was thrown as expected. Check the code and message values are correct.
+            if e.error["code"] != -4:
+                raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
+            if ([x for x in ["Trying to spend an already spent serial",
+                             "You don't have enough Zerocoins in your wallet"] if x in e.error['message']] == []):
+                raise e
+        except Exception as e:
+            raise AssertionError("Unexpected exception raised: " + type(e).__name__)
+        self.log.info("GOOD: Double-spending transaction did not verify.")
+
     def run_test(self):
 
         def get_zerocoin_data(coin):
@@ -129,7 +143,7 @@ class ZerocoinSpendTest(PivxTestFramework):
                 raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
             if ([x for x in ["Couldn't generate the accumulator witness",
                              "The transaction was rejected!"] if x in e.error['message']] == []):
-                raise AssertionError("Expected substring not found:" + e.error['message'])
+                raise e
         except Exception as e:
             raise AssertionError("Unexpected exception raised: " + type(e).__name__)
         self.log.info("GOOD: v2 spend was not possible.")
@@ -145,9 +159,8 @@ class ZerocoinSpendTest(PivxTestFramework):
 
         # 6) Check double spends - spend v3
         self.log.info("Trying to spend the serial twice now...")
-        assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
-                                self.nodes[2].spendrawzerocoin, serial_2, randomness_2, denom_2, privkey_2, "", tx_2)
-        self.log.info("GOOD: Double-spending transaction did not verify.")
+        self.check_double_spend(2, serial_2, randomness_2, denom_2, privkey_2, tx_2)
+
 
         # 7) Activate v4 spends with SPORK_18
         self.setV4SpendEnforcement()
@@ -164,9 +177,7 @@ class ZerocoinSpendTest(PivxTestFramework):
 
         # 9) Check double spends - spend v4
         self.log.info("Trying to spend the serial twice now...")
-        assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
-                                self.nodes[2].spendrawzerocoin, serial_3, randomness_3, denom_3, privkey_3, "", tx_3)
-        self.log.info("GOOD: Double-spending transaction did not verify.")
+        self.check_double_spend(2, serial_3, randomness_3, denom_3, privkey_3, tx_3)
 
         # 10) Try to relay old v3 spend now (serial_1)
         self.log.info("Trying to send old v3 spend now...")
@@ -176,8 +187,7 @@ class ZerocoinSpendTest(PivxTestFramework):
 
         # 11) Try to double spend with v4 a mint already spent with v3 (serial_2)
         self.log.info("Trying to double spend v4 against v3...")
-        assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
-                                self.nodes[2].spendrawzerocoin, serial_2, randomness_2, denom_2, privkey_2, "", tx_2)
+        self.check_double_spend(2, serial_2, randomness_2, denom_2, privkey_2, tx_2)
         self.log.info("GOOD: Double-spending transaction did not verify.")
 
         # 12) Reactivate v3 spends and try to spend the old saved one (serial_1) again
