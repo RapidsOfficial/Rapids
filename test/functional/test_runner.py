@@ -60,7 +60,7 @@ BASE_SCRIPTS= [
 
     # vv Tests less than 5m vv
     'wallet_abandonconflict.py',
-    'wallet_reorg-stake.py',
+    'mining_pos_reorg.py',
     'feature_coldStaking.py',
     'rpc_rawtransaction.py',
     'wallet_zapwallettxes.py',
@@ -70,7 +70,7 @@ BASE_SCRIPTS= [
     'interface_rest.py',
     'feature_proxy.py',
 
-    'pos_fakestake.py',
+    'mining_pos_fakestake.py',
     'zerocoin_spends.py',
     #'zerocoin_wrapped_serials.py',
     #'feature_block.py',
