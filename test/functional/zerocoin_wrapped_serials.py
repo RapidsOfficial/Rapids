@@ -93,6 +93,7 @@ class zPIVwrappedSerialsTest(PivxTestFramework):
         listmints = self.nodes[2].listmintedzerocoins(True, True)
         serial_ids = [mint["serial hash"] for mint in listmints]
         exported_zerocoins = [x for x in self.nodes[2].exportzerocoins(False) if x["id"] in serial_ids]
+        exported_zerocoins.sort(key=lambda x: x["d"], reverse=False)
         assert_equal(8, len(exported_zerocoins))
 
         # 1) Spend 1 coin and mine two more blocks

@@ -3,6 +3,7 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+from test_framework.authproxy import JSONRPCException
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     sync_blocks,
@@ -156,7 +157,17 @@ class ReorgStakeTest(PivxTestFramework):
             {"xxncEuJK27ygNh7imNfaX8JV6ZQUnoBqzN": (stakeinput_amount-0.01)})
         rawtx = self.nodes[0].signrawtransaction(rawtx_unsigned)
         assert(rawtx["complete"])
-        assert_raises_rpc_error(-26, "bad-txns-inputs-spent", self.nodes[0].sendrawtransaction, rawtx["hex"])
+        try:
+            self.nodes[0].sendrawtransaction(rawtx["hex"])
+        except JSONRPCException as e:
+            # JSONRPCException was thrown as expected. Check the code and message values are correct.
+            if e.error["code"] not in [-24, -25]:
+                raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
+            if ([x for x in ["bad-txns-inputs-spent", "Missing inputs"] if x in e.error['message']] == []):
+                raise e
+        except Exception as e:
+            raise AssertionError("Unexpected exception raised: " + type(e).__name__)
+        self.log.info("GOOD: v2 spend was not possible.")
 
         # Spend tx_B0 and tx_B1 on the other chain
         self.nodes[1].sendrawtransaction(tx_B0)
