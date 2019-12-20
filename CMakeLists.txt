@@ -453,6 +453,7 @@ set(COMMON_SOURCES
         ./src/coins.cpp
         ./src/compressor.cpp
         ./src/consensus/merkle.cpp
+        ./src/consensus/tx_verify.cpp
         ./src/primitives/block.cpp
         ./src/zpiv/deterministicmint.cpp
         ./src/primitives/transaction.cpp

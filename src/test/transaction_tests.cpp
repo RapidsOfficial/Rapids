@@ -7,6 +7,7 @@
 #include "data/tx_valid.json.h"
 #include "test/test_pivx.h"
 
+#include "consensus/tx_verify.h"
 #include "clientversion.h"
 #include "key.h"
 #include "keystore.h"
