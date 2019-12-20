@@ -76,12 +76,11 @@ class ReorgStakeTest(PivxTestFramework):
         # Check balances
         self.log.info("Checking balances...")
         initial_balance = [self.get_tot_balance(i) for i in range(self.num_nodes)]
-        # --node 0: 64 pow blocks + 55 pos blocks
-        assert_equal(initial_balance[0], DecimalAmt(29750))
-        # --node 1: 62 pow blocks + 55 pos blocks
-        assert_equal(initial_balance[1], DecimalAmt(29250))
+        # --nodes 0, 1: 62 pow blocks + 55 pos blocks
+        assert_equal(initial_balance[0], DecimalAmt(250.0 * (62 + 55)))
+        assert_equal(initial_balance[1], DecimalAmt(250.0 * (62 + 55)))
         # --node 2: 62 pow blocks + 20 pos blocks - zc minted - zcfee
-        assert_equal(initial_balance[2], DecimalAmt(13833.92))
+        assert_equal(initial_balance[2], DecimalAmt(250.0 * (62 + 20) - 6666 - 0.08))
         assert_equal(self.nodes[2].getzerocoinbalance()['Total'], DecimalAmt(6666))
         self.log.info("Balances ok.")
 

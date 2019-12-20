@@ -46,6 +46,7 @@ from .util import (
     assert_greater_than,
     check_json_precision,
     connect_nodes_bi,
+    connect_nodes_clique,
     disconnect_nodes,
     DEFAULT_FEE,
     get_datadir_path,
@@ -402,10 +403,7 @@ class PivxTestFramework():
             rpc_logger.addHandler(rpc_handler)
 
     def _initialize_chain(self, toPosPhase=False):
-        """Initialize a pre-mined blockchain for use by the test.
-
-        Create a cache of a 200-block-long chain (with wallet) for MAX_NODES
-        Afterward, create num_nodes copies from the cache."""
+        """Initialize a pre-mined blockchain for use by the test."""
 
         def create_cachedir(cachedir):
             if os.path.isdir(cachedir):
@@ -418,6 +416,21 @@ class PivxTestFramework():
                 to_dir = get_datadir_path(destination, i)
                 shutil.copytree(from_dir, to_dir)
                 initialize_datadir(destination, i)  # Overwrite port/rpcport in pivx.conf
+
+        def clone_cache_from_node_1(cachedir, from_num=4):
+            """ Clones cache subdir from node 1 to nodes from 'from_num' to MAX_NODES"""
+            def copy_and_overwrite(from_path, to_path):
+                if os.path.exists(to_path):
+                    shutil.rmtree(to_path)
+                shutil.copytree(from_path, to_path)
+            assert from_num < MAX_NODES
+            node_0_datadir = os.path.join(get_datadir_path(cachedir, 0), "regtest")
+            for i in range(from_num, MAX_NODES):
+                node_i_datadir = os.path.join(get_datadir_path(cachedir, i), "regtest")
+                for subdir in ["blocks", "chainstate", "sporks", "zerocoin"]:
+                    copy_and_overwrite(os.path.join(node_0_datadir, subdir),
+                                    os.path.join(node_i_datadir, subdir))
+                initialize_datadir(cachedir, i)  # Overwrite port/rpcport in pivx.conf
 
         def cachedir_valid(cachedir):
             for i in range(MAX_NODES):
@@ -456,9 +469,9 @@ class PivxTestFramework():
             else:
                 os.makedirs(self.options.cachedir)
 
-        def start_nodes_from_dir(ddir):
-            self.log.info("Starting %d nodes..." % MAX_NODES)
-            for i in range(MAX_NODES):
+        def start_nodes_from_dir(ddir, num_nodes=MAX_NODES):
+            self.log.info("Starting %d nodes..." % num_nodes)
+            for i in range(num_nodes):
                 datadir = initialize_datadir(ddir, i)
                 if i == 0:
                     # Add .incomplete flagfile
@@ -477,13 +490,15 @@ class PivxTestFramework():
             for node in range(4):
                 self.nodes[node].wait_for_rpc_connection()
             self.log.info("Connecting nodes")
-            for node in range(4):
-                for j in range(node+1, MAX_NODES):
-                    connect_nodes_bi(self.nodes, node, j)
+            connect_nodes_clique(self.nodes)
 
         def stop_and_clean_cache_dir(ddir):
             self.stop_nodes()
             self.nodes = []
+            # Copy cache for nodes 5 to MAX_NODES
+            self.log.info("Copying cache dir to non-started nodes")
+            clone_cache_from_node_1(ddir)
+            self.log.info("Cleaning up.")
             clean_cache_subdir(ddir)
 
         def generate_pow_cache():
@@ -499,7 +514,7 @@ class PivxTestFramework():
             # Create cache directories, run pivxds:
             create_cachedir(powcachedir)
             self.log.info("Creating 'PoW-chain': 200 blocks")
-            start_nodes_from_dir(powcachedir)
+            start_nodes_from_dir(powcachedir, 4)
 
             # Mine the blocks
             self.log.info("Mining 200 blocks")
@@ -549,23 +564,21 @@ class PivxTestFramework():
             ### POS Cache ###
             # Create a 330-block-long chain
             # First 200 PoW blocks are copied from PoW chain.
-            # The next 48 PoW blocks are mined in 6-blocks bursts by the first 4 nodes (2 times).
-            # The last 2 PoW blocks are then mined by the first node (Node 0).
-            # Then 80 PoS blocks are generated in 5-blocks bursts by the first 4 nodes (4 times).
+            # The next 48 PoW blocks are mined in 12-blocks bursts by the first 4 nodes.
+            # The last 2 PoW blocks are then mined by the last node (Node 3).
+            # Then 80 PoS blocks are generated in 20-blocks bursts by the first 4 nodes.
             #
-            # - Node 0 gets 84 blocks:
-            # 62 mature blocks (pow) and 22 immature (2 pow + 20 pos)
-            # 42 rewards spendable (62 mature blocks - 20 spent rewards)
-            # - Nodes 1 to 3 get 82 blocks each:
-            # 56 mature blocks (pow) and 26 immature (6 pow + 20 pos)
-            # 36 rewards spendable (56 mature blocks - 20 spent rewards)
-            # - Nodes 2 and 3 both mint one zerocoin for each denom (tot 6666 PIV) on block 301/302
-            # 8 mature zc + 9 rewards spendable (36 - 27 spent) + change 83.92
+            # - Node 0 and node 1 get 62 mature blocks (pow) + 20 immmature (pos)
+            #   42 rewards spendable (62 mature blocks - 20 spent rewards)
+            # - Node 2 gets 56 mature blocks (pow) + 26 immmature (6 pow + 20 pos)
+            #   35 rewards spendable (55 mature blocks - 20 spent rewards)
+            # - Node 3 gets 50 mature blocks (pow) + 34 immmature (14 pow + 20 pos)
+            #   30 rewards spendable (50 mature blocks - 20 spent rewards)
+            # - Nodes 2 and 3 mint one zerocoin for each denom (tot 6666 PIV) on block 301/302
+            #   8 mature zc + 8/3 rewards spendable (35/30 - 27 spent) + change 83.92
             #
-            # Block 331-332 will mature last 2 pow blocks mined by node 0.
-            # Then 333-338 will mature last 6 pow blocks mined by node 1.
-            # Then 339-344 will mature last 6 pow blocks mined by node 2.
-            # Then 345-350 will mature last 6 pow blocks mined by node 3.
+            # Block 331-336 will mature last 6 pow blocks mined by node 2.
+            # Then 337-350 will mature last 14 pow blocks mined by node 3.
             # Then staked blocks start maturing at height 351.
 
             # Create cache directories, run pivxds:
@@ -573,21 +586,21 @@ class PivxTestFramework():
             self.log.info("Creating 'PoS-chain': 330 blocks")
             self.log.info("Copying 200 initial blocks from pow cache")
             copy_cachedir(powcachedir, poscachedir)
-            # Change datadir and restart the nodes
-            start_nodes_from_dir(poscachedir)
+            # Change datadir and restart the nodes (only 4 of them)
+            start_nodes_from_dir(poscachedir, 4)
 
             # Mine 50 more blocks to reach PoS start.
             self.log.info("Mining 50 more blocks to reach PoS phase")
-            for i in range(2):
-                for peer in range(4):
-                    for j in range(6):
-                        set_node_times(self.nodes, block_time)
-                        self.nodes[peer].generate(1)
-                        block_time += 60
-                    # Must sync before next peer starts generating blocks
+            for peer in range(4):
+                for j in range(12):
+                    set_node_times(self.nodes, block_time)
+                    self.nodes[peer].generate(1)
+                    block_time += 60
+                # Must sync before next peer starts generating blocks
+                if peer < 3:
                     sync_blocks(self.nodes)
             set_node_times(self.nodes, block_time)
-            self.nodes[0].generate(2)
+            self.nodes[3].generate(2)
             block_time += 60
             sync_blocks(self.nodes)
 
@@ -595,30 +608,28 @@ class PivxTestFramework():
             self.log.info("Staking 80 blocks...")
             nBlocks = 250
             res = []    # used to save the two txids for change outputs of mints (locked)
-            for i in range(4):
-                for peer in range(4):
-                    for j in range(5):
-                        # Stake block
-                        block_time = self.generate_pos(peer, block_time)
-                        nBlocks += 1
-                        # Mint zerocoins with node-2 at block 301
-                        # Mint zerocoins with node-3 at block 302
-                        if nBlocks == 301 or nBlocks == 302:
-                            # mints 7 zerocoins, one for each denom (tot 6666 PIV), fee = 0.01 * 8
-                            # consumes 27 utxos (tot 6750 PIV), change = 6750 - 6666 - fee
-                            res.append(self.nodes[nBlocks-299].mintzerocoin(6666))
-                            self.sync_all()
-                            # lock the change output (so it's not used as stake input in generate_pos)
-                            assert (self.nodes[nBlocks-299].lockunspent(False, [{"txid": res[-1]['txid'], "vout": 8}]))
-                    # Must sync before next peer starts generating blocks
-                    sync_blocks(self.nodes)
-                    time.sleep(1)
+            for peer in range(4):
+                for j in range(20):
+                    # Stake block
+                    block_time = self.generate_pos(peer, block_time)
+                    nBlocks += 1
+                    # Mint zerocoins with node-2 at block 301 and with node-3 at block 302
+                    if nBlocks == 301 or nBlocks == 302:
+                        # mints 7 zerocoins, one for each denom (tot 6666 PIV), fee = 0.01 * 8
+                        # consumes 27 utxos (tot 6750 PIV), change = 6750 - 6666 - fee
+                        res.append(self.nodes[nBlocks-299].mintzerocoin(6666))
+                        self.sync_all()
+                        # lock the change output (so it's not used as stake input in generate_pos)
+                        assert (self.nodes[nBlocks-299].lockunspent(False, [{"txid": res[-1]['txid'], "vout": 8}]))
+                # Must sync before next peer starts generating blocks
+                sync_blocks(self.nodes)
+                time.sleep(1)
 
-                self.log.info("%d blocks staked" % int((i+1)*20))
+            self.log.info("80 blocks staked")
 
             # Unlock previously locked change outputs
-            for peer in [2, 3]:
-                assert (self.nodes[peer].lockunspent(True, [{"txid": res[peer-2]['txid'], "vout": 8}]))
+            for i in [2, 3]:
+                assert (self.nodes[i].lockunspent(True, [{"txid": res[i-2]['txid'], "vout": 8}]))
 
             # Verify height and balances
             self.test_PoS_chain_balances()
@@ -660,10 +671,12 @@ class PivxTestFramework():
     def test_PoS_chain_balances(self):
         from .util import DecimalAmt
         # 330 blocks
-        # - Node 0 gets 84 blocks:
-        # 64 pow + 20 pos (22 immature)
-        # - Nodes 1 to 3 get 82 blocks each:
+        # - Nodes 0 and 1 get 82 blocks:
+        # 62 pow + 20 pos (20 immature)
+        # - Nodes 2 gets 82 blocks:
         # 62 pow + 20 pos (26 immature)
+        # - Nodes 3 gets 84 blocks:
+        # 64 pow + 20 pos (34 immature)
         # - Nodes 2 and 3 have 6666 PIV worth of zerocoins
         zc_tot = sum(vZC_DENOMS)
         zc_fee = len(vZC_DENOMS) * 0.01
@@ -683,27 +696,23 @@ class PivxTestFramework():
 
         # balance is mature pow blocks rewards minus stake inputs (spent)
         w_info = [self.nodes[i].getwalletinfo() for i in range(num_nodes)]
-        assert_equal(w_info[0]["balance"], 250.0 * (62 - 20))
-        mature_balance = 250.0 * (56 - 20)
-        for i in range(1, num_nodes):
-            if i < 4:
-                if i < 2:
-                    assert_equal(w_info[i]["balance"], DecimalAmt(mature_balance))
-                else:
-                    # node 2 and 3 have minted zerocoins
-                    assert_equal(w_info[i]["balance"], DecimalAmt(mature_balance - (used_utxos * 250) + zc_change))
-            else:
-                # only first 4 nodes have mined/staked
-                assert_equal(w_info[i]["balance"], DecimalAmt(0))
+        assert_equal(w_info[0]["balance"], DecimalAmt(250.0 * (62 - 20)))
+        assert_equal(w_info[1]["balance"], DecimalAmt(250.0 * (62 - 20)))
+        assert_equal(w_info[2]["balance"], DecimalAmt(250.0 * (56 - 20) - (used_utxos * 250) + zc_change))
+        assert_equal(w_info[3]["balance"], DecimalAmt(250.0 * (50 - 20) - (used_utxos * 250) + zc_change))
+        for i in range(4, num_nodes):
+            # only first 4 nodes have mined/staked
+            assert_equal(w_info[i]["balance"], DecimalAmt(0))
 
         # immature balance is immature pow blocks rewards plus
         # immature stakes (outputs=inputs+rewards)
-        assert_equal(w_info[0]["immature_balance"], DecimalAmt((250.0 * 2) + (500.0 * 20)))
-        for i in range(1, num_nodes):
-            if i < 4:
-                assert_equal(w_info[i]["immature_balance"], DecimalAmt((250.0 * 6) + (500.0 * 20)))
-            else:
-                assert_equal(w_info[i]["immature_balance"], DecimalAmt(0))
+        assert_equal(w_info[0]["immature_balance"], DecimalAmt(500.0 * 20))
+        assert_equal(w_info[1]["immature_balance"], DecimalAmt(500.0 * 20))
+        assert_equal(w_info[2]["immature_balance"], DecimalAmt((250.0 * 6) + (500.0 * 20)))
+        assert_equal(w_info[3]["immature_balance"], DecimalAmt((250.0 * 14) + (500.0 * 20)))
+        for i in range(4, num_nodes):
+            # only first 4 nodes have mined/staked
+            assert_equal(w_info[i]["immature_balance"], DecimalAmt(0))
 
         # check zerocoin balances / mints
         for peer in [2, 3]:
