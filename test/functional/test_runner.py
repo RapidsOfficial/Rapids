@@ -295,11 +295,26 @@ def run_tests(test_list, src_dir, build_dir, exeext, tmpdir, jobs=1, enable_cove
 
     if len(test_list) > 1 and jobs > 1:
         # Populate cache
+        # Send a ping message every 5 minutes to not get stalled on Travis.
+        import threading
+        pingTime = 5 * 60
+        stopTimer = False
+
+        def pingTravis():
+            if stopTimer:
+                return
+            print("- Creating cache in progress...")
+            sys.stdout.flush()
+            threading.Timer(pingTime, pingTravis).start()
+
+        pingTravis()
         try:
             subprocess.check_output([tests_dir + 'create_cache.py'] + flags + ["--tmpdir=%s/cache" % tmpdir])
         except subprocess.CalledProcessError as e:
             sys.stdout.buffer.write(e.output)
             raise
+        finally:
+            stopTimer = True
 
     #Run Tests
     job_queue = TestHandler(jobs, tests_dir, tmpdir, test_list, flags)
