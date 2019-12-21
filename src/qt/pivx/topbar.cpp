@@ -537,15 +537,15 @@ void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBa
                             const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
                             const CAmount& delegatedBalance, const CAmount& coldStakedBalance){
 
+    // Locked balance. //TODO move this to the signal properly in the future..
     CAmount nLockedBalance = 0;
     if (walletModel) {
         nLockedBalance = walletModel->getLockedBalance();
     }
+    ui->labelTitle1->setText(nLockedBalance > 0 ? tr("Available (Locked included)") : tr("Available"));
 
-    // PIV Balance
-    //CAmount nTotalBalance = balance + unconfirmedBalance + immatureBalance;
-    CAmount pivAvailableBalance = balance + delegatedBalance - nLockedBalance;
-
+    // PIV Total
+    CAmount pivAvailableBalance = balance + delegatedBalance;
     // zPIV Balance
     CAmount matureZerocoinBalance = zerocoinBalance - unconfirmedZerocoinBalance - immatureZerocoinBalance;
 
