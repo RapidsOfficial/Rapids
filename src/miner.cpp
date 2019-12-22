@@ -624,8 +624,8 @@ bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
 
     // Found a solution
     {
-        LOCK(cs_main);
-        if (pblock->hashPrevBlock != chainActive.Tip()->GetBlockHash())
+        WaitableLock lock(g_best_block_mutex);
+        if (pblock->hashPrevBlock != g_best_block)
             return error("PIVXMiner : generated block is stale");
     }
 
