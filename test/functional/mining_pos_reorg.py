@@ -161,7 +161,7 @@ class ReorgStakeTest(PivxTestFramework):
             self.nodes[0].sendrawtransaction(rawtx["hex"])
         except JSONRPCException as e:
             # JSONRPCException was thrown as expected. Check the code and message values are correct.
-            if e.error["code"] not in [-24, -25]:
+            if e.error["code"] not in [-26, -25]:
                 raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
             if ([x for x in ["bad-txns-inputs-spent", "Missing inputs"] if x in e.error['message']] == []):
                 raise e
