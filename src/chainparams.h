@@ -10,6 +10,7 @@
 
 #include "chainparamsbase.h"
 #include "checkpoints.h"
+#include "consensus/params.h"
 #include "primitives/block.h"
 #include "protocol.h"
 #include "uint256.h"
@@ -22,6 +23,11 @@ typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 struct CDNSSeedData {
     std::string name, host;
     CDNSSeedData(const std::string& strName, const std::string& strHost) : name(strName), host(strHost) {}
+};
+
+struct SeedSpec6 {
+    uint8_t addr[16];
+    uint16_t port;
 };
 
 /**
@@ -46,13 +52,14 @@ public:
         MAX_BASE58_TYPES
     };
 
-    const uint256& HashGenesisBlock() const { return hashGenesisBlock; }
+    const Consensus::Params& GetConsensus() const { return consensus; }
     const MessageStartChars& MessageStart() const { return pchMessageStart; }
-    const std::vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
     int GetDefaultPort() const { return nDefaultPort; }
     const uint256& ProofOfWorkLimit() const { return bnProofOfWorkLimit; }
     const uint256& ProofOfStakeLimit(const bool fV2) const { return fV2 ? bnProofOfStakeLimit_V2 : bnProofOfStakeLimit; }
-    int SubsidyHalvingInterval() const { return nSubsidyHalvingInterval; }
+
+    const CBlock& GenesisBlock() const { return genesis; }
+    const std::vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
     /** Used to check majorities for block version upgrade */
     int EnforceBlockUpgradeMajority() const { return nEnforceBlockUpgradeMajority; }
     int RejectBlockOutdatedMajority() const { return nRejectBlockOutdatedMajority; }
@@ -61,7 +68,6 @@ public:
 
     /** Used if GenerateBitcoins is called with a negative number of threads */
     int DefaultMinerThreads() const { return nMinerThreads; }
-    const CBlock& GenesisBlock() const { return genesis; }
     /** Make miner wait to have peers to avoid wasting work */
     bool MiningRequiresPeers() const { return fMiningRequiresPeers; }
     /** Headers first syncing is disabled */
@@ -76,9 +82,6 @@ public:
     bool RequireStandard() const { return fRequireStandard; }
     int64_t TargetSpacing() const { return nTargetSpacing; }
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespan_V2 : nTargetTimespan; }
-
-    /** returns the coinbase maturity **/
-    int COINBASE_MATURITY() const { return nMaturity; }
 
     /** returns the coinstake maturity (min depth required) **/
     int COINSTAKE_MIN_AGE() const { return nStakeMinAge; }
@@ -150,7 +153,6 @@ public:
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
     bool IsStakeModifierV2(const int nHeight) const { return nHeight >= nBlockStakeModifierlV2; }
     int NewSigsActive(const int nHeight) const { return nHeight >= nBlockEnforceNewMessageSignatures; }
-    int BIP65ActivationHeight() const { return nBIP65ActivationHeight; }
     int Block_V7_StartHeight() const { return nBlockV7StartHeight; }
 
     // fake serial attack
@@ -166,7 +168,7 @@ public:
 protected:
     CChainParams() {}
 
-    uint256 hashGenesisBlock;
+    Consensus::Params consensus;
     MessageStartChars pchMessageStart;
     //! Raw pub key bytes for the broadcast alert signing key.
     std::vector<unsigned char> vAlertPubKey;
@@ -175,7 +177,6 @@ protected:
     uint256 bnProofOfStakeLimit;
     uint256 bnProofOfStakeLimit_V2;
     int nMaxReorganizationDepth;
-    int nSubsidyHalvingInterval;
     int nEnforceBlockUpgradeMajority;
     int nRejectBlockOutdatedMajority;
     int nToCheckBlockUpgradeMajority;
@@ -231,7 +232,6 @@ protected:
     int nZerocoinStartTime;
     int nZerocoinRequiredStakeDepth;
     int64_t nProposalEstablishmentTime;
-    int nBIP65ActivationHeight;
 
     int nBlockEnforceSerialRange;
     int nBlockRecalculateAccumulators;
