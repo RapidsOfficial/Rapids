@@ -30,6 +30,7 @@
 #define DECORATION_SIZE 65
 #define NUM_ITEMS 3
 #define REQUEST_START_ALL 1
+#define REQUEST_START_MISSING 2
 
 class MNHolder : public FurListRow<QWidget*>
 {
@@ -100,6 +101,7 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
     ui->pushButtonSave->setText(tr("Create Masternode Controller"));
     setCssBtnPrimary(ui->pushButtonSave);
     setCssBtnPrimary(ui->pushButtonStartAll);
+    setCssBtnPrimary(ui->pushButtonStartMissing);
 
     /* Options */
     ui->btnAbout->setTitleClassAndText("btn-title-grey", "What is a Masternode?");
@@ -120,7 +122,12 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
     setCssProperty(ui->labelEmpty, "text-empty");
 
     connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(onCreateMNClicked()));
-    connect(ui->pushButtonStartAll, SIGNAL(clicked()), this, SLOT(onStartAllClicked()));
+    connect(ui->pushButtonStartAll, &QPushButton::clicked, [this]() {
+        onStartAllClicked(REQUEST_START_ALL);
+    });
+    connect(ui->pushButtonStartMissing, &QPushButton::clicked, [this]() {
+        onStartAllClicked(REQUEST_START_MISSING);
+    });
     connect(ui->listMn, SIGNAL(clicked(QModelIndex)), this, SLOT(onMNClicked(QModelIndex)));
     connect(ui->btnAbout, &OptionButton::clicked, [this](){window->openFAQ(9);});
     connect(ui->btnAboutController, &OptionButton::clicked, [this](){window->openFAQ(10);});
@@ -228,23 +235,31 @@ bool MasterNodesWidget::startMN(CMasternodeConfig::CMasternodeEntry mne, std::st
     return true;
 }
 
-void MasterNodesWidget::onStartAllClicked() {
+void MasterNodesWidget::onStartAllClicked(int type) {
     if(!verifyWalletUnlocked()) return;
     if (isLoading) {
-        inform(tr("Start all Masternodes is being executed, please wait"));
+        inform(tr("Background task is being executed, please wait"));
     } else {
         isLoading = true;
-        if (!execute(REQUEST_START_ALL)) {
+        if (!execute(type)) {
             isLoading = false;
-            inform(tr("Cannot perform start all Mastenodes"));
+            inform(tr("Cannot perform Mastenodes start"));
         }
     }
 }
 
-bool MasterNodesWidget::startAll(QString& failText) {
+bool MasterNodesWidget::startAll(QString& failText, bool onlyMissing) {
     int amountOfMnFailed = 0;
     int amountOfMnStarted = 0;
     for (CMasternodeConfig::CMasternodeEntry mne : masternodeConfig.getEntries()) {
+        // Check for missing only
+        QString mnAlias = QString::fromStdString(mne.getAlias());
+        if (onlyMissing && !mnModel->isMNInactive(mnAlias)) {
+            if (!mnModel->isMNActive(mnAlias))
+                amountOfMnFailed++;
+            continue;
+        }
+
         std::string strError;
         if (!startMN(mne, strError)) {
             amountOfMnFailed++;
@@ -254,17 +269,20 @@ bool MasterNodesWidget::startAll(QString& failText) {
     }
     if (amountOfMnFailed > 0) {
         failText = tr("%1 Masternodes failed to start, %2 started").arg(amountOfMnFailed).arg(amountOfMnStarted);
+        return false;
     }
     return true;
 }
 
 void MasterNodesWidget::run(int type) {
-    if (type == REQUEST_START_ALL) {
+    bool isStartMissing = type == REQUEST_START_MISSING;
+    if (type == REQUEST_START_ALL || isStartMissing) {
         QString failText;
-        QString inform = startAll(failText) ? tr("All Masternodes started!") : failText;
+        QString inform = startAll(failText, isStartMissing) ? tr("All Masternodes started!") : failText;
         QMetaObject::invokeMethod(this, "updateModelAndInform", Qt::QueuedConnection,
                                   Q_ARG(QString, inform));
     }
+
     isLoading = false;
 }
 

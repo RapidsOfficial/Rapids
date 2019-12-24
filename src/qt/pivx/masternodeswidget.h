@@ -42,7 +42,7 @@ public:
 
 private slots:
     void onCreateMNClicked();
-    void onStartAllClicked();
+    void onStartAllClicked(int type);
     void changeTheme(bool isLightTheme, QString &theme) override;
     void onMNClicked(const QModelIndex &index);
     void onEditMNClicked();
@@ -62,7 +62,7 @@ private:
     std::atomic<bool> isLoading;
 
     void startAlias(QString strAlias);
-    bool startAll(QString& failedMN);
+    bool startAll(QString& failedMN, bool onlyMissing);
     bool startMN(CMasternodeConfig::CMasternodeEntry mne, std::string& strError);
 };
 

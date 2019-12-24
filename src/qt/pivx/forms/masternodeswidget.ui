@@ -264,13 +264,13 @@
            <widget class="QPushButton" name="pushButtonSave">
             <property name="minimumSize">
              <size>
-              <width>280</width>
+              <width>283</width>
               <height>50</height>
              </size>
             </property>
             <property name="maximumSize">
              <size>
-              <width>280</width>
+              <width>283</width>
               <height>50</height>
              </size>
             </property>
@@ -292,6 +292,19 @@
             </property>
             <property name="text">
              <string>Start All</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButtonStartMissing">
+            <property name="minimumSize">
+             <size>
+              <width>125</width>
+              <height>50</height>
+             </size>
+            </property>
+            <property name="text">
+             <string>Start Inactive/s</string>
             </property>
            </widget>
           </item>
