@@ -22,10 +22,10 @@ RequestDialog::RequestDialog(QWidget *parent) :
     setCssProperty(ui->frame, "container-dialog");
 
     // Text
-    ui->labelTitle->setText(tr("New Request Payment"));
+    ui->labelTitle->setText(tr("New Payment Request"));
     setCssProperty(ui->labelTitle, "text-title-dialog");
 
-    ui->labelMessage->setText(tr("Instead of only sharing a PIVX address, you can create a Payment Request message which bundles up more information than is contained in just a PIVX address."));
+    ui->labelMessage->setText(tr("Instead of sharing only a PIVX address, you can create a payment request, bundling up more information."));
     setCssProperty(ui->labelMessage, "text-main-grey");
 
     // Combo Coins
@@ -35,7 +35,7 @@ RequestDialog::RequestDialog(QWidget *parent) :
     // Label
     ui->labelSubtitleLabel->setText(tr("Label"));
     setCssProperty(ui->labelSubtitleLabel, "text-title2-dialog");
-    ui->lineEditLabel->setPlaceholderText(tr("Enter a label to be saved within the address"));
+    ui->lineEditLabel->setPlaceholderText(tr("Enter a label for the address"));
     setCssEditLineDialog(ui->lineEditLabel, true);
 
     // Amount
@@ -49,7 +49,7 @@ RequestDialog::RequestDialog(QWidget *parent) :
     ui->labelSubtitleDescription->setText(tr("Description (optional)"));
     setCssProperty(ui->labelSubtitleDescription, "text-title2-dialog");
 
-    ui->lineEditDescription->setPlaceholderText(tr("Add description "));
+    ui->lineEditDescription->setPlaceholderText(tr("Enter description"));
     setCssEditLineDialog(ui->lineEditDescription, true);
 
     // Stack

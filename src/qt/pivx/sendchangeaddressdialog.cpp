@@ -24,7 +24,7 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
     ui->labelMessage->setText(tr("The remainder of the value resultant from the inputs minus the outputs value goes to the \"change\" PIVX address"));
     ui->labelMessage->setProperty("cssClass", "text-main-grey");
 
-    ui->lineEditAddress->setPlaceholderText("Enter a PIVX  address (e.g D7VFR83SQbiezrW72hjc… ");
+    ui->lineEditAddress->setPlaceholderText("Enter PIVX address (e.g D7VFR83SQbiezrW72hjc… ");
     initCssEditLine(ui->lineEditAddress, true);
 
     // Buttons

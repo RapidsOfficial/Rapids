@@ -492,7 +492,7 @@
                    <string notr="true"/>
                   </property>
                   <property name="text">
-                   <string>No active Master Node yet</string>
+                   <string>N/A</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>

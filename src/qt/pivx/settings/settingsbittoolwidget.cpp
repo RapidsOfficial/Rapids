@@ -81,10 +81,10 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     // Encrypt
 
     // Address
-    ui->labelSubtitleAddress->setText(tr("Enter a PIVX address"));
+    ui->labelSubtitleAddress->setText(tr("PIVX address"));
     setCssProperty(ui->labelSubtitleAddress, "text-title");
 
-    ui->addressIn_ENC->setPlaceholderText(tr("Add address"));
+    ui->addressIn_ENC->setPlaceholderText(tr("Enter address"));
     setCssProperty(ui->addressIn_ENC, "edit-primary-multi-book");
     ui->addressIn_ENC->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->addressIn_ENC);
@@ -94,7 +94,7 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     setCssProperty(ui->labelSubtitleMessage, "text-title");
 
     setCssProperty(ui->passphraseIn_ENC, "edit-primary");
-    ui->passphraseIn_ENC->setPlaceholderText(tr("Write a message"));
+    ui->passphraseIn_ENC->setPlaceholderText(tr("Enter passphrase"));
     setCssProperty(ui->passphraseIn_ENC,"edit-primary");
     setShadow(ui->passphraseIn_ENC);
     ui->passphraseIn_ENC->setAttribute(Qt::WA_MacShowFocusRect, 0);
