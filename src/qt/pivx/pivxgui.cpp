@@ -30,6 +30,7 @@
 
 #define BASE_WINDOW_WIDTH 1200
 #define BASE_WINDOW_HEIGHT 740
+#define BASE_WINDOW_MIN_HEIGHT 620
 
 
 const QString PIVXGUI::DEFAULT_WALLET = "~Default";
@@ -40,7 +41,7 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
     /* Open CSS when configured */
     this->setStyleSheet(GUIUtil::loadStyleSheet());
-    this->setMinimumSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT);
+    this->setMinimumSize(BASE_WINDOW_WIDTH, BASE_WINDOW_MIN_HEIGHT);
     GUIUtil::restoreWindowGeometry("nWindow", QSize(BASE_WINDOW_WIDTH, BASE_WINDOW_HEIGHT), this);
 
 #ifdef ENABLE_WALLET
@@ -71,7 +72,7 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
         QFrame* centralWidget = new QFrame(this);
         this->setMinimumWidth(BASE_WINDOW_WIDTH);
-        this->setMinimumHeight(BASE_WINDOW_HEIGHT);
+        this->setMinimumHeight(BASE_WINDOW_MIN_HEIGHT);
         QHBoxLayout* centralWidgetLayouot = new QHBoxLayout();
         centralWidget->setLayout(centralWidgetLayouot);
         centralWidgetLayouot->setContentsMargins(0,0,0,0);
