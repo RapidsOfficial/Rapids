@@ -94,6 +94,7 @@ AddressesWidget::AddressesWidget(PIVXGUI* parent) :
     ui->listAddresses->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
     ui->listAddresses->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->listAddresses->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->listAddresses->setUniformItemSizes(true);
 
     //Empty List
     ui->emptyContainer->setVisible(false);

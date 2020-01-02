@@ -185,6 +185,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->listViewStakingAddress->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
     ui->listViewStakingAddress->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->listViewStakingAddress->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->listViewStakingAddress->setUniformItemSizes(true);
 
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
     connect(btnOwnerContact, &QAction::triggered, [this](){ onContactsClicked(true); });

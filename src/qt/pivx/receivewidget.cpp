@@ -84,6 +84,7 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     ui->listViewAddress->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
     ui->listViewAddress->setAttribute(Qt::WA_MacShowFocusRect, false);
     ui->listViewAddress->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui->listViewAddress->setUniformItemSizes(true);
 
     spacer = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Expanding);
     ui->btnMyAddresses->setChecked(true);
