@@ -217,9 +217,10 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
 
 UniValue ListaddressesForPurpose(const std::string strPurpose)
 {
-    const CChainParams::Base58Type addrType =
-            strPurpose == "coldstaking" ?
-            CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS;
+    const CChainParams::Base58Type addrType = (
+            AddressBook::IsColdStakingPurpose(strPurpose) ?
+                    CChainParams::STAKING_ADDRESS :
+                    CChainParams::PUBKEY_ADDRESS);
     UniValue ret(UniValue::VARR);
     {
         LOCK(pwalletMain->cs_wallet);
