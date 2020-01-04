@@ -237,15 +237,19 @@ UniValue ListaddressesForPurpose(const std::string strPurpose)
 
 UniValue listdelegators(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() != 0)
+    if (fHelp || params.size() > 1)
         throw std::runtime_error(
-            "listdelegators \"addr\"\n"
+            "listdelegators ( fBlacklist )\n"
             "\nShows the list of allowed delegator addresses for cold staking.\n"
+
+            "\nArguments:\n"
+            "1. fBlacklist             (boolean, optional, default = false) Show addresses removed\n"
+            "                          from the delegators whitelist\n"
 
             "\nResult:\n"
             "[\n"
             "   {\n"
-            "   \"label\": \"yyy\",  (string) account label\n"
+            "   \"label\": \"yyy\",    (string) account label\n"
             "   \"address\": \"xxx\",  (string) PIVX address string\n"
             "   }\n"
             "  ...\n"
@@ -255,7 +259,10 @@ UniValue listdelegators(const UniValue& params, bool fHelp)
             HelpExampleCli("listdelegators" , "") +
             HelpExampleRpc("listdelegators", ""));
 
-    return ListaddressesForPurpose("delegator");
+    const bool fBlacklist = (params.size() > 0 ? params[0].get_bool() : false);
+    return (fBlacklist ?
+            ListaddressesForPurpose(AddressBook::AddressBookPurpose::DELEGABLE) :
+            ListaddressesForPurpose(AddressBook::AddressBookPurpose::DELEGATOR));
 }
 
 UniValue liststakingaddresses(const UniValue& params, bool fHelp)
