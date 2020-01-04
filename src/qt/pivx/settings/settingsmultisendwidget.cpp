@@ -288,7 +288,8 @@ void SettingsMultisendWidget::addMultiSend(QString address, int percentage, QStr
         // update the address book with the label given or no label if none was given.
         CBitcoinAddress address(strAddress);
         std::string userInputLabel = addressLabel.toStdString();
-        walletModel->updateAddressBookLabels(address.Get(), (userInputLabel.empty()) ? "(no label)" : userInputLabel, "send");
+        walletModel->updateAddressBookLabels(address.Get(), (userInputLabel.empty()) ? "(no label)" : userInputLabel,
+                AddressBook::AddressBookPurpose::SEND);
     }
 
     CWalletDB walletdb(pwalletMain->strWalletFile);

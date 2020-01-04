@@ -74,7 +74,7 @@ BOOST_AUTO_TEST_CASE(rpc_wallet)
     CBitcoinAddress demoAddress = CBitcoinAddress(CTxDestination(demoPubkey.GetID()));
     UniValue retValue;
     std::string strAccount = "walletDemoAccount";
-    std::string strPurpose = "receive";
+    std::string strPurpose = AddressBook::AddressBookPurpose::RECEIVE;
     BOOST_CHECK_NO_THROW({ /*Initialize Wallet with an account */
         CWalletDB walletdb(pwalletMain->strWalletFile);
         CAccount account;

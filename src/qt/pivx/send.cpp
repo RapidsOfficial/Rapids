@@ -500,7 +500,9 @@ void SendWidget::updateEntryLabels(QList<SendCoinsRecipient> recipients){
             if(label.compare(labelOld) != 0) {
                 CTxDestination dest = CBitcoinAddress(rec.address.toStdString()).Get();
                 if (!walletModel->updateAddressBookLabels(dest, label.toStdString(),
-                                                          this->walletModel->isMine(dest) ? "receive" : "send")) {
+                                                          this->walletModel->isMine(dest) ?
+                                                                  AddressBook::AddressBookPurpose::RECEIVE :
+                                                                  AddressBook::AddressBookPurpose::SEND)) {
                     // Label update failed
                     emit message("", tr("Address label update failed for address: %1").arg(rec.address), CClientUIInterface::MSG_ERROR);
                     return;
@@ -733,7 +735,8 @@ void SendWidget::onContactMultiClicked(){
             if (label == dialog->getLabel()) {
                 return;
             }
-            if (walletModel->updateAddressBookLabels(pivAdd.Get(), dialog->getLabel().toStdString(), "send")) {
+            if (walletModel->updateAddressBookLabels(pivAdd.Get(), dialog->getLabel().toStdString(),
+                    AddressBook::AddressBookPurpose::SEND)) {
                 inform(tr("New Contact Stored"));
             } else {
                 inform(tr("Error Storing Contact"));

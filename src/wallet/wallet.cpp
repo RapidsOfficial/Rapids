@@ -183,7 +183,7 @@ CBitcoinAddress CWallet::GenerateNewAutoMintKey()
     CKeyID keyID = GenerateNewKey().GetID();
     btcAddress.Set(keyID);
     CWalletDB(strWalletFile).WriteAutoConvertKey(btcAddress);
-    SetAddressBook(keyID, "automint-address", "receive");
+    SetAddressBook(keyID, "automint-address", AddressBook::AddressBookPurpose::RECEIVE);
     setAutoConvertAddresses.emplace(btcAddress);
     return btcAddress;
 }
@@ -3071,7 +3071,7 @@ bool CWallet::HasDelegator(const CTxOut& out) const
         std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = mapAddressBook.find(delegator);
         if (mi == mapAddressBook.end())
             return false;
-        return (*mi).second.purpose == "delegator";
+        return (*mi).second.purpose == AddressBook::AddressBookPurpose::DELEGATOR;
     }
 }
 
