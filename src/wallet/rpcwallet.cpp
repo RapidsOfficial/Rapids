@@ -143,31 +143,35 @@ UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
 
 UniValue delegatoradd(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw std::runtime_error(
-            "delegatoradd \"addr\"\n"
+            "delegatoradd \"addr\" ( \"label\" )\n"
             "\nAdd the provided address <addr> into the allowed delegators AddressBook.\n"
             "This enables the staking of coins delegated to this wallet, owned by <addr>\n"
 
             "\nArguments:\n"
             "1. \"addr\"        (string, required) The address to whitelist\n"
+            "2. \"label\"       (string, optional) A label for the address to whitelist\n"
 
             "\nResult:\n"
             "true|false           (boolean) true if successful.\n"
 
             "\nExamples:\n" +
             HelpExampleCli("delegatoradd", "DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6") +
-            HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
+            HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\"") +
+            HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\" \"myPaperWallet\""));
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid() || address.IsStakingAddress())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
+    const std::string strLabel = (params.size() > 1 ? params[1].get_str() : "");
+
     CKeyID keyID;
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from PIVX address");
 
-    return pwalletMain->SetAddressBook(keyID, "", AddressBook::AddressBookPurpose::DELEGATOR);
+    return pwalletMain->SetAddressBook(keyID, strLabel, AddressBook::AddressBookPurpose::DELEGATOR);
 }
 
 UniValue delegatorremove(const UniValue& params, bool fHelp)
@@ -179,7 +183,7 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
             "This disables the staking of coins delegated to this wallet, owned by <addr>\n"
 
             "\nArguments:\n"
-            "1. \"addr\"        (string, required) The address to whitelist\n"
+            "1. \"addr\"        (string, required) The address to blacklist\n"
 
             "\nResult:\n"
             "true|false           (boolean) true if successful.\n"
