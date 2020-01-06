@@ -22,7 +22,7 @@ from decimal import Decimal
 import http.client
 import subprocess
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
     assert_greater_than,
@@ -33,10 +33,9 @@ from test_framework.util import (
     assert_is_hash_string,
 )
 
-class BlockchainTest(BitcoinTestFramework):
+class BlockchainTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
-        self.extra_args = [['-stopatheight=207', '-prune=1']]
 
     def run_test(self):
         #self._test_getblockchaininfo()
@@ -61,6 +60,7 @@ class BlockchainTest(BitcoinTestFramework):
         res = self.nodes[0].getblockchaininfo()
         # result should have these additional pruning keys if manual pruning is enabled
         assert_equal(sorted(res.keys()), sorted(keys))
+
     def _test_gettxoutsetinfo(self):
         node = self.nodes[0]
         res = node.gettxoutsetinfo()

@@ -5,10 +5,10 @@
 """Test the -alertnotify, -blocknotify and -walletnotify options."""
 import os
 
-from test_framework.test_framework import BitcoinTestFramework
+from test_framework.test_framework import PivxTestFramework
 from test_framework.util import assert_equal, wait_until, connect_nodes_bi
 
-class NotificationsTest(BitcoinTestFramework):
+class NotificationsTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True
@@ -66,7 +66,7 @@ class NotificationsTest(BitcoinTestFramework):
         self.nodes[1].generate(51)
         self.sync_all()
 
-        # Give bitcoind 10 seconds to write the alert notification
+        # Give pivxd 10 seconds to write the alert notification
         wait_until(lambda: os.path.isfile(self.alert_filename) and os.path.getsize(self.alert_filename), timeout=10)
 
         with open(self.alert_filename, 'r', encoding='utf8') as f:

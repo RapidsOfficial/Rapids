@@ -6,85 +6,66 @@
 
 from time import sleep
 
-from test_framework.mininode import network_thread_start
-from test_framework.test_framework import BitcoinTestFramework
-from test_framework.util import connect_nodes_bi, p2p_port
-from fake_stake.util import TestNode
+from test_framework.test_framework import PivxTestFramework
+from test_framework.util import set_node_times, assert_equal
 
 
-class PIVX_RPCSporkTest(BitcoinTestFramework):
+class PIVX_RPCSporkTest(PivxTestFramework):
+
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
         self.extra_args = [['-staking=1']] * self.num_nodes
         self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
 
+    def setup_chain(self):
+        # Start with clean chain
+        self._initialize_chain_clean()
+        self.enable_mocktime()
 
-    def setup_network(self):
-        ''' Can't rely on syncing all the nodes when staking=1
-        :param:
-        :return:
-        '''
-        self.setup_nodes()
-        for i in range(self.num_nodes - 1):
-            for j in range(i+1, self.num_nodes):
-                connect_nodes_bi(self.nodes, i, j)
-
-    def init_test(self):
-        ''' Initializes test parameters
-        :param:
-        :return:
-        '''
+    def log_title(self):
         title = "*** Starting %s ***" % self.__class__.__name__
         underline = "-" * len(title)
-        self.log.info("\n\n%s\n%s\n%s\n", title, underline, self.description)
-
-        # Setup the p2p connections and start up the network thread.
-        self.test_nodes = []
-        for i in range(self.num_nodes):
-            self.test_nodes.append(TestNode())
-            self.test_nodes[i].peer_connect('127.0.0.1', p2p_port(i))
-
-        network_thread_start()  # Start up network handling in another thread
-        self.node = self.nodes[0]
-
-        # Let the test nodes get in sync
-        for i in range(self.num_nodes):
-            self.test_nodes[i].wait_for_verack()
-
-
-    def printDict(self, d):
-        self.log.info("{")
-        for k in d:
-            self.log.info("  %s = %d" % (k, d[k]))
-        self.log.info("}")
-
+        description = "Performs tests on the Spork RPC"
+        self.log.info("\n\n%s\n%s\n%s\n", title, underline, description)
 
     def run_test(self):
-        self.description = "Performs tests on the Spork RPC"
-        # check spork values:
-        sporks = self.nodes[1].spork("show")
-        self.printDict(sporks)
-        active = self.nodes[1].spork("active")
-        assert(not active["SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT"])
-        # activate SPORK 8
-        new_value = 1563253447
-        res = self.nodes[0].spork("SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT", new_value)
-        assert(res == "success")
+        self.log_title()
+        set_node_times(self.nodes, self.mocktime)
+        sporkName = "SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT"
+
+        # 0 - check SPORK 8 status from node 1 (must be inactive)
+        assert_equal(False, self.is_spork_active(1, sporkName))
+
+        # 1 - activate SPORK 8 with nodes[0]
+        assert_equal("success", self.activate_spork(0, sporkName))
         sleep(1)
-        self.sync_all()
-        sporks = self.nodes[1].spork("show")
-        self.printDict(sporks)
-        assert(sporks["SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT"] == new_value)
-        active = self.nodes[0].spork("active")
-        assert (active["SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT"])
+        # check SPORK 8 status from nodes[1] (must be active)
+        assert_equal(True, self.is_spork_active(1, sporkName))
+
+        # 2 - Adjust time to 1 sec in the future and deactivate SPORK 8 with node[0]
+        self.mocktime += 1
+        set_node_times(self.nodes, self.mocktime)
+        assert_equal("success", self.deactivate_spork(0, sporkName))
+        sleep(1)
+        # check SPORK 8 value from nodes[1] (must be inactive again)
+        assert_equal(False, self.is_spork_active(1, sporkName))
+
+        # 3 - Adjust time to 1 sec in the future and set new value (mocktime) for SPORK 8 with node[0]
+        self.mocktime += 1
+        set_node_times(self.nodes, self.mocktime)
+        assert_equal("success", self.set_spork(0, sporkName, self.mocktime))
+        sleep(1)
+        # check SPORK 8 value from nodes[1] (must be equal to mocktime)
+        assert_equal(self.mocktime, self.get_spork(1, sporkName))
+
+        # 4 - Stop nodes and check value again after restart
         self.log.info("Stopping nodes...")
         self.stop_nodes()
         self.log.info("Restarting node 1...")
         self.start_node(1, [])
-        sporks = self.nodes[1].spork("show")
-        self.printDict(sporks)
-        assert (sporks["SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT"] == new_value)
+        assert_equal(self.mocktime, self.get_spork(1, sporkName))
+        self.log.info("%s: TEST PASSED" % self.__class__.__name__)
 
 
 

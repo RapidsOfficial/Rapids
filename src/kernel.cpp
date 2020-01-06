@@ -344,10 +344,10 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
     hashProofOfStakeRet = Hash(ss.begin(), ss.end());
 
     if (fVerify) {
-        LogPrint("staking", "%s :{ nStakeModifier=%s\n"
-                            "nStakeModifierHeight=%s\n"
-                            "}\n",
-            __func__, HexStr(modifier_ss), ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight())));
+        LogPrint("staking", "%s : nStakeModifier=%s (nStakeModifierHeight=%s)\n"
+                "nTimeBlockFrom=%d\nssUniqueIDD=%s\n-->DATA=%s",
+            __func__, HexStr(modifier_ss), ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight())),
+            nTimeBlockFrom, HexStr(ssUniqueID), HexStr(ss));
     }
     return true;
 }
