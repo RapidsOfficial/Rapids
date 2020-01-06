@@ -116,7 +116,7 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
             HelpExampleCli("getnewaddress", "") + HelpExampleRpc("getnewaddress", "\"\"") +
             HelpExampleCli("getnewaddress", "\"myaccount\"") + HelpExampleRpc("getnewaddress", "\"myaccount\""));
 
-    return GetNewAddressFromAccount("receive", params).ToString();
+    return GetNewAddressFromAccount(AddressBook::AddressBookPurpose::RECEIVE, params).ToString();
 }
 
 UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
@@ -143,31 +143,35 @@ UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
 
 UniValue delegatoradd(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() != 1)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw std::runtime_error(
-            "delegatoradd \"addr\"\n"
+            "delegatoradd \"addr\" ( \"label\" )\n"
             "\nAdd the provided address <addr> into the allowed delegators AddressBook.\n"
             "This enables the staking of coins delegated to this wallet, owned by <addr>\n"
 
             "\nArguments:\n"
             "1. \"addr\"        (string, required) The address to whitelist\n"
+            "2. \"label\"       (string, optional) A label for the address to whitelist\n"
 
             "\nResult:\n"
             "true|false           (boolean) true if successful.\n"
 
             "\nExamples:\n" +
             HelpExampleCli("delegatoradd", "DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6") +
-            HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
+            HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\"") +
+            HelpExampleRpc("delegatoradd", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\" \"myPaperWallet\""));
 
     CBitcoinAddress address(params[0].get_str());
     if (!address.IsValid() || address.IsStakingAddress())
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
+    const std::string strLabel = (params.size() > 1 ? params[1].get_str() : "");
+
     CKeyID keyID;
     if (!address.GetKeyID(keyID))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from PIVX address");
 
-    return pwalletMain->SetAddressBook(keyID, "", AddressBook::AddressBookPurpose::DELEGATOR);
+    return pwalletMain->SetAddressBook(keyID, strLabel, AddressBook::AddressBookPurpose::DELEGATOR);
 }
 
 UniValue delegatorremove(const UniValue& params, bool fHelp)
@@ -179,7 +183,7 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
             "This disables the staking of coins delegated to this wallet, owned by <addr>\n"
 
             "\nArguments:\n"
-            "1. \"addr\"        (string, required) The address to whitelist\n"
+            "1. \"addr\"        (string, required) The address to blacklist\n"
 
             "\nResult:\n"
             "true|false           (boolean) true if successful.\n"
@@ -213,9 +217,10 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
 
 UniValue ListaddressesForPurpose(const std::string strPurpose)
 {
-    const CChainParams::Base58Type addrType =
-            strPurpose == "coldstaking" ?
-            CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS;
+    const CChainParams::Base58Type addrType = (
+            AddressBook::IsColdStakingPurpose(strPurpose) ?
+                    CChainParams::STAKING_ADDRESS :
+                    CChainParams::PUBKEY_ADDRESS);
     UniValue ret(UniValue::VARR);
     {
         LOCK(pwalletMain->cs_wallet);
@@ -233,15 +238,19 @@ UniValue ListaddressesForPurpose(const std::string strPurpose)
 
 UniValue listdelegators(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() != 0)
+    if (fHelp || params.size() > 1)
         throw std::runtime_error(
-            "listdelegators \"addr\"\n"
+            "listdelegators ( fBlacklist )\n"
             "\nShows the list of allowed delegator addresses for cold staking.\n"
+
+            "\nArguments:\n"
+            "1. fBlacklist             (boolean, optional, default = false) Show addresses removed\n"
+            "                          from the delegators whitelist\n"
 
             "\nResult:\n"
             "[\n"
             "   {\n"
-            "   \"label\": \"yyy\",  (string) account label\n"
+            "   \"label\": \"yyy\",    (string) account label\n"
             "   \"address\": \"xxx\",  (string) PIVX address string\n"
             "   }\n"
             "  ...\n"
@@ -251,7 +260,10 @@ UniValue listdelegators(const UniValue& params, bool fHelp)
             HelpExampleCli("listdelegators" , "") +
             HelpExampleRpc("listdelegators", ""));
 
-    return ListaddressesForPurpose("delegator");
+    const bool fBlacklist = (params.size() > 0 ? params[0].get_bool() : false);
+    return (fBlacklist ?
+            ListaddressesForPurpose(AddressBook::AddressBookPurpose::DELEGABLE) :
+            ListaddressesForPurpose(AddressBook::AddressBookPurpose::DELEGATOR));
 }
 
 UniValue liststakingaddresses(const UniValue& params, bool fHelp)
@@ -274,7 +286,7 @@ UniValue liststakingaddresses(const UniValue& params, bool fHelp)
             HelpExampleCli("liststakingaddresses" , "") +
             HelpExampleRpc("liststakingaddresses", ""));
 
-    return ListaddressesForPurpose("coldstaking");
+    return ListaddressesForPurpose(AddressBook::AddressBookPurpose::COLD_STAKING);
 }
 
 CBitcoinAddress GetAccountAddress(std::string strAccount, bool bForceNew = false)
@@ -304,7 +316,7 @@ CBitcoinAddress GetAccountAddress(std::string strAccount, bool bForceNew = false
         if (!pwalletMain->GetKeyFromPool(account.vchPubKey))
             throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, "Error: Keypool ran out, please call keypoolrefill first");
 
-        pwalletMain->SetAddressBook(account.vchPubKey.GetID(), strAccount, "receive");
+        pwalletMain->SetAddressBook(account.vchPubKey.GetID(), strAccount, AddressBook::AddressBookPurpose::RECEIVE);
         walletdb.WriteAccount(strAccount, account);
     }
 
@@ -405,7 +417,7 @@ UniValue setaccount(const UniValue& params, bool fHelp)
             if (address == GetAccountAddress(strOldAccount))
                 GetAccountAddress(strOldAccount, true);
         }
-        pwalletMain->SetAddressBook(address.Get(), strAccount, "receive");
+        pwalletMain->SetAddressBook(address.Get(), strAccount, AddressBook::AddressBookPurpose::RECEIVE);
     } else
         throw JSONRPCError(RPC_MISC_ERROR, "setaccount can only be used with own address");
 
@@ -1471,7 +1483,7 @@ UniValue addmultisigaddress(const UniValue& params, bool fHelp)
     CScriptID innerID(inner);
     pwalletMain->AddCScript(inner);
 
-    pwalletMain->SetAddressBook(innerID, strAccount, "send");
+    pwalletMain->SetAddressBook(innerID, strAccount, AddressBook::AddressBookPurpose::SEND);
     return CBitcoinAddress(innerID).ToString();
 }
 

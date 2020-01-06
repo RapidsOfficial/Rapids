@@ -307,7 +307,7 @@ void SettingsBitToolWidget::importAddressFromDecKey(){
         ui->statusLabel_DEC->setText(tr("Please wait while key is imported"));
 
         pwalletMain->MarkDirty();
-        pwalletMain->SetAddressBook(vchAddress, "", "receive");
+        pwalletMain->SetAddressBook(vchAddress, "", AddressBook::AddressBookPurpose::RECEIVE);
 
         // Don't throw error in case a key is already there
         if (pwalletMain->HaveKey(vchAddress)) {

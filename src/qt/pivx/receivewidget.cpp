@@ -189,7 +189,7 @@ void ReceiveWidget::onLabelClicked(){
             if (!label.isEmpty() && walletModel->updateAddressBookLabels(
                     address.Get(),
                     label.toUtf8().constData(),
-                    "receive"
+                    AddressBook::AddressBookPurpose::RECEIVE
             )
                     ) {
                 // update label status (icon color)
