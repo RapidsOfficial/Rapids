@@ -99,10 +99,6 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
             "\nAs a JSON-RPC call\n" +
             HelpExampleRpc("importprivkey", "\"mykey\", \"testing\", false"));
 
-    LOCK2(cs_main, pwalletMain->cs_wallet);
-
-    EnsureWalletIsUnlocked();
-
     const std::string strSecret = params[0].get_str();
     const std::string strLabel = (params.size() > 1 ? params[1].get_str() : "");
     const bool fRescan = (params.size() > 2 ? params[2].get_bool() : true);
@@ -120,6 +116,9 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
     assert(key.VerifyPubKey(pubkey));
     CKeyID vchAddress = pubkey.GetID();
     {
+        LOCK2(cs_main, pwalletMain->cs_wallet);
+        EnsureWalletIsUnlocked();
+
         pwalletMain->MarkDirty();
         pwalletMain->SetAddressBook(vchAddress, strLabel, (
                 fStakingAddress ?
@@ -201,8 +200,12 @@ UniValue importaddress(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_WALLET_ERROR, "The wallet already contains the private key for this address or script");
 
         // add to address book or update label
-        if (address.IsValid())
-            pwalletMain->SetAddressBook(address.Get(), strLabel, AddressBook::AddressBookPurpose::RECEIVE);
+        if (address.IsValid()) {
+            pwalletMain->SetAddressBook(address.Get(), strLabel,
+                    (address.IsStakingAddress() ?
+                            AddressBook::AddressBookPurpose::COLD_STAKING :
+                            AddressBook::AddressBookPurpose::RECEIVE));
+        }
 
         // Don't throw error in case an address is already there
         if (pwalletMain->HaveWatchOnly(script))
