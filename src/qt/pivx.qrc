@@ -62,9 +62,7 @@
         <file alias="browse">res/icons/browse.png</file>
         <file alias="staking_active">res/icons/staking_active.png</file>
         <file alias="staking_inactive">res/icons/staking_inactive.png</file>
-        <file alias="automint_active">res/icons/automint_active.png</file>
         <file alias="explorer">res/icons/explorer.png</file>
-        <file alias="automint_inactive">res/icons/automint_inactive.png</file>
         <file alias="yesvote">res/icons/yesvote.png</file>
         <file alias="novote">res/icons/novote.png</file>
         <file alias="abstainvote">res/icons/abstainvote.png</file>
