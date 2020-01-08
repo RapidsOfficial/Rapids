@@ -70,22 +70,6 @@ void OptionsModel::Init()
         settings.setValue("fShowColdStakingScreen", false);
     showColdStakingScreen = settings.value("fShowColdStakingScreen", false).toBool();
 
-    if (!settings.contains("fZeromintEnable"))
-        settings.setValue("fZeromintEnable", true);
-    fEnableZeromint = settings.value("fZeromintEnable").toBool();
-
-    if (!settings.contains("fEnableAutoConvert"))
-        settings.setValue("fEnableAutoConvert", true);
-    fEnableAutoConvert = settings.value("fEnableAutoConvert").toBool();
-
-    if (!settings.contains("nZeromintPercentage"))
-        settings.setValue("nZeromintPercentage", 10);
-    nZeromintPercentage = settings.value("nZeromintPercentage").toLongLong();
-
-    if (!settings.contains("nPreferredDenom"))
-        settings.setValue("nPreferredDenom", 0);
-    nPreferredDenom = settings.value("nPreferredDenom", "0").toLongLong();
-
     if (!settings.contains("fShowMasternodesTab"))
         settings.setValue("fShowMasternodesTab", masternodeConfig.getCount());
 
@@ -203,14 +187,6 @@ void OptionsModel::setDisplayDefaultOptions(QSettings& settings, bool reset){
     if (!SoftSetArg("-lang", settings.value("language").toString().toStdString()))
         addOverriddenOption("-lang");
 
-    if (settings.contains("fZeromintEnable") || reset)
-        SoftSetBoolArg("-enablezeromint", settings.value("fZeromintEnable").toBool());
-    if (settings.contains("fEnableAutoConvert") || reset)
-        SoftSetBoolArg("-enableautoconvertaddress", settings.value("fEnableAutoConvert").toBool());
-    if (settings.contains("nZeromintPercentage") || reset)
-        SoftSetArg("-zeromintpercentage", settings.value("nZeromintPercentage").toString().toStdString());
-    if (settings.contains("nPreferredDenom") || reset)
-        SoftSetArg("-preferredDenom", settings.value("nPreferredDenom").toString().toStdString());
     if (settings.contains("nAnonymizePivxAmount") || reset)
         SoftSetArg("-anonymizepivxamount", settings.value("nAnonymizePivxAmount").toString().toStdString());
 
@@ -307,14 +283,6 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("fHideZeroBalances");
         case HideOrphans:
             return settings.value("fHideOrphans");
-        case ZeromintEnable:
-            return QVariant(fEnableZeromint);
-        case ZeromintAddresses:
-            return QVariant(fEnableAutoConvert);
-        case ZeromintPercentage:
-            return QVariant(nZeromintPercentage);
-        case ZeromintPrefDenom:
-            return QVariant(nPreferredDenom);
         case Listen:
             return settings.value("fListen");
         default:
@@ -421,25 +389,6 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
                 settings.setValue("language", value);
                 setRestartRequired(true);
             }
-            break;
-        case ZeromintEnable:
-            fEnableZeromint = value.toBool();
-            settings.setValue("fZeromintEnable", fEnableZeromint);
-            emit zeromintEnableChanged(fEnableZeromint);
-            break;
-        case ZeromintAddresses:
-            fEnableAutoConvert = value.toBool();
-            settings.setValue("fEnableAutoConvert", fEnableAutoConvert);
-            emit zeromintAddressesChanged(fEnableAutoConvert);
-        case ZeromintPercentage:
-            nZeromintPercentage = value.toInt();
-            settings.setValue("nZeromintPercentage", nZeromintPercentage);
-            emit zeromintPercentageChanged(nZeromintPercentage);
-            break;
-        case ZeromintPrefDenom:
-            nPreferredDenom = value.toInt();
-            settings.setValue("nPreferredDenom", nPreferredDenom);
-            emit preferredDenomChanged(nPreferredDenom);
             break;
         case HideZeroBalances:
             fHideZeroBalances = value.toBool();
