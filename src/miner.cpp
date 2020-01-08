@@ -103,6 +103,17 @@ void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
 }
 
+CBlockIndex* GetChainTip()
+{
+    LOCK(cs_main);
+    CBlockIndex* p = chainActive.Tip();
+    if (!p)
+        return nullptr;
+    // Do not pass in the chain active tip, because it can change.
+    // Instead pass the blockindex directly from mapblockindex, which is const
+    return mapBlockIndex.at(p->GetBlockHash());
+}
+
 std::pair<int, std::pair<uint256, uint256> > pCheckpointCache;
 CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, bool fProofOfStake)
 {
@@ -115,16 +126,9 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     CBlock* pblock = &pblocktemplate->block; // pointer for convenience
 
     // Tip
-    CBlockIndex* pindexPrev = nullptr;
-    {   // Don't keep cs_main locked
-        LOCK(cs_main);
-        pindexPrev = chainActive.Tip();
-        if (!pindexPrev)
-            return nullptr;
-        // Do not pass in the chain tip, because it can change.
-        // Instead pass the blockindex directly from mapblockindex, which is const
-        pindexPrev = mapBlockIndex.at(pindexPrev->GetBlockHash());
-    }
+    CBlockIndex* pindexPrev = GetChainTip();
+    if (!pindexPrev)
+        return nullptr;
 
     const int nHeight = pindexPrev->nHeight + 1;
 
@@ -163,14 +167,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
         CMutableTransaction txCoinStake;
         int64_t nTxNewTime = 0;
-        if (pwallet->CreateCoinStake(*pwallet, pindexPrev, pblock->nBits, txCoinStake, nTxNewTime)) {
-            pblock->nTime = nTxNewTime;
-            pblock->vtx[0].vout[0].SetEmpty();
-            pblock->vtx.push_back(CTransaction(txCoinStake));
-        } else {
+        if (!pwallet->CreateCoinStake(*pwallet, pindexPrev, pblock->nBits, txCoinStake, nTxNewTime)) {
             LogPrint("staking", "CreateNewBlock(): stake not found\n");
             return nullptr;
         }
+        // Stake found
+        pblock->nTime = nTxNewTime;
+        pblock->vtx[0].vout[0].SetEmpty();
+        pblock->vtx.push_back(CTransaction(txCoinStake));
     }
 
     // Largest block you're willing to create:
@@ -664,8 +668,13 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
     CAmount stakingBalance = 0;
 
     while (fGenerateBitcoins || fProofOfStake) {
+        CBlockIndex* pindexPrev = GetChainTip();
+        if (!pindexPrev) {
+            MilliSleep(Params().TargetSpacing() * 1000);       // sleep a block
+            continue;
+        }
         if (fProofOfStake) {
-            if (chainActive.Tip()->nHeight < Params().LAST_POW_BLOCK()) {
+            if (pindexPrev->nHeight < Params().LAST_POW_BLOCK()) {
                 //  The last PoW block hasn't even been mined yet.
                 MilliSleep(Params().TargetSpacing() * 1000);       // sleep a block
                 continue;
@@ -691,9 +700,9 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 }
             }
 
-            const bool fTimeV2 = Params().IsTimeProtocolV2(chainActive.Height()+1);
+            const bool fTimeV2 = Params().IsTimeProtocolV2(pindexPrev->nHeight+1);
             //search our map of hashed blocks, see if bestblock has been hashed yet
-            if (pwallet->pStakerStatus->GetLastHash() == chainActive.Tip()->GetBlockHash())
+            if (pwallet->pStakerStatus->GetLastHash() == pindexPrev->GetBlockHash())
             {
                 uint256 lastHashTime = pwallet->pStakerStatus->GetLastTime();
                 if (    (!fTimeV2 && GetTime() < lastHashTime + 22) ||
@@ -704,7 +713,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 }
             }
         } else { // PoW
-            if ((chainActive.Tip()->nHeight - 6) > Params().LAST_POW_BLOCK())
+            if ((pindexPrev->nHeight - 6) > Params().LAST_POW_BLOCK())
             {
                 // Run for a little while longer, just in case there is a rewind on the chain.
                 LogPrintf("%s: Exiting Proof of Work Mining Thread at height: %d\n",
@@ -717,9 +726,6 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
         // Create new block
         //
         unsigned int nTransactionsUpdatedLast = mempool.GetTransactionsUpdated();
-        CBlockIndex* pindexPrev = chainActive.Tip();
-        if (!pindexPrev)
-            continue;
 
         std::unique_ptr<CBlockTemplate> pblocktemplate(
                 fProofOfStake ? CreateNewBlock(CScript(), pwallet, fProofOfStake) : CreateNewBlockWithKey(reservekey, pwallet)
