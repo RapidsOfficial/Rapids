@@ -451,7 +451,7 @@ void ColdStakingWidget::onSendClicked(){
     WalletModel::SendCoinsReturn prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl);
 
     // process prepareStatus and on error generate message shown to user
-    GuiTransactionsUtils::ProcessSendCoinsReturn(
+    GuiTransactionsUtils::ProcessSendCoinsReturnAndInform(
             this,
             prepareStatus,
             walletModel,
@@ -475,7 +475,7 @@ void ColdStakingWidget::onSendClicked(){
         // now send the prepared transaction
         WalletModel::SendCoinsReturn sendStatus = dialog->getStatus();
         // process sendStatus and on error generate message shown to user
-        GuiTransactionsUtils::ProcessSendCoinsReturn(
+        GuiTransactionsUtils::ProcessSendCoinsReturnAndInform(
                 this,
                 sendStatus,
                 walletModel
