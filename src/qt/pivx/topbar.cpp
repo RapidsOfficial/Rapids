@@ -76,10 +76,6 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     ui->pushButtonColdStaking->setButtonClassStyle("cssClass", "btn-check-cold-staking-inactive");
     ui->pushButtonColdStaking->setButtonText("Cold Staking Disabled");
 
-    ui->pushButtonMint->setButtonClassStyle("cssClass", "btn-check-mint-inactive");
-    ui->pushButtonMint->setButtonText("Automint Enabled");
-    ui->pushButtonMint->setVisible(false);
-
     ui->pushButtonSync->setButtonClassStyle("cssClass", "btn-check-sync");
     ui->pushButtonSync->setButtonText(" %54 Synchronizing..");
 
@@ -349,11 +345,6 @@ void TopBar::loadClientModel(){
         timerStakingIcon->start(50000);
         updateStakingStatus();
     }
-}
-
-void TopBar::updateAutoMintStatus(){
-    ui->pushButtonMint->setButtonText(fEnableZeromint ? tr("Automint enabled") : tr("Automint disabled"));
-    ui->pushButtonMint->setChecked(fEnableZeromint);
 }
 
 void TopBar::setStakingStatusActive(bool fActive)

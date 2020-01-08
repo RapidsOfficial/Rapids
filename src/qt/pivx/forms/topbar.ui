@@ -263,16 +263,6 @@ border:none;</string>
             </widget>
            </item>
            <item>
-            <widget class="ExpandableButton" name="pushButtonMint" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>36</width>
-               <height>36</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
             <widget class="ExpandableButton" name="pushButtonStack" native="true">
              <property name="minimumSize">
               <size>
