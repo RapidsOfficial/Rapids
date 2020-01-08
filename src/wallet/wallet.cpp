@@ -176,17 +176,6 @@ int64_t CWallet::GetKeyCreationTime(const CBitcoinAddress& address)
     return 0;
 }
 
-CBitcoinAddress CWallet::GenerateNewAutoMintKey()
-{
-    CBitcoinAddress btcAddress;
-    CKeyID keyID = GenerateNewKey().GetID();
-    btcAddress.Set(keyID);
-    CWalletDB(strWalletFile).WriteAutoConvertKey(btcAddress);
-    SetAddressBook(keyID, "automint-address", AddressBook::AddressBookPurpose::RECEIVE);
-    setAutoConvertAddresses.emplace(btcAddress);
-    return btcAddress;
-}
-
 bool CWallet::AddKeyPubKey(const CKey& secret, const CPubKey& pubkey)
 {
     AssertLockHeld(cs_wallet); // mapKeyMetadata
@@ -3578,45 +3567,6 @@ bool CWallet::LoadDestData(const CTxDestination& dest, const std::string& key, c
     return true;
 }
 
-void CWallet::InitAutoConvertAddresses()
-{
-    CWalletDB walletdb(strWalletFile);
-    walletdb.LoadAutoConvertKeys(setAutoConvertAddresses);
-}
-
-void CWallet::AutoZeromintForAddress()
-{
-    std::map<CTxDestination, CAmount> mapBalances = GetAddressBalances();
-    std::map<CBitcoinAddress, std::vector<COutput> > mapAddressCoins = AvailableCoinsByAddress(true);
-
-    for (auto address : setAutoConvertAddresses) {
-        CTxDestination dest = address.Get();
-
-        if (!mapBalances.count(dest) || !mapAddressCoins.count(address))
-            continue;
-
-        CAmount nBalance = mapBalances.at(dest);
-        if (nBalance <= libzerocoin::ZQ_ONE*COIN)
-            continue;
-
-        CAmount nMintAmount = nBalance;
-        CAmount nChange = nMintAmount % COIN;
-        if (nChange == 0)
-            nChange = (99*CENT);
-        nMintAmount -= nChange;
-
-        CAmount nSelected = 0;
-        std::unique_ptr<CCoinControl> coinControl(new CCoinControl());
-        for (auto out : mapAddressCoins.at(address)) {
-            COutPoint outPoint(out.tx->GetHash(), out.i);
-            coinControl->Select(outPoint);
-            nSelected += out.tx->vout[out.i].nValue;
-        }
-
-        CreateAutoMintTransaction(nMintAmount, coinControl.get());
-    }
-}
-
 void CWallet::CreateAutoMintTransaction(const CAmount& nMintAmount, CCoinControl* coinControl)
 {
     if (nMintAmount > 0){
@@ -3662,10 +3612,6 @@ void CWallet::AutoZeromint()
         LogPrint("zero", "CWallet::AutoZeromint(): time since sync-completion or last Automint (%ld sec) < default waiting time (%ld sec). Waiting again...\n", nWaitTime, AUTOMINT_DELAY);
         return;
     }
-
-    // Process Auto Convert Addresses First
-    if (fEnableAutoConvert)
-        AutoZeromintForAddress();
 
     if (!fEnableZeromint)
         return;
