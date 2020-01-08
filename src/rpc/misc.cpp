@@ -594,13 +594,17 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
-            "  \"validtime\": true|false,          (boolean) if the chain tip is within staking phases\n"
+            "  \"staking_enabled\": true|false,    (boolean) if staking is enabled/disabled in pivx.conf\n"
+            "  \"tiptime\": n,                     (integer) chain tip blocktime\n"
             "  \"haveconnections\": true|false,    (boolean) if network connections are present\n"
             "  \"walletunlocked\": true|false,     (boolean) if the wallet is unlocked\n"
             "  \"mintablecoins\": true|false,      (boolean) if the wallet has mintable coins\n"
             "  \"enoughcoins\": true|false,        (boolean) if available coins are greater than reserve balance\n"
             "  \"mnsync\": true|false,             (boolean) if masternode data is synced\n"
-            "  \"staking status\": true|false,     (boolean) if the wallet is staking or not\n"
+            "  \"hashLastStakeAttempt\": xxx       (hex string) hash of last block on top of which the miner attempted to stake\n"
+            "  \"heightLastStakeAttempt\": n       (integer) height of last block on top of which the miner attempted to stake\n"
+            "  \"timeLastStakeAttempt\": n         (integer) time of last attempted stake\n"
+            "  \"staking_status\": true|false,     (boolean) if the wallet is staking or not\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -613,15 +617,21 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
 #endif
 
     UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("validtime", chainActive.Tip()->nTime > 1471482000));
+    obj.push_back(Pair("staking_enabled", GetBoolArg("-staking", true)));
+    obj.push_back(Pair("tiptime", (int)chainActive.Tip()->nTime));
     obj.push_back(Pair("haveconnections", !vNodes.empty()));
     if (pwalletMain) {
         obj.push_back(Pair("walletunlocked", !pwalletMain->IsLocked()));
         obj.push_back(Pair("mintablecoins", pwalletMain->MintableCoins()));
-        obj.push_back(Pair("enoughcoins", nReserveBalance <= pwalletMain->GetBalance()));
+        obj.push_back(Pair("enoughcoins", nReserveBalance <= pwalletMain->GetStakingBalance(GetBoolArg("-coldstaking", true))));
     }
     obj.push_back(Pair("mnsync", masternodeSync.IsSynced()));
-    obj.push_back(Pair("staking status", pwalletMain->pStakerStatus->IsActive()));
+    uint256 lastHash = pwalletMain->pStakerStatus->GetLastHash();
+    obj.push_back(Pair("hashLastStakeAttempt", lastHash.GetHex()));
+    obj.push_back(Pair("heightLastStakeAttempt", (mapBlockIndex.count(lastHash) > 0 ?
+                                                    mapBlockIndex.at(lastHash)->nHeight : -1)) );
+    obj.push_back(Pair("timeLastStakeAttempt", pwalletMain->pStakerStatus->GetLastTime()));
+    obj.push_back(Pair("staking_status", pwalletMain->pStakerStatus->IsActive()));
 
     return obj;
 }

@@ -121,14 +121,12 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
     // Create new block
     std::unique_ptr<CBlockTemplate> pblocktemplate(new CBlockTemplate());
-    if (!pblocktemplate.get())
-        return NULL;
+    if (!pblocktemplate.get()) return nullptr;
     CBlock* pblock = &pblocktemplate->block; // pointer for convenience
 
     // Tip
     CBlockIndex* pindexPrev = GetChainTip();
-    if (!pindexPrev)
-        return nullptr;
+    if (!pindexPrev) return nullptr;
 
     const int nHeight = pindexPrev->nHeight + 1;
 
