@@ -702,7 +702,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             //search our map of hashed blocks, see if bestblock has been hashed yet
             if (pwallet->pStakerStatus->GetLastHash() == pindexPrev->GetBlockHash())
             {
-                uint256 lastHashTime = pwallet->pStakerStatus->GetLastTime();
+                int64_t lastHashTime = pwallet->pStakerStatus->GetLastTime();
                 if (    (!fTimeV2 && GetTime() < lastHashTime + 22) ||
                         (fTimeV2 && GetCurrentTimeSlot() <= lastHashTime) )
                 {
