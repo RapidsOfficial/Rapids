@@ -2700,12 +2700,20 @@ bool CWallet::CreateCoinStake(
     bool fKernelFound = false;
     int nAttempts = 0;
 
-    for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
-        nCredit = 0;
-        // Make sure the wallet is unlocked and shutdown hasn't been requested
-        if (IsLocked() || ShutdownRequested())
-            return false;
+    // update staker status (hash)
+    pStakerStatus->SetLastHash(pindexPrev->GetBlockHash());
 
+    for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
+        //new block came in, move on
+        if (chainActive.Height() != pindexPrev->nHeight) return false;
+
+        // Make sure the wallet is unlocked and shutdown hasn't been requested
+        if (IsLocked() || ShutdownRequested()) return false;
+
+        // update staker status (time)
+        pStakerStatus->SetLastTime(GetCurrentTimeSlot());
+
+        nCredit = 0;
         uint256 hashProofOfStake = 0;
         nAttempts++;
         //iterates each utxo inside of CheckStakeKernelHash()
@@ -5135,6 +5143,7 @@ CWallet::CWallet(std::string strWalletFileIn)
 CWallet::~CWallet()
 {
     delete pwalletdbEncryption;
+    delete pStakerStatus;
 }
 
 void CWallet::SetNull()
@@ -5152,6 +5161,7 @@ void CWallet::SetNull()
     fBackupMints = false;
 
     // Stake Settings
+    pStakerStatus = new CStakerStatus();
     nStakeSplitThreshold = STAKE_SPLIT_THRESHOLD;
     nStakeSetUpdateTime = 300; // 5 minutes
 

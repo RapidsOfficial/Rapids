@@ -147,6 +147,24 @@ public:
     }
 };
 
+/** Record metadata about last kernel stake operation (time and prev hash)**/
+class CStakerStatus {
+private:
+    uint256 hashLastStakeAttempt;
+    int64_t timeLastStakeAttempt;
+public:
+    uint256 GetLastHash() const { return hashLastStakeAttempt; }
+    int64_t GetLastTime() const { return timeLastStakeAttempt; }
+    void SetLastHash(const uint256& lastHash) { hashLastStakeAttempt = lastHash; }
+    void SetLastTime(const uint64_t lastTime) { timeLastStakeAttempt = lastTime; }
+    void Update(const uint256& lastHash, const uint64_t lastTime)
+    {
+        SetLastHash(lastHash);
+        SetLastTime(lastTime);
+    }
+    bool IsActive() { return (timeLastStakeAttempt + 30) >= GetTime(); }
+};
+
 /**
  * A CWallet is an extension of a keystore, which also maintains a set of transactions and balances,
  * and provides the ability to create new transactions.
@@ -278,6 +296,7 @@ public:
     // Stake Settings
     uint64_t nStakeSplitThreshold;
     int nStakeSetUpdateTime;
+    CStakerStatus* pStakerStatus;
 
     //MultiSend
     std::vector<std::pair<std::string, int> > vMultiSend;
