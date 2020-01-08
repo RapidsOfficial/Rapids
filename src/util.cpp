@@ -94,12 +94,6 @@ bool fLiteMode = false;
 // SwiftX
 bool fEnableSwiftTX = true;
 int nSwiftTXDepth = 5;
-// Automatic Zerocoin minting
-bool fEnableZeromint = true;
-bool fEnableAutoConvert = true;
-int nZeromintPercentage = 10;
-int nPreferredDenom = 0;
-const int64_t AUTOMINT_DELAY = (60 * 5); // Wait at least 5 minutes until Automint starts
 
 /** Spork enforcement enabled time */
 int64_t enforceMasternodePaymentsTime = 4085657524;

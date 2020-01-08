@@ -62,10 +62,6 @@ static const unsigned int MAX_FREE_TRANSACTION_CREATE_SIZE = 1000;
 //! -custombackupthreshold default
 static const int DEFAULT_CUSTOMBACKUPTHRESHOLD = 1;
 
-// Zerocoin denomination which creates exactly one of each denominations:
-// 6666 = 1*5000 + 1*1000 + 1*500 + 1*100 + 1*50 + 1*10 + 1*5 + 1
-static const int ZQ_6666 = 6666;
-
 class CAccountingEntry;
 class CCoinControl;
 class COutput;
@@ -314,10 +310,8 @@ public:
     CWallet(std::string strWalletFileIn);
     ~CWallet();
     void SetNull();
-    int getZeromintPercentage();
     void setZWallet(CzPIVWallet* zwallet);
     CzPIVWallet* getZWallet();
-    bool isZeromintEnabled();
     void setZPivAutoBackups(bool fEnabled);
     bool isMultiSendEnabled();
     void setMultiSendDisabled();
@@ -469,8 +463,6 @@ public:
     bool CreateCoinStake(const CKeyStore& keystore, const CBlockIndex* pindexPrev, unsigned int nBits, CMutableTransaction& txNew, int64_t& nTxNewTime);
     bool MultiSend();
     void AutoCombineDust();
-    void AutoZeromint();
-    void CreateAutoMintTransaction(const CAmount& nMintAmount, CCoinControl* coinControl = nullptr);
 
     static CFeeRate minTxFee;
     static CAmount GetMinimumFee(unsigned int nTxBytes, unsigned int nConfirmTarget, const CTxMemPool& pool);
