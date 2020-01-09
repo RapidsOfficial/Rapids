@@ -2701,7 +2701,7 @@ bool CWallet::CreateCoinStake(
     int nAttempts = 0;
 
     // update staker status (hash)
-    pStakerStatus->SetLastHash(pindexPrev->GetBlockHash());
+    pStakerStatus->SetLastTip(pindexPrev);
 
     for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
         //new block came in, move on
