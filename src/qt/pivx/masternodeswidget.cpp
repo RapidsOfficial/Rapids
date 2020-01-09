@@ -190,8 +190,15 @@ void MasterNodesWidget::onMNClicked(const QModelIndex &index){
     ui->listMn->setFocus();
 }
 
+bool MasterNodesWidget::checkMNsNetwork() {
+    bool isTierTwoSync = mnModel->isMNsNetworkSynced();
+    if (!isTierTwoSync) inform(tr("Please wait until the node is fully synced"));
+    return isTierTwoSync;
+}
+
 void MasterNodesWidget::onEditMNClicked(){
     if(walletModel) {
+        if (!checkMNsNetwork()) return;
         if (index.sibling(index.row(), MNModel::WAS_COLLATERAL_ACCEPTED).data(Qt::DisplayRole).toBool()) {
             // Start MN
             QString strAlias = this->index.data(Qt::DisplayRole).toString();
@@ -236,7 +243,8 @@ bool MasterNodesWidget::startMN(CMasternodeConfig::CMasternodeEntry mne, std::st
 }
 
 void MasterNodesWidget::onStartAllClicked(int type) {
-    if(!verifyWalletUnlocked()) return;
+    if (!verifyWalletUnlocked()) return;
+    if (!checkMNsNetwork()) return;
     if (isLoading) {
         inform(tr("Background task is being executed, please wait"));
     } else {
