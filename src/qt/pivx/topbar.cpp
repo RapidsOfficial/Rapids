@@ -367,7 +367,9 @@ void TopBar::setStakingStatusActive(bool fActive)
     }
 }
 void TopBar::updateStakingStatus(){
-    setStakingStatusActive(walletModel && walletModel->isStakingStatusActive());
+    setStakingStatusActive(walletModel &&
+                           !walletModel->isWalletLocked() &&
+                           walletModel->isStakingStatusActive());
 }
 
 void TopBar::setNumConnections(int count) {

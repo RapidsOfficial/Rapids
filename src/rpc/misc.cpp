@@ -594,6 +594,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
 
             "\nResult:\n"
             "{\n"
+            "  \"staking_status\": true|false,     (boolean) if the wallet is staking or not\n"
             "  \"staking_enabled\": true|false,    (boolean) if staking is enabled/disabled in pivx.conf\n"
             "  \"tiptime\": n,                     (integer) chain tip blocktime\n"
             "  \"haveconnections\": true|false,    (boolean) if network connections are present\n"
@@ -604,7 +605,6 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
             "  \"hashLastStakeAttempt\": xxx       (hex string) hash of last block on top of which the miner attempted to stake\n"
             "  \"heightLastStakeAttempt\": n       (integer) height of last block on top of which the miner attempted to stake\n"
             "  \"timeLastStakeAttempt\": n         (integer) time of last attempted stake\n"
-            "  \"staking_status\": true|false,     (boolean) if the wallet is staking or not\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -617,6 +617,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
 #endif
 
     UniValue obj(UniValue::VOBJ);
+    obj.push_back(Pair("staking_status", pwalletMain->pStakerStatus->IsActive()));
     obj.push_back(Pair("staking_enabled", GetBoolArg("-staking", true)));
     obj.push_back(Pair("tiptime", (int)chainActive.Tip()->nTime));
     obj.push_back(Pair("haveconnections", !vNodes.empty()));
@@ -631,8 +632,6 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
     obj.push_back(Pair("heightLastStakeAttempt", (mapBlockIndex.count(lastHash) > 0 ?
                                                     mapBlockIndex.at(lastHash)->nHeight : -1)) );
     obj.push_back(Pair("timeLastStakeAttempt", pwalletMain->pStakerStatus->GetLastTime()));
-    obj.push_back(Pair("staking_status", pwalletMain->pStakerStatus->IsActive()));
-
     return obj;
 }
 #endif // ENABLE_WALLET

@@ -150,7 +150,7 @@ public:
 /** Record info about last kernel stake operation (time and chainTip)**/
 class CStakerStatus {
 private:
-    const CBlockIndex* tipLastStakeAttempt;
+    const CBlockIndex* tipLastStakeAttempt = nullptr;
     int64_t timeLastStakeAttempt;
 public:
     const CBlockIndex* GetLastTip() const { return tipLastStakeAttempt; }
@@ -161,10 +161,10 @@ public:
     int64_t GetLastTime() const { return timeLastStakeAttempt; }
     void SetLastTip(const CBlockIndex* lastTip) { tipLastStakeAttempt = lastTip; }
     void SetLastTime(const uint64_t lastTime) { timeLastStakeAttempt = lastTime; }
-    void Update(CBlockIndex* lastTip, const uint64_t lastTime)
+    void SetNull()
     {
-        SetLastTip(lastTip);
-        SetLastTime(lastTime);
+        SetLastTip(nullptr);
+        SetLastTime(0);
     }
     bool IsActive() { return (timeLastStakeAttempt + 30) >= GetTime(); }
 };
@@ -300,7 +300,7 @@ public:
     // Stake Settings
     uint64_t nStakeSplitThreshold;
     int nStakeSetUpdateTime;
-    CStakerStatus* pStakerStatus;
+    CStakerStatus* pStakerStatus = nullptr;
 
     //MultiSend
     std::vector<std::pair<std::string, int> > vMultiSend;
