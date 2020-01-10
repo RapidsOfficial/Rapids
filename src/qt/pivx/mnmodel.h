@@ -42,6 +42,7 @@ public:
     void updateMNList();
 
 
+    bool isMNsNetworkSynced();
     // Returns the MN activeState field.
     int getMNState(QString alias);
     // Checks if the masternode is inactive

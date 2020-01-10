@@ -166,3 +166,7 @@ bool MNModel::isMNActive(QString mnAlias) {
     int activeState = getMNState(mnAlias);
     return activeState == CMasternode::MASTERNODE_PRE_ENABLED || activeState == CMasternode::MASTERNODE_ENABLED;
 }
+
+bool MNModel::isMNsNetworkSynced() {
+    return masternodeSync.IsSynced();
+}
