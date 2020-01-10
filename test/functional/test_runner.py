@@ -76,6 +76,7 @@ BASE_SCRIPTS= [
     'zerocoin_wrapped_serials.py',              # ~ 137 sec
     'feature_uacomment.py',                     # ~ 130 sec
     'mining_pos_fakestake.py',                  # ~ 123 sec
+    'wallet_import_stakingaddress.py',          # ~ 123 sec
 
     # vv Tests less than 2m vv
     'p2p_disconnect_ban.py',                    # ~ 118 sec
@@ -261,9 +262,16 @@ def main():
     if not args.keepcache:
         shutil.rmtree("%s/test/cache" % config["environment"]["BUILDDIR"], ignore_errors=True)
 
-    run_tests(test_list, config["environment"]["SRCDIR"], config["environment"]["BUILDDIR"], config["environment"]["EXEEXT"], tmpdir, args.jobs, args.coverage, passon_args, args.combinedlogslen)
+    run_tests(test_list,
+              config["environment"]["SRCDIR"],
+              config["environment"]["BUILDDIR"],
+              config["environment"]["EXEEXT"],
+              tmpdir,
+              args.jobs, args.coverage,
+              passon_args, args.combinedlogslen,
+              args.keepcache)
 
-def run_tests(test_list, src_dir, build_dir, exeext, tmpdir, jobs=1, enable_coverage=False, args=[], combined_logs_len=0):
+def run_tests(test_list, src_dir, build_dir, exeext, tmpdir, jobs=1, enable_coverage=False, args=[], combined_logs_len=0, keep_cache=False):
     # Warn if pivxd is already running (unix only)
     try:
         if subprocess.check_output(["pidof", "pivxd"]) is not None:
@@ -307,7 +315,8 @@ def run_tests(test_list, src_dir, build_dir, exeext, tmpdir, jobs=1, enable_cove
             sys.stdout.flush()
             threading.Timer(pingTime, pingTravis).start()
 
-        pingTravis()
+        if not keep_cache:
+            pingTravis()
         try:
             subprocess.check_output([tests_dir + 'create_cache.py'] + flags + ["--tmpdir=%s/cache" % tmpdir])
         except subprocess.CalledProcessError as e:
