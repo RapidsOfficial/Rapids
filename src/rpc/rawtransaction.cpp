@@ -231,7 +231,7 @@ UniValue listunspent(const UniValue& params, bool fHelp)
             "    \"txid\" : \"txid\",        (string) the transaction id\n"
             "    \"vout\" : n,               (numeric) the vout value\n"
             "    \"address\" : \"address\",  (string) the pivx address\n"
-            "    \"account\" : \"account\",  (string) The associated account, or \"\" for the default account\n"
+            "    \"account\" : \"account\",  (string) DEPRECATED. The associated account, or \"\" for the default account\n"
             "    \"scriptPubKey\" : \"key\", (string) the script key\n"
             "    \"redeemScript\" : \"key\", (string) the redeemscript key\n"
             "    \"amount\" : x.xxx,         (numeric) the transaction amount in btc\n"
