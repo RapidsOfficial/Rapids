@@ -69,7 +69,8 @@ private:
 
 ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     PWidget(parent),
-    ui(new Ui::ColdStakingWidget)
+    ui(new Ui::ColdStakingWidget),
+    isLoading(false)
 {
     ui->setupUi(this);
     this->setStyleSheet(parent->styleSheet());
