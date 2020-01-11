@@ -358,8 +358,6 @@ set(WALLET_SOURCES
         ./src/zpiv/zpivtracker.cpp
         ./src/zpiv/zpivmodule.cpp
         ./src/stakeinput.cpp
-        ./src/genwit.cpp
-        ./src/lightzpivthread.cpp
         )
 add_library(WALLET_A STATIC ${BitcoinHeaders} ${WALLET_SOURCES})
 target_include_directories(WALLET_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src

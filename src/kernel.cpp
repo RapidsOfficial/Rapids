@@ -14,6 +14,7 @@
 #include "stakeinput.h"
 #include "utilmoneystr.h"
 #include "zpivchain.h"
+#include "zpiv/accumulators.h"
 
 // v1 modifier interval.
 static const int64_t OLD_MODIFIER_INTERVAL = 2087;
