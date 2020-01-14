@@ -101,6 +101,11 @@ void TxRow::setType(bool isLightTheme, int type, bool isConfirmed){
             path = "://ic-transaction-cs-contract";
             css = "text-list-amount-unconfirmed";
             break;
+        case TransactionRecord::P2CSUnlockOwner:
+        case TransactionRecord::P2CSUnlockStaker:
+            path = "://ic-transaction-cs-contract";
+            css = "text-list-amount-send";
+            break;
         default:
             path = "://ic-pending";
             sameIcon = true;
