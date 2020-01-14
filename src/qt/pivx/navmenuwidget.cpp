@@ -164,6 +164,13 @@ void NavMenuWidget::onShowHideColdStakingChanged(bool show) {
         ui->scrollAreaNav->verticalScrollBar()->setValue(ui->btnColdStaking->y());
 }
 
+void NavMenuWidget::showEvent(QShowEvent *event) {
+    if (!init) {
+        init = true;
+        ui->scrollAreaNav->verticalScrollBar()->setValue(ui->btnDashboard->y());
+    }
+}
+
 void NavMenuWidget::updateButtonStyles(){
     forceUpdateStyle({
          ui->btnDashboard,
