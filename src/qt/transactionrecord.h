@@ -98,7 +98,8 @@ public:
         StakeDelegated, // Received cold stake (owner)
         StakeHot, // Staked via a delegated P2CS.
         P2CSDelegation, // Non-spendable P2CS, staker side.
-        P2CSDelegationSent, // Spendable P2CS delegated utxo. (coin-owner)
+        P2CSDelegationSent, // Non-spendable P2CS delegated utxo. (coin-owner transferred ownership to external wallet)
+        P2CSDelegationSentOwner, // Spendable P2CS delegated utxo. (coin-owner)
         P2CSUnlockOwner, // Coin-owner spent the delegated utxo
         P2CSUnlockStaker // Staker watching the owner spent the delegated utxo
     };

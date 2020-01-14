@@ -461,6 +461,7 @@ QString TransactionTableModel::formatTxType(const TransactionRecord* wtx) const
     case TransactionRecord::StakeHot:
         return tr("PIV Stake on behalf of");
     case TransactionRecord::P2CSDelegationSent:
+    case TransactionRecord::P2CSDelegationSentOwner:
     case TransactionRecord::P2CSDelegation:
         return tr("Stake delegation");
     case TransactionRecord::Generated:
@@ -543,6 +544,7 @@ QString TransactionTableModel::formatTxToAddress(const TransactionRecord* wtx, b
         return tr("Anonymous");
     case TransactionRecord::P2CSDelegation:
     case TransactionRecord::P2CSDelegationSent:
+    case TransactionRecord::P2CSDelegationSentOwner:
     case TransactionRecord::StakeDelegated:
     case TransactionRecord::StakeHot:
     case TransactionRecord::SendToSelf: {
