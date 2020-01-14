@@ -155,7 +155,7 @@
         </property>
         <item>
          <widget class="QWidget" name="layoutAmount" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlAmountText">
              <property name="text">
@@ -167,6 +167,32 @@
             <widget class="QLabel" name="labelCoinControlAmount">
              <property name="text">
               <string>0.00 PIV</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonAmount">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -191,7 +217,7 @@
         </item>
         <item>
          <widget class="QWidget" name="layoutQuantity" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlQuantityText">
              <property name="text">
@@ -203,6 +229,32 @@
             <widget class="QLabel" name="labelCoinControlQuantity">
              <property name="text">
               <string>0</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonQuantity">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+               padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -227,7 +279,7 @@
         </item>
         <item>
          <widget class="QWidget" name="layoutFee" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_11" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlFeeText">
              <property name="text">
@@ -239,6 +291,32 @@
             <widget class="QLabel" name="labelCoinControlFee">
              <property name="text">
               <string>0.00 PIV</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonFee">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+               padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>
@@ -524,7 +602,7 @@
         </property>
         <item>
          <widget class="QWidget" name="layoutBytes" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlBytesText">
              <property name="text">
@@ -539,12 +617,38 @@
              </property>
             </widget>
            </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonBytes">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+               padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
         <item>
          <widget class="QWidget" name="layoutDust" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlLowOutputText">
              <property name="text">
@@ -559,12 +663,38 @@
              </property>
             </widget>
            </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonDust">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+               padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
         <item>
          <widget class="QWidget" name="layoutChange" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlChangeText">
              <property name="text">
@@ -579,12 +709,38 @@
              </property>
             </widget>
            </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonChange">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+               padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
           </layout>
          </widget>
         </item>
         <item>
          <widget class="QWidget" name="layoutAfter" native="true">
-          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,1,0">
            <item>
             <widget class="QLabel" name="labelCoinControlAfterFeeText">
              <property name="text">
@@ -596,6 +752,32 @@
             <widget class="QLabel" name="labelCoinControlAfterFee">
              <property name="text">
               <string>0.00 PIV</string>
+             </property>
+            </widget>
+           </item>
+           <item alignment="Qt::AlignHCenter|Qt::AlignVCenter">
+            <widget class="QPushButton" name="pushButtonAlterFee">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>24</height>
+              </size>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>24</width>
+               <height>26</height>
+              </size>
+             </property>
+             <property name="focusPolicy">
+              <enum>Qt::NoFocus</enum>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">padding-bottom:2px;
+               padding-right:4px;</string>
+             </property>
+             <property name="text">
+              <string/>
              </property>
             </widget>
            </item>

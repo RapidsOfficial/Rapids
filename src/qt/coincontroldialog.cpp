@@ -19,6 +19,8 @@
 #include "obfuscation.h"
 #include "wallet/wallet.h"
 
+#include "qt/pivx/qtutils.h"
+
 #include <boost/assign/list_of.hpp> // for 'map_list_of()'
 
 #include <QApplication>
@@ -76,7 +78,6 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
     ui->labelCoinControlLowOutputText->setProperty("cssClass", "text-main-purple");
     ui->labelCoinControlFeeText->setProperty("cssClass", "text-main-purple");
     ui->labelCoinControlQuantityText->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlAfterFeeText->setProperty("cssClass", "text-main-purple");
 
     ui->labelCoinControlAfterFee->setProperty("cssClass", "text-main-purple");
     ui->labelCoinControlAmount->setProperty("cssClass", "text-main-purple");
@@ -85,7 +86,6 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
     ui->labelCoinControlLowOutput->setProperty("cssClass", "text-main-purple");
     ui->labelCoinControlFee->setProperty("cssClass", "text-main-purple");
     ui->labelCoinControlQuantity->setProperty("cssClass", "text-main-purple");
-    ui->labelCoinControlAfterFee->setProperty("cssClass", "text-main-purple");
 
     ui->groupBox_2->setProperty("cssClass", "group-box");
     ui->treeWidget->setProperty("cssClass", "table-tree");
@@ -131,31 +131,25 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
     connect(unlockAction, SIGNAL(triggered()), this, SLOT(unlockCoin()));
 
     // clipboard actions
-    QAction* clipboardQuantityAction = new QAction(tr("Copy quantity"), this);
-    QAction* clipboardAmountAction = new QAction(tr("Copy amount"), this);
-    QAction* clipboardFeeAction = new QAction(tr("Copy fee"), this);
-    QAction* clipboardAfterFeeAction = new QAction(tr("Copy after fee"), this);
-    QAction* clipboardBytesAction = new QAction(tr("Copy bytes"), this);
-    QAction* clipboardPriorityAction = new QAction(tr("Copy priority"), this);
-    QAction* clipboardLowOutputAction = new QAction(tr("Copy dust"), this);
-    QAction* clipboardChangeAction = new QAction(tr("Copy change"), this);
+    setCssProperty({
+        ui->pushButtonAmount,
+        ui->pushButtonQuantity,
+        ui->pushButtonFee,
+        ui->pushButtonAlterFee,
+        ui->pushButtonBytes,
+        ui->pushButtonChange,
+        ui->pushButtonDust
+        },
+        "ic-copy-big"
+    );
 
-    connect(clipboardQuantityAction, SIGNAL(triggered()), this, SLOT(clipboardQuantity()));
-    connect(clipboardAmountAction, SIGNAL(triggered()), this, SLOT(clipboardAmount()));
-    connect(clipboardFeeAction, SIGNAL(triggered()), this, SLOT(clipboardFee()));
-    connect(clipboardAfterFeeAction, SIGNAL(triggered()), this, SLOT(clipboardAfterFee()));
-    connect(clipboardBytesAction, SIGNAL(triggered()), this, SLOT(clipboardBytes()));
-    connect(clipboardPriorityAction, SIGNAL(triggered()), this, SLOT(clipboardPriority()));
-    connect(clipboardLowOutputAction, SIGNAL(triggered()), this, SLOT(clipboardLowOutput()));
-    connect(clipboardChangeAction, SIGNAL(triggered()), this, SLOT(clipboardChange()));
-
-    ui->labelCoinControlQuantity->addAction(clipboardQuantityAction);
-    ui->labelCoinControlAmount->addAction(clipboardAmountAction);
-    ui->labelCoinControlFee->addAction(clipboardFeeAction);
-    ui->labelCoinControlAfterFee->addAction(clipboardAfterFeeAction);
-    ui->labelCoinControlBytes->addAction(clipboardBytesAction);
-    ui->labelCoinControlLowOutput->addAction(clipboardLowOutputAction);
-    ui->labelCoinControlChange->addAction(clipboardChangeAction);
+    connect(ui->pushButtonQuantity, &QPushButton::clicked, this, &CoinControlDialog::clipboardQuantity);
+    connect(ui->pushButtonAmount, &QPushButton::clicked, this, &CoinControlDialog::clipboardAmount);
+    connect(ui->pushButtonFee, &QPushButton::clicked, this, &CoinControlDialog::clipboardFee);
+    connect(ui->pushButtonAlterFee, &QPushButton::clicked, this, &CoinControlDialog::clipboardAfterFee);
+    connect(ui->pushButtonBytes, &QPushButton::clicked, this, &CoinControlDialog::clipboardBytes);
+    connect(ui->pushButtonDust, &QPushButton::clicked, this, &CoinControlDialog::clipboardLowOutput);
+    connect(ui->pushButtonChange, &QPushButton::clicked, this, &CoinControlDialog::clipboardChange);
 
     if (ui->pushButtonSelectAll->isChecked()){
         ui->pushButtonSelectAll->setText(tr("Unselect all"));
@@ -382,42 +376,49 @@ void CoinControlDialog::unlockCoin()
 void CoinControlDialog::clipboardQuantity()
 {
     GUIUtil::setClipboard(ui->labelCoinControlQuantity->text());
+    inform(tr("Quantity Copied"));
 }
 
 // copy label "Amount" to clipboard
 void CoinControlDialog::clipboardAmount()
 {
     GUIUtil::setClipboard(ui->labelCoinControlAmount->text().left(ui->labelCoinControlAmount->text().indexOf(" ")));
+    inform(tr("Amount Copied"));
 }
 
 // copy label "Fee" to clipboard
 void CoinControlDialog::clipboardFee()
 {
     GUIUtil::setClipboard(ui->labelCoinControlFee->text().left(ui->labelCoinControlFee->text().indexOf(" ")).replace("~", ""));
+    inform(tr("Fee Copied"));
 }
 
 // copy label "After fee" to clipboard
 void CoinControlDialog::clipboardAfterFee()
 {
     GUIUtil::setClipboard(ui->labelCoinControlAfterFee->text().left(ui->labelCoinControlAfterFee->text().indexOf(" ")).replace("~", ""));
+    inform(tr("After Fee Copied"));
 }
 
 // copy label "Bytes" to clipboard
 void CoinControlDialog::clipboardBytes()
 {
     GUIUtil::setClipboard(ui->labelCoinControlBytes->text().replace("~", ""));
+    inform(tr("Bytes Copied"));
 }
 
 // copy label "Dust" to clipboard
 void CoinControlDialog::clipboardLowOutput()
 {
     GUIUtil::setClipboard(ui->labelCoinControlLowOutput->text());
+    inform(tr("Dust Copied"));
 }
 
 // copy label "Change" to clipboard
 void CoinControlDialog::clipboardChange()
 {
     GUIUtil::setClipboard(ui->labelCoinControlChange->text().left(ui->labelCoinControlChange->text().indexOf(" ")).replace("~", ""));
+    inform(tr("Change Copied"));
 }
 
 // treeview: sort
@@ -935,4 +936,12 @@ void CoinControlDialog::refreshDialog()
     updateLabelLocked();
     CoinControlDialog::updateLabels(model, this);
     updateDialogLabels();
+}
+
+void CoinControlDialog::inform(const QString& text)
+{
+    if (!snackBar) snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(text);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
 }
