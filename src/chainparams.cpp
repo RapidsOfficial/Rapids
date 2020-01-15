@@ -71,11 +71,12 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
     (1679090, uint256("f747ce055ba1b12e1f2e842bd480bc647210799359cb2e553ab292065e3419d6")) //!< First block with a "wrapped" serial spend
     (1686229, uint256("bb42bf1e886a7c23474634c90893dd3d68a6ccbfea4ac92a98da5cad0c6a6cb7")) //!< Last block in the "wrapped" serial attack range
     (1778954, uint256("0d3241268264a2908d6babf00d9cd1ffb83d93d7bb4e428820127fe227c2029c")) //!< Network split here
-    (1788528, uint256("ea9243ff8fc079fdd7a04f11fac415de4d98e1bb0dc38db6f79f8f8bbfdbe496")); //!< Network split here
+    (1788528, uint256("ea9243ff8fc079fdd7a04f11fac415de4d98e1bb0dc38db6f79f8f8bbfdbe496")) //!< Network split here
+    (2153200, uint256("14e477e597d24549cac5e59d97d32155e6ec2861c1003b42d0566f9bf39b65d5")); //!< First v7 block
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1556924938, // * UNIX timestamp of last checkpoint block
-    4271692,    // * total number of transactions between genesis and last checkpoint
+    1578332625, // * UNIX timestamp of last checkpoint block
+    5116987,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -85,11 +86,12 @@ static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
     (0, uint256("0x001"))
     (1016800, uint256("6ae7d52092fd918c8ac8d9b1334400387d3057997e6e927a88e57186dc395231"))
     (1106100, uint256("c54b3e7e8b710e4075da1806adf2d508ae722627d5bcc43f594cf64d5eef8b30")) //!< zc public spend activation height
-    (1112700, uint256("2ad8d507dbe3d3841b9f8a29c3878d570228e9361c3e057362d7915777bbc849"));
+    (1112700, uint256("2ad8d507dbe3d3841b9f8a29c3878d570228e9361c3e057362d7915777bbc849"))
+    (1347000, uint256("30c173ffc09a13f288bf6e828216107037ce5b79536b1cebd750a014f4939882")); //!< First v7 block
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
-    1560843157,
-    2501682,
+    1575145155,
+    2971390,
     250};
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
