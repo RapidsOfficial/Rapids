@@ -73,7 +73,6 @@ BASE_SCRIPTS= [
     'interface_rest.py',                        # ~ 154 sec
     'rpc_spork.py',                             # ~ 149 sec
     'feature_proxy.py',                         # ~ 143 sec
-    'zerocoin_wrapped_serials.py',              # ~ 137 sec
     'feature_uacomment.py',                     # ~ 130 sec
     'mining_pos_fakestake.py',                  # ~ 123 sec
     'wallet_import_stakingaddress.py',          # ~ 123 sec
