@@ -2180,9 +2180,6 @@ bool CWallet::MintableCoins()
 {
     LOCK(cs_main);
     CAmount nBalance = GetStakingBalance(GetBoolArg("-coldstaking", true));
-    CAmount nZpivBalance = GetZerocoinBalance(false);
-
-    int chainHeight = chainActive.Height();
 
     // Regular PIV
     if (nBalance > 0) {
@@ -2196,24 +2193,15 @@ bool CWallet::MintableCoins()
         const bool fIncludeCold = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) && GetBoolArg("-coldstaking", true);
         AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS, false, 1, fIncludeCold, false);
 
-        int64_t time = GetAdjustedTime();
-        for (const COutput& out : vCoins) {
-            CBlockIndex* utxoBlock = mapBlockIndex.at(out.tx->hashBlock);
-            //check for maturity (min age/depth)
-            if (Params().HasStakeMinAgeOrDepth(chainHeight, time, utxoBlock->nHeight, utxoBlock->nTime))
-                return true;
-        }
-    }
-
-    // zPIV
-    if (nZpivBalance > 0) {
-        std::set<CMintMeta> setMints = zpivTracker->ListMints(true, true, true);
-        for (auto mint : setMints) {
-            if (mint.nVersion < CZerocoinMint::STAKABLE_VERSION)
-                continue;
-            if (mint.nHeight > chainHeight - Params().Zerocoin_RequiredStakeDepth())
-                continue;
-           return true;
+        if (vCoins.size() > 0) {
+            // check that we have at least one utxo eligible for staking (min age/depth)
+            const int64_t time = GetAdjustedTime();
+            const int chainHeight = chainActive.Height();
+            for (const COutput& out : vCoins) {
+                CBlockIndex* utxoBlock = mapBlockIndex.at(out.tx->hashBlock);
+                if (Params().HasStakeMinAgeOrDepth(chainHeight, time, utxoBlock->nHeight, utxoBlock->nTime))
+                    return true;
+            }
         }
     }
 
