@@ -1013,20 +1013,25 @@ class PivxTestFramework():
         """ stakes a block using generate on nodes[node_id]"""
         assert_greater_than(len(self.nodes), node_id)
         rpc_conn = self.nodes[node_id]
+        ss = rpc_conn.getstakingstatus()
+        assert ss["walletunlocked"]
+        assert ss["mintablecoins"]
         if btime is not None:
             next_btime = btime + 60
         fStaked = False
+        failures = 0
         while not fStaked:
             try:
                 rpc_conn.generate(1)
                 fStaked = True
             except JSONRPCException as e:
                 if ("Couldn't create new block" in str(e)):
-                    # couldn't generate block. check that this node can stake
-                    ss = rpc_conn.getstakingstatus()
-                    if not (ss["validtime"] and ss["haveconnections"] and ss["walletunlocked"] and
-                            ss["mintablecoins"] and ss["enoughcoins"]):
-                        raise AssertionError("Node %d unable to stake!" % node_id)
+                    failures += 1
+                    # couldn't generate block. check that this node can still stake (after 60 failures)
+                    if failures > 60:
+                        ss = rpc_conn.getstakingstatus()
+                        if not (ss["walletunlocked"] and ss["mintablecoins"]):
+                            raise AssertionError("Node %d unable to stake!" % node_id)
                     # try to stake one sec in the future
                     if btime is not None:
                         btime += 1
