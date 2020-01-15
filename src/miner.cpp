@@ -129,13 +129,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     if (!pindexPrev) return nullptr;
     const int nHeight = pindexPrev->nHeight + 1;
 
-    // block version
+    // Make sure to create the correct block version
     pblock->nVersion = 7;       //!> Removes accumulator checkpoints
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
-    bool fZerocoinActive = nHeight >= Params().Zerocoin_StartHeight();
-    if (Params().MineBlocksOnDemand()) pblock->nVersion = (fZerocoinActive ? 5 : 3);
-    pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
+    if (Params().MineBlocksOnDemand()) {
+        if (nHeight < Params().Zerocoin_StartHeight()) pblock->nVersion = 3;
+        pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
+    }
 
     // Create coinbase tx
     CMutableTransaction txNew;
