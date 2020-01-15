@@ -102,16 +102,7 @@ class ZerocoinSpendTest(PivxTestFramework):
                                 self.nodes[2].spendrawzerocoin, serial_0, randomness_0, denom_0, privkey_0, "", tx_0)
         self.log.info("GOOD: v3 spend is not possible yet.")
 
-        # 2) Spend one minted coin - spend v2 (serial_0)
-        self.log.info("Spending the minted coin with serial %s..." % serial_0[:16])
-        txid = self.nodes[2].spendzerocoin(denom_0, False, False, "", False)['txid']
-        # stake 4 blocks - check it gets included on chain and check balances
-        block_time = stake_4_blocks(block_time)
-        self.check_tx_in_chain(0, txid)
-        zpiv_balance, balance = check_balances(denom_0, zpiv_balance, balance)
-        self.log.info("--> VALID COIN SPEND (v2) PASSED")
-
-        # 3) stake more blocks - save a v3 spend for later (serial_1)
+        # 2) stake more blocks - save a v3 spend for later (serial_1)
         serial_1, randomness_1, privkey_1, id_1, denom_1, tx_1 = get_zerocoin_data(exported_zerocoins[1])
         self.log.info("Staking 70 blocks to get to public spend activation")
         for j in range(5):
@@ -121,7 +112,7 @@ class ZerocoinSpendTest(PivxTestFramework):
                 sync_blocks(self.nodes)
         old_spend_v3 = self.nodes[2].createrawzerocoinspend(id_1)
 
-        # 4) Check spend v2 disabled
+        # 3) Check spend v2 disabled
         serial_2, randomness_2, privkey_2, id_2, denom_2, tx_2 = get_zerocoin_data(exported_zerocoins[2])
         self.log.info("Trying to spend using the old coin spend method..")
         try:
@@ -137,7 +128,7 @@ class ZerocoinSpendTest(PivxTestFramework):
             raise AssertionError("Unexpected exception raised: " + type(e).__name__)
         self.log.info("GOOD: v2 spend was not possible.")
 
-        # 5) Spend one minted coin - spend v3 (serial_2)
+        # 4) Spend one minted coin - spend v3 (serial_2)
         self.log.info("Spending the minted coin with serial %s..." % serial_2[:16])
         txid = self.nodes[2].spendzerocoinmints([id_2])['txid']
         # stake 4 blocks - check it gets included on chain and check balances
@@ -146,16 +137,16 @@ class ZerocoinSpendTest(PivxTestFramework):
         zpiv_balance, balance = check_balances(denom_2, zpiv_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v3) PASSED")
 
-        # 6) Check double spends - spend v3
+        # 5) Check double spends - spend v3
         self.log.info("Trying to spend the serial twice now...")
         assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
                                 self.nodes[2].spendrawzerocoin, serial_2, randomness_2, denom_2, privkey_2, "", tx_2)
 
 
-        # 7) Activate v4 spends with SPORK_18
+        # 6) Activate v4 spends with SPORK_18
         self.setV4SpendEnforcement()
 
-        # 8) Spend one minted coin - spend v4 (serial_3)
+        # 7) Spend one minted coin - spend v4 (serial_3)
         serial_3, randomness_3, privkey_3, id_3, denom_3, tx_3 = get_zerocoin_data(exported_zerocoins[3])
         self.log.info("Spending the minted coin with serial %s..." % serial_3[:16])
         txid = self.nodes[2].spendzerocoinmints([id_3])['txid']
@@ -165,24 +156,24 @@ class ZerocoinSpendTest(PivxTestFramework):
         zpiv_balance, balance = check_balances(denom_3, zpiv_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v4) PASSED")
 
-        # 9) Check double spends - spend v4
+        # 8) Check double spends - spend v4
         self.log.info("Trying to spend the serial twice now...")
         assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
                                 self.nodes[2].spendrawzerocoin, serial_3, randomness_3, denom_3, privkey_3, "", tx_3)
 
-        # 10) Try to relay old v3 spend now (serial_1)
+        # 9) Try to relay old v3 spend now (serial_1)
         self.log.info("Trying to send old v3 spend now...")
         assert_raises_rpc_error(-26, "bad-txns-invalid-zpiv",
                                 self.nodes[2].sendrawtransaction, old_spend_v3)
         self.log.info("GOOD: Old transaction not sent.")
 
-        # 11) Try to double spend with v4 a mint already spent with v3 (serial_2)
+        # 10) Try to double spend with v4 a mint already spent with v3 (serial_2)
         self.log.info("Trying to double spend v4 against v3...")
         assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
                                 self.nodes[2].spendrawzerocoin, serial_2, randomness_2, denom_2, privkey_2, "", tx_2)
         self.log.info("GOOD: Double-spending transaction did not verify.")
 
-        # 12) Reactivate v3 spends and try to spend the old saved one (serial_1) again
+        # 11) Reactivate v3 spends and try to spend the old saved one (serial_1) again
         self.setV4SpendEnforcement(False)
         self.log.info("Trying to send old v3 spend now (serial: %s...)" % serial_1[:16])
         txid = self.nodes[2].sendrawtransaction(old_spend_v3)
