@@ -209,8 +209,7 @@ public:
 
     static const int STAKE_SPLIT_THRESHOLD = 2000;
 
-    bool MintableCoins();
-    bool SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount, int blockHeight);
+    bool MintableCoins(std::vector<COutput>* pCoins = nullptr);
     bool IsCollateralAmount(CAmount nInputAmount) const;
 
     // Zerocoin additions
@@ -350,7 +349,7 @@ public:
     //! check whether we are allowed to upgrade (or already support) to the named feature
     bool CanSupportFeature(enum WalletFeature wf);
 
-    void AvailableCoins(std::vector<COutput>& vCoins, bool fOnlyConfirmed = true, const CCoinControl* coinControl = NULL, bool fIncludeZeroValue = false, AvailableCoinsType nCoinType = ALL_COINS, bool fUseIX = false, int nWatchonlyConfig = 1, bool fIncludeColdStaking=false, bool fIncludeDelegated=true, bool fJustOne=false) const;
+    bool AvailableCoins(std::vector<COutput>* pCoins, bool fOnlyConfirmed = true, const CCoinControl* coinControl = NULL, bool fIncludeZeroValue = false, AvailableCoinsType nCoinType = ALL_COINS, bool fUseIX = false, int nWatchonlyConfig = 1, bool fIncludeColdStaking=false, bool fIncludeDelegated=true) const;
 
     // Get available p2cs utxo
     void GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const;
