@@ -725,9 +725,6 @@ class PivxTestFramework():
                 assert_equal(zcBalance['Immature'], 0)
                 if peer == 2:
                     assert_equal(len(zclist), len(zclist_spendable))
-                else:
-                    # last mints added on accumulators - not spendable
-                    assert_equal(0, len(zclist_spendable))
                 assert_equal(set([x['denomination'] for x in zclist]), set(vZC_DENOMS))
                 assert_equal([x['confirmations'] for x in zclist], [30-peer] * len(vZC_DENOMS))
 
