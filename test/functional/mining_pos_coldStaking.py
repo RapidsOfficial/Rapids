@@ -185,7 +185,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # -----------------------------------------------------------
         print("*** 6 ***")
         self.log.info("Trying to generate a cold-stake block before whitelisting the owner...")
-        assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], False)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
         self.log.info("Nice. Cold staker was NOT able to create the block yet.")
 
         self.log.info("Whitelisting the owner...")
@@ -209,7 +209,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # 8) check that the staker can use the coins to stake a block with internal miner.
         # --------------------------------------------------------------------------------
         print("*** 8 ***")
-        assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], True)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], True)
         self.log.info("Generating one valid cold-stake block...")
         self.generateBlock(1, 1)
         self.log.info("New block created by cold-staking. Trying to submit...")
@@ -338,7 +338,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # -----------------------------------------------------------
         print("*** 13 ***")
         self.log.info("Trying to generate one cold-stake block again...")
-        assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], False)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
         self.log.info("Cigar. Cold staker was NOT able to create any more blocks.")
 
         # 14) check balances when mature.
