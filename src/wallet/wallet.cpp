@@ -1959,7 +1959,8 @@ void CWallet::AvailableCoins(
         bool fUseIX,
         int nWatchonlyConfig,
         bool fIncludeColdStaking,
-        bool fIncludeDelegated) const
+        bool fIncludeDelegated,
+        bool fJustOne) const
 {
     vCoins.clear();
     const bool fCoinsSelected = (coinControl != nullptr) && coinControl->HasSelected();
@@ -2030,7 +2031,9 @@ void CWallet::AvailableCoins(
                         ((mine & (ISMINE_MULTISIG | (fIncludeColdStaking ? ISMINE_COLD : ISMINE_NO) |
                                 (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO));
 
+                // found valid coin
                 vCoins.emplace_back(COutput(pcoin, i, nDepth, fIsValid));
+                if (fJustOne) return;
             }
         }
     }
@@ -2162,26 +2165,30 @@ bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInp
 
 bool CWallet::MintableCoins()
 {
-    LOCK(cs_main);
     CAmount nBalance = GetStakingBalance(GetBoolArg("-coldstaking", true));
 
-    // Regular PIV
-    if (nBalance > 0) {
-        if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
-            return error("%s : invalid reserve balance amount", __func__);
-        if (nBalance <= nReserveBalance)
-            return false;
+    if (nBalance == 0) return false;
+    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
+        return error("%s : invalid reserve balance amount", __func__);
+    if (nBalance <= nReserveBalance) return false;
 
-        std::vector<COutput> vCoins;
-        // include cold, exclude delegated
-        const bool fIncludeCold = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) && GetBoolArg("-coldstaking", true);
-        AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS, false, 1, fIncludeCold, false);
+    std::vector<COutput> vCoins;
+    const bool fIncludeCold = (sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) &&
+                               GetBoolArg("-coldstaking", true));
+    AvailableCoins(vCoins,
+            true,           // fOnlyConfirmed
+            nullptr,        // coinControl
+            false,          // fIncludeZeroValue
+            STAKABLE_COINS, // nCoinType
+            false,          // fUseIX
+            1,              // nWatchonlyConfig
+            fIncludeCold,   // fIncludeColdStaking
+            false,          // fIncludeDelegated
+            true            // fJustOne
+            );
 
-        // check that we have at least one utxo eligible for staking.
-        return (vCoins.size() > 0);
-    }
-
-    return false;
+    // check that we have at least one utxo eligible for staking.
+    return (vCoins.size() > 0);
 }
 
 bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int nConfTheirs, std::vector<COutput> vCoins, std::set<std::pair<const CWalletTx*, unsigned int> >& setCoinsRet, CAmount& nValueRet) const
