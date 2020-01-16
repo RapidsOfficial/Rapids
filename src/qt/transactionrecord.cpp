@@ -397,7 +397,8 @@ void TransactionRecord::loadHotOrColdStakeOrContract(
         if (isSpendable) {
             // Offline wallet receiving an stake due a delegation
             record.type = TransactionRecord::StakeDelegated;
-
+            record.credit = wtx.GetCredit(ISMINE_SPENDABLE_DELEGATED);
+            record.debit = -(wtx.GetDebit(ISMINE_SPENDABLE_DELEGATED));
         } else {
             // Online wallet receiving an stake due a received utxo delegation that won a block.
             record.type = TransactionRecord::StakeHot;
@@ -479,7 +480,13 @@ void TransactionRecord::updateStatus(const CWalletTx& wtx)
         }
     }
     // For generated transactions, determine maturity
-    else if (type == TransactionRecord::Generated || type == TransactionRecord::StakeMint || type == TransactionRecord::StakeZPIV || type == TransactionRecord::MNReward) {
+    else if (type == TransactionRecord::Generated ||
+            type == TransactionRecord::StakeMint ||
+            type == TransactionRecord::StakeZPIV ||
+            type == TransactionRecord::MNReward ||
+            type == TransactionRecord::StakeDelegated ||
+            type == TransactionRecord::StakeHot) {
+
         if (nBlocksToMaturity > 0) {
             status.status = TransactionStatus::Immature;
             status.matures_in = nBlocksToMaturity;
