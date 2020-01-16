@@ -89,9 +89,9 @@ enum AvailableCoinsType {
     ALL_COINS = 1,
     ONLY_DENOMINATED = 2,
     ONLY_NOT10000IFMN = 3,
-    ONLY_NONDENOMINATED_NOT10000IFMN = 4, // ONLY_NONDENOMINATED and not 10000 PIV at the same time
-    ONLY_10000 = 5,                        // find masternode outputs including locked ones (use with caution)
-    STAKABLE_COINS = 6                          // UTXO's that are valid for staking
+    ONLY_NONDENOMINATED_NOT10000IFMN = 4,           // ONLY_NONDENOMINATED and not 10000 PIV at the same time
+    ONLY_10000 = 5,                                 // find masternode outputs including locked ones (use with caution)
+    STAKEABLE_COINS = 6                             // UTXO's that are valid for staking
 };
 
 // Possible states for zPIV send
@@ -209,7 +209,7 @@ public:
 
     static const int STAKE_SPLIT_THRESHOLD = 2000;
 
-    bool MintableCoins(std::vector<COutput>* pCoins = nullptr);
+    bool StakeableCoins(std::vector<COutput>* pCoins = nullptr);
     bool IsCollateralAmount(CAmount nInputAmount) const;
 
     // Zerocoin additions

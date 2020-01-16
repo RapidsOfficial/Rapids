@@ -621,7 +621,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
         obj.push_back(Pair("haveconnections", !vNodes.empty()));
         obj.push_back(Pair("mnsync", masternodeSync.IsSynced()));
         obj.push_back(Pair("walletunlocked", !pwalletMain->IsLocked()));
-        obj.push_back(Pair("mintablecoins", pwalletMain->MintableCoins()));
+        obj.push_back(Pair("mintablecoins", pwalletMain->StakeableCoins()));
         uint256 lastHash = pwalletMain->pStakerStatus->GetLastHash();
         obj.push_back(Pair("hashLastStakeAttempt", lastHash.GetHex()));
         obj.push_back(Pair("heightLastStakeAttempt", (mapBlockIndex.count(lastHash) > 0 ?

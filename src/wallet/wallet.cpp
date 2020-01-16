@@ -1986,7 +1986,7 @@ bool CWallet::AvailableCoins(
             if (nDepth == 0 && !pcoin->InMempool()) continue;
 
             // Check min depth requirement for stake inputs
-            if (nCoinType == STAKABLE_COINS && nDepth <= Params().COINSTAKE_MIN_DEPTH()) continue;
+            if (nCoinType == STAKEABLE_COINS && nDepth <= Params().COINSTAKE_MIN_DEPTH()) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
                 bool found = false;
@@ -2005,7 +2005,7 @@ bool CWallet::AvailableCoins(
                 }
                 if (!found) continue;
 
-                if (nCoinType == STAKABLE_COINS && pcoin->vout[i].IsZerocoinMint()) continue;
+                if (nCoinType == STAKEABLE_COINS && pcoin->vout[i].IsZerocoinMint()) continue;
                 if (IsSpent(wtxid, i)) continue;
 
                 isminetype mine = IsMine(pcoin->vout[i]);
@@ -2123,7 +2123,7 @@ bool less_then_denom(const COutput& out1, const COutput& out2)
     return (!found1 && found2);
 }
 
-bool CWallet::MintableCoins(std::vector<COutput>* pCoins)
+bool CWallet::StakeableCoins(std::vector<COutput>* pCoins)
 {
     CAmount nBalance = GetStakingBalance(GetBoolArg("-coldstaking", true));
 
@@ -2135,7 +2135,7 @@ bool CWallet::MintableCoins(std::vector<COutput>* pCoins)
     const bool fIncludeCold = (sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) &&
                                GetBoolArg("-coldstaking", true));
 
-    if (!AvailableCoins(pCoins, true, nullptr, false, STAKABLE_COINS,  false, 1, fIncludeCold, false))
+    if (!AvailableCoins(pCoins, true, nullptr, false, STAKEABLE_COINS,  false, 1, fIncludeCold, false))
         return false;
 
     if (!pCoins || nReserveBalance == 0)
@@ -2592,7 +2592,7 @@ bool CWallet::CreateCoinStake(
 {
     // Get the list of stakable utxos
     std::vector<COutput> vCoins;
-    if (!MintableCoins(&vCoins)) {
+    if (!StakeableCoins(&vCoins)) {
         LogPrintf("%s: No coin available to stake.\n", __func__);
         return false;
     }

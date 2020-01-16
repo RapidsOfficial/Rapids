@@ -680,7 +680,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             if ((GetTime() - nMintableLastCheck > 5 * 60)) // 5 minute check time
             {
                 nMintableLastCheck = GetTime();
-                fMintableCoins = pwallet->MintableCoins();
+                fMintableCoins = pwallet->StakeableCoins();
             }
 
             while (vNodes.empty() || pwallet->IsLocked() || !fMintableCoins ||
@@ -690,7 +690,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 if (!fMintableCoins && (GetTime() - nMintableLastCheck > 1 * 60)) // 1 minute check time
                 {
                     nMintableLastCheck = GetTime();
-                    fMintableCoins = pwallet->MintableCoins();
+                    fMintableCoins = pwallet->StakeableCoins();
                 }
             }
 
