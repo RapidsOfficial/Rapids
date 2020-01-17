@@ -359,7 +359,6 @@ void AddWrappedSerialsInflation();
 void RecalculateZPIVSpent();
 void RecalculateZPIVMinted();
 bool RecalculatePIVSupply(int nHeightStart);
-bool ReindexAccumulators(std::list<uint256>& listMissingCheckpoints, std::string& strError);
 
 // Fake Serial attack Range
 bool isBlockBetweenFakeSerialAttackRange(int nHeight);

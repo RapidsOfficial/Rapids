@@ -15,8 +15,6 @@
 #include "txdb.h"
 #include "util.h"
 #include "utilmoneystr.h"
-#include "zpiv/accumulatormap.h"
-#include "zpiv/accumulators.h"
 #include "wallet/wallet.h"
 #include "zpiv/zpivmodule.h"
 #include "zpivchain.h"
@@ -164,8 +162,6 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
         UniValue stakeData(UniValue::VOBJ);
-        stakeData.push_back(Pair("BlockFromHash", stake.get()->GetIndexFrom()->GetBlockHash().GetHex()));
-        stakeData.push_back(Pair("BlockFromHeight", stake.get()->GetIndexFrom()->nHeight));
         stakeData.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
         stakeData.push_back(Pair("stakeModifierHeight", ((stake->IsZPIV()) ? "Not available" : std::to_string(
                 stake->getStakeModifierHeight()))));
@@ -174,92 +170,6 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
 
     return result;
 }
-
-UniValue getchecksumblock(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() < 2 || params.size() > 3)
-        throw std::runtime_error(
-            "getchecksumblock\n"
-            "\nFinds the first occurrence of a certain accumulator checksum."
-            "\nReturns the block hash or, if fVerbose=true, the JSON block object\n"
-
-            "\nArguments:\n"
-            "1. \"checksum\"      (string, required) The hex encoded accumulator checksum\n"
-            "2. \"denom\"         (integer, required) The denomination of the accumulator\n"
-            "3. fVerbose          (boolean, optional, default=false) true for a json object, false for the hex encoded hash\n"
-
-            "\nResult (for fVerbose = true):\n"
-            "{\n"
-            "  \"hash\" : \"hash\",     (string) the block hash (same as provided)\n"
-            "  \"confirmations\" : n,   (numeric) The number of confirmations, or -1 if the block is not on the main chain\n"
-            "  \"size\" : n,            (numeric) The block size\n"
-            "  \"height\" : n,          (numeric) The block height or index\n"
-            "  \"version\" : n,         (numeric) The block version\n"
-            "  \"merkleroot\" : \"xxxx\", (string) The merkle root\n"
-            "  \"tx\" : [               (array of string) The transaction ids\n"
-            "     \"transactionid\"     (string) The transaction id\n"
-            "     ,...\n"
-            "  ],\n"
-            "  \"time\" : ttt,          (numeric) The block time in seconds since epoch (Jan 1 1970 GMT)\n"
-            "  \"mediantime\" : ttt,    (numeric) The median block time in seconds since epoch (Jan 1 1970 GMT)\n"
-            "  \"nonce\" : n,           (numeric) The nonce\n"
-            "  \"bits\" : \"1d00ffff\", (string) The bits\n"
-            "  \"difficulty\" : x.xxx,  (numeric) The difficulty\n"
-            "  \"previousblockhash\" : \"hash\",  (string) The hash of the previous block\n"
-            "  \"nextblockhash\" : \"hash\"       (string) The hash of the next block\n"
-            "  \"moneysupply\" : \"supply\"       (numeric) The money supply when this block was added to the blockchain\n"
-            "  \"zPIVsupply\" :\n"
-            "  {\n"
-            "     \"1\" : n,            (numeric) supply of 1 zPIV denomination\n"
-            "     \"5\" : n,            (numeric) supply of 5 zPIV denomination\n"
-            "     \"10\" : n,           (numeric) supply of 10 zPIV denomination\n"
-            "     \"50\" : n,           (numeric) supply of 50 zPIV denomination\n"
-            "     \"100\" : n,          (numeric) supply of 100 zPIV denomination\n"
-            "     \"500\" : n,          (numeric) supply of 500 zPIV denomination\n"
-            "     \"1000\" : n,         (numeric) supply of 1000 zPIV denomination\n"
-            "     \"5000\" : n,         (numeric) supply of 5000 zPIV denomination\n"
-            "     \"total\" : n,        (numeric) The total supply of all zPIV denominations\n"
-            "  }\n"
-            "}\n"
-
-            "\nResult (for verbose=false):\n"
-            "\"data\"             (string) A string that is serialized, hex-encoded data for block 'hash'.\n"
-
-            "\nExamples:\n" +
-            HelpExampleCli("getchecksumblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\", 5") +
-            HelpExampleRpc("getchecksumblock", "\"00000000000fd08c2fb661d2fcb0d49abb3a91e5f27082ce64feed3b4dede2e2\", 5"));
-
-
-    LOCK(cs_main);
-
-    // param 0
-    std::string acc_checksum_str = params[0].get_str();
-    uint256 checksum_256(acc_checksum_str);
-    uint32_t acc_checksum = checksum_256.Get32();
-    // param 1
-    libzerocoin::CoinDenomination denomination = libzerocoin::IntToZerocoinDenomination(params[1].get_int());
-    // param 2
-    bool fVerbose = false;
-    if (params.size() > 2)
-        fVerbose = params[2].get_bool();
-
-    int checksumHeight = GetChecksumHeight(acc_checksum, denomination);
-
-    if (checksumHeight == 0)
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Block not found");
-
-    CBlockIndex* pblockindex = chainActive[checksumHeight];
-
-    if (!fVerbose)
-        return pblockindex->GetBlockHash().GetHex();
-
-    CBlock block;
-    if (!ReadBlockFromDisk(block, pblockindex))
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Can't read block from disk");
-
-    return blockToJSON(block, pblockindex);
-}
-
 
 UniValue getblockcount(const UniValue& params, bool fHelp)
 {
@@ -612,8 +522,6 @@ UniValue getblock(const UniValue& params, bool fHelp)
             "     \"total\" : n,        (numeric) The total supply of all zPIV denominations\n"
             "  },\n"
             "  \"CoinStake\" :\n"
-            "    \"BlockFromHash\" : \"hash\",      (string) Block hash of the coin stake input\n"
-            "    \"BlockFromHeight\" : n,           (numeric) Block Height of the coin stake input\n"
             "    \"hashProofOfStake\" : \"hash\",   (string) Proof of Stake hash\n"
             "    \"stakeModifierHeight\" : \"nnn\"  (string) Stake modifier block height\n"
             "  }\n"
@@ -1215,94 +1123,6 @@ UniValue findserial(const UniValue& params, bool fHelp)
     ret.push_back(Pair("success", fSuccess));
     ret.push_back(Pair("txid", txid.GetHex()));
     return ret;
-}
-
-UniValue getaccumulatorvalues(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() != 1)
-        throw std::runtime_error(
-            "getaccumulatorvalues \"height\"\n"
-                    "\nReturns the accumulator values associated with a block height\n"
-
-                    "\nArguments:\n"
-                    "1. height   (numeric, required) the height of the checkpoint.\n"
-
-                    "\nExamples:\n" +
-            HelpExampleCli("getaccumulatorvalues", "\"height\"") + HelpExampleRpc("getaccumulatorvalues", "\"height\""));
-
-    int nHeight = params[0].get_int();
-
-    CBlockIndex* pindex = chainActive[nHeight];
-    if (!pindex)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "invalid block height");
-
-    UniValue ret(UniValue::VARR);
-    for (libzerocoin::CoinDenomination denom : libzerocoin::zerocoinDenomList) {
-        CBigNum bnValue;
-        if(!GetAccumulatorValueFromDB(pindex->nAccumulatorCheckpoint, denom, bnValue))
-            throw JSONRPCError(RPC_DATABASE_ERROR, "failed to find value in database");
-
-        UniValue obj(UniValue::VOBJ);
-        obj.push_back(Pair(std::to_string(denom), bnValue.GetHex()));
-        ret.push_back(obj);
-    }
-
-    return ret;
-}
-
-
-UniValue getaccumulatorwitness(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() != 2)
-        throw std::runtime_error(
-                "getaccumulatorwitness \"commitmentCoinValue, coinDenomination\"\n"
-                "\nReturns the accumulator witness value associated with the coin\n"
-
-                "\nArguments:\n"
-                "1. coinValue             (string, required) the commitment value of the coin in HEX.\n"
-                "2. coinDenomination      (numeric, required) the coin denomination.\n"
-
-                "\nResult:\n"
-                "{\n"
-                "  \"Accumulator Value\": \"xxx\"  (string) Accumulator hex value\n"
-                "  \"Denomination\": \"d\"         (integer) Accumulator denomination\n"
-                "  \"Mints added\": \"d\"          (integer) Number of mints added to the accumulator\n"
-                "  \"Witness Value\": \"xxx\"      (string) Witness hex value\n"
-                "}\n"
-
-                "\nExamples:\n" +
-                HelpExampleCli("getaccumulatorwitness", "\"5fb87fb7bb638e83bfc14bcf33ac6f8064c9884dc72a4e652666abcf42cc47f9da0a7aca58076b0122a19b25629a6b6e7461f188baa7c00865b862cdb270d934873648aa12dd66e3242da40e4c17c78b70fded35e2d9c72933b455fadce9684586b1d48b10570d66feebe51ccebb1d98595217d06f41e66d5a0d9246d46ec3dd\" 5") + HelpExampleRpc("getaccumulatorwitness", "\"5fb87fb7bb638e83bfc14bcf33ac6f8064c9884dc72a4e652666abcf42cc47f9da0a7aca58076b0122a19b25629a6b6e7461f188baa7c00865b862cdb270d934873648aa12dd66e3242da40e4c17c78b70fded35e2d9c72933b455fadce9684586b1d48b10570d66feebe51ccebb1d98595217d06f41e66d5a0d9246d46ec3dd\", 5"));
-
-
-    CBigNum coinValue;
-    coinValue.SetHex(params[0].get_str());
-
-    int d = params[1].get_int();
-    libzerocoin::CoinDenomination denomination = libzerocoin::IntToZerocoinDenomination(d);
-    libzerocoin::ZerocoinParams* zcparams = Params().Zerocoin_Params(false);
-
-    // Public coin
-    libzerocoin::PublicCoin pubCoin(zcparams, coinValue, denomination);
-
-    //Compute Accumulator and Witness
-    libzerocoin::Accumulator accumulator(zcparams, pubCoin.getDenomination());
-    libzerocoin::AccumulatorWitness witness(zcparams, accumulator, pubCoin);
-    std::string strFailReason = "";
-    int nMintsAdded = 0;
-    CZerocoinSpendReceipt receipt;
-
-    if (!GenerateAccumulatorWitness(pubCoin, accumulator, witness, nMintsAdded, strFailReason)) {
-        receipt.SetStatus(_(strFailReason.c_str()), ZPIV_FAILED_ACCUMULATOR_INITIALIZATION);
-        throw JSONRPCError(RPC_DATABASE_ERROR, receipt.GetStatusMessage());
-    }
-
-    UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("Accumulator Value", accumulator.getValue().GetHex()));
-    obj.push_back(Pair("Denomination", accumulator.getDenomination()));
-    obj.push_back(Pair("Mints added",nMintsAdded));
-    obj.push_back(Pair("Witness Value", witness.getValue().GetHex()));
-
-    return obj;
 }
 
 void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int minHeightStart)

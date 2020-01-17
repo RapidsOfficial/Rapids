@@ -67,8 +67,6 @@ public:
     bool MarkSpent(CWallet* pwallet, const uint256& txid);
     bool IsZPIV() override { return true; }
     uint256 GetSerialHash() const override { return hashSerial; }
-    int GetChecksumHeightFromMint();
-    int GetChecksumHeightFromSpend();
     uint32_t GetChecksum();
 };
 

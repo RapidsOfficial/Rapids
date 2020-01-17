@@ -9,7 +9,6 @@
 #include "main.h"
 #include "pow.h"
 #include "uint256.h"
-#include "zpiv/accumulators.h"
 
 #include <stdint.h>
 
@@ -270,15 +269,6 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
                         return error("LoadBlockIndex() : CheckProofOfWork failed: %s", pindexNew->ToString());
                 }
 
-                //populate accumulator checksum map in memory
-                if(pindexNew->nAccumulatorCheckpoint != 0 && pindexNew->nAccumulatorCheckpoint != nPreviousCheckpoint) {
-                    //Don't load any checkpoints that exist before v2 zpiv. The accumulator is invalid for v1 and not used.
-                    if (pindexNew->nHeight >= Params().Zerocoin_Block_V2_Start())
-                        LoadAccumulatorValuesFromDB(pindexNew->nAccumulatorCheckpoint);
-
-                    nPreviousCheckpoint = pindexNew->nAccumulatorCheckpoint;
-                }
-
                 pcursor->Next();
             } else {
                 break; // if shutdown requested or finished loading block index
@@ -409,19 +399,3 @@ bool CZerocoinDB::WipeCoins(std::string strType)
     return true;
 }
 
-bool CZerocoinDB::WriteAccumulatorValue(const uint32_t& nChecksum, const CBigNum& bnValue)
-{
-    LogPrint("zero","%s : checksum:%d val:%s\n", __func__, nChecksum, bnValue.GetHex());
-    return Write(std::make_pair('2', nChecksum), bnValue);
-}
-
-bool CZerocoinDB::ReadAccumulatorValue(const uint32_t& nChecksum, CBigNum& bnValue)
-{
-    return Read(std::make_pair('2', nChecksum), bnValue);
-}
-
-bool CZerocoinDB::EraseAccumulatorValue(const uint32_t& nChecksum)
-{
-    LogPrint("zero", "%s : checksum:%d\n", __func__, nChecksum);
-    return Erase(std::make_pair('2', nChecksum));
-}
