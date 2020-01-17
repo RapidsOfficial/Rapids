@@ -2228,14 +2228,14 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 QScrollBar:vertical {
     border: 0px solid #bababa;
     background:white;
-    width:4px;
+    width:7px;
     margin: 0px 0px 0px 0px;
 }
 
 
 QScrollBar::handle:vertical {
     background: #bababa;
-    min-height: 0px;
+    min-height: 10px;
 }
 
 QScrollBar::add-line:vertical {
