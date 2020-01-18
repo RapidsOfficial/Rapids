@@ -53,30 +53,6 @@ CAmount CLegacyZPivStake::GetValue() const
     return denom * COIN;
 }
 
-bool CLegacyZPivStake::GetModifier(uint64_t& nStakeModifier)
-{
-    CBlockIndex* pindex = GetIndexFrom();
-    if (!pindex)
-        return error("%s: failed to get index from", __func__);
-
-    if(Params().IsRegTestNet()) {
-        nStakeModifier = 0;
-        return true;
-    }
-
-    int64_t nTimeBlockFrom = pindex->GetBlockTime();
-    const int nHeightStop = std::min(chainActive.Height(), Params().Zerocoin_Block_Last_Checkpoint()-1);
-    while (pindex && pindex->nHeight + 1 <= nHeightStop) {
-        if (pindex->GetBlockTime() - nTimeBlockFrom > 60 * 60) {
-            nStakeModifier = pindex->nAccumulatorCheckpoint.Get64();
-            return true;
-        }
-        pindex = chainActive.Next(pindex);
-    }
-
-    return false;
-}
-
 CDataStream CLegacyZPivStake::GetUniqueness() const
 {
     CDataStream ss(SER_GETHASH, 0);
