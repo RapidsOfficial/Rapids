@@ -640,6 +640,7 @@ extern CZerocoinDB* zerocoinDB;
 /** Global variable that points to the spork database (protected by cs_main) */
 extern CSporkDB* pSporkDB;
 
+
 struct CBlockTemplate {
     CBlock block;
     std::vector<CAmount> vTxFees;

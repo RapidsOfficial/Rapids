@@ -399,3 +399,57 @@ bool CZerocoinDB::WipeCoins(std::string strType)
     return true;
 }
 
+
+// Legacy Zerocoin Database
+static const char LZC_ACCUMCS = 'A';
+
+bool CZerocoinDB::WriteAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom, const int nHeight)
+{
+    return Write(std::make_pair(LZC_ACCUMCS, std::make_pair(nChecksum, denom)), nHeight);
+}
+
+bool CZerocoinDB::ReadAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom, int& nHeightRet)
+{
+    return Read(std::make_pair(LZC_ACCUMCS, std::make_pair(nChecksum, denom)), nHeightRet);
+}
+
+bool CZerocoinDB::EraseAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom)
+{
+    return Erase(std::make_pair(LZC_ACCUMCS, std::make_pair(nChecksum, denom)));
+}
+
+bool CZerocoinDB::WipeAccChecksums()
+{
+    boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
+    CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
+    ssKeySet << std::make_pair(LZC_ACCUMCS, (uint32_t) 0);
+    pcursor->Seek(ssKeySet.str());
+    std::set<uint32_t> setDelete;
+    while (pcursor->Valid()) {
+        boost::this_thread::interruption_point();
+        try {
+            leveldb::Slice slKey = pcursor->key();
+            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
+            char chType;
+            ssKey >> chType;
+            if (chType == LZC_ACCUMCS) {
+                leveldb::Slice slValue = pcursor->value();
+                CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
+                uint32_t acs;
+                ssValue >> acs;
+                setDelete.insert(acs);
+                pcursor->Next();
+            } else break;
+        } catch (const std::exception& e) {
+            return error("%s : Deserialize or I/O error - %s", __func__, e.what());
+        }
+    }
+
+    for (auto& acs : setDelete) {
+        if (!Erase(std::make_pair(LZC_ACCUMCS, acs)))
+            LogPrintf("%s: error failed to acc checksum %s\n", __func__, acs);
+    }
+
+    LogPrintf("%s: AccChecksum database removed.\n", __func__);
+    return true;
+}
