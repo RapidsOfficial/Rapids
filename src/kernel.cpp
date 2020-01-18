@@ -14,6 +14,7 @@
 #include "stakeinput.h"
 #include "utilmoneystr.h"
 #include "zpivchain.h"
+#include "zpiv/zpos.h"
 
 // v1 modifier interval.
 static const int64_t OLD_MODIFIER_INTERVAL = 2087;
@@ -344,10 +345,8 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
     hashProofOfStakeRet = Hash(ss.begin(), ss.end());
 
     if (fVerify) {
-        LogPrint("staking", "%s : nStakeModifier=%s (nStakeModifierHeight=%s)\n"
-                "nTimeBlockFrom=%d\nssUniqueIDD=%s\n-->DATA=%s",
-            __func__, HexStr(modifier_ss), ((stake->IsZPIV()) ? "Not available" : std::to_string(stake->getStakeModifierHeight())),
-            nTimeBlockFrom, HexStr(ssUniqueID), HexStr(ss));
+        LogPrint("staking", "%s : nStakeModifier=%s\nnTimeBlockFrom=%d\nssUniqueIDD=%s\n-->DATA=%s",
+            __func__, HexStr(modifier_ss), nTimeBlockFrom, HexStr(ssUniqueID), HexStr(ss));
     }
     return true;
 }
@@ -388,7 +387,7 @@ bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake)
             nPreviousBlockHeight > Params().Zerocoin_Block_Last_Checkpoint())
         return error("%s : zPIV stake block: height %d outside range", __func__, (nPreviousBlockHeight+1));
 
-    CZPivStake* zPIV = dynamic_cast<CZPivStake*>(stake);
+    CLegacyZPivStake* zPIV = dynamic_cast<CLegacyZPivStake*>(stake);
     if (!zPIV) return error("%s : dynamic_cast of stake ptr failed", __func__);
 
     // The checkpoint needs to be from 200 blocks ago
@@ -414,7 +413,7 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
         if (spend.getSpendType() != libzerocoin::SpendType::STAKE)
             return error("%s : spend is using the wrong SpendType (%d)", __func__, (int)spend.getSpendType());
 
-        stake = std::unique_ptr<CStakeInput>(new CZPivStake(spend));
+        stake = std::unique_ptr<CStakeInput>(new CLegacyZPivStake(spend));
         if (!ContextualCheckZerocoinStake(nPreviousBlockHeight, stake.get()))
             return error("%s : staked zPIV fails context checks", __func__);
 
