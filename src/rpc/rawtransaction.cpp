@@ -917,104 +917,18 @@ UniValue getspentzerocoinamount(const UniValue& params, bool fHelp)
 }
 
 #ifdef ENABLE_WALLET
-UniValue createrawzerocoinstake(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() != 1)
-        throw std::runtime_error(
-            "createrawzerocoinstake mint_input \n"
-            "\nCreates raw zPIV coinstakes (without MN output). Only for regtest\n" +
-            HelpRequiringPassphrase() + "\n"
-
-            "\nArguments:\n"
-            "1. mint_input      (hex string, required) serial hash of the mint used as input\n"
-
-            "\nResult:\n"
-            "{\n"
-            "   \"hex\": \"xxx\",           (hex string) raw coinstake transaction\n"
-            "   \"private-key\": \"xxx\"    (hex string) private key of the input mint [needed to\n"
-            "                                            sign a block with this stake]"
-            "}\n"
-            "\nExamples\n" +
-            HelpExampleCli("createrawzerocoinstake", "0d8c16eee7737e3cc1e4e70dc006634182b175e039700931283b202715a0818f") +
-            HelpExampleRpc("createrawzerocoinstake", "0d8c16eee7737e3cc1e4e70dc006634182b175e039700931283b202715a0818f"));
-
-
-    if (!Params().IsRegTestNet())
-        throw JSONRPCError(RPC_WALLET_ERROR, "createrawzerocoinstake is available only on regtest net");
-
-    assert(pwalletMain != NULL);
-    LOCK2(cs_main, pwalletMain->cs_wallet);
-
-    if(sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE))
-        throw JSONRPCError(RPC_WALLET_ERROR, "zPIV is currently disabled due to maintenance.");
-
-    std::string serial_hash = params[0].get_str();
-    if (!IsHex(serial_hash))
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex serial hash");
-
-    EnsureWalletIsUnlocked();
-
-    uint256 hashSerial(serial_hash);
-    CZerocoinMint input_mint;
-    if (!pwalletMain->GetMint(hashSerial, input_mint)) {
-        std::string strErr = "Failed to fetch mint associated with serial hash " + serial_hash;
-        throw JSONRPCError(RPC_WALLET_ERROR, strErr);
-    }
-
-    CMutableTransaction coinstake_tx;
-
-    // create the zerocoinmint output (one spent denom + three 1-zPIV denom)
-    libzerocoin::CoinDenomination staked_denom = input_mint.GetDenomination();
-    std::vector<CTxOut> vOutMint(5);
-    // Mark coin stake transaction
-    CScript scriptEmpty;
-    scriptEmpty.clear();
-    vOutMint[0] = CTxOut(0, scriptEmpty);
-    CDeterministicMint dMint;
-    if (!pwalletMain->CreateZPIVOutPut(staked_denom, vOutMint[1], dMint))
-        throw JSONRPCError(RPC_WALLET_ERROR, "failed to create new zpiv output");
-
-    for (int i=2; i<5; i++) {
-        if (!pwalletMain->CreateZPIVOutPut(libzerocoin::ZQ_ONE, vOutMint[i], dMint))
-            throw JSONRPCError(RPC_WALLET_ERROR, "failed to create new zpiv output");
-    }
-    coinstake_tx.vout = vOutMint;
-
-    //hash with only the output info in it to be used in Signature of Knowledge
-    uint256 hashTxOut = coinstake_tx.GetHash();
-    CZerocoinSpendReceipt receipt;
-
-    // create the zerocoinspend input
-    CTxIn newTxIn;
-    // Use v2 spends for input (with v3 zpiv staking is disabled)
-    if (!pwalletMain->MintToTxIn(input_mint, hashTxOut, newTxIn, receipt, libzerocoin::SpendType::STAKE, nullptr, false))
-        throw JSONRPCError(RPC_WALLET_ERROR, "failed to create zc-spend stake input");
-
-    coinstake_tx.vin.push_back(newTxIn);
-
-    UniValue ret(UniValue::VOBJ);
-    ret.push_back(Pair("hex", EncodeHexTx(coinstake_tx)));
-    CPrivKey pk = input_mint.GetPrivKey();
-    CKey key;
-    key.SetPrivKey(pk, true);
-    ret.push_back(Pair("private-key", HexStr(key)));
-    return ret;
-
-}
 
 UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 3)
         throw std::runtime_error(
-            "createrawzerocoinspend mint_input ( \"address\" isPublicSpend )\n"
+            "createrawzerocoinspend mint_input ( \"address\" )\n"
             "\nCreates raw zPIV public spend.\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
             "1. mint_input      (hex string, required) serial hash of the mint used as input\n"
             "2. \"address\"     (string, optional, default=change) Send to specified address or to a new change address.\n"
-            "3. isPublicSpend   (boolean, optional, default=true) create a public zc spend."
-            "                       If false, instead create spend version 2 (only for regression tests)"
 
 
             "\nResult:\n"
@@ -1027,7 +941,6 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
 
     const std::string serial_hash = params[0].get_str();
     const std::string address_str = (params.size() > 1 ? params[1].get_str() : "");
-    const bool isPublicSpend = (params.size() > 2 ? params[2].get_bool() : true);
 
     if (!IsHex(serial_hash))
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex serial hash");
@@ -1040,9 +953,6 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
         addr_ptr = &address;
     }
-
-    if (!Params().IsRegTestNet() && !isPublicSpend)
-        throw JSONRPCError(RPC_WALLET_ERROR, "zPIV old spend only available in regtest for tests purposes");
 
     assert(pwalletMain != NULL);
     EnsureWalletIsUnlocked();
@@ -1066,7 +976,7 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
     if (addr_ptr) {
         outputs.push_back(std::pair<CBitcoinAddress*, CAmount>(addr_ptr, nAmount));
     }
-    if (!pwalletMain->CreateZerocoinSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, false, true, outputs, nullptr, isPublicSpend))
+    if (!pwalletMain->CreateZCPublicSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, false, true, outputs, nullptr))
         throw JSONRPCError(RPC_WALLET_ERROR, receipt.GetStatusMessage());
 
     // output the raw transaction

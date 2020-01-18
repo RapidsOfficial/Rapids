@@ -574,7 +574,7 @@ bool WalletModel::createZpivSpend(
 
     CReserveKey reserveKey(wallet);
     std::vector<CDeterministicMint> vNewMints;
-    if (!wallet->CreateZerocoinSpendTransaction(
+    if (!wallet->CreateZCPublicSpendTransaction(
             value,
             wtxNew,
             reserveKey,

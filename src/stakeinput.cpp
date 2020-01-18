@@ -10,6 +10,12 @@
 #include "zpiv/deterministicmint.h"
 #include "wallet/wallet.h"
 
+/*
+ * LEGACY: Kept for IBD in order to verify zerocoin stakes occurred when zPoS was active
+ * Find the first occurrence of a certain accumulator checksum.
+ * Return block index pointer or nullptr if not found
+ */
+
 CZPivStake::CZPivStake(const libzerocoin::CoinSpend& spend)
 {
     this->nChecksum = spend.getAccumulatorChecksum();
@@ -23,12 +29,6 @@ uint32_t CZPivStake::GetChecksum()
 {
     return nChecksum;
 }
-
-/*
- * LEGACY: Kept for IBD in order to verify zerocoin stakes occurred when zPoS was active
- * Find the first occurrence of a certain accumulator checksum.
- * Return block index pointer or nullptr if not found
- */
 
 CBlockIndex* CZPivStake::GetIndexFrom()
 {
@@ -98,50 +98,12 @@ CDataStream CZPivStake::GetUniqueness()
 
 bool CZPivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
 {
-    CBlockIndex* pindexCheckpoint = GetIndexFrom();
-    if (!pindexCheckpoint)
-        return error("%s: failed to find checkpoint block index", __func__);
-
-    CZerocoinMint mint;
-    if (!pwallet->GetMintFromStakeHash(hashSerial, mint))
-        return error("%s: failed to fetch mint associated with serial hash %s", __func__, hashSerial.GetHex());
-
-    if (libzerocoin::ExtractVersionFromSerial(mint.GetSerialNumber()) < 2)
-        return error("%s: serial extract is less than v2", __func__);
-
-    CZerocoinSpendReceipt receipt;
-    if (!pwallet->MintToTxIn(mint, hashTxOut, txIn, receipt, libzerocoin::SpendType::STAKE, pindexCheckpoint))
-        return error("%s", receipt.GetStatusMessage());
-
-    return true;
+    return error("%s: zPOS Disabled", __func__);
 }
 
 bool CZPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal)
 {
-    //Create an output returning the zPIV that was staked
-    CTxOut outReward;
-    libzerocoin::CoinDenomination denomStaked = libzerocoin::AmountToZerocoinDenomination(this->GetValue());
-    CDeterministicMint dMint;
-    if (!pwallet->CreateZPIVOutPut(denomStaked, outReward, dMint))
-        return error("%s: failed to create zPIV output", __func__);
-    vout.emplace_back(outReward);
-
-    //Add new staked denom to our wallet
-    if (!pwallet->DatabaseMint(dMint))
-        return error("%s: failed to database the staked zPIV", __func__);
-
-    for (unsigned int i = 0; i < 3; i++) {
-        CTxOut out;
-        CDeterministicMint dMintReward;
-        if (!pwallet->CreateZPIVOutPut(libzerocoin::CoinDenomination::ZQ_ONE, out, dMintReward))
-            return error("%s: failed to create zPIV output", __func__);
-        vout.emplace_back(out);
-
-        if (!pwallet->DatabaseMint(dMintReward))
-            return error("%s: failed to database mint reward", __func__);
-    }
-
-    return true;
+    return error("%s: zPOS Disabled", __func__);
 }
 
 bool CZPivStake::GetTxFrom(CTransaction& tx)

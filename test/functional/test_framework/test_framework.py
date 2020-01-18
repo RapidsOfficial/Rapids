@@ -847,12 +847,8 @@ class PivxTestFramework():
         prevout = None
         isZPoS = is_zerocoin(block.prevoutStake)
         if isZPoS:
-            _, serialHash, _ = stakeableUtxos[block.prevoutStake]
-            raw_stake = rpc_conn.createrawzerocoinstake(serialHash)
-            stake_tx_signed_raw_hex = raw_stake["hex"]
-            stake_pkey = raw_stake["private-key"]
-            block_sig_key.set_compressed(True)
-            block_sig_key.set_secretbytes(bytes.fromhex(stake_pkey))
+            # !TODO: remove me
+            raise Exception("zPOS tests discontinued")
 
         else:
             coinstakeTx_unsigned = CTransaction()
