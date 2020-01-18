@@ -33,9 +33,8 @@ public:
 
     const uint256 signatureHash() const override;
     void setVchSig(std::vector<unsigned char> vchSig) { this->vchSig = vchSig; };
-    bool Verify(const libzerocoin::Accumulator& a, bool verifyParams = true) const override;
     bool HasValidSignature() const;
-    bool validate() const;
+    bool Verify() const;
     static bool isAllowed(const bool fUseV1Params, const int spendVersion) { return !fUseV1Params || spendVersion >= PUBSPEND_SCHNORR; }
     bool isAllowed() const {
         const bool fUseV1Params = getCoinVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;

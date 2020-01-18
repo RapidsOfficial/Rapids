@@ -125,7 +125,6 @@ public:
     static std::vector<unsigned char> ParseSerial(CDataStream& s);
 
     virtual const uint256 signatureHash() const;
-    virtual bool Verify(const Accumulator& a, bool verifyParams = true) const;
     bool HasValidSerial(ZerocoinParams* params) const;
     bool HasValidSignature() const;
     void setTxOutHash(uint256 txOutHash) { this->ptxHash = txOutHash; };

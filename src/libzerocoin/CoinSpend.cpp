@@ -73,38 +73,6 @@ namespace libzerocoin
     }
 }
 
-bool CoinSpend::Verify(const Accumulator& a, bool verifyParams) const
-{
-    // Double check that the version is the same as marked in the serial
-    if (ExtractVersionFromSerial(coinSerialNumber) != version) {
-        //cout << "CoinSpend::Verify: version does not match serial=" << (int)ExtractVersionFromSerial(coinSerialNumber) << " actual=" << (int)version << endl;
-        return false;
-    }
-
-    if (a.getDenomination() != this->denomination) {
-        //std::cout << "CoinsSpend::Verify: failed, denominations do not match\n";
-        return false;
-    }
-
-    // Verify both of the sub-proofs using the given meta-data
-    if (!commitmentPoK.Verify(serialCommitmentToCoinValue, accCommitmentToCoinValue)) {
-        //std::cout << "CoinsSpend::Verify: commitmentPoK failed\n";
-        return false;
-    }
-
-    if (!accumulatorPoK.Verify(a, accCommitmentToCoinValue)) {
-        //std::cout << "CoinsSpend::Verify: accumulatorPoK failed\n";
-        return false;
-    }
-
-    if (!serialNumberSoK.Verify(coinSerialNumber, serialCommitmentToCoinValue, signatureHash(), verifyParams)) {
-        //std::cout << "CoinsSpend::Verify: serialNumberSoK failed. sighash:" << signatureHash().GetHex() << "\n";
-        return false;
-    }
-
-    return true;
-}
-
 const uint256 CoinSpend::signatureHash() const
 {
     CHashWriter h(0, 0);
