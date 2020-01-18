@@ -59,10 +59,10 @@ BASE_SCRIPTS= [
     'wallet_basic.py',                          # ~ 1155 sec
     'wallet_backup.py',                         # ~ 459 sec
     'mining_pos_reorg.py',                      # ~ 305 sec
-    'zerocoin_spends.py',                       # ~ 301 sec
 
     # vv Tests less than 5m vv
     'mining_pos_coldStaking.py',                # ~ 289 sec
+    'wallet_zerocoin_publicspends.py',          # ~ 270 sec
     'p2p_time_offset.py',                       # ~ 263 sec
     'wallet_abandonconflict.py',                # ~ 208 sec
     'rpc_rawtransaction.py',                    # ~ 190 sec
@@ -73,7 +73,6 @@ BASE_SCRIPTS= [
     'interface_rest.py',                        # ~ 154 sec
     'rpc_spork.py',                             # ~ 149 sec
     'feature_proxy.py',                         # ~ 143 sec
-    'zerocoin_wrapped_serials.py',              # ~ 137 sec
     'feature_uacomment.py',                     # ~ 130 sec
     'mining_pos_fakestake.py',                  # ~ 123 sec
     'wallet_import_stakingaddress.py',          # ~ 123 sec
