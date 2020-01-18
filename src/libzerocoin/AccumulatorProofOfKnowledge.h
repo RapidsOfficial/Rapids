@@ -27,15 +27,6 @@ public:
     AccumulatorProofOfKnowledge(){};
 	AccumulatorProofOfKnowledge(const AccumulatorAndProofParams* p);
 
-	/** Generates a proof that a commitment to a coin c was accumulated
-	 * @param p  Cryptographic parameters
-	 * @param commitmentToCoin commitment containing the coin we want to prove is accumulated
-	 * @param witness The witness to the accumulation of the coin
-	 * @param a
-	 */
-    AccumulatorProofOfKnowledge(const AccumulatorAndProofParams* p, const Commitment& commitmentToCoin, const AccumulatorWitness& witness);
-	/** Verifies that  a commitment c is accumulated in accumulated a
-	 */
 	bool Verify(const Accumulator& a,const CBigNum& valueOfCommitmentToCoin) const;
 	
 	ADD_SERIALIZE_METHODS;

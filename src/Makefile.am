@@ -185,7 +185,6 @@ BITCOIN_CORE_H = \
   zpivchain.h \
   zpiv/deterministicmint.h \
   zpiv/mintpool.h \
-  zpiv/witness.h \
   zpiv/zerocoin.h \
   zpiv/zpivtracker.h \
   zpiv/zpivwallet.h \
@@ -281,7 +280,6 @@ libbitcoin_wallet_a_SOURCES = \
   zpiv/deterministicmint.cpp \
   zpiv/zerocoin.cpp \
   zpiv/mintpool.cpp \
-  zpiv/witness.cpp \
   zpiv/zpivwallet.cpp \
   zpiv/zpivtracker.cpp \
   stakeinput.cpp \

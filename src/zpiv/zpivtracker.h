@@ -6,7 +6,6 @@
 #define PIVX_ZPIVTRACKER_H
 
 #include "zerocoin.h"
-#include "witness.h"
 #include "sync.h"
 #include <list>
 
