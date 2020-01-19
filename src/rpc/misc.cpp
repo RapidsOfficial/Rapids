@@ -597,8 +597,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
             "  \"haveconnections\": true|false,    (boolean) if network connections are present\n"
             "  \"mnsync\": true|false,             (boolean) if masternode data is synced\n"
             "  \"walletunlocked\": true|false,     (boolean) if the wallet is unlocked\n"
-            "  \"mintablecoins\": true|false,      (boolean) if the wallet has mintable coins\n"
-            "  \"enoughcoins\": true|false,        (boolean) if available coins are greater than reserve balance\n"
+            "  \"mintablecoins\": true|false,      (boolean) if the wallet has mintable balance (greater than reserve balance)\n"
             "  \"hashLastStakeAttempt\": xxx       (hex string) hash of last block on top of which the miner attempted to stake\n"
             "  \"heightLastStakeAttempt\": n       (integer) height of last block on top of which the miner attempted to stake\n"
             "  \"timeLastStakeAttempt\": n         (integer) time of last attempted stake\n"
@@ -619,8 +618,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
         obj.push_back(Pair("haveconnections", !vNodes.empty()));
         obj.push_back(Pair("mnsync", masternodeSync.IsSynced()));
         obj.push_back(Pair("walletunlocked", !pwalletMain->IsLocked()));
-        obj.push_back(Pair("mintablecoins", pwalletMain->MintableCoins()));
-        obj.push_back(Pair("enoughcoins", nReserveBalance <= pwalletMain->GetStakingBalance(GetBoolArg("-coldstaking", true))));
+        obj.push_back(Pair("mintablecoins", pwalletMain->StakeableCoins()));
         uint256 lastHash = pwalletMain->pStakerStatus->GetLastHash();
         obj.push_back(Pair("hashLastStakeAttempt", lastHash.GetHex()));
         obj.push_back(Pair("heightLastStakeAttempt", (mapBlockIndex.count(lastHash) > 0 ?

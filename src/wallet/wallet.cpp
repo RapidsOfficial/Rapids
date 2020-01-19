@@ -539,7 +539,7 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
 
     // Find possible candidates (remove delegated)
     std::vector<COutput> vPossibleCoins;
-    AvailableCoins(vPossibleCoins, true, NULL, false, ONLY_10000, false, 1, false, false);
+    AvailableCoins(&vPossibleCoins, true, NULL, false, ONLY_10000, false, 1, false, false);
 
     if (vPossibleCoins.empty()) {
         LogPrintf("CWallet::GetMasternodeVinAndKeys -- Could not locate any valid masternode vin\n");
@@ -1938,8 +1938,8 @@ void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
 /**
  * populate vCoins with vector of available COutputs.
  */
-void CWallet::AvailableCoins(
-        std::vector<COutput>& vCoins,
+bool CWallet::AvailableCoins(
+        std::vector<COutput>* pCoins,
         bool fOnlyConfirmed,
         const CCoinControl* coinControl,
         bool fIncludeZeroValue,
@@ -1949,7 +1949,7 @@ void CWallet::AvailableCoins(
         bool fIncludeColdStaking,
         bool fIncludeDelegated) const
 {
-    vCoins.clear();
+    if (pCoins) pCoins->clear();
     const bool fCoinsSelected = (coinControl != nullptr) && coinControl->HasSelected();
     // include delegated coins when coinControl is active
     if (!fIncludeDelegated && fCoinsSelected)
@@ -1961,24 +1961,20 @@ void CWallet::AvailableCoins(
             const uint256& wtxid = it->first;
             const CWalletTx* pcoin = &(*it).second;
 
-            if (!CheckFinalTx(*pcoin))
-                continue;
-
-            if (fOnlyConfirmed && !pcoin->IsTrusted())
-                continue;
-
-            if ((pcoin->IsCoinBase() || pcoin->IsCoinStake()) && pcoin->GetBlocksToMaturity() > 0)
-                continue;
+            if (!CheckFinalTx(*pcoin)) continue;
+            if (fOnlyConfirmed && !pcoin->IsTrusted()) continue;
+            if (pcoin->GetBlocksToMaturity() > 0) continue;
 
             int nDepth = pcoin->GetDepthInMainChain(false);
             // do not use IX for inputs that have less then 6 blockchain confirmations
-            if (fUseIX && nDepth < 6)
-                continue;
+            if (fUseIX && nDepth < 6) continue;
 
             // We should not consider coins which aren't at least in our mempool
             // It's possible for these to be conflicted via ancestors which we may never be able to detect
-            if (nDepth == 0 && !pcoin->InMempool())
-                continue;
+            if (nDepth == 0 && !pcoin->InMempool()) continue;
+
+            // Check min depth requirement for stake inputs
+            if (nCoinType == STAKEABLE_COINS && nDepth <= Params().COINSTAKE_MIN_DEPTH()) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
                 bool found = false;
@@ -1997,29 +1993,17 @@ void CWallet::AvailableCoins(
                 }
                 if (!found) continue;
 
-                if (nCoinType == STAKABLE_COINS) {
-                    if (pcoin->vout[i].IsZerocoinMint())
-                        continue;
-                }
+                if (nCoinType == STAKEABLE_COINS && pcoin->vout[i].IsZerocoinMint()) continue;
+                if (IsSpent(wtxid, i)) continue;
 
                 isminetype mine = IsMine(pcoin->vout[i]);
-                if (IsSpent(wtxid, i))
-                    continue;
-                if (mine == ISMINE_NO)
-                    continue;
-
-                if ((mine == ISMINE_MULTISIG || mine == ISMINE_SPENDABLE) && nWatchonlyConfig == 2)
-                    continue;
-
-                if (mine == ISMINE_WATCH_ONLY && nWatchonlyConfig == 1)
-                    continue;
-
-                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000)
-                    continue;
-                if (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue)
-                    continue;
-                if (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
-                    continue;
+                if (  (mine == ISMINE_NO) ||
+                      ((mine == ISMINE_MULTISIG || mine == ISMINE_SPENDABLE) && nWatchonlyConfig == 2) ||
+                      (mine == ISMINE_WATCH_ONLY && nWatchonlyConfig == 1) ||
+                      (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) ||
+                      (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue) ||
+                      (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
+                   ) continue;
 
                 // --Skip P2CS outputs
                 // skip cold coins
@@ -2034,9 +2018,12 @@ void CWallet::AvailableCoins(
                         ((mine & (ISMINE_MULTISIG | (fIncludeColdStaking ? ISMINE_COLD : ISMINE_NO) |
                                 (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO));
 
-                vCoins.emplace_back(COutput(pcoin, i, nDepth, fIsValid));
+                // found valid coin
+                if (!pCoins) return true;
+                pCoins->emplace_back(COutput(pcoin, i, nDepth, fIsValid));
             }
         }
+        return (pCoins && pCoins->size() > 0);
     }
 }
 
@@ -2044,7 +2031,7 @@ std::map<CBitcoinAddress, std::vector<COutput> > CWallet::AvailableCoinsByAddres
 {
     std::vector<COutput> vCoins;
     // include cold and delegated coins
-    AvailableCoins(vCoins, fConfirmed, nullptr, false, ALL_COINS, false, 1, true, true);
+    AvailableCoins(&vCoins, fConfirmed, nullptr, false, ALL_COINS, false, 1, true, true);
 
     std::map<CBitcoinAddress, std::vector<COutput> > mapCoins;
     for (COutput out : vCoins) {
@@ -2124,88 +2111,35 @@ bool less_then_denom(const COutput& out1, const COutput& out2)
     return (!found1 && found2);
 }
 
-bool CWallet::SelectStakeCoins(std::list<std::unique_ptr<CStakeInput> >& listInputs, CAmount nTargetAmount, int blockHeight)
+bool CWallet::StakeableCoins(std::vector<COutput>* pCoins)
 {
-    LOCK(cs_main);
-    //Add PIV
-    std::vector<COutput> vCoins;
-
-    // include cold, exclude delegated
-    const bool fIncludeCold = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) && GetBoolArg("-coldstaking", true);
-    AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS, false, 1, fIncludeCold, false);
-
-    CAmount nAmountSelected = 0;
-    if (GetBoolArg("-pivstake", true)) {
-        for (const COutput &out : vCoins) {
-            //make sure not to outrun target amount
-            if (nAmountSelected + out.tx->vout[out.i].nValue > nTargetAmount)
-                continue;
-
-            if (out.tx->vin[0].IsZerocoinSpend() && !out.tx->IsInMainChain())
-                continue;
-
-            if (!out.tx->hashBlock)
-                continue;
-
-            CBlockIndex* utxoBlock = mapBlockIndex.at(out.tx->hashBlock);
-            //check for maturity (min age/depth)
-            if (!Params().HasStakeMinAgeOrDepth(blockHeight, GetAdjustedTime(), utxoBlock->nHeight, utxoBlock->GetBlockTime()))
-                continue;
-
-            //add to our stake set
-            nAmountSelected += out.tx->vout[out.i].nValue;
-
-            std::unique_ptr<CPivStake> input(new CPivStake());
-            input->SetInput((CTransaction) *out.tx, out.i);
-            listInputs.emplace_back(std::move(input));
-        }
-    }
-
-    return true;
-}
-
-bool CWallet::MintableCoins()
-{
-    LOCK(cs_main);
     CAmount nBalance = GetStakingBalance(GetBoolArg("-coldstaking", true));
-    CAmount nZpivBalance = GetZerocoinBalance(false);
 
-    int chainHeight = chainActive.Height();
+    if (nBalance == 0) return false;
+    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
+        return error("%s : invalid reserve balance amount", __func__);
+    if (nBalance <= nReserveBalance) return false;
 
-    // Regular PIV
-    if (nBalance > 0) {
-        if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
-            return error("%s : invalid reserve balance amount", __func__);
-        if (nBalance <= nReserveBalance)
-            return false;
+    const bool fIncludeCold = (sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) &&
+                               GetBoolArg("-coldstaking", true));
 
-        std::vector<COutput> vCoins;
-        // include cold, exclude delegated
-        const bool fIncludeCold = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) && GetBoolArg("-coldstaking", true);
-        AvailableCoins(vCoins, true, NULL, false, STAKABLE_COINS, false, 1, fIncludeCold, false);
+    if (!AvailableCoins(pCoins, true, nullptr, false, STAKEABLE_COINS,  false, 1, fIncludeCold, false))
+        return false;
 
-        int64_t time = GetAdjustedTime();
-        for (const COutput& out : vCoins) {
-            CBlockIndex* utxoBlock = mapBlockIndex.at(out.tx->hashBlock);
-            //check for maturity (min age/depth)
-            if (Params().HasStakeMinAgeOrDepth(chainHeight, time, utxoBlock->nHeight, utxoBlock->nTime))
-                return true;
-        }
+    if (!pCoins || nReserveBalance == 0)
+        // there is at least one stakeable utxo
+        return true;
+
+    CAmount nTargetAmount = nBalance - nReserveBalance;
+    CAmount nAmountSelected = 0;
+    // leave some utxo for reserve balance
+    for (const COutput &out : *pCoins) {
+        const CAmount& nAmountUtxo = out.tx->vout[out.i].nValue;
+        if (nAmountSelected + nAmountUtxo > nTargetAmount) continue;
+        nAmountSelected += out.tx->vout[out.i].nValue;
     }
 
-    // zPIV
-    if (nZpivBalance > 0) {
-        std::set<CMintMeta> setMints = zpivTracker->ListMints(true, true, true);
-        for (auto mint : setMints) {
-            if (mint.nVersion < CZerocoinMint::STAKABLE_VERSION)
-                continue;
-            if (mint.nHeight > chainHeight - Params().Zerocoin_RequiredStakeDepth())
-                continue;
-           return true;
-        }
-    }
-
-    return false;
+    return (pCoins->size() > 0);
 }
 
 bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int nConfTheirs, std::vector<COutput> vCoins, std::set<std::pair<const CWalletTx*, unsigned int> >& setCoinsRet, CAmount& nValueRet) const
@@ -2319,7 +2253,7 @@ bool CWallet::SelectCoins(const CAmount& nTargetValue, std::set<std::pair<const 
 {
     // Note: this function should never be used for "always free" tx types like dstx
     std::vector<COutput> vCoins;
-    AvailableCoins(vCoins, true, coinControl, false, coin_type, useIX, 1, fIncludeColdStaking, fIncludeDelegated);
+    AvailableCoins(&vCoins, true, coinControl, false, coin_type, useIX, 1, fIncludeColdStaking, fIncludeDelegated);
 
     // coin control -> return all selected outputs (we want all selected to go into the transaction for sure)
     if (coinControl && coinControl->HasSelected()) {
@@ -2644,50 +2578,34 @@ bool CWallet::CreateCoinStake(
         int64_t& nTxNewTime
         )
 {
-    txNew.vin.clear();
-    txNew.vout.clear();
+    // Get the list of stakable utxos
+    std::vector<COutput> vCoins;
+    if (!StakeableCoins(&vCoins)) {
+        LogPrintf("%s: No coin available to stake.\n", __func__);
+        return false;
+    }
+
+    // Parse utxos into CPivStakes
+    std::list<std::unique_ptr<CStakeInput> > listInputs;
+    for (const COutput &out : vCoins) {
+        std::unique_ptr<CPivStake> input(new CPivStake());
+        input->SetInput((CTransaction) *out.tx, out.i);
+        listInputs.emplace_back(std::move(input));
+    }
 
     // Mark coin stake transaction
-    CScript scriptEmpty;
-    scriptEmpty.clear();
-    txNew.vout.push_back(CTxOut(0, scriptEmpty));
-
-    // Choose coins to use
-    CAmount nBalance = GetStakingBalance();
-
-    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
-        return error("CreateCoinStake : invalid reserve balance amount");
-
-    if (nBalance > 0 && nBalance <= nReserveBalance)
-        return false;
-
-    // Get the list of stakable inputs
-    std::list<std::unique_ptr<CStakeInput> > listInputs;
-    if (!SelectStakeCoins(listInputs, nBalance - nReserveBalance, pindexPrev->nHeight + 1)) {
-        LogPrintf("CreateCoinStake(): selectStakeCoins failed\n");
-        return false;
-    }
-
-    if (listInputs.empty()) {
-        LogPrint("staking", "CreateCoinStake(): listInputs empty\n");
-        MilliSleep(50000);
-        return false;
-    }
-
-    if (GetAdjustedTime() - pindexPrev->GetBlockTime() < 60) {
-        if (Params().NetworkID() == CBaseChainParams::REGTEST) {
-            MilliSleep(1000);
-        }
-    }
-
-    CAmount nCredit;
-    CScript scriptPubKeyKernel;
-    bool fKernelFound = false;
-    int nAttempts = 0;
+    txNew.vin.clear();
+    txNew.vout.clear();
+    txNew.vout.push_back(CTxOut(0, CScript()));
 
     // update staker status (hash)
     pStakerStatus->SetLastTip(pindexPrev);
 
+    // Kernel Search
+    CAmount nCredit;
+    CScript scriptPubKeyKernel;
+    bool fKernelFound = false;
+    int nAttempts = 0;
     for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
         //new block came in, move on
         if (chainActive.Height() != pindexPrev->nHeight) return false;
@@ -3679,7 +3597,7 @@ bool CWallet::MultiSend()
     }
 
     std::vector<COutput> vCoins;
-    AvailableCoins(vCoins);
+    AvailableCoins(&vCoins);
     bool stakeSent = false;
     bool mnSent = false;
     for (const COutput& out : vCoins) {

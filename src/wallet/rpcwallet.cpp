@@ -2917,7 +2917,7 @@ UniValue printMultiSend()
 UniValue printAddresses()
 {
     std::vector<COutput> vCoins;
-    pwalletMain->AvailableCoins(vCoins);
+    pwalletMain->AvailableCoins(&vCoins);
     std::map<std::string, double> mapAddresses;
     for (const COutput& out : vCoins) {
         CTxDestination utxoAddress;
