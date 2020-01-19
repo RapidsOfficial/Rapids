@@ -22,7 +22,7 @@ class ImportStakingTest(PivxTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 2
-        self.extra_args = [['-staking=0']] * self.num_nodes
+        self.extra_args = [[]] * self.num_nodes
         self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
 
     def log_title(self):

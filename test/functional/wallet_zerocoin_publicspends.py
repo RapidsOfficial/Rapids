@@ -26,7 +26,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         self.num_nodes = 3
         # node 0 and node 1 move the chain (node 0 also sets the sporks)
         # node 2 does the spends
-        self.extra_args = [['-staking=0']]*self.num_nodes
+        self.extra_args = [[]]*self.num_nodes
         self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
 
     def setup_chain(self):

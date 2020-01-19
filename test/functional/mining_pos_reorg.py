@@ -21,7 +21,6 @@ class ReorgStakeTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 3
         # node 0 and 1 stake the blocks, node 2 makes the zerocoin spends
-        self.extra_args = [['-staking=0']] * self.num_nodes
 
     def setup_chain(self):
         # Start with PoS cache: 330 blocks

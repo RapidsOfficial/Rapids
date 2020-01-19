@@ -15,7 +15,7 @@ class PIVX_RPCSporkTest(PivxTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 2
-        self.extra_args = [['-staking=1']] * self.num_nodes
+        self.extra_args = [[]] * self.num_nodes
         self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
 
     def setup_chain(self):
