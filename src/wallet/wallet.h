@@ -207,9 +207,24 @@ public:
     bool StakeableCoins(std::vector<COutput>* pCoins = nullptr);
     bool IsCollateralAmount(CAmount nInputAmount) const;
 
-    // Zerocoin additions
-    bool CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransaction& txNew, std::vector<CDeterministicMint>& vDMints, CReserveKey* reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl = NULL, const bool isZCSpendChange = false);
 
+    /* Legacy ZC - !TODO: move outside of main wallet */
+
+    //- Mints (Only for regtest)
+    std::string MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const CCoinControl* coinControl = NULL);
+    std::string MintZerocoinFromOutPoint(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const std::vector<COutPoint> vOutpts);
+    bool CreateZerocoinMintTransaction(const CAmount nValue,
+            CMutableTransaction& txNew,
+            std::vector<CDeterministicMint>& vDMints,
+            CReserveKey* reservekey,
+            int64_t& nFeeRet,
+            std::string& strFailReason,
+            const CCoinControl* coinControl = NULL,
+            const bool isZCSpendChange = false);
+
+    // - PublicSpends
+    bool SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, std::vector<CZerocoinMint>& vMintsSelected, bool fMintChange, bool fMinimizeChange, std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo, CBitcoinAddress* changeAddress = nullptr);
+    bool MintsToInputVectorPublicSpend(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, const uint256& hashTxOut, std::vector<CTxIn>& vin, CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint = nullptr);
     bool CreateZCPublicSpendTransaction(
             CAmount nValue,
             CWalletTx& wtxNew,
@@ -222,28 +237,10 @@ public:
             std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo,
             CBitcoinAddress* changeAddress = nullptr);
 
-    // Public coin spend input creation
-    bool MintsToInputVectorPublicSpend(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, const uint256& hashTxOut, std::vector<CTxIn>& vin,
-                                       CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint = nullptr);
-
-    std::string MintZerocoinFromOutPoint(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const std::vector<COutPoint> vOutpts);
-    std::string MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const CCoinControl* coinControl = NULL);
-
-    bool SpendZerocoin(
-            CAmount nAmount,
-            CWalletTx& wtxNew,
-            CZerocoinSpendReceipt& receipt,
-            std::vector<CZerocoinMint>& vMintsSelected,
-            bool fMintChange,
-            bool fMinimizeChange,
-            std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo,
-            CBitcoinAddress* changeAddress = nullptr
-    );
-
+    // zPIV wallet
     std::string ResetMintZerocoin();
     std::string ResetSpentZerocoin();
     void ReconsiderZerocoins(std::list<CZerocoinMint>& listMintsRestored, std::list<CDeterministicMint>& listDMintsRestored);
-    void ZPivBackupWallet();
     bool GetZerocoinKey(const CBigNum& bnSerial, CKey& key);
     bool CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, CTxOut& outMint, CDeterministicMint& dMint);
     bool GetMint(const uint256& hashSerial, CZerocoinMint& mint);
@@ -251,7 +248,6 @@ public:
     bool DatabaseMint(CDeterministicMint& dMint);
     bool SetMintUnspent(const CBigNum& bnSerial);
     bool UpdateMint(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const libzerocoin::CoinDenomination& denom);
-    std::string GetUniqueWalletBackupName(bool fzpivAuto) const;
 
 
     /** Zerocin entry changed.
@@ -272,7 +268,6 @@ public:
     bool fFileBacked;
     bool fWalletUnlockAnonymizeOnly;
     std::string strWalletFile;
-    bool fBackupMints;
     std::unique_ptr<CzPIVTracker> zpivTracker;
 
     std::set<int64_t> setKeyPool;
@@ -306,7 +301,6 @@ public:
     void SetNull();
     void setZWallet(CzPIVWallet* zwallet);
     CzPIVWallet* getZWallet();
-    void setZPivAutoBackups(bool fEnabled);
     bool isMultiSendEnabled();
     void setMultiSendDisabled();
 
@@ -329,6 +323,7 @@ public:
     const CWalletTx* GetWalletTx(const uint256& hash) const;
 
     std::vector<CWalletTx> getWalletTxs();
+    std::string GetUniqueWalletBackupName() const;
 
     //! check whether we are allowed to upgrade (or already support) to the named feature
     bool CanSupportFeature(enum WalletFeature wf);
