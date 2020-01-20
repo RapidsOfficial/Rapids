@@ -17,11 +17,9 @@
 #include <streams.h>
 #include <utilstrencodings.h>
 #include "Accumulator.h"
-#include "AccumulatorProofOfKnowledge.h"
 #include "Coin.h"
 #include "Commitment.h"
 #include "Params.h"
-#include "SerialNumberSignatureOfKnowledge.h"
 #include "SpendType.h"
 
 #include "bignum.h"
@@ -30,6 +28,79 @@
 
 namespace libzerocoin
 {
+// Lagacy zPIV - Only for serialization
+// Proof that a value inside a commitment C is accumulated in accumulator A
+class AccumulatorProofOfKnowledge {
+public:
+    AccumulatorProofOfKnowledge() {};
+    AccumulatorProofOfKnowledge(const AccumulatorAndProofParams* p): params(p) {};
+    ADD_SERIALIZE_METHODS;
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(C_e); READWRITE(C_u); READWRITE(C_r); READWRITE(st_1); READWRITE(st_2); READWRITE(st_3);
+        READWRITE(t_1); READWRITE(t_2); READWRITE(t_3); READWRITE(t_4); READWRITE(s_alpha); READWRITE(s_beta);
+        READWRITE(s_zeta); READWRITE(s_sigma); READWRITE(s_eta); READWRITE(s_epsilon);
+        READWRITE(s_delta); READWRITE(s_xi); READWRITE(s_phi); READWRITE(s_gamma); READWRITE(s_psi);
+    }
+private:
+    const AccumulatorAndProofParams* params;
+    CBigNum C_e, C_u, C_r;
+    CBigNum st_1, st_2, st_3;
+    CBigNum t_1, t_2, t_3, t_4;
+    CBigNum s_alpha, s_beta, s_zeta, s_sigma, s_eta, s_epsilon, s_delta;
+    CBigNum s_xi, s_phi, s_gamma, s_psi;
+};
+
+// Lagacy zPIV - Only for serialization
+// Signature of knowledge attesting that the signer knows the values to
+// open a commitment to a coin with given serial number
+class SerialNumberSignatureOfKnowledge {
+public:
+    SerialNumberSignatureOfKnowledge(){};
+    SerialNumberSignatureOfKnowledge(const ZerocoinParams* p): params(p) {}
+    ADD_SERIALIZE_METHODS;
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(s_notprime);
+        READWRITE(sprime);
+        READWRITE(hash);
+    }
+private:
+    const ZerocoinParams* params;
+    uint256 hash;
+    std::vector<CBigNum> s_notprime;
+    std::vector<CBigNum> sprime;
+};
+
+// Lagacy zPIV - Only for serialization
+// Proof that two commitments open to the same value (BROKEN)
+class CommitmentProofOfKnowledge {
+public:
+    CommitmentProofOfKnowledge() {};
+    CommitmentProofOfKnowledge(const IntegerGroupParams* ap, const IntegerGroupParams* bp): ap(ap), bp(bp) {};
+    template<typename Stream>
+    CommitmentProofOfKnowledge(const IntegerGroupParams* aParams, const IntegerGroupParams* bParams, Stream& strm):
+        ap(aParams),
+        bp(bParams)
+    {
+        strm >> *this;
+    }
+
+    ADD_SERIALIZE_METHODS;
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(S1); READWRITE(S2); READWRITE(S3); READWRITE(challenge);
+    }
+private:
+    const IntegerGroupParams *ap, *bp;
+    CBigNum S1, S2, S3, challenge;
+};
+
+
+// Lagacy zPIV - Only for serialization
 /** The complete proof needed to spend a zerocoin.
  * Composes together a proof that a coin is accumulated
  * and that it has a given serial number.
