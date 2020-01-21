@@ -42,7 +42,7 @@ public:
     }
 
     Commitment(const IntegerGroupParams* p, const CBigNum& value):
-        Commitment(p, value, CBigNum::randBignum(params->groupOrder)) {};
+        Commitment(p, value, CBigNum::randBignum(p->groupOrder)) {};
 
     const CBigNum& getCommitmentValue() const { return this->commitmentValue; };
     const CBigNum& getRandomness() const { return this->randomness; };

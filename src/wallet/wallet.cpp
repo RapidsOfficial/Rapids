@@ -3797,14 +3797,14 @@ void CWallet::SetNull()
     nTimeFirstKey = 0;
     fWalletUnlockAnonymizeOnly = false;
 
-    // Stake Settings
+    // Staker status (last hashed block and time)
     if (pStakerStatus) {
         pStakerStatus->SetNull();
     } else {
         pStakerStatus = new CStakerStatus();
     }
+    // Stake split threshold
     nStakeSplitThreshold = STAKE_SPLIT_THRESHOLD;
-    nStakeSetUpdateTime = 300; // 5 minutes
 
     //MultiSend
     vMultiSend.clear();

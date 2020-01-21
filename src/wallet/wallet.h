@@ -227,9 +227,9 @@ public:
     MasterKeyMap mapMasterKeys;
     unsigned int nMasterKeyMaxID;
 
-    // Stake Settings
+    // Stake split threshold
     uint64_t nStakeSplitThreshold;
-    int nStakeSetUpdateTime;
+    // Staker status (last hashed block and time)
     CStakerStatus* pStakerStatus = nullptr;
 
     //MultiSend
