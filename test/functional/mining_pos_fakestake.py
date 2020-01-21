@@ -61,7 +61,6 @@ class FakeStakeTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         # nodes[0] moves the chain and checks the spam blocks, nodes[1] sends them
-        self.extra_args = [['-staking=0']]*self.num_nodes
 
     def setup_chain(self):
         # Start with PoW cache: 200 blocks

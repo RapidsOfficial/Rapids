@@ -21,7 +21,6 @@ class ReorgStakeTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 3
         # node 0 and 1 stake the blocks, node 2 makes the zerocoin spends
-        self.extra_args = [['-staking=0']] * self.num_nodes
 
     def setup_chain(self):
         # Start with PoS cache: 330 blocks
@@ -70,7 +69,6 @@ class ReorgStakeTest(PivxTestFramework):
                 for nblock in range(5):
                     self.mocktime = self.generate_pos(peer, self.mocktime)
                 sync_blocks(self.nodes)
-                set_node_times(self.nodes, self.mocktime)
         block_time_0 = block_time_1 = self.mocktime
         self.log.info("Blocks staked.")
 

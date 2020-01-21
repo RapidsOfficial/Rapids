@@ -26,7 +26,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         self.num_nodes = 3
         # node 0 and node 1 move the chain (node 0 also sets the sporks)
         # node 2 does the spends
-        self.extra_args = [['-staking=0']]*self.num_nodes
+        self.extra_args = [[]]*self.num_nodes
         self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
 
     def setup_chain(self):
@@ -112,23 +112,8 @@ class ZerocoinSpendTest(PivxTestFramework):
                 sync_blocks(self.nodes)
         old_spend_v3 = self.nodes[2].createrawzerocoinspend(id_1)
 
-        # 3) Check spend v2 disabled
+        # 3) Spend one minted coin - spend v3 (serial_2)
         serial_2, randomness_2, privkey_2, id_2, denom_2, tx_2 = get_zerocoin_data(exported_zerocoins[2])
-        self.log.info("Trying to spend using the old coin spend method..")
-        try:
-            self.nodes[2].spendzerocoin(denom_2, False, False, "", False)
-        except JSONRPCException as e:
-            # JSONRPCException was thrown as expected. Check the code and message values are correct.
-            if e.error["code"] != -4:
-                raise AssertionError("Unexpected JSONRPC error code %i" % e.error["code"])
-            if ([x for x in ["Couldn't generate the accumulator witness",
-                             "The transaction was rejected!"] if x in e.error['message']] == []):
-                raise e
-        except Exception as e:
-            raise AssertionError("Unexpected exception raised: " + type(e).__name__)
-        self.log.info("GOOD: v2 spend was not possible.")
-
-        # 4) Spend one minted coin - spend v3 (serial_2)
         self.log.info("Spending the minted coin with serial %s..." % serial_2[:16])
         txid = self.nodes[2].spendzerocoinmints([id_2])['txid']
         # stake 4 blocks - check it gets included on chain and check balances
@@ -137,16 +122,16 @@ class ZerocoinSpendTest(PivxTestFramework):
         zpiv_balance, balance = check_balances(denom_2, zpiv_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v3) PASSED")
 
-        # 5) Check double spends - spend v3
+        # 4) Check double spends - spend v3
         self.log.info("Trying to spend the serial twice now...")
         assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
                                 self.nodes[2].spendrawzerocoin, serial_2, randomness_2, denom_2, privkey_2, "", tx_2)
 
 
-        # 6) Activate v4 spends with SPORK_18
+        # 5) Activate v4 spends with SPORK_18
         self.setV4SpendEnforcement()
 
-        # 7) Spend one minted coin - spend v4 (serial_3)
+        # 6) Spend one minted coin - spend v4 (serial_3)
         serial_3, randomness_3, privkey_3, id_3, denom_3, tx_3 = get_zerocoin_data(exported_zerocoins[3])
         self.log.info("Spending the minted coin with serial %s..." % serial_3[:16])
         txid = self.nodes[2].spendzerocoinmints([id_3])['txid']
@@ -156,24 +141,24 @@ class ZerocoinSpendTest(PivxTestFramework):
         zpiv_balance, balance = check_balances(denom_3, zpiv_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v4) PASSED")
 
-        # 8) Check double spends - spend v4
+        # 7) Check double spends - spend v4
         self.log.info("Trying to spend the serial twice now...")
         assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
                                 self.nodes[2].spendrawzerocoin, serial_3, randomness_3, denom_3, privkey_3, "", tx_3)
 
-        # 9) Try to relay old v3 spend now (serial_1)
+        # 8) Try to relay old v3 spend now (serial_1)
         self.log.info("Trying to send old v3 spend now...")
         assert_raises_rpc_error(-26, "bad-txns-invalid-zpiv",
                                 self.nodes[2].sendrawtransaction, old_spend_v3)
         self.log.info("GOOD: Old transaction not sent.")
 
-        # 10) Try to double spend with v4 a mint already spent with v3 (serial_2)
+        # 9) Try to double spend with v4 a mint already spent with v3 (serial_2)
         self.log.info("Trying to double spend v4 against v3...")
         assert_raises_rpc_error(-4, "Trying to spend an already spent serial",
                                 self.nodes[2].spendrawzerocoin, serial_2, randomness_2, denom_2, privkey_2, "", tx_2)
         self.log.info("GOOD: Double-spending transaction did not verify.")
 
-        # 11) Reactivate v3 spends and try to spend the old saved one (serial_1) again
+        # 10) Reactivate v3 spends and try to spend the old saved one (serial_1) again
         self.setV4SpendEnforcement(False)
         self.log.info("Trying to send old v3 spend now (serial: %s...)" % serial_1[:16])
         txid = self.nodes[2].sendrawtransaction(old_spend_v3)

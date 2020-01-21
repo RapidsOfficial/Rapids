@@ -7,14 +7,13 @@
 from io import BytesIO
 from time import sleep
 
-from test_framework.authproxy import JSONRPCException
 from test_framework.messages import CTransaction, CTxIn, CTxOut, COIN, COutPoint
 from test_framework.mininode import network_thread_start
 from test_framework.pivx_node import PivxTestNode
 from test_framework.script import CScript, OP_CHECKSIG
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import connect_nodes_bi, p2p_port, bytes_to_hex_str, \
-    assert_equal, assert_greater_than, sync_blocks, assert_raises_rpc_error
+from test_framework.util import connect_nodes_bi, p2p_port, bytes_to_hex_str, set_node_times, \
+    assert_equal, assert_greater_than, sync_blocks, sync_mempools, assert_raises_rpc_error
 
 # filter utxos based on first 5 bytes of scriptPubKey
 def getDelegatedUtxos(utxos):
@@ -24,10 +23,14 @@ def getDelegatedUtxos(utxos):
 class PIVX_ColdStakingTest(PivxTestFramework):
 
     def set_test_params(self):
-        self.setup_clean_chain = True
         self.num_nodes = 3
-        self.extra_args = [['-staking=1']] * self.num_nodes
+        self.extra_args = [[]] * self.num_nodes
         self.extra_args[0].append('-sporkkey=932HEevBSujW2ud7RfB1YF91AFygbBRQj3de3LyaCRqNzKKgWXi')
+
+    def setup_chain(self):
+        # Start with PoW cache: 200 blocks
+        self._initialize_chain()
+        self.enable_mocktime()
 
 
     def setup_network(self):
@@ -79,40 +82,53 @@ class PIVX_ColdStakingTest(PivxTestFramework):
     def run_test(self):
         self.description = "Performs tests on the Cold Staking P2CS implementation"
         self.init_test()
-        LAST_POW_BLOCK = 250
         NUM_OF_INPUTS = 20
-        INPUT_VALUE = 50
-        INITAL_MINED_BLOCKS = LAST_POW_BLOCK + 1
+        INPUT_VALUE = 249
 
         # nodes[0] - coin-owner
         # nodes[1] - cold-staker
 
-        # 1) nodes[0] mines 20 blocks. nodes[2] mines 231 blocks.
-        # -----------------------------------------------------------
-        # Check that SPORK 17 is disabled
-        assert (not self.isColdStakingEnforced())
+        # 1) nodes[0] and nodes[2] mine 25 blocks each
+        # --------------------------------------------
         print("*** 1 ***")
-        self.log.info("Mining %d blocks..." % INITAL_MINED_BLOCKS)
-        self.generateBlock(20, 0)
-        sync_blocks(self.nodes)
-        self.log.info("20 Blocks mined.")
-        self.generateBlock(INITAL_MINED_BLOCKS-20)
-        sync_blocks(self.nodes)
-        self.log.info("251 Blocks mined.")
+        self.log.info("Mining 50 Blocks...")
+        for peer in [0, 2]:
+            for j in range(25):
+                self.mocktime = self.generate_pow(peer, self.mocktime)
+            sync_blocks(self.nodes)
 
-        # 2) nodes[0] generates a owner address
+        # 2) node[1] sends his entire balance (50 mature rewards) to node[2]
+        #  - node[2] stakes a block - node[1] locks the change
+        print("*** 2 ***")
+        self.log.info("Emptying node1 balance")
+        assert_equal(self.nodes[1].getbalance(), 50 * 250)
+        txid = self.nodes[1].sendtoaddress(self.nodes[2].getnewaddress(), (50 * 250 - 0.01))
+        assert (txid is not None)
+        sync_mempools(self.nodes)
+        self.mocktime = self.generate_pos(2, self.mocktime)
+        sync_blocks(self.nodes)
+        # lock the change output (so it's not used as stake input in generate_pos)
+        for x in self.nodes[1].listunspent():
+            assert (self.nodes[1].lockunspent(False, [{"txid": x['txid'], "vout": x['vout']}]))
+        # check that it cannot stake
+        sleep(1)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
+
+        # 3) nodes[0] generates a owner address
         #    nodes[1] generates a cold-staking address.
         # ---------------------------------------------
-        print("*** 2 ***")
+        print("*** 3 ***")
         owner_address = self.nodes[0].getnewaddress()
         self.log.info("Owner Address: %s" % owner_address)
         staker_address = self.nodes[1].getnewstakingaddress()
         staker_privkey = self.nodes[1].dumpprivkey(staker_address)
         self.log.info("Staking Address: %s" % staker_address)
 
-        # 3) Check enforcement.
+        # 4) Check enforcement.
         # ---------------------
-        print("*** 3 ***")
+        print("*** 4 ***")
+        # Check that SPORK 17 is disabled
+        assert (not self.isColdStakingEnforced())
         self.log.info("Creating a stake-delegation tx before cold staking enforcement...")
         assert_raises_rpc_error(-4, "The transaction was rejected!",
                                 self.nodes[0].delegatestake, staker_address, INPUT_VALUE, owner_address, False, False, True)
@@ -123,9 +139,9 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # double check
         assert (self.isColdStakingEnforced())
 
-        # 4) nodes[0] delegates a number of inputs for nodes[1] to stake em.
+        # 5) nodes[0] delegates a number of inputs for nodes[1] to stake em.
         # ------------------------------------------------------------------
-        print("*** 4 ***")
+        print("*** 5 ***")
         self.log.info("First check warning when using external addresses...")
         assert_raises_rpc_error(-5, "Only the owner of the key to owneraddress will be allowed to spend these coins",
                                 self.nodes[0].delegatestake, staker_address, INPUT_VALUE, "yCgCXC8N5VThhfiaVuKaNLkNnrWduzVnoT")
@@ -152,7 +168,8 @@ class PIVX_ColdStakingTest(PivxTestFramework):
             assert(res != None and res["txid"] != None and res["txid"] != "")
             assert_equal(res["owner_address"], owner_address)
             assert_equal(res["staker_address"], staker_address)
-        self.generateBlock()
+        sync_mempools(self.nodes)
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
         self.log.info("%d Txes created." % NUM_OF_INPUTS)
         # check balances:
@@ -160,32 +177,32 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         self.expected_immature_balance = 0
         self.checkBalances()
 
-        # 5) check that the owner (nodes[0]) can spend the coins.
+        # 6) check that the owner (nodes[0]) can spend the coins.
         # -------------------------------------------------------
-        print("*** 5 ***")
+        print("*** 6 ***")
         self.log.info("Spending back one of the delegated UTXOs...")
         delegated_utxos = getDelegatedUtxos(self.nodes[0].listunspent())
-        assert_equal(20, len(delegated_utxos))
+        assert_equal(NUM_OF_INPUTS, len(delegated_utxos))
         assert_equal(len(delegated_utxos), len(self.nodes[0].listcoldutxos()))
         u = delegated_utxos[0]
         txhash = self.spendUTXOwithNode(u, 0)
         assert(txhash != None)
         self.log.info("Good. Owner was able to spend - tx: %s" % str(txhash))
 
-        self.generateBlock()
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
         # check balances after spend.
         self.expected_balance -= float(u["amount"])
         self.checkBalances()
         self.log.info("Balances check out after spend")
-        assert_equal(19, len(self.nodes[0].listcoldutxos()))
+        assert_equal(NUM_OF_INPUTS-1, len(self.nodes[0].listcoldutxos()))
 
-        # 6) check that the staker CANNOT use the coins to stake yet.
+        # 7) check that the staker CANNOT use the coins to stake yet.
         # He needs to whitelist the owner first.
         # -----------------------------------------------------------
-        print("*** 6 ***")
+        print("*** 7 ***")
         self.log.info("Trying to generate a cold-stake block before whitelisting the owner...")
-        assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], False)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
         self.log.info("Nice. Cold staker was NOT able to create the block yet.")
 
         self.log.info("Whitelisting the owner...")
@@ -193,9 +210,9 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         assert(ret)
         self.log.info("Delegator address %s whitelisted" % owner_address)
 
-        # 7) check that the staker CANNOT spend the coins.
+        # 8) check that the staker CANNOT spend the coins.
         # ------------------------------------------------
-        print("*** 7 ***")
+        print("*** 8 ***")
         self.log.info("Trying to spend one of the delegated UTXOs with the cold-staking key...")
         delegated_utxos = getDelegatedUtxos(self.nodes[0].listunspent())
         assert_greater_than(len(delegated_utxos), 0)
@@ -203,15 +220,15 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         assert_raises_rpc_error(-26, "mandatory-script-verify-flag-failed (Script failed an OP_CHECKCOLDSTAKEVERIFY operation",
                                 self.spendUTXOwithNode, u, 1)
         self.log.info("Good. Cold staker was NOT able to spend (failed OP_CHECKCOLDSTAKEVERIFY)")
-        self.generateBlock()
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
 
-        # 8) check that the staker can use the coins to stake a block with internal miner.
+        # 9) check that the staker can use the coins to stake a block with internal miner.
         # --------------------------------------------------------------------------------
-        print("*** 8 ***")
-        assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], True)
+        print("*** 9 ***")
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], True)
         self.log.info("Generating one valid cold-stake block...")
-        self.generateBlock(1, 1)
+        self.mocktime = self.generate_pos(1, self.mocktime)
         self.log.info("New block created by cold-staking. Trying to submit...")
         newblockhash = self.nodes[1].getbestblockhash()
         self.log.info("Block %s submitted" % newblockhash)
@@ -223,20 +240,20 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         self.log.info("Great. Cold-staked block was accepted!")
 
         # check balances after staked block.
-        self.expected_balance -= 50
-        self.expected_immature_balance += 300
+        self.expected_balance -= INPUT_VALUE
+        self.expected_immature_balance += (INPUT_VALUE + 250)
         self.checkBalances()
         self.log.info("Balances check out after staked block")
 
-        # 9) check that the staker can use the coins to stake a block with a rawtransaction.
+        # 10) check that the staker can use the coins to stake a block with a rawtransaction.
         # ----------------------------------------------------------------------------------
-        print("*** 9 ***")
+        print("*** 10 ***")
         self.log.info("Generating another valid cold-stake block...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
         stakeInputs = self.get_prevouts(1, stakeable_coins)
         assert_greater_than(len(stakeInputs), 0)
         # Create the block
-        new_block = self.stake_next_block(1, stakeInputs, None, staker_privkey)
+        new_block = self.stake_next_block(1, stakeInputs, self.mocktime, staker_privkey)
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
         # Try to submit the block
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
@@ -248,22 +265,24 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         assert_equal(self.nodes[0].getblockcount(), self.nodes[1].getblockcount())
         assert_equal(new_block.hash, self.nodes[0].getbestblockhash())
         self.log.info("Great. Cold-staked block was accepted!")
+        self.mocktime += 60
+        set_node_times(self.nodes, self.mocktime)
 
         # check balances after staked block.
-        self.expected_balance -= 50
-        self.expected_immature_balance += 300
+        self.expected_balance -= INPUT_VALUE
+        self.expected_immature_balance += (INPUT_VALUE + 250)
         self.checkBalances()
         self.log.info("Balances check out after staked block")
 
-        # 10) check that the staker cannot stake a block changing the coinstake scriptPubkey.
+        # 11) check that the staker cannot stake a block changing the coinstake scriptPubkey.
         # ----------------------------------------------------------------------------------
-        print("*** 10 ***")
+        print("*** 11 ***")
         self.log.info("Generating one invalid cold-stake block (changing first coinstake output)...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
         stakeInputs = self.get_prevouts(1, stakeable_coins)
         assert_greater_than(len(stakeInputs), 0)
         # Create the block (with dummy key)
-        new_block = self.stake_next_block(1, stakeInputs, None, "")
+        new_block = self.stake_next_block(1, stakeInputs, self.mocktime, "")
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
         # Try to submit the block
         ret = self.nodes[1].submitblock(bytes_to_hex_str(new_block.serialize()))
@@ -277,15 +296,15 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         self.checkBalances()
         self.log.info("Balances check out after (non) staked block")
 
-        # 11) neither adding different outputs to the coinstake.
+        # 12) neither adding different outputs to the coinstake.
         # ------------------------------------------------------
-        print("*** 11 ***")
+        print("*** 12 ***")
         self.log.info("Generating another invalid cold-stake block (adding coinstake output)...")
         stakeable_coins = getDelegatedUtxos(self.nodes[0].listunspent())
         stakeInputs = self.get_prevouts(1, stakeable_coins)
         assert_greater_than(len(stakeInputs), 0)
         # Create the block
-        new_block = self.stake_next_block(1, stakeInputs, None, staker_privkey)
+        new_block = self.stake_next_block(1, stakeInputs, self.mocktime, staker_privkey)
         # Add output (dummy key address) to coinstake (taking 100 PIV from the pot)
         self.add_output_to_coinstake(new_block, 100)
         self.log.info("New block created (rawtx) by cold-staking. Trying to submit...")
@@ -301,12 +320,12 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         self.checkBalances()
         self.log.info("Balances check out after (non) staked block")
 
-        # 12) Now node[0] gets mad and spends all the delegated coins, voiding the P2CS contracts.
+        # 13) Now node[0] gets mad and spends all the delegated coins, voiding the P2CS contracts.
         # ----------------------------------------------------------------------------------------
         self.log.info("Let's void the contracts.")
-        self.generateBlock()
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
-        print("*** 12 ***")
+        print("*** 13 ***")
         self.log.info("Cancel the stake delegation spending the delegated utxos...")
         delegated_utxos = getDelegatedUtxos(self.nodes[0].listunspent())
         # remove one utxo to spend later
@@ -314,7 +333,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         txhash = self.spendUTXOsWithNode(delegated_utxos, 0)
         assert(txhash != None)
         self.log.info("Good. Owner was able to void the stake delegations - tx: %s" % str(txhash))
-        self.generateBlock()
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
 
         # deactivate SPORK 17 and check that the owner can still spend the last utxo
@@ -323,7 +342,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         txhash = self.spendUTXOsWithNode([final_spend], 0)
         assert(txhash != None)
         self.log.info("Good. Owner was able to void a stake delegation (with SPORK 17 disabled) - tx: %s" % str(txhash))
-        self.generateBlock()
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
 
         # check balances after big spend.
@@ -334,18 +353,22 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         self.setColdStakingEnforcement()
         assert (self.isColdStakingEnforced())
 
-        # 13) check that coinstaker is empty and can no longer stake.
-        # -----------------------------------------------------------
-        print("*** 13 ***")
-        self.log.info("Trying to generate one cold-stake block again...")
-        assert_equal(self.nodes[1].getstakingstatus()["mintablecoins"], False)
-        self.log.info("Cigar. Cold staker was NOT able to create any more blocks.")
-
-        # 14) check balances when mature.
+        # 14) check that coinstaker is empty and can no longer stake.
         # -----------------------------------------------------------
         print("*** 14 ***")
+        self.log.info("Trying to generate one cold-stake block again...")
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
+        self.log.info("Cigar. Cold staker was NOT able to create any more blocks.")
+
+        # 15) check balances when mature.
+        # -----------------------------------------------------------
+        print("*** 15 ***")
         self.log.info("Staking 100 blocks to mature the cold stakes...")
-        self.generateBlock(100)
+        for i in range(2):
+            for peer in [0, 2]:
+                for j in range(25):
+                    self.mocktime = self.generate_pos(peer, self.mocktime)
+                sync_blocks(self.nodes)
         self.expected_balance = self.expected_immature_balance
         self.expected_immature_balance = 0
         self.checkBalances()
@@ -353,23 +376,11 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         txhash = self.spendUTXOsWithNode(delegated_utxos, 0)
         assert (txhash != None)
         self.log.info("Good. Owner was able to spend the cold staked coins - tx: %s" % str(txhash))
-        self.generateBlock()
+        self.mocktime = self.generate_pos(2, self.mocktime)
         sync_blocks(self.nodes)
         self.expected_balance = 0
         self.checkBalances()
 
-    def generateBlock(self, n=1, nodeid=2):
-        fStaked = False
-        while (not fStaked):
-            try:
-                self.nodes[nodeid].generate(n)
-                fStaked = True
-            except JSONRPCException as e:
-                if ("Couldn't create new block" in str(e)):
-                    # Sleep two seconds and retry
-                    sleep(2)
-                else:
-                    raise e
 
     def checkBalances(self):
         w_info = self.nodes[0].getwalletinfo()

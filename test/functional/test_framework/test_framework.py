@@ -725,9 +725,6 @@ class PivxTestFramework():
                 assert_equal(zcBalance['Immature'], 0)
                 if peer == 2:
                     assert_equal(len(zclist), len(zclist_spendable))
-                else:
-                    # last mints added on accumulators - not spendable
-                    assert_equal(0, len(zclist_spendable))
                 assert_equal(set([x['denomination'] for x in zclist]), set(vZC_DENOMS))
                 assert_equal([x['confirmations'] for x in zclist], [30-peer] * len(vZC_DENOMS))
 
@@ -1013,20 +1010,25 @@ class PivxTestFramework():
         """ stakes a block using generate on nodes[node_id]"""
         assert_greater_than(len(self.nodes), node_id)
         rpc_conn = self.nodes[node_id]
+        ss = rpc_conn.getstakingstatus()
+        assert ss["walletunlocked"]
+        assert ss["stakeablecoins"]
         if btime is not None:
             next_btime = btime + 60
         fStaked = False
+        failures = 0
         while not fStaked:
             try:
                 rpc_conn.generate(1)
                 fStaked = True
             except JSONRPCException as e:
                 if ("Couldn't create new block" in str(e)):
-                    # couldn't generate block. check that this node can stake
-                    ss = rpc_conn.getstakingstatus()
-                    if not (ss["validtime"] and ss["haveconnections"] and ss["walletunlocked"] and
-                            ss["mintablecoins"] and ss["enoughcoins"]):
-                        raise AssertionError("Node %d unable to stake!" % node_id)
+                    failures += 1
+                    # couldn't generate block. check that this node can still stake (after 60 failures)
+                    if failures > 60:
+                        ss = rpc_conn.getstakingstatus()
+                        if not (ss["walletunlocked"] and ss["stakeablecoins"]):
+                            raise AssertionError("Node %d unable to stake!" % node_id)
                     # try to stake one sec in the future
                     if btime is not None:
                         btime += 1
