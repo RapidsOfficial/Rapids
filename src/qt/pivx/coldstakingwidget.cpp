@@ -352,7 +352,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         menuAddresses->hide();
     }
 
-    if(isInDelegation){
+    if(isInDelegation) {
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
         ui->containerBtn->setVisible(true);
@@ -364,14 +364,15 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         ui->listViewStakingAddress->setVisible(false);
         if (ui->rightContainer->count() == 2)
             ui->rightContainer->addItem(spacerDiv);
-    }else{
+    } else {
         ui->btnCoinControl->setVisible(false);
         ui->containerSend->setVisible(false);
         ui->containerBtn->setVisible(false);
         ui->btnColdStaking->setVisible(true);
         showList(csModel->rowCount() > 0);
         ui->btnMyStakingAddresses->setVisible(true);
-        ui->listViewStakingAddress->setVisible(false);
+        // Show address list, if it was previously open
+        ui->listViewStakingAddress->setVisible(isStakingAddressListVisible);
     }
 }
 
@@ -711,21 +712,22 @@ void ColdStakingWidget::onLabelClicked(QString dialogTitle, const QModelIndex &i
     }
 }
 
-void ColdStakingWidget::onMyStakingAddressesClicked(){
-    bool isVisible = ui->listViewStakingAddress->isVisible();
-    if(!isVisible){
-        ui->btnMyStakingAddresses->setRightIconClass("btn-dropdown", true);
-        ui->listViewStakingAddress->setVisible(true);
+void ColdStakingWidget::onMyStakingAddressesClicked()
+{
+    isStakingAddressListVisible = !ui->listViewStakingAddress->isVisible();
+    ui->btnMyStakingAddresses->setRightIconClass((isStakingAddressListVisible ?
+                                                  "btn-dropdown" : "ic-arrow"), true);
+    ui->listViewStakingAddress->setVisible(isStakingAddressListVisible);
+    if(isStakingAddressListVisible) {
         ui->rightContainer->removeItem(spacerDiv);
         ui->listViewStakingAddress->update();
-    }else{
-        ui->btnMyStakingAddresses->setRightIconClass("ic-arrow", true);
+    } else {
         ui->rightContainer->addItem(spacerDiv);
-        ui->listViewStakingAddress->setVisible(false);
     }
 }
 
-void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme){
+void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme)
+{
     static_cast<CSDelegationHolder*>(delegate->getRowFactory())->isLightTheme = isLightTheme;
     static_cast<AddressHolder*>(addressDelegate->getRowFactory())->isLightTheme = isLightTheme;
     ui->listView->update();

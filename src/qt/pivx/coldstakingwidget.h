@@ -89,6 +89,7 @@ private:
     QSpacerItem *spacerDiv = nullptr;
 
     bool isInDelegation = true;
+    bool isStakingAddressListVisible = false;
 
     ContactsDropdown *menuContacts = nullptr;
     TooltipMenu* menu = nullptr;
