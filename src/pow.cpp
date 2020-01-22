@@ -19,7 +19,7 @@
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock)
 {
-    if (Params().NetworkID() == CBaseChainParams::REGTEST)
+    if (Params().IsRegTestNet())
         return pindexLast->nBits;
 
     /* current difficulty formula, pivx - DarkGravity v3, written by Evan Duffield - evan@dashpay.io */

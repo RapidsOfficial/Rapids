@@ -119,7 +119,7 @@ uint256 ComputeStakeModifier(const CBlockIndex* pindexPrev, const uint256& kerne
 {
     // genesis block's modifier is 0
     // all block's modifiers are 0 on regtest
-    if (!pindexPrev || Params().NetworkID() == CBaseChainParams::REGTEST)
+    if (!pindexPrev || Params().IsRegTestNet())
         return uint256();
 
     CHashWriter ss(SER_GETHASH, 0);
@@ -153,7 +153,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     fGeneratedStakeModifier = false;
 
     // modifier 0 on RegTest
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+    if (Params().IsRegTestNet()) {
         return true;
     }
     if (!pindexPrev) {
@@ -250,7 +250,7 @@ bool GetKernelStakeModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifi
 {
     nStakeModifier = 0;
     // modifier 0 on RegTest
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+    if (Params().IsRegTestNet()) {
         return true;
     }
     if (!mapBlockIndex.count(hashBlockFrom))
@@ -259,7 +259,7 @@ bool GetKernelStakeModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifi
     nStakeModifierHeight = pindexFrom->nHeight;
     nStakeModifierTime = pindexFrom->GetBlockTime();
     // Fixed stake modifier only for regtest
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+    if (Params().IsRegTestNet()) {
         nStakeModifier = pindexFrom->nStakeModifier;
         return true;
     }
@@ -370,7 +370,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 
         nTimeTx = GetCurrentTimeSlot();
         // double check that we are not on the same slot as prev block
-        if (nTimeTx <= pindexPrev->nTime && Params().NetworkID() != CBaseChainParams::REGTEST)
+        if (!Params().IsRegTestNet() && nTimeTx <= pindexPrev->nTime)
             return false;
 
         // check stake kernel
@@ -389,7 +389,7 @@ bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, const uint3
     const unsigned int prevBlockTime = pindexPrev->nTime;
     const unsigned int maxTime = pindexPrev->MaxFutureBlockTime();
     unsigned int minTime = std::max(prevBlockTime, nTimeBlockFrom + 3600);
-    if (Params().NetworkID() == CBaseChainParams::REGTEST)
+    if (Params().IsRegTestNet())
         minTime = prevBlockTime;
     unsigned int nTryTime = maxTime;
 

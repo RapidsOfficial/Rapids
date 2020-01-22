@@ -202,7 +202,7 @@ bool InitializeAccumulators(const int nHeight, int& nHeightCheckpoint, Accumulat
         return error("%s: height is above last accumulator checkpoint", __func__);
 
     //On a specific block, a recalculation of the accumulators will be forced
-    if (nHeight == Params().Zerocoin_Block_RecalculateAccumulators() && Params().NetworkID() != CBaseChainParams::REGTEST) {
+    if (!Params().IsRegTestNet() && nHeight == Params().Zerocoin_Block_RecalculateAccumulators()) {
         mapAccumulators.Reset();
         if (!mapAccumulators.Load(chainActive[Params().Zerocoin_Block_LastGoodCheckpoint()]->nAccumulatorCheckpoint))
             return error("%s: failed to reset to previous checkpoint when recalculating accumulators", __func__);
@@ -220,7 +220,7 @@ bool InitializeAccumulators(const int nHeight, int& nHeightCheckpoint, Accumulat
         mapAccumulators.Reset(Params().Zerocoin_Params(false));
 
         // 20 after v2 start is when the new checkpoints will be in the block, so don't need to load hard checkpoints
-        if (nHeight <= Params().Zerocoin_Block_V2_Start() + 20 && Params().NetworkID() != CBaseChainParams::REGTEST) {
+        if (!Params().IsRegTestNet() && nHeight <= Params().Zerocoin_Block_V2_Start() + 20) {
             //Load hard coded checkpointed value
             AccumulatorCheckpoints::Checkpoint checkpoint = AccumulatorCheckpoints::GetClosestCheckpoint(nHeight,
                                                                                                          nHeightCheckpoint);
@@ -728,10 +728,10 @@ bool GenerateAccumulatorWitness(
         //Get the accumulator that is right before the cluster of blocks containing our mint was added to the accumulator
         CBigNum bnAccValue = 0;
         if (GetAccumulatorValue(nHeightCheckpoint, coin.getDenomination(), bnAccValue)) {
-            if(!bnAccValue && Params().NetworkID() == CBaseChainParams::REGTEST){
+            if(!bnAccValue && Params().IsRegTestNet()){
                 accumulator.setInitialValue();
                 witness.resetValue(accumulator, coin);
-            }else {
+            } else {
                 accumulator.setValue(bnAccValue);
                 witness.resetValue(accumulator, coin);
             }

@@ -631,7 +631,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
 
     // Fetch previous transactions (inputs):
     std::map<COutPoint, CScript> mapPrevOut;
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+    if (Params().IsRegTestNet()) {
         for (const CTxIn &txbase : mergedTx.vin)
         {
             CTransaction tempTx;
@@ -756,7 +756,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
     for (unsigned int i = 0; i < mergedTx.vin.size(); i++) {
         CTxIn& txin = mergedTx.vin[i];
         const CCoins* coins = view.AccessCoins(txin.prevout.hash);
-        if (Params().NetworkID() == CBaseChainParams::REGTEST) {
+        if (Params().IsRegTestNet()) {
             if (mapPrevOut.count(txin.prevout) == 0 && (coins == NULL || !coins->IsAvailable(txin.prevout.n)))
             {
                 TxInErrorToJSON(txin, vErrors, "Input not found");
@@ -768,7 +768,7 @@ UniValue signrawtransaction(const UniValue& params, bool fHelp)
                 continue;
             }
         }
-        const CScript& prevPubKey = (Params().NetworkID() == CBaseChainParams::REGTEST && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout] : coins->vout[txin.prevout.n].scriptPubKey);
+        const CScript& prevPubKey = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout] : coins->vout[txin.prevout.n].scriptPubKey);
 
         txin.scriptSig.clear();
 
@@ -939,7 +939,7 @@ UniValue createrawzerocoinstake(const UniValue& params, bool fHelp)
             HelpExampleRpc("createrawzerocoinstake", "0d8c16eee7737e3cc1e4e70dc006634182b175e039700931283b202715a0818f"));
 
 
-    if (Params().NetworkID() != CBaseChainParams::REGTEST)
+    if (!Params().IsRegTestNet())
         throw JSONRPCError(RPC_WALLET_ERROR, "createrawzerocoinstake is available only on regtest net");
 
     assert(pwalletMain != NULL);
@@ -1041,7 +1041,7 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
         addr_ptr = &address;
     }
 
-    if (Params().NetworkID() != CBaseChainParams::REGTEST && !isPublicSpend)
+    if (!Params().IsRegTestNet() && !isPublicSpend)
         throw JSONRPCError(RPC_WALLET_ERROR, "zPIV old spend only available in regtest for tests purposes");
 
     assert(pwalletMain != NULL);

@@ -3363,7 +3363,7 @@ UniValue mintzerocoin(const UniValue& params, bool fHelp)
             HelpExampleRpc("mintzerocoin", "13, \"[{\\\"txid\\\":\\\"a08e6907dbbd3d809776dbfc5d82e371b764ed838b5655e72f463568df1aadf0\\\",\\\"vout\\\":1}]\""));
 
 
-    if (Params().NetworkID() != CBaseChainParams::REGTEST)
+    if (!Params().IsRegTestNet())
         throw JSONRPCError(RPC_WALLET_ERROR, "zPIV minting is DISABLED");
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -3493,7 +3493,7 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
     const std::string address_str = (params.size() > 3 ? params[3].get_str() : "");
     const bool isPublicSpend = (params.size() > 4 ? params[4].get_bool() : true);
 
-    if (Params().NetworkID() != CBaseChainParams::REGTEST) {
+    if (!Params().IsRegTestNet()) {
         if (fMintChange)
             throw JSONRPCError(RPC_WALLET_ERROR, "zPIV minting is DISABLED (except for regtest), cannot mint change");
 
@@ -3559,7 +3559,7 @@ UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
     if (arrMints.size() == 0)
         throw JSONRPCError(RPC_WALLET_ERROR, "No zerocoin selected");
 
-    if (!isPublicSpend && Params().NetworkID() != CBaseChainParams::REGTEST) {
+    if (!isPublicSpend && !Params().IsRegTestNet()) {
         throw JSONRPCError(RPC_WALLET_ERROR, "zPIV old spend only available in regtest for tests purposes");
     }
 
@@ -3592,7 +3592,7 @@ UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
 extern UniValue DoZpivSpend(const CAmount nAmount, bool fMintChange, bool fMinimizeChange, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str, bool isPublicSpend)
 {
     // zerocoin mint / v2 spend is disabled. fMintChange/isPublicSpend should be false here. Double check
-    if (Params().NetworkID() != CBaseChainParams::REGTEST) {
+    if (!Params().IsRegTestNet()) {
         if (fMintChange)
             throw JSONRPCError(RPC_WALLET_ERROR, "zPIV minting is DISABLED (except for regtest), cannot mint change");
 
@@ -4298,7 +4298,7 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
             HelpExampleRpc("spendrawzerocoin", "\"f80892e78c30a393ef4ab4d5a9d5a2989de6ebc7b976b241948c7f489ad716a2\", \"a4fd4d7248e6a51f1d877ddd2a4965996154acc6b8de5aa6c83d4775b283b600\", 100, \"xxx\""));
 
     const bool isPublicSpend = (params.size() > 6 ? params[6].get_bool() : true);
-    if (Params().NetworkID() != CBaseChainParams::REGTEST && !isPublicSpend)
+    if (!Params().IsRegTestNet() && !isPublicSpend)
         throw JSONRPCError(RPC_WALLET_ERROR, "zPIV old spend only available in regtest for tests purposes");
 
     LOCK2(cs_main, pwalletMain->cs_wallet);

@@ -43,7 +43,7 @@ void AddTimeData(const CNetAddr& ip, int64_t nOffsetSample, int nOffsetLimit)
     static std::set<CNetAddr> setKnown;
     if (setKnown.size() == BITCOIN_TIMEDATA_MAX_SAMPLES)
         return;
-    if (!setKnown.insert(ip).second && Params().NetworkID() != CBaseChainParams::REGTEST)
+    if (!Params().IsRegTestNet() && !setKnown.insert(ip).second)
         return;
 
     // Add data

@@ -709,7 +709,7 @@ CMasternode* CMasternodeMan::GetMasternodeByRank(int nRank, int64_t nBlockHeight
 void CMasternodeMan::ProcessMasternodeConnections()
 {
     //we don't care about this for regtest
-    if (Params().NetworkID() == CBaseChainParams::REGTEST) return;
+    if (Params().IsRegTestNet()) return;
 
     LOCK(cs_vNodes);
     for (CNode* pnode : vNodes) {
