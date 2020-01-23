@@ -619,12 +619,19 @@ std::string LicenseInfo()
            "\n";
 }
 
-static void BlockNotifyCallback(const uint256& hashNewTip)
+static void BlockNotifyCallback(bool initialSync, const CBlockIndex *pBlockIndex)
 {
+
+    if (initialSync || !pBlockIndex)
+        return;
+
     std::string strCmd = GetArg("-blocknotify", "");
 
-    boost::replace_all(strCmd, "%s", hashNewTip.GetHex());
-    boost::thread t(runCommand, strCmd); // thread runs free
+    if (!strCmd.empty()) {
+        boost::replace_all(strCmd, "%s", pBlockIndex->GetBlockHash().GetHex());
+        std::thread t(runCommand, strCmd);
+        t.detach(); // thread runs free
+    }
 }
 
 static void BlockSizeNotifyCallback(int size, const uint256& hashNewTip)
@@ -1545,7 +1552,7 @@ bool AppInit2()
                     {
                         LOCK(cs_main);
                         CBlockIndex *tip = chainActive[chainActive.Height()];
-                        RPCNotifyBlockChange(tip->GetBlockHash());
+                        RPCNotifyBlockChange(true, tip);
                         if (tip && tip->nTime > GetAdjustedTime() + 2 * 60 * 60) {
                             strLoadError = _("The block database contains a block which appears to be from the future. "
                                              "This may be due to your computer's date and time being set incorrectly. "
