@@ -139,21 +139,25 @@ UniValue generate(const UniValue& params, bool fHelp)
     const int nGenerate = params[0].get_int();
     int nHeightEnd = 0;
     int nHeight = 0;
-    CReserveKey reservekey(pwalletMain);
 
     {   // Don't keep cs_main locked
         LOCK(cs_main);
         nHeight = chainActive.Height();
         nHeightEnd = nHeight + nGenerate;
     }
-    unsigned int nExtraNonce = 0;
-    UniValue blockHashes(UniValue::VARR);
 
-    bool fPoS = false;
     const int last_pow_block = Params().LAST_POW_BLOCK();
+    bool fPoS = nHeight >= last_pow_block;
+    if (fPoS) {
+        // If we are in PoS, wallet must be unlocked.
+        EnsureWalletIsUnlocked();
+    }
+
+    UniValue blockHashes(UniValue::VARR);
+    CReserveKey reservekey(pwalletMain);
+    unsigned int nExtraNonce = 0;
     while (nHeight < nHeightEnd && !ShutdownRequested())
     {
-        if (!fPoS) fPoS = (nHeight >= last_pow_block);
         std::unique_ptr<CBlockTemplate> pblocktemplate(
                 fPoS ? CreateNewBlock(CScript(), pwalletMain, fPoS) : CreateNewBlockWithKey(reservekey, pwalletMain)
                         );
@@ -180,6 +184,9 @@ UniValue generate(const UniValue& params, bool fHelp)
 
         ++nHeight;
         blockHashes.push_back(pblock->GetHash().GetHex());
+
+        // Check PoS if needed.
+        if (!fPoS) fPoS = (nHeight >= last_pow_block);
     }
     return blockHashes;
 }
