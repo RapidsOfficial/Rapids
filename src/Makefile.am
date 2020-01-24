@@ -101,6 +101,7 @@ BITCOIN_CORE_H = \
   compressor.h \
   consensus/consensus.h \
   consensus/merkle.h \
+  consensus/validation.h \
   primitives/block.h \
   primitives/transaction.h \
   core_io.h \
