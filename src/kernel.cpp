@@ -361,59 +361,17 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
     if (!pindexFrom || pindexFrom->nHeight < 1) return error("%s : no pindexfrom", __func__);
 
-    // Time protocol V2: one-try
-    if (Params().IsTimeProtocolV2(nHeight)) {
-        // check required min depth for stake
-        const int nHeightBlockFrom = pindexFrom->nHeight;
-        if (nHeight < nHeightBlockFrom + Params().COINSTAKE_MIN_DEPTH())
-            return error("%s : min depth violation, nHeight=%d, nHeightBlockFrom=%d", __func__, nHeight, nHeightBlockFrom);
+    // check required min depth for stake
+    const int nHeightBlockFrom = pindexFrom->nHeight;
+    if (nHeight < nHeightBlockFrom + Params().COINSTAKE_MIN_DEPTH())
+        return error("%s : min depth violation, nHeight=%d, nHeightBlockFrom=%d", __func__, nHeight, nHeightBlockFrom);
 
-        nTimeTx = GetCurrentTimeSlot();
-        // double check that we are not on the same slot as prev block
-        if (!Params().IsRegTestNet() && nTimeTx <= pindexPrev->nTime)
-            return false;
+    nTimeTx = (Params().IsRegTestNet() ? GetAdjustedTime() : GetCurrentTimeSlot());
+    // double check that we are not on the same slot as prev block
+    if (nTimeTx <= pindexPrev->nTime) return false;
 
-        // check stake kernel
-        return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
-    }
-
-    // Time protocol V1: iterate the hashing (can be removed after hard-fork)
-    const uint32_t nTimeBlockFrom = pindexFrom->nTime;
-    return StakeV1(pindexPrev, stakeInput, nTimeBlockFrom, nBits, nTimeTx, hashProofOfStake);
-}
-
-bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, const uint32_t nTimeBlockFrom, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake)
-{
-    bool fSuccess = false;
-    // iterate from maxTime down to pindexPrev->nTime (or min time due to maturity, 60 min after blockFrom)
-    const unsigned int prevBlockTime = pindexPrev->nTime;
-    const unsigned int maxTime = pindexPrev->MaxFutureBlockTime();
-    unsigned int minTime = std::max(prevBlockTime, nTimeBlockFrom + 3600);
-    if (Params().IsRegTestNet())
-        minTime = prevBlockTime;
-    unsigned int nTryTime = maxTime;
-
-    if (maxTime <= minTime) {
-        // too early to stake
-        return false;
-    }
-
-    while (nTryTime > minTime) {
-        //new block came in, move on
-        if (chainActive.Height() != pindexPrev->nHeight) break;
-
-        --nTryTime;
-        // if stake hash does not meet the target then continue to next iteration
-        if (!CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTryTime, hashProofOfStake))
-             continue;
-
-        // if we made it this far, then we have successfully found a valid kernel hash
-        fSuccess = true;
-        break;
-    }
-
-    nTimeTx = nTryTime;
-    return fSuccess;
+    // check stake kernel
+    return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
 }
 
 bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake)
