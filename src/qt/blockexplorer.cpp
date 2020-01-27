@@ -2,6 +2,7 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
+#include "amount.h"
 #include "blockexplorer.h"
 #include "bitcoinunits.h"
 #include "chainparams.h"
@@ -217,7 +218,7 @@ std::string BlockToString(CBlockIndex* pBlock)
         if (tx.IsCoinBase())
             Reward += Out;
         else if (In < 0)
-            Fees = -Params().MaxMoneyOut();
+            Fees = -MAX_MONEY_OUT;
         else {
             Fees += In - Out;
             OutVolume += Out;
@@ -312,7 +313,7 @@ std::string TxToString(uint256 BlockHash, const CTransaction& tx)
             COutPoint Out = tx.vin[i].prevout;
             CTxOut PrevOut = getPrevOut(tx.vin[i].prevout);
             if (PrevOut.nValue < 0)
-                Input = -Params().MaxMoneyOut();
+                Input = -MAX_MONEY_OUT;
             else
                 Input += PrevOut.nValue;
             std::string InputsContentCells[] =
@@ -438,7 +439,7 @@ BlockExplorer::BlockExplorer(QWidget* parent) : QMainWindow(parent),
     ui->setupUi(this);
 
     this->setStyleSheet(GUIUtil::loadStyleSheet());
-    
+
     connect(ui->pushSearch, SIGNAL(released()), this, SLOT(onSearch()));
     connect(ui->content, SIGNAL(linkActivated(const QString&)), this, SLOT(goTo(const QString&)));
     connect(ui->back, SIGNAL(released()), this, SLOT(back()));

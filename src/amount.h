@@ -12,13 +12,26 @@
 #include <stdlib.h>
 #include <string>
 
+/** Amount in PIV (Can be negative) */
 typedef int64_t CAmount;
 
 static const CAmount COIN = 100000000;
 static const CAmount CENT = 1000000;
 
-/** Type-safe wrapper class to for fee rates
- * (how much to pay based on transaction size)
+/** No amount larger than this (in PIV) is valid in a single UTXO.
+ *
+ * Note that this constant is *not* the total money supply, which in PIVX
+ * is not limited to an arbitrary hard cap, but rather a sanity check. As
+ * this sanity check is used by consensus-critical validation code, the
+ * exact value of the MAX_MONEY_OUT constant is consensus critical; in
+ * unusual circumstances like an overflow bug that allows for the creation
+ * of coins out of thin air modification could lead to a fork.
+ */
+static const CAmount MAX_MONEY_OUT = 21000000 * COIN;
+inline bool MoneyRange(const CAmount& nValue) { return (nValue >= 0 && nValue <= MAX_MONEY_OUT); }
+
+/**
+ * Fee rate in PIV per kilobyte: CAmount / kB
  */
 class CFeeRate
 {
