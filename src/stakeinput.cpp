@@ -2,11 +2,12 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "zpiv/accumulators.h"
-#include "chain.h"
-#include "zpiv/deterministicmint.h"
-#include "main.h"
 #include "stakeinput.h"
+
+#include "chain.h"
+#include "main.h"
+#include "txdb.h"
+#include "zpiv/deterministicmint.h"
 #include "wallet/wallet.h"
 
 CZPivStake::CZPivStake(const libzerocoin::CoinSpend& spend)
@@ -18,51 +19,43 @@ CZPivStake::CZPivStake(const libzerocoin::CoinSpend& spend)
     fMint = false;
 }
 
-int CZPivStake::GetChecksumHeightFromMint()
-{
-    int nHeightChecksum = chainActive.Height() - Params().Zerocoin_RequiredStakeDepth();
-    nHeightChecksum = std::min(nHeightChecksum, Params().Zerocoin_Block_Last_Checkpoint());
-
-    //Need to return the first occurance of this checksum in order for the validation process to identify a specific
-    //block height
-    uint32_t nChecksum = 0;
-    nChecksum = ParseChecksum(chainActive[nHeightChecksum]->nAccumulatorCheckpoint, denom);
-    return GetChecksumHeight(nChecksum, denom);
-}
-
-int CZPivStake::GetChecksumHeightFromSpend()
-{
-    return GetChecksumHeight(nChecksum, denom);
-}
-
 uint32_t CZPivStake::GetChecksum()
 {
     return nChecksum;
 }
 
-// The zPIV block index is the first appearance of the accumulator checksum that was used in the spend
-// note that this also means when staking that this checksum should be from a block that is beyond 60 minutes old and
-// 100 blocks deep.
+/*
+ * LEGACY: Kept for IBD in order to verify zerocoin stakes occurred when zPoS was active
+ * Find the first occurrence of a certain accumulator checksum.
+ * Return block index pointer or nullptr if not found
+ */
+
 CBlockIndex* CZPivStake::GetIndexFrom()
 {
-    if (pindexFrom)
-        return pindexFrom;
-
+    // First look in the legacy database
     int nHeightChecksum = 0;
-
-    if (fMint)
-        nHeightChecksum = GetChecksumHeightFromMint();
-    else
-        nHeightChecksum = GetChecksumHeightFromSpend();
-
-    if (nHeightChecksum < Params().Zerocoin_StartHeight() || nHeightChecksum > chainActive.Height()) {
-        pindexFrom = nullptr;
-    } else {
-        //note that this will be a nullptr if the height DNE
-        pindexFrom = chainActive[nHeightChecksum];
+    if (zerocoinDB->ReadAccChecksum(nChecksum, denom, nHeightChecksum)) {
+        return chainActive[nHeightChecksum];
     }
 
-    return pindexFrom;
+    // Not found. Scan the chain.
+    CBlockIndex* pindex = chainActive[Params().Zerocoin_StartHeight()];
+    if (!pindex) return nullptr;
+    const int last_block = Params().Zerocoin_Block_Last_Checkpoint();
+    while (pindex && pindex->nHeight <= last_block) {
+        if (ParseAccChecksum(pindex->nAccumulatorCheckpoint, denom) == nChecksum) {
+            // Found. Save to database and return
+            zerocoinDB->WriteAccChecksum(nChecksum, denom, pindex->nHeight);
+            return pindex;
+        }
+        //Skip forward in groups of 10 blocks since checkpoints only change every 10 blocks
+        if (pindex->nHeight % 10 == 0) {
+            pindex = chainActive[pindex->nHeight + 10];
+            continue;
+        }
+        pindex = chainActive.Next(pindex);
+    }
+    return nullptr;
 }
 
 CAmount CZPivStake::GetValue()
@@ -70,8 +63,7 @@ CAmount CZPivStake::GetValue()
     return denom * COIN;
 }
 
-//Use the first accumulator checkpoint that occurs 60 minutes after the block being staked from
-// In case of regtest, next accumulator of 60 blocks after the block being staked from
+// Use the first accumulator checkpoint that occurs 60 minutes after the block being staked from
 bool CZPivStake::GetModifier(uint64_t& nStakeModifier)
 {
     CBlockIndex* pindex = GetIndexFrom();
@@ -79,20 +71,17 @@ bool CZPivStake::GetModifier(uint64_t& nStakeModifier)
         return error("%s: failed to get index from", __func__);
 
     if(Params().IsRegTestNet()) {
-        // Stake modifier is fixed for now, move it to 60 blocks after this pindex in the future..
-        nStakeModifier = pindexFrom->nStakeModifier;
+        nStakeModifier = 0;
         return true;
     }
 
     int64_t nTimeBlockFrom = pindex->GetBlockTime();
-    // zPIV staking is disabled long before block v7 (and checkpoint is not included in blocks since v7)
-    // just return false for now. !TODO: refactor/remove this method
-    while (pindex && pindex->nHeight + 1 <= std::min(chainActive.Height(), Params().Zerocoin_Block_Last_Checkpoint()-1)) {
+    const int nHeightStop = std::min(chainActive.Height(), Params().Zerocoin_Block_Last_Checkpoint()-1);
+    while (pindex && pindex->nHeight + 1 <= nHeightStop) {
         if (pindex->GetBlockTime() - nTimeBlockFrom > 60 * 60) {
             nStakeModifier = pindex->nAccumulatorCheckpoint.Get64();
             return true;
         }
-
         pindex = chainActive.Next(pindex);
     }
 

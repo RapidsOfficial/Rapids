@@ -14,7 +14,6 @@
 #include "stakeinput.h"
 #include "utilmoneystr.h"
 #include "zpivchain.h"
-#include "zpiv/accumulators.h"
 
 // v1 modifier interval.
 static const int64_t OLD_MODIFIER_INTERVAL = 2087;
@@ -374,29 +373,29 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
 }
 
+uint32_t ParseAccChecksum(uint256 nCheckpoint, const libzerocoin::CoinDenomination denom)
+{
+    int pos = distance(libzerocoin::zerocoinDenomList.begin(),
+            find(libzerocoin::zerocoinDenomList.begin(), libzerocoin::zerocoinDenomList.end(), denom));
+    nCheckpoint = nCheckpoint >> (32*((libzerocoin::zerocoinDenomList.size() - 1) - pos));
+    return nCheckpoint.Get32();
+}
+
+/* Only for IBD (between Zerocoin_Block_V2_Start and Zerocoin_Block_Last_Checkpoint) */
 bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake)
 {
-    if (nPreviousBlockHeight < Params().Zerocoin_Block_V2_Start())
-        return error("%s : zPIV stake block is less than allowed start height", __func__);
+    if (nPreviousBlockHeight < Params().Zerocoin_Block_V2_Start() ||
+            nPreviousBlockHeight > Params().Zerocoin_Block_Last_Checkpoint())
+        return error("%s : zPIV stake block: height %d outside range", __func__, (nPreviousBlockHeight+1));
 
-    if (CZPivStake* zPIV = dynamic_cast<CZPivStake*>(stake)) {
-        CBlockIndex* pindexFrom = zPIV->GetIndexFrom();
-        if (!pindexFrom)
-            return error("%s : failed to get index associated with zPIV stake checksum", __func__);
+    CZPivStake* zPIV = dynamic_cast<CZPivStake*>(stake);
+    if (!zPIV) return error("%s : dynamic_cast of stake ptr failed", __func__);
 
-        int depth = (nPreviousBlockHeight + 1) - pindexFrom->nHeight;
-        if (depth < Params().Zerocoin_RequiredStakeDepth())
-            return error("%s : zPIV stake does not have required confirmation depth. Current height %d,  stakeInput height %d.", __func__, nPreviousBlockHeight, pindexFrom->nHeight);
-
-        //The checksum needs to be the exact checksum from 200 blocks ago or latest checksum
-        const int checkpointHeight = std::min(Params().Zerocoin_Block_Last_Checkpoint(), (nPreviousBlockHeight - Params().Zerocoin_RequiredStakeDepth()));
-        uint256 nCheckpoint200 = chainActive[checkpointHeight]->nAccumulatorCheckpoint;
-        uint32_t nChecksum200 = ParseChecksum(nCheckpoint200, libzerocoin::AmountToZerocoinDenomination(zPIV->GetValue()));
-        if (nChecksum200 != zPIV->GetChecksum())
-            return error("%s : accumulator checksum is different than the block 200 blocks previous. stake=%d block200=%d", __func__, zPIV->GetChecksum(), nChecksum200);
-    } else {
-        return error("%s : dynamic_cast of stake ptr failed", __func__);
-    }
+    // The checkpoint needs to be from 200 blocks ago
+    const int cpHeight = nPreviousBlockHeight - Params().Zerocoin_RequiredStakeDepth();
+    const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(zPIV->GetValue());
+    if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != zPIV->GetChecksum())
+        return error("%s : accum. checksum at height %d is wrong.", __func__, (nPreviousBlockHeight+1));
 
     return true;
 }
@@ -416,9 +415,9 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
             return error("%s : spend is using the wrong SpendType (%d)", __func__, (int)spend.getSpendType());
 
         stake = std::unique_ptr<CStakeInput>(new CZPivStake(spend));
-
         if (!ContextualCheckZerocoinStake(nPreviousBlockHeight, stake.get()))
             return error("%s : staked zPIV fails context checks", __func__);
+
     } else {
         // First try finding the previous transaction in database
         uint256 hashBlock;

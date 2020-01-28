@@ -359,7 +359,6 @@ void AddWrappedSerialsInflation();
 void RecalculateZPIVSpent();
 void RecalculateZPIVMinted();
 bool RecalculatePIVSupply(int nHeightStart);
-bool ReindexAccumulators(std::list<uint256>& listMissingCheckpoints, std::string& strError);
 
 // Fake Serial attack Range
 bool isBlockBetweenFakeSerialAttackRange(int nHeight);
@@ -640,6 +639,7 @@ extern CZerocoinDB* zerocoinDB;
 
 /** Global variable that points to the spork database (protected by cs_main) */
 extern CSporkDB* pSporkDB;
+
 
 struct CBlockTemplate {
     CBlock block;

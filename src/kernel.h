@@ -40,9 +40,8 @@ unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex);
 // Check stake modifier hard checkpoints
 bool CheckStakeModifierCheckpoints(int nHeight, unsigned int nStakeModifierChecksum);
 
-bool ContextualCheckZerocoinStake(int nPreviousBlockHeight, CStakeInput* stake);
-
 int64_t GetTimeSlot(const int64_t nTime);
 int64_t GetCurrentTimeSlot();
+uint32_t ParseAccChecksum(uint256 nCheckpoint, const libzerocoin::CoinDenomination denom);
 
 #endif // BITCOIN_KERNEL_H
