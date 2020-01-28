@@ -248,9 +248,6 @@ static const unsigned int MODIFIER_INTERVAL = 60;
 static const int MODIFIER_INTERVAL_RATIO = 3;
 static const int64_t OLD_MODIFIER_INTERVAL = 2087;
 
-// Hard checkpoints of stake modifiers to ensure they are deterministic
-static std::map<int, unsigned int> mapStakeModifierCheckpoints =
-    boost::assign::map_list_of(0, 0xfd11f4e7u);
 
 // Get selection interval section (in seconds)
 static int64_t GetStakeModifierSelectionIntervalSection(int nSection)
@@ -496,4 +493,3 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     fGeneratedStakeModifier = true;
     return true;
 }
-
