@@ -41,7 +41,7 @@ bool CheckBlock(int nHeight, const uint256& hash, bool fMatchesCheckpoint)
 }
 
 //! Guess how far we are in the verification process at the given block index
-double GuessVerificationProgress(CBlockIndex* pindex, bool fSigchecks)
+double GuessVerificationProgress(const CBlockIndex* pindex, bool fSigchecks)
 {
     if (pindex == NULL)
         return 0.0;
