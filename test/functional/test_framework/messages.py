@@ -516,7 +516,7 @@ class CBlockHeader():
         return self.sha256
 
     # PIVX
-    def solve_stake(self, stakeInputs):
+    def solve_stake(self, stakeInputs, prevModifier):
         target0 = uint256_from_compact(self.nBits)
         loop = True
         while loop:
@@ -525,9 +525,9 @@ class CBlockHeader():
                 target = int(target0 * nvalue / 100) % 2**256
                 data = b""
                 # always modifier V2 (256 bits) on regtest
-                data += ser_uint256(0)
+                data += ser_uint256(prevModifier)
                 data += struct.pack("<I", prevTime)
-                # prevout is CStake uniquenessfor zPoS is provided as stakeMap key (instead of it being an COutPoint)
+                # prevout is CStake uniqueness
                 data += uniqueness
                 data += struct.pack("<I", self.nTime)
                 posHash = uint256_from_str(hash256(data))
