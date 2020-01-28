@@ -106,7 +106,6 @@ struct COrphanTx {
 std::map<uint256, COrphanTx> mapOrphanTransactions;
 std::map<uint256, std::set<uint256> > mapOrphanTransactionsByPrev;
 std::map<uint256, int64_t> mapRejectedBlocks;
-std::map<uint256, int64_t> mapZerocoinspends; //txid, time received
 
 void EraseOrphansFor(NodeId peer);
 
@@ -1393,10 +1392,6 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     }
 
     SyncWithWallets(tx, nullptr);
-
-    //Track zerocoinspends and ensure that they are given priority to make it into the blockchain
-    if (hasZcSpendInputs)
-        mapZerocoinspends[tx.GetHash()] = GetAdjustedTime();
 
     return true;
 }
@@ -3219,13 +3214,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     //Continue tracking possible movement of fraudulent funds until they are completely frozen
     if (pindex->nHeight >= Params().Zerocoin_Block_FirstFraudulent() && pindex->nHeight <= Params().Zerocoin_Block_RecalculateAccumulators() + 1)
         AddInvalidSpendsToMap(block);
-
-    //Remove zerocoinspends from the pending map
-    for (const uint256& txid : vSpendsInBlock) {
-        auto it = mapZerocoinspends.find(txid);
-        if (it != mapZerocoinspends.end())
-            mapZerocoinspends.erase(it);
-    }
 
     const int last_checkpoint_nHeight = Params().Zerocoin_Block_Last_Checkpoint();
     if (pindex->nHeight >= Params().Zerocoin_Block_V2_Start() && pindex->nHeight < last_checkpoint_nHeight) {
