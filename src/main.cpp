@@ -1236,41 +1236,24 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
             //Check for double spending of serial #'s
             for (const CTxIn& txIn : tx.vin) {
-                // Only allow for zc spends inputs
-                bool isPublicSpend = txIn.IsZerocoinPublicSpend();
-                bool isPrivZerocoinSpend = txIn.IsZerocoinSpend();
-                if (!isPrivZerocoinSpend && !isPublicSpend) {
-                    return state.Invalid(error("%s: failed for tx %s, every input must be a zcspend or zcpublicspend",
+                // Only allow for public zc spends inputs
+                if (!txIn.IsZerocoinPublicSpend())
+                    return state.Invalid(error("%s: failed for tx %s, every input must be a zcpublicspend",
                             __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
-                }
 
-                // Check enforcement
-                if (!CheckPublicCoinSpendEnforced(chainActive.Height(), isPublicSpend)){
-                    return state.Invalid(error("%s: CheckPublicCoinSpendEnforced failed for tx %s",
+                libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
+                PublicCoinSpend publicSpend(params);
+                if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
+                    return false;
+                }
+                if (!ContextualCheckZerocoinSpend(tx, &publicSpend, chainActive.Tip(), 0))
+                    return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s",
                             __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
-                }
 
-                if (isPublicSpend) {
-                    libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
-                    PublicCoinSpend publicSpend(params);
-                    if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
-                        return false;
-                    }
-                    if (!ContextualCheckZerocoinSpend(tx, &publicSpend, chainActive.Tip(), 0))
-                        return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s",
-                                __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
-
-                    // Check that the version matches the one enforced with SPORK_18
-                    if (!CheckPublicCoinSpendVersion(publicSpend.getVersion())) {
-                        return state.Invalid(error("%s : Public Zerocoin spend version %d not accepted. must be version %d.",
-                                __func__, publicSpend.getVersion(), CurrentPublicCoinSpendVersion()), REJECT_INVALID, "bad-txns-invalid-zpiv");
-                    }
-
-                } else {
-                    libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txIn);
-                    if (!ContextualCheckZerocoinSpend(tx, &spend, chainActive.Tip(), 0))
-                        return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s",
-                                __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                // Check that the version matches the one enforced with SPORK_18
+                if (!CheckPublicCoinSpendVersion(publicSpend.getVersion())) {
+                    return state.Invalid(error("%s : Public Zerocoin spend version %d not accepted. must be version %d.",
+                            __func__, publicSpend.getVersion(), CurrentPublicCoinSpendVersion()), REJECT_INVALID, "bad-txns-invalid-zpiv");
                 }
 
             }
