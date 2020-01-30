@@ -22,7 +22,7 @@ public:
 
     void setMapper(QDataWidgetMapper *mapper);
 
-public slots:
+public Q_SLOTS:
     void onResetClicked();
 
 private:

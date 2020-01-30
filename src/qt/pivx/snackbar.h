@@ -24,7 +24,7 @@ public:
     virtual void showEvent(QShowEvent *event) override;
     void sizeTo(QWidget *widget);
     void setText(QString text);
-private slots:
+private Q_SLOTS:
     void hideAnim();
     void windowResizeEvent(QResizeEvent *event);
 private:

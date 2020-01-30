@@ -20,7 +20,7 @@ public:
     explicit SettingsBackupWallet(PIVXGUI* _window, QWidget *parent = nullptr);
     ~SettingsBackupWallet();
 
-private slots:
+private Q_SLOTS:
     void backupWallet();
     void selectFileOutput();
     void changePassphrase();

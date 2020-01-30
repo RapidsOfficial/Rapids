@@ -92,7 +92,7 @@ void SettingsBackupWallet::changePassphrase()
                 walletModel, AskPassphraseDialog::Context::ChangePass);
     }
     dlg->adjustSize();
-    emit execDialog(dlg);
+    Q_EMIT execDialog(dlg);
     dlg->deleteLater();
 }
 

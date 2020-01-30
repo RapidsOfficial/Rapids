@@ -21,7 +21,7 @@ public:
 
     void updateView(QString address, QString label, QString status, bool wasCollateralAccepted);
 
-signals:
+Q_SIGNALS:
     void onMenuClicked();
 private:
     Ui::MNRow *ui;

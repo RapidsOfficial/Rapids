@@ -40,13 +40,13 @@ public:
     void setEditBtnVisible(bool visible);
     void setLastBtnVisible(bool visible);
 
-signals:
+Q_SIGNALS:
     void onDeleteClicked();
     void onCopyClicked();
     void onEditClicked();
     void onLastClicked();
 
-private slots:
+private Q_SLOTS:
     void deleteClicked();
     void copyClicked();
     void editClicked();

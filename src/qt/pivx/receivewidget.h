@@ -35,12 +35,12 @@ public:
 
     void loadWalletModel() override;
 
-public slots:
+public Q_SLOTS:
     void onRequestClicked();
     void onMyAddressesClicked();
     void onNewAddressClicked();
 
-private slots:
+private Q_SLOTS:
     void changeTheme(bool isLightTheme, QString &theme) override ;
     void onLabelClicked();
     void onCopyClicked();

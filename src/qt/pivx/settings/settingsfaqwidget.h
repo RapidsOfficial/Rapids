@@ -21,10 +21,10 @@ public:
 
     void showEvent(QShowEvent *event) override;
 
-public slots:
+public Q_SLOTS:
    void windowResizeEvent(QResizeEvent* event);
    void setSection(int num);
-private slots:
+private Q_SLOTS:
     void onFaq1Clicked();
     void onFaq2Clicked();
     void onFaq3Clicked();

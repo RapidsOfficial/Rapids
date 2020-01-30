@@ -111,7 +111,7 @@ void SettingsDisplayOptionsWidget::initLanguages(){
     QDir translations(":translations");
     QString defaultStr = QString("(") + tr("default") + QString(")");
     ui->comboBoxLanguage->addItem(defaultStr, QVariant(""));
-    foreach (const QString& langStr, translations.entryList()) {
+    Q_FOREACH (const QString& langStr, translations.entryList()) {
         QLocale locale(langStr);
 
         /** check if the locale name consists of 2 parts (language_country) */

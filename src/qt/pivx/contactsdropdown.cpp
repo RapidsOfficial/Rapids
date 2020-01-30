@@ -118,7 +118,7 @@ void ContactsDropdown::handleClick(const QModelIndex &index){
     QString address = rIndex.data(Qt::DisplayRole).toString();
     QModelIndex sibling = rIndex.sibling(rIndex.row(), AddressTableModel::Label);
     QString label = sibling.data(Qt::DisplayRole).toString();
-    emit contactSelected(address, label);
+    Q_EMIT contactSelected(address, label);
     close();
 }
 

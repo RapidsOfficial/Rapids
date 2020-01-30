@@ -35,7 +35,7 @@ public:
     void setData(WalletModel *model, const QModelIndex &index);
     void setDisplayUnit(int unit){this->nDisplayUnit = unit;};
 
-public slots:
+public Q_SLOTS:
     void acceptTx();
     void onInputsClicked();
     void onOutputsClicked();

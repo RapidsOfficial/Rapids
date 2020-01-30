@@ -44,8 +44,9 @@ find_program(MOC_BIN NAMES moc moc-qt5 qt5-moc
         NO_SYSTEM_ENVIRONMENT_PATH)
 if (MOC_BIN)
     MESSAGE(STATUS "FOUND MOC ${MOC_BIN}")
-
 endif ()
+
+add_compile_options("-DQT_NO_KEYWORDS")
 
 # Why isn't this done automatically??
 if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")

@@ -58,8 +58,8 @@ SendMultiRow::SendMultiRow(PWidget *parent) :
 
     connect(ui->lineEditAmount, SIGNAL(textChanged(const QString&)), this, SLOT(amountChanged(const QString&)));
     connect(ui->lineEditAddress, SIGNAL(textChanged(const QString&)), this, SLOT(addressChanged(const QString&)));
-    connect(btnContact, &QAction::triggered, [this](){emit onContactsClicked(this);});
-    connect(ui->btnMenu, &QPushButton::clicked, [this](){emit onMenuClicked(this);});
+    connect(btnContact, &QAction::triggered, [this](){Q_EMIT onContactsClicked(this);});
+    connect(ui->btnMenu, &QPushButton::clicked, [this](){Q_EMIT onMenuClicked(this);});
 }
 
 void SendMultiRow::amountChanged(const QString& amount){
@@ -71,7 +71,7 @@ void SendMultiRow::amountChanged(const QString& amount){
             setCssEditLine(ui->lineEditAmount, true, true);
         }
     }
-    emit onValueChanged();
+    Q_EMIT onValueChanged();
 }
 
 /**
@@ -100,7 +100,7 @@ bool SendMultiRow::addressChanged(const QString& str){
                 } else if(!rcp.message.isEmpty())
                     ui->lineEditDescription->setText(rcp.message);
 
-                emit onUriParsed(rcp);
+                Q_EMIT onUriParsed(rcp);
             } else {
                 setCssProperty(ui->lineEditAddress, "edit-primary-multi-book-error");
             }
@@ -132,7 +132,7 @@ void SendMultiRow::updateDisplayUnit(){
 }
 
 void SendMultiRow::deleteClicked() {
-    emit removeEntry(this);
+    Q_EMIT removeEntry(this);
 }
 
 void SendMultiRow::clear() {

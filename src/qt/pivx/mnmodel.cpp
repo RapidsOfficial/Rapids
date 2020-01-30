@@ -44,7 +44,7 @@ void MNModel::updateMNList(){
             collateralTxAccepted.insert(mne.getTxHash(), txAccepted);
         }
     }
-    emit dataChanged(index(0, 0, QModelIndex()), index(end, 5, QModelIndex()) );
+    Q_EMIT dataChanged(index(0, 0, QModelIndex()), index(end, 5, QModelIndex()) );
 }
 
 int MNModel::rowCount(const QModelIndex &parent) const
@@ -135,7 +135,7 @@ bool MNModel::removeMn(const QModelIndex& modelIndex) {
     beginRemoveRows(QModelIndex(), idx, idx);
     nodes.take(alias);
     endRemoveRows();
-    emit dataChanged(index(idx, 0, QModelIndex()), index(idx, 5, QModelIndex()) );
+    Q_EMIT dataChanged(index(idx, 0, QModelIndex()), index(idx, 5, QModelIndex()) );
     return true;
 }
 

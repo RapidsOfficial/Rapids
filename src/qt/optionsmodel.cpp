@@ -90,7 +90,7 @@ void OptionsModel::Init()
 }
 
 void OptionsModel::refreshDataView(){
-    emit dataChanged(index(0), index(rowCount(QModelIndex()) - 1));
+    Q_EMIT dataChanged(index(0), index(rowCount(QModelIndex()) - 1));
 }
 
 void OptionsModel::setMainDefaultOptions(QSettings& settings, bool reset){
@@ -393,22 +393,22 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
         case HideZeroBalances:
             fHideZeroBalances = value.toBool();
             settings.setValue("fHideZeroBalances", fHideZeroBalances);
-            emit hideZeroBalancesChanged(fHideZeroBalances);
+            Q_EMIT hideZeroBalancesChanged(fHideZeroBalances);
             break;
         case HideOrphans:
             fHideOrphans = value.toBool();
             settings.setValue("fHideOrphans", fHideOrphans);
-            emit hideOrphansChanged(fHideOrphans);
+            Q_EMIT hideOrphansChanged(fHideOrphans);
             break;
         case CoinControlFeatures:
             fCoinControlFeatures = value.toBool();
             settings.setValue("fCoinControlFeatures", fCoinControlFeatures);
-            emit coinControlFeaturesChanged(fCoinControlFeatures);
+            Q_EMIT coinControlFeaturesChanged(fCoinControlFeatures);
             break;
         case ShowColdStakingScreen:
             this->showColdStakingScreen = value.toBool();
             settings.setValue("fShowColdStakingScreen", this->showColdStakingScreen);
-            emit showHideColdStakingScreen(this->showColdStakingScreen);
+            Q_EMIT showHideColdStakingScreen(this->showColdStakingScreen);
             break;
         case DatabaseCache:
             if (settings.value("nDatabaseCache") != value) {
@@ -433,7 +433,7 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
         }
     }
 
-    emit dataChanged(index, index);
+    Q_EMIT dataChanged(index, index);
 
     return successful;
 }
@@ -445,7 +445,7 @@ void OptionsModel::setDisplayUnit(const QVariant& value)
         QSettings settings;
         nDisplayUnit = value.toInt();
         settings.setValue("nDisplayUnit", nDisplayUnit);
-        emit displayUnitChanged(nDisplayUnit);
+        Q_EMIT displayUnitChanged(nDisplayUnit);
     }
 }
 

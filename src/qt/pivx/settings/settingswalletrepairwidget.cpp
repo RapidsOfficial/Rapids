@@ -157,7 +157,7 @@ void SettingsWalletRepairWidget::buildParameterlist(QString arg)
     args.append(arg);
 
     // Send command-line arguments to PIVXGUI::handleRestart()
-    emit handleRestart(args);
+    Q_EMIT handleRestart(args);
 }
 
 SettingsWalletRepairWidget::~SettingsWalletRepairWidget()
