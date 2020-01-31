@@ -222,12 +222,6 @@ bool IsPubcoinInBlockchain(const uint256& hashPubcoin, uint256& txid)
     return zerocoinDB->ReadCoinMint(hashPubcoin, txid);
 }
 
-bool IsSerialKnown(const CBigNum& bnSerial)
-{
-    uint256 txHash = 0;
-    return zerocoinDB->ReadCoinSpend(bnSerial, txHash);
-}
-
 bool IsSerialInBlockchain(const CBigNum& bnSerial, int& nHeightTx)
 {
     uint256 txHash = 0;
