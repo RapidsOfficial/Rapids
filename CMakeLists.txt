@@ -357,6 +357,7 @@ set(WALLET_SOURCES
         ./src/zpiv/zpivwallet.cpp
         ./src/zpiv/zpivtracker.cpp
         ./src/zpiv/zpivmodule.cpp
+        ./src/zpiv/zpos.cpp
         ./src/stakeinput.cpp
         )
 add_library(WALLET_A STATIC ${BitcoinHeaders} ${WALLET_SOURCES})
