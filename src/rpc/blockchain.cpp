@@ -201,10 +201,8 @@ UniValue getbestblockhash(const UniValue& params, bool fHelp)
     return chainActive.Tip()->GetBlockHash().GetHex();
 }
 
-void RPCNotifyBlockChange(const uint256 hashBlock)
+void RPCNotifyBlockChange(bool fInitialDownload, const CBlockIndex* pindex)
 {
-    CBlockIndex* pindex = nullptr;
-    pindex = mapBlockIndex.at(hashBlock);
     if(pindex) {
         std::lock_guard<std::mutex> lock(cs_blockchange);
         latestblock.hash = pindex->GetBlockHash();

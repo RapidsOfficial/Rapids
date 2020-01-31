@@ -3963,11 +3963,12 @@ static bool ActivateBestChainStep(CValidationState& state, CBlockIndex* pindexMo
  */
 bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChecked)
 {
-    CBlockIndex* pindexNewTip = NULL;
-    CBlockIndex* pindexMostWork = NULL;
+    CBlockIndex* pindexNewTip = nullptr;
+    CBlockIndex* pindexMostWork = nullptr;
     do {
         boost::this_thread::interruption_point();
 
+        const CBlockIndex *pindexFork;
         bool fInitialDownload;
         while (true) {
             TRY_LOCK(cs_main, lockMain);
@@ -3976,6 +3977,7 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
                 continue;
             }
 
+            CBlockIndex *pindexOldTip = chainActive.Tip();
             pindexMostWork = FindMostWorkChain();
 
             // Whether we have anything to do at all.
@@ -3986,34 +3988,43 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
                 return false;
 
             pindexNewTip = chainActive.Tip();
+            pindexFork = chainActive.FindFork(pindexOldTip);
             fInitialDownload = IsInitialBlockDownload();
             break;
         }
+
         // When we reach this point, we switched to a new tip (stored in pindexNewTip).
-
         // Notifications/callbacks that can run without cs_main
-        if (!fInitialDownload) {
-            uint256 hashNewTip = pindexNewTip->GetBlockHash();
-            // Relay inventory, but don't relay old inventory during initial block download.
-            int nBlockEstimate = Checkpoints::GetTotalBlocksEstimate();
-            {
-                LOCK(cs_vNodes);
-                for (CNode* pnode : vNodes)
-                    if (chainActive.Height() > (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
-                        pnode->PushInventory(CInv(MSG_BLOCK, hashNewTip));
-            }
-            // Notify external listeners about the new tip.
-            // Note: uiInterface, should switch main signals.
-            uiInterface.NotifyBlockTip(hashNewTip);
-            GetMainSignals().UpdatedBlockTip(pindexNewTip);
+        // Always notify the UI if a new block tip was connected
+        if (pindexFork != pindexNewTip) {
 
-            unsigned size = 0;
-            if (pblock)
-                size = GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION);
-            // If the size is over 1 MB notify external listeners, and it is within the last 5 minutes
-            if (size > MAX_BLOCK_SIZE_LEGACY && pblock->GetBlockTime() > GetAdjustedTime() - 300) {
-                uiInterface.NotifyBlockSize(static_cast<int>(size), hashNewTip);
+            // Notify the UI
+            uiInterface.NotifyBlockTip(fInitialDownload, pindexNewTip);
+
+            // Notifications/callbacks that can run without cs_main
+            if (!fInitialDownload) {
+                uint256 hashNewTip = pindexNewTip->GetBlockHash();
+                // Relay inventory, but don't relay old inventory during initial block download.
+                int nBlockEstimate = Checkpoints::GetTotalBlocksEstimate();
+                {
+                    LOCK(cs_vNodes);
+                    for (CNode *pnode : vNodes)
+                        if (chainActive.Height() >
+                            (pnode->nStartingHeight != -1 ? pnode->nStartingHeight - 2000 : nBlockEstimate))
+                            pnode->PushInventory(CInv(MSG_BLOCK, hashNewTip));
+                }
+                // Notify external listeners about the new tip.
+                GetMainSignals().UpdatedBlockTip(pindexNewTip);
+
+                unsigned size = 0;
+                if (pblock)
+                    size = GetSerializeSize(*pblock, SER_NETWORK, PROTOCOL_VERSION);
+                // If the size is over 1 MB notify external listeners, and it is within the last 5 minutes
+                if (size > MAX_BLOCK_SIZE_LEGACY && pblock->GetBlockTime() > GetAdjustedTime() - 300) {
+                    uiInterface.NotifyBlockSize(static_cast<int>(size), hashNewTip);
+                }
             }
+
         }
     } while (pindexMostWork != chainActive.Tip());
     CheckBlockIndex();

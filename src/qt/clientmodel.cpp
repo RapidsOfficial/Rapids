@@ -30,6 +30,8 @@
 #include <QTimer>
 
 static const int64_t nClientStartupTime = GetTime();
+// Last tip update notification
+static int64_t nLastBlockTipUpdateNotification = 0;
 
 ClientModel::ClientModel(OptionsModel* optionsModel, QObject* parent) : QObject(parent),
                                                                         optionsModel(optionsModel),
@@ -133,29 +135,6 @@ void ClientModel::updateTimer()
     // Get required lock upfront. This avoids the GUI from getting stuck on
     // periodical polls if the core is holding the locks for a longer time -
     // for example, during a wallet rescan.
-    TRY_LOCK(cs_main, lockMain);
-    if (!lockMain)
-        return;
-    // Some quantities (such as number of blocks) change so fast that we don't want to be notified for each change.
-    // Periodically check and update with a timer.
-    int newNumBlocks = getNumBlocks();
-
-    static int prevAttempt = -1;
-    static int prevAssets = -1;
-
-    // check for changed number of blocks we have, number of blocks peers claim to have, reindexing state and importing state
-    if (cachedNumBlocks != newNumBlocks ||
-        cachedReindexing != fReindex || cachedImporting != fImporting ||
-        masternodeSync.RequestedMasternodeAttempt != prevAttempt || masternodeSync.RequestedMasternodeAssets != prevAssets) {
-        cachedNumBlocks = newNumBlocks;
-        cachedReindexing = fReindex;
-        cachedImporting = fImporting;
-        prevAttempt = masternodeSync.RequestedMasternodeAttempt;
-        prevAssets = masternodeSync.RequestedMasternodeAssets;
-
-        Q_EMIT numBlocksChanged(newNumBlocks);
-    }
-
     Q_EMIT bytesChanged(getTotalBytesRecv(), getTotalBytesSent());
 }
 
@@ -268,6 +247,27 @@ void ClientModel::updateBanlist()
     banTableModel->refresh();
 }
 
+static void BlockTipChanged(ClientModel *clientmodel, bool initialSync, const CBlockIndex *pIndex)
+{
+    // lock free async UI updates in case we have a new block tip
+    // during initial sync, only update the UI if the last update
+    // was > 1000ms (MODEL_UPDATE_DELAY) ago
+    int64_t now = 0;
+    if (initialSync)
+        now = GetTimeMillis();
+
+    // if we are in-sync, update the UI regardless of last update time
+    if (!initialSync || now - nLastBlockTipUpdateNotification > MODEL_UPDATE_DELAY) {
+        //pass a async signal to the UI thread
+        int newHeight = pIndex->nHeight;
+        clientmodel->setCacheNumBlocks(newHeight);
+        clientmodel->setCacheImporting(fImporting);
+        clientmodel->setCacheReindexing(fReindex);
+        Q_EMIT clientmodel->numBlocksChanged(newHeight);
+        nLastBlockTipUpdateNotification = now;
+    }
+}
+
 // Handlers for core signals
 static void ShowProgress(ClientModel* clientmodel, const std::string& title, int nProgress)
 {
@@ -305,6 +305,7 @@ void ClientModel::subscribeToCoreSignals()
     uiInterface.NotifyNumConnectionsChanged.connect(boost::bind(NotifyNumConnectionsChanged, this, _1));
     uiInterface.NotifyAlertChanged.connect(boost::bind(NotifyAlertChanged, this, _1, _2));
     uiInterface.BannedListChanged.connect(boost::bind(BannedListChanged, this));
+    uiInterface.NotifyBlockTip.connect(boost::bind(BlockTipChanged, this, _1, _2));
 }
 
 void ClientModel::unsubscribeFromCoreSignals()
@@ -314,6 +315,7 @@ void ClientModel::unsubscribeFromCoreSignals()
     uiInterface.NotifyNumConnectionsChanged.disconnect(boost::bind(NotifyNumConnectionsChanged, this, _1));
     uiInterface.NotifyAlertChanged.disconnect(boost::bind(NotifyAlertChanged, this, _1, _2));
     uiInterface.BannedListChanged.disconnect(boost::bind(BannedListChanged, this));
+    uiInterface.NotifyBlockTip.disconnect(boost::bind(BlockTipChanged, this, _1, _2));
 }
 
 bool ClientModel::getTorInfo(std::string& ip_port) const
