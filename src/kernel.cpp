@@ -209,9 +209,10 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
     if (nHeight < nHeightBlockFrom + Params().COINSTAKE_MIN_DEPTH())
         return error("%s : min depth violation, nHeight=%d, nHeightBlockFrom=%d", __func__, nHeight, nHeightBlockFrom);
 
-    nTimeTx = (Params().IsRegTestNet() ? GetAdjustedTime() : GetCurrentTimeSlot());
+    const bool fRegTest = Params().IsRegTestNet();
+    nTimeTx = (fRegTest ? GetAdjustedTime() : GetCurrentTimeSlot());
     // double check that we are not on the same slot as prev block
-    if (nTimeTx <= pindexPrev->nTime) return false;
+    if (nTimeTx <= pindexPrev->nTime && !fRegTest) return false;
 
     // check stake kernel
     return CheckStakeKernelHash(pindexPrev, nBits, stakeInput, nTimeTx, hashProofOfStake);
