@@ -158,11 +158,10 @@ UniValue generate(const UniValue& params, bool fHelp)
     unsigned int nExtraNonce = 0;
     while (nHeight < nHeightEnd && !ShutdownRequested())
     {
-        std::unique_ptr<CBlockTemplate> pblocktemplate(
-                fPoS ? CreateNewBlock(CScript(), pwalletMain, fPoS) : CreateNewBlockWithKey(reservekey, pwalletMain)
-                        );
-        if (!pblocktemplate.get())
-            throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new block");
+        std::unique_ptr<CBlockTemplate> pblocktemplate(fPoS ?
+                                                       CreateNewBlock(CScript(), pwalletMain, fPoS) :
+                                                       CreateNewBlockWithKey(reservekey, pwalletMain));
+        if (!pblocktemplate.get()) break;
         CBlock *pblock = &pblocktemplate->block;
 
         if(!fPoS) {
@@ -188,6 +187,11 @@ UniValue generate(const UniValue& params, bool fHelp)
         // Check PoS if needed.
         if (!fPoS) fPoS = (nHeight >= last_pow_block);
     }
+
+    const int nGenerated = blockHashes.size();
+    if (nGenerated == 0 || (!fPoS && nGenerated < nGenerate))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Couldn't create new blocks");
+
     return blockHashes;
 }
 
