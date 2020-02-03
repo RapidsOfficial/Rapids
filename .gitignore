@@ -89,6 +89,9 @@ pivx-qt
 PIVX-Qt.app
 background.tiff*
 
+# Rust
+src/rust/target
+
 # Unit-tests
 Makefile.test
 pivx-qt_test
