@@ -177,6 +177,46 @@ void ScriptPubKeyMan::ReturnDestination(int64_t nIndex, bool fInternal, const CT
     LogPrintf("%s: keypool return %d\n", __func__, nIndex);
 }
 
+void ScriptPubKeyMan::MarkReserveKeysAsUsed(int64_t keypool_id)
+{
+    AssertLockHeld(wallet->cs_wallet);
+    bool internal = setInternalKeyPool.count(keypool_id);
+    if (!internal) assert(setExternalKeyPool.count(keypool_id) || set_pre_split_keypool.count(keypool_id));
+    std::set<int64_t> *setKeyPool = internal ? &setInternalKeyPool : (set_pre_split_keypool.empty() ? &setExternalKeyPool : &set_pre_split_keypool);
+    auto it = setKeyPool->begin();
+
+    CWalletDB batch(wallet->strWalletFile);
+    while (it != std::end(*setKeyPool)) {
+        const int64_t& index = *(it);
+        if (index > keypool_id) break; // set*KeyPool is ordered
+
+        CKeyPool keypool;
+        if (batch.ReadPool(index, keypool)) { //TODO: This should be unnecessary
+            m_pool_key_to_index.erase(keypool.vchPubKey.GetID());
+        }
+        batch.ErasePool(index);
+        LogPrintf("keypool index %d removed\n", index);
+        it = setKeyPool->erase(it);
+    }
+}
+
+void ScriptPubKeyMan::MarkUnusedAddresses(const CScript& script)
+{
+    AssertLockHeld(wallet->cs_wallet);
+    // extract addresses and check if they match with an unused keypool key
+    for (const auto& keyid : wallet->GetAffectedKeys(script)) {
+        std::map<CKeyID, int64_t>::const_iterator mi = m_pool_key_to_index.find(keyid);
+        if (mi != m_pool_key_to_index.end()) {
+            LogPrintf("%s: Detected a used keypool key, mark all keypool key up to this key as used\n", __func__);
+            MarkReserveKeysAsUsed(mi->second);
+
+            if (!TopUp()) {
+                LogPrintf("%s: Topping up keypool failed (locked wallet)\n", __func__);
+            }
+        }
+    }
+}
+
 /**
  * Mark old keypool keys as used,
  * and generate all new keys

@@ -74,6 +74,9 @@ public:
       */
     bool TopUp(unsigned int size = 0);
 
+    //! Mark unused addresses as being used
+    void MarkUnusedAddresses(const CScript& script);
+
     //! First wallet key time
     void UpdateTimeFirstKey(int64_t nCreateTime);
     //! Generate a new key
@@ -135,6 +138,11 @@ private:
 
     /* HD derive new child key (on internal or external chain) */
     void DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata, CKey& secret, bool internal = false);
+
+    /**
+     * Marks all keys in the keypool up to and including reserve_key as used.
+     */
+    void MarkReserveKeysAsUsed(int64_t keypool_id);
 };
 
 
