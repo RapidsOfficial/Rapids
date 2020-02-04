@@ -62,7 +62,7 @@ public:
         nTime = 0;
         nBits = 0;
         nNonce = 0;
-        nAccumulatorCheckpoint = 0;
+        nAccumulatorCheckpoint.SetNull();
     }
 
     bool IsNull() const
@@ -131,11 +131,11 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
-        block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
+        if(nVersion > 3 && nVersion < 7)
+            block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
         return block;
     }
 
-    // ppcoin: two types of block: proof-of-work or proof-of-stake
     bool IsProofOfStake() const
     {
         return (vtx.size() > 1 && vtx[1].IsCoinStake());
