@@ -37,7 +37,7 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
         modifier_ss << nStakeModifier;
     } else {
         // Modifier v2
-        modifier_ss << pindexPrev->nStakeModifierV2;
+        modifier_ss << pindexPrev->GetStakeModifierV2();
     }
 
     CDataStream ss(modifier_ss);
@@ -188,9 +188,9 @@ uint256 ComputeStakeModifier(const CBlockIndex* pindexPrev, const uint256& kerne
 
     // switch with old modifier on upgrade block
     if (!Params().GetConsensus().IsStakeModifierV2(pindexPrev->nHeight + 1))
-        ss << pindexPrev->nStakeModifier;
+        ss << pindexPrev->GetStakeModifierV1();
     else
-        ss << pindexPrev->nStakeModifierV2;
+        ss << pindexPrev->GetStakeModifierV2();
 
     return ss.GetHash();
 }
@@ -369,7 +369,7 @@ bool GetOldModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifier)
         pindexNext = chainActive[pindex->nHeight + 1];
     } while (nStakeModifierTime < pindexFrom->GetBlockTime() + OLD_MODIFIER_INTERVAL);
 
-    nStakeModifier = pindex->nStakeModifier;
+    nStakeModifier = pindex->GetStakeModifierV1();
     return true;
 }
 
@@ -408,7 +408,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     const CBlockIndex* p = pindexPrev;
     while (p && p->pprev && !p->GeneratedStakeModifier()) p = p->pprev;
     if (!p->GeneratedStakeModifier()) return error("%s : unable to get last modifier", __func__);
-    nStakeModifier = p->nStakeModifier;
+    nStakeModifier = p->GetStakeModifierV1();
     nModifierTime = p->GetBlockTime();
 
     if (GetBoolArg("-printstakemodifier", false))

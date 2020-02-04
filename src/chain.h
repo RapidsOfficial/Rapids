@@ -216,10 +216,11 @@ public:
 
 
     // proof-of-stake specific fields
-    uint64_t nStakeModifier;             // hash modifier for proof-of-stake
+    // char vector holding the stake modifier bytes. It is empty for PoW blocks.
+    // Modifier V1 is 64 bit while modifier V2 is 256 bit.
+    std::vector<unsigned char> vStakeModifier;
     int64_t nMint;
     int64_t nMoneySupply;
-    uint256 nStakeModifierV2;
 
     //! block header
     int nVersion;
@@ -254,8 +255,7 @@ public:
         nMint = 0;
         nMoneySupply = 0;
         nFlags = 0;
-        nStakeModifier = 0;
-        nStakeModifierV2 = uint256();
+        vStakeModifier = {};
 
         nVersion = 0;
         hashMerkleRoot = uint256();
@@ -447,11 +447,43 @@ public:
         return (nFlags & BLOCK_STAKE_MODIFIER);
     }
 
-    void SetStakeModifier(uint64_t nModifier, bool fGeneratedStakeModifier)
+    // Sets V1 stake modifier
+    void SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier)
     {
-        nStakeModifier = nModifier;
+        vStakeModifier.clear();
+        const size_t modSize = sizeof(nStakeModifier);
+        vStakeModifier.resize(modSize);
+        std::memcpy(vStakeModifier.data(), &nStakeModifier, modSize);
         if (fGeneratedStakeModifier)
             nFlags |= BLOCK_STAKE_MODIFIER;
+
+    }
+
+    // Sets V2 stake modifier
+    void SetStakeModifier(const uint256& nStakeModifier)
+    {
+        vStakeModifier.clear();
+        vStakeModifier.insert(vStakeModifier.begin(), nStakeModifier.begin(), nStakeModifier.end());
+    }
+
+    // Returns V1 stake modifier (uint64_t)
+    uint64_t GetStakeModifierV1() const
+    {
+        if (vStakeModifier.empty() || Params().GetConsensus().IsStakeModifierV2(nHeight))
+            return 0;
+        uint64_t nStakeModifier;
+        std::memcpy(&nStakeModifier, vStakeModifier.data(), vStakeModifier.size());
+        return nStakeModifier;
+    }
+
+    // Returns V1 stake modifier (uint256)
+    uint256 GetStakeModifierV2() const
+    {
+        if (vStakeModifier.empty() || !Params().GetConsensus().IsStakeModifierV2(nHeight))
+            return uint256(0);
+        uint256 nStakeModifier;
+        std::memcpy(nStakeModifier.begin(), vStakeModifier.data(), vStakeModifier.size());
+        return nStakeModifier;
     }
 
     /**
@@ -536,17 +568,10 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-
         READWRITE(nMint);
         READWRITE(nMoneySupply);
         READWRITE(nFlags);
-
-        // v1/v2 modifier selection.
-        if (!Params().GetConsensus().IsStakeModifierV2(nHeight)) {
-            READWRITE(nStakeModifier);
-        } else {
-            READWRITE(nStakeModifierV2);
-        }
+        READWRITE(vStakeModifier);
 
         // block header
         READWRITE(this->nVersion);
@@ -558,13 +583,13 @@ public:
         READWRITE(nNonce);
         if(this->nVersion > 3) {
             READWRITE(mapZerocoinSupply);
-            if(this->nVersion < 7){
+            if(this->nVersion < 7) {
                 READWRITE(nAccumulatorCheckpoint);
                 READWRITE(vMintDenominationsInBlock);
             }
         }
-
     }
+
 
     uint256 GetBlockHash() const
     {

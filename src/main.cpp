@@ -3909,7 +3909,7 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
             pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
         } else {
             // compute v2 stake modifier
-            pindexNew->nStakeModifierV2 = ComputeStakeModifier(pindexNew->pprev, block.vtx[1].vin[0].prevout.hash);
+            pindexNew->SetStakeModifier(ComputeStakeModifier(pindexNew->pprev, block.vtx[1].vin[0].prevout.hash));
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);

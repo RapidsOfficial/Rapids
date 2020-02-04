@@ -133,8 +133,8 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     if (pnext)
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
 
-    result.push_back(Pair("modifier", strprintf("%016x", blockindex->nStakeModifier)));
-    result.push_back(Pair("modifierV2", blockindex->nStakeModifierV2.GetHex()));
+    result.push_back(Pair("modifier", strprintf("%016x", blockindex->GetStakeModifierV1())));
+    result.push_back(Pair("modifierV2", blockindex->GetStakeModifierV2().GetHex()));
 
     result.push_back(Pair("moneysupply",ValueFromAmount(blockindex->nMoneySupply)));
 
@@ -162,8 +162,8 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
         std::string stakeModifier = (Params().GetConsensus().IsStakeModifierV2(blockindex->nHeight) ?
-                                     blockindex->nStakeModifierV2.GetHex() :
-                                     strprintf("%016x", blockindex->nStakeModifier));
+                                     blockindex->GetStakeModifierV2().GetHex() :
+                                     strprintf("%016x", blockindex->GetStakeModifierV1()));
         result.push_back(Pair("stakeModifier", stakeModifier));
         result.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
     }
