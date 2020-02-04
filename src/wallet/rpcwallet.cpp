@@ -302,7 +302,7 @@ UniValue sethdseed(const UniValue& params, bool fHelp)
         master_pub_key = spk_man->DeriveNewSeed(key);
     }
 
-    spk_man->SetHDSeed(master_pub_key);
+    spk_man->SetHDSeed(master_pub_key, true);
     if (flush_key_pool) spk_man->NewKeyPool();
 
     return NullUniValue;
