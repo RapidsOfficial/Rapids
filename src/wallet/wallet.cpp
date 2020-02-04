@@ -104,7 +104,7 @@ PairResult CWallet::getNewStakingAddress(CBitcoinAddress& ret, std::string label
 PairResult CWallet::getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,
                                          const CChainParams::Base58Type addrType)
 {
-    LOCK2(cs_main, cs_wallet);
+    LOCK(cs_wallet);
 
     // Refill keypool if wallet is unlocked
     if (!IsLocked())
@@ -696,7 +696,7 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
                 return false;
             }
         } else {
-            NewKeyPool();
+            NewKeyPool(); // TODO: Remove this.
         }
         Lock();
 
@@ -3129,9 +3129,21 @@ std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) co
 
 bool CReserveKey::GetReservedKey(CPubKey& pubkey, bool internal)
 {
+
+    ScriptPubKeyMan* m_spk_man = pwallet->GetScriptPubKeyMan();
+    if (!m_spk_man) {
+        return false;
+    }
+
     if (nIndex == -1) {
+
+        // Fill the pool if needed
+        m_spk_man->TopUp();
+
         CKeyPool keypool;
-        pwallet->ReserveKeyFromKeyPool(nIndex, keypool, internal);
+        if (!m_spk_man->GetReservedKey(internal, nIndex, keypool))
+            return false;
+
         if (nIndex != -1)
             vchPubKey = keypool.vchPubKey;
         else {

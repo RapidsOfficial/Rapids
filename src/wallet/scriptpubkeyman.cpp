@@ -87,6 +87,18 @@ bool ScriptPubKeyMan::GetKeyFromPool(CPubKey& result, bool internal)
     return true;
 }
 
+bool ScriptPubKeyMan::GetReservedKey(bool internal, int64_t& index, CKeyPool& keypool)
+{
+    if (!CanGetAddresses(internal)) {
+        return false;
+    }
+
+    if (!ReserveKeyFromKeyPool(index, keypool, internal)) {
+        return false;
+    }
+    return true;
+}
+
 bool ScriptPubKeyMan::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fRequestedInternal)
 {
     nIndex = -1;
@@ -238,7 +250,6 @@ bool ScriptPubKeyMan::TopUp(unsigned int kpSize)
         }
         if (missingInternal + missingExternal > 0) {
             LogPrintf("keypool added %d keys (%d internal), size=%u (%u internal)\n", missingInternal + missingExternal, missingInternal, setInternalKeyPool.size() + setExternalKeyPool.size() + set_pre_split_keypool.size(), setInternalKeyPool.size());
-            //LogPrintf("keypool added %d keys (%d internal), size=%u (%u internal)\n", missingInternal + missingExternal, missingInternal, setInternalKeyPool.size() + setExternalKeyPool.size(), setInternalKeyPool.size());
         }
     }
     // TODO: Implement this.
@@ -305,13 +316,14 @@ const uint32_t BIP32_HARDENED_KEY_LIMIT = 0x80000000;
 void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata, CKey& secret, bool internal)
 {
     AssertLockHeld(wallet->cs_wallet);
-    // For now we use a fixed keypath scheme of m/0'/0'/k
-    // TODO: Change it to bip44.
+    // Use BIP44 keypath scheme i.e. m / purpose' / coin_type' / account' / change / address_index
     CKey seed;                     //seed (256bit)
     CExtKey masterKey;             //hd master key
-    CExtKey accountKey;            //key at m/0'
-    CExtKey chainChildKey;         //key at m/0'/0' (external) or m/0'/1' (internal)
-    CExtKey childKey;              //key at m/0'/0'/<n>'
+    CExtKey purposeKey;            //key at m/purpose' --> key at m/44'
+    CExtKey cointypeKey;           //key at m/purpose'/coin_type'  --> key at m/44'/119'
+    CExtKey accountKey;            //key at m/purpose'/coin_type'/account' ---> key at m/44'/119'/account_num
+    CExtKey changeKey;             //key at m/purpose'/coin_type'/account'/change ---> key at m/44'/119'/account_num/change', external = 0' or internal = 1'.
+    CExtKey childKey;              //key at m/purpose'/coin_type'/account'/change/address_index ---> key at m/44'/119'/account_num/change'/<n>'
 
     // try to get the seed
     if (!wallet->GetKey(hdChain.GetID(), seed))
@@ -321,11 +333,14 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
 
     // derive m/0'
     // use hardened derivation (child keys >= 0x80000000 are hardened after bip32)
-    masterKey.Derive(accountKey, BIP32_HARDENED_KEY_LIMIT);
-
-    // derive m/0'/0' (external chain) OR m/0'/1' (internal chain)
+    masterKey.Derive(purposeKey, 44 | BIP32_HARDENED_KEY_LIMIT);
+    // derive m/purpose'/coin_type'
+    purposeKey.Derive(cointypeKey, 119 | BIP32_HARDENED_KEY_LIMIT);
+    // derive m/purpose'/coin_type'/account' // Hardcoded to account 0 for now.
+    cointypeKey.Derive(accountKey, 0 | BIP32_HARDENED_KEY_LIMIT);
+    // derive m/purpose'/coin_type'/account'/change
     assert(internal ? wallet->CanSupportFeature(FEATURE_HD_SPLIT) : true);
-    accountKey.Derive(chainChildKey, BIP32_HARDENED_KEY_LIMIT+(internal ? 1 : 0));
+    accountKey.Derive(changeKey, BIP32_HARDENED_KEY_LIMIT+(internal ? 1 : 0));
 
     // derive child key at next index, skip keys already known to the wallet
     do {
@@ -333,7 +348,7 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
         // childIndex | BIP32_HARDENED_KEY_LIMIT = derive childIndex in hardened child-index-range
         // example: 1 | BIP32_HARDENED_KEY_LIMIT == 0x80000001 == 2147483649
         if (internal) {
-            chainChildKey.Derive(childKey, hdChain.nInternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
+            changeKey.Derive(childKey, hdChain.nInternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
             //metadata.hdKeypath = "m/0'/1'/" + std::to_string(hdChain.nInternalChainCounter) + "'";
             metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);
             metadata.key_origin.path.push_back(1 | BIP32_HARDENED_KEY_LIMIT);
@@ -341,7 +356,7 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
             hdChain.nInternalChainCounter++;
         }
         else {
-            chainChildKey.Derive(childKey, hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
+            changeKey.Derive(childKey, hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
             //metadata.hdKeypath = "m/0'/0'/" + std::to_string(hdChain.nExternalChainCounter) + "'";
             metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);
             metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);

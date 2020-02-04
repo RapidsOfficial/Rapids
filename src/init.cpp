@@ -1959,10 +1959,12 @@ bool AppInit2()
     LogPrintf("chainActive.Height() = %d\n", chainActive.Height());
 #ifdef ENABLE_WALLET
     {
-        LOCK(pwalletMain->cs_wallet);
-        LogPrintf("setKeyPool.size() = %u\n", pwalletMain ? pwalletMain->GetKeyPoolSize() : 0);
-        LogPrintf("mapWallet.size() = %u\n", pwalletMain ? pwalletMain->mapWallet.size() : 0);
-        LogPrintf("mapAddressBook.size() = %u\n", pwalletMain ? pwalletMain->mapAddressBook.size() : 0);
+        if (pwalletMain) {
+            LOCK(pwalletMain->cs_wallet);
+            LogPrintf("setKeyPool.size() = %u\n", pwalletMain ? pwalletMain->GetKeyPoolSize() : 0);
+            LogPrintf("mapWallet.size() = %u\n", pwalletMain ? pwalletMain->mapWallet.size() : 0);
+            LogPrintf("mapAddressBook.size() = %u\n", pwalletMain ? pwalletMain->mapAddressBook.size() : 0);
+        }
     }
 #endif
 

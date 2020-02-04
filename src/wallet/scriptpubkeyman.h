@@ -82,7 +82,10 @@ public:
 
     //! Fetches a key from the keypool
     bool GetKeyFromPool(CPubKey &key, bool internal = false);
+    //! Reserve + fetch a key from the keypool
+    bool GetReservedKey(bool internal, int64_t& index, CKeyPool& keypool);
 
+    const std::map<CKeyID, int64_t>& GetAllReserveKeys() const { return m_pool_key_to_index; }
     /**
      * Reserves a key from the keypool and sets nIndex to its index
      *

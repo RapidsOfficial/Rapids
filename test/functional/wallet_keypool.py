@@ -10,6 +10,7 @@ from test_framework.util import *
 class KeyPoolTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
+        self.extra_args = [['-keypool=1']]
 
     def run_test(self):
         nodes = self.nodes
@@ -19,7 +20,7 @@ class KeyPoolTest(PivxTestFramework):
         # Encrypt wallet and wait to terminate
         nodes[0].node_encrypt_wallet('test')
         # Restart node 0
-        self.start_node(0)
+        self.start_node(0, self.extra_args[0])
         # Keep creating keys
         addr = nodes[0].getnewaddress()
         addr_data = nodes[0].validateaddress(addr)
