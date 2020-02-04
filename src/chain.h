@@ -217,7 +217,6 @@ public:
 
     // proof-of-stake specific fields
     uint64_t nStakeModifier;             // hash modifier for proof-of-stake
-    uint256 hashProofOfStake;
     int64_t nMint;
     int64_t nMoneySupply;
     uint256 nStakeModifierV2;
@@ -546,10 +545,6 @@ public:
             READWRITE(nStakeModifier);
         } else {
             READWRITE(nStakeModifierV2);
-        }
-
-        if (!IsProofOfStake()) {
-            const_cast<CDiskBlockIndex*>(this)->hashProofOfStake = uint256();
         }
 
         // block header
