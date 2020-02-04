@@ -321,19 +321,6 @@ static bool SelectBlockFromCandidates(
     return fSelected;
 }
 
-unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex)
-{
-    assert(pindex->pprev || pindex->GetBlockHash() == Params().GetConsensus().hashGenesisBlock);
-    // Hash previous checksum with flags, hashProofOfStake and nStakeModifier
-    CDataStream ss(SER_GETHASH, 0);
-    if (pindex->pprev)
-        ss << pindex->pprev->nStakeModifierChecksum;
-    ss << pindex->nFlags << pindex->hashProofOfStake << pindex->nStakeModifier;
-    uint256 hashChecksum = Hash(ss.begin(), ss.end());
-    hashChecksum >>= (256 - 32);
-    return hashChecksum.Get64();
-}
-
 bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier)
 {
     if(Params().IsRegTestNet()) {

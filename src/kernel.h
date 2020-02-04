@@ -29,7 +29,6 @@ uint32_t ParseAccChecksum(uint256 nCheckpoint, const libzerocoin::CoinDenominati
 
 
 /* Old Stake Modifier */
-unsigned int GetStakeModifierChecksum(const CBlockIndex* pindex);
 bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier);
 bool GetOldModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifier);
 bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeModifier, bool& fGeneratedStakeModifier);

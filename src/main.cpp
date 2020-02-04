@@ -3915,7 +3915,6 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
             if (!ComputeNextStakeModifier(pindexNew->pprev, nStakeModifier, fGeneratedStakeModifier))
                 LogPrintf("AddToBlockIndex() : ComputeNextStakeModifier() failed \n");
             pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
-            pindexNew->nStakeModifierChecksum = GetStakeModifierChecksum(pindexNew);
         } else {
             // compute v2 stake modifier
             pindexNew->nStakeModifierV2 = ComputeStakeModifier(pindexNew->pprev, block.vtx[1].vin[0].prevout.hash);

@@ -217,7 +217,6 @@ public:
 
     // proof-of-stake specific fields
     uint64_t nStakeModifier;             // hash modifier for proof-of-stake
-    unsigned int nStakeModifierChecksum; // checksum of index; in-memeory only
     uint256 hashProofOfStake;
     int64_t nMint;
     int64_t nMoneySupply;
@@ -258,7 +257,6 @@ public:
         nFlags = 0;
         nStakeModifier = 0;
         nStakeModifierV2 = uint256();
-        nStakeModifierChecksum = 0;
 
         nVersion = 0;
         hashMerkleRoot = uint256();
