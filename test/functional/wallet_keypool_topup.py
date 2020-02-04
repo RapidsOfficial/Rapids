@@ -64,11 +64,11 @@ class KeypoolRestoreTest(PivxTestFramework):
         connect_nodes_bi(self.nodes, 0, 1)
         self.sync_all()
 
-        assert_equal(self.nodes[1].getbalance(), 10)
+        assert_equal(self.nodes[1].getbalance(), 15)
         assert_equal(self.nodes[1].listtransactions()[0]['category'], "receive")
 
         # Check that we have marked all keys up to the used keypool key as used
-        #assert_equal(self.nodes[1].validateaddress(self.nodes[1].getnewaddress())['hdkeypath'], "m/0'/0'/110'")
+        assert_equal(self.nodes[1].getaddressinfo(self.nodes[1].getnewaddress())['hdkeypath'], "m/44'/119'/0'/0'/110'")
 
 if __name__ == '__main__':
     KeypoolRestoreTest().main()
