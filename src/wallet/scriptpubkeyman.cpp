@@ -325,6 +325,8 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
     CExtKey changeKey;             //key at m/purpose'/coin_type'/account'/change ---> key at m/44'/119'/account_num/change', external = 0' or internal = 1'.
     CExtKey childKey;              //key at m/purpose'/coin_type'/account'/change/address_index ---> key at m/44'/119'/account_num/change'/<n>'
 
+    // For now only one account.
+    int nAccountNumber = 0;
     // try to get the seed
     if (!wallet->GetKey(hdChain.GetID(), seed))
         throw std::runtime_error(std::string(__func__) + ": seed not found");
@@ -337,7 +339,7 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
     // derive m/purpose'/coin_type'
     purposeKey.Derive(cointypeKey, 119 | BIP32_HARDENED_KEY_LIMIT);
     // derive m/purpose'/coin_type'/account' // Hardcoded to account 0 for now.
-    cointypeKey.Derive(accountKey, 0 | BIP32_HARDENED_KEY_LIMIT);
+    cointypeKey.Derive(accountKey, nAccountNumber | BIP32_HARDENED_KEY_LIMIT);
     // derive m/purpose'/coin_type'/account'/change
     assert(internal ? wallet->CanSupportFeature(FEATURE_HD_SPLIT) : true);
     accountKey.Derive(changeKey, BIP32_HARDENED_KEY_LIMIT+(internal ? 1 : 0));
@@ -347,18 +349,19 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
         // always derive hardened keys
         // childIndex | BIP32_HARDENED_KEY_LIMIT = derive childIndex in hardened child-index-range
         // example: 1 | BIP32_HARDENED_KEY_LIMIT == 0x80000001 == 2147483649
+
+        // m/44'/119'/account_num/change'/<n>'
+        metadata.key_origin.path.push_back(44 | BIP32_HARDENED_KEY_LIMIT);
+        metadata.key_origin.path.push_back(119 | BIP32_HARDENED_KEY_LIMIT);
+        metadata.key_origin.path.push_back(nAccountNumber | BIP32_HARDENED_KEY_LIMIT);
         if (internal) {
             changeKey.Derive(childKey, hdChain.nInternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
-            //metadata.hdKeypath = "m/0'/1'/" + std::to_string(hdChain.nInternalChainCounter) + "'";
-            metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);
             metadata.key_origin.path.push_back(1 | BIP32_HARDENED_KEY_LIMIT);
             metadata.key_origin.path.push_back(hdChain.nInternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
             hdChain.nInternalChainCounter++;
         }
         else {
             changeKey.Derive(childKey, hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
-            //metadata.hdKeypath = "m/0'/0'/" + std::to_string(hdChain.nExternalChainCounter) + "'";
-            metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);
             metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);
             metadata.key_origin.path.push_back(hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
             hdChain.nExternalChainCounter++;
