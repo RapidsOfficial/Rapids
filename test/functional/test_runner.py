@@ -59,6 +59,7 @@ BASE_SCRIPTS= [
     'wallet_basic.py',                          # ~ 1155 sec
     'wallet_backup.py',                         # ~ 459 sec
     'mining_pos_reorg.py',                      # ~ 305 sec
+    'wallet_hd.py',                             #
 
     # vv Tests less than 5m vv
     'mining_pos_coldStaking.py',                # ~ 289 sec
