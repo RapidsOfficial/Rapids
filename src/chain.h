@@ -180,9 +180,6 @@ public:
     //! pointer to the index of some further predecessor of this block
     CBlockIndex* pskip;
 
-    //ppcoin: trust score of block chain
-    uint256 bnChainTrust;
-
     //! height of the entry in the chain. The genesis block has height 0
     int nHeight;
 
@@ -219,7 +216,6 @@ public:
 
 
     // proof-of-stake specific fields
-    uint256 GetBlockTrust() const;
     uint64_t nStakeModifier;             // hash modifier for proof-of-stake
     unsigned int nStakeModifierChecksum; // checksum of index; in-memeory only
     uint256 hashProofOfStake;
