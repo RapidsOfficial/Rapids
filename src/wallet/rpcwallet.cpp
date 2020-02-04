@@ -10,6 +10,7 @@
 #include "base58.h"
 #include "core_io.h"
 #include "init.h"
+#include "key_io.h"
 #include "net.h"
 #include "netbase.h"
 #include "rpc/server.h"
@@ -106,6 +107,14 @@ static UniValue AddressBookDataToJSON(const AddressBook::CAddressBookData& data,
     }
     ret.pushKV("purpose", data.purpose);
     return ret;
+}
+
+/** Checks if a CKey is in the given CWallet compressed or otherwise*/
+bool HaveKey(const CWallet* wallet, const CKey& key)
+{
+    CKey key2;
+    key2.Set(key.begin(), key.end(), !key.IsCompressed());
+    return wallet->HaveKey(key.GetPubKey().GetID()) || wallet->HaveKey(key2.GetPubKey().GetID());
 }
 
 UniValue getaddressinfo(const UniValue& params, bool fHelp)
@@ -229,6 +238,74 @@ UniValue getaddressinfo(const UniValue& params, bool fHelp)
     ret.pushKV("labels", std::move(labels));
 
     return ret;
+}
+
+UniValue sethdseed(const UniValue& params, bool fHelp)
+{
+    CWallet* pwallet = pwalletMain;
+
+    if (!pwallet) {
+        return NullUniValue;
+    }
+
+    if (fHelp || params.size() > 2)
+        throw std::runtime_error("sethdseed\n"
+               "Set or generate a new HD wallet seed. Non-HD wallets will not be upgraded to being a HD wallet. Wallets that are already\n"
+               "HD will have a new HD seed set so that new keys added to the keypool will be derived from this new seed.\n"
+               "\nNote that you will need to MAKE A NEW BACKUP of your wallet after setting the HD wallet seed.\n\n"
+               "newkeypool bool, default true: Whether to flush old unused addresses, including change addresses, from the keypool and regenerate it.\n"
+               "                             If true, the next address from getnewaddress and change address from getrawchangeaddress will be from this new seed.\n"
+               "                             If false, addresses (including change addresses if the wallet already had HD Chain Split enabled) from the existing\n"
+               "                             keypool will be used until it has been depleted."
+               "seed str, default random seed: The WIF private key to use as the new HD seed.\n"
+               "                             The seed value can be retrieved using the dumpwallet command. It is the private key marked hdseed=1"
+               + HelpExampleCli("sethdseed", "")
+               + HelpExampleCli("sethdseed", "false")
+               + HelpExampleCli("sethdseed", "true \"wifkey\"")
+               + HelpExampleRpc("sethdseed", "true, \"wifkey\"")
+        );
+
+
+
+    ScriptPubKeyMan* spk_man = pwallet->GetScriptPubKeyMan();
+    if (IsInitialBlockDownload()) {
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Cannot set a new HD seed while still in Initial Block Download");
+    }
+
+    LOCK2(cs_main, pwallet->cs_wallet);
+
+    // Do not do anything to non-HD wallets
+    if (!pwallet->CanSupportFeature(FEATURE_HD)) {
+        throw JSONRPCError(RPC_WALLET_ERROR, "Cannot set a HD seed on a non-HD wallet. Start with -upgradewallet in order to upgrade a non-HD wallet to HD");
+    }
+
+    EnsureWalletIsUnlocked(pwallet);
+
+    bool flush_key_pool = true;
+    if (!params[0].isNull()) {
+        flush_key_pool = params[0].get_bool();
+    }
+
+    CPubKey master_pub_key;
+    if (params[1].isNull()) {
+        master_pub_key = spk_man->GenerateNewSeed();
+    } else {
+        CKey key = DecodeSecret(params[1].get_str());
+        if (!key.IsValid()) {
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
+        }
+
+        if (HaveKey(pwallet, key)) {
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Already have this key (either as an HD seed or as a loose private key)");
+        }
+
+        master_pub_key = spk_man->DeriveNewSeed(key);
+    }
+
+    spk_man->SetHDSeed(master_pub_key);
+    if (flush_key_pool) spk_man->NewKeyPool();
+
+    return NullUniValue;
 }
 
 UniValue getnewaddress(const UniValue& params, bool fHelp)
