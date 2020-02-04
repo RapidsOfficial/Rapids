@@ -94,7 +94,7 @@ public:
         key_origin.clear();
     }
 
-    bool HasKeyOrigin()
+    bool HasKeyOrigin() const
     {
         return this->nVersion >= VERSION_WITH_KEY_ORIGIN;
     }
