@@ -91,7 +91,6 @@ void CBlockIndex::SetNull()
     nChainTx = 0;
     nStatus = 0;
     nSequenceId = 0;
-    nMint = 0;
     nMoneySupply = 0;
     nFlags = 0;
     vStakeModifier = {};

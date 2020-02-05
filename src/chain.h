@@ -219,7 +219,6 @@ public:
     // char vector holding the stake modifier bytes. It is empty for PoW blocks.
     // Modifier V1 is 64 bit while modifier V2 is 256 bit.
     std::vector<unsigned char> vStakeModifier;
-    int64_t nMint;
     int64_t nMoneySupply;
 
     //! block header
@@ -334,7 +333,10 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-        READWRITE(nMint);
+        if (fOldSer) {
+            int64_t nMint = 0;
+            READWRITE(nMint);
+        }
         READWRITE(nMoneySupply);
         READWRITE(nFlags);
 
