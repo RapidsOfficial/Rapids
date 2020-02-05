@@ -174,9 +174,6 @@ public:
     //! pointer to the index of the predecessor of this block
     CBlockIndex* pprev;
 
-    //! pointer to the index of the next block
-    CBlockIndex* pnext;
-
     //! pointer to the index of some further predecessor of this block
     CBlockIndex* pskip;
 
@@ -297,12 +294,10 @@ class CDiskBlockIndex : public CBlockIndex
 {
 public:
     uint256 hashPrev;
-    uint256 hashNext;
 
     CDiskBlockIndex()
     {
         hashPrev = uint256();
-        hashNext = uint256();
     }
 
     explicit CDiskBlockIndex(const CBlockIndex* pindex) : CBlockIndex(*pindex)
@@ -350,6 +345,11 @@ public:
 
         } else {
             // Serialization with client version <= 4009900
+            int64_t nMint = 0;
+            uint256 hashNext;
+            READWRITE(nMint);
+            READWRITE(nMoneySupply);
+            READWRITE(nFlags);
             if (!Params().GetConsensus().IsStakeModifierV2(nHeight)) {
                 uint64_t nStakeModifier = 0;
                 READWRITE(nStakeModifier);
