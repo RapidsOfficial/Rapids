@@ -237,254 +237,45 @@ public:
     std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
     std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
 
-    void SetNull()
-    {
-        phashBlock = NULL;
-        pprev = NULL;
-        pskip = NULL;
-        nHeight = 0;
-        nFile = 0;
-        nDataPos = 0;
-        nUndoPos = 0;
-        nChainWork = 0;
-        nTx = 0;
-        nChainTx = 0;
-        nStatus = 0;
-        nSequenceId = 0;
+    CBlockIndex() { SetNull(); }
+    CBlockIndex(const CBlock& block);
+    void SetNull();
 
-        nMint = 0;
-        nMoneySupply = 0;
-        nFlags = 0;
-        vStakeModifier = {};
+    std::string ToString() const;
 
-        nVersion = 0;
-        hashMerkleRoot = uint256();
-        nTime = 0;
-        nBits = 0;
-        nNonce = 0;
-        nAccumulatorCheckpoint = 0;
-        // Start supply of each denomination with 0s
-        for (auto& denom : libzerocoin::zerocoinDenomList) {
-            mapZerocoinSupply.insert(std::make_pair(denom, 0));
-        }
-        vMintDenominationsInBlock.clear();
-    }
+    CDiskBlockPos GetBlockPos() const;
+    CDiskBlockPos GetUndoPos() const;
+    CBlockHeader GetBlockHeader() const;
+    uint256 GetBlockHash() const { return *phashBlock; }
+    int64_t GetBlockTime() const { return (int64_t)nTime; }
+    int64_t GetMedianTimePast() const;
 
-    CBlockIndex()
-    {
-        SetNull();
-    }
+    int64_t MaxFutureBlockTime() const;
+    int64_t MinPastBlockTime() const;
 
-    CBlockIndex(const CBlock& block)
-    {
-        SetNull();
+    bool IsProofOfStake() const { return (nFlags & BLOCK_PROOF_OF_STAKE); }
+    bool IsProofOfWork() const { return !IsProofOfStake(); }
+    void SetProofOfStake() { nFlags |= BLOCK_PROOF_OF_STAKE; }
 
-        nVersion = block.nVersion;
-        hashMerkleRoot = block.hashMerkleRoot;
-        nTime = block.nTime;
-        nBits = block.nBits;
-        nNonce = block.nNonce;
-        if(block.nVersion > 3 && block.nVersion < 7)
-            nAccumulatorCheckpoint = block.nAccumulatorCheckpoint;
+    // Stake Modifier
+    unsigned int GetStakeEntropyBit() const;
+    bool SetStakeEntropyBit(unsigned int nEntropyBit);
+    bool GeneratedStakeModifier() const { return (nFlags & BLOCK_STAKE_MODIFIER); }
+    void SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier);
+    void SetStakeModifier(const uint256& nStakeModifier);
+    uint64_t GetStakeModifierV1() const;
+    uint256 GetStakeModifierV2() const;
 
-        if (block.IsProofOfStake()) {
-            SetProofOfStake();
-        }
-    }
-
-
-    CDiskBlockPos GetBlockPos() const
-    {
-        CDiskBlockPos ret;
-        if (nStatus & BLOCK_HAVE_DATA) {
-            ret.nFile = nFile;
-            ret.nPos = nDataPos;
-        }
-        return ret;
-    }
-
-    CDiskBlockPos GetUndoPos() const
-    {
-        CDiskBlockPos ret;
-        if (nStatus & BLOCK_HAVE_UNDO) {
-            ret.nFile = nFile;
-            ret.nPos = nUndoPos;
-        }
-        return ret;
-    }
-
-    CBlockHeader GetBlockHeader() const
-    {
-        CBlockHeader block;
-        block.nVersion = nVersion;
-        if (pprev)
-            block.hashPrevBlock = pprev->GetBlockHash();
-        block.hashMerkleRoot = hashMerkleRoot;
-        block.nTime = nTime;
-        block.nBits = nBits;
-        block.nNonce = nNonce;
-        if (nVersion > 3 && nVersion < 7)
-            block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
-        return block;
-    }
-
-    int64_t GetZerocoinSupply() const
-    {
-        int64_t nTotal = 0;
-        for (auto& denom : libzerocoin::zerocoinDenomList) {
-            nTotal += GetZcMintsAmount(denom);
-        }
-        return nTotal;
-    }
-
-    /**
-     * Total of mints added to the specific accumulator.
-     * @param denom
-     * @return
-     */
-    int64_t GetZcMints(libzerocoin::CoinDenomination denom) const
-    {
-        return mapZerocoinSupply.at(denom);
-    }
-
-    /**
-     * Total available amount in an specific denom.
-     * @param denom
-     * @return
-     */
-    int64_t GetZcMintsAmount(libzerocoin::CoinDenomination denom) const
-    {
-        return libzerocoin::ZerocoinDenominationToAmount(denom) * GetZcMints(denom);
-    }
-
-    bool MintedDenomination(libzerocoin::CoinDenomination denom) const
-    {
-        return std::find(vMintDenominationsInBlock.begin(), vMintDenominationsInBlock.end(), denom) != vMintDenominationsInBlock.end();
-    }
-
-    uint256 GetBlockHash() const
-    {
-        return *phashBlock;
-    }
-
-    int64_t GetBlockTime() const
-    {
-        return (int64_t)nTime;
-    }
-
-    enum { nMedianTimeSpan = 11 };
-
-    int64_t GetMedianTimePast() const
-    {
-        int64_t pmedian[nMedianTimeSpan];
-        int64_t* pbegin = &pmedian[nMedianTimeSpan];
-        int64_t* pend = &pmedian[nMedianTimeSpan];
-
-        const CBlockIndex* pindex = this;
-        for (int i = 0; i < nMedianTimeSpan && pindex; i++, pindex = pindex->pprev)
-            *(--pbegin) = pindex->GetBlockTime();
-
-        std::sort(pbegin, pend);
-        return pbegin[(pend - pbegin) / 2];
-    }
-
-    int64_t MaxFutureBlockTime() const
-    {
-        return GetAdjustedTime() + Params().GetConsensus().FutureBlockTimeDrift(nHeight+1);
-    }
-
-    int64_t MinPastBlockTime() const
-    {
-        const Consensus::Params& consensus = Params().GetConsensus();
-        // Time Protocol v1: pindexPrev->MedianTimePast + 1
-        if (!consensus.IsTimeProtocolV2(nHeight+1))
-            return GetMedianTimePast();
-
-        // on the transition from Time Protocol v1 to v2
-        // pindexPrev->nTime might be in the future (up to the allowed drift)
-        // so we allow the nBlockTimeProtocolV2 to be at most (180-14) seconds earlier than previous block
-        if (nHeight + 1 == consensus.height_start_TimeProtoV2)
-            return GetBlockTime() - consensus.FutureBlockTimeDrift(nHeight) + consensus.FutureBlockTimeDrift(nHeight + 1);
-
-        // Time Protocol v2: pindexPrev->nTime
-        return GetBlockTime();
-    }
-
-    bool IsProofOfWork() const
-    {
-        return !(nFlags & BLOCK_PROOF_OF_STAKE);
-    }
-
-    bool IsProofOfStake() const
-    {
-        return (nFlags & BLOCK_PROOF_OF_STAKE);
-    }
-
-    void SetProofOfStake()
-    {
-        nFlags |= BLOCK_PROOF_OF_STAKE;
-    }
-
-    unsigned int GetStakeEntropyBit() const
-    {
-        unsigned int nEntropyBit = ((GetBlockHash().Get64()) & 1);
-        if (GetBoolArg("-printstakemodifier", false))
-            LogPrintf("GetStakeEntropyBit: nHeight=%u hashBlock=%s nEntropyBit=%u\n", nHeight, GetBlockHash().ToString().c_str(), nEntropyBit);
-
-        return nEntropyBit;
-    }
-
-    bool SetStakeEntropyBit(unsigned int nEntropyBit)
-    {
-        if (nEntropyBit > 1)
-            return false;
-        nFlags |= (nEntropyBit ? BLOCK_STAKE_ENTROPY : 0);
-        return true;
-    }
-
-    bool GeneratedStakeModifier() const
-    {
-        return (nFlags & BLOCK_STAKE_MODIFIER);
-    }
-
-    // Sets V1 stake modifier
-    void SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier)
-    {
-        vStakeModifier.clear();
-        const size_t modSize = sizeof(nStakeModifier);
-        vStakeModifier.resize(modSize);
-        std::memcpy(vStakeModifier.data(), &nStakeModifier, modSize);
-        if (fGeneratedStakeModifier)
-            nFlags |= BLOCK_STAKE_MODIFIER;
-
-    }
-
-    // Sets V2 stake modifier
-    void SetStakeModifier(const uint256& nStakeModifier)
-    {
-        vStakeModifier.clear();
-        vStakeModifier.insert(vStakeModifier.begin(), nStakeModifier.begin(), nStakeModifier.end());
-    }
-
-    // Returns V1 stake modifier (uint64_t)
-    uint64_t GetStakeModifierV1() const
-    {
-        if (vStakeModifier.empty() || Params().GetConsensus().IsStakeModifierV2(nHeight))
-            return 0;
-        uint64_t nStakeModifier;
-        std::memcpy(&nStakeModifier, vStakeModifier.data(), vStakeModifier.size());
-        return nStakeModifier;
-    }
-
-    // Returns V1 stake modifier (uint256)
-    uint256 GetStakeModifierV2() const
-    {
-        if (vStakeModifier.empty() || !Params().GetConsensus().IsStakeModifierV2(nHeight))
-            return uint256(0);
-        uint256 nStakeModifier;
-        std::memcpy(nStakeModifier.begin(), vStakeModifier.data(), vStakeModifier.size());
-        return nStakeModifier;
-    }
+    //! Check whether this block index entry is valid up to the passed validity level.
+    bool IsValid(enum BlockStatus nUpTo = BLOCK_VALID_TRANSACTIONS) const;
+    //! Raise the validity level of this block index entry.
+    //! Returns true if the validity was changed.
+    bool RaiseValidity(enum BlockStatus nUpTo);
+    //! Build the skiplist pointer for this entry.
+    void BuildSkip();
+    //! Efficiently find an ancestor of this block.
+    CBlockIndex* GetAncestor(int height);
+    const CBlockIndex* GetAncestor(int height) const;
 
     /**
      * Returns true if there are nRequired or more blocks of minVersion or above
@@ -493,43 +284,11 @@ public:
      */
     static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired);
 
-    std::string ToString() const
-    {
-        return strprintf("CBlockIndex(pprev=%p, nHeight=%d, merkle=%s, hashBlock=%s)",
-            pprev, nHeight,
-            hashMerkleRoot.ToString(),
-            GetBlockHash().ToString());
-    }
-
-    //! Check whether this block index entry is valid up to the passed validity level.
-    bool IsValid(enum BlockStatus nUpTo = BLOCK_VALID_TRANSACTIONS) const
-    {
-        assert(!(nUpTo & ~BLOCK_VALID_MASK)); // Only validity flags allowed.
-        if (nStatus & BLOCK_FAILED_MASK)
-            return false;
-        return ((nStatus & BLOCK_VALID_MASK) >= nUpTo);
-    }
-
-    //! Raise the validity level of this block index entry.
-    //! Returns true if the validity was changed.
-    bool RaiseValidity(enum BlockStatus nUpTo)
-    {
-        assert(!(nUpTo & ~BLOCK_VALID_MASK)); // Only validity flags allowed.
-        if (nStatus & BLOCK_FAILED_MASK)
-            return false;
-        if ((nStatus & BLOCK_VALID_MASK) < nUpTo) {
-            nStatus = (nStatus & ~BLOCK_VALID_MASK) | nUpTo;
-            return true;
-        }
-        return false;
-    }
-
-    //! Build the skiplist pointer for this entry.
-    void BuildSkip();
-
-    //! Efficiently find an ancestor of this block.
-    CBlockIndex* GetAncestor(int height);
-    const CBlockIndex* GetAncestor(int height) const;
+    // Legacy Zerocoin
+    int64_t GetZerocoinSupply() const;
+    int64_t GetZcMints(libzerocoin::CoinDenomination denom) const;
+    int64_t GetZcMintsAmount(libzerocoin::CoinDenomination denom) const;
+    bool MintedDenomination(libzerocoin::CoinDenomination denom) const;
 };
 
 /** Used to marshal pointers into hashes for db storage. */
@@ -597,7 +356,7 @@ public:
 
         } else {
             // Serialization with client version <= 4009900
-            if (!Params().IsStakeModifierV2(nHeight)) {
+            if (!Params().GetConsensus().IsStakeModifierV2(nHeight)) {
                 uint64_t nStakeModifier = 0;
                 READWRITE(nStakeModifier);
                 this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
@@ -608,7 +367,7 @@ public:
             }
             if (IsProofOfStake()) {
                 COutPoint prevoutStake;
-                unsigned int nStakeTime;
+                unsigned int nStakeTime = 0;
                 READWRITE(prevoutStake);
                 READWRITE(nStakeTime);
             }
