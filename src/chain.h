@@ -169,42 +169,42 @@ class CBlockIndex
 {
 public:
     //! pointer to the hash of the block, if any. memory is owned by this CBlockIndex
-    const uint256* phashBlock;
+    const uint256* phashBlock{nullptr};
 
     //! pointer to the index of the predecessor of this block
-    CBlockIndex* pprev;
+    CBlockIndex* pprev{nullptr};
 
     //! pointer to the index of some further predecessor of this block
-    CBlockIndex* pskip;
+    CBlockIndex* pskip{nullptr};
 
     //! height of the entry in the chain. The genesis block has height 0
-    int nHeight;
+    int nHeight{0};
 
     //! Which # file this block is stored in (blk?????.dat)
-    int nFile;
+    int nFile{0};
 
     //! Byte offset within blk?????.dat where this block's data is stored
-    unsigned int nDataPos;
+    unsigned int nDataPos{0};
 
     //! Byte offset within rev?????.dat where this block's undo data is stored
-    unsigned int nUndoPos;
+    unsigned int nUndoPos{0};
 
     //! (memory only) Total amount of work (expected number of hashes) in the chain up to and including this block
-    uint256 nChainWork;
+    uint256 nChainWork{};
 
     //! Number of transactions in this block.
     //! Note: in a potential headers-first mode, this number cannot be relied upon
-    unsigned int nTx;
+    unsigned int nTx{0};
 
     //! (memory only) Number of transactions in the chain up to and including this block.
     //! This value will be non-zero only if and only if transactions for this block and all its parents are available.
     //! Change to 64-bit type when necessary; won't happen before 2030
-    unsigned int nChainTx;
+    unsigned int nChainTx{0};
 
     //! Verification status of this block. See enum BlockStatus
-    unsigned int nStatus;
+    unsigned int nStatus{0};
 
-    unsigned int nFlags; // ppcoin: block index flags
+    unsigned int nFlags{0}; // ppcoin: block index flags
     enum {
         BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
         BLOCK_STAKE_ENTROPY = (1 << 1),  // entropy bit for stake modifier
@@ -215,26 +215,26 @@ public:
     // proof-of-stake specific fields
     // char vector holding the stake modifier bytes. It is empty for PoW blocks.
     // Modifier V1 is 64 bit while modifier V2 is 256 bit.
-    std::vector<unsigned char> vStakeModifier;
-    int64_t nMoneySupply;
+    std::vector<unsigned char> vStakeModifier{};
+    int64_t nMoneySupply{0};
 
     //! block header
-    int nVersion;
-    uint256 hashMerkleRoot;
-    unsigned int nTime;
-    unsigned int nBits;
-    unsigned int nNonce;
-    uint256 nAccumulatorCheckpoint;
+    int nVersion{0};
+    uint256 hashMerkleRoot{};
+    unsigned int nTime{0};
+    unsigned int nBits{0};
+    unsigned int nNonce{0};
+    uint256 nAccumulatorCheckpoint{};
 
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
-    uint32_t nSequenceId;
+    uint32_t nSequenceId{0};
 
     //! zerocoin specific fields
     std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
 
-    CBlockIndex() { SetNull(); }
+    CBlockIndex() { ClearMapZcSupply(); }
     CBlockIndex(const CBlock& block);
-    void SetNull();
+    void ClearMapZcSupply();
 
     std::string ToString() const;
 

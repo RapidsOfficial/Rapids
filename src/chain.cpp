@@ -63,43 +63,23 @@ const CBlockIndex* CChain::FindFork(const CBlockIndex* pindex) const
     return pindex;
 }
 
-CBlockIndex::CBlockIndex(const CBlock& block)
+CBlockIndex::CBlockIndex(const CBlock& block):
+        nVersion{block.nVersion},
+        hashMerkleRoot{block.hashMerkleRoot},
+        nTime{block.nTime},
+        nBits{block.nBits},
+        nNonce{block.nNonce}
 {
-    SetNull();
-    nVersion = block.nVersion;
-    hashMerkleRoot = block.hashMerkleRoot;
-    nTime = block.nTime;
-    nBits = block.nBits;
-    nNonce = block.nNonce;
+    ClearMapZcSupply();
     if(block.nVersion > 3 && block.nVersion < 7)
         nAccumulatorCheckpoint = block.nAccumulatorCheckpoint;
-    if (block.IsProofOfStake()) {
+    if (block.IsProofOfStake())
         SetProofOfStake();
-    }
 }
-void CBlockIndex::SetNull()
+
+void CBlockIndex::ClearMapZcSupply()
 {
-    phashBlock = nullptr;
-    pprev = nullptr;
-    pskip = nullptr;
-    nHeight = 0;
-    nFile = 0;
-    nDataPos = 0;
-    nUndoPos = 0;
-    nChainWork = 0;
-    nTx = 0;
-    nChainTx = 0;
-    nStatus = 0;
-    nSequenceId = 0;
-    nMoneySupply = 0;
-    nFlags = 0;
-    vStakeModifier = {};
-    nVersion = 0;
-    hashMerkleRoot = uint256();
-    nTime = 0;
-    nBits = 0;
-    nNonce = 0;
-    nAccumulatorCheckpoint = 0;
+    mapZerocoinSupply.clear();
     // Start supply of each denomination with 0s
     for (auto& denom : libzerocoin::zerocoinDenomList)
         mapZerocoinSupply.insert(std::make_pair(denom, 0));
