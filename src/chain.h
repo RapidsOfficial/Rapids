@@ -160,6 +160,13 @@ enum BlockStatus {
     BLOCK_FAILED_MASK = BLOCK_FAILED_VALID | BLOCK_FAILED_CHILD,
 };
 
+// BlockIndex flags
+enum {
+    BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
+    BLOCK_STAKE_ENTROPY = (1 << 1),  // entropy bit for stake modifier
+    BLOCK_STAKE_MODIFIER = (1 << 2), // regenerated stake modifier
+};
+
 /** The block chain is a tree shaped structure starting with the
  * genesis block at the root, with each block potentially having multiple
  * candidates to be the next block. A blockindex may have multiple pprev pointing
@@ -204,19 +211,12 @@ public:
     //! Verification status of this block. See enum BlockStatus
     unsigned int nStatus{0};
 
-    unsigned int nFlags{0}; // ppcoin: block index flags
-    enum {
-        BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
-        BLOCK_STAKE_ENTROPY = (1 << 1),  // entropy bit for stake modifier
-        BLOCK_STAKE_MODIFIER = (1 << 2), // regenerated stake modifier
-    };
-
-
     // proof-of-stake specific fields
     // char vector holding the stake modifier bytes. It is empty for PoW blocks.
     // Modifier V1 is 64 bit while modifier V2 is 256 bit.
     std::vector<unsigned char> vStakeModifier{};
     int64_t nMoneySupply{0};
+    unsigned int nFlags{0};
 
     //! block header
     int nVersion{0};
@@ -313,9 +313,6 @@ public:
         if (!(nType & SER_GETHASH))
             READWRITE(VARINT(nSerVersion));
 
-        // Serialization version (== CLIENT_VERSION)
-        const bool fNewSer = (nSerVersion > DBI_OLD_SER_VERSION);
-
         READWRITE(VARINT(nHeight));
         READWRITE(VARINT(nStatus));
         READWRITE(VARINT(nTx));
@@ -326,12 +323,11 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-        if (fNewSer) {
-            // Serialization with client version > 4009900
+        if (nSerVersion > DBI_OLD_SER_VERSION) {
+            // Serialization with CLIENT_VERSION > 4009900
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
             READWRITE(vStakeModifier);
-            // block header
             READWRITE(this->nVersion);
             READWRITE(hashPrev);
             READWRITE(hashMerkleRoot);
@@ -344,7 +340,7 @@ public:
             }
 
         } else {
-            // Serialization with client version <= 4009900
+            // Serialization with CLIENT_VERSION <= 4009900
             int64_t nMint = 0;
             uint256 hashNext;
             READWRITE(nMint);
