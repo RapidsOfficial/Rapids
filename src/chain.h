@@ -234,7 +234,6 @@ public:
 
     //! zerocoin specific fields
     std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
-    std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
 
     CBlockIndex() { SetNull(); }
     CBlockIndex(const CBlock& block);
@@ -287,7 +286,6 @@ public:
     int64_t GetZerocoinSupply() const;
     int64_t GetZcMints(libzerocoin::CoinDenomination denom) const;
     int64_t GetZcMintsAmount(libzerocoin::CoinDenomination denom) const;
-    bool MintedDenomination(libzerocoin::CoinDenomination denom) const;
 };
 
 /** Used to marshal pointers into hashes for db storage. */
@@ -333,15 +331,10 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-        if (fOldSer) {
-            int64_t nMint = 0;
-            READWRITE(nMint);
-        }
-        READWRITE(nMoneySupply);
-        READWRITE(nFlags);
-
         if (fNewSer) {
             // Serialization with client version > 4009900
+            READWRITE(nMoneySupply);
+            READWRITE(nFlags);
             READWRITE(vStakeModifier);
             // block header
             READWRITE(this->nVersion);
@@ -353,7 +346,6 @@ public:
             if(this->nVersion > 3) {
                 READWRITE(mapZerocoinSupply);
                 if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
-                READWRITE(vMintDenominationsInBlock);
             }
 
         } else {
@@ -381,6 +373,7 @@ public:
             READWRITE(nBits);
             READWRITE(nNonce);
             if(this->nVersion > 3) {
+                std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
                 READWRITE(nAccumulatorCheckpoint);
                 READWRITE(mapZerocoinSupply);
                 READWRITE(vMintDenominationsInBlock);
