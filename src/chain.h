@@ -533,6 +533,10 @@ public:
 };
 
 /** Used to marshal pointers into hashes for db storage. */
+
+// New serialization introduced with 4.0.99
+static const int DBI_OLD_SER_VERSION = 4009900;
+
 class CDiskBlockIndex : public CBlockIndex
 {
 public:
@@ -553,10 +557,13 @@ public:
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nSerVersion)
     {
         if (!(nType & SER_GETHASH))
-            READWRITE(VARINT(nVersion));
+            READWRITE(VARINT(nSerVersion));
+
+        // Serialization version (== CLIENT_VERSION)
+        const bool fNewSer = (nSerVersion > DBI_OLD_SER_VERSION);
 
         READWRITE(VARINT(nHeight));
         READWRITE(VARINT(nStatus));
@@ -571,20 +578,50 @@ public:
         READWRITE(nMint);
         READWRITE(nMoneySupply);
         READWRITE(nFlags);
-        READWRITE(vStakeModifier);
 
-        // block header
-        READWRITE(this->nVersion);
-        READWRITE(hashPrev);
-        READWRITE(hashNext);
-        READWRITE(hashMerkleRoot);
-        READWRITE(nTime);
-        READWRITE(nBits);
-        READWRITE(nNonce);
-        if(this->nVersion > 3) {
-            READWRITE(mapZerocoinSupply);
-            if(this->nVersion < 7) {
+        if (fNewSer) {
+            // Serialization with client version > 4009900
+            READWRITE(vStakeModifier);
+            // block header
+            READWRITE(this->nVersion);
+            READWRITE(hashPrev);
+            READWRITE(hashMerkleRoot);
+            READWRITE(nTime);
+            READWRITE(nBits);
+            READWRITE(nNonce);
+            if(this->nVersion > 3) {
+                READWRITE(mapZerocoinSupply);
+                if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
+                READWRITE(vMintDenominationsInBlock);
+            }
+
+        } else {
+            // Serialization with client version <= 4009900
+            if (!Params().IsStakeModifierV2(nHeight)) {
+                uint64_t nStakeModifier = 0;
+                READWRITE(nStakeModifier);
+                this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
+            } else {
+                uint256 nStakeModifierV2 = 0;
+                READWRITE(nStakeModifierV2);
+                this->SetStakeModifier(nStakeModifierV2);
+            }
+            if (IsProofOfStake()) {
+                COutPoint prevoutStake;
+                unsigned int nStakeTime;
+                READWRITE(prevoutStake);
+                READWRITE(nStakeTime);
+            }
+            READWRITE(this->nVersion);
+            READWRITE(hashPrev);
+            READWRITE(hashNext);
+            READWRITE(hashMerkleRoot);
+            READWRITE(nTime);
+            READWRITE(nBits);
+            READWRITE(nNonce);
+            if(this->nVersion > 3) {
                 READWRITE(nAccumulatorCheckpoint);
+                READWRITE(mapZerocoinSupply);
                 READWRITE(vMintDenominationsInBlock);
             }
         }
