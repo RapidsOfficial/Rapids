@@ -33,7 +33,6 @@ namespace libzerocoin
 class AccumulatorProofOfKnowledge {
 public:
     AccumulatorProofOfKnowledge() {};
-    AccumulatorProofOfKnowledge(const AccumulatorAndProofParams* p): params(p) {};
     ADD_SERIALIZE_METHODS;
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
@@ -44,7 +43,6 @@ public:
         READWRITE(s_delta); READWRITE(s_xi); READWRITE(s_phi); READWRITE(s_gamma); READWRITE(s_psi);
     }
 private:
-    const AccumulatorAndProofParams* params;
     CBigNum C_e, C_u, C_r;
     CBigNum st_1, st_2, st_3;
     CBigNum t_1, t_2, t_3, t_4;
@@ -58,7 +56,6 @@ private:
 class SerialNumberSignatureOfKnowledge {
 public:
     SerialNumberSignatureOfKnowledge(){};
-    SerialNumberSignatureOfKnowledge(const ZerocoinParams* p): params(p) {}
     ADD_SERIALIZE_METHODS;
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
@@ -68,7 +65,6 @@ public:
         READWRITE(hash);
     }
 private:
-    const ZerocoinParams* params;
     uint256 hash;
     std::vector<CBigNum> s_notprime;
     std::vector<CBigNum> sprime;
@@ -79,15 +75,6 @@ private:
 class CommitmentProofOfKnowledge {
 public:
     CommitmentProofOfKnowledge() {};
-    CommitmentProofOfKnowledge(const IntegerGroupParams* ap, const IntegerGroupParams* bp): ap(ap), bp(bp) {};
-    template<typename Stream>
-    CommitmentProofOfKnowledge(const IntegerGroupParams* aParams, const IntegerGroupParams* bParams, Stream& strm):
-        ap(aParams),
-        bp(bParams)
-    {
-        strm >> *this;
-    }
-
     ADD_SERIALIZE_METHODS;
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
@@ -95,7 +82,6 @@ public:
         READWRITE(S1); READWRITE(S2); READWRITE(S3); READWRITE(challenge);
     }
 private:
-    const IntegerGroupParams *ap, *bp;
     CBigNum S1, S2, S3, challenge;
 };
 
@@ -109,31 +95,10 @@ class CoinSpend
 {
 public:
 
-    CoinSpend(){};
-
-    //! \param paramsV1 - if this is a V1 zerocoin, then use params that existed with initial modulus, ignored otherwise
-    //! \param paramsV2 - params that begin when V2 zerocoins begin on the PIVX network
-    //! \param strm - a serialized CoinSpend
-    template <typename Stream>
-    CoinSpend(const ZerocoinParams* paramsV1, const ZerocoinParams* paramsV2, Stream& strm) :
-        accumulatorPoK(&paramsV2->accumulatorParams),
-        serialNumberSoK(paramsV1),
-        commitmentPoK(&paramsV1->serialNumberSoKCommitmentGroup, &paramsV2->accumulatorParams.accumulatorPoKCommitmentGroup)
-
-    {
-        Stream strmCopy = strm;
-        strm >> *this;
-
-        //Need to reset some parameters if v2
-        if (getCoinVersion() >= PrivateCoin::PUBKEY_VERSION) {
-            accumulatorPoK = AccumulatorProofOfKnowledge(&paramsV2->accumulatorParams);
-            serialNumberSoK = SerialNumberSignatureOfKnowledge(paramsV2);
-            commitmentPoK = CommitmentProofOfKnowledge(&paramsV2->serialNumberSoKCommitmentGroup, &paramsV2->accumulatorParams.accumulatorPoKCommitmentGroup);
-            strmCopy >> *this;
-        }
-    }
-
+    CoinSpend() {};
+    CoinSpend(CDataStream& strm) { strm >> *this; }
     virtual ~CoinSpend(){};
+
     const CBigNum& getCoinSerialNumber() const { return this->coinSerialNumber; }
     CoinDenomination getDenomination() const { return this->denomination; }
     uint32_t getAccumulatorChecksum() const { return this->accChecksum; }
