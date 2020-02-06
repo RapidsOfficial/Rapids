@@ -352,6 +352,7 @@ set(WALLET_SOURCES
         ./src/wallet/rpcwallet.cpp
         ./src/kernel.cpp
         ./src/wallet/wallet.cpp
+        ./src/wallet/wallet_zerocoin.cpp
         ./src/wallet/wallet_ismine.cpp
         ./src/wallet/walletdb.cpp
         ./src/zpiv/zpivwallet.cpp
