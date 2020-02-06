@@ -468,7 +468,7 @@ public:
 
         // Blocks v7
         nBlockV7StartHeight = nBlockZerocoinV2;
-        nBlockLastAccumulatorCheckpoint = nBlockZerocoinV2-1; // no accumul. checkpoints check on regtest
+        nBlockLastAccumulatorCheckpoint = nBlockZerocoinV2+1; // no accumul. checkpoints check on regtest
 
         // New P2P messages signatures
         nBlockEnforceNewMessageSignatures = 1;

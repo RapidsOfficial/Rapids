@@ -217,13 +217,11 @@ public:
             CMutableTransaction& txNew,
             std::vector<CDeterministicMint>& vDMints,
             CReserveKey* reservekey,
-            int64_t& nFeeRet,
             std::string& strFailReason,
-            const CCoinControl* coinControl = NULL,
-            const bool isZCSpendChange = false);
+            const CCoinControl* coinControl = nullptr);
 
-    // - PublicSpends
-    bool SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, std::vector<CZerocoinMint>& vMintsSelected, bool fMintChange, bool fMinimizeChange, std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo, CBitcoinAddress* changeAddress = nullptr);
+    //- PublicSpends
+    bool SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, std::vector<CZerocoinMint>& vMintsSelected, std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo, CBitcoinAddress* changeAddress = nullptr);
     bool MintsToInputVectorPublicSpend(std::map<CBigNum, CZerocoinMint>& mapMintsSelected, const uint256& hashTxOut, std::vector<CTxIn>& vin, CZerocoinSpendReceipt& receipt, libzerocoin::SpendType spendType, CBlockIndex* pindexCheckpoint = nullptr);
     bool CreateZCPublicSpendTransaction(
             CAmount nValue,
@@ -232,8 +230,6 @@ public:
             CZerocoinSpendReceipt& receipt,
             std::vector<CZerocoinMint>& vSelectedMints,
             std::vector<CDeterministicMint>& vNewMints,
-            bool fMintChange,
-            bool fMinimizeChange,
             std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo,
             CBitcoinAddress* changeAddress = nullptr);
 

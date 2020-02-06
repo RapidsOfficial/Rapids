@@ -3440,17 +3440,15 @@ UniValue mintzerocoin(const UniValue& params, bool fHelp)
 
 UniValue spendzerocoin(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() > 5 || params.size() < 3)
+    if (fHelp || params.size() > 3 || params.size() < 1)
         throw std::runtime_error(
-            "spendzerocoin amount mintchange minimizechange ( \"address\" )\n"
+            "spendzerocoin amount ( \"address\" )\n"
             "\nSpend zPIV to a PIV address.\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
             "1. amount          (numeric, required) Amount to spend.\n"
-            "2. mintchange      (boolean, required) Re-mint any leftover change.\n"
-            "3. minimizechange  (boolean, required) Try to minimize the returning change  [false]\n"
-            "4. \"address\"     (string, optional, default=change) Send to specified address or to a new change address.\n"
+            "2. \"address\"     (string, optional, default=change) Send to specified address or to a new change address.\n"
             "                       If there is change then an address is required\n"
 
             "\nResult:\n"
@@ -3477,8 +3475,8 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
             "}\n"
 
             "\nExamples\n" +
-            HelpExampleCli("spendzerocoin", "5000 false true \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\"") +
-            HelpExampleRpc("spendzerocoin", "5000 false true \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
+            HelpExampleCli("spendzerocoin", "5000 \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\"") +
+            HelpExampleRpc("spendzerocoin", "5000 \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
@@ -3486,15 +3484,10 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_WALLET_ERROR, "zPIV is currently disabled due to maintenance.");
 
     CAmount nAmount = AmountFromValue(params[0]);        // Spending amount
-    const bool fMintChange = params[1].get_bool();       // Mint change to zPIV
-    const bool fMinimizeChange = params[2].get_bool();    // Minimize change
-    const std::string address_str = (params.size() > 3 ? params[3].get_str() : "");
-
-    if (!Params().IsRegTestNet() && fMintChange)
-        throw JSONRPCError(RPC_WALLET_ERROR, "zPIV minting is DISABLED (except for regtest), cannot mint change");
+    const std::string address_str = (params.size() > 1 ? params[1].get_str() : "");
 
     std::vector<CZerocoinMint> vMintsSelected;
-    return DoZpivSpend(nAmount, fMintChange, fMinimizeChange, vMintsSelected, address_str);
+    return DoZpivSpend(nAmount, vMintsSelected, address_str);
 }
 
 
@@ -3570,16 +3563,12 @@ UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
         nAmount += mint.GetDenominationAsAmount();
     }
 
-    return DoZpivSpend(nAmount, false, true, vMintsSelected, address_str);
+    return DoZpivSpend(nAmount, vMintsSelected, address_str);
 }
 
 
-extern UniValue DoZpivSpend(const CAmount nAmount, bool fMintChange, bool fMinimizeChange, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str)
+extern UniValue DoZpivSpend(const CAmount nAmount, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str)
 {
-    // zerocoin mint / v2 spend is disabled. fMintChange should be false here. Double check
-    if (!Params().IsRegTestNet() && fMintChange)
-        throw JSONRPCError(RPC_WALLET_ERROR, "zPIV minting is DISABLED (except for regtest), cannot mint change");
-
     int64_t nTimeStart = GetTimeMillis();
     CBitcoinAddress address = CBitcoinAddress(); // Optional sending address. Dummy initialization here.
     CWalletTx wtx;
@@ -3595,7 +3584,7 @@ extern UniValue DoZpivSpend(const CAmount nAmount, bool fMintChange, bool fMinim
     }
 
     EnsureWalletIsUnlocked();
-    fSuccess = pwalletMain->SpendZerocoin(nAmount, wtx, receipt, vMintsSelected, fMintChange, fMinimizeChange, outputs, nullptr);
+    fSuccess = pwalletMain->SpendZerocoin(nAmount, wtx, receipt, vMintsSelected, outputs, nullptr);
 
     if (!fSuccess)
         throw JSONRPCError(RPC_WALLET_ERROR, receipt.GetStatusMessage());
@@ -4344,6 +4333,6 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
     }
 
     std::vector<CZerocoinMint> vMintsSelected = {mint};
-    return DoZpivSpend(mint.GetDenominationAsAmount(), false, true, vMintsSelected, address_str);
+    return DoZpivSpend(mint.GetDenominationAsAmount(), vMintsSelected, address_str);
 }
 

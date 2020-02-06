@@ -3887,7 +3887,7 @@ bool CWallet::CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, CTxOu
     return true;
 }
 
-bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransaction& txNew, std::vector<CDeterministicMint>& vDMints, CReserveKey* reservekey, int64_t& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl, const bool isZCSpendChange)
+bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransaction& txNew, std::vector<CDeterministicMint>& vDMints, CReserveKey* reservekey, std::string& strFailReason, const CCoinControl* coinControl)
 {
     if (IsLocked()) {
         strFailReason = _("Error: Wallet locked, unable to create transaction!");
@@ -3900,12 +3900,7 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransa
     CAmount nValueRemaining = 0;
     while (true) {
         //mint a coin with the closest denomination to what is being requested
-        nFeeRet = std::max(static_cast<int>(txNew.vout.size()), 1) * Params().Zerocoin_MintFee();
-        nValueRemaining = nValue - nMintingValue - (isZCSpendChange ? nFeeRet : 0);
-
-        // if this is change of a zerocoinspend, then we can't mint all change, at least something must be given as a fee
-        if (isZCSpendChange && nValueRemaining <= 1 * COIN)
-            break;
+        nValueRemaining = nValue - nMintingValue;
 
         libzerocoin::CoinDenomination denomination = libzerocoin::AmountToClosestDenomination(nValueRemaining, nValueRemaining);
         if (denomination == libzerocoin::ZQ_ERROR)
@@ -3928,51 +3923,41 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue, CMutableTransa
     }
 
     // calculate fee
-    CAmount nFee = Params().Zerocoin_MintFee() * txNew.vout.size();
+    CAmount nTotalValue = nValue + Params().Zerocoin_MintFee() * txNew.vout.size();
 
-    // no ability to select more coins if this is a ZCSpend change mint
-    CAmount nTotalValue = (isZCSpendChange ? nValue : (nValue + nFee));
-
-    // check for a zerocoinspend that mints the change
     CAmount nValueIn = 0;
     std::set<std::pair<const CWalletTx*, unsigned int> > setCoins;
-    if (isZCSpendChange) {
-        nValueIn = nValue;
-    } else {
-        // select UTXO's to use
-        if (!SelectCoins(nTotalValue, setCoins, nValueIn, coinControl)) {
-            strFailReason = _("Insufficient or insufficient confirmed funds, you might need to wait a few minutes and try again.");
-            return false;
-        }
-
-        // Fill vin
-        for (const std::pair<const CWalletTx*, unsigned int>& coin : setCoins)
-            txNew.vin.push_back(CTxIn(coin.first->GetHash(), coin.second));
+    // select UTXO's to use
+    if (!SelectCoins(nTotalValue, setCoins, nValueIn, coinControl)) {
+        strFailReason = _("Insufficient or insufficient confirmed funds, you might need to wait a few minutes and try again.");
+        return false;
     }
+
+    // Fill vin
+    for (const std::pair<const CWalletTx*, unsigned int>& coin : setCoins)
+        txNew.vin.push_back(CTxIn(coin.first->GetHash(), coin.second));
+
 
     //any change that is less than 0.0100000 will be ignored and given as an extra fee
     //also assume that a zerocoinspend that is minting the change will not have any change that goes to Piv
     CAmount nChange = nValueIn - nTotalValue; // Fee already accounted for in nTotalValue
-    if (nChange > 1 * CENT && !isZCSpendChange) {
+    if (nChange > 1 * CENT) {
         // Fill a vout to ourself using the largest contributing address
         CScript scriptChange = GetLargestContributor(setCoins);
 
         //add to the transaction
         CTxOut outChange(nChange, scriptChange);
         txNew.vout.push_back(outChange);
-    } else {
-        if (reservekey)
-            reservekey->ReturnKey();
+    } else if (reservekey) {
+        reservekey->ReturnKey();
     }
 
-    // Sign if these are pivx outputs - NOTE that zPIV outputs are signed later in SoK
-    if (!isZCSpendChange) {
-        int nIn = 0;
-        for (const std::pair<const CWalletTx*, unsigned int>& coin : setCoins) {
-            if (!SignSignature(*this, *coin.first, txNew, nIn++)) {
-                strFailReason = _("Signing transaction failed");
-                return false;
-            }
+    // Sign
+    int nIn = 0;
+    for (const std::pair<const CWalletTx*, unsigned int>& coin : setCoins) {
+        if (!SignSignature(*this, *coin.first, txNew, nIn++)) {
+            strFailReason = _("Signing transaction failed");
+            return false;
         }
     }
 
@@ -4055,8 +4040,6 @@ bool CWallet::CreateZCPublicSpendTransaction(
         CZerocoinSpendReceipt& receipt,
         std::vector<CZerocoinMint>& vSelectedMints,
         std::vector<CDeterministicMint>& vNewMints,
-        bool fMintChange,
-        bool fMinimizeChange,
         std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo,
         CBitcoinAddress* changeAddress)
 {
@@ -4101,7 +4084,7 @@ bool CWallet::CreateZCPublicSpendTransaction(
         // Select the zPIV mints to use in this spend
         std::map<libzerocoin::CoinDenomination, CAmount> DenomMap = GetMyZerocoinDistribution();
         std::list<CMintMeta> listMints(setMints.begin(), setMints.end());
-        vMintsToFetch = SelectMintsFromList(nValueToSelect, nValueSelected, nMaxSpends, fMinimizeChange,
+        vMintsToFetch = SelectMintsFromList(nValueToSelect, nValueSelected, nMaxSpends,
                                              nCoinsReturned, listMints, DenomMap, nNeededSpends);
         for (auto& meta : vMintsToFetch) {
             CZerocoinMint mint;
@@ -4234,17 +4217,8 @@ bool CWallet::CreateZCPublicSpendTransaction(
                     scriptChange = GetScriptForDestination(vchPubKey.GetID());
                 }
                 //mint change as zerocoins
-                if (fMintChange) {
-                    CAmount nFeeRet = 0;
-                    std::string strFailReason = "";
-                    if (!CreateZerocoinMintTransaction(nChange, txNew, vNewMints, &reserveKey, nFeeRet, strFailReason, NULL, true)) {
-                        receipt.SetStatus(_("Failed to create mint"), nStatus);
-                        return false;
-                    }
-                } else {
-                    CTxOut txOutChange(nValueSelected - nValue, scriptChange);
-                    txNew.vout.push_back(txOutChange);
-                }
+                CTxOut txOutChange(nValueSelected - nValue, scriptChange);
+                txNew.vout.push_back(txOutChange);
             }
 
             //hash with only the output info in it to be used in Signature of Knowledge
@@ -4468,9 +4442,6 @@ std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector
         return _("Insufficient funds");
     }
 
-    CReserveKey reservekey(this);
-    int64_t nFeeRequired;
-
     if (IsLocked()) {
         std::string strError = _("Error: Wallet locked, unable to create transaction!");
         LogPrintf("MintZerocoin() : %s", strError.c_str());
@@ -4478,10 +4449,9 @@ std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector
     }
 
     std::string strError;
+    CReserveKey reservekey(this);
     CMutableTransaction txNew;
-    if (!CreateZerocoinMintTransaction(nValue, txNew, vDMints, &reservekey, nFeeRequired, strError, coinControl)) {
-        if (nValue + nFeeRequired > GetBalance())
-            return strprintf(_("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!"), FormatMoney(nFeeRequired).c_str());
+    if (!CreateZerocoinMintTransaction(nValue, txNew, vDMints, &reservekey, strError, coinControl)) {
         return strError;
     }
 
@@ -4515,8 +4485,6 @@ bool CWallet::SpendZerocoin(
         CWalletTx& wtxNew,
         CZerocoinSpendReceipt& receipt,
         std::vector<CZerocoinMint>& vMintsSelected,
-        bool fMintChange,
-        bool fMinimizeChange,
         std::list<std::pair<CBitcoinAddress*,CAmount>> addressesTo,
         CBitcoinAddress* changeAddress
 )
@@ -4538,8 +4506,6 @@ bool CWallet::SpendZerocoin(
             receipt,
             vMintsSelected,
             vNewMints,
-            fMintChange,
-            fMinimizeChange,
             addressesTo,
             changeAddress
     )) {
