@@ -119,7 +119,7 @@
                <string notr="true">padding:0px;margin:0px;</string>
               </property>
               <property name="text">
-               <string>480.0685 PIV</string>
+               <string notr="true">480.0685 PIV</string>
               </property>
              </widget>
             </item>
@@ -140,7 +140,7 @@
              </spacer>
             </item>
             <item alignment="Qt::AlignVCenter">
-             <widget class="QLabel" name="label_16">
+             <widget class="QLabel" name="typeSpacerTop">
               <property name="minimumSize">
                <size>
                 <width>1</width>
@@ -188,7 +188,7 @@ border:none;</string>
                </size>
               </property>
               <property name="text">
-               <string>1,000 zPIV</string>
+               <string notr="true">1,000 zPIV</string>
               </property>
              </widget>
             </item>
@@ -388,7 +388,7 @@ border:none;</string>
                <item>
                 <widget class="QLabel" name="labelAmountPiv">
                  <property name="text">
-                  <string>480.0685 PIV</string>
+                  <string notr="true">480.0685 PIV</string>
                  </property>
                 </widget>
                </item>
@@ -411,7 +411,7 @@ border:none;</string>
                  <item>
                   <widget class="QLabel" name="labelPendingPiv">
                    <property name="text">
-                    <string>6.943 PIV</string>
+                    <string notr="true">6.943 PIV</string>
                    </property>
                   </widget>
                  </item>
@@ -445,7 +445,7 @@ border:none;</string>
                  <item>
                   <widget class="QLabel" name="labelImmaturePiv">
                    <property name="text">
-                    <string>10 PIV</string>
+                    <string notr="true">10 PIV</string>
                    </property>
                   </widget>
                  </item>
@@ -456,7 +456,7 @@ border:none;</string>
             </layout>
            </item>
            <item>
-            <widget class="QLabel" name="label_9">
+            <widget class="QLabel" name="typeSpacerExpanded">
              <property name="minimumSize">
               <size>
                <width>1</width>
@@ -480,91 +480,102 @@ border:none;</string>
             </widget>
            </item>
            <item>
-            <layout class="QVBoxLayout" name="verticalLayout_8">
-             <property name="spacing">
-              <number>0</number>
-             </property>
-             <property name="leftMargin">
-              <number>30</number>
-             </property>
-             <item>
-              <layout class="QVBoxLayout" name="verticalLayout">
-               <item>
-                <widget class="QLabel" name="labelTitle2">
-                 <property name="text">
-                  <string>Available</string>
-                 </property>
-                </widget>
-               </item>
-               <item>
-                <widget class="QLabel" name="labelAmountzPiv">
-                 <property name="text">
-                  <string>1,000 zPIV</string>
-                 </property>
-                </widget>
-               </item>
-              </layout>
-             </item>
-             <item>
-              <layout class="QHBoxLayout" name="horizontalLayout">
-               <property name="spacing">
-                <number>0</number>
-               </property>
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout_5">
-                 <item>
-                  <widget class="QLabel" name="labelTitle5">
-                   <property name="text">
-                    <string>Pending</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="labelPendingzPiv">
-                   <property name="text">
-                    <string>60 zPIV</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-               <item>
-                <spacer name="horizontalSpacer_4">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
-                 </property>
-                 <property name="sizeType">
-                  <enum>QSizePolicy::Fixed</enum>
-                 </property>
-                 <property name="sizeHint" stdset="0">
-                  <size>
-                   <width>40</width>
-                   <height>20</height>
-                  </size>
-                 </property>
-                </spacer>
-               </item>
-               <item>
-                <layout class="QVBoxLayout" name="verticalLayout_6">
-                 <item>
-                  <widget class="QLabel" name="labelTitle6">
-                   <property name="text">
-                    <string>Immature</string>
-                   </property>
-                  </widget>
-                 </item>
-                 <item>
-                  <widget class="QLabel" name="labelImmaturezPiv">
-                   <property name="text">
-                    <string>10 zPIV</string>
-                   </property>
-                  </widget>
-                 </item>
-                </layout>
-               </item>
-              </layout>
-             </item>
-            </layout>
+            <widget class="QWidget" name="zerocoinBalances" native="true">
+             <layout class="QVBoxLayout" name="verticalLayout_8">
+              <property name="spacing">
+               <number>0</number>
+              </property>
+              <property name="leftMargin">
+               <number>30</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout">
+                <item>
+                 <widget class="QLabel" name="labelTitleAvailablezPiv">
+                  <property name="text">
+                   <string>Available</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="labelAvailablezPiv">
+                  <property name="text">
+                   <string notr="true">1,000 zPIV</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <property name="spacing">
+                 <number>0</number>
+                </property>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_5">
+                  <item>
+                   <widget class="QLabel" name="labelTitlePendingzPiv">
+                    <property name="text">
+                     <string>Pending</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="labelPendingzPiv">
+                    <property name="text">
+                     <string notr="true">60 zPIV</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_4">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_6">
+                  <item>
+                   <widget class="QLabel" name="labelTitleImmaturezPiv">
+                    <property name="text">
+                     <string>Immature</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="labelImmaturezPiv">
+                    <property name="text">
+                     <string notr="true">10 zPIV</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
            </item>
           </layout>
          </item>
