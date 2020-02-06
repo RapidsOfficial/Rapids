@@ -185,7 +185,6 @@ BITCOIN_CORE_H = \
   zpivchain.h \
   zpiv/deterministicmint.h \
   zpiv/mintpool.h \
-  zpiv/witness.h \
   zpiv/zerocoin.h \
   zpiv/zpivtracker.h \
   zpiv/zpivwallet.h \
@@ -281,7 +280,6 @@ libbitcoin_wallet_a_SOURCES = \
   zpiv/deterministicmint.cpp \
   zpiv/zerocoin.cpp \
   zpiv/mintpool.cpp \
-  zpiv/witness.cpp \
   zpiv/zpivwallet.cpp \
   zpiv/zpivtracker.cpp \
   stakeinput.cpp \
@@ -332,7 +330,6 @@ libzerocoin_libbitcoin_zerocoin_a_CPPFLAGS = $(AM_CPPFLAGS) $(BOOST_CPPFLAGS)
 libzerocoin_libbitcoin_zerocoin_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libzerocoin_libbitcoin_zerocoin_a_SOURCES = \
   libzerocoin/Accumulator.h \
-  libzerocoin/AccumulatorProofOfKnowledge.h \
   libzerocoin/bignum.h \
   libzerocoin/Coin.h \
   libzerocoin/CoinRandomnessSchnorrSignature.h \
@@ -341,20 +338,16 @@ libzerocoin_libbitcoin_zerocoin_a_SOURCES = \
   libzerocoin/Denominations.h \
   libzerocoin/ParamGeneration.h \
   libzerocoin/Params.h \
-  libzerocoin/SerialNumberSignatureOfKnowledge.h \
   libzerocoin/SpendType.h \
   libzerocoin/ZerocoinDefines.h \
   libzerocoin/bignum.cpp \
   libzerocoin/Accumulator.cpp \
-  libzerocoin/AccumulatorProofOfKnowledge.cpp \
   libzerocoin/Coin.cpp \
   libzerocoin/CoinRandomnessSchnorrSignature.cpp \
   libzerocoin/CoinSpend.cpp \
-  libzerocoin/Commitment.cpp \
   libzerocoin/Denominations.cpp \
   libzerocoin/ParamGeneration.cpp \
-  libzerocoin/Params.cpp \
-  libzerocoin/SerialNumberSignatureOfKnowledge.cpp
+  libzerocoin/Params.cpp
 if USE_NUM_GMP
   libzerocoin_libbitcoin_zerocoin_a_SOURCES += libzerocoin/bignum_gmp.cpp
 endif

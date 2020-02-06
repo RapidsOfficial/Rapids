@@ -17,11 +17,9 @@
 #include <streams.h>
 #include <utilstrencodings.h>
 #include "Accumulator.h"
-#include "AccumulatorProofOfKnowledge.h"
 #include "Coin.h"
 #include "Commitment.h"
 #include "Params.h"
-#include "SerialNumberSignatureOfKnowledge.h"
 #include "SpendType.h"
 
 #include "bignum.h"
@@ -30,6 +28,65 @@
 
 namespace libzerocoin
 {
+// Lagacy zPIV - Only for serialization
+// Proof that a value inside a commitment C is accumulated in accumulator A
+class AccumulatorProofOfKnowledge {
+public:
+    AccumulatorProofOfKnowledge() {};
+    ADD_SERIALIZE_METHODS;
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(C_e); READWRITE(C_u); READWRITE(C_r); READWRITE(st_1); READWRITE(st_2); READWRITE(st_3);
+        READWRITE(t_1); READWRITE(t_2); READWRITE(t_3); READWRITE(t_4); READWRITE(s_alpha); READWRITE(s_beta);
+        READWRITE(s_zeta); READWRITE(s_sigma); READWRITE(s_eta); READWRITE(s_epsilon);
+        READWRITE(s_delta); READWRITE(s_xi); READWRITE(s_phi); READWRITE(s_gamma); READWRITE(s_psi);
+    }
+private:
+    CBigNum C_e, C_u, C_r;
+    CBigNum st_1, st_2, st_3;
+    CBigNum t_1, t_2, t_3, t_4;
+    CBigNum s_alpha, s_beta, s_zeta, s_sigma, s_eta, s_epsilon, s_delta;
+    CBigNum s_xi, s_phi, s_gamma, s_psi;
+};
+
+// Lagacy zPIV - Only for serialization
+// Signature of knowledge attesting that the signer knows the values to
+// open a commitment to a coin with given serial number
+class SerialNumberSignatureOfKnowledge {
+public:
+    SerialNumberSignatureOfKnowledge(){};
+    ADD_SERIALIZE_METHODS;
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(s_notprime);
+        READWRITE(sprime);
+        READWRITE(hash);
+    }
+private:
+    uint256 hash;
+    std::vector<CBigNum> s_notprime;
+    std::vector<CBigNum> sprime;
+};
+
+// Lagacy zPIV - Only for serialization
+// Proof that two commitments open to the same value (BROKEN)
+class CommitmentProofOfKnowledge {
+public:
+    CommitmentProofOfKnowledge() {};
+    ADD_SERIALIZE_METHODS;
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    {
+        READWRITE(S1); READWRITE(S2); READWRITE(S3); READWRITE(challenge);
+    }
+private:
+    CBigNum S1, S2, S3, challenge;
+};
+
+
+// Lagacy zPIV - Only for serialization
 /** The complete proof needed to spend a zerocoin.
  * Composes together a proof that a coin is accumulated
  * and that it has a given serial number.
@@ -38,81 +95,13 @@ class CoinSpend
 {
 public:
 
-    CoinSpend(){};
-
-    //! \param paramsV1 - if this is a V1 zerocoin, then use params that existed with initial modulus, ignored otherwise
-    //! \param paramsV2 - params that begin when V2 zerocoins begin on the PIVX network
-    //! \param strm - a serialized CoinSpend
-    template <typename Stream>
-    CoinSpend(const ZerocoinParams* paramsV1, const ZerocoinParams* paramsV2, Stream& strm) :
-        accumulatorPoK(&paramsV2->accumulatorParams),
-        serialNumberSoK(paramsV1),
-        commitmentPoK(&paramsV1->serialNumberSoKCommitmentGroup, &paramsV2->accumulatorParams.accumulatorPoKCommitmentGroup)
-
-    {
-        Stream strmCopy = strm;
-        strm >> *this;
-
-        //Need to reset some parameters if v2
-        if (getCoinVersion() >= PrivateCoin::PUBKEY_VERSION) {
-            accumulatorPoK = AccumulatorProofOfKnowledge(&paramsV2->accumulatorParams);
-            serialNumberSoK = SerialNumberSignatureOfKnowledge(paramsV2);
-            commitmentPoK = CommitmentProofOfKnowledge(&paramsV2->serialNumberSoKCommitmentGroup, &paramsV2->accumulatorParams.accumulatorPoKCommitmentGroup);
-            strmCopy >> *this;
-        }
-    }
-
-    /**Generates a proof spending a zerocoin.
-	 *
-	 * To use this, provide an unspent PrivateCoin, the latest Accumulator
-	 * (e.g from the most recent Bitcoin block) containing the public part
-	 * of the coin, a witness to that, and whatever medeta data is needed.
-	 *
-	 * Once constructed, this proof can be serialized and sent.
-	 * It is validated simply be calling validate.
-	 * @warning Validation only checks that the proof is correct
-	 * @warning for the specified values in this class. These values must be validated
-	 *  Clients ought to check that
-	 * 1) params is the right params
-	 * 2) the accumulator actually is in some block
-	 * 3) that the serial number is unspent
-	 * 4) that the transaction
-	 *
-	 * @param p cryptographic parameters
-	 * @param coin The coin to be spend
-	 * @param a The current accumulator containing the coin
-	 * @param witness The witness showing that the accumulator contains the coin
-	 * @param a hash of the partial transaction that contains this coin spend
-	 * @throw ZerocoinException if the process fails
-	 */
-    CoinSpend(const ZerocoinParams* paramsCoin, const ZerocoinParams* paramsAcc, const PrivateCoin& coin, Accumulator& a, const uint32_t& checksum,
-              const AccumulatorWitness& witness, const uint256& ptxHash, const SpendType& spendType);
-
-
+    CoinSpend() {};
+    CoinSpend(CDataStream& strm) { strm >> *this; }
     virtual ~CoinSpend(){};
 
-    /** Returns the serial number of the coin spend by this proof.
-	 *
-	 * @return the coin's serial number
-	 */
     const CBigNum& getCoinSerialNumber() const { return this->coinSerialNumber; }
-
-    /**Gets the denomination of the coin spent in this proof.
-	 *
-	 * @return the denomination
-	 */
     CoinDenomination getDenomination() const { return this->denomination; }
-
-    /**Gets the checksum of the accumulator used in this proof.
-	 *
-	 * @return the checksum
-	 */
     uint32_t getAccumulatorChecksum() const { return this->accChecksum; }
-
-    /**Gets the txout hash used in this proof.
-	 *
-	 * @return the txout hash
-	 */
     uint256 getTxOutHash() const { return ptxHash; }
     CBigNum getAccCommitment() const { return accCommitmentToCoinValue; }
     CBigNum getSerialComm() const { return serialCommitmentToCoinValue; }
@@ -125,7 +114,6 @@ public:
     static std::vector<unsigned char> ParseSerial(CDataStream& s);
 
     virtual const uint256 signatureHash() const;
-    virtual bool Verify(const Accumulator& a, bool verifyParams = true) const;
     bool HasValidSerial(ZerocoinParams* params) const;
     bool HasValidSignature() const;
     void setTxOutHash(uint256 txOutHash) { this->ptxHash = txOutHash; };

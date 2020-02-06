@@ -10,7 +10,6 @@
 #include "txdb.h"
 #include "wallet/walletdb.h"
 #include "zpiv/zpivwallet.h"
-#include "witness.h"
 
 
 CzPIVTracker::CzPIVTracker(std::string strWalletFile)

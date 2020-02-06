@@ -352,10 +352,7 @@ libzerocoin::CoinSpend TxInToZerocoinSpend(const CTxIn& txin)
     std::vector<char, zero_after_free_allocator<char> > dataTxIn;
     dataTxIn.insert(dataTxIn.end(), txin.scriptSig.begin() + BIGNUM_SIZE, txin.scriptSig.end());
     CDataStream serializedCoinSpend(dataTxIn, SER_NETWORK, PROTOCOL_VERSION);
-
-    libzerocoin::ZerocoinParams* paramsAccumulator = Params().Zerocoin_Params(chainActive.Height() < Params().Zerocoin_Block_V2_Start());
-    libzerocoin::CoinSpend spend(Params().Zerocoin_Params(true), paramsAccumulator, serializedCoinSpend);
-
+    libzerocoin::CoinSpend spend(serializedCoinSpend);
     return spend;
 }
 
