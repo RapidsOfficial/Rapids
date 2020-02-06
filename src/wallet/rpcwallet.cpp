@@ -3440,7 +3440,7 @@ UniValue mintzerocoin(const UniValue& params, bool fHelp)
 
 UniValue spendzerocoin(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() > 3 || params.size() < 1)
+    if (fHelp || params.size() > 2 || params.size() < 1)
         throw std::runtime_error(
             "spendzerocoin amount ( \"address\" )\n"
             "\nSpend zPIV to a PIV address.\n" +
@@ -3493,7 +3493,7 @@ UniValue spendzerocoin(const UniValue& params, bool fHelp)
 
 UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 3)
+    if (fHelp || params.size() < 1 || params.size() > 2)
         throw std::runtime_error(
             "spendzerocoinmints mints_list ( \"address\" ) \n"
             "\nSpend zPIV mints to a PIV address.\n" +
@@ -4242,7 +4242,7 @@ UniValue searchdzpiv(const UniValue& params, bool fHelp)
 
 UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 4 || params.size() > 7)
+    if (fHelp || params.size() < 4 || params.size() > 6)
         throw std::runtime_error(
             "spendrawzerocoin \"serialHex\" denom \"randomnessHex\" \"priv key\" ( \"address\" \"mintTxId\" )\n"
             "\nCreate and broadcast a TX spending the provided zericoin.\n"
