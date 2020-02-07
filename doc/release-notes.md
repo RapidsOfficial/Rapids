@@ -72,6 +72,9 @@ RPC Changes
 
 - `setstakesplitthreshold` now accepts decimal amounts. If the provided value is `0`, split staking gets disabled. `getstakesplitthreshold` returns a double.
 
+- `dumpwallet` no longer allows overwriting files. This is a security measure
+   as well as prevents dangerous user mistakes.
+
 ### Removed commands
 
 The following commands have been removed from the RPC interface:

@@ -89,5 +89,8 @@ class WalletDumpTest(PivxTestFramework):
         assert_equal(found_addr_chg, 90 * 2 + 1)  # old reserve keys are marked as change now. todo: The +1 needs to be removed once this is updated (master seed taken as an internal key)
         assert_equal(found_addr_rsv, 90 * 2)
 
+        # Overwriting should fail
+        assert_raises_rpc_error(-8, "already exists", self.nodes[0].dumpwallet, tmpdir + "/node0/wallet.unencrypted.dump")
+
 if __name__ == '__main__':
     WalletDumpTest().main ()
