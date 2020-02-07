@@ -226,6 +226,7 @@ UniValue importaddress(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
+// TODO: Needs further review over the HD flow, staking addresses and multisig import.
 UniValue importwallet(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
@@ -288,13 +289,16 @@ UniValue importwallet(const UniValue& params, bool fHelp)
         std::string strLabel;
         bool fLabel = true;
         for (unsigned int nStr = 2; nStr < vstr.size(); nStr++) {
-            if (boost::algorithm::starts_with(vstr[nStr], "#"))
+            const std::string& type = vstr[nStr];
+            if (boost::algorithm::starts_with(type, "#"))
                 break;
-            if (vstr[nStr] == "change=1")
+            if (type == "change=1")
                 fLabel = false;
-            if (vstr[nStr] == "reserve=1")
+            else if (type == "reserve=1")
                 fLabel = false;
-            if (boost::algorithm::starts_with(vstr[nStr], "label=")) {
+            else if (type == "hdseed")
+                fLabel = false;
+            if (boost::algorithm::starts_with(type, "label=")) {
                 strLabel = DecodeDumpString(vstr[nStr].substr(6));
                 fLabel = true;
             }
@@ -305,7 +309,7 @@ UniValue importwallet(const UniValue& params, bool fHelp)
             continue;
         }
         pwalletMain->mapKeyMetadata[keyid].nCreateTime = nTime;
-        if (fLabel)
+        if (fLabel) // TODO: This is not entirely true.. needs to be reviewed properly.
             pwalletMain->SetAddressBook(keyid, strLabel, AddressBook::AddressBookPurpose::RECEIVE);
         nTimeBegin = std::min(nTimeBegin, nTime);
     }
@@ -364,7 +368,6 @@ UniValue dumpprivkey(const UniValue& params, bool fHelp)
     return CBitcoinSecret(vchSecret).ToString();
 }
 
-// TODO: Update to support HD wallet dump.
 UniValue dumpwallet(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
