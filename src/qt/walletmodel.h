@@ -202,8 +202,6 @@ public:
     bool createZpivSpend(
             CWalletTx &wtxNew,
             std::vector<CZerocoinMint> &vMintsSelected,
-            bool fMintChange,
-            bool fMinimizeChange,
             CZerocoinSpendReceipt &receipt,
             std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
             std::string changeAddress = ""
@@ -211,8 +209,6 @@ public:
 
     bool sendZpiv(
             std::vector<CZerocoinMint> &vMintsSelected,
-            bool fMintChange,
-            bool fMinimizeChange,
             CZerocoinSpendReceipt &receipt,
             std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
             std::string changeAddress = ""
@@ -221,8 +217,6 @@ public:
     bool convertBackZpiv(
             CAmount value,
             std::vector<CZerocoinMint> &vMintsSelected,
-            bool fMintChange,
-            bool fMinimizeChange,
             CZerocoinSpendReceipt &receipt
     );
 

@@ -34,6 +34,11 @@ Notable Changes
 
 (Developers: add your notes here as part of your pull requests whenever possible)
 
+Automatic zPIV backup has been disabled. Thus, the following configuration options have been removed  (either as entries in the pivx.conf file or as startup flags):
+- `autozpivbackup`
+- `backupzpiv`
+- `zpivbackuppath`
+
 
 
 RPC Changes
@@ -50,6 +55,11 @@ RPC Changes
  - `spendrawzerocoin`
 
  These commands are now able to create only *public* spends (private spends were already enabled only on regtest).
+
+- "mintchange" and "minimizechange" boolean input parameters are removed from the following commands:
+ - `spendzerocoin`
+
+ Mints are disabled, therefore it is no longer possible to mint the change of a zerocoin spend. The change is minimized by default.
 
 ### Removed commands
 

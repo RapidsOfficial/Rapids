@@ -976,7 +976,7 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
     if (addr_ptr) {
         outputs.push_back(std::pair<CBitcoinAddress*, CAmount>(addr_ptr, nAmount));
     }
-    if (!pwalletMain->CreateZCPublicSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, false, true, outputs, nullptr))
+    if (!pwalletMain->CreateZCPublicSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, outputs, nullptr))
         throw JSONRPCError(RPC_WALLET_ERROR, receipt.GetStatusMessage());
 
     // output the raw transaction

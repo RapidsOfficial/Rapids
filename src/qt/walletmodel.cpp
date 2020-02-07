@@ -554,8 +554,6 @@ bool WalletModel::mintCoins(CAmount value, CCoinControl* coinControl ,std::strin
 bool WalletModel::createZpivSpend(
         CWalletTx &wtxNew,
         std::vector<CZerocoinMint> &vMintsSelected,
-        bool fMintChange,
-        bool fMinimizeChange,
         CZerocoinSpendReceipt &receipt,
         std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
         std::string changeAddress
@@ -581,8 +579,6 @@ bool WalletModel::createZpivSpend(
             receipt,
             vMintsSelected,
             vNewMints,
-            false, // No more mints
-            fMinimizeChange,
             outputs,
             changeAdd
     )) {
@@ -596,8 +592,6 @@ bool WalletModel::createZpivSpend(
 
 bool WalletModel::sendZpiv(
         std::vector<CZerocoinMint> &vMintsSelected,
-        bool fMintChange,
-        bool fMinimizeChange,
         CZerocoinSpendReceipt &receipt,
         std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
         std::string changeAddress
@@ -615,8 +609,6 @@ bool WalletModel::sendZpiv(
             wtxNew,
             receipt,
             vMintsSelected,
-            false, // No more mints
-            fMinimizeChange,
             outputs,
             changeAdd
     );
@@ -626,8 +618,6 @@ bool WalletModel::sendZpiv(
 bool WalletModel::convertBackZpiv(
         CAmount value,
         std::vector<CZerocoinMint> &vMintsSelected,
-        bool fMintChange,
-        bool fMinimizeChange,
         CZerocoinSpendReceipt &receipt
 ){
     CWalletTx wtxNew;
@@ -636,8 +626,6 @@ bool WalletModel::convertBackZpiv(
             wtxNew,
             receipt,
             vMintsSelected,
-            false, // No more mints
-            fMinimizeChange,
             std::list<std::pair<CBitcoinAddress*, CAmount>>(),
             nullptr
     );

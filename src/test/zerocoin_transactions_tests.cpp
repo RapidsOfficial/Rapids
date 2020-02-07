@@ -34,21 +34,19 @@ BOOST_AUTO_TEST_CASE(zerocoin_spend_test)
     cWallet.zpivTracker = std::unique_ptr<CzPIVTracker>(new CzPIVTracker(cWallet.strWalletFile));
     CMutableTransaction tx;
     CWalletTx* wtx = new CWalletTx(&cWallet, tx);
-    bool fMintChange=true;
-    bool fMinimizeChange=true;
     std::vector<CZerocoinSpend> vSpends;
     std::vector<CZerocoinMint> vMints;
     CAmount nAmount = COIN;
 
     CZerocoinSpendReceipt receipt;
     std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
-    cWallet.SpendZerocoin(nAmount, *wtx, receipt, vMints, fMintChange, fMinimizeChange, outputs);
+    cWallet.SpendZerocoin(nAmount, *wtx, receipt, vMints, outputs);
 
     BOOST_CHECK_MESSAGE(receipt.GetStatus() == ZPIV_TRX_FUNDS_PROBLEMS, strprintf("Failed Invalid Amount Check: %s", receipt.GetStatusMessage()));
 
     nAmount = 1;
     CZerocoinSpendReceipt receipt2;
-    cWallet.SpendZerocoin(nAmount, *wtx, receipt2, vMints, fMintChange, fMinimizeChange, outputs);
+    cWallet.SpendZerocoin(nAmount, *wtx, receipt2, vMints, outputs);
 
     // if using "wallet.dat", instead of "unlocked.dat" need this
     /// BOOST_CHECK_MESSAGE(vString == "Error: Wallet locked, unable to create transaction!"," Locked Wallet Check Failed");
