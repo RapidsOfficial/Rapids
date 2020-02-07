@@ -81,6 +81,7 @@ public:
 class CValidationState;
 
 namespace ZPIVModule {
+    CDataStream ScriptSigToSerializedSpend(const CScript& scriptSig);
     bool createInput(CTxIn &in, CZerocoinMint& mint, uint256 hashTxOut, const int spendVersion);
     PublicCoinSpend parseCoinSpend(const CTxIn &in);
     bool parseCoinSpend(const CTxIn &in, const CTransaction& tx, const CTxOut &prevOut, PublicCoinSpend& publicCoinSpend);
