@@ -415,11 +415,17 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
     mapKeyBirth.clear();
     std::sort(vKeyBirth.begin(), vKeyBirth.end());
 
+    CBlockIndex* tip = chainActive.Tip();
     // produce output
     file << strprintf("# Wallet dump created by PIVX %s (%s)\n", CLIENT_BUILD, CLIENT_DATE);
     file << strprintf("# * Created on %s\n", EncodeDumpTime(GetTime()));
-    file << strprintf("# * Best block at time of backup was %i (%s),\n", chainActive.Height(), chainActive.Tip()->GetBlockHash().ToString());
-    file << strprintf("#   mined on %s\n", EncodeDumpTime(chainActive.Tip()->GetBlockTime()));
+    if (tip) {
+        file << strprintf("# * Best block at time of backup was %i (%s),\n", tip->nHeight,
+                          tip->GetBlockHash().ToString());
+        file << strprintf("#   mined on %s\n", EncodeDumpTime(tip->GetBlockTime()));
+    } else {
+        file << "# Missing tip information\n";
+    }
     file << "\n";
 
     // Add the base58check encoded extended master if the wallet uses HD
@@ -451,7 +457,8 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
             } else {
                 file << "change=1";
             }
-            file << strprintf(" # addr=%s\n", strAddr);
+            const CKeyMetadata& metadata = pwalletMain->mapKeyMetadata[keyid];
+            file << strprintf(" # addr=%s%s\n", strAddr, (metadata.HasKeyOrigin() ? " hdkeypath="+metadata.key_origin.pathToString() : ""));
         }
     }
     file << "\n";

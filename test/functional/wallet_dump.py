@@ -24,18 +24,47 @@ def read_dump(file_name, addrs, hd_master_addr_old):
             # only read non comment lines
             if line[0] != "#" and len(line) > 10:
                 # split out some data
-                key_label, comment = line.split("#")
-                # key = key_label.split(" ")[0]
-                keytype = key_label.split(" ")[2]
-                addr = comment.split(" addr=")[1].strip()
+                key_date_label, comment = line.split("#")
+                key_date_label = key_date_label.split(" ")
+
+                date = key_date_label[1]
+                keytype = key_date_label[2]
+
+                imported_key = date == '1970-01-01T00:00:01Z'
+                if imported_key:
+                    # Imported keys have multiple addresses, no label (keypath) and timestamp
+                    # Skip them
+                    continue
+
+                addr_keypath = comment.split(" addr=")[1]
+                addr = addr_keypath.split(" ")[0]
+                keypath = None
+
+                if keytype == "hdseed=1":
+                    # ensure we have generated a new hd master key
+                    assert hd_master_addr_old != addr
+                    hd_master_addr_ret = addr
+                elif keytype == "script=1":
+                    # scripts don't have keypaths
+                    keypath = None
+                else:
+                    keypath = addr_keypath.rstrip().split("hdkeypath=")[1]
 
                 # count key types
-                if addr in addrs:
-                    found_addr += 1
-                elif keytype == "change=1":
-                    found_addr_chg += 1
-                elif keytype == "reserve=1":
-                    found_addr_rsv += 1
+                for addrObj in addrs:
+                    if addrObj['address'] == addr.split(",")[0] and addrObj['hdkeypath'] == keypath and keytype == "label=":
+                        if addr.startswith('x') or addr.startswith('y'):
+                            # P2PKH address
+                            found_addr += 1
+                        # else: todo: add staking/anonymous addresses here
+                        break
+                    elif keytype == "change=1":
+                        found_addr_chg += 1
+                        break
+                    elif keytype == "reserve=1":
+                        found_addr_rsv += 1
+                        break
+
         return found_addr, found_addr_chg, found_addr_rsv, hd_master_addr_ret
 
 
@@ -60,8 +89,8 @@ class WalletDumpTest(PivxTestFramework):
         addrs = []
         for i in range(0,test_addr_count):
             addr = self.nodes[0].getnewaddress()
-            #vaddr= self.nodes[0].validateaddress(addr) #required to get hd keypath
-            addrs.append(addr)
+            vaddr = self.nodes[0].getaddressinfo(addr)  # required to get hd keypath
+            addrs.append(vaddr)
         # Should be a no-op:
         self.nodes[0].keypoolrefill()
 
