@@ -274,6 +274,7 @@ libbitcoin_wallet_a_SOURCES = \
   wallet/db.cpp \
   addressbook.cpp \
   crypter.cpp \
+  key_io.cpp \
   swifttx.cpp \
   masternode.cpp \
   masternode-budget.cpp \
@@ -390,7 +391,6 @@ libbitcoin_common_a_SOURCES = \
   hash.cpp \
   invalid.cpp \
   key.cpp \
-  key_io.cpp \
   keystore.cpp \
   netbase.cpp \
   protocol.cpp \
