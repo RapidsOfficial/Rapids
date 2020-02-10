@@ -9,13 +9,12 @@
 class CHDChain
 {
 private:
-
     int nVersion;
     CKeyID seed_id;
 
 public:
     static const int CURRENT_VERSION = 1;
-    // Single account counters, todo: move this to the account
+    // Single account counters.
     uint32_t nExternalChainCounter{0};
     uint32_t nInternalChainCounter{0};
 
@@ -27,7 +26,7 @@ public:
     {
         READWRITE(this->nVersion);
         READWRITE(seed_id);
-        // Single account counters, todo: move this to an account class
+        // Single account counters.
         READWRITE(nExternalChainCounter);
         READWRITE(nInternalChainCounter);
     }
@@ -37,6 +36,10 @@ public:
 
     bool SetSeed(const CKeyID& seedId);
     CKeyID GetID() const { return seed_id; }
+
+    uint32_t& GetChainCounter(const bool& internal = false) {
+        return internal ? nInternalChainCounter : nExternalChainCounter;
+    }
 };
 
 #endif // PIVX_HDCHAIN_H

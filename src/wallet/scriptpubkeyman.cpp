@@ -367,6 +367,9 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
 
     // For now only one account.
     int nAccountNumber = 0;
+    // Change type
+    int32_t changeType = internal ? 1 : 0;
+
     // try to get the seed
     if (!wallet->GetKey(hdChain.GetID(), seed))
         throw std::runtime_error(std::string(__func__) + ": seed not found");
@@ -382,7 +385,7 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
     cointypeKey.Derive(accountKey, nAccountNumber | BIP32_HARDENED_KEY_LIMIT);
     // derive m/purpose'/coin_type'/account'/change
     assert(internal ? wallet->CanSupportFeature(FEATURE_HD_SPLIT) : true);
-    accountKey.Derive(changeKey, BIP32_HARDENED_KEY_LIMIT+(internal ? 1 : 0));
+    accountKey.Derive(changeKey, BIP32_HARDENED_KEY_LIMIT + changeType);
 
     // derive child key at next index, skip keys already known to the wallet
     do {
@@ -394,19 +397,15 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
         metadata.key_origin.path.push_back(44 | BIP32_HARDENED_KEY_LIMIT);
         metadata.key_origin.path.push_back(119 | BIP32_HARDENED_KEY_LIMIT);
         metadata.key_origin.path.push_back(nAccountNumber | BIP32_HARDENED_KEY_LIMIT);
-        if (internal) {
-            changeKey.Derive(childKey, hdChain.nInternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
-            metadata.key_origin.path.push_back(1 | BIP32_HARDENED_KEY_LIMIT);
-            metadata.key_origin.path.push_back(hdChain.nInternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
-            hdChain.nInternalChainCounter++;
-        }
-        else {
-            changeKey.Derive(childKey, hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
-            metadata.key_origin.path.push_back(0 | BIP32_HARDENED_KEY_LIMIT);
-            metadata.key_origin.path.push_back(hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
-            hdChain.nExternalChainCounter++;
-        }
+        // Child chain counter
+        uint32_t& chainCounter = hdChain.GetChainCounter(internal);
+        changeKey.Derive(childKey, chainCounter | BIP32_HARDENED_KEY_LIMIT);
+        metadata.key_origin.path.push_back(changeType | BIP32_HARDENED_KEY_LIMIT);
+        metadata.key_origin.path.push_back(chainCounter | BIP32_HARDENED_KEY_LIMIT);
+        chainCounter++;
+
     } while (wallet->HaveKey(childKey.key.GetPubKey().GetID()));
+
     secret = childKey.key;
     metadata.hd_seed_id = hdChain.GetID();
     CKeyID master_id = masterKey.key.GetPubKey().GetID();
