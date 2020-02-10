@@ -440,7 +440,7 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
             CExtKey masterKey;
             masterKey.SetSeed(seed.begin(), seed.size());
 
-            file << "# extended private masterkey: " << EncodeExtKey(masterKey) << "\n\n";
+            file << "# extended private masterkey: " << KeyIO::EncodeExtKey(masterKey) << "\n\n";
         }
     }
 
@@ -450,7 +450,7 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
         std::string strAddr = CBitcoinAddress(keyid).ToString();
         CKey key;
         if (pwalletMain->GetKey(keyid, key)) {
-            file << strprintf("%s %s ", EncodeSecret(key), strTime);
+            file << strprintf("%s %s ", KeyIO::EncodeSecret(key), strTime);
             if (pwalletMain->mapAddressBook.count(keyid)) {
                 file << strprintf("label=%s", EncodeDumpString(pwalletMain->mapAddressBook[keyid].name));
             } else if (keyid == seed_id) {

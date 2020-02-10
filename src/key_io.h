@@ -13,10 +13,16 @@
 
 #include <string>
 
-CKey DecodeSecret(const std::string& str);
-std::string EncodeSecret(const CKey& key);
+namespace KeyIO {
 
-CExtKey DecodeExtKey(const std::string& str);
-std::string EncodeExtKey(const CExtKey& extkey);
+    CKey DecodeSecret(const std::string &str);
+
+    std::string EncodeSecret(const CKey &key);
+
+    CExtKey DecodeExtKey(const std::string &str);
+
+    std::string EncodeExtKey(const CExtKey &extkey);
+
+}
 
 #endif //PIVX_KEY_IO_H

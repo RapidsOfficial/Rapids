@@ -290,7 +290,7 @@ UniValue sethdseed(const UniValue& params, bool fHelp)
     if (params[1].isNull()) {
         master_pub_key = spk_man->GenerateNewSeed();
     } else {
-        CKey key = DecodeSecret(params[1].get_str());
+        CKey key = KeyIO::DecodeSecret(params[1].get_str());
         if (!key.IsValid()) {
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
         }
