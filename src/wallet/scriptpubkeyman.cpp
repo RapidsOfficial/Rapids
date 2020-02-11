@@ -66,7 +66,7 @@ unsigned int ScriptPubKeyMan::GetKeyPoolSize() const
 bool ScriptPubKeyMan::GetKeyFromPool(CPubKey& result, const uint8_t& changeType)
 {
     if (!CanGetAddresses(changeType)) {
-        LogPrintf("Cannot get address\n");
+        LogPrintf("%s: Cannot get address, type: %d\n", __func__ ,changeType);
         return false;
     }
 
@@ -76,7 +76,7 @@ bool ScriptPubKeyMan::GetKeyFromPool(CPubKey& result, const uint8_t& changeType)
         int64_t nIndex;
         if (!ReserveKeyFromKeyPool(nIndex, keypool, changeType)) {
             if (wallet->IsLocked()) {
-                LogPrintf("Wallet locked, cannot get address\n");
+                LogPrintf("%s: Wallet locked, cannot get address\n", __func__);
                 return false;
             }
             CWalletDB batch(wallet->strWalletFile);

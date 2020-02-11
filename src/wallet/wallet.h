@@ -455,7 +455,7 @@ public:
     bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, const bool& fRequestedInternal = false, const bool& fRequestedStaking = false);
     void KeepKey(int64_t nIndex);
     void ReturnKey(int64_t nIndex, const bool& internal = false, const bool& staking = false);
-    bool GetKeyFromPool(CPubKey& key, bool internal = false);
+    bool GetKeyFromPool(CPubKey& key, const uint8_t& type = HDChain::ChangeType::EXTERNAL);
     int64_t GetOldestKeyPoolTime();
     void GetAllReserveKeys(std::set<CKeyID>& setAddress) const;
 
