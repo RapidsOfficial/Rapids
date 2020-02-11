@@ -5,6 +5,14 @@
 
 #include "key.h"
 
+namespace HDChain {
+    namespace ChangeType {
+        static const uint8_t EXTERNAL = 0;
+        static const uint8_t INTERNAL = 1;
+        static const uint8_t STAKING = 2;
+    };
+}
+
 /* Simple HD chain data model */
 class CHDChain
 {
@@ -17,6 +25,7 @@ public:
     // Single account counters.
     uint32_t nExternalChainCounter{0};
     uint32_t nInternalChainCounter{0};
+    uint32_t nStakingChainCounter{0};
 
     CHDChain() { SetNull(); }
 
@@ -29,6 +38,7 @@ public:
         // Single account counters.
         READWRITE(nExternalChainCounter);
         READWRITE(nInternalChainCounter);
+        READWRITE(nStakingChainCounter);
     }
 
     bool SetNull();
@@ -37,8 +47,17 @@ public:
     bool SetSeed(const CKeyID& seedId);
     CKeyID GetID() const { return seed_id; }
 
-    uint32_t& GetChainCounter(const bool& internal = false) {
-        return internal ? nInternalChainCounter : nExternalChainCounter;
+    uint32_t& GetChainCounter(const uint8_t& type = HDChain::ChangeType::EXTERNAL) {
+        switch (type) {
+            case HDChain::ChangeType::EXTERNAL:
+                return nExternalChainCounter;
+            case HDChain::ChangeType::INTERNAL:
+                return nInternalChainCounter;
+            case HDChain::ChangeType::STAKING:
+                return nStakingChainCounter;
+            default:
+                throw std::runtime_error("HD chain type doesn't exist.");
+        }
     }
 };
 

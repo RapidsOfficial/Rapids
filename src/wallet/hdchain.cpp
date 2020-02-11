@@ -12,6 +12,9 @@ bool CHDChain::SetNull()
 {
     nVersion = CURRENT_VERSION;
     seed_id = CKeyID();
+    nExternalChainCounter = 0;
+    nInternalChainCounter = 0;
+    nStakingChainCounter = 0;
     return IsNull();
 }
 
