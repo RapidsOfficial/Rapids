@@ -74,6 +74,11 @@ std::string DecodeDumpString(const std::string& str)
     return ret.str();
 }
 
+bool IsStakingDerPath(KeyOriginInfo keyOrigin)
+{
+    return keyOrigin.path[3] == (2 | BIP32_HARDENED_KEY_LIMIT);
+}
+
 UniValue importprivkey(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 4)
@@ -447,12 +452,17 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
     for (std::vector<std::pair<int64_t, CKeyID> >::const_iterator it = vKeyBirth.begin(); it != vKeyBirth.end(); it++) {
         const CKeyID& keyid = it->second;
         std::string strTime = EncodeDumpTime(it->first);
-        std::string strAddr = CBitcoinAddress(keyid).ToString();
         CKey key;
         if (pwalletMain->GetKey(keyid, key)) {
+            const CKeyMetadata& metadata = pwalletMain->mapKeyMetadata[keyid];
+            std::string strAddr = CBitcoinAddress(keyid, (metadata.HasKeyOrigin() && IsStakingDerPath(metadata.key_origin)?
+                                                          CChainParams::STAKING_ADDRESS :
+                                                          CChainParams::PUBKEY_ADDRESS)).ToString();
+
             file << strprintf("%s %s ", KeyIO::EncodeSecret(key), strTime);
             if (pwalletMain->mapAddressBook.count(keyid)) {
-                file << strprintf("label=%s", EncodeDumpString(pwalletMain->mapAddressBook[keyid].name));
+                auto entry = pwalletMain->mapAddressBook[keyid];
+                file << strprintf("label=%s", EncodeDumpString(entry.name));
             } else if (keyid == seed_id) {
                 file << "hdseed=1";
             } else if (mapKeyPool.count(keyid)) {
@@ -460,7 +470,10 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
             } else {
                 file << "change=1";
             }
-            const CKeyMetadata& metadata = pwalletMain->mapKeyMetadata[keyid];
+
+            if (strAddr.empty()) // If empty, encode the address as a regular address.
+                strAddr = CBitcoinAddress(keyid).ToString();
+
             file << strprintf(" # addr=%s%s\n", strAddr, (metadata.HasKeyOrigin() ? " hdkeypath="+metadata.key_origin.pathToString() : ""));
         }
     }

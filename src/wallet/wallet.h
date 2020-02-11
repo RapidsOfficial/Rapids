@@ -137,13 +137,17 @@ public:
     int64_t nTime;
     //! The public key
     CPubKey vchPubKey;
-    //! Whether this keypool entry is in the internal keypool (for change outputs)
-    bool fInternal;
+    //! Whether this keypool entry is in the internal, external or staking keypool.
+    uint8_t type;
     //! Whether this key was generated for a keypool before the wallet was upgraded to HD-split
     bool m_pre_split;
 
     CKeyPool();
-    CKeyPool(const CPubKey& vchPubKeyIn, bool internalIn);
+    CKeyPool(const CPubKey& vchPubKeyIn, const uint8_t& type);
+
+    bool IsInternal() const { return type == HDChain::ChangeType::INTERNAL; }
+    bool IsExternal() const { return type == HDChain::ChangeType::EXTERNAL; }
+    bool IsStaking() const { return type == HDChain::ChangeType::STAKING; }
 
     ADD_SERIALIZE_METHODS;
 
@@ -156,16 +160,16 @@ public:
         READWRITE(vchPubKey);
         if (ser_action.ForRead()) {
             try {
-                READWRITE(fInternal);
+                READWRITE(FLATDATA(type));
                 READWRITE(m_pre_split);
             } catch (std::ios_base::failure&) {
-                /* flag as external address if we can't read the internal boolean
+                /* Set as external address if we can't read the type boolean
                    (this will be the case for any wallet before the HD chain split version) */
-                fInternal = false;
+                type = HDChain::ChangeType::EXTERNAL;
                 m_pre_split = false;
             }
         } else {
-            READWRITE(fInternal);
+            READWRITE(FLATDATA(type));
             READWRITE(m_pre_split);
         }
     }
@@ -447,9 +451,10 @@ public:
     bool NewKeyPool();
     size_t KeypoolCountExternalKeys();
     bool TopUpKeyPool(unsigned int kpSize = 0);
-    bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fRequestedInternal = false);
+    // TODO: Cleanup the follow methods, all are implemented inside the SPKM.
+    bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, const bool& fRequestedInternal = false, const bool& fRequestedStaking = false);
     void KeepKey(int64_t nIndex);
-    void ReturnKey(int64_t nIndex, bool internal = false);
+    void ReturnKey(int64_t nIndex, const bool& internal = false, const bool& staking = false);
     bool GetKeyFromPool(CPubKey& key, bool internal = false);
     int64_t GetOldestKeyPoolTime();
     void GetAllReserveKeys(std::set<CKeyID>& setAddress) const;

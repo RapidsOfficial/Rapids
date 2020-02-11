@@ -12,6 +12,7 @@
 
 //! Default for -keypool
 static const unsigned int DEFAULT_KEYPOOL_SIZE = 1000;
+static const uint32_t BIP32_HARDENED_KEY_LIMIT = 0x80000000;
 
 /*
  * A class implementing ScriptPubKeyMan manages some (or all) scriptPubKeys used in a wallet.
@@ -49,7 +50,7 @@ public:
     unsigned int GetKeyPoolSize() const;
 
     /* Whether the wallet has or not keys in the pool */
-    bool CanGetAddresses(bool internal = false);
+    bool CanGetAddresses(const uint8_t& type = HDChain::ChangeType::EXTERNAL);
 
     /* Generates a new HD seed (will not be activated) */
     CPubKey GenerateNewSeed();
@@ -80,13 +81,13 @@ public:
     //! First wallet key time
     void UpdateTimeFirstKey(int64_t nCreateTime);
     //! Generate a new key
-    CPubKey GenerateNewKey(CWalletDB& batch, bool internal = false);
+    CPubKey GenerateNewKey(CWalletDB& batch, const uint8_t& type = HDChain::ChangeType::EXTERNAL);
 
 
     //! Fetches a key from the keypool
-    bool GetKeyFromPool(CPubKey &key, bool internal = false);
+    bool GetKeyFromPool(CPubKey &key, const uint8_t& changeType = HDChain::ChangeType::EXTERNAL);
     //! Reserve + fetch a key from the keypool
-    bool GetReservedKey(bool internal, int64_t& index, CKeyPool& keypool);
+    bool GetReservedKey(const uint8_t& changeType, int64_t& index, CKeyPool& keypool);
 
     const std::map<CKeyID, int64_t>& GetAllReserveKeys() const { return m_pool_key_to_index; }
     /**
@@ -103,10 +104,10 @@ public:
      *     was not found in the wallet, or was misclassified in the internal
      *     or external keypool
      */
-    bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fRequestedInternal);
+    bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, const uint8_t& type = HDChain::ChangeType::EXTERNAL);
 
     void KeepDestination(int64_t index);
-    void ReturnDestination(int64_t index, bool internal, const CTxDestination&);
+    void ReturnDestination(int64_t index, const uint8_t& type, const CTxDestination&);
 
     // TODO: This is public for now but shouldn't be here.
     std::set<int64_t> set_pre_split_keypool;
@@ -123,6 +124,7 @@ private:
     // Key pool maps
     std::set<int64_t> setInternalKeyPool;
     std::set<int64_t> setExternalKeyPool;
+    std::set<int64_t> setStakingKeyPool;
     int64_t m_max_keypool_index = 0;
     std::map<CKeyID, int64_t> m_pool_key_to_index;
     // Tracks keypool indexes to CKeyIDs of keys that have been taken out of the keypool but may be returned to it
@@ -134,10 +136,11 @@ private:
     //! Adds a key to the store, and saves it to disk.
     bool AddKeyPubKeyWithDB(CWalletDB &batch,const CKey& key, const CPubKey &pubkey);
     /* Complete me */
-    void AddKeypoolPubkeyWithDB(const CPubKey& pubkey, const bool internal, CWalletDB& batch);
+    void AddKeypoolPubkeyWithDB(const CPubKey& pubkey, const uint8_t& type, CWalletDB& batch);
+    void GeneratePool(CWalletDB& batch, int64_t targetSize, const uint8_t& type);
 
     /* HD derive new child key (on internal or external chain) */
-    void DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata, CKey& secret, bool internal = false);
+    void DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata, CKey& secret, const uint8_t& type = HDChain::ChangeType::EXTERNAL);
 
     /**
      * Marks all keys in the keypool up to and including reserve_key as used.

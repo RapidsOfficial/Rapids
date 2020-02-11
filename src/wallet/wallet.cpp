@@ -110,9 +110,10 @@ PairResult CWallet::getNewAddress(CBitcoinAddress& ret, const std::string addres
     if (!IsLocked())
         TopUpKeyPool();
 
+    uint8_t type = (addrType == CChainParams::Base58Type::STAKING_ADDRESS ? HDChain::ChangeType::STAKING : HDChain::ChangeType::EXTERNAL);
     CPubKey newKey;
     // Get a key
-    if (!GetKeyFromPool(newKey)) {
+    if (!GetKeyFromPool(newKey, type)) {
         // inform the user to top-up the keypool or unlock the wallet
         return PairResult(false, new std::string(
                 "Keypool ran out, please call keypoolrefill first, or unlock the wallet."));
@@ -2968,9 +2969,10 @@ bool CWallet::TopUpKeyPool(unsigned int kpSize)
     return m_spk_man->TopUp(kpSize);
 }
 
-bool CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fRequestedInternal)
+bool CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, const bool& fRequestedInternal, const bool& fRequestedStaking)
 {
-    return m_spk_man->ReserveKeyFromKeyPool(nIndex, keypool, fRequestedInternal);
+    uint8_t changeType = fRequestedStaking ? HDChain::ChangeType::STAKING : (fRequestedInternal ? HDChain::ChangeType::INTERNAL : HDChain::ChangeType::EXTERNAL);
+    return m_spk_man->ReserveKeyFromKeyPool(nIndex, keypool, changeType);
 }
 
 void CWallet::KeepKey(int64_t nIndex)
@@ -2978,15 +2980,17 @@ void CWallet::KeepKey(int64_t nIndex)
     m_spk_man->KeepDestination(nIndex);
 }
 
-void CWallet::ReturnKey(int64_t nIndex, bool internal)
+void CWallet::ReturnKey(int64_t nIndex, const bool& internal, const bool& staking)
 {
     // Return to key pool
     CTxDestination address; // This is not needed for now.
-    m_spk_man->ReturnDestination(nIndex, internal, address);
+    uint8_t changeType = staking ? HDChain::ChangeType::STAKING : (internal ? HDChain::ChangeType::INTERNAL : HDChain::ChangeType::EXTERNAL);
+    m_spk_man->ReturnDestination(nIndex, changeType, address);
 }
 
 bool CWallet::GetKeyFromPool(CPubKey& result, bool internal)
 {
+    // TODO: Modify this for Staking addresses support if needed.
     return m_spk_man->GetKeyFromPool(result, internal);
 }
 
@@ -3152,8 +3156,10 @@ bool CReserveKey::GetReservedKey(CPubKey& pubkey, bool internal)
         // Fill the pool if needed
         m_spk_man->TopUp();
 
+        // TODO: Modify this for Staking addresses support if needed.
+        uint8_t changeType = internal ? HDChain::ChangeType::INTERNAL : HDChain::ChangeType::EXTERNAL;
         CKeyPool keypool;
-        if (!m_spk_man->GetReservedKey(internal, nIndex, keypool))
+        if (!m_spk_man->GetReservedKey(changeType, nIndex, keypool))
             return false;
 
         if (nIndex != -1)
@@ -3642,15 +3648,15 @@ bool CWallet::MultiSend()
 CKeyPool::CKeyPool()
 {
     nTime = GetTime();
-    fInternal = false;
+    type = HDChain::ChangeType::EXTERNAL;
     m_pre_split = false;
 }
 
-CKeyPool::CKeyPool(const CPubKey& vchPubKeyIn, bool internalIn)
+CKeyPool::CKeyPool(const CPubKey& vchPubKeyIn, const uint8_t& _type)
 {
     nTime = GetTime();
     vchPubKey = vchPubKeyIn;
-    fInternal = internalIn;
+    type = _type;
     m_pre_split = false;
 }
 
