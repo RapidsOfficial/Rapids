@@ -23,8 +23,10 @@
 #include "zpiv/zerocoin.h"
 #include "guiinterface.h"
 #include "util.h"
+#include "util/memory.h"
 #include "validationinterface.h"
 #include "wallet/wallet_ismine.h"
+#include "wallet/scriptpubkeyman.h"
 #include "wallet/walletdb.h"
 #include "zpiv/zpivmodule.h"
 #include "zpiv/zpivwallet.h"
@@ -69,6 +71,7 @@ class COutput;
 class CReserveKey;
 class CScript;
 class CWalletTx;
+class ScriptPubKeyMan;
 
 /** (client) version numbers for particular wallet features */
 enum WalletFeature {
@@ -77,7 +80,13 @@ enum WalletFeature {
     FEATURE_WALLETCRYPT = 40000, // wallet encryption
     FEATURE_COMPRPUBKEY = 60000, // compressed public keys
 
-    FEATURE_LATEST = 61000
+    PRE_PIVX = 61000, // inherited version..
+
+    FEATURE_HD = 130000, // Hierarchical key derivation after BIP32 (HD Wallet)
+
+    FEATURE_HD_SPLIT = 139900, // Wallet with HD chain split (change outputs will use m/0'/1'/k)
+
+    FEATURE_LATEST = FEATURE_HD_SPLIT
 };
 
 enum AvailableCoinsType {
@@ -124,11 +133,17 @@ struct CompactTallyItem {
 class CKeyPool
 {
 public:
+    //! The time at which the key was generated. Set in AddKeypoolPubKeyWithDB
     int64_t nTime;
+    //! The public key
     CPubKey vchPubKey;
+    //! Whether this keypool entry is in the internal keypool (for change outputs)
+    bool fInternal;
+    //! Whether this key was generated for a keypool before the wallet was upgraded to HD-split
+    bool m_pre_split;
 
     CKeyPool();
-    CKeyPool(const CPubKey& vchPubKeyIn);
+    CKeyPool(const CPubKey& vchPubKeyIn, bool internalIn);
 
     ADD_SERIALIZE_METHODS;
 
@@ -139,6 +154,20 @@ public:
             READWRITE(nVersion);
         READWRITE(nTime);
         READWRITE(vchPubKey);
+        if (ser_action.ForRead()) {
+            try {
+                READWRITE(fInternal);
+                READWRITE(m_pre_split);
+            } catch (std::ios_base::failure&) {
+                /* flag as external address if we can't read the internal boolean
+                   (this will be the case for any wallet before the HD chain split version) */
+                fInternal = false;
+                m_pre_split = false;
+            }
+        } else {
+            READWRITE(fInternal);
+            READWRITE(m_pre_split);
+        }
     }
 };
 
@@ -176,6 +205,9 @@ private:
 
     CWalletDB* pwalletdbEncryption;
 
+    //! Key manager //
+    std::unique_ptr<ScriptPubKeyMan> m_spk_man = MakeUnique<ScriptPubKeyMan>(this);
+
     //! the current wallet version: clients below this version are not able to load the wallet
     int nWalletVersion;
 
@@ -204,6 +236,18 @@ public:
 
     static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
 
+    //! Generates hd wallet //
+    bool SetupSPKM();
+    //! Whether the wallet is hd or not //
+    bool IsHDEnabled() const;
+
+    /* SPKM Helpers */
+    const CKeyingMaterial& GetEncryptionKey() const;
+    bool HasEncryptionKeys() const;
+
+    //! Get spkm
+    ScriptPubKeyMan* GetScriptPubKeyMan() const;
+
     bool StakeableCoins(std::vector<COutput>* pCoins = nullptr);
     bool IsCollateralAmount(CAmount nInputAmount) const;
 
@@ -220,7 +264,6 @@ public:
     bool fWalletUnlockAnonymizeOnly;
     std::string strWalletFile;
 
-    std::set<int64_t> setKeyPool;
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata;
 
     typedef std::map<unsigned int, CMasterKey> MasterKeyMap;
@@ -401,11 +444,12 @@ public:
     static CAmount GetMinimumFee(unsigned int nTxBytes, unsigned int nConfirmTarget, const CTxMemPool& pool);
 
     bool NewKeyPool();
+    size_t KeypoolCountExternalKeys();
     bool TopUpKeyPool(unsigned int kpSize = 0);
-    void ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool);
+    bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, bool fRequestedInternal = false);
     void KeepKey(int64_t nIndex);
-    void ReturnKey(int64_t nIndex);
-    bool GetKeyFromPool(CPubKey& key);
+    void ReturnKey(int64_t nIndex, bool internal = false);
+    bool GetKeyFromPool(CPubKey& key, bool internal = false);
     int64_t GetOldestKeyPoolTime();
     void GetAllReserveKeys(std::set<CKeyID>& setAddress) const;
 
@@ -571,7 +615,7 @@ public:
     }
 
     void ReturnKey();
-    bool GetReservedKey(CPubKey& pubkey);
+    bool GetReservedKey(CPubKey& pubkey, bool internal = false);
     void KeepKey();
 };
 
