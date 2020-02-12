@@ -696,8 +696,6 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
             if (!m_spk_man->SetupGeneration(true)) {
                 return false;
             }
-        } else {
-            NewKeyPool(); // TODO: Remove this.
         }
         Lock();
 
@@ -2921,42 +2919,6 @@ bool CWallet::HasDelegator(const CTxOut& out) const
             return false;
         return (*mi).second.purpose == AddressBook::AddressBookPurpose::DELEGATOR;
     }
-}
-
-
-/**
- * Mark old keypool keys as used,
- * and generate all new keys
- */
-bool CWallet::NewKeyPool()
-{
-    {
-        LOCK(cs_wallet);
-
-        // Check HD Wallet
-        if (IsHDEnabled()) {
-            // Should never happen.
-            LogPrintf("%s::NewKeyPool called from an already enabled HD wallet\n", __func__);
-            return false;
-        }
-
-        CWalletDB walletdb(strWalletFile);
-        for (int64_t nIndex : m_spk_man->set_pre_split_keypool)
-            walletdb.ErasePool(nIndex);
-        m_spk_man->set_pre_split_keypool.clear();
-
-        if (IsLocked())
-            return false;
-
-        int64_t nKeys = std::max(GetArg("-keypool", 1000), (int64_t)0);
-        for (int i = 0; i < nKeys; i++) {
-            int64_t nIndex = i + 1;
-            walletdb.WritePool(nIndex, CKeyPool(GenerateNewKey(), false));
-            m_spk_man->set_pre_split_keypool.insert(nIndex);
-        }
-        LogPrintf("CWallet::NewKeyPool wrote %d new keys\n", nKeys);
-    }
-    return true;
 }
 
 size_t CWallet::KeypoolCountExternalKeys()
