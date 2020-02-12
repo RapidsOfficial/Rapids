@@ -169,7 +169,7 @@ struct CExtKey {
     void Decode(const unsigned char code[BIP32_EXTKEY_SIZE]);
     bool Derive(CExtKey& out, unsigned int nChild) const;
     CExtPubKey Neuter() const;
-    void SetMaster(const unsigned char* seed, unsigned int nSeedLen);
+    void SetSeed(const unsigned char* seed, unsigned int nSeedLen);
 };
 
 /** Initialize the elliptic curve support. May not be called twice without calling ECC_Stop first. */
