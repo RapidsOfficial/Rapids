@@ -161,6 +161,10 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         if (!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, false, hashProofOfStakeRet))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
+        std::string stakeModifier = (Params().IsStakeModifierV2(blockindex->nHeight) ?
+                                     blockindex->nStakeModifierV2.GetHex() :
+                                     strprintf("%016x", blockindex->nStakeModifier));
+        result.push_back(Pair("stakeModifier", stakeModifier));
         result.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
     }
 
@@ -515,6 +519,7 @@ UniValue getblock(const UniValue& params, bool fHelp)
             "     \"5000\" : n,         (numeric) supply of 5000 zPIV denomination\n"
             "     \"total\" : n,        (numeric) The total supply of all zPIV denominations\n"
             "  },\n"
+            "  \"stakeModifier\" : \"xxx\",       (string) Proof of Stake modifier\n"
             "  \"hashProofOfStake\" : \"hash\",   (string) Proof of Stake hash\n"
             "  }\n"
             "}\n"

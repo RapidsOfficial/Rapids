@@ -181,9 +181,7 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
 uint256 ComputeStakeModifier(const CBlockIndex* pindexPrev, const uint256& kernel)
 {
     // genesis block's modifier is 0
-    // all block's modifiers are 0 on regtest
-    if (!pindexPrev || Params().IsRegTestNet())
-        return uint256();
+    if (!pindexPrev) return uint256();
 
     CHashWriter ss(SER_GETHASH, 0);
     ss << kernel;
@@ -251,9 +249,6 @@ static const unsigned int MODIFIER_INTERVAL = 60;
 static const int MODIFIER_INTERVAL_RATIO = 3;
 static const int64_t OLD_MODIFIER_INTERVAL = 2087;
 
-// Hard checkpoints of stake modifiers to ensure they are deterministic
-static std::map<int, unsigned int> mapStakeModifierCheckpoints =
-    boost::assign::map_list_of(0, 0xfd11f4e7u);
 
 // Get selection interval section (in seconds)
 static int64_t GetStakeModifierSelectionIntervalSection(int nSection)
@@ -373,11 +368,6 @@ bool GetOldModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifier)
         return error("%s : block not indexed", __func__);
     const CBlockIndex* pindexFrom = mapBlockIndex[hashBlockFrom];
     int64_t nStakeModifierTime = pindexFrom->GetBlockTime();
-    // Fixed stake modifier only for regtest
-    if (Params().IsRegTestNet()) {
-        nStakeModifier = pindexFrom->nStakeModifier;
-        return true;
-    }
     const CBlockIndex* pindex = pindexFrom;
     CBlockIndex* pindexNext = chainActive[pindex->nHeight + 1];
 
@@ -414,10 +404,6 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
     nStakeModifier = 0;
     fGeneratedStakeModifier = false;
 
-    // modifier 0 on RegTest
-    if (Params().IsRegTestNet()) {
-        return true;
-    }
     if (!pindexPrev) {
         fGeneratedStakeModifier = true;
         return true; // genesis block's modifier is 0

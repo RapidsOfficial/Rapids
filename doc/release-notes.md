@@ -46,7 +46,7 @@ RPC Changes
 
 ### Modified input/output for existing commands
 
-- "CoinStake" JSON object in `getblock` output is removed, and replaced with the string "hashProofOfStake"
+- "CoinStake" JSON object in `getblock` output is removed, and replaced with the strings "stakeModifier" and "hashProofOfStake"
 
 - "isPublicSpend" boolean (optional) input parameter is removed from the following commands:
  - `createrawzerocoinspend`

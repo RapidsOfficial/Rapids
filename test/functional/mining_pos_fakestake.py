@@ -172,7 +172,13 @@ class FakeStakeTest(PivxTestFramework):
                   fDoubleSpend:       (bool) if true, stake input is double spent in block.vtx
         :return:
         """
-        # Get block number, block time and prevBlock hash
+        def get_prev_modifier(prevBlockHash):
+            prevBlock = self.nodes[1].getblock(prevBlockHash)
+            if prevBlock['height'] > 250:
+                return prevBlock['stakeModifier']
+            return "0"
+
+        # Get block number, block time and prevBlock hash and modifier
         currHeight = self.nodes[1].getblockcount()
         isMainChain = (nHeight == -1)
         chainName = "main" if isMainChain else "forked"
@@ -180,6 +186,7 @@ class FakeStakeTest(PivxTestFramework):
         if isMainChain:
             nHeight = currHeight + 1
         prevBlockHash = self.nodes[1].getblockhash(nHeight - 1)
+        prevModifier = get_prev_modifier(prevBlockHash)
         nTime += (nHeight - currHeight) * 60
 
         # New block hash, coinstake input and list of txes
@@ -199,6 +206,7 @@ class FakeStakeTest(PivxTestFramework):
                 nHeight += 1
                 nTime += 60
                 prevBlockHash = bHash
+                prevModifier = get_prev_modifier(prevBlockHash)
 
             stakeInputs = self.get_prevouts(1, staking_utxo_list, False, nHeight - 1)
             # Update stake inputs for second block sent on forked chain (must stake the same input)
@@ -211,7 +219,7 @@ class FakeStakeTest(PivxTestFramework):
                 block_txes = self.make_txes(1, spending_prevouts, self.DUMMY_KEY.get_pubkey())
 
             # Stake the spam block
-            block = self.stake_block(1, nHeight, prevBlockHash, stakeInputs,
+            block = self.stake_block(1, nHeight, prevBlockHash, prevModifier, stakeInputs,
                                      nTime, "", block_txes, fDoubleSpend)
             # Log stake input
             prevout = COutPoint()
