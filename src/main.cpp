@@ -2640,7 +2640,7 @@ static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck()
 {
-    RenameThread("pivx-scriptch");
+    util::ThreadRename("pivx-scriptch");
     scriptcheckqueue.Thread();
 }
 
