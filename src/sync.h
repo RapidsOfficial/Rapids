@@ -98,6 +98,7 @@ public:
     {
         return PARENT::try_lock();
     }
+
     using UniqueLock = std::unique_lock<PARENT>;
 };
 
@@ -106,7 +107,6 @@ public:
  * TODO: We should move away from using the recursive lock by default.
  */
 using RecursiveMutex = AnnotatedMixin<std::recursive_mutex>;
-typedef AnnotatedMixin<std::recursive_mutex> CCriticalSection;
 
 /** Wrapped mutex: supports waiting but not recursive locking */
 typedef AnnotatedMixin<std::mutex> Mutex;

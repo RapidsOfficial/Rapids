@@ -33,7 +33,7 @@
 
 
 int64_t nWalletUnlockTime;
-static CCriticalSection cs_nWalletUnlockTime;
+static RecursiveMutex cs_nWalletUnlockTime;
 
 std::string HelpRequiringPassphrase()
 {

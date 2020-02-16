@@ -136,17 +136,17 @@ extern CAddrMan addrman;
 extern int nMaxConnections;
 
 extern std::vector<CNode*> vNodes;
-extern CCriticalSection cs_vNodes;
+extern RecursiveMutex cs_vNodes;
 extern std::map<CInv, CDataStream> mapRelay;
 extern std::deque<std::pair<int64_t, CInv> > vRelayExpiration;
-extern CCriticalSection cs_mapRelay;
+extern RecursiveMutex cs_mapRelay;
 extern limitedmap<CInv, int64_t> mapAlreadyAskedFor;
 
 extern std::vector<std::string> vAddedNodes;
-extern CCriticalSection cs_vAddedNodes;
+extern RecursiveMutex cs_vAddedNodes;
 
 extern NodeId nLastNodeId;
-extern CCriticalSection cs_nLastNodeId;
+extern RecursiveMutex cs_nLastNodeId;
 
 /** Subversion as sent to the P2P network in `version` messages */
 extern std::string strSubVersion;
@@ -156,7 +156,7 @@ struct LocalServiceInfo {
     int nPort;
 };
 
-extern CCriticalSection cs_mapLocalHost;
+extern RecursiveMutex cs_mapLocalHost;
 extern std::map<CNetAddr, LocalServiceInfo> mapLocalHost;
 
 class CNodeStats
@@ -297,11 +297,11 @@ public:
     size_t nSendOffset; // offset inside the first vSendMsg already sent
     uint64_t nSendBytes;
     std::deque<CSerializeData> vSendMsg;
-    CCriticalSection cs_vSend;
+    RecursiveMutex cs_vSend;
 
     std::deque<CInv> vRecvGetData;
     std::deque<CNetMessage> vRecvMsg;
-    CCriticalSection cs_vRecvMsg;
+    RecursiveMutex cs_vRecvMsg;
     uint64_t nRecvBytes;
     int nRecvVersion;
 
@@ -337,7 +337,7 @@ public:
     // For such cases node should be released manually (preferably right after corresponding code).
     bool fObfuScationMaster;
     CSemaphoreGrant grantOutbound;
-    CCriticalSection cs_filter;
+    RecursiveMutex cs_filter;
     CBloomFilter* pfilter;
     int nRefCount;
     NodeId id;
@@ -346,7 +346,7 @@ protected:
     // Denial-of-service detection/prevention
     // Key is IP address, value is banned-until-time
     static banmap_t setBanned;
-    static CCriticalSection cs_setBanned;
+    static RecursiveMutex cs_setBanned;
     static bool setBannedIsDirty;
 
     std::vector<std::string> vecRequestsFulfilled; //keep track of what client has asked for
@@ -354,7 +354,7 @@ protected:
     // Whitelisted ranges. Any node connecting from these is automatically
     // whitelisted (as well as those connecting to whitelisted binds).
     static std::vector<CSubNet> vWhitelistedRange;
-    static CCriticalSection cs_vWhitelistedRange;
+    static RecursiveMutex cs_vWhitelistedRange;
 
     // Basic fuzz-testing
     void Fuzz(int nChance); // modifies ssSend
@@ -372,7 +372,7 @@ public:
     // inventory based relay
     mruset<CInv> setInventoryKnown;
     std::vector<CInv> vInventoryToSend;
-    CCriticalSection cs_inventory;
+    RecursiveMutex cs_inventory;
     std::multimap<int64_t, CInv> mapAskFor;
     std::vector<uint256> vBlockRequested;
 
@@ -391,8 +391,8 @@ public:
 
 private:
     // Network usage totals
-    static CCriticalSection cs_totalBytesRecv;
-    static CCriticalSection cs_totalBytesSent;
+    static RecursiveMutex cs_totalBytesRecv;
+    static RecursiveMutex cs_totalBytesSent;
     static uint64_t nTotalBytesRecv;
     static uint64_t nTotalBytesSent;
 

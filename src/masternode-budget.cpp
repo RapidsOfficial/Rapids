@@ -17,7 +17,7 @@
 #include <boost/filesystem.hpp>
 
 CBudgetManager budget;
-CCriticalSection cs_budget;
+RecursiveMutex cs_budget;
 
 std::map<uint256, int64_t> askedForSourceProposalOrBudget;
 std::vector<CBudgetProposalBroadcast> vecImmatureBudgetProposals;
