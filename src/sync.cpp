@@ -169,6 +169,16 @@ void AssertLockHeldInternal(const char* pszName, const char* pszFile, int nLine,
     abort();
 }
 
+void AssertLockNotHeldInternal(const char* pszName, const char* pszFile, int nLine, void* cs)
+{
+    for (const std::pair<void*, CLockLocation>& i : g_lockstack) {
+        if (i.first == cs) {
+            tfm::format(std::cerr, "Assertion failed: lock %s held in %s:%i; locks held:\n%s", pszName, pszFile, nLine, LocksHeld());
+            abort();
+        }
+    }
+}
+
 void DeleteLock(void* cs)
 {
     LockData& lockdata = GetLockData();
