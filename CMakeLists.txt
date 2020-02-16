@@ -493,6 +493,7 @@ set(UTIL_SOURCES
         ./src/rpc/protocol.cpp
         ./src/sync.cpp
         ./src/uint256.cpp
+        ./src/util/threadnames.cpp
         ./src/util.cpp
         ./src/utilstrencodings.cpp
         ./src/utilmoneystr.cpp
