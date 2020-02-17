@@ -38,8 +38,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return consensus.powLimit.GetCompact();
     }
 
-    if (pindexLast->nHeight >= Params().LAST_POW_BLOCK()) {
-        const bool fTimeV2 = Params().IsTimeProtocolV2(pindexLast->nHeight+1);
+    if (pindexLast->nHeight >= Params().GetConsensus().height_last_PoW) {
+        const bool fTimeV2 = consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
         const uint256& bnTargetLimit = consensus.ProofOfStakeLimit(fTimeV2);
         const int64_t& nTargetTimespan = consensus.TargetTimespan(fTimeV2);
 
@@ -57,7 +57,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         bnNew.SetCompact(pindexLast->nBits);
 
         // on first block with V2 time protocol, reduce the difficulty by a factor 16
-        if (fTimeV2 && !Params().IsTimeProtocolV2(pindexLast->nHeight))
+        if (fTimeV2 && !consensus.IsTimeProtocolV2(pindexLast->nHeight))
             bnNew <<= 4;
 
         int64_t nInterval = nTargetTimespan / consensus.nTargetSpacing;

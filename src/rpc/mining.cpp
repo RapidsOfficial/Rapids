@@ -146,7 +146,7 @@ UniValue generate(const UniValue& params, bool fHelp)
         nHeightEnd = nHeight + nGenerate;
     }
 
-    const int last_pow_block = Params().LAST_POW_BLOCK();
+    const int last_pow_block = Params().GetConsensus().height_last_PoW;
     bool fPoS = nHeight >= last_pow_block;
     if (fPoS) {
         // If we are in PoS, wallet must be unlocked.
@@ -225,7 +225,7 @@ UniValue setgenerate(const UniValue& params, bool fHelp)
     if (params.size() > 0)
         fGenerate = params[0].get_bool();
 
-    if (fGenerate && (chainActive.Height() >= Params().LAST_POW_BLOCK()))
+    if (fGenerate && (chainActive.Height() >= Params().GetConsensus().height_last_PoW))
         throw JSONRPCError(RPC_INVALID_REQUEST, "Proof of Work phase has already ended");
 
     int nGenProcLimit = -1;

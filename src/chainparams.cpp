@@ -163,27 +163,6 @@ bool CChainParams::HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t
     return (contextHeight - utxoFromBlockHeight >= consensus.nStakeMinDepth);
 }
 
-int CChainParams::FutureBlockTimeDrift(const int nHeight) const
-{
-    if (IsTimeProtocolV2(nHeight))
-        // PoS (TimeV2): 14 seconds
-        return consensus.nTimeSlotLength - 1;
-
-    // PoS (TimeV1): 3 minutes
-    // PoW: 2 hours
-    return (nHeight > LAST_POW_BLOCK()) ? nFutureTimeDriftPoS : nFutureTimeDriftPoW;
-}
-
-bool CChainParams::IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
-{
-    // Before time protocol V2, blocks can have arbitrary timestamps
-    if (!IsTimeProtocolV2(nHeight))
-        return true;
-
-    // Time protocol v2 requires time in slots
-    return (nTime % consensus.nTimeSlotLength) == 0;
-}
-
 class CMainParams : public CChainParams
 {
 public:
@@ -197,6 +176,8 @@ public:
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
+        consensus.nFutureTimeDriftPoW = 7200;
+        consensus.nFutureTimeDriftPoS = 180;
         consensus.nMaxMoneyOut = 21000000 * COIN;
         consensus.nStakeMinAge = 60 * 60;
         consensus.nStakeMinDepth = 600;
@@ -206,7 +187,9 @@ public:
         consensus.nTimeSlotLength = 15;
 
         // height based activations
+        consensus.height_last_PoW = 259200;
         consensus.height_start_BIP65 = 1808634; // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
+        consensus.height_start_TimeProtoV2 = 2153200; // TimeProtocolV2, Blocks V7 and newMessageSignatures
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -230,13 +213,10 @@ public:
         nRejectBlockOutdatedMajority = 10260; // 95%
         nToCheckBlockUpgradeMajority = 10800; // Approximate expected amount of blocks in 7 days (1440*7.5)
         nMinerThreads = 0;
-        nFutureTimeDriftPoW = 7200;
-        nFutureTimeDriftPoS = 180;
         nMasternodeCountDrift = 20;
         nMinColdStakingAmount = 1 * COIN;
 
         /** Height or Time Based Activations **/
-        nLastPOWBlock = 259200;
         nPivxBadBlockTime = 1471401614; // Skip nBit validation of Block 259201 per PR #915
         nPivxBadBlocknBits = 0x1c056dac; // Skip nBit validation of Block 259201 per PR #915
         nModifierUpdateBlock = 615800;
@@ -253,18 +233,16 @@ public:
         nEnforceNewSporkKey = 1566860400; //!> Sporks signed after Monday, August 26, 2019 11:00:00 PM GMT must use the new spork key
         nRejectOldSporkKey = 1569538800; //!> Fully reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
         nBlockStakeModifierlV2 = 1967000;
-        // Activation height for TimeProtocolV2, Blocks V7 and newMessageSignatures
-        nBlockTimeProtocolV2 = 2153200;
 
         // Public coin spend enforcement
         nPublicZCSpends = 1880000;
 
         // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = nBlockTimeProtocolV2;
+        nBlockEnforceNewMessageSignatures = consensus.height_start_TimeProtoV2;
 
         // Blocks v7
         nBlockLastAccumulatorCheckpoint = 1686240;
-        nBlockV7StartHeight = nBlockTimeProtocolV2;
+        nBlockV7StartHeight = consensus.height_start_TimeProtoV2;
 
         // Fake Serial Attack
         nFakeSerialBlockheightEnd = 1686229;
@@ -344,6 +322,8 @@ public:
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 15;
+        consensus.nFutureTimeDriftPoW = 7200;
+        consensus.nFutureTimeDriftPoS = 180;
         consensus.nMaxMoneyOut = 43199500 * COIN;
         consensus.nStakeMinAge = 60 * 60;
         consensus.nStakeMinDepth = 100;
@@ -353,7 +333,9 @@ public:
         consensus.nTimeSlotLength = 15;
 
         // height based activations
+        consensus.height_last_PoW = 200;
         consensus.height_start_BIP65 = 851019;
+        consensus.height_start_TimeProtoV2 = 1347000; // TimeProtocolV2, Blocks V7 and newMessageSignatures
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -377,7 +359,6 @@ public:
         nRejectBlockOutdatedMajority = 5472; // 95%
         nToCheckBlockUpgradeMajority = 5760; // 4 days
         nMinerThreads = 0;
-        nLastPOWBlock = 200;
         nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 259201 per PR #915
         nPivxBadBlocknBits = 0x1e0a20bd; // Skip nBit validation of Block 201 per PR #915
         nMasternodeCountDrift = 4;
@@ -394,18 +375,16 @@ public:
         nEnforceNewSporkKey = 1566860400; //!> Sporks signed after Monday, August 26, 2019 11:00:00 PM GMT must use the new spork key
         nRejectOldSporkKey = 1569538800; //!> Reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
         nBlockStakeModifierlV2 = 1214000;
-        // Activation height for TimeProtocolV2, Blocks V7 and newMessageSignatures
-        nBlockTimeProtocolV2 = 1347000;
 
         // Public coin spend enforcement
         nPublicZCSpends = 1106100;
 
         // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = nBlockTimeProtocolV2;
+        nBlockEnforceNewMessageSignatures = consensus.height_start_TimeProtoV2;
 
         // Blocks v7
         nBlockLastAccumulatorCheckpoint = nPublicZCSpends - 10;
-        nBlockV7StartHeight = nBlockTimeProtocolV2;
+        nBlockV7StartHeight = consensus.height_start_TimeProtoV2;
 
         // Fake Serial Attack
         nFakeSerialBlockheightEnd = -1;
@@ -469,6 +448,8 @@ public:
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
+        consensus.nFutureTimeDriftPoW = 7200;
+        consensus.nFutureTimeDriftPoS = 180;
         consensus.nMaxMoneyOut = 43199500 * COIN;
         consensus.nStakeMinAge = 0;
         consensus.nStakeMinDepth = 0;
@@ -478,7 +459,9 @@ public:
         consensus.nTimeSlotLength = 15;
 
         // height based activations
+        consensus.height_last_PoW = 250;
         consensus.height_start_BIP65 = 851019; // Not defined for regtest. Inherit TestNet value.
+        consensus.height_start_TimeProtoV2 = 999999999;
 
 
         /**
@@ -502,7 +485,6 @@ public:
         nRejectBlockOutdatedMajority = 950;
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
-        nLastPOWBlock = 250;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 0;
         nZerocoinStartHeight = 300;
@@ -512,8 +494,7 @@ public:
         nBlockRecalculateAccumulators = 999999999;  // Trigger a recalculation of accumulators
         nBlockFirstFraudulent = 999999999;          // First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999;       // Last valid accumulator checkpoint
-        nBlockStakeModifierlV2 = nLastPOWBlock + 1; // start with modifier V2 on regtest
-        nBlockTimeProtocolV2 = 999999999;
+        nBlockStakeModifierlV2 = consensus.height_last_PoW + 1; // start with modifier V2 on regtest
 
         nMintRequiredConfirmations = 10;
         nZerocoinRequiredStakeDepth = nMintRequiredConfirmations;

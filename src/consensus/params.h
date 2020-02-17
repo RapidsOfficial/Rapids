@@ -23,6 +23,8 @@ struct Params {
     uint256 posLimitV1;
     uint256 posLimitV2;
     int nCoinbaseMaturity;
+    int nFutureTimeDriftPoW;
+    int nFutureTimeDriftPoS;
     CAmount nMaxMoneyOut;
     int nStakeMinAge;
     int nStakeMinDepth;
@@ -31,12 +33,31 @@ struct Params {
     int64_t nTargetSpacing;
     int nTimeSlotLength;
 
-    // Height based activations
+    // Height-based activations
+    int height_last_PoW;
     int height_start_BIP65;
+    int height_start_TimeProtoV2;
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
+    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= height_start_TimeProtoV2; }
+
+    int FutureBlockTimeDrift(const int nHeight) const
+    {
+        // PoS (TimeV2): 14 seconds
+        if (IsTimeProtocolV2(nHeight)) return nTimeSlotLength - 1;
+        // PoS (TimeV1): 3 minutes - PoW: 2 hours
+        return (nHeight > height_last_PoW ? nFutureTimeDriftPoS : nFutureTimeDriftPoW);
+    }
+
+    bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
+    {
+        // Before time protocol V2, blocks can have arbitrary timestamps
+        if (!IsTimeProtocolV2(nHeight)) return true;
+        // Time protocol v2 requires time in slots
+        return (nTime % nTimeSlotLength) == 0;
+    }
 };
 } // namespace Consensus
 

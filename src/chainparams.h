@@ -79,12 +79,6 @@ public:
     /** returns the coinstake maturity (min depth required) **/
     bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
 
-    /** Time Protocol V2 **/
-    int BlockStartTimeProtocolV2() const { return nBlockTimeProtocolV2; }
-    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= BlockStartTimeProtocolV2(); }
-    int FutureBlockTimeDrift(const int nHeight) const;
-    bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const;
-
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
     /** In the future use NetworkIDString() for RPC fields */
@@ -128,7 +122,6 @@ public:
 
     /** Height or Time Based Activations **/
     int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
-    int LAST_POW_BLOCK() const { return nLastPOWBlock; }
     int PivxBadBlockTime() const { return nPivxBadBlockTime; }
     int PivxBadBlocknBits() const { return nPivxBadBlocknBits; }
     int Zerocoin_StartHeight() const { return nZerocoinStartHeight; }
@@ -165,13 +158,10 @@ protected:
     int nEnforceBlockUpgradeMajority;
     int nRejectBlockOutdatedMajority;
     int nToCheckBlockUpgradeMajority;
-    int nLastPOWBlock;
     int64_t nPivxBadBlockTime;
     unsigned int nPivxBadBlocknBits;
     int nMasternodeCountDrift;
     int nMaturity;
-    int nFutureTimeDriftPoW;
-    int nFutureTimeDriftPoS;
 
     int nModifierUpdateBlock;
     int nMinerThreads;
@@ -219,7 +209,6 @@ protected:
     int nBlockDoubleAccumulated;
     int nPublicZCSpends;
     int nBlockStakeModifierlV2;
-    int nBlockTimeProtocolV2;
     int nBlockEnforceNewMessageSignatures;
     int nBlockV7StartHeight;
     int nBlockLastAccumulatorCheckpoint;
