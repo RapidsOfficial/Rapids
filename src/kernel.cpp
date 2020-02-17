@@ -224,7 +224,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 // Timestamp for time protocol V2: slot duration 15 seconds
 int64_t GetTimeSlot(const int64_t nTime)
 {
-    const int slotLen = Params().TimeSlotLength();
+    const int slotLen = Params().GetConsensus().nTimeSlotLength;
     return (nTime / slotLen) * slotLen;
 }
 
@@ -432,7 +432,7 @@ bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeMod
 
     // Sort candidate blocks by timestamp
     std::vector<std::pair<int64_t, uint256> > vSortedByTimestamp;
-    vSortedByTimestamp.reserve(64 * MODIFIER_INTERVAL  / Params().TargetSpacing());
+    vSortedByTimestamp.reserve(64 * MODIFIER_INTERVAL  / Params().GetConsensus().nTargetSpacing);
     int64_t nSelectionIntervalStart = (pindexPrev->GetBlockTime() / MODIFIER_INTERVAL ) * MODIFIER_INTERVAL  - OLD_MODIFIER_INTERVAL;
     const CBlockIndex* pindex = pindexPrev;
 

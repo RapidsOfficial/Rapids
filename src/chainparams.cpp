@@ -167,7 +167,7 @@ int CChainParams::FutureBlockTimeDrift(const int nHeight) const
 {
     if (IsTimeProtocolV2(nHeight))
         // PoS (TimeV2): 14 seconds
-        return TimeSlotLength() - 1;
+        return consensus.nTimeSlotLength - 1;
 
     // PoS (TimeV1): 3 minutes
     // PoW: 2 hours
@@ -181,7 +181,7 @@ bool CChainParams::IsValidBlockTimeStamp(const int64_t nTime, const int nHeight)
         return true;
 
     // Time protocol v2 requires time in slots
-    return (nTime % TimeSlotLength()) == 0;
+    return (nTime % consensus.nTimeSlotLength) == 0;
 }
 
 class CMainParams : public CChainParams
@@ -197,7 +197,9 @@ public:
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
         consensus.nTargetTimespan = 40 * 60;
+        consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
+        consensus.nTimeSlotLength = 15;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
 
@@ -232,10 +234,6 @@ public:
         nRejectBlockOutdatedMajority = 10260; // 95%
         nToCheckBlockUpgradeMajority = 10800; // Approximate expected amount of blocks in 7 days (1440*7.5)
         nMinerThreads = 0;
-        nTargetSpacing = 1 * 60;                        // 1 minute
-        nTargetTimespan = 40 * 60;                      // 40 minutes
-        nTimeSlotLength = 15;                           // 15 seconds
-        nTargetTimespan_V2 = 2 * nTimeSlotLength * 60;  // 30 minutes
         nStakeMinAge = 60 * 60;                         // 1 hour
         nStakeMinDepth = 600;
         nFutureTimeDriftPoW = 7200;
@@ -353,7 +351,9 @@ public:
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 15;
         consensus.nTargetTimespan = 40 * 60;
+        consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
+        consensus.nTimeSlotLength = 15;
         consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.fPowNoRetargeting = false;
 
@@ -482,7 +482,9 @@ public:
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
         consensus.nTargetTimespan = 40 * 60;
+        consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
+        consensus.nTimeSlotLength = 15;
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.fPowNoRetargeting = true;
 

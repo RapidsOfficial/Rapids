@@ -21,6 +21,10 @@ struct Params {
     uint256 posLimitV1;
     uint256 posLimitV2;
     int nCoinbaseMaturity;
+    int64_t nTargetTimespan;
+    int64_t nTargetTimespanV2;
+    int64_t nTargetSpacing;
+    int nTimeSlotLength;
 
     // Height based activations
     int height_start_BIP65;
@@ -28,11 +32,8 @@ struct Params {
     // TODO: Implement the following parameters
     bool fPowAllowMinDifficultyBlocks;
     bool fPowNoRetargeting;
-    int64_t nTargetSpacing;
-    int64_t nTargetTimespan;
 
-    // TODO: Implement the following methods
-    int64_t DifficultyAdjustmentInterval() const { return nTargetTimespan / nTargetSpacing; }
+    int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     uint256 nMinimumChainWork;
     uint256 defaultAssumeValid;
