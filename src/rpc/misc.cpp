@@ -570,7 +570,7 @@ UniValue setmocktime(const UniValue& params, bool fHelp)
             "1. timestamp  (integer, required) Unix seconds-since-epoch timestamp\n"
             "   Pass 0 to go back to using the system time.");
 
-    if (!Params().MineBlocksOnDemand())
+    if (!Params().IsRegTestNet())
         throw std::runtime_error("setmocktime for regression testing (-regtest mode) only");
 
     LOCK(cs_main);

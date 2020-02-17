@@ -135,7 +135,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
 
     // Check proof of work matches claimed amount
     if (hash > bnTarget) {
-        if (Params().MineBlocksOnDemand())
+        if (Params().IsRegTestNet())
             return false;
         else
             return error("CheckProofOfWork() : hash doesn't match nBits");

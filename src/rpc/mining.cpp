@@ -133,7 +133,7 @@ UniValue generate(const UniValue& params, bool fHelp)
             + HelpExampleCli("generate", "11")
         );
 
-    if (!Params().MineBlocksOnDemand())
+    if (!Params().IsRegTestNet())
         throw JSONRPCError(RPC_METHOD_NOT_FOUND, "This method can only be used on regtest");
 
     const int nGenerate = params[0].get_int();
@@ -218,8 +218,8 @@ UniValue setgenerate(const UniValue& params, bool fHelp)
     if (pwalletMain == NULL)
         throw JSONRPCError(RPC_METHOD_NOT_FOUND, "Method not found (disabled)");
 
-    if (Params().MineBlocksOnDemand())
-        throw JSONRPCError(RPC_INVALID_REQUEST, "Use the generate method instead of setgenerate on this network");
+    if (Params().IsRegTestNet())
+        throw JSONRPCError(RPC_INVALID_REQUEST, "Use the generate method instead of setgenerate on regtest");
 
     bool fGenerate = true;
     if (params.size() > 0)

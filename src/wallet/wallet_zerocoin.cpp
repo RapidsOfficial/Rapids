@@ -22,8 +22,8 @@
 
 std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const CCoinControl* coinControl)
 {
-    if (!Params().MineBlocksOnDemand())
-        return _("Zerocoin minting available only on regtest/unittest");
+    if (!Params().IsRegTestNet())
+        return _("Zerocoin minting available only on regtest");
 
     // Check amount
     if (nValue <= 0)
