@@ -196,6 +196,7 @@ public:
         consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
+        consensus.nMaxMoneyOut = 21000000 * COIN;
         consensus.nCoinbaseMaturity = 100;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
@@ -343,6 +344,7 @@ public:
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 15;
+        consensus.nMaxMoneyOut = 43199500 * COIN;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -466,6 +468,7 @@ public:
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
+        consensus.nMaxMoneyOut = 43199500 * COIN;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
