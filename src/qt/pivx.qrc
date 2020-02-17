@@ -168,6 +168,8 @@
         <file alias="ic-check-box-liliac-indeterminate">pivx/res/img/ic-check-box-liliac-indeterminate.svg</file>
         <file alias="ic-check-connect-off">pivx/res/img/ic-check-connect-off.svg</file>
         <file alias="ic-check-connect">pivx/res/img/ic-check-connect.svg</file>
+        <file alias="ic-check-tor-off">pivx/res/img/ic-check-tor-off.svg</file>
+        <file alias="ic-check-tor">pivx/res/img/ic-check-tor.svg</file>
         <file alias="ic-check-dark">pivx/res/img/ic-check-dark.svg</file>
         <file alias="ic-check-liliac-on">pivx/res/img/ic-check-liliac-on.svg</file>
         <file alias="ic-check-locked-off">pivx/res/img/ic-check-locked-off.svg</file>

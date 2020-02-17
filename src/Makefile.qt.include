@@ -528,6 +528,8 @@ RES_ICONS = \
   qt/pivx/res/img/dark/ic-transaction-cs-contract-inactive.svg \
   qt/pivx/res/img/img-qr.svg \
   qt/pivx/res/img/ic-check-connect-off.svg \
+  qt/pivx/res/img/ic-check-tor-off.svg \
+  qt/pivx/res/img/ic-check-tor.svg \
   qt/pivx/res/img/ic-label.svg \
   qt/pivx/res/img/ic-transaction-received.svg \
   qt/pivx/res/img/dark/ic-transaction-received.svg \

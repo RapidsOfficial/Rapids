@@ -293,6 +293,16 @@ border:none;</string>
             </widget>
            </item>
            <item>
+            <widget class="ExpandableButton" name="pushButtonTor" native="true">
+             <property name="minimumSize">
+              <size>
+               <width>36</width>
+               <height>36</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="ExpandableButton" name="pushButtonLock" native="true">
              <property name="sizePolicy">
               <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
