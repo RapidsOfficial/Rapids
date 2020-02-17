@@ -229,7 +229,6 @@ Create (and optionally verify) the signed Windows binaries:
     ./bin/gsign --signer "$SIGNER" --release ${VERSION}-win-signed --destination ../gitian.sigs/ ../pivx/contrib/gitian-descriptors/gitian-win-signer.yml
     ./bin/gverify -v -d ../gitian.sigs/ -r ${VERSION}-win-signed ../pivx/contrib/gitian-descriptors/gitian-win-signer.yml
     mv build/out/pivx-*win64-setup.exe ../pivx-${VERSION}-win64-setup.exe
-    mv build/out/pivx-*win32-setup.exe ../pivx-${VERSION}-win32-setup.exe
     popd
 
 Commit your signature for the signed macOS/Windows binaries:
@@ -259,8 +258,6 @@ pivx-${VERSION}-x86_64-linux-gnu.tar.gz
 pivx-${VERSION}-osx64.tar.gz
 pivx-${VERSION}-osx.dmg
 pivx-${VERSION}.tar.gz
-pivx-${VERSION}-win32-setup.exe
-pivx-${VERSION}-win32.zip
 pivx-${VERSION}-win64-setup.exe
 pivx-${VERSION}-win64.zip
 ```
