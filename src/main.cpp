@@ -77,8 +77,8 @@ std::condition_variable g_best_block_cv;
 uint256 g_best_block;
 
 int nScriptCheckThreads = 0;
-bool fImporting = false;
-bool fReindex = false;
+std::atomic<bool> fImporting{false};
+std::atomic<bool> fReindex{false};
 bool fTxIndex = true;
 bool fIsBareMultisigStd = true;
 bool fCheckBlockIndex = false;
@@ -5125,7 +5125,7 @@ bool static LoadBlockIndexDB(std::string& strError)
     // Check whether we need to continue reindexing
     bool fReindexing = false;
     pblocktree->ReadReindexing(fReindexing);
-    fReindex |= fReindexing;
+    if(fReindexing) fReindex = true;
 
     // Check whether we have a transaction index
     pblocktree->ReadFlag("txindex", fTxIndex);
