@@ -192,6 +192,7 @@ public:
         networkID = CBaseChainParams::MAIN;
         strNetworkID = "main";
 
+        consensus.fPowAllowMinDifficultyBlocks = false;
         consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
@@ -200,17 +201,9 @@ public:
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
-        consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.fPowNoRetargeting = false;
 
         // height based activations
         consensus.height_start_BIP65 = 1808634; // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
-
-        // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000000000000");
-
-        // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0000000000000000000000000000000000000000000000000000000000000000");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -293,7 +286,6 @@ public:
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
 
         fMiningRequiresPeers = true;
-        fAllowMinDifficultyBlocks = false;
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
         fSkipProofOfWorkCheck = false;
@@ -346,6 +338,7 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
+        consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
@@ -354,17 +347,9 @@ public:
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
-        consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.fPowNoRetargeting = false;
 
         // height based activations
         consensus.height_start_BIP65 = 851019;
-
-        // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000000000000");
-
-        // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0000000000000000000000000000000000000000000000000000000000000000");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -443,7 +428,6 @@ public:
         convertSeed6(vFixedSeeds, pnSeed6_test, ARRAYLEN(pnSeed6_test));
 
         fMiningRequiresPeers = true;
-        fAllowMinDifficultyBlocks = true;
         fDefaultConsistencyChecks = false;
         fRequireStandard = true;
         fTestnetToBeDeprecatedFieldRPC = true;
@@ -477,6 +461,7 @@ public:
         networkID = CBaseChainParams::REGTEST;
         strNetworkID = "regtest";
 
+        consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
@@ -485,17 +470,10 @@ public:
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
-        consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.fPowNoRetargeting = true;
 
         // height based activations
         consensus.height_start_BIP65 = 851019; // Not defined for regtest. Inherit TestNet value.
 
-        // The best chain should have at least this much work.
-        consensus.nMinimumChainWork = uint256S("0000000000000000000000000000000000000000000000000000000000000000");
-
-        // By default assume that the signatures in ancestors of this block are valid.
-        consensus.defaultAssumeValid = uint256S("0000000000000000000000000000000000000000000000000000000000000000");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -553,7 +531,6 @@ public:
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
 
         fMiningRequiresPeers = false;
-        fAllowMinDifficultyBlocks = true;
         fDefaultConsistencyChecks = true;
         fRequireStandard = false;
         fSkipProofOfWorkCheck = true;

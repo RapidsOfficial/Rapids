@@ -17,6 +17,7 @@ namespace Consensus {
  */
 struct Params {
     uint256 hashGenesisBlock;
+    bool fPowAllowMinDifficultyBlocks;
     uint256 powLimit;
     uint256 posLimitV1;
     uint256 posLimitV2;
@@ -29,14 +30,8 @@ struct Params {
     // Height based activations
     int height_start_BIP65;
 
-    // TODO: Implement the following parameters
-    bool fPowAllowMinDifficultyBlocks;
-    bool fPowNoRetargeting;
-
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
-    uint256 nMinimumChainWork;
-    uint256 defaultAssumeValid;
 };
 } // namespace Consensus
 
