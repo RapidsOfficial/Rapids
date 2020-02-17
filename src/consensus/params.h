@@ -17,20 +17,19 @@ namespace Consensus {
  */
 struct Params {
     uint256 hashGenesisBlock;
-    /** Block height at which BIP65 becomes active */
-    int BIP65Height;
-    int nCoinbaseMaturity;
-
-    // TODO: Implement the following parameters
     uint256 powLimit;
     uint256 posLimitV1;
     uint256 posLimitV2;
+    int nCoinbaseMaturity;
+
+    // Height based activations
+    int height_start_BIP65;
+
+    // TODO: Implement the following parameters
     bool fPowAllowMinDifficultyBlocks;
     bool fPowNoRetargeting;
     int64_t nTargetSpacing;
     int64_t nTargetTimespan;
-
-    int CoinbaseMaturity() const { return nCoinbaseMaturity; }
 
     // TODO: Implement the following methods
     int64_t DifficultyAdjustmentInterval() const { return nTargetTimespan / nTargetSpacing; }
