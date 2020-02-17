@@ -157,10 +157,10 @@ bool CChainParams::HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t
 {
     // before stake modifier V2, the age required was 60 * 60 (1 hour).
     if (!IsStakeModifierV2(contextHeight))
-        return (utxoFromBlockTime + nStakeMinAge <= contextTime);
+        return (utxoFromBlockTime + consensus.nStakeMinAge <= contextTime);
 
     // after stake modifier V2, we require the utxo to be nStakeMinDepth deep in the chain
-    return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
+    return (contextHeight - utxoFromBlockHeight >= consensus.nStakeMinDepth);
 }
 
 int CChainParams::FutureBlockTimeDrift(const int nHeight) const
@@ -196,8 +196,10 @@ public:
         consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~uint256(0) >> 24;
         consensus.posLimitV2 = ~uint256(0) >> 20;
-        consensus.nMaxMoneyOut = 21000000 * COIN;
         consensus.nCoinbaseMaturity = 100;
+        consensus.nMaxMoneyOut = 21000000 * COIN;
+        consensus.nStakeMinAge = 60 * 60;
+        consensus.nStakeMinDepth = 600;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -228,8 +230,6 @@ public:
         nRejectBlockOutdatedMajority = 10260; // 95%
         nToCheckBlockUpgradeMajority = 10800; // Approximate expected amount of blocks in 7 days (1440*7.5)
         nMinerThreads = 0;
-        nStakeMinAge = 60 * 60;                         // 1 hour
-        nStakeMinDepth = 600;
         nFutureTimeDriftPoW = 7200;
         nFutureTimeDriftPoS = 180;
         nMasternodeCountDrift = 20;
@@ -345,6 +345,8 @@ public:
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 15;
         consensus.nMaxMoneyOut = 43199500 * COIN;
+        consensus.nStakeMinAge = 60 * 60;
+        consensus.nStakeMinDepth = 100;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -378,7 +380,6 @@ public:
         nLastPOWBlock = 200;
         nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 259201 per PR #915
         nPivxBadBlocknBits = 0x1e0a20bd; // Skip nBit validation of Block 201 per PR #915
-        nStakeMinDepth = 100;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
         nZerocoinStartHeight = 201576;
@@ -469,6 +470,8 @@ public:
         consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
         consensus.nMaxMoneyOut = 43199500 * COIN;
+        consensus.nStakeMinAge = 0;
+        consensus.nStakeMinDepth = 0;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -500,8 +503,6 @@ public:
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
         nLastPOWBlock = 250;
-        nStakeMinAge = 0;
-        nStakeMinDepth = 0;
         nMasternodeCountDrift = 4;
         nModifierUpdateBlock = 0;
         nZerocoinStartHeight = 300;

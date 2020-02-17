@@ -24,6 +24,8 @@ struct Params {
     uint256 posLimitV2;
     int nCoinbaseMaturity;
     CAmount nMaxMoneyOut;
+    int nStakeMinAge;
+    int nStakeMinDepth;
     int64_t nTargetTimespan;
     int64_t nTargetTimespanV2;
     int64_t nTargetSpacing;

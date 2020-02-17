@@ -204,7 +204,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 
     // check required min depth for stake
     const int nHeightBlockFrom = pindexFrom->nHeight;
-    if (nHeight < nHeightBlockFrom + Params().COINSTAKE_MIN_DEPTH())
+    if (nHeight < nHeightBlockFrom + Params().GetConsensus().nStakeMinDepth)
         return error("%s : min depth violation, nHeight=%d, nHeightBlockFrom=%d", __func__, nHeight, nHeightBlockFrom);
 
     const bool fRegTest = Params().IsRegTestNet();
