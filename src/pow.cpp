@@ -32,14 +32,15 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int64_t CountBlocks = 0;
     uint256 PastDifficultyAverage;
     uint256 PastDifficultyAveragePrev;
+    const uint256& PowLimit = Params().GetConsensus().powLimit;
 
     if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMin) {
-        return Params().ProofOfWorkLimit().GetCompact();
+        return PowLimit.GetCompact();
     }
 
     if (pindexLast->nHeight >= Params().LAST_POW_BLOCK()) {
         const bool fTimeV2 = Params().IsTimeProtocolV2(pindexLast->nHeight+1);
-        const uint256 bnTargetLimit = Params().ProofOfStakeLimit(fTimeV2);
+        const uint256 bnTargetLimit = Params().GetConsensus().ProofOfStakeLimit(fTimeV2);
         const int64_t nTargetSpacing = Params().TargetSpacing();
         const int64_t nTargetTimespan = Params().TargetTimespan(fTimeV2);
 
@@ -111,8 +112,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     bnNew *= nActualTimespan;
     bnNew /= _nTargetTimespan;
 
-    if (bnNew > Params().ProofOfWorkLimit()) {
-        bnNew = Params().ProofOfWorkLimit();
+    if (bnNew > PowLimit) {
+        bnNew = PowLimit;
     }
 
     return bnNew.GetCompact();
@@ -130,7 +131,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > Params().ProofOfWorkLimit())
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > Params().GetConsensus().powLimit)
         return error("CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount

@@ -23,8 +23,8 @@ struct Params {
 
     // TODO: Implement the following parameters
     uint256 powLimit;
-    uint256 posLimitv1;
-    uint256 posLimitv2;
+    uint256 posLimitV1;
+    uint256 posLimitV2;
     bool fPowAllowMinDifficultyBlocks;
     bool fPowNoRetargeting;
     int64_t nTargetSpacing;
@@ -34,8 +34,7 @@ struct Params {
 
     // TODO: Implement the following methods
     int64_t DifficultyAdjustmentInterval() const { return nTargetTimespan / nTargetSpacing; }
-    uint256 ProofOfWorkLimit() const { return powLimit; }
-    uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitv2 : posLimitv1; }
+    uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     uint256 nMinimumChainWork;
     uint256 defaultAssumeValid;
 };

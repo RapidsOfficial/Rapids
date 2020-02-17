@@ -55,8 +55,6 @@ public:
     const Consensus::Params& GetConsensus() const { return consensus; }
     const MessageStartChars& MessageStart() const { return pchMessageStart; }
     int GetDefaultPort() const { return nDefaultPort; }
-    const uint256& ProofOfWorkLimit() const { return bnProofOfWorkLimit; }
-    const uint256& ProofOfStakeLimit(const bool fV2) const { return fV2 ? bnProofOfStakeLimit_V2 : bnProofOfStakeLimit; }
 
     const CBlock& GenesisBlock() const { return genesis; }
     const std::vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
@@ -171,9 +169,6 @@ protected:
     //! Raw pub key bytes for the broadcast alert signing key.
     std::vector<unsigned char> vAlertPubKey;
     int nDefaultPort;
-    uint256 bnProofOfWorkLimit;
-    uint256 bnProofOfStakeLimit;
-    uint256 bnProofOfStakeLimit_V2;
     int nMaxReorganizationDepth;
     int nEnforceBlockUpgradeMajority;
     int nRejectBlockOutdatedMajority;

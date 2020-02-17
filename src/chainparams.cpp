@@ -193,9 +193,9 @@ public:
         strNetworkID = "main";
 
         consensus.BIP65Height = 1808634; // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
-        consensus.powLimit   = uint256S("00000ffff0000000000000000000000000000000000000000000000000000000");
-        consensus.posLimitv1 = uint256S("000000ffff000000000000000000000000000000000000000000000000000000");
-        consensus.posLimitv2 = uint256S("00000ffff0000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
+        consensus.posLimitV1 = ~uint256(0) >> 24;
+        consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -219,9 +219,6 @@ public:
         pchMessageStart[3] = 0xe9;
         vAlertPubKey = ParseHex("0000098d3ba6ba6e7423fa5cbd6a89e0a9a5348f88d332b44a5cb1a8b7ed2c1eaa335fc8dc4f012cb8241cc0bdafd6ca70c5f5448916e4e6f511bcd746ed57dc50");
         nDefaultPort = 51472;
-        bnProofOfWorkLimit = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
-        bnProofOfStakeLimit = ~uint256(0) >> 24;
-        bnProofOfStakeLimit_V2 = ~uint256(0) >> 20; // 60/4 = 15 ==> use 2**4 higher limit
         nMaxReorganizationDepth = 100;
 
         genesis = CreateGenesisBlock(1454124731, 2402015, 0x1e0ffff0, 1, 250 * COIN);
@@ -350,9 +347,9 @@ public:
         strNetworkID = "test";
 
         consensus.BIP65Height = 851019;
-        consensus.powLimit   = uint256S("00000ffff0000000000000000000000000000000000000000000000000000000");
-        consensus.posLimitv1 = uint256S("000000ffff000000000000000000000000000000000000000000000000000000");
-        consensus.posLimitv2 = uint256S("00000ffff0000000000000000000000000000000000000000000000000000000");
+        consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
+        consensus.posLimitV1 = ~uint256(0) >> 24;
+        consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 15;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -476,10 +473,10 @@ public:
         networkID = CBaseChainParams::REGTEST;
         strNetworkID = "regtest";
 
-        consensus.BIP65Height = 1808634; // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
-        consensus.powLimit   = uint256S("ffff000000000000000000000000000000000000000000000000000000000000");
-        consensus.posLimitv1 = uint256S("000000ffff000000000000000000000000000000000000000000000000000000");
-        consensus.posLimitv2 = uint256S("00000ffff0000000000000000000000000000000000000000000000000000000");
+        consensus.BIP65Height = 851019; // Not defined for regtest. Inherit TestNet value.
+        consensus.powLimit   = ~uint256(0) >> 20; // PIVX starting difficulty is 1 / 2^12
+        consensus.posLimitV1 = ~uint256(0) >> 24;
+        consensus.posLimitV2 = ~uint256(0) >> 20;
         consensus.nCoinbaseMaturity = 100;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetSpacing = 1 * 60;
