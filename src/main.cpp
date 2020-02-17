@@ -4108,10 +4108,12 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
         if (lastOut.nValue == 3 * COIN)
             return true;
 
-        if (budget.IsBudgetPaymentBlock(nHeight) &
-                sporkManager.IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS) &&
-                sporkManager.IsSporkActive(SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT))
-            return true;
+        if (budget.IsBudgetPaymentBlock(nHeight)) {
+            // if this is a budget payment, check that SPORK_9 and SPORK_13 are active (if spork list synced)
+            return (!masternodeSync.IsSporkListSynced() ||
+                    (sporkManager.IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS) &&
+                    sporkManager.IsSporkActive(SPORK_9_MASTERNODE_BUDGET_ENFORCEMENT)));
+        }
 
         return error("%s: Wrong cold staking outputs: vout[%d].scriptPubKey (%s) != vout[%d].scriptPubKey (%s) - value: %s",
                 __func__, outs-1, HexStr(lastOut.scriptPubKey), outs-2, HexStr(tx.vout[outs-2].scriptPubKey), FormatMoney(lastOut.nValue).c_str());
@@ -4248,7 +4250,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
             }
         } else {
             if (fDebug)
-                LogPrintf("%s: Masternode payment check skipped on sync - skipping IsBlockPayeeValid()\n", __func__);
+                LogPrintf("%s: Masternode/Budget payment checks skipped on sync\n", __func__);
         }
     }
 
