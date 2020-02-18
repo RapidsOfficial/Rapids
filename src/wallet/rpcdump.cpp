@@ -76,7 +76,7 @@ std::string DecodeDumpString(const std::string& str)
 
 bool IsStakingDerPath(KeyOriginInfo keyOrigin)
 {
-    return keyOrigin.path[3] == (2 | BIP32_HARDENED_KEY_LIMIT);
+    return keyOrigin.path.size() > 3 && keyOrigin.path[3] == (2 | BIP32_HARDENED_KEY_LIMIT);
 }
 
 UniValue importprivkey(const UniValue& params, bool fHelp)
@@ -455,7 +455,7 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
         CKey key;
         if (pwalletMain->GetKey(keyid, key)) {
             const CKeyMetadata& metadata = pwalletMain->mapKeyMetadata[keyid];
-            std::string strAddr = CBitcoinAddress(keyid, (metadata.HasKeyOrigin() && IsStakingDerPath(metadata.key_origin)?
+            std::string strAddr = CBitcoinAddress(keyid, (metadata.HasKeyOrigin() && IsStakingDerPath(metadata.key_origin) ?
                                                           CChainParams::STAKING_ADDRESS :
                                                           CChainParams::PUBKEY_ADDRESS)).ToString();
 
