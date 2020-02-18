@@ -15,7 +15,6 @@
 #include "protocol.h"
 #include "uint256.h"
 
-#include "libzerocoin/Params.h"
 #include <vector>
 
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
@@ -106,21 +105,9 @@ public:
     CBaseChainParams::Network NetworkID() const { return networkID; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
 
-    /** Zerocoin **/
-    libzerocoin::ZerocoinParams* Zerocoin_Params(bool useModulusV1) const;
-    int Zerocoin_MaxSpendsPerTransaction() const { return nMaxZerocoinSpendsPerTransaction; }
-    int Zerocoin_MaxPublicSpendsPerTransaction() const { return nMaxZerocoinPublicSpendsPerTransaction; }
-    CAmount Zerocoin_MintFee() const { return nMinZerocoinMintFee; }
-    int Zerocoin_MintRequiredConfirmations() const { return nMintRequiredConfirmations; }
-    int Zerocoin_RequiredAccumulation() const { return nRequiredAccumulation; }
-    int Zerocoin_DefaultSpendSecurity() const { return nDefaultSecurityLevel; }
-    int Zerocoin_HeaderVersion() const { return nZerocoinHeaderVersion; }
-    int Zerocoin_RequiredStakeDepth() const { return nZerocoinRequiredStakeDepth; }
-
     /** Height or Time Based Activations **/
     int PivxBadBlockTime() const { return nPivxBadBlockTime; }
     int PivxBadBlocknBits() const { return nPivxBadBlocknBits; }
-    int Zerocoin_StartTime() const { return nZerocoinStartTime; }
 
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
 
@@ -145,7 +132,6 @@ protected:
     int nMasternodeCountDrift;
     int nMaturity;
 
-    int nModifierUpdateBlock;
     int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
@@ -164,18 +150,9 @@ protected:
     int64_t nRejectOldSporkKey;
     std::string strObfuscationPoolDummyAddress;
     int64_t nStartMasternodePayments;
-    std::string zerocoinModulus;
-    int nMaxZerocoinSpendsPerTransaction;
-    int nMaxZerocoinPublicSpendsPerTransaction;
-    CAmount nMinZerocoinMintFee;
+
     CAmount nInvalidAmountFiltered;
-    int nMintRequiredConfirmations;
-    int nRequiredAccumulation;
-    int nDefaultSecurityLevel;
-    int nZerocoinHeaderVersion;
     int64_t nBudget_Fee_Confirmations;
-    int nZerocoinStartTime;
-    int nZerocoinRequiredStakeDepth;
     int64_t nProposalEstablishmentTime;
 
     CAmount nMinColdStakingAmount;

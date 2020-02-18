@@ -231,7 +231,7 @@ void CzPIVWallet::SyncWithChain(bool fGenerateMintPool)
                     if (!out.IsZerocoinMint())
                         continue;
 
-                    libzerocoin::PublicCoin pubcoin(Params().Zerocoin_Params(false));
+                    libzerocoin::PublicCoin pubcoin(Params().GetConsensus().Zerocoin_Params(false));
                     CValidationState state;
                     if (!TxOutToPublicCoin(out, pubcoin, state)) {
                         LogPrintf("%s : failed to get mint from txout for %s!\n", __func__, pMint.first.GetHex());
@@ -345,14 +345,13 @@ bool CzPIVWallet::SetMintSeen(const CBigNum& bnValue, const int& nHeight, const 
 // Check if the value of the commitment meets requirements
 bool IsValidCoinValue(const CBigNum& bnValue)
 {
-    return bnValue >= Params().Zerocoin_Params(false)->accumulatorParams.minCoinValue &&
-    bnValue <= Params().Zerocoin_Params(false)->accumulatorParams.maxCoinValue &&
-    bnValue.isPrime();
+    libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
+    return bnValue >= params->accumulatorParams.minCoinValue && bnValue <= params->accumulatorParams.maxCoinValue && bnValue.isPrime();
 }
 
 void CzPIVWallet::SeedToZPIV(const uint512& seedZerocoin, CBigNum& bnValue, CBigNum& bnSerial, CBigNum& bnRandomness, CKey& key)
 {
-    libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
+    libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
 
     //convert state seed into a seed for the private key
     uint256 nSeedPrivKey = seedZerocoin.trim256();
@@ -432,7 +431,7 @@ void CzPIVWallet::GenerateMint(const uint32_t& nCount, const libzerocoin::CoinDe
     CBigNum bnRandomness;
     CKey key;
     SeedToZPIV(seedZerocoin, bnValue, bnSerial, bnRandomness, key);
-    coin = libzerocoin::PrivateCoin(Params().Zerocoin_Params(false), denom, bnSerial, bnRandomness);
+    coin = libzerocoin::PrivateCoin(Params().GetConsensus().Zerocoin_Params(false), denom, bnSerial, bnRandomness);
     coin.setPrivKey(key.GetPrivKey());
     coin.setVersion(libzerocoin::PrivateCoin::CURRENT_VERSION);
 
@@ -460,7 +459,7 @@ bool CzPIVWallet::RegenerateMint(const CDeterministicMint& dMint, CZerocoinMint&
     }
 
     //Generate the coin
-    libzerocoin::PrivateCoin coin(Params().Zerocoin_Params(false), dMint.GetDenomination(), false);
+    libzerocoin::PrivateCoin coin(Params().GetConsensus().Zerocoin_Params(false), dMint.GetDenomination(), false);
     CDeterministicMint dMintDummy;
     GenerateMint(dMint.GetCount(), dMint.GetDenomination(), coin, dMintDummy);
 

@@ -4128,7 +4128,7 @@ UniValue generatemintlist(const UniValue& params, bool fHelp)
     UniValue arrRet(UniValue::VARR);
     for (int i = nCount; i < nCount + nRange; i++) {
         libzerocoin::CoinDenomination denom = libzerocoin::CoinDenomination::ZQ_ONE;
-        libzerocoin::PrivateCoin coin(Params().Zerocoin_Params(false), denom, false);
+        libzerocoin::PrivateCoin coin(Params().GetConsensus().Zerocoin_Params(false), denom, false);
         CDeterministicMint dMint;
         zwallet->GenerateMint(i, denom, coin, dMint);
         UniValue obj(UniValue::VOBJ);
@@ -4291,7 +4291,7 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
     privkey = key.GetPrivKey();
 
     // Create the coin associated with these secrets
-    libzerocoin::PrivateCoin coin(Params().Zerocoin_Params(false), denom, serial, randomness);
+    libzerocoin::PrivateCoin coin(Params().GetConsensus().Zerocoin_Params(false), denom, serial, randomness);
     coin.setPrivKey(privkey);
     coin.setVersion(libzerocoin::PrivateCoin::CURRENT_VERSION);
 

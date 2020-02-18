@@ -1228,7 +1228,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
                         if(!GetOutput(txin.prevout.hash, txin.prevout.n, state, prevOut)){
                             throw JSONRPCError(RPC_INTERNAL_ERROR, "public zerocoin spend prev output not found");
                         }
-                        libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(false);
+                        libzerocoin::ZerocoinParams *params = Params().GetConsensus().Zerocoin_Params(false);
                         PublicCoinSpend publicSpend(params);
                         if (!ZPIVModule::parseCoinSpend(txin, tx, prevOut, publicSpend)) {
                             throw JSONRPCError(RPC_INTERNAL_ERROR, "public zerocoin spend parse failed");

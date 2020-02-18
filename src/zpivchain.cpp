@@ -25,7 +25,7 @@ bool BlockToMintValueVector(const CBlock& block, const libzerocoin::CoinDenomina
                 continue;
 
             CValidationState state;
-            libzerocoin::PublicCoin coin(Params().Zerocoin_Params(false));
+            libzerocoin::PublicCoin coin(Params().GetConsensus().Zerocoin_Params(false));
             if(!TxOutToPublicCoin(txOut, coin, state))
                 return false;
 
@@ -69,7 +69,7 @@ bool BlockToPubcoinList(const CBlock& block, std::list<libzerocoin::PublicCoin>&
                 continue;
 
             CValidationState state;
-            libzerocoin::PublicCoin pubCoin(Params().Zerocoin_Params(false));
+            libzerocoin::PublicCoin pubCoin(Params().GetConsensus().Zerocoin_Params(false));
             if(!TxOutToPublicCoin(txOut, pubCoin, state))
                 return false;
 
@@ -111,7 +111,7 @@ bool BlockToZerocoinMintList(const CBlock& block, std::list<CZerocoinMint>& vMin
                 continue;
 
             CValidationState state;
-            libzerocoin::PublicCoin pubCoin(Params().Zerocoin_Params(false));
+            libzerocoin::PublicCoin pubCoin(Params().GetConsensus().Zerocoin_Params(false));
             if(!TxOutToPublicCoin(txOut, pubCoin, state))
                 return false;
 
@@ -181,7 +181,7 @@ void FindMints(std::vector<CMintMeta> vMintsToFind, std::vector<CMintMeta>& vMin
         for (auto& out : tx.vout) {
             if (!out.IsZerocoinMint())
                 continue;
-            libzerocoin::PublicCoin pubcoin(Params().Zerocoin_Params(meta.nVersion < libzerocoin::PrivateCoin::PUBKEY_VERSION));
+            libzerocoin::PublicCoin pubcoin(Params().GetConsensus().Zerocoin_Params(meta.nVersion < libzerocoin::PrivateCoin::PUBKEY_VERSION));
             CValidationState state;
             TxOutToPublicCoin(out, pubcoin, state);
             if (GetPubCoinHash(pubcoin.getValue()) == meta.hashPubcoin && pubcoin.getDenomination() != meta.denom) {
@@ -285,7 +285,7 @@ std::string ReindexZerocoinDB()
                             if (!in.IsZerocoinSpend() && !isPublicSpend)
                                 continue;
                             if (isPublicSpend) {
-                                libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
+                                libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
                                 PublicCoinSpend publicSpend(params);
                                 CValidationState state;
                                 if (!ZPIVModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
@@ -306,7 +306,7 @@ std::string ReindexZerocoinDB()
                                 continue;
 
                             CValidationState state;
-                            libzerocoin::PublicCoin coin(Params().Zerocoin_Params(pindex->nHeight < Params().GetConsensus().height_start_ZC_SerialsV2));
+                            libzerocoin::PublicCoin coin(Params().GetConsensus().Zerocoin_Params(pindex->nHeight < Params().GetConsensus().height_start_ZC_SerialsV2));
                             TxOutToPublicCoin(out, coin, state);
                             vMintInfo.push_back(std::make_pair(coin, txid));
                         }
@@ -360,7 +360,7 @@ bool TxOutToPublicCoin(const CTxOut& txout, libzerocoin::PublicCoin& pubCoin, CV
     if (denomination == libzerocoin::ZQ_ERROR)
         return state.DoS(100, error("TxOutToPublicCoin : txout.nValue is not correct"));
 
-    libzerocoin::PublicCoin checkPubCoin(Params().Zerocoin_Params(false), publicZerocoin, denomination);
+    libzerocoin::PublicCoin checkPubCoin(Params().GetConsensus().Zerocoin_Params(false), publicZerocoin, denomination);
     pubCoin = checkPubCoin;
 
     return true;

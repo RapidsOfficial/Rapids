@@ -145,7 +145,7 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
         CLegacyZPivStake* zPIV = dynamic_cast<CLegacyZPivStake*>(stake.get());
         if (!zPIV) return error("%s : dynamic_cast of stake ptr failed", __func__);
         // The checkpoint needs to be from 200 blocks ago
-        const int cpHeight = nPreviousBlockHeight - Params().Zerocoin_RequiredStakeDepth();
+        const int cpHeight = nPreviousBlockHeight - consensus.ZC_MinStakeDepth;
         const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(zPIV->GetValue());
         if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != zPIV->GetChecksum())
             return error("%s : accum. checksum at height %d is wrong.", __func__, (nPreviousBlockHeight+1));
