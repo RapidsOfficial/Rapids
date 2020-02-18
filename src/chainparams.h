@@ -76,8 +76,6 @@ public:
     bool SkipProofOfWorkCheck() const { return fSkipProofOfWorkCheck; }
     /** Make standard checks */
     bool RequireStandard() const { return fRequireStandard; }
-    /** returns the coinstake maturity (min depth required) **/
-    bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
 
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
@@ -132,7 +130,6 @@ public:
     int Zerocoin_StartTime() const { return nZerocoinStartTime; }
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
-    bool IsStakeModifierV2(const int nHeight) const { return nHeight >= nBlockStakeModifierlV2; }
     int NewSigsActive(const int nHeight) const { return nHeight >= nBlockEnforceNewMessageSignatures; }
     int Block_V7_StartHeight() const { return nBlockV7StartHeight; }
 
@@ -208,7 +205,6 @@ protected:
     int nBlockZerocoinV2;
     int nBlockDoubleAccumulated;
     int nPublicZCSpends;
-    int nBlockStakeModifierlV2;
     int nBlockEnforceNewMessageSignatures;
     int nBlockV7StartHeight;
     int nBlockLastAccumulatorCheckpoint;

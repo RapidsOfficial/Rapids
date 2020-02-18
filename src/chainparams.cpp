@@ -152,17 +152,6 @@ libzerocoin::ZerocoinParams* CChainParams::Zerocoin_Params(bool useModulusV1) co
     return &ZCParamsDec;
 }
 
-bool CChainParams::HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime,
-        const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
-{
-    // before stake modifier V2, the age required was 60 * 60 (1 hour).
-    if (!IsStakeModifierV2(contextHeight))
-        return (utxoFromBlockTime + consensus.nStakeMinAge <= contextTime);
-
-    // after stake modifier V2, we require the utxo to be nStakeMinDepth deep in the chain
-    return (contextHeight - utxoFromBlockHeight >= consensus.nStakeMinDepth);
-}
-
 class CMainParams : public CChainParams
 {
 public:
@@ -189,6 +178,7 @@ public:
         // height based activations
         consensus.height_last_PoW = 259200;
         consensus.height_start_BIP65 = 1808634; // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
+        consensus.height_start_StakeModifierV2 = 1967000;
         consensus.height_start_TimeProtoV2 = 2153200; // TimeProtocolV2, Blocks V7 and newMessageSignatures
 
         /**
@@ -232,7 +222,6 @@ public:
         nBlockDoubleAccumulated = 1050010;
         nEnforceNewSporkKey = 1566860400; //!> Sporks signed after Monday, August 26, 2019 11:00:00 PM GMT must use the new spork key
         nRejectOldSporkKey = 1569538800; //!> Fully reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
-        nBlockStakeModifierlV2 = 1967000;
 
         // Public coin spend enforcement
         nPublicZCSpends = 1880000;
@@ -335,6 +324,7 @@ public:
         // height based activations
         consensus.height_last_PoW = 200;
         consensus.height_start_BIP65 = 851019;
+        consensus.height_start_StakeModifierV2 = 1214000;
         consensus.height_start_TimeProtoV2 = 1347000; // TimeProtocolV2, Blocks V7 and newMessageSignatures
 
         /**
@@ -374,7 +364,6 @@ public:
         nBlockZerocoinV2 = 444020; //!> The block that zerocoin v2 becomes active
         nEnforceNewSporkKey = 1566860400; //!> Sporks signed after Monday, August 26, 2019 11:00:00 PM GMT must use the new spork key
         nRejectOldSporkKey = 1569538800; //!> Reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
-        nBlockStakeModifierlV2 = 1214000;
 
         // Public coin spend enforcement
         nPublicZCSpends = 1106100;
@@ -461,6 +450,7 @@ public:
         // height based activations
         consensus.height_last_PoW = 250;
         consensus.height_start_BIP65 = 851019; // Not defined for regtest. Inherit TestNet value.
+        consensus.height_start_StakeModifierV2 = consensus.height_last_PoW + 1; // start with modifier V2 on regtest
         consensus.height_start_TimeProtoV2 = 999999999;
 
 
@@ -494,7 +484,6 @@ public:
         nBlockRecalculateAccumulators = 999999999;  // Trigger a recalculation of accumulators
         nBlockFirstFraudulent = 999999999;          // First block that bad serials emerged
         nBlockLastGoodCheckpoint = 999999999;       // Last valid accumulator checkpoint
-        nBlockStakeModifierlV2 = consensus.height_last_PoW + 1; // start with modifier V2 on regtest
 
         nMintRequiredConfirmations = 10;
         nZerocoinRequiredStakeDepth = nMintRequiredConfirmations;

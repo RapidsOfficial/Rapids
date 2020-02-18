@@ -554,7 +554,7 @@ public:
         READWRITE(nFlags);
 
         // v1/v2 modifier selection.
-        if (!Params().IsStakeModifierV2(nHeight)) {
+        if (!Params().GetConsensus().IsStakeModifierV2(nHeight)) {
             READWRITE(nStakeModifier);
         } else {
             READWRITE(nStakeModifierV2);

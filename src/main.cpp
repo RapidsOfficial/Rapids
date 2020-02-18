@@ -3912,7 +3912,7 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
             pindexNew->hashProofOfStake = mapProofOfStake[hash];
         }
 
-        if (!Params().IsStakeModifierV2(pindexNew->nHeight)) {
+        if (!Params().GetConsensus().IsStakeModifierV2(pindexNew->nHeight)) {
             uint64_t nStakeModifier = 0;
             bool fGeneratedStakeModifier = false;
             if (!ComputeNextStakeModifier(pindexNew->pprev, nStakeModifier, fGeneratedStakeModifier))

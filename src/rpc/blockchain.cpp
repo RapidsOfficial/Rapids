@@ -161,7 +161,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         if (!GetHashProofOfStake(blockindex->pprev, stake.get(), nTxTime, false, hashProofOfStakeRet))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
-        std::string stakeModifier = (Params().IsStakeModifierV2(blockindex->nHeight) ?
+        std::string stakeModifier = (Params().GetConsensus().IsStakeModifierV2(blockindex->nHeight) ?
                                      blockindex->nStakeModifierV2.GetHex() :
                                      strprintf("%016x", blockindex->nStakeModifier));
         result.push_back(Pair("stakeModifier", stakeModifier));

@@ -36,12 +36,14 @@ struct Params {
     // Height-based activations
     int height_last_PoW;
     int height_start_BIP65;
+    int height_start_StakeModifierV2;
     int height_start_TimeProtoV2;
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
     bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= height_start_TimeProtoV2; }
+    bool IsStakeModifierV2(const int nHeight) const { return nHeight >= height_start_StakeModifierV2; }
 
     int FutureBlockTimeDrift(const int nHeight) const
     {
@@ -57,6 +59,16 @@ struct Params {
         if (!IsTimeProtocolV2(nHeight)) return true;
         // Time protocol v2 requires time in slots
         return (nTime % nTimeSlotLength) == 0;
+    }
+
+    bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime,
+            const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
+    {
+        // before stake modifier V2, we require the utxo to be nStakeMinAge old
+        if (!IsStakeModifierV2(contextHeight))
+            return (utxoFromBlockTime + nStakeMinAge <= contextTime);
+        // with stake modifier V2+, we require the utxo to be nStakeMinDepth deep in the chain
+        return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
     }
 };
 } // namespace Consensus
