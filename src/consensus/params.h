@@ -50,6 +50,9 @@ struct Params {
     int height_start_ZC_SerialsV2;
     int height_ZC_RecalcAccumulators;
 
+    // Zerocoin-related params
+    CAmount ZC_WrappedSerialsSupply;
+
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
