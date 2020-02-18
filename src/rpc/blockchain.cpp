@@ -1155,7 +1155,6 @@ void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int
     }
 }
 
-
 UniValue getserials(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() < 2 || params.size() > 3)
         throw std::runtime_error(
@@ -1172,7 +1171,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
             HelpExampleRpc("getserials", "1254000, 1000"));
 
     int heightStart, heightEnd;
-    validaterange(params, heightStart, heightEnd, Params().Zerocoin_StartHeight());
+    validaterange(params, heightStart, heightEnd, Params().GetConsensus().height_start_ZC);
 
     bool fVerbose = false;
     if (params.size() > 2) {

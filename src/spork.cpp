@@ -104,7 +104,7 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
 
         // reject old signatures 600 blocks after hard-fork
         if (spork.nMessVersion != MessageVersion::MESS_VER_HASH) {
-            if (Params().NewSigsActive(nChainHeight - 600)) {
+            if (Params().GetConsensus().IsMessSigV2(nChainHeight - 600)) {
                 LogPrintf("%s : nMessVersion=%d not accepted anymore at block %d\n", __func__, spork.nMessVersion, nChainHeight);
                 return;
             }

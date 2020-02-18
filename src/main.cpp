@@ -960,7 +960,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     // Check transaction
     int chainHeight = chainActive.Height();
     bool fColdStakingActive = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT);
-    if (!CheckTransaction(tx, chainHeight >= Params().Zerocoin_StartHeight(), true, state, isBlockBetweenFakeSerialAttackRange(chainHeight), fColdStakingActive))
+    if (!CheckTransaction(tx, chainHeight >= Params().GetConsensus().height_start_ZC, true, state, isBlockBetweenFakeSerialAttackRange(chainHeight), fColdStakingActive))
         return state.DoS(100, error("%s : CheckTransaction failed", __func__), REJECT_INVALID, "bad-tx");
 
     // Coinbase is only valid in a block, not as a loose transaction
@@ -1222,7 +1222,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
 
     const int chainHeight = chainActive.Height();
 
-    if (!CheckTransaction(tx, chainHeight >= Params().Zerocoin_StartHeight(), true, state))
+    if (!CheckTransaction(tx, chainHeight >= Params().GetConsensus().height_start_ZC, true, state))
         return error("AcceptableInputs: : CheckTransaction failed");
 
     // Coinbase is only valid in a block, not as a loose transaction
@@ -1621,7 +1621,7 @@ int64_t GetBlockValue(int nHeight)
         nSubsidy = 13.5 * COIN;
     } else if (nHeight <= 647999 && nHeight >= 604800) {
         nSubsidy = 9 * COIN;
-    } else if (nHeight < Params().Zerocoin_Block_V2_Start()) {
+    } else if (nHeight < Params().GetConsensus().height_start_ZC_SerialsV2) {
         nSubsidy = 4.5 * COIN;
     } else {
         nSubsidy = 5 * COIN;
@@ -1873,15 +1873,16 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
             return 0;
     }
 
+    const Consensus::Params& consensus = Params().GetConsensus();
     if (nHeight <= 43200) {
         ret = blockValue / 5;
     } else if (nHeight < 86400 && nHeight > 43200) {
         ret = blockValue / (100 / 30);
     } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
         ret = 50 * COIN;
-    } else if (nHeight <= Params().GetConsensus().height_last_PoW && nHeight >= 151200) {
+    } else if (nHeight <= consensus.height_last_PoW && nHeight >= 151200) {
         ret = blockValue / 2;
-    } else if (nHeight < Params().Zerocoin_Block_V2_Start()) {
+    } else if (nHeight < consensus.height_start_ZC_SerialsV2) {
         return GetSeeSaw(blockValue, nMasternodeCount, nHeight);
     } else {
         //When zPIV is staked, masternode only gets 2 PIV
@@ -2126,7 +2127,7 @@ void AddInvalidSpendsToMap(const CBlock& block)
 
 bool ValidOutPoint(const COutPoint& out, int nHeight)
 {
-    bool isInvalid = nHeight >= Params().Block_Enforce_Invalid() && invalid_out::ContainsOutPoint(out);
+    bool isInvalid = nHeight >= Params().GetConsensus().height_start_InvalidUTXOsCheck && invalid_out::ContainsOutPoint(out);
     return !isInvalid;
 }
 
@@ -2253,9 +2254,10 @@ static bool AbortNode(CValidationState& state, const std::string& strMessage, co
 // (between Zerocoin_Block_V2_Start and Zerocoin_Block_Last_Checkpoint)
 void DataBaseAccChecksum(CBlockIndex* pindex, bool fWrite)
 {
+    const Consensus::Params& consensus = Params().GetConsensus();
     if (!pindex ||
-            pindex->nHeight < Params().Zerocoin_Block_V2_Start() ||
-            pindex->nHeight > Params().Zerocoin_Block_Last_Checkpoint() ||
+            pindex->nHeight < consensus.height_start_ZC_SerialsV2 ||
+            pindex->nHeight > consensus.height_last_ZC_AccumCheckpoint ||
             pindex->nAccumulatorCheckpoint == pindex->pprev->nAccumulatorCheckpoint)
         return;
 
@@ -2411,7 +2413,9 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
     // move best block pointer to prevout block
     view.SetBestBlock(pindex->pprev->GetBlockHash());
 
-    if (pindex->nHeight >= Params().Zerocoin_Block_V2_Start() && pindex->nHeight <= Params().Zerocoin_Block_Last_Checkpoint()) {
+    const Consensus::Params& consensus = Params().GetConsensus();
+    if (pindex->nHeight >= consensus.height_start_ZC_SerialsV2 &&
+            pindex->nHeight <= consensus.height_last_ZC_AccumCheckpoint) {
         // Legacy Zerocoin DB: If Accumulators Checkpoint is changed, remove changed checksums
         DataBaseAccChecksum(pindex, false);
     }
@@ -2476,15 +2480,17 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         LogPrintf("%s: hashPrev=%s view=%s\n", __func__, hashPrevBlock.GetHex(), view.GetBestBlock().GetHex());
     assert(hashPrevBlock == view.GetBestBlock());
 
+    const Consensus::Params& consensus = Params().GetConsensus();
+
     // Special case for the genesis block, skipping connection of its transactions
     // (its coinbase is unspendable)
-    if (block.GetHash() == Params().GetConsensus().hashGenesisBlock) {
+    if (block.GetHash() == consensus.hashGenesisBlock) {
         if (!fJustCheck)
             view.SetBestBlock(pindex->GetBlockHash());
         return true;
     }
 
-    const int last_pow_block = Params().GetConsensus().height_last_PoW;
+    const int last_pow_block = consensus.height_last_PoW;
     if (pindex->nHeight <= last_pow_block && block.IsProofOfStake())
         return state.DoS(100, error("ConnectBlock() : PoS period not active"),
             REJECT_INVALID, "PoS-early");
@@ -2498,7 +2504,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // If scripts won't be checked anyways, don't bother seeing if CLTV is activated
     bool fCLTVIsActivated = false;
     if (fScriptChecks && pindex->pprev) {
-        fCLTVIsActivated = pindex->pprev->nHeight >= Params().GetConsensus().height_start_BIP65;
+        fCLTVIsActivated = pindex->pprev->nHeight >= consensus.height_start_BIP65;
     }
 
     CCheckQueueControl<CScriptCheck> control(fScriptChecks && nScriptCheckThreads ? &scriptcheckqueue : nullptr);
@@ -2547,7 +2553,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         }
 
         if (tx.HasZerocoinMintOutputs()) {
-            if (pindex->nHeight >= Params().Zerocoin_Block_Public_Spend_Enabled())
+            if (pindex->nHeight >= consensus.height_start_ZC_PublicSpends)
                 return state.DoS(100, error("%s: Mints no longer accepted at height %d", __func__, pindex->nHeight));
             // parse minted coins
             for (auto& out : tx.vout) {
@@ -2651,8 +2657,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     }
 
     //A one-time event where money supply counts were off and recalculated on a certain block.
-    if (pindex->nHeight == Params().Zerocoin_Block_RecalculateAccumulators() + 1) {
-        RecalculatePIVSupply(Params().Zerocoin_StartHeight());
+    if (pindex->nHeight == consensus.height_ZC_RecalcAccumulators + 1) {
+        RecalculatePIVSupply(consensus.height_start_ZC);
     }
 
     //Track zPIV money supply in the block index
@@ -2766,14 +2772,14 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     LogPrint("bench", "    - Callbacks: %.2fms [%.2fs]\n", 0.001 * (nTime4 - nTime3), nTimeCallbacks * 0.000001);
 
     //Continue tracking possible movement of fraudulent funds until they are completely frozen
-    if (pindex->nHeight >= Params().Zerocoin_Block_FirstFraudulent() && pindex->nHeight <= Params().Zerocoin_Block_RecalculateAccumulators() + 1)
+    if (pindex->nHeight >= consensus.height_start_ZC_InvalidSerials &&
+            pindex->nHeight <= consensus.height_ZC_RecalcAccumulators + 1)
         AddInvalidSpendsToMap(block);
 
-    const int last_checkpoint_nHeight = Params().Zerocoin_Block_Last_Checkpoint();
-    if (pindex->nHeight >= Params().Zerocoin_Block_V2_Start() && pindex->nHeight < last_checkpoint_nHeight) {
+    if (pindex->nHeight >= consensus.height_start_ZC_SerialsV2 && pindex->nHeight < consensus.height_last_ZC_AccumCheckpoint) {
         // Legacy Zerocoin DB: If Accumulators Checkpoint is changed, database the checksums
         DataBaseAccChecksum(pindex, true);
-    } else if (pindex->nHeight == last_checkpoint_nHeight) {
+    } else if (pindex->nHeight == consensus.height_last_ZC_AccumCheckpoint) {
         // After last Checkpoint block, wipe the checksum database
         zerocoinDB->WipeAccChecksums();
     }
@@ -3608,7 +3614,7 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
 
     if (Params().IsRegTestNet()) return true;
 
-    // Version 4 header must be used after Params().Zerocoin_StartHeight(). And never before.
+    // Version 4 header must be used after Params().Zerocoin_StartTime(). And never before.
     if (block.GetBlockTime() > Params().Zerocoin_StartTime()) {
         if(block.nVersion < Params().Zerocoin_HeaderVersion())
             return state.DoS(50, error("CheckBlockHeader() : block version must be above 4 after ZerocoinStartHeight"),
@@ -3631,7 +3637,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
     const CTxOut& lastOut = tx.vout[outs-1];
     if (outs >=3 && lastOut.scriptPubKey != tx.vout[outs-2].scriptPubKey) {
         // last output can either be a mn reward or a budget payment
-        // cold staking is active much after nPublicZCSpends so GetMasternodePayment is always 3 PIV.
+        // cold staking is active much after height_start_ZC_PublicSpends so GetMasternodePayment is always 3 PIV.
         // TODO: double check this if/when MN rewards change
         if (lastOut.nValue == 3 * COIN)
             return true;
@@ -3790,7 +3796,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
         if (!CheckTransaction(
                 tx,
                 fZerocoinActive,
-                blockHeight >= Params().Zerocoin_Block_EnforceSerialRange(),
+                blockHeight >= Params().GetConsensus().height_start_ZC_SerialRangeCheck,
                 state,
                 isBlockBetweenFakeSerialAttackRange(blockHeight),
                 fColdStakingActive
@@ -4139,7 +4145,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         std::vector<CBigNum> inBlockSerials;
         for (const CTransaction& tx : block.vtx) {
             for (const CTxIn& in: tx.vin) {
-                if(nHeight >= Params().Zerocoin_StartHeight()) {
+                if(nHeight >= Params().GetConsensus().height_start_ZC) {
                     bool isPublicSpend = in.IsZerocoinPublicSpend();
                     bool isPrivZerocoinSpend = in.IsZerocoinSpend();
                     if (isPrivZerocoinSpend || isPublicSpend) {

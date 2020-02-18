@@ -177,9 +177,20 @@ public:
 
         // height based activations
         consensus.height_last_PoW = 259200;
-        consensus.height_start_BIP65 = 1808634; // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
+        consensus.height_last_ZC_AccumCheckpoint = 1686240;
+        consensus.height_last_ZC_WrappedSerials = 1686229;
+        consensus.height_start_BIP65 = 1808634;             // 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
+        consensus.height_start_InvalidUTXOsCheck = 902850;
+        consensus.height_start_MessSignaturesV2 = 2153200;  // TimeProtocolV2, Blocks V7 and newMessageSignatures
+        consensus.height_start_StakeModifierNewSelection = 615800;
         consensus.height_start_StakeModifierV2 = 1967000;
-        consensus.height_start_TimeProtoV2 = 2153200; // TimeProtocolV2, Blocks V7 and newMessageSignatures
+        consensus.height_start_TimeProtoV2 = 2153200;       // TimeProtocolV2, Blocks V7 and newMessageSignatures
+        consensus.height_start_ZC = 863787;
+        consensus.height_start_ZC_InvalidSerials = 891737;
+        consensus.height_start_ZC_PublicSpends = 1880000;
+        consensus.height_start_ZC_SerialRangeCheck = 895400;
+        consensus.height_start_ZC_SerialsV2 = 1153160;
+        consensus.height_ZC_RecalcAccumulators = 908000;
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -209,33 +220,13 @@ public:
         /** Height or Time Based Activations **/
         nPivxBadBlockTime = 1471401614; // Skip nBit validation of Block 259201 per PR #915
         nPivxBadBlocknBits = 0x1c056dac; // Skip nBit validation of Block 259201 per PR #915
-        nModifierUpdateBlock = 615800;
-        nZerocoinStartHeight = 863787;
         nZerocoinStartTime = 1508214600; // October 17, 2017 4:30:00 AM
-        nBlockEnforceSerialRange = 895400; //Enforce serial range starting this block
-        nBlockRecalculateAccumulators = 908000; //Trigger a recalculation of accumulators
-        nBlockFirstFraudulent = 891737; //First block that bad serials emerged
-        nBlockLastGoodCheckpoint = 891730; //Last valid accumulator checkpoint
-        nBlockEnforceInvalidUTXO = 902850; //Start enforcing the invalid UTXO's
         nInvalidAmountFiltered = 268200*COIN; //Amount of invalid coins filtered through exchanges, that should be considered valid
-        nBlockZerocoinV2 = 1153160; //!> The block that zerocoin v2 becomes active - roughly Tuesday, May 8, 2018 4:00:00 AM GMT
-        nBlockDoubleAccumulated = 1050010;
         nEnforceNewSporkKey = 1566860400; //!> Sporks signed after Monday, August 26, 2019 11:00:00 PM GMT must use the new spork key
         nRejectOldSporkKey = 1569538800; //!> Fully reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
 
-        // Public coin spend enforcement
-        nPublicZCSpends = 1880000;
-
-        // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = consensus.height_start_TimeProtoV2;
-
-        // Blocks v7
-        nBlockLastAccumulatorCheckpoint = 1686240;
-        nBlockV7StartHeight = consensus.height_start_TimeProtoV2;
-
         // Fake Serial Attack
-        nFakeSerialBlockheightEnd = 1686229;
-        nSupplyBeforeFakeSerial = 4131563 * COIN;   // zerocoin supply at block nFakeSerialBlockheightEnd
+        nSupplyBeforeFakeSerial = 4131563 * COIN;   // zerocoin supply at height_last_ZC_WrappedSerials
 
         // Note that of those with the service bits flag, most only support a subset of possible options
         vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx.seed.fuzzbawls.pw"));     // Primary DNS Seeder from Fuzzbawls
@@ -323,9 +314,20 @@ public:
 
         // height based activations
         consensus.height_last_PoW = 200;
+        consensus.height_last_ZC_AccumCheckpoint = 1106090;
+        consensus.height_last_ZC_WrappedSerials = -1;
         consensus.height_start_BIP65 = 851019;
+        consensus.height_start_InvalidUTXOsCheck = 999999999;
+        consensus.height_start_MessSignaturesV2 = 1347000;      // TimeProtocolV2, Blocks V7 and newMessageSignatures
+        consensus.height_start_StakeModifierNewSelection = 51197;
         consensus.height_start_StakeModifierV2 = 1214000;
-        consensus.height_start_TimeProtoV2 = 1347000; // TimeProtocolV2, Blocks V7 and newMessageSignatures
+        consensus.height_start_TimeProtoV2 = 1347000;           // TimeProtocolV2, Blocks V7 and newMessageSignatures
+        consensus.height_start_ZC = 201576;
+        consensus.height_start_ZC_InvalidSerials = 999999999;
+        consensus.height_start_ZC_PublicSpends = 1106100;
+        consensus.height_start_ZC_SerialRangeCheck = 1;
+        consensus.height_start_ZC_SerialsV2 = 444020;
+        consensus.height_ZC_RecalcAccumulators = 999999999;
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -352,31 +354,12 @@ public:
         nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 259201 per PR #915
         nPivxBadBlocknBits = 0x1e0a20bd; // Skip nBit validation of Block 201 per PR #915
         nMasternodeCountDrift = 4;
-        nModifierUpdateBlock = 51197; //approx Mon, 17 Apr 2017 04:00:00 GMT
-        nZerocoinStartHeight = 201576;
         nZerocoinStartTime = 1501776000;
-        nBlockEnforceSerialRange = 1; //Enforce serial range starting this block
-        nBlockRecalculateAccumulators = 9908000; //Trigger a recalculation of accumulators
-        nBlockFirstFraudulent = 9891737; //First block that bad serials emerged
-        nBlockLastGoodCheckpoint = 9891730; //Last valid accumulator checkpoint
-        nBlockEnforceInvalidUTXO = 9902850; //Start enforcing the invalid UTXO's
         nInvalidAmountFiltered = 0; //Amount of invalid coins filtered through exchanges, that should be considered valid
-        nBlockZerocoinV2 = 444020; //!> The block that zerocoin v2 becomes active
         nEnforceNewSporkKey = 1566860400; //!> Sporks signed after Monday, August 26, 2019 11:00:00 PM GMT must use the new spork key
         nRejectOldSporkKey = 1569538800; //!> Reject old spork key after Thursday, September 26, 2019 11:00:00 PM GMT
 
-        // Public coin spend enforcement
-        nPublicZCSpends = 1106100;
-
-        // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = consensus.height_start_TimeProtoV2;
-
-        // Blocks v7
-        nBlockLastAccumulatorCheckpoint = nPublicZCSpends - 10;
-        nBlockV7StartHeight = consensus.height_start_TimeProtoV2;
-
         // Fake Serial Attack
-        nFakeSerialBlockheightEnd = -1;
         nSupplyBeforeFakeSerial = 0;
 
         vFixedSeeds.clear();
@@ -449,9 +432,20 @@ public:
 
         // height based activations
         consensus.height_last_PoW = 250;
-        consensus.height_start_BIP65 = 851019; // Not defined for regtest. Inherit TestNet value.
-        consensus.height_start_StakeModifierV2 = consensus.height_last_PoW + 1; // start with modifier V2 on regtest
+        consensus.height_last_ZC_AccumCheckpoint = 301;     // no checkpoints on regtest
+        consensus.height_last_ZC_WrappedSerials = -1;
+        consensus.height_start_BIP65 = 851019;              // Not defined for regtest. Inherit TestNet value.
+        consensus.height_start_InvalidUTXOsCheck = 999999999;
+        consensus.height_start_MessSignaturesV2 = 1;
+        consensus.height_start_StakeModifierNewSelection = 0;
+        consensus.height_start_StakeModifierV2 = 251;       // start with modifier V2 on regtest
         consensus.height_start_TimeProtoV2 = 999999999;
+        consensus.height_start_ZC = 300;
+        consensus.height_start_ZC_InvalidSerials = 999999999;
+        consensus.height_start_ZC_PublicSpends = 400;
+        consensus.height_start_ZC_SerialRangeCheck = 300;
+        consensus.height_start_ZC_SerialsV2 = 300;
+        consensus.height_ZC_RecalcAccumulators = 999999999;
 
 
         /**
@@ -476,30 +470,10 @@ public:
         nToCheckBlockUpgradeMajority = 1000;
         nMinerThreads = 1;
         nMasternodeCountDrift = 4;
-        nModifierUpdateBlock = 0;
-        nZerocoinStartHeight = 300;
-        nBlockZerocoinV2 = 300;
         nZerocoinStartTime = 1501776000;
-        nBlockEnforceSerialRange = 1;               // Enforce serial range starting this block
-        nBlockRecalculateAccumulators = 999999999;  // Trigger a recalculation of accumulators
-        nBlockFirstFraudulent = 999999999;          // First block that bad serials emerged
-        nBlockLastGoodCheckpoint = 999999999;       // Last valid accumulator checkpoint
 
         nMintRequiredConfirmations = 10;
         nZerocoinRequiredStakeDepth = nMintRequiredConfirmations;
-
-        // Public coin spend enforcement
-        nPublicZCSpends = 400;
-
-        // Blocks v7
-        nBlockV7StartHeight = nBlockZerocoinV2;
-        nBlockLastAccumulatorCheckpoint = nBlockZerocoinV2+1; // no accumul. checkpoints check on regtest
-
-        // New P2P messages signatures
-        nBlockEnforceNewMessageSignatures = 1;
-
-        // Fake Serial Attack
-        nFakeSerialBlockheightEnd = -1;
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.

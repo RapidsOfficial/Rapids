@@ -104,10 +104,11 @@ bool CheckProofOfStake(const CBlock& block, uint256& hashProofOfStake, std::uniq
     unsigned int nBlockFromTime = pindexfrom->nTime;
     unsigned int nTxTime = block.nTime;
     const int nBlockFromHeight = pindexfrom->nHeight;
+    const Consensus::Params& consensus = Params().GetConsensus();
 
-    if (!txin.IsZerocoinSpend() && nPreviousBlockHeight >= Params().Zerocoin_Block_Public_Spend_Enabled() - 1) {
+    if (!txin.IsZerocoinSpend() && nPreviousBlockHeight >= consensus.height_start_ZC_PublicSpends - 1) {
         //check for maturity (min age/depth) requirements
-        if (!Params().GetConsensus().HasStakeMinAgeOrDepth(nPreviousBlockHeight+1, nTxTime, nBlockFromHeight, nBlockFromTime))
+        if (!consensus.HasStakeMinAgeOrDepth(nPreviousBlockHeight+1, nTxTime, nBlockFromHeight, nBlockFromTime))
             return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
                              __func__, nPreviousBlockHeight, nTxTime, nBlockFromTime, nBlockFromHeight);
     }
@@ -137,9 +138,9 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
         stake = std::unique_ptr<CStakeInput>(new CLegacyZPivStake(spend));
 
         // zPoS contextual checks
+        const Consensus::Params& consensus = Params().GetConsensus();
         /* Only for IBD (between Zerocoin_Block_V2_Start and Zerocoin_Block_Last_Checkpoint) */
-        if (nPreviousBlockHeight < Params().Zerocoin_Block_V2_Start() ||
-                nPreviousBlockHeight > Params().Zerocoin_Block_Last_Checkpoint())
+        if (nPreviousBlockHeight < consensus.height_start_ZC_SerialsV2 || nPreviousBlockHeight > consensus.height_last_ZC_AccumCheckpoint)
             return error("%s : zPIV stake block: height %d outside range", __func__, (nPreviousBlockHeight+1));
         CLegacyZPivStake* zPIV = dynamic_cast<CLegacyZPivStake*>(stake.get());
         if (!zPIV) return error("%s : dynamic_cast of stake ptr failed", __func__);
@@ -283,7 +284,7 @@ static bool SelectBlockFromCandidates(
 
         //if the lowest block height (vSortedByTimestamp[0]) is >= switch height, use new modifier calc
         if (fFirstRun){
-            fModifierV2 = pindex->nHeight >= Params().ModifierUpgradeBlock();
+            fModifierV2 = pindex->nHeight >= Params().GetConsensus().height_start_StakeModifierNewSelection;
             fFirstRun = false;
         }
 
@@ -331,7 +332,7 @@ bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier)
     if (!pindexFrom) return error("%s : failed to get index from", __func__);
     if (stake->IsZPIV()) {
         int64_t nTimeBlockFrom = pindexFrom->GetBlockTime();
-        const int nHeightStop = std::min(chainActive.Height(), Params().Zerocoin_Block_Last_Checkpoint()-1);
+        const int nHeightStop = std::min(chainActive.Height(), Params().GetConsensus().height_last_ZC_AccumCheckpoint-1);
         while (pindexFrom && pindexFrom->nHeight + 1 <= nHeightStop) {
             if (pindexFrom->GetBlockTime() - nTimeBlockFrom > 60 * 60) {
                 nStakeModifier = pindexFrom->nAccumulatorCheckpoint.Get64();

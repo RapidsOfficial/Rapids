@@ -4311,7 +4311,7 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
         bool found = false;
         {
             CBlockIndex* pindex = chainActive.Tip();
-            while (!found && pindex && pindex->nHeight >= Params().Zerocoin_StartHeight()) {
+            while (!found && pindex && pindex->nHeight >= Params().GetConsensus().height_start_ZC) {
                 LogPrintf("%s : Checking block %d...\n", __func__, pindex->nHeight);
                 CBlock block;
                 if (!ReadBlockFromDisk(block, pindex))

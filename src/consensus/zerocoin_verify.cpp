@@ -104,11 +104,12 @@ bool isBlockBetweenFakeSerialAttackRange(int nHeight)
     if (Params().NetworkID() != CBaseChainParams::MAIN)
         return false;
 
-    return nHeight <= Params().Zerocoin_Block_EndFakeSerial();
+    return nHeight <= Params().GetConsensus().height_last_ZC_WrappedSerials;
 }
 
-bool CheckPublicCoinSpendEnforced(int blockHeight, bool isPublicSpend) {
-    if (blockHeight >= Params().Zerocoin_Block_Public_Spend_Enabled()) {
+bool CheckPublicCoinSpendEnforced(int blockHeight, bool isPublicSpend)
+{
+    if (blockHeight >= Params().GetConsensus().height_start_ZC_PublicSpends) {
         // reject old coin spend
         if (!isPublicSpend) {
             return error("%s: failed to add block with older zc spend version", __func__);
@@ -148,7 +149,7 @@ bool ContextualCheckZerocoinSpend(const CTransaction& tx, const libzerocoin::Coi
 bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const libzerocoin::CoinSpend* spend, int nHeight, const uint256& hashBlock)
 {
     //Check to see if the zPIV is properly signed
-    if (nHeight >= Params().Zerocoin_Block_V2_Start()) {
+    if (nHeight >= Params().GetConsensus().height_start_ZC_SerialsV2) {
         try {
             if (!spend->HasValidSignature())
                 return error("%s: V2 zPIV spend does not have a valid signature\n", __func__);
@@ -160,9 +161,9 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
                 LogPrintf("%s: Invalid serial detected within range in block %d\n", __func__, nHeight);
         }
 
-        libzerocoin::SpendType expectedType = libzerocoin::SPEND;
+        libzerocoin::SpendType expectedType = libzerocoin::SpendType::SPEND;
         if (tx.IsCoinStake())
-            expectedType = libzerocoin::STAKE;
+            expectedType = libzerocoin::SpendType::STAKE;
         if (spend->getSpendType() != expectedType) {
             return error("%s: trying to spend zPIV without the correct spend type. txid=%s\n", __func__,
                          tx.GetHash().GetHex());
@@ -187,16 +188,17 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
 
 void AddWrappedSerialsInflation()
 {
-    CBlockIndex* pindex = chainActive[Params().Zerocoin_Block_EndFakeSerial()];
+    const int height_end_attack = Params().GetConsensus().height_last_ZC_WrappedSerials;
+    CBlockIndex* pindex = chainActive[height_end_attack];
+    if (!pindex) return;
     const int chainHeight = chainActive.Height();
-    if (pindex->nHeight > chainHeight)
-        return;
+    if (pindex->nHeight > chainHeight) return;
 
     uiInterface.ShowProgress(_("Adding Wrapped Serials supply..."), 0);
     while (true) {
         if (pindex->nHeight % 1000 == 0) {
             LogPrintf("%s : block %d...\n", __func__, pindex->nHeight);
-            int percent = std::max(1, std::min(99, (int)((double)(pindex->nHeight - Params().Zerocoin_Block_EndFakeSerial()) * 100 / (chainHeight - Params().Zerocoin_Block_EndFakeSerial()))));
+            int percent = std::max(1, std::min(99, (int)((double)(pindex->nHeight - height_end_attack) * 100 / (chainHeight - height_end_attack))));
             uiInterface.ShowProgress(_("Adding Wrapped Serials supply..."), percent);
         }
 
@@ -223,7 +225,7 @@ bool RecalculatePIVSupply(int nHeightStart)
 
     CBlockIndex* pindex = chainActive[nHeightStart];
     CAmount nSupplyPrev = pindex->pprev->nMoneySupply;
-    if (nHeightStart == Params().Zerocoin_StartHeight())
+    if (nHeightStart == Params().GetConsensus().height_start_ZC)
         nSupplyPrev = CAmount(5449796547496199);
 
     uiInterface.ShowProgress(_("Recalculating PIV supply..."), 0);
@@ -269,7 +271,7 @@ bool RecalculatePIVSupply(int nHeightStart)
         nSupplyPrev = pindex->nMoneySupply;
 
         // Add fraudulent funds to the supply and remove any recovered funds.
-        if (pindex->nHeight == Params().Zerocoin_Block_RecalculateAccumulators()) {
+        if (pindex->nHeight == Params().GetConsensus().height_ZC_RecalcAccumulators) {
             LogPrintf("%s : Original money supply=%s\n", __func__, FormatMoney(pindex->nMoneySupply));
 
             pindex->nMoneySupply += Params().InvalidAmountFiltered();
@@ -294,7 +296,7 @@ bool RecalculatePIVSupply(int nHeightStart)
 bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
 {
     std::list<CZerocoinMint> listMints;
-    bool fFilterInvalid = pindex->nHeight >= Params().Zerocoin_Block_RecalculateAccumulators();
+    bool fFilterInvalid = pindex->nHeight >= Params().GetConsensus().height_ZC_RecalcAccumulators;
     BlockToZerocoinMintList(block, listMints, fFilterInvalid);
     std::list<libzerocoin::CoinDenomination> listSpends = ZerocoinSpendListFromBlock(block, fFilterInvalid);
 
@@ -350,7 +352,7 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
 
     // Update Wrapped Serials amount
     // A one-time event where only the zPIV supply was off (due to serial duplication off-chain on main net)
-    if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == Params().Zerocoin_Block_EndFakeSerial() + 1
+    if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == Params().GetConsensus().height_last_ZC_WrappedSerials + 1
             && pindex->GetZerocoinSupply() < Params().GetSupplyBeforeFakeSerial() + GetWrapppedSerialInflationAmount()) {
         for (auto denom : libzerocoin::zerocoinDenomList) {
             pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);

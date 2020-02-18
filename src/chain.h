@@ -478,7 +478,7 @@ public:
     const CBlockIndex* FindFork(const CBlockIndex* pindex) const;
 
     /** Check if new message signatures are active **/
-    bool NewSigsActive() { return Params().NewSigsActive(Height()); }
+    bool NewSigsActive() { return Params().GetConsensus().IsMessSigV2(Height()); }
 };
 
 #endif // BITCOIN_CHAIN_H

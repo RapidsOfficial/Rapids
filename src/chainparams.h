@@ -119,29 +119,15 @@ public:
     int Zerocoin_RequiredStakeDepth() const { return nZerocoinRequiredStakeDepth; }
 
     /** Height or Time Based Activations **/
-    int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
     int PivxBadBlockTime() const { return nPivxBadBlockTime; }
     int PivxBadBlocknBits() const { return nPivxBadBlocknBits; }
-    int Zerocoin_StartHeight() const { return nZerocoinStartHeight; }
-    int Zerocoin_Block_EnforceSerialRange() const { return nBlockEnforceSerialRange; }
-    int Zerocoin_Block_RecalculateAccumulators() const { return nBlockRecalculateAccumulators; }
-    int Zerocoin_Block_FirstFraudulent() const { return nBlockFirstFraudulent; }
-    int Zerocoin_Block_LastGoodCheckpoint() const { return nBlockLastGoodCheckpoint; }
     int Zerocoin_StartTime() const { return nZerocoinStartTime; }
-    int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
-    int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
-    int NewSigsActive(const int nHeight) const { return nHeight >= nBlockEnforceNewMessageSignatures; }
-    int Block_V7_StartHeight() const { return nBlockV7StartHeight; }
 
     // fake serial attack
-    int Zerocoin_Block_EndFakeSerial() const { return nFakeSerialBlockheightEnd; }
     CAmount GetSupplyBeforeFakeSerial() const { return nSupplyBeforeFakeSerial; }
 
-    int Zerocoin_Block_Double_Accumulated() const { return nBlockDoubleAccumulated; }
     CAmount InvalidAmountFiltered() const { return nInvalidAmountFiltered; };
 
-    int Zerocoin_Block_Public_Spend_Enabled() const { return nPublicZCSpends; }
-    int Zerocoin_Block_Last_Checkpoint() const { return nBlockLastAccumulatorCheckpoint; }
 
 protected:
     CChainParams() {}
@@ -192,27 +178,13 @@ protected:
     int nDefaultSecurityLevel;
     int nZerocoinHeaderVersion;
     int64_t nBudget_Fee_Confirmations;
-    int nZerocoinStartHeight;
     int nZerocoinStartTime;
     int nZerocoinRequiredStakeDepth;
     int64_t nProposalEstablishmentTime;
 
-    int nBlockEnforceSerialRange;
-    int nBlockRecalculateAccumulators;
-    int nBlockFirstFraudulent;
-    int nBlockLastGoodCheckpoint;
-    int nBlockEnforceInvalidUTXO;
-    int nBlockZerocoinV2;
-    int nBlockDoubleAccumulated;
-    int nPublicZCSpends;
-    int nBlockEnforceNewMessageSignatures;
-    int nBlockV7StartHeight;
-    int nBlockLastAccumulatorCheckpoint;
-
     CAmount nMinColdStakingAmount;
 
     // fake serial attack
-    int nFakeSerialBlockheightEnd = 0;
     CAmount nSupplyBeforeFakeSerial = 0;
 };
 
