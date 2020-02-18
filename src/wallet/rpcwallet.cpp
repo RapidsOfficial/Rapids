@@ -593,9 +593,9 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     // Get Amount
     CAmount nValue = AmountFromValue(params[1]);
-    if (nValue < Params().GetMinColdStakingAmount())
+    if (nValue < MIN_COLDSTAKING_AMOUNT)
         throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Invalid amount (%d). Min amount: %d",
-                nValue, Params().GetMinColdStakingAmount()));
+                nValue, MIN_COLDSTAKING_AMOUNT));
 
     // include already delegated coins
     bool fUseDelegated = false;

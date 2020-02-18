@@ -71,8 +71,6 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
         return state.DoS(100, error("CheckTransaction() : size limits failed"),
             REJECT_INVALID, "bad-txns-oversize");
 
-    const CAmount minColdStakingAmount = Params().GetMinColdStakingAmount();
-
     // Check for negative or overflow output values
     const Consensus::Params& consensus = Params().GetConsensus();
     CAmount nValueOut = 0;
@@ -93,9 +91,9 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
         if (txout.scriptPubKey.IsPayToColdStaking()) {
             if (!fColdStakingActive)
                 return state.DoS(10, error("%s: cold staking not active", __func__), REJECT_INVALID, "bad-txns-cold-stake");
-            if (txout.nValue < minColdStakingAmount)
+            if (txout.nValue < MIN_COLDSTAKING_AMOUNT)
                 return state.DoS(100, error("%s: dust amount (%d) not allowed for cold staking. Min amount: %d",
-                        __func__, txout.nValue, minColdStakingAmount), REJECT_INVALID, "bad-txns-cold-stake");
+                        __func__, txout.nValue, MIN_COLDSTAKING_AMOUNT), REJECT_INVALID, "bad-txns-cold-stake");
         }
     }
 

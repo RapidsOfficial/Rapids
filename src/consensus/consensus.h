@@ -7,6 +7,7 @@
 #ifndef BITCOIN_CONSENSUS_CONSENSUS_H
 #define BITCOIN_CONSENSUS_CONSENSUS_H
 
+#include "amount.h"
 #include <stdint.h>
 
 /** The maximum allowed size for a block, in bytes (only for buffer size limits) */
@@ -20,6 +21,12 @@ static const unsigned int MAX_BLOCK_SIGOPS_LEGACY = MAX_BLOCK_SIZE_LEGACY / 50;
 /** The maximum number of sigops we're willing to relay/mine in a single tx */
 static const unsigned int MAX_TX_SIGOPS_CURRENT = MAX_BLOCK_SIGOPS_CURRENT / 5;
 static const unsigned int MAX_TX_SIGOPS_LEGACY = MAX_BLOCK_SIGOPS_LEGACY / 5;
+
+/** The minimum amount for the value of a P2CS output */
+static const CAmount MIN_COLDSTAKING_AMOUNT = 1 * COIN;
+
+/** The default maximum reorganization depth **/
+static const int DEFAULT_MAX_REORG_DEPTH = 100;
 
 /** Flags for nSequence and nLockTime locks */
 enum {

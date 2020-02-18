@@ -46,6 +46,11 @@ struct Params {
     int64_t nTime_EnforceNewSporkKey;
     int64_t nTime_RejectOldSporkKey;
 
+    // majorities for block version upgrades
+    int nEnforceBlockUpgradeMajority;
+    int nRejectBlockOutdatedMajority;
+    int nToCheckBlockUpgradeMajority;
+
     // height-based activations
     int height_last_PoW;
     int height_last_ZC_AccumCheckpoint;
@@ -62,6 +67,10 @@ struct Params {
     int height_start_ZC_SerialRangeCheck;
     int height_start_ZC_SerialsV2;
     int height_ZC_RecalcAccumulators;
+
+    // validation by-pass
+    int64_t nPivxBadBlockTime;
+    unsigned int nPivxBadBlockBits;
 
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
