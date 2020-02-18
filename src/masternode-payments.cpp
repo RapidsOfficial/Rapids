@@ -248,7 +248,7 @@ bool IsBlockValueValid(const CBlock& block, CAmount nExpectedValue, CAmount nMin
 
     if (!masternodeSync.IsSynced()) { //there is no budget data to use to check anything
         //super blocks will always be on these blocks, max 100 per budgeting
-        if (nHeight % Params().GetBudgetCycleBlocks() < 100) {
+        if (nHeight % Params().GetConsensus().nBudgetCycleBlocks < 100) {
             return true;
         } else {
             if (nMinted > nExpectedValue) {
@@ -584,16 +584,17 @@ bool CMasternodeBlockPayees::IsTransactionValid(const CTransaction& txNew)
     std::string strPayeesPossible = "";
 
     CAmount nReward = GetBlockValue(nBlockHeight);
+    const int mn_count_drift = Params().GetConsensus().nMasternodeCountDrift;
 
     if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
         // Get a stable number of masternodes by ignoring newly activated (< 8000 sec old) masternodes
-        nMasternode_Drift_Count = mnodeman.stable_size() + Params().MasternodeCountDrift();
+        nMasternode_Drift_Count = mnodeman.stable_size() + mn_count_drift;
     }
     else {
         //account for the fact that all peers do not see the same masternode count. A allowance of being off our masternode count is given
         //we only need to look at an increased masternode count because as count increases, the reward decreases. This code only checks
         //for mnPayment >= required, so it only makes sense to check the max node count allowed.
-        nMasternode_Drift_Count = mnodeman.size() + Params().MasternodeCountDrift();
+        nMasternode_Drift_Count = mnodeman.size() + mn_count_drift;
     }
 
     CAmount requiredMasternodePayment = GetMasternodePayment(nBlockHeight, nReward, nMasternode_Drift_Count, txNew.HasZerocoinSpendInputs());

@@ -76,8 +76,6 @@ public:
     /** Make standard checks */
     bool RequireStandard() const { return fRequireStandard; }
 
-    /** The masternode count that we will allow the see-saw reward payments to be off by */
-    int MasternodeCountDrift() const { return nMasternodeCountDrift; }
     /** In the future use NetworkIDString() for RPC fields */
     bool TestnetToBeDeprecatedFieldRPC() const { return fTestnetToBeDeprecatedFieldRPC; }
     /** Return the BIP70 network string (main, test or regtest) */
@@ -86,21 +84,8 @@ public:
     const std::vector<unsigned char>& Base58Prefix(Base58Type type) const { return base58Prefixes[type]; }
     const std::vector<CAddress>& FixedSeeds() const { return vFixedSeeds; }
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
-    int PoolMaxTransactions() const { return nPoolMaxTransactions; }
-    /** Return the number of blocks in a budget cycle */
-    int GetBudgetCycleBlocks() const { return nBudgetCycleBlocks; }
-    int64_t GetProposalEstablishmentTime() const { return nProposalEstablishmentTime; }
 
     CAmount GetMinColdStakingAmount() const { return nMinColdStakingAmount; }
-
-    /** Spork key and Masternode Handling **/
-    std::string SporkPubKey() const { return strSporkPubKey; }
-    std::string SporkPubKeyOld() const { return strSporkPubKeyOld; }
-    int64_t NewSporkStart() const { return nEnforceNewSporkKey; }
-    int64_t RejectOldSporkKey() const { return nRejectOldSporkKey; }
-    std::string ObfuscationPoolDummyAddress() const { return strObfuscationPoolDummyAddress; }
-    int64_t StartMasternodePayments() const { return nStartMasternodePayments; }
-    int64_t Budget_Fee_Confirmations() const { return nBudget_Fee_Confirmations; }
 
     CBaseChainParams::Network NetworkID() const { return networkID; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
@@ -129,7 +114,6 @@ protected:
     int nToCheckBlockUpgradeMajority;
     int64_t nPivxBadBlockTime;
     unsigned int nPivxBadBlocknBits;
-    int nMasternodeCountDrift;
     int nMaturity;
 
     int nMinerThreads;
@@ -142,18 +126,9 @@ protected:
     bool fSkipProofOfWorkCheck;
     bool fTestnetToBeDeprecatedFieldRPC;
     bool fHeadersFirstSyncingActive;
-    int nPoolMaxTransactions;
-    int nBudgetCycleBlocks;
-    std::string strSporkPubKey;
-    std::string strSporkPubKeyOld;
-    int64_t nEnforceNewSporkKey;
-    int64_t nRejectOldSporkKey;
-    std::string strObfuscationPoolDummyAddress;
-    int64_t nStartMasternodePayments;
+
 
     CAmount nInvalidAmountFiltered;
-    int64_t nBudget_Fee_Confirmations;
-    int64_t nProposalEstablishmentTime;
 
     CAmount nMinColdStakingAmount;
 };

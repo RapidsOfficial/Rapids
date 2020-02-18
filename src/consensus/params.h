@@ -23,16 +23,28 @@ struct Params {
     uint256 powLimit;
     uint256 posLimitV1;
     uint256 posLimitV2;
+    int nBudgetCycleBlocks;
+    int nBudgetFeeConfirmations;
     int nCoinbaseMaturity;
     int nFutureTimeDriftPoW;
     int nFutureTimeDriftPoS;
+    int nMasternodeCountDrift;
     CAmount nMaxMoneyOut;
+    int nPoolMaxTransactions;
+    int64_t nProposalEstablishmentTime;
     int nStakeMinAge;
     int nStakeMinDepth;
     int64_t nTargetTimespan;
     int64_t nTargetTimespanV2;
     int64_t nTargetSpacing;
     int nTimeSlotLength;
+    std::string strObfuscationPoolDummyAddress;
+
+    // spork keys
+    std::string strSporkPubKey;
+    std::string strSporkPubKeyOld;
+    int64_t nTime_EnforceNewSporkKey;
+    int64_t nTime_RejectOldSporkKey;
 
     // height-based activations
     int height_last_PoW;
