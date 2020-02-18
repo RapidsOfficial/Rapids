@@ -887,18 +887,6 @@ int GetIXConfirmations(uint256 nTXHash)
     return 0;
 }
 
-bool CheckZerocoinMint(const uint256& txHash, const CTxOut& txout, CValidationState& state, bool fCheckOnly)
-{
-    libzerocoin::PublicCoin pubCoin(Params().Zerocoin_Params(false));
-    if(!TxOutToPublicCoin(txout, pubCoin, state))
-        return state.DoS(100, error("CheckZerocoinMint(): TxOutToPublicCoin() failed"));
-
-    if (!pubCoin.validate())
-        return state.DoS(100, error("CheckZerocoinMint() : PubCoin does not validate"));
-
-    return true;
-}
-
 bool isBlockBetweenFakeSerialAttackRange(int nHeight)
 {
     if (Params().NetworkID() != CBaseChainParams::MAIN)

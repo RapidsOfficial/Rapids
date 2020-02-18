@@ -28,7 +28,6 @@ void FindMints(std::vector<CMintMeta> vMintsToFind, std::vector<CMintMeta>& vMin
 int GetZerocoinStartHeight();
 bool GetZerocoinMint(const CBigNum& bnPubcoin, uint256& txHash);
 bool IsPubcoinInBlockchain(const uint256& hashPubcoin, uint256& txid);
-bool IsSerialKnown(const CBigNum& bnSerial);
 bool IsSerialInBlockchain(const CBigNum& bnSerial, int& nHeightTx);
 bool IsSerialInBlockchain(const uint256& hashSerial, int& nHeightTx, uint256& txidSpend);
 bool IsSerialInBlockchain(const uint256& hashSerial, int& nHeightTx, uint256& txidSpend, CTransaction& tx);

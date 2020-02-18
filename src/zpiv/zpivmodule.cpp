@@ -126,6 +126,16 @@ const uint256 PublicCoinSpend::signatureHash() const
 
 namespace ZPIVModule {
 
+    // Return stream of CoinSpend from tx input scriptsig
+    CDataStream ScriptSigToSerializedSpend(const CScript& scriptSig)
+    {
+        std::vector<char, zero_after_free_allocator<char> > data;
+        // skip opcode and data-len
+        uint8_t byteskip = ((uint8_t) scriptSig[1] + 2);
+        data.insert(data.end(), scriptSig.begin() + byteskip, scriptSig.end());
+        return CDataStream(data, SER_NETWORK, PROTOCOL_VERSION);
+    }
+
     bool createInput(CTxIn &in, CZerocoinMint &mint, uint256 hashTxOut, const int spendVersion) {
         // check that this spend is allowed
         const bool fUseV1Params = mint.GetVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
@@ -171,15 +181,10 @@ namespace ZPIVModule {
         return true;
     }
 
-    PublicCoinSpend parseCoinSpend(const CTxIn &in) {
+    PublicCoinSpend parseCoinSpend(const CTxIn &in)
+    {
         libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(false);
-        // skip opcode and data-len
-        uint8_t byteskip(in.scriptSig[1]);
-        byteskip += 2;
-        std::vector<char, zero_after_free_allocator<char> > data;
-        data.insert(data.end(), in.scriptSig.begin() + byteskip, in.scriptSig.end());
-        CDataStream serializedCoinSpend(data, SER_NETWORK, PROTOCOL_VERSION);
-
+        CDataStream serializedCoinSpend = ScriptSigToSerializedSpend(in.scriptSig);
         return PublicCoinSpend(params, serializedCoinSpend);
     }
 
