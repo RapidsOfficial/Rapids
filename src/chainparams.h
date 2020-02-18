@@ -58,8 +58,6 @@ public:
     const CBlock& GenesisBlock() const { return genesis; }
     const std::vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
 
-    /** Used if GenerateBitcoins is called with a negative number of threads */
-    int DefaultMinerThreads() const { return nMinerThreads; }
     /** Make miner wait to have peers to avoid wasting work */
     bool MiningRequiresPeers() const { return !IsRegTestNet(); }
     /** Headers first syncing is disabled */
@@ -88,7 +86,6 @@ protected:
     MessageStartChars pchMessageStart;
     std::vector<unsigned char> vAlertPubKey;
     int nDefaultPort;
-    int nMinerThreads;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
     std::vector<CAddress> vFixedSeeds;
