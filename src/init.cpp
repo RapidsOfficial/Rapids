@@ -644,7 +644,7 @@ static void BlockSizeNotifyCallback(int size, const uint256& hashNewTip)
 
 static bool fHaveGenesis = false;
 static std::mutex cs_GenesisWait;
-static CConditionVariable condvar_GenesisWait;
+static std::condition_variable condvar_GenesisWait;
 
 static void BlockNotifyGenesisWait(bool, const CBlockIndex *pBlockIndex)
 {
