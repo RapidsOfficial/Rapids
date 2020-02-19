@@ -259,6 +259,7 @@ file(GLOB ZMQ_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/zmq/*.h)
 file(GLOB SCRIPT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/script/*.h)
 file(GLOB RPC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/rpc/*.h)
 file(GLOB COMPAT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/compat/*.h)
+file(GLOB CONSENSUS_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/consensus/*.h)
 
 source_group("BitcoinHeaders" FILES
         ${HEADERS}
@@ -268,6 +269,7 @@ source_group("BitcoinHeaders" FILES
         ${SCRIPT_HEADERS}
         ${RPC_HEADERS}
         ${COMPAT_HEADERS}
+        ${CONSENSUS_HEADERS}
         ./src/support/cleanse.h
         )
 
