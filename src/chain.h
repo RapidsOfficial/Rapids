@@ -327,8 +327,8 @@ public:
             // Serialization with CLIENT_VERSION > 4009900
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
-            READWRITE(vStakeModifier);
             READWRITE(this->nVersion);
+            READWRITE(vStakeModifier);
             READWRITE(hashPrev);
             READWRITE(hashMerkleRoot);
             READWRITE(nTime);
