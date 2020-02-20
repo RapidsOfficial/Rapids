@@ -39,6 +39,9 @@ Automatic zPIV backup has been disabled. Thus, the following configuration optio
 - `backupzpiv`
 - `zpivbackuppath`
 
+### Stake-Split threshold
+The stake split threshold is no longer required to be integer. It can be a fractional amount. A threshold value of 0 disables the stake-split functionality.
+
 
 
 RPC Changes
@@ -60,6 +63,8 @@ RPC Changes
  - `spendzerocoin`
 
  Mints are disabled, therefore it is no longer possible to mint the change of a zerocoin spend. The change is minimized by default.
+
+- `setstakesplitthreshold` now accepts decimal amounts. If the provided value is `0`, split staking gets disabled. `getstakesplitthreshold` returns a double.
 
 ### Removed commands
 
