@@ -1,4 +1,5 @@
-packages:=boost openssl libevent gmp
+zcash_packages := rust librustzcash
+packages:=boost openssl libevent gmp $(zcash_packages)
 
 qt_native_packages = native_protobuf
 qt_packages = qrencode protobuf zlib

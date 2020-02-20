@@ -40,6 +40,7 @@ BITCOIN_TESTS =\
   test/zerocoin_bignum_tests.cpp \
   test/addrman_tests.cpp \
   test/allocator_tests.cpp \
+  test/rust_tests.cpp \
   test/base32_tests.cpp \
   test/base58_tests.cpp \
   test/base64_tests.cpp \
@@ -101,7 +102,7 @@ test_test_pivx_LDADD += $(LIBBITCOIN_WALLET)
 endif
 test_test_pivx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-test_test_pivx_LDADD += $(LIBBITCOIN_CONSENSUS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS)
+test_test_pivx_LDADD += $(LIBBITCOIN_CONSENSUS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBZCASH_LIBS)
 test_test_pivx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) -static
 
 if ENABLE_ZMQ
