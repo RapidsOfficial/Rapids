@@ -69,7 +69,7 @@ public:
     /** Updates current unit in memory, settings and emits displayUnitChanged(newUnit) signal */
     void setDisplayUnit(const QVariant& value);
     /* Update StakeSplitThreshold's value in wallet */
-    void setStakeSplitThreshold(int value);
+    void setStakeSplitThreshold(const CAmount value);
 
     /* Explicit getters */
     bool getMinimizeToTray() { return fMinimizeToTray; }
