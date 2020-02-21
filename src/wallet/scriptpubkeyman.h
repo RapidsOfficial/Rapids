@@ -11,7 +11,7 @@
 #include "wallet/walletdb.h"
 
 //! Default for -keypool
-static const unsigned int DEFAULT_KEYPOOL_SIZE = 1000;
+static const unsigned int DEFAULT_KEYPOOL_SIZE = 100;
 static const uint32_t BIP32_HARDENED_KEY_LIMIT = 0x80000000;
 
 /*
