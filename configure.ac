@@ -1183,7 +1183,11 @@ AC_SUBST(UNIVALUE_LIBS)
 
 BITCOIN_QT_PATH_PROGS([PROTOC], [protoc],$protoc_bin_path)
 
-LIBZCASH_LIBS="-lrustzcash -lcrypto"
+# Additional Zcash flags
+AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing],[CXXFLAGS="$CXXFLAGS -fno-strict-aliasing"])
+AX_CHECK_COMPILE_FLAG([-Wno-builtin-declaration-mismatch],[CXXFLAGS="$CXXFLAGS -Wno-builtin-declaration-mismatch"],,[[$CXXFLAG_WERROR]])
+
+LIBZCASH_LIBS="$BOOST_SYSTEM_LIB -lcrypto -lrustzcash"
 
 AC_MSG_CHECKING([whether to build pivxd])
 AM_CONDITIONAL([BUILD_BITCOIND], [test x$build_bitcoind = xyes])
