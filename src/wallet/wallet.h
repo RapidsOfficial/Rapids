@@ -503,6 +503,7 @@ public:
     void Inventory(const uint256& hash);
 
     unsigned int GetKeyPoolSize();
+    unsigned int GetStakingKeyPoolSize();
 
     //! signify that a particular wallet feature is now used. this may change nWalletVersion and nWalletMaxVersion if those are lower
     bool SetMinVersion(enum WalletFeature, CWalletDB* pwalletdbIn = NULL, bool fExplicit = false);

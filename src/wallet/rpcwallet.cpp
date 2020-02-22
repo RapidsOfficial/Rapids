@@ -163,7 +163,6 @@ UniValue getaddressinfo(const UniValue& params, bool fHelp)
                 "                                               as an array to keep the API stable if multiple labels are enabled in the future.\n"
                 "    [\n"
                 "      \"label name\" (string) The label name. Defaults to \"\". Equivalent to the label field above.\n\n"
-                "      DEPRECATED, will be removed in 0.21. To re-enable, launch bitcoind with `-deprecatedrpc=labelspurpose`:\n"
                 "      { (json object of label data)\n"
                 "        \"name\" : \"label name\" (string) The label name. Defaults to \"\". Equivalent to the label field above.\n"
                 "        \"purpose\" : \"purpose\" (string) The purpose of the associated address (send or receive).\n"
@@ -2929,6 +2928,7 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
             "  \"keypoololdest\": xxxxxx,                 (numeric) the timestamp (seconds since GMT epoch) of the oldest pre-generated key in the key pool\n"
             "  \"keypoolsize\": xxxx,               (numeric) how many new keys are pre-generated (only counts external keys)\n"
             "  \"keypoolsize_hd_internal\": xxxx,   (numeric) how many new keys are pre-generated for internal use (used for change outputs, only appears if the wallet is using this feature, otherwise external keys are used)\n"
+            "  \"keypoolsize_hd_staking\": xxxx,    (numeric) how many new keys are pre-generated for staking use (used for staking contracts, only appears if the wallet is using this feature)\n"
             "  \"unlocked_until\": ttt,             (numeric) the UNIX epoch time until which the wallet is unlocked for transfers, or 0 if the wallet is locked\n"
             "  \"unlocked_until\": ttt,                   (numeric) the timestamp in seconds since epoch (midnight Jan 1 1970 GMT) that the wallet is unlocked for transfers, or 0 if the wallet is locked\n"
             "  \"paytxfee\": x.xxxx                       (numeric) the transaction fee configuration, set in PIV/kB\n"
@@ -2964,6 +2964,7 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
     }
     if (pwalletMain->IsHDEnabled()) {
         obj.pushKV("keypoolsize_hd_internal",   (int64_t)(pwalletMain->GetKeyPoolSize() - kpExternalSize));
+        obj.pushKV("keypoolsize_hd_staking",   (int64_t)(pwalletMain->GetStakingKeyPoolSize()));
     }
 
     if (pwalletMain->IsCrypted())

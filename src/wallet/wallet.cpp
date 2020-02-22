@@ -3922,6 +3922,11 @@ unsigned int CWallet::GetKeyPoolSize()
     return m_spk_man->GetKeyPoolSize();
 }
 
+unsigned int CWallet::GetStakingKeyPoolSize()
+{
+    return m_spk_man->GetStakingKeyPoolSize();
+}
+
 int CWallet::GetVersion()
 {
     LOCK(cs_wallet);

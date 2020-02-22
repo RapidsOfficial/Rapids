@@ -49,6 +49,9 @@ public:
     /* Key pool size */
     unsigned int GetKeyPoolSize() const;
 
+    /* Staking key pool size */
+    unsigned int GetStakingKeyPoolSize() const;
+
     /* Whether the wallet has or not keys in the pool */
     bool CanGetAddresses(const uint8_t& type = HDChain::ChangeType::EXTERNAL);
 

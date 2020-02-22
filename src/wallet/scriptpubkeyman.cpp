@@ -63,6 +63,12 @@ unsigned int ScriptPubKeyMan::GetKeyPoolSize() const
     return setInternalKeyPool.size() + setExternalKeyPool.size() + set_pre_split_keypool.size();
 }
 
+unsigned int ScriptPubKeyMan::GetStakingKeyPoolSize() const
+{
+    AssertLockHeld(wallet->cs_wallet);
+    return setStakingKeyPool.size();
+}
+
 bool ScriptPubKeyMan::GetKeyFromPool(CPubKey& result, const uint8_t& changeType)
 {
     if (!CanGetAddresses(changeType)) {
