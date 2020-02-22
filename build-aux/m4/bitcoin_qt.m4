@@ -82,8 +82,6 @@ AC_DEFUN([BITCOIN_QT_INIT],[
 
 dnl Find the appropriate version of Qt libraries and includes.
 dnl Inputs: $1: Whether or not pkg-config should be used. yes|no. Default: yes.
-dnl Inputs: $2: If $1 is "yes" and --with-gui=auto, which qt version should be
-dnl         tried first.
 dnl Outputs: See _BITCOIN_QT_FIND_LIBS_*
 dnl Outputs: Sets variables for all qt-related tools.
 dnl Outputs: bitcoin_enable_qt, bitcoin_enable_qt_dbus, bitcoin_enable_qt_test
@@ -99,6 +97,12 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
   else
     BITCOIN_QT_CHECK([_BITCOIN_QT_FIND_LIBS_WITHOUT_PKGCONFIG])
   fi
+
+  BITCOIN_QT_CHECK([
+    if test "x$bitcoin_cv_qt_minimumrequired" != xyes; then
+      BITCOIN_QT_FAIL([Qt version not supported])
+    fi
+  ])
 
   dnl This is ugly and complicated. Yuck. Works as follows:
   dnl For Qt5, we can check a header to find out whether Qt is build
@@ -117,24 +121,6 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
   if test "x$bitcoin_cv_static_qt" = xyes; then
     _BITCOIN_QT_FIND_STATIC_PLUGINS
     AC_DEFINE(QT_STATICPLUGIN, 1, [Define this symbol if qt plugins are static])
-    AC_CACHE_CHECK(for Qt < 5.4, bitcoin_cv_need_acc_widget,[
-      AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
-          #include <QtCore/qconfig.h>
-          #ifndef QT_VERSION
-          #  include <QtCore/qglobal.h>
-          #endif
-        ]],
-        [[
-          #if QT_VERSION >= 0x050400
-          choke
-          #endif
-        ]])],
-      [bitcoin_cv_need_acc_widget=yes],
-      [bitcoin_cv_need_acc_widget=no])
-    ])
-    if test "x$bitcoin_cv_need_acc_widget" = xyes; then
-      _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(AccessibleFactory)], [-lqtaccessiblewidgets])
-    fi
     _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(QMinimalIntegrationPlugin)],[-lqminimal])
     AC_DEFINE(QT_QPA_PLATFORM_MINIMAL, 1, [Define this symbol if the minimal qt platform exists])
     _BITCOIN_QT_CHECK_STATIC_PLUGINS([Q_IMPORT_PLUGIN(QSvgPlugin)],[-lqsvg])
@@ -227,7 +213,6 @@ AC_DEFUN([BITCOIN_QT_CONFIGURE],[
        ])
   esac
 
-
   dnl enable qt support
   AC_MSG_CHECKING(whether to build ]AC_PACKAGE_NAME[ GUI)
   BITCOIN_QT_CHECK([
@@ -269,11 +254,11 @@ dnl All macros below are internal and should _not_ be used from the main
 dnl configure.ac.
 dnl ----
 
-dnl Internal. Check if the included version of Qt is Qt5.
+dnl Internal. Check included version of Qt against minimum specified in doc/dependencies.md
 dnl Requires: INCLUDES must be populated as necessary.
-dnl Output: bitcoin_cv_qt5=yes|no
-AC_DEFUN([_BITCOIN_QT_CHECK_QT5],[
-  AC_CACHE_CHECK(for Qt 5, bitcoin_cv_qt5,[
+dnl Output: bitcoin_cv_qt_minimumrequired=yes|no
+AC_DEFUN([_BITCOIN_QT_CHECK_MINIMUM_REQUIRED],[
+  AC_CACHE_CHECK(for Qt >= 5.5.1, bitcoin_cv_qt_minimumrequired,[
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
       #include <QtCore/qconfig.h>
       #ifndef QT_VERSION
@@ -281,19 +266,19 @@ AC_DEFUN([_BITCOIN_QT_CHECK_QT5],[
       #endif
     ]],
     [[
-      #if QT_VERSION < 0x050000 || QT_VERSION_MAJOR < 5
+      #if QT_VERSION < 0x050501
       choke
       #endif
     ]])],
-    [bitcoin_cv_qt5=yes],
-    [bitcoin_cv_qt5=no])
+    [bitcoin_cv_qt_minimumrequired=yes],
+    [bitcoin_cv_qt_minimumrequired=no])
 ])])
 
-dnl Internal. Check if the included version of Qt is greater than Qt58.
+dnl Internal. Check if the included version of Qt is >= 5.8.
 dnl Requires: INCLUDES must be populated as necessary.
-dnl Output: bitcoin_cv_qt5=yes|no
+dnl Output: bitcoin_cv_qt58=yes|no
 AC_DEFUN([_BITCOIN_QT_CHECK_QT58],[
-  AC_CACHE_CHECK(for > Qt 5.7, bitcoin_cv_qt58,[
+  AC_CACHE_CHECK([for Qt >= 5.8], bitcoin_cv_qt58,[
   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([[
       #include <QtCore/qconfig.h>
       #ifndef QT_VERSION
@@ -379,9 +364,7 @@ AC_DEFUN([_BITCOIN_QT_FIND_STATIC_PLUGINS],[
                 fi
        if test "x$TARGET_OS" = xlinux; then
          PKG_CHECK_MODULES([X11XCB], [x11-xcb], [QT_LIBS="$X11XCB_LIBS $QT_LIBS"])
-         if ${PKG_CONFIG} --exists "Qt5Core >= 5.5" 2>/dev/null; then
-           PKG_CHECK_MODULES([QTXCBQPA], [Qt5XcbQpa], [QT_LIBS="$QTXCBQPA_LIBS $QT_LIBS"])
-         fi
+         PKG_CHECK_MODULES([QTXCBQPA], [Qt5XcbQpa], [QT_LIBS="$QTXCBQPA_LIBS $QT_LIBS"])
        elif test "x$TARGET_OS" = xdarwin; then
          PKG_CHECK_MODULES([QTCLIPBOARD], [Qt5ClipboardSupport], [QT_LIBS="-lQt5ClipboardSupport $QT_LIBS"])
          PKG_CHECK_MODULES([QTGRAPHICS], [Qt5GraphicsSupport], [QT_LIBS="-lQt5GraphicsSupport $QT_LIBS"])
@@ -424,10 +407,6 @@ AC_DEFUN([_BITCOIN_QT_FIND_STATIC_PLUGINS],[
 ])
 
 dnl Internal. Find Qt libraries using pkg-config.
-dnl Inputs: bitcoin_qt_want_version (from --with-gui=). The version to check
-dnl         first.
-dnl Inputs: $1: If bitcoin_qt_want_version is "auto", check for this version
-dnl         first.
 dnl Outputs: All necessary QT_* variables are set.
 dnl Outputs: have_qt_test and have_qt_dbus are set (if applicable) to yes|no.
 AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITH_PKGCONFIG],[
@@ -454,6 +433,16 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITH_PKGCONFIG],[
         PKG_CHECK_MODULES([QT_DBUS], [${QT_LIB_PREFIX}DBus], [QT_DBUS_INCLUDES="$QT_DBUS_CFLAGS"; have_qt_dbus=yes], [have_qt_dbus=no])
       fi
     ])
+    BITCOIN_QT_CHECK([
+      AC_CACHE_CHECK(for Qt >= 5.5.1,bitcoin_cv_qt_minimumrequired,
+        PKG_CHECK_EXISTS(Qt5Core < 5.5.1,[bitcoin_cv_qt_minimumrequired=no],[bitcoin_cv_qt_minimumrequired=yes])
+      )
+    ])
+    BITCOIN_QT_CHECK([
+      AC_CACHE_CHECK(for Qt >= 5.8.0,bitcoin_cv_qt58,
+        PKG_CHECK_EXISTS(Qt5Core < 5.8.0,[bitcoin_cv_qt58=no],[bitcoin_cv_qt58=yes])
+      )
+    ])
   ])
   true; dnl
 ])
@@ -461,7 +450,8 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITH_PKGCONFIG],[
 dnl Internal. Find Qt libraries without using pkg-config. Version is deduced
 dnl from the discovered headers.
 dnl Inputs: bitcoin_qt_want_version (from --with-gui=). The version to use.
-dnl         If "auto", the version will be discovered by _BITCOIN_QT_CHECK_QT5.
+dnl         If "auto", the version will be discovered by _BITCOIN_QT_CHECK_MINIMUM_REQUIRED
+dnl         and _BITCOIN_QT_CHECK_QT58.
 dnl Outputs: All necessary QT_* variables are set.
 dnl Outputs: have_qt_test and have_qt_dbus are set (if applicable) to yes|no.
 AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITHOUT_PKGCONFIG],[
@@ -483,7 +473,7 @@ AC_DEFUN([_BITCOIN_QT_FIND_LIBS_WITHOUT_PKGCONFIG],[
 
   BITCOIN_QT_CHECK([
     if test "x$bitcoin_qt_want_version" = xauto; then
-      _BITCOIN_QT_CHECK_QT5
+      _BITCOIN_QT_CHECK_MINIMUM_REQUIRED
       _BITCOIN_QT_CHECK_QT58
     fi
     QT_LIB_PREFIX=Qt5

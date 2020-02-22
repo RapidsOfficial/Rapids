@@ -40,6 +40,11 @@ Automatic zPIV backup has been disabled. Thus, the following configuration optio
 - `zpivbackuppath`
 
 
+Dependencies
+------------
+
+The minimum required version of QT has been increased from 5.0 to 5.5.1 (the [depends system](https://github.com/pivx-project/pivx/blob/master/depends/README.md) provides 5.9.7)
+
 
 RPC Changes
 --------------
