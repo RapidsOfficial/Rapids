@@ -1,4 +1,5 @@
-zcash_packages := rust librustzcash
+rust_crates := crate_libc
+rust_packages := rust $(rust_crates) librustzcash
 packages:=boost openssl libevent gmp $(zcash_packages)
 
 qt_native_packages = native_protobuf
