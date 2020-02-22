@@ -470,10 +470,6 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
             } else {
                 file << "change=1";
             }
-
-            if (strAddr.empty()) // If empty, encode the address as a regular address.
-                strAddr = CBitcoinAddress(keyid).ToString();
-
             file << strprintf(" # addr=%s%s\n", strAddr, (metadata.HasKeyOrigin() ? " hdkeypath="+metadata.key_origin.pathToString() : ""));
         }
     }
