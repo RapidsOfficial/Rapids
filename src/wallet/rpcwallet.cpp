@@ -2962,7 +2962,7 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
             obj.pushKV("hdseedid", seed_id.GetHex());
         }
     }
-    if (pwalletMain->CanSupportFeature(FEATURE_HD_SPLIT)) {
+    if (pwalletMain->IsHDEnabled()) {
         obj.pushKV("keypoolsize_hd_internal",   (int64_t)(pwalletMain->GetKeyPoolSize() - kpExternalSize));
     }
 

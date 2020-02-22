@@ -107,9 +107,9 @@ bool ScriptPubKeyMan::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, 
     {
         LOCK(wallet->cs_wallet);
 
-        bool fReturningInternal = type == HDChain::ChangeType::INTERNAL;
-        fReturningInternal &= (IsHDEnabled() && wallet->CanSupportFeature(FEATURE_HD_SPLIT));
-        bool fReturningStaking = type == HDChain::ChangeType::STAKING;
+        bool isHDEnabled = IsHDEnabled();
+        bool fReturningInternal = type == HDChain::ChangeType::INTERNAL && isHDEnabled;
+        bool fReturningStaking = type == HDChain::ChangeType::STAKING && isHDEnabled;
         bool use_split_keypool = set_pre_split_keypool.empty();
         std::set<int64_t>& setKeyPool = use_split_keypool ?
                 ( fReturningInternal ? setInternalKeyPool : (fReturningStaking ? setStakingKeyPool : setExternalKeyPool) ) : set_pre_split_keypool;
@@ -289,7 +289,7 @@ bool ScriptPubKeyMan::TopUp(unsigned int kpSize)
         int64_t missingInternal = std::max(std::max((int64_t) nTargetSize, (int64_t) 1) - (int64_t)setInternalKeyPool.size(), (int64_t) 0);
         int64_t missingStaking = std::max(std::max((int64_t) nTargetSize, (int64_t) 1) - (int64_t)setStakingKeyPool.size(), (int64_t) 0);
 
-        if (!IsHDEnabled() || !wallet->CanSupportFeature(FEATURE_HD_SPLIT)) {
+        if (!IsHDEnabled()) {
             // don't create extra internal keys
             missingInternal = 0;
         }
@@ -389,9 +389,9 @@ void ScriptPubKeyMan::DeriveNewChildKey(CWalletDB &batch, CKeyMetadata& metadata
     CExtKey masterKey;             //hd master key
     CExtKey purposeKey;            //key at m/purpose' --> key at m/44'
     CExtKey cointypeKey;           //key at m/purpose'/coin_type'  --> key at m/44'/119'
-    CExtKey accountKey;            //key at m/purpose'/coin_type'/account' ---> key at m/44'/119'/account_num
-    CExtKey changeKey;             //key at m/purpose'/coin_type'/account'/change ---> key at m/44'/119'/account_num/change', external = 0' or internal = 1'.
-    CExtKey childKey;              //key at m/purpose'/coin_type'/account'/change/address_index ---> key at m/44'/119'/account_num/change'/<n>'
+    CExtKey accountKey;            //key at m/purpose'/coin_type'/account' ---> key at m/44'/119'/account_num'
+    CExtKey changeKey;             //key at m/purpose'/coin_type'/account'/change ---> key at m/44'/119'/account_num'/change', external = 0' or internal = 1'.
+    CExtKey childKey;              //key at m/purpose'/coin_type'/account'/change/address_index ---> key at m/44'/119'/account_num'/change'/<n>'
 
     // For now only one account.
     int nAccountNumber = 0;
@@ -593,5 +593,5 @@ void ScriptPubKeyMan::SetHDChain(CHDChain& chain, bool memonly)
 
     // Sanity check
     if (!wallet->HaveKey(hdChain.GetID()))
-        throw std::runtime_error(std::string(__func__) + ": Not found seed in walelt");
+        throw std::runtime_error(std::string(__func__) + ": Not found seed in wallet");
 }

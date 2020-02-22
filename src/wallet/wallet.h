@@ -164,9 +164,9 @@ public:
                 READWRITE(m_pre_split);
             } catch (std::ios_base::failure&) {
                 /* Set as external address if we can't read the type boolean
-                   (this will be the case for any wallet before the HD chain split version) */
+                   (this will be the case for any wallet before the HD chain) */
                 type = HDChain::ChangeType::EXTERNAL;
-                m_pre_split = false;
+                m_pre_split = true;
             }
         } else {
             READWRITE(FLATDATA(type));
