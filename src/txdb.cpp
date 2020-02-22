@@ -255,7 +255,7 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
                 pindexNew->nMint = diskindex.nMint;
                 pindexNew->nMoneySupply = diskindex.nMoneySupply;
                 pindexNew->nFlags = diskindex.nFlags;
-                if (!Params().IsStakeModifierV2(pindexNew->nHeight)) {
+                if (!Params().GetConsensus().IsStakeModifierV2(pindexNew->nHeight)) {
                     pindexNew->nStakeModifier = diskindex.nStakeModifier;
                 } else {
                     pindexNew->nStakeModifierV2 = diskindex.nStakeModifierV2;
@@ -264,7 +264,7 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
                 pindexNew->nStakeTime = diskindex.nStakeTime;
                 pindexNew->hashProofOfStake = diskindex.hashProofOfStake;
 
-                if (pindexNew->nHeight <= Params().LAST_POW_BLOCK()) {
+                if (pindexNew->nHeight <= Params().GetConsensus().height_last_PoW) {
                     if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits))
                         return error("LoadBlockIndex() : CheckProofOfWork failed: %s", pindexNew->ToString());
                 }

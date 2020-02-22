@@ -95,7 +95,7 @@ void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
     pblock->nTime = std::max(pindexPrev->GetMedianTimePast() + 1, GetAdjustedTime());
 
     // Updating time can change work required on testnet:
-    if (Params().AllowMinDifficultyBlocks())
+    if (Params().GetConsensus().fPowAllowMinDifficultyBlocks)
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
 }
 
@@ -500,14 +500,13 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet)
         return nullptr;
 
     const int nHeightNext = chainActive.Tip()->nHeight + 1;
-    static int nLastPOWBlock = Params().LAST_POW_BLOCK();
 
     // If we're building a late PoW block, don't continue
     // PoS blocks are built directly with CreateNewBlock
-    if ((nHeightNext > nLastPOWBlock)) {
+    if ((nHeightNext > Params().GetConsensus().height_last_PoW)) {
         LogPrintf("%s: Aborting PoW block creation during PoS phase\n", __func__);
         // sleep 1/2 a block time so we don't go into a tight loop.
-        MilliSleep((Params().TargetSpacing() * 1000) >> 1);
+        MilliSleep((Params().GetConsensus().nTargetSpacing * 1000) >> 1);
         return nullptr;
     }
 
@@ -571,6 +570,8 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
     LogPrintf("PIVXMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
     RenameThread("pivx-miner");
+    const int64_t nSpacingMillis = Params().GetConsensus().nTargetSpacing * 1000;
+    const int last_pow_block = Params().GetConsensus().height_last_PoW;
 
     // Each thread has its own key and counter
     CReserveKey reservekey(pwallet);
@@ -579,13 +580,13 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
     while (fGenerateBitcoins || fProofOfStake) {
         CBlockIndex* pindexPrev = GetChainTip();
         if (!pindexPrev) {
-            MilliSleep(Params().TargetSpacing() * 1000);       // sleep a block
+            MilliSleep(nSpacingMillis);       // sleep a block
             continue;
         }
         if (fProofOfStake) {
-            if (pindexPrev->nHeight < Params().LAST_POW_BLOCK()) {
+            if (pindexPrev->nHeight < last_pow_block) {
                 // The last PoW block hasn't even been mined yet.
-                MilliSleep(Params().TargetSpacing() * 1000);       // sleep a block
+                MilliSleep(nSpacingMillis);       // sleep a block
                 continue;
             }
 
@@ -607,7 +608,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 continue;
             }
 
-        } else if ((pindexPrev->nHeight - 6) > Params().LAST_POW_BLOCK()) {
+        } else if ((pindexPrev->nHeight - 6) > last_pow_block) {
             // Late PoW: run for a little while longer, just in case there is a rewind on the chain.
             LogPrintf("%s: Exiting PoW Mining Thread at height: %d\n", __func__, pindexPrev->nHeight);
             return;
@@ -708,7 +709,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
             // Update nTime every few seconds
             UpdateTime(pblock, pindexPrev);
-            if (Params().AllowMinDifficultyBlocks()) {
+            if (Params().GetConsensus().fPowAllowMinDifficultyBlocks) {
                 // Changing pblock->nTime can change work required on testnet:
                 hashTarget.SetCompact(pblock->nBits);
             }

@@ -913,9 +913,10 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
 
     //get block value and calculate from that
     CAmount nSubsidy = 0;
-    if (nHeight <= Params().LAST_POW_BLOCK() && nHeight >= 151200) {
+    const int last_pow_block = Params().GetConsensus().height_last_PoW;
+    if (nHeight <= last_pow_block && nHeight >= 151200) {
         nSubsidy = 50 * COIN;
-    } else if (nHeight <= 302399 && nHeight > Params().LAST_POW_BLOCK()) {
+    } else if (nHeight <= 302399 && nHeight > last_pow_block) {
         nSubsidy = 50 * COIN;
     } else if (nHeight <= 345599 && nHeight >= 302400) {
         nSubsidy = 45 * COIN;

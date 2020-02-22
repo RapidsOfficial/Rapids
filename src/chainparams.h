@@ -55,8 +55,6 @@ public:
     const Consensus::Params& GetConsensus() const { return consensus; }
     const MessageStartChars& MessageStart() const { return pchMessageStart; }
     int GetDefaultPort() const { return nDefaultPort; }
-    const uint256& ProofOfWorkLimit() const { return bnProofOfWorkLimit; }
-    const uint256& ProofOfStakeLimit(const bool fV2) const { return fV2 ? bnProofOfStakeLimit_V2 : bnProofOfStakeLimit; }
 
     const CBlock& GenesisBlock() const { return genesis; }
     const std::vector<unsigned char>& AlertKey() const { return vAlertPubKey; }
@@ -74,26 +72,10 @@ public:
     bool HeadersFirstSyncingActive() const { return fHeadersFirstSyncingActive; };
     /** Default value for -checkmempool and -checkblockindex argument */
     bool DefaultConsistencyChecks() const { return fDefaultConsistencyChecks; }
-    /** Allow mining of a min-difficulty block */
-    bool AllowMinDifficultyBlocks() const { return fAllowMinDifficultyBlocks; }
     /** Skip proof-of-work check: allow mining of any difficulty block */
     bool SkipProofOfWorkCheck() const { return fSkipProofOfWorkCheck; }
     /** Make standard checks */
     bool RequireStandard() const { return fRequireStandard; }
-    int64_t TargetSpacing() const { return nTargetSpacing; }
-    int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespan_V2 : nTargetTimespan; }
-
-    /** returns the coinstake maturity (min depth required) **/
-    int COINSTAKE_MIN_AGE() const { return nStakeMinAge; }
-    int COINSTAKE_MIN_DEPTH() const { return nStakeMinDepth; }
-    bool HasStakeMinAgeOrDepth(const int contextHeight, const uint32_t contextTime, const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const;
-
-    /** Time Protocol V2 **/
-    int BlockStartTimeProtocolV2() const { return nBlockTimeProtocolV2; }
-    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= BlockStartTimeProtocolV2(); }
-    int TimeSlotLength() const { return nTimeSlotLength; }
-    int FutureBlockTimeDrift(const int nHeight) const;
-    bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const;
 
     /** The masternode count that we will allow the see-saw reward payments to be off by */
     int MasternodeCountDrift() const { return nMasternodeCountDrift; }
@@ -138,7 +120,6 @@ public:
 
     /** Height or Time Based Activations **/
     int ModifierUpgradeBlock() const { return nModifierUpdateBlock; }
-    int LAST_POW_BLOCK() const { return nLastPOWBlock; }
     int PivxBadBlockTime() const { return nPivxBadBlockTime; }
     int PivxBadBlocknBits() const { return nPivxBadBlocknBits; }
     int Zerocoin_StartHeight() const { return nZerocoinStartHeight; }
@@ -149,7 +130,6 @@ public:
     int Zerocoin_StartTime() const { return nZerocoinStartTime; }
     int Block_Enforce_Invalid() const { return nBlockEnforceInvalidUTXO; }
     int Zerocoin_Block_V2_Start() const { return nBlockZerocoinV2; }
-    bool IsStakeModifierV2(const int nHeight) const { return nHeight >= nBlockStakeModifierlV2; }
     int NewSigsActive(const int nHeight) const { return nHeight >= nBlockEnforceNewMessageSignatures; }
     int Block_V7_StartHeight() const { return nBlockV7StartHeight; }
 
@@ -171,26 +151,14 @@ protected:
     //! Raw pub key bytes for the broadcast alert signing key.
     std::vector<unsigned char> vAlertPubKey;
     int nDefaultPort;
-    uint256 bnProofOfWorkLimit;
-    uint256 bnProofOfStakeLimit;
-    uint256 bnProofOfStakeLimit_V2;
     int nMaxReorganizationDepth;
     int nEnforceBlockUpgradeMajority;
     int nRejectBlockOutdatedMajority;
     int nToCheckBlockUpgradeMajority;
-    int64_t nTargetSpacing;
-    int64_t nTargetTimespan;
-    int64_t nTargetTimespan_V2;
-    int nLastPOWBlock;
     int64_t nPivxBadBlockTime;
     unsigned int nPivxBadBlocknBits;
     int nMasternodeCountDrift;
     int nMaturity;
-    int nStakeMinDepth;
-    int nStakeMinAge;
-    int nFutureTimeDriftPoW;
-    int nFutureTimeDriftPoS;
-    int nTimeSlotLength;
 
     int nModifierUpdateBlock;
     int nMinerThreads;
@@ -201,7 +169,6 @@ protected:
     CBlock genesis;
     std::vector<CAddress> vFixedSeeds;
     bool fMiningRequiresPeers;
-    bool fAllowMinDifficultyBlocks;
     bool fDefaultConsistencyChecks;
     bool fRequireStandard;
     bool fSkipProofOfWorkCheck;
@@ -238,8 +205,6 @@ protected:
     int nBlockZerocoinV2;
     int nBlockDoubleAccumulated;
     int nPublicZCSpends;
-    int nBlockStakeModifierlV2;
-    int nBlockTimeProtocolV2;
     int nBlockEnforceNewMessageSignatures;
     int nBlockV7StartHeight;
     int nBlockLastAccumulatorCheckpoint;

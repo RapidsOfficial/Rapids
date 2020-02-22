@@ -32,24 +32,24 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int64_t CountBlocks = 0;
     uint256 PastDifficultyAverage;
     uint256 PastDifficultyAveragePrev;
+    const Consensus::Params& consensus = Params().GetConsensus();
 
     if (BlockLastSolved == NULL || BlockLastSolved->nHeight == 0 || BlockLastSolved->nHeight < PastBlocksMin) {
-        return Params().ProofOfWorkLimit().GetCompact();
+        return consensus.powLimit.GetCompact();
     }
 
-    if (pindexLast->nHeight >= Params().LAST_POW_BLOCK()) {
-        const bool fTimeV2 = Params().IsTimeProtocolV2(pindexLast->nHeight+1);
-        const uint256 bnTargetLimit = Params().ProofOfStakeLimit(fTimeV2);
-        const int64_t nTargetSpacing = Params().TargetSpacing();
-        const int64_t nTargetTimespan = Params().TargetTimespan(fTimeV2);
+    if (pindexLast->nHeight >= Params().GetConsensus().height_last_PoW) {
+        const bool fTimeV2 = consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
+        const uint256& bnTargetLimit = consensus.ProofOfStakeLimit(fTimeV2);
+        const int64_t& nTargetTimespan = consensus.TargetTimespan(fTimeV2);
 
         int64_t nActualSpacing = 0;
         if (pindexLast->nHeight != 0)
             nActualSpacing = pindexLast->GetBlockTime() - pindexLast->pprev->GetBlockTime();
         if (nActualSpacing < 0)
             nActualSpacing = 1;
-        if (fTimeV2 && nActualSpacing > nTargetSpacing*10)
-            nActualSpacing = nTargetSpacing*10;
+        if (fTimeV2 && nActualSpacing > consensus.nTargetSpacing*10)
+            nActualSpacing = consensus.nTargetSpacing*10;
 
         // ppcoin: target change every block
         // ppcoin: retarget with exponential moving toward target spacing
@@ -57,12 +57,12 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         bnNew.SetCompact(pindexLast->nBits);
 
         // on first block with V2 time protocol, reduce the difficulty by a factor 16
-        if (fTimeV2 && !Params().IsTimeProtocolV2(pindexLast->nHeight))
+        if (fTimeV2 && !consensus.IsTimeProtocolV2(pindexLast->nHeight))
             bnNew <<= 4;
 
-        int64_t nInterval = nTargetTimespan / nTargetSpacing;
-        bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
-        bnNew /= ((nInterval + 1) * nTargetSpacing);
+        int64_t nInterval = nTargetTimespan / consensus.nTargetSpacing;
+        bnNew *= ((nInterval - 1) * consensus.nTargetSpacing + nActualSpacing + nActualSpacing);
+        bnNew /= ((nInterval + 1) * consensus.nTargetSpacing);
 
         if (bnNew <= 0 || bnNew > bnTargetLimit)
             bnNew = bnTargetLimit;
@@ -100,7 +100,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
 
     uint256 bnNew(PastDifficultyAverage);
 
-    int64_t _nTargetTimespan = CountBlocks * Params().TargetSpacing();
+    int64_t _nTargetTimespan = CountBlocks * consensus.nTargetSpacing;
 
     if (nActualTimespan < _nTargetTimespan / 3)
         nActualTimespan = _nTargetTimespan / 3;
@@ -111,8 +111,8 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     bnNew *= nActualTimespan;
     bnNew /= _nTargetTimespan;
 
-    if (bnNew > Params().ProofOfWorkLimit()) {
-        bnNew = Params().ProofOfWorkLimit();
+    if (bnNew > consensus.powLimit) {
+        bnNew = consensus.powLimit;
     }
 
     return bnNew.GetCompact();
@@ -130,7 +130,7 @@ bool CheckProofOfWork(uint256 hash, unsigned int nBits)
     bnTarget.SetCompact(nBits, &fNegative, &fOverflow);
 
     // Check range
-    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > Params().ProofOfWorkLimit())
+    if (fNegative || bnTarget == 0 || fOverflow || bnTarget > Params().GetConsensus().powLimit)
         return error("CheckProofOfWork() : nBits below minimum work");
 
     // Check proof of work matches claimed amount

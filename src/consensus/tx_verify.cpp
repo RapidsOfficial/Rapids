@@ -73,6 +73,7 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
     const CAmount minColdStakingAmount = Params().GetMinColdStakingAmount();
 
     // Check for negative or overflow output values
+    const Consensus::Params& consensus = Params().GetConsensus();
     CAmount nValueOut = 0;
     for (const CTxOut& txout : tx.vout) {
         if (txout.IsEmpty() && !tx.IsCoinBase() && !tx.IsCoinStake())
@@ -80,11 +81,11 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
         if (txout.nValue < 0)
             return state.DoS(100, error("CheckTransaction() : txout.nValue negative"),
                 REJECT_INVALID, "bad-txns-vout-negative");
-        if (txout.nValue > MAX_MONEY_OUT)
+        if (txout.nValue > consensus.nMaxMoneyOut)
             return state.DoS(100, error("CheckTransaction() : txout.nValue too high"),
                 REJECT_INVALID, "bad-txns-vout-toolarge");
         nValueOut += txout.nValue;
-        if (!MoneyRange(nValueOut))
+        if (!consensus.MoneyRange(nValueOut))
             return state.DoS(100, error("CheckTransaction() : txout total out of range"),
                 REJECT_INVALID, "bad-txns-txouttotal-toolarge");
         // check cold staking enforcement (for delegations) and value out

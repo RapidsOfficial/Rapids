@@ -1274,7 +1274,7 @@ CAmount CWalletTx::GetUnlockedCredit() const
         if (fMasterNode && vout[i].nValue == 10000 * COIN) continue; // do not count MN-like outputs
 
         nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
-        if (!MoneyRange(nCredit))
+        if (!Params().GetConsensus().MoneyRange(nCredit))
             throw std::runtime_error("CWalletTx::GetUnlockedCredit() : value out of range");
     }
 
@@ -1309,7 +1309,7 @@ CAmount CWalletTx::GetLockedCredit() const
             nCredit += pwallet->GetCredit(txout, ISMINE_SPENDABLE);
         }
 
-        if (!MoneyRange(nCredit))
+        if (!Params().GetConsensus().MoneyRange(nCredit))
             throw std::runtime_error("CWalletTx::GetLockedCredit() : value out of range");
     }
 
@@ -1347,7 +1347,7 @@ CAmount CWalletTx::GetAvailableWatchOnlyCredit(const bool& fUseCache) const
         if (!pwallet->IsSpent(GetHash(), i)) {
             const CTxOut& txout = vout[i];
             nCredit += pwallet->GetCredit(txout, ISMINE_WATCH_ONLY);
-            if (!MoneyRange(nCredit))
+            if (!Params().GetConsensus().MoneyRange(nCredit))
                 throw std::runtime_error("CWalletTx::GetAvailableCredit() : value out of range");
         }
     }
@@ -1384,7 +1384,7 @@ CAmount CWalletTx::GetLockedWatchOnlyCredit() const
             nCredit += pwallet->GetCredit(txout, ISMINE_WATCH_ONLY);
         }
 
-        if (!MoneyRange(nCredit))
+        if (!Params().GetConsensus().MoneyRange(nCredit))
             throw std::runtime_error("CWalletTx::GetLockedCredit() : value out of range");
     }
 
@@ -1896,7 +1896,7 @@ bool CWallet::AvailableCoins(
             if (nDepth == 0 && !pcoin->InMempool()) continue;
 
             // Check min depth requirement for stake inputs
-            if (nCoinType == STAKEABLE_COINS && nDepth <= Params().COINSTAKE_MIN_DEPTH()) continue;
+            if (nCoinType == STAKEABLE_COINS && nDepth <= Params().GetConsensus().nStakeMinDepth) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
                 bool found = false;
@@ -3426,7 +3426,7 @@ void CWallet::AutoCombineDust()
             if (!out.fSpendable)
                 continue;
             //no coins should get this far if they dont have proper maturity, this is double checking
-            if (out.tx->IsCoinStake() && out.tx->GetDepthInMainChain() < Params().GetConsensus().CoinbaseMaturity() + 1)
+            if (out.tx->IsCoinStake() && out.tx->GetDepthInMainChain() < Params().GetConsensus().nCoinbaseMaturity + 1)
                 continue;
 
             // no p2cs accepted, those coins are "locked"
@@ -3521,7 +3521,7 @@ bool CWallet::MultiSend()
     for (const COutput& out : vCoins) {
 
         //need output with precise confirm count - this is how we identify which is the output to send
-        if (out.tx->GetDepthInMainChain() != Params().GetConsensus().CoinbaseMaturity() + 1)
+        if (out.tx->GetDepthInMainChain() != Params().GetConsensus().nCoinbaseMaturity + 1)
             continue;
 
         COutPoint outpoint(out.tx->GetHash(), out.i);
@@ -3707,7 +3707,7 @@ int CMerkleTx::GetBlocksToMaturity() const
     LOCK(cs_main);
     if (!(IsCoinBase() || IsCoinStake()))
         return 0;
-    return std::max(0, (Params().GetConsensus().CoinbaseMaturity() + 1) - GetDepthInMainChain());
+    return std::max(0, (Params().GetConsensus().nCoinbaseMaturity + 1) - GetDepthInMainChain());
 }
 
 bool CMerkleTx::IsInMainChain() const
@@ -3719,7 +3719,7 @@ bool CMerkleTx::IsInMainChainImmature() const
 {
     if (!IsCoinBase() && !IsCoinStake()) return false;
     const int depth = GetDepthInMainChain(false);
-    return (depth > 0 && depth <= Params().GetConsensus().CoinbaseMaturity());
+    return (depth > 0 && depth <= Params().GetConsensus().nCoinbaseMaturity);
 }
 
 
@@ -3852,14 +3852,14 @@ isminetype CWallet::IsMine(const CTxOut& txout) const
 
 CAmount CWallet::GetCredit(const CTxOut& txout, const isminefilter& filter) const
 {
-    if (!MoneyRange(txout.nValue))
+    if (!Params().GetConsensus().MoneyRange(txout.nValue))
         throw std::runtime_error("CWallet::GetCredit() : value out of range");
     return ((IsMine(txout) & filter) ? txout.nValue : 0);
 }
 
 CAmount CWallet::GetChange(const CTxOut& txout) const
 {
-    if (!MoneyRange(txout.nValue))
+    if (!Params().GetConsensus().MoneyRange(txout.nValue))
         throw std::runtime_error("CWallet::GetChange() : value out of range");
     return (IsChange(txout) ? txout.nValue : 0);
 }
@@ -3882,7 +3882,7 @@ CAmount CWallet::GetDebit(const CTransaction& tx, const isminefilter& filter) co
     CAmount nDebit = 0;
     for (const CTxIn& txin : tx.vin) {
         nDebit += GetDebit(txin, filter);
-        if (!MoneyRange(nDebit))
+        if (!Params().GetConsensus().MoneyRange(nDebit))
             throw std::runtime_error("CWallet::GetDebit() : value out of range");
     }
     return nDebit;
@@ -3895,7 +3895,7 @@ CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter, c
         if (fUnspent && IsSpent(tx.GetHash(), i)) continue;
         nCredit += GetCredit(tx.vout[i], filter);
     }
-    if (!MoneyRange(nCredit))
+    if (!Params().GetConsensus().MoneyRange(nCredit))
         throw std::runtime_error("CWallet::GetCredit() : value out of range");
     return nCredit;
 }
@@ -3905,7 +3905,7 @@ CAmount CWallet::GetChange(const CTransaction& tx) const
     CAmount nChange = 0;
     for (const CTxOut& txout : tx.vout) {
         nChange += GetChange(txout);
-        if (!MoneyRange(nChange))
+        if (!Params().GetConsensus().MoneyRange(nChange))
             throw std::runtime_error("CWallet::GetChange() : value out of range");
     }
     return nChange;
