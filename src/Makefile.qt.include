@@ -58,6 +58,7 @@ QT_FORMS_UI = \
   qt/pivx/forms/privacywidget.ui \
   qt/pivx/forms/coldstakingwidget.ui \
   qt/pivx/settings/forms/settingsbackupwallet.ui \
+  qt/pivx/settings/forms/settingsexportcsv.ui \
   qt/pivx/settings/forms/settingsbittoolwidget.ui \
   qt/pivx/settings/forms/settingsconsolewidget.ui \
   qt/pivx/settings/forms/settingsdisplayoptionswidget.ui \
@@ -155,6 +156,7 @@ QT_MOC_CPP = \
   qt/pivx/moc_privacywidget.cpp \
   qt/pivx/moc_coldstakingwidget.cpp \
   qt/pivx/settings/moc_settingsbackupwallet.cpp \
+  qt/pivx/settings/moc_settingsexportcsv.cpp \
   qt/pivx/settings/moc_settingsbittoolwidget.cpp \
   qt/pivx/settings/moc_settingsconsolewidget.cpp \
   qt/pivx/settings/moc_settingsdisplayoptionswidget.cpp \
@@ -286,6 +288,7 @@ BITCOIN_QT_H = \
   qt/pivx/privacywidget.h \
   qt/pivx/coldstakingwidget.h \
   qt/pivx/settings/settingsbackupwallet.h \
+  qt/pivx/settings/settingsexportcsv.h \
   qt/pivx/settings/settingsbittoolwidget.h \
   qt/pivx/settings/settingsconsolewidget.h \
   qt/pivx/settings/settingsdisplayoptionswidget.h \
@@ -674,6 +677,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/privacywidget.cpp \
   qt/pivx/coldstakingwidget.cpp \
   qt/pivx/settings/settingsbackupwallet.cpp \
+  qt/pivx/settings/settingsexportcsv.cpp \
   qt/pivx/settings/settingsbittoolwidget.cpp \
   qt/pivx/settings/settingsconsolewidget.cpp \
   qt/pivx/settings/settingsdisplayoptionswidget.cpp \
