@@ -202,7 +202,7 @@ private:
 
 public:
 
-    static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 2000 * COIN;
+    static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
 
     bool StakeableCoins(std::vector<COutput>* pCoins = nullptr);
     bool IsCollateralAmount(CAmount nInputAmount) const;
