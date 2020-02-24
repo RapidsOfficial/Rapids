@@ -4313,19 +4313,17 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
             CBlockIndex* pindex = chainActive.Tip();
             while (!found && pindex && pindex->nHeight >= Params().Zerocoin_StartHeight()) {
                 LogPrintf("%s : Checking block %d...\n", __func__, pindex->nHeight);
-                if (pindex->MintedDenomination(denom)) {
-                    CBlock block;
-                    if (!ReadBlockFromDisk(block, pindex))
-                        throw JSONRPCError(RPC_INTERNAL_ERROR, "Unable to read block from disk");
-                    std::list<CZerocoinMint> listMints;
-                    BlockToZerocoinMintList(block, listMints, true);
-                    for (const CZerocoinMint& m : listMints) {
-                        if (m.GetValue() == mintValue && m.GetDenomination() == denom) {
-                            // mint found. update txid
-                            mint.SetTxHash(m.GetTxHash());
-                            found = true;
-                            break;
-                        }
+                CBlock block;
+                if (!ReadBlockFromDisk(block, pindex))
+                    throw JSONRPCError(RPC_INTERNAL_ERROR, "Unable to read block from disk");
+                std::list<CZerocoinMint> listMints;
+                BlockToZerocoinMintList(block, listMints, true);
+                for (const CZerocoinMint& m : listMints) {
+                    if (m.GetValue() == mintValue && m.GetDenomination() == denom) {
+                        // mint found. update txid
+                        mint.SetTxHash(m.GetTxHash());
+                        found = true;
+                        break;
                     }
                 }
                 pindex = pindex->pprev;

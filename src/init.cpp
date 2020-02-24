@@ -1543,10 +1543,6 @@ bool AppInit2()
 
                 // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
                 if (GetBoolArg("-reindexmoneysupply", false) || reindexZerocoin) {
-                    if (chainHeight > Params().Zerocoin_StartHeight()) {
-                        RecalculateZPIVMinted();
-                        RecalculateZPIVSpent();
-                    }
                     // Recalculate from the zerocoin activation or from scratch.
                     RecalculatePIVSupply(reindexZerocoin ? Params().Zerocoin_StartHeight() : 1);
                 }

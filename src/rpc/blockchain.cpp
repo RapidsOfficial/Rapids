@@ -133,8 +133,8 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     if (pnext)
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
 
-    result.push_back(Pair("modifier", strprintf("%016x", blockindex->nStakeModifier)));
-    result.push_back(Pair("modifierV2", blockindex->nStakeModifierV2.GetHex()));
+    result.push_back(Pair("modifier", strprintf("%016x", blockindex->GetStakeModifierV1())));
+    result.push_back(Pair("modifierV2", blockindex->GetStakeModifierV2().GetHex()));
 
     result.push_back(Pair("moneysupply",ValueFromAmount(blockindex->nMoneySupply)));
 
@@ -162,8 +162,8 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
         std::string stakeModifier = (Params().GetConsensus().IsStakeModifierV2(blockindex->nHeight) ?
-                                     blockindex->nStakeModifierV2.GetHex() :
-                                     strprintf("%016x", blockindex->nStakeModifier));
+                                     blockindex->GetStakeModifierV2().GetHex() :
+                                     strprintf("%016x", blockindex->GetStakeModifierV1()));
         result.push_back(Pair("stakeModifier", stakeModifier));
         result.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
     }
@@ -1155,60 +1155,6 @@ void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int
     }
 }
 
-UniValue getmintsinblocks(const UniValue& params, bool fHelp) {
-    if (fHelp || params.size() != 3)
-        throw std::runtime_error(
-                "getmintsinblocks height range coinDenomination\n"
-                "\nReturns the number of mints of a certain denomination"
-                "\noccurred in blocks [height, height+1, height+2, ..., height+range-1]\n"
-
-                "\nArguments:\n"
-                "1. height             (numeric, required) block height where the search starts.\n"
-                "2. range              (numeric, required) number of blocks to include.\n"
-                "3. coinDenomination   (numeric, required) coin denomination.\n"
-
-                "\nResult:\n"
-                "{\n"
-                "  \"Starting block\": \"x\"           (integer) First counted block\n"
-                "  \"Ending block\": \"x\"             (integer) Last counted block\n"
-                "  \"Number of d-denom mints\": \"x\"  (integer) number of mints of the required d denomination\n"
-                "}\n"
-
-                "\nExamples:\n" +
-                HelpExampleCli("getmintsinblocks", "1200000 1000 5") +
-                HelpExampleRpc("getmintsinblocks", "1200000, 1000, 5"));
-
-    int heightStart, heightEnd;
-    validaterange(params, heightStart, heightEnd, Params().Zerocoin_StartHeight());
-
-    int d = params[2].get_int();
-    libzerocoin::CoinDenomination denom = libzerocoin::IntToZerocoinDenomination(d);
-    if (denom == libzerocoin::CoinDenomination::ZQ_ERROR)
-        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid denomination. Must be in {1, 5, 10, 50, 100, 500, 1000, 5000}");
-
-    int num_of_mints = 0;
-    {
-        LOCK(cs_main);
-        CBlockIndex* pindex = chainActive[heightStart];
-
-        while (true) {
-            num_of_mints += count(pindex->vMintDenominationsInBlock.begin(), pindex->vMintDenominationsInBlock.end(), denom);
-            if (pindex->nHeight < heightEnd) {
-                pindex = chainActive.Next(pindex);
-            } else {
-                break;
-            }
-        }
-    }
-
-    UniValue obj(UniValue::VOBJ);
-    obj.push_back(Pair("Starting block", heightStart));
-    obj.push_back(Pair("Ending block", heightEnd-1));
-    obj.push_back(Pair("Number of "+ std::to_string(d) +"-denom mints", num_of_mints));
-
-    return obj;
-}
-
 
 UniValue getserials(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() < 2 || params.size() > 3)
@@ -1344,11 +1290,6 @@ UniValue getblockindexstats(const UniValue& params, bool fHelp) {
                 "  \"last_block\": \"x\"             (integer) Last counted block\n"
                 "  \"txcount\": xxxxx                (numeric) tx count (excluding coinbase/coinstake)\n"
                 "  \"txcount_all\": xxxxx            (numeric) tx count (including coinbase/coinstake)\n"
-                "  \"mintcount\": {              [if fFeeOnly=False]\n"
-                "        \"denom_1\": xxxx           (numeric) number of mints of denom_1 occurred over the block range\n"
-                "        \"denom_5\": xxxx           (numeric) number of mints of denom_5 occurred over the block range\n"
-                "         ...                    ... number of mints of other denominations: ..., 10, 50, 100, 500, 1000, 5000\n"
-                "  }\n"
                 "  \"spendcount\": {             [if fFeeOnly=False]\n"
                 "        \"denom_1\": xxxx           (numeric) number of spends of denom_1 occurred over the block range\n"
                 "        \"denom_5\": xxxx           (numeric) number of spends of denom_5 occurred over the block range\n"
@@ -1387,11 +1328,9 @@ UniValue getblockindexstats(const UniValue& params, bool fHelp) {
     int64_t nTxCount = 0;
     int64_t nTxCount_all = 0;
 
-    std::map<libzerocoin::CoinDenomination, int64_t> mapMintCount;
     std::map<libzerocoin::CoinDenomination, int64_t> mapSpendCount;
     std::map<libzerocoin::CoinDenomination, int64_t> mapPublicSpendCount;
     for (auto& denom : libzerocoin::zerocoinDenomList) {
-        mapMintCount.insert(std::make_pair(denom, 0));
         mapSpendCount.insert(std::make_pair(denom, 0));
         mapPublicSpendCount.insert(std::make_pair(denom, 0));
     }
@@ -1460,13 +1399,6 @@ UniValue getblockindexstats(const UniValue& params, bool fHelp) {
             }
         }
 
-        // add mints to map
-        if (!fFeeOnly) {
-            for (auto& denom : libzerocoin::zerocoinDenomList) {
-                mapMintCount[denom] += count(pindex->vMintDenominationsInBlock.begin(), pindex->vMintDenominationsInBlock.end(), denom);
-            }
-        }
-
         if (pindex->nHeight < heightEnd) {
             LOCK(cs_main);
             pindex = chainActive.Next(pindex);
@@ -1486,11 +1418,9 @@ UniValue getblockindexstats(const UniValue& params, bool fHelp) {
         UniValue spend_obj(UniValue::VOBJ);
         UniValue pubspend_obj(UniValue::VOBJ);
         for (auto& denom : libzerocoin::zerocoinDenomList) {
-            mint_obj.push_back(Pair(strprintf("denom_%d", ZerocoinDenominationToInt(denom)), mapMintCount[denom]));
             spend_obj.push_back(Pair(strprintf("denom_%d", ZerocoinDenominationToInt(denom)), mapSpendCount[denom]));
             pubspend_obj.push_back(Pair(strprintf("denom_%d", ZerocoinDenominationToInt(denom)), mapPublicSpendCount[denom]));
         }
-        ret.push_back(Pair("mintcount", mint_obj));
         ret.push_back(Pair("spendcount", spend_obj));
         ret.push_back(Pair("publicspendcount", pubspend_obj));
 
