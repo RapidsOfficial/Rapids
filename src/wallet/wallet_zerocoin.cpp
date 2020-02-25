@@ -6,6 +6,7 @@
 
 #include "init.h"
 #include "coincontrol.h"
+#include "consensus/zerocoin_verify.h"
 #include "denomination_functions.h"
 #include "primitives/transaction.h"
 #include "script/sign.h"
