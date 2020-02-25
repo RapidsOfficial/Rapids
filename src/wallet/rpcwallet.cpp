@@ -248,16 +248,17 @@ UniValue sethdseed(const UniValue& params, bool fHelp)
     }
 
     if (fHelp || params.size() > 2)
-        throw std::runtime_error("sethdseed\n"
+        throw std::runtime_error("sethdseed ( newkeypool \"seed\" )\n"
                "Set or generate a new HD wallet seed. Non-HD wallets will not be upgraded to being a HD wallet. Wallets that are already\n"
                "HD will have a new HD seed set so that new keys added to the keypool will be derived from this new seed.\n"
                "\nNote that you will need to MAKE A NEW BACKUP of your wallet after setting the HD wallet seed.\n\n"
-               "newkeypool bool, default true: Whether to flush old unused addresses, including change addresses, from the keypool and regenerate it.\n"
-               "                             If true, the next address from getnewaddress and change address from getrawchangeaddress will be from this new seed.\n"
-               "                             If false, addresses (including change addresses if the wallet already had HD Chain Split enabled) from the existing\n"
-               "                             keypool will be used until it has been depleted."
-               "seed str, default random seed: The WIF private key to use as the new HD seed.\n"
-               "                             The seed value can be retrieved using the dumpwallet command. It is the private key marked hdseed=1"
+               "\nArguments:\n"
+               "1. newkeypool (boolean, optional, default true): Whether to flush old unused addresses, including change addresses, from the keypool and regenerate it.\n"
+               "           If true, the next address from getnewaddress and change address from getrawchangeaddress will be from this new seed.\n"
+               "           If false, addresses (including change addresses if the wallet already had HD Chain Split enabled) from the existing\n"
+               "           keypool will be used until it has been depleted."
+               "2. \"seed\" (string, optional, default random seed): The WIF private key to use as the new HD seed.\n"
+               "           The seed value can be retrieved using the dumpwallet command. It is the private key marked hdseed=1"
                + HelpExampleCli("sethdseed", "")
                + HelpExampleCli("sethdseed", "false")
                + HelpExampleCli("sethdseed", "true \"wifkey\"")
