@@ -1671,6 +1671,7 @@ bool AppInit2()
                 strErrors << _("Error loading wallet.dat") << "\n";
         }
 
+        int prev_version = pwalletMain->GetVersion();
         if (GetBoolArg("-upgradewallet", fFirstRun)) {
             int nMaxVersion = GetArg("-upgradewallet", 0);
             if (nMaxVersion == 0) // the -upgradewallet without argument case
@@ -1683,6 +1684,12 @@ bool AppInit2()
             if (nMaxVersion < pwalletMain->GetVersion())
                 strErrors << _("Cannot downgrade wallet") << "\n";
             pwalletMain->SetMaxVersion(nMaxVersion);
+        }
+
+        // Upgrade to HD if explicit upgrade was requested.
+        std::string upgradeError;
+        if (!pwalletMain->Upgrade(upgradeError, prev_version)) {
+            strErrors << upgradeError << "\n";
         }
 
         if (fFirstRun) {

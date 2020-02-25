@@ -37,6 +37,9 @@ public:
       */
     bool SetupGeneration(bool force = false);
 
+    /** Upgrades the wallet to the specified version */
+    bool Upgrade(const int& prev_version, std::string& error);
+
     /* Returns true if the wallet can generate new keys */
     bool CanGenerateKeys();
 
@@ -71,6 +74,8 @@ public:
     void LoadKeyPool(int64_t nIndex, const CKeyPool &keypool);
     //! Key pool
     bool NewKeyPool();
+    //! Update pre HD keys in db with the pre-split flag enabled.
+    void MarkPreSplitKeys();
 
     /** Fills internal address pool. Use within ScriptPubKeyMan implementations should be used sparingly and only
       * when something from the address pool is removed, excluding GetNewDestination and GetReservedDestination.

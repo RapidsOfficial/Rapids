@@ -20,6 +20,37 @@ bool ScriptPubKeyMan::SetupGeneration(bool force)
     return true;
 }
 
+bool ScriptPubKeyMan::Upgrade(const int& prev_version, std::string& error)
+{
+    LOCK(wallet->cs_KeyStore);
+    error = "";
+    bool hd_upgrade = false;
+    bool split_upgrade = false;
+    if (wallet->CanSupportFeature(FEATURE_HD_SPLIT) && !IsHDEnabled()) {
+        LogPrintf("Upgrading wallet to use HD chain split\n");
+        wallet->SetMinVersion(FEATURE_PRE_SPLIT_KEYPOOL);
+
+        // generate a new master key
+        CPubKey masterPubKey = GenerateNewSeed();
+        SetHDSeed(masterPubKey);
+        hd_upgrade = true;
+        split_upgrade = FEATURE_HD_SPLIT > prev_version;
+    }
+
+    // Mark all keys currently in the keypool as pre-split
+    if (split_upgrade) {
+        MarkPreSplitKeys();
+    }
+    // Regenerate the keypool if upgraded to HD
+    if (hd_upgrade) {
+        if (!TopUp()) {
+            error = _("Unable to generate keys");
+            return false;
+        }
+    }
+    return true;
+}
+
 bool ScriptPubKeyMan::CanGenerateKeys()
 {
     // A wallet can generate keys if it has an HD seed (IsHDEnabled) or it is a non-HD wallet (pre FEATURE_HD)
@@ -228,6 +259,24 @@ void ScriptPubKeyMan::MarkUnusedAddresses(const CScript& script)
                 LogPrintf("%s: Topping up keypool failed (locked wallet)\n", __func__);
             }
         }
+    }
+}
+
+void ScriptPubKeyMan::MarkPreSplitKeys()
+{
+    CWalletDB batch(wallet->strWalletFile);
+    for (auto it = setExternalKeyPool.begin(); it != setExternalKeyPool.end();) {
+        int64_t index = *it;
+        CKeyPool keypool;
+        if (!batch.ReadPool(index, keypool)) {
+            throw std::runtime_error(std::string(__func__) + ": read keypool entry failed");
+        }
+        keypool.m_pre_split = true;
+        if (!batch.WritePool(index, keypool)) {
+            throw std::runtime_error(std::string(__func__) + ": writing modified keypool entry failed");
+        }
+        set_pre_split_keypool.insert(index);
+        it = setExternalKeyPool.erase(it);
     }
 }
 

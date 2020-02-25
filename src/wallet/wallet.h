@@ -86,7 +86,9 @@ enum WalletFeature {
 
     FEATURE_HD_SPLIT = 139900, // Wallet with HD chain split (change outputs will use m/0'/1'/k)
 
-    FEATURE_LATEST = FEATURE_HD_SPLIT
+    FEATURE_PRE_SPLIT_KEYPOOL = 169900, // Upgraded to HD SPLIT and can have a pre-split keypool
+
+    FEATURE_LATEST = FEATURE_PRE_SPLIT_KEYPOOL
 };
 
 enum AvailableCoinsType {
@@ -408,6 +410,12 @@ public:
     void SyncTransaction(const CTransaction& tx, const CBlock* pblock);
     bool AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate);
     void EraseFromWallet(const uint256& hash);
+
+    /**
+     * Upgrade wallet to HD if needed. Does nothing if not.
+     */
+    bool Upgrade(std::string& error, const int& prevVersion);
+
     int ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate = false, bool fromStartup = false);
     void ReacceptWalletTransactions(bool fFirstLoad = false);
     void ResendWalletTransactions();
