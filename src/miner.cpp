@@ -569,7 +569,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 {
     LogPrintf("PIVXMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
-    RenameThread("pivx-miner");
+    util::ThreadRename("pivx-miner");
     const int64_t nSpacingMillis = Params().GetConsensus().nTargetSpacing * 1000;
     const int last_pow_block = Params().GetConsensus().height_last_PoW;
 

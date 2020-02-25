@@ -131,7 +131,7 @@ extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
 
 // Best block section
-extern CWaitableCriticalSection g_best_block_mutex;
+extern Mutex g_best_block_mutex;
 extern std::condition_variable g_best_block_cv;
 extern uint256 g_best_block;
 

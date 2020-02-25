@@ -19,6 +19,7 @@
 #include "compat.h"
 #include "tinyformat.h"
 #include "utiltime.h"
+#include "util/threadnames.h"
 
 #include <exception>
 #include <map>
@@ -214,7 +215,6 @@ std::string HelpMessageGroup(const std::string& message);
 std::string HelpMessageOpt(const std::string& option, const std::string& message);
 
 void SetThreadPriority(int nPriority);
-void RenameThread(const char* name);
 
 /**
  * .. and a wrapper that just calls func once
@@ -223,7 +223,7 @@ template <typename Callable>
 void TraceThread(const char* name, Callable func)
 {
     std::string s = strprintf("pivx-%s", name);
-    RenameThread(s.c_str());
+    util::ThreadRename(s.c_str());
     try {
         LogPrintf("%s thread start\n", name);
         func();
