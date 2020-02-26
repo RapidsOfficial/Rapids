@@ -133,9 +133,9 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-490</y>
+               <y>0</y>
                <width>230</width>
-               <height>887</height>
+               <height>937</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -328,7 +328,7 @@
                          <enum>Qt::NoFocus</enum>
                         </property>
                         <property name="text">
-                         <string>Export CSV</string>
+                         <string>Export Accounting</string>
                         </property>
                         <property name="checkable">
                          <bool>true</bool>

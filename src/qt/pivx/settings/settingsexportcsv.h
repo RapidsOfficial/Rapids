@@ -22,13 +22,15 @@ public:
     ~SettingsExportCSV();
 
 private Q_SLOTS:
-    void selectFileOutput();
+    void selectFileOutput(const bool& isTxExport);
     void exportClicked();
+    void onExportAddressesClicked();
 
 private:
     Ui::SettingsExportCSV *ui;
     TransactionFilterProxy* txFilter{nullptr};
     QString filename;
+    QString filenameAddressBook;
 };
 
 #endif // SETTINGSEXPORTCSV_H

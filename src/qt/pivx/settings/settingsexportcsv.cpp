@@ -28,20 +28,25 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     ui->labelTitle->setProperty("cssClass", "text-title-screen");
 
     // Subtitle
-    ui->labelSubtitle1->setText(tr("Export all of your transactions in a csv file."));
+    ui->labelSubtitle1->setText(tr("Export your wallet's accounting data to a csv file."));
     ui->labelSubtitle1->setProperty("cssClass", "text-subtitle");
 
     // Location
     ui->labelSubtitleLocation->setText(tr("Where"));
     ui->labelSubtitleLocation->setProperty("cssClass", "text-title");
+    ui->labelSubtitleLocationAddress->setProperty("cssClass", "text-title");
 
     ui->pushButtonDocuments->setText(tr("Select folder..."));
-    ui->pushButtonDocuments->setProperty("cssClass", "btn-edit-primary-folder");
+    setCssProperty({ui->pushButtonDocuments, ui->pushButtonAddressDocuments}, "btn-edit-primary-folder");
     setShadow(ui->pushButtonDocuments);
 
+    ui->pushButtonAddressDocuments->setText(tr("Select folder..."));
+    setShadow(ui->pushButtonAddressDocuments);
+    ui->labelDivider->setProperty("cssClass", "container-divider");
+
     // Buttons
-    ui->pushButtonSave->setText(tr("Export"));
     setCssBtnPrimary(ui->pushButtonSave);
+    setCssBtnPrimary(ui->pushButtonExportAddress);
 
     SortEdit* lineEdit = new SortEdit(ui->comboBoxSort);
     connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSort->showPopup();});
@@ -52,19 +57,31 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     setSortTxTypeFilter(ui->comboBoxSortType, lineEditType);
     ui->comboBoxSortType->setCurrentIndex(0);
 
+    // Todo: add addressbook filter
+    ui->comboBoxSortAddressType->setVisible(false);
+
     connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(exportClicked()));
-    connect(ui->pushButtonDocuments, SIGNAL(clicked()), this, SLOT(selectFileOutput()));
+    connect(ui->pushButtonDocuments, &QPushButton::clicked, [this](){selectFileOutput(true);});
+
+    connect(ui->pushButtonExportAddress, SIGNAL(clicked()), this, SLOT(onExportAddressesClicked()));
+    connect(ui->pushButtonAddressDocuments, &QPushButton::clicked, [this](){selectFileOutput(false);});
 }
 
-void SettingsExportCSV::selectFileOutput()
+void SettingsExportCSV::selectFileOutput(const bool& isTxExport)
 {
     QString filenameRet = GUIUtil::getSaveFileName(this,
-                                        tr("Export CSV"), QString(),
-                                        tr("PIVX_csv_export(*.csv)"), NULL);
+                                        isTxExport ? tr("Export CSV") : tr("Export Address List"), QString(),
+                                        isTxExport ? tr("PIVX_tx_csv_export(*.csv)") : tr("PIVX_addresses_csv_export(*.csv)"),
+                                        nullptr);
 
     if (!filenameRet.isEmpty()) {
-        filename = filenameRet;
-        ui->pushButtonDocuments->setText(filename);
+        if (isTxExport) {
+            filename = filenameRet;
+            ui->pushButtonDocuments->setText(filename);
+        } else {
+            filenameAddressBook = filenameRet;
+            ui->pushButtonAddressDocuments->setText(filenameAddressBook);
+        }
     }
 }
 
@@ -130,7 +147,6 @@ void SettingsExportCSV::exportClicked()
         writer.addColumn(tr("Address"), 0, TransactionTableModel::AddressRole);
         writer.addColumn(BitcoinUnits::getAmountColumnTitle(walletModel->getOptionsModel()->getDisplayUnit()), 0, TransactionTableModel::FormattedAmountRole);
         writer.addColumn(tr("ID"), 0, TransactionTableModel::TxIDRole);
-
         fExport = writer.write();
     }
 
@@ -138,6 +154,30 @@ void SettingsExportCSV::exportClicked()
         inform(tr("Exporting Successful\nThe transaction history was successfully saved to %1.").arg(filename));
     } else {
         inform(tr("Exporting Failed\nThere was an error trying to save the transaction history to %1.").arg(filename));
+    }
+}
+
+void SettingsExportCSV::onExportAddressesClicked()
+{
+    if (filenameAddressBook.isNull()) {
+        inform(tr("Please select a folder to export the csv file first."));
+        return;
+    }
+
+    bool fExport = false;
+    if (walletModel) {
+        CSVModelWriter writer(filenameAddressBook);
+        // name, column, role
+        writer.setModel(walletModel->getAddressTableModel());
+        writer.addColumn("Label", AddressTableModel::Label, Qt::EditRole);
+        writer.addColumn("Address", AddressTableModel::Address, Qt::EditRole);
+        fExport = writer.write();
+    }
+
+    if (fExport) {
+        inform(tr("Exporting Successful\nThe address book was successfully saved to %1.").arg(filenameAddressBook));
+    } else {
+        inform(tr("Exporting Failed\nThere was an error trying to save the address list to %1. Please try again.").arg(filenameAddressBook));
     }
 }
 
