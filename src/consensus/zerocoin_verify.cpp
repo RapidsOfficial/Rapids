@@ -149,8 +149,9 @@ bool ContextualCheckZerocoinSpend(const CTransaction& tx, const libzerocoin::Coi
 
 bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const libzerocoin::CoinSpend* spend, int nHeight, const uint256& hashBlock)
 {
+    const Consensus::Params& consensus = Params().GetConsensus();
     //Check to see if the zPIV is properly signed
-    if (nHeight >= Params().GetConsensus().height_start_ZC_SerialsV2) {
+    if (nHeight >= consensus.height_start_ZC_SerialsV2) {
         try {
             if (!spend->HasValidSignature())
                 return error("%s: V2 zPIV spend does not have a valid signature\n", __func__);
@@ -174,7 +175,7 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
     bool fUseV1Params = spend->getCoinVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
 
     //Reject serial's that are not in the acceptable value range
-    if (!spend->HasValidSerial(Params().GetConsensus().Zerocoin_Params(fUseV1Params)))  {
+    if (!spend->HasValidSerial(consensus.Zerocoin_Params(fUseV1Params)))  {
         // Up until this block our chain was not checking serials correctly..
         if (!isBlockBetweenFakeSerialAttackRange(nHeight))
             return error("%s : zPIV spend with serial %s from tx %s is not in valid range\n", __func__,
@@ -218,15 +219,16 @@ void AddWrappedSerialsInflation()
     uiInterface.ShowProgress("", 100);
 }
 
-bool RecalculatePIVSupply(int nHeightStart)
+bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
 {
+    const Consensus::Params& consensus = Params().GetConsensus();
     const int chainHeight = chainActive.Height();
     if (nHeightStart > chainHeight)
         return false;
 
     CBlockIndex* pindex = chainActive[nHeightStart];
     CAmount nSupplyPrev = pindex->pprev->nMoneySupply;
-    if (nHeightStart == Params().GetConsensus().height_start_ZC)
+    if (nHeightStart == consensus.height_start_ZC)
         nSupplyPrev = CAmount(5449796547496199);
 
     uiInterface.ShowProgress(_("Recalculating PIV supply..."), 0);
@@ -271,8 +273,13 @@ bool RecalculatePIVSupply(int nHeightStart)
         pindex->nMoneySupply = nSupplyPrev + nValueOut - nValueIn;
         nSupplyPrev = pindex->nMoneySupply;
 
+        // Rewrite zpiv supply too
+        if (!fSkipZpiv && pindex->nHeight >= consensus.height_start_ZC) {
+            UpdateZPIVSupply(block, pindex, true);
+        }
+
         // Add fraudulent funds to the supply and remove any recovered funds.
-        if (pindex->nHeight == Params().GetConsensus().height_ZC_RecalcAccumulators) {
+        if (pindex->nHeight == consensus.height_ZC_RecalcAccumulators) {
             const CAmount nInvalidAmountFiltered = 268200*COIN;    //Amount of invalid coins filtered through exchanges, that should be considered valid
             LogPrintf("%s : Original money supply=%s\n", __func__, FormatMoney(pindex->nMoneySupply));
 
@@ -285,6 +292,9 @@ bool RecalculatePIVSupply(int nHeightStart)
         }
 
         assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));
+
+        // Stop if shutdown was requested
+        if (ShutdownRequested()) return false;
 
         if (pindex->nHeight < chainHeight)
             pindex = chainActive.Next(pindex);
