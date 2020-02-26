@@ -43,6 +43,15 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     ui->pushButtonSave->setText(tr("Export"));
     setCssBtnPrimary(ui->pushButtonSave);
 
+    SortEdit* lineEdit = new SortEdit(ui->comboBoxSort);
+    connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSort->showPopup();});
+    setSortTx(ui->comboBoxSort, lineEdit);
+
+    SortEdit* lineEditType = new SortEdit(ui->comboBoxSortType);
+    connect(lineEditType, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSortType->showPopup();});
+    setSortTxTypeFilter(ui->comboBoxSortType, lineEditType);
+    ui->comboBoxSortType->setCurrentIndex(0);
+
     connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(exportClicked()));
     connect(ui->pushButtonDocuments, SIGNAL(clicked()), this, SLOT(selectFileOutput()));
 }
@@ -70,8 +79,48 @@ void SettingsExportCSV::exportClicked()
     bool fExport = false;
 
     if (walletModel) {
+
+        if (!txFilter) {
+            // Set up transaction list
+            txFilter = new TransactionFilterProxy();
+            txFilter->setDynamicSortFilter(true);
+            txFilter->setSortCaseSensitivity(Qt::CaseInsensitive);
+            txFilter->setFilterCaseSensitivity(Qt::CaseInsensitive);
+            txFilter->setSortRole(Qt::EditRole);
+            txFilter->setSourceModel(walletModel->getTransactionTableModel());
+        }
+
+        // First type filter
+        txFilter->setTypeFilter(ui->comboBoxSortType->itemData(ui->comboBoxSortType->currentIndex()).toInt());
+
+        // Second tx filter.
+        int columnIndex = TransactionTableModel::Date;
+        Qt::SortOrder order = Qt::DescendingOrder;
+        switch (ui->comboBoxSort->itemData(ui->comboBoxSort->currentIndex()).toInt()) {
+            case SortTx::DATE_ASC:{
+                columnIndex = TransactionTableModel::Date;
+                order = Qt::AscendingOrder;
+                break;
+            }
+            case SortTx::DATE_DESC:{
+                columnIndex = TransactionTableModel::Date;
+                break;
+            }
+            case SortTx::AMOUNT_ASC:{
+                columnIndex = TransactionTableModel::Amount;
+                order = Qt::AscendingOrder;
+                break;
+            }
+            case SortTx::AMOUNT_DESC:{
+                columnIndex = TransactionTableModel::Amount;
+                break;
+            }
+
+        }
+        txFilter->sort(columnIndex, order);
+
         // name, column, role
-        writer.setModel(walletModel->getTransactionTableModel());
+        writer.setModel(txFilter);
         writer.addColumn(tr("Confirmed"), 0, TransactionTableModel::ConfirmedRole);
         if (walletModel->haveWatchOnly())
             writer.addColumn(tr("Watch-only"), TransactionTableModel::Watchonly);

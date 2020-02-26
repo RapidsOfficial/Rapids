@@ -89,31 +89,14 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
 
     // Sort Transactions
     SortEdit* lineEdit = new SortEdit(ui->comboBoxSort);
-    initComboBox(ui->comboBoxSort, lineEdit);
     connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSort->showPopup();});
-    ui->comboBoxSort->addItem("Date desc", SortTx::DATE_DESC);
-    ui->comboBoxSort->addItem("Date asc", SortTx::DATE_ASC);
-    ui->comboBoxSort->addItem("Amount desc", SortTx::AMOUNT_ASC);
-    ui->comboBoxSort->addItem("Amount asc", SortTx::AMOUNT_DESC);
+    setSortTx(ui->comboBoxSort, lineEdit);
     connect(ui->comboBoxSort, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onSortChanged(const QString&)));
 
     // Sort type
     SortEdit* lineEditType = new SortEdit(ui->comboBoxSortType);
-    initComboBox(ui->comboBoxSortType, lineEditType);
     connect(lineEditType, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSortType->showPopup();});
-
-    QSettings settings;
-    ui->comboBoxSortType->addItem(tr("All"), TransactionFilterProxy::ALL_TYPES);
-    ui->comboBoxSortType->addItem(tr("Received"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) | TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
-    ui->comboBoxSortType->addItem(tr("Sent"), TransactionFilterProxy::TYPE(TransactionRecord::SendToAddress) | TransactionFilterProxy::TYPE(TransactionRecord::SendToOther));
-    ui->comboBoxSortType->addItem(tr("Mined"), TransactionFilterProxy::TYPE(TransactionRecord::Generated));
-    ui->comboBoxSortType->addItem(tr("Minted"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
-    ui->comboBoxSortType->addItem(tr("MN reward"), TransactionFilterProxy::TYPE(TransactionRecord::MNReward));
-    ui->comboBoxSortType->addItem(tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
-    ui->comboBoxSortType->addItem(tr("Cold stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeDelegated));
-    ui->comboBoxSortType->addItem(tr("Hot stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeHot));
-    ui->comboBoxSortType->addItem(tr("Delegated"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSent) | TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSentOwner));
-    ui->comboBoxSortType->addItem(tr("Delegations"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
+    setSortTxTypeFilter(ui->comboBoxSortType, lineEditType);
     ui->comboBoxSortType->setCurrentIndex(0);
     connect(ui->comboBoxSortType, SIGNAL(currentIndexChanged(const QString&)), this, SLOT(onSortTypeChanged(const QString&)));
 

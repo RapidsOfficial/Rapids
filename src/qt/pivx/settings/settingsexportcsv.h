@@ -7,6 +7,7 @@
 
 #include <QWidget>
 #include "qt/pivx/pwidget.h"
+#include "transactionfilterproxy.h"
 
 namespace Ui {
 class SettingsExportCSV;
@@ -26,6 +27,7 @@ private Q_SLOTS:
 
 private:
     Ui::SettingsExportCSV *ui;
+    TransactionFilterProxy* txFilter{nullptr};
     QString filename;
 };
 
