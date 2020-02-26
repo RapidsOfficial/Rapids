@@ -8,6 +8,7 @@
 #include <QWidget>
 #include "qt/pivx/pwidget.h"
 #include "transactionfilterproxy.h"
+#include <QSortFilterProxyModel>
 
 namespace Ui {
 class SettingsExportCSV;
@@ -29,6 +30,7 @@ private Q_SLOTS:
 private:
     Ui::SettingsExportCSV *ui;
     TransactionFilterProxy* txFilter{nullptr};
+    QSortFilterProxyModel* addressFilter{nullptr};
     QString filename;
     QString filenameAddressBook;
 };

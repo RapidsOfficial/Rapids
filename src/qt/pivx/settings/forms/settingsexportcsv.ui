@@ -92,6 +92,13 @@
             <number>0</number>
            </property>
            <item>
+            <widget class="QLabel" name="labelSubtitleLocation">
+             <property name="text">
+              <string>TextLabel</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -125,17 +132,6 @@
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelSubtitleLocation">
-          <property name="styleSheet">
-           <string notr="true">padding-bottom:5px;
-padding-left:0px;</string>
-          </property>
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
          </widget>
         </item>
         <item>
@@ -256,6 +252,22 @@ padding-left:0px;</string>
        </widget>
       </item>
       <item>
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>5</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
        <layout class="QVBoxLayout" name="verticalLayoutAddressesExport">
         <property name="spacing">
          <number>0</number>
@@ -279,6 +291,13 @@ padding-left:0px;</string>
             <number>0</number>
            </property>
            <item>
+            <widget class="QLabel" name="labelSubtitleLocationAddress">
+             <property name="text">
+              <string>Export Address Book</string>
+             </property>
+            </widget>
+           </item>
+           <item>
             <spacer name="horizontalSpacer">
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -295,24 +314,13 @@ padding-left:0px;</string>
             <widget class="QComboBox" name="comboBoxSortAddressType">
              <property name="minimumSize">
               <size>
-               <width>100</width>
+               <width>150</width>
                <height>0</height>
               </size>
              </property>
             </widget>
            </item>
           </layout>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="labelSubtitleLocationAddress">
-          <property name="styleSheet">
-           <string notr="true">padding-bottom:6px;
-padding-left:0px;</string>
-          </property>
-          <property name="text">
-           <string>Export Address Book</string>
-          </property>
          </widget>
         </item>
         <item>

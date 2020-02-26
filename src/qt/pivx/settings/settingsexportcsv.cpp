@@ -57,8 +57,10 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     setSortTxTypeFilter(ui->comboBoxSortType, lineEditType);
     ui->comboBoxSortType->setCurrentIndex(0);
 
-    // Todo: add addressbook filter
-    ui->comboBoxSortAddressType->setVisible(false);
+    SortEdit* lineEditAddressBook = new SortEdit(ui->comboBoxSortAddressType);
+    connect(lineEditAddressBook, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSortAddressType->showPopup();});
+    setFilterAddressBook(ui->comboBoxSortAddressType, lineEditAddressBook);
+    ui->comboBoxSortAddressType->setCurrentIndex(0);
 
     connect(ui->pushButtonSave, SIGNAL(clicked()), this, SLOT(exportClicked()));
     connect(ui->pushButtonDocuments, &QPushButton::clicked, [this](){selectFileOutput(true);});
@@ -166,9 +168,32 @@ void SettingsExportCSV::onExportAddressesClicked()
 
     bool fExport = false;
     if (walletModel) {
+
+        if (!addressFilter) {
+            addressFilter = new QSortFilterProxyModel(this);
+            addressFilter->setSourceModel(walletModel->getAddressTableModel());
+            addressFilter->setDynamicSortFilter(true);
+            addressFilter->setSortCaseSensitivity(Qt::CaseInsensitive);
+            addressFilter->setFilterCaseSensitivity(Qt::CaseInsensitive);
+
+            addressFilter->setFilterRole(AddressTableModel::TypeRole);
+            // Quick and dirty filter
+            switch (ui->comboBoxSortAddressType->itemData(ui->comboBoxSortAddressType->currentIndex()).toInt()) {
+                case 0:
+                    // Receive filter
+                    addressFilter->setFilterFixedString(AddressTableModel::Receive);
+                    break;
+                case 1:
+                default:
+                    // Send filter
+                    addressFilter->setFilterFixedString(AddressTableModel::Send);
+                    break;
+            }
+        }
+
         CSVModelWriter writer(filenameAddressBook);
         // name, column, role
-        writer.setModel(walletModel->getAddressTableModel());
+        writer.setModel(addressFilter);
         writer.addColumn("Label", AddressTableModel::Label, Qt::EditRole);
         writer.addColumn("Address", AddressTableModel::Address, Qt::EditRole);
         fExport = writer.write();
