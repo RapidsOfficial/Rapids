@@ -126,11 +126,12 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     const int nHeight = pindexPrev->nHeight + 1;
 
     // Make sure to create the correct block version
+    const Consensus::Params& consensus = Params().GetConsensus();
     pblock->nVersion = 7;       //!> Removes accumulator checkpoints
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
     if (Params().IsRegTestNet()) {
-        if (nHeight < Params().Zerocoin_StartHeight()) pblock->nVersion = 3;
+        if (nHeight < consensus.height_start_ZC) pblock->nVersion = 3;
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
     }
 
@@ -335,7 +336,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     if (txIn.IsZerocoinSpend() || isPublicSpend) {
                         libzerocoin::CoinSpend* spend;
                         if (isPublicSpend) {
-                            libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
+                            libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
                             PublicCoinSpend publicSpend(params);
                             CValidationState state;
                             if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
@@ -348,7 +349,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                         }
 
                         bool fUseV1Params = spend->getCoinVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
-                        if (!spend->HasValidSerial(Params().Zerocoin_Params(fUseV1Params)))
+                        if (!spend->HasValidSerial(consensus.Zerocoin_Params(fUseV1Params)))
                             fDoubleSerial = true;
                         if (std::count(vBlockSerials.begin(), vBlockSerials.end(), spend->getCoinSerialNumber()))
                             fDoubleSerial = true;
@@ -593,7 +594,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             // update fStakeableCoins (5 minute check time);
             CheckForCoins(pwallet, 5);
 
-            while (vNodes.empty() || pwallet->IsLocked() || !fStakeableCoins ||
+            while ((vNodes.empty() && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins ||
                     masternodeSync.NotCompleted()) {
                 MilliSleep(5000);
                 // Do a separate 1 minute check here to ensure fStakeableCoins is updated
@@ -738,14 +739,6 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet, int nThreads)
 {
     static boost::thread_group* minerThreads = NULL;
     fGenerateBitcoins = fGenerate;
-
-    if (nThreads < 0) {
-        // In regtest threads defaults to 1
-        if (Params().DefaultMinerThreads())
-            nThreads = Params().DefaultMinerThreads();
-        else
-            nThreads = boost::thread::hardware_concurrency();
-    }
 
     if (minerThreads != NULL) {
         minerThreads->interrupt_all();

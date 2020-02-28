@@ -27,7 +27,7 @@ static CWallet cWallet("unlocked.dat");
 BOOST_AUTO_TEST_CASE(zerocoin_spend_test)
 {
     SelectParams(CBaseChainParams::MAIN);
-    libzerocoin::ZerocoinParams *ZCParams = Params().Zerocoin_Params(false);
+    libzerocoin::ZerocoinParams *ZCParams = Params().GetConsensus().Zerocoin_Params(false);
     (void)ZCParams;
 
     bool fFirstRun;
@@ -60,9 +60,9 @@ BOOST_AUTO_TEST_CASE(zerocoin_schnorr_signature_test)
 {
     const int NUM_OF_TESTS = 50;
     SelectParams(CBaseChainParams::MAIN);
-    libzerocoin::ZerocoinParams *ZCParams_v1 = Params().Zerocoin_Params(true);
+    libzerocoin::ZerocoinParams *ZCParams_v1 = Params().GetConsensus().Zerocoin_Params(true);
     (void)ZCParams_v1;
-    libzerocoin::ZerocoinParams *ZCParams_v2 = Params().Zerocoin_Params(false);
+    libzerocoin::ZerocoinParams *ZCParams_v2 = Params().GetConsensus().Zerocoin_Params(false);
     (void)ZCParams_v2;
 
     for (int i=0; i<NUM_OF_TESTS; i++) {
@@ -159,8 +159,8 @@ BOOST_AUTO_TEST_CASE(zerocoin_schnorr_signature_test)
 BOOST_AUTO_TEST_CASE(zerocoin_public_spend_test)
 {
     SelectParams(CBaseChainParams::MAIN);
-    libzerocoin::ZerocoinParams *ZCParams_v1 = Params().Zerocoin_Params(true);
-    libzerocoin::ZerocoinParams *ZCParams_v2 = Params().Zerocoin_Params(false);
+    libzerocoin::ZerocoinParams *ZCParams_v1 = Params().GetConsensus().Zerocoin_Params(true);
+    libzerocoin::ZerocoinParams *ZCParams_v2 = Params().GetConsensus().Zerocoin_Params(false);
     (void)ZCParams_v1;
     (void)ZCParams_v2;
 

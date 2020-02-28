@@ -354,12 +354,13 @@ void PrivacyWidget::updateDenomsSupply(){
 
     std::set<CMintMeta> vMints;
     walletModel->listZerocoinMints(vMints, true, false, true, true);
+    const int nRequiredConfs = Params().GetConsensus().ZC_MinMintConfirmations;
 
     for (auto& meta : vMints){
         // All denominations
         mapDenomBalances.at(meta.denom)++;
 
-        if (!meta.nHeight || chainActive.Height() - meta.nHeight <= Params().Zerocoin_MintRequiredConfirmations()) {
+        if (!meta.nHeight || chainActive.Height() - meta.nHeight <= nRequiredConfs) {
             // All unconfirmed denominations
             mapUnconfirmed.at(meta.denom)++;
         } else {

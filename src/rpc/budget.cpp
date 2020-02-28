@@ -70,7 +70,7 @@ void checkBudgetInputs(const UniValue& params, std::string &strProposalName, std
         throw JSONRPCError(RPC_IN_WARMUP, "Try again after active chain is loaded");
 
     // Start must be in the next budget cycle or later
-    const int budgetCycleBlocks = Params().GetBudgetCycleBlocks();
+    const int budgetCycleBlocks = Params().GetConsensus().nBudgetCycleBlocks;
     int pHeight = pindexPrev->nHeight;
 
     int nBlockMin = pHeight - (pHeight % budgetCycleBlocks) + budgetCycleBlocks;
@@ -552,7 +552,8 @@ UniValue getnextsuperblock(const UniValue& params, bool fHelp)
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (!pindexPrev) return "unknown";
 
-    int nNext = pindexPrev->nHeight - pindexPrev->nHeight % Params().GetBudgetCycleBlocks() + Params().GetBudgetCycleBlocks();
+    const int nBlocksPerCycle = Params().GetConsensus().nBudgetCycleBlocks;
+    int nNext = pindexPrev->nHeight - pindexPrev->nHeight % nBlocksPerCycle + nBlocksPerCycle;
     return nNext;
 }
 

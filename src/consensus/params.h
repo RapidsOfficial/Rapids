@@ -7,6 +7,7 @@
 #define BITCOIN_CONSENSUS_PARAMS_H
 
 #include "amount.h"
+#include "libzerocoin/Params.h"
 #include "uint256.h"
 #include <map>
 #include <string>
@@ -22,26 +23,60 @@ struct Params {
     uint256 powLimit;
     uint256 posLimitV1;
     uint256 posLimitV2;
+    int nBudgetCycleBlocks;
+    int nBudgetFeeConfirmations;
     int nCoinbaseMaturity;
     int nFutureTimeDriftPoW;
     int nFutureTimeDriftPoS;
+    int nMasternodeCountDrift;
     CAmount nMaxMoneyOut;
+    int nPoolMaxTransactions;
+    int64_t nProposalEstablishmentTime;
     int nStakeMinAge;
     int nStakeMinDepth;
     int64_t nTargetTimespan;
     int64_t nTargetTimespanV2;
     int64_t nTargetSpacing;
     int nTimeSlotLength;
+    std::string strObfuscationPoolDummyAddress;
 
-    // Height-based activations
+    // spork keys
+    std::string strSporkPubKey;
+    std::string strSporkPubKeyOld;
+    int64_t nTime_EnforceNewSporkKey;
+    int64_t nTime_RejectOldSporkKey;
+
+    // majorities for block version upgrades
+    int nEnforceBlockUpgradeMajority;
+    int nRejectBlockOutdatedMajority;
+    int nToCheckBlockUpgradeMajority;
+
+    // height-based activations
     int height_last_PoW;
+    int height_last_ZC_AccumCheckpoint;
+    int height_last_ZC_WrappedSerials;
     int height_start_BIP65;
+    int height_start_InvalidUTXOsCheck;
+    int height_start_MessSignaturesV2;
+    int height_start_StakeModifierNewSelection;
     int height_start_StakeModifierV2;
     int height_start_TimeProtoV2;
+    int height_start_ZC;
+    int height_start_ZC_InvalidSerials;
+    int height_start_ZC_PublicSpends;
+    int height_start_ZC_SerialRangeCheck;
+    int height_start_ZC_SerialsV2;
+    int height_ZC_RecalcAccumulators;
+
+    // validation by-pass
+    int64_t nPivxBadBlockTime;
+    unsigned int nPivxBadBlockBits;
+
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
+    bool IsMessSigV2(const int nHeight) const { return nHeight >= height_start_MessSignaturesV2; }
     bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= height_start_TimeProtoV2; }
     bool IsStakeModifierV2(const int nHeight) const { return nHeight >= height_start_StakeModifierV2; }
 
@@ -69,6 +104,30 @@ struct Params {
             return (utxoFromBlockTime + nStakeMinAge <= contextTime);
         // with stake modifier V2+, we require the utxo to be nStakeMinDepth deep in the chain
         return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);
+    }
+
+
+    /*
+     * (Legacy) Zerocoin consensus params
+     */
+    std::string ZC_Modulus;  // parsed in Zerocoin_Params (either as hex or dec string)
+    int ZC_MaxPublicSpendsPerTx;
+    int ZC_MaxSpendsPerTx;
+    int ZC_MinMintConfirmations;
+    CAmount ZC_MinMintFee;
+    int ZC_MinStakeDepth;
+    int ZC_TimeStart;
+    CAmount ZC_WrappedSerialsSupply;
+
+    libzerocoin::ZerocoinParams* Zerocoin_Params(bool useModulusV1) const
+    {
+        static CBigNum bnHexModulus = 0;
+        if (!bnHexModulus) bnHexModulus.SetHex(ZC_Modulus);
+        static libzerocoin::ZerocoinParams ZCParamsHex = libzerocoin::ZerocoinParams(bnHexModulus);
+        static CBigNum bnDecModulus = 0;
+        if (!bnDecModulus) bnDecModulus.SetDec(ZC_Modulus);
+        static libzerocoin::ZerocoinParams ZCParamsDec = libzerocoin::ZerocoinParams(bnDecModulus);
+        return (useModulusV1 ? &ZCParamsHex : &ZCParamsDec);
     }
 };
 } // namespace Consensus

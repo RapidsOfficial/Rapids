@@ -72,7 +72,7 @@ bool PublicCoinSpend::Verify() const {
         }
 
         // Check that the coin is a commitment to serial and randomness.
-        libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(false);
+        libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
         libzerocoin::Commitment comm(&params->coinCommitmentGroup, getCoinSerialNumber(), randomness);
         if (comm.getCommitmentValue() != pubCoin.getValue()) {
             return error("%s: commitments values are not equal", __func__);
@@ -86,7 +86,7 @@ bool PublicCoinSpend::Verify() const {
         }
 
         // spend contains a shnorr signature of ptxHash with the randomness of the coin
-        libzerocoin::ZerocoinParams* params = Params().Zerocoin_Params(fUseV1Params);
+        libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(fUseV1Params);
         if (!schnorrSig.Verify(params, getCoinSerialNumber(), pubCoin.getValue(), getTxOutHash())) {
             return error("%s: schnorr signature does not verify", __func__);
         }
@@ -147,7 +147,7 @@ namespace ZPIVModule {
         }
 
         // create the PublicCoinSpend
-        libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(fUseV1Params);
+        libzerocoin::ZerocoinParams *params = Params().GetConsensus().Zerocoin_Params(fUseV1Params);
         PublicCoinSpend spend(params, spendVersion, mint.GetSerialNumber(), mint.GetRandomness(), hashTxOut, nullptr);
 
         spend.outputIndex = mint.GetOutputIndex();
@@ -183,7 +183,7 @@ namespace ZPIVModule {
 
     PublicCoinSpend parseCoinSpend(const CTxIn &in)
     {
-        libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(false);
+        libzerocoin::ZerocoinParams *params = Params().GetConsensus().Zerocoin_Params(false);
         CDataStream serializedCoinSpend = ScriptSigToSerializedSpend(in.scriptSig);
         return PublicCoinSpend(params, serializedCoinSpend);
     }

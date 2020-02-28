@@ -398,7 +398,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-datadir=<dir>", _("Specify data directory"));
     strUsage += HelpMessageOpt("-dbcache=<n>", strprintf(_("Set database cache size in megabytes (%d to %d, default: %d)"), nMinDbCache, nMaxDbCache, nDefaultDbCache));
     strUsage += HelpMessageOpt("-loadblock=<file>", _("Imports blocks from external blk000??.dat file") + " " + _("on startup"));
-    strUsage += HelpMessageOpt("-maxreorg=<n>", strprintf(_("Set the Maximum reorg depth (default: %u)"), Params(CBaseChainParams::MAIN).MaxReorganizationDepth()));
+    strUsage += HelpMessageOpt("-maxreorg=<n>", strprintf(_("Set the Maximum reorg depth (default: %u)"), DEFAULT_MAX_REORG_DEPTH));
     strUsage += HelpMessageOpt("-maxorphantx=<n>", strprintf(_("Keep at most <n> unconnectable transactions in memory (default: %u)"), DEFAULT_MAX_ORPHAN_TRANSACTIONS));
     strUsage += HelpMessageOpt("-par=<n>", strprintf(_("Set the number of script verification threads (%u to %d, 0 = auto, <0 = leave that many cores free, default: %d)"), -(int)boost::thread::hardware_concurrency(), MAX_SCRIPTCHECK_THREADS, DEFAULT_SCRIPTCHECK_THREADS));
 #ifndef WIN32
@@ -1484,9 +1484,11 @@ bool AppInit2()
                     break;
                 }
 
+                const Consensus::Params& consensus = Params().GetConsensus();
+
                 // If the loaded chain has a wrong genesis, bail out immediately
                 // (we're likely using a testnet datadir, or the other way around).
-                if (!mapBlockIndex.empty() && mapBlockIndex.count(Params().GetConsensus().hashGenesisBlock) == 0)
+                if (!mapBlockIndex.empty() && mapBlockIndex.count(consensus.hashGenesisBlock) == 0)
                     return InitError(_("Incorrect or no genesis block found. Wrong datadir for network?"));
 
                 // Initialize the block index (no-op if non-empty database was already loaded)
@@ -1507,7 +1509,7 @@ bool AppInit2()
 
                 // Drop all information from the zerocoinDB and repopulate
                 if (GetBoolArg("-reindexzerocoin", false)) {
-                    if (chainActive.Height() > Params().Zerocoin_StartHeight()) {
+                    if (chainActive.Height() > consensus.height_start_ZC) {
                         uiInterface.InitMessage(_("Reindexing zerocoin database..."));
                         std::string strError = ReindexZerocoinDB();
                         if (strError != "") {
@@ -1521,11 +1523,11 @@ bool AppInit2()
                 bool reindexDueWrappedSerials = false;
                 bool reindexZerocoin = false;
                 int chainHeight = chainActive.Height();
-                if(Params().NetworkID() == CBaseChainParams::MAIN && chainHeight > Params().Zerocoin_Block_EndFakeSerial()) {
+                if(Params().NetworkID() == CBaseChainParams::MAIN && chainHeight > consensus.height_last_ZC_WrappedSerials) {
 
                     // Supply needs to be exactly GetSupplyBeforeFakeSerial + GetWrapppedSerialInflationAmount
-                    CBlockIndex* pblockindex = chainActive[Params().Zerocoin_Block_EndFakeSerial() + 1];
-                    CAmount zpivSupplyCheckpoint = Params().GetSupplyBeforeFakeSerial() + GetWrapppedSerialInflationAmount();
+                    CBlockIndex* pblockindex = chainActive[consensus.height_last_ZC_WrappedSerials + 1];
+                    CAmount zpivSupplyCheckpoint = consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount();
 
                     if (pblockindex->GetZerocoinSupply() < zpivSupplyCheckpoint) {
                         // Trigger reindex due wrapping serials
@@ -1546,7 +1548,7 @@ bool AppInit2()
                 // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
                 if (GetBoolArg("-reindexmoneysupply", false) || reindexZerocoin) {
                     // Recalculate from the zerocoin activation or from scratch.
-                    RecalculatePIVSupply(reindexZerocoin ? Params().Zerocoin_StartHeight() : 1);
+                    RecalculatePIVSupply(reindexZerocoin ? consensus.height_start_ZC : 1);
                 }
 
 

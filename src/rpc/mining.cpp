@@ -299,7 +299,7 @@ UniValue getmininginfo(const UniValue& params, bool fHelp)
     obj.push_back(Pair("genproclimit", (int)GetArg("-genproclimit", -1)));
     obj.push_back(Pair("networkhashps", getnetworkhashps(params, false)));
     obj.push_back(Pair("pooledtx", (uint64_t)mempool.size()));
-    obj.push_back(Pair("testnet", Params().TestnetToBeDeprecatedFieldRPC()));
+    obj.push_back(Pair("testnet", Params().NetworkID() == CBaseChainParams::TESTNET));
     obj.push_back(Pair("chain", Params().NetworkIDString()));
 #ifdef ENABLE_WALLET
     obj.push_back(Pair("generate", getgenerate(params, false)));
@@ -421,7 +421,6 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
             "        { ... }                       (json object) vote candidate\n"
             "        ,...\n"
             "  ],\n"
-            "  \"masternode_payments\" : true|false,         (boolean) true, if masternode payments are enabled\n"
             "  \"enforce_masternode_payments\" : true|false  (boolean) true, if masternode payments are enforced\n"
             "}\n"
 
@@ -635,7 +634,6 @@ UniValue getblocktemplate(const UniValue& params, bool fHelp)
         result.push_back(Pair("payee_amount", ""));
     }
 
-    result.push_back(Pair("masternode_payments", pblock->nTime > Params().StartMasternodePayments()));
     result.push_back(Pair("enforce_masternode_payments", true));
 
     return result;

@@ -767,7 +767,8 @@ static UniValue SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nR
 {
     int nFound = 0;
     CBlockIndex* pstart = pindex;
-    for (int i = 0; i < Params().ToCheckBlockUpgradeMajority() && pstart != NULL; i++)
+    const int nToCheck = Params().GetConsensus().nToCheckBlockUpgradeMajority;
+    for (int i = 0; i < nToCheck && pstart != NULL; i++)
     {
         if (pstart->nVersion >= minVersion)
             ++nFound;
@@ -777,16 +778,17 @@ static UniValue SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nR
     rv.push_back(Pair("status", nFound >= nRequired));
     rv.push_back(Pair("found", nFound));
     rv.push_back(Pair("required", nRequired));
-    rv.push_back(Pair("window", Params().ToCheckBlockUpgradeMajority()));
+    rv.push_back(Pair("window", nToCheck));
     return rv;
 }
 static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
 {
+    const Consensus::Params& consensus = Params().GetConsensus();
     UniValue rv(UniValue::VOBJ);
     rv.push_back(Pair("id", name));
     rv.push_back(Pair("version", version));
-    rv.push_back(Pair("enforce", SoftForkMajorityDesc(version, pindex, Params().EnforceBlockUpgradeMajority())));
-    rv.push_back(Pair("reject", SoftForkMajorityDesc(version, pindex, Params().RejectBlockOutdatedMajority())));
+    rv.push_back(Pair("enforce", SoftForkMajorityDesc(version, pindex, consensus.nEnforceBlockUpgradeMajority)));
+    rv.push_back(Pair("reject", SoftForkMajorityDesc(version, pindex, consensus.nRejectBlockOutdatedMajority)));
     return rv;
 }
 
@@ -1155,7 +1157,6 @@ void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int
     }
 }
 
-
 UniValue getserials(const UniValue& params, bool fHelp) {
     if (fHelp || params.size() < 2 || params.size() > 3)
         throw std::runtime_error(
@@ -1172,7 +1173,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
             HelpExampleRpc("getserials", "1254000, 1000"));
 
     int heightStart, heightEnd;
-    validaterange(params, heightStart, heightEnd, Params().Zerocoin_StartHeight());
+    validaterange(params, heightStart, heightEnd, Params().GetConsensus().height_start_ZC);
 
     bool fVerbose = false;
     if (params.size() > 2) {
@@ -1229,7 +1230,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
                         if(!GetOutput(txin.prevout.hash, txin.prevout.n, state, prevOut)){
                             throw JSONRPCError(RPC_INTERNAL_ERROR, "public zerocoin spend prev output not found");
                         }
-                        libzerocoin::ZerocoinParams *params = Params().Zerocoin_Params(false);
+                        libzerocoin::ZerocoinParams *params = Params().GetConsensus().Zerocoin_Params(false);
                         PublicCoinSpend publicSpend(params);
                         if (!ZPIVModule::parseCoinSpend(txin, tx, prevOut, publicSpend)) {
                             throw JSONRPCError(RPC_INTERNAL_ERROR, "public zerocoin spend parse failed");
