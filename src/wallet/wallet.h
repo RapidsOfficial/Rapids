@@ -347,8 +347,6 @@ public:
     void ListLockedCoins(std::vector<COutPoint>& vOutpts);
 
     //  keystore implementation
-    // Generate a new key
-    CPubKey GenerateNewKey();
     PairResult getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,
                                            const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
     PairResult getNewAddress(CBitcoinAddress& ret, std::string label);
@@ -464,7 +462,6 @@ public:
     void ReturnKey(int64_t nIndex, const bool& internal = false, const bool& staking = false);
     bool GetKeyFromPool(CPubKey& key, const uint8_t& type = HDChain::ChangeType::EXTERNAL);
     int64_t GetOldestKeyPoolTime();
-    void GetAllReserveKeys(std::set<CKeyID>& setAddress) const;
 
     std::set<std::set<CTxDestination> > GetAddressGroupings();
     std::map<CTxDestination, CAmount> GetAddressBalances();
