@@ -3091,7 +3091,7 @@ std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) co
     return result;
 }
 
-bool CReserveKey::GetReservedKey(CPubKey& pubkey, bool internal)
+bool CReserveKey::GetReservedKey(CPubKey& pubkey, bool _internal)
 {
 
     ScriptPubKeyMan* m_spk_man = pwallet->GetScriptPubKeyMan();
@@ -3103,8 +3103,9 @@ bool CReserveKey::GetReservedKey(CPubKey& pubkey, bool internal)
 
         // Fill the pool if needed
         m_spk_man->TopUp();
+        internal = _internal;
 
-        // TODO: Modify this for Staking addresses support if needed.
+        // Modify this for Staking addresses support if needed.
         uint8_t changeType = internal ? HDChain::ChangeType::INTERNAL : HDChain::ChangeType::EXTERNAL;
         CKeyPool keypool;
         if (!m_spk_man->GetReservedKey(changeType, nIndex, keypool))
@@ -3132,7 +3133,7 @@ void CReserveKey::KeepKey()
 void CReserveKey::ReturnKey()
 {
     if (nIndex != -1)
-        pwallet->ReturnKey(nIndex);
+        pwallet->ReturnKey(nIndex, internal);
     nIndex = -1;
     vchPubKey = CPubKey();
 }
