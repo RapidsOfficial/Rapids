@@ -1522,10 +1522,10 @@ bool CWallet::Upgrade(std::string& error, const int& prevVersion)
     if (GetBoolArg("-upgradewallet", false)) {
         LOCK(cs_wallet);
 
-        // Do not upgrade versions to any version between HD_SPLIT and FEATURE_PRE_SPLIT_KEYPOOL unless already supporting HD_SPLIT
+        // Do not upgrade versions if we are already in the last one
         int max_version = GetVersion();
-        if (!CanSupportFeature(FEATURE_HD_SPLIT) && max_version >= FEATURE_HD_SPLIT && max_version < FEATURE_PRE_SPLIT_KEYPOOL) {
-            error = _("Cannot upgrade a non HD split wallet without upgrading to support pre split keypool. Please use -upgradewallet=169900 or -upgradewallet with no version specified.");
+        if (max_version >= FEATURE_PRE_SPLIT_KEYPOOL) {
+            error = _("Cannot upgrade to HD wallet (already running HD support)");
             return false;
         }
 

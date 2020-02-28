@@ -25,8 +25,7 @@ bool ScriptPubKeyMan::Upgrade(const int& prev_version, std::string& error)
     LOCK(wallet->cs_KeyStore);
     error = "";
     bool hd_upgrade = false;
-    bool split_upgrade = false;
-    if (wallet->CanSupportFeature(FEATURE_HD_SPLIT) && !IsHDEnabled()) {
+    if (!IsHDEnabled()) {
         LogPrintf("Upgrading wallet to use HD chain split\n");
         wallet->SetMinVersion(FEATURE_PRE_SPLIT_KEYPOOL);
 
@@ -34,15 +33,14 @@ bool ScriptPubKeyMan::Upgrade(const int& prev_version, std::string& error)
         CPubKey masterPubKey = GenerateNewSeed();
         SetHDSeed(masterPubKey);
         hd_upgrade = true;
-        split_upgrade = FEATURE_HD_SPLIT > prev_version;
     }
 
-    // Mark all keys currently in the keypool as pre-split
-    if (split_upgrade) {
-        MarkPreSplitKeys();
-    }
     // Regenerate the keypool if upgraded to HD
     if (hd_upgrade) {
+        // Mark all keys currently in the keypool as pre-split
+        MarkPreSplitKeys();
+
+        // Fill keypool
         if (!TopUp()) {
             error = _("Unable to generate keys");
             return false;
@@ -68,7 +66,7 @@ bool ScriptPubKeyMan::CanGetAddresses(const uint8_t& type)
     LOCK(wallet->cs_wallet);
     // Check if the keypool has keys
     bool keypool_has_keys = false;
-    if (type == HDChain::ChangeType::INTERNAL && wallet->CanSupportFeature(FEATURE_HD_SPLIT)) {
+    if (type == HDChain::ChangeType::INTERNAL && IsHDEnabled()) {
         keypool_has_keys = setInternalKeyPool.size() > 0;
     } else if (type == HDChain::ChangeType::EXTERNAL) {
         keypool_has_keys = KeypoolCountExternalKeys() > 0;

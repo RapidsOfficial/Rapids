@@ -275,7 +275,7 @@ UniValue sethdseed(const UniValue& params, bool fHelp)
     LOCK2(cs_main, pwallet->cs_wallet);
 
     // Do not do anything to non-HD wallets
-    if (!pwallet->CanSupportFeature(FEATURE_HD)) {
+    if (!pwallet->CanSupportFeature(FEATURE_PRE_SPLIT_KEYPOOL)) {
         throw JSONRPCError(RPC_WALLET_ERROR, "Cannot set a HD seed on a non-HD wallet. Start with -upgradewallet in order to upgrade a non-HD wallet to HD");
     }
 
