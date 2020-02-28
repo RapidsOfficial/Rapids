@@ -2923,12 +2923,6 @@ bool CWallet::TopUpKeyPool(unsigned int kpSize)
     return m_spk_man->TopUp(kpSize);
 }
 
-bool CWallet::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, const bool& fRequestedInternal, const bool& fRequestedStaking)
-{
-    uint8_t changeType = fRequestedStaking ? HDChain::ChangeType::STAKING : (fRequestedInternal ? HDChain::ChangeType::INTERNAL : HDChain::ChangeType::EXTERNAL);
-    return m_spk_man->ReserveKeyFromKeyPool(nIndex, keypool, changeType);
-}
-
 void CWallet::KeepKey(int64_t nIndex)
 {
     m_spk_man->KeepDestination(nIndex);

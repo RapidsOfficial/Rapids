@@ -456,8 +456,6 @@ public:
 
     size_t KeypoolCountExternalKeys();
     bool TopUpKeyPool(unsigned int kpSize = 0);
-    // TODO: Cleanup the follow methods, all are implemented inside the SPKM.
-    bool ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, const bool& fRequestedInternal = false, const bool& fRequestedStaking = false);
     void KeepKey(int64_t nIndex);
     void ReturnKey(int64_t nIndex, const bool& internal = false, const bool& staking = false);
     bool GetKeyFromPool(CPubKey& key, const uint8_t& type = HDChain::ChangeType::EXTERNAL);
@@ -611,7 +609,7 @@ class CReserveKey
 protected:
     CWallet* pwallet;
     int64_t nIndex;
-    bool internal;
+    bool internal{false};
     CPubKey vchPubKey;
 
 public:
