@@ -170,8 +170,13 @@ bool ScriptPubKeyMan::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, 
         }
         // If the key was pre-split keypool, we don't care about what type it is //TODO: Add staking address
         if (use_split_keypool && keypool.IsInternal() != fReturningInternal) {
-            throw std::runtime_error(std::string(__func__) + ": keypool entry misclassified");
+            throw std::runtime_error(std::string(__func__) + ": keypool internal entry misclassified");
         }
+
+        if (use_split_keypool && keypool.IsStaking() != fReturningStaking) {
+            throw std::runtime_error(std::string(__func__) + ": keypool staking entry misclassified");
+        }
+
         if (!keypool.vchPubKey.IsValid()) {
             throw std::runtime_error(std::string(__func__) + ": keypool entry invalid");
         }
