@@ -82,6 +82,37 @@ bool ScriptPubKeyMan::CanGetAddresses(const uint8_t& type)
     return keypool_has_keys;
 }
 
+static int64_t GetOldestKeyTimeInPool(const std::set<int64_t>& setKeyPool, CWalletDB& batch) {
+    if (setKeyPool.empty()) {
+        return GetTime();
+    }
+
+    CKeyPool keypool;
+    int64_t nIndex = *(setKeyPool.begin());
+    if (!batch.ReadPool(nIndex, keypool)) {
+        throw std::runtime_error(std::string(__func__) + ": read oldest key in keypool failed");
+    }
+    assert(keypool.vchPubKey.IsValid());
+    return keypool.nTime;
+}
+
+int64_t ScriptPubKeyMan::GetOldestKeyPoolTime()
+{
+    LOCK(wallet->cs_KeyStore);
+
+    CWalletDB batch(wallet->strWalletFile);
+    // load oldest key from keypool, get time and return
+    int64_t oldestKey = GetOldestKeyTimeInPool(setExternalKeyPool, batch);
+    if (IsHDEnabled()) {
+        oldestKey = std::max(GetOldestKeyTimeInPool(setInternalKeyPool, batch), oldestKey);
+        if (!set_pre_split_keypool.empty()) {
+            oldestKey = std::max(GetOldestKeyTimeInPool(set_pre_split_keypool, batch), oldestKey);
+        }
+    }
+
+    return oldestKey;
+}
+
 size_t ScriptPubKeyMan::KeypoolCountExternalKeys()
 {
     AssertLockHeld(wallet->cs_wallet);

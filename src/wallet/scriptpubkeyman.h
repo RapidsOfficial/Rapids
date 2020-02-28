@@ -46,6 +46,9 @@ public:
     /* True is HD wallet is enabled */
     bool IsHDEnabled() const;
 
+    /* Return the oldest key time */
+    int64_t GetOldestKeyPoolTime();
+
     /* Count external keypool available keys */
     size_t KeypoolCountExternalKeys();
 
