@@ -28,6 +28,7 @@ public:
     virtual bool CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal) = 0;
     virtual bool IsZPIV() const = 0;
     virtual CDataStream GetUniqueness() const = 0;
+    virtual bool ContextCheck(const CBlockIndex* pTip) = 0;
 
 };
 
@@ -50,6 +51,7 @@ public:
     bool CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut = UINT256_ZERO) override;
     bool CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal) override;
     bool IsZPIV() const override { return false; }
+    bool ContextCheck(const CBlockIndex* pTip);
 };
 
 

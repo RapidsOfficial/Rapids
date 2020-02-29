@@ -12,6 +12,14 @@
  * Return block index pointer or nullptr if not found
  */
 
+uint32_t ParseAccChecksum(uint256 nCheckpoint, const libzerocoin::CoinDenomination denom)
+{
+    int pos = distance(libzerocoin::zerocoinDenomList.begin(),
+            find(libzerocoin::zerocoinDenomList.begin(), libzerocoin::zerocoinDenomList.end(), denom));
+    nCheckpoint = nCheckpoint >> (32*((libzerocoin::zerocoinDenomList.size() - 1) - pos));
+    return nCheckpoint.Get32();
+}
+
 bool CLegacyZPivStake::InitFromTxIn(const CTxIn& txin)
 {
     // Construct the stakeinput object
@@ -26,7 +34,7 @@ bool CLegacyZPivStake::InitFromTxIn(const CTxIn& txin)
     *this = CLegacyZPivStake(spend);
 
     // Find the pindex with the accumulator checksum
-    if (!pindexFrom)
+    if (!GetIndexFrom())
         return error("%s : Failed to find the block index for zpiv stake origin", __func__);
 
     // All good
@@ -79,4 +87,24 @@ CDataStream CLegacyZPivStake::GetUniqueness() const
     CDataStream ss(SER_GETHASH, 0);
     ss << hashSerial;
     return ss;
+}
+
+// Verify stake contextual checks
+bool CLegacyZPivStake::ContextCheck(const CBlockIndex* pTip)
+{
+    const Consensus::Params& consensus = Params().GetConsensus();
+    // Check context height
+    const int nHeight = pTip->nHeight;
+    if (nHeight < consensus.height_start_ZC || nHeight >= consensus.height_last_ZC_AccumCheckpoint)
+        return error("%s : zPIV stake block: height %d outside range", __func__, nHeight);
+
+    // The checkpoint needs to be from 200 blocks ago
+    const int cpHeight = nHeight - consensus.ZC_MinStakeDepth;
+    const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(GetValue());
+    if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != GetChecksum())
+        return error("%s : accum. checksum (%d) at height %d is wrong (should be %d).", __func__,
+                ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom), nHeight+1, GetChecksum());
+
+    // All good
+    return true;
 }

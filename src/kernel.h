@@ -16,14 +16,13 @@ bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, cons
 bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fVerify = false);
 bool CheckProofOfStake(const CBlock& block, uint256& hashProofOfStake, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight);
 // Initialize the stake input object
-bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight);
+bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, const CBlockIndex* pindexPrev);
 // Stake (find valid kernel)
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake);
 
 /* Utils */
 int64_t GetTimeSlot(const int64_t nTime);
 int64_t GetCurrentTimeSlot();
-uint32_t ParseAccChecksum(uint256 nCheckpoint, const libzerocoin::CoinDenomination denom);
 
 
 /* Old Stake Modifier */

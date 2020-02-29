@@ -89,39 +89,20 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
 
 bool CheckProofOfStake(const CBlock& block, uint256& hashProofOfStake, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight)
 {
+    CBlockIndex* pindexPrev = mapBlockIndex[block.hashPrevBlock];
     // Initialize the stake object
-    if(!initStakeInput(block, stake, nPreviousBlockHeight))
+    if(!initStakeInput(block, stake, pindexPrev))
         return error("%s : stake input object initialization failed", __func__);
 
-    const CTransaction tx = block.vtx[1];
-    // Kernel (input 0) must match the stake hash target per coin age (nBits)
-    const CTxIn& txin = tx.vin[0];
-    CBlockIndex* pindexPrev = mapBlockIndex[block.hashPrevBlock];
-    CBlockIndex* pindexfrom = stake->GetIndexFrom();
-    if (!pindexfrom)
-        return error("%s : Failed to find the block index for stake origin", __func__);
-
-    unsigned int nBlockFromTime = pindexfrom->nTime;
-    unsigned int nTxTime = block.nTime;
-    const int nBlockFromHeight = pindexfrom->nHeight;
-    const Consensus::Params& consensus = Params().GetConsensus();
-
-    if (!txin.IsZerocoinSpend() && nPreviousBlockHeight >= consensus.height_start_ZC_PublicSpends - 1) {
-        //check for maturity (min age/depth) requirements
-        if (!consensus.HasStakeMinAgeOrDepth(nPreviousBlockHeight+1, nTxTime, nBlockFromHeight, nBlockFromTime))
-            return error("%s : min age violation - height=%d - nTimeTx=%d, nTimeBlockFrom=%d, nHeightBlockFrom=%d",
-                             __func__, nPreviousBlockHeight, nTxTime, nBlockFromTime, nBlockFromHeight);
-    }
-
-    if (!CheckStakeKernelHash(pindexPrev, block.nBits, stake.get(), nTxTime, hashProofOfStake, true))
-        return error("%s : INFO: check kernel failed on coinstake %s, hashProof=%s", __func__,
-                     tx.GetHash().GetHex(), hashProofOfStake.GetHex());
+    if (!CheckStakeKernelHash(pindexPrev, block.nBits, stake.get(), block.nTime, hashProofOfStake, true))
+        return error("%s : check kernel failed on coinstake", __func__);
 
     return true;
 }
 
 // Initialize the stake input object
-bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight) {
+bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, const CBlockIndex* pindexPrev)
+{
     const CTransaction tx = block.vtx[1];
     if (!tx.IsCoinStake())
         return error("%s : called on non-coinstake %s", __func__, tx.GetHash().ToString().c_str());
@@ -136,15 +117,8 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
             return error("%s : unable to initialize (zpiv) stake input", __func__);
 
         // zPoS contextual checks
-        const Consensus::Params& consensus = Params().GetConsensus();
-        /* Only for IBD (between Zerocoin_Block_V2_Start and Zerocoin_Block_Last_Checkpoint) */
-        if (nPreviousBlockHeight < consensus.height_start_ZC_SerialsV2 || nPreviousBlockHeight > consensus.height_last_ZC_AccumCheckpoint)
-            return error("%s : zPIV stake block: height %d outside range", __func__, (nPreviousBlockHeight+1));
-        // The checkpoint needs to be from 200 blocks ago
-        const int cpHeight = nPreviousBlockHeight - consensus.ZC_MinStakeDepth;
-        const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(zpivStake.GetValue());
-        if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != zpivStake.GetChecksum())
-            return error("%s : accum. checksum at height %d is wrong.", __func__, (nPreviousBlockHeight+1));
+        if (!zpivStake.ContextCheck(pindexPrev))
+            return error("%s : failed contextual checks.", __func__);
 
         stake = std::unique_ptr<CStakeInput>(new CLegacyZPivStake(zpivStake));
 
@@ -152,6 +126,10 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
         CPivStake pivStake;
         if (!pivStake.InitFromTxIn(txin))
             return error("%s : unable to initialize stake input", __func__);
+
+        // PoS contextual checks
+        if (!pivStake.ContextCheck(pindexPrev))
+            return error("%s : failed contextual checks.", __func__);
 
         //verify signature and script
         CTransaction txPrev;
@@ -206,14 +184,6 @@ int64_t GetTimeSlot(const int64_t nTime)
 int64_t GetCurrentTimeSlot()
 {
     return GetTimeSlot(GetAdjustedTime());
-}
-
-uint32_t ParseAccChecksum(uint256 nCheckpoint, const libzerocoin::CoinDenomination denom)
-{
-    int pos = distance(libzerocoin::zerocoinDenomList.begin(),
-            find(libzerocoin::zerocoinDenomList.begin(), libzerocoin::zerocoinDenomList.end(), denom));
-    nCheckpoint = nCheckpoint >> (32*((libzerocoin::zerocoinDenomList.size() - 1) - pos));
-    return nCheckpoint.Get32();
 }
 
 
