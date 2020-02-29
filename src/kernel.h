@@ -41,13 +41,39 @@ private:
 };
 
 /* PoS Validation */
-bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, const unsigned int nTimeTx, const bool fVerify, uint256& hashProofOfStakeRet);
-bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fVerify = false);
-bool CheckProofOfStake(const CBlock& block, uint256& hashProofOfStake, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight);
-// Initialize the stake input object
-bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, const CBlockIndex* pindexPrev);
-// Stake (find valid kernel)
-bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake);
+
+/*
+ * Stake                Check if stakeInput can stake a block on top of pindexPrev
+ *
+ * @param[in]   pindexPrev      index of the parent block of the block being staked
+ * @param[in]   stakeInput      input for the coinstake
+ * @param[in]   nBits           target difficulty bits
+ * @param[in]   nTimeTx         new blocktime
+ * @return      bool            true if stake kernel hash meets target protocol
+ */
+bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx);
+
+/*
+ * CheckProofOfStake    Check if block has valid proof of stake
+ *
+ * @param[in]   block           block with the proof being verified
+ * @param[out]  strError        string returning error message (if any, else empty)
+ * @param[in]   pindexPrev      index of the parent block
+ *                              (if nullptr, it will be searched in mapBlockIndex)
+ * @return      bool            true if the block has a valid proof of stake
+ */
+bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockIndex* pindexPrev = nullptr);
+
+/*
+ * GetStakeKernelHash   Return stake kernel of a block
+ *
+ * @param[out]  hashRet         hash of the kernel (set by this function)
+ * @param[in]   block           block with the kernel to return
+ * @param[in]   pindexPrev      index of the parent block
+ *                              (if nullptr, it will be searched in mapBlockIndex)
+ * @return      bool            false if kernel cannot be initialized, true otherwise
+ */
+bool GetStakeKernelHash(uint256& hashRet, const CBlock& block, const CBlockIndex* pindexPrev = nullptr);
 
 
 /* Old Stake Modifier */

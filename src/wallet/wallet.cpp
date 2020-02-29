@@ -2569,9 +2569,9 @@ bool CWallet::CreateCoinStake(
         }
 
         nCredit = 0;
-        uint256 hashProofOfStake;
+
         nAttempts++;
-        fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime, hashProofOfStake);
+        fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime);
 
         // update staker status (time)
         pStakerStatus->SetLastTime(nTxNewTime);

@@ -90,20 +90,17 @@ CDataStream CLegacyZPivStake::GetUniqueness() const
 }
 
 // Verify stake contextual checks
-bool CLegacyZPivStake::ContextCheck(const CBlockIndex* pTip)
+bool CLegacyZPivStake::ContextCheck(int nHeight, uint32_t nTime)
 {
     const Consensus::Params& consensus = Params().GetConsensus();
-    // Check context height
-    const int nHeight = pTip->nHeight;
-    if (nHeight < consensus.height_start_ZC || nHeight >= consensus.height_last_ZC_AccumCheckpoint)
+    if (nHeight < consensus.height_start_ZC_SerialsV2 || nHeight >= consensus.height_last_ZC_AccumCheckpoint)
         return error("%s : zPIV stake block: height %d outside range", __func__, nHeight);
 
     // The checkpoint needs to be from 200 blocks ago
-    const int cpHeight = nHeight - consensus.ZC_MinStakeDepth;
+    const int cpHeight = nHeight - 1 - consensus.ZC_MinStakeDepth;
     const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(GetValue());
     if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != GetChecksum())
-        return error("%s : accum. checksum (%d) at height %d is wrong (should be %d).", __func__,
-                ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom), nHeight+1, GetChecksum());
+        return error("%s : accum. checksum at height %d is wrong.", __func__, nHeight);
 
     // All good
     return true;
