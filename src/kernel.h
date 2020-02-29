@@ -78,7 +78,6 @@ bool GetStakeKernelHash(uint256& hashRet, const CBlock& block, const CBlockIndex
 
 /* Old Stake Modifier */
 bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier);
-bool GetOldModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifier);
 bool ComputeNextStakeModifier(const CBlockIndex* pindexPrev, uint64_t& nStakeModifier, bool& fGeneratedStakeModifier);
 
 #endif // PIVX_KERNEL_H
