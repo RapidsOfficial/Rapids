@@ -16,6 +16,65 @@
 #include "zpivchain.h"
 #include "zpiv/zpos.h"
 
+/**
+ * CStakeKernel Constructor
+ *
+ * @param[in]   pindexPrev      index of the parent of the kernel block
+ * @param[in]   stakeInput      input for the coinstake of the kernel block
+ * @param[in]   nBits           target difficulty bits of the kernel block
+ * @param[in]   nTimeTx         time of the kernel block
+ */
+CStakeKernel::CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int nTimeTx):
+    stakeUniqueness(stakeInput->GetUniqueness()),
+    nTime(nTimeTx),
+    nBits(nBits),
+    stakeValue(stakeInput->GetValue())
+{
+    if (!Params().GetConsensus().IsStakeModifierV2(pindexPrev->nHeight + 1)) { // Modifier v1
+        uint64_t nStakeModifier = 0;
+        if (!GetOldStakeModifier(stakeInput, nStakeModifier)) return;
+        stakeModifier << nStakeModifier;
+    } else { // Modifier v2
+        stakeModifier << pindexPrev->GetStakeModifierV2();
+    }
+    CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
+    nTimeBlockFrom = pindexFrom->nTime;
+}
+
+// Return stake kernel hash
+uint256 CStakeKernel::GetHash() const
+{
+    CDataStream ss(stakeModifier);
+    ss << nTimeBlockFrom << stakeUniqueness << nTime;
+    return Hash(ss.begin(), ss.end());
+}
+
+// Check that the kernel hash meets the target required
+bool CStakeKernel::CheckKernelHash(bool fSkipLog) const
+{
+    // Get weighted target
+    uint256 bnTarget;
+    bnTarget.SetCompact(nBits);
+    bnTarget *= (uint256(stakeValue) / 100);
+
+    // Check PoS kernel hash
+    const uint256& hashProofOfStake = GetHash();
+    const bool res = hashProofOfStake < bnTarget;
+
+    if (!fSkipLog || res) {
+        LogPrint("staking", "%s : Proof Of Stake:"
+                            "\nssUniqueID=%s"
+                            "\nnTimeTx=%d"
+                            "\nhashProofOfStake=%s"
+                            "\nnBits=%d"
+                            "\nweight=%d"
+                            "\nbnTarget=%s (res: %d)\n\n",
+            __func__, HexStr(stakeUniqueness), nTime, hashProofOfStake.GetHex(),
+            nBits, stakeValue, bnTarget.GetHex(), res);
+    }
+    return res;
+}
+
 /*
  * PoS Validation
  */

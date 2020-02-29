@@ -11,6 +11,35 @@
 #include "main.h"
 #include "stakeinput.h"
 
+class CStakeKernel {
+public:
+    /**
+     * CStakeKernel Constructor
+     *
+     * @param[in]   pindexPrev      index of the parent of the kernel block
+     * @param[in]   stakeInput      input for the coinstake of the kernel block
+     * @param[in]   nBits           target difficulty bits of the kernel block
+     * @param[in]   nTimeTx         time of the kernel block
+     */
+    CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int nTimeTx);
+
+    // Return stake kernel hash
+    uint256 GetHash() const;
+
+    // Check that the kernel hash meets the target required
+    bool CheckKernelHash(bool fSkipLog = false) const;
+
+private:
+    // kernel message hashed
+    CDataStream stakeModifier{CDataStream(SER_GETHASH, 0)};
+    int nTimeBlockFrom{0};
+    CDataStream stakeUniqueness{CDataStream(SER_GETHASH, 0)};
+    int nTime{0};
+    // hash target
+    unsigned int nBits{0};     // difficulty for the target
+    CAmount stakeValue{0};     // target multiplier
+};
+
 /* PoS Validation */
 bool GetHashProofOfStake(const CBlockIndex* pindexPrev, CStakeInput* stake, const unsigned int nTimeTx, const bool fVerify, uint256& hashProofOfStakeRet);
 bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBits, CStakeInput* stake, const unsigned int nTimeTx, uint256& hashProofOfStake, const bool fVerify = false);
