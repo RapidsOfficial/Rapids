@@ -168,7 +168,7 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
         }
 
         CPivStake* pivInput = new CPivStake();
-        pivInput->SetInput(txPrev, txin.prevout.n);
+        pivInput->SetPrevout(txPrev, txin.prevout.n);
         stake = std::unique_ptr<CStakeInput>(pivInput);
     }
     return true;

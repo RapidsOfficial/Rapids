@@ -11,7 +11,7 @@
 #include "wallet/wallet.h"
 
 
-bool CPivStake::SetInput(CTransaction txPrev, unsigned int n)
+bool CPivStake::SetPrevout(CTransaction txPrev, unsigned int n)
 {
     this->txFrom = txPrev;
     this->nPosition = n;
