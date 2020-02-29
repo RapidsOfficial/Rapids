@@ -171,23 +171,6 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
 
 
 /*
- * UTILS
- */
-
-// Timestamp for time protocol V2: slot duration 15 seconds
-int64_t GetTimeSlot(const int64_t nTime)
-{
-    const int slotLen = Params().GetConsensus().nTimeSlotLength;
-    return (nTime / slotLen) * slotLen;
-}
-
-int64_t GetCurrentTimeSlot()
-{
-    return GetTimeSlot(GetAdjustedTime());
-}
-
-
-/*
  * OLD MODIFIER
  */
 static const unsigned int MODIFIER_INTERVAL = 60;

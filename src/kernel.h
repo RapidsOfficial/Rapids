@@ -20,10 +20,6 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, co
 // Stake (find valid kernel)
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake);
 
-/* Utils */
-int64_t GetTimeSlot(const int64_t nTime);
-int64_t GetCurrentTimeSlot();
-
 
 /* Old Stake Modifier */
 bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier);
