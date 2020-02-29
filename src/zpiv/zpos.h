@@ -18,7 +18,10 @@ private:
     uint256 hashSerial;
 
 public:
+    CLegacyZPivStake() {}
+
     explicit CLegacyZPivStake(const libzerocoin::CoinSpend& spend);
+    bool InitFromTxIn(const CTxIn& txin);
     bool IsZPIV() const override { return true; }
     uint32_t GetChecksum() const { return nChecksum; }
     CBlockIndex* GetIndexFrom() override;

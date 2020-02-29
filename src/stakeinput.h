@@ -20,6 +20,7 @@ protected:
 
 public:
     virtual ~CStakeInput(){};
+    virtual bool InitFromTxIn(const CTxIn& txin) = 0;
     virtual CBlockIndex* GetIndexFrom() = 0;
     virtual bool CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut = UINT256_ZERO) = 0;
     virtual bool GetTxFrom(CTransaction& tx) const = 0;
@@ -37,8 +38,9 @@ private:
     unsigned int nPosition;
 
 public:
-    CPivStake(){}
+    CPivStake() {}
 
+    bool InitFromTxIn(const CTxIn& txin);
     bool SetPrevout(CTransaction txPrev, unsigned int n);
 
     CBlockIndex* GetIndexFrom() override;

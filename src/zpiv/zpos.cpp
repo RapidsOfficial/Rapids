@@ -3,6 +3,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "zpiv/zpos.h"
+#include "zpivchain.h"
 
 
 /*
@@ -11,6 +12,26 @@
  * Return block index pointer or nullptr if not found
  */
 
+bool CLegacyZPivStake::InitFromTxIn(const CTxIn& txin)
+{
+    // Construct the stakeinput object
+    if (!txin.IsZerocoinSpend())
+        return error("%s: unable to initialize CLegacyZPivStake from non zc-spend");
+
+    // Check spend type
+    libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txin);
+    if (spend.getSpendType() != libzerocoin::SpendType::STAKE)
+        return error("%s : spend is using the wrong SpendType (%d)", __func__, (int)spend.getSpendType());
+
+    *this = CLegacyZPivStake(spend);
+
+    // Find the pindex with the accumulator checksum
+    if (!pindexFrom)
+        return error("%s : Failed to find the block index for zpiv stake origin", __func__);
+
+    // All good
+    return true;
+}
 
 CLegacyZPivStake::CLegacyZPivStake(const libzerocoin::CoinSpend& spend)
 {

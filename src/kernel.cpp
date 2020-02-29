@@ -131,35 +131,32 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
 
     // Construct the stakeinput object
     if (txin.IsZerocoinSpend()) {
-        libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txin);
-        if (spend.getSpendType() != libzerocoin::SpendType::STAKE)
-            return error("%s : spend is using the wrong SpendType (%d)", __func__, (int)spend.getSpendType());
-
-        stake = std::unique_ptr<CStakeInput>(new CLegacyZPivStake(spend));
+        CLegacyZPivStake zpivStake;
+        if (!zpivStake.InitFromTxIn(txin))
+            return error("%s : unable to initialize (zpiv) stake input", __func__);
 
         // zPoS contextual checks
         const Consensus::Params& consensus = Params().GetConsensus();
         /* Only for IBD (between Zerocoin_Block_V2_Start and Zerocoin_Block_Last_Checkpoint) */
         if (nPreviousBlockHeight < consensus.height_start_ZC_SerialsV2 || nPreviousBlockHeight > consensus.height_last_ZC_AccumCheckpoint)
             return error("%s : zPIV stake block: height %d outside range", __func__, (nPreviousBlockHeight+1));
-        CLegacyZPivStake* zPIV = dynamic_cast<CLegacyZPivStake*>(stake.get());
-        if (!zPIV) return error("%s : dynamic_cast of stake ptr failed", __func__);
         // The checkpoint needs to be from 200 blocks ago
         const int cpHeight = nPreviousBlockHeight - consensus.ZC_MinStakeDepth;
-        const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(zPIV->GetValue());
-        if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != zPIV->GetChecksum())
+        const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(zpivStake.GetValue());
+        if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != zpivStake.GetChecksum())
             return error("%s : accum. checksum at height %d is wrong.", __func__, (nPreviousBlockHeight+1));
 
+        stake = std::unique_ptr<CStakeInput>(new CLegacyZPivStake(zpivStake));
+
     } else {
-        // First try finding the previous transaction in database
-        uint256 hashBlock;
-        CTransaction txPrev;
-        if (!GetTransaction(txin.prevout.hash, txPrev, hashBlock, true))
-            return error("%s : INFO: read txPrev failed, tx id prev: %s, block id %s",
-                         __func__, txin.prevout.hash.GetHex(), block.GetHash().GetHex());
+        CPivStake pivStake;
+        if (!pivStake.InitFromTxIn(txin))
+            return error("%s : unable to initialize stake input", __func__);
 
         //verify signature and script
+        CTransaction txPrev;
         ScriptError serror;
+        pivStake.GetTxFrom(txPrev);
         if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&tx, 0), &serror)) {
             std::string strErr = "";
             if (serror && ScriptErrorString(serror))
@@ -167,9 +164,8 @@ bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, in
             return error("%s : VerifyScript failed on coinstake %s %s", __func__, tx.GetHash().ToString(), strErr);
         }
 
-        CPivStake* pivInput = new CPivStake();
-        pivInput->SetPrevout(txPrev, txin.prevout.n);
-        stake = std::unique_ptr<CStakeInput>(pivInput);
+        stake = std::unique_ptr<CStakeInput>(new CPivStake(pivStake));
+
     }
     return true;
 }
