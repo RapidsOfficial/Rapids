@@ -1523,9 +1523,8 @@ bool CWallet::Upgrade(std::string& error, const int& prevVersion)
         LOCK(cs_wallet);
 
         // Do not upgrade versions if we are already in the last one
-        int max_version = GetVersion();
-        if (max_version >= FEATURE_PRE_SPLIT_KEYPOOL) {
-            error = _("Cannot upgrade to HD wallet (already running HD support)");
+        if (prevVersion >= FEATURE_PRE_SPLIT_KEYPOOL) {
+            error = strprintf(_("Cannot upgrade to HD wallet (already running HD support). Version: %d"), prevVersion);
             return false;
         }
 

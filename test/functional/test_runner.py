@@ -95,6 +95,7 @@ BASE_SCRIPTS= [
     # vv Tests less than 60s vv
     'wallet_accounts.py',                       # ~ 55 sec
     'mempool_resurrect.py',                     # ~ 51 sec
+    'wallet_upgrade.py',                        # ~ 50 sec
     'rpc_budget.py',                            # ~ 50 sec
     'mempool_spend_coinbase.py',                # ~ 50 sec
     'rpc_signrawtransaction.py',                # ~ 50 sec
