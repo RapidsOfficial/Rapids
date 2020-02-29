@@ -17,8 +17,6 @@ bool CheckStakeKernelHash(const CBlockIndex* pindexPrev, const unsigned int nBit
 bool CheckProofOfStake(const CBlock& block, uint256& hashProofOfStake, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight);
 // Initialize the stake input object
 bool initStakeInput(const CBlock& block, std::unique_ptr<CStakeInput>& stake, int nPreviousBlockHeight);
-// (New) Stake Modifier
-uint256 ComputeStakeModifier(const CBlockIndex* pindexPrev, const uint256& kernel);
 // Stake (find valid kernel)
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx, uint256& hashProofOfStake);
 
