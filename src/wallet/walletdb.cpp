@@ -159,8 +159,7 @@ bool CWalletDB::WriteOrderPosNext(int64_t nOrderPosNext)
     return Write(std::string("orderposnext"), nOrderPosNext);
 }
 
-// presstab HyperStake
-bool CWalletDB::WriteStakeSplitThreshold(uint64_t nStakeSplitThreshold)
+bool CWalletDB::WriteStakeSplitThreshold(CAmount nStakeSplitThreshold)
 {
     nWalletDBUpdated++;
     return Write(std::string("stakeSplitThreshold"), nStakeSplitThreshold);
@@ -619,9 +618,11 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             }
         } else if (strType == "orderposnext") {
             ssValue >> pwallet->nOrderPosNext;
-        } else if (strType == "stakeSplitThreshold") //presstab HyperStake
-        {
+        } else if (strType == "stakeSplitThreshold") {
             ssValue >> pwallet->nStakeSplitThreshold;
+            // originally saved as integer
+            if (pwallet->nStakeSplitThreshold < COIN)
+                pwallet->nStakeSplitThreshold *= COIN;
         } else if (strType == "multisend") //presstab HyperStake
         {
             unsigned int i;

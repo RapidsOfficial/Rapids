@@ -124,10 +124,10 @@ void OptionsModel::setWalletDefaultOptions(QSettings& settings, bool reset){
         addOverriddenOption("-spendzeroconfchange");
 
     if (!settings.contains("nStakeSplitThreshold") || reset)
-        settings.setValue("nStakeSplitThreshold", CWallet::STAKE_SPLIT_THRESHOLD);
+        settings.setValue("nStakeSplitThreshold", static_cast<qlonglong>(CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD));
 
     if (reset){
-        setStakeSplitThreshold(CWallet::STAKE_SPLIT_THRESHOLD);
+        setStakeSplitThreshold(CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD);
         refreshDataView();
     }
 }
@@ -257,9 +257,11 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("fShowMasternodesTab");
 #endif
         case StakeSplitThreshold:
-            if (pwalletMain)
-                return QVariant((int)pwalletMain->nStakeSplitThreshold);
-            return settings.value("nStakeSplitThreshold");
+            // Return CAmount/qlonglong as double
+            if (pwalletMain) {
+                return QVariant(static_cast<double>(pwalletMain->nStakeSplitThreshold) / static_cast<double>(COIN));
+            }
+            return QVariant(static_cast<double>(settings.value("nStakeSplitThreshold").toLongLong()) / static_cast<double>(COIN));
         case DisplayUnit:
 
             return nDisplayUnit;
@@ -359,8 +361,9 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
             break;
 #endif
         case StakeSplitThreshold:
-            settings.setValue("nStakeSplitThreshold", value.toInt());
-            setStakeSplitThreshold(value.toInt());
+            // Write double as qlonglong/CAmount
+            settings.setValue("nStakeSplitThreshold", static_cast<qlonglong>(value.toDouble() * COIN));
+            setStakeSplitThreshold(static_cast<CAmount>(value.toDouble() * COIN));
             break;
         case DisplayUnit:
             setDisplayUnit(value);
@@ -450,12 +453,8 @@ void OptionsModel::setDisplayUnit(const QVariant& value)
 }
 
 /* Update StakeSplitThreshold's value in wallet */
-void OptionsModel::setStakeSplitThreshold(int value)
+void OptionsModel::setStakeSplitThreshold(const CAmount nStakeSplitThreshold)
 {
-    // XXX: maybe it's worth to wrap related stuff with WALLET_ENABLE ?
-    uint64_t nStakeSplitThreshold;
-
-    nStakeSplitThreshold = value;
     if (pwalletMain && pwalletMain->nStakeSplitThreshold != nStakeSplitThreshold) {
         CWalletDB walletdb(pwalletMain->strWalletFile);
         LOCK(pwalletMain->cs_wallet);

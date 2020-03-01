@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>511</width>
+    <width>518</width>
     <height>654</height>
    </rect>
   </property>
@@ -122,7 +122,10 @@
            </spacer>
           </item>
           <item>
-           <widget class="QSpinBox" name="spinBoxStakeSplitThreshold">
+           <widget class="QDoubleSpinBox" name="spinBoxStakeSplitThreshold">
+            <property name="decimals">
+             <number>3</number>
+            </property>
             <property name="minimum">
              <number>1</number>
             </property>
