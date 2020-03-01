@@ -89,11 +89,8 @@ static bool SelectBlockFromCandidates(
 
 // The stake modifier used to hash for a stake kernel is chosen as the stake
 // modifier about a selection interval later than the coin generating the kernel
-bool GetOldModifier(const uint256& hashBlockFrom, uint64_t& nStakeModifier)
+bool GetOldModifier(const CBlockIndex* pindexFrom, uint64_t& nStakeModifier)
 {
-    if (!mapBlockIndex.count(hashBlockFrom))
-        return error("%s : block not indexed", __func__);
-    const CBlockIndex* pindexFrom = mapBlockIndex[hashBlockFrom];
     int64_t nStakeModifierTime = pindexFrom->GetBlockTime();
     const CBlockIndex* pindex = pindexFrom;
     CBlockIndex* pindexNext = chainActive[pindex->nHeight + 1];
@@ -129,7 +126,7 @@ bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier)
         }
         return false;
 
-    } else if (!GetOldModifier(pindexFrom->GetBlockHash(), nStakeModifier))
+    } else if (!GetOldModifier(pindexFrom, nStakeModifier))
         return error("%s : failed to get kernel stake modifier", __func__);
 
     return true;
