@@ -22,6 +22,7 @@
 #include "consensus/zerocoin_verify.h"
 #include "init.h"
 #include "kernel.h"
+#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
 #include "masternode-budget.h"
 #include "masternode-payments.h"
 #include "masternodeman.h"
