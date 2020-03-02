@@ -175,27 +175,19 @@ void SettingsExportCSV::onExportAddressesClicked()
             addressFilter->setDynamicSortFilter(true);
             addressFilter->setSortCaseSensitivity(Qt::CaseInsensitive);
             addressFilter->setFilterCaseSensitivity(Qt::CaseInsensitive);
-
             addressFilter->setFilterRole(AddressTableModel::TypeRole);
-            // Quick and dirty filter
-            switch (ui->comboBoxSortAddressType->itemData(ui->comboBoxSortAddressType->currentIndex()).toInt()) {
-                case 0:
-                    // Receive filter
-                    addressFilter->setFilterFixedString(AddressTableModel::Receive);
-                    break;
-                case 1:
-                default:
-                    // Send filter
-                    addressFilter->setFilterFixedString(AddressTableModel::Send);
-                    break;
-            }
         }
+
+        // Filter by type
+        QString filterBy = ui->comboBoxSortAddressType->itemData(ui->comboBoxSortAddressType->currentIndex()).toString();
+        addressFilter->setFilterFixedString(filterBy);
 
         CSVModelWriter writer(filenameAddressBook);
         // name, column, role
         writer.setModel(addressFilter);
         writer.addColumn("Label", AddressTableModel::Label, Qt::EditRole);
         writer.addColumn("Address", AddressTableModel::Address, Qt::EditRole);
+        writer.addColumn("Type", AddressTableModel::Type, Qt::DisplayRole);
         fExport = writer.write();
     }
 
