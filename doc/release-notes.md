@@ -41,6 +41,7 @@ Automatic zPIV backup has been disabled. Thus, the following configuration optio
 
 ### Stake-Split threshold
 The stake split threshold is no longer required to be integer. It can be a fractional amount. A threshold value of 0 disables the stake-split functionality.
+The default value for the stake-split threshold has been lowered from 2000 PIV, down  to 500 PIV.
 
 
 Dependencies

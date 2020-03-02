@@ -123,9 +123,6 @@ void OptionsModel::setWalletDefaultOptions(QSettings& settings, bool reset){
     if (!SoftSetBoolArg("-spendzeroconfchange", settings.value("bSpendZeroConfChange").toBool()))
         addOverriddenOption("-spendzeroconfchange");
 
-    if (!settings.contains("nStakeSplitThreshold") || reset)
-        settings.setValue("nStakeSplitThreshold", static_cast<qlonglong>(CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD));
-
     if (reset){
         setStakeSplitThreshold(CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD);
         refreshDataView();
@@ -255,15 +252,14 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("bSpendZeroConfChange");
         case ShowMasternodesTab:
             return settings.value("fShowMasternodesTab");
-#endif
         case StakeSplitThreshold:
+        {
             // Return CAmount/qlonglong as double
-            if (pwalletMain) {
-                return QVariant(static_cast<double>(pwalletMain->nStakeSplitThreshold) / static_cast<double>(COIN));
-            }
-            return QVariant(static_cast<double>(settings.value("nStakeSplitThreshold").toLongLong()) / static_cast<double>(COIN));
+            const CAmount nStakeSplitThreshold = (pwalletMain) ? pwalletMain->nStakeSplitThreshold : CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD;
+            return QVariant(static_cast<double>(nStakeSplitThreshold / static_cast<double>(COIN)));
+        }
+#endif
         case DisplayUnit:
-
             return nDisplayUnit;
         case ThirdPartyTxUrls:
             return strThirdPartyTxUrls;
@@ -362,7 +358,6 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
 #endif
         case StakeSplitThreshold:
             // Write double as qlonglong/CAmount
-            settings.setValue("nStakeSplitThreshold", static_cast<qlonglong>(value.toDouble() * COIN));
             setStakeSplitThreshold(static_cast<CAmount>(value.toDouble() * COIN));
             break;
         case DisplayUnit:
