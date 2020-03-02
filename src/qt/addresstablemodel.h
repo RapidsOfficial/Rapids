@@ -28,11 +28,12 @@ public:
     enum ColumnIndex {
         Label = 0,  /**< User specified label */
         Address = 1, /**< Bitcoin address */
-        Date = 2 /**< Address creation date */
+        Date = 2, /**< Address creation date */
+        Type = 3 /**< Address Type */
     };
 
     enum RoleIndex {
-        TypeRole = Qt::UserRole /**< Type of address (#Send or #Receive) */
+        TypeRole = Qt::UserRole /**< Type of address (#Send, #Receive, #ColdStaking, #ColdStakingSend, #Delegators) */
     };
 
     /** Return status of edit/insert operation */

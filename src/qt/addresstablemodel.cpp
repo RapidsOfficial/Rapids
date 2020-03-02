@@ -82,6 +82,26 @@ static AddressTableEntry::Type translateTransactionType(const QString& strPurpos
     return addressType;
 }
 
+static QString translateTypeToString(AddressTableEntry::Type type)
+{
+    switch (type) {
+        case AddressTableEntry::Sending:
+            return QObject::tr("Contact");
+        case AddressTableEntry::Receiving:
+            return QObject::tr("Receiving");
+        case AddressTableEntry::Delegators:
+            return QObject::tr("Delegator");
+        case AddressTableEntry::ColdStaking:
+            return QObject::tr("Cold Staking");
+        case AddressTableEntry::ColdStakingSend:
+            return QObject::tr("Cold Staking Contact");
+        case AddressTableEntry::Hidden:
+            return QObject::tr("Hidden");
+        default:
+            return QObject::tr("Unknown");
+    }
+}
+
 // Private implementation
 class AddressTablePriv
 {
@@ -276,7 +296,7 @@ public:
 
 AddressTableModel::AddressTableModel(CWallet* wallet, WalletModel* parent) : QAbstractTableModel(parent), walletModel(parent), wallet(wallet), priv(0)
 {
-    columns << tr("Label") << tr("Address") << tr("Date");
+    columns << tr("Label") << tr("Address") << tr("Date") << tr("Type");
     priv = new AddressTablePriv(wallet, this);
     priv->refreshAddressTable();
 }
@@ -332,6 +352,8 @@ QVariant AddressTableModel::data(const QModelIndex& index, int role) const
             return rec->address;
         case Date:
             return rec->creationTime;
+        case Type:
+            return translateTypeToString(rec->type);
         }
     } else if (role == Qt::FontRole) {
         QFont font;
