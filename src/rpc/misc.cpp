@@ -597,12 +597,13 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
             "  \"haveconnections\": true|false,    (boolean) if network connections are present\n"
             "  \"mnsync\": true|false,             (boolean) if masternode data is synced\n"
             "  \"walletunlocked\": true|false,     (boolean) if the wallet is unlocked\n"
-            "  \"stakeablecoins\": true|false,     (boolean) if the wallet has mintable balance (greater than reserve balance)\n"
-            "  \"lastattempt_age\": xxx            (numeric) seconds since last stake attempt\n"
-            "  \"lastattempt_depth\": xxx          (numeric) depth of the block on top of which the last stake attempt was made\n"
+            "  \"stakeablecoins\": n               (numeric) number of stakeable UTXOs\n"
+            "  \"stakingbalance\": d               (numeric) PIV value of the stakeable coins (minus reserve balance, if any)\n"
+            "  \"lastattempt_age\": n              (numeric) seconds since last stake attempt\n"
+            "  \"lastattempt_depth\": n            (numeric) depth of the block on top of which the last stake attempt was made\n"
             "  \"lastattempt_hash\": xxx           (hex string) hash of the block on top of which the last stake attempt was made\n"
-            "  \"lastattempt_coins\": n             (numeric) number of stakeable coins available during last stake attempt\n"
-            "  \"lastattempt_tries\": n             (numeric) number of stakeable coins checked during last stake attempt\n"
+            "  \"lastattempt_coins\": n            (numeric) number of stakeable coins available during last stake attempt\n"
+            "  \"lastattempt_tries\": n            (numeric) number of stakeable coins checked during last stake attempt\n"
             "}\n"
 
             "\nExamples:\n" +
@@ -619,7 +620,11 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
         obj.push_back(Pair("haveconnections", !vNodes.empty()));
         obj.push_back(Pair("mnsync", masternodeSync.IsSynced()));
         obj.push_back(Pair("walletunlocked", !pwalletMain->IsLocked()));
-        obj.push_back(Pair("stakeablecoins", pwalletMain->StakeableCoins()));
+        std::vector<COutput> vCoins;
+        pwalletMain->StakeableCoins(&vCoins);
+        obj.push_back(Pair("stakeablecoins", (int)vCoins.size()));
+        obj.push_back(Pair("stakingbalance", ValueFromAmount(
+                pwalletMain->GetStakingBalance(GetBoolArg("-coldstaking", true)))));
         CStakerStatus* ss = pwalletMain->pStakerStatus;
         if (ss) {
             obj.push_back(Pair("lastattempt_age", (int)(GetTime() - ss->GetLastTime())));

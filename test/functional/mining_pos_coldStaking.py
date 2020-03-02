@@ -112,7 +112,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
             assert (self.nodes[1].lockunspent(False, [{"txid": x['txid'], "vout": x['vout']}]))
         # check that it cannot stake
         sleep(1)
-        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], 0)
 
         # 3) nodes[0] generates a owner address
         #    nodes[1] generates a cold-staking address.
@@ -202,7 +202,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # -----------------------------------------------------------
         print("*** 7 ***")
         self.log.info("Trying to generate a cold-stake block before whitelisting the owner...")
-        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], 0)
         self.log.info("Nice. Cold staker was NOT able to create the block yet.")
 
         self.log.info("Whitelisting the owner...")
@@ -226,7 +226,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # 9) check that the staker can use the coins to stake a block with internal miner.
         # --------------------------------------------------------------------------------
         print("*** 9 ***")
-        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], True)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], NUM_OF_INPUTS-1)
         self.log.info("Generating one valid cold-stake block...")
         self.mocktime = self.generate_pos(1, self.mocktime)
         self.log.info("New block created by cold-staking. Trying to submit...")
@@ -357,7 +357,7 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # -----------------------------------------------------------
         print("*** 14 ***")
         self.log.info("Trying to generate one cold-stake block again...")
-        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], False)
+        assert_equal(self.nodes[1].getstakingstatus()["stakeablecoins"], 0)
         self.log.info("Cigar. Cold staker was NOT able to create any more blocks.")
 
         # 15) check balances when mature.
