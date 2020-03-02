@@ -177,26 +177,27 @@ public:
     }
 };
 
-/** Record info about last kernel stake operation (time and chainTip)**/
+/** Record info about last stake attempt:
+ *  - tipBlock       index of the block on top of which last stake attempt was made
+ *  - nTime          time slot of last attempt
+**/
 class CStakerStatus {
 private:
-    const CBlockIndex* tipLastStakeAttempt = nullptr;
-    int64_t timeLastStakeAttempt;
+    const CBlockIndex* tipBlock = nullptr;
+    int64_t nTime;
 public:
-    const CBlockIndex* GetLastTip() const { return tipLastStakeAttempt; }
-    uint256 GetLastHash() const
-    {
-        return (tipLastStakeAttempt == nullptr ? UINT256_ZERO : tipLastStakeAttempt->GetBlockHash());
-    }
-    int64_t GetLastTime() const { return timeLastStakeAttempt; }
-    void SetLastTip(const CBlockIndex* lastTip) { tipLastStakeAttempt = lastTip; }
-    void SetLastTime(const uint64_t lastTime) { timeLastStakeAttempt = lastTime; }
+    const CBlockIndex* GetLastTip() const { return tipBlock; }
+    uint256 GetLastHash() const { return (tipBlock == nullptr ? UINT256_ZERO : tipBlock->GetBlockHash()); }
+    int GetLastHeight() const { return (tipBlock == nullptr ? 0 : tipBlock->nHeight); }
+    int64_t GetLastTime() const { return nTime; }
+    void SetLastTip(const CBlockIndex* lastTip) { tipBlock = lastTip; }
+    void SetLastTime(const uint64_t lastTime) { nTime = lastTime; }
     void SetNull()
     {
         SetLastTip(nullptr);
         SetLastTime(0);
     }
-    bool IsActive() { return (timeLastStakeAttempt + 30) >= GetTime(); }
+    bool IsActive() { return (nTime + 30) >= GetTime(); }
 };
 
 /**
