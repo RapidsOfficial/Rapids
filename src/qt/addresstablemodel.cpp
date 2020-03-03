@@ -22,7 +22,7 @@ const QString AddressTableModel::Receive = "R";
 const QString AddressTableModel::Zerocoin = "X";
 const QString AddressTableModel::Delegators = "D";
 const QString AddressTableModel::ColdStaking = "C";
-const QString AddressTableModel::ColdStakingSend = "Csend";
+const QString AddressTableModel::ColdStakingSend = "T";
 
 struct AddressTableEntry {
     enum Type {

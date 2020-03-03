@@ -173,14 +173,17 @@ void SettingsExportCSV::onExportAddressesClicked()
             addressFilter = new QSortFilterProxyModel(this);
             addressFilter->setSourceModel(walletModel->getAddressTableModel());
             addressFilter->setDynamicSortFilter(true);
-            addressFilter->setSortCaseSensitivity(Qt::CaseInsensitive);
-            addressFilter->setFilterCaseSensitivity(Qt::CaseInsensitive);
             addressFilter->setFilterRole(AddressTableModel::TypeRole);
         }
 
         // Filter by type
         QString filterBy = ui->comboBoxSortAddressType->itemData(ui->comboBoxSortAddressType->currentIndex()).toString();
         addressFilter->setFilterFixedString(filterBy);
+
+        if (addressFilter->rowCount() == 0) {
+            inform(tr("No available addresses to export under the selected filter"));
+            return;
+        }
 
         CSVModelWriter writer(filenameAddressBook);
         // name, column, role
