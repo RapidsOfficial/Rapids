@@ -14,13 +14,13 @@ BOOST_FIXTURE_TEST_SUITE(pedersen_hash_tests, BasicTestingSetup)
 BOOST_AUTO_TEST_CASE(pedersen_hash_testvectors)
 {
     // Good scenario check
-    const uint256 a = uint256S("0acaa62d40fcdd9192ed35ea9df31660ccf7f6c60566530faaa444fb5d0d410e");
-    const uint256 b = uint256S("6041357de59ba64959d1b60f93de24dfe5ea1e26ed9e8a73d35b225a1845ba70");
+    const uint256 a = uint256S("87a086ae7d2252d58729b30263fb7b66308bf94ef59a76c9c86e7ea016536505");
+    const uint256 b = uint256S("a75b84a125b2353da7e8d96ee2a15efe4de23df9601b9d9564ba59de57130406");
     uint256 result;
 
     librustzcash_merkle_hash(25, a.begin(), b.begin(), result.begin());
 
-    uint256 expected_result = uint256S("4253b36834b3f64cc6182f1816911e1c9460cb88afeafb155244dd0038ad4717");
+    uint256 expected_result = uint256S("5bf43b5736c19b714d1f462c9d22ba3492c36e3d9bbd7ca24d94b440550aa561");
 
     BOOST_CHECK(result == expected_result);
 
