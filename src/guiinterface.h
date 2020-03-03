@@ -90,10 +90,7 @@ public:
     /** Number of network connections changed. */
     boost::signals2::signal<void(int newNumConnections)> NotifyNumConnectionsChanged;
 
-    /**
-     * New, updated or cancelled alert.
-     * @note called with lock cs_mapAlerts held.
-     */
+    /** New, updated or cancelled alert. */
     boost::signals2::signal<void()> NotifyAlertChanged;
 
     /** A wallet has been loaded. */
