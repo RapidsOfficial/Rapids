@@ -1946,7 +1946,7 @@ bool CWallet::AvailableCoins(
             if (nDepth == 0 && !pcoin->InMempool()) continue;
 
             // Check min depth requirement for stake inputs
-            if (nCoinType == STAKEABLE_COINS && nDepth <= Params().GetConsensus().nStakeMinDepth) continue;
+            if (nCoinType == STAKEABLE_COINS && nDepth < Params().GetConsensus().nStakeMinDepth - 1) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
                 bool found = false;
