@@ -98,6 +98,8 @@ Detailed release notes follow. This overview includes changes that affect behavi
 
 ### P2P Protocol and Network Code
 
+The p2p alert system has been removed in [#1372](https://github.com/PIVX-Project/PIVX/pull/1372) and the 'alert' message is no longer supported.
+
 ### GUI
 
 ### RPC/REST
