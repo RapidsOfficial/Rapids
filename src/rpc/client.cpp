@@ -130,8 +130,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
         //{"startmasternode", 1},
         {"mnvoteraw", 1},
         {"mnvoteraw", 4},
-        {"reservebalance", 0},
-        {"reservebalance", 1},
         {"setstakesplitthreshold", 0},
         {"autocombinerewards", 0},
         {"autocombinerewards", 1},

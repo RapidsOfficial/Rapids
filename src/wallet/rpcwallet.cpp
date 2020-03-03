@@ -2744,51 +2744,6 @@ UniValue getwalletinfo(const UniValue& params, bool fHelp)
     return obj;
 }
 
-// ppcoin: reserve balance from being staked for network protection
-UniValue reservebalance(const UniValue& params, bool fHelp)
-{
-    if (fHelp || params.size() > 2)
-        throw std::runtime_error(
-            "reservebalance ( reserve amount )\n"
-            "\nShow or set the reserve amount not participating in network protection\n"
-            "If no parameters provided current setting is printed.\n"
-
-            "\nArguments:\n"
-            "1. reserve     (boolean, optional) is true or false to turn balance reserve on or off.\n"
-            "2. amount      (numeric, optional) is a real and rounded to cent.\n"
-
-            "\nResult:\n"
-            "{\n"
-            "  \"reserve\": true|false,     (boolean) Status of the reserve balance\n"
-            "  \"amount\": x.xxxx       (numeric) Amount reserved\n"
-            "}\n"
-
-            "\nExamples:\n" +
-            HelpExampleCli("reservebalance", "true 5000") + HelpExampleRpc("reservebalance", "true 5000"));
-
-    if (params.size() > 0) {
-        bool fReserve = params[0].get_bool();
-        if (fReserve) {
-            if (params.size() == 1)
-                throw std::runtime_error("must provide amount to reserve balance.\n");
-            CAmount nAmount = AmountFromValue(params[1]);
-            nAmount = (nAmount / CENT) * CENT; // round to cent
-            if (nAmount < 0)
-                throw std::runtime_error("amount cannot be negative.\n");
-            nReserveBalance = nAmount;
-        } else {
-            if (params.size() > 1)
-                throw std::runtime_error("cannot specify amount to turn off reserve.\n");
-            nReserveBalance = 0;
-        }
-    }
-
-    UniValue result(UniValue::VOBJ);
-    result.push_back(Pair("reserve", (nReserveBalance > 0)));
-    result.push_back(Pair("amount", ValueFromAmount(nReserveBalance)));
-    return result;
-}
-
 UniValue setstakesplitthreshold(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() != 1)
