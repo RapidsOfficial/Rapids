@@ -42,7 +42,7 @@
 // Settings
 static proxyType proxyInfo[NET_MAX];
 static proxyType nameProxy;
-static CCriticalSection cs_proxyInfos;
+static RecursiveMutex cs_proxyInfos;
 int nConnectTimeout = DEFAULT_CONNECT_TIMEOUT;
 bool fNameLookup = false;
 
