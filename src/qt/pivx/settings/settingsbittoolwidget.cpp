@@ -330,7 +330,7 @@ void SettingsBitToolWidget::importAddressFromDecKey(){
     }
 
     ui->statusLabel_DEC->setStyleSheet("QLabel { color: green; }");
-    ui->statusLabel_DEC->setText(tr("Successfully added pivate key to the wallet"));
+    ui->statusLabel_DEC->setText(tr("Successfully added private key to the wallet"));
 }
 
 void SettingsBitToolWidget::resizeEvent(QResizeEvent *event){
