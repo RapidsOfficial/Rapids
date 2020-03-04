@@ -33,6 +33,7 @@ LIBBITCOIN_CRYPTO=crypto/libbitcoin_crypto.a
 LIBBITCOIN_ZEROCOIN=libzerocoin/libbitcoin_zerocoin.a
 LIBBITCOINQT=qt/libbitcoinqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
+LIBSAPLING=libsapling.a
 
 if ENABLE_ZMQ
 LIBBITCOIN_ZMQ=libbitcoin_zmq.a
@@ -57,7 +58,8 @@ EXTRA_LIBRARIES += \
   $(LIBBITCOIN_SERVER) \
   $(LIBBITCOIN_CLI) \
   $(LIBBITCOIN_WALLET) \
-  $(LIBBITCOIN_ZMQ)
+  $(LIBBITCOIN_ZMQ) \
+  $(LIBSAPLING)
 
 lib_LTLIBRARIES = $(LIBBITCOINCONSENSUS)
 
@@ -73,6 +75,9 @@ endif
 if BUILD_BITCOIN_UTILS
   bin_PROGRAMS += pivx-cli pivx-tx
 endif
+
+LIBSAPLING_H = \
+  sapling/prf.h
 
 .PHONY: FORCE check-symbols check-security
 # pivx core #
@@ -188,6 +193,7 @@ BITCOIN_CORE_H = \
   guiinterface.h \
   guiinterfaceutil.h \
   uint256.h \
+  sapling/uint252.h \
   uint512.h \
   blob_uint256.h \
   undo.h \
@@ -267,7 +273,8 @@ libbitcoin_server_a_SOURCES = \
   txmempool.cpp \
   validationinterface.cpp \
   zpivchain.cpp \
-  $(BITCOIN_CORE_H)
+  $(BITCOIN_CORE_H) \
+  $(LIBSAPLING_H)
 
 if ENABLE_ZMQ
 libbitcoin_zmq_a_CPPFLAGS = $(BITCOIN_INCLUDES) $(ZMQ_CFLAGS)
@@ -317,7 +324,8 @@ libbitcoin_wallet_a_SOURCES = \
   stakeinput.cpp \
   zpiv/zpivmodule.cpp \
   zpiv/zpos.cpp \
-  $(BITCOIN_CORE_H)
+  $(BITCOIN_CORE_H) \
+  $(LIBSAPLING_H)
 
 # crypto primitives library
 crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS)
@@ -424,7 +432,8 @@ libbitcoin_common_a_SOURCES = \
   script/script_error.cpp \
   spork.cpp \
   sporkdb.cpp \
-  $(BITCOIN_CORE_H)
+  $(BITCOIN_CORE_H) \
+  $(LIBSAPLING_H)
 
 # util: shared between all executables.
 # This library *must* be included to make sure that the glibc
@@ -452,7 +461,8 @@ libbitcoin_util_a_SOURCES = \
   util/threadnames.cpp \
   utilstrencodings.cpp \
   utiltime.cpp \
-  $(BITCOIN_CORE_H)
+  $(BITCOIN_CORE_H) \
+  $(LIBSAPLING_H)
 
 if GLIBC_BACK_COMPAT
 libbitcoin_util_a_SOURCES += compat/glibc_compat.cpp
@@ -464,7 +474,8 @@ libbitcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_cli_a_SOURCES = \
   rpc/client.cpp \
-  $(BITCOIN_CORE_H)
+  $(BITCOIN_CORE_H) \
+  $(LIBSAPLING_H)
 
 nodist_libbitcoin_util_a_SOURCES = $(srcdir)/obj/build.h
 #
@@ -487,6 +498,7 @@ pivxd_LDADD = \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_ZMQ) \
   $(LIBBITCOIN_CRYPTO) \
+  $(LIBSAPLING) \
   $(LIBLEVELDB) \
   $(LIBLEVELDB_SSE42) \
   $(LIBMEMENV) \
@@ -510,6 +522,7 @@ pivx_cli_LDADD = \
   $(LIBUNIVALUE) \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO) \
+  $(LIBSAPLING) \
   $(LIBZCASH_LIBS)
 
 pivx_cli_LDADD += $(BOOST_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(EVENT_LIBS)
@@ -532,10 +545,17 @@ pivx_tx_LDADD = \
   $(LIBBITCOIN_UTIL) \
   $(LIBBITCOIN_CRYPTO) \
   $(LIBSECP256K1) \
+  $(LIBSAPLING) \
   $(LIBZCASH_LIBS)
 
 pivx_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 #
+
+# sapling protocol primitives #
+libsapling_a_SOURCES = \
+  sapling/prf.cpp
+
+libsapling_a_CPPFLAGS = -fPIC -DCURVE_ALT_BN128 -DBOOST_SPIRIT_THREADSAFE -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -std=c++11 -pipe -O2 -O0 -g -Wstack-protector -fstack-protector-all -fPIE -fvisibility=hidden -DSTATIC $(BITCOIN_INCLUDES)
 
 # bitcoinconsensus library #
 if BUILD_BITCOIN_LIBS
