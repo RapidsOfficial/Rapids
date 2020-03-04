@@ -25,7 +25,7 @@ rust_crates := \
   crate_winapi \
   crate_winapi_x86_64_pc_windows_gnu
 rust_packages := rust $(rust_crates) librustzcash
-packages:=boost openssl libevent gmp $(zcash_packages)
+packages:=boost openssl libevent gmp $(zcash_packages) libsodium
 
 qt_native_packages = native_protobuf
 qt_packages = qrencode protobuf zlib
