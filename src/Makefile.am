@@ -77,6 +77,7 @@ if BUILD_BITCOIN_UTILS
 endif
 
 LIBSAPLING_H = \
+  sapling/sapling.h \
   sapling/prf.h
 
 .PHONY: FORCE check-symbols check-security
