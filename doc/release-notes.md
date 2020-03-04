@@ -77,6 +77,7 @@ RPC Changes
 The following commands have been removed from the RPC interface:
 - `createrawzerocoinstake`
 - `getmintsinblocks`
+- `reservebalance`
 
 
 ### Newly introduced commands
@@ -103,6 +104,8 @@ Detailed release notes follow. This overview includes changes that affect behavi
 ### RPC/REST
 
 ### Wallet
+
+The `-reservebalance` configuration/startup option has been removed ([PR #1373](https://github.com/PIVX-Project/PIVX/pull/1373)).
 
 ### Miscellaneous
 
