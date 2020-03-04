@@ -596,7 +596,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
             "  \"staking_enabled\": true|false,     (boolean) whether staking is enabled/disabled in pivx.conf\n"
             "  \"coldstaking_enabled\": true|false, (boolean) whether cold-staking is enabled/disabled in pivx.conf\n"
             "  \"haveconnections\": true|false,     (boolean) whether network connections are present\n"
-            "  \"mnsync\": true|false,              (boolean) whether masternode data is synced\n"
+            "  \"mnsync\": true|false,              (boolean) whether the required masternode/spork data is synced\n"
             "  \"walletunlocked\": true|false,      (boolean) whether the wallet is unlocked\n"
             "  \"stakeablecoins\": n                (numeric) number of stakeable UTXOs\n"
             "  \"stakingbalance\": d                (numeric) PIV value of the stakeable coins (minus reserve balance, if any)\n"
@@ -622,7 +622,7 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
         bool fColdStaking = GetBoolArg("-coldstaking", true);
         obj.push_back(Pair("coldstaking_enabled", fColdStaking));
         obj.push_back(Pair("haveconnections", !vNodes.empty()));
-        obj.push_back(Pair("mnsync", masternodeSync.IsSynced()));
+        obj.push_back(Pair("mnsync", !masternodeSync.NotCompleted()));
         obj.push_back(Pair("walletunlocked", !pwalletMain->IsLocked()));
         std::vector<COutput> vCoins;
         pwalletMain->StakeableCoins(&vCoins);
