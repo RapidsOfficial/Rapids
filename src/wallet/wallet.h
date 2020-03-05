@@ -80,7 +80,7 @@ enum WalletFeature {
     FEATURE_WALLETCRYPT = 40000, // wallet encryption
     FEATURE_COMPRPUBKEY = 60000, // compressed public keys
 
-    PRE_PIVX = 61000, // inherited version..
+    FEATURE_PRE_PIVX = 61000, // inherited version..
 
     // The following features were implemented in BTC but not in our wallet, we can simply skip them.
     // FEATURE_HD = 130000,  Hierarchical key derivation after BIP32 (HD Wallet)

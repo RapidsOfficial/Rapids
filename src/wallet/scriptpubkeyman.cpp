@@ -103,6 +103,7 @@ int64_t ScriptPubKeyMan::GetOldestKeyPoolTime()
     int64_t oldestKey = GetOldestKeyTimeInPool(setExternalKeyPool, batch);
     if (IsHDEnabled()) {
         oldestKey = std::max(GetOldestKeyTimeInPool(setInternalKeyPool, batch), oldestKey);
+        oldestKey = std::max(GetOldestKeyTimeInPool(setStakingKeyPool, batch), oldestKey);
         if (!set_pre_split_keypool.empty()) {
             oldestKey = std::max(GetOldestKeyTimeInPool(set_pre_split_keypool, batch), oldestKey);
         }
@@ -197,7 +198,7 @@ bool ScriptPubKeyMan::ReserveKeyFromKeyPool(int64_t& nIndex, CKeyPool& keypool, 
         if (!wallet->GetPubKey(keypool.vchPubKey.GetID(), pk)) {
             throw std::runtime_error(std::string(__func__) + ": unknown key in key pool");
         }
-        // If the key was pre-split keypool, we don't care about what type it is //TODO: Add staking address
+        // If the key was pre-split keypool, we don't care about what type it is
         if (use_split_keypool && keypool.IsInternal() != fReturningInternal) {
             throw std::runtime_error(std::string(__func__) + ": keypool internal entry misclassified");
         }

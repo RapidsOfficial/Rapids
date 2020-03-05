@@ -327,7 +327,7 @@ static void registerSignalHandler(int signal, void(*handler)(int))
 
 bool static InitError(const std::string& str)
 {
-    uiInterface.ThreadSafeMessageBox(str, "", CClientUIInterface::MSG_ERROR);
+    uiInterface.ThreadSafeMessageBox(str, "Init Error", CClientUIInterface::MSG_ERROR);
     return false;
 }
 
@@ -1673,17 +1673,27 @@ bool AppInit2()
 
         int prev_version = pwalletMain->GetVersion();
         if (GetBoolArg("-upgradewallet", fFirstRun)) {
-            int nMaxVersion = GetArg("-upgradewallet", 0);
-            if (nMaxVersion == 0) // the -upgradewallet without argument case
-            {
-                LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
-                nMaxVersion = FEATURE_LATEST;
-                pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
-            } else
-                LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
-            if (nMaxVersion < pwalletMain->GetVersion())
-                strErrors << _("Cannot downgrade wallet") << "\n";
-            pwalletMain->SetMaxVersion(nMaxVersion);
+
+            if (prev_version <= FEATURE_PRE_PIVX && pwalletMain->IsLocked()) {
+                // Cannot upgrade a locked wallet
+                std::string strProblem = "Cannot upgrade a locked wallet.\n";
+                strErrors << _("Error: ") << strProblem;
+                LogPrintf("%s", strErrors.str());
+                return InitError(strProblem);
+            } else {
+
+                int nMaxVersion = GetArg("-upgradewallet", 0);
+                if (nMaxVersion == 0) // the -upgradewallet without argument case
+                {
+                    LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
+                    nMaxVersion = FEATURE_LATEST;
+                    pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
+                } else
+                    LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
+                if (nMaxVersion < pwalletMain->GetVersion())
+                    strErrors << _("Cannot downgrade wallet") << "\n";
+                pwalletMain->SetMaxVersion(nMaxVersion);
+            }
         }
 
         // Upgrade to HD if explicit upgrade was requested.

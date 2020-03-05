@@ -2937,7 +2937,6 @@ void CWallet::ReturnKey(int64_t nIndex, const bool& internal, const bool& stakin
 
 bool CWallet::GetKeyFromPool(CPubKey& result, const uint8_t& type)
 {
-    // TODO: Modify this for Staking addresses support if needed.
     return m_spk_man->GetKeyFromPool(result, type);
 }
 
