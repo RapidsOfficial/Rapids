@@ -50,6 +50,14 @@ bool CPivStake::GetTxFrom(CTransaction& tx) const
     return true;
 }
 
+bool CPivStake::GetTxOutFrom(CTxOut& out) const
+{
+    if (txFrom.IsNull() || nPosition >= txFrom.vout.size())
+        return false;
+    out = txFrom.vout[nPosition];
+    return true;
+}
+
 bool CPivStake::CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut)
 {
     txIn = CTxIn(txFrom.GetHash(), nPosition);
