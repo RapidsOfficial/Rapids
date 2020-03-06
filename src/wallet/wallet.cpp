@@ -2618,7 +2618,7 @@ bool CWallet::CreateCoinStake(
         if (pindexPrev->nHeight + 1 >= consensus.height_start_StakeModifierV3) {
             CTxOut stakePrevout;
             if (!stakeInput->GetTxOutFrom(stakePrevout) ||
-                    !SignCoinStakeModifier(pindexPrev->GetStakeModifierV2(), stakePrevout, txNew))
+                    !SignCoinStakeModifier(pindexPrev->GetStakeModifier(), stakePrevout, txNew))
                 return error("%s: failed to sign coinstake modifier", __func__);
         }
 

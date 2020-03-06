@@ -37,7 +37,7 @@ CStakeKernel::CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* sta
             LogPrintf("%s : ERROR: Failed to get kernel stake modifier\n", __func__);
         stakeModifier << nStakeModifier;
     } else { // Modifier v2
-        stakeModifier << pindexPrev->GetStakeModifierV2();
+        stakeModifier << pindexPrev->GetStakeModifier();
     }
     CBlockIndex* pindexFrom = stakeInput->GetIndexFrom();
     nTimeBlockFrom = pindexFrom->nTime;

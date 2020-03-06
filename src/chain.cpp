@@ -210,7 +210,7 @@ void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
     // Generate Hash(prevoutId | prevModifier) - switch with genesis modifier (0) on upgrade block
     CHashWriter ss(SER_GETHASH, 0);
     ss << prevoutId;
-    ss << pprev->GetStakeModifierV2();
+    ss << pprev->GetStakeModifier();
     SetStakeModifier(ss.GetHash());
 }
 
@@ -224,8 +224,8 @@ uint64_t CBlockIndex::GetStakeModifierV1() const
     return nStakeModifier;
 }
 
-// Returns V2 stake modifier (uint256)
-uint256 CBlockIndex::GetStakeModifierV2() const
+// Returns V2/V3 stake modifier (uint256)
+uint256 CBlockIndex::GetStakeModifier() const
 {
     if (vStakeModifier.empty() || !Params().GetConsensus().IsStakeModifierV2(nHeight))
         return UINT256_ZERO;
