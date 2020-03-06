@@ -160,6 +160,7 @@ public:
     }
 
     uint256 GetHash() const;
+    bool GetKeyIDFromUTXO(CKeyID& keyIDRet) const;
 
     bool IsDust(CFeeRate minRelayTxFee) const
     {
