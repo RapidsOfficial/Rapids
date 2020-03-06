@@ -619,6 +619,7 @@ public:
     bool IsPayToScriptHash() const;
     bool IsPayToColdStaking() const;
     bool StartsWithOpcode(const opcodetype opcode) const;
+    bool IsStakeModifierSig() const;
     bool IsZerocoinMint() const;
     bool IsZerocoinSpend() const;
     bool IsZerocoinPublicSpend() const;

@@ -99,6 +99,11 @@ bool CTxOut::IsZerocoinMint() const
     return scriptPubKey.IsZerocoinMint();
 }
 
+bool CTxOut::IsStakeModifierSig() const
+{
+    return scriptPubKey.IsStakeModifierSig();
+}
+
 CAmount CTxOut::GetZerocoinMinted() const
 {
     if (!IsZerocoinMint())
@@ -188,12 +193,14 @@ bool CTransaction::IsCoinStake() const
     if (vin.empty())
         return false;
 
-    // ppcoin: the coin stake transaction is marked with the first output empty
     bool fAllowNull = vin[0].IsZerocoinSpend();
     if (vin[0].prevout.IsNull() && !fAllowNull)
         return false;
 
-    return (vout.size() >= 2 && vout[0].IsEmpty());
+    // coinstake transactions are marked with the first output, which can either be
+    // empty or with a script publishing the modifier signature (via OP_STAKEMODIFIER)
+    return (vout.size() >= 2 &&
+                    (vout[0].IsEmpty() || vout[0].IsStakeModifierSig()));
 }
 
 bool CTransaction::CheckColdStake(const CScript& script) const

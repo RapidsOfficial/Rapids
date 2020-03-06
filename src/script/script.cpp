@@ -269,6 +269,11 @@ bool CScript::StartsWithOpcode(const opcodetype opcode) const
     return (!this->empty() && this->at(0) == opcode);
 }
 
+bool CScript::IsStakeModifierSig() const
+{
+    return StartsWithOpcode(OP_STAKEMODIFIER);
+}
+
 bool CScript::IsZerocoinMint() const
 {
     return StartsWithOpcode(OP_ZEROCOINMINT);
