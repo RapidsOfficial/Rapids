@@ -60,13 +60,13 @@ def read_dump(file_name, addrs):
 
 class WalletUpgradeTest (PivxTestFramework):
 
-    def _initialize_chain_clean(self):
-        initialize_datadir(self.options.tmpdir, 0)
+    def setup_chain(self):
+        self._initialize_chain_clean()
         destinationDirPath = os.path.join(self.options.tmpdir, "node0", "regtest")
-        os.makedirs(destinationDirPath, exist_ok=False)
-        sourcePath = os.path.join("test/util/data", "pre_hd_wallet.dat")
-        destinationPath = os.path.join(destinationDirPath, "wallet.dat")
-        shutil.copyfile(sourcePath, destinationPath)
+        os.makedirs(destinationDirPath)
+        destPath = os.path.join(destinationDirPath, "wallet.dat")
+        sourcePath = os.path.join("test", "util", "data", "pre_hd_wallet.dat")
+        shutil.copyfile(sourcePath, destPath)
 
     def set_test_params(self):
         self.setup_clean_chain = True
@@ -77,8 +77,7 @@ class WalletUpgradeTest (PivxTestFramework):
         assert_equal(self.nodes[0].getwalletinfo()['walletversion'], 61000)
 
         self.log.info("Dumping pre-HD wallet")
-        tmpdir = self.options.tmpdir
-        prevHDWalletDumpFile = tmpdir + "/node0/wallet.dump"
+        prevHDWalletDumpFile = os.path.join(self.options.tmpdir, "node0", "wallet.dump")
         self.nodes[0].dumpwallet(prevHDWalletDumpFile)
 
         test_addr_rsv_count = 60 # Prev HD wallet reserve keypool (the wallet was initialized with -keypool=60)

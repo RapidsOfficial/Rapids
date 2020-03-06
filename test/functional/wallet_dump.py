@@ -95,11 +95,12 @@ class WalletDumpTest(PivxTestFramework):
         self.nodes[0].keypoolrefill()
 
         # dump unencrypted wallet
-        result = self.nodes[0].dumpwallet(tmpdir + "/node0/wallet.unencrypted.dump")
-        assert_equal(result['filename'], os.path.abspath(tmpdir + "/node0/wallet.unencrypted.dump"))
+        dumpUnencrypted = os.path.join(tmpdir, "node0", "wallet.unencrypted.dump")
+        result = self.nodes[0].dumpwallet(dumpUnencrypted)
+        assert_equal(result['filename'], os.path.abspath(dumpUnencrypted))
 
         found_addr, found_addr_chg, found_addr_rsv, hd_master_addr_unenc = \
-            read_dump(tmpdir + "/node0/wallet.unencrypted.dump", addrs, None)
+            read_dump(dumpUnencrypted, addrs, None)
         assert_equal(found_addr, test_addr_count)  # all keys must be in the dump
         assert_equal(found_addr_chg, 0)  # 0 blocks where mined
         assert_equal(found_addr_rsv, 90 * 3)  # 90 keys external plus 100% internal keys plus 100% staking keys
@@ -110,16 +111,17 @@ class WalletDumpTest(PivxTestFramework):
         self.nodes[0].walletpassphrase('test', 10)
         # Should be a no-op:
         self.nodes[0].keypoolrefill()
-        self.nodes[0].dumpwallet(tmpdir + "/node0/wallet.encrypted.dump")
+        dumpEncrypted = os.path.join(tmpdir, "node0", "wallet.encrypted.dump")
+        self.nodes[0].dumpwallet(dumpEncrypted)
 
         found_addr, found_addr_chg, found_addr_rsv, hd_master_addr_enc = \
-            read_dump(tmpdir + "/node0/wallet.encrypted.dump", addrs, hd_master_addr_unenc)
+            read_dump(dumpEncrypted, addrs, hd_master_addr_unenc)
         assert_equal(found_addr, test_addr_count)
         assert_equal(found_addr_chg, 90 * 3 + 1)  # old reserve keys are marked as change now. todo: The +1 needs to be removed once this is updated (master seed taken as an internal key)
         assert_equal(found_addr_rsv, 90 * 3) # 90 external + 90 internal + 90 staking
 
         # Overwriting should fail
-        assert_raises_rpc_error(-8, "already exists", self.nodes[0].dumpwallet, tmpdir + "/node0/wallet.unencrypted.dump")
+        assert_raises_rpc_error(-8, "already exists", self.nodes[0].dumpwallet, dumpUnencrypted)
 
 if __name__ == '__main__':
     WalletDumpTest().main ()
