@@ -445,6 +445,12 @@ bool EvalScript(std::vector<std::vector<unsigned char> >& stack, const CScript& 
                 }
                 break;
 
+                case OP_STAKEMODIFIER:
+                {
+                    return set_error(serror, SCRIPT_ERR_OP_STAKEMODIFIER);
+                }
+                break;
+
 
                 //
                 // Stack ops

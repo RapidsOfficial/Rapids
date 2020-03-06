@@ -13,6 +13,7 @@ typedef enum ScriptError_t
     SCRIPT_ERR_UNKNOWN_ERROR,
     SCRIPT_ERR_EVAL_FALSE,
     SCRIPT_ERR_OP_RETURN,
+    SCRIPT_ERR_OP_STAKEMODIFIER,
 
     /* Max sizes */
     SCRIPT_ERR_SCRIPT_SIZE,
