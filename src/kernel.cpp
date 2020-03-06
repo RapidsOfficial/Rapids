@@ -5,10 +5,10 @@
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include <boost/assign/list_of.hpp>
-
-#include "db.h"
 #include "kernel.h"
+
+#include "consensus/tx_verify.h"
+#include "db.h"
 #include "legacy/stakemodifier.h"
 #include "script/interpreter.h"
 #include "util.h"
@@ -16,6 +16,8 @@
 #include "utilmoneystr.h"
 #include "zpivchain.h"
 #include "zpiv/zpos.h"
+
+#include <boost/assign/list_of.hpp>
 
 /**
  * CStakeKernel Constructor
@@ -146,6 +148,7 @@ bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int 
  */
 bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockIndex* pindexPrev)
 {
+    const int nHeight = pindexPrev->nHeight + 1;
     // Initialize stake input
     std::unique_ptr<CStakeInput> stakeInput;
     if (!LoadStakeInput(block, pindexPrev, stakeInput)) {
@@ -154,26 +157,9 @@ bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockI
     }
 
     // Stake input contextual checks
-    if (!stakeInput->ContextCheck(pindexPrev->nHeight + 1, block.nTime)) {
+    if (!stakeInput->ContextCheck(nHeight, block.nTime)) {
         strError = "stake input failing contextual checks";
         return false;
-    }
-
-    // Verify signature
-    if (!stakeInput->IsZPIV()) {
-        CTransaction txPrev;
-        if (!stakeInput->GetTxFrom(txPrev)) {
-            strError = "unable to get txPrev for coinstake";
-            return false;
-        }
-        const CTransaction& tx = block.vtx[1];
-        const CTxIn& txin = tx.vin[0];
-        ScriptError serror;
-        if (!VerifyScript(txin.scriptSig, txPrev.vout[txin.prevout.n].scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS,
-                 TransactionSignatureChecker(&tx, 0), &serror)) {
-            strError = strprintf("signature fails: %s", serror ? ScriptErrorString(serror) : "");
-            return false;
-        }
     }
 
     // Verify Proof Of Stake
@@ -181,6 +167,36 @@ bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockI
     if (!stakeKernel.CheckKernelHash()) {
         strError = "kernel hash check fails";
         return false;
+    }
+
+    // zPoS disabled (ContextCheck) before blocks V8, and the tx input signature is in CoinSpend
+    if (stakeInput->IsZPIV()) return true;
+
+    // Verify tx input signature
+    CTxOut stakePrevout;
+    if (!stakeInput->GetTxOutFrom(stakePrevout)) {
+        strError = "unable to get stake prevout for coinstake";
+        return false;
+    }
+    const CTransaction& tx = block.vtx[1];
+    const CTxIn& txin = tx.vin[0];
+    ScriptError serror;
+    if (!VerifyScript(txin.scriptSig, stakePrevout.scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS,
+             TransactionSignatureChecker(&tx, 0), &serror)) {
+        strError = strprintf("signature fails: %s", serror ? ScriptErrorString(serror) : "");
+        return false;
+    }
+
+    // Verify modifier signature (from block V8+)
+    if (block.nVersion >= 8) {
+        if (nHeight < Params().GetConsensus().height_start_StakeModifierV3) {
+            strError = strprintf("Block version %d arrived too early (height %d)", block.nVersion, nHeight);
+            return false;
+        }
+        if (!CheckStakeModifierSig(tx, stakePrevout, pindexPrev->GetStakeModifier(), strError)) {
+            strError = strprintf("modifier signature fails: %s", strError);
+            return false;
+        }
     }
 
     // All good

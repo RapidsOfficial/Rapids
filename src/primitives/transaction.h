@@ -176,6 +176,7 @@ public:
     }
 
     bool IsStakeModifierSig() const;
+    bool GetStakeModifierSig(std::vector<unsigned char>& vchSig) const;
 
     bool IsZerocoinMint() const;
     CAmount GetZerocoinMinted() const;

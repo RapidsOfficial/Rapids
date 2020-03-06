@@ -121,6 +121,15 @@ bool CTxOut::IsStakeModifierSig() const
     return scriptPubKey.IsStakeModifierSig();
 }
 
+bool CTxOut::GetStakeModifierSig(std::vector<unsigned char>& vchSig) const
+{
+    if (!IsStakeModifierSig())
+        return false;
+
+    vchSig = std::vector<unsigned char>(scriptPubKey.begin()+2, scriptPubKey.end());
+    return true;
+}
+
 CAmount CTxOut::GetZerocoinMinted() const
 {
     if (!IsZerocoinMint())

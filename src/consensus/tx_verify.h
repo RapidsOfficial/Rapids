@@ -5,6 +5,9 @@
 #ifndef BITCOIN_CONSENSUS_TX_VERIFY_H
 #define BITCOIN_CONSENSUS_TX_VERIFY_H
 
+#include "primitives/transaction.h"
+#include "uint256.h"
+
 #include <stdint.h>
 #include <vector>
 
@@ -17,7 +20,7 @@ class CValidationState;
 
 /** Context-independent validity checks */
 bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state, bool fFakeSerialAttack = false, bool fColdStakingActive=false);
-
+bool CheckStakeModifierSig(const CTransaction& tx, const CTxOut& stakePrevout, const uint256& prevModifier, std::string& strErrorRet);
 /**
  * Count ECDSA signature operations the old-fashioned (pre-0.6) way
  * @return number of sigops this transaction's outputs will produce when spent
