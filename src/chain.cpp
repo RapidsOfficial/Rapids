@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "chain.h"
+#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
 
 
 /**
@@ -193,6 +194,19 @@ void CBlockIndex::SetStakeModifier(const uint64_t nStakeModifier, bool fGenerate
 
 }
 
+// Generates and sets new V1 stake modifier
+void CBlockIndex::SetNewStakeModifier()
+{
+    // compute stake entropy bit for stake modifier
+    if (!SetStakeEntropyBit(GetStakeEntropyBit()))
+        LogPrintf("%s : SetStakeEntropyBit() failed\n", __func__);
+    uint64_t nStakeModifier = 0;
+    bool fGeneratedStakeModifier = false;
+    if (!ComputeNextStakeModifier(pprev, nStakeModifier, fGeneratedStakeModifier))
+        LogPrintf("%s : ComputeNextStakeModifier() failed \n",  __func__);
+    return SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
+}
+
 // Sets V2 or V3 stake modifiers (uint256)
 void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
 {
@@ -215,15 +229,22 @@ void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
     SetStakeModifier(ss.GetHash());
 }
 
-// Generates and sets new V3 stake modifier
-void CBlockIndex::SetNewStakeModifier(std::vector<unsigned char>& vchSig)
+// Generates and sets new V3 stake modifier from coinstake marker (first output)
+void CBlockIndex::SetNewStakeModifier(const CTxOut& txout)
 {
     // Shouldn't be called on V1 or V2 modifier's blocks
     if (nHeight < Params().GetConsensus().height_start_StakeModifierV3) return;
 
+    // Get previous modifier signature from coinstake marker
+    std::vector<unsigned char> modifierSig;
+    if (!txout.GetStakeModifierSig(modifierSig)) {
+        // should never happen (block already accepted)
+        throw std::runtime_error("unable to get stake modifier signature");
+    }
+
     // Generate Hash(modifierSig)
     CHashWriter ss(SER_GETHASH, 0);
-    ss << vchSig;
+    ss << modifierSig;
     return SetStakeModifier(ss.GetHash());
 }
 

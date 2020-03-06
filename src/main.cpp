@@ -22,7 +22,6 @@
 #include "consensus/zerocoin_verify.h"
 #include "init.h"
 #include "kernel.h"
-#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
 #include "masternode-budget.h"
 #include "masternode-payments.h"
 #include "masternodeman.h"
@@ -3477,28 +3476,16 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
 
         const Consensus::Params& consensus = Params().GetConsensus();
         if (pindexNew->nHeight < consensus.height_start_StakeModifierV2) {
-            // old modifier: compute stake entropy bit for stake modifier
-            if (!pindexNew->SetStakeEntropyBit(pindexNew->GetStakeEntropyBit()))
-                LogPrintf("AddToBlockIndex() : SetStakeEntropyBit() failed \n");
-            uint64_t nStakeModifier = 0;
-            bool fGeneratedStakeModifier = false;
-            if (!ComputeNextStakeModifier(pindexNew->pprev, nStakeModifier, fGeneratedStakeModifier))
-                LogPrintf("AddToBlockIndex() : ComputeNextStakeModifier() failed \n");
-            pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
+            // compute and set new V1 stake modifier (entropy bits)
+            pindexNew->SetNewStakeModifier();
 
         } else if (pindexNew->nHeight < consensus.height_start_StakeModifierV3) {
-            // compute new v2 stake modifier
+            // compute and set new V2 stake modifier (hash of prevout and prevModifier)
             pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);
 
         } else {
-            // get previous modifier signature from first coinstake output
-            std::vector<unsigned char> modifierSig;
-            if (!block.vtx[1].vout[0].GetStakeModifierSig(modifierSig)) {
-                // should never happen (block already accepted)
-                throw std::runtime_error("unable to get stake modifier signature");
-            }
-            // compute new v3 stake modifier (hash of the signature)
-            pindexNew->SetNewStakeModifier(modifierSig);
+            // compute and set new V3 stake modifier (hash of the prevModifier sig in coinstake marker)
+            pindexNew->SetNewStakeModifier(block.vtx[1].vout[0]);
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
