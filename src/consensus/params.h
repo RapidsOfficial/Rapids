@@ -74,7 +74,6 @@ struct Params {
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
     bool IsMessSigV2(const int nHeight) const { return nHeight >= height_start_MessSignaturesV2; }
     bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= height_start_TimeProtoV2; }
-    bool IsStakeModifierV2(const int nHeight) const { return nHeight >= height_start_StakeModifierV2; }
 
     int FutureBlockTimeDrift(const int nHeight) const
     {
@@ -96,7 +95,7 @@ struct Params {
             const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
     {
         // before stake modifier V2, we require the utxo to be nStakeMinAge old
-        if (!IsStakeModifierV2(contextHeight))
+        if (contextHeight < height_start_StakeModifierV2)
             return (utxoFromBlockTime + nStakeMinAge <= contextTime);
         // with stake modifier V2+, we require the utxo to be nStakeMinDepth deep in the chain
         return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);

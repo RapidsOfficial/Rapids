@@ -341,7 +341,7 @@ public:
             READWRITE(nMint);
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
-            if (!Params().GetConsensus().IsStakeModifierV2(nHeight)) {
+            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
                 uint64_t nStakeModifier = 0;
                 READWRITE(nStakeModifier);
                 this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
