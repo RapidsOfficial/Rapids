@@ -181,7 +181,7 @@ bool CBlockIndex::SetStakeEntropyBit(unsigned int nEntropyBit)
     return true;
 }
 
-// Sets V1 stake modifier
+// Sets V1 stake modifier (uint64_t)
 void CBlockIndex::SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier)
 {
     vStakeModifier.clear();
@@ -193,7 +193,7 @@ void CBlockIndex::SetStakeModifier(const uint64_t nStakeModifier, bool fGenerate
 
 }
 
-// Sets V2 stake modifier
+// Sets V2 or V3 stake modifiers (uint256)
 void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
 {
     vStakeModifier.clear();
@@ -203,8 +203,9 @@ void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
 // Generates and sets new V2 stake modifier
 void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
 {
-    // Shouldn't be called on V1 modifier's blocks (or before setting pprev)
+    // Shouldn't be called on V1 or V3+ modifier's blocks (or before setting pprev)
     if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) return;
+    if (nHeight >= Params().GetConsensus().height_start_StakeModifierV3) return;
     if (!pprev) throw std::runtime_error(strprintf("%s : ERROR: null pprev", __func__));
 
     // Generate Hash(prevoutId | prevModifier) - switch with genesis modifier (0) on upgrade block
@@ -212,6 +213,18 @@ void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
     ss << prevoutId;
     ss << pprev->GetStakeModifier();
     SetStakeModifier(ss.GetHash());
+}
+
+// Generates and sets new V3 stake modifier
+void CBlockIndex::SetNewStakeModifier(std::vector<unsigned char>& vchSig)
+{
+    // Shouldn't be called on V1 or V2 modifier's blocks
+    if (nHeight < Params().GetConsensus().height_start_StakeModifierV3) return;
+
+    // Generate Hash(modifierSig)
+    CHashWriter ss(SER_GETHASH, 0);
+    ss << vchSig;
+    return SetStakeModifier(ss.GetHash());
 }
 
 // Returns V1 stake modifier (uint64_t)

@@ -3475,19 +3475,30 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
         pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
         pindexNew->BuildSkip();
 
-        // ppcoin: compute stake entropy bit for stake modifier
-        if (!pindexNew->SetStakeEntropyBit(pindexNew->GetStakeEntropyBit()))
-            LogPrintf("AddToBlockIndex() : SetStakeEntropyBit() failed \n");
-
-        if (!Params().GetConsensus().IsStakeModifierV2(pindexNew->nHeight)) {
+        const Consensus::Params& consensus = Params().GetConsensus();
+        if (pindexNew->nHeight < consensus.height_start_StakeModifierV2) {
+            // old modifier: compute stake entropy bit for stake modifier
+            if (!pindexNew->SetStakeEntropyBit(pindexNew->GetStakeEntropyBit()))
+                LogPrintf("AddToBlockIndex() : SetStakeEntropyBit() failed \n");
             uint64_t nStakeModifier = 0;
             bool fGeneratedStakeModifier = false;
             if (!ComputeNextStakeModifier(pindexNew->pprev, nStakeModifier, fGeneratedStakeModifier))
                 LogPrintf("AddToBlockIndex() : ComputeNextStakeModifier() failed \n");
             pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
-        } else {
+
+        } else if (pindexNew->nHeight < consensus.height_start_StakeModifierV3) {
             // compute new v2 stake modifier
             pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);
+
+        } else {
+            // get previous modifier signature from first coinstake output
+            std::vector<unsigned char> modifierSig;
+            if (!block.vtx[1].vout[0].GetStakeModifierSig(modifierSig)) {
+                // should never happen (block already accepted)
+                throw std::runtime_error("unable to get stake modifier signature");
+            }
+            // compute new v3 stake modifier (hash of the signature)
+            pindexNew->SetNewStakeModifier(modifierSig);
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
