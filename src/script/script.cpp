@@ -271,7 +271,9 @@ bool CScript::StartsWithOpcode(const opcodetype opcode) const
 
 bool CScript::IsStakeModifierSig() const
 {
-    return StartsWithOpcode(OP_STAKEMODIFIER);
+    // opcode + len + compact signature <= 1 + 1 + 65 bytes
+    return (StartsWithOpcode(OP_STAKEMODIFIER) && this->size() > 2 &&
+            this->size() <= 67 && this->at(1) == (int)this->size() - 2);
 }
 
 bool CScript::IsZerocoinMint() const
