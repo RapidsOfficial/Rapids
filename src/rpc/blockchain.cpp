@@ -133,9 +133,6 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     if (pnext)
         result.push_back(Pair("nextblockhash", pnext->GetBlockHash().GetHex()));
 
-    result.push_back(Pair("modifier", strprintf("%016x", blockindex->GetStakeModifierV1())));
-    result.push_back(Pair("modifierV2", blockindex->GetStakeModifierV2().GetHex()));
-
     result.push_back(Pair("moneysupply",ValueFromAmount(blockindex->nMoneySupply)));
 
     UniValue zpivObj(UniValue::VOBJ);
