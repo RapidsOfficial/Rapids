@@ -208,7 +208,7 @@ bool MasterNodesWidget::checkMNsNetwork()
 void MasterNodesWidget::onEditMNClicked()
 {
     if (walletModel) {
-        if (!checkMNsNetwork()) return;
+        if (!Params().IsRegTestNet() && !checkMNsNetwork()) return;     // skip on RegNet: so we can test even if tier two not synced
         if (index.sibling(index.row(), MNModel::WAS_COLLATERAL_ACCEPTED).data(Qt::DisplayRole).toBool()) {
             // Start MN
             QString strAlias = this->index.data(Qt::DisplayRole).toString();
@@ -216,8 +216,9 @@ void MasterNodesWidget::onEditMNClicked()
                 if (!verifyWalletUnlocked()) return;
                 startAlias(strAlias);
             }
-        }else {
-            inform(tr("Cannot start masternode, the collateral transaction has not been accepted by the network.\nPlease wait few more minutes."));
+        } else {
+            inform(tr("Cannot start masternode, the collateral transaction has not been confirmed by the network yet.\n"
+                    "Please wait few more minutes (masternode collaterals require %1 confirmations).").arg(MASTERNODE_MIN_CONFIRMATIONS));
         }
     }
 }

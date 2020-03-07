@@ -335,7 +335,7 @@ bool MasterNodeWizardDialog::createMN()
                 COutPoint collateralOut(walletTx->GetHash(), indexOut);
                 walletModel->lockCoin(collateralOut);
 
-                returnStr = tr("Master node created!");
+                returnStr = tr("Master node created! Wait %1 confirmations before starting it.").arg(MASTERNODE_MIN_CONFIRMATIONS);
                 return true;
             } else{
                 returnStr = tr("masternode.conf file doesn't exists");
