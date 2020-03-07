@@ -331,6 +331,10 @@ bool MasterNodeWizardDialog::createMN()
 
                 mnEntry = masternodeConfig.add(alias, ipAddress+":"+port, mnKeyString, txID, indexOutStr);
 
+                // Lock collateral output
+                COutPoint collateralOut(walletTx->GetHash(), indexOut);
+                walletModel->lockCoin(collateralOut);
+
                 returnStr = tr("Master node created!");
                 return true;
             } else{
