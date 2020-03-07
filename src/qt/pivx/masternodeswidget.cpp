@@ -207,8 +207,8 @@ bool MasterNodesWidget::checkMNsNetwork()
 
 void MasterNodesWidget::onEditMNClicked()
 {
-    if (walletModel) {
-        if (!Params().IsRegTestNet() && !checkMNsNetwork()) return;     // skip on RegNet: so we can test even if tier two not synced
+    if(walletModel) {
+        if (!walletModel->isRegTestNetwork() && !checkMNsNetwork()) return;
         if (index.sibling(index.row(), MNModel::WAS_COLLATERAL_ACCEPTED).data(Qt::DisplayRole).toBool()) {
             // Start MN
             QString strAlias = this->index.data(Qt::DisplayRole).toString();
