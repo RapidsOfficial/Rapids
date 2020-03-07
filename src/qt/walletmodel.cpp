@@ -196,7 +196,7 @@ void WalletModel::updateStatus()
 bool WalletModel::isWalletUnlocked() const
 {
     EncryptionStatus status = getEncryptionStatus();
-    return status == Unencrypted || status == Unlocked;
+    return (status == Unencrypted || status == Unlocked);
 }
 
 bool WalletModel::isWalletLocked(bool fFullUnlocked) const
@@ -913,8 +913,7 @@ WalletModel::UnlockContext WalletModel::requestUnlock()
         Q_EMIT requireUnlock();
     }
     // If wallet is still locked, unlock was failed or cancelled, mark context as invalid
-    const WalletModel::EncryptionStatus status_after = getEncryptionStatus();
-    bool valid = (status_after != Locked && status_after != UnlockedForStaking);
+    bool valid = isWalletUnlocked();
 
     return UnlockContext(this, valid, status_before);
 }
@@ -929,9 +928,10 @@ WalletModel::UnlockContext::UnlockContext(WalletModel *_wallet, bool _valid, con
 
 WalletModel::UnlockContext::~UnlockContext()
 {
-    if (valid && relock) {
+    if (valid && relock && wallet) {
         if (was_status == Locked) wallet->setWalletLocked(true);
         else if (was_status == UnlockedForStaking) wallet->lockForStakingOnly();
+        wallet->updateStatus();
     }
 }
 

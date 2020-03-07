@@ -205,7 +205,6 @@ void TopBar::openPassPhraseDialog(AskPassphraseDialog::Mode mode, AskPassphraseD
 void TopBar::encryptWallet()
 {
     return openPassPhraseDialog(AskPassphraseDialog::Mode::Encrypt, AskPassphraseDialog::Context::Encrypt);
-
 }
 
 void TopBar::unlockWallet()
