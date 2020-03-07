@@ -354,6 +354,8 @@ void MasterNodesWidget::onInfoMNClicked()
 
 void MasterNodesWidget::onDeleteMNClicked()
 {
+    QString txId = index.sibling(index.row(), MNModel::COLLATERAL_ID).data(Qt::DisplayRole).toString();
+    QString outIndex = index.sibling(index.row(), MNModel::COLLATERAL_OUT_INDEX).data(Qt::DisplayRole).toString();
     QString qAliasString = index.data(Qt::DisplayRole).toString();
     std::string aliasToRemove = qAliasString.toStdString();
 
@@ -433,6 +435,14 @@ void MasterNodesWidget::onDeleteMNClicked()
             boost::filesystem::path pathNewConfFile("masternode.conf");
             if (!pathNewConfFile.is_complete()) pathNewConfFile = GetDataDir() / pathNewConfFile;
             rename(pathConfigFile, pathNewConfFile);
+
+            // Unlock collateral
+            bool convertOK = false;
+            unsigned int indexOut = outIndex.toUInt(&convertOK);
+            if(convertOK) {
+                COutPoint collateralOut(uint256(txId.toStdString()), indexOut);
+                walletModel->unlockCoin(collateralOut);
+            }
 
             // Remove alias
             masternodeConfig.remove(aliasToRemove);
