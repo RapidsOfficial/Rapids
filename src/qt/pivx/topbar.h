@@ -34,11 +34,13 @@ public:
     void loadWalletModel() override;
     void loadClientModel() override;
 
+    void openPassPhraseDialog(AskPassphraseDialog::Mode mode, AskPassphraseDialog::Context ctx);
     void encryptWallet();
     void showUpgradeDialog();
 
     void run(int type) override;
     void onError(QString error, int type) override;
+    void unlockWallet();
 
 public Q_SLOTS:
     void updateBalances(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
