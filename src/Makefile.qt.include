@@ -26,7 +26,6 @@ QT_FORMS_UI = \
   qt/pivx/forms/lockunlock.ui \
   qt/pivx/forms/expandablebutton.ui \
   qt/pivx/forms/receivedialog.ui \
-  qt/pivx/forms/walletpassworddialog.ui \
   qt/pivx/forms/topbar.ui \
   qt/pivx/forms/txrow.ui \
   qt/pivx/forms/dashboardwidget.ui \
@@ -118,7 +117,6 @@ QT_MOC_CPP = \
   qt/pivx/moc_expandablebutton.cpp \
   qt/pivx/moc_furabstractlistitemdelegate.cpp \
   qt/pivx/moc_receivedialog.cpp \
-  qt/pivx/moc_walletpassworddialog.cpp \
   qt/pivx/moc_pfborderimage.cpp \
   qt/pivx/moc_topbar.cpp \
   qt/pivx/moc_txrow.cpp \
@@ -247,7 +245,6 @@ BITCOIN_QT_H = \
   qt/pivx/txviewholder.h \
   qt/pivx/qtutils.h \
   qt/pivx/expandablebutton.h \
-  qt/pivx/walletpassworddialog.h \
   qt/pivx/topbar.h \
   qt/pivx/txrow.h \
   qt/pivx/addressholder.h \
@@ -633,7 +630,6 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/txviewholder.cpp \
   qt/pivx/qtutils.cpp \
   qt/pivx/expandablebutton.cpp \
-  qt/pivx/walletpassworddialog.cpp \
   qt/pivx/topbar.cpp \
   qt/pivx/txrow.cpp \
   qt/pivx/addressholder.cpp \
