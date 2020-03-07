@@ -100,15 +100,6 @@ bool PWidget::execute(int type)
     return true;
 }
 
-bool PWidget::verifyWalletUnlocked()
-{
-    if (!walletModel->isWalletUnlocked()) {
-        inform(tr("Wallet locked, you need to unlock it to perform this action"));
-        return false;
-    }
-    return true;
-}
-
 void PWidget::errorString(QString error, int type)
 {
     onError(error, type);

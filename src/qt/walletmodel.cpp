@@ -199,9 +199,10 @@ bool WalletModel::isWalletUnlocked() const
     return status == Unencrypted || status == Unlocked;
 }
 
-bool WalletModel::isWalletLocked() const
+bool WalletModel::isWalletLocked(bool fFullUnlocked) const
 {
-    return getEncryptionStatus() == Locked;
+    EncryptionStatus status = getEncryptionStatus();
+    return (status == Locked || (!fFullUnlocked && status == UnlockedForStaking));
 }
 
 bool IsImportingOrReindexing()

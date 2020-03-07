@@ -212,9 +212,8 @@ void TopBar::unlockWallet()
 {
     if(!walletModel)
         return;
-    // Unlock wallet when requested by wallet model
-    const WalletModel::EncryptionStatus& status = walletModel->getEncryptionStatus();
-    if (status == WalletModel::Locked || status == WalletModel::UnlockedForStaking)
+    // Unlock wallet when requested by wallet model (if unlocked or unlocked for staking only)
+    if (walletModel->isWalletLocked(false))
         return openPassPhraseDialog(AskPassphraseDialog::Mode::Unlock, AskPassphraseDialog::Context::Unlock_Full);
 }
 

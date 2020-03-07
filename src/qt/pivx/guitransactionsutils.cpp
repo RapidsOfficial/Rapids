@@ -48,8 +48,8 @@ namespace GuiTransactionsUtils {
                 // Unlock is only need when the coins are send
                 if (!fPrepare) {
                     // Unlock wallet if it wasn't fully unlocked already
-                    walletModel->requestUnlock();
-                    if (walletModel->getEncryptionStatus() != WalletModel::Unlocked) {
+                    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+                    if (!ctx.isValid()) {
                         retStr = parent->translate(
                                 "Error: The wallet was unlocked for staking only. Unlock canceled.");
                     }

@@ -229,15 +229,12 @@ void ProposalFrame::voteButton_clicked(int nVote)
     if (!walletModel) return;
 
     // Request unlock if wallet was locked or unlocked for mixing:
-    WalletModel::EncryptionStatus encStatus = walletModel->getEncryptionStatus();
-    if (encStatus == walletModel->Locked) {
-        WalletModel::UnlockContext ctx(walletModel->requestUnlock());
-        if (!ctx.isValid()) {
-            // Unlock wallet was cancelled
-            governancePage->lockUpdating(true);
-            QMessageBox::warning(this, tr("Wallet Locked"), tr("You must unlock your wallet to vote."), QMessageBox::Ok, QMessageBox::Ok);
-            return;
-        }
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        governancePage->lockUpdating(true);
+        QMessageBox::warning(this, tr("Wallet Locked"), tr("You must unlock your wallet to vote."), QMessageBox::Ok, QMessageBox::Ok);
+        return;
     }
 
     // Display message box
