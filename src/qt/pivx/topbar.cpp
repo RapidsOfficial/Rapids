@@ -240,7 +240,7 @@ void TopBar::lockDropdownClicked(const StateClicked& state)
             }
             case 2: {
                 WalletModel::EncryptionStatus status = walletModel->getEncryptionStatus();
-                if (status == WalletModel::UnlockedForAnonymizationOnly)
+                if (status == WalletModel::UnlockedForStaking)
                     break;
 
                 if (status == WalletModel::Unlocked) {
@@ -254,7 +254,7 @@ void TopBar::lockDropdownClicked(const StateClicked& state)
                     openDialogWithOpaqueBackgroundY(dlg, window);
                     dlg->deleteLater();
                 }
-                if (walletModel->getEncryptionStatus() == WalletModel::UnlockedForAnonymizationOnly) {
+                if (walletModel->getEncryptionStatus() == WalletModel::UnlockedForStaking) {
                     ui->pushButtonLock->setButtonText(tr("Wallet Unlocked for staking"));
                     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-staking", true);
                 }
@@ -586,7 +586,7 @@ void TopBar::refreshStatus()
             ui->pushButtonLock->setButtonText("Wallet Locked");
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock", true);
             break;
-        case WalletModel::EncryptionStatus::UnlockedForAnonymizationOnly:
+        case WalletModel::EncryptionStatus::UnlockedForStaking:
             ui->pushButtonLock->setButtonText("Wallet Unlocked for staking");
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-staking", true);
             break;

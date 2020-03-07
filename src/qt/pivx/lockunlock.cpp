@@ -46,7 +46,7 @@ void LockUnlock::updateStatus(WalletModel::EncryptionStatus status)
             ui->pushButtonLocked->setChecked(false);
             ui->pushButtonStaking->setChecked(false);
             break;
-        case WalletModel::EncryptionStatus::UnlockedForAnonymizationOnly:
+        case WalletModel::EncryptionStatus::UnlockedForStaking:
             ui->pushButtonUnlocked->setChecked(false);
             ui->pushButtonLocked->setChecked(false);
             ui->pushButtonStaking->setChecked(true);
