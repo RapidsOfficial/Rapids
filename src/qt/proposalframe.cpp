@@ -231,7 +231,7 @@ void ProposalFrame::voteButton_clicked(int nVote)
     // Request unlock if wallet was locked or unlocked for mixing:
     WalletModel::EncryptionStatus encStatus = walletModel->getEncryptionStatus();
     if (encStatus == walletModel->Locked) {
-        WalletModel::UnlockContext ctx(walletModel->requestUnlock(AskPassphraseDialog::Context::UI_Vote, true));
+        WalletModel::UnlockContext ctx(walletModel->requestUnlock());
         if (!ctx.isValid()) {
             // Unlock wallet was cancelled
             governancePage->lockUpdating(true);

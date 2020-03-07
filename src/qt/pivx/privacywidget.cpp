@@ -244,7 +244,8 @@ void PrivacyWidget::onSendClicked()
     // Only convert enabled.
     bool isConvert = true;// ui->pushLeft->isChecked();
 
-    if (!GUIUtil::requestUnlock(walletModel, AskPassphraseDialog::Context::Mint_zPIV, true)) {
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
         inform(tr("You need to unlock the wallet to be able to %1 zPIV").arg(isConvert ? tr("convert") : tr("mint")));
         return;
     }

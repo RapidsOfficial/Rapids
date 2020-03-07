@@ -341,11 +341,8 @@ void SendWidget::onSendClicked()
 
     bool sendPiv = ui->pushLeft->isChecked();
 
-    // request unlock only if was locked or unlocked for mixing:
-    // this way we let users unlock by walletpassphrase or by menu
-    // and make many transactions while unlocking through this dialog
-    // will call relock
-    if (!GUIUtil::requestUnlock(walletModel, sendPiv ? AskPassphraseDialog::Context::Send_PIV : AskPassphraseDialog::Context::Send_zPIV, true)) {
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
         // Unlock wallet was cancelled
         inform(tr("Cannot send, wallet locked"));
         return;

@@ -903,41 +903,38 @@ void WalletModel::unsubscribeFromCoreSignals()
 }
 
 // WalletModel::UnlockContext implementation
-WalletModel::UnlockContext WalletModel::requestUnlock(AskPassphraseDialog::Context context, bool relock)
+WalletModel::UnlockContext WalletModel::requestUnlock()
 {
-    bool was_locked = getEncryptionStatus() == Locked;
-
-    if (!was_locked && isAnonymizeOnlyUnlocked()) {
-        setWalletLocked(true);
-        wallet->fWalletUnlockAnonymizeOnly = false;
-        was_locked = getEncryptionStatus() == Locked;
-    }
-
-    if (was_locked) {
+    const WalletModel::EncryptionStatus status_before = getEncryptionStatus();
+    if (status_before == Locked || status_before == UnlockedForAnonymizationOnly)
+    {
         // Request UI to unlock wallet
-        Q_EMIT requireUnlock(context);
+        Q_EMIT requireUnlock();
     }
     // If wallet is still locked, unlock was failed or cancelled, mark context as invalid
-    bool valid = getEncryptionStatus() != Locked;
+    const WalletModel::EncryptionStatus status_after = getEncryptionStatus();
+    bool valid = (status_after != Locked && status_after != UnlockedForAnonymizationOnly);
 
-    return UnlockContext(valid, relock);
-    //    return UnlockContext(this, valid, was_locked && !isAnonymizeOnlyUnlocked());
+    return UnlockContext(this, valid, status_before);
 }
 
-WalletModel::UnlockContext::UnlockContext(bool valid, bool relock) : valid(valid), relock(relock)
+WalletModel::UnlockContext::UnlockContext(WalletModel *_wallet, bool _valid, const WalletModel::EncryptionStatus& status_before):
+        wallet(_wallet),
+        valid(_valid),
+        was_status(status_before),
+        relock(status_before == Locked || status_before == UnlockedForAnonymizationOnly)
 {
 }
 
 WalletModel::UnlockContext::~UnlockContext()
 {
-/*
     if (valid && relock) {
-        wallet->setWalletLocked(true);
+        if (was_status == Locked) wallet->setWalletLocked(true);
+        else if (was_status == UnlockedForAnonymizationOnly) wallet->lockForStakingOnly();
     }
-*/
 }
 
-void WalletModel::UnlockContext::CopyFrom(const UnlockContext& rhs)
+void WalletModel::UnlockContext::CopyFrom(UnlockContext&& rhs)
 {
     // Transfer context; old object no longer relocks wallet
     *this = rhs;

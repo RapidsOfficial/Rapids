@@ -243,27 +243,28 @@ public:
     class UnlockContext
     {
     public:
-        UnlockContext(bool valid, bool relock);
+        UnlockContext(WalletModel *wallet, bool valid, const WalletModel::EncryptionStatus& status_before);
         ~UnlockContext();
 
         bool isValid() const { return valid; }
 
+        // Copy constructor is disabled
+        UnlockContext(const UnlockContext&) = delete;
         // Copy operator and constructor transfer the context
-        UnlockContext(const UnlockContext& obj) { CopyFrom(obj); }
-        UnlockContext& operator=(const UnlockContext& rhs)
-        {
-            CopyFrom(rhs);
-            return *this;
-        }
+        UnlockContext(UnlockContext&& obj) { CopyFrom(std::move(obj)); }
+        UnlockContext& operator=(UnlockContext&& rhs) { CopyFrom(std::move(rhs)); return *this; }
 
     private:
+        WalletModel *wallet;
         bool valid;
+        WalletModel::EncryptionStatus was_status;   // original status
         mutable bool relock; // mutable, as it can be set to false by copying
 
-        void CopyFrom(const UnlockContext& rhs);
+        UnlockContext& operator=(const UnlockContext&) = default;
+        void CopyFrom(UnlockContext&& rhs);
     };
 
-    UnlockContext requestUnlock(AskPassphraseDialog::Context context, bool relock = false);
+    UnlockContext requestUnlock();
 
     bool getPubKey(const CKeyID& address, CPubKey& vchPubKeyOut) const;
     int64_t getCreationTime() const;
@@ -352,7 +353,7 @@ Q_SIGNALS:
     // Signal emitted when wallet needs to be unlocked
     // It is valid behaviour for listeners to keep the wallet locked after this signal;
     // this means that the unlocking failed or was cancelled.
-    void requireUnlock(AskPassphraseDialog::Context context);
+    void requireUnlock();
 
     // Fired when a message should be reported to the user
     void message(const QString& title, const QString& message, unsigned int style);
