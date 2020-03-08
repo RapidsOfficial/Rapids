@@ -279,7 +279,15 @@ UniValue listunspent(const UniValue& params, bool fHelp)
     std::vector<COutput> vecOutputs;
     assert(pwalletMain != NULL);
     LOCK2(cs_main, pwalletMain->cs_wallet);
-    pwalletMain->AvailableCoins(&vecOutputs, false, NULL, false, ALL_COINS, false, nWatchonlyConfig);
+    pwalletMain->AvailableCoins(&vecOutputs,
+            nullptr,    // coin control
+            true,       // include delegated
+            false,      // include cold staking
+            ALL_COINS,  // coin type
+            false,      // only confirmed
+            false,      // include zero value
+            false,      // use IX
+            nWatchonlyConfig);
     for (const COutput& out : vecOutputs) {
         if (out.nDepth < nMinDepth || out.nDepth > nMaxDepth)
             continue;

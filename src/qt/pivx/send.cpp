@@ -256,7 +256,6 @@ void SendWidget::onResetCustomOptions(bool fRefreshAmounts)
     CoinControlDialog::coinControl->SetNull();
     ui->btnChangeAddress->setActive(false);
     ui->btnCoinControl->setActive(false);
-    if (!ui->checkBoxDelegations->isVisible()) ui->checkBoxDelegations->setVisible(true);
     if (ui->checkBoxDelegations->isChecked()) ui->checkBoxDelegations->setChecked(false);
     if (fRefreshAmounts) {
         refreshAmounts();
@@ -380,7 +379,7 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
     WalletModelTransaction currentTransaction(recipients);
     WalletModel::SendCoinsReturn prepareStatus;
 
-    prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl);
+    prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl, fDelegationsChecked);
 
     // process prepareStatus and on error generate message shown to user
     GuiTransactionsUtils::ProcessSendCoinsReturnAndInform(
