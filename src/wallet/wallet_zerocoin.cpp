@@ -253,7 +253,7 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue,
     CAmount nValueIn = 0;
     std::set<std::pair<const CWalletTx*, unsigned int> > setCoins;
     // select UTXO's to use
-    if (!SelectCoins(nTotalValue, setCoins, nValueIn, coinControl)) {
+    if (!SelectCoinsToSpend(nTotalValue, setCoins, nValueIn, coinControl)) {
         strFailReason = _("Insufficient or insufficient confirmed funds, you might need to wait a few minutes and try again.");
         return false;
     }
