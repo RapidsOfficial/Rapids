@@ -19,11 +19,18 @@ public:
     explicit DefaultDialog(QWidget *parent = nullptr);
     ~DefaultDialog();
 
+    void showEvent(QShowEvent *event) override;
     void setText(QString title = "", QString message = "", QString okBtnText = "", QString cancelBtnText = "");
 
     bool isOk = false;
+
+public Q_SLOTS:
+    void accept() override;
+
 private:
     Ui::DefaultDialog *ui;
+protected:
+    void keyPressEvent(QKeyEvent *e) override;
 };
 
 #endif // DEFAULTDIALOG_H
