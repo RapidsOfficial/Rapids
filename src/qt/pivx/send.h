@@ -68,6 +68,7 @@ private Q_SLOTS:
     void clearEntries();
     void clearAll(bool fClearSettings = true);
     void refreshView();
+    void onCheckBoxChanged();
     void onContactMultiClicked();
     void onDeleteClicked();
     void onResetCustomOptions(bool fRefreshAmounts);
@@ -79,6 +80,7 @@ private:
 
     SendCustomFeeDialog* customFeeDialog = nullptr;
     bool isCustomFeeSelected = false;
+    bool fDelegationsChecked = false;
 
     int nDisplayUnit;
     QList<SendMultiRow*> entries;

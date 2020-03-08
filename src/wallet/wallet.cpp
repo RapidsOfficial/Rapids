@@ -1874,11 +1874,13 @@ CAmount CWallet::loopTxsBalance(std::function<void(const uint256&, const CWallet
     return nTotal;
 }
 
-CAmount CWallet::GetBalance() const
+CAmount CWallet::GetBalance(bool fIncludeDelegated) const
 {
-    return loopTxsBalance([](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
-        if (pcoin.IsTrusted())
+    return loopTxsBalance([fIncludeDelegated](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
+        if (pcoin.IsTrusted()) {
             nTotal += pcoin.GetAvailableCredit();
+            if (!fIncludeDelegated) nTotal -= pcoin.GetStakeDelegationCredit();
+        }
     });
 }
 

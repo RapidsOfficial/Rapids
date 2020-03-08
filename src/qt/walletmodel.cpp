@@ -83,6 +83,7 @@ bool WalletModel::isHDEnabled() const
 {
     return wallet->IsHDEnabled();
 }
+
 bool WalletModel::upgradeWallet(std::string& upgradeError)
 {
     // This action must be performed in a separate thread and not the main one.
@@ -98,7 +99,7 @@ bool WalletModel::upgradeWallet(std::string& upgradeError)
     return wallet->Upgrade(upgradeError, prev_version);
 }
 
-CAmount WalletModel::getBalance(const CCoinControl* coinControl) const
+CAmount WalletModel::getBalance(const CCoinControl* coinControl, bool fIncludeDelegated) const
 {
     if (coinControl) {
         CAmount nBalance = 0;
@@ -111,7 +112,7 @@ CAmount WalletModel::getBalance(const CCoinControl* coinControl) const
         return nBalance;
     }
 
-    return wallet->GetBalance();
+    return wallet->GetBalance(fIncludeDelegated);
 }
 
 CAmount WalletModel::getMinColdStakingAmount() const
