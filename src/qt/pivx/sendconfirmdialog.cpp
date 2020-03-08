@@ -13,10 +13,12 @@
 #include "qt/pivx/qtutils.h"
 #include <QList>
 #include <QDateTime>
+#include <QKeyEvent>
 
-TxDetailDialog::TxDetailDialog(QWidget *parent, bool isConfirmDialog, QString warningStr) :
+TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, QString warningStr) :
     QDialog(parent),
-    ui(new Ui::TxDetailDialog)
+    ui(new Ui::TxDetailDialog),
+    isConfirmDialog(_isConfirmDialog)
 {
     ui->setupUi(this);
 
@@ -80,6 +82,11 @@ TxDetailDialog::TxDetailDialog(QWidget *parent, bool isConfirmDialog, QString wa
     connect(ui->pushOutputs, SIGNAL(clicked()), this, SLOT(onOutputsClicked()));
 }
 
+void TxDetailDialog::showEvent(QShowEvent *event)
+{
+    setFocus();
+}
+
 void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index){
     this->model = model;
     TransactionRecord *rec = static_cast<TransactionRecord*>(index.internalPointer());
@@ -135,9 +142,12 @@ void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx){
     ui->textFee->setText(BitcoinUnits::formatWithUnit(nDisplayUnit, txFee, false, BitcoinUnits::separatorAlways));
 }
 
-void TxDetailDialog::acceptTx(){
-    this->confirm = true;
-    this->sendStatus = model->sendCoins(*this->tx);
+void TxDetailDialog::acceptTx()
+{
+    if (isConfirmDialog) {
+        this->confirm = true;
+        this->sendStatus = model->sendCoins(*this->tx);
+    }
     accept();
 }
 
@@ -217,12 +227,25 @@ void TxDetailDialog::onOutputsClicked() {
     }
 }
 
-void TxDetailDialog::closeDialog(){
+void TxDetailDialog::keyPressEvent(QKeyEvent *event)
+{
+    if (event->type() == QEvent::KeyPress) {
+        QKeyEvent* ke = static_cast<QKeyEvent*>(event);
+        // Detect Enter key press
+        if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) acceptTx();
+        // Detect Esc key press
+        if (ke->key() == Qt::Key_Escape) closeDialog();
+    }
+}
+
+void TxDetailDialog::closeDialog()
+{
     if(snackBar && snackBar->isVisible()) snackBar->hide();
     close();
 }
 
-TxDetailDialog::~TxDetailDialog(){
+TxDetailDialog::~TxDetailDialog()
+{
     if(snackBar) delete snackBar;
     delete ui;
 }
