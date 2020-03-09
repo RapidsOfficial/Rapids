@@ -144,10 +144,10 @@ void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx){
 
 void TxDetailDialog::acceptTx()
 {
-    if (isConfirmDialog) {
-        this->confirm = true;
-        this->sendStatus = model->sendCoins(*this->tx);
-    }
+    if (!isConfirmDialog)
+        throw GUIException(strprintf("%s called on non confirm dialog", __func__));
+    this->confirm = true;
+    this->sendStatus = model->sendCoins(*this->tx);
     accept();
 }
 
@@ -232,9 +232,13 @@ void TxDetailDialog::keyPressEvent(QKeyEvent *event)
     if (event->type() == QEvent::KeyPress) {
         QKeyEvent* ke = static_cast<QKeyEvent*>(event);
         // Detect Enter key press
-        if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) acceptTx();
+        if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) {
+            if (isConfirmDialog) acceptTx();
+            else accept();
+        }
         // Detect Esc key press
-        if (ke->key() == Qt::Key_Escape) closeDialog();
+        if (ke->key() == Qt::Key_Escape)
+            closeDialog();
     }
 }
 
