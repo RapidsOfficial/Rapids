@@ -40,6 +40,7 @@ BITCOIN_TESTS =\
   test/zerocoin_bignum_tests.cpp \
   test/addrman_tests.cpp \
   test/allocator_tests.cpp \
+  test/librust/libsapling_utils_tests.cpp \
   test/librust/pedersen_hash_tests.cpp \
   test/librust/noteencryption_tests.cpp \
   test/base32_tests.cpp \
