@@ -167,7 +167,15 @@ Keyboard navigation: dialogs can now be accepted with the `ENTER` (`RETURN`) key
 
 ### Wallet
 
-The `-reservebalance` configuration/startup option has been removed ([PR #1373](https://github.com/PIVX-Project/PIVX/pull/1373)).
+
+__Context Lock/Unlock__ [[PR #1387]()]:<br>
+Present the unlock dialog directly (instead of an error message), whenever an action on encrypted/locked wallet requires full unlock.<br>
+Restore the previous locking state ("locked" or "locked for staking only") when the action is completed.
+
+
+__Configuration Options__:
+
+- The `-reservebalance` configuration/startup option has been removed ([PR #1373](https://github.com/PIVX-Project/PIVX/pull/1373)).
 
 ### Miscellaneous
 
