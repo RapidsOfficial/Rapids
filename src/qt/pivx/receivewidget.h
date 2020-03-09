@@ -47,6 +47,8 @@ private Q_SLOTS:
     void refreshView(const QModelIndex& tl, const QModelIndex& br);
     void refreshView(QString refreshAddress = QString());
     void handleAddressClicked(const QModelIndex &index);
+    void onSortChanged(int idx);
+    void onSortOrderChanged(int idx);
 private:
     Ui::ReceiveWidget *ui;
 

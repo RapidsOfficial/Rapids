@@ -91,6 +91,26 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     ui->container_right->addItem(spacer);
     ui->listViewAddress->setVisible(false);
 
+    // Sort Addresses
+    setCssSubtitleScreen(ui->sortLabel);
+    SortEdit* lineEdit = new SortEdit(ui->comboBoxSort);
+    initComboBox(ui->comboBoxSort, lineEdit, "btn-combo-small");
+    connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSort->showPopup();});
+    ui->comboBoxSort->addItem(tr("by Label"), AddressTableModel::Label);
+    ui->comboBoxSort->addItem(tr("by Address"), AddressTableModel::Address);
+    ui->comboBoxSort->addItem(tr("by Date"), AddressTableModel::Date);
+    ui->comboBoxSort->setCurrentIndex(0);
+    connect(ui->comboBoxSort, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReceiveWidget::onSortChanged);
+    // Sort Order
+    SortEdit* lineEditOrder = new SortEdit(ui->comboBoxSortOrder);
+    initComboBox(ui->comboBoxSortOrder, lineEditOrder, "btn-combo-small");
+    connect(lineEditOrder, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSortOrder->showPopup();});
+    ui->comboBoxSortOrder->addItem("asc", Qt::AscendingOrder);
+    ui->comboBoxSortOrder->addItem("desc", Qt::DescendingOrder);
+    ui->comboBoxSortOrder->setCurrentIndex(0);
+    connect(ui->comboBoxSortOrder, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReceiveWidget::onSortOrderChanged);
+    ui->sortWidget->setVisible(false);
+
     // Connect
     connect(ui->pushButtonLabel, &QPushButton::clicked, this, &ReceiveWidget::onLabelClicked);
     connect(ui->pushButtonCopy, &QPushButton::clicked, this, &ReceiveWidget::onCopyClicked);
@@ -287,14 +307,22 @@ void ReceiveWidget::onMyAddressesClicked()
     if (!isVisible) {
         ui->btnMyAddresses->setRightIconClass("btn-dropdown", true);
         ui->listViewAddress->setVisible(true);
+        ui->sortWidget->setVisible(true);
         ui->container_right->removeItem(spacer);
         ui->listViewAddress->update();
     } else {
         ui->btnMyAddresses->setRightIconClass("ic-arrow", true);
         ui->container_right->addItem(spacer);
         ui->listViewAddress->setVisible(false);
+        ui->sortWidget->setVisible(false);
     }
 }
+
+void ReceiveWidget::onSortChanged(int idx)
+{}
+
+void ReceiveWidget::onSortOrderChanged(int idx)
+{}
 
 void ReceiveWidget::changeTheme(bool isLightTheme, QString& theme)
 {

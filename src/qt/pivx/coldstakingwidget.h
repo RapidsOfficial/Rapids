@@ -73,6 +73,8 @@ private Q_SLOTS:
     void onLabelClicked();
     void onMyStakingAddressesClicked();
     void onDelegationsRefreshed();
+    void onSortChanged(int idx);
+    void onSortOrderChanged(int idx);
 
 private:
     Ui::ColdStakingWidget *ui = nullptr;

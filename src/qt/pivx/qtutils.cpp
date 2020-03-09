@@ -214,8 +214,9 @@ QColor getRowColor(bool isLightTheme, bool isHovered, bool isSelected){
     }
 }
 
-void initComboBox(QComboBox* combo, QLineEdit* lineEdit){
-    setCssProperty(combo, "btn-combo");
+void initComboBox(QComboBox* combo, QLineEdit* lineEdit, QString cssClass)
+{
+    setCssProperty(combo, cssClass);
     combo->setEditable(true);
     if (lineEdit) {
         lineEdit->setReadOnly(true);

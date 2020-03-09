@@ -2120,6 +2120,21 @@ QComboBox[cssClass="btn-combo"]::down-arrow {
     height: 24px;
 }
 
+QComboBox[cssClass="btn-combo-small"] {
+    background-color:#ffffff;
+    padding:8px 16px 8px 8px;
+    font-size:14px;
+    border:1px solid #ffffff;
+    color: #707070;
+    text-align: right;
+}
+
+QComboBox[cssClass="btn-combo-small"]::down-arrow {
+    image: url("://ic-arrow-drop-down");
+    width: 16px;
+    height: 16px;
+}
+
 QComboBox[cssClass="btn-combo-edit"] {
     background-color:#ffffff;
     padding:10px 20px 10px 10px;
