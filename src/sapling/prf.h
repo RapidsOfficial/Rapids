@@ -23,4 +23,9 @@ uint256 PRF_ovk(const uint256& sk);
 
 std::array<unsigned char, 11> default_diversifier(const uint256& sk);
 
+//! Sprout (outdated)
+uint256 PRF_addr_a_pk(const uint252& a_sk);
+uint256 PRF_addr_sk_enc(const uint252& a_sk);
+uint256 PRF_nf(const uint252& a_sk, const uint256& rho);
+
 #endif // ZC_PRF_H_

@@ -109,3 +109,20 @@ uint256 PRF_addr(const uint252& a_sk, unsigned char t)
 
     return PRF(1, 1, 0, 0, a_sk, y);
 }
+
+//// Sprout (Outdated) ////
+
+uint256 PRF_nf(const uint252& a_sk, const uint256& rho)
+{
+    return PRF(1, 1, 1, 0, a_sk, rho);
+}
+
+uint256 PRF_addr_a_pk(const uint252& a_sk)
+{
+    return PRF_addr(a_sk, 0);
+}
+
+uint256 PRF_addr_sk_enc(const uint252& a_sk)
+{
+    return PRF_addr(a_sk, 1);
+}

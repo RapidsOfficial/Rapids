@@ -1,3 +1,8 @@
+// Copyright (c) 2016-2020 The ZCash developers
+// Copyright (c) 2020 The PIVX developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef ZC_SAPLING_H_
 #define ZC_SAPLING_H_
 
@@ -26,5 +31,8 @@
 
 #define ZC_SAPLING_ENCCIPHERTEXT_SIZE (ZC_SAPLING_ENCPLAINTEXT_SIZE + NOTEENCRYPTION_AUTH_BYTES)
 #define ZC_SAPLING_OUTCIPHERTEXT_SIZE (ZC_SAPLING_OUTPLAINTEXT_SIZE + NOTEENCRYPTION_AUTH_BYTES)
+
+// Type def
+typedef std::array<unsigned char, ZC_DIVERSIFIER_SIZE> diversifier_t;
 
 #endif // ZC_SAPLING_H_

@@ -78,7 +78,11 @@ endif
 
 LIBSAPLING_H = \
   sapling/sapling.h \
-  sapling/prf.h
+  sapling/util.h \
+  sapling/prf.h \
+  sapling/noteencryption.hpp \
+  sapling/address.hpp \
+  sapling/note.hpp
 
 .PHONY: FORCE check-symbols check-security
 # pivx core #
@@ -554,7 +558,11 @@ pivx_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 
 # sapling protocol primitives #
 libsapling_a_SOURCES = \
-  sapling/prf.cpp
+  sapling/util.cpp \
+  sapling/prf.cpp \
+  sapling/noteencryption.cpp \
+  sapling/address.cpp \
+  sapling/note.cpp
 
 libsapling_a_CPPFLAGS = -fPIC -DCURVE_ALT_BN128 -DBOOST_SPIRIT_THREADSAFE -DHAVE_BUILD_INFO -D__STDC_FORMAT_MACROS -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=2 -std=c++11 -pipe -O2 -O0 -g -Wstack-protector -fstack-protector-all -fPIE -fvisibility=hidden -DSTATIC $(BITCOIN_INCLUDES)
 
