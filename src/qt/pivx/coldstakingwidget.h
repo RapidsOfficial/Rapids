@@ -108,6 +108,9 @@ private:
     QModelIndex index;
     QModelIndex addressIndex;
 
+    // Cached sort type and order
+    AddressTableModel::ColumnIndex sortType = AddressTableModel::Label;
+    Qt::SortOrder sortOrder = Qt::AscendingOrder;
 
     int nDisplayUnit;
 
@@ -117,6 +120,7 @@ private:
     bool refreshDelegations();
     void onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses);
     void updateStakingTotalLabel();
+    void sortAddresses();
 };
 
 #endif // COLDSTAKINGWIDGET_H

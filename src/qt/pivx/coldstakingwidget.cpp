@@ -210,6 +210,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     ui->comboBoxSortOrder->addItem("desc", Qt::DescendingOrder);
     ui->comboBoxSortOrder->setCurrentIndex(0);
     connect(ui->comboBoxSortOrder, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ColdStakingWidget::onSortOrderChanged);
+    fillAddressSortControls(lineEdit, lineEditOrder, ui->comboBoxSort, ui->comboBoxSortOrder);
     ui->sortWidget->setVisible(false);
 
     connect(ui->pushButtonSend, &QPushButton::clicked, this, &ColdStakingWidget::onSendClicked);
@@ -231,7 +232,7 @@ void ColdStakingWidget::loadWalletModel()
         addressTableModel = walletModel->getAddressTableModel();
         addressesFilter = new AddressFilterProxyModel(AddressTableModel::ColdStaking, this);
         addressesFilter->setSourceModel(addressTableModel);
-        addressesFilter->sort(AddressTableModel::Label, Qt::AscendingOrder);
+        addressesFilter->sort(sortType, sortOrder);
         ui->listViewStakingAddress->setModel(addressesFilter);
         ui->listViewStakingAddress->setModelColumn(AddressTableModel::Address);
 
@@ -397,6 +398,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate)
         ui->btnColdStaking->setVisible(false);
         ui->btnMyStakingAddresses->setVisible(false);
         ui->listViewStakingAddress->setVisible(false);
+        ui->sortWidget->setVisible(false);
         ui->rightContainer->addItem(spacerDiv);
     } else {
         ui->btnCoinControl->setVisible(false);
@@ -407,6 +409,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate)
         ui->btnMyStakingAddresses->setVisible(true);
         // Show address list, if it was previously open
         ui->listViewStakingAddress->setVisible(isStakingAddressListVisible);
+        ui->sortWidget->setVisible(isStakingAddressListVisible);
     }
 }
 
@@ -805,10 +808,23 @@ void ColdStakingWidget::updateStakingTotalLabel()
 }
 
 void ColdStakingWidget::onSortChanged(int idx)
-{}
+{
+    sortType = (AddressTableModel::ColumnIndex) ui->comboBoxSort->itemData(idx).toInt();
+    sortAddresses();
+}
 
 void ColdStakingWidget::onSortOrderChanged(int idx)
-{}
+{
+    sortOrder = (Qt::SortOrder) ui->comboBoxSortOrder->itemData(idx).toInt();
+    sortAddresses();
+}
+
+void ColdStakingWidget::sortAddresses()
+{
+    if (this->addressesFilter)
+        this->addressesFilter->sort(sortType, sortOrder);
+}
+
 
 ColdStakingWidget::~ColdStakingWidget()
 {

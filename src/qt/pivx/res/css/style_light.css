@@ -2122,8 +2122,8 @@ QComboBox[cssClass="btn-combo"]::down-arrow {
 
 QComboBox[cssClass="btn-combo-small"] {
     background-color:#ffffff;
-    padding:8px 16px 8px 8px;
-    font-size:14px;
+    padding:8px 14px 8px 8px;
+    font-size:13px;
     border:1px solid #ffffff;
     color: #707070;
     text-align: right;
@@ -2131,8 +2131,8 @@ QComboBox[cssClass="btn-combo-small"] {
 
 QComboBox[cssClass="btn-combo-small"]::down-arrow {
     image: url("://ic-arrow-drop-down");
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
 }
 
 QComboBox[cssClass="btn-combo-edit"] {

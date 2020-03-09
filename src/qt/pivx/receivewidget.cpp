@@ -109,6 +109,7 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     ui->comboBoxSortOrder->addItem("desc", Qt::DescendingOrder);
     ui->comboBoxSortOrder->setCurrentIndex(0);
     connect(ui->comboBoxSortOrder, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReceiveWidget::onSortOrderChanged);
+    fillAddressSortControls(lineEdit, lineEditOrder, ui->comboBoxSort, ui->comboBoxSortOrder);
     ui->sortWidget->setVisible(false);
 
     // Connect
@@ -126,7 +127,7 @@ void ReceiveWidget::loadWalletModel()
         this->addressTableModel = walletModel->getAddressTableModel();
         this->filter = new AddressFilterProxyModel(AddressTableModel::Receive, this);
         this->filter->setSourceModel(addressTableModel);
-        this->filter->sort(AddressTableModel::Label, Qt::AscendingOrder);
+        this->filter->sort(sortType, sortOrder);
         ui->listViewAddress->setModel(this->filter);
         ui->listViewAddress->setModelColumn(AddressTableModel::Address);
 
@@ -319,10 +320,22 @@ void ReceiveWidget::onMyAddressesClicked()
 }
 
 void ReceiveWidget::onSortChanged(int idx)
-{}
+{
+    sortType = (AddressTableModel::ColumnIndex) ui->comboBoxSort->itemData(idx).toInt();
+    sortAddresses();
+}
 
 void ReceiveWidget::onSortOrderChanged(int idx)
-{}
+{
+    sortOrder = (Qt::SortOrder) ui->comboBoxSortOrder->itemData(idx).toInt();
+    sortAddresses();
+}
+
+void ReceiveWidget::sortAddresses()
+{
+    if (this->filter)
+        this->filter->sort(sortType, sortOrder);
+}
 
 void ReceiveWidget::changeTheme(bool isLightTheme, QString& theme)
 {

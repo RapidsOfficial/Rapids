@@ -227,6 +227,21 @@ void initComboBox(QComboBox* combo, QLineEdit* lineEdit, QString cssClass)
     combo->setView(new QListView());
 }
 
+void fillAddressSortControls(SortEdit* seType, SortEdit* seOrder, QComboBox* boxType, QComboBox* boxOrder)
+{
+    // Sort Type
+    initComboBox(boxType, seType, "btn-combo-small");
+    boxType->addItem(QObject::tr("by Label"), AddressTableModel::Label);
+    boxType->addItem(QObject::tr("by Address"), AddressTableModel::Address);
+    boxType->addItem(QObject::tr("by Date"), AddressTableModel::Date);
+    boxType->setCurrentIndex(0);
+    // Sort Order
+    initComboBox(boxOrder, seOrder, "btn-combo-small");
+    boxOrder->addItem("asc", Qt::AscendingOrder);
+    boxOrder->addItem("desc", Qt::DescendingOrder);
+    boxOrder->setCurrentIndex(0);
+}
+
 void initCssEditLine(QLineEdit *edit, bool isDialog){
     if (isDialog) setCssEditLineDialog(edit, true, false);
     else setCssEditLine(edit, true, false);

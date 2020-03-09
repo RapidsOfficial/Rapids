@@ -63,9 +63,14 @@ private:
     // Cached qr
     QPixmap *qrImage = nullptr;
 
+    // Cached sort type and order
+    AddressTableModel::ColumnIndex sortType = AddressTableModel::Label;
+    Qt::SortOrder sortOrder = Qt::AscendingOrder;
+
     void updateQr(QString address);
     void updateLabel();
     void showAddressGenerationDialog(bool isPaymentRequest);
+    void sortAddresses();
 
     bool isShowingDialog = false;
 
