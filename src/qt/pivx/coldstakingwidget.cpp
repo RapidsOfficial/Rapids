@@ -211,6 +211,7 @@ void ColdStakingWidget::loadWalletModel()
         addressTableModel = walletModel->getAddressTableModel();
         addressesFilter = new AddressFilterProxyModel(AddressTableModel::ColdStaking, this);
         addressesFilter->setSourceModel(addressTableModel);
+        addressesFilter->sort(AddressTableModel::Label, Qt::AscendingOrder);
         ui->listViewStakingAddress->setModel(addressesFilter);
         ui->listViewStakingAddress->setModelColumn(AddressTableModel::Address);
 

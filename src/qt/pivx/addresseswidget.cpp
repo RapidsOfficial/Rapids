@@ -156,6 +156,7 @@ void AddressesWidget::loadWalletModel(){
         addressTablemodel = walletModel->getAddressTableModel();
         this->filter = new AddressFilterProxyModel(QStringList({AddressTableModel::Send, AddressTableModel::ColdStakingSend}), this);
         this->filter->setSourceModel(addressTablemodel);
+        this->filter->sort(AddressTableModel::Label, Qt::AscendingOrder);
         ui->listAddresses->setModel(this->filter);
         ui->listAddresses->setModelColumn(AddressTableModel::Address);
 

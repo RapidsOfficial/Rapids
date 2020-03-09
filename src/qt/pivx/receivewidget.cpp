@@ -106,6 +106,7 @@ void ReceiveWidget::loadWalletModel()
         this->addressTableModel = walletModel->getAddressTableModel();
         this->filter = new AddressFilterProxyModel(AddressTableModel::Receive, this);
         this->filter->setSourceModel(addressTableModel);
+        this->filter->sort(AddressTableModel::Label, Qt::AscendingOrder);
         ui->listViewAddress->setModel(this->filter);
         ui->listViewAddress->setModelColumn(AddressTableModel::Address);
 
