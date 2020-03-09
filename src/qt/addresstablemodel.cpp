@@ -136,7 +136,7 @@ public:
                 const std::string& strName = item.second.name;
 
                 uint creationTime = 0;
-                if(item.second.isReceivePurpose())
+                if (item.second.isReceivePurpose())
                     creationTime = static_cast<uint>(wallet->GetKeyCreationTime(address));
 
                 updatePurposeCachedCounted(item.second.purpose, true);
@@ -155,7 +155,8 @@ public:
         std::sort(cachedAddressTable.begin(), cachedAddressTable.end(), AddressTableEntryLessThan());
     }
 
-    void updatePurposeCachedCounted(std::string purpose, bool add) {
+    void updatePurposeCachedCounted(std::string purpose, bool add)
+    {
         int *var = nullptr;
         if (purpose == AddressBook::AddressBookPurpose::RECEIVE) {
             var = &recvNum;
@@ -242,8 +243,7 @@ public:
         switch(status)
         {
             case CT_NEW:
-                if(inModel)
-                {
+                if (inModel) {
                     qWarning() << "AddressTablePriv_ZC::updateEntry : Warning: Got CT_NEW, but entry is already in model";
                 }
                 parent->beginInsertRows(QModelIndex(), lowerIndex, lowerIndex);
@@ -251,8 +251,7 @@ public:
                 parent->endInsertRows();
                 break;
             case CT_UPDATED:
-                if(!inModel)
-                {
+                if (!inModel) {
                     qWarning() << "AddressTablePriv_ZC::updateEntry : Warning: Got CT_UPDATED, but entry is not in model";
                     break;
                 }
@@ -261,30 +260,13 @@ public:
                 parent->emitDataChanged(lowerIndex);
                 break;
         }
-
     }
 
-
-    int size()
-    {
-        return cachedAddressTable.size();
-    }
-
-    int sizeSend(){
-        return sendNum;
-    }
-
-    int sizeRecv(){
-        return recvNum;
-    }
-
-    int sizeDell(){
-        return dellNum;
-    }
-
-    int SizeColdSend() {
-        return coldSendNum;
-    }
+    int size() { return cachedAddressTable.size(); }
+    int sizeSend() { return sendNum; }
+    int sizeRecv() { return recvNum; }
+    int sizeDell() { return dellNum; }
+    int SizeColdSend() { return coldSendNum; }
 
     AddressTableEntry* index(int idx)
     {
@@ -320,20 +302,10 @@ int AddressTableModel::columnCount(const QModelIndex& parent) const
     return columns.length();
 }
 
-int AddressTableModel::sizeSend() const{
-    return priv->sizeSend();
-}
-int AddressTableModel::sizeRecv() const{
-    return priv->sizeRecv();
-}
-
-int AddressTableModel::sizeDell() const {
-    return priv->sizeDell();
-}
-
-int AddressTableModel::sizeColdSend() const {
-    return priv->SizeColdSend();
-}
+int AddressTableModel::sizeSend() const { return priv->sizeSend(); }
+int AddressTableModel::sizeRecv() const { return priv->sizeRecv(); }
+int AddressTableModel::sizeDell() const { return priv->sizeDell(); }
+int AddressTableModel::sizeColdSend() const { return priv->SizeColdSend(); }
 
 QVariant AddressTableModel::data(const QModelIndex& index, int role) const
 {
@@ -599,10 +571,11 @@ bool AddressTableModel::isWhitelisted(const std::string& address) const
  * Return last created unused address --> TODO: complete "unused" and "last".. basically everything..
  * @return
  */
-QString AddressTableModel::getAddressToShow() const{
+QString AddressTableModel::getAddressToShow() const
+{
     QString addressStr;
     LOCK(wallet->cs_wallet);
-    if(!wallet->mapAddressBook.empty()) {
+    if (!wallet->mapAddressBook.empty()) {
         for (auto it = wallet->mapAddressBook.rbegin(); it != wallet->mapAddressBook.rend(); ++it ) {
             if (it->second.purpose == AddressBook::AddressBookPurpose::RECEIVE) {
                 const CBitcoinAddress &address = it->first;
@@ -626,7 +599,8 @@ void AddressTableModel::emitDataChanged(int idx)
     Q_EMIT dataChanged(index(idx, 0, QModelIndex()), index(idx, columns.length() - 1, QModelIndex()));
 }
 
-void AddressTableModel::notifyChange(const QModelIndex &_index) {
+void AddressTableModel::notifyChange(const QModelIndex &_index)
+{
     int idx = _index.row();
     emitDataChanged(idx);
 }

@@ -8,58 +8,68 @@
 #include <QRunnable>
 #include <QThreadPool>
 
-PWidget::PWidget(PIVXGUI* _window, QWidget *parent) : QWidget((parent) ? parent : _window), window(_window){init();}
-PWidget::PWidget(PWidget* parent) : QWidget(parent), window(parent->getWindow()){init();}
+PWidget::PWidget(PIVXGUI* _window, QWidget *parent) : QWidget((parent) ? parent : _window), window(_window) { init(); }
+PWidget::PWidget(PWidget* parent) : QWidget(parent), window(parent->getWindow()) { init(); }
 
-void PWidget::init() {
-    if(window)
+void PWidget::init()
+{
+    if (window)
         connect(window, SIGNAL(themeChanged(bool, QString&)), this, SLOT(onChangeTheme(bool, QString&)));
 }
 
-void PWidget::setClientModel(ClientModel* model){
+void PWidget::setClientModel(ClientModel* model)
+{
     this->clientModel = model;
     loadClientModel();
 }
 
-void PWidget::setWalletModel(WalletModel* model){
+void PWidget::setWalletModel(WalletModel* model)
+{
     this->walletModel = model;
     loadWalletModel();
 }
 
-void PWidget::onChangeTheme(bool isLightTheme, QString& theme){
+void PWidget::onChangeTheme(bool isLightTheme, QString& theme)
+{
     this->setStyleSheet(theme);
     changeTheme(isLightTheme, theme);
     updateStyle(this);
 }
 
-void PWidget::showHideOp(bool show){
+void PWidget::showHideOp(bool show)
+{
     Q_EMIT showHide(show);
 }
 
-void PWidget::inform(const QString& message){
+void PWidget::inform(const QString& message)
+{
     emitMessage("", message, CClientUIInterface::MSG_INFORMATION_SNACK);
 }
 
-void PWidget::warn(const QString& title, const QString& message){
+void PWidget::warn(const QString& title, const QString& message)
+{
     emitMessage(title, message, CClientUIInterface::MSG_ERROR);
 }
 
-bool PWidget::ask(const QString& title, const QString& message){
+bool PWidget::ask(const QString& title, const QString& message)
+{
     bool ret = false;
     emitMessage(title, message, CClientUIInterface::MSG_INFORMATION | CClientUIInterface::BTN_MASK | CClientUIInterface::MODAL, &ret);
     return ret;
 }
 
-void PWidget::showDialog(QDialog *dlg, int xDiv, int yDiv){
+void PWidget::showDialog(QDialog *dlg, int xDiv, int yDiv)
+{
     Q_EMIT execDialog(dlg, xDiv, yDiv);
 }
 
-void PWidget::emitMessage(const QString& title, const QString& body, unsigned int style, bool* ret){
+void PWidget::emitMessage(const QString& title, const QString& body, unsigned int style, bool* ret)
+{
     Q_EMIT message(title, body, style, ret);
 }
 
-class WorkerTask : public QRunnable {
-
+class WorkerTask : public QRunnable
+{
 public:
     WorkerTask(QPointer<Worker> worker) {
         this->worker = worker;
@@ -76,7 +86,8 @@ public:
     QPointer<Worker> worker;
 };
 
-bool PWidget::execute(int type){
+bool PWidget::execute(int type)
+{
     if (task.isNull()) {
         Worker* worker = new Worker(this, type);
         connect(worker, SIGNAL (error(QString, int)), this, SLOT (errorString(QString, int)));
@@ -89,7 +100,8 @@ bool PWidget::execute(int type){
     return true;
 }
 
-bool PWidget::verifyWalletUnlocked(){
+bool PWidget::verifyWalletUnlocked()
+{
     if (!walletModel->isWalletUnlocked()) {
         inform(tr("Wallet locked, you need to unlock it to perform this action"));
         return false;
@@ -97,7 +109,8 @@ bool PWidget::verifyWalletUnlocked(){
     return true;
 }
 
-void PWidget::errorString(QString error, int type) {
+void PWidget::errorString(QString error, int type)
+{
     onError(error, type);
 }
 
@@ -107,21 +120,8 @@ void PWidget::errorString(QString error, int type) {
 ////////////////////////////////////////////////////////////////
 
 
-void PWidget::loadClientModel(){
-    // override
-}
-
-void PWidget::loadWalletModel(){
-    // override
-}
-
-void PWidget::changeTheme(bool isLightTheme, QString& theme){
-    // override
-}
-
-void PWidget::run(int type) {
-    // override
-}
-void PWidget::onError(QString error, int type) {
-    // override
-}
+void PWidget::loadClientModel() { /* override*/ }
+void PWidget::loadWalletModel() { /* override*/ }
+void PWidget::changeTheme(bool isLightTheme, QString& theme) { /* override*/ }
+void PWidget::run(int type) { /* override*/ }
+void PWidget::onError(QString error, int type) { /* override*/ }

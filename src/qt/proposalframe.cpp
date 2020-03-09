@@ -73,10 +73,7 @@ void ProposalFrame::setGovernancePage(GovernancePage* governancePage)
     this->governancePage = governancePage;
 }
 
-void ProposalFrame::mousePressEvent(QMouseEvent* event)
-{
-
-}
+void ProposalFrame::mousePressEvent(QMouseEvent* event) {}
 
 void ProposalFrame::refresh()
 {
@@ -157,8 +154,8 @@ void ProposalFrame::refresh()
         proposalVotes->addWidget(noVotes);
         proposalVotes->addWidget(noButton);
         proposalItem->addLayout(proposalVotes);
-    } else
-    {
+
+    } else {
         delete strRemainingPaymentCount;
         QLayoutItem* child;
         while ((child = proposalVotes->takeAt(0)) != 0) {

@@ -185,7 +185,7 @@ void MasterNodesWidget::onMNClicked(const QModelIndex &index)
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteMNClicked()));
         connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onInfoMNClicked()));
         this->menu->adjustSize();
-    }else {
+    } else {
         this->menu->hide();
     }
     this->index = index;
@@ -207,7 +207,7 @@ bool MasterNodesWidget::checkMNsNetwork()
 
 void MasterNodesWidget::onEditMNClicked()
 {
-    if(walletModel) {
+    if (walletModel) {
         if (!walletModel->isRegTestNetwork() && !checkMNsNetwork()) return;
         if (index.sibling(index.row(), MNModel::WAS_COLLATERAL_ACCEPTED).data(Qt::DisplayRole).toBool()) {
             // Start MN

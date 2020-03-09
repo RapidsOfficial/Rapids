@@ -68,11 +68,13 @@ bool WalletModel::isRegTestNetwork() const
     return Params().IsRegTestNet();
 }
 
-bool WalletModel::isColdStakingNetworkelyEnabled() const {
+bool WalletModel::isColdStakingNetworkelyEnabled() const
+{
     return sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT);
 }
 
-bool WalletModel::isStakingStatusActive() const {
+bool WalletModel::isStakingStatusActive() const
+{
     return wallet->pStakerStatus->IsActive();
 }
 
@@ -191,22 +193,24 @@ void WalletModel::updateStatus()
         Q_EMIT encryptionStatusChanged(newEncryptionStatus);
 }
 
-bool WalletModel::isWalletUnlocked() const {
+bool WalletModel::isWalletUnlocked() const
+{
     EncryptionStatus status = getEncryptionStatus();
     return status == Unencrypted || status == Unlocked;
 }
 
-bool WalletModel::isWalletLocked() const {
+bool WalletModel::isWalletLocked() const
+{
     return getEncryptionStatus() == Locked;
 }
 
-bool IsImportingOrReindexing() {
+bool IsImportingOrReindexing()
+{
     return fImporting || fReindex;
 }
 
 void WalletModel::pollBalanceChanged()
 {
-
     // Wait a little bit more when the wallet is reindexing and/or importing, no need to lock cs_main so often.
     if (IsImportingOrReindexing()) {
         static uint8_t waitLonger = 0;
@@ -317,16 +321,16 @@ void WalletModel::updateAddressBook(const QString& address, const QString& label
     try {
         if (addressTableModel)
             addressTableModel->updateEntry(address, label, isMine, purpose, status);
-    }catch (...){
+    } catch (...) {
         std::cout << "Exception updateAddressBook" << std::endl;
     }
 }
 void WalletModel::updateAddressBook(const QString &pubCoin, const QString &isUsed, int status)
 {
-    try{
-        if(addressTableModel)
+    try {
+        if (addressTableModel)
             addressTableModel->updateEntry(pubCoin, isUsed, status);
-    }catch (...){
+    } catch (...) {
         std::cout << "Exception updateAddressBook" << std::endl;
     }
 }
@@ -344,7 +348,8 @@ void WalletModel::updateMultiSigFlag(bool fHaveMultiSig)
     Q_EMIT notifyMultiSigChanged(fHaveMultiSig);
 }
 
-bool WalletModel::getMint(const uint256& hashSerial, CZerocoinMint& mint){
+bool WalletModel::getMint(const uint256& hashSerial, CZerocoinMint& mint)
+{
     return wallet->GetMint(hashSerial, mint);
 }
 
@@ -354,7 +359,8 @@ bool WalletModel::validateAddress(const QString& address)
     return addressParsed.IsValid();
 }
 
-bool WalletModel::validateStakingAddress(const QString& address) {
+bool WalletModel::validateStakingAddress(const QString& address)
+{
     if (validateAddress(address)) {
         // check for staking only addresses
         QChar firstLetter = address.at(0).toLower();
@@ -442,7 +448,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
                 CKeyID stakerId;
                 CKeyID ownerId;
-                if(!out.GetKeyID(stakerId) || !ownerAdd.GetKeyID(ownerId)) {
+                if (!out.GetKeyID(stakerId) || !ownerAdd.GetKeyID(ownerId)) {
                     return InvalidAddress;
                 }
 
@@ -530,7 +536,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
 
     // Double check tx before do anything
     CValidationState state;
-    if(!CheckTransaction(*transaction.getTransaction(), true, true, state, true, fColdStakingActive)){
+    if (!CheckTransaction(*transaction.getTransaction(), true, true, state, true, fColdStakingActive)) {
         return TransactionCommitFailed;
     }
 
@@ -579,11 +585,13 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
     return SendCoinsReturn(OK);
 }
 
-const CWalletTx* WalletModel::getTx(uint256 id){
+const CWalletTx* WalletModel::getTx(uint256 id)
+{
     return wallet->GetWalletTx(id);
 }
 
-bool WalletModel::mintCoins(CAmount value, CCoinControl* coinControl ,std::string &strError){
+bool WalletModel::mintCoins(CAmount value, CCoinControl* coinControl ,std::string &strError)
+{
     CWalletTx wtx;
     std::vector<CDeterministicMint> vMints;
     strError = wallet->MintZerocoin(value, wtx, vMints, coinControl);
@@ -596,12 +604,11 @@ bool WalletModel::createZpivSpend(
         std::vector<CZerocoinMint> &vMintsSelected,
         CZerocoinSpendReceipt &receipt,
         std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
-        std::string changeAddress
-        ){
-
+        std::string changeAddress)
+{
     CBitcoinAddress *changeAdd = (!changeAddress.empty()) ? new CBitcoinAddress(changeAddress) : nullptr;
     CAmount value = 0;
-    for(std::pair<CBitcoinAddress*, CAmount> pair : outputs){
+    for (std::pair<CBitcoinAddress*, CAmount> pair : outputs) {
         value += pair.second;
     }
 
@@ -634,12 +641,11 @@ bool WalletModel::sendZpiv(
         std::vector<CZerocoinMint> &vMintsSelected,
         CZerocoinSpendReceipt &receipt,
         std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
-        std::string changeAddress
-        ){
-
+        std::string changeAddress)
+{
     CBitcoinAddress *changeAdd = (!changeAddress.empty()) ? new CBitcoinAddress(changeAddress) : nullptr;
     CAmount value = 0;
-    for(std::pair<CBitcoinAddress*, CAmount> pair : outputs){
+    for (std::pair<CBitcoinAddress*, CAmount> pair : outputs) {
         value += pair.second;
     }
 
@@ -658,8 +664,8 @@ bool WalletModel::sendZpiv(
 bool WalletModel::convertBackZpiv(
         CAmount value,
         std::vector<CZerocoinMint> &vMintsSelected,
-        CZerocoinSpendReceipt &receipt
-){
+        CZerocoinSpendReceipt &receipt)
+{
     CWalletTx wtxNew;
     return wallet->SpendZerocoin(
             value,
@@ -758,7 +764,7 @@ bool WalletModel::changePassphrase(const SecureString& oldPass, const SecureStri
 bool WalletModel::backupWallet(const QString& filename)
 {
     //attempt regular backup
-    if(!BackupWallet(*wallet, filename.toLocal8Bit().data())) {
+    if (!BackupWallet(*wallet, filename.toLocal8Bit().data())) {
         return error("ERROR: Failed to backup wallet!");
     }
 
@@ -947,34 +953,41 @@ int64_t WalletModel::getCreationTime() const {
     return wallet->nTimeFirstKey;
 }
 
-int64_t WalletModel::getKeyCreationTime(const CPubKey& key){
+int64_t WalletModel::getKeyCreationTime(const CPubKey& key)
+{
     return pwalletMain->GetKeyCreationTime(key);
 }
 
-int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address){
-    if(this->isMine(address)) {
+int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address)
+{
+    if (this->isMine(address)) {
         return pwalletMain->GetKeyCreationTime(address);
     }
     return 0;
 }
 
-PairResult WalletModel::getNewAddress(CBitcoinAddress& ret, std::string label) const{
+PairResult WalletModel::getNewAddress(CBitcoinAddress& ret, std::string label) const
+{
     return wallet->getNewAddress(ret, label);
 }
 
-PairResult WalletModel::getNewStakingAddress(CBitcoinAddress& ret,std::string label) const{
+PairResult WalletModel::getNewStakingAddress(CBitcoinAddress& ret,std::string label) const
+{
     return wallet->getNewStakingAddress(ret, label);
 }
 
-bool WalletModel::whitelistAddressFromColdStaking(const QString &addressStr) {
+bool WalletModel::whitelistAddressFromColdStaking(const QString &addressStr)
+{
     return updateAddressBookPurpose(addressStr, AddressBook::AddressBookPurpose::DELEGATOR);
 }
 
-bool WalletModel::blacklistAddressFromColdStaking(const QString &addressStr) {
+bool WalletModel::blacklistAddressFromColdStaking(const QString &addressStr)
+{
     return updateAddressBookPurpose(addressStr, AddressBook::AddressBookPurpose::DELEGABLE);
 }
 
-bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std::string& purpose) {
+bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std::string& purpose)
+{
     CBitcoinAddress address(addressStr.toStdString());
     if (address.IsStakingAddress())
         return error("Invalid PIVX address, cold staking address");
@@ -984,7 +997,8 @@ bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std:
     return pwalletMain->SetAddressBook(keyID, getLabelForAddress(address), purpose);
 }
 
-bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID) {
+bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID)
+{
     if (!address.IsValid())
         return error("Invalid PIVX address");
 
@@ -994,7 +1008,8 @@ bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID) {
     return true;
 }
 
-std::string WalletModel::getLabelForAddress(const CBitcoinAddress& address) {
+std::string WalletModel::getLabelForAddress(const CBitcoinAddress& address)
+{
     std::string label = "";
     {
         LOCK(wallet->cs_wallet);
@@ -1134,10 +1149,5 @@ bool WalletModel::isUsed(CBitcoinAddress address)
     return wallet->IsUsed(address);
 }
 
-std::string WalletModel::resetMintZerocoin(){
-    return wallet->ResetMintZerocoin();
-}
-
-std::string WalletModel::resetSpentZerocoin(){
-    return wallet->ResetSpentZerocoin();
-}
+std::string WalletModel::resetMintZerocoin() { return wallet->ResetMintZerocoin(); }
+std::string WalletModel::resetSpentZerocoin() { return wallet->ResetSpentZerocoin(); }

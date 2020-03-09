@@ -156,8 +156,9 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
     ui->listView->setUniformItemSizes(true);
 }
 
-void PrivacyWidget::loadWalletModel(){
-    if(walletModel) {
+void PrivacyWidget::loadWalletModel()
+{
+    if (walletModel) {
         txModel = walletModel->getTransactionTableModel();
         // Set up transaction list
         filter = new TransactionFilterProxy();
@@ -178,7 +179,7 @@ void PrivacyWidget::loadWalletModel(){
         if (!txModel->hasZcTxes()) {
             ui->emptyContainer->setVisible(true);
             ui->listView->setVisible(false);
-        }else{
+        } else {
             showList();
         }
 
@@ -187,13 +188,14 @@ void PrivacyWidget::loadWalletModel(){
 
 }
 
-void PrivacyWidget::onMintSelected(bool isMint){
+void PrivacyWidget::onMintSelected(bool isMint)
+{
     QString btnText;
-    if(isMint){
+    if (isMint) {
         btnText = tr("Mint zPIV");
         ui->btnCoinControl->setVisible(true);
         ui->labelSubtitleAmount->setText(tr("Enter amount of PIV to mint into zPIV"));
-    }else{
+    } else {
         btnText = tr("Convert back to PIV");
         ui->btnCoinControl->setVisible(false);
         ui->labelSubtitleAmount->setText(tr("Enter amount of zPIV to convert back into PIV"));
@@ -201,7 +203,8 @@ void PrivacyWidget::onMintSelected(bool isMint){
     ui->pushButtonSave->setText(btnText);
 }
 
-void PrivacyWidget::updateDisplayUnit() {
+void PrivacyWidget::updateDisplayUnit()
+{
     if (walletModel && walletModel->getOptionsModel()) {
         nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
 
@@ -210,27 +213,30 @@ void PrivacyWidget::updateDisplayUnit() {
     }
 }
 
-void PrivacyWidget::showList(){
+void PrivacyWidget::showList()
+{
     ui->emptyContainer->setVisible(false);
     ui->listView->setVisible(true);
 }
 
-void PrivacyWidget::onTotalZpivClicked(){
+void PrivacyWidget::onTotalZpivClicked()
+{
     bool isVisible = ui->layoutDenom->isVisible();
-    if(!isVisible){
+    if (!isVisible) {
         ui->layoutDenom->setVisible(true);
         ui->btnTotalzPIV->setRightIconClass("btn-dropdown", true);
-    }else{
+    } else {
         ui->layoutDenom->setVisible(false);
         ui->btnTotalzPIV->setRightIconClass("ic-arrow", true);
     }
 }
 
-void PrivacyWidget::onSendClicked(){
+void PrivacyWidget::onSendClicked()
+{
     if (!walletModel || !walletModel->getOptionsModel())
         return;
 
-    if(sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
+    if (sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
         warn(tr("Zerocoin"), tr("zPIV is currently undergoing maintenance"));
         return;
     }
@@ -238,7 +244,7 @@ void PrivacyWidget::onSendClicked(){
     // Only convert enabled.
     bool isConvert = true;// ui->pushLeft->isChecked();
 
-    if(!GUIUtil::requestUnlock(walletModel, AskPassphraseDialog::Context::Mint_zPIV, true)){
+    if (!GUIUtil::requestUnlock(walletModel, AskPassphraseDialog::Context::Mint_zPIV, true)) {
         inform(tr("You need to unlock the wallet to be able to %1 zPIV").arg(isConvert ? tr("convert") : tr("mint")));
         return;
     }
@@ -257,18 +263,19 @@ void PrivacyWidget::onSendClicked(){
     }
 
     setCssEditLine(ui->lineEditAmount, true, true);
-    if(isConvert){
+    if (isConvert) {
         spend(value);
-    }else{
+    } else {
         mint(value);
     }
 }
 
-void PrivacyWidget::mint(CAmount value){
+void PrivacyWidget::mint(CAmount value)
+{
     std::string strError;
-    if(!walletModel->mintCoins(value, CoinControlDialog::coinControl, strError)){
+    if (!walletModel->mintCoins(value, CoinControlDialog::coinControl, strError)) {
         inform(tr(strError.data()));
-    }else{
+    } else {
         // Mint succeed
         inform(tr("zPIV minted successfully"));
         // clear
@@ -276,17 +283,18 @@ void PrivacyWidget::mint(CAmount value){
     }
 }
 
-void PrivacyWidget::spend(CAmount value){
+void PrivacyWidget::spend(CAmount value)
+{
     CZerocoinSpendReceipt receipt;
     std::vector<CZerocoinMint> selectedMints;
 
-    if(!walletModel->convertBackZpiv(
+    if (!walletModel->convertBackZpiv(
             value,
             selectedMints,
             receipt
-    )){
+    )) {
         inform(receipt.GetStatusMessage().data());
-    }else{
+    } else {
         // Spend succeed
         inform(tr("zPIV converted back to PIV"));
         // clear
@@ -295,8 +303,9 @@ void PrivacyWidget::spend(CAmount value){
 }
 
 
-void PrivacyWidget::onCoinControlClicked(){
-    if(ui->pushRight->isChecked()) {
+void PrivacyWidget::onCoinControlClicked()
+{
+    if (ui->pushRight->isChecked()) {
         if (walletModel->getBalance() > 0) {
             if (!coinControlDialog) {
                 coinControlDialog = new CoinControlDialog();
@@ -312,29 +321,32 @@ void PrivacyWidget::onCoinControlClicked(){
     }
 }
 
-void PrivacyWidget::onRescanMintsClicked(){
+void PrivacyWidget::onRescanMintsClicked()
+{
     if (ask(tr("Rescan Mints"),
         tr("Your zerocoin mints are going to be scanned from the blockchain from scratch"))
-    ){
+    ) {
         std::string strResetMintResult = walletModel->resetMintZerocoin();
         inform(QString::fromStdString(strResetMintResult));
     }
 }
 
-void PrivacyWidget::onResetZeroClicked(){
+void PrivacyWidget::onResetZeroClicked()
+{
     if (ask(tr("Reset Spent zPIV"),
         tr("Your zerocoin spends are going to be scanned from the blockchain from scratch"))
-    ){
+    ) {
         std::string strResetMintResult = walletModel->resetSpentZerocoin();
         inform(QString::fromStdString(strResetMintResult));
     }
 }
 
-void PrivacyWidget::updateDenomsSupply(){
+void PrivacyWidget::updateDenomsSupply()
+{
     std::map<libzerocoin::CoinDenomination, CAmount> mapDenomBalances;
     std::map<libzerocoin::CoinDenomination, int> mapUnconfirmed;
     std::map<libzerocoin::CoinDenomination, int> mapImmature;
-    for (const auto& denom : libzerocoin::zerocoinDenomList){
+    for (const auto& denom : libzerocoin::zerocoinDenomList) {
         mapDenomBalances.insert(std::make_pair(denom, 0));
         mapUnconfirmed.insert(std::make_pair(denom, 0));
         mapImmature.insert(std::make_pair(denom, 0));
@@ -344,7 +356,7 @@ void PrivacyWidget::updateDenomsSupply(){
     walletModel->listZerocoinMints(vMints, true, false, true, true);
     const int nRequiredConfs = Params().GetConsensus().ZC_MinMintConfirmations;
 
-    for (auto& meta : vMints){
+    for (auto& meta : vMints) {
         // All denominations
         mapDenomBalances.at(meta.denom)++;
 
@@ -374,10 +386,10 @@ void PrivacyWidget::updateDenomsSupply(){
         if (nUnconfirmed) {
             strUnconfirmed += QString::number(nUnconfirmed) + QString(" unconf. ");
         }
-        if(nImmature) {
+        if (nImmature) {
             strUnconfirmed += QString::number(nImmature) + QString(" immature ");
         }
-        if(nImmature || nUnconfirmed) {
+        if (nImmature || nUnconfirmed) {
             strUnconfirmed = QString("( ") + strUnconfirmed + QString(") ");
         }
 
@@ -420,11 +432,13 @@ void PrivacyWidget::updateDenomsSupply(){
     ui->btnTotalzPIV->setTitleText(tr("Total %1").arg(GUIUtil::formatBalance(matureZerocoinBalance, nDisplayUnit, true)));
 }
 
-void PrivacyWidget::changeTheme(bool isLightTheme, QString& theme){
+void PrivacyWidget::changeTheme(bool isLightTheme, QString& theme)
+{
     static_cast<TxViewHolder*>(this->delegate->getRowFactory())->isLightTheme = isLightTheme;
     ui->listView->update();
 }
 
-PrivacyWidget::~PrivacyWidget(){
+PrivacyWidget::~PrivacyWidget()
+{
     delete ui;
 }
