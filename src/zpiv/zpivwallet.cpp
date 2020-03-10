@@ -16,6 +16,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
 {
     this->strWalletFile = strWalletFile;
     CWalletDB walletdb(strWalletFile);
+    bool fRegtest = Params().IsRegTestNet();
 
     uint256 hashSeed;
     bool fFirstRun = !walletdb.ReadCurrentSeedHash(hashSeed);
@@ -39,7 +40,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
     }
 
     //Don't try to do anything if the wallet is locked.
-    if (pwalletMain->IsLocked()) {
+    if (pwalletMain->IsLocked() || (!fRegtest && fFirstRun)) {
         seedMaster = 0;
         nCountLastUsed = 0;
         this->mintPool = CMintPool();
@@ -48,7 +49,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
 
     //First time running, generate master seed
     uint256 seed;
-    if (fFirstRun) {
+    if (fRegtest && fFirstRun) {
         // Borrow random generator from the key class so that we don't have to worry about randomness
         CKey key;
         key.MakeNewKey(true);
