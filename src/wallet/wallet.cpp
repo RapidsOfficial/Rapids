@@ -1518,19 +1518,13 @@ bool CWalletTx::WriteToDisk(CWalletDB *pwalletdb)
 
 bool CWallet::Upgrade(std::string& error, const int& prevVersion)
 {
-    // Upgrade to HD if explicit upgrade
-    if (GetBoolArg("-upgradewallet", false)) {
-        LOCK(cs_wallet);
-
-        // Do not upgrade versions if we are already in the last one
-        if (prevVersion >= FEATURE_PRE_SPLIT_KEYPOOL) {
-            error = strprintf(_("Cannot upgrade to HD wallet (already running HD support). Version: %d"), prevVersion);
-            return false;
-        }
-
-        return m_spk_man->Upgrade(prevVersion, error);
+    LOCK(cs_wallet);
+    // Do not upgrade versions if we are already in the last one
+    if (prevVersion >= FEATURE_PRE_SPLIT_KEYPOOL) {
+        error = strprintf(_("Cannot upgrade to HD wallet (already running HD support). Version: %d"), prevVersion);
+        return false;
     }
-    return true;
+    return m_spk_man->Upgrade(prevVersion, error);
 }
 
 /**
