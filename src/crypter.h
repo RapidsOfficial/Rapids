@@ -122,8 +122,6 @@ bool DecryptAES256(const SecureString& sKey, const std::string& sCiphertext, con
 class CCryptoKeyStore : public CBasicKeyStore
 {
 private:
-    CKeyingMaterial vMasterKey;
-
     //! if fUseCrypto is true, mapKeys must be empty
     //! if fUseCrypto is false, vMasterKey must be empty
     bool fUseCrypto;
@@ -132,6 +130,9 @@ private:
     bool fDecryptionThoroughlyChecked;
 
 protected:
+    // TODO: In the future, move this variable to the wallet class directly following upstream's structure.
+    CKeyingMaterial vMasterKey;
+
     bool SetCrypted();
 
     //! will encrypt previously unencrypted keys

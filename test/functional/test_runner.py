@@ -65,6 +65,7 @@ BASE_SCRIPTS= [
     'wallet_zerocoin_publicspends.py',          # ~ 270 sec
     'p2p_time_offset.py',                       # ~ 263 sec
     'wallet_abandonconflict.py',                # ~ 208 sec
+    'wallet_hd.py',                             # ~ 205 sec
     'rpc_rawtransaction.py',                    # ~ 190 sec
     'wallet_zapwallettxes.py',                  # ~ 172 sec
     'wallet_keypool_topup.py',                  # ~ 167 sec
@@ -94,6 +95,7 @@ BASE_SCRIPTS= [
     # vv Tests less than 60s vv
     'wallet_accounts.py',                       # ~ 55 sec
     'mempool_resurrect.py',                     # ~ 51 sec
+    'wallet_upgrade.py',                        # ~ 50 sec
     'rpc_budget.py',                            # ~ 50 sec
     'mempool_spend_coinbase.py',                # ~ 50 sec
     'rpc_signrawtransaction.py',                # ~ 50 sec

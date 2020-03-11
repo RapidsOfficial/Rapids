@@ -10,6 +10,7 @@ from test_framework.util import *
 class KeyPoolTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
+        self.extra_args = [['-keypool=1']]
 
     def run_test(self):
         nodes = self.nodes
@@ -19,7 +20,7 @@ class KeyPoolTest(PivxTestFramework):
         # Encrypt wallet and wait to terminate
         nodes[0].node_encrypt_wallet('test')
         # Restart node 0
-        self.start_node(0)
+        self.start_node(0, self.extra_args[0])
         # Keep creating keys
         addr = nodes[0].getnewaddress()
         addr_data = nodes[0].validateaddress(addr)
@@ -31,10 +32,10 @@ class KeyPoolTest(PivxTestFramework):
         nodes[0].keypoolrefill(6)
         nodes[0].walletlock()
         wi = nodes[0].getwalletinfo()
-        assert_equal(wi['keypoolsize'], 7)
+        assert_equal(wi['keypoolsize_hd_internal'], 6)
+        assert_equal(wi['keypoolsize'], 6)
 
         # drain the internal keys
-        nodes[0].getrawchangeaddress()
         nodes[0].getrawchangeaddress()
         nodes[0].getrawchangeaddress()
         nodes[0].getrawchangeaddress()
@@ -46,16 +47,16 @@ class KeyPoolTest(PivxTestFramework):
         assert_raises_rpc_error(-12, "Keypool ran out", nodes[0].getrawchangeaddress)
 
         # drain the external keys
-        #addr.add(nodes[0].getnewaddress())
-        #addr.add(nodes[0].getnewaddress())
-        #addr.add(nodes[0].getnewaddress())
-        #addr.add(nodes[0].getnewaddress())
-        #addr.add(nodes[0].getnewaddress())
-        #addr.add(nodes[0].getnewaddress())
-        #addr.add(nodes[0].getnewaddress())
-        #assert(len(addr) == 7)
+        addr.add(nodes[0].getnewaddress())
+        addr.add(nodes[0].getnewaddress())
+        addr.add(nodes[0].getnewaddress())
+        addr.add(nodes[0].getnewaddress())
+        addr.add(nodes[0].getnewaddress())
+        addr.add(nodes[0].getnewaddress())
+        assert len(addr) == 6
         # the next one should fail
-        #assert_raises_rpc_error(-12, "Error: Keypool ran out, please call keypoolrefill first", nodes[0].getnewaddress)
+        assert_raises_rpc_error(-12, "Keypool ran out, please call keypoolrefill first, or unlock the wallet.",
+                                nodes[0].getnewaddress)
 
         # refill keypool with three new addresses
         nodes[0].walletpassphrase('test', 1)
@@ -65,16 +66,16 @@ class KeyPoolTest(PivxTestFramework):
         time.sleep(1.1)
         assert_equal(nodes[0].getwalletinfo()["unlocked_until"], 0)
 
-        # drain them by mining
-        #nodes[0].generate(1)
-        #nodes[0].generate(1)
-        #nodes[0].generate(1)
-        #assert_raises_rpc_error(-12, "Keypool ran out", nodes[0].generate, 1)
+        # drain the keypool
+        for _ in range(3):
+            nodes[0].getnewaddress()
+        assert_raises_rpc_error(-12, "Keypool ran out", nodes[0].getnewaddress)
 
         nodes[0].walletpassphrase('test', 100)
         nodes[0].keypoolrefill(100)
         wi = nodes[0].getwalletinfo()
-        assert_equal(wi['keypoolsize'], 101)
+        assert_equal(wi['keypoolsize_hd_internal'], 100)
+        assert_equal(wi['keypoolsize'], 100)
 
 if __name__ == '__main__':
     KeyPoolTest().main()

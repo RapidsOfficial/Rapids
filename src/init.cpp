@@ -327,7 +327,7 @@ static void registerSignalHandler(int signal, void(*handler)(int))
 
 bool static InitError(const std::string& str)
 {
-    uiInterface.ThreadSafeMessageBox(str, "", CClientUIInterface::MSG_ERROR);
+    uiInterface.ThreadSafeMessageBox(str, "Init Error", CClientUIInterface::MSG_ERROR);
     return false;
 }
 
@@ -1671,23 +1671,44 @@ bool AppInit2()
                 strErrors << _("Error loading wallet.dat") << "\n";
         }
 
+        int prev_version = pwalletMain->GetVersion();
         if (GetBoolArg("-upgradewallet", fFirstRun)) {
-            int nMaxVersion = GetArg("-upgradewallet", 0);
-            if (nMaxVersion == 0) // the -upgradewallet without argument case
-            {
-                LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
-                nMaxVersion = CLIENT_VERSION;
-                pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
-            } else
-                LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
-            if (nMaxVersion < pwalletMain->GetVersion())
-                strErrors << _("Cannot downgrade wallet") << "\n";
-            pwalletMain->SetMaxVersion(nMaxVersion);
+
+            if (prev_version <= FEATURE_PRE_PIVX && pwalletMain->IsLocked()) {
+                // Cannot upgrade a locked wallet
+                std::string strProblem = "Cannot upgrade a locked wallet.\n";
+                strErrors << _("Error: ") << strProblem;
+                LogPrintf("%s", strErrors.str());
+                return InitError(strProblem);
+            } else {
+
+                int nMaxVersion = GetArg("-upgradewallet", 0);
+                if (nMaxVersion == 0) // the -upgradewallet without argument case
+                {
+                    LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
+                    nMaxVersion = FEATURE_LATEST;
+                    pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
+                } else
+                    LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
+                if (nMaxVersion < pwalletMain->GetVersion())
+                    strErrors << _("Cannot downgrade wallet") << "\n";
+                pwalletMain->SetMaxVersion(nMaxVersion);
+            }
+        }
+
+        // Upgrade to HD if explicit upgrade was requested.
+        std::string upgradeError;
+        if (!pwalletMain->Upgrade(upgradeError, prev_version)) {
+            strErrors << upgradeError << "\n";
         }
 
         if (fFirstRun) {
-            // Create new keyUser and set as default key
-            CPubKey newDefaultKey;
+            // Create new HD Wallet
+            LogPrintf("Creating HD Wallet\n");
+            // Ensure this wallet.dat can only be opened by clients supporting HD.
+            pwalletMain->SetMinVersion(FEATURE_LATEST);
+            pwalletMain->SetupSPKM();
+
             // Top up the keypool
             if (!pwalletMain->TopUpKeyPool()) {
                 // Error generating keys
@@ -1956,9 +1977,14 @@ bool AppInit2()
     LogPrintf("mapBlockIndex.size() = %u\n", mapBlockIndex.size());
     LogPrintf("chainActive.Height() = %d\n", chainActive.Height());
 #ifdef ENABLE_WALLET
-    LogPrintf("setKeyPool.size() = %u\n", pwalletMain ? pwalletMain->setKeyPool.size() : 0);
-    LogPrintf("mapWallet.size() = %u\n", pwalletMain ? pwalletMain->mapWallet.size() : 0);
-    LogPrintf("mapAddressBook.size() = %u\n", pwalletMain ? pwalletMain->mapAddressBook.size() : 0);
+    {
+        if (pwalletMain) {
+            LOCK(pwalletMain->cs_wallet);
+            LogPrintf("setKeyPool.size() = %u\n", pwalletMain ? pwalletMain->GetKeyPoolSize() : 0);
+            LogPrintf("mapWallet.size() = %u\n", pwalletMain ? pwalletMain->mapWallet.size() : 0);
+            LogPrintf("mapAddressBook.size() = %u\n", pwalletMain ? pwalletMain->mapAddressBook.size() : 0);
+        }
+    }
 #endif
 
     if (GetBoolArg("-listenonion", DEFAULT_LISTEN_ONION))

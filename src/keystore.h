@@ -19,10 +19,11 @@ class CScriptID;
 /** A virtual base class for key stores */
 class CKeyStore
 {
-protected:
-    mutable RecursiveMutex cs_KeyStore;
 
 public:
+    // todo: Make it protected again once we are more advanced in the wallet/spkm decoupling.
+    mutable RecursiveMutex cs_KeyStore;
+
     virtual ~CKeyStore() {}
 
     //! Add a key to the store.
