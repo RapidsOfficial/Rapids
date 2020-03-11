@@ -31,7 +31,7 @@ static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesi
 
     CBlock genesis;
     genesis.vtx.push_back(txNew);
-    genesis.hashPrevBlock = 0;
+    genesis.hashPrevBlock.SetNull();
     genesis.nVersion = nVersion;
     genesis.nTime    = nTime;
     genesis.nBits    = nBits;
@@ -148,9 +148,9 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
         consensus.fPowAllowMinDifficultyBlocks = false;
-        consensus.powLimit   = ~uint256(0) >> 20;   // PIVX starting difficulty is 1 / 2^12
-        consensus.posLimitV1 = ~uint256(0) >> 24;
-        consensus.posLimitV2 = ~uint256(0) >> 20;
+        consensus.powLimit   = ~UINT256_ZERO >> 20;   // PIVX starting difficulty is 1 / 2^12
+        consensus.posLimitV1 = ~UINT256_ZERO >> 24;
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 43200;       // approx. 1 every 30 days
         consensus.nBudgetFeeConfirmations = 6;      // Number of confirmations for the finalization fee
         consensus.nCoinbaseMaturity = 100;
@@ -269,9 +269,9 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.powLimit   = ~uint256(0) >> 20;   // PIVX starting difficulty is 1 / 2^12
-        consensus.posLimitV1 = ~uint256(0) >> 24;
-        consensus.posLimitV2 = ~uint256(0) >> 20;
+        consensus.powLimit   = ~UINT256_ZERO >> 20;   // PIVX starting difficulty is 1 / 2^12
+        consensus.posLimitV1 = ~UINT256_ZERO >> 24;
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 144;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on testnet)
         consensus.nCoinbaseMaturity = 15;
@@ -393,9 +393,9 @@ public:
         assert(genesis.hashMerkleRoot == uint256("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.powLimit   = ~uint256(0) >> 20;   // PIVX starting difficulty is 1 / 2^12
-        consensus.posLimitV1 = ~uint256(0) >> 24;
-        consensus.posLimitV2 = ~uint256(0) >> 20;
+        consensus.powLimit   = ~UINT256_ZERO >> 20;   // PIVX starting difficulty is 1 / 2^12
+        consensus.posLimitV1 = ~UINT256_ZERO >> 24;
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 144;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on regtest)
         consensus.nCoinbaseMaturity = 100;

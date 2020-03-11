@@ -484,7 +484,7 @@ UniValue decoderawtransaction(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "TX decode failed");
 
     UniValue result(UniValue::VOBJ);
-    TxToJSON(tx, 0, result);
+    TxToJSON(tx, UINT256_ZERO, result);
 
     return result;
 }
@@ -900,7 +900,7 @@ UniValue getspentzerocoinamount(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter for transaction input");
 
     CTransaction tx;
-    uint256 hashBlock = 0;
+    uint256 hashBlock = UINT256_ZERO;
     if (!GetTransaction(txHash, tx, hashBlock, true))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No information available about transaction");
 

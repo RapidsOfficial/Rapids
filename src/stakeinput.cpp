@@ -98,7 +98,7 @@ CBlockIndex* CPivStake::GetIndexFrom()
 {
     if (pindexFrom)
         return pindexFrom;
-    uint256 hashBlock = 0;
+    uint256 hashBlock = UINT256_ZERO;
     CTransaction tx;
     if (GetTransaction(txFrom.GetHash(), tx, hashBlock, true)) {
         // If the index is in the chain, then set it as the "index from"

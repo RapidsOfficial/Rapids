@@ -297,12 +297,12 @@ public:
 
     CDiskBlockIndex()
     {
-        hashPrev = uint256();
+        hashPrev = UINT256_ZERO;
     }
 
     explicit CDiskBlockIndex(const CBlockIndex* pindex) : CBlockIndex(*pindex)
     {
-        hashPrev = (pprev ? pprev->GetBlockHash() : uint256(0));
+        hashPrev = (pprev ? pprev->GetBlockHash() : UINT256_ZERO);
     }
 
     ADD_SERIALIZE_METHODS;

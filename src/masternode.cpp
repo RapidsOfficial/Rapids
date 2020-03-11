@@ -160,7 +160,7 @@ uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
 {
     if (chainActive.Tip() == NULL) return 0;
 
-    uint256 hash = 0;
+    uint256 hash;
     uint256 aux = vin.prevout.hash + vin.prevout.n;
 
     if (!GetBlockHash(hash, nBlockHeight)) {
@@ -647,7 +647,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
 
     // verify that sig time is legit in past
     // should be at least not earlier than block when 1000 PIV tx got MASTERNODE_MIN_CONFIRMATIONS
-    uint256 hashBlock = 0;
+    uint256 hashBlock = UINT256_ZERO;
     CTransaction tx2;
     GetTransaction(vin.prevout.hash, tx2, hashBlock, true);
     BlockMap::iterator mi = mapBlockIndex.find(hashBlock);

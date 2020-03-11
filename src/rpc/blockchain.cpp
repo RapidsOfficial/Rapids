@@ -114,7 +114,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
     for (const CTransaction& tx : block.vtx) {
         if (txDetails) {
             UniValue objTx(UniValue::VOBJ);
-            TxToJSON(tx, uint256(0), objTx);
+            TxToJSON(tx, UINT256_ZERO, objTx);
             txs.push_back(objTx);
         } else
             txs.push_back(tx.GetHash().GetHex());

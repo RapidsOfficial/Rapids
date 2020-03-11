@@ -2085,7 +2085,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
     isminefilter filter = ISMINE_SPENDABLE_ALL | ISMINE_COLD;
 
     if (params.size() > 0) {
-        uint256 blockId = 0;
+        uint256 blockId;
 
         blockId.SetHex(params[0].get_str());
         BlockMap::iterator it = mapBlockIndex.find(blockId);
@@ -2116,7 +2116,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
     }
 
     CBlockIndex* pblockLast = chainActive[chainActive.Height() + 1 - target_confirms];
-    uint256 lastblock = pblockLast ? pblockLast->GetBlockHash() : 0;
+    uint256 lastblock = pblockLast ? pblockLast->GetBlockHash() : UINT256_ZERO;
 
     UniValue ret(UniValue::VOBJ);
     ret.push_back(Pair("transactions", transactions));
@@ -3722,14 +3722,14 @@ UniValue resetspentzerocoin(const UniValue& params, bool fHelp)
 
     for (CZerocoinSpend spend : listSpends) {
         CTransaction tx;
-        uint256 hashBlock = 0;
+        uint256 hashBlock = UINT256_ZERO;
         if (!GetTransaction(spend.GetTxHash(), tx, hashBlock)) {
             listUnconfirmedSpends.push_back(spend);
             continue;
         }
 
         //no confirmations
-        if (hashBlock == 0)
+        if (hashBlock.IsNull())
             listUnconfirmedSpends.push_back(spend);
     }
 

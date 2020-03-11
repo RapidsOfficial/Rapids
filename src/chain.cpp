@@ -214,7 +214,7 @@ uint64_t CBlockIndex::GetStakeModifierV1() const
 uint256 CBlockIndex::GetStakeModifierV2() const
 {
     if (vStakeModifier.empty() || !Params().GetConsensus().IsStakeModifierV2(nHeight))
-        return uint256(0);
+        return UINT256_ZERO;
     uint256 nStakeModifier;
     std::memcpy(nStakeModifier.begin(), vStakeModifier.data(), vStakeModifier.size());
     return nStakeModifier;

@@ -723,14 +723,14 @@ std::string CWallet::ResetSpentZerocoin()
 
     for (CZerocoinSpend spend : listSpends) {
         CTransaction tx;
-        uint256 hashBlock = 0;
+        uint256 hashBlock = UINT256_ZERO;
         if (!GetTransaction(spend.GetTxHash(), tx, hashBlock)) {
             listUnconfirmedSpends.push_back(spend);
             continue;
         }
 
         //no confirmations
-        if (hashBlock == 0)
+        if (hashBlock.IsNull())
             listUnconfirmedSpends.push_back(spend);
     }
 

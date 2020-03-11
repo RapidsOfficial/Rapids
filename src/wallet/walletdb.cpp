@@ -498,7 +498,7 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             }
             CKey key;
             CPrivKey pkey;
-            uint256 hash = 0;
+            uint256 hash;
 
             if (strType == "key") {
                 wss.nKeys++;
@@ -521,7 +521,7 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
 
             bool fSkipCheck = false;
 
-            if (hash != 0) {
+            if (!hash.IsNull()) {
                 // hash pubkey/privkey to accelerate wallet load
                 std::vector<unsigned char> vchKey;
                 vchKey.reserve(vchPubKey.size() + pkey.size());
@@ -1334,7 +1334,7 @@ std::map<uint256, std::vector<std::pair<uint256, uint32_t> > > CWalletDB::MapMin
         // Read next record
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         if (fFlags == DB_SET_RANGE)
-            ssKey << std::make_pair(std::string("mintpool"), uint256(0));
+            ssKey << std::make_pair(std::string("mintpool"), UINT256_ZERO);
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         int ret = ReadAtCursor(pcursor, ssKey, ssValue, fFlags);
         fFlags = DB_NEXT;
@@ -1390,7 +1390,7 @@ std::list<CDeterministicMint> CWalletDB::ListDeterministicMints()
         // Read next record
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         if (fFlags == DB_SET_RANGE)
-            ssKey << make_pair(std::string("dzpiv"), uint256(0));
+            ssKey << make_pair(std::string("dzpiv"), UINT256_ZERO);
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         int ret = ReadAtCursor(pcursor, ssKey, ssValue, fFlags);
         fFlags = DB_NEXT;
@@ -1435,7 +1435,7 @@ std::list<CZerocoinMint> CWalletDB::ListMintedCoins()
         // Read next record
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
         if (fFlags == DB_SET_RANGE)
-            ssKey << make_pair(std::string("zerocoin"), uint256(0));
+            ssKey << make_pair(std::string("zerocoin"), UINT256_ZERO);
         CDataStream ssValue(SER_DISK, CLIENT_VERSION);
         int ret = ReadAtCursor(pcursor, ssKey, ssValue, fFlags);
         fFlags = DB_NEXT;
