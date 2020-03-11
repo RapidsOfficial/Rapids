@@ -2082,33 +2082,10 @@ bool less_then_denom(const COutput& out1, const COutput& out2)
 
 bool CWallet::StakeableCoins(std::vector<COutput>* pCoins)
 {
-    CAmount nBalance = GetStakingBalance(GetBoolArg("-coldstaking", true));
-
-    if (nBalance == 0) return false;
-    if (mapArgs.count("-reservebalance") && !ParseMoney(mapArgs["-reservebalance"], nReserveBalance))
-        return error("%s : invalid reserve balance amount", __func__);
-    if (nBalance <= nReserveBalance) return false;
-
     const bool fIncludeCold = (sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) &&
                                GetBoolArg("-coldstaking", true));
 
-    if (!AvailableCoins(pCoins, true, nullptr, false, STAKEABLE_COINS,  false, 1, fIncludeCold, false))
-        return false;
-
-    if (!pCoins || nReserveBalance == 0)
-        // there is at least one stakeable utxo
-        return true;
-
-    CAmount nTargetAmount = nBalance - nReserveBalance;
-    CAmount nAmountSelected = 0;
-    // leave some utxo for reserve balance
-    for (const COutput &out : *pCoins) {
-        const CAmount& nAmountUtxo = out.tx->vout[out.i].nValue;
-        if (nAmountSelected + nAmountUtxo > nTargetAmount) continue;
-        nAmountSelected += out.tx->vout[out.i].nValue;
-    }
-
-    return (pCoins->size() > 0);
+    return AvailableCoins(pCoins, true, nullptr, false, STAKEABLE_COINS,  false, 1, fIncludeCold, false);
 }
 
 bool CWallet::SelectCoinsMinConf(const CAmount& nTargetValue, int nConfMine, int nConfTheirs, std::vector<COutput> vCoins, std::set<std::pair<const CWalletTx*, unsigned int> >& setCoinsRet, CAmount& nValueRet) const
