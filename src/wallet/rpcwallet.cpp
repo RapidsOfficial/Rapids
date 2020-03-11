@@ -47,6 +47,12 @@ void EnsureWalletIsUnlocked(bool fAllowAnonOnly)
         throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: Please enter the wallet passphrase with walletpassphrase first.");
 }
 
+void EnsureWallet()
+{
+    if (!pwalletMain)
+        throw JSONRPCError(RPC_WALLET_UNLOCK_NEEDED, "Error: No wallet loaded in the system");
+}
+
 void WalletTxToJSON(const CWalletTx& wtx, UniValue& entry)
 {
     int confirms = wtx.GetDepthInMainChain(false);
@@ -239,6 +245,57 @@ UniValue getaddressinfo(const UniValue& params, bool fHelp)
     return ret;
 }
 
+CPubKey parseWIFKey(std::string strKey, CWallet* pwallet)
+{
+    CKey key = KeyIO::DecodeSecret(strKey);
+    if (!key.IsValid()) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
+    }
+
+    if (HaveKey(pwallet, key)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Already have this key (either as an HD seed or as a loose private key)");
+    }
+    return pwallet->GetScriptPubKeyMan()->DeriveNewSeed(key);
+}
+
+UniValue upgradewallet(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() != 0)
+        throw std::runtime_error("upgradewallet\n"
+                                 "Bump the wallet features to the latest supported version. Non-HD wallets will be upgraded to HD wallet functionality. "
+                                 "Marking all the previous keys as pre-split keys and managing them separately. Once the last key in the pre-split keypool gets marked as used (received balance), the wallet will automatically start using the HD generated keys.\n"
+                                 "The upgraded HD wallet will have a new HD seed set so that new keys added to the keypool will be derived from this new seed.\n"
+                                 "Wallets that are already runnning the latest HD version will not be upgraded\n"
+                                 "\nNote that you will need to MAKE A NEW BACKUP of your wallet after upgrade it.\n"
+                                 + HelpExampleCli("upgradewallet", "") + HelpExampleRpc("upgradewallet", "")
+        );
+
+    EnsureWallet();
+    EnsureWalletIsUnlocked();
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    // Do not do anything to non-HD wallets
+    if (pwalletMain->IsHDEnabled()) {
+        throw JSONRPCError(RPC_WALLET_ERROR, "Cannot upgrade the wallet. The wallet is already running the latest version");
+    }
+
+    // Get version
+    int prev_version = pwalletMain->GetVersion();
+    // Upgrade wallet's version
+    pwalletMain->SetMinVersion(FEATURE_LATEST);
+    pwalletMain->SetMaxVersion(FEATURE_LATEST);
+
+    // Upgrade to HD
+    std::string upgradeError;
+    if (!pwalletMain->Upgrade(upgradeError, prev_version)) {
+        upgradeError = strprintf("Error: Cannot upgrade wallet, %s", upgradeError);
+        throw JSONRPCError(RPC_WALLET_ERROR, upgradeError);
+    }
+
+    return NullUniValue;
+}
+
 UniValue sethdseed(const UniValue& params, bool fHelp)
 {
     CWallet* pwallet = pwalletMain;
@@ -265,9 +322,6 @@ UniValue sethdseed(const UniValue& params, bool fHelp)
                + HelpExampleRpc("sethdseed", "true, \"wifkey\"")
         );
 
-
-
-    ScriptPubKeyMan* spk_man = pwallet->GetScriptPubKeyMan();
     if (IsInitialBlockDownload()) {
         throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Cannot set a new HD seed while still in Initial Block Download");
     }
@@ -286,21 +340,9 @@ UniValue sethdseed(const UniValue& params, bool fHelp)
         flush_key_pool = params[0].get_bool();
     }
 
-    CPubKey master_pub_key;
-    if (params[1].isNull()) {
-        master_pub_key = spk_man->GenerateNewSeed();
-    } else {
-        CKey key = KeyIO::DecodeSecret(params[1].get_str());
-        if (!key.IsValid()) {
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid private key");
-        }
-
-        if (HaveKey(pwallet, key)) {
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Already have this key (either as an HD seed or as a loose private key)");
-        }
-
-        master_pub_key = spk_man->DeriveNewSeed(key);
-    }
+    ScriptPubKeyMan* spk_man = pwallet->GetScriptPubKeyMan();
+    CPubKey master_pub_key = params[1].isNull() ?
+            spk_man->GenerateNewSeed() : parseWIFKey(params[1].get_str(), pwallet);
 
     spk_man->SetHDSeed(master_pub_key, true);
     if (flush_key_pool) spk_man->NewKeyPool();
