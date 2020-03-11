@@ -2542,7 +2542,7 @@ bool CWallet::CreateCoinStake(
         }
 
         nCredit = 0;
-        uint256 hashProofOfStake = 0;
+        uint256 hashProofOfStake;
         nAttempts++;
         fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime, hashProofOfStake);
 

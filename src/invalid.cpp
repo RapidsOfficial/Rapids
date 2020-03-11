@@ -38,7 +38,7 @@ namespace invalid_out
                 return false;
 
             uint256 txid = uint256(vTxid.get_str());
-            if (txid == 0)
+            if (txid.IsNull())
                 return false;
 
             const UniValue &vN = find_value(o, "n");

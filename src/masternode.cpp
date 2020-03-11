@@ -158,14 +158,14 @@ bool CMasternode::UpdateFromNewBroadcast(CMasternodeBroadcast& mnb)
 //
 uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
 {
-    if (chainActive.Tip() == NULL) return 0;
+    if (chainActive.Tip() == NULL) return UINT256_ZERO;
 
     uint256 hash;
     uint256 aux = vin.prevout.hash + vin.prevout.n;
 
     if (!GetBlockHash(hash, nBlockHeight)) {
         LogPrint("masternode","CalculateScore ERROR - nHeight %d - Returned 0\n", nBlockHeight);
-        return 0;
+        return UINT256_ZERO;
     }
 
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
@@ -694,7 +694,7 @@ uint256 CMasternodeBroadcast::GetHash() const
 CMasternodePing::CMasternodePing() :
         CSignedMessage(),
         vin(),
-        blockHash(0),
+        blockHash(),
         sigTime(GetAdjustedTime())
 { }
 

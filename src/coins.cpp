@@ -54,7 +54,7 @@ bool CCoins::Spend(const COutPoint& out, CTxInUndo& undo)
 bool CCoins::Spend(int nPos)
 {
     CTxInUndo undo;
-    COutPoint out(0, nPos);
+    COutPoint out(UINT256_ZERO, nPos);
     return Spend(out, undo);
 }
 

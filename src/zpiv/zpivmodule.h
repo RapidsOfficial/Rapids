@@ -47,7 +47,7 @@ public:
     CBigNum randomness;
     libzerocoin::CoinRandomnessSchnorrSignature schnorrSig;
     // prev out values
-    uint256 txHash = 0;
+    uint256 txHash;
     unsigned int outputIndex = -1;
     libzerocoin::PublicCoin pubCoin;
 

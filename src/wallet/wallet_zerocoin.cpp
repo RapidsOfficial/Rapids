@@ -361,7 +361,7 @@ bool CWallet::MintsToInputVectorPublicSpend(std::map<CBigNum, CZerocoinMint>& ma
             return false;
         }
         vin.emplace_back(in);
-        receipt.AddSpend(CZerocoinSpend(mint.GetSerialNumber(), 0, mint.GetValue(), mint.GetDenomination(), 0));
+        receipt.AddSpend(CZerocoinSpend(mint.GetSerialNumber(), UINT256_ZERO, mint.GetValue(), mint.GetDenomination(), 0));
     }
 
     receipt.SetStatus(_("Spend Valid"), ZPIV_SPEND_OKAY); // Everything okay

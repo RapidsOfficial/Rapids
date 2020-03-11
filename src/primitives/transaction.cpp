@@ -48,7 +48,7 @@ CTxIn::CTxIn(uint256 hashPrevTx, uint32_t nOut, CScript scriptSigIn, uint32_t nS
 
 bool CTxIn::IsZerocoinSpend() const
 {
-    return prevout.hash == 0 && scriptSig.IsZerocoinSpend();
+    return prevout.hash.IsNull() && scriptSig.IsZerocoinSpend();
 }
 
 bool CTxIn::IsZerocoinPublicSpend() const

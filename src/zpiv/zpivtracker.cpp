@@ -354,7 +354,7 @@ void CzPIVTracker::RemovePending(const uint256& txid)
         }
     }
 
-    if (hashSerial > 0)
+    if (!hashSerial.IsNull())
         mapPendingSpends.erase(hashSerial);
 }
 
@@ -389,7 +389,7 @@ bool CzPIVTracker::UpdateStatusInternal(const std::set<uint256>& setMempool, CMi
         uint256 hashBlock;
 
         // Txid will be marked 0 if there is no knowledge of the final tx hash yet
-        if (mint.txid == 0) {
+        if (mint.txid.IsNull()) {
             if (!isMintInChain) {
                 LogPrintf("%s : Failed to find mint in zerocoinDB %s\n", __func__, mint.hashPubcoin.GetHex().substr(0, 6));
                 mint.isArchived = true;

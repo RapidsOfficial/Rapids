@@ -27,11 +27,11 @@ void CDeterministicMint::SetNull()
 {
     nVersion = libzerocoin::PrivateCoin::CURRENT_VERSION;
     nCount = 0;
-    hashSeed = 0;
-    hashSerial = 0;
-    hashStake = 0;
-    hashPubcoin = 0;
-    txid = 0;
+    hashSeed.SetNull();
+    hashSerial.SetNull();
+    hashStake.SetNull();
+    hashPubcoin.SetNull();
+    txid.SetNull();
     nHeight = 0;
     denom = libzerocoin::CoinDenomination::ZQ_ERROR;
     isUsed = false;

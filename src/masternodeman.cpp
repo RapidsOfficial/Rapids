@@ -519,7 +519,7 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
     //  -- (chance per block * chances before IsScheduled will fire)
     int nTenthNetwork = CountEnabled() / 10;
     int nCountTenth = 0;
-    uint256 nHigh = 0;
+    uint256 nHigh;
     for (PAIRTYPE(int64_t, CTxIn) & s : vecMasternodeLastPaid) {
         CMasternode* pmn = Find(s.second);
         if (!pmn) break;

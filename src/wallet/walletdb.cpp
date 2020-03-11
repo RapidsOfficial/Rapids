@@ -1283,7 +1283,7 @@ bool CWalletDB::EraseZPIVSeed()
     if(!WriteZPIVSeed(hash, ToByteVector(base_uint<256>(0) << 256))) {
         return error("Failed to write empty seed to wallet");
     }
-    if(!WriteCurrentSeedHash(0)) {
+    if(!WriteCurrentSeedHash(UINT256_ZERO)) {
         return error("Failed to write empty seedHash");
     }
 

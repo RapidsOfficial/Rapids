@@ -728,7 +728,7 @@ UniValue getmasternodescores (const UniValue& params, bool fHelp)
 
     std::vector<CMasternode> vMasternodes = mnodeman.GetFullMasternodeVector();
     for (int nHeight = chainActive.Tip()->nHeight - nLast; nHeight < chainActive.Tip()->nHeight + 20; nHeight++) {
-        uint256 nHigh = 0;
+        uint256 nHigh;
         CMasternode* pBestMasternode = NULL;
         for (CMasternode& mn : vMasternodes) {
             uint256 n = mn.CalculateScore(1, nHeight - 100);

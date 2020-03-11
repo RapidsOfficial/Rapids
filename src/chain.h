@@ -351,7 +351,7 @@ public:
                 READWRITE(nStakeModifier);
                 this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
             } else {
-                uint256 nStakeModifierV2 = 0;
+                uint256 nStakeModifierV2;
                 READWRITE(nStakeModifierV2);
                 this->SetStakeModifier(nStakeModifierV2);
             }

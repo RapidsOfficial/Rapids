@@ -109,7 +109,7 @@ bool GenerateKeyPair(const CBigNum& bnGroupOrder, const uint256& nPrivkey, CKey&
     // Generate a new key pair, which also has a 256-bit pubkey hash that qualifies as a serial #
     // This builds off of Tim Ruffing's work on libzerocoin, but has a different implementation
     CKey keyPair;
-    if (nPrivkey == 0)
+    if (nPrivkey.IsNull())
         keyPair.MakeNewKey(true);
     else
         keyPair.Set(nPrivkey.begin(), nPrivkey.end(), true);

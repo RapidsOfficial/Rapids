@@ -272,7 +272,7 @@ static bool SelectBlockFromCandidates(
     bool fModifierV2 = false;
     bool fFirstRun = true;
     bool fSelected = false;
-    uint256 hashBest = 0;
+    uint256 hashBest;
     *pindexSelected = (const CBlockIndex*)0;
     for (const PAIRTYPE(int64_t, uint256) & item : vSortedByTimestamp) {
         if (!mapBlockIndex.count(item.second))
@@ -296,7 +296,7 @@ static bool SelectBlockFromCandidates(
         if(fModifierV2)
             hashProof = pindex->GetBlockHash();
         else
-            hashProof = pindex->IsProofOfStake() ? 0 : pindex->GetBlockHash();
+            hashProof = pindex->IsProofOfStake() ? UINT256_ZERO : pindex->GetBlockHash();
 
         CDataStream ss(SER_GETHASH, 0);
         ss << hashProof << nStakeModifierPrev;
@@ -335,7 +335,7 @@ bool GetOldStakeModifier(CStakeInput* stake, uint64_t& nStakeModifier)
         const int nHeightStop = std::min(chainActive.Height(), Params().GetConsensus().height_last_ZC_AccumCheckpoint-1);
         while (pindexFrom && pindexFrom->nHeight + 1 <= nHeightStop) {
             if (pindexFrom->GetBlockTime() - nTimeBlockFrom > 60 * 60) {
-                nStakeModifier = pindexFrom->nAccumulatorCheckpoint.Get64();
+                nStakeModifier = pindexFrom->nAccumulatorCheckpoint.GetCheapHash();
                 return true;
             }
             pindexFrom = chainActive.Next(pindexFrom);
