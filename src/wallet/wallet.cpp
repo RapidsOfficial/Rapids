@@ -1748,7 +1748,7 @@ void CWallet::ResendWalletTransactions()
  * @{
  */
 
-CAmount CWallet::loopTxsBalance(std::function<void(const uint256&, const CWalletTx&, CAmount&)>method) const
+CAmount CWallet::loopTxsBalance(std::function<void(const uint256&, const CWalletTx&, CAmount&)> method) const
 {
     CAmount nTotal = 0;
     {
@@ -1778,7 +1778,16 @@ CAmount CWallet::GetColdStakingBalance() const
 
 CAmount CWallet::GetStakingBalance(const bool fIncludeColdStaking) const
 {
-    return GetBalance() + (fIncludeColdStaking ? GetColdStakingBalance() : 0);
+    return std::max(CAmount(0), loopTxsBalance(
+            [fIncludeColdStaking](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal) {
+        if (pcoin.IsTrusted() && pcoin.GetDepthInMainChain() >= Params().GetConsensus().nStakeMinDepth) {
+            nTotal += pcoin.GetAvailableCredit();       // available coins
+            nTotal -= pcoin.GetStakeDelegationCredit(); // minus delegated coins, if any
+            nTotal -= pcoin.GetLockedCredit();          // minus locked coins, if any
+            if (fIncludeColdStaking)
+                nTotal += pcoin.GetColdStakingCredit(); // plus cold coins, if any and if requested
+        }
+    }));
 }
 
 CAmount CWallet::GetDelegatedBalance() const
