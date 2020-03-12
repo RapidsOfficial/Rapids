@@ -65,13 +65,15 @@ bool ScriptPubKeyMan::CanGetAddresses(const uint8_t& type)
 {
     LOCK(wallet->cs_wallet);
     // Check if the keypool has keys
+    const bool isHDEnabled = IsHDEnabled();
     bool keypool_has_keys = false;
-    if (type == HDChain::ChangeType::INTERNAL && IsHDEnabled()) {
+    if (isHDEnabled && type == HDChain::ChangeType::INTERNAL) {
         keypool_has_keys = setInternalKeyPool.size() > 0;
-    } else if (type == HDChain::ChangeType::EXTERNAL) {
-        keypool_has_keys = KeypoolCountExternalKeys() > 0;
-    } else if (type == HDChain::ChangeType::STAKING) {
+    } else if (isHDEnabled && type == HDChain::ChangeType::STAKING) {
         keypool_has_keys = setStakingKeyPool.size() > 0;
+    } else {
+        // either external key was requested or HD is not enabled
+        keypool_has_keys = KeypoolCountExternalKeys() > 0;
     }
     // If the keypool doesn't have keys, check if we can generate them
     if (!keypool_has_keys) {
@@ -159,10 +161,10 @@ bool ScriptPubKeyMan::GetKeyFromPool(CPubKey& result, const uint8_t& changeType)
 bool ScriptPubKeyMan::GetReservedKey(const uint8_t& changeType, int64_t& index, CKeyPool& keypool)
 {
     if (!CanGetAddresses(changeType)) {
-        return false;
+        return error("%s : Cannot get address for change type %d", __func__, changeType);
     }
     if (!ReserveKeyFromKeyPool(index, keypool, changeType)) {
-        return false;
+        return error("%s : Cannot reserve key from pool for change type %d", __func__, changeType);
     }
     return true;
 }
