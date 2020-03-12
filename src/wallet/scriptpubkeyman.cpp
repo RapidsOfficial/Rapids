@@ -239,15 +239,15 @@ void ScriptPubKeyMan::ReturnDestination(int64_t nIndex, const uint8_t& type, con
     // Return to key pool
     {
         LOCK(wallet->cs_wallet);
-        bool fInternal = type == HDChain::ChangeType::INTERNAL;
-        if (fInternal) {
+        const bool isHDEnabled = IsHDEnabled();
+        if (isHDEnabled && type == HDChain::ChangeType::INTERNAL) {
             setInternalKeyPool.insert(nIndex);
-        } else if (!set_pre_split_keypool.empty()) {
-            set_pre_split_keypool.insert(nIndex);
-        } else if (type == HDChain::ChangeType::EXTERNAL) {
-            setExternalKeyPool.insert(nIndex);
-        } else if (type == HDChain::ChangeType::STAKING) {
+        } else if (isHDEnabled && type == HDChain::ChangeType::STAKING) {
             setStakingKeyPool.insert(nIndex);
+        } else if (isHDEnabled && !set_pre_split_keypool.empty()) {
+            set_pre_split_keypool.insert(nIndex);
+        } else {
+            setExternalKeyPool.insert(nIndex);
         }
         CKeyID& pubkey_id = m_index_to_reserved_key.at(nIndex);
         m_pool_key_to_index[pubkey_id] = nIndex;
@@ -382,8 +382,9 @@ bool ScriptPubKeyMan::TopUp(unsigned int kpSize)
         int64_t missingStaking = std::max(std::max((int64_t) nTargetSize, (int64_t) 1) - (int64_t)setStakingKeyPool.size(), (int64_t) 0);
 
         if (!IsHDEnabled()) {
-            // don't create extra internal keys
+            // don't create extra internal or staking keys
             missingInternal = 0;
+            missingStaking = 0;
         }
 
         CWalletDB batch(wallet->strWalletFile);
@@ -420,16 +421,13 @@ void ScriptPubKeyMan::AddKeypoolPubkeyWithDB(const CPubKey& pubkey, const uint8_
         throw std::runtime_error(std::string(__func__) + ": writing imported pubkey failed");
     }
 
-    switch (type) {
-        case HDChain::ChangeType::EXTERNAL:
-            setExternalKeyPool.insert(index);
-            break;
-        case HDChain::ChangeType::INTERNAL:
-            setInternalKeyPool.insert(index);
-            break;
-        case HDChain::ChangeType::STAKING:
-            setStakingKeyPool.insert(index);
-            break;
+    const bool isHDEnabled = IsHDEnabled();
+    if (isHDEnabled && type == HDChain::ChangeType::INTERNAL) {
+        setInternalKeyPool.insert(index);
+    } else if (isHDEnabled && type == HDChain::ChangeType::STAKING) {
+        setStakingKeyPool.insert(index);
+    } else {
+        setExternalKeyPool.insert(index);
     }
 
     m_pool_key_to_index[pubkey.GetID()] = index;
