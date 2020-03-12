@@ -112,11 +112,18 @@ void ReceiveWidget::loadWalletModel(){
         refreshView();
 
         // data change
-        connect(this->addressTableModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(refreshView()));
+        connect(this->addressTableModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(refreshView(QModelIndex, QModelIndex)));
     }
 }
 
-void ReceiveWidget::refreshView(QString refreshAddress){
+void ReceiveWidget::refreshView(const QModelIndex& tl, const QModelIndex& br)
+{
+    const QModelIndex& index = tl.sibling(tl.row(), AddressTableModel::Address);
+    return refreshView(index.data(Qt::DisplayRole).toString());
+}
+
+void ReceiveWidget::refreshView(QString refreshAddress)
+{
     try {
         QString latestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getAddressToShow() : refreshAddress;
         if (latestAddress.isEmpty()) { // new default address

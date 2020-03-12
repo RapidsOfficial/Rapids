@@ -44,6 +44,7 @@ private Q_SLOTS:
     void changeTheme(bool isLightTheme, QString &theme) override ;
     void onLabelClicked();
     void onCopyClicked();
+    void refreshView(const QModelIndex& tl, const QModelIndex& br);
     void refreshView(QString refreshAddress = QString());
     void handleAddressClicked(const QModelIndex &index);
 private:
