@@ -52,14 +52,14 @@
         <item>
          <widget class="QLabel" name="labelTitle">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Export Accounting</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="labelSubtitle1">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Export your wallet's accounting data to a csv file.</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -94,7 +94,7 @@
            <item>
             <widget class="QLabel" name="labelSubtitleLocation">
              <property name="text">
-              <string>TextLabel</string>
+              <string>Where</string>
              </property>
             </widget>
            </item>
@@ -152,7 +152,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string/>
+           <string>Select folder...</string>
           </property>
          </widget>
         </item>
@@ -341,7 +341,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string/>
+           <string>Select folder...</string>
           </property>
          </widget>
         </item>

@@ -24,23 +24,16 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     ui->left->setContentsMargins(10,10,10,10);
 
     // Title
-    ui->labelTitle->setText(tr("Export Accounting"));
     ui->labelTitle->setProperty("cssClass", "text-title-screen");
-
-    // Subtitle
-    ui->labelSubtitle1->setText(tr("Export your wallet's accounting data to a csv file."));
     ui->labelSubtitle1->setProperty("cssClass", "text-subtitle");
 
     // Location
-    ui->labelSubtitleLocation->setText(tr("Where"));
     ui->labelSubtitleLocation->setProperty("cssClass", "text-title");
     ui->labelSubtitleLocationAddress->setProperty("cssClass", "text-title");
 
-    ui->pushButtonDocuments->setText(tr("Select folder..."));
     setCssProperty({ui->pushButtonDocuments, ui->pushButtonAddressDocuments}, "btn-edit-primary-folder");
     setShadow(ui->pushButtonDocuments);
 
-    ui->pushButtonAddressDocuments->setText(tr("Select folder..."));
     setShadow(ui->pushButtonAddressDocuments);
     ui->labelDivider->setProperty("cssClass", "container-divider");
 
