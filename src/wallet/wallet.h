@@ -301,6 +301,10 @@ public:
     // Staker status (last hashed block and time)
     CStakerStatus* pStakerStatus = nullptr;
 
+    // User-defined fee PIV/kb
+    bool fUseCustomFee;
+    CAmount nCustomFee;
+
     //MultiSend
     std::vector<std::pair<std::string, int> > vMultiSend;
     bool fMultiSendStake;

@@ -134,7 +134,9 @@ public:
 
     bool WriteOrderPosNext(int64_t nOrderPosNext);
 
-    bool WriteStakeSplitThreshold(CAmount nStakeSplitThreshold);
+    bool WriteStakeSplitThreshold(const CAmount& nStakeSplitThreshold);
+    bool WriteUseCustomFee(bool fUse);
+    bool WriteCustomFeeValue(const CAmount& nCustomFee);
     bool WriteMultiSend(std::vector<std::pair<std::string, int> > vMultiSend);
     bool EraseMultiSend(std::vector<std::pair<std::string, int> > vMultiSend);
     bool WriteMSettings(bool fMultiSendStake, bool fMultiSendMasternode, int nLastMultiSendHeight);
