@@ -266,6 +266,7 @@ void SendWidget::addEntry(){
         sendMultiRow->setNumber(entries.length());
         sendMultiRow->hideLabels();
     }
+    setFocusOnLastEntry();
 }
 
 SendMultiRow* SendWidget::createEntry(){
@@ -295,6 +296,16 @@ void SendWidget::resizeEvent(QResizeEvent *event){
     QWidget::resizeEvent(event);
 }
 
+void SendWidget::showEvent(QShowEvent *event)
+{
+    // Set focus on last recipient address when Send-window is displayed
+    setFocusOnLastEntry();
+}
+
+void SendWidget::setFocusOnLastEntry()
+{
+    if (!entries.isEmpty()) entries.last()->setFocus();
+}
 
 void SendWidget::onSendClicked(){
 
@@ -334,6 +345,7 @@ void SendWidget::onSendClicked(){
     if((sendPiv) ? send(recipients) : sendZpiv(recipients)) {
         updateEntryLabels(recipients);
     }
+    setFocusOnLastEntry();
 }
 
 bool SendWidget::send(QList<SendCoinsRecipient> recipients){
@@ -772,6 +784,7 @@ void SendWidget::onDeleteClicked(){
 
         // Update total amounts
         refreshAmounts();
+        setFocusOnLastEntry();
     }
 }
 
