@@ -599,14 +599,10 @@ void SendWidget::onChangeCustomFeeClicked()
         customFeeDialog = new SendCustomFeeDialog(window);
         customFeeDialog->setWalletModel(walletModel);
     }
-    if (openDialogWithOpaqueBackgroundY(customFeeDialog, window, 3, 5)) {
-        ui->pushButtonFee->setText(tr("Custom Fee %1").arg(BitcoinUnits::formatWithUnit(nDisplayUnit, customFeeDialog->getFeeRate().GetFeePerK()) + "/kB"));
-        isCustomFeeSelected = true;
-        walletModel->setWalletDefaultFee(customFeeDialog->getFeeRate().GetFeePerK());
+    if (openDialogWithOpaqueBackgroundY(customFeeDialog, window, 3, 5)){
+        setCustomFeeSelected(true, customFeeDialog->getFeeRate().GetFeePerK());
     } else {
-        ui->pushButtonFee->setText(tr("Customize Fee"));
-        isCustomFeeSelected = false;
-        walletModel->setWalletDefaultFee();
+        setCustomFeeSelected(false);
     }
 }
 
@@ -818,6 +814,19 @@ void SendWidget::resizeMenu()
         pos.setX(pos.x() + 20);
         pos.setY(pos.y() + ((focusedEntry->getEditHeight() - 12)  * 3));
         menuContacts->move(pos);
+    }
+}
+
+void SendWidget::setCustomFeeSelected(bool isSelected, const CAmount& customFee)
+{
+    if (isSelected) {
+        ui->pushButtonFee->setText(tr("Custom Fee %1").arg(BitcoinUnits::formatWithUnit(nDisplayUnit, customFee) + "/kB"));
+        isCustomFeeSelected = true;
+        walletModel->setWalletDefaultFee(customFee);
+    } else {
+        ui->pushButtonFee->setText(tr("Customize Fee"));
+        isCustomFeeSelected = false;
+        walletModel->setWalletDefaultFee();
     }
 }
 
