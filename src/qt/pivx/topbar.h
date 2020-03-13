@@ -35,6 +35,10 @@ public:
     void loadClientModel() override;
 
     void encryptWallet();
+
+    void run(int type) override;
+    void onError(QString error, int type) override;
+
 public Q_SLOTS:
     void updateBalances(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
                         const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
@@ -46,6 +50,7 @@ public Q_SLOTS:
     void setNumBlocks(int count);
     void setStakingStatusActive(bool fActive);
     void updateStakingStatus();
+    void updateHDState(const bool& upgraded, const std::string& upgradeError);
 
 Q_SIGNALS:
     void themeChanged(bool isLight);
