@@ -261,7 +261,7 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
         case fUseCustomFee:
             return QVariant((pwalletMain) ? pwalletMain->fUseCustomFee : false);
         case nCustomFee:
-            return QVariant(static_cast<qlonglong>((pwalletMain) ? pwalletMain->nCustomFee : 0));
+            return QVariant(static_cast<qlonglong>((pwalletMain) ? pwalletMain->nCustomFee : CWallet::minTxFee.GetFeePerK()));
 #endif
         case DisplayUnit:
             return nDisplayUnit;

@@ -3898,7 +3898,7 @@ void CWallet::SetNull()
 
     // User-defined fee PIV/kb
     fUseCustomFee = false;
-    nCustomFee = 0;
+    nCustomFee = CWallet::minTxFee.GetFeePerK();
 
     //MultiSend
     vMultiSend.clear();

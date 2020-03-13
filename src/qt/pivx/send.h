@@ -96,7 +96,7 @@ private:
     bool sendZpiv(QList<SendCoinsRecipient> recipients);
     void setFocusOnLastEntry();
     void updateEntryLabels(QList<SendCoinsRecipient> recipients);
-    void setCustomFeeSelected(bool isSelected, const CAmount& customFee = 0);
+    void setCustomFeeSelected(bool isSelected, const CAmount& customFee = DEFAULT_TRANSACTION_FEE);
 
 };
 
