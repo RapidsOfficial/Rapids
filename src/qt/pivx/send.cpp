@@ -142,7 +142,7 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     connect(ui->pushRight,  &QPushButton::clicked, [this](){onPIVSelected(false);});
     connect(ui->pushButtonSave, &QPushButton::clicked, this, &SendWidget::onSendClicked);
     connect(ui->pushButtonAddRecipient, &QPushButton::clicked, this, &SendWidget::onAddEntryClicked);
-    connect(ui->pushButtonClear, &QPushButton::clicked, this, &SendWidget::clearAll);
+    connect(ui->pushButtonClear, &QPushButton::clicked, [this](){clearAll(true);});
 }
 
 void SendWidget::refreshView()
@@ -233,14 +233,19 @@ void SendWidget::loadWalletModel()
     }
 }
 
-void SendWidget::clearAll()
+void SendWidget::clearAll(bool fClearSettings)
 {
     onResetCustomOptions(false);
-    if (customFeeDialog) customFeeDialog->clear();
-    if (walletModel) walletModel->setWalletCustomFee(false, DEFAULT_TRANSACTION_FEE);
-    setCustomFeeSelected(false);
+    if (fClearSettings) onResetSettings();
     clearEntries();
     refreshAmounts();
+}
+
+void SendWidget::onResetSettings()
+{
+    if (customFeeDialog) customFeeDialog->clear();
+    setCustomFeeSelected(false);
+    if (walletModel) walletModel->setWalletCustomFee(false, DEFAULT_TRANSACTION_FEE);
 }
 
 void SendWidget::onResetCustomOptions(bool fRefreshAmounts)
@@ -409,7 +414,7 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
         );
 
         if (sendStatus.status == WalletModel::OK) {
-            clearAll();
+            clearAll(false);
             inform(tr("Transaction sent"));
             dialog->deleteLater();
             return true;
@@ -489,7 +494,7 @@ bool SendWidget::sendZpiv(QList<SendCoinsRecipient> recipients)
             ) {
         inform(tr("zPIV transaction sent!"));
         ZPivControlDialog::setSelectedMints.clear();
-        clearAll();
+        clearAll(false);
         return true;
     } else {
         QString body;
