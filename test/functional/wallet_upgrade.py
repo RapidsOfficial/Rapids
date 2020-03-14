@@ -58,41 +58,25 @@ def read_dump(file_name, addrs):
 
         return found_addr, found_addr_rsv
 
+def copyPreHDWallet(tmpdir, createFolder):
+    destinationDirPath = os.path.join(tmpdir, "node0", "regtest")
+    if createFolder:
+        os.makedirs(destinationDirPath)
+    destPath = os.path.join(destinationDirPath, "wallet.dat")
+    sourcePath = os.path.join("test", "util", "data", "pre_hd_wallet.dat")
+    shutil.copyfile(sourcePath, destPath)
+
 class WalletUpgradeTest (PivxTestFramework):
 
     def setup_chain(self):
         self._initialize_chain_clean()
-        destinationDirPath = os.path.join(self.options.tmpdir, "node0", "regtest")
-        os.makedirs(destinationDirPath)
-        destPath = os.path.join(destinationDirPath, "wallet.dat")
-        sourcePath = os.path.join("test", "util", "data", "pre_hd_wallet.dat")
-        shutil.copyfile(sourcePath, destPath)
+        copyPreHDWallet(self.options.tmpdir, True)
 
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1
 
-    def run_test(self):
-        self.log.info("Checking correct version")
-        assert_equal(self.nodes[0].getwalletinfo()['walletversion'], 61000)
-
-        self.log.info("Dumping pre-HD wallet")
-        prevHDWalletDumpFile = os.path.join(self.options.tmpdir, "node0", "wallet.dump")
-        self.nodes[0].dumpwallet(prevHDWalletDumpFile)
-
-        test_addr_rsv_count = 60 # Prev HD wallet reserve keypool (the wallet was initialized with -keypool=60)
-        test_addr_count = 21 # Amount of generated addresses (20 manually + 1 created by default)
-        addrs = []
-        found_addr, found_addr_rsv = \
-            read_dump(prevHDWalletDumpFile, addrs)
-        assert_equal(found_addr, test_addr_count)  # all keys must be in the dump
-        assert_equal(found_addr_rsv, test_addr_rsv_count)
-
-        self.log.info("Upgrading wallet to HD..")
-        # Now that know that the wallet is ok, let's upgrade it.
-        self.stop_node(0)
-        self.start_node(0, ["-upgradewallet"])
-
+    def check_keys(self, addrs):
         self.log.info("Checking old keys existence in the upgraded wallet..")
         # Now check that all of the pre upgrade addresses are still in the wallet
         for addr in addrs:
@@ -115,8 +99,49 @@ class WalletUpgradeTest (PivxTestFramework):
             assert_equal('hdseedid' in vaddrHD, True)
             assert_equal(vaddrHD['hdkeypath'], "m/44'/119'/0'/0'/" +str(i)+"'")
 
+
+    def run_test(self):
+        self.log.info("Checking correct version")
+        assert_equal(self.nodes[0].getwalletinfo()['walletversion'], 61000)
+
+        self.log.info("Dumping pre-HD wallet")
+        prevHDWalletDumpFile = os.path.join(self.options.tmpdir, "node0", "wallet.dump")
+        self.nodes[0].dumpwallet(prevHDWalletDumpFile)
+
+        test_addr_rsv_count = 60 # Prev HD wallet reserve keypool (the wallet was initialized with -keypool=60)
+        test_addr_count = 21 # Amount of generated addresses (20 manually + 1 created by default)
+        addrs = []
+        found_addr, found_addr_rsv = \
+            read_dump(prevHDWalletDumpFile, addrs)
+        assert_equal(found_addr, test_addr_count)  # all keys must be in the dump
+        assert_equal(found_addr_rsv, test_addr_rsv_count)
+
+        self.log.info("Upgrading wallet to HD..")
+        # Now that know that the wallet is ok, let's upgrade it.
+        self.stop_node(0)
+        self.start_node(0, ["-upgradewallet"])
+
+        # Now check if the upgrade went fine
+        self.check_keys(addrs)
         self.log.info("New HD addresses created successfully")
 
+        # Now test the upgrade at runtime using the JSON-RPC upgradewallet command
+        self.log.info("## Testing the upgrade via RPC now, stopping the node...")
+        self.stop_node(0)
+        copyPreHDWallet(self.options.tmpdir, False)
+        self.start_node(0)
+
+        # Generating a block to not be in IBD
+        self.nodes[0].generate(1)
+
+        self.log.info("Upgrading wallet..")
+        self.nodes[0].upgradewallet()
+
+        self.log.info("upgrade completed, checking keys now..")
+        # Now check if the upgrade went fine
+        self.check_keys(addrs)
+
+        self.log.info("Upgrade via RPC completed, all good :)")
 
 if __name__ == '__main__':
     WalletUpgradeTest().main()

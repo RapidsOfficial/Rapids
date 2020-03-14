@@ -1705,10 +1705,12 @@ bool AppInit2()
             }
         }
 
-        // Upgrade to HD if explicit upgrade was requested.
-        std::string upgradeError;
-        if (!pwalletMain->Upgrade(upgradeError, prev_version)) {
-            strErrors << upgradeError << "\n";
+        // Upgrade to HD only if explicit upgrade was requested
+        if (GetBoolArg("-upgradewallet", false)) {
+            std::string upgradeError;
+            if (!pwalletMain->Upgrade(upgradeError, prev_version)) {
+                strErrors << upgradeError << "\n";
+            }
         }
 
         if (fFirstRun) {

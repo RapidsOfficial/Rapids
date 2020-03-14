@@ -179,6 +179,8 @@ extern std::string HelpExampleCli(std::string methodname, std::string args);
 extern std::string HelpExampleRpc(std::string methodname, std::string args);
 
 extern void EnsureWalletIsUnlocked(bool fAllowAnonOnly = false);
+// Ensure the wallet's existence.
+extern void EnsureWallet();
 extern UniValue DoZpivSpend(const CAmount nAmount, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str);
 
 extern UniValue getconnectioncount(const UniValue& params, bool fHelp); // in rpc/net.cpp
@@ -216,6 +218,7 @@ extern UniValue delegatestake(const UniValue& params, bool fHelp); // in rpcwall
 extern UniValue rawdelegatestake(const UniValue& params, bool fHelp);
 extern UniValue delegatoradd(const UniValue& params, bool fHelp);
 extern UniValue delegatorremove(const UniValue& params, bool fHelp);
+extern UniValue upgradewallet(const UniValue& params, bool fHelp);
 extern UniValue sethdseed(const UniValue& params, bool fHelp);
 extern UniValue getaddressinfo(const UniValue& params, bool fHelp);
 extern UniValue getnewaddress(const UniValue& params, bool fHelp);
