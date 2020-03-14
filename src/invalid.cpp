@@ -37,7 +37,7 @@ namespace invalid_out
             if (!vTxid.isStr())
                 return false;
 
-            uint256 txid = uint256(vTxid.get_str());
+            uint256 txid = uint256S(vTxid.get_str());
             if (txid.IsNull())
                 return false;
 

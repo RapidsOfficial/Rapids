@@ -958,7 +958,7 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
     EnsureWalletIsUnlocked();
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    uint256 hashSerial(serial_hash);
+    uint256 hashSerial(uint256S(serial_hash));
     CZerocoinMint input_mint;
     if (!pwalletMain->GetMint(hashSerial, input_mint)) {
         std::string strErr = "Failed to fetch mint associated with serial hash " + serial_hash;
