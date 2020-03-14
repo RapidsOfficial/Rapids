@@ -122,6 +122,8 @@ class PivxTestFramework():
                           help="Write tested RPC commands into this directory")
         parser.add_option("--configfile", dest="configfile",
                           help="Location of the test framework config file")
+        parser.add_option('--legacywallet', dest="legacywallet", default=False, action="store_true",
+                          help='create pre-HD wallets only')
         parser.add_option("--pdbonfailure", dest="pdbonfailure", default=False, action="store_true",
                           help="Attach a python debugger if test fails")
         parser.add_option("--usecli", dest="usecli", default=False, action="store_true",
@@ -248,6 +250,11 @@ class PivxTestFramework():
 
         if extra_args is None:
             extra_args = [[]] * num_nodes
+        # Check wallet version
+        if self.options.legacywallet:
+            for arg in extra_args:
+                arg.append('-legacywallet')
+            self.log.info("Running test with legacy (pre-HD) wallet")
         if binary is None:
             binary = [None] * num_nodes
         assert_equal(len(extra_args), num_nodes)

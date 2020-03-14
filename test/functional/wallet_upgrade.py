@@ -101,6 +101,10 @@ class WalletUpgradeTest (PivxTestFramework):
 
 
     def run_test(self):
+        # Make sure we use hd
+        if '-legacywallet' in self.nodes[0].extra_args:
+            self.log.info("Exiting HD upgrade test for non-HD wallets")
+            return
         self.log.info("Checking correct version")
         assert_equal(self.nodes[0].getwalletinfo()['walletversion'], 61000)
 

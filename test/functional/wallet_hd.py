@@ -26,7 +26,11 @@ class WalletHDTest(PivxTestFramework):
         self.skip_if_no_wallet()
 
     def run_test(self):
-        # Make sure we use hd, keep masterkeyid
+        # Make sure we use hd
+        if '-legacywallet' in self.nodes[0].extra_args:
+            self.log.info("Exiting HD test for non-HD wallets")
+            return
+        # keep masterkeyid
         masterkeyid = self.nodes[1].getwalletinfo()['hdseedid']
         assert_equal(len(masterkeyid), 40)
 
