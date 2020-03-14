@@ -36,7 +36,7 @@ ClientModel::ClientModel(OptionsModel* optionsModel, QObject* parent) : QObject(
                                                                         optionsModel(optionsModel),
                                                                         peerTableModel(0),
                                                                         banTableModel(0),
-                                                                        cachedNumBlocks(0),
+                                                                        cacheTip(nullptr),
                                                                         cachedMasternodeCountString(""),
                                                                         cachedReindexing(0), cachedImporting(0),
                                                                         numBlocksAtStartup(-1), pollTimer(0)
@@ -85,8 +85,7 @@ QString ClientModel::getMasternodeCountString() const
 
 int ClientModel::getNumBlocks() const
 {
-    LOCK(cs_main);
-    return chainActive.Height();
+    return cacheTip == nullptr ? 0 : cacheTip->nHeight;
 }
 
 int ClientModel::getNumBlocksAtStartup()
@@ -107,26 +106,19 @@ quint64 ClientModel::getTotalBytesSent() const
 
 QDateTime ClientModel::getLastBlockDate() const
 {
-    LOCK(cs_main);
-    if (chainActive.Tip())
-        return QDateTime::fromTime_t(chainActive.Tip()->GetBlockTime());
-    else
-        return QDateTime::fromTime_t(Params().GenesisBlock().GetBlockTime()); // Genesis block's time of current network
+    const int nTime = (cacheTip == nullptr ? Params().GenesisBlock().GetBlockTime() : cacheTip->GetBlockTime());
+    return QDateTime::fromTime_t(nTime);
 }
 
 QString ClientModel::getLastBlockHash() const
 {
-    LOCK(cs_main);
-    if (chainActive.Tip())
-        return QString::fromStdString(chainActive.Tip()->GetBlockHash().ToString());
-    else
-        return QString::fromStdString(Params().GenesisBlock().GetHash().ToString()); // Genesis block's hash of current network
+    const uint256& nHash = (cacheTip == nullptr ? Params().GenesisBlock().GetHash() : cacheTip->GetBlockHash());
+    return QString::fromStdString(nHash.GetHex());
 }
 
 double ClientModel::getVerificationProgress() const
 {
-    LOCK(cs_main);
-    return Checkpoints::GuessVerificationProgress(chainActive.Tip());
+    return Checkpoints::GuessVerificationProgress(cacheTip);
 }
 
 void ClientModel::updateTimer()
@@ -248,11 +240,10 @@ static void BlockTipChanged(ClientModel *clientmodel, bool initialSync, const CB
     // if we are in-sync, update the UI regardless of last update time
     if (!initialSync || now - nLastBlockTipUpdateNotification > MODEL_UPDATE_DELAY) {
         //pass a async signal to the UI thread
-        int newHeight = pIndex->nHeight;
-        clientmodel->setCacheNumBlocks(newHeight);
+        clientmodel->setCacheTip(pIndex);
         clientmodel->setCacheImporting(fImporting);
         clientmodel->setCacheReindexing(fReindex);
-        Q_EMIT clientmodel->numBlocksChanged(newHeight);
+        Q_EMIT clientmodel->numBlocksChanged(pIndex->nHeight);
         nLastBlockTipUpdateNotification = now;
     }
 }
