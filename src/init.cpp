@@ -470,6 +470,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-txconfirmtarget=<n>", strprintf(_("If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)"), 1));
     strUsage += HelpMessageOpt("-maxtxfee=<amt>", strprintf(_("Maximum total fees to use in a single wallet transaction, setting too low may abort large transactions (default: %s)"),
         FormatMoney(maxTxFee)));
+    strUsage += HelpMessageOpt("-legacywallet", _("On first run, create a legacy wallet instead of a HD wallet"));
     strUsage += HelpMessageOpt("-upgradewallet", _("Upgrade wallet to latest format") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-wallet=<file>", _("Specify wallet file (within data directory)") + " " + strprintf(_("(default: %s)"), "wallet.dat"));
     strUsage += HelpMessageOpt("-walletnotify=<cmd>", _("Execute command when a wallet transaction changes (%s in cmd is replaced by TxID)"));
@@ -1681,28 +1682,29 @@ bool AppInit2()
         }
 
         int prev_version = pwalletMain->GetVersion();
-        if (GetBoolArg("-upgradewallet", fFirstRun)) {
 
+        // Forced upgrade
+        const bool fLegacyWallet = GetBoolArg("-legacywallet", false);
+        if (GetBoolArg("-upgradewallet", fFirstRun && !fLegacyWallet)) {
             if (prev_version <= FEATURE_PRE_PIVX && pwalletMain->IsLocked()) {
                 // Cannot upgrade a locked wallet
                 std::string strProblem = "Cannot upgrade a locked wallet.\n";
                 strErrors << _("Error: ") << strProblem;
                 LogPrintf("%s", strErrors.str());
                 return InitError(strProblem);
-            } else {
-
-                int nMaxVersion = GetArg("-upgradewallet", 0);
-                if (nMaxVersion == 0) // the -upgradewallet without argument case
-                {
-                    LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
-                    nMaxVersion = FEATURE_LATEST;
-                    pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
-                } else
-                    LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
-                if (nMaxVersion < pwalletMain->GetVersion())
-                    strErrors << _("Cannot downgrade wallet") << "\n";
-                pwalletMain->SetMaxVersion(nMaxVersion);
             }
+
+            int nMaxVersion = GetArg("-upgradewallet", 0);
+            if (nMaxVersion == 0) // the -upgradewallet without argument case
+            {
+                LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
+                nMaxVersion = FEATURE_LATEST;
+                pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
+            } else
+                LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
+            if (nMaxVersion < pwalletMain->GetVersion())
+                strErrors << _("Cannot downgrade wallet") << "\n";
+            pwalletMain->SetMaxVersion(nMaxVersion);
         }
 
         // Upgrade to HD only if explicit upgrade was requested
@@ -1714,11 +1716,23 @@ bool AppInit2()
         }
 
         if (fFirstRun) {
-            // Create new HD Wallet
-            LogPrintf("Creating HD Wallet\n");
-            // Ensure this wallet.dat can only be opened by clients supporting HD.
-            pwalletMain->SetMinVersion(FEATURE_LATEST);
-            pwalletMain->SetupSPKM();
+            if (!fLegacyWallet) {
+                // Create new HD Wallet
+                LogPrintf("Creating HD Wallet\n");
+                // Ensure this wallet.dat can only be opened by clients supporting HD.
+                pwalletMain->SetMinVersion(FEATURE_LATEST);
+                pwalletMain->SetupSPKM();
+            } else {
+                if (!Params().IsRegTestNet()) {
+                    std::string strProblem = "Legacy wallets can only be created on RegTest.\n";
+                    strErrors << _("Error: ") << strProblem;
+                    LogPrintf("%s", strErrors.str());
+                    return InitError(strProblem);
+                }
+                // Create legacy wallet
+                LogPrintf("Creating Pre-HD Wallet\n");
+                pwalletMain->SetMaxVersion(FEATURE_PRE_PIVX);
+            }
 
             // Top up the keypool
             if (!pwalletMain->TopUpKeyPool()) {
