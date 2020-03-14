@@ -53,7 +53,7 @@ bool ScriptPubKeyMan::CanGenerateKeys()
 {
     // A wallet can generate keys if it has an HD seed (IsHDEnabled) or it is a non-HD wallet (pre FEATURE_HD)
     LOCK(wallet->cs_wallet);
-    return IsHDEnabled();
+    return IsHDEnabled() || wallet->GetVersion() < FEATURE_PRE_SPLIT_KEYPOOL;
 }
 
 bool ScriptPubKeyMan::IsHDEnabled() const
@@ -361,6 +361,9 @@ bool ScriptPubKeyMan::NewKeyPool()
  */
 bool ScriptPubKeyMan::TopUp(unsigned int kpSize)
 {
+    if (!CanGenerateKeys()) {
+        return false;
+    }
     {
         LOCK(wallet->cs_wallet);
         if (wallet->IsLocked()) return false;
