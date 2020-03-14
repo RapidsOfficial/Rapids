@@ -176,6 +176,7 @@ BITCOIN_CORE_H = \
   txmempool.h \
   guiinterface.h \
   uint256.h \
+  blob_uint256.h \
   undo.h \
   util/memory.h \
   util.h \
@@ -420,6 +421,7 @@ libbitcoin_util_a_SOURCES = \
   support/cleanse.cpp \
   sync.cpp \
   uint256.cpp \
+  blob_uint256.cpp \
   util.cpp \
   utilmoneystr.cpp \
   util/threadnames.cpp \
@@ -525,6 +527,7 @@ libbitcoinconsensus_la_SOURCES = \
   script/interpreter.cpp \
   script/bitcoinconsensus.cpp \
   uint256.cpp \
+  blob_uint256.cpp \
   utilstrencodings.cpp
 
 if GLIBC_BACK_COMPAT
