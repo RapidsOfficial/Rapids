@@ -123,7 +123,7 @@ static void inline HashFinal(uint32_t& a, uint32_t& b, uint32_t& c)
     c -= ((b << 24) | (b >> 8));
 }
 
-uint64_t uint256::GetHash(const uint256& salt) const
+uint64_t blob_uint256::GetHash(const blob_uint256& salt) const
 {
     uint32_t a, b, c;
     const uint32_t *pn = (const uint32_t*)data;

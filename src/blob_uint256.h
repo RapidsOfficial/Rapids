@@ -19,11 +19,10 @@
 template<unsigned int BITS>
 class base_blob
 {
-protected:
+public:
+    // todo: make this protected
     enum { WIDTH=BITS/8 };
     uint8_t data[WIDTH];
-
-public:
 
     base_blob()
     {
@@ -101,11 +100,11 @@ public:
  * @note This type is called uint160 for historical reasons only. It is an opaque
  * blob of 160 bits and has no integer operations.
  */
-class uint160 : public base_blob<160> {
+class blob_uint160 : public base_blob<160> {
 public:
-    uint160() {}
-    uint160(const base_blob<160>& b) : base_blob<160>(b) {}
-    explicit uint160(const std::vector<unsigned char>& vch) : base_blob<160>(vch) {}
+    blob_uint160() {}
+    blob_uint160(const base_blob<160>& b) : base_blob<160>(b) {}
+    explicit blob_uint160(const std::vector<unsigned char>& vch) : base_blob<160>(vch) {}
 };
 
 /** 256-bit opaque blob.
@@ -113,11 +112,11 @@ public:
  * opaque blob of 256 bits and has no integer operations. Use arith_uint256 if
  * those are required.
  */
-class uint256 : public base_blob<256> {
+class blob_uint256 : public base_blob<256> {
 public:
-    uint256() {}
-    uint256(const base_blob<256>& b) : base_blob<256>(b) {}
-    explicit uint256(const std::vector<unsigned char>& vch) : base_blob<256>(vch) {}
+    blob_uint256() {}
+    blob_uint256(const base_blob<256>& b) : base_blob<256>(b) {}
+    explicit blob_uint256(const std::vector<unsigned char>& vch) : base_blob<256>(vch) {}
 
     /** A cheap hash function that just returns 64 bits from the result, it can be
      * used when the contents are considered uniformly random. It is not appropriate
@@ -135,16 +134,16 @@ public:
     /** A more secure, salted hash function.
      * @note This hash is not stable between little and big endian.
      */
-    uint64_t GetHash(const uint256& salt) const;
+    uint64_t GetHash(const blob_uint256& salt) const;
 };
 
 /* uint256 from const char *.
  * This is a separate function because the constructor uint256(const char*) can result
  * in dangerously catching uint256(0).
  */
-inline uint256 uint256S(const char *str)
+inline blob_uint256 blob_uint256S(const char *str)
 {
-    uint256 rv;
+    blob_uint256 rv;
     rv.SetHex(str);
     return rv;
 }
@@ -152,13 +151,13 @@ inline uint256 uint256S(const char *str)
  * This is a separate function because the constructor uint256(const std::string &str) can result
  * in dangerously catching uint256(0) via std::string(const char*).
  */
-inline uint256 uint256S(const std::string& str)
+inline blob_uint256 blob_uint256S(const std::string& str)
 {
     return blob_uint256S(str.c_str());
 }
 
 /** constant uint256 instances */
-const uint256 UINT256_ZERO = uint256();
-const uint256 UINT256_ONE = uint256S("0000000000000000000000000000000000000000000000000000000000000001");
+const blob_uint256 BLOB_UINT256_ZERO = blob_uint256();
+const blob_uint256 BLOB_UINT256_ONE = blob_uint256S("0000000000000000000000000000000000000000000000000000000000000001");
 
 #endif // PIVX_BLOB_UINT256_H
