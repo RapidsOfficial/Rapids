@@ -361,9 +361,6 @@ bool ScriptPubKeyMan::NewKeyPool()
  */
 bool ScriptPubKeyMan::TopUp(unsigned int kpSize)
 {
-    if (!CanGenerateKeys()) {
-        return false;
-    }
     {
         LOCK(wallet->cs_wallet);
         if (wallet->IsLocked()) return false;
