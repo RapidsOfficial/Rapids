@@ -56,7 +56,7 @@ BASE_SCRIPTS= [
     # Scripts that are run by the travis build process.
 
     # Longest test should go first, to favor running tests in parallel
-    'wallet_basic.py',                          # ~ 1155 sec
+    'wallet_basic.py',                          # ~ 833 sec
     'wallet_backup.py',                         # ~ 459 sec
     'mining_pos_reorg.py',                      # ~ 305 sec
 
