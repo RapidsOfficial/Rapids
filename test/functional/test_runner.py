@@ -126,7 +126,6 @@ BASE_SCRIPTS= [
     # 'wallet_listsinceblock.py',
     # 'p2p_leak.py',
     # 'feature_cltv.py',
-    # 'wallet_resendwallettransactions.py',
     # 'feature_minchainwork.py',
     # 'p2p_fingerprint.py',
     # 'p2p_unrequested_blocks.py',

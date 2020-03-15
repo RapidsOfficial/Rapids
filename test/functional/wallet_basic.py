@@ -167,12 +167,6 @@ class WalletTest(PivxTestFramework):
         connect_nodes_bi(self.nodes, 0, 3)
         sync_blocks(self.nodes)
 
-        #relayed = self.nodes[0].resendwallettransactions()
-        #assert_equal(set(relayed), {txid1, txid2})
-        #sync_mempools(self.nodes)
-
-        #assert(txid1 in self.nodes[3].getrawmempool())
-
         # Exercise balance rpcs
         assert_equal(self.nodes[0].getwalletinfo()["unconfirmed_balance"], 1)
         assert_equal(self.nodes[0].getunconfirmedbalance(), 1)
