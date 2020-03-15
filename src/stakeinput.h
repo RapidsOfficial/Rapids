@@ -35,8 +35,8 @@ public:
 class CPivStake : public CStakeInput
 {
 private:
-    CTransaction txFrom;
-    unsigned int nPosition;
+    CTransaction txFrom{CTransaction()};
+    unsigned int nPosition{0};
 
 public:
     CPivStake() {}

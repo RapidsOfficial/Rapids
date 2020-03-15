@@ -211,7 +211,7 @@ void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
     CHashWriter ss(SER_GETHASH, 0);
     ss << prevoutId;
     ss << pprev->GetStakeModifierV2();
-    return SetStakeModifier(ss.GetHash());
+    SetStakeModifier(ss.GetHash());
 }
 
 // Returns V1 stake modifier (uint64_t)
