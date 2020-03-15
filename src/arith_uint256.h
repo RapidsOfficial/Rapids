@@ -17,6 +17,8 @@
 
 class blob_uint512;
 class blob_uint256;
+class uint256;
+class uint512;
 
 class uint_error : public std::runtime_error {
 public:
@@ -233,6 +235,7 @@ public:
     void SetHex(const char* psz);
     void SetHex(const std::string& str);
     std::string ToString() const;
+    std::string ToStringReverseEndian() const;
 
     unsigned char* begin()
     {
@@ -259,6 +262,15 @@ public:
         return sizeof(pn);
     }
 
+    uint64_t Get64(int n = 0) const
+    {
+        return pn[2 * n] | (uint64_t)pn[2 * n + 1] << 32;
+    }
+
+    uint32_t Get32(int n = 0) const
+    {
+        return pn[2 * n];
+    }
     /**
      * Returns the position of the highest bit set plus one, or zero if the
      * value is zero.
@@ -304,6 +316,14 @@ public:
                 return false;
         return true;
     }
+
+    friend class uint160;
+    friend class uint256;
+    friend class uint512;
+
+    friend class arith_uint160;
+    friend class arith_uint256;
+    friend class arith_uint512;
 };
 
 /** 160-bit unsigned big integer. */
@@ -364,15 +384,14 @@ public:
 
     uint64_t GetHash(const arith_uint256& salt) const;
 
-    friend arith_uint512 UintToArith512(const blob_uint512 &a);
-    friend blob_uint512 ArithToUint512(const arith_uint512 &a);
+    //friend arith_uint512 UintToArith512(const blob_uint512 &a);
+    //friend blob_uint512 ArithToUint512(const arith_uint512 &a);
 
 };
 
-blob_uint256 ArithToUint256(const arith_uint256 &);
-arith_uint256 UintToArith256(const blob_uint256 &);
-blob_uint512 ArithToUint512(const arith_uint512 &);
-arith_uint512 UintToArith512(const blob_uint512 &);
+/** Old classes definitions */
+
+/** End classes definitions */
 
 const arith_uint256 ARITH_UINT256_ZERO = arith_uint256();
 
