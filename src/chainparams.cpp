@@ -174,11 +174,6 @@ public:
         consensus.nTime_EnforceNewSporkKey = 1566860400;    //!> August 26, 2019 11:00:00 PM GMT
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
-        // majorities for block version upgrades
-        consensus.nEnforceBlockUpgradeMajority = 8100; // 75%
-        consensus.nRejectBlockOutdatedMajority = 10260; // 95%
-        consensus.nToCheckBlockUpgradeMajority = 10800; // Approximate expected amount of blocks in 7 days (1440*7.5)
-
         // height-based activations
         consensus.height_last_PoW = 259200;
         consensus.height_last_ZC_AccumCheckpoint = 1686240;
@@ -293,11 +288,6 @@ public:
         consensus.strSporkPubKeyOld = "04A8B319388C0F8588D238B9941DC26B26D3F9465266B368A051C5C100F79306A557780101FE2192FE170D7E6DEFDCBEE4C8D533396389C0DAFFDBC842B002243C";
         consensus.nTime_EnforceNewSporkKey = 1566860400;    //!> August 26, 2019 11:00:00 PM GMT
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
-
-        // majorities for block version upgrades
-        consensus.nEnforceBlockUpgradeMajority = 4320; // 75%
-        consensus.nRejectBlockOutdatedMajority = 5472; // 95%
-        consensus.nToCheckBlockUpgradeMajority = 5760; // 4 days
 
         // height based activations
         consensus.height_last_PoW = 200;
@@ -420,11 +410,6 @@ public:
         consensus.strSporkPubKeyOld = "";
         consensus.nTime_EnforceNewSporkKey = 0;
         consensus.nTime_RejectOldSporkKey = 0;
-
-        // majorities for block version upgrades
-        consensus.nEnforceBlockUpgradeMajority = 750;
-        consensus.nRejectBlockOutdatedMajority = 950;
-        consensus.nToCheckBlockUpgradeMajority = 1000;
 
         // height based activations
         consensus.height_last_PoW = 250;

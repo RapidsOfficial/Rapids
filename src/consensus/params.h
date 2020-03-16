@@ -46,11 +46,6 @@ struct Params {
     int64_t nTime_EnforceNewSporkKey;
     int64_t nTime_RejectOldSporkKey;
 
-    // majorities for block version upgrades
-    int nEnforceBlockUpgradeMajority;
-    int nRejectBlockOutdatedMajority;
-    int nToCheckBlockUpgradeMajority;
-
     // height-based activations
     int height_last_PoW;
     int height_last_ZC_AccumCheckpoint;

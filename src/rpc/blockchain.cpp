@@ -763,22 +763,30 @@ UniValue verifychain(const UniValue& params, bool fHelp)
 }
 
 /** Implementation of IsSuperMajority with better feedback */
-static UniValue SoftForkMajorityDesc(int minVersion, CBlockIndex* pindex, int nRequired)
+static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Consensus::Params& consensusParams)
 {
-    int nFound = 0;
-    CBlockIndex* pstart = pindex;
-    const int nToCheck = Params().GetConsensus().nToCheckBlockUpgradeMajority;
-    for (int i = 0; i < nToCheck && pstart != NULL; i++)
-    {
-        if (pstart->nVersion >= minVersion)
-            ++nFound;
-        pstart = pstart->pprev;
-    }
     UniValue rv(UniValue::VOBJ);
-    rv.push_back(Pair("status", nFound >= nRequired));
-    rv.push_back(Pair("found", nFound));
-    rv.push_back(Pair("required", nRequired));
-    rv.push_back(Pair("window", nToCheck));
+    bool activated = false;
+    switch(version) {
+    case 1:
+    case 2:
+    case 3:
+        activated = pindex->nHeight >= 1;
+        break;
+    case 4:
+        activated = pindex->nHeight >= consensusParams.height_start_ZC;
+        break;
+    case 5:
+        activated = pindex->nHeight >= consensusParams.height_start_BIP65;
+        break;
+    case 6:
+        activated = pindex->nHeight >= consensusParams.height_start_StakeModifierV2;
+        break;
+    case 7:
+        activated = pindex->nHeight >= consensusParams.height_start_TimeProtoV2;
+        break;
+    }
+    rv.push_back(Pair("status", activated));
     return rv;
 }
 static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
@@ -787,8 +795,7 @@ static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* 
     UniValue rv(UniValue::VOBJ);
     rv.push_back(Pair("id", name));
     rv.push_back(Pair("version", version));
-    rv.push_back(Pair("enforce", SoftForkMajorityDesc(version, pindex, consensus.nEnforceBlockUpgradeMajority)));
-    rv.push_back(Pair("reject", SoftForkMajorityDesc(version, pindex, consensus.nRejectBlockOutdatedMajority)));
+    rv.push_back(Pair("reject", SoftForkMajorityDesc(version, pindex, consensus)));
     return rv;
 }
 
@@ -812,13 +819,9 @@ UniValue getblockchaininfo(const UniValue& params, bool fHelp)
             "     {\n"
             "        \"id\": \"xxxx\",        (string) name of softfork\n"
             "        \"version\": xx,         (numeric) block version\n"
-            "        \"enforce\": {           (object) progress toward enforcing the softfork rules for new-version blocks\n"
+            "        \"reject\": {           (object) progress toward rejecting pre-softfork blocks\n"
             "           \"status\": xx,       (boolean) true if threshold reached\n"
-            "           \"found\": xx,        (numeric) number of blocks with the new version found\n"
-            "           \"required\": xx,     (numeric) number of blocks required to trigger\n"
-            "           \"window\": xx,       (numeric) maximum size of examined window of recent blocks\n"
             "        },\n"
-            "        \"reject\": { ... }      (object) progress toward rejecting pre-softfork blocks (same fields as \"enforce\")\n"
             "     }, ...\n"
             "  ]\n"
             "}\n"

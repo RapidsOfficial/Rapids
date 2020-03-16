@@ -4348,18 +4348,6 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     return true;
 }
 
-bool CBlockIndex::IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired)
-{
-    const int nToCheck = Params().GetConsensus().nToCheckBlockUpgradeMajority;
-    unsigned int nFound = 0;
-    for (int i = 0; i < nToCheck && nFound < nRequired && pstart != NULL; i++) {
-        if (pstart->nVersion >= minVersion)
-            ++nFound;
-        pstart = pstart->pprev;
-    }
-    return (nFound >= nRequired);
-}
-
 /** Turn the lowest '1' bit in the binary representation of a number into a '0'. */
 int static inline InvertLowestOne(int n) { return n & (n - 1); }
 
