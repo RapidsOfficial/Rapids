@@ -55,13 +55,13 @@ struct Params {
     int height_last_PoW;
     int height_last_ZC_AccumCheckpoint;
     int height_last_ZC_WrappedSerials;
-    int height_start_BIP65;
+    int height_start_BIP65;                         // Blocks v5 start
     int height_start_InvalidUTXOsCheck;
     int height_start_MessSignaturesV2;
     int height_start_StakeModifierNewSelection;
-    int height_start_StakeModifierV2;
-    int height_start_TimeProtoV2;
-    int height_start_ZC;
+    int height_start_StakeModifierV2;               // Blocks v6 start
+    int height_start_TimeProtoV2;                   // Blocks v7 start
+    int height_start_ZC;                            // Blocks v4 start
     int height_start_ZC_InvalidSerials;
     int height_start_ZC_PublicSpends;
     int height_start_ZC_SerialRangeCheck;

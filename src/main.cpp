@@ -3926,9 +3926,10 @@ bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIn
 
 bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& state, CBlockIndex* const pindexPrev)
 {
+    const Consensus::Params& consensus = Params().GetConsensus();
     uint256 hash = block.GetHash();
 
-    if (hash == Params().GetConsensus().hashGenesisBlock)
+    if (hash == consensus.hashGenesisBlock)
         return true;
 
     assert(pindexPrev);
@@ -3955,11 +3956,15 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (pcheckpoint && nHeight < pcheckpoint->nHeight)
         return state.DoS(0, error("%s : forked chain older than last checkpoint (height %d)", __func__, nHeight));
 
-    // Reject block.nVersion=1, ..., CURRENT_VERSION-1 blocks when 95% (75% on testnet) of the network has upgraded:
-    for (int version = 2; version <= CBlockHeader::CURRENT_VERSION; version++) {
-        if (block.nVersion < version && CBlockIndex::IsSuperMajority(version, pindexPrev, Params().GetConsensus().nRejectBlockOutdatedMajority)) {
-            return state.Invalid(error("%s : rejected nVersion=%d block", __func__, block.nVersion), REJECT_OBSOLETE, "bad-version");
-        }
+    // Reject outdated version blocks
+    if((block.nVersion < 3 && nHeight >= 1) ||
+        (block.nVersion < 4 && nHeight >= consensus.height_start_ZC) ||
+        (block.nVersion < 5 && nHeight >= consensus.height_start_BIP65) ||
+        (block.nVersion < 6 && nHeight >= consensus.height_start_StakeModifierV2) ||
+        (block.nVersion < 7 && nHeight >= consensus.height_start_TimeProtoV2))
+    {
+        std::string stringErr = strprintf("rejected block version %d at height %d", block.nVersion, nHeight);
+        return state.Invalid(error("%s : %s", __func__, stringErr), REJECT_OBSOLETE, stringErr);
     }
 
     return true;
