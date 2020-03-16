@@ -24,25 +24,29 @@ ExpandableButton::ExpandableButton(QWidget *parent) :
     connect(ui->pushButton, SIGNAL(clicked()), this, SLOT(mousePressEvent()));
 }
 
-void ExpandableButton::setButtonClassStyle(const char *name, const QVariant &value, bool forceUpdate){
+void ExpandableButton::setButtonClassStyle(const char *name, const QVariant &value, bool forceUpdate)
+{
     ui->pushButton->setProperty(name, value);
     if(forceUpdate){
         updateStyle(ui->pushButton);
     }
 }
 
-void ExpandableButton::setIcon(QString path){
+void ExpandableButton::setIcon(QString path)
+{
     ui->pushButton->setIcon(QIcon(path));
 }
 
-void ExpandableButton::setButtonText(const QString& _text){
+void ExpandableButton::setButtonText(const QString& _text)
+{
     this->text = _text;
     if(this->isExpanded){
         ui->pushButton->setText(_text);
     }
 }
 
-void ExpandableButton::setNoIconText(const QString& _text) {
+void ExpandableButton::setNoIconText(const QString& _text)
+{
     notExpandedText = _text;
     if (!this->isExpanded)
         ui->pushButton->setText(_text);

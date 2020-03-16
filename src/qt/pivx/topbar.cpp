@@ -340,7 +340,8 @@ TopBar::~TopBar(){
     delete ui;
 }
 
-void TopBar::loadClientModel(){
+void TopBar::loadClientModel()
+{
     if(clientModel){
         // Keep up to date with client
         setNumConnections(clientModel->getNumConnections());
@@ -482,8 +483,8 @@ void TopBar::setNumBlocks(int count) {
     ui->pushButtonSync->setButtonText(tr(text.data()));
 }
 
-void TopBar::loadWalletModel() {
-
+void TopBar::loadWalletModel()
+{
     // Upgrade wallet.
     if (walletModel->isHDEnabled()) {
         ui->pushButtonHDUpgrade->setVisible(false);
@@ -639,7 +640,8 @@ void TopBar::expandSync() {
     }
 }
 
-void TopBar::updateHDState(const bool& upgraded, const std::string& upgradeError) {
+void TopBar::updateHDState(const bool& upgraded, const std::string& upgradeError)
+{
     if (upgraded) {
         ui->pushButtonHDUpgrade->setVisible(false);
         inform(tr("Wallet upgraded successfully"));
@@ -648,7 +650,8 @@ void TopBar::updateHDState(const bool& upgraded, const std::string& upgradeError
     }
 }
 
-void TopBar::run(int type) {
+void TopBar::run(int type)
+{
     if (type == REQUEST_UPGRADE_WALLET) {
         std::string upgradeError;
         bool ret = this->walletModel->upgradeWallet(upgradeError);
@@ -660,7 +663,8 @@ void TopBar::run(int type) {
         );
     }
 }
-void TopBar::onError(QString error, int type) {
+void TopBar::onError(QString error, int type)
+{
     if (type == REQUEST_UPGRADE_WALLET) {
         warn(tr("Upgrade Wallet Error"), error);
     }

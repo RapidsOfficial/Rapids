@@ -76,10 +76,12 @@ bool WalletModel::isStakingStatusActive() const {
     return wallet->pStakerStatus->IsActive();
 }
 
-bool WalletModel::isHDEnabled() const {
+bool WalletModel::isHDEnabled() const
+{
     return wallet->IsHDEnabled();
 }
-bool WalletModel::upgradeWallet(std::string& upgradeError) {
+bool WalletModel::upgradeWallet(std::string& upgradeError)
+{
     // This action must be performed in a separate thread and not the main one.
     LOCK2(cs_main, wallet->cs_wallet);
 
