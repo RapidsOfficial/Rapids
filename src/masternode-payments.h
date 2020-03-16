@@ -235,7 +235,7 @@ private:
 public:
     std::map<uint256, CMasternodePaymentWinner> mapMasternodePayeeVotes;
     std::map<int, CMasternodeBlockPayees> mapMasternodeBlocks;
-    std::map<uint256, int> mapMasternodesLastVote; //prevout.hash + prevout.n, nBlockHeight
+    std::map<COutPoint, int> mapMasternodesLastVote; //prevout, nBlockHeight
 
     CMasternodePayments()
     {
@@ -265,14 +265,14 @@ public:
     {
         LOCK(cs_mapMasternodePayeeVotes);
 
-        if (mapMasternodesLastVote.count(outMasternode.hash + outMasternode.n)) {
-            if (mapMasternodesLastVote[outMasternode.hash + outMasternode.n] == nBlockHeight) {
+        if (mapMasternodesLastVote.count(outMasternode)) {
+            if (mapMasternodesLastVote[outMasternode] == nBlockHeight) {
                 return false;
             }
         }
 
         //record this masternode voted
-        mapMasternodesLastVote[outMasternode.hash + outMasternode.n] = nBlockHeight;
+        mapMasternodesLastVote[outMasternode] = nBlockHeight;
         return true;
     }
 
