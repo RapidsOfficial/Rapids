@@ -483,6 +483,25 @@ void TopBar::setNumBlocks(int count) {
     ui->pushButtonSync->setButtonText(tr(text.data()));
 }
 
+void TopBar::showUpgradeDialog()
+{
+    QString title = tr("Wallet Upgrade");
+    if (ask(title,
+            tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\nNote that you will need to MAKE\nA NEW BACKUP of your wallet\nafter upgrade it.\n"))) {
+
+        // If the wallet is locked, notify that the wallet needs to be unlocked first.
+        if (walletModel->isWalletLocked()) {
+            warn(title, tr("Cannot upgrade a locked wallet. Please unlock it first.\n\nOnce it's unlocked you can continue the upgrade\nprocess clicking on the 'HD' icon at the top bar.\n"));
+            return;
+        }
+
+        // Action performed on a separate thread, it's locking cs_main and cs_wallet.
+        LoadingDialog *dialog = new LoadingDialog(window);
+        dialog->execute(this, REQUEST_UPGRADE_WALLET);
+        openDialogWithOpaqueBackgroundFullScreen(dialog, window);
+    }
+}
+
 void TopBar::loadWalletModel()
 {
     // Upgrade wallet.
@@ -494,14 +513,12 @@ void TopBar::loadWalletModel()
                 inform(tr("Cannot upgrade a locked wallet. Please unlock it first."));
                 return;
             }
-            if (ask(tr("Upgrade Wallet"),
-                    tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\nNote that you will need to MAKE\nA NEW BACKUP of your wallet\nafter upgrade it.\n"))){
-                // Action performed on a separate thread, it's locking cs_main and cs_wallet.
-                LoadingDialog *dialog = new LoadingDialog(window);
-                dialog->execute(this, REQUEST_UPGRADE_WALLET);
-                openDialogWithOpaqueBackgroundFullScreen(dialog, window);
+            showUpgradeDialog();
+        });
 
-            }
+        // Upgrade wallet timer, only once. launched 4 seconds after the wallet started.
+        QTimer::singleShot(4000, [this](){
+            showUpgradeDialog();
         });
     }
 
@@ -640,13 +657,13 @@ void TopBar::expandSync() {
     }
 }
 
-void TopBar::updateHDState(const bool& upgraded, const std::string& upgradeError)
+void TopBar::updateHDState(const bool& upgraded, const QString& upgradeError)
 {
     if (upgraded) {
         ui->pushButtonHDUpgrade->setVisible(false);
         inform(tr("Wallet upgraded successfully"));
     } else {
-        warn(tr("Upgrade Wallet Error"), QString::fromStdString(upgradeError));
+        warn(tr("Upgrade Wallet Error"), upgradeError);
     }
 }
 

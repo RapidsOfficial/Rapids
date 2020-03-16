@@ -35,6 +35,7 @@ public:
     void loadClientModel() override;
 
     void encryptWallet();
+    void showUpgradeDialog();
 
     void run(int type) override;
     void onError(QString error, int type) override;
@@ -50,7 +51,7 @@ public Q_SLOTS:
     void setNumBlocks(int count);
     void setStakingStatusActive(bool fActive);
     void updateStakingStatus();
-    void updateHDState(const bool& upgraded, const std::string& upgradeError);
+    void updateHDState(const bool& upgraded, const QString& upgradeError);
 
 Q_SIGNALS:
     void themeChanged(bool isLight);
