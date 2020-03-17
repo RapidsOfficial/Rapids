@@ -133,9 +133,9 @@
              <property name="geometry">
               <rect>
                <x>0</x>
-               <y>-490</y>
+               <y>0</y>
                <width>230</width>
-               <height>887</height>
+               <height>937</height>
               </rect>
              </property>
              <property name="sizePolicy">
@@ -301,6 +301,34 @@
                         </property>
                         <property name="text">
                          <string>Multisend</string>
+                        </property>
+                        <property name="checkable">
+                         <bool>true</bool>
+                        </property>
+                        <property name="autoExclusive">
+                         <bool>false</bool>
+                        </property>
+                       </widget>
+                      </item>
+                      <item>
+                       <widget class="QPushButton" name="pushButtonExportCsv">
+                        <property name="minimumSize">
+                         <size>
+                          <width>0</width>
+                          <height>50</height>
+                         </size>
+                        </property>
+                        <property name="maximumSize">
+                         <size>
+                          <width>16777215</width>
+                          <height>50</height>
+                         </size>
+                        </property>
+                        <property name="focusPolicy">
+                         <enum>Qt::NoFocus</enum>
+                        </property>
+                        <property name="text">
+                         <string>Export Accounting</string>
                         </property>
                         <property name="checkable">
                          <bool>true</bool>

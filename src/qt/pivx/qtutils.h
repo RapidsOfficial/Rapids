@@ -44,6 +44,11 @@ QPixmap encodeToQr(QString str, QString &errorStr, QColor qrColor = Qt::black);
 void updateStyle(QWidget* widget);
 QColor getRowColor(bool isLightTheme, bool isHovered, bool isSelected);
 
+// filters
+void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit);
+void setSortTx(QComboBox* filter, SortEdit* lineEdit);
+void setSortTxTypeFilter(QComboBox* filter, SortEdit* lineEdit);
+
 // Settings
 QSettings* getSettings();
 void setupSettings(QSettings *settings);

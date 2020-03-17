@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SettingsBackupWallet</class>
- <widget class="QWidget" name="SettingsBackupWallet">
+ <class>SettingsExportCSV</class>
+ <widget class="QWidget" name="SettingsExportCSV">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>410</height>
+    <height>427</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -52,14 +52,14 @@
         <item>
          <widget class="QLabel" name="labelTitle">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Export Accounting</string>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QLabel" name="labelSubtitle1">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Export your wallet's accounting data to a csv file.</string>
           </property>
           <property name="wordWrap">
            <bool>true</bool>
@@ -69,28 +69,69 @@
        </layout>
       </item>
       <item>
-       <spacer name="verticalSpacer_5">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <layout class="QVBoxLayout" name="verticalLayout_9">
+       <layout class="QVBoxLayout" name="verticalLayoutContainerTxExport">
         <property name="spacing">
-         <number>5</number>
+         <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="labelSubtitleLocation">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
+         <widget class="QWidget" name="filtersContainer" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelSubtitleLocation">
+             <property name="text">
+              <string>Where</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxSortType">
+             <property name="minimumSize">
+              <size>
+               <width>100</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxSort">
+             <property name="minimumSize">
+              <size>
+               <width>150</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
@@ -111,7 +152,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string/>
+           <string>Select folder...</string>
           </property>
          </widget>
         </item>
@@ -155,13 +196,13 @@
          <widget class="QPushButton" name="pushButtonSave">
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>50</height>
            </size>
           </property>
@@ -169,7 +210,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string/>
+           <string>Export Transactions</string>
           </property>
          </widget>
         </item>
@@ -180,10 +221,13 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>40</height>
+          <height>5</height>
          </size>
         </property>
        </spacer>
@@ -212,33 +256,92 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>30</height>
+          <height>5</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <layout class="QVBoxLayout" name="verticalLayoutTitle_2">
+       <layout class="QVBoxLayout" name="verticalLayoutAddressesExport">
         <property name="spacing">
-         <number>5</number>
+         <number>0</number>
         </property>
         <item>
-         <widget class="QLabel" name="labelTitle_2">
-          <property name="text">
-           <string>TextLabel</string>
-          </property>
+         <widget class="QWidget" name="filtersContainer" native="true">
+          <layout class="QHBoxLayout" name="horizontalLayout">
+           <property name="spacing">
+            <number>0</number>
+           </property>
+           <property name="leftMargin">
+            <number>0</number>
+           </property>
+           <property name="topMargin">
+            <number>0</number>
+           </property>
+           <property name="rightMargin">
+            <number>1</number>
+           </property>
+           <property name="bottomMargin">
+            <number>0</number>
+           </property>
+           <item>
+            <widget class="QLabel" name="labelSubtitleLocationAddress">
+             <property name="text">
+              <string>Export Address Book</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <spacer name="horizontalSpacer">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item>
+            <widget class="QComboBox" name="comboBoxSortAddressType">
+             <property name="minimumSize">
+              <size>
+               <width>165</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+          </layout>
          </widget>
         </item>
         <item>
-         <widget class="QLabel" name="labelSubtitle_2">
-          <property name="text">
-           <string>TextLabel</string>
+         <widget class="QPushButton" name="pushButtonAddressDocuments">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>50</height>
+           </size>
           </property>
-          <property name="wordWrap">
-           <bool>true</bool>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>50</height>
+           </size>
+          </property>
+          <property name="focusPolicy">
+           <enum>Qt::NoFocus</enum>
+          </property>
+          <property name="text">
+           <string>Select folder...</string>
           </property>
          </widget>
         </item>
@@ -249,18 +352,21 @@
         <property name="orientation">
          <enum>Qt::Vertical</enum>
         </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
         <property name="sizeHint" stdset="0">
          <size>
           <width>20</width>
-          <height>10</height>
+          <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <layout class="QHBoxLayout" name="horizontalLayout_7">
         <item>
-         <spacer name="horizontalSpacer_6">
+         <spacer name="horizontalSpacer_5">
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -276,16 +382,16 @@
          </spacer>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButtonSave_2">
+         <widget class="QPushButton" name="pushButtonExportAddress">
           <property name="minimumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>50</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>200</width>
+            <width>220</width>
             <height>50</height>
            </size>
           </property>
@@ -293,7 +399,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string/>
+           <string>Export Address Book</string>
           </property>
          </widget>
         </item>

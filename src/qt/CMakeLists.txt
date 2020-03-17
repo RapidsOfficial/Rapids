@@ -177,6 +177,7 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingssignmessagewidgets.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingswalletoptionswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingswalletrepairwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsexportcsv.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/welcomecontentwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/splash.cpp

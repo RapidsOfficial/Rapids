@@ -8,6 +8,7 @@
 #include <QWidget>
 #include "qt/pivx/pwidget.h"
 #include "qt/pivx/settings/settingsbackupwallet.h"
+#include "qt/pivx/settings/settingsexportcsv.h"
 #include "qt/pivx/settings/settingsbittoolwidget.h"
 #include "qt/pivx/settings/settingssignmessagewidgets.h"
 #include "qt/pivx/settings/settingswalletrepairwidget.h"
@@ -55,6 +56,7 @@ private Q_SLOTS:
     void onConfigurationClicked();
     void onBipToolClicked();
     void onMultisendClicked();
+    void onExportCSVClicked();
 
     // Options
     void onOptionsClicked();
@@ -80,6 +82,7 @@ private:
     Ui::SettingsWidget *ui;
 
     SettingsBackupWallet *settingsBackupWallet;
+    SettingsExportCSV *settingsExportCsvWidget;
     SettingsBitToolWidget *settingsBitToolWidget;
     SettingsSignMessageWidgets *settingsSingMessageWidgets;
     SettingsWalletRepairWidget *settingsWalletRepairWidget;
