@@ -267,7 +267,7 @@
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>16777215</width>
+                   <width>140</width>
                    <height>1</height>
                   </size>
                  </property>
@@ -353,7 +353,7 @@
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>16777215</width>
+                   <width>140</width>
                    <height>1</height>
                   </size>
                  </property>
@@ -439,7 +439,7 @@
                  </property>
                  <property name="maximumSize">
                   <size>
-                   <width>16777215</width>
+                   <width>160</width>
                    <height>1</height>
                   </size>
                  </property>
@@ -715,7 +715,7 @@
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>40</width>
+                      <width>20</width>
                       <height>20</height>
                      </size>
                     </property>
@@ -725,7 +725,7 @@
                    <widget class="QPushButton" name="pushName4">
                     <property name="minimumSize">
                      <size>
-                      <width>110</width>
+                      <width>150</width>
                       <height>0</height>
                      </size>
                     </property>
@@ -759,7 +759,7 @@
                     </property>
                     <property name="sizeHint" stdset="0">
                      <size>
-                      <width>96</width>
+                      <width>76</width>
                       <height>20</height>
                      </size>
                     </property>
