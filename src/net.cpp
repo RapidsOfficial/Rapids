@@ -1737,8 +1737,11 @@ void StartNode(boost::thread_group& threadGroup, CScheduler& scheduler)
         CAddrDB adb;
         if (adb.Read(addrman))
             LogPrintf("Loaded %i addresses from peers.dat  %dms\n", addrman.size(), GetTimeMillis() - nStart);
-        else
+        else {
+            addrman.Clear(); // Addrman can be in an inconsistent state after failure, reset it
             LogPrintf("Invalid or missing peers.dat; recreating\n");
+            DumpAddresses();
+        }
     }
 
     uiInterface.InitMessage(_("Loading banlist..."));
@@ -1753,8 +1756,11 @@ void StartNode(boost::thread_group& threadGroup, CScheduler& scheduler)
 
         LogPrint("net", "Loaded %d banned node ips/subnets from banlist.dat  %dms\n",
             banmap.size(), GetTimeMillis() - nStart);
-    } else
+    } else {
         LogPrintf("Invalid or missing banlist.dat; recreating\n");
+        CNode::SetBannedSetDirty(true); // force write
+        DumpBanlist();
+    }
 
     // Initialize random numbers. Even when rand() is only usable for trivial use-cases most nodes should have a different
     // seed after all the file-IO done at this point. Should be good enough even when nodes are started via scripts.
@@ -2055,6 +2061,11 @@ bool CAddrDB::Read(CAddrMan& addr)
     if (hashIn != hashTmp)
         return error("%s : Checksum mismatch, data corrupted", __func__);
 
+    return Read(addr, ssPeers);
+}
+
+bool CAddrDB::Read(CAddrMan& addr, CDataStream& ssPeers)
+{
     unsigned char pchMsgTmp[4];
     try {
         // de-serialize file header (network specific magic number) and ..
@@ -2067,6 +2078,8 @@ bool CAddrDB::Read(CAddrMan& addr)
         // de-serialize address data into one CAddrMan object
         ssPeers >> addr;
     } catch (const std::exception& e) {
+        // de-serialization has failed, ensure addrman is left in a clean state
+        addr.Clear();
         return error("%s : Deserialize or I/O error - %s", __func__, e.what());
     }
 
