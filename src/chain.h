@@ -297,12 +297,12 @@ public:
 
     CDiskBlockIndex()
     {
-        hashPrev = uint256();
+        hashPrev = UINT256_ZERO;
     }
 
     explicit CDiskBlockIndex(const CBlockIndex* pindex) : CBlockIndex(*pindex)
     {
-        hashPrev = (pprev ? pprev->GetBlockHash() : uint256(0));
+        hashPrev = (pprev ? pprev->GetBlockHash() : UINT256_ZERO);
     }
 
     ADD_SERIALIZE_METHODS;
@@ -351,7 +351,7 @@ public:
                 READWRITE(nStakeModifier);
                 this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
             } else {
-                uint256 nStakeModifierV2 = 0;
+                uint256 nStakeModifierV2;
                 READWRITE(nStakeModifierV2);
                 this->SetStakeModifier(nStakeModifierV2);
             }

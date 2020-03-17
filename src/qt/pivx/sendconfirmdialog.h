@@ -49,7 +49,7 @@ private:
     WalletModel *model = nullptr;
     WalletModel::SendCoinsReturn sendStatus;
     WalletModelTransaction *tx = nullptr;
-    uint256 txHash = 0;
+    uint256 txHash;
 
     bool inputsLoaded = false;
     bool outputsLoaded = false;

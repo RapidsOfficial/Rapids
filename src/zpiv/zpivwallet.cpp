@@ -41,7 +41,7 @@ CzPIVWallet::CzPIVWallet(std::string strWalletFile)
 
     //Don't try to do anything if the wallet is locked.
     if (pwalletMain->IsLocked() || (!fRegtest && fFirstRun)) {
-        seedMaster = 0;
+        seedMaster.SetNull();
         nCountLastUsed = 0;
         this->mintPool = CMintPool();
         return;
@@ -75,7 +75,7 @@ bool CzPIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
     if (pwalletMain->IsLocked())
         return false;
 
-    if (seedMaster != 0 && !pwalletMain->AddDeterministicSeed(seedMaster)) {
+    if (!seedMaster.IsNull() && !pwalletMain->AddDeterministicSeed(seedMaster)) {
         return error("%s: failed to set master seed.", __func__);
     }
 
@@ -95,7 +95,7 @@ bool CzPIVWallet::SetMasterSeed(const uint256& seedMaster, bool fResetCount)
 
 void CzPIVWallet::Lock()
 {
-    seedMaster = 0;
+    seedMaster.SetNull();
 }
 
 void CzPIVWallet::AddToMintPool(const std::pair<uint256, uint32_t>& pMint, bool fVerbose)
@@ -108,7 +108,7 @@ void CzPIVWallet::GenerateMintPool(uint32_t nCountStart, uint32_t nCountEnd)
 {
 
     //Is locked
-    if (seedMaster == 0)
+    if (seedMaster.IsNull())
         return;
 
     uint32_t n = nCountLastUsed + 1;
@@ -377,7 +377,7 @@ void CzPIVWallet::SeedToZPIV(const uint512& seedZerocoin, CBigNum& bnValue, CBig
                         params->coinCommitmentGroup.modulus);
 
     CBigNum random;
-    uint256 attempts256 = 0;
+    uint256 attempts256;
     // Iterate on Randomness until a valid commitmentValue is found
     while (true) {
         // Now verify that the commitment is a prime number

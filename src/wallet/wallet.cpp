@@ -2569,7 +2569,7 @@ bool CWallet::CreateCoinStake(
         }
 
         nCredit = 0;
-        uint256 hashProofOfStake = 0;
+        uint256 hashProofOfStake;
         nAttempts++;
         fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime, hashProofOfStake);
 
@@ -3266,7 +3266,7 @@ void CWallet::GetKeyBirthTimes(std::map<CKeyID, int64_t>& mapKeyBirth) const
 unsigned int CWallet::ComputeTimeSmart(const CWalletTx& wtx) const
 {
     unsigned int nTimeSmart = wtx.nTimeReceived;
-    if (wtx.hashBlock != 0) {
+    if (!wtx.hashBlock.IsNull()) {
         if (mapBlockIndex.count(wtx.hashBlock)) {
             int64_t latestNow = wtx.nTimeReceived;
             int64_t latestEntry = 0;

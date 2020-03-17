@@ -33,7 +33,7 @@ public:
 
 /* uint256 from const char *.
  * This is a separate function because the constructor uint256(const char*) can result
- * in dangerously catching uint256(0).
+ * in dangerously catching UINT256_ZERO.
  */
 inline uint512 uint512S(const char* str)
 {

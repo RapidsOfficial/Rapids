@@ -1020,7 +1020,7 @@ UniValue rawdelegatestake(const UniValue& params, bool fHelp)
     CreateColdStakeDelegation(params, wtx, reservekey);
 
     UniValue result(UniValue::VOBJ);
-    TxToUniv(wtx, 0, result);
+    TxToUniv(wtx, UINT256_ZERO, result);
 
     return result;
 }
@@ -2338,7 +2338,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
     isminefilter filter = ISMINE_SPENDABLE_ALL | ISMINE_COLD;
 
     if (params.size() > 0) {
-        uint256 blockId = 0;
+        uint256 blockId;
 
         blockId.SetHex(params[0].get_str());
         BlockMap::iterator it = mapBlockIndex.find(blockId);
@@ -2369,7 +2369,7 @@ UniValue listsinceblock(const UniValue& params, bool fHelp)
     }
 
     CBlockIndex* pblockLast = chainActive[chainActive.Height() + 1 - target_confirms];
-    uint256 lastblock = pblockLast ? pblockLast->GetBlockHash() : 0;
+    uint256 lastblock = pblockLast ? pblockLast->GetBlockHash() : UINT256_ZERO;
 
     UniValue ret(UniValue::VOBJ);
     ret.push_back(Pair("transactions", transactions));
@@ -2838,7 +2838,7 @@ UniValue lockunspent(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, vout must be positive");
         }
 
-        const COutPoint outpt(uint256(txid), nOutput);
+        const COutPoint outpt(uint256S(txid), nOutput);
 
         const auto it = pwalletMain->mapWallet.find(outpt.hash);
         if (it == pwalletMain->mapWallet.end()) {
@@ -3446,7 +3446,7 @@ UniValue listmintedzerocoins(const UniValue& params, bool fHelp)
             objMint.push_back(Pair("mint height", m.nHeight));              // Mint Height
             int nConfirmations = (m.nHeight && nBestHeight > m.nHeight) ? nBestHeight - m.nHeight : 0;
             objMint.push_back(Pair("confirmations", nConfirmations));       // Confirmations
-            if (m.hashStake == 0) {
+            if (m.hashStake.IsNull()) {
                 CZerocoinMint mint;
                 if (pwalletMain->GetMint(m.hashSerial, mint)) {
                     uint256 hashStake = mint.GetSerialNumber().getuint256();
@@ -3634,7 +3634,7 @@ UniValue mintzerocoin(const UniValue& params, bool fHelp)
             if (nOutput < 0)
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, vout must be positive");
 
-            COutPoint outpt(uint256(txid), nOutput);
+            COutPoint outpt(uint256S(txid), nOutput);
             vOutpts.push_back(outpt);
         }
         strError = pwalletMain->MintZerocoinFromOutPoint(nAmount, wtx, vDMints, vOutpts);
@@ -3773,7 +3773,7 @@ UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
         std::string serialHashStr = arrMints[i].get_str();
         if (!IsHex(serialHashStr))
             throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex serial hash");
-        vSerialHashes.push_back(uint256(serialHashStr));
+        vSerialHashes.push_back(uint256S(serialHashStr));
     }
 
     // fetch mints and update nAmount
@@ -3948,14 +3948,14 @@ UniValue resetspentzerocoin(const UniValue& params, bool fHelp)
 
     for (CZerocoinSpend spend : listSpends) {
         CTransaction tx;
-        uint256 hashBlock = 0;
+        uint256 hashBlock = UINT256_ZERO;
         if (!GetTransaction(spend.GetTxHash(), tx, hashBlock)) {
             listUnconfirmedSpends.push_back(spend);
             continue;
         }
 
         //no confirmations
-        if (hashBlock == 0)
+        if (hashBlock.IsNull())
             listUnconfirmedSpends.push_back(spend);
     }
 
@@ -4166,7 +4166,7 @@ UniValue importzerocoins(const UniValue& params, bool fHelp)
         bnSerial.SetHex(find_value(o, "s").get_str());
         CBigNum bnRandom = 0;
         bnRandom.SetHex(find_value(o, "r").get_str());
-        uint256 txid(find_value(o, "t").get_str());
+        uint256 txid(uint256S(find_value(o, "t").get_str()));
 
         int nHeight = find_value(o, "h").get_int();
         if (nHeight < 0)

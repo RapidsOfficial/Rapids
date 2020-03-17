@@ -166,7 +166,7 @@ int64_t CBlockIndex::GetMedianTimePast() const
 
 unsigned int CBlockIndex::GetStakeEntropyBit() const
 {
-    unsigned int nEntropyBit = ((GetBlockHash().Get64()) & 1);
+    unsigned int nEntropyBit = ((GetBlockHash().GetCheapHash()) & 1);
     if (GetBoolArg("-printstakemodifier", false))
         LogPrintf("GetStakeEntropyBit: nHeight=%u hashBlock=%s nEntropyBit=%u\n", nHeight, GetBlockHash().ToString().c_str(), nEntropyBit);
 
@@ -214,7 +214,7 @@ uint64_t CBlockIndex::GetStakeModifierV1() const
 uint256 CBlockIndex::GetStakeModifierV2() const
 {
     if (vStakeModifier.empty() || !Params().GetConsensus().IsStakeModifierV2(nHeight))
-        return uint256(0);
+        return UINT256_ZERO;
     uint256 nStakeModifier;
     std::memcpy(nStakeModifier.begin(), vStakeModifier.data(), vStakeModifier.size());
     return nStakeModifier;

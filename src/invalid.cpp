@@ -37,8 +37,8 @@ namespace invalid_out
             if (!vTxid.isStr())
                 return false;
 
-            uint256 txid = uint256(vTxid.get_str());
-            if (txid == 0)
+            uint256 txid = uint256S(vTxid.get_str());
+            if (txid.IsNull())
                 return false;
 
             const UniValue &vN = find_value(o, "n");

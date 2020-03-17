@@ -109,7 +109,7 @@ bool GenerateKeyPair(const CBigNum& bnGroupOrder, const uint256& nPrivkey, CKey&
     // Generate a new key pair, which also has a 256-bit pubkey hash that qualifies as a serial #
     // This builds off of Tim Ruffing's work on libzerocoin, but has a different implementation
     CKey keyPair;
-    if (nPrivkey == 0)
+    if (nPrivkey.IsNull())
         keyPair.MakeNewKey(true);
     else
         keyPair.Set(nPrivkey.begin(), nPrivkey.end(), true);
@@ -162,7 +162,7 @@ void PrivateCoin::mintCoin(const CoinDenomination denomination) {
         CBigNum s;
         bool isValid = false;
         while (!isValid) {
-            isValid = GenerateKeyPair(this->params->coinCommitmentGroup.groupOrder, uint256(0), key, s);
+            isValid = GenerateKeyPair(this->params->coinCommitmentGroup.groupOrder, UINT256_ZERO, key, s);
         }
 
         // Generate a Pedersen commitment to the serial number "s"
@@ -200,7 +200,7 @@ void PrivateCoin::mintCoinFast(const CoinDenomination denomination) {
     CBigNum s;
     bool isValid = false;
     while (!isValid) {
-        isValid = GenerateKeyPair(this->params->coinCommitmentGroup.groupOrder, uint256(0), key, s);
+        isValid = GenerateKeyPair(this->params->coinCommitmentGroup.groupOrder, UINT256_ZERO, key, s);
     }
     // Generate a random number "r" in the range 0...{q-1}
     CBigNum r = CBigNum::randBignum(this->params->coinCommitmentGroup.groupOrder);
@@ -264,7 +264,7 @@ int ExtractVersionFromSerial(const CBigNum& bnSerial)
 CBigNum GetAdjustedSerial(const CBigNum& bnSerial)
 {
     uint256 serial = bnSerial.getuint256();
-    serial &= ~uint256(0) >> PrivateCoin::V2_BITSHIFT;
+    serial &= ~UINT256_ZERO >> PrivateCoin::V2_BITSHIFT;
     CBigNum bnSerialAdjusted;
     bnSerialAdjusted.setuint256(serial);
     return bnSerialAdjusted;

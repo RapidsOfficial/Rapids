@@ -265,7 +265,7 @@ void ProposalFrame::voteButton_clicked(int nVote)
 
 void ProposalFrame::SendVote(std::string strHash, int nVote)
 {
-    uint256 hash = uint256(strHash);
+    uint256 hash = uint256S(strHash);
     int failed = 0, success = 0;
     std::string mnresult;
     for (CMasternodeConfig::CMasternodeEntry mne : masternodeConfig.getEntries()) {

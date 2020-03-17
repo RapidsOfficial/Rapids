@@ -133,7 +133,7 @@ uint256 CBigNum::getuint256() const
     if(bitSize() > 256) {
         throw std::range_error("cannot convert to uint256, bignum longer than 256 bits");
     }
-    uint256 n = uint256(0);
+    uint256 n = UINT256_ZERO;
     mpz_export((unsigned char*)&n, NULL, -1, 1, 0, 0, bn);
     return n;
 }

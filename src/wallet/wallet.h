@@ -186,7 +186,7 @@ public:
     const CBlockIndex* GetLastTip() const { return tipLastStakeAttempt; }
     uint256 GetLastHash() const
     {
-        return (tipLastStakeAttempt == nullptr ? 0 : tipLastStakeAttempt->GetBlockHash());
+        return (tipLastStakeAttempt == nullptr ? UINT256_ZERO : tipLastStakeAttempt->GetBlockHash());
     }
     int64_t GetLastTime() const { return timeLastStakeAttempt; }
     void SetLastTip(const CBlockIndex* lastTip) { tipLastStakeAttempt = lastTip; }
@@ -684,7 +684,7 @@ public:
 
     void Init()
     {
-        hashBlock = 0;
+        hashBlock = UINT256_ZERO;
         nIndex = -1;
     }
 

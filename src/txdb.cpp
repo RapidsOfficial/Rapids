@@ -46,7 +46,7 @@ uint256 CCoinsViewDB::GetBestBlock() const
 {
     uint256 hashBestChain;
     if (!db.Read('B', hashBestChain))
-        return uint256(0);
+        return UINT256_ZERO;
     return hashBestChain;
 }
 
@@ -64,7 +64,7 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
         CCoinsMap::iterator itOld = it++;
         mapCoins.erase(itOld);
     }
-    if (hashBlock != uint256(0))
+    if (!hashBlock.IsNull())
         BatchWriteHashBestChain(batch, hashBlock);
 
     LogPrint("coindb", "Committing %u changed transactions (out of %u) to coin database...\n", (unsigned int)changed, (unsigned int)count);
@@ -212,7 +212,7 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
     boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
 
     CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
-    ssKeySet << std::make_pair('b', uint256(0));
+    ssKeySet << std::make_pair('b', UINT256_ZERO);
     pcursor->Seek(ssKeySet.str());
 
     // Load mapBlockIndex
@@ -354,7 +354,7 @@ bool CZerocoinDB::WipeCoins(std::string strType)
 
     char type = (strType == "spends" ? 's' : 'm');
     CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
-    ssKeySet << std::make_pair(type, uint256(0));
+    ssKeySet << std::make_pair(type, UINT256_ZERO);
     pcursor->Seek(ssKeySet.str());
     // Load mapBlockIndex
     std::set<uint256> setDelete;
