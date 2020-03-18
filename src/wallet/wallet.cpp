@@ -2549,6 +2549,7 @@ bool CWallet::CreateCoinStake(
 
     // update staker status (hash)
     pStakerStatus->SetLastTip(pindexPrev);
+    pStakerStatus->SetLastCoins(listInputs.size());
 
     // Kernel Search
     CAmount nCredit;
@@ -2573,8 +2574,9 @@ bool CWallet::CreateCoinStake(
         nAttempts++;
         fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime, hashProofOfStake);
 
-        // update staker status (time)
+        // update staker status (time, attempts)
         pStakerStatus->SetLastTime(nTxNewTime);
+        pStakerStatus->SetLastTries(nAttempts);
 
         if (!fKernelFound) continue;
 

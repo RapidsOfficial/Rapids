@@ -117,7 +117,7 @@ enum ZerocoinSpendStatus {
     ZPIV_INVALID_WITNESS = 12,                      // Spend coin transaction did not verify
     ZPIV_BAD_SERIALIZATION = 13,                    // Transaction verification failed
     ZPIV_SPENT_USED_ZPIV = 14,                      // Coin has already been spend
-    ZPIV_TX_TOO_LARGE = 15,                          // The transaction is larger than the max tx size
+    ZPIV_TX_TOO_LARGE = 15,                         // The transaction is larger than the max tx size
     ZPIV_SPEND_V1_SEC_LEVEL                         // Spend is V1 and security level is not set to 100
 };
 
@@ -177,26 +177,42 @@ public:
     }
 };
 
-/** Record info about last kernel stake operation (time and chainTip)**/
-class CStakerStatus {
+/** Record info about last stake attempt:
+ *  - tipBlock       index of the block on top of which last stake attempt was made
+ *  - nTime          time slot of last attempt
+ *  - nTries         number of UTXOs hashed during last attempt
+ *  - nCoins         number of stakeable utxos during last attempt
+**/
+class CStakerStatus
+{
 private:
-    const CBlockIndex* tipLastStakeAttempt = nullptr;
-    int64_t timeLastStakeAttempt;
+    const CBlockIndex* tipBlock{nullptr};
+    int64_t nTime{0};
+    int nTries{0};
+    int nCoins{0};
+
 public:
-    const CBlockIndex* GetLastTip() const { return tipLastStakeAttempt; }
-    uint256 GetLastHash() const
-    {
-        return (tipLastStakeAttempt == nullptr ? UINT256_ZERO : tipLastStakeAttempt->GetBlockHash());
-    }
-    int64_t GetLastTime() const { return timeLastStakeAttempt; }
-    void SetLastTip(const CBlockIndex* lastTip) { tipLastStakeAttempt = lastTip; }
-    void SetLastTime(const uint64_t lastTime) { timeLastStakeAttempt = lastTime; }
+    // Get
+    const CBlockIndex* GetLastTip() const { return tipBlock; }
+    uint256 GetLastHash() const { return (GetLastTip() == nullptr ? UINT256_ZERO : GetLastTip()->GetBlockHash()); }
+    int GetLastHeight() const { return (GetLastTip() == nullptr ? 0 : GetLastTip()->nHeight); }
+    int GetLastCoins() const { return nCoins; }
+    int GetLastTries() const { return nTries; }
+    int64_t GetLastTime() const { return nTime; }
+    // Set
+    void SetLastCoins(const int coins) { nCoins = coins; }
+    void SetLastTries(const int tries) { nTries = tries; }
+    void SetLastTip(const CBlockIndex* lastTip) { tipBlock = lastTip; }
+    void SetLastTime(const uint64_t lastTime) { nTime = lastTime; }
     void SetNull()
     {
+        SetLastCoins(0);
+        SetLastTries(0);
         SetLastTip(nullptr);
         SetLastTime(0);
     }
-    bool IsActive() { return (timeLastStakeAttempt + 30) >= GetTime(); }
+    // Check whether staking status is active (last attempt earlier than 30 seconds ago)
+    bool IsActive() const { return (nTime + 30) >= GetTime(); }
 };
 
 /**
