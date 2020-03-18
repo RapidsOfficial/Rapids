@@ -26,7 +26,8 @@ public:
     ~ExpandableButton();
 
     void setButtonClassStyle(const char *name, const QVariant &value, bool forceUpdate = false);
-    void setButtonText(const QString _text);
+    void setButtonText(const QString& _text);
+    void setNoIconText(const QString& _text);
     void setIcon(QString path);
 
     bool isChecked();
@@ -62,6 +63,7 @@ private Q_SLOTS:
     void mousePressEvent();
 private:
     Ui::ExpandableButton *ui;
+    QString notExpandedText;
     QString text;
     std::atomic<bool> isAnimating;
     QPropertyAnimation *animation = nullptr;

@@ -76,6 +76,25 @@ bool WalletModel::isStakingStatusActive() const {
     return wallet->pStakerStatus->IsActive();
 }
 
+bool WalletModel::isHDEnabled() const
+{
+    return wallet->IsHDEnabled();
+}
+bool WalletModel::upgradeWallet(std::string& upgradeError)
+{
+    // This action must be performed in a separate thread and not the main one.
+    LOCK2(cs_main, wallet->cs_wallet);
+
+    // Get version
+    int prev_version = wallet->GetVersion();
+    // Upgrade wallet's version
+    wallet->SetMinVersion(FEATURE_LATEST);
+    wallet->SetMaxVersion(FEATURE_LATEST);
+
+    // Upgrade to HD
+    return wallet->Upgrade(upgradeError, prev_version);
+}
+
 CAmount WalletModel::getBalance(const CCoinControl* coinControl) const
 {
     if (coinControl) {
