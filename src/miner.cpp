@@ -131,7 +131,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
     if (Params().IsRegTestNet()) {
-        if (nHeight < consensus.height_start_ZC) pblock->nVersion = 3;
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
     }
 

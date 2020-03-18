@@ -272,13 +272,6 @@ public:
     CBlockIndex* GetAncestor(int height);
     const CBlockIndex* GetAncestor(int height) const;
 
-    /**
-     * Returns true if there are nRequired or more blocks of minVersion or above
-     * in the last Params().consensus.nToCheckBlockUpgradeMajority blocks, starting at pstart
-     * and going backwards.
-     */
-    static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired);
-
     // Legacy Zerocoin
     int64_t GetZerocoinSupply() const;
     int64_t GetZcMints(libzerocoin::CoinDenomination denom) const;
