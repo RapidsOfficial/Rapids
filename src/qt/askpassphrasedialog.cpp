@@ -183,7 +183,8 @@ void AskPassphraseDialog::accept()
         hide();
         bool ret = openStandardDialog(
                 tr("Confirm wallet encryption"),
-                tr("Warning: If you encrypt your wallet and lose your passphrase, you will <b>LOSE ALL OF YOUR PIV</b>!") + "<br><br>" + tr("Are you sure you wish to encrypt your wallet?"),
+                "<b>" + tr("WARNING") + ":</b> " + tr("If you encrypt your wallet and lose your passphrase, you will") +
+                " <b>" + tr("LOSE ALL OF YOUR PIV") + "</b>!<br><br>" + tr("Are you sure you wish to encrypt your wallet?"),
                 tr("ENCRYPT"), tr("CANCEL")
         );
         if (ret) {
@@ -271,7 +272,7 @@ bool AskPassphraseDialog::event(QEvent* event)
         if (ke->key() == Qt::Key_CapsLock) {
             fCapsLock = !fCapsLock;
             ui->capsLabel->setVisible(fCapsLock);
-            fCapsLock ? ui->capsLabel->setText(tr("Warning: The Caps Lock key is on!")) : ui->capsLabel->clear();
+            fCapsLock ? ui->capsLabel->setText(tr("WARNING: The Caps Lock key is on!")) : ui->capsLabel->clear();
         }
         // Detect Enter key press
         if ((ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) && ui->pushButtonOk->isEnabled()) {
@@ -297,7 +298,7 @@ bool AskPassphraseDialog::eventFilter(QObject* object, QEvent* event)
             bool fShift = (ke->modifiers() & Qt::ShiftModifier) != 0;
             if ((fShift && *psz >= 'a' && *psz <= 'z') || (!fShift && *psz >= 'A' && *psz <= 'Z')) {
                 fCapsLock = true;
-                ui->capsLabel->setText(tr("Warning: The Caps Lock key is on!"));
+                ui->capsLabel->setText(tr("WARNING: The Caps Lock key is on!"));
                 ui->capsLabel->setVisible(true);
             } else if (psz->isLetter()) {
                 fCapsLock = false;
