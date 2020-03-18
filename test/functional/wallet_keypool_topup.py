@@ -26,6 +26,7 @@ class KeypoolRestoreTest(PivxTestFramework):
         self.extra_args = [['-keypool=3'], ['-keypool=100']]
 
     def run_test(self):
+        isLegacyWallet = '-legacywallet' in self.nodes[0].extra_args
         self.tmpdir = self.options.tmpdir
         self.nodes[0].generate(101)
 
@@ -64,11 +65,15 @@ class KeypoolRestoreTest(PivxTestFramework):
         connect_nodes_bi(self.nodes, 0, 1)
         self.sync_all()
 
-        assert_equal(self.nodes[1].getbalance(), 15)
+        # wallet was not backupped after emptying the key pool.
+        # Legacy wallet can't recover funds in addr_extpool
+        recoveredBalance = 10 if isLegacyWallet else 15
+        assert_equal(self.nodes[1].getbalance(), recoveredBalance)
         assert_equal(self.nodes[1].listtransactions()[0]['category'], "receive")
 
         # Check that we have marked all keys up to the used keypool key as used
-        assert_equal(self.nodes[1].getaddressinfo(self.nodes[1].getnewaddress())['hdkeypath'], "m/44'/119'/0'/0'/110'")
+        if not isLegacyWallet:
+            assert_equal(self.nodes[1].getaddressinfo(self.nodes[1].getnewaddress())['hdkeypath'], "m/44'/119'/0'/0'/110'")
 
 if __name__ == '__main__':
     KeypoolRestoreTest().main()
