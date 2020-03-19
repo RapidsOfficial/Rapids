@@ -168,6 +168,9 @@ The p2p alert system has been removed in [#1372](https://github.com/PIVX-Project
 Addresses in the dropdown of the "Send Transaction" and "Send Delegation" widgets are now automatically sorted by label with ascending order ([#1393](https://github.com/PIVX-Project/PIVX/pull/1393)).
 
 
+**Custom Fee**: The custom fee selected when sending a transaction is now saved in the wallet database and persisted across multiple sends and wallet's restarts ([#1406](https://github.com/PIVX-Project/PIVX/pull/1406)).
+
+
 
 ### RPC/REST
 
