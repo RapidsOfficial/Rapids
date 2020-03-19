@@ -233,6 +233,7 @@ jobs:
         homebrew:
           packages:
             - python3
+            - ccache
             - autoconf
             - automake
             - berkeley-db4

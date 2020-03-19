@@ -1,4 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
+
+# Search for and use ccache if available to speed up build times
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    message(STATUS "Found ccache: ${CCACHE_PROGRAM}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+    # Set up wrapper scripts
+    set(C_LAUNCHER   "${CCACHE_PROGRAM}")
+    set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
+endif()
+
 project(PIVX)
 
 set(BDB_VER "4.8.30")
