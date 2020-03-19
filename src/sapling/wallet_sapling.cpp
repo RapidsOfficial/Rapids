@@ -45,15 +45,11 @@ bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &sk)
         return false;
     }
 
-    // // check if we need to remove from viewing keys
-    // if (HaveViewingKey(addr)) {
-    //     RemoveViewingKey(key.viewing_key());
-    // }
+    if (!fFileBacked) {
+        return true;
+    }
 
-    // if (!fFileBacked) {
-    //     return true;
-    // }
-
+    // TODO: Persist to disk
     // if (!IsCrypted()) {
     //     return CWalletDB(strWalletFile).WriteSaplingZKey(addr,
     //                                               sk,
