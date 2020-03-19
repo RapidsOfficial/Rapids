@@ -28,55 +28,55 @@
  * >> and << read and write unformatted data using the above serialization templates.
  * Fills with data in linear time; some stringstream implementations take N^2 time.
  */
-class CDataStream
+template<typename SerializeType>
+class CBaseDataStream
 {
 protected:
-    typedef CSerializeData vector_type;
+    typedef SerializeType vector_type;
     vector_type vch;
     unsigned int nReadPos;
-
     int nType;
     int nVersion;
 
 public:
-    typedef vector_type::allocator_type allocator_type;
-    typedef vector_type::size_type size_type;
-    typedef vector_type::difference_type difference_type;
-    typedef vector_type::reference reference;
-    typedef vector_type::const_reference const_reference;
-    typedef vector_type::value_type value_type;
-    typedef vector_type::iterator iterator;
-    typedef vector_type::const_iterator const_iterator;
-    typedef vector_type::reverse_iterator reverse_iterator;
+    typedef typename vector_type::allocator_type   allocator_type;
+    typedef typename vector_type::size_type        size_type;
+    typedef typename vector_type::difference_type  difference_type;
+    typedef typename vector_type::reference        reference;
+    typedef typename vector_type::const_reference  const_reference;
+    typedef typename vector_type::value_type       value_type;
+    typedef typename vector_type::iterator         iterator;
+    typedef typename vector_type::const_iterator   const_iterator;
+    typedef typename vector_type::reverse_iterator reverse_iterator;
 
-    explicit CDataStream(int nTypeIn, int nVersionIn)
+    explicit CBaseDataStream(int nTypeIn, int nVersionIn)
     {
         Init(nTypeIn, nVersionIn);
     }
 
-    CDataStream(const_iterator pbegin, const_iterator pend, int nTypeIn, int nVersionIn) : vch(pbegin, pend)
+    CBaseDataStream(const_iterator pbegin, const_iterator pend, int nTypeIn, int nVersionIn) : vch(pbegin, pend)
     {
         Init(nTypeIn, nVersionIn);
     }
 
 #if !defined(_MSC_VER) || _MSC_VER >= 1300
-    CDataStream(const char* pbegin, const char* pend, int nTypeIn, int nVersionIn) : vch(pbegin, pend)
+    CBaseDataStream(const char* pbegin, const char* pend, int nTypeIn, int nVersionIn) : vch(pbegin, pend)
     {
         Init(nTypeIn, nVersionIn);
     }
 #endif
 
-    CDataStream(const vector_type& vchIn, int nTypeIn, int nVersionIn) : vch(vchIn.begin(), vchIn.end())
+    CBaseDataStream(const vector_type& vchIn, int nTypeIn, int nVersionIn) : vch(vchIn.begin(), vchIn.end())
     {
         Init(nTypeIn, nVersionIn);
     }
 
-    CDataStream(const std::vector<char>& vchIn, int nTypeIn, int nVersionIn) : vch(vchIn.begin(), vchIn.end())
+    CBaseDataStream(const std::vector<char>& vchIn, int nTypeIn, int nVersionIn) : vch(vchIn.begin(), vchIn.end())
     {
         Init(nTypeIn, nVersionIn);
     }
 
-    CDataStream(const std::vector<unsigned char>& vchIn, int nTypeIn, int nVersionIn) : vch(vchIn.begin(), vchIn.end())
+    CBaseDataStream(const std::vector<unsigned char>& vchIn, int nTypeIn, int nVersionIn) : vch(vchIn.begin(), vchIn.end())
     {
         Init(nTypeIn, nVersionIn);
     }
@@ -88,15 +88,15 @@ public:
         nVersion = nVersionIn;
     }
 
-    CDataStream& operator+=(const CDataStream& b)
+    CBaseDataStream& operator+=(const CBaseDataStream& b)
     {
         vch.insert(vch.end(), b.begin(), b.end());
         return *this;
     }
 
-    friend CDataStream operator+(const CDataStream& a, const CDataStream& b)
+    friend CBaseDataStream operator+(const CBaseDataStream& a, const CBaseDataStream& b)
     {
-        CDataStream ret = a;
+        CBaseDataStream ret = a;
         ret += b;
         return (ret);
     }
@@ -200,9 +200,9 @@ public:
     //
     // Stream subset
     //
-    bool eof() const        { return size() == 0; }
-    CDataStream* rdbuf()    { return this; }
-    int in_avail()          { return size(); }
+    bool eof() const { return size() == 0; }
+    CBaseDataStream* rdbuf() { return this; }
+    int in_avail() { return size(); }
 
     void SetType(int n)     { nType = n; }
     int GetType() const     { return nType; }
@@ -215,7 +215,7 @@ public:
         unsigned int nReadPosNext = nReadPos + nSize;
         if (nReadPosNext >= vch.size()) {
             if (nReadPosNext > vch.size()) {
-                throw std::ios_base::failure("CDataStream::read() : end of data");
+                throw std::ios_base::failure("CBaseDataStream::read() : end of data");
             }
             memcpy(pch, &vch[nReadPos], nSize);
             nReadPos = 0;
@@ -226,7 +226,7 @@ public:
         nReadPos = nReadPosNext;
     }
 
-    CDataStream& movePos(size_t nSize){
+    CBaseDataStream& movePos(size_t nSize){
         nReadPos = nReadPos + nSize;
         return (*this);
     }
@@ -235,12 +235,12 @@ public:
     {
         // Ignore from the beginning of the buffer
         if (nSize < 0) {
-            throw std::ios_base::failure("CDataStream::ignore(): nSize negative");
+            throw std::ios_base::failure("CBaseDataStream::ignore(): nSize negative");
         }
         unsigned int nReadPosNext = nReadPos + nSize;
         if (nReadPosNext >= vch.size()) {
             if (nReadPosNext > vch.size())
-                throw std::ios_base::failure("CDataStream::ignore() : end of data");
+                throw std::ios_base::failure("CBaseDataStream::ignore() : end of data");
             nReadPos = 0;
             vch.clear();
             return;
@@ -263,7 +263,7 @@ public:
     }
 
     template <typename T>
-    CDataStream& operator<<(const T& obj)
+    CBaseDataStream& operator<<(const T& obj)
     {
         // Serialize to this stream
         ::Serialize(*this, obj);
@@ -271,7 +271,7 @@ public:
     }
 
     template <typename T>
-    CDataStream& operator>>(T& obj)
+    CBaseDataStream& operator>>(T& obj)
     {
         // Unserialize from this stream
         ::Unserialize(*this, obj);
@@ -284,6 +284,38 @@ public:
         clear();
     }
 };
+
+class CDataStream : public CBaseDataStream<CSerializeData>
+{
+public:
+    explicit CDataStream(int nTypeIn, int nVersionIn) : CBaseDataStream(nTypeIn, nVersionIn) { }
+
+    CDataStream(const_iterator pbegin, const_iterator pend, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(pbegin, pend, nTypeIn, nVersionIn) { }
+
+#if !defined(_MSC_VER) || _MSC_VER >= 1300
+    CDataStream(const char* pbegin, const char* pend, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(pbegin, pend, nTypeIn, nVersionIn) { }
+#endif
+
+    CDataStream(const vector_type& vchIn, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(vchIn, nTypeIn, nVersionIn) { }
+
+    CDataStream(const std::vector<char>& vchIn, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(vchIn, nTypeIn, nVersionIn) { }
+
+    CDataStream(const std::vector<unsigned char>& vchIn, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(vchIn, nTypeIn, nVersionIn) { }
+
+};
+
+
+
+
+
+
+
+
 
 
 /** Non-refcounted RAII wrapper for FILE*
