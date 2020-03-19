@@ -16,7 +16,8 @@ JSON_TEST_FILES = \
   test/data/script_invalid.json \
   test/data/tx_invalid.json \
   test/data/tx_valid.json \
-  test/data/sighash.json
+  test/data/sighash.json \
+  test/data/sapling_key_components.json
 
 RAW_TEST_FILES =
 
@@ -44,6 +45,7 @@ BITCOIN_TESTS =\
   test/librust/pedersen_hash_tests.cpp \
   test/librust/noteencryption_tests.cpp \
   test/librust/sapling_note_tests.cpp \
+  test/librust/sapling_keystore_tests.cpp \
   test/librust/zip32_tests.cpp \
   test/librust/wallet_zkeys_tests.cpp \
   test/base32_tests.cpp \
