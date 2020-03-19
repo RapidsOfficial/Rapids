@@ -215,7 +215,7 @@ public:
     SaplingFullViewingKey full_viewing_key() const;
     
     // Can derive Sapling addr from default diversifier 
-    SaplingPaymentAddress default_address() const;
+    boost::optional<SaplingPaymentAddress> default_address() const;
 };
 
 typedef boost::variant<InvalidEncoding, SproutPaymentAddress, SaplingPaymentAddress> PaymentAddress;
