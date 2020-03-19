@@ -516,12 +516,14 @@ void TopBar::showUpgradeDialog()
     if (ask(title,
             tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\nNote that you will need to MAKE\nA NEW BACKUP of your wallet\nafter upgrade it.\n"))) {
 
-        // If the wallet is locked, notify that the wallet needs to be unlocked first.
-        if (walletModel->isWalletLocked()) {
-            warn(title, tr("Cannot upgrade a locked wallet. Please unlock it first.\n\nOnce it's unlocked you can continue the upgrade\nprocess clicking on the 'HD' icon at the top bar.\n"));
+        pctx = new WalletModel::UnlockContext(walletModel->requestUnlock());
+        if (!pctx->isValid()) {
+            warn(tr("Upgrade Wallet"), tr("Wallet unlock cancelled"));
+            // delete unlock context
+            delete pctx;
+            pctx = nullptr;
             return;
         }
-
         // Action performed on a separate thread, it's locking cs_main and cs_wallet.
         LoadingDialog *dialog = new LoadingDialog(window);
         dialog->execute(this, REQUEST_UPGRADE_WALLET);
@@ -535,13 +537,7 @@ void TopBar::loadWalletModel()
     if (walletModel->isHDEnabled()) {
         ui->pushButtonHDUpgrade->setVisible(false);
     } else {
-        connect(ui->pushButtonHDUpgrade, &ExpandableButton::Mouse_Pressed, [this]() {
-            if (walletModel->isWalletLocked()) {
-                inform(tr("Cannot upgrade a locked wallet. Please unlock it first."));
-                return;
-            }
-            showUpgradeDialog();
-        });
+        connect(ui->pushButtonHDUpgrade, &ExpandableButton::Mouse_Pressed, this, &TopBar::showUpgradeDialog);
 
         // Upgrade wallet timer, only once. launched 4 seconds after the wallet started.
         QTimer::singleShot(4000, [this](){
@@ -699,6 +695,11 @@ void TopBar::updateHDState(const bool& upgraded, const QString& upgradeError)
         inform(tr("Wallet upgraded successfully"));
     } else {
         warn(tr("Upgrade Wallet Error"), upgradeError);
+    }
+    // delete global unlock context
+    if (pctx) {
+        delete pctx;
+        pctx = nullptr;
     }
 }
 
