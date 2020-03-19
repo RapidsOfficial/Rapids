@@ -175,6 +175,8 @@ Addresses in the dropdown of the "Send Transaction" and "Send Delegation" widget
 **Custom Fee**: The custom fee selected when sending a transaction is now saved in the wallet database and persisted across multiple sends and wallet's restarts ([#1406](https://github.com/PIVX-Project/PIVX/pull/1406)).
 
 
+**Include delegations in send**: The send and cold-staking page present a checkbox ([#1391](https://github.com/PIVX-Project/PIVX/pull/1391)) to make the automatic input selection algorithm include delegated (P2CS) utxos if needed. The option is unchecked by default.
+
 
 ### RPC/REST
 
