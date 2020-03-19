@@ -9,6 +9,7 @@
 
 #include "key.h"
 #include "pubkey.h"
+#include "sapling/address.hpp"
 #include "sync.h"
 
 #include <boost/signals2/signal.hpp>
@@ -19,6 +20,8 @@ class CScriptID;
 /** A virtual base class for key stores */
 class CKeyStore
 {
+protected:
+    mutable RecursiveMutex cs_SpendingKeyStore;
 
 public:
     // todo: Make it protected again once we are more advanced in the wallet/spkm decoupling.
@@ -46,12 +49,22 @@ public:
     virtual bool RemoveWatchOnly(const CScript& dest) = 0;
     virtual bool HaveWatchOnly(const CScript& dest) const = 0;
     virtual bool HaveWatchOnly() const = 0;
+
+    //! Support for Sapling
+    // Add a Sapling spending key to the store.
+    virtual bool AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &sk) = 0;
+
+    // Check whether a Sapling spending key corresponding to a given Sapling viewing key is present in the store.
+    virtual bool HaveSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk) const = 0;
+    virtual bool GetSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk, libzcash::SaplingSpendingKey& skOut) const = 0;
 };
 
 typedef std::map<CKeyID, CKey> KeyMap;
 typedef std::map<CKeyID, CPubKey> WatchKeyMap;
 typedef std::map<CScriptID, CScript> ScriptMap;
 typedef std::set<CScript> WatchOnlySet;
+typedef std::map<libzcash::SaplingFullViewingKey, libzcash::SaplingSpendingKey> SaplingSpendingKeyMap;
+typedef std::map<libzcash::SaplingIncomingViewingKey, libzcash::SaplingFullViewingKey> SaplingFullViewingKeyMap;
 
 /** Basic key store, that keeps keys in an address->secret map */
 class CBasicKeyStore : public CKeyStore
@@ -61,6 +74,7 @@ protected:
     WatchKeyMap mapWatchKeys;
     ScriptMap mapScripts;
     WatchOnlySet setWatchOnly;
+    SaplingSpendingKeyMap mapSaplingSpendingKeys;
 
 public:
     bool AddKeyPubKey(const CKey& key, const CPubKey& pubkey);
@@ -77,6 +91,10 @@ public:
     virtual bool RemoveWatchOnly(const CScript& dest);
     virtual bool HaveWatchOnly(const CScript& dest) const;
     virtual bool HaveWatchOnly() const;
+
+    bool AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &sk);
+    bool HaveSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk) const;
+    bool GetSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk, libzcash::SaplingSpendingKey &skOut) const;
 };
 
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CKeyingMaterial;

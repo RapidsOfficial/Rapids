@@ -150,3 +150,28 @@ bool CBasicKeyStore::GetKey(const CKeyID& address, CKey& keyOut) const
     }
     return false;
 }
+
+//! Sapling
+bool CBasicKeyStore::AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &sk)
+{
+    LOCK(cs_SpendingKeyStore);
+    auto fvk = sk.full_viewing_key();
+    mapSaplingSpendingKeys[fvk] = sk;
+    //! TODO: Note decryptors for Sapling
+    return true;
+}
+
+bool CBasicKeyStore::HaveSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk) const
+{
+    return WITH_LOCK(cs_SpendingKeyStore, return mapSaplingSpendingKeys.count(fvk) > 0);
+}
+bool CBasicKeyStore::GetSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk, libzcash::SaplingSpendingKey &skOut) const
+{
+    LOCK(cs_SpendingKeyStore);
+    SaplingSpendingKeyMap::const_iterator mi = mapSaplingSpendingKeys.find(fvk);
+    if (mi != mapSaplingSpendingKeys.end()) {
+        skOut = mi->second;
+        return true;
+    }
+    return false;
+}

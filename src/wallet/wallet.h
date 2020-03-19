@@ -20,6 +20,7 @@
 #include "pairresult.h"
 #include "primitives/block.h"
 #include "primitives/transaction.h"
+#include "sapling/address.hpp"
 #include "zpiv/zerocoin.h"
 #include "guiinterface.h"
 #include "util.h"
@@ -285,6 +286,7 @@ public:
     std::string strWalletFile;
 
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata;
+    std::map<libzcash::SaplingPaymentAddress, CKeyMetadata> mapSaplingZKeyMetadata;
 
     typedef std::map<unsigned int, CMasterKey> MasterKeyMap;
     MasterKeyMap mapMasterKeys;
@@ -387,6 +389,15 @@ public:
     PairResult getNewStakingAddress(CTxDestination& ret, std::string label);
     int64_t GetKeyCreationTime(CPubKey pubkey);
     int64_t GetKeyCreationTime(const CTxDestination& address);
+
+    //////////// Sapling //////////////////
+
+    //! Generates new Sapling key
+    libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
+    //! Adds Sapling spending key to the store, and saves it to disk
+    bool AddSaplingZKey(const libzcash::SaplingSpendingKey &key);
+
+    //////////// End Sapling //////////////
 
     //! Adds a key to the store, and saves it to disk.
     bool AddKeyPubKey(const CKey& key, const CPubKey& pubkey);
