@@ -29,6 +29,8 @@ SOURCE_LANG = 'pivx_en.ts'
 LOCALE_DIR = 'src/qt/locale'
 # Minimum number of messages for translation to be considered at all
 MIN_NUM_MESSAGES = 10
+# Minimum completion percentage required to download from transifex
+MINIMUM_PERC = 80
 # Path to git
 GIT = os.getenv("GIT", "git")
 
@@ -50,7 +52,7 @@ def remove_current_translations():
         os.remove(name + '.orig')
 
 def fetch_all_translations():
-    if subprocess.call([TX, 'pull', '-f', '-a']):
+    if subprocess.call([TX, 'pull', '-f', '-a', '--minimum-perc=%s' % MINIMUM_PERC]):
         print('Error while fetching translations', file=sys.stderr)
         sys.exit(1)
 
