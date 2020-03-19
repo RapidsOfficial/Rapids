@@ -64,8 +64,8 @@ BOOST_AUTO_TEST_CASE(random) {
     CAmount MAX_MONEY_OUT = 21000000 * COIN;
     // Test creating random notes using the same spending key
     auto address = SaplingSpendingKey::random().default_address();
-    SaplingNote note1(address.get(), GetRand(MAX_MONEY_OUT));
-    SaplingNote note2(address.get(), GetRand(MAX_MONEY_OUT));
+    SaplingNote note1(address, GetRand(MAX_MONEY_OUT));
+    SaplingNote note2(address, GetRand(MAX_MONEY_OUT));
 
     BOOST_CHECK(note1.d == note2.d);
     BOOST_CHECK(note1.pk_d == note2.pk_d);
@@ -73,7 +73,7 @@ BOOST_AUTO_TEST_CASE(random) {
     BOOST_CHECK(note1.r != note2.r);
 
     // Test diversifier and pk_d are not the same for different spending keys
-    SaplingNote note3(SaplingSpendingKey::random().default_address().get(), GetRand(MAX_MONEY_OUT));
+    SaplingNote note3(SaplingSpendingKey::random().default_address(), GetRand(MAX_MONEY_OUT));
     BOOST_CHECK(note1.d != note3.d);
     BOOST_CHECK(note1.pk_d != note3.pk_d);
 }

@@ -156,16 +156,17 @@ bool CBasicKeyStore::AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &s
 {
     LOCK(cs_SpendingKeyStore);
     auto fvk = sk.full_viewing_key();
-    mapSaplingSpendingKeys[fvk] = sk;
 
     // if SaplingFullViewingKey is not in SaplingFullViewingKeyMap, add it
-    AddSaplingFullViewingKey(fvk);
+    if (!AddSaplingFullViewingKey(fvk)){
+        return error("%s: adding new sapling fvk", __func__);
+    }
 
+    mapSaplingSpendingKeys[fvk] = sk;
     // Add addr -> SaplingIncomingViewing to SaplingIncomingViewingKeyMap
-    auto addrOpt = sk.default_address();
-    assert(addrOpt != boost::none);
+    auto addr = sk.default_address();
     auto ivk = fvk.in_viewing_key();
-    mapSaplingIncomingViewingKeys[addrOpt.value()] = ivk;
+    mapSaplingIncomingViewingKeys[addr] = ivk;
     return true;
 }
 
