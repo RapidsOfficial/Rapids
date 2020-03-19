@@ -9,6 +9,7 @@
 #include "allocators.h"
 #include "keystore.h"
 #include "serialize.h"
+#include "streams.h"
 
 class uint256;
 
@@ -73,6 +74,18 @@ namespace wallet_crypto
 {
     class TestCrypter;
 }
+
+class CSecureDataStream : public CBaseDataStream<CKeyingMaterial>
+{
+public:
+    explicit CSecureDataStream(int nTypeIn, int nVersionIn) : CBaseDataStream(nTypeIn, nVersionIn) { }
+
+    CSecureDataStream(const_iterator pbegin, const_iterator pend, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(pbegin, pend, nTypeIn, nVersionIn) { }
+
+    CSecureDataStream(const vector_type& vchIn, int nTypeIn, int nVersionIn) :
+            CBaseDataStream(vchIn, nTypeIn, nVersionIn) { }
+};
 
 /** Encryption/decryption context with key information */
 class CCrypter
