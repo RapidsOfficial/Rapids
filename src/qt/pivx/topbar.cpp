@@ -358,6 +358,10 @@ void TopBar::onColdStakingClicked()
 
 TopBar::~TopBar()
 {
+    if (pctx) {
+        delete pctx;
+        pctx = nullptr;
+    }
     if (timerStakingIcon) {
         timerStakingIcon->stop();
     }
@@ -514,7 +518,8 @@ void TopBar::showUpgradeDialog()
 {
     QString title = tr("Wallet Upgrade");
     if (ask(title,
-            tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\nNote that you will need to MAKE\nA NEW BACKUP of your wallet\nafter upgrade it.\n"))) {
+            tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\n"
+                    "NOTE: after the upgrade, a new \nbackup will be created.\n"))) {
 
         pctx = new WalletModel::UnlockContext(walletModel->requestUnlock());
         if (!pctx->isValid()) {
@@ -690,16 +695,30 @@ void TopBar::expandSync()
 
 void TopBar::updateHDState(const bool& upgraded, const QString& upgradeError)
 {
-    if (upgraded) {
-        ui->pushButtonHDUpgrade->setVisible(false);
-        inform(tr("Wallet upgraded successfully"));
-    } else {
-        warn(tr("Upgrade Wallet Error"), upgradeError);
-    }
-    // delete global unlock context
+    // delete global unlock context (relocking the wallet if needed)
     if (pctx) {
         delete pctx;
         pctx = nullptr;
+    }
+    if (upgraded) {
+        ui->pushButtonHDUpgrade->setVisible(false);
+        if (ask("HD Upgrade Complete", tr("The wallet has been successfully upgraded to HD.") + "\n" +
+                tr("It is advised to make a backup.") + "\n\n" + tr("Do you wish to backup now?") + "\n\n")) {
+            // backup wallet
+            QString filename = GUIUtil::getSaveFileName(this,
+                                                tr("Backup Wallet"), QString(),
+                                                tr("Wallet Data (*.dat)"), NULL);
+            if (!filename.isEmpty()) {
+                inform(walletModel->backupWallet(filename) ? tr("Backup created") : tr("Backup creation failed"));
+            } else {
+                warn(tr("Backup creation failed"), tr("no file selected"));
+            }
+        } else {
+            inform(tr("Wallet upgraded successfully, but no backup created.") + "\n" +
+                    tr("WARNING: remember to make a copy of your wallet.dat file!"));
+        }
+    } else {
+        warn(tr("Upgrade Wallet Error"), upgradeError);
     }
 }
 
