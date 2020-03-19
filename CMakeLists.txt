@@ -1,4 +1,15 @@
 cmake_minimum_required(VERSION 3.10)
+
+# Search for and use ccache if available to speed up build times
+find_program(CCACHE_PROGRAM ccache)
+if(CCACHE_PROGRAM)
+    message(STATUS "Found ccache: ${CCACHE_PROGRAM}")
+    set_property(GLOBAL PROPERTY RULE_LAUNCH_COMPILE "${CCACHE_PROGRAM}")
+    # Set up wrapper scripts
+    set(C_LAUNCHER   "${CCACHE_PROGRAM}")
+    set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
+endif()
+
 project(PIVX)
 
 set(BDB_VER "4.8.30")
@@ -15,11 +26,11 @@ if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
     message(STATUS "Compiling on macOS")
     set(ENV{target} "Mac")
     list(APPEND CMAKE_PREFIX_PATH /usr/local/opt/qt5)
-    list(APPEND CMAKE_PREFIX_PATH /usr/local/opt/openssl)
+    list(APPEND CMAKE_PREFIX_PATH /usr/local/opt/openssl@1.1)
     list(APPEND CMAKE_PREFIX_PATH /usr/local/Cellar/berkeley-db@4)
-    set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl/")
-    set(ENV{CPPFLAGS} "-I${OPENSSL_ROOT_DIR}/include")
-    set(ENV{LDFLAGS} "-L${OPENSSL_ROOT_DIR}/lib")
+    #set(OPENSSL_ROOT_DIR "/usr/local/opt/openssl@1.1/")
+    #set(ENV{CPPFLAGS} "-I${OPENSSL_ROOT_DIR}/include")
+    #set(ENV{LDFLAGS} "-L${OPENSSL_ROOT_DIR}/lib")
     set(BerkeleyDB_ROOT_DIR "/usr/local/Cellar/berkeley-db@4/${BDB_VER}/")
     set(Boost_USE_MULTITHREADED ON)
     set(Boost_NO_BOOST_CMAKE ON)

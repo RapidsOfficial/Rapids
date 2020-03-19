@@ -33,7 +33,6 @@ cache:
   directories:
     - $TRAVIS_BUILD_DIR/depends/built
     - $TRAVIS_BUILD_DIR/depends/sdk-sources
-    - $TRAVIS_BUILD_DIR/cmake-build-debug
     - $HOME/.ccache
 stages:
   - lint
@@ -233,6 +232,8 @@ jobs:
       addons:
         homebrew:
           packages:
+            - python3
+            - ccache
             - autoconf
             - automake
             - berkeley-db4
@@ -242,13 +243,14 @@ jobs:
             - openssl
             - pkg-config
             - protobuf
-            - python3
             - qt5
             - zmq
             - libevent
             - qrencode
             - gmp
-          update: false
+#         Set 'update: true' below until TravisCI updates their macOS build images.
+#         See https://travis-ci.community/t/macos-build-fails-because-of-homebrew-bundle-unknown-command/7296/16
+          update: true
       before_install:
       install:
       before_script:
