@@ -26,31 +26,26 @@ BOOST_FIXTURE_TEST_SUITE(wallet_zkeys_tests, BasicTestingSetup)
   * This test covers Sapling methods on CWallet
   * GenerateNewSaplingZKey()
   */
-BOOST_AUTO_TEST_CASE(testVectors) {
+BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
 
     CWallet wallet;
-    // wallet should be empty
-    // std::set<libzcash::SaplingPaymentAddress> addrs;
-    // wallet.GetSaplingPaymentAddresses(addrs);
-    // ASSERT_EQ(0, addrs.size());
 
-    // wallet should have one key
-    auto saplingAddr = wallet.GenerateNewSaplingZKey();
-    // ASSERT_NE(boost::get<libzcash::SaplingPaymentAddress>(&address), nullptr);
-    // auto sapling_addr = boost::get<libzcash::SaplingPaymentAddress>(saplingAddr);
-    // wallet.GetSaplingPaymentAddresses(addrs);
-    // ASSERT_EQ(1, addrs.size());
+    auto address = wallet.GenerateNewSaplingZKey();
 
+    // verify wallet has incoming viewing key for the address
+    BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(address));
+
+    // manually add new spending key to wallet
     auto sk = libzcash::SaplingSpendingKey::random();
-    auto full_viewing_key = sk.full_viewing_key();
-    BOOST_CHECK(wallet.AddSaplingSpendingKey(sk));
+    BOOST_CHECK(wallet.AddSaplingZKey(sk));
 
-    // verify wallet has spending key for the address
-    BOOST_CHECK(wallet.HaveSaplingSpendingKey(full_viewing_key));
+    // verify wallet did add it
+    auto fvk = sk.full_viewing_key();
+    BOOST_CHECK(wallet.HaveSaplingSpendingKey(fvk));
 
     // check key is the same
     libzcash::SaplingSpendingKey keyOut;
-    wallet.GetSaplingSpendingKey(full_viewing_key, keyOut);
+    wallet.GetSaplingSpendingKey(fvk, keyOut);
     BOOST_CHECK(sk == keyOut);
 }
 

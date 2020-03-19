@@ -141,6 +141,8 @@ private:
 protected:
     // TODO: In the future, move this variable to the wallet class directly following upstream's structure.
     CKeyingMaterial vMasterKey;
+    // Sapling
+    CryptedSaplingSpendingKeyMap mapCryptedSaplingSpendingKeys;
 
     bool SetCrypted();
 
@@ -197,6 +199,11 @@ public:
             mi++;
         }
     }
+
+    //! Sapling
+    virtual bool AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
+                                              const std::vector<unsigned char> &vchCryptedSecret);
+    bool AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &sk);
 
     /**
      * Wallet status (encrypted, locked) changed.
