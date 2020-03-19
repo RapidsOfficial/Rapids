@@ -40,7 +40,7 @@ Wallets under a tree derivation structure in which keypairs are generated determ
 
 Enabling major improvements over the keystore management, the PIVX wallet doesn't require regular backups as before, keys are following a deterministic creation path that can be verified at any time (before HD Wallet, every keypair was randomly created and added to the keypool, forcing the user to backup the wallet every certain amount of time or could end up loosing coins forever if the latest `wallet.dat` was not being used).
 As well as new possibilities like the account extended public key that enables deterministic public keys creation without the private keys requisite inside the wallet (A good use case could be online stores generating fresh addresses).
- 
+
 This work includes a customization/extension to the [BIP44](https://github.com/bitcoin/bips/blob/master/bip-0044.mediawiki) standard. We have included an unique staking keys derivation path which introduced the deterministic generation/recovery of staking addresses.
 
 An extended description of this large work can be found in the PR [here](https://github.com/PIVX-Project/PIVX/pull/1327).
@@ -48,7 +48,7 @@ An extended description of this large work can be found in the PR [here](https:/
 #### HD Wallet FAQ
 
  - How do i upgrade to HD Wallet?
- 
+
     GUI:
     1) A dialog will appear on every wallet startup notifying you that you are running a pre-HD wallet and letting you upgrade it from there.
     2) If you haven't upgraded your wallet, the topbar (bar with icons that appears at the top of your wallet) will have an "HD" icon. Click it and the upgrade dialog will be launched.
@@ -56,12 +56,12 @@ An extended description of this large work can be found in the PR [here](https:/
     RPC:
     1) If your wallet is unlocked, use the `-upgradewallet` flag at startup and will automatically upgrade your wallet.
     2) If your wallet is encrypted, use the `upgradewallet` rpc command. It will upgrade your wallet to the latest wallet version.
-    
+
  - How do i know if i'm already running an HD Wallet?
- 
+
     1) GUI: Go to settings, press on the Debug option, then Information.
     2) RPC: call `getwalletinfo`, the `walletversion` field must be `169900` (HD Wallet Feature).
-       
+
 
 ### Functional Changes
 
@@ -160,6 +160,8 @@ Detailed release notes follow. This overview includes changes that affect behavi
 The p2p alert system has been removed in [#1372](https://github.com/PIVX-Project/PIVX/pull/1372) and the 'alert' message is no longer supported.
 
 ### GUI
+
+Keyboard navigation: dialogs can now be accepted with the `ENTER` (`RETURN`) key, and dismissed with the `ESC` key ([#1392](https://github.com/PIVX-Project/PIVX/pull/1392)).
 
 ### RPC/REST
 
