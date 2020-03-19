@@ -60,14 +60,54 @@ BOOST_AUTO_TEST_CASE(saplingKeys) {
         BOOST_CHECK(in_viewing_key == in_viewing_key_2);
 
         // Check that the default address from primitives and from sk method are the same
-        auto default_addr = sk.default_address();
-        auto default_addr_2 = in_viewing_key.address(default_d);
+        auto addrOpt = sk.default_address();
+        BOOST_CHECK(addrOpt);
+        auto default_addr = addrOpt.value();
+        auto addrOpt2 = in_viewing_key.address(default_d);
+        BOOST_CHECK(addrOpt2);
+        auto default_addr_2 = addrOpt2.value();
         BOOST_CHECK(default_addr == default_addr_2);
 
         auto default_addr_3 = libzcash::SaplingPaymentAddress(default_d, default_pk_d);
         BOOST_CHECK(default_addr_2 == default_addr_3);
         BOOST_CHECK(default_addr == default_addr_3);
     }
+}
+
+
+BOOST_AUTO_TEST_CASE(StoreAndRetrieveSaplingSpendingKey) {
+    CBasicKeyStore keyStore;
+    libzcash::SaplingSpendingKey skOut;
+    libzcash::SaplingFullViewingKey fvkOut;
+    libzcash::SaplingIncomingViewingKey ivkOut;
+
+    auto sk = libzcash::SaplingSpendingKey::random();
+    auto fvk = sk.full_viewing_key();
+    auto ivk = fvk.in_viewing_key();
+    auto addrOpt = sk.default_address();
+    BOOST_CHECK(addrOpt);
+    auto addr = addrOpt.value();
+
+    // Sanity-check: we can't get a key we haven't added
+    BOOST_CHECK(!keyStore.HaveSaplingSpendingKey(fvk));
+    BOOST_CHECK(!keyStore.GetSaplingSpendingKey(fvk, skOut));
+    // Sanity-check: we can't get a full viewing key we haven't added
+    BOOST_CHECK(!keyStore.HaveSaplingFullViewingKey(ivk));
+    BOOST_CHECK(!keyStore.GetSaplingFullViewingKey(ivk, fvkOut));
+    // Sanity-check: we can't get an incoming viewing key we haven't added
+    BOOST_CHECK(!keyStore.HaveSaplingIncomingViewingKey(addr));
+    BOOST_CHECK(!keyStore.GetSaplingIncomingViewingKey(addr, ivkOut));
+
+    keyStore.AddSaplingSpendingKey(sk);
+    BOOST_CHECK(keyStore.HaveSaplingSpendingKey(fvk));
+    BOOST_CHECK(keyStore.GetSaplingSpendingKey(fvk, skOut));
+    BOOST_CHECK(keyStore.HaveSaplingFullViewingKey(ivk));
+    BOOST_CHECK(keyStore.GetSaplingFullViewingKey(ivk, fvkOut));
+    BOOST_CHECK(keyStore.HaveSaplingIncomingViewingKey(addr));
+    BOOST_CHECK(keyStore.GetSaplingIncomingViewingKey(addr, ivkOut));
+    BOOST_CHECK(sk == skOut);
+    BOOST_CHECK(fvk == fvkOut);
+    BOOST_CHECK(ivk == ivkOut);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

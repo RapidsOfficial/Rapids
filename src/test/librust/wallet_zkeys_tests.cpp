@@ -12,6 +12,13 @@
 #include "util.h"
 #include <boost/test/unit_test.hpp>
 
+/**
+ * This test covers methods on CWallet
+ * GenerateNewZKey()
+ * AddZKey()
+ * LoadZKey()
+ * LoadZKeyMetadata()
+ */
 
 BOOST_FIXTURE_TEST_SUITE(wallet_zkeys_tests, BasicTestingSetup)
 
