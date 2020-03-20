@@ -19,6 +19,13 @@ class CAddrManSerializationMock : public CAddrMan
 {
 public:
     virtual void Serialize(CDataStream& s, int nType, int nVersionDummy) const = 0;
+
+    //! Ensure that bucket placement is always the same for testing purposes.
+    void MakeDeterministic()
+    {
+        nKey.SetNull();
+        SeedInsecureRand(true);
+    }
 };
 
 class CAddrManUncorrupted : public CAddrManSerializationMock
@@ -67,6 +74,7 @@ BOOST_FIXTURE_TEST_SUITE(net_tests, BasicTestingSetup)
 BOOST_AUTO_TEST_CASE(caddrdb_read)
 {
     CAddrManUncorrupted addrmanUncorrupted;
+    addrmanUncorrupted.MakeDeterministic();
 
     CService addr1 = CService("250.7.1.1", 8333);
     CService addr2 = CService("250.7.2.2", 9999);
@@ -108,6 +116,7 @@ BOOST_AUTO_TEST_CASE(caddrdb_read)
 BOOST_AUTO_TEST_CASE(caddrdb_read_corrupted)
 {
     CAddrManCorrupted addrmanCorrupted;
+    addrmanCorrupted.MakeDeterministic();
 
     // Test that the de-serialization of corrupted addrman throws an exception.
     CDataStream ssPeers1 = AddrmanToStream(addrmanCorrupted);
