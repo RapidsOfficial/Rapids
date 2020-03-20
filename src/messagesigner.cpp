@@ -128,16 +128,11 @@ bool CSignedMessage::CheckSignature(const CPubKey& pubKey) const
 
     if (nMessVersion == MessageVersion::MESS_VER_HASH) {
         uint256 hash = GetSignatureHash();
-        if(!CHashSigner::VerifyHash(hash, pubKey, vchSig, strError))
-            return error("%s : VerifyHash failed: %s", __func__, strError);
-
-    } else {
-        std::string strMessage = GetStrMessage();
-        if(!CMessageSigner::VerifyMessage(pubKey, vchSig, strMessage, strError))
-            return error("%s : VerifyMessage failed: %s", __func__, strError);
+        return CHashSigner::VerifyHash(hash, pubKey, vchSig, strError);
     }
 
-    return true;
+    std::string strMessage = GetStrMessage();
+    return CMessageSigner::VerifyMessage(pubKey, vchSig, strMessage, strError);
 }
 
 bool CSignedMessage::CheckSignature() const
