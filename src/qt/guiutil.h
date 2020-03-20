@@ -32,6 +32,16 @@ class QUrl;
 class QWidget;
 QT_END_NAMESPACE
 
+/*
+ * General GUI exception
+ */
+class GUIException : public std::exception
+{
+public:
+    std::string message;
+    GUIException(const std::string &message) : message(message) {}
+};
+
 /** Utility functions used by the PIVX Qt UI.
  */
 namespace GUIUtil
