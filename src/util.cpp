@@ -104,7 +104,6 @@ std::string strBudgetMode = "";
 
 std::map<std::string, std::string> mapArgs;
 std::map<std::string, std::vector<std::string> > mapMultiArgs;
-bool fDebug = false;
 bool fPrintToConsole = false;
 bool fPrintToDebugLog = true;
 bool fDaemon = false;
@@ -112,6 +111,10 @@ std::string strMiscWarning;
 bool fLogTimestamps = false;
 bool fLogIPs = false;
 volatile bool fReopenDebugLog = false;
+
+/** Log categories bitfield. Leveldb/libevent need special handling if their flags are changed at runtime. */
+std::atomic<uint32_t> logCategories(0);
+
 
 /** Init OpenSSL library multithreading support */
 static RecursiveMutex** ppmutexOpenSSL;
@@ -194,40 +197,73 @@ static void DebugPrintInit()
     mutexDebugLog = new boost::mutex();
 }
 
-bool LogAcceptCategory(const char* category)
+struct CLogCategoryDesc
 {
-    if (category != NULL) {
-        if (!fDebug)
-            return false;
+    uint32_t flag;
+    std::string category;
+};
 
-        // Give each thread quick access to -debug settings.
-        // This helps prevent issues debugging global destructors,
-        // where mapMultiArgs might be deleted before another
-        // global destructor calls LogPrint()
-        static boost::thread_specific_ptr<std::set<std::string> > ptrCategory;
-        if (ptrCategory.get() == NULL) {
-            const std::vector<std::string>& categories = mapMultiArgs["-debug"];
-            ptrCategory.reset(new std::set<std::string>(categories.begin(), categories.end()));
-            // thread_specific_ptr automatically deletes the set when the thread ends.
-            // "pivx" is a composite category enabling all PIVX-related debug output
-            if (ptrCategory->count(std::string("pivx"))) {
-                ptrCategory->insert(std::string("obfuscation"));
-                ptrCategory->insert(std::string("swiftx"));
-                ptrCategory->insert(std::string("masternode"));
-                ptrCategory->insert(std::string("mnpayments"));
-                ptrCategory->insert(std::string("zero"));
-                ptrCategory->insert(std::string("mnbudget"));
-                ptrCategory->insert(std::string("staking"));
+const CLogCategoryDesc LogCategories[] = {
+        {BCLog::NONE,           "0"},
+        {BCLog::NET,            "net"},
+        {BCLog::TOR,            "tor"},
+        {BCLog::MEMPOOL,        "mempool"},
+        {BCLog::HTTP,           "http"},
+        {BCLog::BENCH,          "bench"},
+        {BCLog::ZMQ,            "zmq"},
+        {BCLog::DB,             "db"},
+        {BCLog::RPC,            "rpc"},
+        {BCLog::ESTIMATEFEE,    "estimatefee"},
+        {BCLog::ADDRMAN,        "addrman"},
+        {BCLog::SELECTCOINS,    "selectcoins"},
+        {BCLog::REINDEX,        "reindex"},
+        {BCLog::CMPCTBLOCK,     "cmpctblock"},
+        {BCLog::RAND,           "rand"},
+        {BCLog::PRUNE,          "prune"},
+        {BCLog::PROXY,          "proxy"},
+        {BCLog::MEMPOOLREJ,     "mempoolrej"},
+        {BCLog::LIBEVENT,       "libevent"},
+        {BCLog::COINDB,         "coindb"},
+        {BCLog::QT,             "qt"},
+        {BCLog::LEVELDB,        "leveldb"},
+        {BCLog::STAKING,        "staking"},
+        {BCLog::MASTERNODE,     "masternode"},
+        {BCLog::MNBUDGET,       "mnbudget"},
+        {BCLog::LEGACYZC,       "zero"},
+        {BCLog::ALL,            "1"},
+        {BCLog::ALL,            "all"},
+};
+
+bool GetLogCategory(uint32_t *f, const std::string *str)
+{
+    if (f && str) {
+        if (*str == "") {
+            *f = BCLog::ALL;
+            return true;
+        }
+        for (unsigned int i = 0; i < ARRAYLEN(LogCategories); i++) {
+            if (LogCategories[i].category == *str) {
+                *f = LogCategories[i].flag;
+                return true;
             }
         }
-        const std::set<std::string>& setCategories = *ptrCategory.get();
-
-        // if not debugging everything and not debugging specific category, LogPrint does nothing.
-        if (setCategories.count(std::string("")) == 0 &&
-            setCategories.count(std::string(category)) == 0)
-            return false;
     }
-    return true;
+    return false;
+}
+
+std::string ListLogCategories()
+{
+    std::string ret;
+    int outcount = 0;
+    for (unsigned int i = 0; i < ARRAYLEN(LogCategories); i++) {
+        // Omit the special cases.
+        if (LogCategories[i].flag != BCLog::NONE && LogCategories[i].flag != BCLog::ALL) {
+            if (outcount != 0) ret += ", ";
+            ret += LogCategories[i].category;
+            outcount++;
+        }
+    }
+    return ret;
 }
 
 int LogPrintStr(const std::string& str)

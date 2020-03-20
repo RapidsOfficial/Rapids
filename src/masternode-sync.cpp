@@ -235,7 +235,7 @@ void CMasternodeSync::ProcessMessage(CNode* pfrom, std::string& strCommand, CDat
             break;
         }
 
-        LogPrint("masternode", "CMasternodeSync:ProcessMessage - ssc - got inventory count %d %d\n", nItemID, nCount);
+        LogPrint(BCLog::MASTERNODE, "CMasternodeSync:ProcessMessage - ssc - got inventory count %d %d\n", nItemID, nCount);
     }
 }
 
@@ -276,7 +276,7 @@ void CMasternodeSync::Process()
         return;
     }
 
-    LogPrint("masternode", "CMasternodeSync::Process() - tick %d RequestedMasternodeAssets %d\n", tick, RequestedMasternodeAssets);
+    LogPrint(BCLog::MASTERNODE, "CMasternodeSync::Process() - tick %d RequestedMasternodeAssets %d\n", tick, RequestedMasternodeAssets);
 
     if (RequestedMasternodeAssets == MASTERNODE_SYNC_INITIAL) GetNextAsset();
 
@@ -319,7 +319,7 @@ void CMasternodeSync::Process()
 
         if (pnode->nVersion >= masternodePayments.GetMinMasternodePaymentsProto()) {
             if (RequestedMasternodeAssets == MASTERNODE_SYNC_LIST) {
-                LogPrint("masternode", "CMasternodeSync::Process() - lastMasternodeList %lld (GetTime() - MASTERNODE_SYNC_TIMEOUT) %lld\n", lastMasternodeList, GetTime() - MASTERNODE_SYNC_TIMEOUT);
+                LogPrint(BCLog::MASTERNODE, "CMasternodeSync::Process() - lastMasternodeList %lld (GetTime() - MASTERNODE_SYNC_TIMEOUT) %lld\n", lastMasternodeList, GetTime() - MASTERNODE_SYNC_TIMEOUT);
                 if (lastMasternodeList > 0 && lastMasternodeList < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) { //hasn't received a new item in the last five seconds, so we'll move to the
                     GetNextAsset();
                     return;

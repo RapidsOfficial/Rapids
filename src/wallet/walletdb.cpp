@@ -886,7 +886,7 @@ void ThreadFlushWalletDB(const std::string& strFile)
                     boost::this_thread::interruption_point();
                     std::map<std::string, int>::iterator mi = bitdb.mapFileUseCount.find(strFile);
                     if (mi != bitdb.mapFileUseCount.end()) {
-                        LogPrint("db", "Flushing wallet.dat\n");
+                        LogPrint(BCLog::DB, "Flushing wallet.dat\n");
                         nLastFlushed = nWalletDBUpdated;
                         int64_t nStart = GetTimeMillis();
 
@@ -895,7 +895,7 @@ void ThreadFlushWalletDB(const std::string& strFile)
                         bitdb.CheckpointLSN(strFile);
 
                         bitdb.mapFileUseCount.erase(mi++);
-                        LogPrint("db", "Flushed wallet.dat %dms\n", GetTimeMillis() - nStart);
+                        LogPrint(BCLog::DB, "Flushed wallet.dat %dms\n", GetTimeMillis() - nStart);
                     }
                 }
             }
@@ -905,7 +905,7 @@ void ThreadFlushWalletDB(const std::string& strFile)
 
 void NotifyBacked(const CWallet& wallet, bool fSuccess, std::string strMessage)
 {
-    LogPrint(nullptr, strMessage.data());
+    LogPrintf("%s\n", strMessage);
     wallet.NotifyWalletBacked(fSuccess, strMessage);
 }
 
@@ -998,7 +998,6 @@ bool BackupWallet(const CWallet& wallet, const boost::filesystem::path& strDest,
                                 }
                             } catch (const boost::filesystem::filesystem_error& error) {
                                 std::string strMessage = strprintf("Failed to delete backup %s\n", error.what());
-                                LogPrint(nullptr, strMessage.data());
                                 NotifyBacked(wallet, false, strMessage);
                             }
                         }
@@ -1034,12 +1033,12 @@ bool AttemptBackupWallet(const CWallet& wallet, const boost::filesystem::path& p
         dst.close();
 #endif
         strMessage = strprintf("copied wallet.dat to %s\n", pathDest.string());
-        LogPrint(nullptr, strMessage.data());
+        LogPrintf("%s : %s\n", __func__, strMessage);
         retStatus = true;
     } catch (const boost::filesystem::filesystem_error& e) {
         retStatus = false;
         strMessage = strprintf("%s\n", e.what());
-        LogPrint(nullptr, strMessage.data());
+        LogPrintf("%s : %s\n", __func__, strMessage);
     }
     NotifyBacked(wallet, retStatus, strMessage);
     return retStatus;

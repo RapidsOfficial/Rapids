@@ -361,7 +361,7 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
     }
 
     for (const auto& denom : libzerocoin::zerocoinDenomList)
-        LogPrint("zero", "%s coins for denomination %d pubcoin %s\n", __func__, denom, pindex->mapZerocoinSupply.at(denom));
+        LogPrint(BCLog::LEGACYZC, "%s coins for denomination %d pubcoin %s\n", __func__, denom, pindex->mapZerocoinSupply.at(denom));
 
     return true;
 }

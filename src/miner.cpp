@@ -152,7 +152,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         CMutableTransaction txCoinStake;
         int64_t nTxNewTime = 0;
         if (!pwallet->CreateCoinStake(*pwallet, pindexPrev, pblock->nBits, txCoinStake, nTxNewTime)) {
-            LogPrint("staking", "%s : stake not found\n", __func__);
+            LogPrint(BCLog::STAKING, "%s : stake not found\n", __func__);
             return nullptr;
         }
         // Stake found
@@ -218,7 +218,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     // or other transactions in the memory pool.
                     if (!mempool.mapTx.count(txin.prevout.hash)) {
                         LogPrintf("ERROR: mempool transaction missing input\n");
-                        if (fDebug) assert("mempool transaction missing input" == 0);
                         fMissingInputs = true;
                         if (porphan)
                             vOrphan.pop_back();

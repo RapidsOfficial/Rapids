@@ -109,22 +109,22 @@ void CObfuscationPool::UnlockCoins()
 //
 void CObfuscationPool::Check()
 {
-    if (fMasterNode) LogPrint("obfuscation", "CObfuscationPool::Check() - entries count %lu\n", entries.size());
+    if (fMasterNode) LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() - entries count %lu\n", entries.size());
     //printf("CObfuscationPool::Check() %d - %d - %d\n", state, anonTx.CountEntries(), GetTimeMillis()-lastTimeChanged);
 
     if (fMasterNode) {
-        LogPrint("obfuscation", "CObfuscationPool::Check() - entries count %lu\n", entries.size());
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() - entries count %lu\n", entries.size());
 
         // If entries is full, then move on to the next phase
         if (state == POOL_STATUS_ACCEPTING_ENTRIES && (int)entries.size() >= GetMaxPoolTransactions()) {
-            LogPrint("obfuscation", "CObfuscationPool::Check() -- TRYING TRANSACTION \n");
+            LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() -- TRYING TRANSACTION \n");
             UpdateState(POOL_STATUS_FINALIZE_TRANSACTION);
         }
     }
 
     // create the finalized transaction for distribution to the clients
     if (state == POOL_STATUS_FINALIZE_TRANSACTION) {
-        LogPrint("obfuscation", "CObfuscationPool::Check() -- FINALIZE TRANSACTIONS\n");
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() -- FINALIZE TRANSACTIONS\n");
         UpdateState(POOL_STATUS_SIGNING);
 
         if (fMasterNode) {
@@ -144,7 +144,7 @@ void CObfuscationPool::Check()
             std::random_shuffle(txNew.vout.begin(), txNew.vout.end(), randomizeList);
 
 
-            LogPrint("obfuscation", "Transaction 1: %s\n", txNew.ToString());
+            LogPrint(BCLog::MASTERNODE, "Transaction 1: %s\n", txNew.ToString());
             finalTransaction = txNew;
 
             // request signatures from clients
@@ -154,7 +154,7 @@ void CObfuscationPool::Check()
 
     // If we have all of the signatures, try to compile the transaction
     if (fMasterNode && state == POOL_STATUS_SIGNING && SignaturesComplete()) {
-        LogPrint("obfuscation", "CObfuscationPool::Check() -- SIGNING\n");
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() -- SIGNING\n");
         UpdateState(POOL_STATUS_TRANSMISSION);
 
         CheckFinalTransaction();
@@ -162,7 +162,7 @@ void CObfuscationPool::Check()
 
     // reset if we're here for 10 seconds
     if ((state == POOL_STATUS_ERROR || state == POOL_STATUS_SUCCESS) && GetTimeMillis() - lastTimeChanged >= 10000) {
-        LogPrint("obfuscation", "CObfuscationPool::Check() -- timeout, RESETTING\n");
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() -- timeout, RESETTING\n");
         UnlockCoins();
         SetNull();
         if (fMasterNode) RelayStatus(sessionID, GetState(), GetEntriesCount(), MASTERNODE_RESET);
@@ -177,7 +177,7 @@ void CObfuscationPool::CheckFinalTransaction()
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
     {
-        LogPrint("obfuscation", "Transaction 2: %s\n", txNew.ToString());
+        LogPrint(BCLog::MASTERNODE, "Transaction 2: %s\n", txNew.ToString());
 
         // See if the transaction is valid
         if (!txNew.AcceptToMemoryPool(false, true, true)) {
@@ -236,7 +236,7 @@ void CObfuscationPool::CheckFinalTransaction()
         ChargeRandomFees();
 
         // Reset
-        LogPrint("obfuscation", "CObfuscationPool::Check() -- COMPLETED -- RESETTING\n");
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::Check() -- COMPLETED -- RESETTING\n");
         SetNull();
         RelayStatus(sessionID, GetState(), GetEntriesCount(), MASTERNODE_RESET);
     }
@@ -402,15 +402,15 @@ void CObfuscationPool::CheckTimeout()
     if (!fMasterNode) {
         switch (state) {
         case POOL_STATUS_TRANSMISSION:
-            LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() -- Session complete -- Running Check()\n");
+            LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() -- Session complete -- Running Check()\n");
             Check();
             break;
         case POOL_STATUS_ERROR:
-            LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() -- Pool error -- Running Check()\n");
+            LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() -- Pool error -- Running Check()\n");
             Check();
             break;
         case POOL_STATUS_SUCCESS:
-            LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() -- Pool success -- Running Check()\n");
+            LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() -- Pool success -- Running Check()\n");
             Check();
             break;
         }
@@ -421,7 +421,7 @@ void CObfuscationPool::CheckTimeout()
     std::vector<CObfuscationQueue>::iterator it = vecObfuscationQueue.begin();
     while (it != vecObfuscationQueue.end()) {
         if ((*it).IsExpired()) {
-            LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() : Removing expired queue entry - %d\n", c);
+            LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() : Removing expired queue entry - %d\n", c);
             it = vecObfuscationQueue.erase(it);
         } else
             ++it;
@@ -438,7 +438,7 @@ void CObfuscationPool::CheckTimeout()
         std::vector<CObfuScationEntry>::iterator it2 = entries.begin();
         while (it2 != entries.end()) {
             if ((*it2).IsExpired()) {
-                LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() : Removing expired entry - %d\n", c);
+                LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() : Removing expired entry - %d\n", c);
                 it2 = entries.erase(it2);
                 if (entries.size() == 0) {
                     UnlockCoins();
@@ -457,7 +457,7 @@ void CObfuscationPool::CheckTimeout()
             SetNull();
         }
     } else if (GetTimeMillis() - lastTimeChanged >= (OBFUSCATION_QUEUE_TIMEOUT * 1000) + addLagTime) {
-        LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() -- Session timed out (%ds) -- resetting\n", OBFUSCATION_QUEUE_TIMEOUT);
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() -- Session timed out (%ds) -- resetting\n", OBFUSCATION_QUEUE_TIMEOUT);
         UnlockCoins();
         SetNull();
 
@@ -466,7 +466,7 @@ void CObfuscationPool::CheckTimeout()
     }
 
     if (state == POOL_STATUS_SIGNING && GetTimeMillis() - lastTimeChanged >= (OBFUSCATION_SIGNING_TIMEOUT * 1000) + addLagTime) {
-        LogPrint("obfuscation", "CObfuscationPool::CheckTimeout() -- Session timed out (%ds) -- restting\n", OBFUSCATION_SIGNING_TIMEOUT);
+        LogPrint(BCLog::MASTERNODE, "CObfuscationPool::CheckTimeout() -- Session timed out (%ds) -- restting\n", OBFUSCATION_SIGNING_TIMEOUT);
         ChargeFees();
         UnlockCoins();
         SetNull();
@@ -515,7 +515,7 @@ bool CObfuscationPool::SignaturesComplete()
 
 void CObfuscationPool::NewBlock()
 {
-    LogPrint("obfuscation", "CObfuscationPool::NewBlock \n");
+    LogPrint(BCLog::MASTERNODE, "CObfuscationPool::NewBlock \n");
 
     //we we're processing lots of blocks, we'll just leave
     if (GetTime() - lastNewBlock < 10) return;

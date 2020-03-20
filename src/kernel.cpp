@@ -69,7 +69,7 @@ bool CStakeKernel::CheckKernelHash(bool fSkipLog) const
     const bool res = hashProofOfStake < bnTarget;
 
     if (!fSkipLog || res) {
-        LogPrint("staking", "%s : Proof Of Stake:"
+        LogPrint(BCLog::STAKING, "%s : Proof Of Stake:"
                             "\nssUniqueID=%s"
                             "\nnTimeTx=%d"
                             "\nhashProofOfStake=%s"

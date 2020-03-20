@@ -67,7 +67,7 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
     if (!hashBlock.IsNull())
         BatchWriteHashBestChain(batch, hashBlock);
 
-    LogPrint("coindb", "Committing %u changed transactions (out of %u) to coin database...\n", (unsigned int)changed, (unsigned int)count);
+    LogPrint(BCLog::COINDB, "Committing %u changed transactions (out of %u) to coin database...\n", (unsigned int)changed, (unsigned int)count);
     return db.WriteBatch(batch);
 }
 
@@ -285,7 +285,7 @@ bool CZerocoinDB::WriteCoinMintBatch(const std::vector<std::pair<libzerocoin::Pu
         ++count;
     }
 
-    LogPrint("zero", "Writing %u coin mints to db.\n", (unsigned int)count);
+    LogPrint(BCLog::COINDB, "Writing %u coin mints to db.\n", (unsigned int)count);
     return WriteBatch(batch, true);
 }
 
@@ -318,7 +318,7 @@ bool CZerocoinDB::WriteCoinSpendBatch(const std::vector<std::pair<libzerocoin::C
         ++count;
     }
 
-    LogPrint("zero", "Writing %u coin spends to db.\n", (unsigned int)count);
+    LogPrint(BCLog::COINDB, "Writing %u coin spends to db.\n", (unsigned int)count);
     return WriteBatch(batch, true);
 }
 

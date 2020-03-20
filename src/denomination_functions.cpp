@@ -155,10 +155,10 @@ void listSpends(const std::vector<CZerocoinMint>& vSelectedMints)
 
     CAmount nTotal = 0;
     for (auto& denom : libzerocoin::zerocoinDenomList) {
-        LogPrint("zero", "%s %d coins for denomination %d used\n", __func__, mapZerocoinSupply.at(denom), denom);
+        LogPrint(BCLog::LEGACYZC, "%s %d coins for denomination %d used\n", __func__, mapZerocoinSupply.at(denom), denom);
         nTotal += libzerocoin::ZerocoinDenominationToAmount(denom);
     }
-    LogPrint("zero", "Total value of coins %d\n", nTotal);
+    LogPrint(BCLog::LEGACYZC, "Total value of coins %d\n", nTotal);
 }
 
 // -------------------------------------------------------------------------------------------------------
@@ -416,11 +416,11 @@ std::vector<CMintMeta> SelectMintsFromList(const CAmount nValueTarget, CAmount& 
     // calculate the change needed and the map of coins used
     nCoinsReturned = calculateChange(nMaxNumberOfSpends, nValueTarget, mapOfDenomsHeld, mapOfDenomsUsed);
     if (nCoinsReturned == 0) {
-        LogPrint("zero", "%s: Problem getting change (TBD) or Too many spends %d\n", __func__, nValueTarget);
+        LogPrint(BCLog::LEGACYZC, "%s: Problem getting change (TBD) or Too many spends %d\n", __func__, nValueTarget);
         vSelectedMints.clear();
     } else {
         vSelectedMints = getSpends(listMints, mapOfDenomsUsed, nSelectedValue);
-        LogPrint("zero", "%s: %d coins in change for %d\n", __func__, nCoinsReturned, nValueTarget);
+        LogPrint(BCLog::LEGACYZC, "%s: %d coins in change for %d\n", __func__, nCoinsReturned, nValueTarget);
     }
     return vSelectedMints;
 }
