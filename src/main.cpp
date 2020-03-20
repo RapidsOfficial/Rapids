@@ -3675,7 +3675,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
             CAmount amtIn = txPrev.vout[tx.vin[0].prevout.n].nValue + GetBlockValue(nHeight - 1);
             CAmount amtOut = 0;
             for (unsigned int i = 1; i < outs-1; i++) amtOut += tx.vout[i].nValue;
-            if (amtOut < amtIn)
+            if (amtOut != amtIn)
                 return error("%s: non-free outputs value %d less than required %d", __func__, amtOut, amtIn);
             return true;
         }
