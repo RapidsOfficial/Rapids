@@ -15,7 +15,7 @@
 #include <QDateTime>
 #include <QKeyEvent>
 
-TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, QString warningStr) :
+TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, const QString& warningStr) :
     QDialog(parent),
     ui(new Ui::TxDetailDialog),
     isConfirmDialog(_isConfirmDialog)
@@ -125,7 +125,7 @@ void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index){
 
 }
 
-void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx){
+void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction& tx){
     this->model = model;
     this->tx = &tx;
     CAmount txFee = tx.getTransactionFee();
