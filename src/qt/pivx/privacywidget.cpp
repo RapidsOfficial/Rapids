@@ -6,7 +6,6 @@
 #include "qt/pivx/forms/ui_privacywidget.h"
 #include "qt/pivx/qtutils.h"
 #include "guiutil.h"
-#include "qt/pivx/denomgenerationdialog.h"
 #include "qt/pivx/txviewholder.h"
 #include "walletmodel.h"
 #include "optionsmodel.h"
@@ -123,10 +122,6 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
     ui->btnCoinControl->setTitleClassAndText("btn-title-grey", "Coin Control");
     ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select PIV outputs to mint into zPIV.");
 
-    ui->btnDenomGeneration->setTitleClassAndText("btn-title-grey", "Denom Generation");
-    ui->btnDenomGeneration->setSubTitleClassAndText("text-subtitle", "Select the denomination of the coins.");
-    ui->btnDenomGeneration->setVisible(false);
-
     ui->btnRescanMints->setTitleClassAndText("btn-title-grey", "Rescan Mints");
     ui->btnRescanMints->setSubTitleClassAndText("text-subtitle", "Find mints in the blockchain.");
 
@@ -135,7 +130,6 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
 
     connect(ui->btnTotalzPIV, SIGNAL(clicked()), this, SLOT(onTotalZpivClicked()));
     connect(ui->btnCoinControl, SIGNAL(clicked()), this, SLOT(onCoinControlClicked()));
-    connect(ui->btnDenomGeneration, SIGNAL(clicked()), this, SLOT(onDenomClicked()));
     connect(ui->btnRescanMints, SIGNAL(clicked()), this, SLOT(onRescanMintsClicked()));
     connect(ui->btnResetZerocoin, SIGNAL(clicked()), this, SLOT(onResetZeroClicked()));
 
@@ -316,12 +310,6 @@ void PrivacyWidget::onCoinControlClicked(){
             inform(tr("You don't have any PIV to select."));
         }
     }
-}
-
-void PrivacyWidget::onDenomClicked(){
-    showHideOp(true);
-    DenomGenerationDialog* dialog = new DenomGenerationDialog(window);
-    openDialogWithOpaqueBackgroundY(dialog, window, 4.5, 5);
 }
 
 void PrivacyWidget::onRescanMintsClicked(){
