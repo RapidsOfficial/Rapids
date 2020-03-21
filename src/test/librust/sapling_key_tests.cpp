@@ -20,7 +20,7 @@ BOOST_AUTO_TEST_CASE(ps_address_test)
         auto sk = libzcash::SaplingSpendingKey::random();
         {
             std::string sk_string = KeyIO::EncodeSpendingKey(sk);
-            BOOST_CHECK(sk_string.compare(0, 26, "p-secret-spending-key-main") == 0);
+            BOOST_CHECK(sk_string.compare(0, 26, Params().Bech32HRP(CChainParams::SAPLING_SPENDING_KEY)) == 0);
 
             auto spendingkey2 = KeyIO::DecodeSpendingKey(sk_string);
             BOOST_CHECK(IsValidSpendingKey(spendingkey2));
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(ps_address_test)
             libzcash::SaplingPaymentAddress addr = sk.default_address();
 
             std::string addr_string = KeyIO::EncodePaymentAddress(addr);
-            BOOST_CHECK(addr_string.compare(0, 2, "ps") == 0);
+            BOOST_CHECK(addr_string.compare(0, 2, Params().Bech32HRP(CChainParams::SAPLING_PAYMENT_ADDRESS)) == 0);
 
             auto paymentaddr2 = KeyIO::DecodePaymentAddress(addr_string);
             BOOST_CHECK(IsValidPaymentAddress(paymentaddr2));
