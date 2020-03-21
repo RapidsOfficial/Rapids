@@ -1,0 +1,48 @@
+// Copyright (c) 2016-2020 The ZCash developers
+// Copyright (c) 2020 The PIVX developers
+// Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+#include "test/test_pivx.h"
+
+#include "sapling/address.hpp"
+#include "sapling/key_io_sapling.h"
+#include <string>
+#include <vector>
+#include <boost/test/unit_test.hpp>
+
+
+BOOST_FIXTURE_TEST_SUITE(sapling_key_tests, BasicTestingSetup)
+
+BOOST_AUTO_TEST_CASE(ps_address_test)
+{
+    for (size_t i = 0; i < 1000; i++) {
+        auto sk = libzcash::SaplingSpendingKey::random();
+        {
+            std::string sk_string = KeyIO::EncodeSpendingKey(sk);
+            BOOST_CHECK(sk_string.compare(0, 26, "p-secret-spending-key-main") == 0);
+
+            auto spendingkey2 = KeyIO::DecodeSpendingKey(sk_string);
+            BOOST_CHECK(IsValidSpendingKey(spendingkey2));
+
+            BOOST_ASSERT(boost::get<libzcash::SaplingSpendingKey>(&spendingkey2) != nullptr);
+            auto sk2 = boost::get<libzcash::SaplingSpendingKey>(spendingkey2);
+            BOOST_CHECK(sk == sk2);
+        }
+        {
+            libzcash::SaplingPaymentAddress addr = sk.default_address();
+
+            std::string addr_string = KeyIO::EncodePaymentAddress(addr);
+            BOOST_CHECK(addr_string.compare(0, 2, "ps") == 0);
+
+            auto paymentaddr2 = KeyIO::DecodePaymentAddress(addr_string);
+            BOOST_CHECK(IsValidPaymentAddress(paymentaddr2));
+
+            BOOST_ASSERT(boost::get<libzcash::SaplingPaymentAddress>(&paymentaddr2) != nullptr);
+            auto addr2 = boost::get<libzcash::SaplingPaymentAddress>(paymentaddr2);
+            BOOST_CHECK(addr == addr2);
+        }
+    }
+}
+
+BOOST_AUTO_TEST_SUITE_END()
