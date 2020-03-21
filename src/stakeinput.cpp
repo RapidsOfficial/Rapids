@@ -10,8 +10,32 @@
 #include "zpiv/deterministicmint.h"
 #include "wallet/wallet.h"
 
+bool CPivStake::InitFromTxIn(const CTxIn& txin)
+{
+    if (txin.IsZerocoinSpend())
+        return error("%s: unable to initialize CPivStake from zerocoin spend");
 
-bool CPivStake::SetInput(CTransaction txPrev, unsigned int n)
+    // Find the previous transaction in database
+    uint256 hashBlock;
+    CTransaction txPrev;
+    if (!GetTransaction(txin.prevout.hash, txPrev, hashBlock, true))
+        return error("%s : INFO: read txPrev failed, tx id prev: %s", __func__, txin.prevout.hash.GetHex());
+    SetPrevout(txPrev, txin.prevout.n);
+
+    // Find the index of the block of the previous transaction
+    if (mapBlockIndex.count(hashBlock)) {
+        CBlockIndex* pindex = mapBlockIndex.at(hashBlock);
+        if (chainActive.Contains(pindex)) pindexFrom = pindex;
+    }
+    // Check that the input is in the active chain
+    if (!pindexFrom)
+        return error("%s : Failed to find the block index for stake origin", __func__);
+
+    // All good
+    return true;
+}
+
+bool CPivStake::SetPrevout(CTransaction txPrev, unsigned int n)
 {
     this->txFrom = txPrev;
     this->nPosition = n;
@@ -20,6 +44,8 @@ bool CPivStake::SetInput(CTransaction txPrev, unsigned int n)
 
 bool CPivStake::GetTxFrom(CTransaction& tx) const
 {
+    if (txFrom.IsNull())
+        return false;
     tx = txFrom;
     return true;
 }
@@ -113,3 +139,24 @@ CBlockIndex* CPivStake::GetIndexFrom()
 
     return pindexFrom;
 }
+
+// Verify stake contextual checks
+bool CPivStake::ContextCheck(int nHeight, uint32_t nTime)
+{
+    const Consensus::Params& consensus = Params().GetConsensus();
+    // Get Stake input block time/height
+    CBlockIndex* pindexFrom = GetIndexFrom();
+    if (!pindexFrom)
+        return error("%s: unable to get previous index for stake input");
+    const int nHeightBlockFrom = pindexFrom->nHeight;
+    const uint32_t nTimeBlockFrom = pindexFrom->nTime;
+
+    // Check that the stake has the required depth/age
+    if (nHeight >= consensus.height_start_ZC_PublicSpends - 1 &&
+            !consensus.HasStakeMinAgeOrDepth(nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom))
+        return error("%s : min age violation - height=%d - time=%d, nHeightBlockFrom=%d, nTimeBlockFrom=%d",
+                         __func__, nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom);
+    // All good
+    return true;
+}
+

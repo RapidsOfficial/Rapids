@@ -200,6 +200,20 @@ void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
     vStakeModifier.insert(vStakeModifier.begin(), nStakeModifier.begin(), nStakeModifier.end());
 }
 
+// Generates and sets new V2 stake modifier
+void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
+{
+    // Shouldn't be called on V1 modifier's blocks (or before setting pprev)
+    if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) return;
+    if (!pprev) throw std::runtime_error(strprintf("%s : ERROR: null pprev", __func__));
+
+    // Generate Hash(prevoutId | prevModifier) - switch with genesis modifier (0) on upgrade block
+    CHashWriter ss(SER_GETHASH, 0);
+    ss << prevoutId;
+    ss << pprev->GetStakeModifierV2();
+    SetStakeModifier(ss.GetHash());
+}
+
 // Returns V1 stake modifier (uint64_t)
 uint64_t CBlockIndex::GetStakeModifierV1() const
 {

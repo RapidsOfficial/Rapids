@@ -22,6 +22,7 @@
 #include "consensus/zerocoin_verify.h"
 #include "init.h"
 #include "kernel.h"
+#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
 #include "masternode-budget.h"
 #include "masternode-payments.h"
 #include "masternodeman.h"
@@ -3485,8 +3486,8 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
                 LogPrintf("AddToBlockIndex() : ComputeNextStakeModifier() failed \n");
             pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
         } else {
-            // compute v2 stake modifier
-            pindexNew->SetStakeModifier(ComputeStakeModifier(pindexNew->pprev, block.vtx[1].vin[0].prevout.hash));
+            // compute new v2 stake modifier
+            pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
@@ -4114,10 +4115,9 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
     bool isPoS = block.IsProofOfStake();
     if (isPoS) {
-        uint256 hashProofOfStake;
-        std::unique_ptr<CStakeInput> stake;
-        if (!CheckProofOfStake(block, hashProofOfStake, stake, pindexPrev->nHeight))
-            return state.DoS(100, error("%s: proof of stake check failed", __func__));
+        std::string strError;
+        if (!CheckProofOfStake(block, strError, pindexPrev))
+            return state.DoS(100, error("%s: proof of stake check failed (%s)", __func__, strError));
     }
 
     if (!AcceptBlockHeader(block, state, &pindex))

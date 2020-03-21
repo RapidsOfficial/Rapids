@@ -1946,7 +1946,7 @@ bool CWallet::AvailableCoins(
             if (nDepth == 0 && !pcoin->InMempool()) continue;
 
             // Check min depth requirement for stake inputs
-            if (nCoinType == STAKEABLE_COINS && nDepth <= Params().GetConsensus().nStakeMinDepth) continue;
+            if (nCoinType == STAKEABLE_COINS && nDepth < Params().GetConsensus().nStakeMinDepth - 1) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
                 bool found = false;
@@ -2538,7 +2538,7 @@ bool CWallet::CreateCoinStake(
     std::list<std::unique_ptr<CStakeInput> > listInputs;
     for (const COutput &out : vCoins) {
         std::unique_ptr<CPivStake> input(new CPivStake());
-        input->SetInput((CTransaction) *out.tx, out.i);
+        input->SetPrevout((CTransaction) *out.tx, out.i);
         listInputs.emplace_back(std::move(input));
     }
 
@@ -2570,9 +2570,9 @@ bool CWallet::CreateCoinStake(
         }
 
         nCredit = 0;
-        uint256 hashProofOfStake;
+
         nAttempts++;
-        fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime, hashProofOfStake);
+        fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime);
 
         // update staker status (time, attempts)
         pStakerStatus->SetLastTime(nTxNewTime);

@@ -20,6 +20,7 @@ protected:
 
 public:
     virtual ~CStakeInput(){};
+    virtual bool InitFromTxIn(const CTxIn& txin) = 0;
     virtual CBlockIndex* GetIndexFrom() = 0;
     virtual bool CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut = UINT256_ZERO) = 0;
     virtual bool GetTxFrom(CTransaction& tx) const = 0;
@@ -27,19 +28,21 @@ public:
     virtual bool CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal) = 0;
     virtual bool IsZPIV() const = 0;
     virtual CDataStream GetUniqueness() const = 0;
-
+    virtual bool ContextCheck(int nHeight, uint32_t nTime) = 0;
 };
+
 
 class CPivStake : public CStakeInput
 {
 private:
-    CTransaction txFrom;
-    unsigned int nPosition;
+    CTransaction txFrom{CTransaction()};
+    unsigned int nPosition{0};
 
 public:
-    CPivStake(){}
+    CPivStake() {}
 
-    bool SetInput(CTransaction txPrev, unsigned int n);
+    bool InitFromTxIn(const CTxIn& txin);
+    bool SetPrevout(CTransaction txPrev, unsigned int n);
 
     CBlockIndex* GetIndexFrom() override;
     bool GetTxFrom(CTransaction& tx) const override;
@@ -48,6 +51,7 @@ public:
     bool CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut = UINT256_ZERO) override;
     bool CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal) override;
     bool IsZPIV() const override { return false; }
+    bool ContextCheck(int nHeight, uint32_t nTime) override;
 };
 
 
