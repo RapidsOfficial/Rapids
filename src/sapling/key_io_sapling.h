@@ -14,6 +14,8 @@ namespace KeyIO {
     libzcash::PaymentAddress DecodePaymentAddress(const std::string& str);
     bool IsValidPaymentAddressString(const std::string& str);
 
+    std::string EncodeSpendingKey(const libzcash::SpendingKey& zkey);
+    libzcash::SpendingKey DecodeSpendingKey(const std::string& str);
 }
 
 #endif //PIVX_KEY_IO_SAPLING_H
