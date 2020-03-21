@@ -78,6 +78,7 @@ endif
 
 LIBSAPLING_H = \
   sapling/sapling.h \
+  sapling/key_io_sapling.h \
   sapling/util.h \
   sapling/prf.h \
   sapling/noteencryption.hpp \
@@ -562,6 +563,7 @@ pivx_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 # sapling protocol primitives #
 libsapling_a_SOURCES = \
   sapling/util.cpp \
+  sapling/key_io_sapling.cpp \
   sapling/prf.cpp \
   sapling/noteencryption.cpp \
   sapling/address.cpp \
