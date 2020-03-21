@@ -38,6 +38,7 @@ public:
         // ConvertBits requires unsigned char, but CDataStream uses char
         std::vector<unsigned char> seraddr(ss.begin(), ss.end());
         std::vector<unsigned char> data;
+        // See calculation comment below
         data.reserve((seraddr.size() * 8 + 4) / 5);
         ConvertBits<8, 5, true>([&](unsigned char c) { data.push_back(c); }, seraddr.begin(), seraddr.end());
         return bech32::Encode(m_params.Bech32HRP(CChainParams::SAPLING_PAYMENT_ADDRESS), data);
@@ -67,6 +68,7 @@ public:
         // ConvertBits requires unsigned char, but CDataStream uses char
         std::vector<unsigned char> serkey(ss.begin(), ss.end());
         std::vector<unsigned char> data;
+        // See calculation comment below
         data.reserve((serkey.size() * 8 + 4) / 5);
         ConvertBits<8, 5, true>([&](unsigned char c) { data.push_back(c); }, serkey.begin(), serkey.end());
         std::string ret = bech32::Encode(m_params.Bech32HRP(CChainParams::SAPLING_SPENDING_KEY), data);
@@ -80,6 +82,10 @@ public:
 
 namespace KeyIO {
 
+    // Sizes of SaplingPaymentAddress and SaplingSpendingKey after
+    // ConvertBits<8, 5, true>(). The calculations below take the
+    // regular serialized size in bytes, convert to bits, and then
+    // perform ceiling division to get the number of 5-bit clusters.
     const size_t ConvertedSaplingPaymentAddressSize = ((32 + 11) * 8 + 4) / 5;
     const size_t ConvertedSaplingSpendingKeySize = (32 * 8 + 4) / 5;
 
