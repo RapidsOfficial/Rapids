@@ -74,7 +74,6 @@
 
 
 #ifdef ENABLE_WALLET
-CWallet* pwalletMain = NULL;
 CzPIVWallet* zwalletMain = NULL;
 int nWalletBackups = 10;
 #endif
@@ -912,11 +911,6 @@ static std::string ResolveErrMsg(const char * const optname, const std::string& 
     return strprintf(_("Cannot resolve -%s address: '%s'"), optname, strBind);
 }
 
-static std::string AmountErrMsg(const char * const optname, const std::string& strValue)
-{
-    return strprintf(_("Invalid amount for -%s=<amount>: '%s'"), optname, strValue);
-}
-
 void InitLogging()
 {
     fPrintToConsole = GetBoolArg("-printtoconsole", false);
@@ -1013,47 +1007,13 @@ bool AppInit2()
         if (ParseMoney(mapArgs["-minrelaytxfee"], n) && n > 0)
             ::minRelayTxFee = CFeeRate(n);
         else
-            return InitError(AmountErrMsg("minrelaytxfee", mapArgs["-minrelaytxfee"]));
+            return InitError(strprintf(_("Invalid amount for -%s=<amount>: '%s'"), "minrelaytxfee", mapArgs["-minrelaytxfee"]));
     }
 
 #ifdef ENABLE_WALLET
-    if (mapArgs.count("-mintxfee")) {
-        CAmount n = 0;
-        if (ParseMoney(mapArgs["-mintxfee"], n) && n > 0)
-            CWallet::minTxFee = CFeeRate(n);
-        else
-            return InitError(AmountErrMsg("mintxfee", mapArgs["-mintxfee"]));
-    }
-    if (mapArgs.count("-paytxfee")) {
-        CAmount nFeePerK = 0;
-        if (!ParseMoney(mapArgs["-paytxfee"], nFeePerK))
-            return InitError(AmountErrMsg("paytxfee", mapArgs["-paytxfee"]));
-        if (nFeePerK > nHighTransactionFeeWarning)
-            InitWarning(_("Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction."));
-        payTxFee = CFeeRate(nFeePerK, 1000);
-        if (payTxFee < ::minRelayTxFee) {
-            return InitError(strprintf(_("Invalid amount for -paytxfee=<amount>: '%s' (must be at least %s)"),
-                mapArgs["-paytxfee"], ::minRelayTxFee.ToString()));
-        }
-    }
-    if (mapArgs.count("-maxtxfee")) {
-        CAmount nMaxFee = 0;
-        if (!ParseMoney(mapArgs["-maxtxfee"], nMaxFee))
-            return InitError(AmountErrMsg("maxtxfee", mapArgs["-maxtxfee"]));
-        if (nMaxFee > nHighTransactionMaxFeeWarning)
-            InitWarning(_("Warning: -maxtxfee is set very high! Fees this large could be paid on a single transaction."));
-        maxTxFee = nMaxFee;
-        if (CFeeRate(maxTxFee, 1000) < ::minRelayTxFee) {
-            return InitError(strprintf(_("Invalid amount for -maxtxfee=<amount>: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)"),
-                mapArgs["-maxtxfee"], ::minRelayTxFee.ToString()));
-        }
-    }
-    nTxConfirmTarget = GetArg("-txconfirmtarget", 1);
-    bSpendZeroConfChange = GetBoolArg("-spendzeroconfchange", false);
-    bdisableSystemnotifications = GetBoolArg("-disablesystemnotifications", false);
-    fSendFreeTransactions = GetBoolArg("-sendfreetransactions", false);
-
     std::string strWalletFile = GetArg("-wallet", "wallet.dat");
+    if (!CWallet::ParameterInteraction())
+        return false;
 #endif // ENABLE_WALLET
 
     fIsBareMultisigStd = GetBoolArg("-permitbaremultisig", true) != 0;
