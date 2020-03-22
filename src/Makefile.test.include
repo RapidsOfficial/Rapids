@@ -25,6 +25,13 @@ GENERATED_TEST_FILES = $(JSON_TEST_FILES:.json=.json.h) $(RAW_TEST_FILES:.raw=.r
 BITCOIN_TEST_SUITE = \
   test/test_pivx.h \
   test/test_pivx.cpp
+
+if ENABLE_WALLET
+BITCOIN_TEST_SUITE += \
+  wallet/test/wallet_test_fixture.cpp \
+  wallet/test/wallet_test_fixture.h
+endif
+
 # test_pivx binary #
 BITCOIN_TESTS =\
   test/zerocoin_denomination_tests.cpp\

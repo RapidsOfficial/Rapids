@@ -11,11 +11,6 @@
 #include "random.h"
 #include "txdb.h"
 #include "guiinterface.h"
-#include "util.h"
-#ifdef ENABLE_WALLET
-#include "wallet/db.h"
-#include "wallet/wallet.h"
-#endif
 
 #include <boost/test/unit_test.hpp>
 
@@ -43,9 +38,6 @@ BasicTestingSetup::~BasicTestingSetup()
 
 TestingSetup::TestingSetup()
 {
-#ifdef ENABLE_WALLET
-        bitdb.MakeMock();
-#endif
         ClearDatadirCache();
         pathTemp = GetTempPath() / strprintf("test_pivx_%lu_%i", (unsigned long)GetTime(), (int)(InsecureRandRange(100000)));
         boost::filesystem::create_directories(pathTemp);
@@ -59,12 +51,6 @@ TestingSetup::TestingSetup()
             bool ok = ActivateBestChain(state);
             BOOST_CHECK(ok);
         }
-#ifdef ENABLE_WALLET
-        bool fFirstRun;
-        pwalletMain = new CWallet("wallet.dat");
-        pwalletMain->LoadWallet(fFirstRun);
-        RegisterValidationInterface(pwalletMain);
-#endif
         nScriptCheckThreads = 3;
         for (int i=0; i < nScriptCheckThreads-1; i++)
             threadGroup.create_thread(&ThreadScriptCheck);
@@ -76,19 +62,10 @@ TestingSetup::~TestingSetup()
         UnregisterNodeSignals(GetNodeSignals());
         threadGroup.interrupt_all();
         threadGroup.join_all();
-#ifdef ENABLE_WALLET
-        UnregisterValidationInterface(pwalletMain);
-        delete pwalletMain;
-        pwalletMain = NULL;
-#endif
         UnloadBlockIndex();
         delete pcoinsTip;
         delete pcoinsdbview;
         delete pblocktree;
-#ifdef ENABLE_WALLET
-        bitdb.Flush(true);
-        bitdb.Reset();
-#endif
         boost::filesystem::remove_all(pathTemp);
 }
 
