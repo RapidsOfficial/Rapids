@@ -144,6 +144,19 @@ jobs:
         BUILD_TIMEOUT=800
 
     - stage: test
+      name: 'x86_64 Linux  [GOAL: install]  [bionic]  [no GUI, no unit tests - only functional tests on legacy pre-HD wallets]'
+      env: >-
+        HOST=x86_64-unknown-linux-gnu
+        PACKAGES="python3-zmq protobuf-compiler libdbus-1-dev libharfbuzz-dev libprotobuf-dev"
+        DEP_OPTS="NO_QT=1 NO_UPNP=1 DEBUG=1 ALLOW_HOST_PACKAGES=1"
+        RUN_UNIT_TESTS=false
+        RUN_FUNCTIONAL_TESTS=true
+        TEST_RUNNER_EXTRA="--legacywallet"  # Run functional tests on pre-HD wallet
+        GOAL="install"
+        BITCOIN_CONFIG="--enable-zmq --with-gui=no --enable-glibc-back-compat --enable-reduce-exports"
+        BUILD_TIMEOUT=800
+
+    - stage: test
       name: 'x86_64 Linux  [GOAL: install]  [trusty]  [no functional tests, no depends, no GUI, only system libs]'
       env: >-
         HOST=x86_64-unknown-linux-gnu

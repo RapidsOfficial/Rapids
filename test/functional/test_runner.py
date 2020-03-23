@@ -150,6 +150,31 @@ EXTENDED_SCRIPTS = [
     'rpc_invalidateblock.py',
 ]
 
+LEGACY_SKIP_TESTS = [
+    # These tests are not run when the flag --legacywallet is used
+    'feature_help.py',
+    'feature_reindex.py',
+    'feature_proxy.py',
+    'feature_uacomment.py',
+    'interface_bitcoin_cli.py',
+    'interface_http.py',
+    'interface_rest.py',
+    'mempool_reorg.py',
+    'mempool_resurrect.py',
+    'mempool_spend_coinbase.py',
+    'p2p_disconnect_ban.py',
+    'p2p_time_offset.py',
+    'rpc_bip38.py',
+    'rpc_blockchain.py',
+    'rpc_budget.py',
+    'rpc_decodescript.py',
+    'rpc_net.py',
+    'rpc_signmessage.py',
+    'rpc_spork.py',
+    'wallet_hd.py',         # no HD tests for pre-HD wallets
+    'wallet_upgrade.py',    # can't upgrade to pre-HD wallet
+]
+
 # Place EXTENDED_SCRIPTS first since it has the 3 longest running tests
 ALL_SCRIPTS = EXTENDED_SCRIPTS + BASE_SCRIPTS
 
@@ -247,6 +272,10 @@ def main():
                 test_list.remove(exclude_test)
             else:
                 print("{}WARNING!{} Test '{}' not found in current test list.".format(BOLD[1], BOLD[0], exclude_test))
+
+    # If --legacywallet, remove extra test cases
+    if args.legacywallet:
+        test_list = [x for x in test_list if x not in LEGACY_SKIP_TESTS]
 
     if not test_list:
         print("No valid test scripts specified. Check that your test is in one "
