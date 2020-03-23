@@ -55,4 +55,12 @@ bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &sk)
     return true;
 }
 
+bool CWallet::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const
+{
+    libzcash::SaplingIncomingViewingKey ivk;
+    libzcash::SaplingFullViewingKey fvk;
 
+    return GetSaplingIncomingViewingKey(zaddr, ivk) &&
+           GetSaplingFullViewingKey(ivk, fvk) &&
+           HaveSaplingSpendingKey(fvk);
+}
