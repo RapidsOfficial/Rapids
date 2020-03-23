@@ -582,6 +582,58 @@ UniValue setmocktime(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
+uint32_t getCategoryMask(UniValue cats) {
+    cats = cats.get_array();
+    uint32_t mask = 0;
+    for (unsigned int i = 0; i < cats.size(); ++i) {
+        uint32_t flag = 0;
+        std::string cat = cats[i].get_str();
+        if (!GetLogCategory(&flag, &cat)) {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "unknown logging category " + cat);
+        }
+        mask |= flag;
+    }
+    return mask;
+}
+
+UniValue logging(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() > 2) {
+        throw std::runtime_error(
+            "logging [include,...] <exclude>\n"
+            "Gets and sets the logging configuration.\n"
+            "When called without an argument, returns the list of categories that are currently being debug logged.\n"
+            "When called with arguments, adds or removes categories from debug logging.\n"
+            "The valid logging categories are: " + ListLogCategories() + "\n"
+            "libevent logging is configured on startup and cannot be modified by this RPC during runtime."
+            "Arguments:\n"
+            "1. \"include\" (array of strings) add debug logging for these categories.\n"
+            "2. \"exclude\" (array of strings) remove debug logging for these categories.\n"
+            "\nResult: <categories>  (string): a list of the logging categories that are active.\n"
+            "\nExamples:\n"
+            + HelpExampleCli("logging", "\"[\\\"all\\\"]\" \"[\\\"http\\\"]\"")
+            + HelpExampleRpc("logging", "[\"all\"], \"[libevent]\"")
+        );
+    }
+
+    if (params.size() > 0 && params[0].isArray()) {
+        logCategories |= getCategoryMask(params[0]);
+    }
+
+    if (params.size() > 1 && params[1].isArray()) {
+        logCategories &= ~getCategoryMask(params[1]);
+    }
+
+
+    UniValue result(UniValue::VOBJ);
+    std::vector<CLogCategoryActive> vLogCatActive = ListActiveLogCategories();
+    for (const auto& logCatActive : vLogCatActive) {
+        result.pushKV(logCatActive.category, logCatActive.active);
+    }
+
+    return result;
+}
+
 #ifdef ENABLE_WALLET
 UniValue getstakingstatus(const UniValue& params, bool fHelp)
 {
