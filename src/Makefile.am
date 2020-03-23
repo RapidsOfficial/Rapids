@@ -130,6 +130,7 @@ BITCOIN_CORE_H = \
   keystore.h \
   leveldbwrapper.h \
   limitedmap.h \
+  logging.h \
   main.h \
   masternode.h \
   masternode-payments.h \
@@ -418,6 +419,7 @@ libbitcoin_util_a_SOURCES = \
   compat/glibc_sanity.cpp \
   compat/glibcxx_sanity.cpp \
   compat/strnlen.cpp \
+  logging.cpp \
   random.cpp \
   rpc/protocol.cpp \
   support/cleanse.cpp \
