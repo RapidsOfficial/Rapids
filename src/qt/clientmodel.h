@@ -112,7 +112,7 @@ Q_SIGNALS:
     void bytesChanged(quint64 totalBytesIn, quint64 totalBytesOut);
 
     //! Fired when a message should be reported to the user
-    void message(const QString& title, const QString& message, unsigned int style);
+    void message(const QString& title, const QString& message, unsigned int style, bool* ret = nullptr);
 
     // Show progress dialog e.g. for verifychain
     void showProgress(const QString& title, int nProgress);

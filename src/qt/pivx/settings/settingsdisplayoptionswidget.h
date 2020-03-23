@@ -28,6 +28,10 @@ public:
 public Q_SLOTS:
     void onResetClicked();
 
+Q_SIGNALS:
+    void saveSettings();
+    void discardSettings();
+
 private:
     Ui::SettingsDisplayOptionsWidget *ui;
 };

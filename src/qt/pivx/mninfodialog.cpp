@@ -23,7 +23,7 @@ MnInfoDialog::MnInfoDialog(QWidget *parent) :
     setCssTextBodyDialog({ui->textAmount, ui->textAddress, ui->textInputs, ui->textStatus, ui->textId, ui->textExport});
     setCssProperty({ui->pushCopy, ui->pushCopyId, ui->pushExport}, "ic-copy-big");
     setCssProperty(ui->btnEsc, "ic-close");
-    connect(ui->btnEsc, SIGNAL(clicked()), this, SLOT(closeDialog()));
+    connect(ui->btnEsc, &QPushButton::clicked, this, &MnInfoDialog::closeDialog);
     connect(ui->pushCopy, &QPushButton::clicked, [this](){ copyInform(pubKey, "Masternode public key copied"); });
     connect(ui->pushCopyId, &QPushButton::clicked, [this](){ copyInform(txId, "Collateral tx id copied"); });
     connect(ui->pushExport, &QPushButton::clicked, [this](){ exportMN = true; accept(); });

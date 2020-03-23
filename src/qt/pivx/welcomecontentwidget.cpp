@@ -158,9 +158,9 @@ WelcomeContentWidget::WelcomeContentWidget(QWidget *parent) :
     ui->pushButtonSkip->setProperty("cssClass", "btn-close-white");
     onNextClicked();
 
-    connect(ui->pushButtonSkip, SIGNAL(clicked()), this, SLOT(close()));
-    connect(nextButton, SIGNAL(clicked()), this, SLOT(onNextClicked()));
-    connect(backButton, SIGNAL(clicked()), this, SLOT(onBackClicked()));
+    connect(ui->pushButtonSkip, &QPushButton::clicked, this, &WelcomeContentWidget::close);
+    connect(nextButton, &QPushButton::clicked, this, &WelcomeContentWidget::onNextClicked);
+    connect(backButton, &QPushButton::clicked, this, &WelcomeContentWidget::onBackClicked);
 
     initLanguages();
 

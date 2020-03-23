@@ -47,7 +47,7 @@ LoadingDialog::LoadingDialog(QWidget *parent) :
 
 void LoadingDialog::execute(Runnable *runnable, int type){
     loadingTimer = new QTimer(this);
-    connect(loadingTimer, SIGNAL(timeout()), this, SLOT(loadingTextChange()));
+    connect(loadingTimer, &QTimer::timeout, this, &LoadingDialog::loadingTextChange);
     loadingTimer->start(250);
 
     QThread* thread = new QThread;

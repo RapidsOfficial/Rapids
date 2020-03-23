@@ -88,9 +88,9 @@ MasterNodeWizardDialog::MasterNodeWizardDialog(WalletModel *model, QWidget *pare
     ui->btnBack->setText(tr("BACK"));
     setCssProperty(ui->pushButtonSkip, "ic-close");
 
-    connect(ui->pushButtonSkip, SIGNAL(clicked()), this, SLOT(close()));
-    connect(ui->btnNext, SIGNAL(clicked()), this, SLOT(onNextClicked()));
-    connect(ui->btnBack, SIGNAL(clicked()), this, SLOT(onBackClicked()));
+    connect(ui->pushButtonSkip, &QPushButton::clicked, this, &MasterNodeWizardDialog::close);
+    connect(ui->btnNext, &QPushButton::clicked, this, &MasterNodeWizardDialog::onNextClicked);
+    connect(ui->btnBack, &QPushButton::clicked, this, &MasterNodeWizardDialog::onBackClicked);
 }
 
 void MasterNodeWizardDialog::showEvent(QShowEvent *event)

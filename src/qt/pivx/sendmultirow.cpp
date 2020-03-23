@@ -56,8 +56,8 @@ SendMultiRow::SendMultiRow(PWidget *parent) :
     int posIconY = 14;
     iconNumber->move(posIconX, posIconY);
 
-    connect(ui->lineEditAmount, SIGNAL(textChanged(const QString&)), this, SLOT(amountChanged(const QString&)));
-    connect(ui->lineEditAddress, SIGNAL(textChanged(const QString&)), this, SLOT(addressChanged(const QString&)));
+    connect(ui->lineEditAmount, &QLineEdit::textChanged, this, &SendMultiRow::amountChanged);
+    connect(ui->lineEditAddress, &QLineEdit::textChanged, this, &SendMultiRow::addressChanged);
     connect(btnContact, &QAction::triggered, [this](){Q_EMIT onContactsClicked(this);});
     connect(ui->btnMenu, &QPushButton::clicked, [this](){Q_EMIT onMenuClicked(this);});
 }
@@ -123,7 +123,7 @@ bool SendMultiRow::addressChanged(const QString& str)
 void SendMultiRow::loadWalletModel() {
     if (walletModel && walletModel->getOptionsModel()) {
         displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
-        connect(walletModel->getOptionsModel(), SIGNAL(displayUnitChanged(int)), this, SLOT(updateDisplayUnit()));
+        connect(walletModel->getOptionsModel(), &OptionsModel::displayUnitChanged, this, &SendMultiRow::updateDisplayUnit);
     }
     clear();
 }
