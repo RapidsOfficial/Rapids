@@ -46,7 +46,7 @@ void DefaultDialog::showEvent(QShowEvent *event)
 }
 
 
-void DefaultDialog::setText(QString title, QString message, QString okBtnText, QString cancelBtnText)
+void DefaultDialog::setText(const QString& title, const QString& message, const QString& okBtnText, const QString& cancelBtnText)
 {
     if(!okBtnText.isNull()) ui->btnSave->setText(okBtnText);
     if(!cancelBtnText.isNull()){

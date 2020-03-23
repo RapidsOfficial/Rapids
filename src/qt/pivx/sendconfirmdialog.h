@@ -25,14 +25,14 @@ class TxDetailDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit TxDetailDialog(QWidget *parent = nullptr, bool isConfirmDialog = true, QString warningStr = QString());
+    explicit TxDetailDialog(QWidget *parent = nullptr, bool isConfirmDialog = true, const QString& warningStr = QString());
     ~TxDetailDialog();
 
     void showEvent(QShowEvent *event) override;
     bool isConfirm() { return this->confirm;}
     WalletModel::SendCoinsReturn getStatus() { return this->sendStatus;}
 
-    void setData(WalletModel *model, WalletModelTransaction &tx);
+    void setData(WalletModel *model, WalletModelTransaction& tx);
     void setData(WalletModel *model, const QModelIndex &index);
     void setDisplayUnit(int unit){this->nDisplayUnit = unit;};
 

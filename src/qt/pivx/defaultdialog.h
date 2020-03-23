@@ -20,7 +20,7 @@ public:
     ~DefaultDialog();
 
     void showEvent(QShowEvent *event) override;
-    void setText(QString title = "", QString message = "", QString okBtnText = "", QString cancelBtnText = "");
+    void setText(const QString& title = "", const QString& message = "", const QString& okBtnText = "", const QString& cancelBtnText = "");
 
     bool isOk = false;
 
