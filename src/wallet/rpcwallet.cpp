@@ -20,6 +20,8 @@
 #include "walletdb.h"
 #include "zpivchain.h"
 
+#include "sapling/key_io_sapling.h"
+
 #include <stdint.h>
 
 #include "libzerocoin/Coin.h"
@@ -493,6 +495,29 @@ UniValue getnewstakingaddress(const JSONRPCRequest& request)
             HelpExampleCli("getnewstakingaddress", "") + HelpExampleRpc("getnewstakingaddress", ""));
 
     return EncodeDestination(GetNewAddressFromLabel("coldstaking", request.params, CChainParams::STAKING_ADDRESS), CChainParams::STAKING_ADDRESS);
+}
+
+UniValue getnewshieldedaddress(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() > 1)
+        throw std::runtime_error(
+                "getnewshieldedaddress\n"
+                "\nReturns a new shielded address for receiving payments.\n"
+                "\nArguments:\n"
+                "\nResult:\n"
+                "\"address\"    (string) The new shielded address.\n"
+                "\nExamples:\n"
+                + HelpExampleCli("getnewshieldedaddress", "")
+                + HelpExampleRpc("getnewshieldedaddress", "")
+        );
+
+    EnsureWallet();
+
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    EnsureWalletIsUnlocked();
+
+    return KeyIO::EncodePaymentAddress(pwalletMain->GenerateNewSaplingZKey());
 }
 
 UniValue delegatoradd(const JSONRPCRequest& request)
@@ -5004,6 +5029,9 @@ const CRPCCommand vWalletRPCCommands[] =
         { "wallet",             "walletpassphrase",         &walletpassphrase,         true  },
         { "wallet",             "delegatoradd",             &delegatoradd,             true  },
         { "wallet",             "delegatorremove",          &delegatorremove,          true  },
+
+        /** Sapling functions */
+        { "wallet",             "getnewshieldedaddress",     &getnewshieldedaddress,     true  },
 
         /** Account functions (deprecated) */
         { "wallet",             "getaccountaddress",        &getaccountaddress,        true  },
