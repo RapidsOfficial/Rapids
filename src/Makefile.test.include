@@ -102,6 +102,7 @@ BITCOIN_TESTS += \
   wallet/test/wallet_test_fixture.cpp \
   wallet/test/wallet_test_fixture.h \
   test/accounting_tests.cpp \
+  test/librust/sapling_rpc_wallet_tests.cpp \
   wallet/test/wallet_tests.cpp \
   wallet/test/crypto_tests.cpp
 endif
