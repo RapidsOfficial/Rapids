@@ -7,6 +7,7 @@
 
 #include "base58.h"
 #include "clientversion.h"
+#include "httpserver.h"
 #include "init.h"
 #include "main.h"
 #include "masternode-sync.h"
@@ -616,6 +617,7 @@ UniValue logging(const UniValue& params, bool fHelp)
         );
     }
 
+    uint32_t originalLogCategories = logCategories;
     if (params.size() > 0 && params[0].isArray()) {
         logCategories |= getCategoryMask(params[0]);
     }
@@ -624,6 +626,20 @@ UniValue logging(const UniValue& params, bool fHelp)
         logCategories &= ~getCategoryMask(params[1]);
     }
 
+    // Update libevent logging if BCLog::LIBEVENT has changed.
+    // If the library version doesn't allow it, UpdateHTTPServerLogging() returns false,
+    // in which case we should clear the BCLog::LIBEVENT flag.
+    // Throw an error if the user has explicitly asked to change only the libevent
+    // flag and it failed.
+    uint32_t changedLogCategories = originalLogCategories ^ logCategories;
+    if (changedLogCategories & BCLog::LIBEVENT) {
+        if (!UpdateHTTPServerLogging(logCategories & BCLog::LIBEVENT)) {
+            logCategories &= ~BCLog::LIBEVENT;
+            if (changedLogCategories == BCLog::LIBEVENT) {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "libevent logging cannot be updated when using libevent before v2.1.1.");
+            }
+        }
+    }
 
     UniValue result(UniValue::VOBJ);
     std::vector<CLogCategoryActive> vLogCatActive = ListActiveLogCategories();
