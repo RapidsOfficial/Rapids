@@ -185,7 +185,7 @@ void MasterNodesWidget::onMNClicked(const QModelIndex &index)
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteMNClicked()));
         connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onInfoMNClicked()));
         this->menu->adjustSize();
-    }else {
+    } else {
         this->menu->hide();
     }
     this->index = index;
@@ -207,13 +207,18 @@ bool MasterNodesWidget::checkMNsNetwork()
 
 void MasterNodesWidget::onEditMNClicked()
 {
-    if(walletModel) {
+    if (walletModel) {
         if (!walletModel->isRegTestNetwork() && !checkMNsNetwork()) return;
         if (index.sibling(index.row(), MNModel::WAS_COLLATERAL_ACCEPTED).data(Qt::DisplayRole).toBool()) {
             // Start MN
             QString strAlias = this->index.data(Qt::DisplayRole).toString();
             if (ask(tr("Start Masternode"), tr("Are you sure you want to start masternode %1?\n").arg(strAlias))) {
-                if (!verifyWalletUnlocked()) return;
+                WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+                if (!ctx.isValid()) {
+                    // Unlock wallet was cancelled
+                    inform(tr("Cannot edit masternode, wallet locked"));
+                    return;
+                }
                 startAlias(strAlias);
             }
         } else {
@@ -258,7 +263,12 @@ bool MasterNodesWidget::startMN(CMasternodeConfig::CMasternodeEntry mne, std::st
 
 void MasterNodesWidget::onStartAllClicked(int type)
 {
-    if (!verifyWalletUnlocked()) return;
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot perform Mastenodes start, wallet locked"));
+        return;
+    }
     if (!checkMNsNetwork()) return;
     if (isLoading) {
         inform(tr("Background task is being executed, please wait"));
@@ -321,7 +331,12 @@ void MasterNodesWidget::onError(QString error, int type)
 
 void MasterNodesWidget::onInfoMNClicked()
 {
-    if (!verifyWalletUnlocked()) return;
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot show Mastenode information, wallet locked"));
+        return;
+    }
     showHideOp(true);
     MnInfoDialog* dialog = new MnInfoDialog(window);
     QString label = index.data(Qt::DisplayRole).toString();
@@ -457,26 +472,31 @@ void MasterNodesWidget::onDeleteMNClicked()
 
 void MasterNodesWidget::onCreateMNClicked()
 {
-    if (verifyWalletUnlocked()) {
-        if (walletModel->getBalance() <= (COIN * 10000)) {
-            inform(tr("Not enough balance to create a masternode, 10,000 PIV required."));
-            return;
-        }
-        showHideOp(true);
-        MasterNodeWizardDialog *dialog = new MasterNodeWizardDialog(walletModel, window);
-        if (openDialogWithOpaqueBackgroundY(dialog, window, 5, 7)) {
-            if (dialog->isOk) {
-                // Update list
-                mnModel->addMn(dialog->mnEntry);
-                updateListState();
-                // add mn
-                inform(dialog->returnStr);
-            } else {
-                warn(tr("Error creating masternode"), dialog->returnStr);
-            }
-        }
-        dialog->deleteLater();
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot create Mastenode controller, wallet locked"));
+        return;
     }
+
+    if (walletModel->getBalance() <= (COIN * 10000)) {
+        inform(tr("Not enough balance to create a masternode, 10,000 PIV required."));
+        return;
+    }
+    showHideOp(true);
+    MasterNodeWizardDialog *dialog = new MasterNodeWizardDialog(walletModel, window);
+    if (openDialogWithOpaqueBackgroundY(dialog, window, 5, 7)) {
+        if (dialog->isOk) {
+            // Update list
+            mnModel->addMn(dialog->mnEntry);
+            updateListState();
+            // add mn
+            inform(dialog->returnStr);
+        } else {
+            warn(tr("Error creating masternode"), dialog->returnStr);
+        }
+    }
+    dialog->deleteLater();
 }
 
 void MasterNodesWidget::changeTheme(bool isLightTheme, QString& theme)

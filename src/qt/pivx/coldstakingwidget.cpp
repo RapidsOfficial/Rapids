@@ -30,14 +30,16 @@ class CSDelegationHolder : public FurListRow<QWidget*>
 public:
     CSDelegationHolder();
 
-    explicit CSDelegationHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme){}
+    explicit CSDelegationHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme) {}
 
-    CSRow* createHolder(int pos) override{
+    CSRow* createHolder(int pos) override
+    {
         if (!cachedRow) cachedRow = new CSRow();
         return cachedRow;
     }
 
-    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override{
+    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override
+    {
         CSRow *row = static_cast<CSRow*>(holder);
         row->updateState(isLightTheme, isHovered, isSelected);
 
@@ -53,11 +55,13 @@ public:
         row->showMenuButton(isReceivedDelegation);
     }
 
-    QColor rectColor(bool isHovered, bool isSelected) override{
+    QColor rectColor(bool isHovered, bool isSelected) override
+    {
         return getRowColor(isLightTheme, isHovered, isSelected);
     }
 
-    ~CSDelegationHolder() override {
+    ~CSDelegationHolder() override
+    {
         if (cachedRow)
             delete cachedRow;
     }
@@ -195,8 +199,9 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     connect(ui->btnMyStakingAddresses, SIGNAL(clicked()), this, SLOT(onMyStakingAddressesClicked()));
 }
 
-void ColdStakingWidget::loadWalletModel(){
-    if(walletModel) {
+void ColdStakingWidget::loadWalletModel()
+{
+    if (walletModel) {
         sendMultiRow->setWalletModel(walletModel);
         txModel = walletModel->getTransactionTableModel();
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
@@ -222,20 +227,23 @@ void ColdStakingWidget::loadWalletModel(){
 
 }
 
-void ColdStakingWidget::onTxArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType) {
+void ColdStakingWidget::onTxArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType)
+{
     if (isCSAnyType) {
         tryRefreshDelegations();
     }
 }
 
-void ColdStakingWidget::walletSynced(bool sync) {
+void ColdStakingWidget::walletSynced(bool sync)
+{
     if (this->isChainSync != sync) {
         this->isChainSync = sync;
         tryRefreshDelegations();
     }
 }
 
-void ColdStakingWidget::tryRefreshDelegations() {
+void ColdStakingWidget::tryRefreshDelegations()
+{
     // Check for min update time to not reload the UI so often if the node is syncing.
     int64_t now = GetTime();
     if (lastRefreshTime + LOAD_MIN_TIME_INTERVAL < now) {
@@ -244,13 +252,15 @@ void ColdStakingWidget::tryRefreshDelegations() {
     }
 }
 
-bool ColdStakingWidget::refreshDelegations(){
+bool ColdStakingWidget::refreshDelegations()
+{
     if (isLoading) return false;
     isLoading = true;
     return execute(REQUEST_LOAD_TASK);
 }
 
-void ColdStakingWidget::onDelegationsRefreshed() {
+void ColdStakingWidget::onDelegationsRefreshed()
+{
     isLoading = false;
     bool hasDel = csModel->rowCount() > 0;
 
@@ -263,30 +273,33 @@ void ColdStakingWidget::onDelegationsRefreshed() {
     }
 }
 
-void ColdStakingWidget::run(int type) {
+void ColdStakingWidget::run(int type)
+{
     if (type == REQUEST_LOAD_TASK) {
         csModel->updateCSList();
         QMetaObject::invokeMethod(this, "onDelegationsRefreshed", Qt::QueuedConnection);
     }
 }
-void ColdStakingWidget::onError(QString error, int type) {
+void ColdStakingWidget::onError(QString error, int type)
+{
     isLoading = false;
     inform(tr("Error loading delegations: %1").arg(error));
 }
 
-void ColdStakingWidget::onContactsClicked(bool ownerAdd) {
+void ColdStakingWidget::onContactsClicked(bool ownerAdd)
+{
     isContactOwnerSelected = ownerAdd;
     onContactsClicked();
 }
 
-void ColdStakingWidget::onContactsClicked(){
-
-    if(menu && menu->isVisible()){
+void ColdStakingWidget::onContactsClicked()
+{
+    if (menu && menu->isVisible()) {
         menu->hide();
     }
 
     int contactsSize = isContactOwnerSelected ? walletModel->getAddressTableModel()->sizeRecv() : walletModel->getAddressTableModel()->sizeColdSend();
-    if(contactsSize == 0) {
+    if (contactsSize == 0) {
         inform(isContactOwnerSelected ?
                  tr( "No receive addresses available, you can go to the receive screen and create some there!") :
                  tr("No contacts available, you can go to the contacts screen and add some there!")
@@ -313,13 +326,13 @@ void ColdStakingWidget::onContactsClicked(){
     pos.setX(pos.x() + 40);
     height = (contactsSize <= 2) ? height * ( 2 * (contactsSize + 1 )) : height * 4;
 
-    if(!menuContacts){
+    if (!menuContacts) {
         menuContacts = new ContactsDropdown(
                 width,
                 height,
                 this
         );
-        connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label){
+        connect(menuContacts, &ContactsDropdown::contactSelected, [this](QString address, QString label) {
             if (isContactOwnerSelected) {
                 ui->lineEditOwnerAddress->setText(address);
             } else {
@@ -329,7 +342,7 @@ void ColdStakingWidget::onContactsClicked(){
         });
     }
 
-    if(menuContacts->isVisible()){
+    if (menuContacts->isVisible()) {
         menuContacts->hide();
         return;
     }
@@ -342,7 +355,8 @@ void ColdStakingWidget::onContactsClicked(){
     menuContacts->show();
 }
 
-void ColdStakingWidget::onDelegateSelected(bool delegate){
+void ColdStakingWidget::onDelegateSelected(bool delegate)
+{
     isInDelegation = delegate;
     if (menu && menu->isVisible()) {
         menu->hide();
@@ -352,7 +366,7 @@ void ColdStakingWidget::onDelegateSelected(bool delegate){
         menuAddresses->hide();
     }
 
-    if(isInDelegation) {
+    if (isInDelegation) {
         ui->btnCoinControl->setVisible(true);
         ui->containerSend->setVisible(true);
         ui->containerBtn->setVisible(true);
@@ -382,15 +396,24 @@ void ColdStakingWidget::updateDisplayUnit() {
     }
 }
 
-void ColdStakingWidget::showList(bool show){
+void ColdStakingWidget::showList(bool show)
+{
     ui->emptyContainer->setVisible(!show);
     ui->listView->setVisible(show);
     ui->containerHistoryLabel->setVisible(show);
 }
 
-void ColdStakingWidget::onSendClicked(){
-    if (!walletModel || !walletModel->getOptionsModel() || !verifyWalletUnlocked())
+void ColdStakingWidget::onSendClicked()
+{
+    if (!walletModel || !walletModel->getOptionsModel())
         return;
+
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot send delegation, wallet locked"));
+        return;
+    }
 
     if (!walletModel->isColdStakingNetworkelyEnabled()) {
         inform(tr("Cold staking is networkely disabled"));
@@ -473,7 +496,7 @@ void ColdStakingWidget::onSendClicked(){
     dialog->adjustSize();
     openDialogWithOpaqueBackgroundY(dialog, window, 3, 5);
 
-    if(dialog->isConfirm()){
+    if (dialog->isConfirm()) {
         // now send the prepared transaction
         WalletModel::SendCoinsReturn sendStatus = dialog->getStatus();
         // process sendStatus and on error generate message shown to user
@@ -492,7 +515,8 @@ void ColdStakingWidget::onSendClicked(){
     dialog->deleteLater();
 }
 
-void ColdStakingWidget::clearAll() {
+void ColdStakingWidget::clearAll()
+{
     if (sendMultiRow) sendMultiRow->clear();
     ui->lineEditOwnerAddress->clear();
     if (CoinControlDialog::coinControl) {
@@ -501,8 +525,9 @@ void ColdStakingWidget::clearAll() {
     }
 }
 
-void ColdStakingWidget::onCoinControlClicked(){
-    if(isInDelegation) {
+void ColdStakingWidget::onCoinControlClicked()
+{
+    if (isInDelegation) {
         if (walletModel->getBalance() > 0) {
             if (!coinControlDialog) {
                 coinControlDialog = new CoinControlDialog();
@@ -518,22 +543,29 @@ void ColdStakingWidget::onCoinControlClicked(){
     }
 }
 
-void ColdStakingWidget::onColdStakeClicked() {
+void ColdStakingWidget::onColdStakeClicked()
+{
     showAddressGenerationDialog(false);
 }
 
-void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest) {
-    if(walletModel && !isShowingDialog) {
-        if (!verifyWalletUnlocked()) return;
+void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest)
+{
+    if (walletModel && !isShowingDialog) {
+        WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+        if (!ctx.isValid()) {
+            // Unlock wallet was cancelled
+            inform(tr("Cannot perform operation, wallet locked"));
+            return;
+        }
         isShowingDialog = true;
         showHideOp(true);
         RequestDialog *dialog = new RequestDialog(window);
         dialog->setWalletModel(walletModel);
         dialog->setPaymentRequest(isPaymentRequest);
         openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 12);
-        if (dialog->res == 1){
+        if (dialog->res == 1) {
             inform(tr("URI copied to clipboard"));
-        } else if (dialog->res == 2){
+        } else if (dialog->res == 2) {
             inform(tr("Address copied to clipboard"));
         }
         dialog->deleteLater();
@@ -541,8 +573,8 @@ void ColdStakingWidget::showAddressGenerationDialog(bool isPaymentRequest) {
     }
 }
 
-void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index) {
-
+void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index)
+{
     ui->listViewStakingAddress->setCurrentIndex(_index);
 
     QRect rect = ui->listViewStakingAddress->visualRect(_index);
@@ -552,7 +584,7 @@ void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index) {
 
     QModelIndex rIndex = addressesFilter->mapToSource(_index);
 
-    if(!menuAddresses){
+    if (!menuAddresses) {
         menuAddresses = new TooltipMenu(window, this);
         menuAddresses->setEditBtnText(tr("Copy"));
         menuAddresses->setDeleteBtnText(tr("Edit"));
@@ -561,7 +593,7 @@ void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index) {
         connect(menuAddresses, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(menuAddresses, SIGNAL(onEditClicked()), this, SLOT(onAddressCopyClicked()));
         connect(menuAddresses, SIGNAL(onDeleteClicked()), this, SLOT(onAddressEditClicked()));
-    }else {
+    } else {
         menuAddresses->hide();
     }
 
@@ -571,8 +603,8 @@ void ColdStakingWidget::handleMyColdAddressClicked(const QModelIndex &_index) {
     menuAddresses->show();
 }
 
-void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
-
+void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex)
+{
     bool isReceivedDelegation = rIndex.sibling(rIndex.row(), ColdStakingModel::IS_RECEIVED_DELEGATION).data(Qt::DisplayRole).toBool();
 
     ui->listView->setCurrentIndex(rIndex);
@@ -581,7 +613,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
     pos.setX(pos.x() - (DECORATION_SIZE * 2));
     pos.setY(pos.y() + (DECORATION_SIZE * 2));
 
-    if(!this->menu){
+    if (!this->menu) {
         this->menu = new TooltipMenu(window, this);
         this->menu->setEditBtnText(tr("Stake"));
         this->menu->setDeleteBtnText(tr("Blacklist"));
@@ -596,7 +628,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
         connect(this->menu, SIGNAL(onDeleteClicked()), this, SLOT(onDeleteClicked()));
         connect(this->menu, SIGNAL(onCopyClicked()), this, SLOT(onLabelClicked()));
         connect(this->menu, SIGNAL(onLastClicked()), this, SLOT(onCopyOwnerClicked()));
-    }else {
+    } else {
         this->menu->hide();
     }
 
@@ -623,11 +655,14 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex) {
     menu->show();
 }
 
-void ColdStakingWidget::onAddressCopyClicked() {
+void ColdStakingWidget::onAddressCopyClicked()
+{
     GUIUtil::setClipboard(addressIndex.data(Qt::DisplayRole).toString());
     inform(tr("Address copied"));
 }
-void ColdStakingWidget::onAddressEditClicked() {
+
+void ColdStakingWidget::onAddressEditClicked()
+{
     onLabelClicked(
             tr("Edit Cold Address Label"),
             addressIndex,
@@ -635,7 +670,8 @@ void ColdStakingWidget::onAddressEditClicked() {
     );
 }
 
-void ColdStakingWidget::onEditClicked() {
+void ColdStakingWidget::onEditClicked()
+{
     // whitelist address
     if (!csModel->whitelist(index)) {
         inform(tr("Whitelist failed, please check the logs"));
@@ -649,7 +685,8 @@ void ColdStakingWidget::onEditClicked() {
     inform(label + tr(" staking!"));
 }
 
-void ColdStakingWidget::onDeleteClicked() {
+void ColdStakingWidget::onDeleteClicked()
+{
     // blacklist address
     if (!csModel->blacklist(index)) {
         inform(tr("Blacklist failed, please check the logs"));
@@ -663,17 +700,20 @@ void ColdStakingWidget::onDeleteClicked() {
     inform(label + tr(" blacklisted from staking"));
 }
 
-void ColdStakingWidget::onCopyClicked() {
+void ColdStakingWidget::onCopyClicked()
+{
     // show address info
 }
 
-void ColdStakingWidget::onCopyOwnerClicked() {
+void ColdStakingWidget::onCopyOwnerClicked()
+{
     QString owner = index.data(Qt::DisplayRole).toString();
     GUIUtil::setClipboard(owner);
     inform(tr("Owner address copied"));
 }
 
-void ColdStakingWidget::onLabelClicked(){
+void ColdStakingWidget::onLabelClicked()
+{
     onLabelClicked(
             tr("Edit Owner Address Label"),
             index,
@@ -681,8 +721,9 @@ void ColdStakingWidget::onLabelClicked(){
     );
 }
 
-void ColdStakingWidget::onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses) {
-    if(walletModel && !isShowingDialog) {
+void ColdStakingWidget::onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses)
+{
+    if (walletModel && !isShowingDialog) {
         isShowingDialog = true;
         showHideOp(true);
         AddNewContactDialog *dialog = new AddNewContactDialog(window);
@@ -718,7 +759,7 @@ void ColdStakingWidget::onMyStakingAddressesClicked()
     ui->btnMyStakingAddresses->setRightIconClass((isStakingAddressListVisible ?
                                                   "btn-dropdown" : "ic-arrow"), true);
     ui->listViewStakingAddress->setVisible(isStakingAddressListVisible);
-    if(isStakingAddressListVisible) {
+    if (isStakingAddressListVisible) {
         ui->rightContainer->removeItem(spacerDiv);
         ui->listViewStakingAddress->update();
     } else {
@@ -741,7 +782,8 @@ void ColdStakingWidget::updateStakingTotalLabel()
     );
 }
 
-ColdStakingWidget::~ColdStakingWidget(){
+ColdStakingWidget::~ColdStakingWidget()
+{
     if (sendMultiRow)
         delete sendMultiRow;
     if (txHolder)

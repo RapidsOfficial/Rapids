@@ -130,7 +130,6 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/txviewholder.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/qtutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/expandablebutton.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/walletpassworddialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/topbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/txrow.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addressfilterproxymodel.cpp

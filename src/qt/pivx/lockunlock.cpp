@@ -38,14 +38,15 @@ LockUnlock::~LockUnlock()
     delete ui;
 }
 
-void LockUnlock::updateStatus(WalletModel::EncryptionStatus status){
-    switch (status){
+void LockUnlock::updateStatus(WalletModel::EncryptionStatus status)
+{
+    switch (status) {
         case WalletModel::EncryptionStatus::Unlocked:
             ui->pushButtonUnlocked->setChecked(true);
             ui->pushButtonLocked->setChecked(false);
             ui->pushButtonStaking->setChecked(false);
             break;
-        case WalletModel::EncryptionStatus::UnlockedForAnonymizationOnly:
+        case WalletModel::EncryptionStatus::UnlockedForStaking:
             ui->pushButtonUnlocked->setChecked(false);
             ui->pushButtonLocked->setChecked(false);
             ui->pushButtonStaking->setChecked(true);
@@ -60,17 +61,20 @@ void LockUnlock::updateStatus(WalletModel::EncryptionStatus status){
     }
 }
 
-void LockUnlock::onLockClicked(){
+void LockUnlock::onLockClicked()
+{
     lock = 0;
     Q_EMIT lockClicked(StateClicked::LOCK);
 }
 
-void LockUnlock::onUnlockClicked(){
+void LockUnlock::onUnlockClicked()
+{
     lock = 1;
     Q_EMIT lockClicked(StateClicked::UNLOCK);
 }
 
-void LockUnlock::onStakingClicked(){
+void LockUnlock::onStakingClicked()
+{
     lock = 2;
     Q_EMIT lockClicked(StateClicked::UNLOCK_FOR_STAKING);
 }
@@ -87,6 +91,7 @@ void LockUnlock::leaveEvent(QEvent *)
     Q_EMIT Mouse_Leave();
 }
 
-bool LockUnlock::isHovered(){
+bool LockUnlock::isHovered()
+{
     return isOnHover;
 }

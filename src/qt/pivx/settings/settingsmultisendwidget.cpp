@@ -16,21 +16,25 @@
 #define DECORATION_SIZE 65
 #define NUM_ITEMS 3
 
-MultiSendModel::MultiSendModel(QObject *parent) : QAbstractTableModel(parent){
+MultiSendModel::MultiSendModel(QObject *parent) : QAbstractTableModel(parent)
+{
     updateList();
 }
 
-void MultiSendModel::updateList(){
+void MultiSendModel::updateList()
+{
     Q_EMIT dataChanged(index(0, 0, QModelIndex()), index((int) pwalletMain->vMultiSend.size(), 5, QModelIndex()) );
 }
 
-int MultiSendModel::rowCount(const QModelIndex &parent) const{
+int MultiSendModel::rowCount(const QModelIndex &parent) const
+{
     if (parent.isValid())
         return 0;
     return (int) pwalletMain->vMultiSend.size();
 }
 
-QVariant MultiSendModel::data(const QModelIndex &index, int role) const {
+QVariant MultiSendModel::data(const QModelIndex &index, int role) const
+{
     if (!index.isValid())
         return QVariant();
 
@@ -47,7 +51,8 @@ QVariant MultiSendModel::data(const QModelIndex &index, int role) const {
     return QVariant();
 }
 
-QModelIndex MultiSendModel::index(int row, int column, const QModelIndex& parent) const{
+QModelIndex MultiSendModel::index(int row, int column, const QModelIndex& parent) const
+{
     Q_UNUSED(parent);
     return createIndex(row, column, nullptr);
 }
@@ -57,9 +62,10 @@ class MultiSendHolder : public FurListRow<QWidget*>
 public:
     MultiSendHolder();
 
-    explicit MultiSendHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme){}
+    explicit MultiSendHolder(bool _isLightTheme) : FurListRow(), isLightTheme(_isLightTheme) {}
 
-    QWidget* createHolder(int pos) override{
+    QWidget* createHolder(int pos) override
+    {
         if (!row) {
             row = new QWidget();
             QVBoxLayout *verticalLayout_2;
@@ -114,18 +120,20 @@ public:
         return row;
     }
 
-    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override{
+    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override
+    {
         holder->findChild<QLabel*>("labelAddress")->setText(index.data(Qt::DisplayRole).toString());
         holder->findChild<QLabel*>("labelPercentage")->setText(
                 QString::number(index.sibling(index.row(), MultiSendModel::PERCENTAGE).data(Qt::DisplayRole).toInt()) + QString("%")
         );
     }
 
-    QColor rectColor(bool isHovered, bool isSelected) override{
+    QColor rectColor(bool isHovered, bool isSelected) override
+    {
         return getRowColor(isLightTheme, isHovered, isSelected);
     }
 
-    ~MultiSendHolder() override{}
+    ~MultiSendHolder() override {}
 
     bool isLightTheme;
     QWidget *row = nullptr;
@@ -187,15 +195,17 @@ SettingsMultisendWidget::SettingsMultisendWidget(PWidget *parent) :
     connect(ui->pushButtonClear, SIGNAL(clicked()), this, SLOT(clearAll()));
 }
 
-void SettingsMultisendWidget::showEvent(QShowEvent *event) {
+void SettingsMultisendWidget::showEvent(QShowEvent *event)
+{
     if (multiSendModel) {
         multiSendModel->updateList();
         updateListState();
     }
 }
 
-void SettingsMultisendWidget::loadWalletModel(){
-    if(walletModel){
+void SettingsMultisendWidget::loadWalletModel()
+{
+    if (walletModel) {
         multiSendModel = new MultiSendModel(this);
         ui->listView->setModel(multiSendModel);
         ui->listView->setModelColumn(MultiSendModel::ADDRESS);
@@ -212,7 +222,8 @@ void SettingsMultisendWidget::loadWalletModel(){
     }
 }
 
-void SettingsMultisendWidget::updateListState(){
+void SettingsMultisendWidget::updateListState()
+{
     if (multiSendModel->rowCount() > 0) {
         ui->listView->setVisible(true);
         ui->emptyContainer->setVisible(false);
@@ -222,8 +233,14 @@ void SettingsMultisendWidget::updateListState(){
     }
 }
 
-void SettingsMultisendWidget::clearAll(){
-    if(!verifyWalletUnlocked()) return;
+void SettingsMultisendWidget::clearAll()
+{
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot perform operation, wallet locked"));
+        return;
+    }
     std::vector<std::pair<std::string, int> > vMultiSendTemp = pwalletMain->vMultiSend;
     bool fRemoved = true;
     pwalletMain->vMultiSend.clear();
@@ -239,18 +256,25 @@ void SettingsMultisendWidget::clearAll(){
     inform(fRemoved ? tr("Clear succeed") : tr("Clear all failed, could not locate address in wallet file"));
 }
 
-void SettingsMultisendWidget::checkBoxChanged(){
+void SettingsMultisendWidget::checkBoxChanged()
+{
     pwalletMain->fMultiSendStake = ui->checkBoxStake->isChecked();
     pwalletMain->fMultiSendMasternodeReward = ui->checkBoxRewards->isChecked();
 }
 
-void SettingsMultisendWidget::onAddRecipientClicked() {
-    if(!verifyWalletUnlocked()) return;
+void SettingsMultisendWidget::onAddRecipientClicked()
+{
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot add multisend recipient, wallet locked"));
+        return;
+    }
     showHideOp(true);
     SettingsMultisendDialog* dialog = new SettingsMultisendDialog(window);
     openDialogWithOpaqueBackgroundY(dialog, window, 3, 5);
 
-    if(dialog->isOk){
+    if (dialog->isOk) {
         addMultiSend(
                 dialog->getAddress(),
                 dialog->getPercentage(),
@@ -260,7 +284,8 @@ void SettingsMultisendWidget::onAddRecipientClicked() {
     dialog->deleteLater();
 }
 
-void SettingsMultisendWidget::addMultiSend(QString address, int percentage, QString addressLabel){
+void SettingsMultisendWidget::addMultiSend(QString address, int percentage, QString addressLabel)
+{
     std::string strAddress = address.toStdString();
     if (!CBitcoinAddress(strAddress).IsValid()) {
         inform(tr("The entered address: %1 is invalid.\nPlease check the address and try again.").arg(address));
@@ -293,7 +318,7 @@ void SettingsMultisendWidget::addMultiSend(QString address, int percentage, QStr
     }
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
-    if(!walletdb.WriteMultiSend(pwalletMain->vMultiSend)) {
+    if (!walletdb.WriteMultiSend(pwalletMain->vMultiSend)) {
         inform(tr("Error saving  MultiSend, failed saving properties to the database."));
         return;
     }
@@ -303,8 +328,9 @@ void SettingsMultisendWidget::addMultiSend(QString address, int percentage, QStr
     inform("MultiSend recipient added.");
 }
 
-void SettingsMultisendWidget::activate(){
-    if(pwalletMain->isMultiSendEnabled())
+void SettingsMultisendWidget::activate()
+{
+    if (pwalletMain->isMultiSendEnabled())
         return;
     QString strRet;
     if (pwalletMain->vMultiSend.size() < 1)
@@ -326,8 +352,9 @@ void SettingsMultisendWidget::activate(){
     inform(strRet);
 }
 
-void SettingsMultisendWidget::deactivate(){
-    if(pwalletMain->isMultiSendEnabled()) {
+void SettingsMultisendWidget::deactivate()
+{
+    if (pwalletMain->isMultiSendEnabled()) {
         QString strRet;
         pwalletMain->setMultiSendDisabled();
         CWalletDB walletdb(pwalletMain->strWalletFile);
@@ -338,10 +365,12 @@ void SettingsMultisendWidget::deactivate(){
     }
 }
 
-void SettingsMultisendWidget::changeTheme(bool isLightTheme, QString& theme){
+void SettingsMultisendWidget::changeTheme(bool isLightTheme, QString& theme)
+{
     static_cast<MultiSendHolder*>(this->delegate->getRowFactory())->isLightTheme = isLightTheme;
 }
 
-SettingsMultisendWidget::~SettingsMultisendWidget(){
+SettingsMultisendWidget::~SettingsMultisendWidget()
+{
     delete ui;
 }

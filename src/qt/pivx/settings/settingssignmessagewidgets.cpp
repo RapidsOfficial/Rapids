@@ -91,7 +91,8 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
     connect(ui->pushVerify,  &QPushButton::clicked, [this](){onModeSelected(false);});
 }
 
-SettingsSignMessageWidgets::~SettingsSignMessageWidgets(){
+SettingsSignMessageWidgets::~SettingsSignMessageWidgets()
+{
     delete ui;
 }
 
@@ -100,23 +101,26 @@ void SettingsSignMessageWidgets::showEvent(QShowEvent *event)
     if (ui->addressIn_SM) ui->addressIn_SM->setFocus();
 }
 
-void SettingsSignMessageWidgets::onModeSelected(bool isSign){
+void SettingsSignMessageWidgets::onModeSelected(bool isSign)
+{
     this->isSign = isSign;
     updateMode();
 }
 
-void SettingsSignMessageWidgets::onGoClicked(){
-    if(isSign){
+void SettingsSignMessageWidgets::onGoClicked()
+{
+    if (isSign) {
         onSignMessageButtonSMClicked();
     } else {
         onVerifyMessage();
     }
 }
 
-void SettingsSignMessageWidgets::updateMode(){
+void SettingsSignMessageWidgets::updateMode()
+{
     QString subtitle;
     QString go;
-    if(isSign){
+    if (isSign) {
         subtitle = tr("You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.");
         go = tr("SIGN");
         ui->signatureOut_SM->setReadOnly(true);
@@ -130,12 +134,14 @@ void SettingsSignMessageWidgets::updateMode(){
     ui->pushButtonSave->setText(go);
 }
 
-void SettingsSignMessageWidgets::setAddress_SM(const QString& address){
+void SettingsSignMessageWidgets::setAddress_SM(const QString& address)
+{
     ui->addressIn_SM->setText(address);
     ui->messageIn_SM->setFocus();
 }
 
-void SettingsSignMessageWidgets::onAddressBookButtonSMClicked(){
+void SettingsSignMessageWidgets::onAddressBookButtonSMClicked()
+{
     if (walletModel && walletModel->getAddressTableModel()) {
         AddressBookPage dlg(AddressBookPage::ForSelection, AddressBookPage::ReceivingTab, this);
         dlg.setModel(walletModel->getAddressTableModel());
@@ -145,19 +151,21 @@ void SettingsSignMessageWidgets::onAddressBookButtonSMClicked(){
     }
 }
 
-void SettingsSignMessageWidgets::onPasteButtonSMClicked(){
+void SettingsSignMessageWidgets::onPasteButtonSMClicked()
+{
     setAddress_SM(QApplication::clipboard()->text());
 }
 
-void SettingsSignMessageWidgets::onClearAll() {
+void SettingsSignMessageWidgets::onClearAll()
+{
     ui->addressIn_SM->clear();
     ui->signatureOut_SM->clear();
     ui->messageIn_SM->clear();
     ui->statusLabel_SM->setStyleSheet("QLabel { color: transparent; }");
 }
 
-void SettingsSignMessageWidgets::onSignMessageButtonSMClicked(){
-
+void SettingsSignMessageWidgets::onSignMessageButtonSMClicked()
+{
     if (!walletModel)
         return;
 
@@ -179,7 +187,7 @@ void SettingsSignMessageWidgets::onSignMessageButtonSMClicked(){
         return;
     }
 
-    WalletModel::UnlockContext ctx(walletModel->requestUnlock(AskPassphraseDialog::Context::Sign_Message, true));
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
     if (!ctx.isValid()) {
         ui->statusLabel_SM->setStyleSheet("QLabel { color: red; }");
         ui->statusLabel_SM->setText(tr("Wallet unlock was cancelled."));
@@ -210,8 +218,8 @@ void SettingsSignMessageWidgets::onSignMessageButtonSMClicked(){
     ui->signatureOut_SM->setText(QString::fromStdString(EncodeBase64(&vchSig[0], vchSig.size())));
 }
 
-void SettingsSignMessageWidgets::onVerifyMessage(){
-
+void SettingsSignMessageWidgets::onVerifyMessage()
+{
     /**
      * ui->addressIn_SM->clear();
     ui->signatureOut_SM->clear();
@@ -265,9 +273,10 @@ void SettingsSignMessageWidgets::onVerifyMessage(){
     ui->statusLabel_SM->setText(QString("<nobr>") + tr("Message verified.") + QString("</nobr>"));
 }
 
-void SettingsSignMessageWidgets::onAddressesClicked(){
+void SettingsSignMessageWidgets::onAddressesClicked()
+{
     int addressSize = walletModel->getAddressTableModel()->sizeRecv();
-    if(addressSize == 0) {
+    if (addressSize == 0) {
         inform(tr("No addresses available, you can go to the receive screen and add some there!"));
         return;
     }
@@ -275,7 +284,7 @@ void SettingsSignMessageWidgets::onAddressesClicked(){
     int height = (addressSize <= 2) ? ui->addressIn_SM->height() * ( 2 * (addressSize + 1 )) : ui->addressIn_SM->height() * 4;
     int width = ui->containerAddress->width();
 
-    if(!menuContacts){
+    if (!menuContacts) {
         menuContacts = new ContactsDropdown(
                 width,
                 height,
@@ -288,7 +297,7 @@ void SettingsSignMessageWidgets::onAddressesClicked(){
 
     }
 
-    if(menuContacts->isVisible()){
+    if (menuContacts->isVisible()) {
         menuContacts->hide();
         return;
     }
@@ -303,8 +312,9 @@ void SettingsSignMessageWidgets::onAddressesClicked(){
     menuContacts->show();
 }
 
-void SettingsSignMessageWidgets::resizeMenu(){
-    if(menuContacts && menuContacts->isVisible()){
+void SettingsSignMessageWidgets::resizeMenu()
+{
+    if (menuContacts && menuContacts->isVisible()) {
         int width = ui->containerAddress->width();
         menuContacts->resizeList(width, menuContacts->height());
         menuContacts->resize(width, menuContacts->height());
@@ -314,7 +324,8 @@ void SettingsSignMessageWidgets::resizeMenu(){
     }
 }
 
-void SettingsSignMessageWidgets::resizeEvent(QResizeEvent *event){
+void SettingsSignMessageWidgets::resizeEvent(QResizeEvent *event)
+{
     resizeMenu();
     QWidget::resizeEvent(event);
 }
