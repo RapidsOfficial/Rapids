@@ -162,7 +162,6 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/tooltipmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/addresseswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/defaultdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/denomgenerationdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/privacywidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/coldstakingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/settings/settingsbackupwallet.cpp
