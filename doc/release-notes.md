@@ -141,7 +141,11 @@ The following commands have been removed from the RPC interface:
 ### Newly introduced commands
 
 The following new commands have been added to the RPC interface:
-- `...`
+- `logging` <br>Gets and sets the logging configuration.<br>
+When called without an argument, returns the list of categories that are currently being debug logged.<br>
+When called with arguments, adds or removes categories from debug logging.<br>
+E.g. `logging "[\"all\"]" "[\"http\"]""`
+
 
 Details about each new command can be found below.
 
