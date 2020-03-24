@@ -150,6 +150,12 @@ E.g. `logging "[\"all\"]" "[\"http\"]""`
 Details about each new command can be found below.
 
 
+Changed command-line options
+-----------------------------
+
+- `-debuglogfile=<file>` can be used to specify an alternative debug logging file. This can be an absolute path or a path relative to the data directory
+
+
 *version* Change log
 ==============
 
