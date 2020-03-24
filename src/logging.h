@@ -18,12 +18,12 @@
 
 #include <boost/filesystem.hpp>
 
-extern bool fPrintToConsole;
-extern bool fPrintToDebugLog;
+static const bool DEFAULT_LOGTIMEMICROS = false;
+static const bool DEFAULT_LOGIPS        = false;
+static const bool DEFAULT_LOGTIMESTAMPS = true;
+extern const char * const DEFAULT_DEBUGLOGFILE;
 
-extern bool fLogTimestamps;
 extern bool fLogIPs;
-extern std::atomic<bool> fReopenDebugLog;
 
 extern std::atomic<uint32_t> logCategories;
 
@@ -63,7 +63,38 @@ namespace BCLog {
         LEGACYZC    = (1 << 24),
         ALL         = ~(uint32_t)0,
     };
-}
+
+    class Logger
+    {
+    private:
+        /**
+         * fStartedNewLine is a state variable that will suppress printing of
+         * the timestamp when multiple calls are made that don't end in a
+         * newline.
+         */
+        std::atomic_bool fStartedNewLine{true};
+
+        std::string LogTimestampStr(const std::string& str);
+
+    public:
+        bool fPrintToConsole = false;
+        bool fPrintToDebugLog = true;
+
+        bool fLogTimestamps = DEFAULT_LOGTIMESTAMPS;
+        bool fLogTimeMicros = DEFAULT_LOGTIMEMICROS;
+
+        std::atomic<bool> fReopenDebugLog{false};
+
+        /** Send a string to the log output */
+        int LogPrintStr(const std::string &str);
+
+        /** Returns whether logs will be written to any output */
+        bool Enabled() const { return fPrintToConsole || fPrintToDebugLog; }
+    };
+
+} // namespace BCLog
+
+extern BCLog::Logger* const g_logger;
 
 /** Return true if log accepts specified category */
 static inline bool LogAcceptCategory(uint32_t category)
@@ -80,9 +111,6 @@ std::vector<CLogCategoryActive> ListActiveLogCategories();
 /** Return true if str parses as a log category and set the flags in f */
 bool GetLogCategory(uint32_t *f, const std::string *str);
 
-/** Send a string to the log output */
-int LogPrintStr(const std::string& str);
-
 /** Get format string from VA_ARGS for error reporting */
 template<typename... Args> std::string FormatStringFromLogArgs(const char *fmt, const Args&... args) { return fmt; }
 
@@ -91,14 +119,18 @@ template<typename... Args> std::string FormatStringFromLogArgs(const char *fmt, 
 // peer can fill up a user's disk with debug.log entries.
 
 #define LogPrintf(...) do {                                                         \
-    std::string _log_msg_; /* Unlikely name to avoid shadowing variables */         \
-    try {                                                                           \
-        _log_msg_ = tfm::format(__VA_ARGS__);                                       \
-    } catch (tinyformat::format_error &e) {                                               \
-        /* Original format string will have newline so don't add one here */        \
-        _log_msg_ = "Error \"" + std::string(e.what()) + "\" while formatting log message: " + FormatStringFromLogArgs(__VA_ARGS__); \
+    if(g_logger->Enabled()) {                                                       \
+        std::string _log_msg_; /* Unlikely name to avoid shadowing variables */     \
+        try {                                                                       \
+            _log_msg_ = tfm::format(__VA_ARGS__);                                   \
+        } catch (tinyformat::format_error &e) {                                     \
+            /* Original format string will have newline so don't add one here */    \
+            _log_msg_ = "Error \"" + std::string(e.what()) +                        \
+                        "\" while formatting log message: " +                       \
+                        FormatStringFromLogArgs(__VA_ARGS__);                       \
+        }                                                                           \
+        g_logger->LogPrintStr(_log_msg_);                                           \
     }                                                                               \
-    LogPrintStr(_log_msg_);                                                         \
 } while(0)
 
 #define LogPrint(category, ...) do {                                                \
