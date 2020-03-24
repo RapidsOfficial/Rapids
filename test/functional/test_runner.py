@@ -66,10 +66,10 @@ BASE_SCRIPTS= [
     'wallet_abandonconflict.py',                # ~ 212 sec
     'wallet_hd.py',                             # ~ 210 sec
     'wallet_zerocoin_publicspends.py',          # ~ 202 sec
+    'feature_logging.py',                       # ~ 200 sec
     'rpc_rawtransaction.py',                    # ~ 193 sec
     'wallet_zapwallettxes.py',                  # ~ 180 sec
     'wallet_keypool_topup.py',                  # ~ 174 sec
-    'feature_logging.py',                       # ~ 166 sec
     'wallet_txn_doublespend.py --mineblock',    # ~ 157 sec
     'wallet_txn_clone.py --mineblock',          # ~ 157 sec
     'rpc_spork.py',                             # ~ 156 sec
