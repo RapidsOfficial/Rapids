@@ -102,6 +102,9 @@ bool fSucessfullyLoaded = false;
 std::vector<int64_t> obfuScationDenominations;
 std::string strBudgetMode = "";
 
+const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
+namespace fs = boost::filesystem;
+
 std::map<std::string, std::string> mapArgs;
 std::map<std::string, std::vector<std::string> > mapMultiArgs;
 bool fPrintToConsole = false;
@@ -203,17 +206,29 @@ static void DebugPrintInit()
     vMsgsBeforeOpenLog = new std::list<std::string>;
 }
 
-void OpenDebugLog()
+fs::path GetDebugLogPath()
+{
+    fs::path logfile(GetArg("-debuglogfile", DEFAULT_DEBUGLOGFILE));
+    if (logfile.is_absolute()) {
+        return logfile;
+    } else {
+        return GetDataDir() / logfile;
+    }
+}
+
+bool OpenDebugLog()
 {
     boost::call_once(&DebugPrintInit, debugPrintInitFlag);
     boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
     assert(fileout == nullptr);
     assert(vMsgsBeforeOpenLog);
 
-    boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
-    fileout = fopen(pathDebug.string().c_str(), "a");
-    if (fileout) setbuf(fileout, nullptr); // unbuffered
+    boost::filesystem::path pathDebug = GetDebugLogPath();
 
+    fileout = fopen(pathDebug.string().c_str(), "a");
+    if (!fileout) return false;
+
+    setbuf(fileout, nullptr); // unbuffered
     // dump buffered messages from before we opened the log
     while (!vMsgsBeforeOpenLog->empty()) {
         FileWriteStr(vMsgsBeforeOpenLog->front(), fileout);
@@ -222,6 +237,7 @@ void OpenDebugLog()
 
     delete vMsgsBeforeOpenLog;
     vMsgsBeforeOpenLog = nullptr;
+    return true;
 }
 
 struct CLogCategoryDesc
@@ -357,7 +373,7 @@ int LogPrintStr(const std::string& str)
             // reopen the log file, if requested
             if (fReopenDebugLog) {
                 fReopenDebugLog = false;
-                boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
+                boost::filesystem::path pathDebug = GetDebugLogPath();
                 if (freopen(pathDebug.string().c_str(),"a",fileout) != NULL)
                     setbuf(fileout, NULL); // unbuffered
             }
@@ -497,7 +513,6 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 
 boost::filesystem::path GetDefaultDataDir()
 {
-    namespace fs = boost::filesystem;
 // Windows < Vista: C:\Documents and Settings\Username\Application Data\PIVX
 // Windows >= Vista: C:\Users\Username\AppData\Roaming\PIVX
 // Mac: ~/Library/Application Support/PIVX
@@ -524,14 +539,12 @@ boost::filesystem::path GetDefaultDataDir()
 #endif
 }
 
-static boost::filesystem::path pathCached;
-static boost::filesystem::path pathCachedNetSpecific;
+static fs::path pathCached;
+static fs::path pathCachedNetSpecific;
 static RecursiveMutex csPathCached;
 
-const boost::filesystem::path& GetDataDir(bool fNetSpecific)
+const fs::path& GetDataDir(bool fNetSpecific)
 {
-    namespace fs = boost::filesystem;
-
     LOCK(csPathCached);
 
     fs::path& path = fNetSpecific ? pathCachedNetSpecific : pathCached;
@@ -755,7 +768,7 @@ void AllocateFileRange(FILE* file, unsigned int offset, unsigned int length)
 void ShrinkDebugFile()
 {
     // Scroll debug.log if it's getting too big
-    boost::filesystem::path pathLog = GetDataDir() / "debug.log";
+    boost::filesystem::path pathLog = GetDebugLogPath();
     FILE* file = fopen(pathLog.string().c_str(), "r");
     if (file && boost::filesystem::file_size(pathLog) > 10 * 1000000) {
         // Restart the file with some of the end
@@ -776,8 +789,6 @@ void ShrinkDebugFile()
 #ifdef WIN32
 boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate)
 {
-    namespace fs = boost::filesystem;
-
     char pszPath[MAX_PATH] = "";
 
     if (SHGetSpecialFolderPathA(NULL, pszPath, nFolder, fCreate)) {

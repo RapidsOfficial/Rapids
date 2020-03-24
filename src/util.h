@@ -32,6 +32,8 @@
 #include <boost/thread/exceptions.hpp>
 #include <boost/thread/condition_variable.hpp> // for boost::thread_interrupted
 
+extern const char * const DEFAULT_DEBUGLOGFILE;
+
 //PIVX only features
 
 extern bool fMasterNode;
@@ -161,7 +163,8 @@ void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet, std::map
 boost::filesystem::path GetSpecialFolderPath(int nFolder, bool fCreate = true);
 #endif
 boost::filesystem::path GetTempPath();
-void OpenDebugLog();
+boost::filesystem::path GetDebugLogPath();
+bool OpenDebugLog();
 void ShrinkDebugFile();
 void runCommand(std::string strCommand);
 
