@@ -9,9 +9,6 @@
 #include "util.h"
 #include "utilstrencodings.h"
 
-#include <list>
-#include <mutex>
-
 #include <boost/filesystem/fstream.hpp>
 
 const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
@@ -38,40 +35,12 @@ bool fLogIPs = DEFAULT_LOGIPS;
 /** Log categories bitfield. Leveldb/libevent need special handling if their flags are changed at runtime. */
 std::atomic<uint32_t> logCategories(0);
 
-/**
- * LogPrintf() has been broken a couple of times now
- * by well-meaning people adding mutexes in the most straightforward way.
- * It breaks because it may be called by global destructors during shutdown.
- * Since the order of destruction of static/global objects is undefined,
- * defining a mutex as a global object doesn't work (the mutex gets
- * destroyed, and then some later destructor calls OutputDebugStringF,
- * maybe indirectly, and you get a core dump at shutdown trying to lock
- * the mutex).
- */
-
-static boost::once_flag debugPrintInitFlag = BOOST_ONCE_INIT;
-
-/**
- * We use boost::call_once() to make sure these are initialized
- * in a thread-safe manner the first time called:
- */
-static FILE* fileout = nullptr;
-static boost::mutex* mutexDebugLog = nullptr;
-static std::list<std::string> *vMsgsBeforeOpenLog;
-
 static int FileWriteStr(const std::string &str, FILE *fp)
 {
     return fwrite(str.data(), 1, str.size(), fp);
 }
 
-static void DebugPrintInit()
-{
-    assert(mutexDebugLog == nullptr);
-    mutexDebugLog = new boost::mutex();
-    vMsgsBeforeOpenLog = new std::list<std::string>;
-}
-
-fs::path GetDebugLogPath()
+fs::path BCLog::Logger::GetDebugLogPath() const
 {
     fs::path logfile(GetArg("-debuglogfile", DEFAULT_DEBUGLOGFILE));
     if (logfile.is_absolute()) {
@@ -81,12 +50,10 @@ fs::path GetDebugLogPath()
     }
 }
 
-bool OpenDebugLog()
+bool BCLog::Logger::OpenDebugLog()
 {
-    boost::call_once(&DebugPrintInit, debugPrintInitFlag);
-    boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
+    std::lock_guard<std::mutex> scoped_lock(mutexDebugLog);
     assert(fileout == nullptr);
-    assert(vMsgsBeforeOpenLog);
 
     fs::path pathDebug = GetDebugLogPath();
 
@@ -95,13 +62,11 @@ bool OpenDebugLog()
 
     setbuf(fileout, nullptr); // unbuffered
     // dump buffered messages from before we opened the log
-    while (!vMsgsBeforeOpenLog->empty()) {
-        FileWriteStr(vMsgsBeforeOpenLog->front(), fileout);
-        vMsgsBeforeOpenLog->pop_front();
+    while (!vMsgsBeforeOpenLog.empty()) {
+        FileWriteStr(vMsgsBeforeOpenLog.front(), fileout);
+        vMsgsBeforeOpenLog.pop_front();
     }
 
-    delete vMsgsBeforeOpenLog;
-    vMsgsBeforeOpenLog = nullptr;
     return true;
 }
 
@@ -217,16 +182,14 @@ int BCLog::Logger::LogPrintStr(const std::string &str)
         ret = fwrite(str.data(), 1, str.size(), stdout);
         fflush(stdout);
     } else if (fPrintToDebugLog) {
-        boost::call_once(&DebugPrintInit, debugPrintInitFlag);
-        boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
+        std::lock_guard<std::mutex> scoped_lock(mutexDebugLog);
 
         std::string strTimestamped = LogTimestampStr(str);
 
         // buffer if we haven't opened the log yet
         if (fileout == NULL) {
-            assert(vMsgsBeforeOpenLog);
             ret = strTimestamped.length();
-            vMsgsBeforeOpenLog->push_back(strTimestamped);
+            vMsgsBeforeOpenLog.push_back(strTimestamped);
 
         } else {
             // reopen the log file, if requested
@@ -244,7 +207,7 @@ int BCLog::Logger::LogPrintStr(const std::string &str)
     return ret;
 }
 
-void ShrinkDebugFile()
+void BCLog::Logger::ShrinkDebugFile()
 {
     // Scroll debug.log if it's getting too big
     fs::path pathLog = GetDebugLogPath();
