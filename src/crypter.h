@@ -154,6 +154,9 @@ protected:
 
     CryptedKeyMap mapCryptedKeys;
 
+    // Unlock Sapling keys
+    bool UnlockSaplingKeys(const CKeyingMaterial& vMasterKeyIn, bool fDecryptionThoroughlyChecked);
+
 public:
     CCryptoKeyStore() : fUseCrypto(false) { }
 

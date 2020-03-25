@@ -120,3 +120,32 @@ bool CCryptoKeyStore::EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn)
     mapSaplingSpendingKeys.clear();
     return true;
 }
+
+bool CCryptoKeyStore::UnlockSaplingKeys(const CKeyingMaterial& vMasterKeyIn, bool fDecryptionThoroughlyChecked)
+{
+    bool keyFail = false;
+    bool keyPass = false;
+    CryptedSaplingSpendingKeyMap::const_iterator miSapling = mapCryptedSaplingSpendingKeys.begin();
+    for (; miSapling != mapCryptedSaplingSpendingKeys.end(); ++miSapling) {
+        const libzcash::SaplingFullViewingKey &fvk = (*miSapling).first;
+        const std::vector<unsigned char> &vchCryptedSecret = (*miSapling).second;
+        libzcash::SaplingSpendingKey sk;
+        if (!DecryptSaplingSpendingKey(vMasterKeyIn, vchCryptedSecret, fvk, sk))
+        {
+            keyFail = true;
+            break;
+        }
+        keyPass = true;
+        if (fDecryptionThoroughlyChecked)
+            break;
+    }
+
+    if (keyPass && keyFail) {
+        LogPrintf("Sapling wallet is probably corrupted: Some keys decrypt but not all.");
+        throw std::runtime_error("Error unlocking sapling wallet: some keys decrypt but not all. Your wallet file may be corrupt.");
+    }
+    if (keyFail || !keyPass)
+        return false;
+
+    return true;
+}
