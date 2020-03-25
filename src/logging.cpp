@@ -48,19 +48,19 @@ fs::path BCLog::Logger::GetDebugLogPath() const
 
 bool BCLog::Logger::OpenDebugLog()
 {
-    std::lock_guard<std::mutex> scoped_lock(mutexDebugLog);
-    assert(fileout == nullptr);
+    std::lock_guard<std::mutex> scoped_lock(m_file_mutex);
+    assert(m_fileout == nullptr);
 
     fs::path pathDebug = GetDebugLogPath();
 
-    fileout = fopen(pathDebug.string().c_str(), "a");
-    if (!fileout) return false;
+    m_fileout = fopen(pathDebug.string().c_str(), "a");
+    if (!m_fileout) return false;
 
-    setbuf(fileout, nullptr); // unbuffered
+    setbuf(m_fileout, nullptr); // unbuffered
     // dump buffered messages from before we opened the log
-    while (!vMsgsBeforeOpenLog.empty()) {
-        FileWriteStr(vMsgsBeforeOpenLog.front(), fileout);
-        vMsgsBeforeOpenLog.pop_front();
+    while (!m_msgs_before_open.empty()) {
+        FileWriteStr(m_msgs_before_open.front(), m_fileout);
+        m_msgs_before_open.pop_front();
     }
 
     return true;
@@ -68,7 +68,7 @@ bool BCLog::Logger::OpenDebugLog()
 
 void BCLog::Logger::EnableCategory(BCLog::LogFlags flag)
 {
-    logCategories |= flag;
+    m_categories |= flag;
 }
 
 bool BCLog::Logger::EnableCategory(const std::string& str)
@@ -81,7 +81,7 @@ bool BCLog::Logger::EnableCategory(const std::string& str)
 
 void BCLog::Logger::DisableCategory(BCLog::LogFlags flag)
 {
-    logCategories &= ~flag;
+    m_categories &= ~flag;
 }
 
 bool BCLog::Logger::DisableCategory(const std::string& str)
@@ -94,12 +94,12 @@ bool BCLog::Logger::DisableCategory(const std::string& str)
 
 bool BCLog::Logger::WillLogCategory(BCLog::LogFlags category) const
 {
-    return (logCategories.load(std::memory_order_relaxed) & category) != 0;
+    return (m_categories.load(std::memory_order_relaxed) & category) != 0;
 }
 
 bool BCLog::Logger::DefaultShrinkDebugFile() const
 {
-    return logCategories == BCLog::NONE;
+    return m_categories == BCLog::NONE;
 }
 
 struct CLogCategoryDesc
@@ -188,18 +188,18 @@ std::string BCLog::Logger::LogTimestampStr(const std::string &str)
 {
     std::string strStamped;
 
-    if (!fLogTimestamps)
+    if (!m_log_timestamps)
         return str;
 
-    if (fStartedNewLine)
+    if (m_started_new_line)
         strStamped =  DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()) + ' ' + str;
     else
         strStamped = str;
 
     if (!str.empty() && str[str.size()-1] == '\n')
-        fStartedNewLine = true;
+        m_started_new_line = true;
     else
-        fStartedNewLine = false;
+        m_started_new_line = false;
 
     return strStamped;
 }
@@ -207,30 +207,30 @@ std::string BCLog::Logger::LogTimestampStr(const std::string &str)
 int BCLog::Logger::LogPrintStr(const std::string &str)
 {
     int ret = 0; // Returns total number of characters written
-    if (fPrintToConsole) {
+    if (m_print_to_console) {
         // print to console
         ret = fwrite(str.data(), 1, str.size(), stdout);
         fflush(stdout);
-    } else if (fPrintToDebugLog) {
-        std::lock_guard<std::mutex> scoped_lock(mutexDebugLog);
+    } else if (m_print_to_file) {
+        std::lock_guard<std::mutex> scoped_lock(m_file_mutex);
 
         std::string strTimestamped = LogTimestampStr(str);
 
         // buffer if we haven't opened the log yet
-        if (fileout == NULL) {
+        if (m_fileout == NULL) {
             ret = strTimestamped.length();
-            vMsgsBeforeOpenLog.push_back(strTimestamped);
+            m_msgs_before_open.push_back(strTimestamped);
 
         } else {
             // reopen the log file, if requested
-            if (fReopenDebugLog) {
-                fReopenDebugLog = false;
+            if (m_reopen_file) {
+                m_reopen_file = false;
                 fs::path pathDebug = GetDebugLogPath();
-                if (freopen(pathDebug.string().c_str(),"a",fileout) != NULL)
-                    setbuf(fileout, NULL); // unbuffered
+                if (freopen(pathDebug.string().c_str(),"a",m_fileout) != NULL)
+                    setbuf(m_fileout, NULL); // unbuffered
             }
 
-            ret = FileWriteStr(strTimestamped, fileout);
+            ret = FileWriteStr(strTimestamped, m_fileout);
         }
     }
 

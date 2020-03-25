@@ -311,7 +311,7 @@ void HandleSIGTERM(int)
 
 void HandleSIGHUP(int)
 {
-    g_logger->fReopenDebugLog = true;
+    g_logger->m_reopen_file = true;
 }
 
 #ifndef WIN32
@@ -901,11 +901,11 @@ static std::string ResolveErrMsg(const char * const optname, const std::string& 
 
 void InitLogging()
 {
-    g_logger->fPrintToConsole = GetBoolArg("-printtoconsole", !GetBoolArg("-daemon", false));
-    //g_logger->fPrintToDebugLog = !IsArgNegated("-debuglogfile");
-    g_logger->fPrintToDebugLog = true;
-    g_logger->fLogTimestamps = GetBoolArg("-logtimestamps", DEFAULT_LOGTIMESTAMPS);
-    g_logger->fLogTimeMicros = GetBoolArg("-logtimemicros", DEFAULT_LOGTIMEMICROS);
+    g_logger->m_print_to_console = GetBoolArg("-printtoconsole", !GetBoolArg("-daemon", false));
+    //g_logger->m_print_to_file = !IsArgNegated("-debuglogfile");
+    g_logger->m_print_to_file = true;
+    g_logger->m_log_timestamps = GetBoolArg("-logtimestamps", DEFAULT_LOGTIMESTAMPS);
+    g_logger->m_log_time_micros = GetBoolArg("-logtimemicros", DEFAULT_LOGTIMEMICROS);
 
     fLogIPs = GetBoolArg("-logips", DEFAULT_LOGIPS);
 
@@ -1062,7 +1062,7 @@ bool AppInit2()
 #ifndef WIN32
     CreatePidFile(GetPidFile(), getpid());
 #endif
-    if (g_logger->fPrintToDebugLog) {
+    if (g_logger->m_print_to_file) {
         if (GetBoolArg("-shrinkdebugfile", g_logger->DefaultShrinkDebugFile()))
             g_logger->ShrinkDebugFile();
         if (!g_logger->OpenDebugLog())
@@ -1071,7 +1071,7 @@ bool AppInit2()
 #ifdef ENABLE_WALLET
     LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
 #endif
-    if (!g_logger->fLogTimestamps)
+    if (!g_logger->m_log_timestamps)
         LogPrintf("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
     LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
     LogPrintf("Using data directory %s\n", strDataDir);
