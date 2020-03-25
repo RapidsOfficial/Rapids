@@ -941,11 +941,9 @@ bool AppInit2()
     if (!(GetBoolArg("-nodebug", false) ||
             find(categories.begin(), categories.end(), std::string("0")) != categories.end())) {
         for (const auto& cat : categories) {
-            uint32_t flag;
-            if (!GetLogCategory(&flag, &cat)) {
+            if (!g_logger->EnableCategory(cat)) {
                 UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debug", cat));
             }
-            g_logger->EnableCategory(static_cast<BCLog::LogFlags>(flag));
         }
     }
 
@@ -953,11 +951,9 @@ bool AppInit2()
     if (mapMultiArgs.count("-debugexclude") > 0) {
         const std::vector<std::string>& excludedCategories = mapMultiArgs.at("-debugexclude");
         for (const auto& cat : excludedCategories) {
-            uint32_t flag;
-            if (!GetLogCategory(&flag, &cat)) {
+            if (!g_logger->DisableCategory(cat)) {
                 UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debugexclude", cat));
             }
-            g_logger->DisableCategory(static_cast<BCLog::LogFlags>(flag));
         }
     }
 
