@@ -55,6 +55,19 @@ bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &sk)
     return true;
 }
 
+bool CWallet::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
+                                           const std::vector<unsigned char> &vchCryptedSecret)
+{
+    if (!CCryptoKeyStore::AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret))
+        return false;
+    if (!fFileBacked)
+        return true;
+    {
+        // TODO: Sapling - Write to disk
+    }
+    return false;
+}
+
 bool CWallet::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const
 {
     libzcash::SaplingIncomingViewingKey ivk;

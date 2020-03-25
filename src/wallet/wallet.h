@@ -396,6 +396,8 @@ public:
     libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
     //! Adds Sapling spending key to the store, and saves it to disk
     bool AddSaplingZKey(const libzcash::SaplingSpendingKey &key);
+    bool AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
+                                      const std::vector<unsigned char> &vchCryptedSecret);
     //! Returns true if the wallet contains the spending key
     bool HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const;
 
