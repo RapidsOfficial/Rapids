@@ -138,6 +138,9 @@ private:
     //! if fUseCrypto is false, vMasterKey must be empty
     bool fUseCrypto;
 
+    // Sapling
+    bool EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn);
+
 protected:
     // TODO: In the future, move this variable to the wallet class directly following upstream's structure.
     CKeyingMaterial vMasterKey;

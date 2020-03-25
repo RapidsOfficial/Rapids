@@ -100,3 +100,23 @@ bool CCryptoKeyStore::HaveSaplingSpendingKey(const libzcash::SaplingFullViewingK
     }
     return false;
 }
+
+bool CCryptoKeyStore::EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn)
+{
+    for (SaplingSpendingKeyMap::value_type& mSaplingSpendingKey : mapSaplingSpendingKeys) {
+        const libzcash::SaplingSpendingKey &sk = mSaplingSpendingKey.second;
+        CSecureDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+        ss << sk;
+        CKeyingMaterial vchSecret(ss.begin(), ss.end());
+        libzcash::SaplingFullViewingKey fvk = sk.full_viewing_key();
+        std::vector<unsigned char> vchCryptedSecret;
+        if (!EncryptSecret(vMasterKeyIn, vchSecret, fvk.GetFingerprint(), vchCryptedSecret)) {
+            return false;
+        }
+        if (!AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret)) {
+            return false;
+        }
+    }
+    mapSaplingSpendingKeys.clear();
+    return true;
+}

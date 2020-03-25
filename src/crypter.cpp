@@ -232,6 +232,9 @@ bool CCryptoKeyStore::EncryptKeys(CKeyingMaterial& vMasterKeyIn)
                 return false;
         }
         mapKeys.clear();
+
+        // Now Sapling keys
+        return EncryptSaplingKeys(vMasterKeyIn);
     }
     return true;
 }
