@@ -28,8 +28,6 @@ extern const char * const DEFAULT_DEBUGLOGFILE;
 
 extern bool fLogIPs;
 
-extern std::atomic<uint32_t> logCategories;
-
 struct CLogCategoryActive
 {
     std::string category;
@@ -81,6 +79,9 @@ namespace BCLog {
          */
         std::atomic_bool fStartedNewLine{true};
 
+        /** Log categories bitfield. */
+        std::atomic<uint32_t> logCategories{0};
+
         std::string LogTimestampStr(const std::string& str);
 
     public:
@@ -101,6 +102,13 @@ namespace BCLog {
         boost::filesystem::path GetDebugLogPath() const;
         bool OpenDebugLog();
         void ShrinkDebugFile();
+
+        uint32_t GetCategoryMask() const { return logCategories.load(); }
+        void EnableCategory(LogFlags flag);
+        void DisableCategory(LogFlags flag);
+        bool WillLogCategory(LogFlags category) const;
+
+        bool DefaultShrinkDebugFile() const;
     };
 
 } // namespace BCLog
@@ -108,9 +116,9 @@ namespace BCLog {
 extern BCLog::Logger* const g_logger;
 
 /** Return true if log accepts specified category */
-static inline bool LogAcceptCategory(uint32_t category)
+static inline bool LogAcceptCategory(BCLog::LogFlags category)
 {
-    return (logCategories.load(std::memory_order_relaxed) & category) != 0;
+    return g_logger->WillLogCategory(category);
 }
 
 /** Returns a string with the supported log categories */

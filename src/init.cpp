@@ -942,10 +942,10 @@ bool AppInit2()
             find(categories.begin(), categories.end(), std::string("0")) != categories.end())) {
         for (const auto& cat : categories) {
             uint32_t flag;
-            if (!GetLogCategory(&flag, &cat))
+            if (!GetLogCategory(&flag, &cat)) {
                 UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debug", cat));
-            else
-                logCategories |= flag;
+            }
+            g_logger->EnableCategory(static_cast<BCLog::LogFlags>(flag));
         }
     }
 
@@ -954,10 +954,10 @@ bool AppInit2()
         const std::vector<std::string>& excludedCategories = mapMultiArgs.at("-debugexclude");
         for (const auto& cat : excludedCategories) {
             uint32_t flag;
-            if (!GetLogCategory(&flag, &cat))
+            if (!GetLogCategory(&flag, &cat)) {
                 UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debugexclude", cat));
-            else
-                logCategories &= ~flag;
+            }
+            g_logger->DisableCategory(static_cast<BCLog::LogFlags>(flag));
         }
     }
 
@@ -1067,7 +1067,7 @@ bool AppInit2()
     CreatePidFile(GetPidFile(), getpid());
 #endif
     if (g_logger->fPrintToDebugLog) {
-        if (GetBoolArg("-shrinkdebugfile", logCategories != BCLog::NONE))
+        if (GetBoolArg("-shrinkdebugfile", g_logger->DefaultShrinkDebugFile()))
             g_logger->ShrinkDebugFile();
         if (!g_logger->OpenDebugLog())
             return UIError(strprintf("Could not open debug log file %s", g_logger->GetDebugLogPath().string()));

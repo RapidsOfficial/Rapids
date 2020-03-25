@@ -587,18 +587,23 @@ UniValue setmocktime(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
-uint32_t getCategoryMask(UniValue cats) {
+void EnableOrDisableLogCategories(UniValue cats, bool enable) {
     cats = cats.get_array();
-    uint32_t mask = 0;
     for (unsigned int i = 0; i < cats.size(); ++i) {
         uint32_t flag = 0;
         std::string cat = cats[i].get_str();
         if (!GetLogCategory(&flag, &cat)) {
             throw JSONRPCError(RPC_INVALID_PARAMETER, "unknown logging category " + cat);
         }
-        mask |= flag;
+        if (flag == BCLog::NONE) {
+            return;
+        }
+        if (enable) {
+            g_logger->EnableCategory(static_cast<BCLog::LogFlags>(flag));
+        } else {
+            g_logger->DisableCategory(static_cast<BCLog::LogFlags>(flag));
+        }
     }
-    return mask;
 }
 
 UniValue logging(const UniValue& params, bool fHelp)
@@ -621,25 +626,26 @@ UniValue logging(const UniValue& params, bool fHelp)
         );
     }
 
-    uint32_t originalLogCategories = logCategories;
+    uint32_t original_log_categories = g_logger->GetCategoryMask();
     if (params.size() > 0 && params[0].isArray()) {
-        logCategories |= getCategoryMask(params[0]);
+        EnableOrDisableLogCategories(params[0], true);
     }
 
     if (params.size() > 1 && params[1].isArray()) {
-        logCategories &= ~getCategoryMask(params[1]);
+        EnableOrDisableLogCategories(params[1], false);
     }
+    uint32_t updated_log_categories = g_logger->GetCategoryMask();
+    uint32_t changed_log_categories = original_log_categories ^ updated_log_categories;
 
     // Update libevent logging if BCLog::LIBEVENT has changed.
     // If the library version doesn't allow it, UpdateHTTPServerLogging() returns false,
     // in which case we should clear the BCLog::LIBEVENT flag.
     // Throw an error if the user has explicitly asked to change only the libevent
     // flag and it failed.
-    uint32_t changedLogCategories = originalLogCategories ^ logCategories;
-    if (changedLogCategories & BCLog::LIBEVENT) {
-        if (!UpdateHTTPServerLogging(logCategories & BCLog::LIBEVENT)) {
-            logCategories &= ~BCLog::LIBEVENT;
-            if (changedLogCategories == BCLog::LIBEVENT) {
+    if (changed_log_categories & BCLog::LIBEVENT) {
+        if (!UpdateHTTPServerLogging(g_logger->WillLogCategory(BCLog::LIBEVENT))) {
+            g_logger->DisableCategory(BCLog::LIBEVENT);
+            if (changed_log_categories == BCLog::LIBEVENT) {
             throw JSONRPCError(RPC_INVALID_PARAMETER, "libevent logging cannot be updated when using libevent before v2.1.1.");
             }
         }
