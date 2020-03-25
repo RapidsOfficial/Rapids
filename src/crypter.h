@@ -134,7 +134,7 @@ bool DecryptSecret(const CKeyingMaterial& vMasterKey, const std::vector<unsigned
 class CCryptoKeyStore : public CBasicKeyStore
 {
 private:
-    //! if fUseCrypto is true, mapKeys must be empty
+    //! if fUseCrypto is true, mapKeys and mapSaplingSpendingKeys must be empty
     //! if fUseCrypto is false, vMasterKey must be empty
     bool fUseCrypto;
 
