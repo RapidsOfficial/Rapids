@@ -188,4 +188,6 @@ void TraceThread(const char* name, Callable func)
     }
 }
 
+boost::filesystem::path AbsPathForConfigVal(const boost::filesystem::path& path, bool net_specific = true);
+
 #endif // BITCOIN_UTIL_H

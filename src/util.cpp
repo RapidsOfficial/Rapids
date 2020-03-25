@@ -397,6 +397,14 @@ void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
     ClearDatadirCache();
 }
 
+fs::path AbsPathForConfigVal(const fs::path& path, bool net_specific)
+{
+    if (path.is_absolute()) {
+        return path;
+    }
+    return fs::absolute(path, GetDataDir(net_specific));
+}
+
 #ifndef WIN32
 fs::path GetPidFile()
 {

@@ -6,7 +6,7 @@
 
 #include "chainparamsbase.h"
 #include "logging.h"
-#include "util.h"
+#include "utiltime.h"
 
 #include <boost/filesystem/fstream.hpp>
 
@@ -36,24 +36,14 @@ static int FileWriteStr(const std::string &str, FILE *fp)
     return fwrite(str.data(), 1, str.size(), fp);
 }
 
-fs::path BCLog::Logger::GetDebugLogPath() const
-{
-    fs::path logfile(GetArg("-debuglogfile", DEFAULT_DEBUGLOGFILE));
-    if (logfile.is_absolute()) {
-        return logfile;
-    } else {
-        return GetDataDir() / logfile;
-    }
-}
-
 bool BCLog::Logger::OpenDebugLog()
 {
     std::lock_guard<std::mutex> scoped_lock(m_file_mutex);
+
     assert(m_fileout == nullptr);
+    assert(!m_file_path.empty());
 
-    fs::path pathDebug = GetDebugLogPath();
-
-    m_fileout = fopen(pathDebug.string().c_str(), "a");
+    m_fileout = fopen(m_file_path.string().c_str(), "a");
     if (!m_fileout) return false;
 
     setbuf(m_fileout, nullptr); // unbuffered
@@ -225,8 +215,7 @@ int BCLog::Logger::LogPrintStr(const std::string &str)
             // reopen the log file, if requested
             if (m_reopen_file) {
                 m_reopen_file = false;
-                fs::path pathDebug = GetDebugLogPath();
-                if (freopen(pathDebug.string().c_str(),"a",m_fileout) != NULL)
+                if (freopen(m_file_path.string().c_str(),"a",m_fileout) != NULL)
                     setbuf(m_fileout, NULL); // unbuffered
             }
 
@@ -239,17 +228,21 @@ int BCLog::Logger::LogPrintStr(const std::string &str)
 
 void BCLog::Logger::ShrinkDebugFile()
 {
+    // Amount of debug.log to save at end when shrinking (must fit in memory)
+    constexpr size_t RECENT_DEBUG_HISTORY_SIZE = 10 * 1000000;
+
+    assert(!m_file_path.empty());
+
     // Scroll debug.log if it's getting too big
-    fs::path pathLog = GetDebugLogPath();
-    FILE* file = fopen(pathLog.string().c_str(), "r");
-    if (file && fs::file_size(pathLog) > 10 * 1000000) {
+    FILE* file = fopen(m_file_path.string().c_str(), "r");
+    if (file && fs::file_size(m_file_path) > RECENT_DEBUG_HISTORY_SIZE) {
         // Restart the file with some of the end
         std::vector<char> vch(200000, 0);
         fseek(file, -((long)vch.size()), SEEK_END);
         int nBytes = fread(vch.data(), 1, vch.size(), file);
         fclose(file);
 
-        file = fopen(pathLog.string().c_str(), "w");
+        file = fopen(m_file_path.string().c_str(), "w");
         if (file) {
             fwrite(vch.data(), 1, nBytes, file);
             fclose(file);
