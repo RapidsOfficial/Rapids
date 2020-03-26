@@ -232,3 +232,17 @@ bool CBasicKeyStore::GetSaplingIncomingViewingKey(const libzcash::SaplingPayment
     }
     return false;
 }
+
+void CBasicKeyStore::GetSaplingPaymentAddresses(std::set<libzcash::SaplingPaymentAddress> &setAddress) const
+{
+    setAddress.clear();
+    {
+        LOCK(cs_SpendingKeyStore);
+        auto mi = mapSaplingIncomingViewingKeys.begin();
+        while (mi != mapSaplingIncomingViewingKeys.end())
+        {
+            setAddress.insert((*mi).first);
+            mi++;
+        }
+    }
+}

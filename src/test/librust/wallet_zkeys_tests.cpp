@@ -27,10 +27,18 @@ BOOST_FIXTURE_TEST_SUITE(wallet_zkeys_tests, BasicTestingSetup)
   * GenerateNewSaplingZKey()
   */
 BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
+    SelectParams(CBaseChainParams::MAIN);
 
     CWallet wallet;
 
+    // wallet should be empty
+    std::set<libzcash::SaplingPaymentAddress> addrs;
+    wallet.GetSaplingPaymentAddresses(addrs);
+    BOOST_CHECK_EQUAL(0, addrs.size());
+
     auto address = wallet.GenerateNewSaplingZKey();
+    wallet.GetSaplingPaymentAddresses(addrs);
+    BOOST_CHECK_EQUAL(1, addrs.size());
 
     // verify wallet has incoming viewing key for the address
     BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(address));
@@ -43,10 +51,16 @@ BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
     auto fvk = sk.full_viewing_key();
     BOOST_CHECK(wallet.HaveSaplingSpendingKey(fvk));
 
-    // check key is the same
+    // verify spending key stored correctly
     libzcash::SaplingSpendingKey keyOut;
     wallet.GetSaplingSpendingKey(fvk, keyOut);
     BOOST_CHECK(sk == keyOut);
+
+    // verify there are two keys
+    wallet.GetSaplingPaymentAddresses(addrs);
+    BOOST_CHECK_EQUAL(2, addrs.size());
+    BOOST_CHECK_EQUAL(1, addrs.count(address));
+    BOOST_CHECK_EQUAL(1, addrs.count(sk.default_address()));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

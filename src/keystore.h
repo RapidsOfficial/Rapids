@@ -68,6 +68,7 @@ public:
     virtual bool GetSaplingFullViewingKey(
         const libzcash::SaplingIncomingViewingKey &ivk,
         libzcash::SaplingFullViewingKey& fvkOut) const = 0;
+    virtual void GetSaplingPaymentAddresses(std::set<libzcash::SaplingPaymentAddress> &setAddress) const = 0;
 
     //! Sapling incoming viewing keys
     virtual bool HaveSaplingIncomingViewingKey(const libzcash::SaplingPaymentAddress &addr) const = 0;
@@ -136,6 +137,7 @@ public:
     virtual bool GetSaplingIncomingViewingKey(
             const libzcash::SaplingPaymentAddress &addr,
             libzcash::SaplingIncomingViewingKey& ivkOut) const;
+    void GetSaplingPaymentAddresses(std::set<libzcash::SaplingPaymentAddress> &setAddress) const;
 };
 
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CKeyingMaterial;
