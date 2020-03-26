@@ -52,9 +52,6 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     ui->pushRight->setText("zPIV");
     setCssProperty(ui->pushRight, "btn-check-right");
 
-    /* CheckBox */
-    ui->checkBoxDelegations->setToolTip(tr("Possibly spend coins delegated for cold-staking, if available"));
-
     /* Subtitle */
     ui->labelSubtitle1->setText(tr("You can transfer public coins (PIV) or private coins (zPIV)"));
     setCssProperty(ui->labelSubtitle1, "text-subtitle");
@@ -178,16 +175,12 @@ void SendWidget::refreshAmounts()
         // Set remaining balance to the sum of the coinControl selected inputs
         totalAmount = walletModel->getBalance(CoinControlDialog::coinControl) - total;
         ui->labelTitleTotalRemaining->setText(tr("Total remaining from the selected UTXO"));
-        // Hide delegations checkbox
-        if (ui->checkBoxDelegations->isVisible()) ui->checkBoxDelegations->setVisible(false);
     } else {
         // Wallet's balance
         totalAmount = (isZpiv ?
                 walletModel->getZerocoinBalance() :
                 walletModel->getBalance(nullptr, fDelegationsChecked)) - total;
         ui->labelTitleTotalRemaining->setText(tr("Total remaining"));
-        // Show delegations checkbox (if not Zpiv, else hide)
-        if (ui->checkBoxDelegations->isVisible() == isZpiv) ui->checkBoxDelegations->setVisible(!isZpiv);
     }
     ui->labelAmountRemaining->setText(
             GUIUtil::formatBalance(
@@ -196,6 +189,8 @@ void SendWidget::refreshAmounts()
                     isZpiv
                     )
     );
+    // show or hide delegations checkbox if need be
+    showHideCheckBoxDelegations();
 }
 
 void SendWidget::loadClientModel()
@@ -209,10 +204,13 @@ void SendWidget::loadClientModel()
 
 void SendWidget::loadWalletModel()
 {
-    if (walletModel && walletModel->getOptionsModel()) {
-        // display unit
-        nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
+    if (walletModel) {
+        if (walletModel->getOptionsModel()) {
+            // display unit
+            nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
+        }
 
+        // set walletModel for entries
         for (SendMultiRow *entry : entries) {
             if (entry) {
                 entry->setWalletModel(walletModel);
@@ -328,11 +326,35 @@ void SendWidget::showEvent(QShowEvent *event)
 {
     // Set focus on last recipient address when Send-window is displayed
     setFocusOnLastEntry();
+
+    // Update cached delegated balance
+    CAmount cachedDelegatedBalance_new = walletModel->getDelegatedBalance();
+    if (cachedDelegatedBalance != cachedDelegatedBalance_new) {
+        cachedDelegatedBalance = cachedDelegatedBalance_new;
+        refreshAmounts();
+    }
 }
 
 void SendWidget::setFocusOnLastEntry()
 {
     if (!entries.isEmpty()) entries.last()->setFocus();
+}
+
+void SendWidget::showHideCheckBoxDelegations()
+{
+    // Show checkbox only when there is any available owned delegation,
+    // coincontrol is not selected, and we are trying to spend PIV (not zPIV)
+    const bool isZpiv = ui->pushRight->isChecked();
+    const bool isCControl = CoinControlDialog::coinControl->HasSelected();
+    const bool hasDel = cachedDelegatedBalance > 0;
+
+    const bool showCheckBox = !isZpiv && !isCControl && hasDel;
+    ui->checkBoxDelegations->setVisible(showCheckBox);
+    if (showCheckBox)
+        ui->checkBoxDelegations->setToolTip(
+                tr("Possibly spend coins delegated for cold-staking (currently available: %1").arg(
+                        GUIUtil::formatBalance(cachedDelegatedBalance, nDisplayUnit, isZpiv))
+        );
 }
 
 void SendWidget::onSendClicked()
@@ -397,8 +419,9 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
     }
 
     showHideOp(true);
+    const bool fStakeDelegationVoided = currentTransaction.getTransaction()->fStakeDelegationVoided;
     QString warningStr = QString();
-    if (currentTransaction.getTransaction()->fStakeDelegationVoided)
+    if (fStakeDelegationVoided)
         warningStr = tr("WARNING:\nTransaction spends a cold-stake delegation, voiding it.\n"
                      "These coins will no longer be cold-staked.");
     TxDetailDialog* dialog = new TxDetailDialog(window, true, warningStr);
@@ -418,6 +441,9 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
         );
 
         if (sendStatus.status == WalletModel::OK) {
+            // if delegations were spent, update cachedBalance
+            if (fStakeDelegationVoided)
+                cachedDelegatedBalance = walletModel->getDelegatedBalance();
             clearAll(false);
             inform(tr("Transaction sent"));
             dialog->deleteLater();
