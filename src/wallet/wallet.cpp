@@ -4148,6 +4148,24 @@ int CWallet::GetVersion()
     return nWalletVersion;
 }
 
+///////////////// Sapling Methods //////////////////////////
+////////////////////////////////////////////////////////////
+
+libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey() { return m_sspk_man->GenerateNewSaplingZKey(); }
+
+bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &key,
+                    const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr) { return m_sspk_man->AddSaplingZKey(key, defaultAddr); }
+
+bool CWallet::AddCryptedSaplingSpendingKeyW(
+        const libzcash::SaplingFullViewingKey &fvk,
+        const std::vector<unsigned char> &vchCryptedSecret,
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr) { return m_sspk_man->AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr); }
+
+bool CWallet::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const { return m_sspk_man->HaveSpendingKeyForPaymentAddress(zaddr); }
+
+///////////////// End Sapling Methods //////////////////////
+////////////////////////////////////////////////////////////
+
 CWalletTx::CWalletTx()
 {
     Init(NULL);

@@ -3,29 +3,29 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#include "wallet/wallet.h"
+#include "sapling/saplingscriptpubkeyman.h"
 
 
 //! TODO: Should be Sapling address format, SaplingPaymentAddress
 // Generate a new Sapling spending key and return its public payment address
-libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
+libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 {
-    AssertLockHeld(cs_wallet); // mapZKeyMetadata
+    AssertLockHeld(wallet->cs_wallet); // mapZKeyMetadata
 
     auto sk = libzcash::SaplingSpendingKey::random();
     auto fvk = sk.full_viewing_key();
     auto addr = sk.default_address();
 
     // Check for collision, even though it is unlikely to ever occur
-    if (CCryptoKeyStore::HaveSaplingSpendingKey(fvk))
-        throw std::runtime_error("CWallet::GenerateNewSaplingZKey(): Collision detected");
+    if (wallet->HaveSaplingSpendingKey(fvk))
+        throw std::runtime_error("SaplingScriptPubKeyMan::GenerateNewSaplingZKey(): Collision detected");
 
     // Create new metadata
     int64_t nCreationTime = GetTime();
     mapSaplingZKeyMetadata[addr] = CKeyMetadata(nCreationTime);
 
     if (!AddSaplingZKey(sk, addr)) {
-        throw std::runtime_error("CWallet::GenerateNewSaplingZKey(): AddSaplingZKey failed");
+        throw std::runtime_error("SaplingScriptPubKeyMan::GenerateNewSaplingZKey(): AddSaplingZKey failed");
     }
     // return default sapling payment address.
     return addr;
@@ -33,17 +33,17 @@ libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
 
 // Add spending key to keystore
 // TODO: persist to disk
-bool CWallet::AddSaplingZKey(
+bool SaplingScriptPubKeyMan::AddSaplingZKey(
         const libzcash::SaplingSpendingKey &sk,
         const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
-    AssertLockHeld(cs_wallet); // mapSaplingZKeyMetadata
+    AssertLockHeld(wallet->cs_wallet); // mapSaplingZKeyMetadata
 
-    if (!CCryptoKeyStore::AddSaplingSpendingKey(sk, defaultAddr)) {
+    if (!wallet->AddSaplingSpendingKey(sk, defaultAddr)) {
         return false;
     }
 
-    if (!fFileBacked) {
+    if (!wallet->fFileBacked) {
         return true;
     }
 
@@ -56,13 +56,13 @@ bool CWallet::AddSaplingZKey(
     return true;
 }
 
-bool CWallet::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
+bool SaplingScriptPubKeyMan::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
                                            const std::vector<unsigned char> &vchCryptedSecret,
                                            const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
-    if (!CCryptoKeyStore::AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr))
+    if (!wallet->AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr))
         return false;
-    if (!fFileBacked)
+    if (!wallet->fFileBacked)
         return true;
     {
         // TODO: Sapling - Write to disk
@@ -70,12 +70,12 @@ bool CWallet::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey
     return false;
 }
 
-bool CWallet::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const
+bool SaplingScriptPubKeyMan::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const
 {
     libzcash::SaplingIncomingViewingKey ivk;
     libzcash::SaplingFullViewingKey fvk;
 
-    return GetSaplingIncomingViewingKey(zaddr, ivk) &&
-           GetSaplingFullViewingKey(ivk, fvk) &&
-           HaveSaplingSpendingKey(fvk);
+    return wallet->GetSaplingIncomingViewingKey(zaddr, ivk) &&
+           wallet->GetSaplingFullViewingKey(ivk, fvk) &&
+           wallet->HaveSaplingSpendingKey(fvk);
 }

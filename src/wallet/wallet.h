@@ -28,6 +28,7 @@
 #include "validationinterface.h"
 #include "wallet/wallet_ismine.h"
 #include "wallet/scriptpubkeyman.h"
+#include "sapling/saplingscriptpubkeyman.h"
 #include "wallet/walletdb.h"
 #include "zpiv/zpivmodule.h"
 #include "zpiv/zpivwallet.h"
@@ -77,6 +78,7 @@ class CReserveKey;
 class CScript;
 class CWalletTx;
 class ScriptPubKeyMan;
+class SaplingScriptPubKeyMan;
 
 /** (client) version numbers for particular wallet features */
 enum WalletFeature {
@@ -229,6 +231,7 @@ private:
 
     //! Key manager //
     std::unique_ptr<ScriptPubKeyMan> m_spk_man = MakeUnique<ScriptPubKeyMan>(this);
+    std::unique_ptr<SaplingScriptPubKeyMan> m_sspk_man = MakeUnique<SaplingScriptPubKeyMan>(this);
 
     //! the current wallet version: clients below this version are not able to load the wallet
     int nWalletVersion;
@@ -286,7 +289,6 @@ public:
     std::string strWalletFile;
 
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata;
-    std::map<libzcash::SaplingPaymentAddress, CKeyMetadata> mapSaplingZKeyMetadata;
 
     typedef std::map<unsigned int, CMasterKey> MasterKeyMap;
     MasterKeyMap mapMasterKeys;
@@ -397,7 +399,7 @@ public:
     //! Adds Sapling spending key to the store, and saves it to disk
     bool AddSaplingZKey(const libzcash::SaplingSpendingKey &key,
             const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
-    bool AddCryptedSaplingSpendingKey(
+    bool AddCryptedSaplingSpendingKeyW(
             const libzcash::SaplingFullViewingKey &fvk,
             const std::vector<unsigned char> &vchCryptedSecret,
             const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
