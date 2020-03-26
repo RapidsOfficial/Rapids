@@ -45,4 +45,41 @@ BOOST_AUTO_TEST_CASE(ps_address_test)
     }
 }
 
+BOOST_AUTO_TEST_CASE(EncodeAndDecodeSapling)
+{
+    SelectParams(CBaseChainParams::MAIN);
+
+    for (size_t i = 0; i < 1000; i++) {
+        auto sk = libzcash::SaplingSpendingKey::random();
+        {
+            std::string sk_string = KeyIO::EncodeSpendingKey(sk);
+            BOOST_CHECK(
+                    sk_string.substr(0, 26) ==
+                    Params().Bech32HRP(CChainParams::SAPLING_SPENDING_KEY));
+
+            auto spendingkey2 = KeyIO::DecodeSpendingKey(sk_string);
+            BOOST_CHECK(IsValidSpendingKey(spendingkey2));
+
+            BOOST_CHECK(boost::get<libzcash::SaplingSpendingKey>(&spendingkey2) != nullptr);
+            auto sk2 = boost::get<libzcash::SaplingSpendingKey>(spendingkey2);
+            BOOST_CHECK(sk == sk2);
+        }
+        {
+            auto addr = sk.default_address();
+
+            std::string addr_string = KeyIO::EncodePaymentAddress(addr);
+            BOOST_CHECK(
+                    addr_string.substr(0, 2) ==
+                    Params().Bech32HRP(CChainParams::SAPLING_PAYMENT_ADDRESS));
+
+            auto paymentaddr2 = KeyIO::DecodePaymentAddress(addr_string);
+            BOOST_CHECK(IsValidPaymentAddress(paymentaddr2));
+
+            BOOST_CHECK(boost::get<libzcash::SaplingPaymentAddress>(&paymentaddr2) != nullptr);
+            auto addr2 = boost::get<libzcash::SaplingPaymentAddress>(paymentaddr2);
+            BOOST_CHECK(addr == addr2);
+        }
+    }
+}
+
 BOOST_AUTO_TEST_SUITE_END()
