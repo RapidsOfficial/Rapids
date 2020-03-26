@@ -16,6 +16,8 @@ BOOST_FIXTURE_TEST_SUITE(sapling_key_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(ps_address_test)
 {
+    SelectParams(CBaseChainParams::REGTEST);
+
     for (size_t i = 0; i < 1000; i++) {
         auto sk = libzcash::SaplingSpendingKey::random();
         {
@@ -33,7 +35,7 @@ BOOST_AUTO_TEST_CASE(ps_address_test)
             libzcash::SaplingPaymentAddress addr = sk.default_address();
 
             std::string addr_string = KeyIO::EncodePaymentAddress(addr);
-            BOOST_CHECK(addr_string.compare(0, 2, Params().Bech32HRP(CChainParams::SAPLING_PAYMENT_ADDRESS)) == 0);
+            BOOST_CHECK(addr_string.compare(0, 12, Params().Bech32HRP(CChainParams::SAPLING_PAYMENT_ADDRESS)) == 0);
 
             auto paymentaddr2 = KeyIO::DecodePaymentAddress(addr_string);
             BOOST_CHECK(IsValidPaymentAddress(paymentaddr2));
