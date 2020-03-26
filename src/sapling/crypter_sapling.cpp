@@ -14,12 +14,14 @@
 #include <openssl/evp.h>
 #include "wallet/wallet.h"
 
-bool CCryptoKeyStore::AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &sk)
+bool CCryptoKeyStore::AddSaplingSpendingKey(
+        const libzcash::SaplingSpendingKey &sk,
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
     {
         LOCK(cs_SpendingKeyStore);
         if (!IsCrypted()) {
-            return CBasicKeyStore::AddSaplingSpendingKey(sk);
+            return CBasicKeyStore::AddSaplingSpendingKey(sk, defaultAddr);
         }
 
         if (IsLocked()) {
@@ -36,19 +38,25 @@ bool CCryptoKeyStore::AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &
             return false;
         }
 
-        if (!AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret)) {
+        if (!AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr)) {
             return false;
         }
     }
     return true;
 }
 
-// TODO: Handle note decryptors
-bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
-                                                   const std::vector<unsigned char> &vchCryptedSecret)
+bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(
+        const libzcash::SaplingFullViewingKey &fvk,
+        const std::vector<unsigned char> &vchCryptedSecret,
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
     LOCK(cs_SpendingKeyStore);
     if (!SetCrypted()) {
+        return false;
+    }
+
+    // if SaplingFullViewingKey is not in SaplingFullViewingKeyMap, add it
+    if (!AddSaplingFullViewingKey(fvk, defaultAddr)){
         return false;
     }
 

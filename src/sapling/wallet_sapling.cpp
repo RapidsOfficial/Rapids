@@ -24,7 +24,7 @@ libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
     int64_t nCreationTime = GetTime();
     mapSaplingZKeyMetadata[addr] = CKeyMetadata(nCreationTime);
 
-    if (!AddSaplingZKey(sk)) {
+    if (!AddSaplingZKey(sk, addr)) {
         throw std::runtime_error("CWallet::GenerateNewSaplingZKey(): AddSaplingZKey failed");
     }
     // return default sapling payment address.
@@ -33,12 +33,13 @@ libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey()
 
 // Add spending key to keystore
 // TODO: persist to disk
-bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &sk)
+bool CWallet::AddSaplingZKey(
+        const libzcash::SaplingSpendingKey &sk,
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
     AssertLockHeld(cs_wallet); // mapSaplingZKeyMetadata
-    //auto addr = sk.default_address();
 
-    if (!CCryptoKeyStore::AddSaplingSpendingKey(sk)) {
+    if (!CCryptoKeyStore::AddSaplingSpendingKey(sk, defaultAddr)) {
         return false;
     }
 
@@ -56,9 +57,10 @@ bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &sk)
 }
 
 bool CWallet::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
-                                           const std::vector<unsigned char> &vchCryptedSecret)
+                                           const std::vector<unsigned char> &vchCryptedSecret,
+                                           const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
-    if (!CCryptoKeyStore::AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret))
+    if (!CCryptoKeyStore::AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr))
         return false;
     if (!fFileBacked)
         return true;

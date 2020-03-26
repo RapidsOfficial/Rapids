@@ -36,8 +36,8 @@ BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
     BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(address));
 
     // manually add new spending key to wallet
-    auto sk = libzcash::SaplingSpendingKey::random();
-    BOOST_CHECK(wallet.AddSaplingZKey(sk));
+    libzcash::SaplingSpendingKey sk = libzcash::SaplingSpendingKey::random();
+    BOOST_CHECK(wallet.AddSaplingZKey(sk, sk.default_address()));
 
     // verify wallet did add it
     auto fvk = sk.full_viewing_key();

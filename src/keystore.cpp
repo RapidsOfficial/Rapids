@@ -152,32 +152,34 @@ bool CBasicKeyStore::GetKey(const CKeyID& address, CKey& keyOut) const
 }
 
 //! Sapling
-bool CBasicKeyStore::AddSaplingSpendingKey(const libzcash::SaplingSpendingKey &sk)
+bool CBasicKeyStore::AddSaplingSpendingKey(
+        const libzcash::SaplingSpendingKey &sk,
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
     LOCK(cs_SpendingKeyStore);
     auto fvk = sk.full_viewing_key();
 
     // if SaplingFullViewingKey is not in SaplingFullViewingKeyMap, add it
-    if (!AddSaplingFullViewingKey(fvk)){
+    if (!AddSaplingFullViewingKey(fvk, defaultAddr)){
         return error("%s: adding new sapling fvk", __func__);
     }
 
     mapSaplingSpendingKeys[fvk] = sk;
-    // Add addr -> SaplingIncomingViewing to SaplingIncomingViewingKeyMap
-    auto addr = sk.default_address();
-    auto ivk = fvk.in_viewing_key();
-    mapSaplingIncomingViewingKeys[addr] = ivk;
     return true;
 }
 
-bool CBasicKeyStore::AddSaplingFullViewingKey(const libzcash::SaplingFullViewingKey &fvk)
+bool CBasicKeyStore::AddSaplingFullViewingKey(
+        const libzcash::SaplingFullViewingKey &fvk,
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
     LOCK(cs_SpendingKeyStore);
     auto ivk = fvk.in_viewing_key();
     mapSaplingFullViewingKeys[ivk] = fvk;
 
-    //! TODO: Note decryptors for Sapling
-    // mapNoteDecryptors.insert(std::make_pair(address, ZCNoteDecryption(vk.sk_enc)));
+    if (defaultAddr) {
+        // Add defaultAddr -> SaplingIncomingViewing to SaplingIncomingViewingKeyMap
+        mapSaplingIncomingViewingKeys[defaultAddr.get()] = ivk;
+    }
     return true;
 }
 
