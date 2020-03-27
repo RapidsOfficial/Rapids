@@ -14,30 +14,13 @@ bool SignBlockWithKey(CBlock& block, const CKey& key)
     return true;
 }
 
-bool GetKeyIDFromUTXO(const CTxOut& txout, CKeyID& keyID)
-{
-    std::vector<valtype> vSolutions;
-    txnouttype whichType;
-    if (!Solver(txout.scriptPubKey, whichType, vSolutions))
-        return false;
-    if (whichType == TX_PUBKEY) {
-        keyID = CPubKey(vSolutions[0]).GetID();
-    } else if (whichType == TX_PUBKEYHASH || whichType == TX_COLDSTAKE) {
-        keyID = CKeyID(uint160(vSolutions[0]));
-    } else {
-        return false;
-    }
-
-    return true;
-}
-
 bool SignBlock(CBlock& block, const CKeyStore& keystore)
 {
     CKeyID keyID;
     if (block.IsProofOfWork()) {
         bool fFoundID = false;
         for (const CTxOut& txout :block.vtx[0].vout) {
-            if (!GetKeyIDFromUTXO(txout, keyID))
+            if (!txout.GetKeyIDFromUTXO(keyID))
                 continue;
             fFoundID = true;
             break;
@@ -45,7 +28,7 @@ bool SignBlock(CBlock& block, const CKeyStore& keystore)
         if (!fFoundID)
             return error("%s: failed to find key for PoW", __func__);
     } else {
-        if (!GetKeyIDFromUTXO(block.vtx[1].vout[1], keyID))
+        if (!block.vtx[1].vout[1].GetKeyIDFromUTXO(keyID))
             return error("%s: failed to find key for PoS", __func__);
     }
 

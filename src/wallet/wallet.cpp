@@ -2518,7 +2518,6 @@ bool CWallet::CreateTransaction(CScript scriptPubKey, const CAmount& nValue, CWa
     return CreateTransaction(vecSend, wtxNew, reservekey, nFeeRet, strFailReason, coinControl, coin_type, useIX, nFeePay, fIncludeDelegated);
 }
 
-// ppcoin: create coin stake transaction
 bool CWallet::CreateCoinStake(
         const CKeyStore& keystore,
         const CBlockIndex* pindexPrev,
@@ -2541,6 +2540,8 @@ bool CWallet::CreateCoinStake(
         input->SetPrevout((CTransaction) *out.tx, out.i);
         listInputs.emplace_back(std::move(input));
     }
+
+    const Consensus::Params& consensus = Params().GetConsensus();
 
     // Mark coin stake transaction
     txNew.vin.clear();
@@ -2613,12 +2614,20 @@ bool CWallet::CreateCoinStake(
         // put the remaining on the last output (which all into the first if only one output)
         txNew.vout[outputs].nValue += nRemaining;
 
+        // Coinstake marker (for blocks V8+)
+        if (pindexPrev->nHeight + 1 >= consensus.height_start_StakeModifierV3) {
+            CTxOut stakePrevout;
+            if (!stakeInput->GetTxOutFrom(stakePrevout) ||
+                    !SignCoinStakeModifier(pindexPrev->GetStakeModifier(), stakePrevout, txNew))
+                return error("%s: failed to sign coinstake modifier", __func__);
+        }
+
         // Limit size
         unsigned int nBytes = ::GetSerializeSize(txNew, SER_NETWORK, PROTOCOL_VERSION);
         if (nBytes >= DEFAULT_BLOCK_MAX_SIZE / 5)
             return error("CreateCoinStake : exceeded coinstake size limit");
 
-        //Masternode payment
+        // Masternode payment
         FillBlockPayee(txNew, nMinFee, true, false);
 
         uint256 hashTxOut = txNew.GetHash();
@@ -2652,7 +2661,7 @@ bool CWallet::CreateCoinStake(
             if (!out.IsZerocoinMint())
                 continue;
 
-            libzerocoin::PublicCoin pubcoin(Params().GetConsensus().Zerocoin_Params(false));
+            libzerocoin::PublicCoin pubcoin(consensus.Zerocoin_Params(false));
             CValidationState state;
             if (!TxOutToPublicCoin(out, pubcoin, state))
                 return error("%s: extracting pubcoin from txout failed", __func__);
@@ -2670,6 +2679,30 @@ bool CWallet::CreateCoinStake(
     }
 
     // Successfully generated coinstake
+    return true;
+}
+
+// Signs a previous modifier with the key of the stake input. publish signature in
+// coinstake (vout[0] with OP_STAKEMODIFIER)
+bool CWallet::SignCoinStakeModifier(const uint256& prevModifier, const CTxOut& stakePrevout, CMutableTransaction& coinstake)
+{
+    // tx needs at least two outputs
+    if (coinstake.vout.size() < 2)
+        return error("%s : called on non-coinstake transaction (vout size: %d)",
+                __func__, coinstake.vout.size());
+    CKeyID keyID;
+    if (!stakePrevout.GetKeyIDFromUTXO(keyID))
+        return error("%s : failed to get keyID from coinstake prevout", __func__);
+    CKey key;
+    if (!GetKey(keyID, key))
+        return error("%s : failed to find key in keystore", __func__);
+    std::vector<unsigned char> vchSigRet;
+    if (!key.SignCompact(prevModifier, vchSigRet))
+        return error("%s : failed to sign previous modifier", __func__);
+    // Add modifier signature to first output
+    coinstake.vout[0].scriptPubKey = CScript() << OP_STAKEMODIFIER << vchSigRet;
+    LogPrintf("%s : Modifier (%s) signed with coinstake key. Signature=%s\n",
+            __func__, prevModifier.GetHex(), EncodeBase64(&vchSigRet[0], vchSigRet.size()));
     return true;
 }
 

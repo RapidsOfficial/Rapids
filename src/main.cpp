@@ -22,7 +22,6 @@
 #include "consensus/zerocoin_verify.h"
 #include "init.h"
 #include "kernel.h"
-#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
 #include "masternode-budget.h"
 #include "masternode-payments.h"
 #include "masternodeman.h"
@@ -3475,19 +3474,18 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
         pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
         pindexNew->BuildSkip();
 
-        // ppcoin: compute stake entropy bit for stake modifier
-        if (!pindexNew->SetStakeEntropyBit(pindexNew->GetStakeEntropyBit()))
-            LogPrintf("AddToBlockIndex() : SetStakeEntropyBit() failed \n");
+        const Consensus::Params& consensus = Params().GetConsensus();
+        if (pindexNew->nHeight < consensus.height_start_StakeModifierV2) {
+            // compute and set new V1 stake modifier (entropy bits)
+            pindexNew->SetNewStakeModifier();
 
-        if (!Params().GetConsensus().IsStakeModifierV2(pindexNew->nHeight)) {
-            uint64_t nStakeModifier = 0;
-            bool fGeneratedStakeModifier = false;
-            if (!ComputeNextStakeModifier(pindexNew->pprev, nStakeModifier, fGeneratedStakeModifier))
-                LogPrintf("AddToBlockIndex() : ComputeNextStakeModifier() failed \n");
-            pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
-        } else {
-            // compute new v2 stake modifier
+        } else if (pindexNew->nHeight < consensus.height_start_StakeModifierV3) {
+            // compute and set new V2 stake modifier (hash of prevout and prevModifier)
             pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);
+
+        } else {
+            // compute and set new V3 stake modifier (hash of the prevModifier sig in coinstake marker)
+            pindexNew->SetNewStakeModifier(block.vtx[1].vout[0]);
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);

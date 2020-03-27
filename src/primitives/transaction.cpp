@@ -94,9 +94,40 @@ uint256 CTxOut::GetHash() const
     return SerializeHash(*this);
 }
 
+bool CTxOut::GetKeyIDFromUTXO(CKeyID& keyIDRet) const
+{
+    std::vector<valtype> vSolutions;
+    txnouttype whichType;
+    if (scriptPubKey.empty() || !Solver(scriptPubKey, whichType, vSolutions))
+        return false;
+    if (whichType == TX_PUBKEY) {
+        keyIDRet = CPubKey(vSolutions[0]).GetID();
+        return true;
+    }
+    if (whichType == TX_PUBKEYHASH || whichType == TX_COLDSTAKE) {
+        keyIDRet = CKeyID(uint160(vSolutions[0]));
+        return true;
+    }
+    return false;
+}
+
 bool CTxOut::IsZerocoinMint() const
 {
     return scriptPubKey.IsZerocoinMint();
+}
+
+bool CTxOut::IsStakeModifierSig() const
+{
+    return scriptPubKey.IsStakeModifierSig();
+}
+
+bool CTxOut::GetStakeModifierSig(std::vector<unsigned char>& vchSig) const
+{
+    if (!IsStakeModifierSig())
+        return false;
+
+    vchSig = std::vector<unsigned char>(scriptPubKey.begin()+2, scriptPubKey.end());
+    return true;
 }
 
 CAmount CTxOut::GetZerocoinMinted() const
@@ -188,12 +219,14 @@ bool CTransaction::IsCoinStake() const
     if (vin.empty())
         return false;
 
-    // ppcoin: the coin stake transaction is marked with the first output empty
     bool fAllowNull = vin[0].IsZerocoinSpend();
     if (vin[0].prevout.IsNull() && !fAllowNull)
         return false;
 
-    return (vout.size() >= 2 && vout[0].IsEmpty());
+    // coinstake transactions are marked with the first output, which can either be
+    // empty or with a script publishing the modifier signature (via OP_STAKEMODIFIER)
+    return (vout.size() >= 2 &&
+                    (vout[0].IsEmpty() || vout[0].IsStakeModifierSig()));
 }
 
 bool CTransaction::CheckColdStake(const CScript& script) const

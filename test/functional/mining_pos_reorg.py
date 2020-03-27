@@ -106,10 +106,7 @@ class ReorgStakeTest(PivxTestFramework):
         set_node_times(self.nodes, block_time_0)
         last_block = self.nodes[0].getblock(self.nodes[0].getbestblockhash())
         assert(len(last_block["tx"]) > 1)                                       # a PoS block has at least two txes
-        coinstake_txid = last_block["tx"][1]
-        coinstake_tx = self.nodes[0].getrawtransaction(coinstake_txid, True)
-        assert(coinstake_tx["vout"][0]["scriptPubKey"]["hex"] == "")            # first output of coinstake is empty
-        stakeinput = coinstake_tx["vin"][0]
+        stakeinput = self.nodes[0].getrawtransaction(last_block["tx"][1], True)["vin"][0]
 
         # The stake input was unspent 1 block ago, now it's not
         res, utxo = findUtxoInList(stakeinput["txid"], stakeinput["vout"], initial_unspent_0)

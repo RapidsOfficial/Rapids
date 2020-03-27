@@ -257,10 +257,12 @@ public:
     bool SetStakeEntropyBit(unsigned int nEntropyBit);
     bool GeneratedStakeModifier() const { return (nFlags & BLOCK_STAKE_MODIFIER); }
     void SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier);
+    void SetNewStakeModifier();                             // generates and sets new v1 modifier
     void SetStakeModifier(const uint256& nStakeModifier);
     void SetNewStakeModifier(const uint256& prevoutId);     // generates and sets new v2 modifier
+    void SetNewStakeModifier(const CTxOut& txout);          // generates and sets new v3 modifier
     uint64_t GetStakeModifierV1() const;
-    uint256 GetStakeModifierV2() const;
+    uint256 GetStakeModifier() const;
 
     //! Check whether this block index entry is valid up to the passed validity level.
     bool IsValid(enum BlockStatus nUpTo = BLOCK_VALID_TRANSACTIONS) const;
@@ -340,7 +342,7 @@ public:
             READWRITE(nMint);
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
-            if (!Params().GetConsensus().IsStakeModifierV2(nHeight)) {
+            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
                 uint64_t nStakeModifier = 0;
                 READWRITE(nStakeModifier);
                 this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());

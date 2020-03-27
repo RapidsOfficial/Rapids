@@ -179,6 +179,9 @@ enum opcodetype
     // cold staking
     OP_CHECKCOLDSTAKEVERIFY = 0xd1,
 
+    // v3 stake modifier
+    OP_STAKEMODIFIER = 0xd2,
+
     // template matching params
     OP_SMALLINTEGER = 0xfa,
     OP_PUBKEYS = 0xfb,
@@ -616,6 +619,7 @@ public:
     bool IsPayToScriptHash() const;
     bool IsPayToColdStaking() const;
     bool StartsWithOpcode(const opcodetype opcode) const;
+    bool IsStakeModifierSig() const;
     bool IsZerocoinMint() const;
     bool IsZerocoinSpend() const;
     bool IsZerocoinPublicSpend() const;

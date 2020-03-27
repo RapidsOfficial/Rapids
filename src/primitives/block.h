@@ -23,7 +23,7 @@ class CBlockHeader
 {
 public:
     // header
-    static const int32_t CURRENT_VERSION=7;     //!> Version 7 removes nAccumulatorCheckpoint from serialization
+    static const int32_t CURRENT_VERSION=8;     //!> Version 8 introduces stake modifier V3
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;

@@ -5,6 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "chain.h"
+#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
 
 
 /**
@@ -181,7 +182,7 @@ bool CBlockIndex::SetStakeEntropyBit(unsigned int nEntropyBit)
     return true;
 }
 
-// Sets V1 stake modifier
+// Sets V1 stake modifier (uint64_t)
 void CBlockIndex::SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier)
 {
     vStakeModifier.clear();
@@ -193,7 +194,20 @@ void CBlockIndex::SetStakeModifier(const uint64_t nStakeModifier, bool fGenerate
 
 }
 
-// Sets V2 stake modifier
+// Generates and sets new V1 stake modifier
+void CBlockIndex::SetNewStakeModifier()
+{
+    // compute stake entropy bit for stake modifier
+    if (!SetStakeEntropyBit(GetStakeEntropyBit()))
+        LogPrintf("%s : SetStakeEntropyBit() failed\n", __func__);
+    uint64_t nStakeModifier = 0;
+    bool fGeneratedStakeModifier = false;
+    if (!ComputeNextStakeModifier(pprev, nStakeModifier, fGeneratedStakeModifier))
+        LogPrintf("%s : ComputeNextStakeModifier() failed \n",  __func__);
+    return SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
+}
+
+// Sets V2 or V3 stake modifiers (uint256)
 void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
 {
     vStakeModifier.clear();
@@ -203,31 +217,51 @@ void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
 // Generates and sets new V2 stake modifier
 void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
 {
-    // Shouldn't be called on V1 modifier's blocks (or before setting pprev)
+    // Shouldn't be called on V1 or V3+ modifier's blocks (or before setting pprev)
     if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) return;
+    if (nHeight >= Params().GetConsensus().height_start_StakeModifierV3) return;
     if (!pprev) throw std::runtime_error(strprintf("%s : ERROR: null pprev", __func__));
 
     // Generate Hash(prevoutId | prevModifier) - switch with genesis modifier (0) on upgrade block
     CHashWriter ss(SER_GETHASH, 0);
     ss << prevoutId;
-    ss << pprev->GetStakeModifierV2();
+    ss << pprev->GetStakeModifier();
     SetStakeModifier(ss.GetHash());
+}
+
+// Generates and sets new V3 stake modifier from coinstake marker (first output)
+void CBlockIndex::SetNewStakeModifier(const CTxOut& txout)
+{
+    // Shouldn't be called on V1 or V2 modifier's blocks
+    if (nHeight < Params().GetConsensus().height_start_StakeModifierV3) return;
+
+    // Get previous modifier signature from coinstake marker
+    std::vector<unsigned char> modifierSig;
+    if (!txout.GetStakeModifierSig(modifierSig)) {
+        // should never happen (block already accepted)
+        throw std::runtime_error("unable to get stake modifier signature");
+    }
+
+    // Generate Hash(modifierSig)
+    CHashWriter ss(SER_GETHASH, 0);
+    ss << modifierSig;
+    return SetStakeModifier(ss.GetHash());
 }
 
 // Returns V1 stake modifier (uint64_t)
 uint64_t CBlockIndex::GetStakeModifierV1() const
 {
-    if (vStakeModifier.empty() || Params().GetConsensus().IsStakeModifierV2(nHeight))
+    if (vStakeModifier.empty() || nHeight >= Params().GetConsensus().height_start_StakeModifierV2)
         return 0;
     uint64_t nStakeModifier;
     std::memcpy(&nStakeModifier, vStakeModifier.data(), vStakeModifier.size());
     return nStakeModifier;
 }
 
-// Returns V2 stake modifier (uint256)
-uint256 CBlockIndex::GetStakeModifierV2() const
+// Returns V2/V3 stake modifier (uint256)
+uint256 CBlockIndex::GetStakeModifier() const
 {
-    if (vStakeModifier.empty() || !Params().GetConsensus().IsStakeModifierV2(nHeight))
+    if (vStakeModifier.empty() || nHeight < Params().GetConsensus().height_start_StakeModifierV2)
         return UINT256_ZERO;
     uint256 nStakeModifier;
     std::memcpy(nStakeModifier.begin(), vStakeModifier.data(), vStakeModifier.size());
