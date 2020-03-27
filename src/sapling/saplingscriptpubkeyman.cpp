@@ -79,3 +79,19 @@ bool SaplingScriptPubKeyMan::HaveSpendingKeyForPaymentAddress(const libzcash::Sa
            wallet->GetSaplingFullViewingKey(ivk, fvk) &&
            wallet->HaveSaplingSpendingKey(fvk);
 }
+
+void SaplingScriptPubKeyMan::SetHDChain(CHDChain& chain, bool memonly)
+{
+    LOCK(wallet->cs_wallet);
+    if (chain.chainType != HDChain::ChainCounterType::Sapling)
+        throw std::runtime_error(std::string(__func__) + ": trying to store an invalid chain type");
+
+    if (!memonly && !CWalletDB(wallet->strWalletFile).WriteHDChain(chain))
+        throw std::runtime_error(std::string(__func__) + ": writing chain failed");
+
+    hdChain = chain;
+
+    // Sanity check
+    if (!wallet->HaveKey(hdChain.GetID()))
+        throw std::runtime_error(std::string(__func__) + ": Not found seed in wallet");
+}

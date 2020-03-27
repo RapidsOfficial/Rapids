@@ -20,6 +20,10 @@ public:
 
     ~SaplingScriptPubKeyMan() {};
 
+    /* Set the HD chain model (chain child index counters) */
+    void SetHDChain(CHDChain& chain, bool memonly);
+    const CHDChain& GetHDChain() const { return hdChain; }
+
     //! Generates new Sapling key
     libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
     //! Adds Sapling spending key to the store, and saves it to disk
@@ -39,6 +43,8 @@ public:
 private:
     /* Parent wallet */
     CWallet* wallet{nullptr};
+    /* the HD chain data model (external/internal chain counters) */
+    CHDChain hdChain;
 };
 
 #endif //PIVX_SAPLINGSCRIPTPUBKEYMAN_H
