@@ -183,7 +183,8 @@ public:
 
     // Check address for validity
     bool validateAddress(const QString& address);
-    bool validateStakingAddress(const QString& address);
+    // Check address for validity and type (whether cold staking address or not)
+    bool validateAddress(const QString& address, bool fStaking);
 
     // Return status record for SendCoins, contains error id + information
     struct SendCoinsReturn {

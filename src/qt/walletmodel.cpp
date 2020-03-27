@@ -360,19 +360,10 @@ bool WalletModel::validateAddress(const QString& address)
     return addressParsed.IsValid();
 }
 
-bool WalletModel::validateStakingAddress(const QString& address)
+bool WalletModel::validateAddress(const QString& address, bool fStaking)
 {
-    if (validateAddress(address)) {
-        // check for staking only addresses
-        QChar firstLetter = address.at(0).toLower();
-        if (isTestNetwork() && firstLetter == 'w')
-            return true;
-
-        // mainnet check
-        if (firstLetter == 's')
-            return true;
-    }
-    return false;
+    CBitcoinAddress addressParsed(address.toStdString());
+    return (addressParsed.IsValid() && fStaking == addressParsed.IsStakingAddress());
 }
 
 bool WalletModel::updateAddressBookLabels(const CTxDestination& dest, const std::string& strName, const std::string& strPurpose)
