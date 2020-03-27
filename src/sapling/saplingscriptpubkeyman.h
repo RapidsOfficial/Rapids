@@ -20,6 +20,12 @@ public:
 
     ~SaplingScriptPubKeyMan() {};
 
+    /* Set the current HD seed (will reset the chain child index counters)
+      Sets the seed's version based on the current wallet version (so the
+      caller must ensure the current wallet version is correct before calling
+      this function). */
+    void SetHDSeed(const CPubKey& key, bool force = false);
+
     /* Set the HD chain model (chain child index counters) */
     void SetHDChain(CHDChain& chain, bool memonly);
     const CHDChain& GetHDChain() const { return hdChain; }

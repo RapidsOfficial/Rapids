@@ -80,6 +80,23 @@ bool SaplingScriptPubKeyMan::HaveSpendingKeyForPaymentAddress(const libzcash::Sa
            wallet->HaveSaplingSpendingKey(fvk);
 }
 
+void SaplingScriptPubKeyMan::SetHDSeed(const CPubKey& seed, bool force)
+{
+    if (!hdChain.IsNull() && !force)
+        throw std::runtime_error(std::string(__func__) + ": sapling trying to set a hd seed on an already created chain");
+
+    LOCK(wallet->cs_wallet);
+    // store the keyid (hash160) together with
+    // the child index counter in the database
+    // as a hdChain object
+    CHDChain newHdChain(HDChain::ChainCounterType::Sapling);
+    if (!newHdChain.SetSeed(seed.GetID()) ) {
+        throw std::runtime_error(std::string(__func__) + ": set sapling hd seed failed");
+    }
+
+    SetHDChain(newHdChain, false);
+}
+
 void SaplingScriptPubKeyMan::SetHDChain(CHDChain& chain, bool memonly)
 {
     LOCK(wallet->cs_wallet);
@@ -87,11 +104,11 @@ void SaplingScriptPubKeyMan::SetHDChain(CHDChain& chain, bool memonly)
         throw std::runtime_error(std::string(__func__) + ": trying to store an invalid chain type");
 
     if (!memonly && !CWalletDB(wallet->strWalletFile).WriteHDChain(chain))
-        throw std::runtime_error(std::string(__func__) + ": writing chain failed");
+        throw std::runtime_error(std::string(__func__) + ": writing sapling chain failed");
 
     hdChain = chain;
 
     // Sanity check
     if (!wallet->HaveKey(hdChain.GetID()))
-        throw std::runtime_error(std::string(__func__) + ": Not found seed in wallet");
+        throw std::runtime_error(std::string(__func__) + ": Not found sapling seed in wallet");
 }
