@@ -284,7 +284,10 @@ bool CWalletDB::WriteMinVersion(int nVersion)
 bool CWalletDB::WriteHDChain(const CHDChain& chain)
 {
     nWalletDBUpdated++;
-    return Write(std::string("hdchain"), chain);
+    std::string key = std::string("hdchain");
+    if (chain.chainType == HDChain::ChainCounterType::Sapling)
+        key += std::string("_sap");
+    return Write(key, chain);
 }
 
 bool CWalletDB::ReadAccount(const std::string& strAccount, CAccount& account)
@@ -682,7 +685,7 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
                 strErr = "Error reading wallet database: LoadDestData failed";
                 return false;
             }
-        } else if (strType == "hdchain") {
+        } else if (strType == "hdchain") { // Regular key chain counter
             CHDChain chain;
             ssValue >> chain;
             pwallet->GetScriptPubKeyMan()->SetHDChain(chain, true);
