@@ -44,7 +44,7 @@ public:
 
 
     // Sapling metadata
-    std::map<libzcash::SaplingPaymentAddress, CKeyMetadata> mapSaplingZKeyMetadata;
+    std::map<libzcash::SaplingIncomingViewingKey, CKeyMetadata> mapSaplingZKeyMetadata;
 
 private:
     /* Parent wallet */

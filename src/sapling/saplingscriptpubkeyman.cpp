@@ -14,6 +14,7 @@ libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 
     auto sk = libzcash::SaplingSpendingKey::random();
     auto fvk = sk.full_viewing_key();
+    auto ivk = fvk.in_viewing_key();
     auto addr = sk.default_address();
 
     // Check for collision, even though it is unlikely to ever occur
@@ -22,7 +23,7 @@ libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 
     // Create new metadata
     int64_t nCreationTime = GetTime();
-    mapSaplingZKeyMetadata[addr] = CKeyMetadata(nCreationTime);
+    mapSaplingZKeyMetadata[ivk] = CKeyMetadata(nCreationTime);
 
     if (!AddSaplingZKey(sk, addr)) {
         throw std::runtime_error("SaplingScriptPubKeyMan::GenerateNewSaplingZKey(): AddSaplingZKey failed");
