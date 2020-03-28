@@ -28,19 +28,7 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
     setCssProperty({ui->layoutOptions1, ui->layoutOptions2, ui->layoutOptions3}, "container-options");
 
     // Title
-    ui->labelTitle->setText(tr("Information"));
     setCssTitleScreen(ui->labelTitle);
-
-    ui->labelTitleGeneral->setText(tr("General"));
-    ui->labelTitleClient->setText(tr("Client Version: "));
-    ui->labelTitleAgent->setText(tr("User Agent:"));
-    ui->labelTitleBerkeley->setText(tr("BerkeleyDB version:"));
-    ui->labelTitleDataDir->setText(tr("Datadir: "));
-    ui->labelTitleTime->setText(tr("Startup time:  "));
-    ui->labelTitleNetwork->setText(tr("Network"));
-    ui->labelTitleName->setText(tr("Name:"));
-    ui->labelTitleConnections->setText(tr("Connections:"));
-    ui->labelTitleMasternodes->setText(tr("Number of Masternodes:"));
 
     setCssProperty({
         ui->labelTitleDataDir,
@@ -74,24 +62,16 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
 
     },"text-title");
 
-    ui->labelTitleBlockchain->setText(tr("Blockchain"));
-    ui->labelTitleBlockNumber->setText(tr("Current number of blocks:"));
-    ui->labelTitleBlockTime->setText(tr("Last block time:"));
-    ui->labelTitleBlockHash->setText(tr("Last block hash:"));
-
-    ui->labelTitleMemory->setText(tr("Memory Pool"));
+    // TODO: Mempool section is not currently implemented and instead, hidden for now
     ui->labelTitleMemory->setVisible(false);
-
-    ui->labelTitleNumberTransactions->setText(tr("Current number of transactions:"));
     ui->labelTitleNumberTransactions->setVisible(false);
-
     ui->labelInfoNumberTransactions->setText("0");
     ui->labelInfoNumberTransactions->setVisible(false);
 
     // Information Network
     ui->labelInfoName->setText(tr("Main"));
     ui->labelInfoName->setProperty("cssClass", "text-main-settings");
-    ui->labelInfoConnections->setText("0 (In: 0 / Out:0)");
+    ui->labelInfoConnections->setText("0 (In: 0 / Out: 0)");
     ui->labelInfoMasternodes->setText("Total: 0 (IPv4: 0 / IPv6: 0 / Tor: 0 / Unknown: 0");
 
     // Information Blockchain
@@ -101,9 +81,6 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
     ui->labelInfoBlockHash->setProperty("cssClass", "text-main-hash");
 
     // Buttons
-    ui->pushButtonFile->setText(tr("Wallet Conf"));
-    ui->pushButtonNetworkMonitor->setText(tr("Network Monitor"));
-    ui->pushButtonBackups->setText(tr("Backups"));
     setCssBtnSecondary(ui->pushButtonBackups);
     setCssBtnSecondary(ui->pushButtonFile);
     setCssBtnSecondary(ui->pushButtonNetworkMonitor);

@@ -57,7 +57,7 @@
           <item>
            <widget class="QLabel" name="labelTitle">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Information</string>
             </property>
            </widget>
           </item>
@@ -135,7 +135,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string/>
+                <string>Backups</string>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -163,7 +163,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string/>
+                <string>Wallet Conf</string>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -218,7 +218,7 @@
            <item>
             <widget class="QLabel" name="labelTitleGeneral">
              <property name="text">
-              <string>TextLabel</string>
+              <string>General</string>
              </property>
             </widget>
            </item>
@@ -242,7 +242,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>Client Version:</string>
                </property>
               </widget>
              </item>
@@ -255,7 +255,7 @@
                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">N/A</string>
                </property>
               </widget>
              </item>
@@ -281,7 +281,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>User Agent:</string>
                </property>
               </widget>
              </item>
@@ -294,7 +294,7 @@
                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">N/A</string>
                </property>
               </widget>
              </item>
@@ -320,7 +320,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>BerkeleyDB version:</string>
                </property>
               </widget>
              </item>
@@ -333,7 +333,7 @@
                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">N/A</string>
                </property>
               </widget>
              </item>
@@ -359,7 +359,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>Datadir:</string>
                </property>
               </widget>
              </item>
@@ -372,7 +372,7 @@
                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">N/A</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -401,7 +401,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string>Startup time:</string>
                </property>
               </widget>
              </item>
@@ -414,7 +414,7 @@
                 <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
                </property>
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">N/A</string>
                </property>
               </widget>
              </item>
@@ -442,7 +442,7 @@
         <item>
          <widget class="QLabel" name="labelTitleNetwork">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Network</string>
           </property>
          </widget>
         </item>
@@ -466,7 +466,7 @@
              </size>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>Name:</string>
             </property>
            </widget>
           </item>
@@ -479,7 +479,7 @@
              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">N/A</string>
             </property>
            </widget>
           </item>
@@ -505,7 +505,7 @@
              </size>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>Connections:</string>
             </property>
            </widget>
           </item>
@@ -518,7 +518,7 @@
              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">N/A</string>
             </property>
            </widget>
           </item>
@@ -557,7 +557,7 @@
               </size>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>Number of Masternodes:</string>
              </property>
             </widget>
            </item>
@@ -570,7 +570,7 @@
               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string notr="true">N/A</string>
              </property>
             </widget>
            </item>
@@ -596,7 +596,7 @@
         <item>
          <widget class="QLabel" name="labelTitleBlockchain">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Blockchain</string>
           </property>
          </widget>
         </item>
@@ -620,7 +620,7 @@
              </size>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>Current number of blocks:</string>
             </property>
            </widget>
           </item>
@@ -633,7 +633,7 @@
              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">N/A</string>
             </property>
            </widget>
           </item>
@@ -659,7 +659,7 @@
              </size>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>Last block time:</string>
             </property>
            </widget>
           </item>
@@ -672,7 +672,7 @@
              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">N/A</string>
             </property>
            </widget>
           </item>
@@ -711,7 +711,7 @@
               </size>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>Last block hash:</string>
              </property>
             </widget>
            </item>
@@ -724,7 +724,7 @@
               <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string notr="true">N/A</string>
              </property>
             </widget>
            </item>
@@ -750,7 +750,7 @@
         <item>
          <widget class="QLabel" name="labelTitleMemory">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Memory Pool</string>
           </property>
          </widget>
         </item>
@@ -774,14 +774,14 @@
              </size>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>Current number of transactions:</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="labelInfoNumberTransactions">
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">N/A</string>
             </property>
            </widget>
           </item>
