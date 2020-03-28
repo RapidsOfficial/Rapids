@@ -37,10 +37,6 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     setShadow(ui->pushButtonAddressDocuments);
     ui->labelDivider->setProperty("cssClass", "container-divider");
 
-    // Buttons
-    setCssBtnPrimary(ui->pushButtonSave);
-    setCssBtnPrimary(ui->pushButtonExportAddress);
-
     SortEdit* lineEdit = new SortEdit(ui->comboBoxSort);
     connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSort->showPopup();});
     setSortTx(ui->comboBoxSort, lineEdit);
@@ -55,32 +51,35 @@ SettingsExportCSV::SettingsExportCSV(PIVXGUI* _window, QWidget *parent) :
     setFilterAddressBook(ui->comboBoxSortAddressType, lineEditAddressBook);
     ui->comboBoxSortAddressType->setCurrentIndex(0);
 
-    connect(ui->pushButtonSave, &QPushButton::clicked, this, &SettingsExportCSV::exportClicked);
     connect(ui->pushButtonDocuments, &QPushButton::clicked, [this](){selectFileOutput(true);});
-
-    connect(ui->pushButtonExportAddress, &QPushButton::clicked, this, &SettingsExportCSV::onExportAddressesClicked);
     connect(ui->pushButtonAddressDocuments, &QPushButton::clicked, [this](){selectFileOutput(false);});
 }
 
 void SettingsExportCSV::selectFileOutput(const bool& isTxExport)
 {
-    QString filenameRet = GUIUtil::getSaveFileName(this,
+    QString filename = GUIUtil::getSaveFileName(this,
                                         isTxExport ? tr("Export CSV") : tr("Export Address List"), QString(),
                                         isTxExport ? tr("PIVX_tx_csv_export(*.csv)") : tr("PIVX_addresses_csv_export(*.csv)"),
                                         nullptr);
 
-    if (!filenameRet.isEmpty()) {
-        if (isTxExport) {
-            filename = filenameRet;
+    if (isTxExport) {
+        if (!filename.isEmpty()) {
             ui->pushButtonDocuments->setText(filename);
+            exportTxes(filename);
         } else {
-            filenameAddressBook = filenameRet;
-            ui->pushButtonAddressDocuments->setText(filenameAddressBook);
+            ui->pushButtonDocuments->setText(tr("Select folder..."));
+        }
+    } else {
+        if (!filename.isEmpty()) {
+            ui->pushButtonAddressDocuments->setText(filename);
+            exportAddrs(filename);
+        } else {
+            ui->pushButtonAddressDocuments->setText(tr("Select folder..."));
         }
     }
 }
 
-void SettingsExportCSV::exportClicked()
+void SettingsExportCSV::exportTxes(const QString& filename)
 {
     if (filename.isNull()) {
         inform(tr("Please select a folder to export the csv file first."));
@@ -152,9 +151,9 @@ void SettingsExportCSV::exportClicked()
     }
 }
 
-void SettingsExportCSV::onExportAddressesClicked()
+void SettingsExportCSV::exportAddrs(const QString& filename)
 {
-    if (filenameAddressBook.isNull()) {
+    if (filename.isNull()) {
         inform(tr("Please select a folder to export the csv file first."));
         return;
     }
@@ -178,7 +177,7 @@ void SettingsExportCSV::onExportAddressesClicked()
             return;
         }
 
-        CSVModelWriter writer(filenameAddressBook);
+        CSVModelWriter writer(filename);
         // name, column, role
         writer.setModel(addressFilter);
         writer.addColumn("Label", AddressTableModel::Label, Qt::EditRole);
@@ -188,9 +187,9 @@ void SettingsExportCSV::onExportAddressesClicked()
     }
 
     if (fExport) {
-        inform(tr("Exporting Successful\nThe address book was successfully saved to %1.").arg(filenameAddressBook));
+        inform(tr("Exporting Successful\nThe address book was successfully saved to %1.").arg(filename));
     } else {
-        inform(tr("Exporting Failed\nThere was an error trying to save the address list to %1. Please try again.").arg(filenameAddressBook));
+        inform(tr("Exporting Failed\nThere was an error trying to save the address list to %1. Please try again.").arg(filename));
     }
 }
 

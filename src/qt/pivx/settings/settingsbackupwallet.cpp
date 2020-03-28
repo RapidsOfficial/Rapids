@@ -46,36 +46,24 @@ SettingsBackupWallet::SettingsBackupWallet(PIVXGUI* _window, QWidget *parent) :
     setShadow(ui->pushButtonDocuments);
 
     // Buttons
-    ui->pushButtonSave->setText(tr("Backup"));
-    setCssBtnPrimary(ui->pushButtonSave);
-
     ui->pushButtonSave_2->setText(tr("Change Passphrase"));
     setCssBtnPrimary(ui->pushButtonSave_2);
 
-    connect(ui->pushButtonSave, &QPushButton::clicked, this, &SettingsBackupWallet::backupWallet);
     connect(ui->pushButtonDocuments, &QPushButton::clicked, this, &SettingsBackupWallet::selectFileOutput);
     connect(ui->pushButtonSave_2, &QPushButton::clicked, this, &SettingsBackupWallet::changePassphrase);
 }
 
 void SettingsBackupWallet::selectFileOutput()
 {
-    QString filenameRet = GUIUtil::getSaveFileName(this,
+    QString filename = GUIUtil::getSaveFileName(this,
                                         tr("Backup Wallet"), QString(),
                                         tr("Wallet Data (*.dat)"), NULL);
 
-    if (!filenameRet.isEmpty()) {
-        filename = filenameRet;
+    if (!filename.isEmpty() && walletModel) {
         ui->pushButtonDocuments->setText(filename);
-    }
-}
-
-void SettingsBackupWallet::backupWallet()
-{
-    if(walletModel && !filename.isEmpty()) {
         inform(walletModel->backupWallet(filename) ? tr("Backup created") : tr("Backup creation failed"));
-        filename = QString();
-        ui->pushButtonDocuments->setText(tr("Select folder..."));
     } else {
+        ui->pushButtonDocuments->setText(tr("Select folder..."));
         inform(tr("Please select a folder to export the backup first."));
     }
 }
