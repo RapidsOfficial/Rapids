@@ -4,12 +4,14 @@
 
 #include "qt/pivx/settings/settingsinformationwidget.h"
 #include "qt/pivx/settings/forms/ui_settingsinformationwidget.h"
+
 #include "clientmodel.h"
 #include "chainparams.h"
 #include "db.h"
 #include "util.h"
 #include "guiutil.h"
 #include "qt/pivx/qtutils.h"
+
 #include <QDir>
 
 SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *parent) :
@@ -127,7 +129,8 @@ SettingsInformationWidget::SettingsInformationWidget(PIVXGUI* _window,QWidget *p
 }
 
 
-void SettingsInformationWidget::loadClientModel(){
+void SettingsInformationWidget::loadClientModel()
+{
     if (clientModel && clientModel->getPeerTableModel() && clientModel->getBanTableModel()) {
         // Provide initial values
         ui->labelInfoClient->setText(clientModel->formatFullVersion());
@@ -145,7 +148,8 @@ void SettingsInformationWidget::loadClientModel(){
     }
 }
 
-void SettingsInformationWidget::setNumConnections(int count){
+void SettingsInformationWidget::setNumConnections(int count)
+{
     if (!clientModel)
         return;
 
@@ -156,7 +160,8 @@ void SettingsInformationWidget::setNumConnections(int count){
     ui->labelInfoConnections->setText(connections);
 }
 
-void SettingsInformationWidget::setNumBlocks(int count){
+void SettingsInformationWidget::setNumBlocks(int count)
+{
     ui->labelInfoBlockNumber->setText(QString::number(count));
     if (clientModel) {
         ui->labelInfoBlockTime->setText(clientModel->getLastBlockDate().toString());
@@ -169,7 +174,8 @@ void SettingsInformationWidget::setMasternodeCount(const QString& strMasternodes
     ui->labelInfoMasternodes->setText(strMasternodes);
 }
 
-void SettingsInformationWidget::openNetworkMonitor(){
+void SettingsInformationWidget::openNetworkMonitor()
+{
     if(!rpcConsole){
         rpcConsole = new RPCConsole(0);
         rpcConsole->setClientModel(clientModel);
@@ -177,6 +183,7 @@ void SettingsInformationWidget::openNetworkMonitor(){
     rpcConsole->showNetwork();
 }
 
-SettingsInformationWidget::~SettingsInformationWidget(){
+SettingsInformationWidget::~SettingsInformationWidget()
+{
     delete ui;
 }
