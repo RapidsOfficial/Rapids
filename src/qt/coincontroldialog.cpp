@@ -65,7 +65,6 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
                     }, "container-border-purple");
 
     // Title
-    ui->labelTitle->setText("Select PIV Denominations to Spend");
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
 
     // Label Style
@@ -94,8 +93,6 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
 
     // Buttons
     setCssProperty({ui->pushButtonSelectAll, ui->pushButtonToggleLock}, "btn-check");
-
-    ui->btnEsc->setText("");
     ui->btnEsc->setProperty("cssClass", "ic-close");
     ui->pushButtonOk->setProperty("cssClass", "btn-primary");
 
