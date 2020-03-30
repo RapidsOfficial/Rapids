@@ -51,7 +51,6 @@ libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 }
 
 // Add spending key to keystore
-// TODO: persist to disk
 bool SaplingScriptPubKeyMan::AddSaplingZKey(
         const libzcash::SaplingExtendedSpendingKey &sk,
         const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
@@ -66,12 +65,11 @@ bool SaplingScriptPubKeyMan::AddSaplingZKey(
         return true;
     }
 
-    // TODO: Persist to disk
-    // if (!IsCrypted()) {
-    //     return CWalletDB(wallet->strWalletFile).WriteSaplingZKey(addr,
-    //                                               sk,
-    //                                               mapSaplingZKeyMetadata[addr]);
-    // }
+    if (!wallet->IsCrypted()) {
+        auto ivk = sk.expsk.full_viewing_key().in_viewing_key();
+        return CWalletDB(wallet->strWalletFile).WriteSaplingZKey(ivk, sk, mapSaplingZKeyMetadata[ivk]);
+    }
+
     return true;
 }
 
@@ -84,7 +82,16 @@ bool SaplingScriptPubKeyMan::AddCryptedSaplingSpendingKey(const libzcash::Saplin
     if (!wallet->fFileBacked)
         return true;
     {
-        // TODO: Sapling - Write to disk
+        LOCK(wallet->cs_wallet);
+        if (wallet->pwalletdbEncryption) {
+            return wallet->pwalletdbEncryption->WriteCryptedSaplingZKey(extfvk,
+                                                                vchCryptedSecret,
+                                                                mapSaplingZKeyMetadata[extfvk.fvk.in_viewing_key()]);
+        } else {
+            return CWalletDB(wallet->strWalletFile).WriteCryptedSaplingZKey(extfvk,
+                                                                    vchCryptedSecret,
+                                                                    mapSaplingZKeyMetadata[extfvk.fvk.in_viewing_key()]);
+        }
     }
     return false;
 }
@@ -97,6 +104,27 @@ bool SaplingScriptPubKeyMan::HaveSpendingKeyForPaymentAddress(const libzcash::Sa
     return wallet->GetSaplingIncomingViewingKey(zaddr, ivk) &&
            wallet->GetSaplingFullViewingKey(ivk, fvk) &&
            wallet->HaveSaplingSpendingKey(fvk);
+}
+
+///////////////////// Load ////////////////////////////////////////
+
+bool SaplingScriptPubKeyMan::LoadCryptedSaplingZKey(
+        const libzcash::SaplingExtendedFullViewingKey &extfvk,
+        const std::vector<unsigned char> &vchCryptedSecret)
+{
+    return wallet->AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, extfvk.DefaultAddress());
+}
+
+bool SaplingScriptPubKeyMan::LoadSaplingZKeyMetadata(const libzcash::SaplingIncomingViewingKey &ivk, const CKeyMetadata &meta)
+{
+    AssertLockHeld(wallet->cs_wallet); // mapSaplingZKeyMetadata
+    mapSaplingZKeyMetadata[ivk] = meta;
+    return true;
+}
+
+bool SaplingScriptPubKeyMan::LoadSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key)
+{
+    return wallet->AddSaplingSpendingKey(key, key.DefaultAddress());
 }
 
 ///////////////////// Setup ///////////////////////////////////////

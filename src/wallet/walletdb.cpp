@@ -105,6 +105,39 @@ bool CWalletDB::WriteCryptedKey(const CPubKey& vchPubKey,
     return true;
 }
 
+bool CWalletDB::WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
+                                 const libzcash::SaplingExtendedSpendingKey &key,
+                                 const CKeyMetadata &keyMeta)
+{
+    nWalletDBUpdated++;
+
+    if (!Write(std::make_pair(std::string("sapzkeymeta"), ivk), keyMeta))
+        return false;
+
+    return Write(std::make_pair(std::string("sapzkey"), ivk), key, false);
+}
+
+bool CWalletDB::WriteCryptedSaplingZKey(
+        const libzcash::SaplingExtendedFullViewingKey &extfvk,
+        const std::vector<unsigned char>& vchCryptedSecret,
+        const CKeyMetadata &keyMeta)
+{
+    const bool fEraseUnencryptedKey = true;
+    nWalletDBUpdated++;
+    auto ivk = extfvk.fvk.in_viewing_key();
+
+    if (!Write(std::make_pair(std::string("sapzkeymeta"), ivk), keyMeta))
+        return false;
+
+    if (!Write(std::make_pair(std::string("csapzkey"), ivk), std::make_pair(extfvk, vchCryptedSecret), false))
+        return false;
+
+    if (fEraseUnencryptedKey) {
+        Erase(std::make_pair(std::string("sapzkey"), ivk));
+    }
+    return true;
+}
+
 bool CWalletDB::WriteMasterKey(unsigned int nID, const CMasterKey& kMasterKey)
 {
     nWalletDBUpdated++;
@@ -438,6 +471,8 @@ public:
     unsigned int nKeys;
     unsigned int nCKeys;
     unsigned int nKeyMeta;
+    unsigned int nZKeys;
+    unsigned int nZKeyMeta;
     bool fIsEncrypted;
     bool fAnyUnordered;
     int nFileVersion;
@@ -445,7 +480,7 @@ public:
 
     CWalletScanState()
     {
-        nKeys = nCKeys = nKeyMeta = 0;
+        nKeys = nCKeys = nKeyMeta = nZKeys = nZKeyMeta = 0;
         fIsEncrypted = false;
         fAnyUnordered = false;
         nFileVersion = 0;
@@ -689,6 +724,42 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             CHDChain chain;
             ssValue >> chain;
             pwallet->GetScriptPubKeyMan()->SetHDChain(chain, true);
+        } else if (strType == "sapzkey") {
+            libzcash::SaplingIncomingViewingKey ivk;
+            ssKey >> ivk;
+            libzcash::SaplingExtendedSpendingKey key;
+            ssValue >> key;
+
+            if (!pwallet->LoadSaplingZKey(key)) {
+                strErr = "Error reading wallet database: LoadSaplingZKey failed";
+                return false;
+            }
+
+            //add checks for integrity
+            wss.nZKeys++;
+        } else if (strType == "csapzkey") {
+            libzcash::SaplingIncomingViewingKey ivk;
+            ssKey >> ivk;
+            libzcash::SaplingExtendedFullViewingKey extfvk;
+            ssValue >> extfvk;
+            std::vector<unsigned char> vchCryptedSecret;
+            ssValue >> vchCryptedSecret;
+            wss.nCKeys++;
+
+            if (!pwallet->LoadCryptedSaplingZKey(extfvk, vchCryptedSecret)) {
+                strErr = "Error reading wallet database: LoadCryptedSaplingZKey failed";
+                return false;
+            }
+            wss.fIsEncrypted = true;
+        } else if (strType == "sapzkeymeta") {
+            libzcash::SaplingIncomingViewingKey ivk;
+            ssKey >> ivk;
+            CKeyMetadata keyMeta;
+            ssValue >> keyMeta;
+
+            wss.nZKeyMeta++;
+
+            pwallet->LoadSaplingZKeyMetadata(ivk, keyMeta);
         }
     } catch (...) {
         return false;
@@ -699,7 +770,8 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
 static bool IsKeyType(std::string strType)
 {
     return (strType == "key" || strType == "wkey" ||
-            strType == "mkey" || strType == "ckey");
+            strType == "mkey" || strType == "ckey" ||
+            strType == "sapzkey" || strType == "csapzkey");
 }
 
 DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
@@ -773,6 +845,9 @@ DBErrors CWalletDB::LoadWallet(CWallet* pwallet)
 
     LogPrintf("Keys: %u plaintext, %u encrypted, %u w/ metadata, %u total\n",
         wss.nKeys, wss.nCKeys, wss.nKeyMeta, wss.nKeys + wss.nCKeys);
+
+    LogPrintf("ZKeys: %u plaintext, -- encrypted, %u w/metadata, %u total\n",
+              wss.nZKeys, wss.nZKeyMeta, wss.nZKeys + 0);
 
     // nTimeFirstKey is only reliable if all keys have metadata
     if ((wss.nKeys + wss.nCKeys) != wss.nKeyMeta)
