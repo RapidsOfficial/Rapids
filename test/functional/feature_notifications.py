@@ -6,7 +6,11 @@
 import os
 
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import assert_equal, wait_until, connect_nodes_bi
+from test_framework.util import (
+    assert_equal,
+    wait_until,
+    connect_nodes_bi,
+)
 
 class NotificationsTest(PivxTestFramework):
     def set_test_params(self):
