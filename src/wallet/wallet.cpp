@@ -4165,9 +4165,9 @@ bool CWallet::AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
                     const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr) { return m_sspk_man->AddSaplingZKey(key, defaultAddr); }
 
 bool CWallet::AddCryptedSaplingSpendingKeyW(
-        const libzcash::SaplingFullViewingKey &fvk,
+        const libzcash::SaplingExtendedFullViewingKey &extfvk,
         const std::vector<unsigned char> &vchCryptedSecret,
-        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr) { return m_sspk_man->AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr); }
+        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr) { return m_sspk_man->AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, defaultAddr); }
 
 bool CWallet::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const { return m_sspk_man->HaveSpendingKeyForPaymentAddress(zaddr); }
 

@@ -75,11 +75,11 @@ bool SaplingScriptPubKeyMan::AddSaplingZKey(
     return true;
 }
 
-bool SaplingScriptPubKeyMan::AddCryptedSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk,
+bool SaplingScriptPubKeyMan::AddCryptedSaplingSpendingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
                                            const std::vector<unsigned char> &vchCryptedSecret,
                                            const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
-    if (!wallet->AddCryptedSaplingSpendingKey(fvk, vchCryptedSecret, defaultAddr))
+    if (!wallet->AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, defaultAddr))
         return false;
     if (!wallet->fFileBacked)
         return true;

@@ -401,7 +401,7 @@ public:
     bool AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
             const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
     bool AddCryptedSaplingSpendingKeyW(
-            const libzcash::SaplingFullViewingKey &fvk,
+            const libzcash::SaplingExtendedFullViewingKey &extfvk,
             const std::vector<unsigned char> &vchCryptedSecret,
             const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
     //! Returns true if the wallet contains the spending key
