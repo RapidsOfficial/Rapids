@@ -57,30 +57,31 @@ BASE_SCRIPTS= [
 
     # Longest test should go first, to favor running tests in parallel
     'wallet_basic.py',                          # ~ 833 sec
-    'wallet_backup.py',                         # ~ 459 sec
-    'mining_pos_reorg.py',                      # ~ 305 sec
+    'wallet_backup.py',                         # ~ 477 sec
 
     # vv Tests less than 5m vv
-    'mining_pos_coldStaking.py',                # ~ 289 sec
-    'wallet_zerocoin_publicspends.py',          # ~ 270 sec
-    'p2p_time_offset.py',                       # ~ 263 sec
-    'wallet_abandonconflict.py',                # ~ 208 sec
-    'wallet_hd.py',                             # ~ 205 sec
-    'rpc_rawtransaction.py',                    # ~ 190 sec
-    'wallet_zapwallettxes.py',                  # ~ 172 sec
-    'wallet_keypool_topup.py',                  # ~ 167 sec
+    'p2p_time_offset.py',                       # ~ 267 sec
+    'mining_pos_coldStaking.py',                # ~ 215 sec
+    'mining_pos_reorg.py',                      # ~ 212 sec
+    'wallet_abandonconflict.py',                # ~ 212 sec
+    'wallet_hd.py',                             # ~ 210 sec
+    'wallet_zerocoin_publicspends.py',          # ~ 202 sec
+    'rpc_rawtransaction.py',                    # ~ 193 sec
+    'wallet_zapwallettxes.py',                  # ~ 180 sec
+    'wallet_keypool_topup.py',                  # ~ 174 sec
     'wallet_txn_doublespend.py --mineblock',    # ~ 157 sec
     'wallet_txn_clone.py --mineblock',          # ~ 157 sec
+    'rpc_spork.py',                             # ~ 156 sec
     'interface_rest.py',                        # ~ 154 sec
-    'rpc_spork.py',                             # ~ 149 sec
     'feature_proxy.py',                         # ~ 143 sec
     'feature_uacomment.py',                     # ~ 130 sec
-    'mining_pos_fakestake.py',                  # ~ 123 sec
+    'wallet_upgrade.py',                        # ~ 124 sec
     'wallet_import_stakingaddress.py',          # ~ 123 sec
 
     # vv Tests less than 2m vv
     'p2p_disconnect_ban.py',                    # ~ 118 sec
     'wallet_listreceivedby.py',                 # ~ 117 sec
+    'mining_pos_fakestake.py',                  # ~ 113 sec
     'feature_reindex.py',                       # ~ 110 sec
     'interface_http.py',                        # ~ 105 sec
     'rpc_listtransactions.py',                  # ~ 97 sec
@@ -93,16 +94,15 @@ BASE_SCRIPTS= [
     'interface_bitcoin_cli.py',                 # ~ 80 sec
 
     # vv Tests less than 60s vv
-    'wallet_accounts.py',                       # ~ 55 sec
+    'wallet_accounts.py',                       # ~ 57 sec
+    'rpc_signmessage.py',                       # ~ 54 sec
     'mempool_resurrect.py',                     # ~ 51 sec
-    'wallet_upgrade.py',                        # ~ 50 sec
     'rpc_budget.py',                            # ~ 50 sec
     'mempool_spend_coinbase.py',                # ~ 50 sec
     'rpc_signrawtransaction.py',                # ~ 50 sec
     'rpc_decodescript.py',                      # ~ 50 sec
     'rpc_blockchain.py',                        # ~ 50 sec
     'wallet_disable.py',                        # ~ 50 sec
-    'rpc_signmessage.py',                       # ~ 50 sec
     'feature_help.py',                          # ~ 30 sec
 
     # Don't append tests at the end to avoid merge conflicts
