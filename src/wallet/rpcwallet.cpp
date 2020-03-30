@@ -671,6 +671,50 @@ UniValue liststakingaddresses(const JSONRPCRequest& request)
     return ListaddressesForPurpose(AddressBook::AddressBookPurpose::COLD_STAKING);
 }
 
+UniValue listsaplingaddresses(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() > 1)
+        throw std::runtime_error(
+                "listsaplingaddresses ( includeWatchonly )\n"
+                "\nReturns the list of Sapling shielded addresses belonging to the wallet.\n"
+                "\nArguments:\n"
+                "1. includeWatchonly (bool, optional, default=false) Also include watchonly addresses (see 'importviewingkey')\n"
+                "\nResult:\n"
+                "[                     (json array of string)\n"
+                "  \"addr\"           (string) a sapling address belonging to the wallet\n"
+                "  ,...\n"
+                "]\n"
+                "\nExamples:\n"
+                + HelpExampleCli("listsaplingaddresses", "")
+                + HelpExampleRpc("listsaplingaddresses", "")
+        );
+
+    EnsureWallet();
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+
+    bool fIncludeWatchonly = false;
+    if (request.params.size() > 0) {
+        fIncludeWatchonly = request.params[0].get_bool();
+    }
+
+    UniValue ret(UniValue::VARR);
+
+    std::set<libzcash::SaplingPaymentAddress> addresses;
+    pwalletMain->GetSaplingPaymentAddresses(addresses);
+    libzcash::SaplingIncomingViewingKey ivk;
+    libzcash::SaplingFullViewingKey fvk;
+    for (libzcash::SaplingPaymentAddress addr : addresses) {
+        if (fIncludeWatchonly || (
+                pwalletMain->GetSaplingIncomingViewingKey(addr, ivk) &&
+                pwalletMain->GetSaplingFullViewingKey(ivk, fvk) &&
+                pwalletMain->HaveSaplingSpendingKey(fvk)
+        )) {
+            ret.push_back(KeyIO::EncodePaymentAddress(addr));
+        }
+    }
+    return ret;
+}
+
 CTxDestination GetLabelDestination(CWallet* const pwallet, const std::string& label, bool bForceNew = false)
 {
     CTxDestination dest;
@@ -5032,6 +5076,7 @@ const CRPCCommand vWalletRPCCommands[] =
 
         /** Sapling functions */
         { "wallet",             "getnewshieldedaddress",     &getnewshieldedaddress,     true  },
+        { "wallet",             "listsaplingaddresses",     &listsaplingaddresses,     false },
 
         /** Account functions (deprecated) */
         { "wallet",             "getaccountaddress",        &getaccountaddress,        true  },
