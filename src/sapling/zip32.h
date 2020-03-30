@@ -8,6 +8,7 @@
 #include "serialize.h"
 #include "allocators.h"
 #include "blob_uint256.h"
+#include "key.h"
 #include "uint256.h"
 #include "sapling/address.hpp"
 
@@ -17,20 +18,18 @@ const uint32_t ZIP32_HARDENED_KEY_LIMIT = 0x80000000;
 const size_t ZIP32_XFVK_SIZE = 169;
 const size_t ZIP32_XSK_SIZE = 169;
 
-typedef std::vector<unsigned char, secure_allocator<unsigned char>> RawHDSeed;
-
 class HDSeed {
 private:
-    RawHDSeed seed;
+    CPrivKey seed;
 
 public:
     HDSeed() {}
-    HDSeed(RawHDSeed& seedIn) : seed(seedIn) {}
+    HDSeed(const CPrivKey& seedIn) : seed(seedIn) {}
 
     static HDSeed Random(size_t len = 32);
     bool IsNull() const { return seed.empty(); };
     uint256 Fingerprint() const;
-    RawHDSeed RawSeed() const { return seed; }
+    CPrivKey RawSeed() const { return seed; }
 
     friend bool operator==(const HDSeed& a, const HDSeed& b)
     {

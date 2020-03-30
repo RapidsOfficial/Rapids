@@ -18,7 +18,7 @@ const unsigned char ZCASH_HD_SEED_FP_PERSONAL[crypto_generichash_blake2b_PERSONA
 HDSeed HDSeed::Random(size_t len)
 {
     assert(len >= 32);
-    RawHDSeed rawSeed(len, 0);
+    CPrivKey rawSeed(len, 0);
     GetRandBytes(rawSeed.data(), len);
     return HDSeed(rawSeed);
 }
