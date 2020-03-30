@@ -8,9 +8,13 @@ import time
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
-    connect_nodes_bi,
-    set_node_times
+    connect_nodes,
+    set_node_times,
 )
+
+def connect_nodes_bi(nodes, a, b):
+    connect_nodes(nodes[a], b)
+    connect_nodes(nodes[b], a)
 
 class TimeOffsetTest(PivxTestFramework):
     def set_test_params(self):
