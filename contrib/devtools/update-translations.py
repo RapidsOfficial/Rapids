@@ -14,6 +14,7 @@ It will do the following automatically:
 - update git for added translations
 - update build system
 '''
+import argparse
 import subprocess
 import re
 import sys
@@ -29,6 +30,8 @@ SOURCE_LANG = 'pivx_en.ts'
 LOCALE_DIR = 'src/qt/locale'
 # Minimum number of messages for translation to be considered at all
 MIN_NUM_MESSAGES = 10
+# Minimum completion percentage required to download from transifex
+MINIMUM_PERC = 80
 # Path to git
 GIT = os.getenv("GIT", "git")
 
@@ -49,8 +52,11 @@ def remove_current_translations():
     for (_,name) in all_ts_files('.orig'):
         os.remove(name + '.orig')
 
-def fetch_all_translations():
-    if subprocess.call([TX, 'pull', '-f', '-a']):
+def fetch_all_translations(fAll = False):
+    call_list = [TX, 'pull', '-f', '-a']
+    if not fAll:
+        call_list.append('--minimum-perc=%s' % MINIMUM_PERC)
+    if subprocess.call(call_list):
         print('Error while fetching translations', file=sys.stderr)
         sys.exit(1)
 
@@ -248,9 +254,17 @@ def update_build_systems():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(add_help=False,
+                                     usage='%(prog)s [update-translations.py options] [flags]',
+                                     description=__doc__,
+                                     epilog='',
+                                     formatter_class=argparse.RawTextHelpFormatter)
+    parser.add_argument('--ignore_completion', '-i', action='store_true', help='fetch all translations, even those not reaching the completion threshold')
+    args, unknown_args = parser.parse_known_args()
+
     check_at_repository_root()
     remove_current_translations()
-    fetch_all_translations()
+    fetch_all_translations(args.ignore_completion)
     postprocess_translations()
     update_git()
     update_build_systems()
