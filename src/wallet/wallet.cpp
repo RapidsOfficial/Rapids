@@ -74,7 +74,15 @@ std::string COutput::ToString() const
 
 bool CWallet::SetupSPKM()
 {
-    return m_spk_man->SetupGeneration();
+    if (m_spk_man->SetupGeneration()) {
+        LogPrintf("%s : spkm setup completed\n", __func__);
+        if (m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
+            LogPrintf("%s : sapling spkm setup completed\n", __func__);
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool CWallet::IsHDEnabled() const

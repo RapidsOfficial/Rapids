@@ -99,7 +99,20 @@ bool SaplingScriptPubKeyMan::HaveSpendingKeyForPaymentAddress(const libzcash::Sa
            wallet->HaveSaplingSpendingKey(fvk);
 }
 
+///////////////////// Setup ///////////////////////////////////////
+
+bool SaplingScriptPubKeyMan::SetupGeneration(const CKeyID& keyID, bool force)
+{
+    SetHDSeed(keyID, force);
+    return true;
+}
+
 void SaplingScriptPubKeyMan::SetHDSeed(const CPubKey& seed, bool force, bool memonly)
+{
+    SetHDSeed(seed.GetID(), force, memonly);
+}
+
+void SaplingScriptPubKeyMan::SetHDSeed(const CKeyID& keyID, bool force, bool memonly)
 {
     if (!hdChain.IsNull() && !force)
         throw std::runtime_error(std::string(__func__) + ": sapling trying to set a hd seed on an already created chain");
@@ -109,7 +122,7 @@ void SaplingScriptPubKeyMan::SetHDSeed(const CPubKey& seed, bool force, bool mem
     // the child index counter in the database
     // as a hdChain object
     CHDChain newHdChain(HDChain::ChainCounterType::Sapling);
-    if (!newHdChain.SetSeed(seed.GetID()) ) {
+    if (!newHdChain.SetSeed(keyID) ) {
         throw std::runtime_error(std::string(__func__) + ": set sapling hd seed failed");
     }
 
