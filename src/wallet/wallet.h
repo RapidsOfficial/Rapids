@@ -274,6 +274,7 @@ public:
 
     //! Get spkm
     ScriptPubKeyMan* GetScriptPubKeyMan() const;
+    SaplingScriptPubKeyMan* GetSaplingScriptPubKeyMan() const { return m_sspk_man.get(); };
 
     /*
      * Main wallet lock.
@@ -397,7 +398,7 @@ public:
     //! Generates new Sapling key
     libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
     //! Adds Sapling spending key to the store, and saves it to disk
-    bool AddSaplingZKey(const libzcash::SaplingSpendingKey &key,
+    bool AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
             const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
     bool AddCryptedSaplingSpendingKeyW(
             const libzcash::SaplingFullViewingKey &fvk,

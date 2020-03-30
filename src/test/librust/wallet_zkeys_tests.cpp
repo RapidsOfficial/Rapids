@@ -36,6 +36,16 @@ BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
     wallet.GetSaplingPaymentAddresses(addrs);
     BOOST_CHECK_EQUAL(0, addrs.size());
 
+    // No HD seed in the wallet
+    BOOST_CHECK_THROW(wallet.GenerateNewSaplingZKey(), std::runtime_error);
+
+    // Random seed
+    CKey seed;
+    seed.MakeNewKey(true);
+    wallet.AddKeyPubKey(seed, seed.GetPubKey());
+    wallet.GetSaplingScriptPubKeyMan()->SetHDSeed(seed.GetPubKey(), false, true);
+
+    // wallet should have one key
     auto address = wallet.GenerateNewSaplingZKey();
     wallet.GetSaplingPaymentAddresses(addrs);
     BOOST_CHECK_EQUAL(1, addrs.size());
@@ -44,15 +54,17 @@ BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
     BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(address));
 
     // manually add new spending key to wallet
-    libzcash::SaplingSpendingKey sk = libzcash::SaplingSpendingKey::random();
-    BOOST_CHECK(wallet.AddSaplingZKey(sk, sk.default_address()));
+    HDSeed seed1(seed.GetPrivKey());
+    auto m = libzcash::SaplingExtendedSpendingKey::Master(seed1);
+    auto sk = m.Derive(0);
+    BOOST_CHECK(wallet.AddSaplingZKey(sk, sk.DefaultAddress()));
 
     // verify wallet did add it
-    auto fvk = sk.full_viewing_key();
+    auto fvk = sk.expsk.full_viewing_key();
     BOOST_CHECK(wallet.HaveSaplingSpendingKey(fvk));
 
     // verify spending key stored correctly
-    libzcash::SaplingSpendingKey keyOut;
+    libzcash::SaplingExtendedSpendingKey keyOut;
     wallet.GetSaplingSpendingKey(fvk, keyOut);
     BOOST_CHECK(sk == keyOut);
 
@@ -60,7 +72,7 @@ BOOST_AUTO_TEST_CASE(store_and_load_sapling_zkeys) {
     wallet.GetSaplingPaymentAddresses(addrs);
     BOOST_CHECK_EQUAL(2, addrs.size());
     BOOST_CHECK_EQUAL(1, addrs.count(address));
-    BOOST_CHECK_EQUAL(1, addrs.count(sk.default_address()));
+    BOOST_CHECK_EQUAL(1, addrs.count(sk.DefaultAddress()));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

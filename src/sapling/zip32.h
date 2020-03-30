@@ -116,6 +116,11 @@ struct SaplingExtendedSpendingKey {
     }
 };
 
+typedef boost::variant<InvalidEncoding, SproutSpendingKey, SaplingExtendedSpendingKey> SpendingKey;
+
 }
+
+/** Check whether a SpendingKey is not an InvalidEncoding. */
+bool IsValidSpendingKey(const libzcash::SpendingKey& zkey);
 
 #endif // PIVX_ZIP32_H

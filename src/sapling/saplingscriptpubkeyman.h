@@ -24,7 +24,7 @@ public:
       Sets the seed's version based on the current wallet version (so the
       caller must ensure the current wallet version is correct before calling
       this function). */
-    void SetHDSeed(const CPubKey& key, bool force = false);
+    void SetHDSeed(const CPubKey& key, bool force = false, bool memonly = false);
 
     /* Set the HD chain model (chain child index counters) */
     void SetHDChain(CHDChain& chain, bool memonly);
@@ -33,7 +33,7 @@ public:
     //! Generates new Sapling key
     libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
     //! Adds Sapling spending key to the store, and saves it to disk
-    bool AddSaplingZKey(const libzcash::SaplingSpendingKey &key,
+    bool AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
                         const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
     bool AddCryptedSaplingSpendingKey(
             const libzcash::SaplingFullViewingKey &fvk,

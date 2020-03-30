@@ -10,23 +10,41 @@
 // Generate a new Sapling spending key and return its public payment address
 libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 {
-    AssertLockHeld(wallet->cs_wallet); // mapZKeyMetadata
+    LOCK(wallet->cs_wallet); // mapSaplingZKeyMetadata
 
-    auto sk = libzcash::SaplingSpendingKey::random();
-    auto fvk = sk.full_viewing_key();
-    auto ivk = fvk.in_viewing_key();
-    auto addr = sk.default_address();
+    // Try to get the seed
+    CKey seedKey;
+    if (!wallet->GetKey(hdChain.GetID(), seedKey))
+        throw std::runtime_error(std::string(__func__) + ": HD seed not found");
 
-    // Check for collision, even though it is unlikely to ever occur
-    if (wallet->HaveSaplingSpendingKey(fvk))
-        throw std::runtime_error("SaplingScriptPubKeyMan::GenerateNewSaplingZKey(): Collision detected");
+    HDSeed seed(seedKey.GetPrivKey());
+    auto m = libzcash::SaplingExtendedSpendingKey::Master(seed);
+
+    // We use a fixed keypath scheme of m/32'/coin_type'/account'
+    // Derive m/32'
+    auto m_32h = m.Derive(32 | ZIP32_HARDENED_KEY_LIMIT);
+    // Derive m/32'/coin_type'
+    auto m_32h_cth = m_32h.Derive(119 | ZIP32_HARDENED_KEY_LIMIT);
+
+    // Derive account key at next index, skip keys already known to the wallet
+    libzcash::SaplingExtendedSpendingKey xsk;
+    do {
+        xsk = m_32h_cth.Derive(hdChain.nExternalChainCounter | ZIP32_HARDENED_KEY_LIMIT);
+        hdChain.nExternalChainCounter++; // Increment childkey index
+    } while (wallet->HaveSaplingSpendingKey(xsk.expsk.full_viewing_key()));
+
+    // Update the chain model in the database
+    if (wallet->fFileBacked && !CWalletDB(wallet->strWalletFile).WriteHDChain(hdChain))
+        throw std::runtime_error(std::string(__func__) + ": Writing HD chain model failed");
 
     // Create new metadata
     int64_t nCreationTime = GetTime();
+    auto ivk = xsk.expsk.full_viewing_key().in_viewing_key();
     mapSaplingZKeyMetadata[ivk] = CKeyMetadata(nCreationTime);
 
-    if (!AddSaplingZKey(sk, addr)) {
-        throw std::runtime_error("SaplingScriptPubKeyMan::GenerateNewSaplingZKey(): AddSaplingZKey failed");
+    auto addr = xsk.DefaultAddress();
+    if (!AddSaplingZKey(xsk, addr)) {
+        throw std::runtime_error(std::string(__func__) + ": AddSaplingZKey failed");
     }
     // return default sapling payment address.
     return addr;
@@ -35,7 +53,7 @@ libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 // Add spending key to keystore
 // TODO: persist to disk
 bool SaplingScriptPubKeyMan::AddSaplingZKey(
-        const libzcash::SaplingSpendingKey &sk,
+        const libzcash::SaplingExtendedSpendingKey &sk,
         const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
 {
     AssertLockHeld(wallet->cs_wallet); // mapSaplingZKeyMetadata
@@ -50,7 +68,7 @@ bool SaplingScriptPubKeyMan::AddSaplingZKey(
 
     // TODO: Persist to disk
     // if (!IsCrypted()) {
-    //     return CWalletDB(strWalletFile).WriteSaplingZKey(addr,
+    //     return CWalletDB(wallet->strWalletFile).WriteSaplingZKey(addr,
     //                                               sk,
     //                                               mapSaplingZKeyMetadata[addr]);
     // }
@@ -81,7 +99,7 @@ bool SaplingScriptPubKeyMan::HaveSpendingKeyForPaymentAddress(const libzcash::Sa
            wallet->HaveSaplingSpendingKey(fvk);
 }
 
-void SaplingScriptPubKeyMan::SetHDSeed(const CPubKey& seed, bool force)
+void SaplingScriptPubKeyMan::SetHDSeed(const CPubKey& seed, bool force, bool memonly)
 {
     if (!hdChain.IsNull() && !force)
         throw std::runtime_error(std::string(__func__) + ": sapling trying to set a hd seed on an already created chain");
@@ -95,7 +113,7 @@ void SaplingScriptPubKeyMan::SetHDSeed(const CPubKey& seed, bool force)
         throw std::runtime_error(std::string(__func__) + ": set sapling hd seed failed");
     }
 
-    SetHDChain(newHdChain, false);
+    SetHDChain(newHdChain, memonly);
 }
 
 void SaplingScriptPubKeyMan::SetHDChain(CHDChain& chain, bool memonly)

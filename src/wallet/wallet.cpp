@@ -4153,7 +4153,7 @@ int CWallet::GetVersion()
 
 libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey() { return m_sspk_man->GenerateNewSaplingZKey(); }
 
-bool CWallet::AddSaplingZKey(const libzcash::SaplingSpendingKey &key,
+bool CWallet::AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
                     const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr) { return m_sspk_man->AddSaplingZKey(key, defaultAddr); }
 
 bool CWallet::AddCryptedSaplingSpendingKeyW(

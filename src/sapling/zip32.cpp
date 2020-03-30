@@ -136,4 +136,8 @@ libzcash::SaplingPaymentAddress SaplingExtendedSpendingKey::DefaultAddress() con
     return ToXFVK().DefaultAddress();
 }
 
+} // End namespace
+
+bool IsValidSpendingKey(const libzcash::SpendingKey& zkey) {
+    return zkey.which() != 0;
 }

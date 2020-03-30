@@ -56,7 +56,7 @@ public:
         SAPLING_PAYMENT_ADDRESS,
         SAPLING_FULL_VIEWING_KEY,
         SAPLING_INCOMING_VIEWING_KEY,
-        SAPLING_SPENDING_KEY, // todo: implement extended spend key
+        SAPLING_EXTENDED_SPEND_KEY,
 
         MAX_BECH32_TYPES
     };

@@ -18,21 +18,25 @@ BOOST_AUTO_TEST_CASE(ps_address_test)
 {
     SelectParams(CBaseChainParams::REGTEST);
 
-    for (size_t i = 0; i < 1000; i++) {
-        auto sk = libzcash::SaplingSpendingKey::random();
+    std::vector<unsigned char, secure_allocator<unsigned char>> rawSeed(32);
+    HDSeed seed(rawSeed);
+    auto m = libzcash::SaplingExtendedSpendingKey::Master(seed);
+
+    for (uint32_t i = 0; i < 1000; i++) {
+        auto sk = m.Derive(i);
         {
             std::string sk_string = KeyIO::EncodeSpendingKey(sk);
-            BOOST_CHECK(sk_string.compare(0, 26, Params().Bech32HRP(CChainParams::SAPLING_SPENDING_KEY)) == 0);
+            BOOST_CHECK(sk_string.compare(0, 26, Params().Bech32HRP(CChainParams::SAPLING_EXTENDED_SPEND_KEY)) == 0);
 
-            auto spendingkey2 = KeyIO::DecodeSpendingKey(sk_string);
+            libzcash::SpendingKey spendingkey2 = KeyIO::DecodeSpendingKey(sk_string);
             BOOST_CHECK(IsValidSpendingKey(spendingkey2));
 
-            BOOST_ASSERT(boost::get<libzcash::SaplingSpendingKey>(&spendingkey2) != nullptr);
-            auto sk2 = boost::get<libzcash::SaplingSpendingKey>(spendingkey2);
+            BOOST_ASSERT(boost::get<libzcash::SaplingExtendedSpendingKey>(&spendingkey2) != nullptr);
+            auto sk2 = boost::get<libzcash::SaplingExtendedSpendingKey>(spendingkey2);
             BOOST_CHECK(sk == sk2);
         }
         {
-            libzcash::SaplingPaymentAddress addr = sk.default_address();
+            libzcash::SaplingPaymentAddress addr = sk.DefaultAddress();
 
             std::string addr_string = KeyIO::EncodePaymentAddress(addr);
             BOOST_CHECK(addr_string.compare(0, 12, Params().Bech32HRP(CChainParams::SAPLING_PAYMENT_ADDRESS)) == 0);
@@ -51,23 +55,27 @@ BOOST_AUTO_TEST_CASE(EncodeAndDecodeSapling)
 {
     SelectParams(CBaseChainParams::MAIN);
 
-    for (size_t i = 0; i < 1000; i++) {
-        auto sk = libzcash::SaplingSpendingKey::random();
+    std::vector<unsigned char, secure_allocator<unsigned char>> rawSeed(32);
+    HDSeed seed(rawSeed);
+    libzcash::SaplingExtendedSpendingKey m = libzcash::SaplingExtendedSpendingKey::Master(seed);
+
+    for (uint32_t i = 0; i < 1000; i++) {
+        auto sk = m.Derive(i);
         {
             std::string sk_string = KeyIO::EncodeSpendingKey(sk);
             BOOST_CHECK(
                     sk_string.substr(0, 26) ==
-                    Params().Bech32HRP(CChainParams::SAPLING_SPENDING_KEY));
+                    Params().Bech32HRP(CChainParams::SAPLING_EXTENDED_SPEND_KEY));
 
             auto spendingkey2 = KeyIO::DecodeSpendingKey(sk_string);
             BOOST_CHECK(IsValidSpendingKey(spendingkey2));
 
-            BOOST_CHECK(boost::get<libzcash::SaplingSpendingKey>(&spendingkey2) != nullptr);
-            auto sk2 = boost::get<libzcash::SaplingSpendingKey>(spendingkey2);
+            BOOST_CHECK(boost::get<libzcash::SaplingExtendedSpendingKey>(&spendingkey2) != nullptr);
+            auto sk2 = boost::get<libzcash::SaplingExtendedSpendingKey>(spendingkey2);
             BOOST_CHECK(sk == sk2);
         }
         {
-            auto addr = sk.default_address();
+            auto addr = sk.DefaultAddress();
 
             std::string addr_string = KeyIO::EncodePaymentAddress(addr);
             BOOST_CHECK(

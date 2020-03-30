@@ -7,6 +7,7 @@
 #define PIVX_KEY_IO_SAPLING_H
 
 #include "chainparams.h"
+#include "sapling/zip32.h"
 
 namespace KeyIO {
 
