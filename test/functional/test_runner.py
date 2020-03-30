@@ -88,6 +88,7 @@ BASE_SCRIPTS= [
     'interface_http.py',                        # ~ 105 sec
     'wallet_listtransactions.py',               # ~ 97 sec
     'mempool_reorg.py',                         # ~ 92 sec
+    'sapling_wallet_persistence.py',            # ~ 90 sec
     'wallet_encryption.py',                     # ~ 89 sec
     'wallet_keypool.py',                        # ~ 88 sec
     'wallet_dump.py',                           # ~ 83 sec
