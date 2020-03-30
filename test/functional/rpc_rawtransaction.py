@@ -16,7 +16,7 @@ from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
-    connect_nodes_bi,
+    connect_nodes,
     Decimal,
 )
 
@@ -47,7 +47,7 @@ class RawTransactionsTest(PivxTestFramework):
 
     def setup_network(self, split=False):
         super().setup_network()
-        connect_nodes_bi(self.nodes,0,2)
+        connect_nodes(self.nodes[0], 2)
 
     def run_test(self):
 

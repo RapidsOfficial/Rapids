@@ -9,7 +9,7 @@ from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
     wait_until,
-    connect_nodes_bi,
+    connect_nodes,
 )
 
 class NotificationsTest(PivxTestFramework):
@@ -56,7 +56,7 @@ class NotificationsTest(PivxTestFramework):
         self.log.info("test -walletnotify after rescan")
         # restart node to rescan to force wallet notifications
         self.restart_node(1)
-        connect_nodes_bi(self.nodes, 0, 1)
+        connect_nodes(self.nodes[0], 1)
 
         wait_until(lambda: os.path.isfile(self.tx_filename) and os.stat(self.tx_filename).st_size >= (block_count * 65), timeout=10)
 

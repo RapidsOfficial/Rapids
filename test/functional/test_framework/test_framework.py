@@ -364,7 +364,7 @@ class PivxTestFramework():
         """
         Join the (previously split) network halves together.
         """
-        connect_nodes_bi(self.nodes, 1, 2)
+        connect_nodes(self.nodes[1], 2)
         self.sync_all()
 
     def sync_all(self, node_groups=None):

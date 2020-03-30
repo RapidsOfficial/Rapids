@@ -35,7 +35,6 @@ class NetTest(PivxTestFramework):
         #self._test_getpeerinfo()
 
     def _test_connection_count(self):
-        # connect_nodes_bi connects each node to the other
         assert_equal(self.nodes[0].getconnectioncount(), 2)
 
     def _test_getnettotals(self):

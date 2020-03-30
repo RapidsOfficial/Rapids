@@ -27,7 +27,7 @@ class InvalidateTest(PivxTestFramework):
         assert(self.nodes[1].getblockcount() == 6)
 
         self.log.info("Connect nodes to force a reorg")
-        connect_nodes_bi(self.nodes,0,1)
+        connect_nodes(self.nodes[0], 1)
         sync_blocks(self.nodes[0:2])
         assert(self.nodes[0].getblockcount() == 6)
         badhash = self.nodes[1].getblockhash(2)
@@ -40,7 +40,7 @@ class InvalidateTest(PivxTestFramework):
             raise AssertionError("Wrong tip for node0, hash %s, height %d"%(newhash,newheight))
 
         self.log.info("Make sure we won't reorg to a lower work chain:")
-        connect_nodes_bi(self.nodes,1,2)
+        connect_nodes(self.nodes[1], 2)
         self.log.info("Sync node 2 to node 1 so both have 6 blocks")
         sync_blocks(self.nodes[1:3])
         assert(self.nodes[2].getblockcount() == 6)

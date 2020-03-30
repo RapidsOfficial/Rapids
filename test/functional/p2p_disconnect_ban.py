@@ -9,7 +9,6 @@ from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
     connect_nodes,
-    connect_nodes_bi,
     assert_raises_rpc_error,
     wait_until,
 )
@@ -100,7 +99,7 @@ class DisconnectBanTest(PivxTestFramework):
         assert not [node for node in self.nodes[0].getpeerinfo() if node['addr'] == address1]
 
         self.log.info("disconnectnode: successfully reconnect node")
-        connect_nodes_bi(self.nodes, 0, 1)  # reconnect the node
+        connect_nodes(self.nodes[0], 1)  # reconnect the node
         assert_equal(len(self.nodes[0].getpeerinfo()), 2)
         assert [node for node in self.nodes[0].getpeerinfo() if node['addr'] == address1]
 

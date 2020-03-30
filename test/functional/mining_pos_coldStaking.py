@@ -12,8 +12,16 @@ from test_framework.mininode import network_thread_start
 from test_framework.pivx_node import PivxTestNode
 from test_framework.script import CScript, OP_CHECKSIG
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import connect_nodes_bi, p2p_port, bytes_to_hex_str, set_node_times, \
-    assert_equal, assert_greater_than, sync_blocks, sync_mempools, assert_raises_rpc_error
+from test_framework.util import (
+    assert_equal,
+    assert_greater_than,
+    assert_raises_rpc_error,
+    p2p_port,
+    bytes_to_hex_str,
+    set_node_times,
+    sync_blocks,
+    sync_mempools,
+)
 
 # filter utxos based on first 5 bytes of scriptPubKey
 def getDelegatedUtxos(utxos):
@@ -31,15 +39,6 @@ class PIVX_ColdStakingTest(PivxTestFramework):
         # Start with PoW cache: 200 blocks
         self._initialize_chain()
         self.enable_mocktime()
-
-
-    def setup_network(self):
-        ''' Can't rely on syncing all the nodes when staking=1
-        '''
-        self.setup_nodes()
-        for i in range(self.num_nodes - 1):
-            for j in range(i+1, self.num_nodes):
-                connect_nodes_bi(self.nodes, i, j)
 
     def init_test(self):
         title = "*** Starting %s ***" % self.__class__.__name__
