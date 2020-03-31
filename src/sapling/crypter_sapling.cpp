@@ -19,7 +19,7 @@ bool CCryptoKeyStore::AddSaplingSpendingKey(
         const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     {
-        LOCK(cs_SpendingKeyStore);
+        LOCK2(cs_SpendingKeyStore, cs_KeyStore);
         if (!IsCrypted()) {
             return CBasicKeyStore::AddSaplingSpendingKey(sk, defaultAddr);
         }
