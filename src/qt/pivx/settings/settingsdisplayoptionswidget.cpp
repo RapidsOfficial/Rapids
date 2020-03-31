@@ -106,7 +106,8 @@ SettingsDisplayOptionsWidget::SettingsDisplayOptionsWidget(PIVXGUI* _window, QWi
     connect(ui->pushButtonClean, &QPushButton::clicked, [this] { Q_EMIT discardSettings(); });
 }
 
-void SettingsDisplayOptionsWidget::initLanguages(){
+void SettingsDisplayOptionsWidget::initLanguages()
+{
     /* Language selector */
     QDir translations(":translations");
     QString defaultStr = QString("(") + tr("default") + QString(")");
@@ -115,18 +116,18 @@ void SettingsDisplayOptionsWidget::initLanguages(){
         QLocale locale(langStr);
 
         /** check if the locale name consists of 2 parts (language_country) */
-        if(langStr.contains("_")){
+        if (langStr.contains("_")) {
             /** display language strings as "native language - native country (locale name)", e.g. "Deutsch - Deutschland (de)" */
             ui->comboBoxLanguage->addItem(locale.nativeLanguageName() + QString(" - ") + locale.nativeCountryName() + QString(" (") + langStr + QString(")"), QVariant(langStr));
-        }
-        else{
+        } else {
             /** display language strings as "native language (locale name)", e.g. "Deutsch (de)" */
             ui->comboBoxLanguage->addItem(locale.nativeLanguageName() + QString(" (") + langStr + QString(")"), QVariant(langStr));
         }
     }
 }
 
-void SettingsDisplayOptionsWidget::onResetClicked() {
+void SettingsDisplayOptionsWidget::onResetClicked()
+{
     if (clientModel) {
         OptionsModel *optionsModel = clientModel->getOptionsModel();
         QSettings settings;
@@ -135,19 +136,22 @@ void SettingsDisplayOptionsWidget::onResetClicked() {
     }
 }
 
-void SettingsDisplayOptionsWidget::setMapper(QDataWidgetMapper *mapper){
+void SettingsDisplayOptionsWidget::setMapper(QDataWidgetMapper *mapper)
+{
     mapper->addMapping(ui->comboBoxDigits, OptionsModel::Digits);
     mapper->addMapping(ui->comboBoxLanguage, OptionsModel::Language);
     mapper->addMapping(ui->comboBoxUnit, OptionsModel::DisplayUnit);
     mapper->addMapping(ui->pushButtonSwitchBalance, OptionsModel::HideZeroBalances);
 }
 
-void SettingsDisplayOptionsWidget::loadClientModel(){
-    if(clientModel) {
+void SettingsDisplayOptionsWidget::loadClientModel()
+{
+    if (clientModel) {
         ui->comboBoxUnit->setCurrentIndex(this->clientModel->getOptionsModel()->getDisplayUnit());
     }
 }
 
-SettingsDisplayOptionsWidget::~SettingsDisplayOptionsWidget(){
+SettingsDisplayOptionsWidget::~SettingsDisplayOptionsWidget()
+{
     delete ui;
 }
