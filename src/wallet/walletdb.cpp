@@ -724,6 +724,10 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             CHDChain chain;
             ssValue >> chain;
             pwallet->GetScriptPubKeyMan()->SetHDChain(chain, true);
+        } else if (strType == "hdchain_sap") {
+            CHDChain chain;
+            ssValue >> chain;
+            pwallet->GetSaplingScriptPubKeyMan()->SetHDChain(chain, true);
         } else if (strType == "sapzkey") {
             libzcash::SaplingIncomingViewingKey ivk;
             ssKey >> ivk;
