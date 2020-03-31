@@ -42,8 +42,6 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     // Containers
     setCssProperty({this, ui->left}, "container");
     ui->left->setContentsMargins(0,0,0,0);
-    setCssProperty(ui->right, "container-right");
-    ui->right->setContentsMargins(20,20,20,0);
 
     // Title
     ui->labelTitle2->setText(tr("Staking Rewards"));
@@ -86,8 +84,13 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     setCssProperty(ui->pushButtonChartRight, "btn-chart-arrow-right");
 
 #ifdef USE_QTCHARTS
+    setCssProperty(ui->right, "container-right");
+    ui->right->setContentsMargins(20,20,20,0);
     connect(ui->comboBoxYears, static_cast<void (QComboBox::*)(const QString&)>(&QComboBox::currentIndexChanged),
         this, &DashboardWidget::onChartYearChanged);
+#else
+    // hide charts container if not USE_QTCHARTS
+    ui->right->setVisible(false);
 #endif // USE_QTCHARTS
 
     // Sort Transactions
