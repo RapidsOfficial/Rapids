@@ -16,7 +16,7 @@
 
 bool CCryptoKeyStore::AddSaplingSpendingKey(
         const libzcash::SaplingExtendedSpendingKey &sk,
-        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
+        const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     {
         LOCK(cs_SpendingKeyStore);
@@ -48,7 +48,7 @@ bool CCryptoKeyStore::AddSaplingSpendingKey(
 bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(
         const libzcash::SaplingExtendedFullViewingKey &extfvk,
         const std::vector<unsigned char> &vchCryptedSecret,
-        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
+        const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     LOCK(cs_SpendingKeyStore);
     if (!SetCrypted()) {
@@ -123,7 +123,7 @@ bool CCryptoKeyStore::EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn)
         if (!EncryptSecret(vMasterKeyIn, vchSecret, extfvk.fvk.GetFingerprint(), vchCryptedSecret)) {
             return false;
         }
-        if (!AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret)) {
+        if (!AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, sk.DefaultAddress())) {
             return false;
         }
     }

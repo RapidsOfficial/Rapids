@@ -21,6 +21,7 @@ public:
     ~SaplingScriptPubKeyMan() {};
 
     bool SetupGeneration(const CKeyID& keyID, bool force = false);
+    bool IsEnabled() const { return !hdChain.IsNull(); };
 
     /* Set the current HD seed (will reset the chain child index counters)
       Sets the seed's version based on the current wallet version (so the
@@ -37,11 +38,11 @@ public:
     libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
     //! Adds Sapling spending key to the store, and saves it to disk
     bool AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
-                        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
+                        const libzcash::SaplingPaymentAddress &defaultAddr);
     bool AddCryptedSaplingSpendingKey(
             const libzcash::SaplingExtendedFullViewingKey &extfvk,
             const std::vector<unsigned char> &vchCryptedSecret,
-            const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
+            const libzcash::SaplingPaymentAddress &defaultAddr);
     //! Returns true if the wallet contains the spending key
     bool HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const;
 

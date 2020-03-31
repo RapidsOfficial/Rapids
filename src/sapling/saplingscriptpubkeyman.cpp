@@ -53,7 +53,7 @@ libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
 // Add spending key to keystore
 bool SaplingScriptPubKeyMan::AddSaplingZKey(
         const libzcash::SaplingExtendedSpendingKey &sk,
-        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
+        const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     AssertLockHeld(wallet->cs_wallet); // mapSaplingZKeyMetadata
 
@@ -75,7 +75,7 @@ bool SaplingScriptPubKeyMan::AddSaplingZKey(
 
 bool SaplingScriptPubKeyMan::AddCryptedSaplingSpendingKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
                                            const std::vector<unsigned char> &vchCryptedSecret,
-                                           const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
+                                           const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     if (!wallet->AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, defaultAddr))
         return false;

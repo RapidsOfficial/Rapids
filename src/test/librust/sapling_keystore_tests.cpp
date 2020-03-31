@@ -96,11 +96,6 @@ BOOST_AUTO_TEST_CASE(StoreAndRetrieveSaplingSpendingKey) {
     BOOST_CHECK(!keyStore.HaveSaplingIncomingViewingKey(addr));
     BOOST_CHECK(!keyStore.GetSaplingIncomingViewingKey(addr, ivkOut));
 
-    keyStore.AddSaplingSpendingKey(sk);
-    BOOST_CHECK(keyStore.HaveSaplingSpendingKey(fvk));
-    BOOST_CHECK(keyStore.HaveSaplingFullViewingKey(ivk));
-    BOOST_CHECK(!keyStore.HaveSaplingIncomingViewingKey(addr));
-
     // When we specify the default address, we get the full mapping
     keyStore.AddSaplingSpendingKey(sk, addr);
     BOOST_CHECK(keyStore.HaveSaplingSpendingKey(fvk));

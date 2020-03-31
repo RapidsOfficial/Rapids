@@ -38,10 +38,10 @@ BOOST_AUTO_TEST_CASE(rpc_wallet_sapling_validateaddress)
     BOOST_CHECK_THROW(CallRPC("validateaddress"), std::runtime_error);
     BOOST_CHECK_THROW(CallRPC("validateaddress toomany args"), std::runtime_error);
 
-    // Wallet should be empty: todo: implement method.
-    //std::set<libzcash::SaplingPaymentAddress> addrs;
-    //pwalletMain->GetSaplingPaymentAddresses(addrs);
-    //BOOST_CHECK(addrs.size()==0);
+    // Wallet should be empty:
+    std::set<libzcash::SaplingPaymentAddress> addrs;
+    pwalletMain->GetSaplingPaymentAddresses(addrs);
+    BOOST_CHECK(addrs.size()==0);
 
     // This Sapling address is not valid, it belongs to another network
     BOOST_CHECK_NO_THROW(retValue = CallRPC("validateaddress ptestsapling1nrn6exksuqtpld9gu6fwdz4hwg54h2x37gutdds89pfyg6mtjf63km45a8eare5qla45cj75vs8"));

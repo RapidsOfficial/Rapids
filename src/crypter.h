@@ -210,10 +210,10 @@ public:
     virtual bool AddCryptedSaplingSpendingKey(
             const libzcash::SaplingExtendedFullViewingKey &extfvk,
             const std::vector<unsigned char> &vchCryptedSecret,
-            const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
+            const libzcash::SaplingPaymentAddress &defaultAddr);
     bool AddSaplingSpendingKey(
             const libzcash::SaplingExtendedSpendingKey &sk,
-            const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr = boost::none);
+            const libzcash::SaplingPaymentAddress &defaultAddr);
     bool HaveSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk) const;
     bool GetSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk, libzcash::SaplingExtendedSpendingKey &skOut) const;
 
