@@ -220,7 +220,8 @@ void DashboardWidget::loadWalletModel()
         stakesFilter->setOnlyStakes(true);
         stakesFilter->setSourceModel(txModel);
         hasStakes = stakesFilter->rowCount() > 0;
-        loadChart();
+
+        onHideChartsChanged(GetBoolArg("-hidecharts", false));
 #endif
     }
     // update the display unit, to not use the default ("PIV")
@@ -338,6 +339,8 @@ void DashboardWidget::changeTheme(bool isLightTheme, QString& theme)
 
 void DashboardWidget::tryChartRefresh()
 {
+    if (!fShowCharts)
+        return;
     if (hasStakes) {
         // First check that everything was loaded properly.
         if (!chart) {
@@ -811,6 +814,14 @@ void DashboardWidget::windowResizeEvent(QResizeEvent* event)
             }
         }
     }
+}
+
+void DashboardWidget::onHideChartsChanged(bool fHide)
+{
+    fShowCharts = !fHide;
+    // Hide charts if requested
+    ui->right->setVisible(fShowCharts);
+    if (fShowCharts) tryChartRefresh();
 }
 
 #endif

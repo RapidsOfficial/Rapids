@@ -167,6 +167,7 @@ private:
 
     ChartData* chartData = nullptr;
     bool hasStakes = false;
+    bool fShowCharts = true;
 
     void initChart();
     void showHideEmptyChart(bool show, bool loading, bool forceView = false);
@@ -181,6 +182,7 @@ private:
 
 private Q_SLOTS:
     void onChartRefreshed();
+    void onHideChartsChanged(bool fHide); // set as Q_SLOT to be connected with the options model in the next commit
 
 #endif
 
