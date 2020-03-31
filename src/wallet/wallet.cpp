@@ -320,7 +320,7 @@ bool CWallet::Lock()
     {
         LOCK(cs_KeyStore);
         vMasterKey.clear();
-        pwalletMain->zwalletMain->Lock();
+        if (zwalletMain) zwalletMain->Lock();
     }
 
     NotifyStatusChanged(this);
@@ -368,13 +368,15 @@ bool CWallet::Unlock(const CKeyingMaterial& vMasterKeyIn)
         vMasterKey = vMasterKeyIn;
         fDecryptionThoroughlyChecked = true;
 
-        uint256 hashSeed;
-        if (CWalletDB(pwalletMain->strWalletFile).ReadCurrentSeedHash(hashSeed)) {
-            uint256 nSeed;
-            if (!GetDeterministicSeed(hashSeed, nSeed)) {
-                return error("Failed to read zPIV seed from DB. Wallet is probably corrupt.");
+        if (zwalletMain) {
+            uint256 hashSeed;
+            if (CWalletDB(strWalletFile).ReadCurrentSeedHash(hashSeed)) {
+                uint256 nSeed;
+                if (!GetDeterministicSeed(hashSeed, nSeed)) {
+                    return error("Failed to read zPIV seed from DB. Wallet is probably corrupt.");
+                }
+                zwalletMain->SetMasterSeed(nSeed, false);
             }
-            pwalletMain->zwalletMain->SetMasterSeed(nSeed, false);
         }
     }
 
