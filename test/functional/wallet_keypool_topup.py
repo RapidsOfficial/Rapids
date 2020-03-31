@@ -15,7 +15,7 @@ import shutil
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
-    connect_nodes_bi,
+    connect_nodes,
     sync_blocks,
 )
 
@@ -36,7 +36,7 @@ class KeypoolRestoreTest(PivxTestFramework):
 
         shutil.copyfile(self.tmpdir + "/node1/regtest/wallet.dat", self.tmpdir + "/wallet.bak")
         self.start_node(1, self.extra_args[1])
-        connect_nodes_bi(self.nodes, 0, 1)
+        connect_nodes(self.nodes[0], 1)
 
         self.log.info("Generate keys for wallet")
 
@@ -62,7 +62,7 @@ class KeypoolRestoreTest(PivxTestFramework):
         self.log.info("Verify keypool is restored and balance is correct")
 
         self.start_node(1, self.extra_args[1])
-        connect_nodes_bi(self.nodes, 0, 1)
+        connect_nodes(self.nodes[0], 1)
         self.sync_all()
 
         # wallet was not backupped after emptying the key pool.

@@ -5,8 +5,14 @@
 
 
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import *
-import urllib.parse
+from test_framework.util import (
+    assert_equal,
+    connect_nodes,
+    Decimal,
+    disconnect_nodes,
+    sync_blocks,
+    sync_mempools
+)
 
 class AbandonConflictTest(PivxTestFramework):
     def set_test_params(self):
@@ -31,8 +37,8 @@ class AbandonConflictTest(PivxTestFramework):
         assert(balance - newbalance < Decimal("0.001")) #no more than fees lost
         balance = newbalance
 
-        url = urllib.parse.urlparse(self.nodes[1].url)
-        self.nodes[0].disconnectnode(url.hostname+":"+str(p2p_port(1)))
+        # Disconnect nodes so node0's transactions don't get into node1's mempool
+        disconnect_nodes(self.nodes[0], 1)
 
         # Identify the 10btc outputs
         nA = next(i for i, vout in enumerate(self.nodes[0].getrawtransaction(txA, 1)["vout"]) if vout["value"] == 10)

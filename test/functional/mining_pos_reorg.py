@@ -9,7 +9,7 @@ from test_framework.util import (
     sync_blocks,
     assert_equal,
     assert_raises_rpc_error,
-    connect_nodes_bi,
+    connect_nodes,
     connect_nodes_clique,
     disconnect_nodes,
     set_node_times,
@@ -130,7 +130,7 @@ class ReorgStakeTest(PivxTestFramework):
 
         # Connect with node 2, sync and check zerocoin balance
         self.log.info("Reconnecting node 0 and node 2")
-        connect_nodes_bi(self.nodes, 0, 2)
+        connect_nodes(self.nodes[0], 2)
         sync_blocks([self.nodes[i] for i in [0, 2]])
         self.log.info("Resetting zerocoin mints on node 2")
         self.nodes[2].resetmintzerocoin(True)

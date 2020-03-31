@@ -5,7 +5,12 @@
 """Test the listsincelast RPC."""
 
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import assert_equal, assert_array_result, assert_raises_rpc_error
+from test_framework.util import (
+    assert_equal,
+    assert_array_result,
+    assert_raises_rpc_error,
+    connect_nodes,
+)
 
 class ListSinceBlockTest (PivxTestFramework):
     def set_test_params(self):
@@ -13,6 +18,9 @@ class ListSinceBlockTest (PivxTestFramework):
         self.setup_clean_chain = True
 
     def run_test(self):
+        # All nodes are in IBD from genesis, so they'll need the miner (node2) to be an outbound connection, or have
+        # only one connection. (See fPreferredDownload in net_processing)
+        connect_nodes(self.nodes[1], 2)
         self.nodes[2].generate(101)
         self.sync_all()
 

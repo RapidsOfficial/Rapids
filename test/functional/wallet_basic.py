@@ -4,7 +4,17 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the wallet."""
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import *
+from test_framework.util import (
+    assert_array_result,
+    assert_equal,
+    assert_fee_amount,
+    assert_raises_rpc_error,
+    connect_nodes,
+    Decimal,
+    sync_blocks,
+    sync_mempools,
+    wait_until,
+)
 
 class WalletTest(PivxTestFramework):
     def set_test_params(self):
@@ -16,9 +26,9 @@ class WalletTest(PivxTestFramework):
         self.start_node(0)
         self.start_node(1)
         self.start_node(2)
-        connect_nodes_bi(self.nodes,0,1)
-        connect_nodes_bi(self.nodes,1,2)
-        connect_nodes_bi(self.nodes,0,2)
+        connect_nodes(self.nodes[0], 1)
+        connect_nodes(self.nodes[1], 2)
+        connect_nodes(self.nodes[0], 2)
         self.sync_all([self.nodes[0:3]])
 
     def check_fee_amount(self, curr_balance, balance_with_fee, fee_per_byte, tx_size):
@@ -164,7 +174,7 @@ class WalletTest(PivxTestFramework):
         sync_mempools(self.nodes[0:2])
 
         self.start_node(3)
-        connect_nodes_bi(self.nodes, 0, 3)
+        connect_nodes(self.nodes[0], 3)
         sync_blocks(self.nodes)
 
         # Exercise balance rpcs
