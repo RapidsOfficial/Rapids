@@ -47,10 +47,15 @@ SettingsDisplayOptionsWidget::SettingsDisplayOptionsWidget(PIVXGUI* _window, QWi
     // TODO: Reconnect this option to an action. Hide it for now
     ui->labelTitleUrl->hide();
 
-    // Switch
+    // Switch (hide for now)
     ui->pushButtonSwitchBalance->setText(tr("Hide empty balances"));
     ui->pushButtonSwitchBalance->setProperty("cssClass", "btn-switch");
     ui->pushButtonSwitchBalance->setVisible(false);
+
+    // Hide checkbox if qtcharts not used
+#ifndef USE_QTCHARTS
+    ui->checkBoxHideCharts->setVisible(false);
+#endif
 
     // Combobox
     ui->comboBoxLanguage->setProperty("cssClass", "btn-combo");
@@ -142,6 +147,9 @@ void SettingsDisplayOptionsWidget::setMapper(QDataWidgetMapper *mapper)
     mapper->addMapping(ui->comboBoxLanguage, OptionsModel::Language);
     mapper->addMapping(ui->comboBoxUnit, OptionsModel::DisplayUnit);
     mapper->addMapping(ui->pushButtonSwitchBalance, OptionsModel::HideZeroBalances);
+#ifdef USE_QTCHARTS
+    mapper->addMapping(ui->checkBoxHideCharts, OptionsModel::HideCharts);
+#endif
 }
 
 void SettingsDisplayOptionsWidget::loadClientModel()

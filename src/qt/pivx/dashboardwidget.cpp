@@ -221,7 +221,8 @@ void DashboardWidget::loadWalletModel()
         stakesFilter->setSourceModel(txModel);
         hasStakes = stakesFilter->rowCount() > 0;
 
-        onHideChartsChanged(GetBoolArg("-hidecharts", false));
+        onHideChartsChanged(walletModel->getOptionsModel()->isHideCharts());
+        connect(walletModel->getOptionsModel(), &OptionsModel::hideChartsChanged, this, &DashboardWidget::onHideChartsChanged);
 #endif
     }
     // update the display unit, to not use the default ("PIV")
@@ -395,10 +396,8 @@ void DashboardWidget::loadChart()
 void DashboardWidget::showHideEmptyChart(bool showEmpty, bool loading, bool forceView)
 {
     if (stakesFilter->rowCount() > SHOW_EMPTY_CHART_VIEW_THRESHOLD || forceView) {
-        if (ui->emptyContainerChart->isVisible() != showEmpty) {
-            ui->layoutChart->setVisible(!showEmpty);
-            ui->emptyContainerChart->setVisible(showEmpty);
-        }
+        ui->layoutChart->setVisible(!showEmpty);
+        ui->emptyContainerChart->setVisible(showEmpty);
     }
     // Enable/Disable sort buttons
     bool invLoading = !loading;

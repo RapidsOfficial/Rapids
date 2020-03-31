@@ -197,6 +197,8 @@ void OptionsModel::setDisplayDefaultOptions(QSettings& settings, bool reset)
         settings.setValue("strThirdPartyTxUrls", "");
     strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "").toString();
 
+    fHideCharts = GetBoolArg("-hidecharts", false);
+
     if (reset) {
         refreshDataView();
     }
@@ -287,6 +289,8 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("nDatabaseCache");
         case ThreadsScriptVerif:
             return settings.value("nThreadsScriptVerif");
+        case HideCharts:
+            return fHideCharts;
         case HideZeroBalances:
             return settings.value("fHideZeroBalances");
         case HideOrphans:
@@ -403,6 +407,10 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
                 settings.setValue("language", value);
                 setRestartRequired(true);
             }
+            break;
+        case HideCharts:
+            fHideCharts = value.toBool();   // memory only
+            Q_EMIT hideChartsChanged(fHideCharts);
             break;
         case HideZeroBalances:
             fHideZeroBalances = value.toBool();
