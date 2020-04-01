@@ -8,13 +8,14 @@
 #include "sync.h"
 #include "main.h"
 #include "txdb.h"
+#include "wallet/wallet.h"
 #include "wallet/walletdb.h"
 #include "zpiv/zpivwallet.h"
 
 
-CzPIVTracker::CzPIVTracker(std::string strWalletFile)
+CzPIVTracker::CzPIVTracker(CWallet* parent)
 {
-    this->strWalletFile = strWalletFile;
+    this->wallet = parent;
     mapSerialHashes.clear();
     mapPendingSpends.clear();
     fInitialized = false;
@@ -40,10 +41,10 @@ bool CzPIVTracker::Archive(CMintMeta& meta)
     if (mapSerialHashes.count(meta.hashSerial))
         mapSerialHashes.at(meta.hashSerial).isArchived = true;
 
-    CWalletDB walletdb(strWalletFile);
+    CWalletDB walletdb(wallet->strWalletFile);
     CZerocoinMint mint;
     if (walletdb.ReadZerocoinMint(meta.hashPubcoin, mint)) {
-        if (!CWalletDB(strWalletFile).ArchiveMintOrphan(mint))
+        if (!CWalletDB(wallet->strWalletFile).ArchiveMintOrphan(mint))
             return error("%s: failed to archive zerocoinmint", __func__);
     } else {
         //failed to read mint from DB, try reading deterministic
@@ -60,7 +61,7 @@ bool CzPIVTracker::Archive(CMintMeta& meta)
 
 bool CzPIVTracker::UnArchive(const uint256& hashPubcoin, bool isDeterministic)
 {
-    CWalletDB walletdb(strWalletFile);
+    CWalletDB walletdb(wallet->strWalletFile);
     if (isDeterministic) {
         CDeterministicMint dMint;
         if (!walletdb.UnarchiveDeterministicMint(hashPubcoin, dMint))
@@ -229,12 +230,12 @@ bool CzPIVTracker::UpdateZerocoinMint(const CZerocoinMint& mint)
     mapSerialHashes.at(hashSerial) = meta;
 
     //Write to db
-    return CWalletDB(strWalletFile).WriteZerocoinMint(mint);
+    return CWalletDB(wallet->strWalletFile).WriteZerocoinMint(mint);
 }
 
 bool CzPIVTracker::UpdateState(const CMintMeta& meta)
 {
-    CWalletDB walletdb(strWalletFile);
+    CWalletDB walletdb(wallet->strWalletFile);
 
     if (meta.isDeterministic) {
         CDeterministicMint dMint;
@@ -277,7 +278,7 @@ bool CzPIVTracker::UpdateState(const CMintMeta& meta)
 
 void CzPIVTracker::Add(const CDeterministicMint& dMint, bool isNew, bool isArchived, CzPIVWallet* zPIVWallet)
 {
-    bool iszPIVWalletInitialized = (NULL != zPIVWallet);
+    bool iszPIVWalletInitialized = (nullptr != zPIVWallet);
     CMintMeta meta;
     meta.hashPubcoin = dMint.GetPubcoinHash();
     meta.nHeight = dMint.GetHeight();
@@ -289,15 +290,15 @@ void CzPIVTracker::Add(const CDeterministicMint& dMint, bool isNew, bool isArchi
     meta.denom = dMint.GetDenomination();
     meta.isArchived = isArchived;
     meta.isDeterministic = true;
-    if (! iszPIVWalletInitialized)
-        zPIVWallet = new CzPIVWallet(strWalletFile);
+    if (!iszPIVWalletInitialized)
+        zPIVWallet = new CzPIVWallet(wallet);
     meta.isSeedCorrect = zPIVWallet->CheckSeed(dMint);
-    if (! iszPIVWalletInitialized)
+    if (!iszPIVWalletInitialized)
         delete zPIVWallet;
     mapSerialHashes[meta.hashSerial] = meta;
 
     if (isNew)
-        CWalletDB(strWalletFile).WriteDeterministicMint(dMint);
+        CWalletDB(wallet->strWalletFile).WriteDeterministicMint(dMint);
 }
 
 void CzPIVTracker::Add(const CZerocoinMint& mint, bool isNew, bool isArchived)
@@ -318,7 +319,7 @@ void CzPIVTracker::Add(const CZerocoinMint& mint, bool isNew, bool isArchived)
     mapSerialHashes[meta.hashSerial] = meta;
 
     if (isNew)
-        CWalletDB(strWalletFile).WriteZerocoinMint(mint);
+        CWalletDB(wallet->strWalletFile).WriteZerocoinMint(mint);
 }
 
 void CzPIVTracker::SetPubcoinUsed(const uint256& hashPubcoin, const uint256& txid)
@@ -436,7 +437,7 @@ bool CzPIVTracker::UpdateStatusInternal(const std::set<uint256>& setMempool, CMi
 
 std::set<CMintMeta> CzPIVTracker::ListMints(bool fUnusedOnly, bool fMatureOnly, bool fUpdateStatus, bool fWrongSeed, bool fExcludeV1)
 {
-    CWalletDB walletdb(strWalletFile);
+    CWalletDB walletdb(wallet->strWalletFile);
     if (fUpdateStatus) {
         std::list<CZerocoinMint> listMintsDB = walletdb.ListMintedCoins();
         for (auto& mint : listMintsDB)
@@ -445,13 +446,11 @@ std::set<CMintMeta> CzPIVTracker::ListMints(bool fUnusedOnly, bool fMatureOnly, 
 
         std::list<CDeterministicMint> listDeterministicDB = walletdb.ListDeterministicMints();
 
-        CzPIVWallet* zPIVWallet = new CzPIVWallet(strWalletFile);
         for (auto& dMint : listDeterministicDB) {
             if (fExcludeV1 && dMint.GetVersion() < 2)
                 continue;
-            Add(dMint, false, false, zPIVWallet);
+            Add(dMint, false, false, wallet->zwalletMain);
         }
-        delete zPIVWallet;
         LogPrint("zero", "%s: added %d dzpiv from DB\n", __func__, listDeterministicDB.size());
     }
 
