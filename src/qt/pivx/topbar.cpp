@@ -519,6 +519,7 @@ void TopBar::showUpgradeDialog()
             tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\n"
                     "NOTE: after the upgrade, a new \nbackup will be created.\n"))) {
 
+        if (pctx) delete pctx;
         pctx = new WalletModel::UnlockContext(walletModel->requestUnlock());
         if (!pctx->isValid()) {
             warn(tr("Upgrade Wallet"), tr("Wallet unlock cancelled"));

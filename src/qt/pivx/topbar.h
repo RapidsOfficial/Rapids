@@ -82,7 +82,7 @@ private:
     QTimer* timerStakingIcon = nullptr;
     bool isInitializing = true;
 
-    // pointer to global unlock context (for multithread unlock/relock)
+    // pointer to global unlock context (for async unlock/relock)
     WalletModel::UnlockContext* pctx = nullptr;
 
     void updateTorIcon();
