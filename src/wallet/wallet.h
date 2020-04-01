@@ -41,6 +41,8 @@
 #include <utility>
 #include <vector>
 
+extern CWallet* pwalletMain;
+
 /**
  * Settings
  */
@@ -617,6 +619,9 @@ public:
     boost::signals2::signal<void(CWallet* wallet, const std::string& pubCoin, const std::string& isUsed, ChangeType status)> NotifyZerocoinChanged;
     // zPIV reset
     boost::signals2::signal<void()> NotifyzPIVReset;
+
+    /* Wallets parameter interaction */
+    static bool ParameterInteraction();
 };
 
 

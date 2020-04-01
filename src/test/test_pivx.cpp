@@ -20,7 +20,6 @@
 #include <boost/test/unit_test.hpp>
 
 CClientUIInterface uiInterface;
-CWallet* pwalletMain;
 
 uint256 insecure_rand_seed = GetRandHash();
 FastRandomContext insecure_rand_ctx(insecure_rand_seed);

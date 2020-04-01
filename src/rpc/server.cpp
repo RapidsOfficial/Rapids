@@ -16,6 +16,10 @@
 #include "util.h"
 #include "utilstrencodings.h"
 
+#ifdef ENABLE_WALLET
+#include "wallet/wallet.h"
+#endif // ENABLE_WALLET
+
 #include <boost/bind.hpp>
 #include <boost/filesystem.hpp>
 #include <boost/iostreams/concepts.hpp>
