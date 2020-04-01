@@ -573,11 +573,12 @@ void TopBar::updateTorIcon()
             ui->pushButtonTor->setButtonClassStyle("cssClass", "btn-check-tor", true);
         }
         QString ip_port_q = QString::fromStdString(ip_port);
-        ui->pushButtonTor->setButtonText(tr("Tor is <b>enabled</b>: %1").arg(ip_port_q));
+        ui->pushButtonTor->setButtonText(tr("Tor Active: %1").arg(ip_port_q));
     } else {
         if (ui->pushButtonTor->isChecked()) {
             ui->pushButtonTor->setChecked(false);
             ui->pushButtonTor->setButtonClassStyle("cssClass", "btn-check-tor-inactive", true);
+            ui->pushButtonTor->setButtonText(tr("Tor Disabled"));
         }
     }
 }
