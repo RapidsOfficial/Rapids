@@ -5,13 +5,16 @@
 #ifndef MASTERNODESWIDGET_H
 #define MASTERNODESWIDGET_H
 
-#include <QWidget>
 #include "qt/pivx/pwidget.h"
 #include "qt/pivx/furabstractlistitemdelegate.h"
 #include "qt/pivx/mnmodel.h"
 #include "qt/pivx/tooltipmenu.h"
-#include <QTimer>
+#include "walletmodel.h"
+
 #include <atomic>
+
+#include <QTimer>
+#include <QWidget>
 
 class PIVXGUI;
 
@@ -60,6 +63,9 @@ private:
     QTimer *timer = nullptr;
 
     std::atomic<bool> isLoading;
+
+    // pointer to global unlock context (for async unlock/relock)
+    WalletModel::UnlockContext* pctx = nullptr;
 
     bool checkMNsNetwork();
     void startAlias(QString strAlias);
