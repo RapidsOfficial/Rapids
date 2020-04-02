@@ -161,7 +161,7 @@ Detailed release notes follow. This overview includes changes that affect behavi
 
 ### P2P Protocol and Network Code
 
-The p2p alert system has been removed in [#1372](https://github.com/PIVX-Project/PIVX/pull/1372) and the 'alert' message is no longer supported.
+The p2p alert system has been removed in [PR #1372](https://github.com/PIVX-Project/PIVX/pull/1372) and the 'alert' message is no longer supported.
 
 ### GUI
 
@@ -178,12 +178,16 @@ Addresses in the dropdown of the "Send Transaction" and "Send Delegation" widget
 **Include delegations in send**: The send and cold-staking page present a checkbox ([#1391](https://github.com/PIVX-Project/PIVX/pull/1391)) to make the automatic input selection algorithm include delegated (P2CS) utxos if needed. The option is unchecked by default.
 
 
+**Staking Charts**: can now be hidden at startup (with a flag `--hidecharts`) or at runtime with a checkbox in settings --> options --> display ([PR #1475](https://github.com/PIVX-Project/PIVX/pull/1475)).
+
+
+
 ### RPC/REST
 
 ### Wallet
 
 
-__Context Lock/Unlock__ [[PR #1387]()]:<br>
+__Context Lock/Unlock__ [[PR #1387](https://github.com/PIVX-Project/PIVX/pull/1387)]:<br>
 Present the unlock dialog directly (instead of an error message), whenever an action on encrypted/locked wallet requires full unlock.<br>
 Restore the previous locking state ("locked" or "locked for staking only") when the action is completed.
 
