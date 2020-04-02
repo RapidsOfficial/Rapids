@@ -7,14 +7,14 @@
 #include "crypter.h"
 #include "script/standard.h"
 
-bool ScriptPubKeyMan::SetupGeneration(bool force)
+bool ScriptPubKeyMan::SetupGeneration(bool newKeypool, bool force)
 {
     if (CanGenerateKeys() && !force) {
         return false;
     }
 
     SetHDSeed(GenerateNewSeed(), force);
-    if (!NewKeyPool()) {
+    if (newKeypool && !NewKeyPool()) {
         return false;
     }
     return true;

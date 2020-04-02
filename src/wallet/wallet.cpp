@@ -72,7 +72,7 @@ std::string COutput::ToString() const
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CWallet::SetupSPKM()
+bool CWallet::SetupSPKM(bool newKeypool)
 {
     if (m_spk_man->SetupGeneration()) {
         LogPrintf("%s : spkm setup completed\n", __func__);

@@ -263,7 +263,7 @@ public:
     static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
 
     //! Generates hd wallet //
-    bool SetupSPKM();
+    bool SetupSPKM(bool newKeypool = true);
     //! Whether the wallet is hd or not //
     bool IsHDEnabled() const;
 

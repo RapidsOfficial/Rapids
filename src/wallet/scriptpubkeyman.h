@@ -35,7 +35,7 @@ public:
       * Returns false if already setup or setup fails, true if setup is successful
       * Set force=true to make it re-setup if already setup, used for upgrades
       */
-    bool SetupGeneration(bool force = false);
+    bool SetupGeneration(bool newKeypool = true, bool force = false);
 
     /** Upgrades the wallet to the specified version */
     bool Upgrade(const int& prev_version, std::string& error);
