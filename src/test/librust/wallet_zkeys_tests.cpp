@@ -20,7 +20,7 @@
  * LoadZKeyMetadata()
  */
 
-BOOST_FIXTURE_TEST_SUITE(wallet_zkeys_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(wallet_zkeys_tests, TestingSetup)
 
 /**
   * This test covers Sapling methods on CWallet
