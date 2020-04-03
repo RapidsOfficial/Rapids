@@ -471,7 +471,6 @@ public:
     bool AddAccountingEntry(const CAccountingEntry&, CWalletDB & pwalletdb);
     int GenerateObfuscationOutputs(int nTotalValue, std::vector<CTxOut>& vout);
     bool CreateCoinStake(const CKeyStore& keystore, const CBlockIndex* pindexPrev, unsigned int nBits, CMutableTransaction& txNew, int64_t& nTxNewTime);
-    bool SignCoinStakeModifier(const uint256& prevModifier, const CTxOut& stakePrevout, CMutableTransaction& coinstake);
     bool MultiSend();
     void AutoCombineDust();
 

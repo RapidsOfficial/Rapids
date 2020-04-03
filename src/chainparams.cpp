@@ -192,7 +192,6 @@ public:
         consensus.height_start_MessSignaturesV2 = 2153200;  // height_start_TimeProtoV2
         consensus.height_start_StakeModifierNewSelection = 615800;
         consensus.height_start_StakeModifierV2 = 1967000;   // Block v6: 0ef2556e40f3b9f6e02ce611b832e0bbfe7734a8ea751c7b555310ee49b61456
-        consensus.height_start_StakeModifierV3 = 999999999;   // Block V8
         consensus.height_start_TimeProtoV2 = 2153200;       // Block v7: 14e477e597d24549cac5e59d97d32155e6ec2861c1003b42d0566f9bf39b65d5
         consensus.height_start_ZC = 863787;                 // Block v4: 5b2482eca24caf2a46bb22e0545db7b7037282733faa3a42ec20542509999a64
         consensus.height_start_ZC_InvalidSerials = 891737;
@@ -308,7 +307,6 @@ public:
         consensus.height_start_MessSignaturesV2 = 1347000;      // height_start_TimeProtoV2
         consensus.height_start_StakeModifierNewSelection = 51197;
         consensus.height_start_StakeModifierV2 = 1214000;       // Block v6: 1822577176173752aea33d1f60607cefe9e0b1c54ebaa77eb40201a385506199
-        consensus.height_start_StakeModifierV3 = 1519000;     // Block V8
         consensus.height_start_TimeProtoV2 = 1347000;           // Block v7: 30c173ffc09a13f288bf6e828216107037ce5b79536b1cebd750a014f4939882
         consensus.height_start_ZC = 201576;                     // Block v4: 258c489f42f03cb97db2255e47938da4083eee4e242853c2d48bae2b1d0110a6
         consensus.height_start_ZC_InvalidSerials = 999999999;
@@ -432,7 +430,6 @@ public:
         consensus.height_start_MessSignaturesV2 = 1;
         consensus.height_start_StakeModifierNewSelection = 0;
         consensus.height_start_StakeModifierV2 = 251;       // start with modifier V2 on regtest
-        consensus.height_start_StakeModifierV3 = 311; // Block V8  (after last accum checkpoint)
         consensus.height_start_TimeProtoV2 = 999999999;
         consensus.height_start_ZC = 300;
         consensus.height_start_ZC_InvalidSerials = 999999999;

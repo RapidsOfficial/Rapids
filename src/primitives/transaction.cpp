@@ -116,20 +116,6 @@ bool CTxOut::IsZerocoinMint() const
     return scriptPubKey.IsZerocoinMint();
 }
 
-bool CTxOut::IsStakeModifierSig() const
-{
-    return scriptPubKey.IsStakeModifierSig();
-}
-
-bool CTxOut::GetStakeModifierSig(std::vector<unsigned char>& vchSig) const
-{
-    if (!IsStakeModifierSig())
-        return false;
-
-    vchSig = std::vector<unsigned char>(scriptPubKey.begin()+2, scriptPubKey.end());
-    return true;
-}
-
 CAmount CTxOut::GetZerocoinMinted() const
 {
     if (!IsZerocoinMint())
@@ -223,10 +209,7 @@ bool CTransaction::IsCoinStake() const
     if (vin[0].prevout.IsNull() && !fAllowNull)
         return false;
 
-    // coinstake transactions are marked with the first output, which can either be
-    // empty or with a script publishing the modifier signature (via OP_STAKEMODIFIER)
-    return (vout.size() >= 2 &&
-                    (vout[0].IsEmpty() || vout[0].IsStakeModifierSig()));
+    return (vout.size() >= 2 && vout[0].IsEmpty());
 }
 
 bool CTransaction::CheckColdStake(const CScript& script) const

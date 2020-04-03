@@ -128,8 +128,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     const Consensus::Params& consensus = Params().GetConsensus();
 
     //!> Block v7: Removes accumulator checkpoints
-    //!> Block v8: Introduces stake modifier V3
-    pblock->nVersion = (nHeight >= consensus.height_start_StakeModifierV3 ? 8 : 7);
+    pblock->nVersion = CBlockHeader::CURRENT_VERSION;
     // -regtest only: allow overriding block.nVersion with
     // -blockversion=N to test forking scenarios
     if (Params().IsRegTestNet()) {

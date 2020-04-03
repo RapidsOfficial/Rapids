@@ -3479,13 +3479,9 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
             // compute and set new V1 stake modifier (entropy bits)
             pindexNew->SetNewStakeModifier();
 
-        } else if (pindexNew->nHeight < consensus.height_start_StakeModifierV3) {
+        } else {
             // compute and set new V2 stake modifier (hash of prevout and prevModifier)
             pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);
-
-        } else {
-            // compute and set new V3 stake modifier (hash of the prevModifier sig in coinstake marker)
-            pindexNew->SetNewStakeModifier(block.vtx[1].vout[0]);
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);

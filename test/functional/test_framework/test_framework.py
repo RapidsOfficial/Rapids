@@ -648,7 +648,7 @@ class PivxTestFramework():
             for i in [2, 3]:
                 assert (self.nodes[i].lockunspent(True, [{"txid": res[i-2]['txid'], "vout": 8}]))
 
-            # Verify height, version and balances
+            # Verify height and balances
             self.test_PoS_chain_balances()
 
             # Shut nodes down, and clean up cache directories:
@@ -710,8 +710,6 @@ class PivxTestFramework():
             assert_equal(self.nodes[i].getblockcount(), 330)
             if i > 0:
                 assert_equal(self.nodes[i].getbestblockhash(), best_block)
-        # Verify version of last block
-        assert_equal(self.nodes[0].getblock(best_block, True)["version"], 8)
 
         # balance is mature pow blocks rewards minus stake inputs (spent)
         w_info = [self.nodes[i].getwalletinfo() for i in range(num_nodes)]
