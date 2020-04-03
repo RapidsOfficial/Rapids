@@ -457,11 +457,11 @@ public:
         // Known checking here is only to save space from duplicates.
         // SendMessages will filter it again for knowns that were added
         // after addresses were pushed.
-        if (addr.IsValid() && !setAddrKnown.count(addr)) {
+        if (_addr.IsValid() && !setAddrKnown.count(_addr)) {
             if (vAddrToSend.size() >= MAX_ADDR_TO_SEND) {
                 vAddrToSend[insecure_rand.randrange(vAddrToSend.size())] = _addr;
             } else {
-                vAddrToSend.push_back(addr);
+                vAddrToSend.push_back(_addr);
             }
         }
     }
