@@ -2026,8 +2026,7 @@ void ListTransactions(const CWalletTx& wtx, const std::string& strAccount, int n
                 entry.push_back(Pair("involvesWatchonly", true));
             entry.push_back(Pair("account", strSentAccount));
             MaybePushAddress(entry, s.destination);
-            std::map<std::string, std::string>::const_iterator it = wtx.mapValue.find("DS");
-            entry.push_back(Pair("category", (it != wtx.mapValue.end() && it->second == "1") ? "darksent" : "send"));
+            entry.push_back(Pair("category", "send"));
             entry.push_back(Pair("amount", ValueFromAmount(-s.amount)));
             entry.push_back(Pair("vout", s.vout));
             entry.push_back(Pair("fee", ValueFromAmount(-nFee)));
