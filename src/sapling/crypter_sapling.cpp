@@ -133,6 +133,11 @@ bool CCryptoKeyStore::EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn)
 
 bool CCryptoKeyStore::UnlockSaplingKeys(const CKeyingMaterial& vMasterKeyIn, bool fDecryptionThoroughlyChecked)
 {
+    if (mapCryptedSaplingSpendingKeys.empty()) {
+        LogPrintf("%s: mapCryptedSaplingSpendingKeys empty. No need to unlock anything.\n");
+        return true;
+    }
+
     bool keyFail = false;
     bool keyPass = false;
     CryptedSaplingSpendingKeyMap::const_iterator miSapling = mapCryptedSaplingSpendingKeys.begin();

@@ -347,17 +347,21 @@ bool CWallet::Unlock(const CKeyingMaterial& vMasterKeyIn)
                 break;
         }
 
-        // Sapling
-        if (!UnlockSaplingKeys(vMasterKeyIn, fDecryptionThoroughlyChecked)) {
-            return false; // only could get here if (keyFail || !keyPass).
-        }
-
         if (keyPass && keyFail) {
-            LogPrintf("The wallet is probably corrupted: Some keys decrypt but not all.");
+            LogPrintf("The wallet is probably corrupted: Some keys decrypt but not all.\n");
             throw std::runtime_error("Error unlocking wallet: some keys decrypt but not all. Your wallet file may be corrupt.");
         }
+
         if (keyFail || !keyPass)
             return false;
+
+        // Sapling
+        if (!UnlockSaplingKeys(vMasterKeyIn, fDecryptionThoroughlyChecked)) {
+            // If Sapling key encryption fail, let's unencrypt the rest of the keys
+            LogPrintf("Sapling wallet unlock keys failed\n");
+            throw std::runtime_error("Error unlocking wallet: some Sapling keys decrypt but not all. Your wallet file may be corrupt.");
+        }
+
         vMasterKey = vMasterKeyIn;
         fDecryptionThoroughlyChecked = true;
 
@@ -748,6 +752,7 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
         Unlock(strWalletPassphrase);
         // if we are using HD, replace the HD seed with a new one
         if (m_spk_man->IsHDEnabled()) {
+            LogPrintf("pre unlock setupGeneration\n");
             if (!m_spk_man->SetupGeneration(false, true)) {
                 return false;
             }
