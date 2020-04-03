@@ -271,6 +271,7 @@ file(GLOB SCRIPT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/script/*.h)
 file(GLOB RPC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/rpc/*.h)
 file(GLOB COMPAT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/compat/*.h)
 file(GLOB CONSENSUS_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/consensus/*.h)
+file(GLOB CTAES_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/*.h)
 
 source_group("BitcoinHeaders" FILES
         ${HEADERS}
@@ -281,6 +282,7 @@ source_group("BitcoinHeaders" FILES
         ${RPC_HEADERS}
         ${COMPAT_HEADERS}
         ${CONSENSUS_HEADERS}
+        ${CTAES_HEADERS}
         ./src/support/cleanse.h
         )
 
@@ -384,6 +386,7 @@ target_include_directories(WALLET_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
 
 set(BITCOIN_CRYPTO_SOURCES
+        ./src/crypto/aes.cpp
         ./src/crypto/sha1.cpp
         ./src/crypto/sha256.cpp
         ./src/crypto/sha512.cpp
