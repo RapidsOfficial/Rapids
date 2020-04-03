@@ -10,6 +10,7 @@
 #include "messagesigner.h"
 #include "obfuscation.h"
 #include "spork.h"
+#include "swifttx.h"
 #include "util.h"
 #include <boost/filesystem.hpp>
 
@@ -890,4 +891,43 @@ std::string CMasternodeMan::ToString() const
     info << "Masternodes: " << (int)vMasternodes.size() << ", peers who asked us for Masternode list: " << (int)mAskedUsForMasternodeList.size() << ", peers we asked for Masternode list: " << (int)mWeAskedForMasternodeList.size() << ", entries in Masternode list we asked for: " << (int)mWeAskedForMasternodeListEntry.size() << ", nDsqCount: " << (int)nDsqCount;
 
     return info.str();
+}
+
+void ThreadCheckObfuScationPool()
+{
+    if (fLiteMode) return; //disable all Obfuscation/Masternode related functionality
+
+    // Make this thread recognisable as the wallet flushing thread
+    util::ThreadRename("pivx-obfuscation");
+    LogPrintf("Masternodes thread started\n");
+
+    unsigned int c = 0;
+
+    while (true) {
+        MilliSleep(1000);
+        //LogPrintf("ThreadCheckObfuScationPool::check timeout\n");
+
+        // try to sync from all available nodes, one step at a time
+        masternodeSync.Process();
+
+        if (masternodeSync.IsBlockchainSynced()) {
+            c++;
+
+            // check if we should activate or ping every few minutes,
+            // start right after sync is considered to be done
+            if (c % MASTERNODE_PING_SECONDS == 1) activeMasternode.ManageStatus();
+
+            if (c % 60 == 0) {
+                mnodeman.CheckAndRemove();
+                mnodeman.ProcessMasternodeConnections();
+                masternodePayments.CleanPaymentList();
+                CleanTransactionLocksList();
+            }
+
+            //if(c % MASTERNODES_DUMP_SECONDS == 0) DumpMasternodes();
+
+            obfuScationPool.CheckTimeout();
+            obfuScationPool.CheckForCompleteQueue();
+        }
+    }
 }
