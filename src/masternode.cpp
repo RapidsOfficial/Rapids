@@ -4,11 +4,15 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "masternode.h"
+
+#include "activemasternode.h"
 #include "addrman.h"
+#include "init.h"
 #include "masternodeman.h"
 #include "obfuscation.h"
 #include "sync.h"
 #include "util.h"
+#include "wallet/wallet.h"
 
 // keep track of the scanning errors I've seen
 std::map<uint256, int> mapSeenMasternodeScanningErrors;
