@@ -139,7 +139,7 @@ The following commands have been removed from the RPC interface:
 - `createrawzerocoinstake`
 - `getmintsinblocks`
 - `reservebalance`
-
+- `getpoolinfo`
 
 ### Newly introduced commands
 

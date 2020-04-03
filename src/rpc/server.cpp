@@ -390,7 +390,6 @@ static const CRPCCommand vRPCCommands[] =
         {"pivx", "checkbudgets", &checkbudgets, true, true, false},
         {"pivx", "mnsync", &mnsync, true, true, false},
         {"pivx", "spork", &spork, true, true, false},
-        {"pivx", "getpoolinfo", &getpoolinfo, true, true, false},
 
 #ifdef ENABLE_WALLET
         /* Wallet */
