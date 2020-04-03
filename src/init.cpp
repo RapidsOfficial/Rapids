@@ -1977,8 +1977,6 @@ bool AppInit2()
     obfuScationDenominations.push_back((1 * COIN) + 1000);
     obfuScationDenominations.push_back((.1 * COIN) + 100);
 
-    obfuScationPool.InitCollateralAddress();
-
     threadGroup.create_thread(boost::bind(&ThreadCheckObfuScationPool));
 
     if (ShutdownRequested()) {

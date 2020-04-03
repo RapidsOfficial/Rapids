@@ -715,9 +715,6 @@ void CMasternodeMan::ProcessMasternodeConnections()
     LOCK(cs_vNodes);
     for (CNode* pnode : vNodes) {
         if (pnode->fObfuScationMaster) {
-            if (obfuScationPool.pSubmittedToMasternode != NULL && pnode->addr == obfuScationPool.pSubmittedToMasternode->addr) continue;
-            LogPrint(BCLog::MASTERNODE,"Closing Masternode connection peer=%i \n", pnode->GetId());
-            pnode->fObfuScationMaster = false;
             pnode->Release();
         }
     }
@@ -925,9 +922,6 @@ void ThreadCheckObfuScationPool()
             }
 
             //if(c % MASTERNODES_DUMP_SECONDS == 0) DumpMasternodes();
-
-            obfuScationPool.CheckTimeout();
-            obfuScationPool.CheckForCompleteQueue();
         }
     }
 }
