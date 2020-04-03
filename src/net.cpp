@@ -14,11 +14,11 @@
 #include "addrman.h"
 #include "chainparams.h"
 #include "clientversion.h"
+#include "guiinterface.h"
+#include "main.h"
 #include "miner.h"
-#include "obfuscation.h"
 #include "primitives/transaction.h"
 #include "scheduler.h"
-#include "guiinterface.h"
 
 #ifdef WIN32
 #include <string.h>

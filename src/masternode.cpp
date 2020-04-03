@@ -5,11 +5,11 @@
 
 #include "masternode.h"
 
-#include "activemasternode.h"
 #include "addrman.h"
 #include "init.h"
+#include "masternode-payments.h"
+#include "masternode-sync.h"
 #include "masternodeman.h"
-#include "obfuscation.h"
 #include "sync.h"
 #include "util.h"
 #include "wallet/wallet.h"

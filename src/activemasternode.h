@@ -10,7 +10,6 @@
 #include "key.h"
 #include "masternode.h"
 #include "net.h"
-#include "obfuscation.h"
 #include "sync.h"
 #include "wallet/wallet.h"
 

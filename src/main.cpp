@@ -28,7 +28,6 @@
 #include "merkleblock.h"
 #include "messagesigner.h"
 #include "net.h"
-#include "obfuscation.h"
 #include "pow.h"
 #include "spork.h"
 #include "sporkdb.h"
@@ -41,9 +40,10 @@
 #include "validationinterface.h"
 #include "zpivchain.h"
 
-#include "zpiv/zerocoin.h"
-#include "libzerocoin/Denominations.h"
 #include "invalid.h"
+#include "libzerocoin/Denominations.h"
+#include "masternode-sync.h"
+#include "zpiv/zerocoin.h"
 #include <sstream>
 
 #include <boost/algorithm/string/replace.hpp>

@@ -4,7 +4,6 @@
 
 #include "qt/pivx/topbar.h"
 #include "qt/pivx/forms/ui_topbar.h"
-#include <QPixmap>
 #include "qt/pivx/lockunlock.h"
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/receivedialog.h"
@@ -17,10 +16,14 @@
 #include "qt/guiutil.h"
 #include "optionsmodel.h"
 #include "qt/platformstyle.h"
-#include "wallet/wallet.h"
 #include "walletmodel.h"
 #include "addresstablemodel.h"
 #include "guiinterface.h"
+
+#include "masternode-sync.h"
+#include "wallet/wallet.h"
+
+#include <QPixmap>
 
 #define REQUEST_UPGRADE_WALLET 1
 

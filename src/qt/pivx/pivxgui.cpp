@@ -18,6 +18,9 @@
 #include "qt/pivx/defaultdialog.h"
 #include "qt/pivx/settings/settingsfaqwidget.h"
 
+#include "init.h"
+#include "util.h"
+
 #include <QDesktopWidget>
 #include <QHBoxLayout>
 #include <QVBoxLayout>
@@ -27,7 +30,6 @@
 #include <QKeySequence>
 #include <QWindowStateChangeEvent>
 
-#include "util.h"
 
 #define BASE_WINDOW_WIDTH 1200
 #define BASE_WINDOW_HEIGHT 740
