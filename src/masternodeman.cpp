@@ -707,19 +707,6 @@ CMasternode* CMasternodeMan::GetMasternodeByRank(int nRank, int64_t nBlockHeight
     return NULL;
 }
 
-void CMasternodeMan::ProcessMasternodeConnections()
-{
-    //we don't care about this for regtest
-    if (Params().IsRegTestNet()) return;
-
-    LOCK(cs_vNodes);
-    for (CNode* pnode : vNodes) {
-        if (pnode->fObfuScationMaster) {
-            pnode->Release();
-        }
-    }
-}
-
 void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if (fLiteMode) return; //disable all Obfuscation/Masternode related functionality
@@ -916,7 +903,6 @@ void ThreadCheckObfuScationPool()
 
             if (c % 60 == 0) {
                 mnodeman.CheckAndRemove();
-                mnodeman.ProcessMasternodeConnections();
                 masternodePayments.CleanPaymentList();
                 CleanTransactionLocksList();
             }
