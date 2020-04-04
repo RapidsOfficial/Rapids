@@ -1698,7 +1698,7 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate, b
                 for (auto& m : listMints) {
                     if (IsMyMint(m.GetValue())) {
                         LogPrint(BCLog::LEGACYZC, "%s: found mint\n", __func__);
-                        pwalletMain->UpdateMint(m.GetValue(), pindex->nHeight, m.GetTxHash(), m.GetDenomination());
+                        UpdateMint(m.GetValue(), pindex->nHeight, m.GetTxHash(), m.GetDenomination());
 
                         // Add the transaction to the wallet
                         for (auto& tx : block.vtx) {
@@ -1706,10 +1706,10 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate, b
                             if (setAddedToWallet.count(txid) || mapWallet.count(txid))
                                 continue;
                             if (txid == m.GetTxHash()) {
-                                CWalletTx wtx(pwalletMain, tx);
+                                CWalletTx wtx(this, tx);
                                 wtx.nTimeReceived = block.GetBlockTime();
                                 wtx.SetMerkleBranch(block);
-                                pwalletMain->AddToWallet(wtx, false, &walletdb);
+                                AddToWallet(wtx, false, &walletdb);
                                 setAddedToWallet.insert(txid);
                             }
                         }
@@ -1722,14 +1722,14 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate, b
                             if (setAddedToWallet.count(txidSpend) || mapWallet.count(txidSpend))
                                 continue;
 
-                            CWalletTx wtx(pwalletMain, txSpend);
+                            CWalletTx wtx(this, txSpend);
                             CBlockIndex* pindexSpend = chainActive[nHeightSpend];
                             CBlock blockSpend;
                             if (ReadBlockFromDisk(blockSpend, pindexSpend))
                                 wtx.SetMerkleBranch(blockSpend);
 
                             wtx.nTimeReceived = pindexSpend->nTime;
-                            pwalletMain->AddToWallet(wtx, false, &walletdb);
+                            AddToWallet(wtx, false, &walletdb);
                             setAddedToWallet.emplace(txidSpend);
                         }
                     }
@@ -2348,7 +2348,7 @@ bool CWallet::IsCollateralAmount(CAmount nInputAmount) const
 bool CWallet::GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useIX)
 {
     // make our change address
-    CReserveKey reservekey(pwalletMain);
+    CReserveKey reservekey(this);
 
     CScript scriptChange;
     scriptChange << OP_RETURN << ToByteVector(hash);
@@ -2371,7 +2371,7 @@ bool CWallet::GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useI
 bool CWallet::GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX)
 {
     // make our change address
-    CReserveKey reservekey(pwalletMain);
+    CReserveKey reservekey(this);
 
     CScript scriptChange;
     scriptChange << OP_RETURN << ToByteVector(hash);
