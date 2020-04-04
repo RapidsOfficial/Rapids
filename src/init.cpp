@@ -496,6 +496,7 @@ std::string HelpMessage(HelpMessageMode mode)
     }
     strUsage += HelpMessageOpt("-debug=<category>", strprintf(_("Output debugging information (default: %u, supplying <category> is optional)"), 0) + ". " +
         _("If <category> is not supplied, output all debugging information.") + _("<category> can be:") + " " + ListLogCategories() + ".");
+    strUsage += HelpMessageOpt("-debugexclude=<category>", _("Exclude debugging information for a category. Can be used in conjunction with -debug=1 to output debug logs for all categories except one or more specified categories."));
     if (GetBoolArg("-help-debug", false))
         strUsage += HelpMessageOpt("-nodebug", "Turn off debugging messages, same as -debug=0");
 #ifdef ENABLE_WALLET
@@ -936,10 +937,22 @@ bool AppInit2()
             find(categories.begin(), categories.end(), std::string("0")) != categories.end())) {
         for (const auto& cat : categories) {
             uint32_t flag;
-            if (!GetLogCategory(&flag, &cat)) {
-                UIWarning(strprintf(_("Unsupported logging category %s.\n"), cat));
-            }
-            logCategories |= flag;
+            if (!GetLogCategory(&flag, &cat))
+                UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debug", cat));
+            else
+                logCategories |= flag;
+        }
+    }
+
+    // Now remove the logging categories which were explicitly excluded
+    if (mapMultiArgs.count("-debugexclude") > 0) {
+        const std::vector<std::string>& excludedCategories = mapMultiArgs.at("-debugexclude");
+        for (const auto& cat : excludedCategories) {
+            uint32_t flag;
+            if (!GetLogCategory(&flag, &cat))
+                UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debugexclude", cat));
+            else
+                logCategories &= ~flag;
         }
     }
 
