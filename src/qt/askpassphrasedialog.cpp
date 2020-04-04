@@ -367,7 +367,9 @@ void AskPassphraseDialog::run(int type)
 }
 void AskPassphraseDialog::onError(QString error, int type)
 {
-    newpassCache = "";
+    newpassCache.clear();
+    LogPrintf("Error encrypting wallet, %s\n", error.toStdString());
+    QMetaObject::invokeMethod(this, "errorEncryptingWallet", Qt::QueuedConnection);
 }
 
 void AskPassphraseDialog::initWatch(QWidget *parent)
