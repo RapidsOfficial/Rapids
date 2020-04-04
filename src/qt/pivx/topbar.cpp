@@ -356,10 +356,6 @@ void TopBar::onColdStakingClicked()
 
 TopBar::~TopBar()
 {
-    if (pctx) {
-        delete pctx;
-        pctx = nullptr;
-    }
     if (timerStakingIcon) {
         timerStakingIcon->stop();
     }
@@ -519,18 +515,14 @@ void TopBar::showUpgradeDialog()
             tr("Upgrading to HD wallet will improve\nthe wallet's reliability and security.\n\n\n"
                     "NOTE: after the upgrade, a new \nbackup will be created.\n"))) {
 
-        if (pctx) delete pctx;
-        pctx = new WalletModel::UnlockContext(walletModel->requestUnlock());
+        std::unique_ptr<WalletModel::UnlockContext> pctx = MakeUnique<WalletModel::UnlockContext>(walletModel->requestUnlock());
         if (!pctx->isValid()) {
             warn(tr("Upgrade Wallet"), tr("Wallet unlock cancelled"));
-            // delete unlock context
-            delete pctx;
-            pctx = nullptr;
             return;
         }
         // Action performed on a separate thread, it's locking cs_main and cs_wallet.
         LoadingDialog *dialog = new LoadingDialog(window);
-        dialog->execute(this, REQUEST_UPGRADE_WALLET);
+        dialog->execute(this, REQUEST_UPGRADE_WALLET, std::move(pctx));
         openDialogWithOpaqueBackgroundFullScreen(dialog, window);
     }
 }
@@ -694,11 +686,6 @@ void TopBar::expandSync()
 
 void TopBar::updateHDState(const bool& upgraded, const QString& upgradeError)
 {
-    // delete global unlock context (relocking the wallet if needed)
-    if (pctx) {
-        delete pctx;
-        pctx = nullptr;
-    }
     if (upgraded) {
         ui->pushButtonHDUpgrade->setVisible(false);
         if (ask("HD Upgrade Complete", tr("The wallet has been successfully upgraded to HD.") + "\n" +

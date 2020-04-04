@@ -4,10 +4,11 @@
 
 #include "qt/pivx/masternodeswidget.h"
 #include "qt/pivx/forms/ui_masternodeswidget.h"
+
+#include "qt/pivx/loadingdialog.h"
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/mnrow.h"
 #include "qt/pivx/mninfodialog.h"
-
 #include "qt/pivx/masternodewizarddialog.h"
 
 #include "activemasternode.h"
@@ -245,11 +246,6 @@ void MasterNodesWidget::startAlias(QString strAlias)
 
 void MasterNodesWidget::updateModelAndInform(QString informText)
 {
-    // delete global unlock context (relocking the wallet if needed)
-    if (pctx) {
-        delete pctx;
-        pctx = nullptr;
-    }
     mnModel->updateMNList();
     inform(informText);
 }
@@ -267,25 +263,21 @@ bool MasterNodesWidget::startMN(CMasternodeConfig::CMasternodeEntry mne, std::st
 
 void MasterNodesWidget::onStartAllClicked(int type)
 {
-    if (pctx) delete pctx;
-    pctx = new WalletModel::UnlockContext(walletModel->requestUnlock());
-    if (!pctx->isValid()) {
-        warn(tr("Start ALL masternodes failed"), tr("Wallet unlock cancelled"));
-        // delete unlock context
-        delete pctx;
-        pctx = nullptr;
-        return;
-    }
     if (!Params().IsRegTestNet() && !checkMNsNetwork()) return;     // skip on RegNet: so we can test even if tier two not synced
 
     if (isLoading) {
         inform(tr("Background task is being executed, please wait"));
     } else {
-        isLoading = true;
-        if (!execute(type)) {
-            isLoading = false;
-            inform(tr("Cannot perform Mastenodes start"));
+        std::unique_ptr<WalletModel::UnlockContext> pctx = MakeUnique<WalletModel::UnlockContext>(walletModel->requestUnlock());
+        if (!pctx->isValid()) {
+            warn(tr("Start ALL masternodes failed"), tr("Wallet unlock cancelled"));
+            return;
         }
+        isLoading = true;
+        // Action performed on a separate thread
+        LoadingDialog *dialog = new LoadingDialog(window);
+        dialog->execute(this, type, std::move(pctx));
+        openDialogWithOpaqueBackgroundFullScreen(dialog, window);
     }
 }
 
@@ -519,9 +511,5 @@ void MasterNodesWidget::changeTheme(bool isLightTheme, QString& theme)
 
 MasterNodesWidget::~MasterNodesWidget()
 {
-    if (pctx) {
-        delete pctx;
-        pctx = nullptr;
-    }
     delete ui;
 }

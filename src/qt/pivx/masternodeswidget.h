@@ -64,9 +64,6 @@ private:
 
     std::atomic<bool> isLoading;
 
-    // pointer to global unlock context (for async unlock/relock)
-    WalletModel::UnlockContext* pctx = nullptr;
-
     bool checkMNsNetwork();
     void startAlias(QString strAlias);
     bool startAll(QString& failedMN, bool onlyMissing);
