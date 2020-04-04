@@ -74,7 +74,7 @@ std::string COutput::ToString() const
 
 bool CWallet::SetupSPKM(bool newKeypool)
 {
-    if (m_spk_man->SetupGeneration()) {
+    if (m_spk_man->SetupGeneration(newKeypool, true)) {
         LogPrintf("%s : spkm setup completed\n", __func__);
         if (m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
             LogPrintf("%s : sapling spkm setup completed\n", __func__);
@@ -601,6 +601,11 @@ ScriptPubKeyMan* CWallet::GetScriptPubKeyMan() const
     return m_spk_man.get();
 }
 
+bool CWallet::HasSaplingSPKM()
+{
+    return GetSaplingScriptPubKeyMan()->IsEnabled();
+}
+
 /**
  * Outpoint is spent if any non-conflicted transaction
  * spends it:
@@ -747,9 +752,11 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
             delete pwalletdbEncryption;
             pwalletdbEncryption = NULL;
         }
-
+        std::cout << "pre lock after encrypt" << std::endl;
         Lock();
+        std::cout << "post lock after encrypt" << std::endl;
         Unlock(strWalletPassphrase);
+        std::cout << "unlock after encrypt" << std::endl;
         // if we are using HD, replace the HD seed with a new one
         if (m_spk_man->IsHDEnabled()) {
             LogPrintf("pre unlock setupGeneration\n");

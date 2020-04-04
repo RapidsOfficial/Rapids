@@ -273,7 +273,9 @@ public:
 
     //! Get spkm
     ScriptPubKeyMan* GetScriptPubKeyMan() const;
-    SaplingScriptPubKeyMan* GetSaplingScriptPubKeyMan() const { return m_sspk_man.get(); };
+    SaplingScriptPubKeyMan* GetSaplingScriptPubKeyMan() const { return m_sspk_man.get(); }
+
+    bool HasSaplingSPKM();
 
     /*
      * Main wallet lock.
