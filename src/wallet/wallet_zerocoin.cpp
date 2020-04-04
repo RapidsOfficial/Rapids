@@ -21,7 +21,7 @@
 
 bool CWallet::AddDeterministicSeed(const uint256& seed)
 {
-    CWalletDB db(pwalletMain->strWalletFile);
+    CWalletDB db(strWalletFile);
     std::string strErr;
     uint256 hashSeed = Hash(seed.begin(), seed.end());
 
@@ -56,7 +56,7 @@ bool CWallet::AddDeterministicSeed(const uint256& seed)
 bool CWallet::GetDeterministicSeed(const uint256& hashSeed, uint256& seedOut)
 {
 
-    CWalletDB db(pwalletMain->strWalletFile);
+    CWalletDB db(strWalletFile);
     std::string strErr;
     if (IsCrypted()) {
         if(!IsLocked()) { //if we have password
