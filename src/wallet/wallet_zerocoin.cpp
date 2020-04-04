@@ -65,7 +65,7 @@ std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector
         return _("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
     } else {
         //update mints with full transaction hash and then database them
-        CWalletDB walletdb(pwalletMain->strWalletFile);
+        CWalletDB walletdb(strWalletFile);
         for (CDeterministicMint dMint : vDMints) {
             dMint.SetTxHash(wtxNew.GetHash());
             zpivTracker->Add(dMint, true);
@@ -243,7 +243,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
     }
 
 
-    CWalletDB walletdb(pwalletMain->strWalletFile);
+    CWalletDB walletdb(strWalletFile);
     if (!CommitTransaction(wtxNew, reserveKey)) {
         LogPrintf("%s: failed to commit\n", __func__);
         nStatus = ZPIV_COMMIT_FAILED;
@@ -252,7 +252,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
         for (CZerocoinMint mint : vMintsSelected) {
             uint256 hashPubcoin = GetPubCoinHash(mint.GetValue());
             zpivTracker->SetPubcoinNotUsed(hashPubcoin);
-            pwalletMain->NotifyZerocoinChanged(pwalletMain, mint.GetValue().GetHex(), "New", CT_UPDATED);
+            NotifyZerocoinChanged(this, mint.GetValue().GetHex(), "New", CT_UPDATED);
         }
 
         //erase spends
@@ -395,7 +395,7 @@ bool CWallet::CreateZCPublicSpendTransaction(
     nStatus = ZPIV_TRX_CREATE;
 
     // If not already given pre-selected mints, then select mints from the wallet
-    CWalletDB walletdb(pwalletMain->strWalletFile);
+    CWalletDB walletdb(strWalletFile);
     std::set<CMintMeta> setMints;
     CAmount nValueSelected = 0;
     int nCoinsReturned = 0; // Number of coins returned in change from function below (for debug)
@@ -683,7 +683,7 @@ std::string CWallet::ResetMintZerocoin()
 {
     long updates = 0;
     long deletions = 0;
-    CWalletDB walletdb(pwalletMain->strWalletFile);
+    CWalletDB walletdb(strWalletFile);
 
     std::set<CMintMeta> setMints = zpivTracker->ListMints(false, false, true);
     std::vector<CMintMeta> vMintsToFind(setMints.begin(), setMints.end());
@@ -715,7 +715,7 @@ std::string CWallet::ResetMintZerocoin()
 std::string CWallet::ResetSpentZerocoin()
 {
     long removed = 0;
-    CWalletDB walletdb(pwalletMain->strWalletFile);
+    CWalletDB walletdb(strWalletFile);
 
     std::set<CMintMeta> setMints = zpivTracker->ListMints(false, false, true);
     std::list<CZerocoinSpend> listSpends = walletdb.ListSpentCoins();
@@ -771,7 +771,7 @@ bool IsMintInChain(const uint256& hashPubcoin, uint256& txid, int& nHeight)
 
 void CWallet::ReconsiderZerocoins(std::list<CZerocoinMint>& listMintsRestored, std::list<CDeterministicMint>& listDMintsRestored)
 {
-    CWalletDB walletdb(pwalletMain->strWalletFile);
+    CWalletDB walletdb(strWalletFile);
     std::list<CZerocoinMint> listMints = walletdb.ListArchivedZerocoins();
     std::list<CDeterministicMint> listDMints = walletdb.ListArchivedDeterministicMints();
 
