@@ -73,6 +73,7 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
 
     ui->pushButtonImport->setText(tr("Import Address"));
     setCssProperty(ui->pushButtonImport, "btn-text-primary");
+    ui->pushButtonImport->setVisible(false);
 
     connect(ui->pushLeft, &QPushButton::clicked, [this](){onEncryptSelected(true);});
     connect(ui->pushRight,  &QPushButton::clicked, [this](){onEncryptSelected(false);});
@@ -270,6 +271,7 @@ void SettingsBitToolWidget::onClearDecrypt()
     ui->lineEditKey->clear();
     ui->lineEditDecryptResult->clear();
     ui->lineEditPassphrase->clear();
+    ui->pushButtonImport->setVisible(false);
     key = CKey();
 }
 
@@ -290,6 +292,7 @@ void SettingsBitToolWidget::onDecryptClicked()
     CPubKey pubKey = key.GetPubKey();
     CBitcoinAddress address(pubKey.GetID());
     ui->lineEditDecryptResult->setText(QString::fromStdString(address.ToString()));
+    ui->pushButtonImport->setVisible(true);
 }
 
 void SettingsBitToolWidget::importAddressFromDecKey()
