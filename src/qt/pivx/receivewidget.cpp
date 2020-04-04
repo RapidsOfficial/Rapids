@@ -91,6 +91,16 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     ui->container_right->addItem(spacer);
     ui->listViewAddress->setVisible(false);
 
+    // Sort Controls
+    SortEdit* lineEdit = new SortEdit(ui->comboBoxSort);
+    connect(lineEdit, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSort->showPopup();});
+    connect(ui->comboBoxSort, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReceiveWidget::onSortChanged);
+    SortEdit* lineEditOrder = new SortEdit(ui->comboBoxSortOrder);
+    connect(lineEditOrder, &SortEdit::Mouse_Pressed, [this](){ui->comboBoxSortOrder->showPopup();});
+    connect(ui->comboBoxSortOrder, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &ReceiveWidget::onSortOrderChanged);
+    fillAddressSortControls(lineEdit, lineEditOrder, ui->comboBoxSort, ui->comboBoxSortOrder);
+    ui->sortWidget->setVisible(false);
+
     // Connect
     connect(ui->pushButtonLabel, &QPushButton::clicked, this, &ReceiveWidget::onLabelClicked);
     connect(ui->pushButtonCopy, &QPushButton::clicked, this, &ReceiveWidget::onCopyClicked);
@@ -106,6 +116,7 @@ void ReceiveWidget::loadWalletModel()
         this->addressTableModel = walletModel->getAddressTableModel();
         this->filter = new AddressFilterProxyModel(AddressTableModel::Receive, this);
         this->filter->setSourceModel(addressTableModel);
+        this->filter->sort(sortType, sortOrder);
         ui->listViewAddress->setModel(this->filter);
         ui->listViewAddress->setModelColumn(AddressTableModel::Address);
 
@@ -286,13 +297,33 @@ void ReceiveWidget::onMyAddressesClicked()
     if (!isVisible) {
         ui->btnMyAddresses->setRightIconClass("btn-dropdown", true);
         ui->listViewAddress->setVisible(true);
+        ui->sortWidget->setVisible(true);
         ui->container_right->removeItem(spacer);
         ui->listViewAddress->update();
     } else {
         ui->btnMyAddresses->setRightIconClass("ic-arrow", true);
         ui->container_right->addItem(spacer);
         ui->listViewAddress->setVisible(false);
+        ui->sortWidget->setVisible(false);
     }
+}
+
+void ReceiveWidget::onSortChanged(int idx)
+{
+    sortType = (AddressTableModel::ColumnIndex) ui->comboBoxSort->itemData(idx).toInt();
+    sortAddresses();
+}
+
+void ReceiveWidget::onSortOrderChanged(int idx)
+{
+    sortOrder = (Qt::SortOrder) ui->comboBoxSortOrder->itemData(idx).toInt();
+    sortAddresses();
+}
+
+void ReceiveWidget::sortAddresses()
+{
+    if (this->filter)
+        this->filter->sort(sortType, sortOrder);
 }
 
 void ReceiveWidget::changeTheme(bool isLightTheme, QString& theme)

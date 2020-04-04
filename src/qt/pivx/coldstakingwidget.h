@@ -73,6 +73,8 @@ private Q_SLOTS:
     void onLabelClicked();
     void onMyStakingAddressesClicked();
     void onDelegationsRefreshed();
+    void onSortChanged(int idx);
+    void onSortOrderChanged(int idx);
 
 private:
     Ui::ColdStakingWidget *ui = nullptr;
@@ -106,6 +108,9 @@ private:
     QModelIndex index;
     QModelIndex addressIndex;
 
+    // Cached sort type and order
+    AddressTableModel::ColumnIndex sortType = AddressTableModel::Label;
+    Qt::SortOrder sortOrder = Qt::AscendingOrder;
 
     int nDisplayUnit;
 
@@ -115,6 +120,7 @@ private:
     bool refreshDelegations();
     void onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses);
     void updateStakingTotalLabel();
+    void sortAddresses();
 };
 
 #endif // COLDSTAKINGWIDGET_H

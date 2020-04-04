@@ -291,7 +291,8 @@ void DashboardWidget::onSortChanged(const QString& value){
     ui->listTransactions->update();
 }
 
-void DashboardWidget::onSortTypeChanged(const QString& value){
+void DashboardWidget::onSortTypeChanged(const QString& value)
+{
     if (!filter) return;
     int filterByType = ui->comboBoxSortType->itemData(ui->comboBoxSortType->currentIndex()).toInt();
     filter->setTypeFilter(filterByType);
