@@ -58,7 +58,7 @@ public:
     QString getMasternodeCountString() const;
 
     // from cached block index
-    int getNumBlocks() const;
+    int getNumBlocks();
     QDateTime getLastBlockDate() const;
     QString getLastBlockHash() const;
     double getVerificationProgress() const;
@@ -92,7 +92,7 @@ private:
     PeerTableModel* peerTableModel;
     BanTableModel *banTableModel;
 
-    const CBlockIndex* cacheTip;
+    const CBlockIndex* cacheTip{nullptr};
     QString cachedMasternodeCountString;
     bool cachedReindexing;
     bool cachedImporting;

@@ -83,9 +83,13 @@ QString ClientModel::getMasternodeCountString() const
     return tr("Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)").arg(QString::number((int)mnodeman.size())).arg(QString::number((int)ipv4)).arg(QString::number((int)ipv6)).arg(QString::number((int)onion)).arg(QString::number((int)nUnknown));
 }
 
-int ClientModel::getNumBlocks() const
+int ClientModel::getNumBlocks()
 {
-    return cacheTip == nullptr ? 0 : cacheTip->nHeight;
+    if (!cacheTip) {
+        cacheTip = WITH_LOCK(cs_main, return chainActive.Tip(););
+    }
+
+    return cacheTip ? cacheTip->nHeight : 0;
 }
 
 int ClientModel::getNumBlocksAtStartup()
