@@ -2673,11 +2673,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         pos.nTxOffset += ::GetSerializeSize(tx, SER_DISK, CLIENT_VERSION);
     }
 
-    //A one-time event where money supply counts were off and recalculated on a certain block.
-    if (pindex->nHeight == consensus.height_ZC_RecalcAccumulators + 1) {
-        RecalculatePIVSupply(consensus.height_start_ZC);
-    }
-
     // track money supply and mint amount info
     CAmount nMoneySupplyPrev = pindex->pprev ? pindex->pprev->nMoneySupply : 0;
     pindex->nMoneySupply = nMoneySupplyPrev + nValueOut - nValueIn;
@@ -2774,6 +2769,21 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     if (!UpdateZPIVSupplyConnect(block, pindex, fJustCheck)) {
         return state.DoS(100, error("%s: Failed to calculate new zPIV supply for block=%s height=%d", __func__,
                                     block.GetHash().GetHex(), pindex->nHeight), REJECT_INVALID);
+    }
+
+    // A one-time event where the zPIV supply was off (due to serial duplication off-chain on main net)
+    if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == consensus.height_last_ZC_WrappedSerials + 1
+            && GetZerocoinSupply() != consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount()) {
+        RecalculatePIVSupply(consensus.height_start_ZC, false);
+    }
+
+    // Add fraudulent funds to the supply and remove any recovered funds.
+    if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == consensus.height_ZC_RecalcAccumulators) {
+        LogPrintf("%s : Adding fraudulent funds at height_ZC_RecalcAccumulators\n", __func__);
+        const CAmount nInvalidAmountFiltered = 268200*COIN;    //Amount of invalid coins filtered through exchanges, that should be considered valid
+        nMoneySupply += nInvalidAmountFiltered;
+        CAmount nLocked = GetInvalidUTXOValue();
+        nMoneySupply -= nLocked;
     }
 
     int64_t nTime3 = GetTimeMicros();
