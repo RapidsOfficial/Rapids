@@ -275,22 +275,4 @@ bool CBlockIndex::RaiseValidity(enum BlockStatus nUpTo)
  * CBlockIndex - Legacy Zerocoin
  */
 
-int64_t CBlockIndex::GetZerocoinSupply() const
-{
-    int64_t nTotal = 0;
-    for (auto& denom : libzerocoin::zerocoinDenomList) {
-        nTotal += GetZcMintsAmount(denom);
-    }
-    return nTotal;
-}
-
-int64_t CBlockIndex::GetZcMints(libzerocoin::CoinDenomination denom) const
-{
-    return mapZerocoinSupply.at(denom);
-}
-
-int64_t CBlockIndex::GetZcMintsAmount(libzerocoin::CoinDenomination denom) const
-{
-    return libzerocoin::ZerocoinDenominationToAmount(denom) * GetZcMints(denom);
-}
 

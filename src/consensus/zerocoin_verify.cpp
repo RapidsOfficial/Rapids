@@ -15,6 +15,7 @@
 #include "txdb.h"
 #include "utilmoneystr.h"        // for FormatMoney
 
+
 bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidationState& state, bool fFakeSerialAttack)
 {
     //max needed non-mint outputs should be 2 - one for redemption address and a possible 2nd for change
@@ -188,37 +189,6 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
     return true;
 }
 
-void AddWrappedSerialsInflation()
-{
-    const int height_end_attack = Params().GetConsensus().height_last_ZC_WrappedSerials;
-    CBlockIndex* pindex = chainActive[height_end_attack];
-    if (!pindex) return;
-    const int chainHeight = chainActive.Height();
-    if (pindex->nHeight > chainHeight) return;
-
-    uiInterface.ShowProgress(_("Adding Wrapped Serials supply..."), 0);
-    while (true) {
-        if (pindex->nHeight % 1000 == 0) {
-            LogPrintf("%s : block %d...\n", __func__, pindex->nHeight);
-            int percent = std::max(1, std::min(99, (int)((double)(pindex->nHeight - height_end_attack) * 100 / (chainHeight - height_end_attack))));
-            uiInterface.ShowProgress(_("Adding Wrapped Serials supply..."), percent);
-        }
-
-        // Add inflated denominations to block index mapSupply
-        for (auto denom : libzerocoin::zerocoinDenomList) {
-            pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
-        }
-        // Update current block index to disk
-        assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));
-        // next block
-        if (pindex->nHeight < chainHeight)
-            pindex = chainActive.Next(pindex);
-        else
-            break;
-    }
-    uiInterface.ShowProgress("", 100);
-}
-
 bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
 {
     const Consensus::Params& consensus = Params().GetConsensus();
@@ -311,16 +281,13 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
     if (pindex->nHeight < consensus.height_start_ZC)
         return true;
 
-    //Reset the supply to previous block
-    pindex->mapZerocoinSupply = pindex->pprev->mapZerocoinSupply;
-
     //Add mints to zPIV supply (mints are forever disabled after last checkpoint)
     if (pindex->nHeight < consensus.height_last_ZC_AccumCheckpoint) {
         std::list<CZerocoinMint> listMints;
         std::set<uint256> setAddedToWallet;
         BlockToZerocoinMintList(block, listMints, true);
         for (const auto& m : listMints) {
-            pindex->mapZerocoinSupply.at(m.GetDenomination())++;
+            mapZerocoinSupply.at(m.GetDenomination())++;
             //Remove any of our own mints from the mintpool
             if (!fJustCheck && pwalletMain) {
                 if (pwalletMain->IsMyMint(m.GetValue())) {
@@ -346,22 +313,22 @@ bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
     //Remove spends from zPIV supply
     std::list<libzerocoin::CoinDenomination> listDenomsSpent = ZerocoinSpendListFromBlock(block, true);
     for (const auto& denom : listDenomsSpent) {
-        pindex->mapZerocoinSupply.at(denom)--;
+        mapZerocoinSupply.at(denom)--;
         // zerocoin failsafe
-        if (pindex->mapZerocoinSupply.at(denom) < 0)
+        if (mapZerocoinSupply.at(denom) < 0)
             return error("Block contains zerocoins that spend more than are in the available supply to spend");
     }
 
     // Update Wrapped Serials amount
     // A one-time event where only the zPIV supply was off (due to serial duplication off-chain on main net)
     if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == consensus.height_last_ZC_WrappedSerials + 1
-            && pindex->GetZerocoinSupply() < consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount()) {
+            && GetZerocoinSupply() < consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount()) {
         for (const auto& denom : libzerocoin::zerocoinDenomList)
-            pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
+            mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
     }
 
     for (const auto& denom : libzerocoin::zerocoinDenomList)
-        LogPrint(BCLog::LEGACYZC, "%s coins for denomination %d pubcoin %s\n", __func__, denom, pindex->mapZerocoinSupply.at(denom));
+        LogPrint(BCLog::LEGACYZC, "%s coins for denomination %d pubcoin %s\n", __func__, denom, mapZerocoinSupply.at(denom));
 
     return true;
 }

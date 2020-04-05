@@ -14,6 +14,8 @@
 // For Script size (BIGNUM/Uint256 size)
 #define BIGNUM_SIZE   4
 
+std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
+
 bool BlockToMintValueVector(const CBlock& block, const libzerocoin::CoinDenomination denom, std::vector<CBigNum>& vValues)
 {
     for (const CTransaction& tx : block.vtx) {
@@ -390,5 +392,17 @@ std::list<libzerocoin::CoinDenomination> ZerocoinSpendListFromBlock(const CBlock
         }
     }
     return vSpends;
+}
+
+int64_t GetZerocoinSupply()
+{
+    if (mapZerocoinSupply.empty())
+        return 0;
+
+    int64_t nTotal = 0;
+    for (auto& denom : libzerocoin::zerocoinDenomList) {
+        nTotal += libzerocoin::ZerocoinDenominationToAmount(denom) * mapZerocoinSupply.at(denom);
+    }
+    return nTotal;
 }
 

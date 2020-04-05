@@ -273,11 +273,6 @@ public:
     //! Efficiently find an ancestor of this block.
     CBlockIndex* GetAncestor(int height);
     const CBlockIndex* GetAncestor(int height) const;
-
-    // Legacy Zerocoin
-    int64_t GetZerocoinSupply() const;
-    int64_t GetZcMints(libzerocoin::CoinDenomination denom) const;
-    int64_t GetZcMintsAmount(libzerocoin::CoinDenomination denom) const;
 };
 
 /** Used to marshal pointers into hashes for db storage. */

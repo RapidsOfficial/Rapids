@@ -1497,36 +1497,10 @@ bool AppInit2()
                     }
                 }
 
-                // Wrapped serials inflation check
-                bool reindexDueWrappedSerials = false;
-                bool reindexZerocoin = false;
-                int chainHeight = chainActive.Height();
-                if(Params().NetworkID() == CBaseChainParams::MAIN && chainHeight > consensus.height_last_ZC_WrappedSerials) {
-
-                    // Supply needs to be exactly GetSupplyBeforeFakeSerial + GetWrapppedSerialInflationAmount
-                    CBlockIndex* pblockindex = chainActive[consensus.height_last_ZC_WrappedSerials + 1];
-                    CAmount zpivSupplyCheckpoint = consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount();
-
-                    if (pblockindex->GetZerocoinSupply() < zpivSupplyCheckpoint) {
-                        // Trigger reindex due wrapping serials
-                        LogPrintf("Current GetZerocoinSupply: %d vs %d\n", pblockindex->GetZerocoinSupply()/COIN , zpivSupplyCheckpoint/COIN);
-                        reindexDueWrappedSerials = true;
-                    } else if (pblockindex->GetZerocoinSupply() > zpivSupplyCheckpoint) {
-                        // Trigger global zPIV reindex
-                        reindexZerocoin = true;
-                        LogPrintf("Current GetZerocoinSupply: %d vs %d\n", pblockindex->GetZerocoinSupply()/COIN , zpivSupplyCheckpoint/COIN);
-                    }
-
-                }
-
-                // Reindex only for wrapped serials inflation.
-                if (reindexDueWrappedSerials)
-                    AddWrappedSerialsInflation();
-
                 // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
-                if (GetBoolArg("-reindexmoneysupply", false) || reindexZerocoin) {
+                if (GetBoolArg("-reindexmoneysupply", false)) {
                     // Recalculate from the zerocoin activation or from scratch.
-                    RecalculatePIVSupply((reindexZerocoin ? consensus.height_start_ZC : 1), false);
+                    RecalculatePIVSupply(1, false);
                 }
 
                 if (!fReindex) {
