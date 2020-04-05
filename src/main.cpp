@@ -2310,6 +2310,10 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
     if (blockUndo.vtxundo.size() + 1 != block.vtx.size())
         return error("DisconnectBlock() : block and undo data inconsistent");
 
+    //Track zPIV money supply
+    if (!UpdateZPIVSupplyDisconnect(block, pindex))
+        return error("%s: Failed to calculate new zPIV supply", __func__);
+
     // undo transactions in reverse order
     for (int i = block.vtx.size() - 1; i >= 0; i--) {
         const CTransaction& tx = block.vtx[i];
@@ -2767,7 +2771,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     view.SetBestBlock(pindex->GetBlockHash());
 
     // Update zPIV money supply map
-    if (!UpdateZPIVSupply(block, pindex, fJustCheck)) {
+    if (!UpdateZPIVSupplyConnect(block, pindex, fJustCheck)) {
         return state.DoS(100, error("%s: Failed to calculate new zPIV supply for block=%s height=%d", __func__,
                                     block.GetHash().GetHex(), pindex->nHeight), REJECT_INVALID);
     }

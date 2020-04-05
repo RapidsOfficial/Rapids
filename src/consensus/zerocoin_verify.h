@@ -21,7 +21,6 @@ bool CheckPublicCoinSpendVersion(int version);
 bool ContextualCheckZerocoinSpend(const CTransaction& tx, const libzerocoin::CoinSpend* spend, int nHeight, const uint256& hashBlock);
 bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const libzerocoin::CoinSpend* spend, int nHeight, const uint256& hashBlock);
 bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv = true);
-bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck);
 CAmount GetInvalidUTXOValue();
 
 #endif //PIVX_CONSENSUS_ZEROCOIN_VERIFY_H
