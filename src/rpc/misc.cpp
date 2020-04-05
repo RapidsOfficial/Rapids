@@ -147,7 +147,10 @@ UniValue getinfo(const UniValue& params, bool fHelp)
     obj.push_back(Pair("moneysupply",ValueFromAmount(chainActive.Tip()->nMoneySupply)));
     UniValue zpivObj(UniValue::VOBJ);
     for (auto denom : libzerocoin::zerocoinDenomList) {
-        zpivObj.push_back(Pair(std::to_string(denom), ValueFromAmount(mapZerocoinSupply.at(denom) * (denom*COIN))));
+        if (mapZerocoinSupply.empty())
+            zpivObj.push_back(Pair(std::to_string(denom), ValueFromAmount(0)));
+        else
+            zpivObj.push_back(Pair(std::to_string(denom), ValueFromAmount(mapZerocoinSupply.at(denom) * (denom*COIN))));
     }
     zpivObj.push_back(Pair("total", ValueFromAmount(GetZerocoinSupply())));
     obj.push_back(Pair("zPIVsupply", zpivObj));

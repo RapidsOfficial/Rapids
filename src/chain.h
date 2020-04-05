@@ -229,12 +229,8 @@ public:
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
     uint32_t nSequenceId{0};
 
-    //! zerocoin specific fields
-    std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
-
-    CBlockIndex() { ClearMapZcSupply(); }
+    CBlockIndex() {}
     CBlockIndex(const CBlock& block);
-    void ClearMapZcSupply();
 
     std::string ToString() const;
 
@@ -279,6 +275,7 @@ public:
 
 // New serialization introduced with 4.0.99
 static const int DBI_OLD_SER_VERSION = 4009900;
+static const int DBI_SER_VERSION_NO_ZC = 4009902;   // removes mapZerocoinSupply
 
 class CDiskBlockIndex : public CBlockIndex
 {
@@ -325,7 +322,11 @@ public:
             READWRITE(nBits);
             READWRITE(nNonce);
             if(this->nVersion > 3) {
-                READWRITE(mapZerocoinSupply);
+                // zc supply removed in 4.0.99.2
+                if (nSerVersion < DBI_SER_VERSION_NO_ZC) {
+                    std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
+                    READWRITE(mapZerocoinSupply);
+                }
                 if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
             }
 
@@ -359,6 +360,7 @@ public:
             READWRITE(nBits);
             READWRITE(nNonce);
             if(this->nVersion > 3) {
+                std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
                 std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
                 READWRITE(nAccumulatorCheckpoint);
                 READWRITE(mapZerocoinSupply);

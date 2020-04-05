@@ -71,19 +71,10 @@ CBlockIndex::CBlockIndex(const CBlock& block):
         nBits{block.nBits},
         nNonce{block.nNonce}
 {
-    ClearMapZcSupply();
     if(block.nVersion > 3 && block.nVersion < 7)
         nAccumulatorCheckpoint = block.nAccumulatorCheckpoint;
     if (block.IsProofOfStake())
         SetProofOfStake();
-}
-
-void CBlockIndex::ClearMapZcSupply()
-{
-    mapZerocoinSupply.clear();
-    // Start supply of each denomination with 0s
-    for (auto& denom : libzerocoin::zerocoinDenomList)
-        mapZerocoinSupply.insert(std::make_pair(denom, 0));
 }
 
 std::string CBlockIndex::ToString() const
