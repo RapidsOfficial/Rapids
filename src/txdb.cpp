@@ -390,6 +390,17 @@ bool CZerocoinDB::WipeCoins(std::string strType)
 
 // Legacy Zerocoin Database
 static const char LZC_ACCUMCS = 'A';
+static const char LZC_MAPSUPPLY = 'M';
+
+bool CZerocoinDB::WriteZCSupply(const std::map<libzerocoin::CoinDenomination, int64_t>& mapZCS)
+{
+    return Write(LZC_MAPSUPPLY, mapZCS);
+}
+
+bool CZerocoinDB::ReadZCSupply(std::map<libzerocoin::CoinDenomination, int64_t>& mapZCS) const
+{
+    return Read(LZC_MAPSUPPLY, mapZCS);
+}
 
 bool CZerocoinDB::WriteAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom, const int nHeight)
 {

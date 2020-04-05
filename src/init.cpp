@@ -1485,15 +1485,28 @@ bool AppInit2()
                 invalid_out::LoadOutpoints();
                 invalid_out::LoadSerials();
 
+                bool fReindexZerocoin = GetBoolArg("-reindexzerocoin", false);
+
+                // initialize zPIV supply to 0
+                mapZerocoinSupply.clear();
+                for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
+
+                // Load zPIV supply from DB
+                const int chainHeight = WITH_LOCK(cs_main, return chainActive.Height());
+                if (chainHeight >= 0) {
+                    if (!fReindexZerocoin && chainHeight >= consensus.height_start_ZC && !zerocoinDB->ReadZCSupply(mapZerocoinSupply)) {
+                        // reindex from disk
+                        fReindexZerocoin = true;
+                    }
+                }
+
                 // Drop all information from the zerocoinDB and repopulate
-                if (GetBoolArg("-reindexzerocoin", false)) {
-                    if (chainActive.Height() > consensus.height_start_ZC) {
-                        uiInterface.InitMessage(_("Reindexing zerocoin database..."));
-                        std::string strError = ReindexZerocoinDB();
-                        if (strError != "") {
-                            strLoadError = strError;
-                            break;
-                        }
+                if (fReindexZerocoin && chainHeight >= consensus.height_start_ZC) {
+                    uiInterface.InitMessage(_("Reindexing zerocoin database..."));
+                    std::string strError = ReindexZerocoinDB();
+                    if (strError != "") {
+                        strLoadError = strError;
+                        break;
                     }
                 }
 
@@ -1511,7 +1524,7 @@ bool AppInit2()
 
                     {
                         LOCK(cs_main);
-                        CBlockIndex *tip = chainActive[chainActive.Height()];
+                        CBlockIndex *tip = chainActive[chainHeight];
                         RPCNotifyBlockChange(true, tip);
                         if (tip && tip->nTime > GetAdjustedTime() + 2 * 60 * 60) {
                             strLoadError = _("The block database contains a block which appears to be from the future. "

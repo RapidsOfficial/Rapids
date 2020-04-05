@@ -2846,10 +2846,16 @@ bool static FlushStateToDisk(CValidationState& state, FlushStateMode mode)
                 if (!pblocktree->WriteBatchSync(vFiles, nLastBlockFile, vBlocks)) {
                     return AbortNode(state, "Files to write to block index database");
                 }
+                // Flush zerocoin supply
+                if (!mapZerocoinSupply.empty() && !zerocoinDB->WriteZCSupply(mapZerocoinSupply)) {
+                    return AbortNode(state, "Failed to write zerocoin supply to DB");
+                }
             }
             // Finally flush the chainstate (which may refer to block index entries).
-            if (!pcoinsTip->Flush())
+            if (!pcoinsTip->Flush()) {
                 return AbortNode(state, "Failed to write to coin database");
+            }
+
             // Update best block in wallet (so we can detect restored wallets).
             if (mode != FLUSH_STATE_IF_NEEDED) {
                 GetMainSignals().SetBestChain(chainActive.GetLocator());
