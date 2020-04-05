@@ -56,7 +56,7 @@ CzPIVWallet::CzPIVWallet(CWallet* parent)
         seed = key.GetPrivKey_256();
         seedMaster = seed;
         LogPrintf("%s: first run of zpiv wallet detected, new seed generated. Seedhash=%s\n", __func__, Hash(seed.begin(), seed.end()).GetHex());
-    } else if (!pwalletMain->GetDeterministicSeed(hashSeed, seed)) {
+    } else if (!parent->GetDeterministicSeed(hashSeed, seed)) {
         LogPrintf("%s: failed to get deterministic seed for hashseed %s\n", __func__, hashSeed.GetHex());
         return;
     }
