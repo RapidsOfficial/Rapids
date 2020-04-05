@@ -1494,9 +1494,18 @@ bool AppInit2()
                 // Load zPIV supply from DB
                 const int chainHeight = WITH_LOCK(cs_main, return chainActive.Height());
                 if (chainHeight >= 0) {
+                    const uint256& tipHash = WITH_LOCK(cs_main, return chainActive[chainHeight]->GetBlockHash());
+                    CLegacyBlockIndex bi;
+
+                    // Read zPIV supply map
                     if (!fReindexZerocoin && chainHeight >= consensus.height_start_ZC && !zerocoinDB->ReadZCSupply(mapZerocoinSupply)) {
-                        // reindex from disk
-                        fReindexZerocoin = true;
+                        // try first reading legacy block index from disk
+                        if (pblocktree->ReadLegacyBlockIndex(tipHash, bi) && !bi.mapZerocoinSupply.empty()) {
+                            mapZerocoinSupply = bi.mapZerocoinSupply;
+                        } else {
+                            // reindex from disk
+                            fReindexZerocoin = true;
+                        }
                     }
                 }
 
@@ -1512,8 +1521,8 @@ bool AppInit2()
 
                 // Recalculate money supply for blocks that are impacted by accounting issue after zerocoin activation
                 if (GetBoolArg("-reindexmoneysupply", false)) {
-                    // Recalculate from the zerocoin activation or from scratch.
-                    RecalculatePIVSupply(1, false);
+                    // Skip zpiv if already reindexed
+                    RecalculatePIVSupply(1, fReindexZerocoin);
                 }
 
                 if (!fReindex) {

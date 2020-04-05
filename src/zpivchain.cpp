@@ -260,6 +260,11 @@ std::string ReindexZerocoinDB()
 
     uiInterface.ShowProgress(_("Reindexing zerocoin database..."), 0);
 
+    // initialize supply to 0
+    mapZerocoinSupply.clear();
+    for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
+
+    const Consensus::Params& consensus = Params().GetConsensus();
     const int zc_start_height = GetZerocoinStartHeight();
     CBlockIndex* pindex = chainActive[zc_start_height];
     std::vector<std::pair<libzerocoin::CoinSpend, uint256> > vSpendInfo;
@@ -274,6 +279,8 @@ std::string ReindexZerocoinDB()
         if (!ReadBlockFromDisk(block, pindex)) {
             return _("Reindexing zerocoin failed");
         }
+        // update supply
+        UpdateZPIVSupplyConnect(block, pindex, true);
 
         for (const CTransaction& tx : block.vtx) {
             for (unsigned int i = 0; i < tx.vin.size(); i++) {
@@ -289,7 +296,7 @@ std::string ReindexZerocoinDB()
                             if (!in.IsZerocoinSpend() && !isPublicSpend)
                                 continue;
                             if (isPublicSpend) {
-                                libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
+                                libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
                                 PublicCoinSpend publicSpend(params);
                                 CValidationState state;
                                 if (!ZPIVModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
@@ -310,7 +317,7 @@ std::string ReindexZerocoinDB()
                                 continue;
 
                             CValidationState state;
-                            libzerocoin::PublicCoin coin(Params().GetConsensus().Zerocoin_Params(pindex->nHeight < Params().GetConsensus().height_start_ZC_SerialsV2));
+                            libzerocoin::PublicCoin coin(consensus.Zerocoin_Params(pindex->nHeight < consensus.height_start_ZC_SerialsV2));
                             TxOutToPublicCoin(out, coin, state);
                             vMintInfo.push_back(std::make_pair(coin, txid));
                         }
@@ -503,3 +510,4 @@ bool UpdateZPIVSupplyDisconnect(const CBlock& block, CBlockIndex* pindex)
 
     return true;
 }
+

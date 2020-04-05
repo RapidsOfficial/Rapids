@@ -396,6 +396,89 @@ public:
     }
 };
 
+/** Legacy block index - used to retrieve old serializations */
+
+class CLegacyBlockIndex : public CBlockIndex
+{
+public:
+    std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply{};
+    int64_t nMint = 0;
+    uint256 hashNext{};
+    uint256 hashPrev{};
+    uint64_t nStakeModifier = 0;
+    uint256 nStakeModifierV2{};
+    COutPoint prevoutStake{};
+    unsigned int nStakeTime = 0;
+    std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
+
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nSerVersion)
+    {
+        if (!(nType & SER_GETHASH))
+            READWRITE(VARINT(nSerVersion));
+
+        READWRITE(VARINT(nHeight));
+        READWRITE(VARINT(nStatus));
+        READWRITE(VARINT(nTx));
+        if (nStatus & (BLOCK_HAVE_DATA | BLOCK_HAVE_UNDO))
+            READWRITE(VARINT(nFile));
+        if (nStatus & BLOCK_HAVE_DATA)
+            READWRITE(VARINT(nDataPos));
+        if (nStatus & BLOCK_HAVE_UNDO)
+            READWRITE(VARINT(nUndoPos));
+
+        if (nSerVersion > DBI_OLD_SER_VERSION) {
+            // Serialization with CLIENT_VERSION > 4009900
+            READWRITE(nMoneySupply);
+            READWRITE(nFlags);
+            READWRITE(this->nVersion);
+            READWRITE(vStakeModifier);
+            READWRITE(hashPrev);
+            READWRITE(hashMerkleRoot);
+            READWRITE(nTime);
+            READWRITE(nBits);
+            READWRITE(nNonce);
+            if(this->nVersion > 3) {
+                // zc supply removed in 4.0.99.2
+                if (nSerVersion < DBI_SER_VERSION_NO_ZC) {
+                    READWRITE(mapZerocoinSupply);
+                }
+                if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
+            }
+
+        } else {
+            // Serialization with CLIENT_VERSION <= 4009900
+            READWRITE(nMint);
+            READWRITE(nMoneySupply);
+            READWRITE(nFlags);
+            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
+                READWRITE(nStakeModifier);
+            } else {
+                READWRITE(nStakeModifierV2);
+            }
+            if (IsProofOfStake()) {
+                READWRITE(prevoutStake);
+                READWRITE(nStakeTime);
+            }
+            READWRITE(this->nVersion);
+            READWRITE(hashPrev);
+            READWRITE(hashNext);
+            READWRITE(hashMerkleRoot);
+            READWRITE(nTime);
+            READWRITE(nBits);
+            READWRITE(nNonce);
+            if(this->nVersion > 3) {
+                READWRITE(nAccumulatorCheckpoint);
+                READWRITE(mapZerocoinSupply);
+                READWRITE(vMintDenominationsInBlock);
+            }
+        }
+    }
+};
+
 /** An in-memory indexed chain of blocks. */
 class CChain
 {

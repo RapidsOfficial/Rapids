@@ -269,6 +269,11 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
     return true;
 }
 
+bool CBlockTreeDB::ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet)
+{
+    return Read(std::make_pair('b', blockHash), biRet);
+}
+
 CZerocoinDB::CZerocoinDB(size_t nCacheSize, bool fMemory, bool fWipe) : CLevelDBWrapper(GetDataDir() / "zerocoin", nCacheSize, fMemory, fWipe)
 {
 }

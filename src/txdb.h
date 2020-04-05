@@ -94,6 +94,7 @@ public:
     bool WriteInt(const std::string& name, int nValue);
     bool ReadInt(const std::string& name, int& nValue);
     bool LoadBlockIndexGuts();
+    bool ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet);
 };
 
 /** Zerocoin database (zerocoin/) */

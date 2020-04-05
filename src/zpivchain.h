@@ -45,5 +45,4 @@ int64_t GetZerocoinSupply();
 bool UpdateZPIVSupplyConnect(const CBlock& block, CBlockIndex* pindex, bool fJustCheck);
 bool UpdateZPIVSupplyDisconnect(const CBlock& block, CBlockIndex* pindex);
 
-
 #endif //PIVX_ZPIVCHAIN_H
