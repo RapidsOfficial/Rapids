@@ -1063,8 +1063,8 @@ bool AppInit2()
 #endif
     if (GetBoolArg("-shrinkdebugfile", logCategories != BCLog::NONE))
         ShrinkDebugFile();
-    LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("PIVX version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+    if (fPrintToDebugLog)
+        OpenDebugLog();
 #ifdef ENABLE_WALLET
     LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
 #endif
