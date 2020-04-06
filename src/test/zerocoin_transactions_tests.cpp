@@ -14,15 +14,13 @@
 #include "wallet/walletdb.h"
 #include "txdb.h"
 #include "zpiv/zpivmodule.h"
-#include "test/test_pivx.h"
+#include "wallet/test/wallet_test_fixture.h"
 #include <boost/test/unit_test.hpp>
 #include <iostream>
 
 
 
-BOOST_FIXTURE_TEST_SUITE(zerocoin_transactions_tests, TestingSetup)
-
-static CWallet cWallet("unlocked.dat");
+BOOST_FIXTURE_TEST_SUITE(zerocoin_transactions_tests, WalletTestingSetup)
 
 BOOST_AUTO_TEST_CASE(zerocoin_spend_test)
 {
@@ -31,23 +29,23 @@ BOOST_AUTO_TEST_CASE(zerocoin_spend_test)
     (void)ZCParams;
 
     bool fFirstRun;
-    cWallet.LoadWallet(fFirstRun);
-    cWallet.zpivTracker = std::unique_ptr<CzPIVTracker>(new CzPIVTracker(&cWallet));
+    pwalletMain->LoadWallet(fFirstRun);
+    pwalletMain->zpivTracker = std::unique_ptr<CzPIVTracker>(new CzPIVTracker(pwalletMain));
     CMutableTransaction tx;
-    CWalletTx* wtx = new CWalletTx(&cWallet, tx);
+    CWalletTx* wtx = new CWalletTx(pwalletMain, tx);
     std::vector<CZerocoinSpend> vSpends;
     std::vector<CZerocoinMint> vMints;
     CAmount nAmount = COIN;
 
     CZerocoinSpendReceipt receipt;
     std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
-    cWallet.SpendZerocoin(nAmount, *wtx, receipt, vMints, outputs);
+    pwalletMain->SpendZerocoin(nAmount, *wtx, receipt, vMints, outputs);
 
     BOOST_CHECK_MESSAGE(receipt.GetStatus() == ZPIV_TRX_FUNDS_PROBLEMS, strprintf("Failed Invalid Amount Check: %s", receipt.GetStatusMessage()));
 
     nAmount = 1;
     CZerocoinSpendReceipt receipt2;
-    cWallet.SpendZerocoin(nAmount, *wtx, receipt2, vMints, outputs);
+    pwalletMain->SpendZerocoin(nAmount, *wtx, receipt2, vMints, outputs);
 
     // if using "wallet.dat", instead of "unlocked.dat" need this
     /// BOOST_CHECK_MESSAGE(vString == "Error: Wallet locked, unable to create transaction!"," Locked Wallet Check Failed");
