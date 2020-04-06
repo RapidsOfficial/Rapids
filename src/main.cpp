@@ -80,6 +80,7 @@ BlockMap mapBlockIndex;
 CChain chainActive;
 CBlockIndex* pindexBestHeader = NULL;
 int64_t nTimeBestReceived = 0;
+int64_t nMoneySupply;
 
 // Best block section
 Mutex g_best_block_mutex;
@@ -2416,10 +2417,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         pos.nTxOffset += ::GetSerializeSize(tx, SER_DISK, CLIENT_VERSION);
     }
 
-    // track money supply and mint amount info
-    CAmount nMoneySupplyPrev = pindex->pprev ? pindex->pprev->nMoneySupply : 0;
-    pindex->nMoneySupply = nMoneySupplyPrev + nValueOut - nValueIn;
-    const int64_t nMint = pindex->nMoneySupply - nMoneySupplyPrev + nFees;
+    // track mint amount info
+    const int64_t nMint = (nValueOut - nValueIn) + nFees;
 
     int64_t nTime1 = GetTimeMicros();
     nTimeConnect += nTime1 - nTimeStart;
@@ -2529,6 +2528,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         nMoneySupply -= nLocked;
     }
 
+    // Update PIV money supply
+    nMoneySupply += (nValueOut - nValueIn);
+
     int64_t nTime3 = GetTimeMicros();
     nTimeIndex += nTime3 - nTime2;
     LogPrint(BCLog::BENCH, "    - Index writing: %.2fms [%.2fs]\n", 0.001 * (nTime3 - nTime2), nTimeIndex * 0.000001);
@@ -2606,6 +2608,10 @@ bool static FlushStateToDisk(CValidationState& state, FlushStateMode mode)
                 // Flush zerocoin supply
                 if (!mapZerocoinSupply.empty() && !zerocoinDB->WriteZCSupply(mapZerocoinSupply)) {
                     return AbortNode(state, "Failed to write zerocoin supply to DB");
+                }
+                // Flush money supply
+                if (!pblocktree->WriteMoneySupply(nMoneySupply)) {
+                    return AbortNode(state, "Failed to write money supply to DB");
                 }
             }
             // Finally flush the chainstate (which may refer to block index entries).

@@ -127,6 +127,7 @@ extern uint64_t nLastBlockTx;
 extern uint64_t nLastBlockSize;
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
+extern int64_t nMoneySupply;
 
 // Best block section
 extern Mutex g_best_block_mutex;

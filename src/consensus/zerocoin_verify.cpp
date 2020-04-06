@@ -197,9 +197,8 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         return false;
 
     CBlockIndex* pindex = chainActive[nHeightStart];
-    CAmount nSupplyPrev = pindex->pprev->nMoneySupply;
     if (nHeightStart == consensus.height_start_ZC)
-        nSupplyPrev = CAmount(5449796547496199);
+        nMoneySupply = CAmount(5449796547496199);
 
     if (!fSkipZpiv) {
         // initialize supply to 0
@@ -246,8 +245,7 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         }
 
         // Rewrite money supply
-        pindex->nMoneySupply = nSupplyPrev + nValueOut - nValueIn;
-        nSupplyPrev = pindex->nMoneySupply;
+        nMoneySupply += (nValueOut - nValueIn);
 
         // Rewrite zpiv supply too
         if (!fSkipZpiv && pindex->nHeight >= consensus.height_start_ZC) {
@@ -257,14 +255,14 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         // Add fraudulent funds to the supply and remove any recovered funds.
         if (pindex->nHeight == consensus.height_ZC_RecalcAccumulators) {
             const CAmount nInvalidAmountFiltered = 268200*COIN;    //Amount of invalid coins filtered through exchanges, that should be considered valid
-            LogPrintf("%s : Original money supply=%s\n", __func__, FormatMoney(pindex->nMoneySupply));
+            LogPrintf("%s : Original money supply=%s\n", __func__, FormatMoney(nMoneySupply));
 
-            pindex->nMoneySupply += nInvalidAmountFiltered;
-            LogPrintf("%s : Adding filtered funds to supply + %s : supply=%s\n", __func__, FormatMoney(nInvalidAmountFiltered), FormatMoney(pindex->nMoneySupply));
+            nMoneySupply += nInvalidAmountFiltered;
+            LogPrintf("%s : Adding filtered funds to supply + %s : supply=%s\n", __func__, FormatMoney(nInvalidAmountFiltered), FormatMoney(nMoneySupply));
 
             CAmount nLocked = GetInvalidUTXOValue();
-            pindex->nMoneySupply -= nLocked;
-            LogPrintf("%s : Removing locked from supply - %s : supply=%s\n", __func__, FormatMoney(nLocked), FormatMoney(pindex->nMoneySupply));
+            nMoneySupply -= nLocked;
+            LogPrintf("%s : Removing locked from supply - %s : supply=%s\n", __func__, FormatMoney(nLocked), FormatMoney(nMoneySupply));
         }
 
         assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));

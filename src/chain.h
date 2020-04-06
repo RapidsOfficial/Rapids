@@ -215,7 +215,6 @@ public:
     // char vector holding the stake modifier bytes. It is empty for PoW blocks.
     // Modifier V1 is 64 bit while modifier V2 is 256 bit.
     std::vector<unsigned char> vStakeModifier{};
-    int64_t nMoneySupply{0};
     unsigned int nFlags{0};
 
     //! block header
@@ -275,7 +274,7 @@ public:
 
 // New serialization introduced with 4.0.99
 static const int DBI_OLD_SER_VERSION = 4009900;
-static const int DBI_SER_VERSION_NO_ZC = 4009902;   // removes mapZerocoinSupply
+static const int DBI_SER_VERSION_NO_ZC = 4009902;   // removes mapZerocoinSupply, nMoneySupply
 
 class CDiskBlockIndex : public CBlockIndex
 {
@@ -310,8 +309,23 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-        if (nSerVersion > DBI_OLD_SER_VERSION) {
-            // Serialization with CLIENT_VERSION > 4009900
+        if (nSerVersion >= DBI_SER_VERSION_NO_ZC) {
+            // Serialization with CLIENT_VERSION = 4009902+
+            READWRITE(nFlags);
+            READWRITE(this->nVersion);
+            READWRITE(vStakeModifier);
+            READWRITE(hashPrev);
+            READWRITE(hashMerkleRoot);
+            READWRITE(nTime);
+            READWRITE(nBits);
+            READWRITE(nNonce);
+            if(this->nVersion > 3 && this->nVersion < 7)
+                READWRITE(nAccumulatorCheckpoint);
+
+        } else if (nSerVersion > DBI_OLD_SER_VERSION) {
+            // Serialization with CLIENT_VERSION = 4009901
+            std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
+            int64_t nMoneySupply = 0;
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
             READWRITE(this->nVersion);
@@ -322,18 +336,15 @@ public:
             READWRITE(nBits);
             READWRITE(nNonce);
             if(this->nVersion > 3) {
-                // zc supply removed in 4.0.99.2
-                if (nSerVersion < DBI_SER_VERSION_NO_ZC) {
-                    std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
-                    READWRITE(mapZerocoinSupply);
-                }
+                READWRITE(mapZerocoinSupply);
                 if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
             }
 
         } else {
-            // Serialization with CLIENT_VERSION <= 4009900
+            // Serialization with CLIENT_VERSION = 4009900-
             int64_t nMint = 0;
-            uint256 hashNext;
+            uint256 hashNext{};
+            int64_t nMoneySupply = 0;
             READWRITE(nMint);
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
@@ -410,6 +421,7 @@ public:
     COutPoint prevoutStake{};
     unsigned int nStakeTime = 0;
     std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
+    int64_t nMoneySupply = 0;
 
 
     ADD_SERIALIZE_METHODS;
@@ -419,6 +431,11 @@ public:
     {
         if (!(nType & SER_GETHASH))
             READWRITE(VARINT(nSerVersion));
+
+        if (nSerVersion >= DBI_SER_VERSION_NO_ZC) {
+            // no extra serialized field
+            return;
+        }
 
         READWRITE(VARINT(nHeight));
         READWRITE(VARINT(nStatus));
@@ -431,7 +448,7 @@ public:
             READWRITE(VARINT(nUndoPos));
 
         if (nSerVersion > DBI_OLD_SER_VERSION) {
-            // Serialization with CLIENT_VERSION > 4009900
+            // Serialization with CLIENT_VERSION = 4009901
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
             READWRITE(this->nVersion);
@@ -442,15 +459,12 @@ public:
             READWRITE(nBits);
             READWRITE(nNonce);
             if(this->nVersion > 3) {
-                // zc supply removed in 4.0.99.2
-                if (nSerVersion < DBI_SER_VERSION_NO_ZC) {
-                    READWRITE(mapZerocoinSupply);
-                }
+                READWRITE(mapZerocoinSupply);
                 if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
             }
 
         } else {
-            // Serialization with CLIENT_VERSION <= 4009900
+            // Serialization with CLIENT_VERSION = 4009900-
             READWRITE(nMint);
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
