@@ -608,8 +608,8 @@ public:
     std::map<libzerocoin::CoinDenomination, CAmount> GetMyZerocoinDistribution() const;
 
     // zPIV wallet
-    CzPIVWallet* zwalletMain;
-    std::unique_ptr<CzPIVTracker> zpivTracker;
+    CzPIVWallet* zwalletMain{nullptr};
+    std::unique_ptr<CzPIVTracker> zpivTracker{nullptr};
     void setZWallet(CzPIVWallet* zwallet);
     CzPIVWallet* getZWallet();
     bool IsMyZerocoinSpend(const CBigNum& bnSerial) const;
