@@ -881,19 +881,18 @@ std::string CMasternodeMan::ToString() const
     return info.str();
 }
 
-void ThreadCheckObfuScationPool()
+void ThreadCheckMasternodes()
 {
     if (fLiteMode) return; //disable all Masternode related functionality
 
     // Make this thread recognisable as the wallet flushing thread
-    util::ThreadRename("pivx-obfuscation");
+    util::ThreadRename("pivx-masternodeman");
     LogPrintf("Masternodes thread started\n");
 
     unsigned int c = 0;
 
     while (true) {
         MilliSleep(1000);
-        //LogPrintf("ThreadCheckObfuScationPool::check timeout\n");
 
         // try to sync from all available nodes, one step at a time
         masternodeSync.Process();
@@ -910,8 +909,6 @@ void ThreadCheckObfuScationPool()
                 masternodePayments.CleanPaymentList();
                 CleanTransactionLocksList();
             }
-
-            //if(c % MASTERNODES_DUMP_SECONDS == 0) DumpMasternodes();
         }
     }
 }

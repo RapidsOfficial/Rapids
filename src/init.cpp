@@ -1961,7 +1961,7 @@ bool AppInit2()
     LogPrintf("nSwiftTXDepth %d\n", nSwiftTXDepth);
     LogPrintf("Budget Mode %s\n", strBudgetMode.c_str());
 
-    threadGroup.create_thread(boost::bind(&ThreadCheckObfuScationPool));
+    threadGroup.create_thread(boost::bind(&ThreadCheckMasternodes));
 
     if (ShutdownRequested()) {
         LogPrintf("Shutdown requested. Exiting.\n");
