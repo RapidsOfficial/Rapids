@@ -138,9 +138,6 @@ private:
     //! if fUseCrypto is false, vMasterKey must be empty
     bool fUseCrypto;
 
-    // Sapling
-    bool EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn);
-
 protected:
     // TODO: In the future, move this variable to the wallet class directly following upstream's structure.
     CKeyingMaterial vMasterKey;
@@ -210,9 +207,6 @@ public:
     virtual bool AddCryptedSaplingSpendingKey(
             const libzcash::SaplingExtendedFullViewingKey &extfvk,
             const std::vector<unsigned char> &vchCryptedSecret,
-            const libzcash::SaplingPaymentAddress &defaultAddr);
-    bool AddSaplingSpendingKey(
-            const libzcash::SaplingExtendedSpendingKey &sk,
             const libzcash::SaplingPaymentAddress &defaultAddr);
     bool HaveSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk) const;
     bool GetSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk, libzcash::SaplingExtendedSpendingKey &skOut) const;

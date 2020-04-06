@@ -21,12 +21,10 @@ class CScriptID;
 /** A virtual base class for key stores */
 class CKeyStore
 {
-protected:
-    mutable RecursiveMutex cs_SpendingKeyStore;
-
 public:
     // todo: Make it protected again once we are more advanced in the wallet/spkm decoupling.
     mutable RecursiveMutex cs_KeyStore;
+    mutable RecursiveMutex cs_SpendingKeyStore;
 
     virtual ~CKeyStore() {}
 
@@ -101,11 +99,13 @@ protected:
     ScriptMap mapScripts;
     WatchOnlySet setWatchOnly;
 
+public:
+
+    // todo future: Move every Sapling map to the new sspkm box.
     SaplingSpendingKeyMap mapSaplingSpendingKeys;
     SaplingFullViewingKeyMap mapSaplingFullViewingKeys;
     SaplingIncomingViewingKeyMap mapSaplingIncomingViewingKeys;
 
-public:
     bool AddKeyPubKey(const CKey& key, const CPubKey& pubkey);
     bool GetPubKey(const CKeyID &address, CPubKey& vchPubKeyOut) const;
     bool HaveKey(const CKeyID& address) const;

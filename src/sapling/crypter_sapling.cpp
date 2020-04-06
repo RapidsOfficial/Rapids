@@ -14,37 +14,6 @@
 #include <openssl/evp.h>
 #include "wallet/wallet.h"
 
-bool CCryptoKeyStore::AddSaplingSpendingKey(
-        const libzcash::SaplingExtendedSpendingKey &sk,
-        const libzcash::SaplingPaymentAddress &defaultAddr)
-{
-    {
-        LOCK2(cs_SpendingKeyStore, cs_KeyStore);
-        if (!IsCrypted()) {
-            return CBasicKeyStore::AddSaplingSpendingKey(sk, defaultAddr);
-        }
-
-        if (IsLocked()) {
-            return false;
-        }
-
-        std::vector<unsigned char> vchCryptedSecret;
-        CSecureDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-        ss << sk;
-        CKeyingMaterial vchSecret(ss.begin(), ss.end());
-        auto address = sk.DefaultAddress();
-        auto extfvk = sk.ToXFVK();
-        if (!EncryptSecret(vMasterKey, vchSecret, extfvk.fvk.GetFingerprint(), vchCryptedSecret)) {
-            return false;
-        }
-
-        if (!AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, defaultAddr)) {
-            return false;
-        }
-    }
-    return true;
-}
-
 bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(
         const libzcash::SaplingExtendedFullViewingKey &extfvk,
         const std::vector<unsigned char> &vchCryptedSecret,
@@ -109,26 +78,6 @@ bool CCryptoKeyStore::HaveSaplingSpendingKey(const libzcash::SaplingFullViewingK
         }
     }
     return false;
-}
-
-bool CCryptoKeyStore::EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn)
-{
-    for (SaplingSpendingKeyMap::value_type& mSaplingSpendingKey : mapSaplingSpendingKeys) {
-        const libzcash::SaplingExtendedSpendingKey &sk = mSaplingSpendingKey.second;
-        CSecureDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-        ss << sk;
-        CKeyingMaterial vchSecret(ss.begin(), ss.end());
-        auto extfvk = sk.ToXFVK();
-        std::vector<unsigned char> vchCryptedSecret;
-        if (!EncryptSecret(vMasterKeyIn, vchSecret, extfvk.fvk.GetFingerprint(), vchCryptedSecret)) {
-            return false;
-        }
-        if (!AddCryptedSaplingSpendingKey(extfvk, vchCryptedSecret, sk.DefaultAddress())) {
-            return false;
-        }
-    }
-    mapSaplingSpendingKeys.clear();
-    return true;
 }
 
 bool CCryptoKeyStore::UnlockSaplingKeys(const CKeyingMaterial& vMasterKeyIn, bool fDecryptionThoroughlyChecked)

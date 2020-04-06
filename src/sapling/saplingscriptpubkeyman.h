@@ -34,12 +34,15 @@ public:
     void SetHDChain(CHDChain& chain, bool memonly);
     const CHDChain& GetHDChain() const { return hdChain; }
 
+    /* Encrypt Sapling keys */
+    bool EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn);
+
     //! Generates new Sapling key
     libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
     //! Adds Sapling spending key to the store, and saves it to disk
     bool AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
                         const libzcash::SaplingPaymentAddress &defaultAddr);
-    bool AddCryptedSaplingSpendingKey(
+    bool AddCryptedSaplingSpendingKeyDB(
             const libzcash::SaplingExtendedFullViewingKey &extfvk,
             const std::vector<unsigned char> &vchCryptedSecret,
             const libzcash::SaplingPaymentAddress &defaultAddr);
@@ -53,6 +56,10 @@ public:
     //! Adds an encrypted spending key to the store, without saving it to disk (used by LoadWallet)
     bool LoadCryptedSaplingZKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
                                 const std::vector<unsigned char> &vchCryptedSecret);
+
+    bool AddSaplingSpendingKey(
+            const libzcash::SaplingExtendedSpendingKey &sk,
+            const libzcash::SaplingPaymentAddress &defaultAddr);
 
     // Sapling metadata
     std::map<libzcash::SaplingIncomingViewingKey, CKeyMetadata> mapSaplingZKeyMetadata;
