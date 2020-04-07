@@ -66,11 +66,12 @@ private Q_SLOTS:
     void onMenuClicked(SendMultiRow* entry);
     void onAddEntryClicked();
     void clearEntries();
-    void clearAll();
+    void clearAll(bool fClearSettings = true);
     void refreshView();
     void onContactMultiClicked();
     void onDeleteClicked();
     void onResetCustomOptions(bool fRefreshAmounts);
+    void onResetSettings();
 private:
     Ui::send *ui;
     QPushButton *coinIcon;
@@ -96,6 +97,7 @@ private:
     bool sendZpiv(QList<SendCoinsRecipient> recipients);
     void setFocusOnLastEntry();
     void updateEntryLabels(QList<SendCoinsRecipient> recipients);
+    void setCustomFeeSelected(bool isSelected, const CAmount& customFee = DEFAULT_TRANSACTION_FEE);
 
 };
 

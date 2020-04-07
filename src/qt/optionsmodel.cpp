@@ -76,7 +76,7 @@ void OptionsModel::Init()
     // Main
     setMainDefaultOptions(settings);
 
-// Wallet
+    // Wallet
 #ifdef ENABLE_WALLET
     setWalletDefaultOptions(settings);
 #endif
@@ -118,13 +118,13 @@ void OptionsModel::setMainDefaultOptions(QSettings& settings, bool reset){
 }
 
 void OptionsModel::setWalletDefaultOptions(QSettings& settings, bool reset){
-    if (!settings.contains("bSpendZeroConfChange") || reset)
+    if (reset || !settings.contains("bSpendZeroConfChange"))
         settings.setValue("bSpendZeroConfChange", false);
     if (!SoftSetBoolArg("-spendzeroconfchange", settings.value("bSpendZeroConfChange").toBool()))
         addOverriddenOption("-spendzeroconfchange");
-
     if (reset){
         setStakeSplitThreshold(CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD);
+        setUseCustomFee(false);
         refreshDataView();
     }
 }
@@ -258,6 +258,10 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             const CAmount nStakeSplitThreshold = (pwalletMain) ? pwalletMain->nStakeSplitThreshold : CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD;
             return QVariant(static_cast<double>(nStakeSplitThreshold / static_cast<double>(COIN)));
         }
+        case fUseCustomFee:
+            return QVariant((pwalletMain) ? pwalletMain->fUseCustomFee : false);
+        case nCustomFee:
+            return QVariant(static_cast<qlonglong>((pwalletMain) ? pwalletMain->nCustomFee : CWallet::minTxFee.GetFeePerK()));
 #endif
         case DisplayUnit:
             return nDisplayUnit;
@@ -354,6 +358,12 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
                 settings.setValue("fShowMasternodesTab", value);
                 setRestartRequired(true);
             }
+            break;
+        case fUseCustomFee:
+            setUseCustomFee(value.toBool());
+            break;
+        case nCustomFee:
+            setCustomFeeValue(value.toLongLong());
             break;
 #endif
         case StakeSplitThreshold:
@@ -461,6 +471,32 @@ void OptionsModel::setStakeSplitThreshold(const CAmount nStakeSplitThreshold)
     }
 }
 
+/* Update Custom Fee value in wallet */
+void OptionsModel::setUseCustomFee(bool fUse)
+{
+    if (pwalletMain && pwalletMain->fUseCustomFee != fUse) {
+        CWalletDB walletdb(pwalletMain->strWalletFile);
+        {
+            LOCK(pwalletMain->cs_wallet);
+            pwalletMain->fUseCustomFee = fUse;
+            if (pwalletMain->fFileBacked)
+                walletdb.WriteUseCustomFee(fUse);
+        }
+    }
+}
+
+void OptionsModel::setCustomFeeValue(const CAmount& value)
+{
+    if (pwalletMain && pwalletMain->nCustomFee != value) {
+        CWalletDB walletdb(pwalletMain->strWalletFile);
+        {
+            LOCK(pwalletMain->cs_wallet);
+            pwalletMain->nCustomFee = value;
+            if (pwalletMain->fFileBacked)
+                walletdb.WriteCustomFeeValue(value);
+        }
+    }
+}
 
 bool OptionsModel::getProxySettings(QNetworkProxy& proxy) const
 {
@@ -490,3 +526,4 @@ bool OptionsModel::isRestartRequired()
     QSettings settings;
     return settings.value("fRestartRequired", false).toBool();
 }
+

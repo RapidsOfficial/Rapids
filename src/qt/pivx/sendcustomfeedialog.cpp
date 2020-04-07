@@ -65,6 +65,10 @@ void SendCustomFeeDialog::setWalletModel(WalletModel* walletModel){
 
 void SendCustomFeeDialog::showEvent(QShowEvent *event){
     updateFee();
+    if (walletModel && walletModel->hasWalletCustomFee()) {
+        ui->checkBoxCustom->setChecked(true);
+        onCustomChecked();
+    }
 }
 
 void SendCustomFeeDialog::onCustomChecked(){
@@ -74,8 +78,9 @@ void SendCustomFeeDialog::onCustomChecked(){
     ui->checkBoxRecommended->setChecked(!isChecked);
 
     if(walletModel && ui->lineEditCustomFee->text().isEmpty()) {
-        feeRate = CWallet::minTxFee;
-        ui->lineEditCustomFee->setText(BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), feeRate.GetFeePerK()));
+        CAmount nFee;
+        walletModel->getWalletCustomFee(nFee);
+        ui->lineEditCustomFee->setText(BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), nFee));
     }
 }
 
@@ -97,19 +102,22 @@ void SendCustomFeeDialog::updateFee(){
     int nBlocksToConfirm = num.toInt(&res);
     if (res) {
         feeRate = mempool.estimateFee(nBlocksToConfirm);
-        if (feeRate <= CFeeRate(0)) { // not enough data => minfee
-            feeRate = CWallet::minTxFee;
-            ui->labelFee->setText(BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(),
-                                                               feeRate.GetFeePerK()) + "/kB");
-        } else {
-            ui->labelFee->setText(
-                    BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(),
-                                                 feeRate.GetFeePerK()) + "/kB");
-        }
+        if (feeRate <= CWallet::minTxFee) feeRate = CWallet::minTxFee;    // not enough data => minfee
+        ui->labelFee->setText(BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(),
+                                                           feeRate.GetFeePerK()) + "/kB");
     }
 }
 
-void SendCustomFeeDialog::clear(){
+void SendCustomFeeDialog::accept()
+{
+    // Persist custom fee in the wallet
+    if (walletModel)
+        walletModel->setWalletCustomFee(ui->checkBoxCustom->checkState() == Qt::Checked, getFeeRate().GetFeePerK());
+    QDialog::accept();
+}
+
+void SendCustomFeeDialog::clear()
+{
     onRecommendedChecked();
     updateFee();
 }
@@ -117,6 +125,11 @@ void SendCustomFeeDialog::clear(){
 CFeeRate SendCustomFeeDialog::getFeeRate(){
     return ui->checkBoxRecommended->isChecked() ?
            feeRate : CFeeRate(GUIUtil::parseValue(ui->lineEditCustomFee->text(), walletModel->getOptionsModel()->getDisplayUnit()));
+}
+
+bool SendCustomFeeDialog::isCustomFeeChecked()
+{
+    return ui->checkBoxCustom->checkState() == Qt::Checked;
 }
 
 void SendCustomFeeDialog::onChangeTheme(bool isLightTheme, QString& theme){

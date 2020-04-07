@@ -8,6 +8,7 @@
 
 #include "addresstablemodel.h"
 #include "guiconstants.h"
+#include "optionsmodel.h"
 #include "recentrequeststablemodel.h"
 #include "transactiontablemodel.h"
 
@@ -309,6 +310,28 @@ void WalletModel::checkBalanceChanged()
 void WalletModel::setWalletDefaultFee(CAmount fee)
 {
     payTxFee = CFeeRate(fee);
+}
+
+bool WalletModel::hasWalletCustomFee()
+{
+    if (!optionsModel) return false;
+    return optionsModel->data(optionsModel->index(OptionsModel::fUseCustomFee), Qt::EditRole).toBool();
+}
+
+bool WalletModel::getWalletCustomFee(CAmount& nFeeRet)
+{
+    nFeeRet = static_cast<CAmount>(optionsModel->data(optionsModel->index(OptionsModel::nCustomFee), Qt::EditRole).toLongLong());
+    return hasWalletCustomFee();
+}
+
+void WalletModel::setWalletCustomFee(bool fUseCustomFee, const CAmount& nFee)
+{
+    if (!optionsModel) return;
+    optionsModel->setData(optionsModel->index(OptionsModel::fUseCustomFee), fUseCustomFee);
+    // do not update custom fee value when fUseCustomFee is set to false
+    if (fUseCustomFee) {
+        optionsModel->setData(optionsModel->index(OptionsModel::nCustomFee), static_cast<qlonglong>(nFee));
+    }
 }
 
 void WalletModel::updateTransaction()

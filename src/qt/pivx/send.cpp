@@ -134,12 +134,15 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     // Entry
     addEntry();
 
+    // Init custom fee false (updated in loadWalletModel)
+    setCustomFeeSelected(false);
+
     // Connect
     connect(ui->pushLeft, &QPushButton::clicked, [this](){onPIVSelected(true);});
     connect(ui->pushRight,  &QPushButton::clicked, [this](){onPIVSelected(false);});
     connect(ui->pushButtonSave, &QPushButton::clicked, this, &SendWidget::onSendClicked);
     connect(ui->pushButtonAddRecipient, &QPushButton::clicked, this, &SendWidget::onAddEntryClicked);
-    connect(ui->pushButtonClear, &QPushButton::clicked, this, &SendWidget::clearAll);
+    connect(ui->pushButtonClear, &QPushButton::clicked, [this](){clearAll(true);});
 }
 
 void SendWidget::refreshView()
@@ -201,7 +204,8 @@ void SendWidget::loadClientModel()
     }
 }
 
-void SendWidget::loadWalletModel() {
+void SendWidget::loadWalletModel()
+{
     if (walletModel && walletModel->getOptionsModel()) {
         // display unit
         nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
@@ -210,6 +214,12 @@ void SendWidget::loadWalletModel() {
             if (entry) {
                 entry->setWalletModel(walletModel);
             }
+        }
+
+        // Restore custom fee from wallet Settings
+        CAmount nCustomFee;
+        if (walletModel->getWalletCustomFee(nCustomFee)) {
+            setCustomFeeSelected(true, nCustomFee);
         }
 
         // Refresh view
@@ -223,14 +233,19 @@ void SendWidget::loadWalletModel() {
     }
 }
 
-void SendWidget::clearAll()
+void SendWidget::clearAll(bool fClearSettings)
 {
     onResetCustomOptions(false);
-    if (customFeeDialog) customFeeDialog->clear();
-    ui->pushButtonFee->setText(tr("Customize Fee"));
-    if (walletModel) walletModel->setWalletDefaultFee();
+    if (fClearSettings) onResetSettings();
     clearEntries();
     refreshAmounts();
+}
+
+void SendWidget::onResetSettings()
+{
+    if (customFeeDialog) customFeeDialog->clear();
+    setCustomFeeSelected(false);
+    if (walletModel) walletModel->setWalletCustomFee(false, DEFAULT_TRANSACTION_FEE);
 }
 
 void SendWidget::onResetCustomOptions(bool fRefreshAmounts)
@@ -399,7 +414,7 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
         );
 
         if (sendStatus.status == WalletModel::OK) {
-            clearAll();
+            clearAll(false);
             inform(tr("Transaction sent"));
             dialog->deleteLater();
             return true;
@@ -479,7 +494,7 @@ bool SendWidget::sendZpiv(QList<SendCoinsRecipient> recipients)
             ) {
         inform(tr("zPIV transaction sent!"));
         ZPivControlDialog::setSelectedMints.clear();
-        clearAll();
+        clearAll(false);
         return true;
     } else {
         QString body;
@@ -600,13 +615,8 @@ void SendWidget::onChangeCustomFeeClicked()
         customFeeDialog->setWalletModel(walletModel);
     }
     if (openDialogWithOpaqueBackgroundY(customFeeDialog, window, 3, 5)) {
-        ui->pushButtonFee->setText(tr("Custom Fee %1").arg(BitcoinUnits::formatWithUnit(nDisplayUnit, customFeeDialog->getFeeRate().GetFeePerK()) + "/kB"));
-        isCustomFeeSelected = true;
-        walletModel->setWalletDefaultFee(customFeeDialog->getFeeRate().GetFeePerK());
-    } else {
-        ui->pushButtonFee->setText(tr("Customize Fee"));
-        isCustomFeeSelected = false;
-        walletModel->setWalletDefaultFee();
+        const CAmount& nFeePerKb = customFeeDialog->getFeeRate().GetFeePerK();
+        setCustomFeeSelected(customFeeDialog->isCustomFeeChecked(), nFeePerKb);
     }
 }
 
@@ -819,6 +829,16 @@ void SendWidget::resizeMenu()
         pos.setY(pos.y() + ((focusedEntry->getEditHeight() - 12)  * 3));
         menuContacts->move(pos);
     }
+}
+
+void SendWidget::setCustomFeeSelected(bool isSelected, const CAmount& customFee)
+{
+    isCustomFeeSelected = isSelected;
+    ui->pushButtonFee->setText(isCustomFeeSelected ?
+                    tr("Custom Fee %1").arg(BitcoinUnits::formatWithUnit(nDisplayUnit, customFee) + "/kB") :
+                    tr("Customize Fee"));
+    if (walletModel)
+        walletModel->setWalletDefaultFee(customFee);
 }
 
 void SendWidget::changeTheme(bool isLightTheme, QString& theme)
