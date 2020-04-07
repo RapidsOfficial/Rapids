@@ -756,8 +756,7 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
         Unlock(strWalletPassphrase);
         // if we are using HD, replace the HD seed with a new one
         if (m_spk_man->IsHDEnabled()) {
-            LogPrintf("pre unlock setupGeneration\n");
-            if (!m_spk_man->SetupGeneration(false, true)) {
+            if (!m_spk_man->SetupGeneration(true, true)) {
                 return false;
             }
         }
