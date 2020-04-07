@@ -1020,6 +1020,10 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     font-size:17px;
 }
 
+*[cssClass="text-main-hash"] {
+    color:#FFFFFF;
+    font-size:12px;
+}
 
 *[cssClass="text-main-settings"] {
     color:#FFFFFF;

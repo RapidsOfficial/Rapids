@@ -55,7 +55,6 @@ public:
     //! Return number of connections, default is in- and outbound (total)
     int getNumConnections(unsigned int flags = CONNECTIONS_ALL) const;
     int getNumBlocksAtStartup();
-    QString getMasternodeCountString() const;
 
     // from cached block index
     int getNumBlocks();
@@ -88,6 +87,7 @@ public:
     bool getTorInfo(std::string& ip_port) const;
 
 private:
+    QString getMasternodeCountString() const;
     OptionsModel* optionsModel;
     PeerTableModel* peerTableModel;
     BanTableModel *banTableModel;
