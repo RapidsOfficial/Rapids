@@ -334,7 +334,11 @@ void ColdStakingWidget::onContactsClicked()
         pos.setY((pos.y() + (height - 14) * 4));
     }
 
-    pos.setX(pos.x() + 40);
+    int margin1, margin2;
+    ui->verticalLayoutTop->getContentsMargins(&margin1, nullptr, nullptr, nullptr);
+    ui->vContainerOwner->getContentsMargins(&margin2, nullptr, nullptr, nullptr);
+    pos.setX(pos.x() + margin1 + margin2);
+
     height = (contactsSize <= 2) ? height * ( 2 * (contactsSize + 1 )) : height * 4;
 
     if (!menuContacts) {
