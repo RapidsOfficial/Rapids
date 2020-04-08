@@ -90,7 +90,7 @@ bool PWidget::execute(int type)
 {
     if (task.isNull()) {
         Worker* worker = new Worker(this, type);
-        connect(worker, SIGNAL (error(QString, int)), this, SLOT (errorString(QString, int)));
+        connect(worker, &Worker::error, this, &PWidget::errorString);
 
         WorkerTask* workerTask = new WorkerTask(QPointer<Worker>(worker));
         workerTask->setAutoDelete(false);
