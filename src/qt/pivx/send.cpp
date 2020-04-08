@@ -99,6 +99,7 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     connect(ui->btnChangeAddress, &OptionButton::clicked, this, &SendWidget::onChangeAddressClicked);
     connect(ui->btnUri, &OptionButton::clicked, this, &SendWidget::onOpenUriClicked);
     connect(ui->pushButtonReset, &QPushButton::clicked, [this](){ onResetCustomOptions(true); });
+    connect(ui->checkBoxDelegations, &QCheckBox::stateChanged, this, &SendWidget::onCheckBoxChanged);
 
     setCssProperty(ui->coinWidget, "container-coin-type");
     setCssProperty(ui->labelLine, "container-divider");
@@ -147,16 +148,9 @@ SendWidget::SendWidget(PIVXGUI* parent) :
 
 void SendWidget::refreshView()
 {
-    QString btnText;
-    if (ui->pushLeft->isChecked()) {
-        btnText = tr("Send PIV");
-        ui->pushButtonAddRecipient->setVisible(true);
-    } else {
-        btnText = tr("Send zPIV");
-        ui->pushButtonAddRecipient->setVisible(false);
-    }
-    ui->pushButtonSave->setText(btnText);
-
+    const bool isChecked = ui->pushLeft->isChecked();
+    ui->pushButtonSave->setText(isChecked ? tr("Send PIV") : tr("Send zPIV"));
+    ui->pushButtonAddRecipient->setVisible(isChecked);
     refreshAmounts();
 }
 
@@ -183,7 +177,9 @@ void SendWidget::refreshAmounts()
         ui->labelTitleTotalRemaining->setText(tr("Total remaining from the selected UTXO"));
     } else {
         // Wallet's balance
-        totalAmount = (isZpiv ? walletModel->getZerocoinBalance() : walletModel->getBalance()) - total;
+        totalAmount = (isZpiv ?
+                walletModel->getZerocoinBalance() :
+                walletModel->getBalance(nullptr, fDelegationsChecked)) - total;
         ui->labelTitleTotalRemaining->setText(tr("Total remaining"));
     }
     ui->labelAmountRemaining->setText(
@@ -193,6 +189,8 @@ void SendWidget::refreshAmounts()
                     isZpiv
                     )
     );
+    // show or hide delegations checkbox if need be
+    showHideCheckBoxDelegations();
 }
 
 void SendWidget::loadClientModel()
@@ -206,10 +204,13 @@ void SendWidget::loadClientModel()
 
 void SendWidget::loadWalletModel()
 {
-    if (walletModel && walletModel->getOptionsModel()) {
-        // display unit
-        nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
+    if (walletModel) {
+        if (walletModel->getOptionsModel()) {
+            // display unit
+            nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
+        }
 
+        // set walletModel for entries
         for (SendMultiRow *entry : entries) {
             if (entry) {
                 entry->setWalletModel(walletModel);
@@ -253,6 +254,7 @@ void SendWidget::onResetCustomOptions(bool fRefreshAmounts)
     CoinControlDialog::coinControl->SetNull();
     ui->btnChangeAddress->setActive(false);
     ui->btnCoinControl->setActive(false);
+    if (ui->checkBoxDelegations->isChecked()) ui->checkBoxDelegations->setChecked(false);
     if (fRefreshAmounts) {
         refreshAmounts();
     }
@@ -324,11 +326,35 @@ void SendWidget::showEvent(QShowEvent *event)
 {
     // Set focus on last recipient address when Send-window is displayed
     setFocusOnLastEntry();
+
+    // Update cached delegated balance
+    CAmount cachedDelegatedBalance_new = walletModel->getDelegatedBalance();
+    if (cachedDelegatedBalance != cachedDelegatedBalance_new) {
+        cachedDelegatedBalance = cachedDelegatedBalance_new;
+        refreshAmounts();
+    }
 }
 
 void SendWidget::setFocusOnLastEntry()
 {
     if (!entries.isEmpty()) entries.last()->setFocus();
+}
+
+void SendWidget::showHideCheckBoxDelegations()
+{
+    // Show checkbox only when there is any available owned delegation,
+    // coincontrol is not selected, and we are trying to spend PIV (not zPIV)
+    const bool isZpiv = ui->pushRight->isChecked();
+    const bool isCControl = CoinControlDialog::coinControl->HasSelected();
+    const bool hasDel = cachedDelegatedBalance > 0;
+
+    const bool showCheckBox = !isZpiv && !isCControl && hasDel;
+    ui->checkBoxDelegations->setVisible(showCheckBox);
+    if (showCheckBox)
+        ui->checkBoxDelegations->setToolTip(
+                tr("Possibly spend coins delegated for cold-staking (currently available: %1").arg(
+                        GUIUtil::formatBalance(cachedDelegatedBalance, nDisplayUnit, isZpiv))
+        );
 }
 
 void SendWidget::onSendClicked()
@@ -375,7 +401,7 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
     WalletModelTransaction currentTransaction(recipients);
     WalletModel::SendCoinsReturn prepareStatus;
 
-    prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl);
+    prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl, fDelegationsChecked);
 
     // process prepareStatus and on error generate message shown to user
     GuiTransactionsUtils::ProcessSendCoinsReturnAndInform(
@@ -393,8 +419,9 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
     }
 
     showHideOp(true);
+    const bool fStakeDelegationVoided = currentTransaction.getTransaction()->fStakeDelegationVoided;
     QString warningStr = QString();
-    if (currentTransaction.getTransaction()->fStakeDelegationVoided)
+    if (fStakeDelegationVoided)
         warningStr = tr("WARNING:\nTransaction spends a cold-stake delegation, voiding it.\n"
                      "These coins will no longer be cold-staked.");
     TxDetailDialog* dialog = new TxDetailDialog(window, true, warningStr);
@@ -414,6 +441,9 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
         );
 
         if (sendStatus.status == WalletModel::OK) {
+            // if delegations were spent, update cachedBalance
+            if (fStakeDelegationVoided)
+                cachedDelegatedBalance = walletModel->getDelegatedBalance();
             clearAll(false);
             inform(tr("Transaction sent"));
             dialog->deleteLater();
@@ -652,6 +682,15 @@ void SendWidget::onCoinControlClicked()
 void SendWidget::onValueChanged()
 {
     refreshAmounts();
+}
+
+void SendWidget::onCheckBoxChanged()
+{
+    const bool checked = ui->checkBoxDelegations->isChecked();
+    if (checked != fDelegationsChecked) {
+        fDelegationsChecked = checked;
+        refreshAmounts();
+    }
 }
 
 void SendWidget::onPIVSelected(bool _isPIV)

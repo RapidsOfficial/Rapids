@@ -68,10 +68,12 @@ private Q_SLOTS:
     void clearEntries();
     void clearAll(bool fClearSettings = true);
     void refreshView();
+    void onCheckBoxChanged();
     void onContactMultiClicked();
     void onDeleteClicked();
     void onResetCustomOptions(bool fRefreshAmounts);
     void onResetSettings();
+
 private:
     Ui::send *ui;
     QPushButton *coinIcon;
@@ -79,6 +81,8 @@ private:
 
     SendCustomFeeDialog* customFeeDialog = nullptr;
     bool isCustomFeeSelected = false;
+    bool fDelegationsChecked = false;
+    CAmount cachedDelegatedBalance{0};
 
     int nDisplayUnit;
     QList<SendMultiRow*> entries;
@@ -96,6 +100,7 @@ private:
     bool send(QList<SendCoinsRecipient> recipients);
     bool sendZpiv(QList<SendCoinsRecipient> recipients);
     void setFocusOnLastEntry();
+    void showHideCheckBoxDelegations();
     void updateEntryLabels(QList<SendCoinsRecipient> recipients);
     void setCustomFeeSelected(bool isSelected, const CAmount& customFee = DEFAULT_TRANSACTION_FEE);
 
