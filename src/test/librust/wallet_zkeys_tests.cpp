@@ -25,6 +25,9 @@ BOOST_FIXTURE_TEST_SUITE(wallet_zkeys_tests, WalletTestingSetup)
 /**
   * This test covers Sapling methods on CWallet
   * GenerateNewSaplingZKey()
+  * AddSaplingZKey()
+  * LoadSaplingZKey()
+  * LoadSaplingZKeyMetadata()
   */
 BOOST_AUTO_TEST_CASE(StoreAndLoadSaplingZkeys) {
     SelectParams(CBaseChainParams::MAIN);
@@ -73,6 +76,19 @@ BOOST_AUTO_TEST_CASE(StoreAndLoadSaplingZkeys) {
     BOOST_CHECK_EQUAL(2, addrs.size());
     BOOST_CHECK_EQUAL(1, addrs.count(address));
     BOOST_CHECK_EQUAL(1, addrs.count(sk.DefaultAddress()));
+
+    // Load a third key into the wallet
+    auto sk2 = m.Derive(1);
+    BOOST_CHECK(wallet.LoadSaplingZKey(sk2));
+
+    // attach metadata to this third key
+    auto ivk2 = sk2.expsk.full_viewing_key().in_viewing_key();
+    int64_t now = GetTime();
+    CKeyMetadata meta(now);
+    BOOST_CHECK(wallet.LoadSaplingZKeyMetadata(ivk2, meta));
+
+    // check metadata is the same
+    BOOST_CHECK_EQUAL(wallet.GetSaplingScriptPubKeyMan()->mapSaplingZKeyMetadata[ivk2].nCreateTime, now);
 }
 
 /**
