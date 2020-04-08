@@ -104,6 +104,28 @@ bool SaplingScriptPubKeyMan::AddSaplingSpendingKey(
     return true;
 }
 
+// Add payment address -> incoming viewing key map entry
+bool SaplingScriptPubKeyMan::AddSaplingIncomingViewingKey(
+        const libzcash::SaplingIncomingViewingKey &ivk,
+        const libzcash::SaplingPaymentAddress &addr)
+{
+    AssertLockHeld(wallet->cs_wallet); // mapSaplingZKeyMetadata
+
+    if (!wallet->AddSaplingIncomingViewingKey(ivk, addr)) {
+        return false;
+    }
+
+    if (!wallet->fFileBacked) {
+        return true;
+    }
+
+    if (!wallet->IsCrypted()) {
+        return CWalletDB(wallet->strWalletFile).WriteSaplingPaymentAddress(addr, ivk);
+    }
+
+    return true;
+}
+
 bool SaplingScriptPubKeyMan::EncryptSaplingKeys(CKeyingMaterial& vMasterKeyIn)
 {
     AssertLockHeld(wallet->cs_wallet); // mapSaplingSpendingKeys
@@ -178,6 +200,13 @@ bool SaplingScriptPubKeyMan::LoadSaplingZKeyMetadata(const libzcash::SaplingInco
 bool SaplingScriptPubKeyMan::LoadSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key)
 {
     return wallet->AddSaplingSpendingKey(key, key.DefaultAddress());
+}
+
+bool SaplingScriptPubKeyMan::LoadSaplingPaymentAddress(
+        const libzcash::SaplingPaymentAddress &addr,
+        const libzcash::SaplingIncomingViewingKey &ivk)
+{
+    return wallet->AddSaplingIncomingViewingKey(ivk, addr);
 }
 
 ///////////////////// Setup ///////////////////////////////////////

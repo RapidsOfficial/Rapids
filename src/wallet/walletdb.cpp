@@ -117,6 +117,15 @@ bool CWalletDB::WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
     return Write(std::make_pair(std::string("sapzkey"), ivk), key, false);
 }
 
+bool CWalletDB::WriteSaplingPaymentAddress(
+        const libzcash::SaplingPaymentAddress &addr,
+        const libzcash::SaplingIncomingViewingKey &ivk)
+{
+    nWalletDBUpdated++;
+
+    return Write(std::make_pair(std::string("sapzaddr"), addr), ivk, false);
+}
+
 bool CWalletDB::WriteCryptedSaplingZKey(
         const libzcash::SaplingExtendedFullViewingKey &extfvk,
         const std::vector<unsigned char>& vchCryptedSecret,
@@ -473,6 +482,7 @@ public:
     unsigned int nKeyMeta;
     unsigned int nZKeys;
     unsigned int nZKeyMeta;
+    unsigned int nSapZAddrs;
     bool fIsEncrypted;
     bool fAnyUnordered;
     int nFileVersion;
@@ -480,7 +490,7 @@ public:
 
     CWalletScanState()
     {
-        nKeys = nCKeys = nKeyMeta = nZKeys = nZKeyMeta = 0;
+        nKeys = nCKeys = nKeyMeta = nZKeys = nZKeyMeta = nSapZAddrs = 0;
         fIsEncrypted = false;
         fAnyUnordered = false;
         nFileVersion = 0;
@@ -764,6 +774,18 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             wss.nZKeyMeta++;
 
             pwallet->LoadSaplingZKeyMetadata(ivk, keyMeta);
+        } else if (strType == "sapzaddr") {
+            libzcash::SaplingPaymentAddress addr;
+            ssKey >> addr;
+            libzcash::SaplingIncomingViewingKey ivk;
+            ssValue >> ivk;
+
+            wss.nSapZAddrs++;
+
+            if (!pwallet->LoadSaplingPaymentAddress(addr, ivk)) {
+                strErr = "Error reading wallet database: LoadSaplingPaymentAddress failed";
+                return false;
+            }
         }
     } catch (...) {
         return false;

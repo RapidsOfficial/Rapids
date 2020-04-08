@@ -154,7 +154,7 @@ bool CBasicKeyStore::GetKey(const CKeyID& address, CKey& keyOut) const
 //! Sapling
 bool CBasicKeyStore::AddSaplingSpendingKey(
         const libzcash::SaplingExtendedSpendingKey &sk,
-        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
+        const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     LOCK(cs_SpendingKeyStore);
     auto fvk = sk.expsk.full_viewing_key();
@@ -170,16 +170,27 @@ bool CBasicKeyStore::AddSaplingSpendingKey(
 
 bool CBasicKeyStore::AddSaplingFullViewingKey(
         const libzcash::SaplingFullViewingKey &fvk,
-        const boost::optional<libzcash::SaplingPaymentAddress> &defaultAddr)
+        const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     LOCK(cs_SpendingKeyStore);
     auto ivk = fvk.in_viewing_key();
     mapSaplingFullViewingKeys[ivk] = fvk;
 
-    if (defaultAddr) {
-        // Add defaultAddr -> SaplingIncomingViewing to SaplingIncomingViewingKeyMap
-        mapSaplingIncomingViewingKeys[defaultAddr.get()] = ivk;
-    }
+    return AddSaplingIncomingViewingKey(ivk, defaultAddr);
+}
+
+// This function updates the wallet's internal address->ivk map.
+// If we add an address that is already in the map, the map will
+// remain unchanged as each address only has one ivk.
+bool CBasicKeyStore::AddSaplingIncomingViewingKey(
+        const libzcash::SaplingIncomingViewingKey &ivk,
+        const libzcash::SaplingPaymentAddress &addr)
+{
+    LOCK(cs_SpendingKeyStore);
+
+    // Add addr -> SaplingIncomingViewing to SaplingIncomingViewingKeyMap
+    mapSaplingIncomingViewingKeys[addr] = ivk;
+
     return true;
 }
 

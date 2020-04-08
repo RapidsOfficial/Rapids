@@ -77,6 +77,24 @@ BOOST_AUTO_TEST_CASE(StoreAndLoadSaplingZkeys) {
     BOOST_CHECK_EQUAL(1, addrs.count(address));
     BOOST_CHECK_EQUAL(1, addrs.count(sk.DefaultAddress()));
 
+    // Generate a diversified address different to the default
+    // If we can't get an early diversified address, we are very unlucky
+    blob88 diversifier;
+    diversifier.begin()[0] = 10;
+    auto dpa = sk.ToXFVK().Address(diversifier).get().second;
+
+    // verify wallet only has the default address
+    BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(sk.DefaultAddress()));
+    BOOST_CHECK(!wallet.HaveSaplingIncomingViewingKey(dpa));
+
+    // manually add a diversified address
+    auto ivk = fvk.in_viewing_key();
+    BOOST_CHECK(wallet.AddSaplingIncomingViewingKeyW(ivk, dpa));
+
+    // verify wallet did add it
+    BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(sk.DefaultAddress()));
+    BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(dpa));
+
     // Load a third key into the wallet
     auto sk2 = m.Derive(1);
     BOOST_CHECK(wallet.LoadSaplingZKey(sk2));
@@ -89,6 +107,13 @@ BOOST_AUTO_TEST_CASE(StoreAndLoadSaplingZkeys) {
 
     // check metadata is the same
     BOOST_CHECK_EQUAL(wallet.GetSaplingScriptPubKeyMan()->mapSaplingZKeyMetadata[ivk2].nCreateTime, now);
+
+    // Load a diversified address for the third key into the wallet
+    auto dpa2 = sk2.ToXFVK().Address(diversifier).get().second;
+    BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(sk2.DefaultAddress()));
+    BOOST_CHECK(!wallet.HaveSaplingIncomingViewingKey(dpa2));
+    BOOST_CHECK(wallet.LoadSaplingPaymentAddress(dpa2, ivk2));
+    BOOST_CHECK(wallet.HaveSaplingIncomingViewingKey(dpa2));
 }
 
 /**
