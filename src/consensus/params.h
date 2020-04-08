@@ -55,7 +55,6 @@ struct Params {
     int height_start_MessSignaturesV2;
     int height_start_StakeModifierNewSelection;
     int height_start_StakeModifierV2;               // Blocks v6 start
-    int height_start_StakeModifierV3;               // Blocks v8 start
     int height_start_TimeProtoV2;                   // Blocks v7 start
     int height_start_ZC;                            // Blocks v4 start
     int height_start_ZC_InvalidSerials;

@@ -3479,13 +3479,9 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
             // compute and set new V1 stake modifier (entropy bits)
             pindexNew->SetNewStakeModifier();
 
-        } else if (pindexNew->nHeight < consensus.height_start_StakeModifierV3) {
+        } else {
             // compute and set new V2 stake modifier (hash of prevout and prevModifier)
             pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);
-
-        } else {
-            // compute and set new V3 stake modifier (hash of the prevModifier sig in coinstake marker)
-            pindexNew->SetNewStakeModifier(block.vtx[1].vout[0]);
         }
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
@@ -6285,13 +6281,13 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 //       it was the one which was commented out
 int ActiveProtocol()
 {
-    // SPORK_14 is used for 70919 (v4.1+)
-    if (sporkManager.IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-
-    // SPORK_15 was used for 70918 (v4.0), commented out now.
-    //if (sporkManager.IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
+    // SPORK_14 was used for 70917 (v3.4), commented out now.
+    //if (sporkManager.IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
     //        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+
+    // SPORK_15 is used for 70918 (v4.0+)
+    if (sporkManager.IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
+            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
 
     return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }

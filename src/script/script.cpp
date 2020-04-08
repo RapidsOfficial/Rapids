@@ -155,9 +155,8 @@ const char* GetOpName(opcodetype opcode)
     case OP_ZEROCOINSPEND          : return "OP_ZEROCOINSPEND";
     case OP_ZEROCOINPUBLICSPEND    : return "OP_ZEROCOINPUBLICSPEND";
 
-    // staking / cold staking
+    // cold staking
     case OP_CHECKCOLDSTAKEVERIFY   : return "OP_CHECKCOLDSTAKEVERIFY";
-    case OP_STAKEMODIFIER          : return "OP_STAKEMODIFIER";
 
     case OP_INVALIDOPCODE          : return "OP_INVALIDOPCODE";
 
@@ -267,13 +266,6 @@ bool CScript::IsPayToColdStaking() const
 bool CScript::StartsWithOpcode(const opcodetype opcode) const
 {
     return (!this->empty() && this->at(0) == opcode);
-}
-
-bool CScript::IsStakeModifierSig() const
-{
-    // opcode + len + compact signature <= 1 + 1 + 65 bytes
-    return (StartsWithOpcode(OP_STAKEMODIFIER) && this->size() > 2 &&
-            this->size() <= 67 && this->at(1) == (int)this->size() - 2);
 }
 
 bool CScript::IsZerocoinMint() const

@@ -159,33 +159,3 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
 
     return true;
 }
-
-bool CheckStakeModifierSig(const CTransaction& tx, const CTxOut& stakePrevout,
-                           const uint256& prevModifier, std::string& strErrorRet)
-{
-    if (!tx.IsCoinStake()) {
-        strErrorRet = "Called on non-coinstake transaction";
-        return false;
-    }
-    std::vector<unsigned char> vchSig;
-    if (!tx.vout[0].GetStakeModifierSig(vchSig)) {
-        strErrorRet = "Failed to get modifier signature from coinstake";
-        return false;
-    }
-    CKeyID keyID;
-    if (!stakePrevout.GetKeyIDFromUTXO(keyID)) {
-        strErrorRet = "Failed to get coinstake prevout keyID";
-        return false;
-    }
-    CPubKey pubkeyFromSig;
-    if(!pubkeyFromSig.RecoverCompact(prevModifier, vchSig)) {
-        strErrorRet = "Error recovering public key from stake modifier signature.";
-        return false;
-    }
-    if(pubkeyFromSig.GetID() != keyID) {
-        strErrorRet = "Stake modifier signature fails";
-        return false;
-    }
-    // All good
-    return true;
-}
