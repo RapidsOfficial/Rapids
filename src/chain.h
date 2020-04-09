@@ -322,7 +322,7 @@ public:
             if(this->nVersion > 3 && this->nVersion < 7)
                 READWRITE(nAccumulatorCheckpoint);
 
-        } else if (nSerVersion > DBI_OLD_SER_VERSION) {
+        } else if (nSerVersion > DBI_OLD_SER_VERSION && ser_action.ForRead()) {
             // Serialization with CLIENT_VERSION = 4009901
             std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
             int64_t nMoneySupply = 0;
@@ -340,7 +340,7 @@ public:
                 if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
             }
 
-        } else {
+        } else if (ser_action.ForRead()) {
             // Serialization with CLIENT_VERSION = 4009900-
             int64_t nMint = 0;
             uint256 hashNext{};
@@ -434,6 +434,11 @@ public:
 
         if (nSerVersion >= DBI_SER_VERSION_NO_ZC) {
             // no extra serialized field
+            return;
+        }
+
+        if (!ser_action.ForRead()) {
+            // legacy block index shouldn't be used to write
             return;
         }
 
