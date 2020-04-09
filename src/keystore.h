@@ -24,7 +24,6 @@ class CKeyStore
 public:
     // todo: Make it protected again once we are more advanced in the wallet/spkm decoupling.
     mutable RecursiveMutex cs_KeyStore;
-    mutable RecursiveMutex cs_SpendingKeyStore;
 
     virtual ~CKeyStore() {}
 

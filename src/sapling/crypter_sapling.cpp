@@ -19,7 +19,7 @@ bool CCryptoKeyStore::AddCryptedSaplingSpendingKey(
         const std::vector<unsigned char> &vchCryptedSecret,
         const libzcash::SaplingPaymentAddress &defaultAddr)
 {
-    LOCK(cs_SpendingKeyStore);
+    LOCK(cs_KeyStore);
     if (!SetCrypted()) {
         return false;
     }
@@ -53,7 +53,7 @@ static bool DecryptSaplingSpendingKey(const CKeyingMaterial& vMasterKey,
 bool CCryptoKeyStore::GetSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk, libzcash::SaplingExtendedSpendingKey &skOut) const
 {
     {
-        LOCK(cs_SpendingKeyStore);
+        LOCK(cs_KeyStore);
         if (!IsCrypted())
             return CBasicKeyStore::GetSaplingSpendingKey(fvk, skOut);
 
@@ -69,7 +69,7 @@ bool CCryptoKeyStore::GetSaplingSpendingKey(const libzcash::SaplingFullViewingKe
 
 bool CCryptoKeyStore::HaveSaplingSpendingKey(const libzcash::SaplingFullViewingKey &fvk) const
 {
-    LOCK(cs_SpendingKeyStore);
+    LOCK(cs_KeyStore);
     if (!IsCrypted())
         return CBasicKeyStore::HaveSaplingSpendingKey(fvk);
     for (auto entry : mapCryptedSaplingSpendingKeys) { // work more on this flow..

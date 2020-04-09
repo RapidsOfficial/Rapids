@@ -78,7 +78,7 @@ bool SaplingScriptPubKeyMan::AddSaplingSpendingKey(
         const libzcash::SaplingPaymentAddress &defaultAddr)
 {
     {
-        LOCK2(wallet->cs_SpendingKeyStore, wallet->cs_KeyStore);
+        LOCK(wallet->cs_KeyStore);
         if (!wallet->IsCrypted()) {
             return wallet->AddSaplingSpendingKey(sk, defaultAddr); // keystore
         }
