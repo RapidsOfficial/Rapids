@@ -89,11 +89,13 @@ void OptionsModel::Init()
     language = settings.value("language").toString();
 }
 
-void OptionsModel::refreshDataView(){
+void OptionsModel::refreshDataView()
+{
     Q_EMIT dataChanged(index(0), index(rowCount(QModelIndex()) - 1));
 }
 
-void OptionsModel::setMainDefaultOptions(QSettings& settings, bool reset){
+void OptionsModel::setMainDefaultOptions(QSettings& settings, bool reset)
+{
     // These are shared with the core or have a command-line parameter
     // and we want command-line parameters to overwrite the GUI settings.
     //
@@ -112,24 +114,26 @@ void OptionsModel::setMainDefaultOptions(QSettings& settings, bool reset){
     if (!SoftSetArg("-par", settings.value("nThreadsScriptVerif").toString().toStdString()))
         addOverriddenOption("-par");
 
-    if(reset){
+    if (reset) {
         refreshDataView();
     }
 }
 
-void OptionsModel::setWalletDefaultOptions(QSettings& settings, bool reset){
-    if (reset || !settings.contains("bSpendZeroConfChange"))
+void OptionsModel::setWalletDefaultOptions(QSettings& settings, bool reset)
+{
+    if (!settings.contains("bSpendZeroConfChange") || reset)
         settings.setValue("bSpendZeroConfChange", false);
     if (!SoftSetBoolArg("-spendzeroconfchange", settings.value("bSpendZeroConfChange").toBool()))
         addOverriddenOption("-spendzeroconfchange");
-    if (reset){
+    if (reset) {
         setStakeSplitThreshold(CWallet::DEFAULT_STAKE_SPLIT_THRESHOLD);
         setUseCustomFee(false);
         refreshDataView();
     }
 }
 
-void OptionsModel::setNetworkDefaultOptions(QSettings& settings, bool reset){
+void OptionsModel::setNetworkDefaultOptions(QSettings& settings, bool reset)
+{
     if (!settings.contains("fUseUPnP") || reset)
         settings.setValue("fUseUPnP", DEFAULT_UPNP);
     if (!SoftSetBoolArg("-upnp", settings.value("fUseUPnP").toBool()))
@@ -150,12 +154,13 @@ void OptionsModel::setNetworkDefaultOptions(QSettings& settings, bool reset){
     else if (!settings.value("fUseProxy").toBool() && !GetArg("-proxy", "").empty())
         addOverriddenOption("-proxy");
 
-    if(reset){
+    if (reset) {
         refreshDataView();
     }
 }
 
-void OptionsModel::setWindowDefaultOptions(QSettings& settings, bool reset){
+void OptionsModel::setWindowDefaultOptions(QSettings& settings, bool reset)
+{
     if (!settings.contains("fMinimizeToTray") || reset)
         settings.setValue("fMinimizeToTray", false);
     fMinimizeToTray = settings.value("fMinimizeToTray").toBool();
@@ -164,12 +169,13 @@ void OptionsModel::setWindowDefaultOptions(QSettings& settings, bool reset){
         settings.setValue("fMinimizeOnClose", false);
     fMinimizeOnClose = settings.value("fMinimizeOnClose").toBool();
 
-    if(reset){
+    if (reset) {
         refreshDataView();
     }
 }
 
-void OptionsModel::setDisplayDefaultOptions(QSettings& settings, bool reset){
+void OptionsModel::setDisplayDefaultOptions(QSettings& settings, bool reset)
+{
     if (!settings.contains("nDisplayUnit") || reset)
         settings.setValue("nDisplayUnit", BitcoinUnits::PIV);
     nDisplayUnit = settings.value("nDisplayUnit").toInt();
@@ -191,7 +197,9 @@ void OptionsModel::setDisplayDefaultOptions(QSettings& settings, bool reset){
         settings.setValue("strThirdPartyTxUrls", "");
     strThirdPartyTxUrls = settings.value("strThirdPartyTxUrls", "").toString();
 
-    if(reset){
+    fHideCharts = GetBoolArg("-hidecharts", false);
+
+    if (reset) {
         refreshDataView();
     }
 }
@@ -281,6 +289,8 @@ QVariant OptionsModel::data(const QModelIndex& index, int role) const
             return settings.value("nDatabaseCache");
         case ThreadsScriptVerif:
             return settings.value("nThreadsScriptVerif");
+        case HideCharts:
+            return fHideCharts;
         case HideZeroBalances:
             return settings.value("fHideZeroBalances");
         case HideOrphans:
@@ -397,6 +407,10 @@ bool OptionsModel::setData(const QModelIndex& index, const QVariant& value, int 
                 settings.setValue("language", value);
                 setRestartRequired(true);
             }
+            break;
+        case HideCharts:
+            fHideCharts = value.toBool();   // memory only
+            Q_EMIT hideChartsChanged(fHideCharts);
             break;
         case HideZeroBalances:
             fHideZeroBalances = value.toBool();
