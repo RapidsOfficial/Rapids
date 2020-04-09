@@ -182,7 +182,7 @@ private:
 
 private Q_SLOTS:
     void onChartRefreshed();
-    void onHideChartsChanged(bool fHide); // set as Q_SLOT to be connected with the options model in the next commit
+    void onHideChartsChanged(bool fHide);
 
 #endif
 
