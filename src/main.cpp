@@ -2035,6 +2035,8 @@ void DataBaseAccChecksum(CBlockIndex* pindex, bool fWrite)
 
 bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex, CCoinsViewCache& view, bool* pfClean)
 {
+    AssertLockHeld(cs_main);
+
     if (pindex->GetBlockHash() != view.GetBestBlock())
         LogPrintf("%s : pindex=%s view=%s\n", __func__, pindex->GetBlockHash().GetHex(), view.GetBestBlock().GetHex());
     assert(pindex->GetBlockHash() == view.GetBestBlock());

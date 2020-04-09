@@ -191,6 +191,8 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
 
 bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
 {
+    AssertLockHeld(cs_main);
+
     const Consensus::Params& consensus = Params().GetConsensus();
     const int chainHeight = chainActive.Height();
     if (nHeightStart > chainHeight)

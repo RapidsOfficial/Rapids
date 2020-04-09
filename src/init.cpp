@@ -1488,43 +1488,48 @@ bool AppInit2()
                 bool fReindexZerocoin = GetBoolArg("-reindexzerocoin", false);
                 bool fReindexMoneySupply = GetBoolArg("-reindexmoneysupply", false);
 
-                // initialize PIV and zPIV supply to 0
-                mapZerocoinSupply.clear();
-                for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
-                nMoneySupply = 0;
+                int chainHeight;
+                {
+                    LOCK(cs_main);
+                    chainHeight = chainActive.Height();
 
-                // Load PIV and zPIV supply from DB
-                const int chainHeight = WITH_LOCK(cs_main, return chainActive.Height());
-                if (chainHeight >= 0) {
-                    const uint256& tipHash = WITH_LOCK(cs_main, return chainActive[chainHeight]->GetBlockHash());
-                    CLegacyBlockIndex bi;
+                    // initialize PIV and zPIV supply to 0
+                    mapZerocoinSupply.clear();
+                    for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
+                    nMoneySupply = 0;
 
-                    // Load zPIV supply map
-                    if (!fReindexZerocoin && chainHeight >= consensus.height_start_ZC && !zerocoinDB->ReadZCSupply(mapZerocoinSupply)) {
-                        // try first reading legacy block index from DB
-                        if (pblocktree->ReadLegacyBlockIndex(tipHash, bi) && !bi.mapZerocoinSupply.empty()) {
-                            mapZerocoinSupply = bi.mapZerocoinSupply;
-                        } else {
-                            // reindex from disk
-                            fReindexZerocoin = true;
+                    // Load PIV and zPIV supply from DB
+                    if (chainHeight >= 0) {
+                        const uint256& tipHash = chainActive[chainHeight]->GetBlockHash();
+                        CLegacyBlockIndex bi;
+
+                        // Load zPIV supply map
+                        if (!fReindexZerocoin && chainHeight >= consensus.height_start_ZC && !zerocoinDB->ReadZCSupply(mapZerocoinSupply)) {
+                            // try first reading legacy block index from DB
+                            if (pblocktree->ReadLegacyBlockIndex(tipHash, bi) && !bi.mapZerocoinSupply.empty()) {
+                                mapZerocoinSupply = bi.mapZerocoinSupply;
+                            } else {
+                                // reindex from disk
+                                fReindexZerocoin = true;
+                            }
                         }
 
-                    }
-
-                    // Load PIV supply amount
-                    if (!fReindexMoneySupply && !pblocktree->ReadMoneySupply(nMoneySupply)) {
-                        // try first reading legacy block index from DB
-                        if (pblocktree->ReadLegacyBlockIndex(tipHash, bi)) {
-                            nMoneySupply = bi.nMoneySupply;
-                        } else {
-                            // reindex from disk
-                            fReindexMoneySupply = true;
+                        // Load PIV supply amount
+                        if (!fReindexMoneySupply && !pblocktree->ReadMoneySupply(nMoneySupply)) {
+                            // try first reading legacy block index from DB
+                            if (pblocktree->ReadLegacyBlockIndex(tipHash, bi)) {
+                                nMoneySupply = bi.nMoneySupply;
+                            } else {
+                                // reindex from disk
+                                fReindexMoneySupply = true;
+                            }
                         }
                     }
                 }
 
                 // Drop all information from the zerocoinDB and repopulate
                 if (fReindexZerocoin && chainHeight >= consensus.height_start_ZC) {
+                    LOCK(cs_main);
                     uiInterface.InitMessage(_("Reindexing zerocoin database..."));
                     std::string strError = ReindexZerocoinDB();
                     if (strError != "") {
@@ -1535,6 +1540,7 @@ bool AppInit2()
 
                 // Recalculate money supply
                 if (fReindexMoneySupply) {
+                    LOCK(cs_main);
                     // Skip zpiv if already reindexed
                     RecalculatePIVSupply(1, fReindexZerocoin);
                 }

@@ -254,6 +254,8 @@ bool IsSerialInBlockchain(const uint256& hashSerial, int& nHeightTx, uint256& tx
 
 std::string ReindexZerocoinDB()
 {
+    AssertLockHeld(cs_main);
+
     if (!zerocoinDB->WipeCoins("spends") || !zerocoinDB->WipeCoins("mints")) {
         return _("Failed to wipe zerocoinDB");
     }
@@ -405,6 +407,8 @@ std::list<libzerocoin::CoinDenomination> ZerocoinSpendListFromBlock(const CBlock
 
 int64_t GetZerocoinSupply()
 {
+    AssertLockHeld(cs_main);
+
     if (mapZerocoinSupply.empty())
         return 0;
 
@@ -417,6 +421,8 @@ int64_t GetZerocoinSupply()
 
 bool UpdateZPIVSupplyConnect(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
 {
+    AssertLockHeld(cs_main);
+
     const Consensus::Params& consensus = Params().GetConsensus();
     if (pindex->nHeight < consensus.height_start_ZC)
         return true;
@@ -474,6 +480,8 @@ bool UpdateZPIVSupplyConnect(const CBlock& block, CBlockIndex* pindex, bool fJus
 
 bool UpdateZPIVSupplyDisconnect(const CBlock& block, CBlockIndex* pindex)
 {
+    AssertLockHeld(cs_main);
+
     const Consensus::Params& consensus = Params().GetConsensus();
     if (pindex->nHeight < consensus.height_start_ZC)
         return true;
