@@ -49,6 +49,8 @@ public:
     bool isMNInactive(QString mnAlias);
     // Masternode is active if it's in PRE_ENABLED OR ENABLED state
     bool isMNActive(QString mnAlias);
+    // Masternode collateral has enough confirmations
+    bool isMNCollateralMature(QString mnAlias);
 
 
 private:

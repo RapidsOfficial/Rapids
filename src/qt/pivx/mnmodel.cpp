@@ -174,6 +174,13 @@ bool MNModel::isMNActive(QString mnAlias)
     return activeState == CMasternode::MASTERNODE_PRE_ENABLED || activeState == CMasternode::MASTERNODE_ENABLED;
 }
 
+bool MNModel::isMNCollateralMature(QString mnAlias)
+{
+    QMap<QString, std::pair<QString, CMasternode*>>::const_iterator it = nodes.find(mnAlias);
+    if (it != nodes.end()) return collateralTxAccepted.value(it.value().second->vin.prevout.hash.GetHex());
+    throw std::runtime_error(std::string("Masternode alias not found"));
+}
+
 bool MNModel::isMNsNetworkSynced()
 {
     return masternodeSync.IsSynced();
