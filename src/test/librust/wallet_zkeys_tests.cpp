@@ -170,7 +170,6 @@ BOOST_AUTO_TEST_CASE(WriteCryptedSaplingZkeyDirectToDb) {
     // spending key is crypted, so we can't extract valid payment address
     libzcash::SaplingExtendedSpendingKey keyOut;
     BOOST_CHECK(!wallet2.GetSaplingExtendedSpendingKey(address, keyOut));
-    assert(!(address == keyOut.DefaultAddress()));
 
     // unlock wallet to get spending keys and verify payment addresses
     wallet2.Unlock(strWalletPass);
