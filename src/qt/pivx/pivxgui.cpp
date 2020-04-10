@@ -71,12 +71,8 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
     windowTitle += " " + networkStyle->getTitleAddText();
     setWindowTitle(windowTitle);
 
-#ifndef Q_OS_MAC
     QApplication::setWindowIcon(networkStyle->getAppIcon());
     setWindowIcon(networkStyle->getAppIcon());
-#else
-    MacDockIconHandler::instance()->setIcon(networkStyle->getAppIcon());
-#endif
 
 #ifdef ENABLE_WALLET
     // Create wallet frame
