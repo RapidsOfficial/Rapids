@@ -22,6 +22,8 @@ CRATE_REGISTRY:=vendored-sources
 HOST_ID_SALT ?= salt
 BUILD_ID_SALT ?= salt
 
+LIBRUSTZCASH_OVERRIDE ?=
+
 host:=$(BUILD)
 ifneq ($(HOST),)
 host:=$(HOST)
