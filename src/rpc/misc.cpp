@@ -8,6 +8,7 @@
 #include "base58.h"
 #include "clientversion.h"
 #include "httpserver.h"
+#include "consensus/zerocoin_verify.h"
 #include "init.h"
 #include "main.h"
 #include "masternode-sync.h"
@@ -143,12 +144,15 @@ UniValue getinfo(const UniValue& params, bool fHelp)
         return obj;
     }
 
-    obj.push_back(Pair("moneysupply",ValueFromAmount(chainActive.Tip()->nMoneySupply)));
+    obj.push_back(Pair("moneysupply",ValueFromAmount(nMoneySupply)));
     UniValue zpivObj(UniValue::VOBJ);
     for (auto denom : libzerocoin::zerocoinDenomList) {
-        zpivObj.push_back(Pair(std::to_string(denom), ValueFromAmount(chainActive.Tip()->mapZerocoinSupply.at(denom) * (denom*COIN))));
+        if (mapZerocoinSupply.empty())
+            zpivObj.push_back(Pair(std::to_string(denom), ValueFromAmount(0)));
+        else
+            zpivObj.push_back(Pair(std::to_string(denom), ValueFromAmount(mapZerocoinSupply.at(denom) * (denom*COIN))));
     }
-    zpivObj.push_back(Pair("total", ValueFromAmount(chainActive.Tip()->GetZerocoinSupply())));
+    zpivObj.push_back(Pair("total", ValueFromAmount(GetZerocoinSupply())));
     obj.push_back(Pair("zPIVsupply", zpivObj));
 
 #ifdef ENABLE_WALLET

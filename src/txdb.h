@@ -94,6 +94,9 @@ public:
     bool WriteInt(const std::string& name, int nValue);
     bool ReadInt(const std::string& name, int& nValue);
     bool LoadBlockIndexGuts();
+    bool ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet);
+    bool WriteMoneySupply(const int64_t& nSupply);
+    bool ReadMoneySupply(int64_t& nSupply) const;
 };
 
 /** Zerocoin database (zerocoin/) */
@@ -119,6 +122,9 @@ public:
     bool EraseCoinSpend(const CBigNum& bnSerial);
     bool WipeCoins(std::string strType);
 
+    /** Map supply [denom] --> supply     */
+    bool WriteZCSupply(const std::map<libzerocoin::CoinDenomination, int64_t>& mapZCS);
+    bool ReadZCSupply(std::map<libzerocoin::CoinDenomination, int64_t>& mapZCS) const;
     /** Accumulators (only for zPoS IBD): [checksum, denom] --> block height **/
     bool WriteAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom, const int nHeight);
     bool ReadAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom, int& nHeightRet);

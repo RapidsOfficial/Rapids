@@ -127,6 +127,7 @@ extern uint64_t nLastBlockTx;
 extern uint64_t nLastBlockSize;
 extern const std::string strMessageMagic;
 extern int64_t nTimeBestReceived;
+extern int64_t nMoneySupply;
 
 // Best block section
 extern Mutex g_best_block_mutex;
@@ -214,7 +215,7 @@ bool GetOutput(const uint256& hash, unsigned int index, CValidationState& state,
 
 // ***TODO***
 double ConvertBitsToDouble(unsigned int nBits);
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount, bool isZPIVStake);
+int64_t GetMasternodePayment();
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock, bool fProofOfStake);
 
 bool ActivateBestChain(CValidationState& state, CBlock* pblock = NULL, bool fAlreadyChecked = false);

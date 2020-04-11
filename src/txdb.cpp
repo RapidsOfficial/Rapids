@@ -158,6 +158,18 @@ bool CCoinsViewDB::GetStats(CCoinsStats& stats) const
     return true;
 }
 
+static const char MONEYSUPPLY = 'M';
+
+bool CBlockTreeDB::WriteMoneySupply(const int64_t& nSupply)
+{
+    return Write(MONEYSUPPLY, nSupply);
+}
+
+bool CBlockTreeDB::ReadMoneySupply(int64_t& nSupply) const
+{
+    return Read(MONEYSUPPLY, nSupply);
+}
+
 bool CBlockTreeDB::WriteBatchSync(const std::vector<std::pair<int, const CBlockFileInfo*> >& fileInfo, int nLastFile, const std::vector<const CBlockIndex*>& blockinfo) {
     CLevelDBBatch batch;
     for (std::vector<std::pair<int, const CBlockFileInfo*> >::const_iterator it=fileInfo.begin(); it != fileInfo.end(); it++) {
@@ -246,10 +258,8 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
 
                 //zerocoin
                 pindexNew->nAccumulatorCheckpoint = diskindex.nAccumulatorCheckpoint;
-                pindexNew->mapZerocoinSupply = diskindex.mapZerocoinSupply;
 
                 //Proof Of Stake
-                pindexNew->nMoneySupply = diskindex.nMoneySupply;
                 pindexNew->nFlags = diskindex.nFlags;
                 pindexNew->vStakeModifier = diskindex.vStakeModifier;
 
@@ -268,6 +278,11 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
     }
 
     return true;
+}
+
+bool CBlockTreeDB::ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet)
+{
+    return Read(std::make_pair('b', blockHash), biRet);
 }
 
 CZerocoinDB::CZerocoinDB(size_t nCacheSize, bool fMemory, bool fWipe) : CLevelDBWrapper(GetDataDir() / "zerocoin", nCacheSize, fMemory, fWipe)
@@ -391,6 +406,17 @@ bool CZerocoinDB::WipeCoins(std::string strType)
 
 // Legacy Zerocoin Database
 static const char LZC_ACCUMCS = 'A';
+static const char LZC_MAPSUPPLY = 'M';
+
+bool CZerocoinDB::WriteZCSupply(const std::map<libzerocoin::CoinDenomination, int64_t>& mapZCS)
+{
+    return Write(LZC_MAPSUPPLY, mapZCS);
+}
+
+bool CZerocoinDB::ReadZCSupply(std::map<libzerocoin::CoinDenomination, int64_t>& mapZCS) const
+{
+    return Read(LZC_MAPSUPPLY, mapZCS);
+}
 
 bool CZerocoinDB::WriteAccChecksum(const uint32_t& nChecksum, const libzerocoin::CoinDenomination denom, const int nHeight)
 {

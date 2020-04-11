@@ -71,19 +71,10 @@ CBlockIndex::CBlockIndex(const CBlock& block):
         nBits{block.nBits},
         nNonce{block.nNonce}
 {
-    ClearMapZcSupply();
     if(block.nVersion > 3 && block.nVersion < 7)
         nAccumulatorCheckpoint = block.nAccumulatorCheckpoint;
     if (block.IsProofOfStake())
         SetProofOfStake();
-}
-
-void CBlockIndex::ClearMapZcSupply()
-{
-    mapZerocoinSupply.clear();
-    // Start supply of each denomination with 0s
-    for (auto& denom : libzerocoin::zerocoinDenomList)
-        mapZerocoinSupply.insert(std::make_pair(denom, 0));
 }
 
 std::string CBlockIndex::ToString() const
@@ -275,22 +266,4 @@ bool CBlockIndex::RaiseValidity(enum BlockStatus nUpTo)
  * CBlockIndex - Legacy Zerocoin
  */
 
-int64_t CBlockIndex::GetZerocoinSupply() const
-{
-    int64_t nTotal = 0;
-    for (auto& denom : libzerocoin::zerocoinDenomList) {
-        nTotal += GetZcMintsAmount(denom);
-    }
-    return nTotal;
-}
-
-int64_t CBlockIndex::GetZcMints(libzerocoin::CoinDenomination denom) const
-{
-    return mapZerocoinSupply.at(denom);
-}
-
-int64_t CBlockIndex::GetZcMintsAmount(libzerocoin::CoinDenomination denom) const
-{
-    return libzerocoin::ZerocoinDenominationToAmount(denom) * GetZcMints(denom);
-}
 

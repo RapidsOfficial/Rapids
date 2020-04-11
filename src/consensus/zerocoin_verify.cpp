@@ -15,6 +15,7 @@
 #include "txdb.h"
 #include "utilmoneystr.h"        // for FormatMoney
 
+
 bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidationState& state, bool fFakeSerialAttack)
 {
     //max needed non-mint outputs should be 2 - one for redemption address and a possible 2nd for change
@@ -188,48 +189,24 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
     return true;
 }
 
-void AddWrappedSerialsInflation()
-{
-    const int height_end_attack = Params().GetConsensus().height_last_ZC_WrappedSerials;
-    CBlockIndex* pindex = chainActive[height_end_attack];
-    if (!pindex) return;
-    const int chainHeight = chainActive.Height();
-    if (pindex->nHeight > chainHeight) return;
-
-    uiInterface.ShowProgress(_("Adding Wrapped Serials supply..."), 0);
-    while (true) {
-        if (pindex->nHeight % 1000 == 0) {
-            LogPrintf("%s : block %d...\n", __func__, pindex->nHeight);
-            int percent = std::max(1, std::min(99, (int)((double)(pindex->nHeight - height_end_attack) * 100 / (chainHeight - height_end_attack))));
-            uiInterface.ShowProgress(_("Adding Wrapped Serials supply..."), percent);
-        }
-
-        // Add inflated denominations to block index mapSupply
-        for (auto denom : libzerocoin::zerocoinDenomList) {
-            pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
-        }
-        // Update current block index to disk
-        assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));
-        // next block
-        if (pindex->nHeight < chainHeight)
-            pindex = chainActive.Next(pindex);
-        else
-            break;
-    }
-    uiInterface.ShowProgress("", 100);
-}
-
 bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
 {
+    AssertLockHeld(cs_main);
+
     const Consensus::Params& consensus = Params().GetConsensus();
     const int chainHeight = chainActive.Height();
     if (nHeightStart > chainHeight)
         return false;
 
     CBlockIndex* pindex = chainActive[nHeightStart];
-    CAmount nSupplyPrev = pindex->pprev->nMoneySupply;
     if (nHeightStart == consensus.height_start_ZC)
-        nSupplyPrev = CAmount(5449796547496199);
+        nMoneySupply = CAmount(5449796547496199);
+
+    if (!fSkipZpiv) {
+        // initialize supply to 0
+        mapZerocoinSupply.clear();
+        for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
+    }
 
     uiInterface.ShowProgress(_("Recalculating PIV supply..."), 0);
     while (true) {
@@ -270,25 +247,24 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         }
 
         // Rewrite money supply
-        pindex->nMoneySupply = nSupplyPrev + nValueOut - nValueIn;
-        nSupplyPrev = pindex->nMoneySupply;
+        nMoneySupply += (nValueOut - nValueIn);
 
         // Rewrite zpiv supply too
         if (!fSkipZpiv && pindex->nHeight >= consensus.height_start_ZC) {
-            UpdateZPIVSupply(block, pindex, true);
+            UpdateZPIVSupplyConnect(block, pindex, true);
         }
 
         // Add fraudulent funds to the supply and remove any recovered funds.
         if (pindex->nHeight == consensus.height_ZC_RecalcAccumulators) {
             const CAmount nInvalidAmountFiltered = 268200*COIN;    //Amount of invalid coins filtered through exchanges, that should be considered valid
-            LogPrintf("%s : Original money supply=%s\n", __func__, FormatMoney(pindex->nMoneySupply));
+            LogPrintf("%s : Original money supply=%s\n", __func__, FormatMoney(nMoneySupply));
 
-            pindex->nMoneySupply += nInvalidAmountFiltered;
-            LogPrintf("%s : Adding filtered funds to supply + %s : supply=%s\n", __func__, FormatMoney(nInvalidAmountFiltered), FormatMoney(pindex->nMoneySupply));
+            nMoneySupply += nInvalidAmountFiltered;
+            LogPrintf("%s : Adding filtered funds to supply + %s : supply=%s\n", __func__, FormatMoney(nInvalidAmountFiltered), FormatMoney(nMoneySupply));
 
             CAmount nLocked = GetInvalidUTXOValue();
-            pindex->nMoneySupply -= nLocked;
-            LogPrintf("%s : Removing locked from supply - %s : supply=%s\n", __func__, FormatMoney(nLocked), FormatMoney(pindex->nMoneySupply));
+            nMoneySupply -= nLocked;
+            LogPrintf("%s : Removing locked from supply - %s : supply=%s\n", __func__, FormatMoney(nLocked), FormatMoney(nMoneySupply));
         }
 
         assert(pblocktree->WriteBlockIndex(CDiskBlockIndex(pindex)));
@@ -302,67 +278,6 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
             break;
     }
     uiInterface.ShowProgress("", 100);
-    return true;
-}
-
-bool UpdateZPIVSupply(const CBlock& block, CBlockIndex* pindex, bool fJustCheck)
-{
-    const Consensus::Params& consensus = Params().GetConsensus();
-    if (pindex->nHeight < consensus.height_start_ZC)
-        return true;
-
-    //Reset the supply to previous block
-    pindex->mapZerocoinSupply = pindex->pprev->mapZerocoinSupply;
-
-    //Add mints to zPIV supply (mints are forever disabled after last checkpoint)
-    if (pindex->nHeight < consensus.height_last_ZC_AccumCheckpoint) {
-        std::list<CZerocoinMint> listMints;
-        std::set<uint256> setAddedToWallet;
-        BlockToZerocoinMintList(block, listMints, true);
-        for (const auto& m : listMints) {
-            pindex->mapZerocoinSupply.at(m.GetDenomination())++;
-            //Remove any of our own mints from the mintpool
-            if (!fJustCheck && pwalletMain) {
-                if (pwalletMain->IsMyMint(m.GetValue())) {
-                    pwalletMain->UpdateMint(m.GetValue(), pindex->nHeight, m.GetTxHash(), m.GetDenomination());
-                    // Add the transaction to the wallet
-                    for (auto& tx : block.vtx) {
-                        uint256 txid = tx.GetHash();
-                        if (setAddedToWallet.count(txid))
-                            continue;
-                        if (txid == m.GetTxHash()) {
-                            CWalletTx wtx(pwalletMain, tx);
-                            wtx.nTimeReceived = block.GetBlockTime();
-                            wtx.SetMerkleBranch(block);
-                            pwalletMain->AddToWallet(wtx, false, nullptr);
-                            setAddedToWallet.insert(txid);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    //Remove spends from zPIV supply
-    std::list<libzerocoin::CoinDenomination> listDenomsSpent = ZerocoinSpendListFromBlock(block, true);
-    for (const auto& denom : listDenomsSpent) {
-        pindex->mapZerocoinSupply.at(denom)--;
-        // zerocoin failsafe
-        if (pindex->mapZerocoinSupply.at(denom) < 0)
-            return error("Block contains zerocoins that spend more than are in the available supply to spend");
-    }
-
-    // Update Wrapped Serials amount
-    // A one-time event where only the zPIV supply was off (due to serial duplication off-chain on main net)
-    if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == consensus.height_last_ZC_WrappedSerials + 1
-            && pindex->GetZerocoinSupply() < consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount()) {
-        for (const auto& denom : libzerocoin::zerocoinDenomList)
-            pindex->mapZerocoinSupply.at(denom) += GetWrapppedSerialInflation(denom);
-    }
-
-    for (const auto& denom : libzerocoin::zerocoinDenomList)
-        LogPrint(BCLog::LEGACYZC, "%s coins for denomination %d pubcoin %s\n", __func__, denom, pindex->mapZerocoinSupply.at(denom));
-
     return true;
 }
 

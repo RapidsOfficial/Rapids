@@ -89,6 +89,9 @@ RPC Changes
 - "CoinStake" JSON object in `getblock` output is removed, and replaced with the strings "stakeModifier" and "hashProofOfStake"
 
 
+- "moneysupply" and "zpivSupply" attributes in `getblock` output are removed.
+
+
 - "isPublicSpend" boolean (optional) input parameter is removed from the following commands:
  - `createrawzerocoinspend`
  - `spendzerocoin`

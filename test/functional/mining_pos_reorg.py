@@ -51,6 +51,14 @@ class ReorgStakeTest(PivxTestFramework):
         wi = self.nodes[nodeid].getwalletinfo()
         return wi['balance'] + wi['immature_balance']
 
+    def check_money_supply(self, expected_piv, expected_zpiv):
+        g_info = [self.nodes[i].getinfo() for i in range(self.num_nodes)]
+        # verify that nodes have the expected PIV and zPIV supply
+        for node in g_info:
+            assert_equal(node['moneysupply'], DecimalAmt(expected_piv))
+            for denom in node['zPIVsupply']:
+                assert_equal(node['zPIVsupply'][denom], DecimalAmt(expected_zpiv[denom]))
+
 
     def run_test(self):
 
@@ -59,6 +67,24 @@ class ReorgStakeTest(PivxTestFramework):
                 if x["txid"] == txid and x["vout"] == vout:
                     return True, x
             return False, None
+
+        # Check PIV and zPIV supply at the beginning
+        # ------------------------------------------
+        # zPIV supply: 2 coins for each denomination
+        expected_zpiv_supply = {
+            "1": 2,
+            "5": 10,
+            "10": 20,
+            "50": 100,
+            "100": 200,
+            "500": 1000,
+            "1000": 2000,
+            "5000": 10000,
+            "total": 13332,
+        }
+        # PIV supply: block rewards minus burned fees for minting
+        expected_money_supply = 250.0 * 330 - 16 * 0.01
+        self.check_money_supply(expected_money_supply, expected_zpiv_supply)
 
         # Stake with node 0 and node 1 up to public spend activation (400)
         # 70 blocks: 5 blocks each (x7)
@@ -203,6 +229,17 @@ class ReorgStakeTest(PivxTestFramework):
         sync_blocks(self.nodes)
         res, utxo = findUtxoInList(stakeinput["txid"], stakeinput["vout"], self.nodes[0].listunspent())
         assert (not res or not utxo["spendable"])
+
+        # Verify that PIV and zPIV supplies were properly updated after the spends and reorgs
+        self.log.info("Check PIV and zPIV supply...")
+        expected_money_supply += 250.0 * (self.nodes[1].getblockcount() - 330)
+        spent_coin_0 = mints[0]["denomination"]
+        spent_coin_1 = mints[1]["denomination"]
+        expected_zpiv_supply[str(spent_coin_0)] -= spent_coin_0
+        expected_zpiv_supply[str(spent_coin_1)] -= spent_coin_1
+        expected_zpiv_supply["total"] -= (spent_coin_0 + spent_coin_1)
+        self.check_money_supply(expected_money_supply, expected_zpiv_supply)
+        self.log.info("Supply checks out.")
 
 
 if __name__ == '__main__':
