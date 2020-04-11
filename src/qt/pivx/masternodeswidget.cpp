@@ -269,7 +269,8 @@ void MasterNodesWidget::onStartAllClicked(int type)
         inform(tr("Cannot perform Mastenodes start, wallet locked"));
         return;
     }
-    if (!checkMNsNetwork()) return;
+    if (!Params().IsRegTestNet() && !checkMNsNetwork()) return;     // skip on RegNet: so we can test even if tier two not synced
+
     if (isLoading) {
         inform(tr("Background task is being executed, please wait"));
     } else {
@@ -291,6 +292,11 @@ bool MasterNodesWidget::startAll(QString& failText, bool onlyMissing)
         if (onlyMissing && !mnModel->isMNInactive(mnAlias)) {
             if (!mnModel->isMNActive(mnAlias))
                 amountOfMnFailed++;
+            continue;
+        }
+
+        if(!mnModel->isMNCollateralMature(mnAlias)) {
+            amountOfMnFailed++;
             continue;
         }
 
