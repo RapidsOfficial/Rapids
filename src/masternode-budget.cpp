@@ -12,7 +12,6 @@
 #include "masternode-sync.h"
 #include "masternode.h"
 #include "masternodeman.h"
-#include "obfuscation.h"
 #include "util.h"
 #include <boost/filesystem.hpp>
 

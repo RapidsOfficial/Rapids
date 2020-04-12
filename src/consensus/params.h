@@ -38,7 +38,6 @@ struct Params {
     int64_t nTargetTimespanV2;
     int64_t nTargetSpacing;
     int nTimeSlotLength;
-    std::string strObfuscationPoolDummyAddress;
 
     // spork keys
     std::string strSporkPubKey;

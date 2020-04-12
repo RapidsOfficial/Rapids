@@ -87,6 +87,7 @@ RPC Changes
 ### Modified input/output for existing commands
 
 - "CoinStake" JSON object in `getblock` output is removed, and replaced with the strings "stakeModifier" and "hashProofOfStake"
+- "obfcompat" JSON field in `getmasternodecount` output is removed as it is/was redundant with the `enabled` field.
 
 
 - "moneysupply" and "zpivSupply" attributes in `getblock` output are removed.
@@ -139,7 +140,7 @@ The following commands have been removed from the RPC interface:
 - `createrawzerocoinstake`
 - `getmintsinblocks`
 - `reservebalance`
-
+- `getpoolinfo`
 
 ### Newly introduced commands
 
