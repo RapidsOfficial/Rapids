@@ -24,6 +24,7 @@ public:
     ~Worker(){
         runnable = nullptr;
     }
+    virtual void clean() {};
 public Q_SLOTS:
     void process();
 Q_SIGNALS:
@@ -45,10 +46,18 @@ public:
         Worker::Worker(runnable, type),
         pctx(std::move(_pctx))
     {}
+    void clean() override
+    {
+        if (pctx) pctx.reset();
+    }
+    void setContext(std::unique_ptr<WalletModel::UnlockContext> _pctx)
+    {
+        clean();
+        pctx = std::move(_pctx);
+    }
 private:
     std::unique_ptr<WalletModel::UnlockContext> pctx{nullptr};
 };
-
 
 class LoadingDialog : public QDialog
 {

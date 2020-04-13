@@ -80,21 +80,34 @@ public:
     }
 
     void run() override {
-        if (!worker.isNull()) worker.data()->process();
+        if (!worker.isNull()) {
+            Worker* _worker = worker.data();
+            _worker->process();
+            _worker->clean();
+        }
     }
 
     QPointer<Worker> worker;
 };
 
-bool PWidget::execute(int type)
+bool PWidget::execute(int type, std::unique_ptr<WalletModel::UnlockContext> pctx)
 {
     if (task.isNull()) {
-        Worker* worker = new Worker(this, type);
+        Worker* worker = (!pctx) ? new Worker(this, type) : new WalletWorker(this, type, std::move(pctx));
         connect(worker, &Worker::error, this, &PWidget::errorString);
 
         WorkerTask* workerTask = new WorkerTask(QPointer<Worker>(worker));
         workerTask->setAutoDelete(false);
         task = QSharedPointer<WorkerTask>(workerTask);
+    } else if (pctx){
+        if (task->worker.isNull() || !task->worker.data()) // Must never happen
+            throw std::runtime_error("Worker task null");
+
+        // Update context
+        if (dynamic_cast<WalletWorker*>(task->worker.data()) != nullptr) {
+            WalletWorker* _worker = static_cast<WalletWorker*>(task->worker.data());
+            _worker->setContext(std::move(pctx));
+        }
     }
     QThreadPool::globalInstance()->start(task.data());
     return true;

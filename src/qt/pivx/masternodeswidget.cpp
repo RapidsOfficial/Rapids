@@ -5,7 +5,6 @@
 #include "qt/pivx/masternodeswidget.h"
 #include "qt/pivx/forms/ui_masternodeswidget.h"
 
-#include "qt/pivx/loadingdialog.h"
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/mnrow.h"
 #include "qt/pivx/mninfodialog.h"
@@ -274,10 +273,10 @@ void MasterNodesWidget::onStartAllClicked(int type)
             return;
         }
         isLoading = true;
-        // Action performed on a separate thread
-        LoadingDialog *dialog = new LoadingDialog(window);
-        dialog->execute(this, type, std::move(pctx));
-        openDialogWithOpaqueBackgroundFullScreen(dialog, window);
+        if (!execute(type, std::move(pctx))) {
+            isLoading = false;
+            inform(tr("Cannot perform Mastenodes start"));
+        }
     }
 }
 
