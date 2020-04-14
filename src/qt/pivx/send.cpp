@@ -590,7 +590,14 @@ void SendWidget::onChangeAddressClicked()
         if (dialog->selected) {
             QString ret;
             if (dialog->getAddress(walletModel, &ret)) {
-                CoinControlDialog::coinControl->destChange = CBitcoinAddress(ret.toStdString()).Get();
+                CBitcoinAddress address(ret.toStdString());
+
+                // Ask if it's what the user really wants
+                if (!walletModel->isMine(address) &&
+                    !ask(tr("Warning!"), tr("The change address doesn't belong to this wallet.\n\nDo you want to continue?"))) {
+                    return;
+                }
+                CoinControlDialog::coinControl->destChange = address.Get();
                 ui->btnChangeAddress->setActive(true);
             } else {
                 inform(tr("Invalid change address"));
