@@ -57,7 +57,7 @@ private Q_SLOTS:
 
     void on_pushButton_clicked(bool checked);
 
-    void mousePressEvent();
+    void innerMousePressEvent();
 private:
     Ui::ExpandableButton *ui;
     QString notExpandedText;
