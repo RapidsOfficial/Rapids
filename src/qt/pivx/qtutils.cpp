@@ -153,17 +153,17 @@ void setSortTx(QComboBox* filter, SortEdit* lineEdit)
 void setSortTxTypeFilter(QComboBox* filter, SortEdit* lineEditType)
 {
     initComboBox(filter, lineEditType);
-    filter->addItem(filter->tr("All"), TransactionFilterProxy::ALL_TYPES);
-    filter->addItem(filter->tr("Received"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) | TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
-    filter->addItem(filter->tr("Sent"), TransactionFilterProxy::TYPE(TransactionRecord::SendToAddress) | TransactionFilterProxy::TYPE(TransactionRecord::SendToOther));
-    filter->addItem(filter->tr("Mined"), TransactionFilterProxy::TYPE(TransactionRecord::Generated));
-    filter->addItem(filter->tr("Minted"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
-    filter->addItem(filter->tr("MN reward"), TransactionFilterProxy::TYPE(TransactionRecord::MNReward));
-    filter->addItem(filter->tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
-    filter->addItem(filter->tr("Cold stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeDelegated));
-    filter->addItem(filter->tr("Hot stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeHot));
-    filter->addItem(filter->tr("Delegated"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSent) | TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSentOwner));
-    filter->addItem(filter->tr("Delegations"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
+    filter->addItem(QObject::tr("All"), TransactionFilterProxy::ALL_TYPES);
+    filter->addItem(QObject::tr("Received"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) | TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
+    filter->addItem(QObject::tr("Sent"), TransactionFilterProxy::TYPE(TransactionRecord::SendToAddress) | TransactionFilterProxy::TYPE(TransactionRecord::SendToOther));
+    filter->addItem(QObject::tr("Mined"), TransactionFilterProxy::TYPE(TransactionRecord::Generated));
+    filter->addItem(QObject::tr("Minted"), TransactionFilterProxy::TYPE(TransactionRecord::StakeMint));
+    filter->addItem(QObject::tr("MN reward"), TransactionFilterProxy::TYPE(TransactionRecord::MNReward));
+    filter->addItem(QObject::tr("To yourself"), TransactionFilterProxy::TYPE(TransactionRecord::SendToSelf));
+    filter->addItem(QObject::tr("Cold stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeDelegated));
+    filter->addItem(QObject::tr("Hot stakes"), TransactionFilterProxy::TYPE(TransactionRecord::StakeHot));
+    filter->addItem(QObject::tr("Delegated"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSent) | TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegationSentOwner));
+    filter->addItem(QObject::tr("Delegations"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
 }
 
 void setupSettings(QSettings* settings)
