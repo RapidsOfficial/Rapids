@@ -1431,7 +1431,7 @@ bool AppInit2()
     nTotalCache -= nBlockTreeDBCache;
     size_t nCoinDBCache = nTotalCache / 2; // use half of the remaining cache for coindb cache
     nTotalCache -= nCoinDBCache;
-    nCoinCacheSize = nTotalCache / 300; // coins in memory require around 300 bytes
+    nCoinCacheUsage = nTotalCache;
 
     bool fLoaded = false;
     while (!fLoaded && !ShutdownRequested()) {
