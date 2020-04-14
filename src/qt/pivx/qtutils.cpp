@@ -132,22 +132,22 @@ QPixmap encodeToQr(QString str, QString& errorStr, QColor qrColor)
 void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit)
 {
     initComboBox(filter, lineEdit);
-    filter->addItem("All", "");
-    filter->addItem("Receiving", AddressTableModel::Receive);
-    filter->addItem("Contacts", AddressTableModel::Send);
-    filter->addItem("Cold Staking", AddressTableModel::ColdStaking);
-    filter->addItem("Delegators", AddressTableModel::Delegators);
-    filter->addItem("Staking Contacts", AddressTableModel::ColdStakingSend);
+    filter->addItem(QObject::tr("All"), "");
+    filter->addItem(QObject::tr("Receiving"), AddressTableModel::Receive);
+    filter->addItem(QObject::tr("Contacts"), AddressTableModel::Send);
+    filter->addItem(QObject::tr("Cold Staking"), AddressTableModel::ColdStaking);
+    filter->addItem(QObject::tr("Delegators"), AddressTableModel::Delegators);
+    filter->addItem(QObject::tr("Staking Contacts"), AddressTableModel::ColdStakingSend);
 }
 
 void setSortTx(QComboBox* filter, SortEdit* lineEdit)
 {
     // Sort Transactions
     initComboBox(filter, lineEdit);
-    filter->addItem("Date desc", SortTx::DATE_DESC);
-    filter->addItem("Date asc", SortTx::DATE_ASC);
-    filter->addItem("Amount desc", SortTx::AMOUNT_ASC);
-    filter->addItem("Amount asc", SortTx::AMOUNT_DESC);
+    filter->addItem(QObject::tr("Date desc"), SortTx::DATE_DESC);
+    filter->addItem(QObject::tr("Date asc"), SortTx::DATE_ASC);
+    filter->addItem(QObject::tr("Amount desc"), SortTx::AMOUNT_ASC);
+    filter->addItem(QObject::tr("Amount asc"), SortTx::AMOUNT_DESC);
 }
 
 void setSortTxTypeFilter(QComboBox* filter, SortEdit* lineEditType)
