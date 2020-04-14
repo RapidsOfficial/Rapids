@@ -4,24 +4,25 @@
 
 #include "qt/pivx/qtutils.h"
 
-#include "qt/pivx/snackbar.h"
-#include "qrencode.h"
 #include "guiconstants.h"
+#include "qrencode.h"
+#include "qt/pivx/snackbar.h"
 
 #include <QFile>
-#include <QStyle>
-#include <QListView>
 #include <QGraphicsDropShadowEffect>
+#include <QListView>
+#include <QStyle>
 
 Qt::Modifier SHORT_KEY
 #ifdef Q_OS_MAC
-        = Qt::CTRL;
+    = Qt::CTRL;
 #else
-        = Qt::ALT;
+    = Qt::ALT;
 #endif
 
 // Open dialog at the bottom
-bool openDialog(QDialog *widget, QWidget *gui){
+bool openDialog(QDialog* widget, QWidget* gui)
+{
     widget->setWindowFlags(Qt::CustomizeWindowHint);
     widget->setAttribute(Qt::WA_TranslucentBackground, true);
     QPropertyAnimation* animation = new QPropertyAnimation(widget, "pos");
@@ -35,7 +36,8 @@ bool openDialog(QDialog *widget, QWidget *gui){
     return widget->exec();
 }
 
-void closeDialog(QDialog *widget, PIVXGUI *gui){
+void closeDialog(QDialog* widget, PIVXGUI* gui)
+{
     widget->setWindowFlags(Qt::CustomizeWindowHint);
     widget->setAttribute(Qt::WA_TranslucentBackground, true);
     QPropertyAnimation* animation = new QPropertyAnimation(widget, "pos");
@@ -46,22 +48,24 @@ void closeDialog(QDialog *widget, PIVXGUI *gui){
     animation->start(QAbstractAnimation::DeleteWhenStopped);
 }
 
-void openDialogFullScreen(QWidget *parent, QWidget * dialog){
+void openDialogFullScreen(QWidget* parent, QWidget* dialog)
+{
     dialog->setWindowFlags(Qt::CustomizeWindowHint);
     dialog->move(0, 0);
     dialog->show();
     dialog->activateWindow();
-    dialog->resize(parent->width(),parent->height());
+    dialog->resize(parent->width(), parent->height());
 }
 
-bool openDialogWithOpaqueBackgroundY(QDialog *widget, PIVXGUI *gui, double posX, int posY){
+bool openDialogWithOpaqueBackgroundY(QDialog* widget, PIVXGUI* gui, double posX, int posY)
+{
     widget->setWindowFlags(Qt::CustomizeWindowHint);
     widget->setAttribute(Qt::WA_TranslucentBackground, true);
     QPropertyAnimation* animation = new QPropertyAnimation(widget, "pos");
     animation->setDuration(300);
-    int xPos = gui->width() / posX ;
+    int xPos = gui->width() / posX;
     animation->setStartValue(QPoint(xPos, gui->height()));
-    animation->setEndValue(QPoint(xPos, gui->height() / posY));//- (gui->height()) / posY  ));
+    animation->setEndValue(QPoint(xPos, gui->height() / posY)); //- (gui->height()) / posY  ));
     animation->setEasingCurve(QEasingCurve::OutQuad);
     animation->start(QAbstractAnimation::DeleteWhenStopped);
     widget->activateWindow();
@@ -70,16 +74,18 @@ bool openDialogWithOpaqueBackgroundY(QDialog *widget, PIVXGUI *gui, double posX,
     return res;
 }
 
-bool openDialogWithOpaqueBackground(QDialog *widget, PIVXGUI *gui, double posX){
+bool openDialogWithOpaqueBackground(QDialog* widget, PIVXGUI* gui, double posX)
+{
     return openDialogWithOpaqueBackgroundY(widget, gui, posX, 5);
 }
 
-bool openDialogWithOpaqueBackgroundFullScreen(QDialog *widget, PIVXGUI *gui){
+bool openDialogWithOpaqueBackgroundFullScreen(QDialog* widget, PIVXGUI* gui)
+{
     widget->setWindowFlags(Qt::CustomizeWindowHint);
     widget->setAttribute(Qt::WA_TranslucentBackground, true);
 
     widget->activateWindow();
-    widget->resize(gui->width(),gui->height());
+    widget->resize(gui->width(), gui->height());
 
     QPropertyAnimation* animation = new QPropertyAnimation(widget, "pos");
     animation->setDuration(300);
@@ -94,7 +100,8 @@ bool openDialogWithOpaqueBackgroundFullScreen(QDialog *widget, PIVXGUI *gui){
     return res;
 }
 
-QPixmap encodeToQr(QString str, QString &errorStr, QColor qrColor){
+QPixmap encodeToQr(QString str, QString& errorStr, QColor qrColor)
+{
     if (!str.isEmpty()) {
         // limit URI length
         if (str.length() > MAX_URI_LENGTH) {
@@ -122,7 +129,8 @@ QPixmap encodeToQr(QString str, QString &errorStr, QColor qrColor){
     return QPixmap();
 }
 
-void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit) {
+void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit)
+{
     initComboBox(filter, lineEdit);
     filter->addItem("All", "");
     filter->addItem("Receiving", AddressTableModel::Receive);
@@ -132,7 +140,8 @@ void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit) {
     filter->addItem("Staking Contacts", AddressTableModel::ColdStakingSend);
 }
 
-void setSortTx(QComboBox* filter, SortEdit* lineEdit) {
+void setSortTx(QComboBox* filter, SortEdit* lineEdit)
+{
     // Sort Transactions
     initComboBox(filter, lineEdit);
     filter->addItem("Date desc", SortTx::DATE_DESC);
@@ -141,7 +150,8 @@ void setSortTx(QComboBox* filter, SortEdit* lineEdit) {
     filter->addItem("Amount asc", SortTx::AMOUNT_DESC);
 }
 
-void setSortTxTypeFilter(QComboBox* filter, SortEdit* lineEditType) {
+void setSortTxTypeFilter(QComboBox* filter, SortEdit* lineEditType)
+{
     initComboBox(filter, lineEditType);
     filter->addItem(filter->tr("All"), TransactionFilterProxy::ALL_TYPES);
     filter->addItem(filter->tr("Received"), TransactionFilterProxy::TYPE(TransactionRecord::RecvWithAddress) | TransactionFilterProxy::TYPE(TransactionRecord::RecvFromOther));
@@ -156,16 +166,18 @@ void setSortTxTypeFilter(QComboBox* filter, SortEdit* lineEditType) {
     filter->addItem(filter->tr("Delegations"), TransactionFilterProxy::TYPE(TransactionRecord::P2CSDelegation));
 }
 
-void setupSettings(QSettings *settings){
-    if(!settings->contains("lightTheme")){
+void setupSettings(QSettings* settings)
+{
+    if (!settings->contains("lightTheme")) {
         settings->setValue("lightTheme", true);
     }
 }
 
-QSettings *settings = nullptr;
+QSettings* settings = nullptr;
 
-QSettings* getSettings(){
-    if(!settings){
+QSettings* getSettings()
+{
+    if (!settings) {
         settings = new QSettings();
         // Setup initial values if them are not there
         setupSettings(settings);
@@ -174,12 +186,14 @@ QSettings* getSettings(){
     return settings;
 }
 
-bool isLightTheme(){
+bool isLightTheme()
+{
     return getSettings()->value("lightTheme", true).toBool();
 }
 
-void setTheme(bool isLight){
-    QSettings* settings =  getSettings();
+void setTheme(bool isLight)
+{
+    QSettings* settings = getSettings();
     settings->setValue("theme", isLight ? "default" : "default-dark");
     settings->setValue("lightTheme", isLight);
 }
@@ -187,28 +201,30 @@ void setTheme(bool isLight){
 
 // Style
 
-void updateStyle(QWidget* widget){
+void updateStyle(QWidget* widget)
+{
     widget->style()->unpolish(widget);
     widget->style()->polish(widget);
     widget->update();
 }
 
 
-QColor getRowColor(bool isLightTheme, bool isHovered, bool isSelected){
-    if(isLightTheme){
+QColor getRowColor(bool isLightTheme, bool isHovered, bool isSelected)
+{
+    if (isLightTheme) {
         if (isSelected) {
             return QColor("#25b088ff");
-        }else if(isHovered){
+        } else if (isHovered) {
             return QColor("#25bababa");
-        } else{
+        } else {
             return QColor("#ffffff");
         }
-    }else{
+    } else {
         if (isSelected) {
             return QColor("#25b088ff");
-        }else if(isHovered){
+        } else if (isHovered) {
             return QColor("#25bababa");
-        } else{
+        } else {
             return QColor("#0f0b16");
         }
     }
@@ -242,22 +258,28 @@ void fillAddressSortControls(SortEdit* seType, SortEdit* seOrder, QComboBox* box
     boxOrder->setCurrentIndex(0);
 }
 
-void initCssEditLine(QLineEdit *edit, bool isDialog){
-    if (isDialog) setCssEditLineDialog(edit, true, false);
-    else setCssEditLine(edit, true, false);
+void initCssEditLine(QLineEdit* edit, bool isDialog)
+{
+    if (isDialog)
+        setCssEditLineDialog(edit, true, false);
+    else
+        setCssEditLine(edit, true, false);
     setShadow(edit);
     edit->setAttribute(Qt::WA_MacShowFocusRect, 0);
 }
 
-void setCssEditLine(QLineEdit *edit, bool isValid, bool forceUpdate){
+void setCssEditLine(QLineEdit* edit, bool isValid, bool forceUpdate)
+{
     setCssProperty(edit, isValid ? "edit-primary" : "edit-primary-error", forceUpdate);
 }
 
-void setCssEditLineDialog(QLineEdit *edit, bool isValid, bool forceUpdate){
+void setCssEditLineDialog(QLineEdit* edit, bool isValid, bool forceUpdate)
+{
     setCssProperty(edit, isValid ? "edit-primary-dialog" : "edit-primary-dialog-error", forceUpdate);
 }
 
-void setShadow(QWidget *edit){
+void setShadow(QWidget* edit)
+{
     QGraphicsDropShadowEffect* shadowEffect = new QGraphicsDropShadowEffect();
     shadowEffect->setColor(QColor(0, 0, 0, 22));
     shadowEffect->setXOffset(0);
@@ -266,44 +288,60 @@ void setShadow(QWidget *edit){
     edit->setGraphicsEffect(shadowEffect);
 }
 
-void setCssBtnPrimary(QPushButton *btn, bool forceUpdate){
+void setCssBtnPrimary(QPushButton* btn, bool forceUpdate)
+{
     setCssProperty(btn, "btn-primary", forceUpdate);
 }
 
-void setCssBtnSecondary(QPushButton *btn, bool forceUpdate){
+void setCssBtnSecondary(QPushButton* btn, bool forceUpdate)
+{
     setCssProperty(btn, "btn-secundary", forceUpdate);
 }
 
-void setCssTextBodyDialog(std::initializer_list<QWidget*> args){
-    Q_FOREACH (QWidget* w, args) { setCssTextBodyDialog(w); }
+void setCssTextBodyDialog(std::initializer_list<QWidget*> args)
+{
+    Q_FOREACH (QWidget* w, args) {
+        setCssTextBodyDialog(w);
+    }
 }
 
-void setCssTextBodyDialog(QWidget* widget) {
+void setCssTextBodyDialog(QWidget* widget)
+{
     setCssProperty(widget, "text-body1-dialog", false);
 }
 
-void setCssTitleScreen(QLabel* label) {
+void setCssTitleScreen(QLabel* label)
+{
     setCssProperty(label, "text-title-screen", false);
 }
 
-void setCssSubtitleScreen(QWidget* wid) {
+void setCssSubtitleScreen(QWidget* wid)
+{
     setCssProperty(wid, "text-subtitle", false);
 }
 
-void setCssProperty(std::initializer_list<QWidget*> args, QString value){
-    Q_FOREACH (QWidget* w, args) { setCssProperty(w, value); }
+void setCssProperty(std::initializer_list<QWidget*> args, QString value)
+{
+    Q_FOREACH (QWidget* w, args) {
+        setCssProperty(w, value);
+    }
 }
 
-void setCssProperty(QWidget *wid, QString value, bool forceUpdate){
+void setCssProperty(QWidget* wid, QString value, bool forceUpdate)
+{
     wid->setProperty("cssClass", value);
     forceUpdateStyle(wid, forceUpdate);
 }
 
-void forceUpdateStyle(QWidget *widget, bool forceUpdate){
-    if(forceUpdate)
+void forceUpdateStyle(QWidget* widget, bool forceUpdate)
+{
+    if (forceUpdate)
         updateStyle(widget);
 }
 
-void forceUpdateStyle(std::initializer_list<QWidget*> args){
-    Q_FOREACH (QWidget* w, args) { forceUpdateStyle(w, true); }
+void forceUpdateStyle(std::initializer_list<QWidget*> args)
+{
+    Q_FOREACH (QWidget* w, args) {
+        forceUpdateStyle(w, true);
+    }
 }
