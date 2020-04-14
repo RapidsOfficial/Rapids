@@ -27,7 +27,6 @@ BasicTestingSetup::BasicTestingSetup()
         RandomInit();
         ECC_Start();
         SetupEnvironment();
-        fPrintToDebugLog = false; // don't want to write to debug.log file
         fCheckBlockIndex = true;
         SelectParams(CBaseChainParams::MAIN);
 }

@@ -313,7 +313,7 @@ void HandleSIGTERM(int)
 
 void HandleSIGHUP(int)
 {
-    fReopenDebugLog = true;
+    g_logger->m_reopen_file = true;
 }
 
 #ifndef WIN32
@@ -509,6 +509,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-help-debug", _("Show all debugging options (usage: --help -help-debug)"));
     strUsage += HelpMessageOpt("-logips", strprintf(_("Include IP addresses in debug output (default: %u)"), 0));
     strUsage += HelpMessageOpt("-logtimestamps", strprintf(_("Prepend debug output with timestamp (default: %u)"), 1));
+    strUsage += HelpMessageOpt("-logtimemicros", strprintf("Add microsecond precision to debug timestamps (default: %u)", DEFAULT_LOGTIMEMICROS));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-limitfreerelay=<n>", strprintf(_("Continuously rate-limit free transactions to <n>*1000 bytes per minute (default:%u)"), 15));
         strUsage += HelpMessageOpt("-relaypriority", strprintf(_("Require high priority for relaying free or low-fee transactions (default:%u)"), 1));
@@ -903,12 +904,28 @@ static std::string ResolveErrMsg(const char * const optname, const std::string& 
 
 void InitLogging()
 {
-    fPrintToConsole = GetBoolArg("-printtoconsole", false);
-    fLogTimestamps = GetBoolArg("-logtimestamps", true);
-    fLogIPs = GetBoolArg("-logips", false);
+    //g_logger->m_print_to_file = !IsArgNegated("-debuglogfile");
+    g_logger->m_print_to_file = true;
+    g_logger->m_file_path = AbsPathForConfigVal(GetArg("-debuglogfile", DEFAULT_DEBUGLOGFILE));
 
+    // Add newlines to the logfile to distinguish this execution from the last
+    // one; called before console logging is set up, so this is only sent to
+    // debug.log.
     LogPrintf("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
-    LogPrintf("PIVX version %s (%s)\n", FormatFullVersion(), CLIENT_DATE);
+
+    g_logger->m_print_to_console = GetBoolArg("-printtoconsole", !GetBoolArg("-daemon", false));
+    g_logger->m_log_timestamps = GetBoolArg("-logtimestamps", DEFAULT_LOGTIMESTAMPS);
+    g_logger->m_log_time_micros = GetBoolArg("-logtimemicros", DEFAULT_LOGTIMEMICROS);
+
+    fLogIPs = GetBoolArg("-logips", DEFAULT_LOGIPS);
+
+    std::string version_string = FormatFullVersion();
+#ifdef DEBUG
+    version_string += " (debug build)";
+#else
+    version_string += " (release build)";
+#endif
+    LogPrintf("PIVX version %s (%s)\n", version_string, CLIENT_DATE);
 }
 
 /** Initialize pivx.
@@ -939,11 +956,9 @@ bool AppInit2()
     if (!(GetBoolArg("-nodebug", false) ||
             find(categories.begin(), categories.end(), std::string("0")) != categories.end())) {
         for (const auto& cat : categories) {
-            uint32_t flag;
-            if (!GetLogCategory(&flag, &cat))
+            if (!g_logger->EnableCategory(cat)) {
                 UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debug", cat));
-            else
-                logCategories |= flag;
+            }
         }
     }
 
@@ -951,11 +966,9 @@ bool AppInit2()
     if (mapMultiArgs.count("-debugexclude") > 0) {
         const std::vector<std::string>& excludedCategories = mapMultiArgs.at("-debugexclude");
         for (const auto& cat : excludedCategories) {
-            uint32_t flag;
-            if (!GetLogCategory(&flag, &cat))
+            if (!g_logger->DisableCategory(cat)) {
                 UIWarning(strprintf(_("Unsupported logging category %s=%s."), "-debugexclude", cat));
-            else
-                logCategories &= ~flag;
+            }
         }
     }
 
@@ -1064,15 +1077,16 @@ bool AppInit2()
 #ifndef WIN32
     CreatePidFile(GetPidFile(), getpid());
 #endif
-    if (GetBoolArg("-shrinkdebugfile", logCategories != BCLog::NONE))
-        ShrinkDebugFile();
-    if (fPrintToDebugLog && !OpenDebugLog()) {
-        return UIError(strprintf("Could not open debug log file %s", GetDebugLogPath().string()));
+    if (g_logger->m_print_to_file) {
+        if (GetBoolArg("-shrinkdebugfile", g_logger->DefaultShrinkDebugFile()))
+            g_logger->ShrinkDebugFile();
+        if (!g_logger->OpenDebugLog())
+            return UIError(strprintf("Could not open debug log file %s", g_logger->m_file_path.string()));
     }
 #ifdef ENABLE_WALLET
     LogPrintf("Using BerkeleyDB version %s\n", DbEnv::version(0, 0, 0));
 #endif
-    if (!fLogTimestamps)
+    if (!g_logger->m_log_timestamps)
         LogPrintf("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
     LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
     LogPrintf("Using data directory %s\n", strDataDir);
