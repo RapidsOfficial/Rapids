@@ -4,10 +4,10 @@
 
 #include "qt/pivx/masternodeswidget.h"
 #include "qt/pivx/forms/ui_masternodeswidget.h"
+
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/mnrow.h"
 #include "qt/pivx/mninfodialog.h"
-
 #include "qt/pivx/masternodewizarddialog.h"
 
 #include "activemasternode.h"
@@ -19,7 +19,6 @@
 #include "masternodeman.h"
 #include "sync.h"
 #include "wallet/wallet.h"
-#include "walletmodel.h"
 #include "askpassphrasedialog.h"
 #include "util.h"
 #include "qt/pivx/optionbutton.h"
@@ -263,19 +262,18 @@ bool MasterNodesWidget::startMN(CMasternodeConfig::CMasternodeEntry mne, std::st
 
 void MasterNodesWidget::onStartAllClicked(int type)
 {
-    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
-    if (!ctx.isValid()) {
-        // Unlock wallet was cancelled
-        inform(tr("Cannot perform Mastenodes start, wallet locked"));
-        return;
-    }
     if (!Params().IsRegTestNet() && !checkMNsNetwork()) return;     // skip on RegNet: so we can test even if tier two not synced
 
     if (isLoading) {
         inform(tr("Background task is being executed, please wait"));
     } else {
+        std::unique_ptr<WalletModel::UnlockContext> pctx = MakeUnique<WalletModel::UnlockContext>(walletModel->requestUnlock());
+        if (!pctx->isValid()) {
+            warn(tr("Start ALL masternodes failed"), tr("Wallet unlock cancelled"));
+            return;
+        }
         isLoading = true;
-        if (!execute(type)) {
+        if (!execute(type, std::move(pctx))) {
             isLoading = false;
             inform(tr("Cannot perform Mastenodes start"));
         }
