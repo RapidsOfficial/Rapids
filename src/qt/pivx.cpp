@@ -420,6 +420,10 @@ void BitcoinApplication::startThread()
 
 void BitcoinApplication::parameterSetup()
 {
+    // Default printtoconsole to false for the GUI. GUI programs should not
+    // print to the console unnecessarily.
+    SoftSetBoolArg("-printtoconsole", false);
+
     InitLogging();
     InitParameterInteraction();
 }
