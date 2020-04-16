@@ -714,7 +714,7 @@ void SendWidget::onContactsClicked(SendMultiRow* entry)
         return;
     }
 
-    int height = (contactsSize <= 2) ? entry->getEditHeight() * ( 2 * (contactsSize + 1 )) : entry->getEditHeight() * 4;
+    int height = (contactsSize <= 2) ? entry->getEditHeight() * ( 2 * (contactsSize + 1 )) : entry->getEditHeight() * 6;
     int width = entry->getEditWidth();
 
     if (!menuContacts) {
