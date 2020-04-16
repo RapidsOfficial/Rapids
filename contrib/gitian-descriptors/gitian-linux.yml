@@ -1,5 +1,5 @@
 ---
-name: "pivx-linux-4.0"
+name: "pivx-linux-4.2"
 enable_cache: true
 distro: "ubuntu"
 suites:
