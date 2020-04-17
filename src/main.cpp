@@ -1574,58 +1574,91 @@ double ConvertBitsToDouble(unsigned int nBits)
     return dDiff;
 }
 
-int64_t GetBlockValue(int nHeight)
+int64_t GetTotalValue(int nHeight)
 {
-    if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < 200 && nHeight > 0)
-            return 250000 * COIN;
-    }
-
-    if (Params().IsRegTestNet()) {
-        if (nHeight == 0)
-            return 250 * COIN;
-
-    }
-
-    const int last_pow_block = Params().GetConsensus().height_last_PoW;
     int64_t nSubsidy = 0;
+
     if (nHeight == 0) {
-        nSubsidy = 60001 * COIN;
-    } else if (nHeight < 86400 && nHeight > 0) {
-        nSubsidy = 250 * COIN;
-    } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
-        nSubsidy = 225 * COIN;
-    } else if (nHeight <= last_pow_block && nHeight >= 151200) {
-        nSubsidy = 45 * COIN;
-    } else if (nHeight <= 302399 && nHeight > last_pow_block) {
-        nSubsidy = 45 * COIN;
-    } else if (nHeight <= 345599 && nHeight >= 302400) {
-        nSubsidy = 40.5 * COIN;
-    } else if (nHeight <= 388799 && nHeight >= 345600) {
-        nSubsidy = 36 * COIN;
-    } else if (nHeight <= 431999 && nHeight >= 388800) {
-        nSubsidy = 31.5 * COIN;
-    } else if (nHeight <= 475199 && nHeight >= 432000) {
-        nSubsidy = 27 * COIN;
-    } else if (nHeight <= 518399 && nHeight >= 475200) {
-        nSubsidy = 22.5 * COIN;
-    } else if (nHeight <= 561599 && nHeight >= 518400) {
-        nSubsidy = 18 * COIN;
-    } else if (nHeight <= 604799 && nHeight >= 561600) {
-        nSubsidy = 13.5 * COIN;
-    } else if (nHeight <= 647999 && nHeight >= 604800) {
-        nSubsidy = 9 * COIN;
-    } else if (nHeight < Params().GetConsensus().height_start_ZC_SerialsV2) {
-        nSubsidy = 4.5 * COIN;
+        nSubsidy = 20000000000 * COIN;
     } else {
-        nSubsidy = 5 * COIN;
+        nSubsidy =  3567.352 * COIN; 
+        nSubsidy >>= ((nHeight - 1) / 2102400);
     }
+
     return nSubsidy;
 }
 
-int64_t GetMasternodePayment()
+int64_t GetBlockValue(int nHeight)
 {
-    return 3 * COIN;
+    int64_t nSubsidy = 0;
+
+    if (Params().NetworkID() == CBaseChainParams::TESTNET) {
+        if (nHeight < Params().GetConsensus().height_last_PoW)
+            return 5000 * COIN;
+    }
+    
+    if(IsBurnBlock(nHeight)) {
+		nSubsidy = GetBurnAward(nHeight);
+    } else {
+        if (nHeight == 0) {
+            nSubsidy = 20000000000 * COIN;
+        } else {
+            nSubsidy =  3567.352 * COIN; 
+            nSubsidy >>= ((nHeight - 1) / 2102400);
+        }
+        if(nHeight > 0) nSubsidy *= 0.9;
+    }
+
+    if (nMoneySupply + nSubsidy >= Params().GetConsensus().nMaxMoneyOut)
+        nSubsidy = Params().GetConsensus().nMaxMoneyOut - nMoneySupply;
+
+    if (nMoneySupply >= Params().GetConsensus().nMaxMoneyOut)
+        nSubsidy = 0;
+    
+    return nSubsidy;
+}
+
+bool IsBurnBlock(int nHeight)
+{
+    const int nStartBurnBlock = 43199;
+    const int nBurnBlockStep = 43200;
+
+	if(nHeight < nStartBurnBlock)
+		return false;
+	else if( (nHeight-nStartBurnBlock) % nBurnBlockStep == 0)
+		return true;
+	else
+		return false;
+}
+
+int64_t GetBurnAward(int nHeight)
+{
+    int64_t nSubsidy = 0;
+
+	if(IsBurnBlock(nHeight)) {
+        //one month : 43200block, 10% - reward to PoS
+        nSubsidy = 43200 * GetTotalValue(nHeight) * 0.1 + GetTotalValue(nHeight) * 0.3;
+		return nSubsidy; 
+	} else
+		return 0;
+}
+
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCount)
+{
+    int64_t ret = 0;
+
+    // No rewards till masternode activation.
+    if (nHeight < Params().GetConsensus().height_last_PoW || blockValue == 0)
+        return 0;
+
+    // Check if we reached coin supply
+    if (nHeight < 50) {
+        ret = 0;
+    } else {
+        ret = blockValue * 0.60 / 0.9; // 60% of block reward
+    }
+
+    return ret;
 }
 
 bool IsInitialBlockDownload()
@@ -3407,19 +3440,6 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
         return state.DoS(50, error("CheckBlockHeader() : proof of work failed"),
             REJECT_INVALID, "high-hash");
 
-    if (Params().IsRegTestNet()) return true;
-
-    // Version 4 header must be used after consensus.ZC_TimeStart. And never before.
-    if (block.GetBlockTime() > Params().GetConsensus().ZC_TimeStart) {
-        if(block.nVersion < 4)
-            return state.DoS(50, error("CheckBlockHeader() : block version must be above 4 after ZerocoinStartHeight"),
-            REJECT_INVALID, "block-version");
-    } else {
-        if (block.nVersion >= 4)
-            return state.DoS(50, error("CheckBlockHeader() : block version must be below 4 before ZerocoinStartHeight"),
-            REJECT_INVALID, "block-version");
-    }
-
     return true;
 }
 
@@ -3431,7 +3451,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
     const unsigned int outs = tx.vout.size();
     const CTxOut& lastOut = tx.vout[outs-1];
     if (outs >=3 && lastOut.scriptPubKey != tx.vout[outs-2].scriptPubKey) {
-        if (lastOut.nValue == GetMasternodePayment())
+        if (lastOut.nValue == GetMasternodePayment(nHeight, GetBlockValue(nHeight)))
             return true;
 
         // This could be a budget block.
