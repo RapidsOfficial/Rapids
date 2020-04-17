@@ -159,11 +159,14 @@ bool CPivStake::ContextCheck(int nHeight, uint32_t nTime)
     const int nHeightBlockFrom = pindexFrom->nHeight;
     const uint32_t nTimeBlockFrom = pindexFrom->nTime;
 
+#if 0
     // Check that the stake has the required depth/age
     if (nHeight >= consensus.height_start_ZC_PublicSpends - 1 &&
             !consensus.HasStakeMinAgeOrDepth(nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom))
         return error("%s : min age violation - height=%d - time=%d, nHeightBlockFrom=%d, nTimeBlockFrom=%d",
                          __func__, nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom);
+#endif
+
     // All good
     return true;
 }

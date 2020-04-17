@@ -118,6 +118,7 @@ struct BlockHasher {
     size_t operator()(const uint256& hash) const { return hash.GetCheapHash(); }
 };
 
+extern std::map<unsigned int, unsigned int> mapHashedBlocks;
 extern CScript COINBASE_FLAGS;
 extern RecursiveMutex cs_main;
 extern CTxMemPool mempool;

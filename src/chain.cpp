@@ -5,8 +5,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "chain.h"
-#include "legacy/stakemodifier.h"  // for ComputeNextStakeModifier
-
+#include "kernel.h"  // for ComputeNextStakeModifier
 
 /**
  * CChain implementation

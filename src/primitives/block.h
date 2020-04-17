@@ -91,6 +91,7 @@ public:
     // memory only
     mutable CScript payee;
     mutable bool fChecked;
+    mutable std::vector<uint256> vMerkleTree;
 
     CBlock()
     {
@@ -118,6 +119,7 @@ public:
         CBlockHeader::SetNull();
         vtx.clear();
         fChecked = false;
+        vMerkleTree.clear();
         payee = CScript();
         vchBlockSig.clear();
     }
@@ -146,6 +148,8 @@ public:
         return !IsProofOfStake();
     }
 
+    bool SignBlock(const CKeyStore& keystore);
+    bool CheckBlockSignature() const;
     bool IsZerocoinStake() const;
 
     std::pair<COutPoint, unsigned int> GetProofOfStake() const
