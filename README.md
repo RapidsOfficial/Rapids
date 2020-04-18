@@ -1,4 +1,4 @@
-<a href="https://ibb.co/2P0PTFg"><img src="https://i.ibb.co/WFNFLHg/rpd-new-logo-complet.png" alt="rpd-new-logo-complet" border="0"></a><br /><a target='_blank' href='https://imgbb.com/'></a><br />
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/Cwdp2XM/Rapids-V2-Logo-Side-Writing.png" alt="Rapids-V2-Logo-Side-Writing" border="0"></a>
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 https://RapidsNetwork.io
