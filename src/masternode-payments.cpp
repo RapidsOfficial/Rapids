@@ -463,11 +463,13 @@ void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::st
             return;
         }
 
+#if 0
         // reject old signatures 6000 blocks after hard-fork
         if (winner.nMessVersion != MessageVersion::MESS_VER_HASH && Params().GetConsensus().IsMessSigV2(winner.nBlockHeight - 6000)) {
             LogPrintf("%s : nMessVersion=%d not accepted anymore at block %d\n", __func__, winner.nMessVersion, nHeight);
             return;
         }
+#endif
 
         std::string strError = "";
         if (!winner.IsValid(pfrom, strError)) {
