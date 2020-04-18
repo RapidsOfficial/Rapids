@@ -10,6 +10,7 @@
 #include "masternode-sync.h"
 #include "masternode.h"
 #include "messagesigner.h"
+#include "obfuscation.h"
 #include "spork.h"
 #include "swifttx.h"
 #include "util.h"
@@ -20,8 +21,6 @@
 
 /** Masternode manager */
 CMasternodeMan mnodeman;
-/** Keep track of the active Masternode */
-CActiveMasternode activeMasternode;
 
 struct CompareLastPaid {
     bool operator()(const std::pair<int64_t, CTxIn>& t1,
@@ -739,7 +738,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
 
         // make sure the vout that was signed is related to the transaction that spawned the Masternode
         //  - this is expensive, so it's only done once per Masternode
-        if (!mnb.IsInputAssociatedWithPubkey()) {
+        if (!obfuScationSigner.IsVinAssociatedWithPubkey(mnb.vin, mnb.pubKeyCollateralAddress)) {
             LogPrintf("CMasternodeMan::ProcessMessage() : mnb - Got mismatched pubkey and vin\n");
             Misbehaving(pfrom->GetId(), 33);
             return;

@@ -177,7 +177,7 @@ bool CSporkManager::UpdateSpork(SporkId nSporkID, int64_t nValue)
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
+        fNewSigs = false;
     }
 
 

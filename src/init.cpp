@@ -631,26 +631,6 @@ static void BlockSizeNotifyCallback(int size, const uint256& hashNewTip)
     boost::thread t(runCommand, strCmd); // thread runs free
 }
 
-////////////////////////////////////////////////////
-
-static bool fHaveGenesis = false;
-static std::mutex cs_GenesisWait;
-static std::condition_variable condvar_GenesisWait;
-
-static void BlockNotifyGenesisWait(bool, const CBlockIndex *pBlockIndex)
-{
-    if (pBlockIndex != nullptr) {
-        {
-            std::unique_lock<std::mutex> lock_GenesisWait(cs_GenesisWait);
-            fHaveGenesis = true;
-        }
-        condvar_GenesisWait.notify_all();
-    }
-}
-
-////////////////////////////////////////////////////
-
-
 struct CImportingNow {
     CImportingNow()
     {
@@ -1453,7 +1433,6 @@ bool AppInit2()
                 delete pSporkDB;
 
                 //PIVX specific: zerocoin and spork DB's
-                zerocoinDB = new CZerocoinDB(0, false, fReindex);
                 pSporkDB = new CSporkDB(0, false, false);
 
                 pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
@@ -1484,8 +1463,10 @@ bool AppInit2()
 
                 // If the loaded chain has a wrong genesis, bail out immediately
                 // (we're likely using a testnet datadir, or the other way around).
-                if (!mapBlockIndex.empty() && mapBlockIndex.count(consensus.hashGenesisBlock) == 0)
-                    return UIError(_("Incorrect or no genesis block found. Wrong datadir for network?"));
+                if (!mapBlockIndex.empty() && mapBlockIndex.count(Params().GetConsensus().hashGenesisBlock) == 0) {
+                    strLoadError = _("Incorrect or no genesis block found. Wrong datadir for network?");
+                    break;
+                }
 
                 // Initialize the block index (no-op if non-empty database was already loaded)
                 if (!InitBlockIndex()) {
@@ -1499,106 +1480,16 @@ bool AppInit2()
                     break;
                 }
 
-                // Populate list of invalid/fraudulent outpoints that are banned from the chain
-                invalid_out::LoadOutpoints();
-                invalid_out::LoadSerials();
-
-                bool fReindexZerocoin = GetBoolArg("-reindexzerocoin", false);
-                bool fReindexMoneySupply = GetBoolArg("-reindexmoneysupply", false);
-
-                int chainHeight;
-                {
-                    LOCK(cs_main);
-                    chainHeight = chainActive.Height();
-
-                    // initialize PIV and zPIV supply to 0
-                    mapZerocoinSupply.clear();
-                    for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
-                    nMoneySupply = 0;
-
-                    // Load PIV and zPIV supply from DB
-                    if (chainHeight >= 0) {
-                        const uint256& tipHash = chainActive[chainHeight]->GetBlockHash();
-                        CLegacyBlockIndex bi;
-
-                        // Load zPIV supply map
-                        if (!fReindexZerocoin && chainHeight >= consensus.height_start_ZC && !zerocoinDB->ReadZCSupply(mapZerocoinSupply)) {
-                            // try first reading legacy block index from DB
-                            if (pblocktree->ReadLegacyBlockIndex(tipHash, bi) && !bi.mapZerocoinSupply.empty()) {
-                                mapZerocoinSupply = bi.mapZerocoinSupply;
-                            } else {
-                                // reindex from disk
-                                fReindexZerocoin = true;
-                            }
-                        }
-
-                        // Load PIV supply amount
-                        if (!fReindexMoneySupply && !pblocktree->ReadMoneySupply(nMoneySupply)) {
-                            // try first reading legacy block index from DB
-                            if (pblocktree->ReadLegacyBlockIndex(tipHash, bi)) {
-                                nMoneySupply = bi.nMoneySupply;
-                            } else {
-                                // reindex from disk
-                                fReindexMoneySupply = true;
-                            }
-                        }
-                    }
-                }
-
-                // Drop all information from the zerocoinDB and repopulate
-                if (fReindexZerocoin && chainHeight >= consensus.height_start_ZC) {
-                    LOCK(cs_main);
-                    uiInterface.InitMessage(_("Reindexing zerocoin database..."));
-                    std::string strError = ReindexZerocoinDB();
-                    if (strError != "") {
-                        strLoadError = strError;
-                        break;
-                    }
-                }
-
-                // Recalculate money supply
-                if (fReindexMoneySupply) {
-                    LOCK(cs_main);
-                    // Skip zpiv if already reindexed
-                    RecalculatePIVSupply(1, fReindexZerocoin);
-                }
-
-                if (!fReindex) {
-                    uiInterface.InitMessage(_("Verifying blocks..."));
-
-                    // Flag sent to validation code to let it know it can skip certain checks
-                    fVerifyingBlocks = true;
-
-                    {
-                        LOCK(cs_main);
-                        CBlockIndex *tip = chainActive[chainHeight];
-                        RPCNotifyBlockChange(true, tip);
-                        if (tip && tip->nTime > GetAdjustedTime() + 2 * 60 * 60) {
-                            strLoadError = _("The block database contains a block which appears to be from the future. "
-                                             "This may be due to your computer's date and time being set incorrectly. "
-                                             "Only rebuild the block database if you are sure that your computer's date and time are correct");
-                            break;
-                        }
-                    }
-
-                    // Zerocoin must check at level 4
-                    if (!CVerifyDB().VerifyDB(pcoinsdbview, 4, GetArg("-checkblocks", 10))) {
-                        strLoadError = _("Corrupted block database detected");
-                        fVerifyingBlocks = false;
-                        break;
-                    }
-                }
-            } catch (const std::exception& e) {
+                uiInterface.InitMessage(_("Verifying blocks..."));
+            } catch (std::exception& e) {
                 LogPrintf("%s\n", e.what());
                 strLoadError = _("Error opening block database");
-                fVerifyingBlocks = false;
                 break;
             }
 
-            fVerifyingBlocks = false;
             fLoaded = true;
-            LogPrintf(" block index %15dms\n", GetTimeMillis() - load_block_index_start_time);
         } while (false);
+
 
         if (!fLoaded && !ShutdownRequested()) {
             // first suggest a reindex
@@ -1815,14 +1706,6 @@ bool AppInit2()
     if (!CheckDiskSpace())
         return false;
 
-    // Either install a handler to notify us when genesis activates, or set fHaveGenesis directly.
-    // No locking, as this happens before any background thread is started.
-    if (chainActive.Tip() == nullptr) {
-        uiInterface.NotifyBlockTip.connect(BlockNotifyGenesisWait);
-    } else {
-        fHaveGenesis = true;
-    }
-
     if (mapArgs.count("-blocknotify"))
         uiInterface.NotifyBlockTip.connect(BlockNotifyCallback);
 
@@ -1848,15 +1731,10 @@ bool AppInit2()
             vImportFiles.push_back(strFile);
     }
     threadGroup.create_thread(boost::bind(&ThreadImport, vImportFiles));
-
-    // Wait for genesis block to be processed
-    LogPrintf("Waiting for genesis block to be imported...\n");
-    {
-        std::unique_lock<std::mutex> lockG(cs_GenesisWait);
-        while (!fHaveGenesis) {
-            condvar_GenesisWait.wait(lockG);
-        }
-        uiInterface.NotifyBlockTip.disconnect(BlockNotifyGenesisWait);
+    if (chainActive.Tip() == NULL) {
+        LogPrintf("Waiting for genesis block to be imported...\n");
+        while (!fRequestShutdown && chainActive.Tip() == NULL)
+            MilliSleep(10);
     }
 
     // ********************************************************* Step 10: setup layer 2 data

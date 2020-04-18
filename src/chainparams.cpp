@@ -229,6 +229,8 @@ public:
         base58Prefixes[EXT_COIN_TYPE] = boost::assign::list_of(0x80)(0x00)(0x00)(0xde).convert_to_container<std::vector<unsigned char> >();
 
         convertSeed6(vFixedSeeds, pnSeed6_main, ARRAYLEN(pnSeed6_main));
+
+        strMasternodePoolDummyAddress = "RstYW5FygzLA3RyaSZENjY323fg1CxjsXm";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

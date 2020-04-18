@@ -86,7 +86,6 @@ UniValue blockheaderToJSON(const CBlockIndex* blockindex)
     result.push_back(Pair("bits", strprintf("%08x", blockindex->nBits)));
     result.push_back(Pair("difficulty", GetDifficulty(blockindex)));
     result.push_back(Pair("chainwork", blockindex->nChainWork.GetHex()));
-    result.push_back(Pair("acc_checkpoint", blockindex->nAccumulatorCheckpoint.GetHex()));
 
     if (blockindex->pprev)
         result.push_back(Pair("previousblockhash", blockindex->pprev->GetBlockHash().GetHex()));
@@ -140,9 +139,6 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         uint256 hashProofOfStakeRet;
         if (!CheckProofOfStake(block, hashProofOfStakeRet))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
-
-        std::string stakeModifier = (strprintf("%016x", blockindex->GetStakeModifierV1()));
-        result.push_back(Pair("stakeModifier", stakeModifier));
         result.push_back(Pair("hashProofOfStake", hashProofOfStakeRet.GetHex()));
     }
 

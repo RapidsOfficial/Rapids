@@ -51,29 +51,6 @@ CLegacyZPivStake::CLegacyZPivStake(const libzerocoin::CoinSpend& spend)
 
 CBlockIndex* CLegacyZPivStake::GetIndexFrom()
 {
-    // First look in the legacy database
-    int nHeightChecksum = 0;
-    if (zerocoinDB->ReadAccChecksum(nChecksum, denom, nHeightChecksum)) {
-        return chainActive[nHeightChecksum];
-    }
-
-    // Not found. Scan the chain.
-    const Consensus::Params& consensus = Params().GetConsensus();
-    CBlockIndex* pindex = chainActive[consensus.height_start_ZC];
-    if (!pindex) return nullptr;
-    while (pindex && pindex->nHeight <= consensus.height_last_ZC_AccumCheckpoint) {
-        if (ParseAccChecksum(pindex->nAccumulatorCheckpoint, denom) == nChecksum) {
-            // Found. Save to database and return
-            zerocoinDB->WriteAccChecksum(nChecksum, denom, pindex->nHeight);
-            return pindex;
-        }
-        //Skip forward in groups of 10 blocks since checkpoints only change every 10 blocks
-        if (pindex->nHeight % 10 == 0) {
-            pindex = chainActive[pindex->nHeight + 10];
-            continue;
-        }
-        pindex = chainActive.Next(pindex);
-    }
     return nullptr;
 }
 
@@ -92,16 +69,5 @@ CDataStream CLegacyZPivStake::GetUniqueness() const
 // Verify stake contextual checks
 bool CLegacyZPivStake::ContextCheck(int nHeight, uint32_t nTime)
 {
-    const Consensus::Params& consensus = Params().GetConsensus();
-    if (nHeight < consensus.height_start_ZC_SerialsV2 || nHeight >= consensus.height_last_ZC_AccumCheckpoint)
-        return error("%s : zPIV stake block: height %d outside range", __func__, nHeight);
-
-    // The checkpoint needs to be from 200 blocks ago
-    const int cpHeight = nHeight - 1 - consensus.ZC_MinStakeDepth;
-    const libzerocoin::CoinDenomination denom = libzerocoin::AmountToZerocoinDenomination(GetValue());
-    if (ParseAccChecksum(chainActive[cpHeight]->nAccumulatorCheckpoint, denom) != GetChecksum())
-        return error("%s : accum. checksum at height %d is wrong.", __func__, nHeight);
-
-    // All good
-    return true;
+    return false;
 }

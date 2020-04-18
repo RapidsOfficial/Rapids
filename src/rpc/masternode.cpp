@@ -790,20 +790,27 @@ UniValue createmasternodebroadcast(const UniValue& params, bool fHelp)
 
         for (CMasternodeConfig::CMasternodeEntry mne : masternodeConfig.getEntries()) {
             if(mne.getAlias() == alias) {
-                CMasternodeBroadcast mnb;
                 found = true;
                 std::string errorMessage;
-                bool fSuccess = false;
-                if (!StartMasternodeEntry(statusObj, mnb, fSuccess, mne, errorMessage, strCommand))
-                        continue;
-                SerializeMNB(statusObj, mnb, fSuccess);
+                CMasternodeBroadcast mnb;
+
+                bool success = activeMasternode.CreateBroadcast(mne.getIp(), mne.getPrivKey(), mne.getTxHash(), mne.getOutputIndex(), errorMessage, mnb, true);
+
+                statusObj.push_back(Pair("success", success));
+                if(success) {
+                    CDataStream ssMnb(SER_NETWORK, PROTOCOL_VERSION);
+                    ssMnb << mnb;
+                    statusObj.push_back(Pair("hex", HexStr(ssMnb.begin(), ssMnb.end())));
+                } else {
+                    statusObj.push_back(Pair("error_message", errorMessage));
+                }
                 break;
             }
         }
 
         if(!found) {
             statusObj.push_back(Pair("success", false));
-            statusObj.push_back(Pair("error_message", "Could not find alias in config. Verify with listmasternodeconf."));
+            statusObj.push_back(Pair("error_message", "Could not find alias in config. Verify with list-conf."));
         }
 
         return statusObj;
@@ -883,26 +890,25 @@ UniValue decodemasternodebroadcast(const UniValue& params, bool fHelp)
     if (!DecodeHexMnb(mnb, params[0].get_str()))
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Masternode broadcast message decode failed");
 
+    if(!mnb.VerifySignature())
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Masternode broadcast signature verification failed");
+
     UniValue resultObj(UniValue::VOBJ);
 
     resultObj.push_back(Pair("vin", mnb.vin.prevout.ToString()));
     resultObj.push_back(Pair("addr", mnb.addr.ToString()));
     resultObj.push_back(Pair("pubkeycollateral", CBitcoinAddress(mnb.pubKeyCollateralAddress.GetID()).ToString()));
     resultObj.push_back(Pair("pubkeymasternode", CBitcoinAddress(mnb.pubKeyMasternode.GetID()).ToString()));
-    resultObj.push_back(Pair("vchsig", mnb.GetSignatureBase64()));
+    resultObj.push_back(Pair("vchsig", EncodeBase64(&mnb.sig[0], mnb.sig.size())));
     resultObj.push_back(Pair("sigtime", mnb.sigTime));
-    resultObj.push_back(Pair("sigvalid", mnb.CheckSignature() ? "true" : "false"));
     resultObj.push_back(Pair("protocolversion", mnb.protocolVersion));
     resultObj.push_back(Pair("nlastdsq", mnb.nLastDsq));
-    resultObj.push_back(Pair("nMessVersion", mnb.nMessVersion));
 
     UniValue lastPingObj(UniValue::VOBJ);
     lastPingObj.push_back(Pair("vin", mnb.lastPing.vin.prevout.ToString()));
     lastPingObj.push_back(Pair("blockhash", mnb.lastPing.blockHash.ToString()));
     lastPingObj.push_back(Pair("sigtime", mnb.lastPing.sigTime));
-    lastPingObj.push_back(Pair("sigvalid", mnb.lastPing.CheckSignature(mnb.pubKeyMasternode) ? "true" : "false"));
-    lastPingObj.push_back(Pair("vchsig", mnb.lastPing.GetSignatureBase64()));
-    lastPingObj.push_back(Pair("nMessVersion", mnb.lastPing.nMessVersion));
+    lastPingObj.push_back(Pair("vchsig", EncodeBase64(&mnb.lastPing.vchSig[0], mnb.lastPing.vchSig.size())));
 
     resultObj.push_back(Pair("lastping", lastPingObj));
 
@@ -928,7 +934,7 @@ UniValue relaymasternodebroadcast(const UniValue& params, bool fHelp)
     if (!DecodeHexMnb(mnb, params[0].get_str()))
         throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "Masternode broadcast message decode failed");
 
-    if(!mnb.CheckSignature())
+    if(!mnb.VerifySignature())
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Masternode broadcast signature verification failed");
 
     mnodeman.UpdateMasternodeList(mnb);

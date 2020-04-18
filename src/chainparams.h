@@ -76,7 +76,7 @@ public:
 
     CBaseChainParams::Network NetworkID() const { return networkID; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
-
+    std::string MasternodePoolDummyAddress() const { return strMasternodePoolDummyAddress; }
 
 protected:
     CChainParams() {}
@@ -90,6 +90,7 @@ protected:
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
     std::vector<CAddress> vFixedSeeds;
+    std::string strMasternodePoolDummyAddress;
 };
 
 /**

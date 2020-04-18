@@ -31,7 +31,7 @@ void MNModel::updateMNList()
         if (!pmn) {
             pmn = new CMasternode();
             pmn->vin = txIn;
-            pmn->activeState = CMasternode::MASTERNODE_MISSING;
+            pmn->activeState = CMasternode::MASTERNODE_EXPIRED;
         }
         nodes.insert(QString::fromStdString(mne.getAlias()), std::make_pair(QString::fromStdString(mne.getIp()), pmn));
         if (pwalletMain) {
@@ -165,7 +165,7 @@ int MNModel::getMNState(QString mnAlias)
 bool MNModel::isMNInactive(QString mnAlias)
 {
     int activeState = getMNState(mnAlias);
-    return activeState == CMasternode::MASTERNODE_MISSING || activeState == CMasternode::MASTERNODE_EXPIRED || activeState == CMasternode::MASTERNODE_REMOVE;
+    return activeState ==  CMasternode::MASTERNODE_EXPIRED || activeState == CMasternode::MASTERNODE_REMOVE;
 }
 
 bool MNModel::isMNActive(QString mnAlias)

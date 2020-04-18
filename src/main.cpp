@@ -54,6 +54,8 @@
 #include <atomic>
 #include <queue>
 
+using namespace boost;
+using namespace std;
 
 #if defined(NDEBUG)
 #error "PIVX cannot be compiled without assertions."
@@ -77,6 +79,8 @@
 RecursiveMutex cs_main;
 
 BlockMap mapBlockIndex;
+std::map<uint256, uint256> mapProofOfStake;
+std::set<std::pair<COutPoint, unsigned int> > setStakeSeen;
 CChain chainActive;
 CBlockIndex* pindexBestHeader = NULL;
 int64_t nTimeBestReceived = 0;
@@ -2038,32 +2042,6 @@ static bool AbortNode(CValidationState& state, const std::string& strMessage, co
     return state.Error(strMessage);
 }
 
-// Legacy Zerocoin DB: used for performance during IBD
-// (between Zerocoin_Block_V2_Start and Zerocoin_Block_Last_Checkpoint)
-void DataBaseAccChecksum(CBlockIndex* pindex, bool fWrite)
-{
-    const Consensus::Params& consensus = Params().GetConsensus();
-    if (!pindex ||
-            pindex->nHeight < consensus.height_start_ZC_SerialsV2 ||
-            pindex->nHeight > consensus.height_last_ZC_AccumCheckpoint ||
-            pindex->nAccumulatorCheckpoint == pindex->pprev->nAccumulatorCheckpoint)
-        return;
-
-    uint256 accCurr = pindex->nAccumulatorCheckpoint;
-    uint256 accPrev = pindex->pprev->nAccumulatorCheckpoint;
-    // add/remove changed checksums to/from DB
-    for (int i = (int)libzerocoin::zerocoinDenomList.size()-1; i >= 0; i--) {
-        const uint32_t& nChecksum = accCurr.Get32();
-        if (nChecksum != accPrev.Get32()) {
-            fWrite ?
-               zerocoinDB->WriteAccChecksum(nChecksum, libzerocoin::zerocoinDenomList[i], pindex->nHeight) :
-               zerocoinDB->EraseAccChecksum(nChecksum, libzerocoin::zerocoinDenomList[i]);
-        }
-        accCurr >>= 32;
-        accPrev >>= 32;
-    }
-}
-
 bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex, CCoinsViewCache& view, bool* pfClean)
 {
     AssertLockHeld(cs_main);
@@ -2219,12 +2197,6 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
     // move best block pointer to prevout block
     view.SetBestBlock(pindex->pprev->GetBlockHash());
 
-    const Consensus::Params& consensus = Params().GetConsensus();
-    if (pindex->nHeight >= consensus.height_start_ZC_SerialsV2 &&
-            pindex->nHeight <= consensus.height_last_ZC_AccumCheckpoint) {
-        // Legacy Zerocoin DB: If Accumulators Checkpoint is changed, remove changed checksums
-        DataBaseAccChecksum(pindex, false);
-    }
 
     if (pfClean) {
         *pfClean = fClean;
@@ -2333,20 +2305,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     uint256 hashBlock = block.GetHash();
     for (unsigned int i = 0; i < block.vtx.size(); i++) {
         const CTransaction& tx = block.vtx[i];
-
-        // First check for BIP30.
-        // Do not allow blocks that contain transactions which 'overwrite' older transactions,
-        // unless those are already completely spent.
-        // If such overwrites are allowed, coinbases and transactions depending upon those
-        // can be duplicated to remove the ability to spend the first instance -- even after
-        // being sent to another address.
-        // See BIP30 and http://r6.ca/blog/20120206T005236Z.html for more information.
-        // This logic is not necessary for memory pool transactions, as AcceptToMemoryPool
-        // already refuses previously-known transaction ids entirely.
-        const CCoins* coins = view.AccessCoins(tx.GetHash());
-        if (coins && !coins->IsPruned())
-            return state.DoS(100, error("ConnectBlock() : tried to overwrite transaction"),
-                             REJECT_INVALID, "bad-txns-BIP30");
 
         nInputs += tx.vin.size();
         nSigOps += GetLegacySigOpCount(tx);
@@ -2470,9 +2428,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs]\n", (unsigned)block.vtx.size(), 0.001 * (nTime1 - nTimeStart), 0.001 * (nTime1 - nTimeStart) / block.vtx.size(), nInputs <= 1 ? 0 : 0.001 * (nTime1 - nTimeStart) / (nInputs - 1), nTimeConnect * 0.000001);
 
     //PoW phase redistributed fees to miner. PoS stage destroys fees.
-    CAmount nExpectedMint = GetBlockValue(pindex->pprev->nHeight);
-    if (block.IsProofOfWork())
-        nExpectedMint += nFees;
+    CAmount nExpectedMint = GetBlockValue(pindex->pprev->nHeight) + nFees;
 
     //Check that the block does not overmint
     if (!IsBlockValueValid(block, nExpectedMint, nMint)) {
@@ -2589,19 +2545,6 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     nTimeCallbacks += nTime4 - nTime3;
     LogPrint(BCLog::BENCH, "    - Callbacks: %.2fms [%.2fs]\n", 0.001 * (nTime4 - nTime3), nTimeCallbacks * 0.000001);
 
-    //Continue tracking possible movement of fraudulent funds until they are completely frozen
-    if (pindex->nHeight >= consensus.height_start_ZC_InvalidSerials &&
-            pindex->nHeight <= consensus.height_ZC_RecalcAccumulators + 1)
-        AddInvalidSpendsToMap(block);
-
-    if (pindex->nHeight >= consensus.height_start_ZC_SerialsV2 && pindex->nHeight < consensus.height_last_ZC_AccumCheckpoint) {
-        // Legacy Zerocoin DB: If Accumulators Checkpoint is changed, database the checksums
-        DataBaseAccChecksum(pindex, true);
-    } else if (pindex->nHeight == consensus.height_last_ZC_AccumCheckpoint) {
-        // After last Checkpoint block, wipe the checksum database
-        zerocoinDB->WipeAccChecksums();
-    }
-
     return true;
 }
 
@@ -2634,35 +2577,27 @@ bool static FlushStateToDisk(CValidationState& state, FlushStateMode mode)
             // First make sure all block and undo data is flushed to disk.
             FlushBlockFile();
             // Then update all block file information (which may refer to block and undo files).
-            {
-                std::vector<std::pair<int, const CBlockFileInfo*> > vFiles;
-                vFiles.reserve(setDirtyFileInfo.size());
-                for (std::set<int>::iterator it = setDirtyFileInfo.begin(); it != setDirtyFileInfo.end(); ) {
-                    vFiles.push_back(std::make_pair(*it, &vinfoBlockFile[*it]));
-                    setDirtyFileInfo.erase(it++);
+            bool fileschanged = false;
+            for (set<int>::iterator it = setDirtyFileInfo.begin(); it != setDirtyFileInfo.end();) {
+                if (!pblocktree->WriteBlockFileInfo(*it, vinfoBlockFile[*it])) {
+                    return AbortNode("Failed to write to block index");
                 }
-                std::vector<const CBlockIndex*> vBlocks;
-                vBlocks.reserve(setDirtyBlockIndex.size());
-                for (std::set<CBlockIndex*>::iterator it = setDirtyBlockIndex.begin(); it != setDirtyBlockIndex.end(); ) {
-                    vBlocks.push_back(*it);
-                    setDirtyBlockIndex.erase(it++);
-                }
-                if (!pblocktree->WriteBatchSync(vFiles, nLastBlockFile, vBlocks)) {
-                    return AbortNode(state, "Files to write to block index database");
-                }
-                // Flush zerocoin supply
-                if (!mapZerocoinSupply.empty() && !zerocoinDB->WriteZCSupply(mapZerocoinSupply)) {
-                    return AbortNode(state, "Failed to write zerocoin supply to DB");
-                }
-                // Flush money supply
-                if (!pblocktree->WriteMoneySupply(nMoneySupply)) {
-                    return AbortNode(state, "Failed to write money supply to DB");
-                }
+                fileschanged = true;
+                setDirtyFileInfo.erase(it++);
             }
+            if (fileschanged && !pblocktree->WriteLastBlockFile(nLastBlockFile)) {
+                return AbortNode("Failed to write to block index");
+            }
+            for (set<CBlockIndex*>::iterator it = setDirtyBlockIndex.begin(); it != setDirtyBlockIndex.end();) {
+                if (!pblocktree->WriteBlockIndex(CDiskBlockIndex(*it))) {
+                    return AbortNode("Failed to write to block index");
+                }
+                setDirtyBlockIndex.erase(it++);
+            }
+            pblocktree->Sync();
             // Finally flush the chainstate (which may refer to block index entries).
-            if (!pcoinsTip->Flush()) {
-                return AbortNode(state, "Failed to write to coin database");
-            }
+            if (!pcoinsTip->Flush())
+                return AbortNode("Failed to write to coin database");
 
             // Update best block in wallet (so we can detect restored wallets).
             if (mode != FLUSH_STATE_IF_NEEDED) {
@@ -2671,7 +2606,7 @@ bool static FlushStateToDisk(CValidationState& state, FlushStateMode mode)
             nLastWrite = GetTimeMicros();
         }
     } catch (const std::runtime_error& e) {
-        return AbortNode(state, std::string("System error while flushing: ") + e.what());
+        return AbortNode(std::string("System error while flushing: ") + e.what());
     }
     return true;
 }
@@ -3127,7 +3062,6 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
     do {
         boost::this_thread::interruption_point();
 
-        const CBlockIndex *pindexFork;
         bool fInitialDownload;
         while (true) {
             TRY_LOCK(cs_main, lockMain);
@@ -3136,7 +3070,6 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
                 continue;
             }
 
-            CBlockIndex *pindexOldTip = chainActive.Tip();
             pindexMostWork = FindMostWorkChain();
 
             // Whether we have anything to do at all.
@@ -3147,7 +3080,6 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
                 return false;
 
             pindexNewTip = chainActive.Tip();
-            pindexFork = chainActive.FindFork(pindexOldTip);
             fInitialDownload = IsInitialBlockDownload();
             break;
         }
@@ -3155,10 +3087,6 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
         // When we reach this point, we switched to a new tip (stored in pindexNewTip).
         // Notifications/callbacks that can run without cs_main
         // Always notify the UI if a new block tip was connected
-        if (pindexFork != pindexNewTip) {
-
-            // Notify the UI
-            uiInterface.NotifyBlockTip(fInitialDownload, pindexNewTip);
 
             // Notifications/callbacks that can run without cs_main
             if (!fInitialDownload) {
@@ -3184,7 +3112,6 @@ bool ActivateBestChain(CValidationState& state, CBlock* pblock, bool fAlreadyChe
                 }
             }
 
-        }
     } while (pindexMostWork != chainActive.Tip());
     CheckBlockIndex();
 
@@ -3280,7 +3207,11 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
     // to avoid miners withholding blocks but broadcasting headers, to get a
     // competitive advantage.
     pindexNew->nSequenceId = 0;
-    BlockMap::iterator mi = mapBlockIndex.insert(std::make_pair(hash, pindexNew)).first;
+    BlockMap::iterator mi = mapBlockIndex.insert(make_pair(hash, pindexNew)).first;
+
+    //mark as PoS seen
+    if (pindexNew->IsProofOfStake())
+        setStakeSeen.insert(make_pair(pindexNew->prevoutStake, pindexNew->nStakeTime));
 
     pindexNew->phashBlock = &((*mi).first);
     BlockMap::iterator miPrev = mapBlockIndex.find(block.hashPrevBlock);
@@ -3288,13 +3219,38 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
         pindexNew->pprev = (*miPrev).second;
         pindexNew->nHeight = pindexNew->pprev->nHeight + 1;
         pindexNew->BuildSkip();
-        pindexNew->SetNewStakeModifier();
+        pindexNew->pprev->pnext = pindexNew;
 
+        // ppcoin: compute chain trust score
+        pindexNew->bnChainTrust = (pindexNew->pprev ? pindexNew->pprev->bnChainTrust : 0) + pindexNew->GetBlockTrust();
+
+        // ppcoin: compute stake entropy bit for stake modifier
+        if (!pindexNew->SetStakeEntropyBit(pindexNew->GetStakeEntropyBit()))
+            LogPrintf("AddToBlockIndex() : SetStakeEntropyBit() failed \n");
+
+        // ppcoin: record proof-of-stake hash value
+        if (pindexNew->IsProofOfStake()) {
+            if (!mapProofOfStake.count(hash))
+                LogPrintf("AddToBlockIndex() : hashProofOfStake not found in map \n");
+            pindexNew->hashProofOfStake = mapProofOfStake[hash];
+        }
+
+        uint64_t nStakeModifier = 0;
+        bool fGeneratedStakeModifier = false;
+        if (!ComputeNextStakeModifier(pindexNew->pprev, nStakeModifier, fGeneratedStakeModifier))
+            LogPrintf("AddToBlockIndex() : ComputeNextStakeModifier() failed \n");
+        pindexNew->SetStakeModifier(nStakeModifier, fGeneratedStakeModifier);
+        pindexNew->nStakeModifierChecksum = GetStakeModifierChecksum(pindexNew);
+        if (!CheckStakeModifierCheckpoints(pindexNew->nHeight, pindexNew->nStakeModifierChecksum))
+            LogPrintf("AddToBlockIndex() : Rejected by stake modifier checkpoint height=%d, modifier=%s \n", pindexNew->nHeight, boost::lexical_cast<std::string>(nStakeModifier));
     }
     pindexNew->nChainWork = (pindexNew->pprev ? pindexNew->pprev->nChainWork : 0) + GetBlockProof(*pindexNew);
     pindexNew->RaiseValidity(BLOCK_VALID_TREE);
     if (pindexBestHeader == NULL || pindexBestHeader->nChainWork < pindexNew->nChainWork)
         pindexBestHeader = pindexNew;
+
+    if (pindexNew->nHeight)
+        pindexNew->pprev->pnext = pindexNew;
 
     setDirtyBlockIndex.insert(pindexNew);
 
@@ -3700,32 +3656,6 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
         return error("%s : incorrect proof of work at %d", __func__, pindexPrev->nHeight + 1);
     }
 
-    return true;
-}
-
-bool CheckBlockTime(const CBlockHeader& block, CValidationState& state, CBlockIndex* const pindexPrev)
-{
-    // Not enforced on RegTest
-    if (Params().IsRegTestNet())
-        return true;
-
-    const int64_t blockTime = block.GetBlockTime();
-    const int blockHeight = pindexPrev->nHeight + 1;
-
-    // Check blocktime against future drift (WANT: blk_time <= Now + MaxDrift)
-    if (blockTime > pindexPrev->MaxFutureBlockTime())
-        return state.Invalid(error("%s : block timestamp too far in the future", __func__), REJECT_INVALID, "time-too-new");
-
-#if 0
-    // Check blocktime against prev (WANT: blk_time > MinPastBlockTime)
-    if (blockTime <= pindexPrev->MinPastBlockTime())
-        return state.DoS(50, error("%s : block timestamp too old", __func__), REJECT_INVALID, "time-too-old");
-
-    // Check blocktime mask
-    if (!Params().GetConsensus().IsValidBlockTimeStamp(blockTime, blockHeight))
-        return state.DoS(100, error("%s : block timestamp mask not valid", __func__), REJECT_INVALID, "invalid-time-mask");
-#endif
-
     // All good
     return true;
 }
@@ -3748,9 +3678,12 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
     if (chainHeight - nHeight >= nMaxReorgDepth)
         return state.DoS(1, error("%s: forked chain older than max reorganization depth (height %d)", __func__, chainHeight - nHeight));
 
-    // Check blocktime (past limit, future limit and mask)
-    if (!CheckBlockTime(block, state, pindexPrev))
-        return false;
+    // Check timestamp against prev
+    if (block.GetBlockTime() <= pindexPrev->GetMedianTimePast()) {
+        LogPrintf("Block time = %d , GetMedianTimePast = %d \n", block.GetBlockTime(), pindexPrev->GetMedianTimePast());
+        return state.Invalid(error("%s : block's timestamp is too early", __func__),
+            REJECT_INVALID, "time-too-old");
+    }
 
     // Check that the block chain matches the known block chain up to a checkpoint
     if (!Checkpoints::CheckBlock(nHeight, hash))
@@ -3922,13 +3855,15 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     if (block.GetHash() != Params().GetConsensus().hashGenesisBlock && !CheckWork(block, pindexPrev))
         return false;
 
-    bool isPoS = false;
     if (block.IsProofOfStake()) {
-        isPoS = true;
-        uint256 hashProofOfStake = 0;
+        uint256 hashProofOfStake;
+        uint256 hash = block.GetHash();
 
         if(!CheckProofOfStake(block, hashProofOfStake))
             return state.DoS(100, error("%s: proof of stake check failed", __func__));
+
+        if(!mapProofOfStake.count(hash)) // add to mapProofOfStake
+            mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
     }
 
     if (!AcceptBlockHeader(block, state, &pindex))
@@ -3952,7 +3887,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     int nHeight = pindex->nHeight;
     int splitHeight = -1;
 
-    if (isPoS) {
+    if (!block.nNonce) {
         LOCK(cs_main);
 
         // Blocks arrives in order, so if prev block is not the tip then we are on a fork.

@@ -2206,7 +2206,7 @@ void CFinalizedBudget::SubmitVote()
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
+        fNewSigs = false;
     }
 
     if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, keyMasternode, pubKeyMasternode)) {

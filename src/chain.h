@@ -1,83 +1,22 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c) 2011-2013 The PPCoin developers
-// Copyright (c) 2013-2014 The NovaCoin Developers
-// Copyright (c) 2014-2018 The BlackCoin Developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2017 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #ifndef BITCOIN_CHAIN_H
 #define BITCOIN_CHAIN_H
 
-#include "chainparams.h"
 #include "pow.h"
 #include "primitives/block.h"
-#include "timedata.h"
 #include "tinyformat.h"
 #include "uint256.h"
 #include "util.h"
-#include "libzerocoin/Denominations.h"
 
 #include <vector>
 
-class CBlockFileInfo
-{
-public:
-    unsigned int nBlocks;      //!< number of blocks stored in file
-    unsigned int nSize;        //!< number of used bytes of block file
-    unsigned int nUndoSize;    //!< number of used bytes in the undo file
-    unsigned int nHeightFirst; //!< lowest height of block in file
-    unsigned int nHeightLast;  //!< highest height of block in file
-    uint64_t nTimeFirst;       //!< earliest time of block in file
-    uint64_t nTimeLast;        //!< latest time of block in file
-
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
-    {
-        READWRITE(VARINT(nBlocks));
-        READWRITE(VARINT(nSize));
-        READWRITE(VARINT(nUndoSize));
-        READWRITE(VARINT(nHeightFirst));
-        READWRITE(VARINT(nHeightLast));
-        READWRITE(VARINT(nTimeFirst));
-        READWRITE(VARINT(nTimeLast));
-    }
-
-    void SetNull()
-    {
-        nBlocks = 0;
-        nSize = 0;
-        nUndoSize = 0;
-        nHeightFirst = 0;
-        nHeightLast = 0;
-        nTimeFirst = 0;
-        nTimeLast = 0;
-    }
-
-    CBlockFileInfo()
-    {
-        SetNull();
-    }
-
-    std::string ToString() const;
-
-    /** update statistics (does not update nSize) */
-    void AddBlock(unsigned int nHeightIn, uint64_t nTimeIn)
-    {
-        if (nBlocks == 0 || nHeightFirst > nHeightIn)
-            nHeightFirst = nHeightIn;
-        if (nBlocks == 0 || nTimeFirst > nTimeIn)
-            nTimeFirst = nTimeIn;
-        nBlocks++;
-        if (nHeightIn > nHeightLast)
-            nHeightLast = nHeightIn;
-        if (nTimeIn > nTimeLast)
-            nTimeLast = nTimeIn;
-    }
-};
+#include <boost/foreach.hpp>
+#include <boost/lexical_cast.hpp>
 
 struct CDiskBlockPos {
     int nFile;
@@ -160,13 +99,6 @@ enum BlockStatus {
     BLOCK_FAILED_MASK = BLOCK_FAILED_VALID | BLOCK_FAILED_CHILD,
 };
 
-// BlockIndex flags
-enum {
-    BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
-    BLOCK_STAKE_ENTROPY = (1 << 1),  // entropy bit for stake modifier
-    BLOCK_STAKE_MODIFIER = (1 << 2), // regenerated stake modifier
-};
-
 /** The block chain is a tree shaped structure starting with the
  * genesis block at the root, with each block potentially having multiple
  * candidates to be the next block. A blockindex may have multiple pprev pointing
@@ -176,134 +108,312 @@ class CBlockIndex
 {
 public:
     //! pointer to the hash of the block, if any. memory is owned by this CBlockIndex
-    const uint256* phashBlock{nullptr};
+    const uint256* phashBlock;
 
     //! pointer to the index of the predecessor of this block
-    CBlockIndex* pprev{nullptr};
+    CBlockIndex* pprev;
+
+    //! pointer to the index of the next block
+    CBlockIndex* pnext;
 
     //! pointer to the index of some further predecessor of this block
-    CBlockIndex* pskip{nullptr};
+    CBlockIndex* pskip;
+
+    //ppcoin: trust score of block chain
+    uint256 bnChainTrust;
 
     //! height of the entry in the chain. The genesis block has height 0
-    int nHeight{0};
+    int nHeight;
 
     //! Which # file this block is stored in (blk?????.dat)
-    int nFile{0};
+    int nFile;
 
     //! Byte offset within blk?????.dat where this block's data is stored
-    unsigned int nDataPos{0};
+    unsigned int nDataPos;
 
     //! Byte offset within rev?????.dat where this block's undo data is stored
-    unsigned int nUndoPos{0};
+    unsigned int nUndoPos;
 
     //! (memory only) Total amount of work (expected number of hashes) in the chain up to and including this block
-    uint256 nChainWork{};
+    uint256 nChainWork;
 
     //! Number of transactions in this block.
     //! Note: in a potential headers-first mode, this number cannot be relied upon
-    unsigned int nTx{0};
+    unsigned int nTx;
 
     //! (memory only) Number of transactions in the chain up to and including this block.
     //! This value will be non-zero only if and only if transactions for this block and all its parents are available.
     //! Change to 64-bit type when necessary; won't happen before 2030
-    unsigned int nChainTx{0};
+    unsigned int nChainTx;
 
     //! Verification status of this block. See enum BlockStatus
-    unsigned int nStatus{0};
+    unsigned int nStatus;
+
+    unsigned int nFlags; // ppcoin: block index flags
+    enum {
+        BLOCK_PROOF_OF_STAKE = (1 << 0), // is proof-of-stake block
+        BLOCK_STAKE_ENTROPY = (1 << 1),  // entropy bit for stake modifier
+        BLOCK_STAKE_MODIFIER = (1 << 2), // regenerated stake modifier
+    };
 
     // proof-of-stake specific fields
-    // char vector holding the stake modifier bytes. It is empty for PoW blocks.
-    // Modifier V1 is 64 bit while modifier V2 is 256 bit.
-    std::vector<unsigned char> vStakeModifier{};
-    unsigned int nFlags{0};
-
-    //! block header
-    int nVersion{0};
-    uint256 hashMerkleRoot{};
-    unsigned int nTime{0};
-    unsigned int nBits{0};
-    unsigned int nNonce{0};
-    uint256 nAccumulatorCheckpoint{};
-
+    uint256 GetBlockTrust() const;
     uint64_t nStakeModifier;             // hash modifier for proof-of-stake
     unsigned int nStakeModifierChecksum; // checksum of index; in-memeory only
     COutPoint prevoutStake;
     unsigned int nStakeTime;
     uint256 hashProofOfStake;
+    int64_t nMint;
+    int64_t nMoneySupply;
+
+    //! block header
+    int nVersion;
+    uint256 hashMerkleRoot;
+    unsigned int nTime;
+    unsigned int nBits;
+    unsigned int nNonce;
 
     //! (memory only) Sequential id assigned to distinguish order in which blocks are received.
-    uint32_t nSequenceId{0};
+    uint32_t nSequenceId;
 
-    CBlockIndex() {}
-    CBlockIndex(const CBlock& block);
+    void SetNull()
+    {
+        phashBlock = NULL;
+        pprev = NULL;
+        pskip = NULL;
+        nHeight = 0;
+        nFile = 0;
+        nDataPos = 0;
+        nUndoPos = 0;
+        nChainWork = 0;
+        nTx = 0;
+        nChainTx = 0;
+        nStatus = 0;
+        nSequenceId = 0;
 
-    std::string ToString() const;
+        nMint = 0;
+        nMoneySupply = 0;
+        nFlags = 0;
+        nStakeModifier = 0;
+        nStakeModifierChecksum = 0;
+        prevoutStake.SetNull();
+        nStakeTime = 0;
 
-    CDiskBlockPos GetBlockPos() const;
-    CDiskBlockPos GetUndoPos() const;
-    CBlockHeader GetBlockHeader() const;
-    uint256 GetBlockHash() const { return *phashBlock; }
-    int64_t GetBlockTime() const { return (int64_t)nTime; }
-    int64_t GetMedianTimePast() const;
+        nVersion = 0;
+        hashMerkleRoot = uint256();
+        nTime = 0;
+        nBits = 0;
+        nNonce = 0;
+    }
 
-    int64_t MaxFutureBlockTime() const;
-    int64_t MinPastBlockTime() const;
+    CBlockIndex()
+    {
+        SetNull();
+    }
 
-    bool IsProofOfStake() const { return (nFlags & BLOCK_PROOF_OF_STAKE); }
-    bool IsProofOfWork() const { return !IsProofOfStake(); }
-    void SetProofOfStake() { nFlags |= BLOCK_PROOF_OF_STAKE; }
+    CBlockIndex(const CBlock& block)
+    {
+        SetNull();
 
-    // Stake Modifier
-    unsigned int GetStakeEntropyBit() const;
-    bool SetStakeEntropyBit(unsigned int nEntropyBit);
-    bool GeneratedStakeModifier() const { return (nFlags & BLOCK_STAKE_MODIFIER); }
-    void SetStakeModifier(const uint64_t nStakeModifier, bool fGeneratedStakeModifier);
-    void SetNewStakeModifier();                             // generates and sets new v1 modifier
-    void SetStakeModifier(const uint256& nStakeModifier);
-    void SetNewStakeModifier(const uint256& prevoutId);     // generates and sets new v2 modifier
-    uint64_t GetStakeModifierV1() const;
-    uint256 GetStakeModifierV2() const;
+        nVersion = block.nVersion;
+        hashMerkleRoot = block.hashMerkleRoot;
+        nTime = block.nTime;
+        nBits = block.nBits;
+        nNonce = block.nNonce;
+
+        //Proof of Stake
+        bnChainTrust = uint256();
+        nMint = 0;
+        nMoneySupply = 0;
+        nFlags = 0;
+        nStakeModifier = 0;
+        nStakeModifierChecksum = 0;
+        hashProofOfStake = uint256();
+
+        if (block.IsProofOfStake()) {
+            SetProofOfStake();
+            prevoutStake = block.vtx[1].vin[0].prevout;
+            nStakeTime = block.nTime;
+        } else {
+            prevoutStake.SetNull();
+            nStakeTime = 0;
+        }
+    }
+
+    CDiskBlockPos GetBlockPos() const
+    {
+        CDiskBlockPos ret;
+        if (nStatus & BLOCK_HAVE_DATA) {
+            ret.nFile = nFile;
+            ret.nPos = nDataPos;
+        }
+        return ret;
+    }
+
+    CDiskBlockPos GetUndoPos() const
+    {
+        CDiskBlockPos ret;
+        if (nStatus & BLOCK_HAVE_UNDO) {
+            ret.nFile = nFile;
+            ret.nPos = nUndoPos;
+        }
+        return ret;
+    }
+
+    CBlockHeader GetBlockHeader() const
+    {
+        CBlockHeader block;
+        block.nVersion = nVersion;
+        if (pprev)
+            block.hashPrevBlock = pprev->GetBlockHash();
+        block.hashMerkleRoot = hashMerkleRoot;
+        block.nTime = nTime;
+        block.nBits = nBits;
+        block.nNonce = nNonce;
+        return block;
+    }
+
+    uint256 GetBlockHash() const
+    {
+        return *phashBlock;
+    }
+
+    int64_t GetBlockTime() const
+    {
+        return (int64_t)nTime;
+    }
+
+    enum { nMedianTimeSpan = 11 };
+
+    int64_t GetMedianTimePast() const
+    {
+        int64_t pmedian[nMedianTimeSpan];
+        int64_t* pbegin = &pmedian[nMedianTimeSpan];
+        int64_t* pend = &pmedian[nMedianTimeSpan];
+
+        const CBlockIndex* pindex = this;
+        for (int i = 0; i < nMedianTimeSpan && pindex; i++, pindex = pindex->pprev)
+            *(--pbegin) = pindex->GetBlockTime();
+
+        std::sort(pbegin, pend);
+        return pbegin[(pend - pbegin) / 2];
+    }
+
+    bool IsProofOfWork() const
+    {
+        return !(nFlags & BLOCK_PROOF_OF_STAKE);
+    }
+
+    bool IsProofOfStake() const
+    {
+        return (nFlags & BLOCK_PROOF_OF_STAKE);
+    }
+
+    void SetProofOfStake()
+    {
+        nFlags |= BLOCK_PROOF_OF_STAKE;
+    }
+
+    unsigned int GetStakeEntropyBit() const
+    {
+        unsigned int nEntropyBit = ((GetBlockHash().Get64()) & 1);
+        if (GetBoolArg("-printstakemodifier", false))
+            LogPrintf("GetStakeEntropyBit: nHeight=%u hashBlock=%s nEntropyBit=%u\n", nHeight, GetBlockHash().ToString().c_str(), nEntropyBit);
+
+        return nEntropyBit;
+    }
+
+    bool SetStakeEntropyBit(unsigned int nEntropyBit)
+    {
+        if (nEntropyBit > 1)
+            return false;
+        nFlags |= (nEntropyBit ? BLOCK_STAKE_ENTROPY : 0);
+        return true;
+    }
+
+    bool GeneratedStakeModifier() const
+    {
+        return (nFlags & BLOCK_STAKE_MODIFIER);
+    }
+
+    void SetStakeModifier(uint64_t nModifier, bool fGeneratedStakeModifier)
+    {
+        nStakeModifier = nModifier;
+        if (fGeneratedStakeModifier)
+            nFlags |= BLOCK_STAKE_MODIFIER;
+    }
+
+    /**
+     * Returns true if there are nRequired or more blocks of minVersion or above
+     * in the last Params().ToCheckBlockUpgradeMajority() blocks, starting at pstart 
+     * and going backwards.
+     */
+    static bool IsSuperMajority(int minVersion, const CBlockIndex* pstart, unsigned int nRequired);
+
+    std::string ToString() const
+    {
+        return strprintf("CBlockIndex(pprev=%p, nHeight=%d, merkle=%s, hashBlock=%s)",
+            pprev, nHeight,
+            hashMerkleRoot.ToString(),
+            GetBlockHash().ToString());
+    }
 
     //! Check whether this block index entry is valid up to the passed validity level.
-    bool IsValid(enum BlockStatus nUpTo = BLOCK_VALID_TRANSACTIONS) const;
+    bool IsValid(enum BlockStatus nUpTo = BLOCK_VALID_TRANSACTIONS) const
+    {
+        assert(!(nUpTo & ~BLOCK_VALID_MASK)); // Only validity flags allowed.
+        if (nStatus & BLOCK_FAILED_MASK)
+            return false;
+        return ((nStatus & BLOCK_VALID_MASK) >= nUpTo);
+    }
+
     //! Raise the validity level of this block index entry.
     //! Returns true if the validity was changed.
-    bool RaiseValidity(enum BlockStatus nUpTo);
+    bool RaiseValidity(enum BlockStatus nUpTo)
+    {
+        assert(!(nUpTo & ~BLOCK_VALID_MASK)); // Only validity flags allowed.
+        if (nStatus & BLOCK_FAILED_MASK)
+            return false;
+        if ((nStatus & BLOCK_VALID_MASK) < nUpTo) {
+            nStatus = (nStatus & ~BLOCK_VALID_MASK) | nUpTo;
+            return true;
+        }
+        return false;
+    }
+
     //! Build the skiplist pointer for this entry.
     void BuildSkip();
+
     //! Efficiently find an ancestor of this block.
     CBlockIndex* GetAncestor(int height);
     const CBlockIndex* GetAncestor(int height) const;
 };
 
 /** Used to marshal pointers into hashes for db storage. */
-
-// New serialization introduced with 4.0.99
-static const int DBI_OLD_SER_VERSION = 4009900;
-static const int DBI_SER_VERSION_NO_ZC = 4009902;   // removes mapZerocoinSupply, nMoneySupply
-
 class CDiskBlockIndex : public CBlockIndex
 {
 public:
     uint256 hashPrev;
+    uint256 hashNext;
 
     CDiskBlockIndex()
     {
-        hashPrev = UINT256_ZERO;
+        hashPrev = uint256();
+        hashNext = uint256();
     }
 
-    explicit CDiskBlockIndex(const CBlockIndex* pindex) : CBlockIndex(*pindex)
+    explicit CDiskBlockIndex(CBlockIndex* pindex) : CBlockIndex(*pindex)
     {
-        hashPrev = (pprev ? pprev->GetBlockHash() : UINT256_ZERO);
+        hashPrev = (pprev ? pprev->GetBlockHash() : uint256());
     }
 
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nSerVersion)
+    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
     {
         if (!(nType & SER_GETHASH))
-            READWRITE(VARINT(nSerVersion));
+            READWRITE(VARINT(nVersion));
 
         READWRITE(VARINT(nHeight));
         READWRITE(VARINT(nStatus));
@@ -315,77 +425,29 @@ public:
         if (nStatus & BLOCK_HAVE_UNDO)
             READWRITE(VARINT(nUndoPos));
 
-        if (nSerVersion >= DBI_SER_VERSION_NO_ZC) {
-            // Serialization with CLIENT_VERSION = 4009902+
-            READWRITE(nFlags);
-            READWRITE(this->nVersion);
-            READWRITE(vStakeModifier);
-            READWRITE(hashPrev);
-            READWRITE(hashMerkleRoot);
-            READWRITE(nTime);
-            READWRITE(nBits);
-            READWRITE(nNonce);
-            if(this->nVersion > 3 && this->nVersion < 7)
-                READWRITE(nAccumulatorCheckpoint);
 
-        } else if (nSerVersion > DBI_OLD_SER_VERSION && ser_action.ForRead()) {
-            // Serialization with CLIENT_VERSION = 4009901
-            std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
-            int64_t nMoneySupply = 0;
-            READWRITE(nMoneySupply);
-            READWRITE(nFlags);
-            READWRITE(this->nVersion);
-            READWRITE(vStakeModifier);
-            READWRITE(hashPrev);
-            READWRITE(hashMerkleRoot);
-            READWRITE(nTime);
-            READWRITE(nBits);
-            READWRITE(nNonce);
-            if(this->nVersion > 3) {
-                READWRITE(mapZerocoinSupply);
-                if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
-            }
-
-        } else if (ser_action.ForRead()) {
-            // Serialization with CLIENT_VERSION = 4009900-
-            int64_t nMint = 0;
-            uint256 hashNext{};
-            int64_t nMoneySupply = 0;
-            READWRITE(nMint);
-            READWRITE(nMoneySupply);
-            READWRITE(nFlags);
-            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
-                uint64_t nStakeModifier = 0;
-                READWRITE(nStakeModifier);
-                this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
-            } else {
-                uint256 nStakeModifierV2;
-                READWRITE(nStakeModifierV2);
-                this->SetStakeModifier(nStakeModifierV2);
-            }
-            if (IsProofOfStake()) {
-                COutPoint prevoutStake;
-                unsigned int nStakeTime = 0;
-                READWRITE(prevoutStake);
-                READWRITE(nStakeTime);
-            }
-            READWRITE(this->nVersion);
-            READWRITE(hashPrev);
-            READWRITE(hashNext);
-            READWRITE(hashMerkleRoot);
-            READWRITE(nTime);
-            READWRITE(nBits);
-            READWRITE(nNonce);
-            if(this->nVersion > 3) {
-                std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply;
-                std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
-                READWRITE(nAccumulatorCheckpoint);
-                READWRITE(mapZerocoinSupply);
-                READWRITE(vMintDenominationsInBlock);
-            }
+        READWRITE(nMint);
+        READWRITE(nMoneySupply);
+        READWRITE(nFlags);
+        READWRITE(nStakeModifier);
+        if (IsProofOfStake()) {
+            READWRITE(prevoutStake);
+            READWRITE(nStakeTime);
+        } else {
+            const_cast<CDiskBlockIndex*>(this)->prevoutStake.SetNull();
+            const_cast<CDiskBlockIndex*>(this)->nStakeTime = 0;
+            const_cast<CDiskBlockIndex*>(this)->hashProofOfStake = uint256();
         }
-    }
 
+        // block header
+        READWRITE(this->nVersion);
+        READWRITE(hashPrev);
+        READWRITE(hashNext);
+        READWRITE(hashMerkleRoot);
+        READWRITE(nTime);
+        READWRITE(nBits);
+        READWRITE(nNonce);
+    }
 
     uint256 GetBlockHash() const
     {
@@ -396,8 +458,6 @@ public:
         block.nTime = nTime;
         block.nBits = nBits;
         block.nNonce = nNonce;
-        if (nVersion > 3 && nVersion < 7)
-            block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
         return block.GetHash();
     }
 
@@ -410,97 +470,6 @@ public:
             GetBlockHash().ToString(),
             hashPrev.ToString());
         return str;
-    }
-};
-
-/** Legacy block index - used to retrieve old serializations */
-
-class CLegacyBlockIndex : public CBlockIndex
-{
-public:
-    std::map<libzerocoin::CoinDenomination, int64_t> mapZerocoinSupply{};
-    int64_t nMint = 0;
-    uint256 hashNext{};
-    uint256 hashPrev{};
-    uint64_t nStakeModifier = 0;
-    uint256 nStakeModifierV2{};
-    COutPoint prevoutStake{};
-    unsigned int nStakeTime = 0;
-    std::vector<libzerocoin::CoinDenomination> vMintDenominationsInBlock;
-    int64_t nMoneySupply = 0;
-
-
-    ADD_SERIALIZE_METHODS;
-
-    template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nSerVersion)
-    {
-        if (!(nType & SER_GETHASH))
-            READWRITE(VARINT(nSerVersion));
-
-        if (nSerVersion >= DBI_SER_VERSION_NO_ZC) {
-            // no extra serialized field
-            return;
-        }
-
-        if (!ser_action.ForRead()) {
-            // legacy block index shouldn't be used to write
-            return;
-        }
-
-        READWRITE(VARINT(nHeight));
-        READWRITE(VARINT(nStatus));
-        READWRITE(VARINT(nTx));
-        if (nStatus & (BLOCK_HAVE_DATA | BLOCK_HAVE_UNDO))
-            READWRITE(VARINT(nFile));
-        if (nStatus & BLOCK_HAVE_DATA)
-            READWRITE(VARINT(nDataPos));
-        if (nStatus & BLOCK_HAVE_UNDO)
-            READWRITE(VARINT(nUndoPos));
-
-        if (nSerVersion > DBI_OLD_SER_VERSION) {
-            // Serialization with CLIENT_VERSION = 4009901
-            READWRITE(nMoneySupply);
-            READWRITE(nFlags);
-            READWRITE(this->nVersion);
-            READWRITE(vStakeModifier);
-            READWRITE(hashPrev);
-            READWRITE(hashMerkleRoot);
-            READWRITE(nTime);
-            READWRITE(nBits);
-            READWRITE(nNonce);
-            if(this->nVersion > 3) {
-                READWRITE(mapZerocoinSupply);
-                if(this->nVersion < 7) READWRITE(nAccumulatorCheckpoint);
-            }
-
-        } else {
-            // Serialization with CLIENT_VERSION = 4009900-
-            READWRITE(nMint);
-            READWRITE(nMoneySupply);
-            READWRITE(nFlags);
-            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
-                READWRITE(nStakeModifier);
-            } else {
-                READWRITE(nStakeModifierV2);
-            }
-            if (IsProofOfStake()) {
-                READWRITE(prevoutStake);
-                READWRITE(nStakeTime);
-            }
-            READWRITE(this->nVersion);
-            READWRITE(hashPrev);
-            READWRITE(hashNext);
-            READWRITE(hashMerkleRoot);
-            READWRITE(nTime);
-            READWRITE(nBits);
-            READWRITE(nNonce);
-            if(this->nVersion > 3) {
-                READWRITE(nAccumulatorCheckpoint);
-                READWRITE(mapZerocoinSupply);
-                READWRITE(vMintDenominationsInBlock);
-            }
-        }
     }
 };
 
@@ -576,9 +545,6 @@ public:
 
     /** Find the last common block between this chain and a block index entry. */
     const CBlockIndex* FindFork(const CBlockIndex* pindex) const;
-
-    /** Check if new message signatures are active **/
-    bool NewSigsActive() { return Params().GetConsensus().IsMessSigV2(Height()); }
 };
 
 #endif // BITCOIN_CHAIN_H

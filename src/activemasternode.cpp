@@ -174,11 +174,11 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
+        fNewSigs = false;
     }
 
     CMasternodePing mnp(vin);
-    if (!mnp.Sign(keyMasternode, pubKeyMasternode, fNewSigs)) {
+    if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
         errorMessage = "Couldn't sign Masternode Ping";
         return false;
     }
@@ -257,11 +257,11 @@ bool CActiveMasternode::CreateBroadcast(CTxIn vin, CService service, CKey keyCol
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
+        fNewSigs = false;
     }
 
     CMasternodePing mnp(vin);
-    if (!mnp.Sign(keyMasternode, pubKeyMasternode, fNewSigs)) {
+    if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
         errorMessage = strprintf("Failed to sign ping, vin: %s", vin.ToString());
         LogPrintf("CActiveMasternode::CreateBroadcast() -  %s\n", errorMessage);
         mnb = CMasternodeBroadcast();
@@ -270,7 +270,7 @@ bool CActiveMasternode::CreateBroadcast(CTxIn vin, CService service, CKey keyCol
 
     mnb = CMasternodeBroadcast(service, vin, pubKeyCollateralAddress, pubKeyMasternode, PROTOCOL_VERSION);
     mnb.lastPing = mnp;
-    if (!mnb.Sign(keyCollateralAddress, pubKeyCollateralAddress, fNewSigs)) {
+    if (!mnb.Sign(keyCollateralAddress)) {
         errorMessage = strprintf("Failed to sign broadcast, vin: %s", vin.ToString());
         LogPrintf("CActiveMasternode::CreateBroadcast() - %s\n", errorMessage);
         mnb = CMasternodeBroadcast();

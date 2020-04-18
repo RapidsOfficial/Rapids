@@ -286,10 +286,6 @@ void DoConsensusVote(CTransaction& tx, int64_t nBlockHeight)
     ctx.txHash = tx.GetHash();
     ctx.nBlockHeight = nBlockHeight;
     bool fNewSigs = false;
-    {
-        LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
-    }
     if (!ctx.Sign(strMasterNodePrivKey, fNewSigs)) {
         LogPrintf("%s : Failed to sign consensus vote\n", __func__);
         return;

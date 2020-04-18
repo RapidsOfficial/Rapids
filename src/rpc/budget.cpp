@@ -278,7 +278,7 @@ UniValue mnbudgetvote(const UniValue& params, bool fHelp)
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
+        fNewSigs = false;
     }
 
     UniValue resultsObj(UniValue::VARR);
@@ -771,7 +771,7 @@ UniValue mnfinalbudget(const UniValue& params, bool fHelp)
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
+        fNewSigs = false;
     }
 
     if (strCommand == "vote-many") {
