@@ -41,7 +41,7 @@ RequestDialog::RequestDialog(QWidget *parent) :
     // Amount
     ui->labelSubtitleAmount->setText(tr("Amount"));
     setCssProperty(ui->labelSubtitleAmount, "text-title2-dialog");
-    ui->lineEditAmount->setPlaceholderText("0.00 PIV");
+    ui->lineEditAmount->setPlaceholderText("0.00 RPD");
     setCssEditLineDialog(ui->lineEditAmount, true);
     GUIUtil::setupAmountWidget(ui->lineEditAmount, this);
 
@@ -127,7 +127,7 @@ void RequestDialog::onNextClicked(){
         PairResult r(false);
         if (this->isPaymentRequest) {
             r = walletModel->getNewAddress(address, label);
-            title = "Request for " + BitcoinUnits::format(displayUnit, value, false, BitcoinUnits::separatorAlways) + " PIV";
+            title = "Request for " + BitcoinUnits::format(displayUnit, value, false, BitcoinUnits::separatorAlways) + " RPD";
         } else {
             r = walletModel->getNewStakingAddress(address, label);
             title = "Cold Staking Address Generated";

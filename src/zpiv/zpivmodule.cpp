@@ -158,7 +158,7 @@ namespace ZPIVModule {
         if (!fUseV1Params) {
             CKey key;
             if (!mint.GetKeyPair(key))
-                return error("%s: failed to set zPIV privkey mint.", __func__);
+                return error("%s: failed to set zRPD privkey mint.", __func__);
             spend.setPubKey(key.GetPubKey(), true);
 
             std::vector<unsigned char> vchSig;

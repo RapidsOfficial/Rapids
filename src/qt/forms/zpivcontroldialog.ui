@@ -17,7 +17,7 @@
             </size>
         </property>
         <property name="windowTitle">
-            <string>Select zPIV to Spend</string>
+            <string>Select zRPD to Spend</string>
         </property>
         <layout class="QVBoxLayout" name="verticalLayout_1" stretch="0">
             <property name="spacing">
@@ -318,12 +318,12 @@
                                         </column>
                                         <column>
                                             <property name="text">
-                                                <string notr="true">zPIV ID</string>
+                                                <string notr="true">zRPD ID</string>
                                             </property>
                                         </column>
                                         <column>
                                             <property name="text">
-                                                <string notr="true">zPIV Version</string>
+                                                <string notr="true">zRPD Version</string>
                                             </property>
                                         </column>
                                         <column>

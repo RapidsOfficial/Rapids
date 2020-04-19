@@ -30,7 +30,7 @@ CzPIVWallet::CzPIVWallet(CWallet* parent)
             hashSeed = Hash(seed.begin(), seed.end());
             if (wallet->AddDeterministicSeed(seed)) {
                 if (walletdb.EraseZPIVSeed_deprecated()) {
-                    LogPrintf("%s: Updated zPIV seed databasing\n", __func__);
+                    LogPrintf("%s: Updated zRPD seed databasing\n", __func__);
                     fFirstRun = false;
                 } else {
                     LogPrintf("%s: failed to remove old zpiv seed\n", __func__);

@@ -101,7 +101,7 @@
            <string notr="true">padding-left:30px;</string>
           </property>
           <property name="text">
-           <string>Select PIV Outputs to Spend</string>
+           <string>Select RPD Outputs to Spend</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -166,7 +166,7 @@
            <item>
             <widget class="QLabel" name="labelCoinControlAmount">
              <property name="text">
-              <string>0.00 PIV</string>
+              <string>0.00 RPD</string>
              </property>
             </widget>
            </item>
@@ -290,7 +290,7 @@ padding-right:4px;</string>
            <item>
             <widget class="QLabel" name="labelCoinControlFee">
              <property name="text">
-              <string>0.00 PIV</string>
+              <string>0.00 RPD</string>
              </property>
             </widget>
            </item>
@@ -751,7 +751,7 @@ padding-right:4px;</string>
            <item>
             <widget class="QLabel" name="labelCoinControlAfterFee">
              <property name="text">
-              <string>0.00 PIV</string>
+              <string>0.00 RPD</string>
              </property>
             </widget>
            </item>

@@ -35,7 +35,7 @@ ZPivControlDialog::ZPivControlDialog(QWidget *parent) :
     ui->frame->setProperty("cssClass", "container-dialog");
 
     // Title
-    ui->labelTitle->setText(tr("Select zPIV Denominations to Spend"));
+    ui->labelTitle->setText(tr("Select zRPD Denominations to Spend"));
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
 
 
@@ -150,9 +150,9 @@ void ZPivControlDialog::updateList()
             if(nConfirmations < nRequiredConfs)
                 strReason = strprintf("Needs %d more confirmations", nRequiredConfs - nConfirmations);
             else if (model->getEncryptionStatus() == WalletModel::EncryptionStatus::Locked)
-                strReason = "Your wallet is locked. Impossible to spend zPIV.";
+                strReason = "Your wallet is locked. Impossible to spend zRPD.";
             else if (!mint.isSeedCorrect)
-                strReason = "The zPIV seed used to mint this zPIV is not the same as currently hold in the wallet";
+                strReason = "The zRPD seed used to mint this zRPD is not the same as currently hold in the wallet";
             else
                 strReason = "Needs 1 more mint added to network";
 

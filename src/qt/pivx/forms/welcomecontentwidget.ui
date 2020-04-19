@@ -937,7 +937,7 @@
                      </property>
                      <property name="text">
                       <string>Welcome to
-PIVX Core Wallet</string>
+Rapids Wallet</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignCenter</set>

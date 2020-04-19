@@ -484,7 +484,7 @@ void MasterNodesWidget::onCreateMNClicked()
     }
 
     if (walletModel->getBalance() <= (COIN * 10000)) {
-        inform(tr("Not enough balance to create a masternode, 10,000 PIV required."));
+        inform(tr("Not enough balance to create a masternode, 10,000 RPD required."));
         return;
     }
     showHideOp(true);

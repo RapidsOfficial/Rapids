@@ -44,63 +44,63 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
     setCssProperty(ui->pushRight, "btn-check-right");
 
     /* Subtitle */
-    ui->labelSubtitle1->setText(tr("Minting zPIV anonymizes your PIV by removing any\ntransaction history, making transactions untraceable "));
+    ui->labelSubtitle1->setText(tr("Minting zRPD anonymizes your RPD by removing any\ntransaction history, making transactions untraceable "));
     setCssSubtitleScreen(ui->labelSubtitle1);
 
-    ui->labelSubtitle2->setText(tr("Mint new zPIV or convert back to PIV"));
+    ui->labelSubtitle2->setText(tr("Mint new zRPD or convert back to RPD"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
     setCssProperty(ui->labelSubtitleAmount, "text-title");
 
-    ui->lineEditAmount->setPlaceholderText("0.00 PIV ");
+    ui->lineEditAmount->setPlaceholderText("0.00 RPD ");
     ui->lineEditAmount->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     initCssEditLine(ui->lineEditAmount);
 
     /* Denom */
     ui->labelTitleDenom1->setText("Denom. with value 1:");
     setCssProperty(ui->labelTitleDenom1, "text-subtitle");
-    ui->labelValueDenom1->setText("0x1 = 0 zPIV");
+    ui->labelValueDenom1->setText("0x1 = 0 zRPD");
     setCssProperty(ui->labelValueDenom1, "text-body2");
 
     ui->labelTitleDenom5->setText("Denom. with value 5:");
     setCssProperty(ui->labelTitleDenom5, "text-subtitle");
-    ui->labelValueDenom5->setText("0x5 = 0 zPIV");
+    ui->labelValueDenom5->setText("0x5 = 0 zRPD");
     setCssProperty(ui->labelValueDenom5, "text-body2");
 
     ui->labelTitleDenom10->setText("Denom. with value 10:");
     setCssProperty(ui->labelTitleDenom10, "text-subtitle");
-    ui->labelValueDenom10->setText("0x10 = 0 zPIV");
+    ui->labelValueDenom10->setText("0x10 = 0 zRPD");
     setCssProperty(ui->labelValueDenom10, "text-body2");
 
     ui->labelTitleDenom50->setText("Denom. with value 50:");
     setCssProperty(ui->labelTitleDenom50, "text-subtitle");
-    ui->labelValueDenom50->setText("0x50 = 0 zPIV");
+    ui->labelValueDenom50->setText("0x50 = 0 zRPD");
     setCssProperty(ui->labelValueDenom50, "text-body2");
 
     ui->labelTitleDenom100->setText("Denom. with value 100:");
     setCssProperty(ui->labelTitleDenom100, "text-subtitle");
-    ui->labelValueDenom100->setText("0x100 = 0 zPIV");
+    ui->labelValueDenom100->setText("0x100 = 0 zRPD");
     setCssProperty(ui->labelValueDenom100, "text-body2");
 
     ui->labelTitleDenom500->setText("Denom. with value 500:");
     setCssProperty(ui->labelTitleDenom500, "text-subtitle");
-    ui->labelValueDenom500->setText("0x500 = 0 zPIV");
+    ui->labelValueDenom500->setText("0x500 = 0 zRPD");
     setCssProperty(ui->labelValueDenom500, "text-body2");
 
     ui->labelTitleDenom1000->setText("Denom. with value 1000:");
     setCssProperty(ui->labelTitleDenom1000, "text-subtitle");
-    ui->labelValueDenom1000->setText("0x1000 = 0 zPIV");
+    ui->labelValueDenom1000->setText("0x1000 = 0 zRPD");
     setCssProperty(ui->labelValueDenom1000, "text-body2");
 
     ui->labelTitleDenom5000->setText("Denom. with value 5000:");
     setCssProperty(ui->labelTitleDenom5000, "text-subtitle");
-    ui->labelValueDenom5000->setText("0x5000 = 0 zPIV");
+    ui->labelValueDenom5000->setText("0x5000 = 0 zRPD");
     setCssProperty(ui->labelValueDenom5000, "text-body2");
 
     ui->layoutDenom->setVisible(false);
 
     // List
-    ui->labelListHistory->setText(tr("Last zPIV Movements"));
+    ui->labelListHistory->setText(tr("Last zRPD Movements"));
     setCssProperty(ui->labelListHistory, "text-title");
 
     //ui->emptyContainer->setVisible(false);
@@ -111,21 +111,21 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
     // Buttons
     setCssBtnPrimary(ui->pushButtonSave);
 
-    // Only Convert to PIV enabled.
+    // Only Convert to RPD enabled.
     ui->containerViewPrivacyChecks->setVisible(false);
     onMintSelected(false);
 
-    ui->btnTotalzPIV->setTitleClassAndText("btn-title-grey", "Total 0 zPIV");
-    ui->btnTotalzPIV->setSubTitleClassAndText("text-subtitle", "Show denominations of zPIV owned.");
+    ui->btnTotalzPIV->setTitleClassAndText("btn-title-grey", "Total 0 zRPD");
+    ui->btnTotalzPIV->setSubTitleClassAndText("text-subtitle", "Show denominations of zRPD owned.");
     ui->btnTotalzPIV->setRightIconClass("ic-arrow");
 
     ui->btnCoinControl->setTitleClassAndText("btn-title-grey", "Coin Control");
-    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select PIV outputs to mint into zPIV.");
+    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select RPD outputs to mint into zRPD.");
 
     ui->btnRescanMints->setTitleClassAndText("btn-title-grey", "Rescan Mints");
     ui->btnRescanMints->setSubTitleClassAndText("text-subtitle", "Find mints in the blockchain.");
 
-    ui->btnResetZerocoin->setTitleClassAndText("btn-title-grey", "Reset Spent zPIV");
+    ui->btnResetZerocoin->setTitleClassAndText("btn-title-grey", "Reset Spent zRPD");
     ui->btnResetZerocoin->setSubTitleClassAndText("text-subtitle", "Reset zerocoin database.");
 
     connect(ui->btnTotalzPIV, &OptionButton::clicked, this, &PrivacyWidget::onTotalZpivClicked);
@@ -192,13 +192,13 @@ void PrivacyWidget::onMintSelected(bool isMint)
 {
     QString btnText;
     if (isMint) {
-        btnText = tr("Mint zPIV");
+        btnText = tr("Mint zRPD");
         ui->btnCoinControl->setVisible(true);
-        ui->labelSubtitleAmount->setText(tr("Enter amount of PIV to mint into zPIV"));
+        ui->labelSubtitleAmount->setText(tr("Enter amount of RPD to mint into zRPD"));
     } else {
-        btnText = tr("Convert back to PIV");
+        btnText = tr("Convert back to RPD");
         ui->btnCoinControl->setVisible(false);
-        ui->labelSubtitleAmount->setText(tr("Enter amount of zPIV to convert back into PIV"));
+        ui->labelSubtitleAmount->setText(tr("Enter amount of zRPD to convert back into RPD"));
     }
     ui->pushButtonSave->setText(btnText);
 }
@@ -237,7 +237,7 @@ void PrivacyWidget::onSendClicked()
         return;
 
     if (sporkManager.IsSporkActive(SPORK_16_ZEROCOIN_MAINTENANCE_MODE)) {
-        warn(tr("Zerocoin"), tr("zPIV is currently undergoing maintenance"));
+        warn(tr("Zerocoin"), tr("zRPD is currently undergoing maintenance"));
         return;
     }
 
@@ -246,7 +246,7 @@ void PrivacyWidget::onSendClicked()
 
     WalletModel::UnlockContext ctx(walletModel->requestUnlock());
     if (!ctx.isValid()) {
-        inform(tr("You need to unlock the wallet to be able to %1 zPIV").arg(isConvert ? tr("convert") : tr("mint")));
+        inform(tr("You need to unlock the wallet to be able to %1 zRPD").arg(isConvert ? tr("convert") : tr("mint")));
         return;
     }
 
@@ -278,7 +278,7 @@ void PrivacyWidget::mint(CAmount value)
         inform(tr(strError.data()));
     } else {
         // Mint succeed
-        inform(tr("zPIV minted successfully"));
+        inform(tr("zRPD minted successfully"));
         // clear
         ui->lineEditAmount->clear();
     }
@@ -297,7 +297,7 @@ void PrivacyWidget::spend(CAmount value)
         inform(receipt.GetStatusMessage().data());
     } else {
         // Spend succeed
-        inform(tr("zPIV converted back to PIV"));
+        inform(tr("zRPD converted back to RPD"));
         // clear
         ui->lineEditAmount->clear();
     }
@@ -317,7 +317,7 @@ void PrivacyWidget::onCoinControlClicked()
             coinControlDialog->exec();
             ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
         } else {
-            inform(tr("You don't have any PIV to select."));
+            inform(tr("You don't have any RPD to select."));
         }
     }
 }
@@ -334,7 +334,7 @@ void PrivacyWidget::onRescanMintsClicked()
 
 void PrivacyWidget::onResetZeroClicked()
 {
-    if (ask(tr("Reset Spent zPIV"),
+    if (ask(tr("Reset Spent zRPD"),
         tr("Your zerocoin spends are going to be scanned from the blockchain from scratch"))
     ) {
         std::string strResetMintResult = walletModel->resetSpentZerocoin();
@@ -396,7 +396,7 @@ void PrivacyWidget::updateDenomsSupply()
 
         strDenomStats = strUnconfirmed + QString::number(mapDenomBalances.at(denom)) + " x " +
                         QString::number(nCoins) + " = <b>" +
-                        QString::number(nSumPerCoin) + " zPIV </b>";
+                        QString::number(nSumPerCoin) + " zRPD </b>";
 
         switch (nCoins) {
             case libzerocoin::CoinDenomination::ZQ_ONE:

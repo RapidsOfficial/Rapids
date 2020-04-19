@@ -1333,7 +1333,7 @@
           <bool>false</bool>
          </property>
          <property name="text">
-          <string>Custom zPIV Backup Path:</string>
+          <string>Custom zRPD Backup Path:</string>
          </property>
         </widget>
        </item>
