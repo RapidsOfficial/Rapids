@@ -218,7 +218,65 @@ extern const char *REJECT;
  * @see https://bitcoin.org/en/developer-reference#sendheaders
  */
 extern const char *SENDHEADERS;
-
+/**
+ * The ix message transmits a single SwiftX transaction
+ */
+extern const char *IX;
+/**
+ * The ixlockvote message is used to reach consensus for SwiftX
+ * transaction locks
+ */
+extern const char *IXLOCKVOTE;
+/**
+ * The spork message is used to send spork values to connected
+ * peers
+ */
+extern const char *SPORK;
+/**
+ * The getsporks message is used to request spork data from connected peers
+ */
+extern const char *GETSPORKS;
+/**
+ * The mnbroadcast message is used to broadcast masternode startup data to connected peers
+ */
+extern const char *MNBROADCAST;
+/**
+ * The mnping message is used to ensure a masternode is still active
+ */
+extern const char *MNPING;
+/**
+ * The mnwinner message is used to relay and distribute consensus for masternode
+ * payout ordering
+ */
+extern const char *MNWINNER;
+/**
+ * The getmnwinners message is used to request winning masternode data from connected peers
+ */
+extern const char *GETMNWINNERS;
+/**
+ * The budgetproposal message is used to broadcast or relay budget proposal metadata to connected peers
+ */
+extern const char *BUDGETPROPOSAL;
+/**
+ * The budgetvote message is used to broadcast or relay budget proposal votes to connected peers
+ */
+extern const char *BUDGETVOTE;
+/**
+ * The budgetvotesync message is used to request budget vote data from connected peers
+ */
+extern const char *BUDGETVOTESYNC;
+/**
+ * The finalbudget message is used to broadcast or relay finalized budget metadata to connected peers
+ */
+extern const char *FINALBUDGET;
+/**
+ * The finalbudgetvote message is used to broadcast or relay finalized budget votes to connected peers
+ */
+extern const char *FINALBUDGETVOTE;
+/**
+ * The syncstatuscount message is used to track the layer 2 syncing process
+ */
+extern const char *SYNCSTATUSCOUNT;
 };
 
 /* Get a vector of all valid message types (see above) */

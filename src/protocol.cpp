@@ -38,6 +38,20 @@ const char *FILTERADD="filteradd";
 const char *FILTERCLEAR="filterclear";
 const char *REJECT="reject";
 const char *SENDHEADERS="sendheaders";
+const char *IX="ix";
+const char *IXLOCKVOTE="txlvote";
+const char *SPORK="spork";
+const char *GETSPORKS="getsporks";
+const char *MNBROADCAST="mnb";
+const char *MNPING="mnp";
+const char *MNWINNER="mnw";
+const char *GETMNWINNERS="mnget";
+const char *BUDGETPROPOSAL="mprop";
+const char *BUDGETVOTE="mvote";
+const char *BUDGETVOTESYNC="mnvs";
+const char *FINALBUDGET="fbs";
+const char *FINALBUDGETVOTE="fbvote";
+const char *SYNCSTATUSCOUNT="ssc";
 };
 
 static const char* ppszTypeName[] =
@@ -46,18 +60,18 @@ static const char* ppszTypeName[] =
     NetMsgType::TX,
     NetMsgType::BLOCK,
     "filtered block", // Should never occur
-    "tx lock request",
-    "tx lock vote",
-    "spork",
-    "mn winner",
-    "mn scan error",
-    "mn budget vote",
-    "mn budget proposal",
-    "mn budget finalized",
-    "mn budget finalized vote",
-    "mn quorum",
-    "mn announce",
-    "mn ping"
+    NetMsgType::IX,
+    NetMsgType::IXLOCKVOTE,
+    NetMsgType::SPORK,
+    NetMsgType::GETSPORKS,
+    NetMsgType::MNBROADCAST,
+    NetMsgType::MNPING,
+    NetMsgType::MNWINNER,
+    NetMsgType::GETMNWINNERS,
+    NetMsgType::BUDGETPROPOSAL,
+    NetMsgType::BUDGETVOTE,
+    NetMsgType::FINALBUDGET,
+    NetMsgType::FINALBUDGETVOTE
 };
 
 /** All known message types. Keep this in the same order as the list of
@@ -85,7 +99,21 @@ const static std::string allNetMessageTypes[] = {
     NetMsgType::FILTERADD,
     NetMsgType::FILTERCLEAR,
     NetMsgType::REJECT,
-    NetMsgType::SENDHEADERS
+    NetMsgType::SENDHEADERS,
+    NetMsgType::IX,
+    NetMsgType::IXLOCKVOTE,
+    NetMsgType::SPORK,
+    NetMsgType::GETSPORKS,
+    NetMsgType::MNBROADCAST,
+    NetMsgType::MNPING,
+    NetMsgType::MNWINNER,
+    NetMsgType::GETMNWINNERS,
+    NetMsgType::BUDGETPROPOSAL,
+    NetMsgType::BUDGETVOTE,
+    NetMsgType::BUDGETVOTESYNC,
+    NetMsgType::FINALBUDGET,
+    NetMsgType::FINALBUDGETVOTE,
+    NetMsgType::SYNCSTATUSCOUNT
 };
 const static std::vector<std::string> allNetMessageTypesVec(allNetMessageTypes, allNetMessageTypes+ARRAYLEN(allNetMessageTypes));
 

@@ -204,7 +204,7 @@ std::string CMasternodeSync::GetSyncStatus()
 
 void CMasternodeSync::ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
-    if (strCommand == "ssc") { //Sync status count
+    if (strCommand == NetMsgType::SYNCSTATUSCOUNT) { //Sync status count
         int nItemID;
         int nCount;
         vRecv >> nItemID >> nCount;
@@ -260,7 +260,7 @@ void CMasternodeSync::Process()
     if (tick++ % MASTERNODE_SYNC_TIMEOUT != 0) return;
 
     if (IsSynced()) {
-        /* 
+        /*
             Resync if we lose all masternodes from sleep/wake or failure to sync originally
         */
         if (mnodeman.CountEnabled() == 0) {
@@ -290,14 +290,14 @@ void CMasternodeSync::Process()
     for (CNode* pnode : vNodes) {
         if (isRegTestNet) {
             if (RequestedMasternodeAttempt <= 2) {
-                pnode->PushMessage("getsporks"); //get current network sporks
+                pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
             } else if (RequestedMasternodeAttempt < 4) {
                 mnodeman.DsegUpdate(pnode);
             } else if (RequestedMasternodeAttempt < 6) {
                 int nMnCount = mnodeman.CountEnabled();
-                pnode->PushMessage("mnget", nMnCount); //sync payees
+                pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
                 uint256 n;
-                pnode->PushMessage("mnvs", n); //sync masternode votes
+                pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
             } else {
                 RequestedMasternodeAssets = MASTERNODE_SYNC_FINISHED;
             }
@@ -310,7 +310,7 @@ void CMasternodeSync::Process()
             if (pnode->HasFulfilledRequest("getspork")) continue;
             pnode->FulfilledRequest("getspork");
 
-            pnode->PushMessage("getsporks"); //get current network sporks
+            pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
             if (RequestedMasternodeAttempt >= 2) GetNextAsset();
             RequestedMasternodeAttempt++;
 
@@ -377,7 +377,7 @@ void CMasternodeSync::Process()
                 if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return;
 
                 int nMnCount = mnodeman.CountEnabled();
-                pnode->PushMessage("mnget", nMnCount); //sync payees
+                pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
                 RequestedMasternodeAttempt++;
 
                 return;
@@ -386,10 +386,10 @@ void CMasternodeSync::Process()
 
         if (pnode->nVersion >= ActiveProtocol()) {
             if (RequestedMasternodeAssets == MASTERNODE_SYNC_BUDGET) {
-                
+
                 // We'll start rejecting votes if we accidentally get set as synced too soon
-                if (lastBudgetItem > 0 && lastBudgetItem < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) { 
-                    
+                if (lastBudgetItem > 0 && lastBudgetItem < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) {
+
                     // Hasn't received a new item in the last five seconds, so we'll move to the
                     GetNextAsset();
 
@@ -414,7 +414,7 @@ void CMasternodeSync::Process()
                 if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return;
 
                 uint256 n;
-                pnode->PushMessage("mnvs", n); //sync masternode votes
+                pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
                 RequestedMasternodeAttempt++;
 
                 return;

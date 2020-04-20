@@ -4204,7 +4204,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, CBlock* pblock, CDis
         //if we get this far, check if the prev block is our prev block, if not then request sync and return false
         BlockMap::iterator mi = mapBlockIndex.find(pblock->hashPrevBlock);
         if (mi == mapBlockIndex.end()) {
-            pfrom->PushMessage("getblocks", chainActive.GetLocator(), UINT256_ZERO);
+            pfrom->PushMessage(NetMsgType::GETBLOCKS, chainActive.GetLocator(), UINT256_ZERO);
             return false;
         }
     }
@@ -5091,7 +5091,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mapTxLockVote[inv.hash];
-                        pfrom->PushMessage("txlvote", ss);
+                        pfrom->PushMessage(NetMsgType::IXLOCKVOTE, ss);
                         pushed = true;
                     }
                 }
@@ -5100,7 +5100,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mapTxLockReq[inv.hash];
-                        pfrom->PushMessage("ix", ss);
+                        pfrom->PushMessage(NetMsgType::IX, ss);
                         pushed = true;
                     }
                 }
@@ -5109,7 +5109,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mapSporks[inv.hash];
-                        pfrom->PushMessage("spork", ss);
+                        pfrom->PushMessage(NetMsgType::SPORK, ss);
                         pushed = true;
                     }
                 }
@@ -5118,7 +5118,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << masternodePayments.mapMasternodePayeeVotes[inv.hash];
-                        pfrom->PushMessage("mnw", ss);
+                        pfrom->PushMessage(NetMsgType::MNWINNER, ss);
                         pushed = true;
                     }
                 }
@@ -5127,7 +5127,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenMasternodeBudgetVotes[inv.hash];
-                        pfrom->PushMessage("mvote", ss);
+                        pfrom->PushMessage(NetMsgType::BUDGETVOTE, ss);
                         pushed = true;
                     }
                 }
@@ -5137,7 +5137,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenMasternodeBudgetProposals[inv.hash];
-                        pfrom->PushMessage("mprop", ss);
+                        pfrom->PushMessage(NetMsgType::BUDGETPROPOSAL, ss);
                         pushed = true;
                     }
                 }
@@ -5147,7 +5147,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenFinalizedBudgetVotes[inv.hash];
-                        pfrom->PushMessage("fbvote", ss);
+                        pfrom->PushMessage(NetMsgType::FINALBUDGETVOTE, ss);
                         pushed = true;
                     }
                 }
@@ -5157,7 +5157,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << budget.mapSeenFinalizedBudgets[inv.hash];
-                        pfrom->PushMessage("fbs", ss);
+                        pfrom->PushMessage(NetMsgType::FINALBUDGET, ss);
                         pushed = true;
                     }
                 }
@@ -5167,7 +5167,7 @@ void static ProcessGetData(CNode* pfrom)
                         CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
                         ss.reserve(1000);
                         ss << mnodeman.mapSeenMasternodeBroadcast[inv.hash];
-                        pfrom->PushMessage("mnb", ss);
+                        pfrom->PushMessage(NetMsgType::MNBROADCAST, ss);
                         pushed = true;
                     }
                 }
@@ -5268,7 +5268,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
         if (fMissingSporks || !fRequestedSporksIDB){
             LogPrintf("asking peer for sporks\n");
-            pfrom->PushMessage("getsporks");
+            pfrom->PushMessage(NetMsgType::GETSPORKS);
             fRequestedSporksIDB = true;
         }
 
@@ -5905,9 +5905,9 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
     }
 
     else if (!(nLocalServices & NODE_BLOOM) &&
-             (strCommand == "filterload" ||
-                 strCommand == "filteradd" ||
-                 strCommand == "filterclear")) {
+             (strCommand == NetMsgType::FILTERLOAD ||
+                 strCommand == NetMsgType::FILTERADD ||
+                 strCommand == NetMsgType::FILTERCLEAR)) {
         LogPrintf("bloom message=%s\n", strCommand);
         LOCK(cs_main);
         Misbehaving(pfrom->GetId(), 100);
@@ -5981,13 +5981,27 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             LogPrint(BCLog::NET, "Unparseable reject message received\n");
         }
     } else {
-        //probably one the extensions
-        mnodeman.ProcessMessage(pfrom, strCommand, vRecv);
-        budget.ProcessMessage(pfrom, strCommand, vRecv);
-        masternodePayments.ProcessMessageMasternodePayments(pfrom, strCommand, vRecv);
-        ProcessMessageSwiftTX(pfrom, strCommand, vRecv);
-        sporkManager.ProcessSpork(pfrom, strCommand, vRecv);
-        masternodeSync.ProcessMessage(pfrom, strCommand, vRecv);
+        bool found = false;
+        const std::vector<std::string> &allMessages = getAllNetMessageTypes();
+        for (const std::string msg : allMessages) {
+            if(msg == strCommand) {
+                found = true;
+                break;
+            }
+        }
+
+        if (found) {
+            //probably one the extensions
+            mnodeman.ProcessMessage(pfrom, strCommand, vRecv);
+            budget.ProcessMessage(pfrom, strCommand, vRecv);
+            masternodePayments.ProcessMessageMasternodePayments(pfrom, strCommand, vRecv);
+            ProcessMessageSwiftTX(pfrom, strCommand, vRecv);
+            sporkManager.ProcessSpork(pfrom, strCommand, vRecv);
+            masternodeSync.ProcessMessage(pfrom, strCommand, vRecv);
+        } else {
+            // Ignore unknown commands for extensibility
+            LogPrint(BCLog::NET, "Unknown command \"%s\" from peer=%d\n", SanitizeString(strCommand), pfrom->id);
+        }
     }
 
 
