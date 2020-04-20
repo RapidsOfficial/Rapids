@@ -85,7 +85,6 @@ void CSporkManager::ProcessSpork(CNode* pfrom, std::string& strCommand, CDataStr
     }
 
     if (strCommand == NetMsgType::SPORK) {
-
         CSporkMessage spork;
         vRecv >> spork;
 
