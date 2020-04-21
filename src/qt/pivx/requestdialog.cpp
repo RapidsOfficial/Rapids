@@ -118,7 +118,7 @@ void RequestDialog::accept()
         PairResult r(false);
         if (this->isPaymentRequest) {
             r = walletModel->getNewAddress(address, label);
-            title = tr("Request for ") + BitcoinUnits::format(displayUnit, value, false, BitcoinUnits::separatorAlways) + " PIV";
+            title = tr("Request for ") + BitcoinUnits::format(displayUnit, value, false, BitcoinUnits::separatorAlways) + " " + QString(CURRENCY_UNIT.c_str());
         } else {
             r = walletModel->getNewStakingAddress(address, label);
             title = tr("Cold Staking Address Generated");

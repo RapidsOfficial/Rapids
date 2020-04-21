@@ -125,7 +125,6 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     setCssProperty(ui->chartContainer, "container-chart");
     setCssProperty(ui->pushImgEmptyChart, "img-empty-staking-on");
 
-
     setCssBtnSecondary(ui->btnHowTo);
 
     setCssProperty(ui->labelEmptyChart, "text-empty");
@@ -634,8 +633,8 @@ void DashboardWidget::onChartRefreshed()
         axisX->clear();
     }
     // init sets
-    set0 = new QBarSet("PIV");
-    set1 = new QBarSet("zPIV");
+    set0 = new QBarSet(CURRENCY_UNIT.c_str());
+    set1 = new QBarSet("z" + QString(CURRENCY_UNIT.c_str()));
     set0->setColor(QColor(92,75,125));
     set1->setColor(QColor(176,136,255));
 

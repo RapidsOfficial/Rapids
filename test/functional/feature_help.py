@@ -18,7 +18,7 @@ class HelpTest(PivxTestFramework):
         # Don't start the node
 
     def run_test(self):
-        self.log.info("Start pivx with -h for help text")
+        self.log.info("Start pivx with -? for help text")
         self.nodes[0].start(extra_args=['-?'], stderr=subprocess.PIPE, stdout=subprocess.PIPE)
         # Node should exit immediately and output help to stdout.
         ret_code = self.nodes[0].process.wait(timeout=1)
