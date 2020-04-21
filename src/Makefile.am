@@ -78,6 +78,7 @@ endif
 
 LIBSAPLING_H = \
   sapling/sapling.h \
+  bech32.h \
   sapling/key_io_sapling.h \
   sapling/util.h \
   sapling/prf.h \
@@ -96,7 +97,6 @@ BITCOIN_CORE_H = \
   arith_uint256.h \
   amount.h \
   base58.h \
-  bech32.h \
   bip38.h \
   bloom.h \
   blocksignature.h \
@@ -413,7 +413,6 @@ libbitcoin_common_a_SOURCES = \
   allocators.cpp \
   amount.cpp \
   base58.cpp \
-  bech32.cpp \
   bip38.cpp \
   chainparams.cpp \
   consensus/upgrades.cpp \
@@ -563,6 +562,7 @@ pivx_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 
 # sapling protocol primitives #
 libsapling_a_SOURCES = \
+  bech32.cpp \
   sapling/util.cpp \
   sapling/key_io_sapling.cpp \
   sapling/prf.cpp \

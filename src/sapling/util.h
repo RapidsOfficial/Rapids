@@ -20,7 +20,6 @@ void initZKSNARKS();
 
 // Sapling network dir
 const boost::filesystem::path &ZC_GetParamsDir();
-bool TryCreateDirectory(const boost::filesystem::path& p);
 
 std::vector<unsigned char> convertIntToVectorLE(const uint64_t val_int);
 std::vector<bool> convertBytesVectorToVector(const std::vector<unsigned char>& bytes);
