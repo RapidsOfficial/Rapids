@@ -6,6 +6,8 @@
 #ifndef ZC_SAPLING_H_
 #define ZC_SAPLING_H_
 
+#include <array>
+
 #define ZC_NUM_JS_INPUTS 2
 #define ZC_NUM_JS_OUTPUTS 2
 #define INCREMENTAL_MERKLE_TREE_DEPTH 29
