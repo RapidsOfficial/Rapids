@@ -3,9 +3,11 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "qt/pivx/mnmodel.h"
+
+#include "activemasternode.h"
 #include "masternode-sync.h"
 #include "masternodeman.h"
-#include "activemasternode.h"
+#include "net.h"        // for validateMasternodeIP
 #include "sync.h"
 #include "uint256.h"
 #include "wallet/wallet.h"
@@ -184,4 +186,9 @@ bool MNModel::isMNCollateralMature(QString mnAlias)
 bool MNModel::isMNsNetworkSynced()
 {
     return masternodeSync.IsSynced();
+}
+
+bool MNModel::validateMNIP(const QString& addrStr)
+{
+    return validateMasternodeIP(addrStr.toStdString());
 }
