@@ -31,11 +31,7 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
            ui->labelNumber3,
            ui->labelNumber4,
            ui->labelNumber5,
-           ui->labelNumber6,
-           ui->labelNumber7,
-           ui->labelNumber8,
-           ui->labelNumber9,
-           ui->labelNumber10
+           ui->labelNumber6
         }, "container-number-faq");
 
     setCssProperty({
@@ -44,11 +40,7 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
               ui->labelSubtitle3,
               ui->labelSubtitle4,
               ui->labelSubtitle5,
-              ui->labelSubtitle6,
-              ui->labelSubtitle7,
-              ui->labelSubtitle8,
-              ui->labelSubtitle9,
-              ui->labelSubtitle10
+              ui->labelSubtitle6
             }, "text-subtitle-faq");
 
 
@@ -58,11 +50,7 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
               ui->labelContent3,
               ui->labelContent4,
               ui->labelContent5,
-              ui->labelContent6,
-              ui->labelContent7,
-              ui->labelContent8,
-              ui->labelContent9,
-              ui->labelContent10
+              ui->labelContent6
             }, "text-content-faq");
 
 
@@ -72,16 +60,10 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
               ui->pushButtonFaq3,
               ui->pushButtonFaq4,
               ui->pushButtonFaq5,
-              ui->pushButtonFaq6,
-              ui->pushButtonFaq7,
-              ui->pushButtonFaq8,
-              ui->pushButtonFaq9,
-              ui->pushButtonFaq10
+              ui->pushButtonFaq6
             }, "btn-faq-options");
 
-    ui->labelContent3->setOpenExternalLinks(true);
-    ui->labelContent5->setOpenExternalLinks(true);
-    ui->labelContent8->setOpenExternalLinks(true);
+    ui->labelContent4->setOpenExternalLinks(true);
 
     // Exit button
     setCssProperty(ui->pushButtonExit, "btn-faq-exit");
@@ -98,10 +80,6 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
     connect(ui->pushButtonFaq4, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq4Clicked);
     connect(ui->pushButtonFaq5, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq5Clicked);
     connect(ui->pushButtonFaq6, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq6Clicked);
-    connect(ui->pushButtonFaq7, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq7Clicked);
-    connect(ui->pushButtonFaq8, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq8Clicked);
-    connect(ui->pushButtonFaq9, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq9Clicked);
-    connect(ui->pushButtonFaq10, &QPushButton::clicked, this, &SettingsFaqWidget::onFaq10Clicked);
 
     if (parent)
         connect(parent, &PIVXGUI::windowResizeEvent, this, &SettingsFaqWidget::windowResizeEvent);
@@ -153,26 +131,6 @@ void SettingsFaqWidget::onFaq6Clicked()
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq6->y());
 }
 
-void SettingsFaqWidget::onFaq7Clicked()
-{
-    ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq7->y());
-}
-
-void SettingsFaqWidget::onFaq8Clicked()
-{
-    ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq8->y());
-}
-
-void SettingsFaqWidget::onFaq9Clicked()
-{
-    ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq9->y());
-}
-
-void SettingsFaqWidget::onFaq10Clicked()
-{
-    ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq10->y());
-}
-
 void SettingsFaqWidget::windowResizeEvent(QResizeEvent* event)
 {
     QWidget* w = qobject_cast<QWidget*>(parent());
@@ -188,11 +146,7 @@ std::vector<QPushButton*> SettingsFaqWidget::getButtons()
             ui->pushButtonFaq3,
             ui->pushButtonFaq4,
             ui->pushButtonFaq5,
-            ui->pushButtonFaq6,
-            ui->pushButtonFaq7,
-            ui->pushButtonFaq8,
-            ui->pushButtonFaq9,
-            ui->pushButtonFaq10
+            ui->pushButtonFaq6
     };
 }
 
