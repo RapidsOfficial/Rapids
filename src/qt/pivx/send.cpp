@@ -113,11 +113,6 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     connect(ui->pushButtonClear, &QPushButton::clicked, [this](){clearAll(true);});
 }
 
-void SendWidget::refreshView()
-{
-    refreshAmounts();
-}
-
 void SendWidget::refreshAmounts()
 {
     CAmount total = 0;
@@ -184,8 +179,8 @@ void SendWidget::loadWalletModel()
             setCustomFeeSelected(true, nCustomFee);
         }
 
-        // Refresh view
-        refreshView();
+        // Refresh
+        refreshAmounts();
 
         // TODO: This only happen when the coin control features are modified in other screen, check before do this if the wallet has another screen modifying it.
         // Coin Control

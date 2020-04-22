@@ -65,7 +65,6 @@ private Q_SLOTS:
     void onAddEntryClicked();
     void clearEntries();
     void clearAll(bool fClearSettings = true);
-    void refreshView();
     void onCheckBoxChanged();
     void onContactMultiClicked();
     void onDeleteClicked();
