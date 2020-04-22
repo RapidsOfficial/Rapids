@@ -130,12 +130,12 @@
         <translation>Адреса получения</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Это ваши PIVX-адреса для отправки платежей. Перед отправкой монет всегда проверяйте сумму и адрес получателя.</translation>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Это ваши RPD-адреса для отправки платежей. Перед отправкой монет всегда проверяйте сумму и адрес получателя.</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Это ваши PIVX-адреса для получения платежей. Для каждой транзакции рекомендуется использовать новый адрес получения.</translation>
+        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Это ваши RPD-адреса для получения платежей. Для каждой транзакции рекомендуется использовать новый адрес получения.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -247,8 +247,8 @@
         <translation>Например, Иван Петров</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Ввести адрес PIVX</translation>
+        <source>Enter a RPD address</source>
+        <translation>Ввести адрес RPD</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -375,16 +375,16 @@ for staking</source>
         <translation>ОТМЕНА</translation>
     </message>
     <message>
-        <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
-        <translation>PIVX сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши PIVX от кражи с использованием вредоносного ПО.</translation>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <translation>RPD сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши RPD от кражи с использованием вредоносного ПО.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Вы действительно хотите зашифровать свой кошелек?</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
-        <translation>Внимание: если вы зашифруете свой кошелёк и потеряете от него пароль, то вы &lt;b&gt;ПОТЕРЯЕТЕ ВСЕ СВОИ PIV&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
+        <translation>Внимание: если вы зашифруете свой кошелёк и потеряете от него пароль, то вы &lt;b&gt;ПОТЕРЯЕТЕ ВСЕ СВОИ RPD&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -484,8 +484,8 @@ for staking</source>
         <translation>Сбережения</translation>
     </message>
     <message>
-        <source>0,00 PIV</source>
-        <translation>0.00 PIV</translation>
+        <source>0,00 RPD</source>
+        <translation>0.00 RPD</translation>
     </message>
     <message>
         <source>address</source>
@@ -562,8 +562,8 @@ for staking</source>
         <translation>Нажать кнопку</translation>
     </message>
     <message>
-        <source>0.00 PIV</source>
-        <translation>0.00 PIV </translation>
+        <source>0.00 RPD</source>
+        <translation>0.00 RPD </translation>
     </message>
     <message>
         <source>0</source>
@@ -773,8 +773,8 @@ for staking</source>
         <translation>Нажать кнопку</translation>
     </message>
     <message>
-        <source>PIV:</source>
-        <translation>PIV:</translation>
+        <source>RPD:</source>
+        <translation>RPD:</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -894,7 +894,7 @@ for staking</source>
     <message>
         <source>You can delegate your PIVs and let a hot node (24/7 online node)
 stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation>Вы можете делегировать свои PIV и позволить горячему узлу (онлайн-узел 24/7 )
+        <translation>Вы можете делегировать свои RPD и позволить горячему узлу (онлайн-узел 24/7 )
 запускать стекинг от вашего имени, при этом удерживая ключи оффлайн в безопасном месте.</translation>
     </message>
     <message>
@@ -902,8 +902,8 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Добавить адрес владельца</translation>
     </message>
     <message>
-        <source>Delegate or Accept PIV delegation</source>
-        <translation>Делегировать или принять делегирование PIV</translation>
+        <source>Delegate or Accept RPD delegation</source>
+        <translation>Делегировать или принять делегирование RPD</translation>
     </message>
     <message>
         <source>Delegate</source>
@@ -946,8 +946,8 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Неверная запись</translation>
     </message>
     <message>
-        <source>Invalid entry, minimum delegable amount is 10 PIV</source>
-        <translation>Неверная запись, минимальная делегируемая сумма равна 10 PIV</translation>
+        <source>Invalid entry, minimum delegable amount is 10 RPD</source>
+        <translation>Неверная запись, минимальная делегируемая сумма равна 10 RPD</translation>
     </message>
     <message>
         <source>Owner address invalid</source>
@@ -985,8 +985,8 @@ Do you wish to proceed?</source>
         <translation>Монеты делегированы</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
-        <translation>У вас нет PIV.</translation>
+        <source>You don't have any RPD to select.</source>
+        <translation>У вас нет RPD.</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -1117,12 +1117,12 @@ address</source>
         <translation>Статистика стекинга</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
+        <source>zRPD</source>
+        <translation>zRPD</translation>
     </message>
     <message>
         <source>Sort by</source>
@@ -1153,8 +1153,8 @@ address</source>
         <translation>Вы можете просмотреть историю вашего аккаунта</translation>
     </message>
     <message>
-        <source>Amount of PIV and zPIV staked.</source>
-        <translation>Сумма добытых PIV и zPIV</translation>
+        <source>Amount of RPD and zRPD staked.</source>
+        <translation>Сумма добытых RPD и zRPD</translation>
     </message>
     <message>
         <source>All</source>
@@ -1209,8 +1209,8 @@ address</source>
         <translation>Пока что нет транзакций</translation>
     </message>
     <message>
-        <source>How to get PIV or zPIV</source>
-        <translation>Как получить PIV или zPIV</translation>
+        <source>How to get RPD or zRPD</source>
+        <translation>Как получить RPD или zRPD</translation>
     </message>
     <message>
         <source>You can verify the staking activity in the status bar at the top right of the wallet.
@@ -1368,8 +1368,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Изменить адрес отправки</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid PIVX address.</source>
-        <translation>Введенный адрес "%1" не является PIVX адресом.</translation>
+        <source>The entered address "%1" is not a valid RPD address.</source>
+        <translation>Введенный адрес "%1" не является RPD адресом.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1464,16 +1464,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>версия</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-бит)</translation>
     </message>
     <message>
-        <source>About PIVX Core</source>
-        <translation>О PIVX Core</translation>
+        <source>About Rapids</source>
+        <translation>О Rapids</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1523,16 +1523,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Добро пожаловать</translation>
     </message>
     <message>
-        <source>Welcome to PIVX Core.</source>
-        <translation>Добро пожаловать в PIVX Core.</translation>
+        <source>Welcome to Rapids.</source>
+        <translation>Добро пожаловать в Rapids.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
-        <translation>Поскольку это первый запуск программы, вы можете выбрать, где будут храниться данные PIVX Core.</translation>
+        <source>As this is the first time the program is launched, you can choose where Rapids will store its data.</source>
+        <translation>Поскольку это первый запуск программы, вы можете выбрать, где будут храниться данные Rapids.</translation>
     </message>
     <message>
-        <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>PIVX Core загрузит и сохранит копию цепочки блоков PIVX. Каталог будет занимать около %1GB и со временем размер будет увеличиваться. Кроме того, в этом каталоге будет храниться кошелек.</translation>
+        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Rapids загрузит и сохранит копию цепочки блоков RPD. Каталог будет занимать около %1GB и со временем размер будет увеличиваться. Кроме того, в этом каталоге будет храниться кошелек.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1551,8 +1551,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>ХОРОШО</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1663,8 +1663,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Создать новый контроллер мастерноды</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 10.000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Для того, чтобы создать мастерноду PIVX, вам необходимо внести в сеть 10.000 PIV (эти монеты остаются вашими и никогда не покинут вас).&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt; Вы можете отключить узел и разблокировать монеты в любое время.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Для того, чтобы создать мастерноду RPD, вам необходимо внести в сеть 10.000 RPD (эти монеты остаются вашими и никогда не покинут вас).&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt; Вы можете отключить узел и разблокировать монеты в любое время.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Make sure you have this amount of coins.</source>
@@ -1675,8 +1675,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Установить имя мастерноды</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;На новый пустой адрес в вашем кошельке&lt;/p&gt;&lt;p&gt; будет сделана транзакция в 10 000 PIV. &lt;/p&gt;&lt;p&gt;Адрес отмечен под именем мастерноды.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;На новый пустой адрес в вашем кошельке&lt;/p&gt;&lt;p&gt; будет сделана транзакция в 10 000 RPD. &lt;/p&gt;&lt;p&gt;Адрес отмечен под именем мастерноды.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Set Master Node’s IP and port</source>
@@ -1908,8 +1908,8 @@ Are you sure?</source>
         <translation>Файла masternode.cong не существует</translation>
     </message>
     <message>
-        <source>Not enough balance to create a masternode, 10,000 PIV required.</source>
-        <translation>Недостаточно баланса для создания мастерноды. Требуется 10 000 PIV.</translation>
+        <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
+        <translation>Недостаточно баланса для создания мастерноды. Требуется 10 000 RPD.</translation>
     </message>
     <message>
         <source>Error creating masternode</source>
@@ -2090,8 +2090,8 @@ Are you sure?</source>
         <translation>Отключив проведение неподтвержденных изменений все изменения о транзакции &lt;br/&gt;не будут использованы пока транзакция не получит хотя бы одно подтверждение.&lt;br/&gt;Также это влияет на расчет вашего баланса.</translation>
     </message>
     <message>
-        <source>Automatically open the PIVX client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Автоматически открыть клиентский порт PIVX через роутер. Ваш роутер должен поддерживать UPnP, а сам сервис должен быть включен.</translation>
+        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Автоматически открыть клиентский порт RPD через роутер. Ваш роутер должен поддерживать UPnP, а сам сервис должен быть включен.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -2110,12 +2110,12 @@ Are you sure?</source>
         <translation>Эксперт</translation>
     </message>
     <message>
-        <source>Automatically start PIVX after logging in to the system.</source>
-        <translation>Автоматически запускать PIVX после входа в систему.</translation>
+        <source>Automatically start RPD after logging in to the system.</source>
+        <translation>Автоматически запускать RPD после входа в систему.</translation>
     </message>
     <message>
-        <source>&amp;Start PIVX on system login</source>
-        <translation>&amp;Запускать PIVX при входе в систему</translation>
+        <source>&amp;Start RPD on system login</source>
+        <translation>&amp;Запускать RPD при входе в систему</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -2142,8 +2142,8 @@ Are you sure?</source>
         <translation>&amp;Сеть</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting PIVX.</source>
-        <translation>Здесь можно выставить язык интерфейса. Изменения вступят в силу после перезапуска PIVX.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
+        <translation>Здесь можно выставить язык интерфейса. Изменения вступят в силу после перезапуска RPD.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -2156,44 +2156,44 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Карта порта, использующего &amp;UPnP</translation>
     </message>
     <message>
-        <source>Enable automatic minting of PIV units to zPIV</source>
-        <translation>Невозможно автоматически отчеканить единицы PIV для zPIV</translation>
+        <source>Enable automatic minting of RPD units to zRPD</source>
+        <translation>Невозможно автоматически отчеканить единицы RPD для zRPD</translation>
     </message>
     <message>
-        <source>Enable zPIV Automint</source>
-        <translation>Невозможно авточеканка  zPIV</translation>
+        <source>Enable zRPD Automint</source>
+        <translation>Невозможно авточеканка  zRPD</translation>
     </message>
     <message>
-        <source>Enable automatic zPIV minting from specific addresses</source>
-        <translation>Включить автоматическое чеканку zPIV с определенных адресов</translation>
+        <source>Enable automatic zRPD minting from specific addresses</source>
+        <translation>Включить автоматическое чеканку zRPD с определенных адресов</translation>
     </message>
     <message>
         <source>Enable Automint Addresses</source>
         <translation>Включить адреса с автоматической чеканкой</translation>
     </message>
     <message>
-        <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
-        <translation>Процент приходящих PIV, которые автоматически конвертируются в zPIV благодаря Zerocoin протоколу (min: 10%)</translation>
+        <source>Percentage of incoming RPD which get automatically converted to zRPD via Zerocoin Protocol (min: 10%)</source>
+        <translation>Процент приходящих RPD, которые автоматически конвертируются в zRPD благодаря Zerocoin протоколу (min: 10%)</translation>
     </message>
     <message>
-        <source>Percentage of autominted zPIV</source>
-        <translation>Процент  авточеканненых zPIV</translation>
+        <source>Percentage of autominted zRPD</source>
+        <translation>Процент  авточеканненых zRPD</translation>
     </message>
     <message>
-        <source>Wait with automatic conversion to Zerocoin until enough PIV for this denomination is available</source>
-        <translation>Подождите с автоматическим преобразованием в Zerocoin, пока не будет достаточно PIV для этой номинации.</translation>
+        <source>Wait with automatic conversion to Zerocoin until enough RPD for this denomination is available</source>
+        <translation>Подождите с автоматическим преобразованием в Zerocoin, пока не будет достаточно RPD для этой номинации.</translation>
     </message>
     <message>
-        <source>Preferred Automint zPIV Denomination</source>
-        <translation>Предпочитаемый номинал авточеканной  монеты  zPIV</translation>
+        <source>Preferred Automint zRPD Denomination</source>
+        <translation>Предпочитаемый номинал авточеканной  монеты  zRPD</translation>
     </message>
     <message>
         <source>Stake split threshold:</source>
         <translation>Порог разделения доли:</translation>
     </message>
     <message>
-        <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
-        <translation>Подключиться к сети PIVX через SOCKS5 прокси.</translation>
+        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
+        <translation>Подключиться к сети RPD через SOCKS5 прокси.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -2339,8 +2339,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -2367,8 +2367,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Завершить работу</translation>
     </message>
     <message>
-        <source>PIVX Core client</source>
-        <translation>Клиент PIVX Core</translation>
+        <source>Rapids client</source>
+        <translation>Клиент Rapids</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2411,8 +2411,8 @@ Address: %4
 </translation>
     </message>
     <message>
-        <source>A fatal error occurred. PIVX can no longer continue safely and will quit.</source>
-        <translation>Произошла фатальная ошибка. PIVX больше не может безопасно продолжать работу и завершит работу.</translation>
+        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
+        <translation>Произошла фатальная ошибка. RPD больше не может безопасно продолжать работу и завершит работу.</translation>
     </message>
 </context>
 <context>
@@ -2449,8 +2449,8 @@ Address: %4
         <translation>Не удалось запустить pivx: обработчик click-to-pay </translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>
-        <translation>URI не интерпретируется! Причиной этому может быть неверный PIVX адрес или неверные параметеры URI.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
+        <translation>URI не интерпретируется! Причиной этому может быть неверный RPD адрес или неверные параметеры URI.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -2563,13 +2563,13 @@ Address: %4
         <translation>Чеканить</translation>
     </message>
     <message>
-        <source>Minting zPIV anonymizes your PIV by removing any
+        <source>Minting zRPD anonymizes your RPD by removing any
 transaction history, making transactions untraceable </source>
-        <translation>Чеканка zPIV анонимизирует ваш PIV, удаляя любую историю транзакций и делая транзакции недоступными для отслеживания.</translation>
+        <translation>Чеканка zRPD анонимизирует ваш RPD, удаляя любую историю транзакций и делая транзакции недоступными для отслеживания.</translation>
     </message>
     <message>
-        <source>Mint new zPIV or convert back to PIV</source>
-        <translation>Чеканить новые zPIV или конвертировать обратно в PIV</translation>
+        <source>Mint new zRPD or convert back to RPD</source>
+        <translation>Чеканить новые zRPD или конвертировать обратно в RPD</translation>
     </message>
     <message>
         <source>Last Zerocoin Movements</source>
@@ -2580,32 +2580,32 @@ transaction history, making transactions untraceable </source>
         <translation>Пока что нет транзакций</translation>
     </message>
     <message>
-        <source>Mint zPIV</source>
-        <translation>Чеканить zPIV</translation>
+        <source>Mint zRPD</source>
+        <translation>Чеканить zRPD</translation>
     </message>
     <message>
-        <source>Enter amount of PIV to mint into zPIV</source>
-        <translation>Введите количество PIV для чеканки в zPIV</translation>
+        <source>Enter amount of RPD to mint into zRPD</source>
+        <translation>Введите количество RPD для чеканки в zRPD</translation>
     </message>
     <message>
-        <source>Convert back to PIV</source>
-        <translation>Конвертировать обратно в PIV</translation>
+        <source>Convert back to RPD</source>
+        <translation>Конвертировать обратно в RPD</translation>
     </message>
     <message>
-        <source>Enter amount of zPIV to convert back into PIV</source>
-        <translation>Введите количество zPIV для чеканки в PIV </translation>
+        <source>Enter amount of zRPD to convert back into RPD</source>
+        <translation>Введите количество zRPD для чеканки в RPD </translation>
     </message>
     <message>
         <source>Zerocoin</source>
         <translation>Zerocoin </translation>
     </message>
     <message>
-        <source>zPIV is currently undergoing maintenance</source>
-        <translation>zPIV в настоящее время проходит техническое обслуживание</translation>
+        <source>zRPD is currently undergoing maintenance</source>
+        <translation>zRPD в настоящее время проходит техническое обслуживание</translation>
     </message>
     <message>
-        <source>You need to unlock the wallet to be able to %1 zPIV</source>
-        <translation>Вам нужно разблокировать кошелек, чтобы иметь возможность %1 zPIV</translation>
+        <source>You need to unlock the wallet to be able to %1 zRPD</source>
+        <translation>Вам нужно разблокировать кошелек, чтобы иметь возможность %1 zRPD</translation>
     </message>
     <message>
         <source>convert</source>
@@ -2620,16 +2620,16 @@ transaction history, making transactions untraceable </source>
         <translation>Неверное значение</translation>
     </message>
     <message>
-        <source>zPIV minted successfully</source>
-        <translation>zPIV отчеканились успешно</translation>
+        <source>zRPD minted successfully</source>
+        <translation>zRPD отчеканились успешно</translation>
     </message>
     <message>
-        <source>zPIV converted back to PIV</source>
-        <translation>ZPIV конвертированы обратно в PIV</translation>
+        <source>zRPD converted back to RPD</source>
+        <translation>ZPIV конвертированы обратно в RPD</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
-        <translation>У вас нет PIV.</translation>
+        <source>You don't have any RPD to select.</source>
+        <translation>У вас нет RPD.</translation>
     </message>
     <message>
         <source>Rescan Mints</source>
@@ -2728,8 +2728,8 @@ transaction history, making transactions untraceable </source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <source>Enter a PIVX address (e.g. %1)</source>
-        <translation>Введите адрес PIVX (например %1)</translation>
+        <source>Enter a RPD address (e.g. %1)</source>
+        <translation>Введите адрес RPD (например %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2776,8 +2776,8 @@ transaction history, making transactions untraceable </source>
         <translation>%1 мс</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" does not exist.</source>
@@ -2796,8 +2796,8 @@ transaction history, making transactions untraceable </source>
         <translation>Ошибка чтения файла конфигурации мастерноды: %1</translation>
     </message>
     <message>
-        <source>PIVX Core didn't yet exit safely...</source>
-        <translation>PIVX Core еще не вышел безопасно...</translation>
+        <source>Rapids didn't yet exit safely...</source>
+        <translation>Rapids еще не вышел безопасно...</translation>
     </message>
 </context>
 <context>
@@ -2871,8 +2871,8 @@ transaction history, making transactions untraceable </source>
         <translation>Блокчейн</translation>
     </message>
     <message>
-        <source>Open the PIVX debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Открыть протокол отладки PIVX. Это может занять некоторе время, если файл протокола очень большой.</translation>
+        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Открыть протокол отладки RPD. Это может занять некоторе время, если файл протокола очень большой.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
@@ -3015,8 +3015,8 @@ transaction history, making transactions untraceable </source>
         <translation>Пользовательский путь резервного копирования:</translation>
     </message>
     <message>
-        <source>Custom zPIV Backup Path:</source>
-        <translation>Пользовательский путь резервного копирования zPIV:</translation>
+        <source>Custom zRPD Backup Path:</source>
+        <translation>Пользовательский путь резервного копирования zRPD:</translation>
     </message>
     <message>
         <source>Custom Backups Threshold:</source>
@@ -3096,8 +3096,8 @@ transaction history, making transactions untraceable </source>
         <translation>Вывод:</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Добро пожаловать в окружение PIVX RPC.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Добро пожаловать в окружение RPD RPC.</translation>
     </message>
     <message>
         <source>&amp;Disconnect Node</source>
@@ -3266,8 +3266,8 @@ transaction history, making transactions untraceable </source>
         <translation>Получить</translation>
     </message>
     <message>
-        <source>Scan the QR code or copy the address to receive PIV.</source>
-        <translation>Сканировать QR-код или копировать адрес для получения PIV.</translation>
+        <source>Scan the QR code or copy the address to receive RPD.</source>
+        <translation>Сканировать QR-код или копировать адрес для получения RPD.</translation>
     </message>
     <message>
         <source>No address </source>
@@ -3368,8 +3368,8 @@ transaction history, making transactions untraceable </source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -3396,8 +3396,8 @@ transaction history, making transactions untraceable </source>
         <translation>ЗАПРОС</translation>
     </message>
     <message>
-        <source>Instead of only sharing a PIVX address, you can create a Payment Request message which bundles up more information than is contained in just a PIVX address.</source>
-        <translation>Вместо того, чтобы просто делиться адресом PIVX, вы можете создать сообщение с запросом платежа, в котором содержится больше информации, чем содержится в адресе PIVX.</translation>
+        <source>Instead of only sharing a RPD address, you can create a Payment Request message which bundles up more information than is contained in just a RPD address.</source>
+        <translation>Вместо того, чтобы просто делиться адресом RPD, вы можете создать сообщение с запросом платежа, в котором содержится больше информации, чем содержится в адресе RPD.</translation>
     </message>
     <message>
         <source>Label</source>
@@ -3463,8 +3463,8 @@ transaction history, making transactions untraceable </source>
         <translation>Смена адреса</translation>
     </message>
     <message>
-        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" PIVX address</source>
-        <translation>Остаточная часть значения, полученного от значения входов минус выходов, идет на «изменение» адреса PIVX</translation>
+        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" RPD address</source>
+        <translation>Остаточная часть значения, полученного от значения входов минус выходов, идет на «изменение» адреса RPD</translation>
     </message>
 </context>
 <context>
@@ -3556,16 +3556,16 @@ transaction history, making transactions untraceable </source>
         <translation>Отправить</translation>
     </message>
     <message>
-        <source>You can transfer public coins (PIV) or private coins (zPIV)</source>
-        <translation>Вы можете отправить публичные монеты (PIV) или конфиденциальные монеты (zPIV)</translation>
+        <source>You can transfer public coins (RPD) or private coins (zRPD)</source>
+        <translation>Вы можете отправить публичные монеты (RPD) или конфиденциальные монеты (zRPD)</translation>
     </message>
     <message>
         <source>Select coin type to spend</source>
         <translation>Выберите тип монеты для трат</translation>
     </message>
     <message>
-        <source>Enter a PIVX address or contact label</source>
-        <translation>Введите адрес PIVX или метку контакта</translation>
+        <source>Enter a RPD address or contact label</source>
+        <translation>Введите адрес RPD или метку контакта</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3592,12 +3592,12 @@ transaction history, making transactions untraceable </source>
         <translation>Общая сумма к отправке</translation>
     </message>
     <message>
-        <source>Send PIV</source>
-        <translation>Отправить PIV</translation>
+        <source>Send RPD</source>
+        <translation>Отправить RPD</translation>
     </message>
     <message>
-        <source>Send zPIV</source>
-        <translation>Отправить zPIV</translation>
+        <source>Send zRPD</source>
+        <translation>Отправить zRPD</translation>
     </message>
     <message>
         <source>Total remaining from the selected UTXO</source>
@@ -3652,8 +3652,8 @@ These coins will no longer be cold-staked.</source>
         <translation>Потратить Zerocoin</translation>
     </message>
     <message>
-        <source>zPIV is currently undergoing maintenance.</source>
-        <translation>В настоящее время zPIV проходит техническое обслуживание.</translation>
+        <source>zRPD is currently undergoing maintenance.</source>
+        <translation>В настоящее время zRPD проходит техническое обслуживание.</translation>
     </message>
     <message>
         <source>Coin control mint not found</source>
@@ -3672,12 +3672,12 @@ These coins will no longer be cold-staked.</source>
 %2</translation>
     </message>
     <message>
-        <source>zPIV transaction sent!</source>
-        <translation>Транзакция zPIV отправлена!</translation>
+        <source>zRPD transaction sent!</source>
+        <translation>Транзакция zRPD отправлена!</translation>
     </message>
     <message>
-        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
-        <translation>Для версии 1 zPIV требуется уровень безопасности 100, который можно успешно тратить.</translation>
+        <source>Version 1 zRPD require a security level of 100 to successfully spend.</source>
+        <translation>Для версии 1 zRPD требуется уровень безопасности 100, который можно успешно тратить.</translation>
     </message>
     <message>
         <source>Too much inputs (</source>
@@ -3716,12 +3716,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Сбор по выбору %1</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
-        <translation>У вас нет PIV.</translation>
+        <source>You don't have any RPD to select.</source>
+        <translation>У вас нет RPD.</translation>
     </message>
     <message>
-        <source>You don't have any zPIV in your balance to select.</source>
-        <translation>На вашем балансе нет zPIV для выбора.</translation>
+        <source>You don't have any zRPD in your balance to select.</source>
+        <translation>На вашем балансе нет zRPD для выбора.</translation>
     </message>
     <message>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
@@ -3897,8 +3897,8 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Расшифровать ключ</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Ввести адрес PIVX</translation>
+        <source>Enter a RPD address</source>
+        <translation>Ввести адрес RPD</translation>
     </message>
     <message>
         <source>Add address</source>
@@ -4026,8 +4026,8 @@ Verify that you have installed a predetermined text editor.</source>
 Убедитесь, что вы установили заранее установленный текстовый редактор.</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Добро пожаловать в окружение PIVX RPC.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Добро пожаловать в окружение RPD RPC.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
@@ -4120,34 +4120,34 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>Нажать кнопку</translation>
     </message>
     <message>
-        <source>1) What is PIVX?</source>
-        <translation>1) Что такое PIVX?</translation>
+        <source>1) What is RPD?</source>
+        <translation>1) Что такое RPD?</translation>
     </message>
     <message>
-        <source>2) Why are my PIV unspendable?</source>
-        <translation>2) Почему мои PIV невозможно потратить?</translation>
+        <source>2) Why are my RPD unspendable?</source>
+        <translation>2) Почему мои RPD невозможно потратить?</translation>
     </message>
     <message>
-        <source>3) PIVX privacy? What is Zerocoin (zPIV)?</source>
-        <translation>3) Конфиденциальность PIVX? Что такое Zerocoin (zPIV)?</translation>
+        <source>3) RPD privacy? What is Zerocoin (zRPD)?</source>
+        <translation>3) Конфиденциальность RPD? Что такое Zerocoin (zRPD)?</translation>
     </message>
     <message>
-        <source>4) Why are my zPIV unspendable?</source>
-        <translation>4) Почему мои zPIV невозможно потратить?</translation>
+        <source>4) Why are my zRPD unspendable?</source>
+        <translation>4) Почему мои zRPD невозможно потратить?</translation>
     </message>
     <message>
         <source>5) Why did my wallet convert the balance
-    into zPIV automatically?</source>
+    into zRPD automatically?</source>
         <translation>5) Почему мой кошелек автоматически конвертировал баланс
-в zPIV?</translation>
+в zRPD?</translation>
     </message>
     <message>
-        <source>6) How do I receive PIV/zPIV?</source>
-        <translation>6) Как я могу получить PIV/zPIV?</translation>
+        <source>6) How do I receive RPD/zRPD?</source>
+        <translation>6) Как я могу получить RPD/zRPD?</translation>
     </message>
     <message>
-        <source>7) How do I stake PIV/zPIV?</source>
-        <translation>7) Как запустить стекинг PIV/zPIV?</translation>
+        <source>7) How do I stake RPD/zRPD?</source>
+        <translation>7) Как запустить стекинг RPD/zRPD?</translation>
     </message>
     <message>
         <source>8) Where I should go if I need support?</source>
@@ -4166,33 +4166,33 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>1</translation>
     </message>
     <message>
-        <source>What is PIVX?</source>
-        <translation>Что такое PIVX?</translation>
+        <source>What is RPD?</source>
+        <translation>Что такое RPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           PIVX is a form of digital online money using blockchain technology
+                           RPD is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  PIVX incorporates market leading security &amp;
+                           zero fees.  RPD incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
-                           to implement ZeroCoin(zPIV) and Zerocoin staking.
+                           to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           PIVX utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of PIVX to participate in earning block rewards
+                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of RPD to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-PIVX - это форма цифровых онлайн-денег, использующая технологию блокчейн,
+RPD - это форма цифровых онлайн-денег, использующая технологию блокчейн,
 которая может быть легко переведена по всему миру, мгновенно и с практически
-нулевой комиссией. PIVX включает в себя лидирующую на рынке защиту и
+нулевой комиссией. RPD включает в себя лидирующую на рынке защиту и
 «конфиденциальность», а также является первой PoS криптовалютой (Proof of Stake),
-в которой реализована система стекинга ZeroCoin (zPIV) и Zerocoin.
+в которой реализована система стекинга ZeroCoin (zRPD) и Zerocoin.
 &lt;/p&gt;&lt;p align="justify"&gt;
-PIVX использует консенсус PoS (Proof of Stake), позволяя всем владельцам PIVX участвовать в заработке вознаграждений
+RPD использует консенсус PoS (Proof of Stake), позволяя всем владельцам RPD участвовать в заработке вознаграждений
 при этом обеспечивая безопасность сети с помощью кошельков с полными узлами, а также позволяет
 запускать мастерноды для создания предложений и голосования по ним.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
@@ -4202,25 +4202,25 @@ PIVX использует консенсус PoS (Proof of Stake), позвол�
         <translation>2</translation>
     </message>
     <message>
-        <source>Why are my PIV unspendable?</source>
-        <translation>Почему мои PIV невозможно потратить?</translation>
+        <source>Why are my RPD unspendable?</source>
+        <translation>Почему мои RPD невозможно потратить?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Newly received PIVX requires 6 confirmations on the network
+                           Newly received RPD requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Your PIVX wallet also needs to be completely synchronized
+                           Your RPD wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-Недавно полученным PIVX требуется 6 подтверждений в сети,
+Недавно полученным RPD требуется 6 подтверждений в сети,
 чтобы получить право быть расходуемыми. Это может занять примерно 6 минут.
 &lt;/p&gt;&lt;p align="justify"&gt;
-Ваш кошелек PIVX также должен быть полностью синхронизирован,
+Ваш кошелек RPD также должен быть полностью синхронизирован,
 чтобы видеть баланс и расходовать его в сети.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
@@ -4229,26 +4229,26 @@ PIVX использует консенсус PoS (Proof of Stake), позвол�
         <translation>3</translation>
     </message>
     <message>
-        <source>PIVX privacy? What is Zerocoin (zPIV)?</source>
-        <translation>Конфиденциальность PIVX? Что такое Zerocoin (zPIV)?</translation>
+        <source>RPD privacy? What is Zerocoin (zRPD)?</source>
+        <translation>Конфиденциальность RPD? Что такое Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zPIV is an optional privacy-centric method of coin mixing on the
-                           PIVX blockchain. Basically all your transactions cannot be tracked
+                           zRPD is an optional privacy-centric method of coin mixing on the
+                           RPD blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt;
-                           "PIVX Zerocoin (zPIV) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt;
+                           "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-zPIV - это необязательная конфиденциальность, которая возможна при микшировании монет
-в блокчейне PIVX. По сути,ни одна транзакция не может быть отслежена
+zRPD - это необязательная конфиденциальность, которая возможна при микшировании монет
+в блокчейне RPD. По сути,ни одна транзакция не может быть отслежена
 ни в одном из обозревателей блоков. Вы можете прочитать больше о технических характеристиках в
-&lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt;
-"Техническом документе PIVX Zerocoin (zPIV)"&lt;/a&gt;.
+&lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt;
+"Техническом документе RPD Zerocoin (zRPD)"&lt;/a&gt;.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
     <message>
@@ -4256,20 +4256,20 @@ zPIV - это необязательная конфиденциальность,
         <translation>4</translation>
     </message>
     <message>
-        <source>Why are my zPIV unspendable?</source>
-        <translation>Почему мои zPIV невозможно потратить?</translation>
+        <source>Why are my zRPD unspendable?</source>
+        <translation>Почему мои zRPD невозможно потратить?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           After minting, zPIV will require 20 confirmations as well as 1
+                           After minting, zRPD will require 20 confirmations as well as 1
                            additional mint of the same denomination on the network to
                            become eligible for spending.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-После чеканки zPIV потребуется 20 подтверждений, а также 1
+После чеканки zRPD потребуется 20 подтверждений, а также 1
 дополнительная чеканка того же номинала в сети,
 чтобы получить право быть расходуемым.
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
@@ -4279,40 +4279,40 @@ zPIV - это необязательная конфиденциальность,
         <translation>5</translation>
     </message>
     <message>
-        <source>Why did my wallet convert the balance into zPIV automatically?</source>
-        <translation>Почему мой кошелек автоматически конвертировал баланс в zPIV?</translation>
+        <source>Why did my wallet convert the balance into zRPD automatically?</source>
+        <translation>Почему мой кошелек автоматически конвертировал баланс в zRPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           By default the PIVX wallet will convert 10% of your entire PIV
-                           balance to zPIV to assist the network. If you do not wish to
-                           stake zPIV or take advantage of the privacy benefit it brings,
-                           you can disable the automatic minting in your PIVX wallet by
-                           going to Settings-&gt;Options and deselecting “Enable zPIV Automint”.
-                           If you are not making use of the PIVX-QT or GUI you can simply open
+                           By default the RPD wallet will convert 10% of your entire RPD
+                           balance to zRPD to assist the network. If you do not wish to
+                           stake zRPD or take advantage of the privacy benefit it brings,
+                           you can disable the automatic minting in your RPD wallet by
+                           going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
+                           If you are not making use of the RPD-QT or GUI you can simply open
                            your pivx.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           You can read more about zPIV in the
-                           &lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt; "PIVX Zerocoin (zPIV) Technical Paper"&lt;/a&gt;.
-                           If you would like to keep and stake your zPIV, please read the "How do I stake"
+                           You can read more about zRPD in the
+                           &lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt; "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           If you would like to keep and stake your zRPD, please read the "How do I stake"
                            section of the FAQ below.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-По умолчанию кошелек PIVX преобразует 10% всего вашего баланса PIV
-в zPIV для помощи сети. Если вы не хотите
-запускать стекинг zPIV или пользоваться преимуществами конфиденциальности, которые она приносит,
-вы можете отключить автоматическую чеканку в своем PIVX-кошельке,
-перейдя в «Настройки-&gt; Параметры» и отменив выбор «Включить авточекунку zPIV».
-Если вы не используете PIVX-QT или GUI, вы можете просто открыть
+По умолчанию кошелек RPD преобразует 10% всего вашего баланса RPD
+в zRPD для помощи сети. Если вы не хотите
+запускать стекинг zRPD или пользоваться преимуществами конфиденциальности, которые она приносит,
+вы можете отключить автоматическую чеканку в своем RPD-кошельке,
+перейдя в «Настройки-&gt; Параметры» и отменив выбор «Включить авточекунку zRPD».
+Если вы не используете RPD-QT или GUI, вы можете просто открыть
 свой файл pivx.conf и добавить &lt;i&gt;enablezeromint=0&lt;/i&gt; без кавычек и
-перезапустите свой кошелек для отключения  автоматической чеканки. &lt;/p&gt; &lt;/p&gt;&lt;p align="justify"&gt; Вы можете прочитать больше о zPIV в
-&lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt;
- "Технический документ PIVX Zerocoin (zPIV)"&lt;/a&gt;.
-Если вы хотите продолжать стекинг zPIV, ознакомьтесь с разделом" Как осуществить стекинг"
+перезапустите свой кошелек для отключения  автоматической чеканки. &lt;/p&gt; &lt;/p&gt;&lt;p align="justify"&gt; Вы можете прочитать больше о zRPD в
+&lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt;
+ "Технический документ RPD Zerocoin (zRPD)"&lt;/a&gt;.
+Если вы хотите продолжать стекинг zRPD, ознакомьтесь с разделом" Как осуществить стекинг"
 в разделе часто задаваемых вопросов ниже.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
@@ -4321,24 +4321,24 @@ zPIV - это необязательная конфиденциальность,
         <translation>6</translation>
     </message>
     <message>
-        <source>How do I receive PIV/zPIV?</source>
-        <translation>Как мне получить PIV/zPIV?</translation>
+        <source>How do I receive RPD/zRPD?</source>
+        <translation>Как мне получить RPD/zRPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zPIV can be spent and sent to any PIVX address. The receiver will
-                           receive standard PIVX but the origin of the PIVX is anonymized by the zPIV Protocol.
+                           zRPD can be spent and sent to any RPD address. The receiver will
+                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           If you want more zPIV you will need to mint your balance in the “Privacy” tab.
+                           If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-zPIV можно потратить и отправить на любой адрес PIVX. Получатель получит
-стандартный PIVX, но оригинальное происхождение PIVX анонимизируется протоколом zPIV.
+zRPD можно потратить и отправить на любой адрес RPD. Получатель получит
+стандартный RPD, но оригинальное происхождение RPD анонимизируется протоколом zRPD.
 &lt;/p&gt;&lt;p align="justify"&gt;
-Если вы хотите больше zPIV, вам нужно будет чеканить свой баланс на вкладке «Конфиденциальность».
+Если вы хотите больше zRPD, вам нужно будет чеканить свой баланс на вкладке «Конфиденциальность».
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
     <message>
@@ -4346,18 +4346,18 @@ zPIV можно потратить и отправить на любой адр�
         <translation>7</translation>
     </message>
     <message>
-        <source>How do I stake PIV/zPIV?</source>
-        <translation>Как мне запустить стекинг PIV/zPIV?</translation>
+        <source>How do I stake RPD/zRPD?</source>
+        <translation>Как мне запустить стекинг RPD/zRPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           To Stake PIVX:
+                           To Stake RPD:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           You must have a balance of PIVX with a minimum of 101 confirmations.
+                           You must have a balance of RPD with a minimum of 101 confirmations.
                            &lt;li&gt;
                            Your wallet must stay online and be unlocked for anonymization and staking purposes.
                            &lt;li&gt;
@@ -4366,12 +4366,12 @@ zPIV можно потратить и отправить на любой адр�
                            You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state "Staking Enabled" to indicate it is staking.  Using the command line interface (pivx-cli); the command &lt;i&gt;getstakingstatus&lt;/i&gt; will confirm that staking is active.
                            &lt;/li&gt;&lt;/ol&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           To Stake zPIV:
+                           To Stake zRPD:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           Your newly minted or existing zPIV balance must have a minimum of 200 confirmations.
+                           Your newly minted or existing zRPD balance must have a minimum of 200 confirmations.
                            &lt;li&gt;
                            Your wallet must stay online and be unlocked for anonymization and staking purposes.
                            Staking should now be enabled.
@@ -4379,17 +4379,17 @@ zPIV можно потратить и отправить на любой адр�
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
-&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Чтобы запустить стекинг PIVX:
+&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Чтобы запустить стекинг RPD:
 &lt;/p&gt;&lt;p align="justify"&gt;
  &lt;ol&gt;&lt;li&gt;убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию.
 &lt;li&gt;
-Вы должны иметь баланс PIVX с минимумом в 101 подтверждение
+Вы должны иметь баланс RPD с минимумом в 101 подтверждение
 &lt;li&gt;
 Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга.
 &lt;li&gt;
 После того, как все эти шаги будут выполнены, следует включить стекинг.
 &lt;li&gt;
-Вы можете увидеть статус стекинга в кошельке, наведя курсор на соответствующий значок в строке в левом верхнем углу интерфейса кошелька. Там будет подсвечен значек, в котором будет указано «Стекинг включен», а это значит, что делает стекинг запущен. Использование интерфейса командной строки (pivx-cli); команда getstakingstatus подтвердит, что стекинг активен. Чтобы запустить стекинг zPIV: убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию. Ваш недавно отчеканенный или существующий баланс zPIV должен иметь, как минимум, 200 подтверждений. Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга. Стекинг будет включен.</translation>
+Вы можете увидеть статус стекинга в кошельке, наведя курсор на соответствующий значок в строке в левом верхнем углу интерфейса кошелька. Там будет подсвечен значек, в котором будет указано «Стекинг включен», а это значит, что делает стекинг запущен. Использование интерфейса командной строки (pivx-cli); команда getstakingstatus подтвердит, что стекинг активен. Чтобы запустить стекинг zRPD: убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию. Ваш недавно отчеканенный или существующий баланс zRPD должен иметь, как минимум, 200 подтверждений. Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга. Стекинг будет включен.</translation>
     </message>
     <message>
         <source>8</source>
@@ -4403,20 +4403,20 @@ zPIV можно потратить и отправить на любой адр�
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://Discord.PIVX.com'&gt;
+                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
                            #support in our Discord&lt;/a&gt;.
                            If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://PIVX.FreshDesk.com'&gt;
+                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
                            our Freshdesk support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
 У нас есть каналы поддержки в большинстве наших официальных групп, например
-&lt;a style='color: #b088ff' href='https://Discord.PIVX.com'&gt;
+&lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
 #support в нашем Discord&lt;/a&gt;.
 Если вы хотите задать вопрос, одним из способов это сделать может послужить
-&lt;a style='color: #b088ff' href='https://PIVX.FreshDesk.com'&gt;
+&lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
 наш сайт поддержки Freshdesk&lt;/a&gt;.
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
@@ -4431,8 +4431,8 @@ zPIV можно потратить и отправить на любой адр�
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           A masternode is a computer running a full node PIVX core wallet with a
-                           requirement of 10,000 PIV secured collateral to provide extra services
+                           A masternode is a computer running a full node RPD core wallet with a
+                           requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
                            &lt;/p&gt;&lt;p align="justify"&gt;
@@ -4454,17 +4454,17 @@ zPIV можно потратить и отправить на любой адр�
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in PIVX Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the PIVX network&lt;/li&gt;
+                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
                            Requirements:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;10,000 PIV per single Masternode instance&lt;/li&gt;
+                           &lt;li&gt;10,000 RPD per single Masternode instance&lt;/li&gt;
                            &lt;li&gt;Must be stored in a core wallet&lt;/li&gt;
                            &lt;li&gt;Need dedicated IP address&lt;/li&gt;
                            &lt;li&gt;Masternode wallet to remain online&lt;/li&gt;
@@ -4472,7 +4472,7 @@ zPIV можно потратить и отправить на любой адр�
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
-Мастернода - это компьютер, на котором запущен базовый кошелек PIVX с полным узлом и для которого требуется обеспечение в 10000 PIV для обеспечения дополнительных услуг сети и, в свою очередь, регулярного получения части вознаграждения за блок. Эти услуги в себя включают:
+Мастернода - это компьютер, на котором запущен базовый кошелек RPD с полным узлом и для которого требуется обеспечение в 10000 RPD для обеспечения дополнительных услуг сети и, в свою очередь, регулярного получения части вознаграждения за блок. Эти услуги в себя включают:
 
 Мгновенные транзакции (SwiftX)
 Децентрализованное управление (Голосование по предложениям)
@@ -4484,14 +4484,14 @@ zPIV можно потратить и отправить на любой адр�
 
 Привилегии мастерноды:
 
-Участие в управлении PIVX
+Участие в управлении RPD
 Получение вознаграждений за мастерноду
 Товарные опционы для будущей продажи
-Помощь в защите сети PIVX
+Помощь в защите сети RPD
 
 Требования:
 
-10 000 PIV для каждой мастерноды
+10 000 RPD для каждой мастерноды
 Должен храниться в основном кошельке
 Требуется выделенный IP-адрес
 Кошелек мастерноды должен оставаться в сети</translation>
@@ -4505,8 +4505,8 @@ zPIV можно потратить и отправить на любой адр�
         <translation>Что такое контролер мастерноды?</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 PIV collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Кошелек контролера мастерноды - это то место, где может находиться залог в 10 000 PIV во время настройки удаленного контролера мастерноды. Это кошелек, который может активировать удаленный кошелек / кошельки мастерноды и позволит вам сохранять ваши сопутствующие монеты в автономном режиме, пока удаленная мастернода остается в сети.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Кошелек контролера мастерноды - это то место, где может находиться залог в 10 000 RPD во время настройки удаленного контролера мастерноды. Это кошелек, который может активировать удаленный кошелек / кошельки мастерноды и позволит вам сохранять ваши сопутствующие монеты в автономном режиме, пока удаленная мастернода остается в сети.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Frequently Asked Questions</source>
@@ -4675,8 +4675,8 @@ zPIV можно потратить и отправить на любой адр�
         <translation>Количество потоков проверки скрипта</translation>
     </message>
     <message>
-        <source>Start PIVX on system login</source>
-        <translation>Запускать PIVX при входе в систему</translation>
+        <source>Start RPD on system login</source>
+        <translation>Запускать RPD при входе в систему</translation>
     </message>
     <message>
         <source>Minimize to the tray instead of the taskbar</source>
@@ -4763,8 +4763,8 @@ Are you sure?
         <translation>Флажок</translation>
     </message>
     <message>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other PIVX addresses after it matures.</source>
-        <translation>MultiSend позволяет автоматически отправлять до 100% ваших вознаграждений от стекинга или мастернод в список других адресов PIVX после его созревания.</translation>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other RPD addresses after it matures.</source>
+        <translation>MultiSend позволяет автоматически отправлять до 100% ваших вознаграждений от стекинга или мастернод в список других адресов RPD после его созревания.</translation>
     </message>
     <message>
         <source>Active</source>
@@ -4874,8 +4874,8 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Подписать/верифицировать сообщение</translation>
     </message>
     <message>
-        <source>Enter a PIVX address or contact label</source>
-        <translation>Введите адрес PIVX или метку контакта</translation>
+        <source>Enter a RPD address or contact label</source>
+        <translation>Введите адрес RPD или метку контакта</translation>
     </message>
     <message>
         <source>Add address</source>
@@ -5235,8 +5235,8 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>ЧаВо</translation>
     </message>
     <message>
-        <source>About PIVX</source>
-        <translation>О PIVX</translation>
+        <source>About RPD</source>
+        <translation>О RPD</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -5302,8 +5302,8 @@ Are you sure?
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>PIVX Core выключается...</translation>
+        <source>Rapids is shutting down...</source>
+        <translation>Rapids выключается...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -5332,15 +5332,15 @@ Are you sure?
         <translation>Загрузка...</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -5355,8 +5355,8 @@ Are you sure?
         <translation>Разработчики Dash Core</translation>
     </message>
     <message>
-        <source>The PIVX Core developers</source>
-        <translation>Разработчики PIVX Core</translation>
+        <source>The Rapids developers</source>
+        <translation>Разработчики Rapids</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -5393,12 +5393,12 @@ Are you sure?
         <translation>Вид</translation>
     </message>
     <message>
-        <source>480.0685 PIV</source>
-        <translation>480.0685 PIV</translation>
+        <source>480.0685 RPD</source>
+        <translation>480.0685 RPD</translation>
     </message>
     <message>
-        <source>1,000 zPIV</source>
-        <translation>1 000 zPIV</translation>
+        <source>1,000 zRPD</source>
+        <translation>1 000 zRPD</translation>
     </message>
     <message>
         <source>Available</source>
@@ -5409,24 +5409,24 @@ Are you sure?
         <translation>В ожидании</translation>
     </message>
     <message>
-        <source>6.943 PIV</source>
-        <translation>6.943 PIV</translation>
+        <source>6.943 RPD</source>
+        <translation>6.943 RPD</translation>
     </message>
     <message>
         <source>Immature</source>
         <translation>Незрелый</translation>
     </message>
     <message>
-        <source>10 PIV</source>
-        <translation>10 PIV</translation>
+        <source>10 RPD</source>
+        <translation>10 RPD</translation>
     </message>
     <message>
-        <source>60 zPIV</source>
-        <translation>60 zPIV</translation>
+        <source>60 zRPD</source>
+        <translation>60 zRPD</translation>
     </message>
     <message>
-        <source>10 zPIV</source>
-        <translation>10 zPIV</translation>
+        <source>10 zRPD</source>
+        <translation>10 zRPD</translation>
     </message>
     <message>
         <source>Wallet Unlocked for staking</source>
@@ -5710,20 +5710,20 @@ Are you sure?
         <translation>Получено через обфускацию</translation>
     </message>
     <message>
-        <source>PIV Stake</source>
-        <translation>Доля PIV</translation>
+        <source>RPD Stake</source>
+        <translation>Доля RPD</translation>
     </message>
     <message>
-        <source>zPIV Stake</source>
-        <translation>Доля zPIV</translation>
+        <source>zRPD Stake</source>
+        <translation>Доля zRPD</translation>
     </message>
     <message>
-        <source>PIV Cold Stake</source>
-        <translation>Холодный стекинг PIV</translation>
+        <source>RPD Cold Stake</source>
+        <translation>Холодный стекинг RPD</translation>
     </message>
     <message>
-        <source>PIV Stake in behalf of</source>
-        <translation>Стекинг PIV от имени</translation>
+        <source>RPD Stake in behalf of</source>
+        <translation>Стекинг RPD от имени</translation>
     </message>
     <message>
         <source>Stake delegation</source>
@@ -5746,24 +5746,24 @@ Are you sure?
         <translation>Обфускация Создание конфессий</translation>
     </message>
     <message>
-        <source>Converted PIV to zPIV</source>
-        <translation>Преобразованный PIV в zPIV</translation>
+        <source>Converted RPD to zRPD</source>
+        <translation>Преобразованный RPD в zRPD</translation>
     </message>
     <message>
-        <source>Spent zPIV</source>
-        <translation>потраченный zPIV</translation>
+        <source>Spent zRPD</source>
+        <translation>потраченный zRPD</translation>
     </message>
     <message>
-        <source>Received PIV from zPIV</source>
-        <translation>Полученный PIV от zPIV</translation>
+        <source>Received RPD from zRPD</source>
+        <translation>Полученный RPD от zRPD</translation>
     </message>
     <message>
-        <source>Minted Change as zPIV from zPIV Spend</source>
-        <translation>созданная  замена  zPIV из потраенного zPIV </translation>
+        <source>Minted Change as zRPD from zRPD Spend</source>
+        <translation>созданная  замена  zRPD из потраенного zRPD </translation>
     </message>
     <message>
-        <source>Converted zPIV to PIV</source>
-        <translation>Преобразованный zPIV to PIV</translation>
+        <source>Converted zRPD to RPD</source>
+        <translation>Преобразованный zRPD to RPD</translation>
     </message>
     <message>
         <source>Sent to</source>
@@ -5857,8 +5857,8 @@ Are you sure?
         <translation>Общая сумма</translation>
     </message>
     <message>
-        <source>2 PIV</source>
-        <translation>2 PIV</translation>
+        <source>2 RPD</source>
+        <translation>2 RPD</translation>
     </message>
     <message>
         <source>Coin inputs:</source>
@@ -5881,8 +5881,8 @@ Are you sure?
         <translation>Комиссия:</translation>
     </message>
     <message>
-        <source>0.0001 PIV</source>
-        <translation>0.0001 PIV</translation>
+        <source>0.0001 RPD</source>
+        <translation>0.0001 RPD</translation>
     </message>
     <message>
         <source>Change address:</source>
@@ -5968,8 +5968,8 @@ Are you sure?
         <translation>18/05/18 </translation>
     </message>
     <message>
-        <source>+0.000585 PIV</source>
-        <translation>+0.000585 PIV</translation>
+        <source>+0.000585 RPD</source>
+        <translation>+0.000585 RPD</translation>
     </message>
 </context>
 <context>
@@ -5979,8 +5979,8 @@ Are you sure?
         <translation>Отправить Монеты</translation>
     </message>
     <message>
-        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 PIV.</source>
-        <translation>SwiftX не поддерживает отправку значений, которые еще высоки. В настоящее время транзакции ограничены %1 PIV.</translation>
+        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 RPD.</source>
+        <translation>SwiftX не поддерживает отправку значений, которые еще высоки. В настоящее время транзакции ограничены %1 RPD.</translation>
     </message>
 </context>
 <context>
@@ -6054,25 +6054,25 @@ Are you sure?
     </message>
     <message>
         <source>Welcome to
-PIVX Core Wallet</source>
+Rapids Wallet</source>
         <translation>Добро пожаловать
-в основной кошелек PIVX</translation>
+в основной кошелек RPD</translation>
     </message>
     <message>
-        <source>PIVX is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
-        <translation>PIVX - самая инновационная в мире технология на основе блокчейна Proof of Stake. Разработана командой опытных разработчиков и криптографов.</translation>
+        <source>RPD is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <translation>RPD - самая инновационная в мире технология на основе блокчейна Proof of Stake. Разработана командой опытных разработчиков и криптографов.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - PIVX believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Как говорится в нашем манифесте: конфиденциальность является не подлежащим обсуждению основным правом человека; это дает пользователям свободу делиться своими данными в любое время и с кем угодно, ведь PIVX верит в собственный суверенитет.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - RPD believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Как говорится в нашем манифесте: конфиденциальность является не подлежащим обсуждению основным правом человека; это дает пользователям свободу делиться своими данными в любое время и с кем угодно, ведь RPD верит в собственный суверенитет.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>The masternode network is PIVX's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
-        <translation>Сеть мастернод - это сеть второго уровня PIVX поверх блокчейна, которая позволяет нашему ДАО обеспечивать децентрализованное управление и казначейство.</translation>
+        <source>The masternode network is RPD's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
+        <translation>Сеть мастернод - это сеть второго уровня RPD поверх блокчейна, которая позволяет нашему ДАО обеспечивать децентрализованное управление и казначейство.</translation>
     </message>
     <message>
-        <source>How PIVX respects your privacy?</source>
-        <translation>Как PIVX уважает вашу конфиденциальность?</translation>
+        <source>How RPD respects your privacy?</source>
+        <translation>Как RPD уважает вашу конфиденциальность?</translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
@@ -6086,8 +6086,8 @@ PIVX Core Wallet</source>
 <context>
     <name>ZPivControlDialog</name>
     <message>
-        <source>Select zPIV to Spend</source>
-        <translation>Выберите zPIV чтобы потратить</translation>
+        <source>Select zRPD to Spend</source>
+        <translation>Выберите zRPD чтобы потратить</translation>
     </message>
     <message>
         <source>Coin Control</source>
@@ -6122,8 +6122,8 @@ PIVX Core Wallet</source>
         <translation>Выбрать / Отменить выбор</translation>
     </message>
     <message>
-        <source>Select zPIV Denominations to Spend</source>
-        <translation>Выберите деноминации zPIV для расходов</translation>
+        <source>Select zRPD Denominations to Spend</source>
+        <translation>Выберите деноминации zRPD для расходов</translation>
     </message>
 </context>
 <context>
@@ -6153,8 +6153,8 @@ PIVX Core Wallet</source>
         <translation>Расчетная контрольная точка  не является тем, что регистрируется блочным индексом</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. PIVX Core is probably already running.</source>
-        <translation>Не удается получить блокировку в каталоге данных %s. PIVX Core, вероятно, уже запущен.</translation>
+        <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
+        <translation>Не удается получить блокировку в каталоге данных %s. Rapids, вероятно, уже запущен.</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -6185,20 +6185,20 @@ PIVX Core Wallet</source>
         <translation>Включить автоматическую чеканку Zerocoin с определенных адресов (0-1, по умолчанию:%u)</translation>
     </message>
     <message>
-        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
-        <translation>Включить автоматическое резервное копирование кошелька, запускаемое после каждого чеканки zPIV (0-1, по умолчанию: %u)</translation>
+        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
+        <translation>Включить автоматическое резервное копирование кошелька, запускаемое после каждого чеканки zRPD (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable cold staking functionality (0-1, default: %u). Disabled if staking=0</source>
         <translation>Включить функцию холодного стекинга (0-1, по умолчанию:%u). Отключено, если стекинг = 0</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
-        <translation>Включение или отключение функций разбивки для входов PIV (0-1, по умолчанию: %u)</translation>
+        <source>Enable or disable staking functionality for RPD inputs (0-1, default: %u)</source>
+        <translation>Включение или отключение функций разбивки для входов RPD (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
-        <translation>Включение или отключение функций разбивки для входов zPIV (0-1, по умолчанию: %u)</translation>
+        <source>Enable or disable staking functionality for zRPD inputs (0-1, default: %u)</source>
+        <translation>Включение или отключение функций разбивки для входов zRPD (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable spork administration functionality with the appropriate private key.</source>
@@ -6233,12 +6233,12 @@ PIVX Core Wallet</source>
         <translation>Выполнить команду, когда лучший блок изменяется (%s в cmd заменяется блочным хэшем)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
-        <translation>Тарифы (в PIV / Kb), меньшие, чем это, считаются нулевой комиссией за ретрансляцию (по умолчанию: %s)</translation>
+        <source>Fees (in RPD/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
+        <translation>Тарифы (в RPD / Kb), меньшие, чем это, считаются нулевой комиссией за ретрансляцию (по умолчанию: %s)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
-        <translation>Плата (в PIV / Kb) меньше этого считается нулевой комиссией за создание транзакции (по умолчанию: %s)</translation>
+        <source>Fees (in RPD/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
+        <translation>Плата (в RPD / Kb) меньше этого считается нулевой комиссией за создание транзакции (по умолчанию: %s)</translation>
     </message>
     <message>
         <source>Flush database activity from memory pool to disk log every &lt;n&gt; megabytes (default: %u)</source>
@@ -6353,20 +6353,20 @@ PIVX Core Wallet</source>
         <translation>Общая длина строки версии сети (%i) превышает максимальную длину (%i). Уменьшите количество или размер uacomments.</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. PIVX Core is probably already running.</source>
-        <translation>Не удалось привязать к %s на этом компьютере. PIVX Core, вероятно, уже запущен.</translation>
+        <source>Unable to bind to %s on this computer. Rapids is probably already running.</source>
+        <translation>Не удалось привязать к %s на этом компьютере. Rapids, вероятно, уже запущен.</translation>
     </message>
     <message>
         <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
         <translation>Не удалось найти достаточное количество средств, предназначенных для обфускации, для этой транзакции.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Невозможно найти достаточное количество средств, не предназначенных для обфускации, для этой транзакции, которые не равны 10000 PIV.</translation>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
+        <translation>Невозможно найти достаточное количество средств, не предназначенных для обфускации, для этой транзакции, которые не равны 10000 RPD.</translation>
     </message>
     <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Не удалось найти достаточное количество средств для этой транзакции, которые не равны 10000 PIV.</translation>
+        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
+        <translation>Не удалось найти достаточное количество средств для этой транзакции, которые не равны 10000 RPD.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -6381,12 +6381,12 @@ PIVX Core Wallet</source>
         <translation>Предупреждение: -paytxfee установлен очень высоко! Это комиссия за транзакцию, которую вы заплатите, если вы отправляете транзакцию.</translation>
     </message>
     <message>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>Предупреждение: пиры отключаются из-за разницы во времени. Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы настроены не правильно, PIVX Core не будет работать должным образом.</translation>
+        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>Предупреждение: пиры отключаются из-за разницы во времени. Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы настроены не правильно, Rapids не будет работать должным образом.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>Внимание: проверьте правильность даты и времени вашего компьютера! Если ваши часы ошибочны, PIVX Core не будет работать должным образом.</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>Внимание: проверьте правильность даты и времени вашего компьютера! Если ваши часы ошибочны, Rapids не будет работать должным образом.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -6525,8 +6525,8 @@ PIVX Core Wallet</source>
         <translation>Copyright (C) 2014-%i Разработчики Dash Core</translation>
     </message>
     <message>
-        <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
-        <translation>Copyright (C) 2015-%i Разработчики PIVX Core</translation>
+        <source>Copyright (C) 2015-%i The Rapids Developers</source>
+        <translation>Copyright (C) 2015-%i Разработчики Rapids</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>
@@ -6577,8 +6577,8 @@ PIVX Core Wallet</source>
         <translation>Включить автоматическую чистку Zerocoin (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>Enable precomputation of zPIV spends and stakes (0-1, default %u)</source>
-        <translation>Включить предварительное вычисление расходов и стекинга zPIV (0-1, по умолчанию %u)</translation>
+        <source>Enable precomputation of zRPD spends and stakes (0-1, default %u)</source>
+        <translation>Включить предварительное вычисление расходов и стекинга zRPD (0-1, по умолчанию %u)</translation>
     </message>
     <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
@@ -6613,8 +6613,8 @@ PIVX Core Wallet</source>
         <translation>Ошибка при загрузке wallet.dat: Кошелек поврежден</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>Ошибка загрузки wallet.dat: Кошелек требует более новой версии PIVX Core</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Rapids</source>
+        <translation>Ошибка загрузки wallet.dat: Кошелек требует более новой версии Rapids</translation>
     </message>
     <message>
         <source>Error opening block database</source>
@@ -6665,8 +6665,8 @@ PIVX Core Wallet</source>
         <translation>Не удалось прочитать блок</translation>
     </message>
     <message>
-        <source>Fee (in PIV/kB) to add to transactions you send (default: %s)</source>
-        <translation>Плата (в PIV / kB) для добавления к транзакциям, которые вы отправляете (по умолчанию: %s)</translation>
+        <source>Fee (in RPD/kB) to add to transactions you send (default: %s)</source>
+        <translation>Плата (в RPD / kB) для добавления к транзакциям, которые вы отправляете (по умолчанию: %s)</translation>
     </message>
     <message>
         <source>Force safe mode (default: %u)</source>
@@ -6705,8 +6705,8 @@ PIVX Core Wallet</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
-        <translation>Инициализация проверки работоспособности не удалась. PIVX Core отключается.</translation>
+        <source>Initialization sanity check failed. Rapids is shutting down.</source>
+        <translation>Инициализация проверки работоспособности не удалась. Rapids отключается.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -6765,8 +6765,8 @@ PIVX Core Wallet</source>
         <translation>Процент автоматически отчеканенного Zerocoin (1-100, по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>Recalculating PIV supply...</source>
-        <translation>Перерасчет предложения PIV...</translation>
+        <source>Recalculating RPD supply...</source>
+        <translation>Перерасчет предложения RPD...</translation>
     </message>
     <message>
         <source>Recalculating minted ZPIV...</source>
@@ -6777,8 +6777,8 @@ PIVX Core Wallet</source>
         <translation>Перерасчет потраченных ZPIV...</translation>
     </message>
     <message>
-        <source>Reindex the PIV and zPIV money supply statistics</source>
-        <translation>Reindex статистика денежной массы PIV и zPIV</translation>
+        <source>Reindex the RPD and zRPD money supply statistics</source>
+        <translation>Reindex статистика денежной массы RPD и zRPD</translation>
     </message>
     <message>
         <source>Reindexing zerocoin database...</source>
@@ -6821,8 +6821,8 @@ PIVX Core Wallet</source>
 </translation>
     </message>
     <message>
-        <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
-        <translation>Отключите все специфические функции PIVX (Masternodes, Zerocoin, SwiftX, Бюджетирование) (0-1, по умолчанию: %u)</translation>
+        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <translation>Отключите все специфические функции RPD (Masternodes, Zerocoin, SwiftX, Бюджетирование) (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
@@ -6857,8 +6857,8 @@ PIVX Core Wallet</source>
         <translation>Предпочтительный номинал для автоматически чеканившегося Zerocoin (1/5/10/50/100/500/1000/5000), 0 без предпочтений. default: %u)</translation>
     </message>
     <message>
-        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Укажите собственный путь резервного копирования, чтобы добавить копию любой автоматической резервной копии zPIV. Если задано как dir, каждая резервная копия генерирует файл с отметкой времени. Если он установлен как файл, он будет переписывать в этот файл каждую резервную копию. Если также установлен резервный путь, произойдет 4 резервных копии</translation>
+        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <translation>Укажите собственный путь резервного копирования, чтобы добавить копию любой автоматической резервной копии zRPD. Если задано как dir, каждая резервная копия генерирует файл с отметкой времени. Если он установлен как файл, он будет переписывать в этот файл каждую резервную копию. Если также установлен резервный путь, произойдет 4 резервных копии</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
@@ -7293,8 +7293,8 @@ PIVX Core Wallet</source>
         <translation>Синхронизация спорков ...</translation>
     </message>
     <message>
-        <source>Syncing zPIV wallet...</source>
-        <translation>Синхронизация zPIV кошелька ...</translation>
+        <source>Syncing zRPD wallet...</source>
+        <translation>Синхронизация zRPD кошелька ...</translation>
     </message>
     <message>
         <source>The coin spend has been used</source>
@@ -7409,7 +7409,7 @@ PIVX Core Wallet</source>
         <translation>Имя пользователя для соединений JSON-RPC</translation>
     </message>
     <message>
-        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
+        <source>Value is below the smallest available denomination (= 1) of zRPD</source>
         <translation>Значение ниже наименьшего доступного номинала (= 1) zPiv</translation>
     </message>
     <message>
@@ -7425,8 +7425,8 @@ PIVX Core Wallet</source>
         <translation>Кошелек %s находится за пределами каталога данных %s</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
-        <translation>Кошелек необходимо переписать: перезапустите PIVX Core, чтобы завершить</translation>
+        <source>Wallet needed to be rewritten: restart Rapids to complete</source>
+        <translation>Кошелек необходимо переписать: перезапустите Rapids, чтобы завершить</translation>
     </message>
     <message>
         <source>Wallet options:</source>

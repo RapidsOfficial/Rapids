@@ -130,12 +130,12 @@
         <translation>Mottagar adresser</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Det här är dina PIVX adresser för att skicka betalningar. Kontrollera alltid summan och mottagaradressen före du sänder mynt.</translation>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Det här är dina RPD adresser för att skicka betalningar. Kontrollera alltid summan och mottagaradressen före du sänder mynt.</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Det här är dina PIVX adresser för att ta emot betalningar. Det är rekomenderat att använda en ny mottagaradress för varje transaktion.</translation>
+        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Det här är dina RPD adresser för att ta emot betalningar. Det är rekomenderat att använda en ny mottagaradress för varje transaktion.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -247,8 +247,8 @@
         <translation>Till Exempel John Doe</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Skriv in en PIVX adress</translation>
+        <source>Enter a RPD address</source>
+        <translation>Skriv in en RPD adress</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -374,16 +374,16 @@ for staking</source>
         <translation>cancel</translation>
     </message>
     <message>
-        <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
-        <translation>PIVX kommer att stängas ner nu för att färdigställa kryperingsprocessen. Kom ihåg att kryptering av din plånbok inte kan säkerställa dina PIVs från att bli stulna av skadeprogram som infekterat din dator.</translation>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <translation>RPD kommer att stängas ner nu för att färdigställa kryperingsprocessen. Kom ihåg att kryptering av din plånbok inte kan säkerställa dina PIVs från att bli stulna av skadeprogram som infekterat din dator.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Är du säker på att du vill kryptera din plånbok?</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
-        <translation>Varning: om du krypterar din plånbok och tappar bort din lösenfras kommer du &lt;b&gt; FÖRLORA ALLA DINA PIV&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
+        <translation>Varning: om du krypterar din plånbok och tappar bort din lösenfras kommer du &lt;b&gt; FÖRLORA ALLA DINA RPD&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -545,8 +545,8 @@ for staking</source>
         <translation>Tryck på knappen</translation>
     </message>
     <message>
-        <source>0.00 PIV</source>
-        <translation>0.00 PIV</translation>
+        <source>0.00 RPD</source>
+        <translation>0.00 RPD</translation>
     </message>
     <message>
         <source>0</source>
@@ -756,8 +756,8 @@ for staking</source>
         <translation>Tryck på knappen</translation>
     </message>
     <message>
-        <source>PIV:</source>
-        <translation>PIV:</translation>
+        <source>RPD:</source>
+        <translation>RPD:</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -901,12 +901,12 @@ for staking</source>
         <translation>Staking statistik</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
+        <source>zRPD</source>
+        <translation>zRPD</translation>
     </message>
     <message>
         <source>Sort by</source>
@@ -937,8 +937,8 @@ for staking</source>
         <translation>Du kan se ditt kontos historik</translation>
     </message>
     <message>
-        <source>Amount of PIV and zPIV staked.</source>
-        <translation>Mängden PIV och zPIV som präglats.</translation>
+        <source>Amount of RPD and zRPD staked.</source>
+        <translation>Mängden RPD och zRPD som präglats.</translation>
     </message>
     <message>
         <source>All</source>
@@ -977,8 +977,8 @@ for staking</source>
         <translation>Inga transaktioner ännu.</translation>
     </message>
     <message>
-        <source>How to get PIV or zPIV</source>
-        <translation>Hur man får PIV eller zPIV.</translation>
+        <source>How to get RPD or zRPD</source>
+        <translation>Hur man får RPD eller zRPD.</translation>
     </message>
     <message>
         <source>You can verify the staking activity in the status bar at the top right of the wallet.
@@ -1132,8 +1132,8 @@ Den startar automatiskt så snart plånboken har tillräckligt många bekräftel
         <translation>Redigera skickande adress</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid PIVX address.</source>
-        <translation>Den inmatade adressen "%1" är ej en giltig PIVX adress.</translation>
+        <source>The entered address "%1" is not a valid RPD address.</source>
+        <translation>Den inmatade adressen "%1" är ej en giltig RPD adress.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1228,16 +1228,16 @@ Den startar automatiskt så snart plånboken har tillräckligt många bekräftel
         <translation>version</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-bit)</translation>
     </message>
     <message>
-        <source>About PIVX Core</source>
-        <translation>Om PIVX Kärna</translation>
+        <source>About Rapids</source>
+        <translation>Om RPD Kärna</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -1287,16 +1287,16 @@ Den startar automatiskt så snart plånboken har tillräckligt många bekräftel
         <translation>Välkommen</translation>
     </message>
     <message>
-        <source>Welcome to PIVX Core.</source>
-        <translation>Välkommen till PIVX Core.</translation>
+        <source>Welcome to Rapids.</source>
+        <translation>Välkommen till Rapids.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
-        <translation>Eftersom detta är första gången programmet körs så kan du välja var PIVX Core ska spara sin data.</translation>
+        <source>As this is the first time the program is launched, you can choose where Rapids will store its data.</source>
+        <translation>Eftersom detta är första gången programmet körs så kan du välja var Rapids ska spara sin data.</translation>
     </message>
     <message>
-        <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>PIVX Kärnan kommer ladda ner och spara en kopia av PIVX block chain. Minst %1GB data kommer sparas i denna katalog och den kommer växa med tiden. Plånboken kommer också sparas i denna katalog.</translation>
+        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>RPD Kärnan kommer ladda ner och spara en kopia av RPD block chain. Minst %1GB data kommer sparas i denna katalog och den kommer växa med tiden. Plånboken kommer också sparas i denna katalog.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1315,8 +1315,8 @@ Den startar automatiskt så snart plånboken har tillräckligt många bekräftel
         <translation>ok</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1423,8 +1423,8 @@ Den startar automatiskt så snart plånboken har tillräckligt många bekräftel
         <translation>Skapa ny masternode kontrollör</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 10.000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>För att skapa en PIVX Masternode måste du avsätta 10.000 PIV (enheten till PIVX) till nätverket (dessa mynt är dock fortfarande dina och kommer aldrig att lämna ditt innehav). Du kan stänga av noden och låsa upp mynt när som helst.</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>För att skapa en RPD Masternode måste du avsätta 10.000 RPD (enheten till RPD) till nätverket (dessa mynt är dock fortfarande dina och kommer aldrig att lämna ditt innehav). Du kan stänga av noden och låsa upp mynt när som helst.</translation>
     </message>
     <message>
         <source>Make sure you have this amount of coins.</source>
@@ -1435,8 +1435,8 @@ Den startar automatiskt så snart plånboken har tillräckligt många bekräftel
         <translation>Ställ in Masternode namn</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>En transaktion på 10 000 PIV kommer göras till en ny tom adress i din plånbok. Adressen är märkt under huvudnodens namn.</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>En transaktion på 10 000 RPD kommer göras till en ny tom adress i din plånbok. Adressen är märkt under huvudnodens namn.</translation>
     </message>
     <message>
         <source>Set Master Node’s IP and port</source>
@@ -1701,8 +1701,8 @@ Are you sure?</source>
         <translation>Masternode conf file existerar inte</translation>
     </message>
     <message>
-        <source>Not enough balance to create a masternode, 10,000 PIV required.</source>
-        <translation>Inte nog på saldot för att skapa en Masternode, 10000 PIV behövs.</translation>
+        <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
+        <translation>Inte nog på saldot för att skapa en Masternode, 10000 RPD behövs.</translation>
     </message>
     <message>
         <source>Error creating masternode</source>
@@ -1863,8 +1863,8 @@ Are you sure?</source>
         <translation>Om du avaktiverar spenderandet av okonfirmerad växel så kommer växeln från en transaktion &lt;br/&gt;ej kunna användas föräns transaktionen har minst en bekräftelse. &lt;br/&gt; Detta påverkar även hur ditt saldo beräknas.</translation>
     </message>
     <message>
-        <source>Automatically open the PIVX client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Öppna automatiskt PIVX klient porten på denna router. Detta funkar endast om din router stödjer UPnP och är påslaget.</translation>
+        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Öppna automatiskt RPD klient porten på denna router. Detta funkar endast om din router stödjer UPnP och är påslaget.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -1883,12 +1883,12 @@ Are you sure?</source>
         <translation>Expert</translation>
     </message>
     <message>
-        <source>Automatically start PIVX after logging in to the system.</source>
-        <translation>Starta PIVX automatiskt efter inloggning på systemet.</translation>
+        <source>Automatically start RPD after logging in to the system.</source>
+        <translation>Starta RPD automatiskt efter inloggning på systemet.</translation>
     </message>
     <message>
-        <source>&amp;Start PIVX on system login</source>
-        <translation>&amp;Starta PIVX vid systeminloggning</translation>
+        <source>&amp;Start RPD on system login</source>
+        <translation>&amp;Starta RPD vid systeminloggning</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -1915,8 +1915,8 @@ Are you sure?</source>
         <translation>&amp;Nätverk</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting PIVX.</source>
-        <translation>Användargränssnittets språk kan väljas här. Denna inställning börjar gälla efter att man startat om PIVX.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
+        <translation>Användargränssnittets språk kan väljas här. Denna inställning börjar gälla efter att man startat om RPD.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -1929,44 +1929,44 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Kartlägg port med &amp;UPnP</translation>
     </message>
     <message>
-        <source>Enable automatic minting of PIV units to zPIV</source>
-        <translation>Tillåt automatisk prägling med PIV enheter till zPIV</translation>
+        <source>Enable automatic minting of RPD units to zRPD</source>
+        <translation>Tillåt automatisk prägling med RPD enheter till zRPD</translation>
     </message>
     <message>
-        <source>Enable zPIV Automint</source>
-        <translation>Tillåt zPIV Autoprägling</translation>
+        <source>Enable zRPD Automint</source>
+        <translation>Tillåt zRPD Autoprägling</translation>
     </message>
     <message>
-        <source>Enable automatic zPIV minting from specific addresses</source>
-        <translation>Aktivera automatisk zPIV prägling från specifika adresser</translation>
+        <source>Enable automatic zRPD minting from specific addresses</source>
+        <translation>Aktivera automatisk zRPD prägling från specifika adresser</translation>
     </message>
     <message>
         <source>Enable Automint Addresses</source>
         <translation>Aktivera autopräglingsadresser</translation>
     </message>
     <message>
-        <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
-        <translation>Procent av inkommande PIV som automatiskt konverteras till zPIV via Zerocoin Protokollet (min: 10%)</translation>
+        <source>Percentage of incoming RPD which get automatically converted to zRPD via Zerocoin Protocol (min: 10%)</source>
+        <translation>Procent av inkommande RPD som automatiskt konverteras till zRPD via Zerocoin Protokollet (min: 10%)</translation>
     </message>
     <message>
-        <source>Percentage of autominted zPIV</source>
-        <translation>Procent av autopräglade zPIV</translation>
+        <source>Percentage of autominted zRPD</source>
+        <translation>Procent av autopräglade zRPD</translation>
     </message>
     <message>
-        <source>Wait with automatic conversion to Zerocoin until enough PIV for this denomination is available</source>
-        <translation>Vänta med automatisk omvandling till Zerocoin tills tillräckligt många PIV för denna valör är tillgängliga</translation>
+        <source>Wait with automatic conversion to Zerocoin until enough RPD for this denomination is available</source>
+        <translation>Vänta med automatisk omvandling till Zerocoin tills tillräckligt många RPD för denna valör är tillgängliga</translation>
     </message>
     <message>
-        <source>Preferred Automint zPIV Denomination</source>
-        <translation>Preferens på zPIV valör i autoprägling</translation>
+        <source>Preferred Automint zRPD Denomination</source>
+        <translation>Preferens på zRPD valör i autoprägling</translation>
     </message>
     <message>
         <source>Stake split threshold:</source>
         <translation>Staking delnings tröskel:</translation>
     </message>
     <message>
-        <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
-        <translation>Anslut till PIVX nätverket via en SOCKS5 proxy.</translation>
+        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
+        <translation>Anslut till RPD nätverket via en SOCKS5 proxy.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -2112,8 +2112,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -2140,8 +2140,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Avsluta applikationen</translation>
     </message>
     <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX kärn klient</translation>
+        <source>Rapids client</source>
+        <translation>RPD kärn klient</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2184,8 +2184,8 @@ Adress: %4
 </translation>
     </message>
     <message>
-        <source>A fatal error occurred. PIVX can no longer continue safely and will quit.</source>
-        <translation>Ett fel inträffade. PIVX kan inte längre köras säkert och kommer att stängas ned för tillfället.</translation>
+        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
+        <translation>Ett fel inträffade. RPD kan inte längre köras säkert och kommer att stängas ned för tillfället.</translation>
     </message>
 </context>
 <context>
@@ -2222,8 +2222,8 @@ Adress: %4
         <translation>Kan ej starta pivx: klicka-för-att-betala hanterare</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>
-        <translation>URI kunde ej analyseras! Detta kan orsakas av en ogiltig PIVX adress eller felproducerade URI parametrar.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
+        <translation>URI kunde ej analyseras! Detta kan orsakas av en ogiltig RPD adress eller felproducerade URI parametrar.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -2336,14 +2336,14 @@ Adress: %4
         <translation>Prägla</translation>
     </message>
     <message>
-        <source>Minting zPIV anonymizes your PIV by removing any
+        <source>Minting zRPD anonymizes your RPD by removing any
 transaction history, making transactions untraceable </source>
-        <translation>Prägling av zPIV anonymiserar dina PIV genom att ta bort
+        <translation>Prägling av zRPD anonymiserar dina RPD genom att ta bort
 transaktionshistorik, vilket gör transaktioner ospårbara</translation>
     </message>
     <message>
-        <source>Mint new zPIV or convert back to PIV</source>
-        <translation>Prägla nya zPIV eller konvertera tillbaka till PIV</translation>
+        <source>Mint new zRPD or convert back to RPD</source>
+        <translation>Prägla nya zRPD eller konvertera tillbaka till RPD</translation>
     </message>
     <message>
         <source>Last Zerocoin Movements</source>
@@ -2354,28 +2354,28 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Inga transaktioner ännu.</translation>
     </message>
     <message>
-        <source>Mint zPIV</source>
-        <translation>Prägla zPIV</translation>
+        <source>Mint zRPD</source>
+        <translation>Prägla zRPD</translation>
     </message>
     <message>
-        <source>Enter amount of PIV to mint into zPIV</source>
-        <translation>Ange PIV beloppet att prägla till zPIV</translation>
+        <source>Enter amount of RPD to mint into zRPD</source>
+        <translation>Ange RPD beloppet att prägla till zRPD</translation>
     </message>
     <message>
-        <source>Convert back to PIV</source>
-        <translation>Konvertera tillbaka till PIV</translation>
+        <source>Convert back to RPD</source>
+        <translation>Konvertera tillbaka till RPD</translation>
     </message>
     <message>
-        <source>Enter amount of zPIV to convert back into PIV</source>
-        <translation>Ange mängden zPIV som ska konverteras tillbaka till PIV</translation>
+        <source>Enter amount of zRPD to convert back into RPD</source>
+        <translation>Ange mängden zRPD som ska konverteras tillbaka till RPD</translation>
     </message>
     <message>
         <source>Zerocoin</source>
         <translation>Zerocoin</translation>
     </message>
     <message>
-        <source>zPIV is currently undergoing maintenance</source>
-        <translation>zPIV genomgår underhåll</translation>
+        <source>zRPD is currently undergoing maintenance</source>
+        <translation>zRPD genomgår underhåll</translation>
     </message>
     <message>
         <source>convert</source>
@@ -2456,8 +2456,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Mängd</translation>
     </message>
     <message>
-        <source>Enter a PIVX address (e.g. %1)</source>
-        <translation>Mata in en PIVX adress (e.g. %1)</translation>
+        <source>Enter a RPD address (e.g. %1)</source>
+        <translation>Mata in en RPD adress (e.g. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2504,8 +2504,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" does not exist.</source>
@@ -2516,8 +2516,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Fel vid inläsning av masternodens konfigurationsfil: %1</translation>
     </message>
     <message>
-        <source>PIVX Core didn't yet exit safely...</source>
-        <translation>PIVX Core avslutades ännu inte säkert...</translation>
+        <source>Rapids didn't yet exit safely...</source>
+        <translation>Rapids avslutades ännu inte säkert...</translation>
     </message>
 </context>
 <context>
@@ -2591,8 +2591,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Blockchain</translation>
     </message>
     <message>
-        <source>Open the PIVX debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Öppna PIVX felsökningslogg från den nuvarande data katalogen. Detta kan ta några sekunder för stora logg filer.</translation>
+        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Öppna RPD felsökningslogg från den nuvarande data katalogen. Detta kan ta några sekunder för stora logg filer.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
@@ -2727,8 +2727,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Vanlig Backup Sökväg:</translation>
     </message>
     <message>
-        <source>Custom zPIV Backup Path:</source>
-        <translation>Vanlig zPIV Backup Sökväg:</translation>
+        <source>Custom zRPD Backup Path:</source>
+        <translation>Vanlig zRPD Backup Sökväg:</translation>
     </message>
     <message>
         <source>Custom Backups Threshold:</source>
@@ -2807,8 +2807,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Ut:</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Välkommen till PIVX RPC konsol.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Välkommen till RPD RPC konsol.</translation>
     </message>
     <message>
         <source>&amp;Disconnect Node</source>
@@ -3007,8 +3007,8 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Mängd</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -3103,12 +3103,12 @@ transaktionshistorik, vilket gör transaktioner ospårbara</translation>
         <translation>Spendera Zerocoin</translation>
     </message>
     <message>
-        <source>zPIV is currently undergoing maintenance.</source>
-        <translation>zPIV genomgår för tillfället underhåll.</translation>
+        <source>zRPD is currently undergoing maintenance.</source>
+        <translation>zRPD genomgår för tillfället underhåll.</translation>
     </message>
     <message>
-        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
-        <translation>Version 1 zPIV kräver en säkerhetsnivå på 100 för att kunna spenderas med framgång.</translation>
+        <source>Version 1 zRPD require a security level of 100 to successfully spend.</source>
+        <translation>Version 1 zRPD kräver en säkerhetsnivå på 100 för att kunna spenderas med framgång.</translation>
     </message>
     <message>
         <source>Too much inputs (</source>
@@ -3185,8 +3185,8 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>Rensa</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Skriv in en PIVX adress</translation>
+        <source>Enter a RPD address</source>
+        <translation>Skriv in en RPD adress</translation>
     </message>
     <message>
         <source>ENCRYPT</source>
@@ -3252,8 +3252,8 @@ Minta antingen högre valörer (så att färre inputs behövs) eller spendera mi
         <translation>text etikett</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Välkommen till PIVX RPC konsol.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Välkommen till RPD RPC konsol.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
@@ -3683,8 +3683,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>PIVX Core stängs ner...</translation>
+        <source>Rapids is shutting down...</source>
+        <translation>Rapids stängs ner...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -3705,15 +3705,15 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Formulär</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -3728,8 +3728,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Dash Core utvecklarna</translation>
     </message>
     <message>
-        <source>The PIVX Core developers</source>
-        <translation>PIVX Core utvecklarna</translation>
+        <source>The Rapids developers</source>
+        <translation>Rapids utvecklarna</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -3999,12 +3999,12 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Mottaget via Fördunkling</translation>
     </message>
     <message>
-        <source>PIV Stake</source>
-        <translation>PIV staking</translation>
+        <source>RPD Stake</source>
+        <translation>RPD staking</translation>
     </message>
     <message>
-        <source>zPIV Stake</source>
-        <translation>zPIV Staking</translation>
+        <source>zRPD Stake</source>
+        <translation>zRPD Staking</translation>
     </message>
     <message>
         <source>Obfuscation Denominate</source>
@@ -4023,24 +4023,24 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Obfuscation Skapa tecken</translation>
     </message>
     <message>
-        <source>Converted PIV to zPIV</source>
-        <translation>Konvertera PIV till zPIV</translation>
+        <source>Converted RPD to zRPD</source>
+        <translation>Konvertera RPD till zRPD</translation>
     </message>
     <message>
-        <source>Spent zPIV</source>
-        <translation>Spendera zPIV</translation>
+        <source>Spent zRPD</source>
+        <translation>Spendera zRPD</translation>
     </message>
     <message>
-        <source>Received PIV from zPIV</source>
-        <translation>Mottog PIV från zPIV</translation>
+        <source>Received RPD from zRPD</source>
+        <translation>Mottog RPD från zRPD</translation>
     </message>
     <message>
-        <source>Minted Change as zPIV from zPIV Spend</source>
-        <translation>Myntad Växel som zPIV från zPIV Spendering</translation>
+        <source>Minted Change as zRPD from zRPD Spend</source>
+        <translation>Myntad Växel som zRPD från zRPD Spendering</translation>
     </message>
     <message>
-        <source>Converted zPIV to PIV</source>
-        <translation>Konverterad zPIV till PIV</translation>
+        <source>Converted zRPD to RPD</source>
+        <translation>Konverterad zRPD till RPD</translation>
     </message>
     <message>
         <source>Sent to</source>
@@ -4156,8 +4156,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Skicka Mynt</translation>
     </message>
     <message>
-        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 PIV.</source>
-        <translation>wiftX stödjer inte att skicka så höga värden än. Transaktioner är för nuvarande begränsade till %1 PIV.</translation>
+        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 RPD.</source>
+        <translation>wiftX stödjer inte att skicka så höga värden än. Transaktioner är för nuvarande begränsade till %1 RPD.</translation>
     </message>
 </context>
 <context>
@@ -4221,8 +4221,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
 <context>
     <name>ZPivControlDialog</name>
     <message>
-        <source>Select zPIV to Spend</source>
-        <translation>Välj zPIV att Spendera</translation>
+        <source>Select zRPD to Spend</source>
+        <translation>Välj zRPD att Spendera</translation>
     </message>
     <message>
         <source>Coin Control</source>
@@ -4276,8 +4276,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Beräknade ackumulator kontrollstation är inte vad som sparats av block index</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. PIVX Core is probably already running.</source>
-        <translation>Kan ej låsa in på data katalog %s. PIVX Kärna körs förmodligen redan.</translation>
+        <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
+        <translation>Kan ej låsa in på data katalog %s. RPD Kärna körs förmodligen redan.</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -4304,16 +4304,16 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Distribuerad under MIT mjukvarulicensen, se medföljande fil COPYING eller &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
     </message>
     <message>
-        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
-        <translation>Aktivera automatisk plånboksbackup efter varje zPIV minting (0-1, standard: %u)</translation>
+        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
+        <translation>Aktivera automatisk plånboksbackup efter varje zRPD minting (0-1, standard: %u)</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
-        <translation>Aktivera eller avaktivera staking funktionalitet för PIV inmatningar (0-1, standard: %u)</translation>
+        <source>Enable or disable staking functionality for RPD inputs (0-1, default: %u)</source>
+        <translation>Aktivera eller avaktivera staking funktionalitet för RPD inmatningar (0-1, standard: %u)</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
-        <translation>Aktivera eller avaktivera staking funktionalitet för zPIV inmatningar (0-1, standard: %u)</translation>
+        <source>Enable or disable staking functionality for zRPD inputs (0-1, default: %u)</source>
+        <translation>Aktivera eller avaktivera staking funktionalitet för zRPD inmatningar (0-1, standard: %u)</translation>
     </message>
     <message>
         <source>Enable spork administration functionality with the appropriate private key.</source>
@@ -4348,12 +4348,12 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Exekvera kommando när den bästa block ändras (%s i cmd är utbytt mot block hash)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
-        <translation>Avgifter (i PIV/Kb) mindre än detta anses vara noll avgift i vidarebefodring (standard: %s)</translation>
+        <source>Fees (in RPD/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
+        <translation>Avgifter (i RPD/Kb) mindre än detta anses vara noll avgift i vidarebefodring (standard: %s)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
-        <translation>Avgifter (i PIV/Kb) mindre än detta anses vara noll avgift i transaktionsskapelse (standard: %s)</translation>
+        <source>Fees (in RPD/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
+        <translation>Avgifter (i RPD/Kb) mindre än detta anses vara noll avgift i transaktionsskapelse (standard: %s)</translation>
     </message>
     <message>
         <source>Flush database activity from memory pool to disk log every &lt;n&gt; megabytes (default: %u)</source>
@@ -4452,20 +4452,20 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Totala längden av nätverks verisionens sträng (%i) överskrider maximala längd (%i). Minska mängden eller storleken av uakommentarer.</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. PIVX Core is probably already running.</source>
-        <translation>Kan inte binda till %s på denna dator. PIVX Core körs förmodligen redan.</translation>
+        <source>Unable to bind to %s on this computer. Rapids is probably already running.</source>
+        <translation>Kan inte binda till %s på denna dator. Rapids körs förmodligen redan.</translation>
     </message>
     <message>
         <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
         <translation>Kan ej lokalisera tillräckligt Fördunklingsdenominationerade pengar för denna transaktion.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Kan ej lokalisera tillräckligt Fördunkling icke-denominationerade pengar för denna transaktion som inte är 10000 PIV.</translation>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
+        <translation>Kan ej lokalisera tillräckligt Fördunkling icke-denominationerade pengar för denna transaktion som inte är 10000 RPD.</translation>
     </message>
     <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Kan inte hitta tillräckligt med pengar för denna transaktion som inte är 10000 PIV.</translation>
+        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
+        <translation>Kan inte hitta tillräckligt med pengar för denna transaktion som inte är 10000 RPD.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -4480,8 +4480,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Varning: -maxtxfee är sätt väldigt högt! Detta är transaktionsavgiften du kommer betala om du skickar en transaktion.</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>Varning: Var vänlig kontrollera att din dators tid och datum är korrekt! Om din klocka är fel så kommer PIVX Core inte att fungera korrekt.</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>Varning: Var vänlig kontrollera att din dators tid och datum är korrekt! Om din klocka är fel så kommer Rapids inte att fungera korrekt.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -4612,8 +4612,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Copyright (C) 2014-%i The Dash Core Developers</translation>
     </message>
     <message>
-        <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
-        <translation>Copyright (C) 2015-%i The PIVX Core Developers</translation>
+        <source>Copyright (C) 2015-%i The Rapids Developers</source>
+        <translation>Copyright (C) 2015-%i The Rapids Developers</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>
@@ -4692,8 +4692,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Fel vid laddning av wallet.dat: Plånbok korrupterad</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>Fel vid laddning av wallet.dat: Plånbok  kräver nyare PIVX Kärna version</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Rapids</source>
+        <translation>Fel vid laddning av wallet.dat: Plånbok  kräver nyare RPD Kärna version</translation>
     </message>
     <message>
         <source>Error opening block database</source>
@@ -4744,8 +4744,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Misslyckades läsa block</translation>
     </message>
     <message>
-        <source>Fee (in PIV/kB) to add to transactions you send (default: %s)</source>
-        <translation>Avgift (i PIV/kB) för att lägga till transaktioner you skicka (standard: %s)</translation>
+        <source>Fee (in RPD/kB) to add to transactions you send (default: %s)</source>
+        <translation>Avgift (i RPD/kB) för att lägga till transaktioner you skicka (standard: %s)</translation>
     </message>
     <message>
         <source>Force safe mode (default: %u)</source>
@@ -4784,8 +4784,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Information</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
-        <translation>Initierings renlighetscheck misslyckades. PIVX Kärna stängs ner.</translation>
+        <source>Initialization sanity check failed. Rapids is shutting down.</source>
+        <translation>Initierings renlighetscheck misslyckades. RPD Kärna stängs ner.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -4844,8 +4844,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Procent automatiskt mintad Zerocoin (1-100, default: %u)</translation>
     </message>
     <message>
-        <source>Reindex the PIV and zPIV money supply statistics</source>
-        <translation>Indexera PIV och zPIV pengarna tillgång statistik på nytt</translation>
+        <source>Reindex the RPD and zRPD money supply statistics</source>
+        <translation>Indexera RPD och zRPD pengarna tillgång statistik på nytt</translation>
     </message>
     <message>
         <source>Reindexing zerocoin database...</source>
@@ -4888,8 +4888,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
 </translation>
     </message>
     <message>
-        <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
-        <translation>Avaktivera all PIVX funktionalitet (Huvudnoder, Zerocoin, SwiftX, Budgeting) (0-1, standard: %u)</translation>
+        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <translation>Avaktivera all RPD funktionalitet (Huvudnoder, Zerocoin, SwiftX, Budgeting) (0-1, standard: %u)</translation>
     </message>
     <message>
         <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
@@ -4924,8 +4924,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Valör aatt föredra för automatiskt mintad Zerocoin (1/5/10/50/100/500/1000/5000), 0 för ingen preface. standard: %u)</translation>
     </message>
     <message>
-        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Specifiera skräddarsydd backup väg att lägga till en kopia av alla automatisk zPIV backup. Om satt som dir, varje backup genererar en tidsstämplad fil. Om satt som fil, skriver över den filen vid varje backup. Om backupvägen också är satt, 4 backups kommer hända</translation>
+        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <translation>Specifiera skräddarsydd backup väg att lägga till en kopia av alla automatisk zRPD backup. Om satt som dir, varje backup genererar en tidsstämplad fil. Om satt som fil, skriver över den filen vid varje backup. Om backupvägen också är satt, 4 backups kommer hända</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
@@ -5332,8 +5332,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Synkroniserar sporks...</translation>
     </message>
     <message>
-        <source>Syncing zPIV wallet...</source>
-        <translation>Synkroniserar zPIV plånbok...</translation>
+        <source>Syncing zRPD wallet...</source>
+        <translation>Synkroniserar zRPD plånbok...</translation>
     </message>
     <message>
         <source>The coin spend has been used</source>
@@ -5444,8 +5444,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Användarnamn för JSON-RPC anslutningar</translation>
     </message>
     <message>
-        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
-        <translation>Värde är under den minsta tillgängliga valören (=1) av zPIV</translation>
+        <source>Value is below the smallest available denomination (= 1) of zRPD</source>
+        <translation>Värde är under den minsta tillgängliga valören (=1) av zRPD</translation>
     </message>
     <message>
         <source>Verifying blocks...</source>
@@ -5460,8 +5460,8 @@ Var vänlig kontrollera adressen och försök igen.</translation>
         <translation>Plånbok %s finns utanför data katalog %s</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
-        <translation>Plånbok behöver skrivas om: starta om PIVX Kärna för att göra klart</translation>
+        <source>Wallet needed to be rewritten: restart Rapids to complete</source>
+        <translation>Plånbok behöver skrivas om: starta om RPD Kärna för att göra klart</translation>
     </message>
     <message>
         <source>Wallet options:</source>

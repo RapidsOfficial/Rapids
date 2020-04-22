@@ -163,7 +163,7 @@
                       <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
-                      <string>1) What is PIVX?</string>
+                      <string>1) What is RPD?</string>
                      </property>
                      <property name="checkable">
                       <bool>true</bool>
@@ -222,7 +222,7 @@
                       <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
-                      <string>3) PIVX privacy? What is Zerocoin (zRPD)?</string>
+                      <string>3) RPD privacy? What is Zerocoin (zRPD)?</string>
                      </property>
                      <property name="checkable">
                       <bool>true</bool>
@@ -596,7 +596,7 @@
                       <item>
                        <widget class="QLabel" name="labelSubtitle1">
                         <property name="text">
-                         <string>What is PIVX?</string>
+                         <string>What is RPD?</string>
                         </property>
                         <property name="wordWrap">
                          <bool>true</bool>
@@ -624,14 +624,14 @@
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           PIVX is a form of digital online money using blockchain technology
+                           RPD is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  PIVX incorporates market leading security &amp;
+                           zero fees.  RPD incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
                            to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
-                           PIVX utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of PIVX to participate in earning block rewards
+                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of RPD to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -730,10 +730,10 @@
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           Newly received PIVX requires 6 confirmations on the network
+                           Newly received RPD requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
-                           Your PIVX wallet also needs to be completely synchronized
+                           Your RPD wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </string>
@@ -800,7 +800,7 @@
                       <item>
                        <widget class="QLabel" name="labelSubtitle3">
                         <property name="text">
-                         <string>PIVX privacy? What is Zerocoin (zRPD)?</string>
+                         <string>RPD privacy? What is Zerocoin (zRPD)?</string>
                         </property>
                         <property name="wordWrap">
                          <bool>true</bool>
@@ -829,10 +829,10 @@
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
                            zRPD is an optional privacy-centric method of coin mixing on the
-                           PIVX blockchain. Basically all your transactions cannot be tracked
+                           RPD blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt;
-                           &quot;PIVX Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
+                           &lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt;
+                           &quot;RPD Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </string>
                         </property>
@@ -1022,17 +1022,17 @@
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           By default the PIVX wallet will convert 10% of your entire RPD
+                           By default the RPD wallet will convert 10% of your entire RPD
                            balance to zRPD to assist the network. If you do not wish to
                            stake zRPD or take advantage of the privacy benefit it brings,
-                           you can disable the automatic minting in your PIVX wallet by
+                           you can disable the automatic minting in your RPD wallet by
                            going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
-                           If you are not making use of the PIVX-QT or GUI you can simply open
+                           If you are not making use of the RPD-QT or GUI you can simply open
                            your pivx.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            You can read more about zRPD in the
-                           &lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt; &quot;PIVX Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
+                           &lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt; &quot;RPD Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
                            If you would like to keep and stake your zRPD, please read the &quot;How do I stake&quot;
                            section of the FAQ below.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -1131,8 +1131,8 @@
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           zRPD can be spent and sent to any PIVX address. The receiver will
-                           receive standard PIVX but the origin of the PIVX is anonymized by the zRPD Protocol.
+                           zRPD can be spent and sent to any RPD address. The receiver will
+                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -1228,12 +1228,12 @@
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           To Stake PIVX:
+                           To Stake RPD:
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           You must have a balance of PIVX with a minimum of 600 confirmations.
+                           You must have a balance of RPD with a minimum of 600 confirmations.
                            &lt;li&gt;
                            Your wallet must stay online and be unlocked for staking purposes.
                            &lt;li&gt;
@@ -1346,10 +1346,10 @@
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
                            We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://discord.PIVX.org'&gt;
+                           &lt;a style='color: #b088ff' href='https://discord.RPD.org'&gt;
                            #support in our Discord&lt;/a&gt;.
                            If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://PIVX.freshdesk.com'&gt;
+                           &lt;a style='color: #b088ff' href='https://RPD.freshdesk.com'&gt;
                            our Freshdesk support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </string>
@@ -1444,7 +1444,7 @@
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           A masternode is a computer running a full node PIVX core wallet with a
+                           A masternode is a computer running a full node RPD core wallet with a
                            requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
@@ -1467,10 +1467,10 @@
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in PIVX Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the PIVX network&lt;/li&gt;
+                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
 

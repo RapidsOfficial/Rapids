@@ -122,7 +122,7 @@ AddressesWidget::AddressesWidget(PIVXGUI* parent) :
     setCssEditLine(ui->lineEditName, true);
 
     // Address
-    ui->labelAddress->setText(tr("Enter PIVX address"));
+    ui->labelAddress->setText(tr("Enter RPD address"));
     setCssProperty(ui->labelAddress, "text-title");
     ui->lineEditAddress->setPlaceholderText("e.g. D7VFR83SQbiezrW72hjc…");
     setCssEditLine(ui->lineEditAddress, true);

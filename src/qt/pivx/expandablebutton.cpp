@@ -21,7 +21,7 @@ ExpandableButton::ExpandableButton(QWidget *parent) :
     ui->pushButton->setCheckable(true);
     this->layout()->setSizeConstraint(QLayout::SetFixedSize);
 
-    connect(ui->pushButton, &QPushButton::clicked, this, &ExpandableButton::mousePressEvent);
+    connect(ui->pushButton, &QPushButton::clicked, this, &ExpandableButton::innerMousePressEvent);
 }
 
 void ExpandableButton::setButtonClassStyle(const char *name, const QVariant &value, bool forceUpdate)
@@ -63,11 +63,13 @@ ExpandableButton::~ExpandableButton()
     delete ui;
 }
 
-bool ExpandableButton::isChecked(){
+bool ExpandableButton::isChecked()
+{
     return ui->pushButton->isChecked();
 }
 
-void ExpandableButton::setChecked(bool check){
+void ExpandableButton::setChecked(bool check)
+{
     ui->pushButton->setChecked(check);
 }
 
@@ -79,13 +81,15 @@ void ExpandableButton::setSmall()
     update();
 }
 
-void ExpandableButton::setExpanded(){
+void ExpandableButton::setExpanded()
+{
     this->setMaximumWidth(100);
     ui->pushButton->setText(text);
     this->isExpanded = true;
 }
 
-void ExpandableButton::enterEvent(QEvent *) {
+void ExpandableButton::enterEvent(QEvent *)
+{
     if(!this->isAnimating){
         setExpanded();
         Q_EMIT Mouse_Hover();
@@ -93,14 +97,16 @@ void ExpandableButton::enterEvent(QEvent *) {
     update();
 }
 
-void ExpandableButton::leaveEvent(QEvent *) {
+void ExpandableButton::leaveEvent(QEvent *)
+{
     if(!keepExpanded){
         this->setSmall();
     }
     Q_EMIT Mouse_HoverLeave();
 }
 
-void ExpandableButton::mousePressEvent(){
+void ExpandableButton::innerMousePressEvent()
+{
     Q_EMIT Mouse_Pressed();
 }
 

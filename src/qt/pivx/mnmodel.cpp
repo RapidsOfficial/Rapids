@@ -87,7 +87,7 @@ QVariant MNModel::data(const QModelIndex &index, int role) const
                 return (isAvailable) ? QString::number(rec->vin.prevout.n) : "Not available";
             case STATUS: {
                 std::pair<QString, CMasternode*> pair = nodes.values().value(row);
-                return (pair.second) ? QString::fromStdString(pair.second->Status()) : "MISSING";
+                return (pair.second) ? QString::fromStdString(pair.second->Status()) : "EXPIRED";
             }
             case PRIV_KEY: {
                 for (CMasternodeConfig::CMasternodeEntry mne : masternodeConfig.getEntries()) {
@@ -165,7 +165,7 @@ int MNModel::getMNState(QString mnAlias)
 bool MNModel::isMNInactive(QString mnAlias)
 {
     int activeState = getMNState(mnAlias);
-    return activeState ==  CMasternode::MASTERNODE_EXPIRED || activeState == CMasternode::MASTERNODE_REMOVE;
+    return activeState == CMasternode::MASTERNODE_EXPIRED || activeState == CMasternode::MASTERNODE_REMOVE;
 }
 
 bool MNModel::isMNActive(QString mnAlias)

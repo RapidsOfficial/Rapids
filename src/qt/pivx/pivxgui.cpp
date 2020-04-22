@@ -409,7 +409,7 @@ void PIVXGUI::message(const QString& title, const QString& message, unsigned int
     } else if(style & CClientUIInterface::MSG_INFORMATION_SNACK){
         messageInfo(message);
     }else {
-        // Append title to "PIVX - "
+        // Append title to "RPD - "
         if (!msgType.isEmpty())
             strTitle += " - " + msgType;
         notificator->notify((Notificator::Class) nNotifyIcon, strTitle, message);
@@ -584,16 +584,6 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     masterNodesWidget->setWalletModel(walletModel);
     coldStakingWidget->setWalletModel(walletModel);
     settingsWidget->setWalletModel(walletModel);
-
-    // Privacy screen
-    if (walletModel->getZerocoinBalance() > 0) {
-        privacyWidget = new PrivacyWidget(this);
-        stackedContainer->addWidget(privacyWidget);
-
-        privacyWidget->setWalletModel(walletModel);
-        connect(privacyWidget, &PrivacyWidget::message, this, &PIVXGUI::message);
-        connect(privacyWidget, &PrivacyWidget::showHide, this, &PIVXGUI::showHide);
-    }
 
     // Connect actions..
     connect(masterNodesWidget, &MasterNodesWidget::message, this, &PIVXGUI::message);

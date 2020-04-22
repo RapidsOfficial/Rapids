@@ -61,7 +61,7 @@ SettingsMainOptionsWidget::SettingsMainOptionsWidget(PIVXGUI* _window, QWidget *
     ui->labelTitleThreads->setProperty("cssClass", "text-main-settings");
 
     // Switch
-    ui->pushSwitchStart->setText(tr("Start PIVX on system login"));
+    ui->pushSwitchStart->setText(tr("Start RPD on system login"));
     ui->pushSwitchStart->setProperty("cssClass", "btn-switch");
 
     // Combobox

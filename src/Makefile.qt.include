@@ -19,7 +19,6 @@ QT_FORMS_UI = \
   qt/forms/optionsdialog.ui \
   qt/forms/rpcconsole.ui \
   qt/pivx/forms/loadingdialog.ui \
-  qt/forms/zpivcontroldialog.ui \
   qt/pivx/forms/snackbar.ui \
   qt/pivx/forms/navmenuwidget.ui \
   qt/pivx/forms/lockunlock.ui \
@@ -50,7 +49,6 @@ QT_FORMS_UI = \
   qt/pivx/forms/tooltipmenu.ui \
   qt/pivx/forms/addresseswidget.ui \
   qt/pivx/forms/defaultdialog.ui \
-  qt/pivx/forms/privacywidget.ui \
   qt/pivx/forms/coldstakingwidget.ui \
   qt/pivx/settings/forms/settingsbackupwallet.ui \
   qt/pivx/settings/forms/settingsexportcsv.ui \
@@ -105,7 +103,6 @@ QT_MOC_CPP = \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletmodel.cpp \
   qt/pivx/moc_loadingdialog.cpp \
-  qt/moc_zpivcontroldialog.cpp \
   qt/pivx/moc_pwidget.cpp \
   qt/pivx/moc_snackbar.cpp \
   qt/pivx/moc_navmenuwidget.cpp \
@@ -226,7 +223,6 @@ BITCOIN_QT_H = \
   qt/pivx/pfborderimage.h \
   qt/pivx/loadingdialog.h \
   qt/winshutdownmonitor.h \
-  qt/zpivcontroldialog.h \
   qt/pivx/pwidget.h \
   qt/pivx/guitransactionsutils.h \
   qt/pivx/snackbar.h \
@@ -268,7 +264,6 @@ BITCOIN_QT_H = \
   qt/pivx/tooltipmenu.h \
   qt/pivx/addresseswidget.h \
   qt/pivx/defaultdialog.h \
-  qt/pivx/privacywidget.h \
   qt/pivx/coldstakingwidget.h \
   qt/pivx/settings/settingsbackupwallet.h \
   qt/pivx/settings/settingsexportcsv.h \
@@ -383,15 +378,11 @@ RES_ICONS = \
   qt/pivx/res/img/bg-welcome-container.jpg \
   qt/pivx/res/img/bg-welcome-container.png \
   qt/pivx/res/img/bg-welcome-container.svg \
-  qt/pivx/res/img/bg-welcome-container@2x.png \
-  qt/pivx/res/img/bg-welcome-container@3x.png \
   qt/pivx/res/img/ic-check-staking-off.svg \
   qt/pivx/res/img/ic-nav-master-hover.svg \
   qt/pivx/res/img/ic-watch-password.svg \
   qt/pivx/res/img/bg-welcome.jpg \
   qt/pivx/res/img/bg-welcome.svg \
-  qt/pivx/res/img/bg-welcome@2x.jpg \
-  qt/pivx/res/img/bg-welcome@3x.jpg \
   qt/pivx/res/img/bg-welcome.png \
   qt/pivx/res/img/ic-check-staking.svg \
   qt/pivx/res/img/ic-nav-master.svg \
@@ -469,11 +460,9 @@ RES_ICONS = \
   qt/pivx/res/img/ic-arrow-drop-white-down.svg \
   qt/pivx/res/img/ic-combo-box.svg \
   qt/pivx/res/img/ic-send.svg \
-  qt/pivx/res/img/img-logo-pivx@2x.png \
   qt/pivx/res/img/ic-arrow-purple-down.svg \
   qt/pivx/res/img/ic-connect.svg \
   qt/pivx/res/img/ic-submenu-lock.svg \
-  qt/pivx/res/img/img-logo-pivx@3x.png \
   qt/pivx/res/img/img-logo-pivx.svg \
   qt/pivx/res/img/ic-arrow-right-white.svg \
   qt/pivx/res/img/ic-arrow-left-white.svg \
@@ -609,7 +598,6 @@ BITCOIN_QT_WALLET_CPP = \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
   qt/pivx/loadingdialog.cpp \
-  qt/zpivcontroldialog.cpp \
   qt/pivx/pwidget.cpp \
   qt/pivx/guitransactionsutils.cpp \
   qt/pivx/snackbar.cpp \
@@ -650,7 +638,6 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/tooltipmenu.cpp \
   qt/pivx/addresseswidget.cpp \
   qt/pivx/defaultdialog.cpp \
-  qt/pivx/privacywidget.cpp \
   qt/pivx/coldstakingwidget.cpp \
   qt/pivx/settings/settingsbackupwallet.cpp \
   qt/pivx/settings/settingsexportcsv.cpp \

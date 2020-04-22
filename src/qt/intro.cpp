@@ -68,7 +68,7 @@ void FreespaceChecker::check()
     fs::path dataDir = GUIUtil::qstringToBoostPath(dataDirStr);
     uint64_t freeBytesAvailable = 0;
     int replyStatus = ST_OK;
-    QString replyMessage = tr("A new data directory will be created.");
+    QString replyMessage = tr("");
 
     /* Find first parent that exists, so that fs::space does not fail */
     fs::path parentDir = dataDir;
@@ -241,6 +241,7 @@ void Intro::setStatus(int status, const QString& message, quint64 bytesAvailable
         } else {
             ui->freeSpace->setStyleSheet("");
         }
+        ui->freeSpace->setStyleSheet("QLabel { color: #000000 }");
         ui->freeSpace->setText(freeString + ".");
     }
     /* Don't allow confirm in ERROR state */

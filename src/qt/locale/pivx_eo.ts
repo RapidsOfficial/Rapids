@@ -76,11 +76,11 @@
         <translation>Ricevanta adresojn</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Ĉi tiuj estas viaj PIVX adreso por sendi pagojn. Ĉiam kontroku la kvanto kaj la ricevanta antaŭ ol sendi monerojn.</translation>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Ĉi tiuj estas viaj RPD adreso por sendi pagojn. Ĉiam kontroku la kvanto kaj la ricevanta antaŭ ol sendi monerojn.</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
         <translation>Ĉi tiuj estas vian adreson por ricevi pagojn. Ĝi rekomendas uzi novajn ricenvantan adreson por ĉiu nova transakcio.</translation>
     </message>
     <message>
@@ -196,15 +196,15 @@
         <translation>Konfirmi monerĉifrado</translation>
     </message>
     <message>
-        <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
-        <translation>PIVX fermos nun por fini ĉifran procezon. Memoru ke ĉifri vian monujon ne povas plene protekti viajn PIVs de esti ŝtelita per malware infektanta vian komputilon.</translation>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <translation>RPD fermos nun por fini ĉifran procezon. Memoru ke ĉifri vian monujon ne povas plene protekti viajn PIVs de esti ŝtelita per malware infektanta vian komputilon.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Ĉu vi certas ke vi volas ĉifri vian monujon?</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
         <translation>Averto: se vi ĉifras vian monujo kaj perdi vian pasfrazon, vi &lt;b&gt;PERDOS VIAN TUTAN MONON&lt;/b&gt;!</translation>
     </message>
     <message>
@@ -595,8 +595,8 @@
         <translation>Tekstetikedo</translation>
     </message>
     <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
+        <source>zRPD</source>
+        <translation>zRPD</translation>
     </message>
     <message>
         <source>Received</source>
@@ -660,8 +660,8 @@
         <translation>Redaktu sendantan adreson</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid PIVX address.</source>
-        <translation>La enirita "%1" adreso ne estas validan PIVX adreson.</translation>
+        <source>The entered address "%1" is not a valid RPD address.</source>
+        <translation>La enirita "%1" adreso ne estas validan RPD adreson.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -724,16 +724,16 @@
         <translation>versio</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX kerno</translation>
+        <source>Rapids</source>
+        <translation>RPD kerno</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-bajto)</translation>
     </message>
     <message>
-        <source>About PIVX Core</source>
-        <translation>Pri PIVX Kerno</translation>
+        <source>About Rapids</source>
+        <translation>Pri RPD Kerno</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -775,24 +775,24 @@
         <translation>Bonvenon</translation>
     </message>
     <message>
-        <source>Welcome to PIVX Core.</source>
-        <translation>Bonvenon al la PIVX Kerno.</translation>
+        <source>Welcome to Rapids.</source>
+        <translation>Bonvenon al la RPD Kerno.</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
-        <translation>Ĉar estas la unuan fojon ke la programo estas lanĉita, vi povas elekti kie PIVX kernk storigis sian datumojn. </translation>
+        <source>As this is the first time the program is launched, you can choose where Rapids will store its data.</source>
+        <translation>Ĉar estas la unuan fojon ke la programo estas lanĉita, vi povas elekti kie RPD kernk storigis sian datumojn. </translation>
     </message>
     <message>
-        <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>PIVX kerno elŝutos kaj konservi kopion de la PIVX blokĉeno. Almenaŭ %1GB datumoj stokitos en ĉi tiun dosierujo, kaj ĝi kresko kun la tempo. Monujo stokitos en ĉi tiun dosierujo.</translation>
+        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>RPD kerno elŝutos kaj konservi kopion de la RPD blokĉeno. Almenaŭ %1GB datumoj stokitos en ĉi tiun dosierujo, kaj ĝi kresko kun la tempo. Monujo stokitos en ĉi tiun dosierujo.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
         <translation>Uzi defaŭltan dosierujon</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX kerno</translation>
+        <source>Rapids</source>
+        <translation>RPD kerno</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -940,8 +940,8 @@
         <translation>&amp;Monujo</translation>
     </message>
     <message>
-        <source>Automatically open the PIVX client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Aŭtomate malfermi PIVX klienton havenon en la enkursigilo. Tio nur laboras kiam via enkursigilo subtenas UPnP kaj estas ebligita.</translation>
+        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Aŭtomate malfermi RPD klienton havenon en la enkursigilo. Tio nur laboras kiam via enkursigilo subtenas UPnP kaj estas ebligita.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -952,8 +952,8 @@
         <translation>Sperta</translation>
     </message>
     <message>
-        <source>&amp;Start PIVX on system login</source>
-        <translation>&amp;Komencu PIVX en sistem-ensaluto</translation>
+        <source>&amp;Start RPD on system login</source>
+        <translation>&amp;Komencu RPD en sistem-ensaluto</translation>
     </message>
     <message>
         <source>&amp;Spend unconfirmed change</source>
@@ -964,8 +964,8 @@
         <translation>&amp;Reto</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting PIVX.</source>
-        <translation>La uzanta interfaco lingvo povas esti agordi ĉi tie. Tio agordo efektivigos post rekomenci PIVX.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
+        <translation>La uzanta interfaco lingvo povas esti agordi ĉi tie. Tio agordo efektivigos post rekomenci RPD.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -974,8 +974,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</source>
 https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
-        <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
-        <translation>Konekti al la PIVX reto per SOCKS5 prokurilo.</translation>
+        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
+        <translation>Konekti al la RPD reto per SOCKS5 prokurilo.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -1029,8 +1029,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX kerno</translation>
+        <source>Rapids</source>
+        <translation>RPD kerno</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -1057,8 +1057,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Eliri</translation>
     </message>
     <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX Kerno kliento</translation>
+        <source>Rapids client</source>
+        <translation>RPD Kerno kliento</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1151,8 +1151,8 @@ Adreso: %4
         <translation>NEKONATA</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX kerno</translation>
+        <source>Rapids</source>
+        <translation>RPD kerno</translation>
     </message>
     </context>
 <context>
@@ -1214,8 +1214,8 @@ Adreso: %4
         <translation>Rekonstrui indekson</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Bonvenon al la PIVX RPC konzolo.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Bonvenon al la RPD RPC konzolo.</translation>
     </message>
     <message>
         <source>1 &amp;hour</source>
@@ -1435,8 +1435,8 @@ Adreso: %4
         <translation>Tekstetikedo</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Bonvenon al la PIVX RPC konzolo.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Bonvenon al la RPD RPC konzolo.</translation>
     </message>
     <message>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
@@ -1632,8 +1632,8 @@ Adreso: %4
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>PIVX kerno fermanta...</translation>
+        <source>Rapids is shutting down...</source>
+        <translation>RPD kerno fermanta...</translation>
     </message>
     </context>
 <context>
@@ -1650,15 +1650,15 @@ Adreso: %4
         <translation>Formo</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX kerno</translation>
+        <source>Rapids</source>
+        <translation>RPD kerno</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX kerno</translation>
+        <source>Rapids</source>
+        <translation>RPD kerno</translation>
     </message>
     <message>
         <source>The Bitcoin Core developers</source>
@@ -1669,8 +1669,8 @@ Adreso: %4
         <translation>La Dash kerno programistoj</translation>
     </message>
     <message>
-        <source>The PIVX Core developers</source>
-        <translation>La PIVX kerno programistoj</translation>
+        <source>The Rapids developers</source>
+        <translation>La RPD kerno programistoj</translation>
     </message>
     </context>
 <context>

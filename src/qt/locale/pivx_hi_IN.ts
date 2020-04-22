@@ -24,7 +24,7 @@
         <translation>सिक्कों को प्राप्त करने के लिए पता चुनें</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation>पहले इस्तेमाल किए गए पते को चुनें</translation>
     </message>
     </context>

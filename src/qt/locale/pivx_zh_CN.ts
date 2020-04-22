@@ -130,11 +130,11 @@
         <translation>接收地址</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation>这是用于发送PIVX的地址。在发送PIVX之前，请认真核查发送金额和接收地址。</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
         <translation>这是用于接收PIVX的钱包地址。建议每一笔交易都使用一个新的钱包地址。</translation>
     </message>
     <message>
@@ -247,7 +247,7 @@
         <translation>例如John Doe</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
+        <source>Enter a RPD address</source>
         <translation>输入一个PIVX地址</translation>
     </message>
     <message>
@@ -376,7 +376,7 @@ for staking</source>
         <translation>删除</translation>
     </message>
     <message>
-        <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
         <translation>PIVX将关闭以完成加密过程。但是，仅仅加密您的钱包是不够的，因为它并不能阻止恶意软件从您的电脑里面偷取PIVs。</translation>
     </message>
     <message>
@@ -384,7 +384,7 @@ for staking</source>
         <translation>您确定加密您的钱包吗？</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
         <translation>注意：请妥善保管好你的密码，因为在加密后，没有密码将无法打开钱包。这将会让您&lt;b&gt;损失钱包中所有的PIV&lt;/b&gt;！</translation>
     </message>
     <message>
@@ -485,8 +485,8 @@ for staking</source>
         <translation>存款</translation>
     </message>
     <message>
-        <source>0,00 PIV</source>
-        <translation>0,00 PIV</translation>
+        <source>0,00 RPD</source>
+        <translation>0,00 RPD</translation>
     </message>
     <message>
         <source>address</source>
@@ -563,8 +563,8 @@ for staking</source>
         <translation>按钮</translation>
     </message>
     <message>
-        <source>0.00 PIV</source>
-        <translation>0.00 PIV</translation>
+        <source>0.00 RPD</source>
+        <translation>0.00 RPD</translation>
     </message>
     <message>
         <source>0</source>
@@ -774,8 +774,8 @@ for staking</source>
         <translation>按钮</translation>
     </message>
     <message>
-        <source>PIV:</source>
-        <translation>PIV:</translation>
+        <source>RPD:</source>
+        <translation>RPD:</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -903,7 +903,7 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>添加地址</translation>
     </message>
     <message>
-        <source>Delegate or Accept PIV delegation</source>
+        <source>Delegate or Accept RPD delegation</source>
         <translation>授予权限或接受PIV权限</translation>
     </message>
     <message>
@@ -947,8 +947,8 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>条目无效</translation>
     </message>
     <message>
-        <source>Invalid entry, minimum delegable amount is 10 PIV</source>
-        <translation>输入无效，最小委托量为10 PIV</translation>
+        <source>Invalid entry, minimum delegable amount is 10 RPD</source>
+        <translation>输入无效，最小委托量为10 RPD</translation>
     </message>
     <message>
         <source>Owner address invalid</source>
@@ -987,7 +987,7 @@ Do you wish to proceed?</source>
         <translation>委托硬币</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
+        <source>You don't have any RPD to select.</source>
         <translation>您没有任何PIV可选择。</translation>
     </message>
     <message>
@@ -1119,12 +1119,12 @@ address</source>
         <translation>加注数据</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
+        <source>zRPD</source>
+        <translation>zRPD</translation>
     </message>
     <message>
         <source>Sort by</source>
@@ -1155,8 +1155,8 @@ address</source>
         <translation>您可以查看您的帐户的历史</translation>
     </message>
     <message>
-        <source>Amount of PIV and zPIV staked.</source>
-        <translation>已加注的PIV 和 zPIV 金额</translation>
+        <source>Amount of RPD and zRPD staked.</source>
+        <translation>已加注的PIV 和 zRPD 金额</translation>
     </message>
     <message>
         <source>All</source>
@@ -1211,8 +1211,8 @@ address</source>
         <translation>暂无交易</translation>
     </message>
     <message>
-        <source>How to get PIV or zPIV</source>
-        <translation>如何获取PIV 或 zPIV</translation>
+        <source>How to get RPD or zRPD</source>
+        <translation>如何获取PIV 或 zRPD</translation>
     </message>
     <message>
         <source>You can verify the staking activity in the status bar at the top right of the wallet.
@@ -1370,7 +1370,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>编辑发送地址</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid PIVX address.</source>
+        <source>The entered address "%1" is not a valid RPD address.</source>
         <translation>所输入的地址“%1”不是有效的PIVX地址。</translation>
     </message>
     <message>
@@ -1466,15 +1466,15 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>版本</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-位)</translation>
     </message>
     <message>
-        <source>About PIVX Core</source>
+        <source>About Rapids</source>
         <translation>关于PIVX Core</translation>
     </message>
     <message>
@@ -1525,16 +1525,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>欢迎</translation>
     </message>
     <message>
-        <source>Welcome to PIVX Core.</source>
-        <translation>欢迎使用 PIVX Core</translation>
+        <source>Welcome to Rapids.</source>
+        <translation>欢迎使用 Rapids</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
+        <source>As this is the first time the program is launched, you can choose where Rapids will store its data.</source>
         <translation>由于这是该程序第一次启动，您可以选择存储PIVX Core 数据的位置。</translation>
     </message>
     <message>
-        <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>PIVX Core将下载并存储PIVX区块链副本。 至少 %1 GB的数据将存储在此目录中，并且会随着时间的推移而增长。 钱包也将存储在此目录中。</translation>
+        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>RPD Core将下载并存储PIVX区块链副本。 至少 %1 GB的数据将存储在此目录中，并且会随着时间的推移而增长。 钱包也将存储在此目录中。</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1553,8 +1553,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>OK</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -1665,8 +1665,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>创建新的主节点控制器</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 10.000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;创建一个PIVX 主节点，你必须奉献给网络10.000 PIV (PIVX的单位)(但是，这些币仍属于你，永远都是属于你的财产)。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;你可以在任何时候关闭该节点并解锁币。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;创建一个PIVX 主节点，你必须奉献给网络10.000 RPD (PIVX的单位)(但是，这些币仍属于你，永远都是属于你的财产)。&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;你可以在任何时候关闭该节点并解锁币。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Make sure you have this amount of coins.</source>
@@ -1677,7 +1677,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>设置主节点名称</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;将进行10,000 PIV的交易&lt;/p&gt;&lt;p&gt;到您的钱包空地址&lt;/p&gt;&lt;p&gt;地址被标记在主节点的名称之下&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -1910,8 +1910,8 @@ Are you sure?</source>
         <translation>主节点配置文件不存在</translation>
     </message>
     <message>
-        <source>Not enough balance to create a masternode, 10,000 PIV required.</source>
-        <translation>没有足够的余额创建主节点，需要10,000 PIV。</translation>
+        <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
+        <translation>没有足够的余额创建主节点，需要10,000 RPD。</translation>
     </message>
     <message>
         <source>Error creating masternode</source>
@@ -2092,7 +2092,7 @@ Are you sure?</source>
         <translation>如果您要禁用未经确认发送，在至少有一个确认之前&lt;br/&gt;不能更改。&lt;br/&gt;这也将影响您的余额计算。</translation>
     </message>
     <message>
-        <source>Automatically open the PIVX client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
         <translation>自动打开路由器上的PIVX钱包使用的端口。 这只有当您的路由器支持UPnP并且该享生效时才有用。</translation>
     </message>
     <message>
@@ -2112,11 +2112,11 @@ Are you sure?</source>
         <translation>专家</translation>
     </message>
     <message>
-        <source>Automatically start PIVX after logging in to the system.</source>
+        <source>Automatically start RPD after logging in to the system.</source>
         <translation>登录系统后自动启动PIVX。</translation>
     </message>
     <message>
-        <source>&amp;Start PIVX on system login</source>
+        <source>&amp;Start RPD on system login</source>
         <translation>&amp;开机启动PIVX</translation>
     </message>
     <message>
@@ -2144,7 +2144,7 @@ Are you sure?</source>
         <translation>&amp;网络</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting PIVX.</source>
+        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
         <translation>可以在这里设置用户界面语言。此设置将在重新启动PIVX后生效。</translation>
     </message>
     <message>
@@ -2158,15 +2158,15 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>端口使用&amp;UPnP</translation>
     </message>
     <message>
-        <source>Enable automatic minting of PIV units to zPIV</source>
+        <source>Enable automatic minting of RPD units to zRPD</source>
         <translation>启动自动铸造PIV到zPIV</translation>
     </message>
     <message>
-        <source>Enable zPIV Automint</source>
+        <source>Enable zRPD Automint</source>
         <translation>启动自动铸造zPIV</translation>
     </message>
     <message>
-        <source>Enable automatic zPIV minting from specific addresses</source>
+        <source>Enable automatic zRPD minting from specific addresses</source>
         <translation>启用从特定地址自动生成zPIV</translation>
     </message>
     <message>
@@ -2174,19 +2174,19 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>启动自动铸造地址</translation>
     </message>
     <message>
-        <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
+        <source>Percentage of incoming RPD which get automatically converted to zRPD via Zerocoin Protocol (min: 10%)</source>
         <translation>通过零币协议自动转换为zPIV的传入PIV的百分比(最小:10%)</translation>
     </message>
     <message>
-        <source>Percentage of autominted zPIV</source>
+        <source>Percentage of autominted zRPD</source>
         <translation>自动铸造的zPIV百分比</translation>
     </message>
     <message>
-        <source>Wait with automatic conversion to Zerocoin until enough PIV for this denomination is available</source>
+        <source>Wait with automatic conversion to Zerocoin until enough RPD for this denomination is available</source>
         <translation>等待自动转换为零币，直到足够的PIV为这种面额可用</translation>
     </message>
     <message>
-        <source>Preferred Automint zPIV Denomination</source>
+        <source>Preferred Automint zRPD Denomination</source>
         <translation>首选自动铸造zPIV面额</translation>
     </message>
     <message>
@@ -2194,7 +2194,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>股权分割阈值:</translation>
     </message>
     <message>
-        <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
+        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
         <translation>通过SOCKS5代理连接到PIVX网络。</translation>
     </message>
     <message>
@@ -2341,8 +2341,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -2369,8 +2369,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>关闭应用</translation>
     </message>
     <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX Core 客户端</translation>
+        <source>Rapids client</source>
+        <translation>Rapids 客户端</translation>
     </message>
     <message>
         <source>Error</source>
@@ -2413,7 +2413,7 @@ Address: %4
 </translation>
     </message>
     <message>
-        <source>A fatal error occurred. PIVX can no longer continue safely and will quit.</source>
+        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
         <translation>发生了一个致命的错误。PIVX不能继续安全，将退出。</translation>
     </message>
 </context>
@@ -2451,7 +2451,7 @@ Address: %4
         <translation>无法启动pivx:点击支付处理程序</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>
+        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
         <translation>URI不能被解析!这可能是由无效的PIVX地址或格式错误的URI参数造成的。</translation>
     </message>
     <message>
@@ -2565,13 +2565,13 @@ Address: %4
         <translation>铸造</translation>
     </message>
     <message>
-        <source>Minting zPIV anonymizes your PIV by removing any
+        <source>Minting zRPD anonymizes your RPD by removing any
 transaction history, making transactions untraceable </source>
         <translation>铸造zPIV会通过删除任何
 交易历史匿名化您的PIV，使交易无法被跟踪</translation>
     </message>
     <message>
-        <source>Mint new zPIV or convert back to PIV</source>
+        <source>Mint new zRPD or convert back to RPD</source>
         <translation>铸造新的zPIV或转换回PIV</translation>
     </message>
     <message>
@@ -2583,19 +2583,19 @@ transaction history, making transactions untraceable </source>
         <translation>暂无交易</translation>
     </message>
     <message>
-        <source>Mint zPIV</source>
+        <source>Mint zRPD</source>
         <translation>铸造zPIV</translation>
     </message>
     <message>
-        <source>Enter amount of PIV to mint into zPIV</source>
+        <source>Enter amount of RPD to mint into zRPD</source>
         <translation>输入一定量的PIV铸造成zPIV</translation>
     </message>
     <message>
-        <source>Convert back to PIV</source>
+        <source>Convert back to RPD</source>
         <translation>转换回PIV</translation>
     </message>
     <message>
-        <source>Enter amount of zPIV to convert back into PIV</source>
+        <source>Enter amount of zRPD to convert back into RPD</source>
         <translation>输入一定量的zPIV转换回PIV</translation>
     </message>
     <message>
@@ -2603,12 +2603,12 @@ transaction history, making transactions untraceable </source>
         <translation>零币</translation>
     </message>
     <message>
-        <source>zPIV is currently undergoing maintenance</source>
+        <source>zRPD is currently undergoing maintenance</source>
         <translation>zPIV目前正在维护中</translation>
     </message>
     <message>
-        <source>You need to unlock the wallet to be able to %1 zPIV</source>
-        <translation>你需要解锁钱包才能%1 zPIV</translation>
+        <source>You need to unlock the wallet to be able to %1 zRPD</source>
+        <translation>你需要解锁钱包才能%1 zRPD</translation>
     </message>
     <message>
         <source>convert</source>
@@ -2623,15 +2623,15 @@ transaction history, making transactions untraceable </source>
         <translation>无效值</translation>
     </message>
     <message>
-        <source>zPIV minted successfully</source>
+        <source>zRPD minted successfully</source>
         <translation>zPIV铸造成功</translation>
     </message>
     <message>
-        <source>zPIV converted back to PIV</source>
-        <translation>zPIV 转换回PIV</translation>
+        <source>zRPD converted back to RPD</source>
+        <translation>zRPD 转换回PIV</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
+        <source>You don't have any RPD to select.</source>
         <translation>您没有任何PIV可选择。</translation>
     </message>
     <message>
@@ -2731,8 +2731,8 @@ transaction history, making transactions untraceable </source>
         <translation>金额</translation>
     </message>
     <message>
-        <source>Enter a PIVX address (e.g. %1)</source>
-        <translation>输入一个 PIVX 地址 (e.g. %1)</translation>
+        <source>Enter a RPD address (e.g. %1)</source>
+        <translation>输入一个 RPD 地址 (e.g. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2779,8 +2779,8 @@ transaction history, making transactions untraceable </source>
         <translation>%1 毫秒</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" does not exist.</source>
@@ -2799,7 +2799,7 @@ transaction history, making transactions untraceable </source>
         <translation>读取主节点配置文件出错:%1</translation>
     </message>
     <message>
-        <source>PIVX Core didn't yet exit safely...</source>
+        <source>Rapids didn't yet exit safely...</source>
         <translation>PIVX核心尚未安全退出……</translation>
     </message>
 </context>
@@ -2874,7 +2874,7 @@ transaction history, making transactions untraceable </source>
         <translation>区块链</translation>
     </message>
     <message>
-        <source>Open the PIVX debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation>从当前数据目录打开PIVX调试日志文件。对于大型日志文件，这可能需要几秒钟。</translation>
     </message>
     <message>
@@ -3018,7 +3018,7 @@ transaction history, making transactions untraceable </source>
         <translation>自定义备份路径:</translation>
     </message>
     <message>
-        <source>Custom zPIV Backup Path:</source>
+        <source>Custom zRPD Backup Path:</source>
         <translation>自定义zPIV备份路径:</translation>
     </message>
     <message>
@@ -3098,7 +3098,7 @@ transaction history, making transactions untraceable </source>
         <translation>出：</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
+        <source>Welcome to the RPD RPC console.</source>
         <translation>欢迎访问PIVX RPC控制台</translation>
     </message>
     <message>
@@ -3268,7 +3268,7 @@ transaction history, making transactions untraceable </source>
         <translation>接收</translation>
     </message>
     <message>
-        <source>Scan the QR code or copy the address to receive PIV.</source>
+        <source>Scan the QR code or copy the address to receive RPD.</source>
         <translation>扫描二维码或复制地址接收PIV</translation>
     </message>
     <message>
@@ -3370,8 +3370,8 @@ transaction history, making transactions untraceable </source>
         <translation>金额</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -3398,7 +3398,7 @@ transaction history, making transactions untraceable </source>
         <translation>请求</translation>
     </message>
     <message>
-        <source>Instead of only sharing a PIVX address, you can create a Payment Request message which bundles up more information than is contained in just a PIVX address.</source>
+        <source>Instead of only sharing a RPD address, you can create a Payment Request message which bundles up more information than is contained in just a RPD address.</source>
         <translation>与共享PIVX地址不同，您可以创建一个支付请求消息，该消息包含的信息比仅包含PIVX地址所包含的信息更多。</translation>
     </message>
     <message>
@@ -3466,7 +3466,7 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
         <translation>自定义更改地址</translation>
     </message>
     <message>
-        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" PIVX address</source>
+        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" RPD address</source>
         <translation>输入值减去输出值所得的值的其余部分归为“更改”PIVX地址</translation>
     </message>
 </context>
@@ -3559,15 +3559,15 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
         <translation>发送</translation>
     </message>
     <message>
-        <source>You can transfer public coins (PIV) or private coins (zPIV)</source>
-        <translation>您可以转换公共币(PIV)或私人币(zPIV)</translation>
+        <source>You can transfer public coins (RPD) or private coins (zRPD)</source>
+        <translation>您可以转换公共币(RPD)或私人币(zRPD)</translation>
     </message>
     <message>
         <source>Select coin type to spend</source>
         <translation>选择需要花费的币种类</translation>
     </message>
     <message>
-        <source>Enter a PIVX address or contact label</source>
+        <source>Enter a RPD address or contact label</source>
         <translation>输入PIVX地址或联系人标签</translation>
     </message>
     <message>
@@ -3595,11 +3595,11 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
         <translation>花费总金额</translation>
     </message>
     <message>
-        <source>Send PIV</source>
+        <source>Send RPD</source>
         <translation>花费PIV</translation>
     </message>
     <message>
-        <source>Send zPIV</source>
+        <source>Send zRPD</source>
         <translation>花费zPIV</translation>
     </message>
     <message>
@@ -3655,7 +3655,7 @@ These coins will no longer be cold-staked.</source>
         <translation>花费零币</translation>
     </message>
     <message>
-        <source>zPIV is currently undergoing maintenance.</source>
+        <source>zRPD is currently undergoing maintenance.</source>
         <translation>zPIV目前正在维护中</translation>
     </message>
     <message>
@@ -3675,11 +3675,11 @@ These coins will no longer be cold-staked.</source>
 %2</translation>
     </message>
     <message>
-        <source>zPIV transaction sent!</source>
+        <source>zRPD transaction sent!</source>
         <translation>zPIV交易已发送！</translation>
     </message>
     <message>
-        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
+        <source>Version 1 zRPD require a security level of 100 to successfully spend.</source>
         <translation>版本1 zPIV要求安全级别为100才能成功使用。</translation>
     </message>
     <message>
@@ -3719,11 +3719,11 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>定制费用%1</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
+        <source>You don't have any RPD to select.</source>
         <translation>您没有任何PIV可供选择。</translation>
     </message>
     <message>
-        <source>You don't have any zPIV in your balance to select.</source>
+        <source>You don't have any zRPD in your balance to select.</source>
         <translation>你的余额中没有zPIV可供选择。</translation>
     </message>
     <message>
@@ -3901,7 +3901,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>解密钥匙</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
+        <source>Enter a RPD address</source>
         <translation>输入一个PIVX地址</translation>
     </message>
     <message>
@@ -4030,7 +4030,7 @@ Verify that you have installed a predetermined text editor.</source>
 确认您已经安装了预定的文本编辑器</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
+        <source>Welcome to the RPD RPC console.</source>
         <translation>欢迎访问PIVX RPC控制台</translation>
     </message>
     <message>
@@ -4124,34 +4124,34 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>按钮</translation>
     </message>
     <message>
-        <source>1) What is PIVX?</source>
+        <source>1) What is RPD?</source>
         <translation>1）什么是PIVX?</translation>
     </message>
     <message>
-        <source>2) Why are my PIV unspendable?</source>
+        <source>2) Why are my RPD unspendable?</source>
         <translation>2) 我的PIV为什么不能用？</translation>
     </message>
     <message>
-        <source>3) PIVX privacy? What is Zerocoin (zPIV)?</source>
-        <translation>3）PIVX 隐私？什么是零币(zPIV)？</translation>
+        <source>3) RPD privacy? What is Zerocoin (zRPD)?</source>
+        <translation>3）RPD 隐私？什么是零币(zRPD)？</translation>
     </message>
     <message>
-        <source>4) Why are my zPIV unspendable?</source>
+        <source>4) Why are my zRPD unspendable?</source>
         <translation>4) 我的zPIV为什么不能用？</translation>
     </message>
     <message>
         <source>5) Why did my wallet convert the balance
-    into zPIV automatically?</source>
+    into zRPD automatically?</source>
         <translation>5）为什么我的钱包把余额自动转换成
 zPIV了?</translation>
     </message>
     <message>
-        <source>6) How do I receive PIV/zPIV?</source>
-        <translation>6）如何接收PIV/zPIV?</translation>
+        <source>6) How do I receive RPD/zRPD?</source>
+        <translation>6）如何接收PIV/zRPD?</translation>
     </message>
     <message>
-        <source>7) How do I stake PIV/zPIV?</source>
-        <translation>7）如何加注PIV/zPIV?</translation>
+        <source>7) How do I stake RPD/zRPD?</source>
+        <translation>7）如何加注PIV/zRPD?</translation>
     </message>
     <message>
         <source>8) Where I should go if I need support?</source>
@@ -4170,20 +4170,20 @@ zPIV了?</translation>
         <translation>1</translation>
     </message>
     <message>
-        <source>What is PIVX?</source>
+        <source>What is RPD?</source>
         <translation>PIVX是什么?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           PIVX is a form of digital online money using blockchain technology
+                           RPD is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  PIVX incorporates market leading security &amp;
+                           zero fees.  RPD incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
-                           to implement ZeroCoin(zPIV) and Zerocoin staking.
+                           to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           PIVX utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of PIVX to participate in earning block rewards
+                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of RPD to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4194,7 +4194,7 @@ PIVX是一种使用区块链技术的数字在线货币
 全球范围内快捷交易，即时，基本为
 零的交易费用。PIVX是市场上领先的安全和
 隐私加密货币，也是第一个PoS(股权证明)加密货币
-实现零币(zPIV)和零币加注。
+实现零币(zRPD)和零币加注。
 &lt;/p&gt;&lt;p align="justify"&gt;
 PIVX使用了一个股权证明(PoS)一致系统算法，
 允许所有PIVX的所有者参与赚取区块奖励
@@ -4206,16 +4206,16 @@ PIVX使用了一个股权证明(PoS)一致系统算法，
         <translation>2</translation>
     </message>
     <message>
-        <source>Why are my PIV unspendable?</source>
+        <source>Why are my RPD unspendable?</source>
         <translation>我的PIV为什么不能用？</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Newly received PIVX requires 6 confirmations on the network
+                           Newly received RPD requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Your PIVX wallet also needs to be completely synchronized
+                           Your RPD wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
@@ -4234,28 +4234,28 @@ PIVX使用了一个股权证明(PoS)一致系统算法，
         <translation>3</translation>
     </message>
     <message>
-        <source>PIVX privacy? What is Zerocoin (zPIV)?</source>
-        <translation>PIVX 隐私？什么是零币(zPIV)？</translation>
+        <source>RPD privacy? What is Zerocoin (zRPD)?</source>
+        <translation>RPD 隐私？什么是零币(zRPD)？</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zPIV is an optional privacy-centric method of coin mixing on the
-                           PIVX blockchain. Basically all your transactions cannot be tracked
+                           zRPD is an optional privacy-centric method of coin mixing on the
+                           RPD blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt;
-                           "PIVX Zerocoin (zPIV) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt;
+                           "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
 zPIV是一种可选的以隐私为中心的隐私币
 它是PIVX区块链的一员，基本上在任何块资源管理器
-所有的交易都不能被跟踪&lt;a style='color: #b088ff' href='https://PIVX.org/zpiv/'&gt;
+所有的交易都不能被跟踪&lt;a style='color: #b088ff' href='https://RPD.org/zpiv/'&gt;
 
 你可以阅读更多关于技术方面的文章&lt;/a&gt;
 
-PIVX零币(zPIV)技术文件
+PIVX零币(zRPD)技术文件
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
 </translation>
     </message>
@@ -4264,13 +4264,13 @@ PIVX零币(zPIV)技术文件
         <translation>4</translation>
     </message>
     <message>
-        <source>Why are my zPIV unspendable?</source>
+        <source>Why are my zRPD unspendable?</source>
         <translation>我的PIV为什么不能用？</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           After minting, zPIV will require 20 confirmations as well as 1
+                           After minting, zRPD will require 20 confirmations as well as 1
                            additional mint of the same denomination on the network to
                            become eligible for spending.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4287,7 +4287,7 @@ PIVX零币(zPIV)技术文件
         <translation>5</translation>
     </message>
     <message>
-        <source>Why did my wallet convert the balance into zPIV automatically?</source>
+        <source>Why did my wallet convert the balance into zRPD automatically?</source>
         <translation>为什么我的钱包会自动将余额转换成zPIV ?</translation>
     </message>
     <message>
@@ -4295,16 +4295,16 @@ PIVX零币(zPIV)技术文件
         <translation>6</translation>
     </message>
     <message>
-        <source>How do I receive PIV/zPIV?</source>
-        <translation>我怎么接收PIV/zPIV?</translation>
+        <source>How do I receive RPD/zRPD?</source>
+        <translation>我怎么接收PIV/zRPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zPIV can be spent and sent to any PIVX address. The receiver will
-                           receive standard PIVX but the origin of the PIVX is anonymized by the zPIV Protocol.
+                           zRPD can be spent and sent to any RPD address. The receiver will
+                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           If you want more zPIV you will need to mint your balance in the “Privacy” tab.
+                           If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
@@ -4320,18 +4320,18 @@ PIVX零币(zPIV)技术文件
         <translation>7</translation>
     </message>
     <message>
-        <source>How do I stake PIV/zPIV?</source>
-        <translation>我怎么加注PIV/zPIV?</translation>
+        <source>How do I stake RPD/zRPD?</source>
+        <translation>我怎么加注PIV/zRPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           To Stake PIVX:
+                           To Stake RPD:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           You must have a balance of PIVX with a minimum of 101 confirmations.
+                           You must have a balance of RPD with a minimum of 101 confirmations.
                            &lt;li&gt;
                            Your wallet must stay online and be unlocked for anonymization and staking purposes.
                            &lt;li&gt;
@@ -4340,12 +4340,12 @@ PIVX零币(zPIV)技术文件
                            You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state "Staking Enabled" to indicate it is staking.  Using the command line interface (pivx-cli); the command &lt;i&gt;getstakingstatus&lt;/i&gt; will confirm that staking is active.
                            &lt;/li&gt;&lt;/ol&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           To Stake zPIV:
+                           To Stake zRPD:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           Your newly minted or existing zPIV balance must have a minimum of 200 confirmations.
+                           Your newly minted or existing zRPD balance must have a minimum of 200 confirmations.
                            &lt;li&gt;
                            Your wallet must stay online and be unlocked for anonymization and staking purposes.
                            Staking should now be enabled.
@@ -4391,19 +4391,19 @@ PIVX零币(zPIV)技术文件
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://Discord.PIVX.com'&gt;
+                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
                            #support in our Discord&lt;/a&gt;.
                            If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://PIVX.FreshDesk.com'&gt;
+                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
                            our Freshdesk support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
 例如，我们在大多数官方聊天组中都有支持频道
-&lt;a style='color: #b088ff' href='https://Discord.PIVX.com'&gt;
+&lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
 #在&lt;/a&gt;Discord支持我们
-如果您想订票&lt;a style='color: #b088ff' href='https://PIVX.FreshDesk.com'&gt;，我们可以为您提供前台支持&lt;/a&gt;
+如果您想订票&lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;，我们可以为您提供前台支持&lt;/a&gt;
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -4417,8 +4417,8 @@ PIVX零币(zPIV)技术文件
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           A masternode is a computer running a full node PIVX core wallet with a
-                           requirement of 10,000 PIV secured collateral to provide extra services
+                           A masternode is a computer running a full node RPD core wallet with a
+                           requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
                            &lt;/p&gt;&lt;p align="justify"&gt;
@@ -4440,17 +4440,17 @@ PIVX零币(zPIV)技术文件
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in PIVX Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the PIVX network&lt;/li&gt;
+                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
                            Requirements:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;10,000 PIV per single Masternode instance&lt;/li&gt;
+                           &lt;li&gt;10,000 RPD per single Masternode instance&lt;/li&gt;
                            &lt;li&gt;Must be stored in a core wallet&lt;/li&gt;
                            &lt;li&gt;Need dedicated IP address&lt;/li&gt;
                            &lt;li&gt;Masternode wallet to remain online&lt;/li&gt;
@@ -4492,7 +4492,7 @@ PIVX零币(zPIV)技术文件
 要求：
 &lt;/p&gt;&lt;p align="justify"&gt;
 &lt;ul&gt;
-&lt;li&gt;每个主节点实例有10,000 PIV&lt;/li&gt;
+&lt;li&gt;每个主节点实例有10,000 RPD&lt;/li&gt;
 &lt;li&gt;必须存储在核心钱包&lt;/li&gt;
 &lt;li&gt;需要专用IP地址&lt;/li&gt;
 主节点钱包保持在线&lt;li&gt;
@@ -4510,7 +4510,7 @@ PIVX零币(zPIV)技术文件
         <translation>什么是主节点控制器？</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 PIV collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;主节点控制器钱包是在控制器-远程主节点设置期间10,000 PIV附属品可以驻留的地方。这是一个可以激活远程主节点钱包的钱包/s，远程主节点保持在线的时候，可以让你的抵押品硬币离线。&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
@@ -4680,7 +4680,7 @@ PIVX零币(zPIV)技术文件
         <translation>脚本&amp;验证线程数</translation>
     </message>
     <message>
-        <source>Start PIVX on system login</source>
+        <source>Start RPD on system login</source>
         <translation>开机启动PIVX</translation>
     </message>
     <message>
@@ -4768,7 +4768,7 @@ Are you sure?
         <translation>查看列表</translation>
     </message>
     <message>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other PIVX addresses after it matures.</source>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other RPD addresses after it matures.</source>
         <translation>成熟以后，多重花费允许您自动发送高达 100% 的股权或主节点奖励到其他PIVX地址列表</translation>
     </message>
     <message>
@@ -4875,7 +4875,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>签署/验证消息</translation>
     </message>
     <message>
-        <source>Enter a PIVX address or contact label</source>
+        <source>Enter a RPD address or contact label</source>
         <translation>输入PIVX地址或联系人标签</translation>
     </message>
     <message>
@@ -5236,7 +5236,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>常见问题</translation>
     </message>
     <message>
-        <source>About PIVX</source>
+        <source>About RPD</source>
         <translation>关于PIVX </translation>
     </message>
     <message>
@@ -5303,8 +5303,8 @@ Are you sure?
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>PIVX 核心正在关闭...</translation>
+        <source>Rapids is shutting down...</source>
+        <translation>RPD 核心正在关闭...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -5333,15 +5333,15 @@ Are you sure?
         <translation>正在下载…</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -5356,8 +5356,8 @@ Are you sure?
         <translation>达世币核心开发者</translation>
     </message>
     <message>
-        <source>The PIVX Core developers</source>
-        <translation>PIVX 核心开发者</translation>
+        <source>The Rapids developers</source>
+        <translation>RPD 核心开发者</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -5394,12 +5394,12 @@ Are you sure?
         <translation>来自</translation>
     </message>
     <message>
-        <source>480.0685 PIV</source>
-        <translation>480.0685 PIV</translation>
+        <source>480.0685 RPD</source>
+        <translation>480.0685 RPD</translation>
     </message>
     <message>
-        <source>1,000 zPIV</source>
-        <translation>1,000 zPIV</translation>
+        <source>1,000 zRPD</source>
+        <translation>1,000 zRPD</translation>
     </message>
     <message>
         <source>Available</source>
@@ -5410,24 +5410,24 @@ Are you sure?
         <translation>进行当中：</translation>
     </message>
     <message>
-        <source>6.943 PIV</source>
-        <translation>6.943 PIV</translation>
+        <source>6.943 RPD</source>
+        <translation>6.943 RPD</translation>
     </message>
     <message>
         <source>Immature</source>
         <translation>不成熟</translation>
     </message>
     <message>
-        <source>10 PIV</source>
-        <translation>10 PIV</translation>
+        <source>10 RPD</source>
+        <translation>10 RPD</translation>
     </message>
     <message>
-        <source>60 zPIV</source>
-        <translation>60 PIV</translation>
+        <source>60 zRPD</source>
+        <translation>60 RPD</translation>
     </message>
     <message>
-        <source>10 zPIV</source>
-        <translation>10 PIV</translation>
+        <source>10 zRPD</source>
+        <translation>10 RPD</translation>
     </message>
     <message>
         <source>Wallet Unlocked for staking</source>
@@ -5743,19 +5743,19 @@ Are you sure?
         <translation>模糊接收</translation>
     </message>
     <message>
-        <source>PIV Stake</source>
+        <source>RPD Stake</source>
         <translation>PIV加注</translation>
     </message>
     <message>
-        <source>zPIV Stake</source>
-        <translation>zPIV 加注</translation>
+        <source>zRPD Stake</source>
+        <translation>zRPD 加注</translation>
     </message>
     <message>
-        <source>PIV Cold Stake</source>
+        <source>RPD Cold Stake</source>
         <translation>PIV冷饮</translation>
     </message>
     <message>
-        <source>PIV Stake in behalf of</source>
+        <source>RPD Stake in behalf of</source>
         <translation>PIV权益代表</translation>
     </message>
     <message>
@@ -5779,23 +5779,23 @@ Are you sure?
         <translation>模糊创建命名</translation>
     </message>
     <message>
-        <source>Converted PIV to zPIV</source>
+        <source>Converted RPD to zRPD</source>
         <translation>转换PIV为zPIV</translation>
     </message>
     <message>
-        <source>Spent zPIV</source>
+        <source>Spent zRPD</source>
         <translation>已经花费zPIV</translation>
     </message>
     <message>
-        <source>Received PIV from zPIV</source>
+        <source>Received RPD from zRPD</source>
         <translation>从zPIV接收PIV</translation>
     </message>
     <message>
-        <source>Minted Change as zPIV from zPIV Spend</source>
+        <source>Minted Change as zRPD from zRPD Spend</source>
         <translation>铸币的变化，从zPIV花费zPIV</translation>
     </message>
     <message>
-        <source>Converted zPIV to PIV</source>
+        <source>Converted zRPD to RPD</source>
         <translation>转换PIV为zPIV</translation>
     </message>
     <message>
@@ -5890,8 +5890,8 @@ Are you sure?
         <translation>总金额</translation>
     </message>
     <message>
-        <source>2 PIV</source>
-        <translation>2 PIV</translation>
+        <source>2 RPD</source>
+        <translation>2 RPD</translation>
     </message>
     <message>
         <source>Coin inputs:</source>
@@ -5914,8 +5914,8 @@ Are you sure?
         <translation>费用：</translation>
     </message>
     <message>
-        <source>0.0001 PIV</source>
-        <translation>0.0001 PIV</translation>
+        <source>0.0001 RPD</source>
+        <translation>0.0001 RPD</translation>
     </message>
     <message>
         <source>Change address:</source>
@@ -6001,8 +6001,8 @@ Are you sure?
         <translation>18/05/18</translation>
     </message>
     <message>
-        <source>+0.000585 PIV</source>
-        <translation>+0.000585 PIV</translation>
+        <source>+0.000585 RPD</source>
+        <translation>+0.000585 RPD</translation>
     </message>
 </context>
 <context>
@@ -6012,8 +6012,8 @@ Are you sure?
         <translation>发送币</translation>
     </message>
     <message>
-        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 PIV.</source>
-        <translation>SwiftX目前还不支持发送这么高的值。当前的交易限制为%1 PIV。</translation>
+        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 RPD.</source>
+        <translation>SwiftX目前还不支持发送这么高的值。当前的交易限制为%1 RPD。</translation>
     </message>
 </context>
 <context>
@@ -6087,25 +6087,25 @@ Are you sure?
     </message>
     <message>
         <source>Welcome to
-PIVX Core Wallet</source>
+Rapids Wallet</source>
         <translation>欢迎
 PIVX核心钱包</translation>
     </message>
     <message>
-        <source>PIVX is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <source>RPD is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
         <translation>PIVX是世界上最先进的隐私保护技术，由经验丰富的开发人员和密码专家开发。</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - PIVX believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - RPD believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;正如我们的宣言所说:隐私是一项不容协商的基本人权;它赋予用户随时随地与任何人共享数据的自由——PIVX相信自我主权&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>The masternode network is PIVX's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
+        <source>The masternode network is RPD's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
         <translation>主节点网络是PIVX在区块链之上的第二层网络，它使我们的DAO能够提供去中心的治理。</translation>
     </message>
     <message>
-        <source>How PIVX respects your privacy?</source>
-        <translation>PIVX 到底是怎么尊重你的隐私的？</translation>
+        <source>How RPD respects your privacy?</source>
+        <translation>RPD 到底是怎么尊重你的隐私的？</translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
@@ -6119,7 +6119,7 @@ PIVX核心钱包</translation>
 <context>
     <name>ZPivControlDialog</name>
     <message>
-        <source>Select zPIV to Spend</source>
+        <source>Select zRPD to Spend</source>
         <translation>选择zPIV 花费</translation>
     </message>
     <message>
@@ -6155,7 +6155,7 @@ PIVX核心钱包</translation>
         <translation>选择／删除所有</translation>
     </message>
     <message>
-        <source>Select zPIV Denominations to Spend</source>
+        <source>Select zRPD Denominations to Spend</source>
         <translation>选择zPIV 面额花费</translation>
     </message>
 </context>
@@ -6186,7 +6186,7 @@ PIVX核心钱包</translation>
         <translation>计算累加器检查点并不是块索引记录的内容</translation>
     </message>
     <message>
-        <source>Cannot obtain a lock on data directory %s. PIVX Core is probably already running.</source>
+        <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
         <translation>无法获取数据目录%s锁。PIVX核心可能已经在运行了。</translation>
     </message>
     <message>
@@ -6218,7 +6218,7 @@ PIVX核心钱包</translation>
         <translation>启用从特定地址自动生成零币(0-1，默认:%u)</translation>
     </message>
     <message>
-        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
+        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
         <translation>启用每次zPIV生成后触发的自动钱包备份(0-1，默认值:%u)</translation>
     </message>
     <message>
@@ -6226,11 +6226,11 @@ PIVX核心钱包</translation>
         <translation>启用冷堆叠（0-1，默认值：%u）。 如果累计= 0，则禁用</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
+        <source>Enable or disable staking functionality for RPD inputs (0-1, default: %u)</source>
         <translation>启用或禁用PIV输入标记功能(0-1，默认值:%u)</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
+        <source>Enable or disable staking functionality for zRPD inputs (0-1, default: %u)</source>
         <translation>启用或禁用zPIV输入的标记功能(0-1，默认值:%u)</translation>
     </message>
     <message>
@@ -6266,11 +6266,11 @@ PIVX核心钱包</translation>
         <translation>当最佳区块更改时执行命令(cmd中的%s被块散列替换)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
+        <source>Fees (in RPD/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
         <translation>小于此值的费用(以PIV/Kb为单位)视为零中继费用(默认值:%s)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
+        <source>Fees (in RPD/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
         <translation>小于此值的费用(以PIV/Kb为单位)被认为是交易创建的零费用(默认值:%s)</translation>
     </message>
     <message>
@@ -6386,7 +6386,7 @@ PIVX核心钱包</translation>
         <translation>网络版本字符串的总长度(%i)超过最大长度(%i)。减少任务的数量或大小。</translation>
     </message>
     <message>
-        <source>Unable to bind to %s on this computer. PIVX Core is probably already running.</source>
+        <source>Unable to bind to %s on this computer. Rapids is probably already running.</source>
         <translation>无法绑定到此计算机上的%s。PIVX核心可能已经在运行了。</translation>
     </message>
     <message>
@@ -6394,11 +6394,11 @@ PIVX核心钱包</translation>
         <translation>无法为这笔交易找到足够的模糊基金。</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 PIV.</source>
+        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
         <translation>无法找到不等于10000 PIV的模糊非计价基金来进行这笔交易。</translation>
     </message>
     <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 PIV.</source>
+        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
         <translation>无法为这次交易找到不等于10000 PIV的足够资金。</translation>
     </message>
     <message>
@@ -6414,12 +6414,12 @@ PIVX核心钱包</translation>
         <translation>警告:-支付tx费用设置的非常高!这是您发送交易时要支付的交易费。</translation>
     </message>
     <message>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>警告：由于时差，对等连接已断开。 请检查计算机的日期和时间是否正确！ 如果您的时钟错误，PIVX Core将无法正常工作。</translation>
+        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>警告：由于时差，对等连接已断开。 请检查计算机的日期和时间是否正确！ 如果您的时钟错误，RPD Core将无法正常工作。</translation>
     </message>
     <message>
-        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>注意：请检查您的电脑的日期和时间是否正确！ 如果您的时间设置不正确，PIVX Core将无法正常工作。</translation>
+        <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>注意：请检查您的电脑的日期和时间是否正确！ 如果您的时间设置不正确，RPD Core将无法正常工作。</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -6558,7 +6558,7 @@ PIVX核心钱包</translation>
         <translation>版权所有(C) 2014-%i的达世核心开发者</translation>
     </message>
     <message>
-        <source>Copyright (C) 2015-%i The PIVX Core Developers</source>
+        <source>Copyright (C) 2015-%i The Rapids Developers</source>
         <translation>版权所有(C) 2015-%i PIVX核心开发者</translation>
     </message>
     <message>
@@ -6610,7 +6610,7 @@ PIVX核心钱包</translation>
         <translation>启用自动零币铸造(0-1，默认:%u)</translation>
     </message>
     <message>
-        <source>Enable precomputation of zPIV spends and stakes (0-1, default %u)</source>
+        <source>Enable precomputation of zRPD spends and stakes (0-1, default %u)</source>
         <translation>启用预先计算zPIV的花费和加注(0-1，默认%u)</translation>
     </message>
     <message>
@@ -6646,7 +6646,7 @@ PIVX核心钱包</translation>
         <translation>加载钱包出错。dat:钱包损坏</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
+        <source>Error loading wallet.dat: Wallet requires newer version of Rapids</source>
         <translation>加载的钱包出错。dat: 钱包需要更新版本的PIVX核心</translation>
     </message>
     <message>
@@ -6698,7 +6698,7 @@ PIVX核心钱包</translation>
         <translation>读取区块失败</translation>
     </message>
     <message>
-        <source>Fee (in PIV/kB) to add to transactions you send (default: %s)</source>
+        <source>Fee (in RPD/kB) to add to transactions you send (default: %s)</source>
         <translation>将费用(以PIV/kB为单位)添加到您发送的交易中(默认:%s)</translation>
     </message>
     <message>
@@ -6738,7 +6738,7 @@ PIVX核心钱包</translation>
         <translation>信息</translation>
     </message>
     <message>
-        <source>Initialization sanity check failed. PIVX Core is shutting down.</source>
+        <source>Initialization sanity check failed. Rapids is shutting down.</source>
         <translation>初始化完整性检查失败。PIVX核心快要关闭了。</translation>
     </message>
     <message>
@@ -6798,7 +6798,7 @@ PIVX核心钱包</translation>
         <translation>自动铸造零币的百分比(1-100，默认:%u)</translation>
     </message>
     <message>
-        <source>Recalculating PIV supply...</source>
+        <source>Recalculating RPD supply...</source>
         <translation>重新计算PIV供应量……</translation>
     </message>
     <message>
@@ -6810,7 +6810,7 @@ PIVX核心钱包</translation>
         <translation>重新计算ZPIV……</translation>
     </message>
     <message>
-        <source>Reindex the PIV and zPIV money supply statistics</source>
+        <source>Reindex the RPD and zRPD money supply statistics</source>
         <translation>重新索引PIV和zPIV货币供应统计数据</translation>
     </message>
     <message>
@@ -6854,7 +6854,7 @@ PIVX核心钱包</translation>
 </translation>
     </message>
     <message>
-        <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation>禁用所有PIVX特定功能(主节点, 零币, SwiftX, budget)(0-1，默认值:%u)</translation>
     </message>
     <message>
@@ -6890,7 +6890,7 @@ PIVX核心钱包</translation>
         <translation>自动铸造零币的首选面额(1/5/10/50/100/500/1000/5000)，0为无偏好。默认值: %u)</translation>
     </message>
     <message>
-        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
+        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
         <translation>指定自定义备份路径，以添加任何自动zPIV备份的副本。如果将其设置为dir，则每个备份将生成一个时间戳文件。如果设置为文件，将重写到该文件的每次备份。如果还设置了备份文件，则会进行4次备份</translation>
     </message>
     <message>
@@ -7326,7 +7326,7 @@ PIVX核心钱包</translation>
         <translation>正在同步分叉...</translation>
     </message>
     <message>
-        <source>Syncing zPIV wallet...</source>
+        <source>Syncing zRPD wallet...</source>
         <translation>正在同步zPIV钱包……</translation>
     </message>
     <message>
@@ -7442,7 +7442,7 @@ PIVX核心钱包</translation>
         <translation>JSON-RPC连接的用户名</translation>
     </message>
     <message>
-        <source>Value is below the smallest available denomination (= 1) of zPIV</source>
+        <source>Value is below the smallest available denomination (= 1) of zRPD</source>
         <translation>值小于zPIV的最小可用面额(= 1)</translation>
     </message>
     <message>
@@ -7458,7 +7458,7 @@ PIVX核心钱包</translation>
         <translation>钱包%s驻留在数据目录%s之外</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
+        <source>Wallet needed to be rewritten: restart Rapids to complete</source>
         <translation>钱包需要重写:重新启动PIVX核心完成</translation>
     </message>
     <message>
