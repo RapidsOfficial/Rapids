@@ -146,7 +146,7 @@
                     <number>0</number>
                    </property>
                    <item>
-                    <widget class="QPushButton" name="pushButtonFaq1">
+                    <widget class="QPushButton" name="pushButton_Intro">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -177,7 +177,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButtonFaq2">
+                    <widget class="QPushButton" name="pushButton_UnspendablePIV">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -205,7 +205,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButtonFaq3">
+                    <widget class="QPushButton" name="pushButton_Stake">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -227,7 +227,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButtonFaq4">
+                    <widget class="QPushButton" name="pushButton_Support">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -249,7 +249,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButtonFaq5">
+                    <widget class="QPushButton" name="pushButton_Masternode">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -271,7 +271,7 @@
                     </widget>
                    </item>
                    <item>
-                    <widget class="QPushButton" name="pushButtonFaq6">
+                    <widget class="QPushButton" name="pushButton_MNController">
                      <property name="minimumSize">
                       <size>
                        <width>0</width>
@@ -454,16 +454,16 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QWidget" name="widgetFaq1" native="true">
+                  <widget class="QWidget" name="widget_Intro" native="true">
                    <property name="minimumSize">
                     <size>
                      <width>300</width>
                      <height>0</height>
                     </size>
                    </property>
-                   <layout class="QHBoxLayout" name="horizontalLayout_1" stretch="0,1">
+                   <layout class="QHBoxLayout" name="horizontalLayout_Intro" stretch="0,1">
                     <item alignment="Qt::AlignTop">
-                     <widget class="QLabel" name="labelNumber1">
+                     <widget class="QLabel" name="labelNumber_Intro">
                       <property name="minimumSize">
                        <size>
                         <width>24</width>
@@ -485,7 +485,7 @@
                      </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayout_61">
+                     <layout class="QVBoxLayout" name="verticalLayout_Intro">
                       <property name="leftMargin">
                        <number>20</number>
                       </property>
@@ -493,7 +493,7 @@
                        <number>20</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="labelSubtitle1">
+                       <widget class="QLabel" name="labelSubtitle_Intro">
                         <property name="text">
                          <string>What is PIVX?</string>
                         </property>
@@ -503,7 +503,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_10">
+                       <spacer name="verticalSpacer1_Intro">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -519,7 +519,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="labelContent1">
+                       <widget class="QLabel" name="labelContent_Intro">
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
@@ -545,7 +545,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_11">
+                       <spacer name="verticalSpacer2_Intro">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -563,10 +563,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widgetFaq2" native="true">
-                   <layout class="QHBoxLayout" name="horizontalPage2" stretch="0,1">
+                  <widget class="QWidget" name="widget_UnspendablePIV" native="true">
+                   <layout class="QHBoxLayout" name="horizontalPage_UnspendablePIV" stretch="0,1">
                     <item alignment="Qt::AlignTop">
-                     <widget class="QLabel" name="labelNumber2">
+                     <widget class="QLabel" name="labelNumber_UnspendablePIV">
                       <property name="minimumSize">
                        <size>
                         <width>24</width>
@@ -588,7 +588,7 @@
                      </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayoutPage2">
+                     <layout class="QVBoxLayout" name="verticalLayout_UnspendablePIV">
                       <property name="spacing">
                        <number>0</number>
                       </property>
@@ -599,7 +599,7 @@
                        <number>20</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="labelSubtitle2">
+                       <widget class="QLabel" name="labelSubtitle_UnspendablePIV">
                         <property name="text">
                          <string>Why are my PIV unspendable?</string>
                         </property>
@@ -609,7 +609,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_20">
+                       <spacer name="verticalSpacer1_UnspendablePIV">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -625,7 +625,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="labelContent2">
+                       <widget class="QLabel" name="labelContent_UnspendablePIV">
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
@@ -646,7 +646,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_21">
+                       <spacer name="verticalSpacer2_UnspendablePIV">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -664,10 +664,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widgetFaq3" native="true">
-                   <layout class="QHBoxLayout" name="horizontalpage_3" stretch="0,1">
+                  <widget class="QWidget" name="widget_Stake" native="true">
+                   <layout class="QHBoxLayout" name="horizontalpage_Stake" stretch="0,1">
                     <item alignment="Qt::AlignTop">
-                     <widget class="QLabel" name="labelNumber3">
+                     <widget class="QLabel" name="labelNumber_Stake">
                       <property name="minimumSize">
                        <size>
                         <width>24</width>
@@ -689,7 +689,7 @@
                      </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayoutpage_3">
+                     <layout class="QVBoxLayout" name="verticalLayoutpage_Stake">
                       <property name="leftMargin">
                        <number>20</number>
                       </property>
@@ -697,7 +697,7 @@
                        <number>20</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="labelSubtitle3">
+                       <widget class="QLabel" name="labelSubtitle_Stake">
                         <property name="text">
                          <string>How do I stake PIV?</string>
                         </property>
@@ -707,7 +707,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_30">
+                       <spacer name="verticalSpacer1_Stake">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -723,7 +723,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="labelContent3">
+                       <widget class="QLabel" name="labelContent_Stake">
                         <property name="text">
                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;ol style=&quot;margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;&quot;&gt;&lt;li align=&quot;justify&quot; style=&quot; margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Make sure your wallet is completely synchronized and you are using the latest release. &lt;/li&gt;&lt;li align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You must have a balance of PIVX with a minimum of 600 confirmations. &lt;/li&gt;&lt;li align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Your wallet must stay online and be unlocked for staking purposes. &lt;/li&gt;&lt;li align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Once all those steps are followed staking should be enabled. &lt;/li&gt;&lt;li align=&quot;justify&quot; style=&quot; margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state &amp;quot;Staking Enabled&amp;quot; to indicate it is staking. Using the command line interface (pivx-cli); the command &lt;span style=&quot; font-style:italic;&quot;&gt;getstakingstatus&lt;/span&gt; will confirm that staking is active. &lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;</string>
                         </property>
@@ -736,7 +736,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_31">
+                       <spacer name="verticalSpacer2_Stake">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -754,10 +754,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widgetFaq4" native="true">
-                   <layout class="QHBoxLayout" name="horizontalpage_4" stretch="0,1">
+                  <widget class="QWidget" name="widget_Support" native="true">
+                   <layout class="QHBoxLayout" name="horizontalpage_Support" stretch="0,1">
                     <item alignment="Qt::AlignTop">
-                     <widget class="QLabel" name="labelNumber4">
+                     <widget class="QLabel" name="labelNumber_Support">
                       <property name="minimumSize">
                        <size>
                         <width>24</width>
@@ -779,7 +779,7 @@
                      </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayoutpage_4">
+                     <layout class="QVBoxLayout" name="verticalLayoutpage_Support">
                       <property name="leftMargin">
                        <number>20</number>
                       </property>
@@ -787,7 +787,7 @@
                        <number>20</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="labelSubtitle4">
+                       <widget class="QLabel" name="labelSubtitle_Support">
                         <property name="text">
                          <string>Where should I go if I need support?</string>
                         </property>
@@ -797,7 +797,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_40">
+                       <spacer name="verticalSpacer1_Support">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -813,7 +813,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="labelContent4">
+                       <widget class="QLabel" name="labelContent_Support">
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
@@ -835,7 +835,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_41">
+                       <spacer name="verticalSpacer2_Support">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -853,10 +853,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widgetFaq5" native="true">
-                   <layout class="QHBoxLayout" name="horizontalpage_5" stretch="0,1">
+                  <widget class="QWidget" name="widget_Masternode" native="true">
+                   <layout class="QHBoxLayout" name="horizontalpage_Masternode" stretch="0,1">
                     <item alignment="Qt::AlignTop">
-                     <widget class="QLabel" name="labelNumber5">
+                     <widget class="QLabel" name="labelNumber_Masternode">
                       <property name="minimumSize">
                        <size>
                         <width>24</width>
@@ -878,7 +878,7 @@
                      </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayoutpage_5">
+                     <layout class="QVBoxLayout" name="verticalLayoutpage_Masternode">
                       <property name="leftMargin">
                        <number>20</number>
                       </property>
@@ -886,7 +886,7 @@
                        <number>20</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="labelSubtitle5">
+                       <widget class="QLabel" name="labelSubtitle_Masternode">
                         <property name="text">
                          <string>What is a Masternode?</string>
                         </property>
@@ -896,7 +896,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_50">
+                       <spacer name="verticalSpacer1_Masternode">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -912,7 +912,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="labelContent5">
+                       <widget class="QLabel" name="labelContent_Masternode">
                         <property name="text">
                          <string>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
@@ -966,7 +966,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_51">
+                       <spacer name="verticalSpacer2_Masternode">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -984,10 +984,10 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QWidget" name="widgetFaq6" native="true">
-                   <layout class="QHBoxLayout" name="horizontalpage_6" stretch="0,1">
+                  <widget class="QWidget" name="widget_MNController" native="true">
+                   <layout class="QHBoxLayout" name="horizontalpage_MNController" stretch="0,1">
                     <item alignment="Qt::AlignTop">
-                     <widget class="QLabel" name="labelNumber6">
+                     <widget class="QLabel" name="labelNumber_MNController">
                       <property name="minimumSize">
                        <size>
                         <width>24</width>
@@ -1009,7 +1009,7 @@
                      </widget>
                     </item>
                     <item>
-                     <layout class="QVBoxLayout" name="verticalLayoutpage_6">
+                     <layout class="QVBoxLayout" name="verticalLayoutpage_MNController">
                       <property name="leftMargin">
                        <number>20</number>
                       </property>
@@ -1017,7 +1017,7 @@
                        <number>20</number>
                       </property>
                       <item>
-                       <widget class="QLabel" name="labelSubtitle6">
+                       <widget class="QLabel" name="labelSubtitle_MNController">
                         <property name="text">
                          <string>What is a Masternode Controller?</string>
                         </property>
@@ -1027,7 +1027,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_60">
+                       <spacer name="verticalSpacer1_MNController">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
@@ -1043,7 +1043,7 @@
                        </spacer>
                       </item>
                       <item>
-                       <widget class="QLabel" name="labelContent6">
+                       <widget class="QLabel" name="labelContent_MNController">
                         <property name="text">
                          <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;A Masternode Controller wallet is where the 10,000 PIV collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet(s) and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                         </property>
@@ -1056,7 +1056,7 @@
                        </widget>
                       </item>
                       <item>
-                       <spacer name="verticalSpacer_61">
+                       <spacer name="verticalSpacer2_MNController">
                         <property name="orientation">
                          <enum>Qt::Vertical</enum>
                         </property>
