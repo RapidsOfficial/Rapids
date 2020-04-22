@@ -19,7 +19,6 @@ QT_FORMS_UI = \
   qt/forms/optionsdialog.ui \
   qt/forms/rpcconsole.ui \
   qt/pivx/forms/loadingdialog.ui \
-  qt/forms/zpivcontroldialog.ui \
   qt/pivx/forms/snackbar.ui \
   qt/pivx/forms/navmenuwidget.ui \
   qt/pivx/forms/lockunlock.ui \
@@ -103,7 +102,6 @@ QT_MOC_CPP = \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletmodel.cpp \
   qt/pivx/moc_loadingdialog.cpp \
-  qt/moc_zpivcontroldialog.cpp \
   qt/pivx/moc_pwidget.cpp \
   qt/pivx/moc_focuseddialog.cpp \
   qt/pivx/moc_snackbar.cpp \
@@ -222,7 +220,6 @@ BITCOIN_QT_H = \
   qt/pivx/pfborderimage.h \
   qt/pivx/loadingdialog.h \
   qt/winshutdownmonitor.h \
-  qt/zpivcontroldialog.h \
   qt/pivx/pwidget.h \
   qt/pivx/focuseddialog.h \
   qt/pivx/guitransactionsutils.h \
@@ -546,7 +543,6 @@ BITCOIN_QT_WALLET_CPP = \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
   qt/pivx/loadingdialog.cpp \
-  qt/zpivcontroldialog.cpp \
   qt/pivx/pwidget.cpp \
   qt/pivx/focuseddialog.cpp \
   qt/pivx/guitransactionsutils.cpp \
