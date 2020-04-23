@@ -322,7 +322,7 @@ public:
     void Write(CAutoFile& fileout) const
     {
         fileout << nBestSeenHeight;
-        fileout << history.size();
+        fileout << (uint32_t)history.size();
         for (const CBlockAverage& entry : history) {
             entry.Write(fileout);
         }
@@ -332,7 +332,7 @@ public:
     {
         int nFileBestSeenHeight;
         filein >> nFileBestSeenHeight;
-        size_t numEntries;
+        uint32_t numEntries;
         filein >> numEntries;
         if (numEntries <= 0 || numEntries > 10000)
             throw std::runtime_error("Corrupt estimates file. Must have between 1 and 10k entries.");
