@@ -26,8 +26,12 @@ public:
     bool selected = false;
 
     void showEvent(QShowEvent *event) override;
+
 private:
     Ui::SendChangeAddressDialog *ui;
+
+private Q_SLOTS:
+    void reset();
 };
 
 #endif // SENDCHANGEADDRESSDIALOG_H

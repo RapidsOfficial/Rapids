@@ -4,7 +4,8 @@
 
 #include "qt/pivx/sendchangeaddressdialog.h"
 #include "qt/pivx/forms/ui_sendchangeaddressdialog.h"
-#include "walletmodel.h"
+
+#include "coincontrol.h"
 #include "qt/pivx/qtutils.h"
 
 SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
@@ -32,16 +33,17 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
     ui->btnEsc->setProperty("cssClass", "ic-close");
 
     ui->btnCancel->setProperty("cssClass", "btn-dialog-cancel");
-    ui->btnSave->setText("SAVE");
+    ui->btnSave->setText(tr("SAVE"));
     setCssBtnPrimary(ui->btnSave);
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
-    connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
+    connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::reset);
     connect(ui->btnSave, &QPushButton::clicked, [this](){ selected = true; accept(); });
 }
 
 void SendChangeAddressDialog::setAddress(QString address){
     ui->lineEditAddress->setText(address);
+    ui->btnCancel->setText(tr("RESET"));
 }
 
 bool SendChangeAddressDialog::getAddress(WalletModel *model, QString *retAddress){
@@ -56,6 +58,16 @@ bool SendChangeAddressDialog::getAddress(WalletModel *model, QString *retAddress
 void SendChangeAddressDialog::showEvent(QShowEvent *event)
 {
     if (ui->lineEditAddress) ui->lineEditAddress->setFocus();
+}
+
+void SendChangeAddressDialog::reset()
+{
+    if (!ui->lineEditAddress->text().isEmpty()) {
+        ui->lineEditAddress->clear();
+        ui->btnCancel->setText(tr("CANCEL"));
+        CoinControlDialog::coinControl->destChange = CNoDestination();
+    }
+    close();
 }
 
 SendChangeAddressDialog::~SendChangeAddressDialog(){
