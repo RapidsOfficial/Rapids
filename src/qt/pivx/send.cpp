@@ -601,10 +601,12 @@ void SendWidget::onChangeAddressClicked()
                 ui->btnChangeAddress->setActive(true);
             } else {
                 inform(tr("Invalid change address"));
-                ui->btnChangeAddress->setActive(false);
             }
         }
     }
+    // check if changeAddress has been reset to NoDestination (or wasn't set at all)
+    if (boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange))
+        ui->btnChangeAddress->setActive(false);
     dialog->deleteLater();
 }
 
