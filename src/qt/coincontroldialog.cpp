@@ -912,18 +912,9 @@ void CoinControlDialog::updateView()
             // vout index
             itemOutput->setText(COLUMN_VOUT_INDEX, QString::number(out.i));
 
-            // outputs delegated (for cold staking)
-            if (fDelegated) {
-                itemOutput->setData(COLUMN_CHECKBOX, Qt::UserRole, QString("Delegated"));
-                itemOutput->setIcon(COLUMN_CHECKBOX, QIcon("://ic-check-cold-staking-off"));
-                if (haveDest) {
-                    sAddress = QString::fromStdString(CBitcoinAddress(outputAddressStaker, CChainParams::STAKING_ADDRESS).ToString());
-                    itemOutput->setToolTip(COLUMN_CHECKBOX, tr("delegated to %1 for cold staking").arg(sAddress));
-                }
-            }
-
             // disable locked coins
-            if (model->isLockedCoin(txhash, out.i)) {
+            const bool isLockedCoin = model->isLockedCoin(txhash, out.i);
+            if (isLockedCoin) {
                 COutPoint outpt(txhash, out.i);
                 coinControl->UnSelect(outpt); // just to be sure
                 itemOutput->setDisabled(true);
@@ -933,6 +924,17 @@ void CoinControlDialog::updateView()
             // set checkbox
             if (coinControl->IsSelected(txhash, out.i))
                 itemOutput->setCheckState(COLUMN_CHECKBOX, Qt::Checked);
+
+            // outputs delegated (for cold staking)
+            if (fDelegated) {
+                itemOutput->setData(COLUMN_CHECKBOX, Qt::UserRole, QString("Delegated"));
+                if (!isLockedCoin)
+                    itemOutput->setIcon(COLUMN_CHECKBOX, QIcon("://ic-check-cold-staking-off"));
+                if (haveDest) {
+                    sAddress = QString::fromStdString(CBitcoinAddress(outputAddressStaker, CChainParams::STAKING_ADDRESS).ToString());
+                    itemOutput->setToolTip(COLUMN_CHECKBOX, tr("delegated to %1 for cold staking").arg(sAddress));
+                }
+            }
         }
 
         // amount
