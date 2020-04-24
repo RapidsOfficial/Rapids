@@ -148,7 +148,7 @@ CMasternodePaymentDB::ReadResult CMasternodePaymentDB::Read(CMasternodePayments&
 uint256 CMasternodePaymentWinner::GetHash() const
 {
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
-    ss << payee;
+    ss << std::vector<unsigned char>(payee.begin(), payee.end());
     ss << nBlockHeight;
     ss << vinMasternode.prevout;
     return ss.GetHash();

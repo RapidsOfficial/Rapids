@@ -19,7 +19,7 @@
 static std::vector<unsigned char>
 Serialize(const CScript& s)
 {
-    std::vector<unsigned char> sSerialized(s);
+    std::vector<unsigned char> sSerialized(s.begin(), s.end());
     return sSerialized;
 }
 

@@ -146,6 +146,7 @@ BITCOIN_CORE_H = \
   net.h \
   noui.h \
   pow.h \
+  prevector.h \
   protocol.h \
   pubkey.h \
   random.h \
