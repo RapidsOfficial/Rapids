@@ -130,6 +130,7 @@ bool GetLocal(CService& addr, const CNetAddr* paddrPeer = NULL);
 bool IsReachable(enum Network net);
 bool IsReachable(const CNetAddr& addr);
 CAddress GetLocalAddress(const CNetAddr* paddrPeer = NULL);
+bool validateMasternodeIP(const std::string& addrStr);          // valid, reachable and routable address
 
 
 extern bool fDiscover;

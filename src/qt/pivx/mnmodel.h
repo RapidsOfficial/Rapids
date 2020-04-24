@@ -51,6 +51,8 @@ public:
     bool isMNActive(QString mnAlias);
     // Masternode collateral has enough confirmations
     bool isMNCollateralMature(QString mnAlias);
+    // Validate string representing a masternode IP address
+    static bool validateMNIP(const QString& addrStr);
 
 
 private:
