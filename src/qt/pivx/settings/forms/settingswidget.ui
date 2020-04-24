@@ -867,7 +867,6 @@
                         <enum>Qt::NoFocus</enum>
                        </property>
                        <property name="text">
-                        <string>Help</string>
                        </property>
                        <property name="checkable">
                         <bool>true</bool>
@@ -878,92 +877,6 @@
                       </widget>
                      </item>
                     </layout>
-                   </item>
-                   <item>
-                    <widget class="QWidget" name="helpButtonsWidget" native="true">
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>100</height>
-                      </size>
-                     </property>
-                     <layout class="QVBoxLayout" name="verticalHelp">
-                      <property name="spacing">
-                       <number>0</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QPushButton" name="pushButtonHelp1">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>50</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>50</height>
-                         </size>
-                        </property>
-                        <property name="focusPolicy">
-                         <enum>Qt::NoFocus</enum>
-                        </property>
-                        <property name="text">
-                         <string>FAQ</string>
-                        </property>
-                        <property name="checkable">
-                         <bool>false</bool>
-                        </property>
-                        <property name="checked">
-                         <bool>false</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>false</bool>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QPushButton" name="pushButtonHelp2">
-                        <property name="minimumSize">
-                         <size>
-                          <width>0</width>
-                          <height>50</height>
-                         </size>
-                        </property>
-                        <property name="maximumSize">
-                         <size>
-                          <width>16777215</width>
-                          <height>50</height>
-                         </size>
-                        </property>
-                        <property name="focusPolicy">
-                         <enum>Qt::NoFocus</enum>
-                        </property>
-                        <property name="text">
-                         <string>About RPD</string>
-                        </property>
-                        <property name="checkable">
-                         <bool>false</bool>
-                        </property>
-                        <property name="autoExclusive">
-                         <bool>false</bool>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
                    </item>
                   </layout>
                  </widget>

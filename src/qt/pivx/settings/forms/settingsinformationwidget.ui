@@ -57,7 +57,7 @@
           <item>
            <widget class="QLabel" name="labelTitle">
             <property name="text">
-             <string>Information</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
@@ -135,7 +135,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string>Backups</string>
+                <string/>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -163,7 +163,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string>Wallet Conf</string>
+                <string/>
                </property>
                <property name="checkable">
                 <bool>false</bool>
@@ -218,7 +218,7 @@
            <item>
             <widget class="QLabel" name="labelTitleGeneral">
              <property name="text">
-              <string>General</string>
+              <string>TextLabel</string>
              </property>
             </widget>
            </item>
@@ -242,20 +242,14 @@
                 </size>
                </property>
                <property name="text">
-                <string>Client Version:</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelInfoClient">
-               <property name="cursor">
-                <cursorShape>IBeamCursor</cursorShape>
-               </property>
-               <property name="textInteractionFlags">
-                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-               </property>
                <property name="text">
-                <string notr="true">N/A</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
@@ -281,20 +275,14 @@
                 </size>
                </property>
                <property name="text">
-                <string>User Agent:</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelInfoAgent">
-               <property name="cursor">
-                <cursorShape>IBeamCursor</cursorShape>
-               </property>
-               <property name="textInteractionFlags">
-                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-               </property>
                <property name="text">
-                <string notr="true">N/A</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
@@ -320,20 +308,14 @@
                 </size>
                </property>
                <property name="text">
-                <string>BerkeleyDB version:</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelInfoBerkeley">
-               <property name="cursor">
-                <cursorShape>IBeamCursor</cursorShape>
-               </property>
-               <property name="textInteractionFlags">
-                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-               </property>
                <property name="text">
-                <string notr="true">N/A</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
@@ -359,20 +341,14 @@
                 </size>
                </property>
                <property name="text">
-                <string>Datadir:</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelInfoDataDir">
-               <property name="cursor">
-                <cursorShape>IBeamCursor</cursorShape>
-               </property>
-               <property name="textInteractionFlags">
-                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-               </property>
                <property name="text">
-                <string notr="true">N/A</string>
+                <string>TextLabel</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -401,20 +377,14 @@
                 </size>
                </property>
                <property name="text">
-                <string>Startup time:</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelInfoTime">
-               <property name="cursor">
-                <cursorShape>IBeamCursor</cursorShape>
-               </property>
-               <property name="textInteractionFlags">
-                <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-               </property>
                <property name="text">
-                <string notr="true">N/A</string>
+                <string>TextLabel</string>
                </property>
               </widget>
              </item>
@@ -442,7 +412,7 @@
         <item>
          <widget class="QLabel" name="labelTitleNetwork">
           <property name="text">
-           <string>Network</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -466,59 +436,14 @@
              </size>
             </property>
             <property name="text">
-             <string>Name:</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="labelInfoName">
-            <property name="cursor">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-            </property>
             <property name="text">
-             <string notr="true">N/A</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalConnections" stretch="0,1">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="labelTitleConnections">
-            <property name="minimumSize">
-             <size>
-              <width>290</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>290</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Connections:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="labelInfoConnections">
-            <property name="cursor">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-            </property>
-            <property name="text">
-             <string notr="true">N/A</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
@@ -526,9 +451,9 @@
         </item>
         <item>
          <widget class="QWidget" name="layoutOptions2" native="true">
-          <layout class="QHBoxLayout" name="horizontalMasternodes" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalConnections" stretch="0,1">
            <property name="spacing">
-             <number>0</number>
+            <number>0</number>
            </property>
            <property name="leftMargin">
             <number>0</number>
@@ -543,7 +468,7 @@
             <number>10</number>
            </property>
            <item>
-            <widget class="QLabel" name="labelTitleMasternodes">
+            <widget class="QLabel" name="labelTitleConnections">
              <property name="minimumSize">
               <size>
                <width>290</width>
@@ -557,20 +482,14 @@
               </size>
              </property>
              <property name="text">
-              <string>Number of Masternodes:</string>
+              <string>TextLabel</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelInfoMasternodes">
-             <property name="cursor">
-              <cursorShape>IBeamCursor</cursorShape>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-             </property>
+            <widget class="QLabel" name="labelInfoConnections">
              <property name="text">
-              <string notr="true">N/A</string>
+              <string>TextLabel</string>
              </property>
             </widget>
            </item>
@@ -596,7 +515,7 @@
         <item>
          <widget class="QLabel" name="labelTitleBlockchain">
           <property name="text">
-           <string>Blockchain</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -620,59 +539,14 @@
              </size>
             </property>
             <property name="text">
-             <string>Current number of blocks:</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="labelInfoBlockNumber">
-            <property name="cursor">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-            </property>
             <property name="text">
-             <string notr="true">N/A</string>
-            </property>
-           </widget>
-          </item>
-         </layout>
-        </item>
-        <item>
-         <layout class="QHBoxLayout" name="horizontalBlockTime" stretch="0,1">
-          <property name="spacing">
-           <number>0</number>
-          </property>
-          <item>
-           <widget class="QLabel" name="labelTitleBlockTime">
-            <property name="minimumSize">
-             <size>
-              <width>290</width>
-              <height>0</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>290</width>
-              <height>16777215</height>
-             </size>
-            </property>
-            <property name="text">
-             <string>Last block time:</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLabel" name="labelInfoBlockTime">
-            <property name="cursor">
-             <cursorShape>IBeamCursor</cursorShape>
-            </property>
-            <property name="textInteractionFlags">
-             <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-            </property>
-            <property name="text">
-             <string notr="true">N/A</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
@@ -680,7 +554,7 @@
         </item>
         <item>
          <widget class="QWidget" name="layoutOptions3" native="true">
-          <layout class="QHBoxLayout" name="horizontalBlockHash" stretch="0,1">
+          <layout class="QHBoxLayout" name="horizontalBlockTime" stretch="0,1">
            <property name="spacing">
             <number>0</number>
            </property>
@@ -697,7 +571,7 @@
             <number>10</number>
            </property>
            <item>
-            <widget class="QLabel" name="labelTitleBlockHash">
+            <widget class="QLabel" name="labelTitleBlockTime">
              <property name="minimumSize">
               <size>
                <width>290</width>
@@ -711,20 +585,14 @@
               </size>
              </property>
              <property name="text">
-              <string>Last block hash:</string>
+              <string>TextLabel</string>
              </property>
             </widget>
            </item>
            <item>
-            <widget class="QLabel" name="labelInfoBlockHash">
-             <property name="cursor">
-              <cursorShape>IBeamCursor</cursorShape>
-             </property>
-             <property name="textInteractionFlags">
-              <set>Qt::LinksAccessibleByMouse|Qt::TextSelectableByKeyboard|Qt::TextSelectableByMouse</set>
-             </property>
+            <widget class="QLabel" name="labelInfoBlockTime">
              <property name="text">
-              <string notr="true">N/A</string>
+              <string>TextLabel</string>
              </property>
             </widget>
            </item>
@@ -750,7 +618,7 @@
         <item>
          <widget class="QLabel" name="labelTitleMemory">
           <property name="text">
-           <string>Memory Pool</string>
+           <string>TextLabel</string>
           </property>
          </widget>
         </item>
@@ -774,14 +642,14 @@
              </size>
             </property>
             <property name="text">
-             <string>Current number of transactions:</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>
           <item>
            <widget class="QLabel" name="labelInfoNumberTransactions">
             <property name="text">
-             <string notr="true">N/A</string>
+             <string>TextLabel</string>
             </property>
            </widget>
           </item>

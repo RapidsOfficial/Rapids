@@ -66,10 +66,6 @@ SettingsWidget::SettingsWidget(PIVXGUI* parent) :
     setCssProperty(ui->pushButtonTools2, "btn-settings-options");
     setCssProperty(ui->pushButtonTools5, "btn-settings-options");
 
-    setCssProperty(ui->pushButtonHelp, "btn-settings-check");
-    setCssProperty(ui->pushButtonHelp1, "btn-settings-options");
-    setCssProperty(ui->pushButtonHelp2, "btn-settings-options");
-
     options = {
         ui->pushButtonFile2,
         ui->pushButtonFile3,
@@ -79,7 +75,6 @@ SettingsWidget::SettingsWidget(PIVXGUI* parent) :
         ui->pushButtonOptions5,
         ui->pushButtonConfiguration3,
         ui->pushButtonConfiguration4,
-        ui->pushButtonHelp2,
         ui->pushButtonTools1,
         ui->pushButtonTools2,
         ui->pushButtonTools5,
@@ -89,7 +84,6 @@ SettingsWidget::SettingsWidget(PIVXGUI* parent) :
     menus.insert(ui->pushButtonConfiguration, ui->configurationButtonsWidget);
     menus.insert(ui->pushButtonOptions, ui->optionsButtonsWidget);
     menus.insert(ui->pushButtonTools, ui->toolsButtonsWidget);
-    menus.insert(ui->pushButtonHelp, ui->helpButtonsWidget);
 
     settingsBackupWallet = new SettingsBackupWallet(window, this);
     settingsExportCsvWidget = new SettingsExportCSV(window, this);
@@ -139,11 +133,6 @@ SettingsWidget::SettingsWidget(PIVXGUI* parent) :
     connect(ui->pushButtonTools2, &QPushButton::clicked, this, &SettingsWidget::onDebugConsoleClicked);
     ui->pushButtonTools2->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_C));
     connect(ui->pushButtonTools5, &QPushButton::clicked, this, &SettingsWidget::onWalletRepairClicked);
-
-    // Help
-    connect(ui->pushButtonHelp, &QPushButton::clicked, this, &SettingsWidget::onHelpClicked);
-    connect(ui->pushButtonHelp1, &QPushButton::clicked, window, &PIVXGUI::openFAQ);
-    connect(ui->pushButtonHelp2, &QPushButton::clicked, this, &SettingsWidget::onAboutClicked);
 
     // Get restart command-line parameters and handle restart
     connect(settingsWalletRepairWidget, &SettingsWalletRepairWidget::handleRestart, [this](QStringList arg){Q_EMIT handleRestart(arg);});

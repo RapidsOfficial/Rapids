@@ -1596,22 +1596,27 @@ int64_t GetTotalValue(int nHeight)
 int64_t GetBlockValue(int nHeight)
 {
     int64_t nSubsidy = 0;
+    const int nHalvingPeriod = 2102400;
 
-    if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < Params().GetConsensus().height_last_PoW)
-            return 5000 * COIN;
-    }
-    
-    if(IsBurnBlock(nHeight)) {
-		nSubsidy = GetBurnAward(nHeight);
+    //! unfortunately this must remain to validate the existing
+    //! chain, but we can just disable it at new client height
+    if (IsBurnBlock(nHeight) && nHeight < Params().GetConsensus().height_new_client) {
+        nSubsidy = GetBurnAward(nHeight);
+
     } else {
+
+        //! existing reward schema
         if (nHeight == 0) {
             nSubsidy = 20000000000 * COIN;
         } else {
-            nSubsidy =  3567.352 * COIN; 
-            nSubsidy >>= ((nHeight - 1) / 2102400);
+            nSubsidy = 3567.352 * COIN;
+            nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
         }
-        if(nHeight > 0) nSubsidy *= 0.9;
+
+        //! remove the old restriction on reward with new client
+        if (nHeight > 0 &&
+            nHeight < Params().GetConsensus().height_new_client)
+            nSubsidy *= 0.9;
     }
 
     if (nMoneySupply + nSubsidy >= Params().GetConsensus().nMaxMoneyOut)
@@ -1659,6 +1664,8 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
     // Check if we reached coin supply
     if (nHeight < 50) {
         ret = 0;
+    } else if (nHeight >= Params().GetConsensus().height_new_client) {
+        ret = blockValue * 0.65;
     } else {
         ret = blockValue * 0.60 / 0.9; // 60% of block reward
     }
@@ -3857,15 +3864,17 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     if (block.GetHash() != Params().GetConsensus().hashGenesisBlock && !CheckWork(block, pindexPrev))
         return false;
 
+    bool isPoS = false;
     if (block.IsProofOfStake()) {
-        uint256 hashProofOfStake;
-        uint256 hash = block.GetHash();
+        isPoS = true;
+        uint256 hashProofOfStake = 0;
 
         if(!CheckProofOfStake(block, hashProofOfStake))
             return state.DoS(100, error("%s: proof of stake check failed", __func__));
 
+        uint256 hash = block.GetHash();
         if(!mapProofOfStake.count(hash)) // add to mapProofOfStake
-            mapProofOfStake.insert(make_pair(hash, hashProofOfStake));
+            mapProofOfStake.insert(std::make_pair(hash, hashProofOfStake));
     }
 
     if (!AcceptBlockHeader(block, state, &pindex))
@@ -3889,7 +3898,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
     int nHeight = pindex->nHeight;
     int splitHeight = -1;
 
-    if (!block.nNonce) {
+    if (isPoS) {
         LOCK(cs_main);
 
         // Blocks arrives in order, so if prev block is not the tip then we are on a fork.
@@ -3901,62 +3910,6 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
         // Inputs
         std::vector<CTxIn> pivInputs;
-        std::vector<CTxIn> zPIVInputs;
-
-        for (const CTxIn& stakeIn : stakeTxIn.vin) {
-             pivInputs.push_back(stakeIn);
-        }
-        const bool hasPIVInputs = !pivInputs.empty();
-        const bool hasZPIVInputs = false;
-
-        // ZC started after PoS.
-        // Check for serial double spent on the same block, TODO: Move this to the proper method..
-
-        std::vector<CBigNum> inBlockSerials;
-        for (const CTransaction& tx : block.vtx) {
-            for (const CTxIn& in: tx.vin) {
-                if(nHeight >= Params().GetConsensus().height_start_ZC) {
-                    bool isPublicSpend = in.IsZerocoinPublicSpend();
-                    bool isPrivZerocoinSpend = in.IsZerocoinSpend();
-                    if (isPrivZerocoinSpend || isPublicSpend) {
-
-                        // Check enforcement
-                        if (!CheckPublicCoinSpendEnforced(pindex->nHeight, isPublicSpend)){
-                            return false;
-                        }
-
-                        libzerocoin::CoinSpend spend;
-                        if (isPublicSpend) {
-                            libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
-                            PublicCoinSpend publicSpend(params);
-                            if (!ZPIVModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
-                                return false;
-                            }
-                            spend = publicSpend;
-                        } else {
-                            spend = TxInToZerocoinSpend(in);
-                        }
-                        // Check for serials double spending in the same block
-                        if (std::find(inBlockSerials.begin(), inBlockSerials.end(), spend.getCoinSerialNumber()) !=
-                            inBlockSerials.end()) {
-                            return state.DoS(100, error("%s: serial double spent on the same block", __func__));
-                        }
-                        inBlockSerials.push_back(spend.getCoinSerialNumber());
-                    }
-                }
-                if(tx.IsCoinStake()) continue;
-                if(hasPIVInputs) {
-                    // Check if coinstake input is double spent inside the same block
-                    for (const CTxIn& pivIn : pivInputs)
-                        if(pivIn.prevout == in.prevout)
-                            // double spent coinstake input inside block
-                            return error("%s: double spent coinstake input inside block", __func__);
-                }
-
-            }
-        }
-        inBlockSerials.clear();
-
 
         // Check whether is a fork or not
         if (isBlockFromFork) {
@@ -3981,21 +3934,14 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
                     return error("%s: forked chain longer than maximum reorg limit", __func__);
                 }
 
-                // Loop through every tx of this block
-                for (const CTransaction& t : bl.vtx) {
-                    // Loop through every input of this tx
-                    for (const CTxIn& in: t.vin) {
-                        // If this input is a zerocoin spend, and the coinstake has zerocoin inputs
-                        // then store the serials for later check
-                        if(hasZPIVInputs && in.IsZerocoinSpend())
-                            vBlockSerials.push_back(TxInToZerocoinSpend(in).getCoinSerialNumber());
-
+                // Loop through every input from said block
+                for (const CTransaction &t : bl.vtx) {
+                    for (const CTxIn &in: t.vin) {
                         // Loop through every input of the staking tx
-                        if (hasPIVInputs) {
-                            for (const CTxIn& stakeIn : pivInputs)
-                                // check if the tx input is double spending any coinstake input
-                                if (stakeIn.prevout == in.prevout)
-                                    return state.DoS(100, error("%s: input already spent on a previous block", __func__));
+                        for (const CTxIn &stakeIn : pivInputs) {
+                            if (stakeIn.prevout == in.prevout) {
+                                return state.DoS(100, error("%s: input already spent on a previous block", __func__));
+                            }
                         }
                     }
                 }
@@ -4010,35 +3956,6 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
             // Split height
             splitHeight = prev->nHeight;
-
-            // Now that this loop if completed. Check if we have zRPD inputs.
-            if(hasZPIVInputs) {
-                for (const CTxIn& zPivInput : zPIVInputs) {
-                    libzerocoin::CoinSpend spend = TxInToZerocoinSpend(zPivInput);
-
-                    // First check if the serials were not already spent on the forked blocks.
-                    CBigNum coinSerial = spend.getCoinSerialNumber();
-                    for(const CBigNum& serial : vBlockSerials){
-                        if(serial == coinSerial){
-                            return state.DoS(100, error("%s: serial double spent on fork", __func__));
-                        }
-                    }
-
-                    // Now check if the serial exists before the chain split.
-                    int nHeightTx = 0;
-                    if (IsSerialInBlockchain(spend.getCoinSerialNumber(), nHeightTx)) {
-                        // if the height is nHeightTx > chainSplit means that the spent occurred after the chain split
-                        if(nHeightTx <= splitHeight)
-                            return state.DoS(100, error("%s: serial double spent on main chain", __func__));
-                    }
-
-                    if (!ContextualCheckZerocoinSpendNoSerialCheck(stakeTxIn, &spend, pindex->nHeight, UINT256_ZERO))
-                        return state.DoS(100,error("%s: forked chain ContextualCheckZerocoinSpend failed for tx %s", __func__,
-                                                   stakeTxIn.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
-
-                }
-            }
-
         }
 
 
@@ -4060,14 +3977,8 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
                 }
             }
         } else {
-            if(!isBlockFromFork)
-                for (const CTxIn& zPivInput : zPIVInputs) {
-                        libzerocoin::CoinSpend spend = TxInToZerocoinSpend(zPivInput);
-                        if (!ContextualCheckZerocoinSpend(stakeTxIn, &spend, pindex->nHeight, UINT256_ZERO))
-                            return state.DoS(100,error("%s: main chain ContextualCheckZerocoinSpend failed for tx %s", __func__,
-                                    stakeTxIn.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
-                }
-
+            // If they get here, they're doing well..
+            return state.DoS(100, error("ConnectBlock() : We don't take kindly to zerocoin transactions around here"));
         }
 
     }
@@ -4082,11 +3993,11 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
             return error("AcceptBlock() : FindBlockPos failed");
         if (dbp == NULL)
             if (!WriteBlockToDisk(block, blockPos))
-                return AbortNode(state, "Failed to write block");
+                return AbortNode("Failed to write block");
         if (!ReceivedBlockTransactions(block, state, pindex, blockPos))
             return error("AcceptBlock() : ReceivedBlockTransactions failed");
-    } catch (const std::runtime_error& e) {
-        return AbortNode(state, std::string("System error: ") + e.what());
+    } catch (std::runtime_error& e) {
+        return AbortNode(std::string("System error: ") + e.what());
     }
 
     return true;
@@ -5948,20 +5859,11 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
     return true;
 }
 
-// Note: whenever a protocol update is needed toggle between both implementations (comment out the formerly active one)
-//       so we can leave the existing clients untouched (old SPORK will stay on so they don't see even older clients).
-//       Those old clients won't react to the changes of the other (new) SPORK because at the time of their implementation
-//       it was the one which was commented out
+// switch the protocol version up once we hit fork height
 int ActiveProtocol()
 {
-    // SPORK_14 was used for 70917 (v3.4), commented out now.
-    //if (sporkManager.IsSporkActive(SPORK_14_NEW_PROTOCOL_ENFORCEMENT))
-    //        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-
-    // SPORK_15 is used for 70918 (v4.0+)
-    if (sporkManager.IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
-            return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
-
+    if (chainActive.Height() >= Params().GetConsensus().height_new_client)
+        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
     return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
 
