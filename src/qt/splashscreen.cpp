@@ -62,7 +62,7 @@ SplashScreen::SplashScreen(Qt::WindowFlags f, const NetworkStyle* networkStyle) 
     //titleTextWidth = fm.width(titleText);
     pixPaint.drawText(paddingLeft, paddingTop, titleText);
 
-    pixPaint.setFont(QFont(font, 15 * fontFactor));
+    pixPaint.setFont(QFont(font, 12 * fontFactor));
     pixPaint.drawText(paddingLeft, paddingTop + titleVersionVSpace, versionText);
 
     // draw copyright stuff

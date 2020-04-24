@@ -141,7 +141,7 @@ void setupAddressWidget(QValidatedLineEdit* widget, QWidget* parent)
     widget->setFont(bitcoinAddressFont());
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter RPD address (e.g. %1)").arg("D7VFR83SQbiezrW72hjcWJtcfip5krte2Z"));
+    widget->setPlaceholderText(QObject::tr("Enter RPD address (e.g. %1)").arg("RmphVWRT43hdZ9zncvPRgA94tuL2dvFXCL"));
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
 }
@@ -212,7 +212,7 @@ bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)
 
 bool parseBitcoinURI(QString uri, SendCoinsRecipient* out)
 {
-    // Convert pivx:// to pivx:
+    // Convert pivx:// to rapids:
     //
     //    Cannot handle this later, because pivx:// will cause Qt to see the part after // as host,
     //    which will lower-case it (and thus invalidate the address).

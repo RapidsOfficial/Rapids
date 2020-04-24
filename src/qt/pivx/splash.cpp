@@ -34,13 +34,12 @@ Splash::Splash(Qt::WindowFlags f, const NetworkStyle* networkStyle) :
     this->setAttribute( Qt::WA_TranslucentBackground, true );
     ui->progressBar->setAttribute( Qt::WA_TranslucentBackground, true );
 
-    ui->progressBar->setTextVisible(false);
+    ui->progressBar->setTextVisible(true);
     ui->progressBar->setMaximum(0);
     ui->progressBar->setMinimum(0);
     ui->progressBar->setProperty("cssClass", "progress-splash");
     ui->frame->setProperty("cssClass", "container-splash");
     ui->layoutProgress->setProperty("cssClass", "bg-progress");
-    ui->lblVersion->setText(QString("v") + QString::fromStdString(FormatVersionFriendly()));
 
     // Resize window and move to center of desktop, disallow resizing
     QRect r(QPoint(), size());
