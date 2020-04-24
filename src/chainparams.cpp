@@ -155,11 +155,8 @@ public:
         consensus.nTargetSpacing = 2 * 60;
         consensus.nTimeSlotLength = 15;
 
-        // spork keys
-        consensus.strSporkPubKey = "";
-        consensus.strSporkPubKeyOld = "04232761d6403206eee2e230eff432db29414364d5837ac94c8ec4450c2b191b275ad4a48f3cdde7eb9c0477777550c50a20980fd32798e7dee04483244a7b5027";
-        consensus.nTime_EnforceNewSporkKey = disabled;
-        consensus.nTime_RejectOldSporkKey = disabled;
+        // spork key
+        consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
 
         // height-based activations
         consensus.height_last_PoW = 200;
@@ -276,9 +273,6 @@ public:
 
         // spork keys
         consensus.strSporkPubKey = "04E88BB455E2A04E65FCC41D88CD367E9CCE1F5A409BE94D8C2B4B35D223DED9C8E2F4E061349BA3A38839282508066B6DC4DB72DD432AC4067991E6BF20176127";
-        consensus.strSporkPubKeyOld = "04A8B319388C0F8588D238B9941DC26B26D3F9465266B368A051C5C100F79306A557780101FE2192FE170D7E6DEFDCBEE4C8D533396389C0DAFFDBC842B002243C";
-        consensus.nTime_EnforceNewSporkKey = 1566860400;    //!> August 26, 2019 11:00:00 PM GMT
-        consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
         // height based activations
         consensus.height_last_PoW = 200;
@@ -398,9 +392,6 @@ public:
         Address: yCvUVd72w7xpimf981m114FSFbmAmne7j9
         */
         consensus.strSporkPubKey = "043969b1b0e6f327de37f297a015d37e2235eaaeeb3933deecd8162c075cee0207b13537618bde640879606001a8136091c62ec272dd0133424a178704e6e75bb7";
-        consensus.strSporkPubKeyOld = "";
-        consensus.nTime_EnforceNewSporkKey = 0;
-        consensus.nTime_RejectOldSporkKey = 0;
 
         // height based activations
         consensus.height_last_PoW = 250;
