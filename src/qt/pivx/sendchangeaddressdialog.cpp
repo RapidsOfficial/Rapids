@@ -8,10 +8,14 @@
 #include "coincontrol.h"
 #include "qt/pivx/qtutils.h"
 
-SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
+SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* model) :
     QDialog(parent),
+    walletModel(model),
     ui(new Ui::SendChangeAddressDialog)
 {
+    if (!walletModel) {
+        throw std::runtime_error(strprintf("%s: No wallet model set", __func__));
+    }
     ui->setupUi(this);
     this->setStyleSheet(parent->styleSheet());
 
@@ -38,21 +42,18 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
     connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::reset);
-    connect(ui->btnSave, &QPushButton::clicked, [this](){ selected = true; accept(); });
+    connect(ui->btnSave, &QPushButton::clicked, this, &SendChangeAddressDialog::save);
 }
 
-void SendChangeAddressDialog::setAddress(QString address){
+void SendChangeAddressDialog::setAddress(QString address)
+{
     ui->lineEditAddress->setText(address);
     ui->btnCancel->setText(tr("RESET"));
 }
 
-bool SendChangeAddressDialog::getAddress(WalletModel *model, QString *retAddress){
-    QString address = ui->lineEditAddress->text();
-    if(!address.isEmpty() && model->validateAddress(address)){
-        *retAddress = address;
-        return true;
-    }
-    return false;
+QString SendChangeAddressDialog::getAddress() const
+{
+    return ui->lineEditAddress->text();
 }
 
 void SendChangeAddressDialog::showEvent(QShowEvent *event)
@@ -70,6 +71,25 @@ void SendChangeAddressDialog::reset()
     close();
 }
 
-SendChangeAddressDialog::~SendChangeAddressDialog(){
+void SendChangeAddressDialog::save()
+{
+    // validate address
+    if (!walletModel->validateAddress(ui->lineEditAddress->text())) {
+        inform(tr("Invalid address"));
+    } else {
+        accept();
+    }
+}
+
+void SendChangeAddressDialog::inform(const QString& text)
+{
+    if (!snackBar) snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(text);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
+}
+
+SendChangeAddressDialog::~SendChangeAddressDialog()
+{
     delete ui;
 }

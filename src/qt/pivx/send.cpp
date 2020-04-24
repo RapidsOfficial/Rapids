@@ -582,27 +582,20 @@ void SendWidget::updateEntryLabels(QList<SendCoinsRecipient> recipients)
 void SendWidget::onChangeAddressClicked()
 {
     showHideOp(true);
-    SendChangeAddressDialog* dialog = new SendChangeAddressDialog(window);
+    SendChangeAddressDialog* dialog = new SendChangeAddressDialog(window, walletModel);
     if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
         dialog->setAddress(QString::fromStdString(CBitcoinAddress(CoinControlDialog::coinControl->destChange).ToString()));
     }
     if (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5)) {
-        if (dialog->selected) {
-            QString ret;
-            if (dialog->getAddress(walletModel, &ret)) {
-                CBitcoinAddress address(ret.toStdString());
+        CBitcoinAddress address(dialog->getAddress().toStdString());
 
-                // Ask if it's what the user really wants
-                if (!walletModel->isMine(address) &&
-                    !ask(tr("Warning!"), tr("The change address doesn't belong to this wallet.\n\nDo you want to continue?"))) {
-                    return;
-                }
-                CoinControlDialog::coinControl->destChange = address.Get();
-                ui->btnChangeAddress->setActive(true);
-            } else {
-                inform(tr("Invalid change address"));
-            }
+        // Ask if it's what the user really wants
+        if (!walletModel->isMine(address) &&
+            !ask(tr("Warning!"), tr("The change address doesn't belong to this wallet.\n\nDo you want to continue?"))) {
+            return;
         }
+        CoinControlDialog::coinControl->destChange = address.Get();
+        ui->btnChangeAddress->setActive(true);
     }
     // check if changeAddress has been reset to NoDestination (or wasn't set at all)
     if (boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange))
