@@ -1003,7 +1003,7 @@ bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std:
 {
     CBitcoinAddress address(addressStr.toStdString());
     if (address.IsStakingAddress())
-        return error("Invalid PIVX address, cold staking address");
+        return error("Invalid RPD address, cold staking address");
     CKeyID keyID;
     if (!getKeyId(address, keyID))
         return false;
@@ -1013,10 +1013,10 @@ bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std:
 bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID)
 {
     if (!address.IsValid())
-        return error("Invalid PIVX address");
+        return error("Invalid RPD address");
 
     if (!address.GetKeyID(keyID))
-        return error("Unable to get KeyID from PIVX address");
+        return error("Unable to get KeyID from RPD address");
 
     return true;
 }

@@ -105,7 +105,7 @@ public:
     }
 };
 
-/** Interface to PIVX wallet from Qt view code. */
+/** Interface to RPD wallet from Qt view code. */
 class WalletModel : public QObject
 {
     Q_OBJECT

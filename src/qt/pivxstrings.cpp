@@ -50,7 +50,7 @@ QT_TRANSLATE_NOOP("pivx-core", ""
 "Delete all zerocoin spends and mints that have been recorded to the "
 "blockchain database and reindex them (0-1, default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", ""
-"Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, "
+"Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, "
 "Budgeting) (0-1, default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "Distributed under the MIT software license, see the accompanying file "
@@ -229,7 +229,7 @@ QT_TRANSLATE_NOOP("pivx-core", ""
 "pay if you send a transaction."),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "Warning: Peers are being disconnected due time differences. Please check "
-"that your computer's date and time are correct! If your clock is wrong PIVX "
+"that your computer's date and time are correct! If your clock is wrong RPD "
 "Core will not work properly."),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "Warning: Please check that your computer's date and time are correct! If "
@@ -256,10 +256,10 @@ QT_TRANSLATE_NOOP("pivx-core", ""
 QT_TRANSLATE_NOOP("pivx-core", ""
 "You must specify a masternodeprivkey in the configuration. Please see "
 "documentation for help."),
-QT_TRANSLATE_NOOP("pivx-core", "(28732 could be used only on mainnet)"),
+QT_TRANSLATE_NOOP("pivx-core", "(51472 could be used only on mainnet)"),
 QT_TRANSLATE_NOOP("pivx-core", "(default: %s)"),
 QT_TRANSLATE_NOOP("pivx-core", "(default: 1)"),
-QT_TRANSLATE_NOOP("pivx-core", "(must be 28732 for mainnet)"),
+QT_TRANSLATE_NOOP("pivx-core", "(must be 51472 for mainnet)"),
 QT_TRANSLATE_NOOP("pivx-core", "<category> can be:"),
 QT_TRANSLATE_NOOP("pivx-core", "Accept command line and JSON-RPC commands"),
 QT_TRANSLATE_NOOP("pivx-core", "Accept connections from outside (default: 1 if no -proxy or -connect)"),

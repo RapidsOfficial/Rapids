@@ -122,12 +122,12 @@
         <translation>Adrese za primanje</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>To su vaše PIVX adrese za slanje plaćanja. Uvijek provjerite iznos i adresu primatelja prije slanja novca.</translation>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>To su vaše RPD adrese za slanje plaćanja. Uvijek provjerite iznos i adresu primatelja prije slanja novca.</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>To su vaše PIVX adrese za primanje uplata. Preporuča se upotreba nove adrese primanja za svaku transakciju.</translation>
+        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>To su vaše RPD adrese za primanje uplata. Preporuča se upotreba nove adrese primanja za svaku transakciju.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -235,8 +235,8 @@
         <translation>npr. Ivan Ivić</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Unesite PIVX adresu</translation>
+        <source>Enter a RPD address</source>
+        <translation>Unesite RPD adresu</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -342,16 +342,16 @@
         <translation>PONIŠTI</translation>
     </message>
     <message>
-        <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
-        <translation>PIVX se sada zatvara kako bi dovršio proces šifriranja. Ne zaboravite da šifriranje vašeg novčanika ne može u potpunosti zaštititi vaše PIV od krađe zlonamjernog softvera koji zarazi vaše računalo.</translation>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <translation>RPD se sada zatvara kako bi dovršio proces šifriranja. Ne zaboravite da šifriranje vašeg novčanika ne može u potpunosti zaštititi vaše RPD od krađe zlonamjernog softvera koji zarazi vaše računalo.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Jeste li sigurni da želite šifrirati svoj novčanik?</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
-        <translation>Upozorenje: Ako šifrirate svoj novčanik i izgubite vašu zaporku, vi ćete &lt;b&gt;IZGUBITI ĆE TE SAV VAŠ PIV&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
+        <translation>Upozorenje: Ako šifrirate svoj novčanik i izgubite vašu zaporku, vi ćete &lt;b&gt;IZGUBITI ĆE TE SAV VAŠ RPD&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -485,8 +485,8 @@
         <translation>PritisniTipku</translation>
     </message>
     <message>
-        <source>0.00 PIV</source>
-        <translation>0.00 PIV</translation>
+        <source>0.00 RPD</source>
+        <translation>0.00 RPD</translation>
     </message>
     <message>
         <source>0</source>
@@ -777,12 +777,12 @@
         <translation>TekstualnaOznaka</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
+        <source>zRPD</source>
+        <translation>zRPD</translation>
     </message>
     <message>
         <source>Sort by</source>
@@ -829,8 +829,8 @@
         <translation>Još nema transakcija</translation>
     </message>
     <message>
-        <source>How to get PIV or zPIV</source>
-        <translation>Kako dobiti PIV ili zPIV</translation>
+        <source>How to get RPD or zRPD</source>
+        <translation>Kako dobiti RPD ili zRPD</translation>
     </message>
     <message>
         <source>Loading chart..</source>
@@ -1010,12 +1010,12 @@
 <context>
     <name>HelpMessageDialog</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
-        <source>About PIVX Core</source>
-        <translation>O PIVX Core-u</translation>
+        <source>About Rapids</source>
+        <translation>O Rapids-u</translation>
     </message>
     <message>
         <source>Usage:</source>
@@ -1033,8 +1033,8 @@
         <translation>Dobrodošli</translation>
     </message>
     <message>
-        <source>Welcome to PIVX Core.</source>
-        <translation>Dobrodošli u PIVX Core.</translation>
+        <source>Welcome to Rapids.</source>
+        <translation>Dobrodošli u Rapids.</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1045,8 +1045,8 @@
         <translation>U redu</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1262,8 +1262,8 @@
         <translation>Stručnjak</translation>
     </message>
     <message>
-        <source>Automatically start PIVX after logging in to the system.</source>
-        <translation>Automatski pokreni PIVX nakon ulogiravanja u računalo.</translation>
+        <source>Automatically start RPD after logging in to the system.</source>
+        <translation>Automatski pokreni RPD nakon ulogiravanja u računalo.</translation>
     </message>
     <message>
         <source>&amp;Network</source>
@@ -1301,8 +1301,8 @@
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -1329,8 +1329,8 @@
         <translation>Napusti aplikaciju</translation>
     </message>
     <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX Core klijent</translation>
+        <source>Rapids client</source>
+        <translation>Rapids klijent</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1415,8 +1415,8 @@
         <translation>Iznos</translation>
     </message>
     <message>
-        <source>Enter a PIVX address (e.g. %1)</source>
-        <translation>Unesi PIVX adresu (npr. %1)</translation>
+        <source>Enter a RPD address (e.g. %1)</source>
+        <translation>Unesi RPD adresu (npr. %1)</translation>
     </message>
     <message>
         <source>NETWORK</source>
@@ -1427,8 +1427,8 @@
         <translation>N/A</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     </context>
 <context>
@@ -1638,8 +1638,8 @@
         <translation>Iznos</translation>
     </message>
     <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
+        <source>RPD</source>
+        <translation>RPD</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -1750,8 +1750,8 @@
         <translation>Pošalji</translation>
     </message>
     <message>
-        <source>Enter a PIVX address or contact label</source>
-        <translation>Unesite PIVX adresu ili oznaku kontakta</translation>
+        <source>Enter a RPD address or contact label</source>
+        <translation>Unesite RPD adresu ili oznaku kontakta</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -1852,8 +1852,8 @@
         <translation>Dešifriraj adresu</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Unesite PIVX adresu</translation>
+        <source>Enter a RPD address</source>
+        <translation>Unesite RPD adresu</translation>
     </message>
     <message>
         <source>Add address</source>
@@ -2096,8 +2096,8 @@
         <translation>PritisniTipku</translation>
     </message>
     <message>
-        <source>Enter a PIVX address or contact label</source>
-        <translation>Unesite PIVX adresu ili oznaku kontakta</translation>
+        <source>Enter a RPD address or contact label</source>
+        <translation>Unesite RPD adresu ili oznaku kontakta</translation>
     </message>
     <message>
         <source>Add address</source>
@@ -2261,8 +2261,8 @@
         <translation>Često postavljena pitanja</translation>
     </message>
     <message>
-        <source>About PIVX</source>
-        <translation>O PIVX-u</translation>
+        <source>About RPD</source>
+        <translation>O RPD-u</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -2284,8 +2284,8 @@
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <source>PIVX Core is shutting down...</source>
-        <translation>PIVX Core se gasi...</translation>
+        <source>Rapids is shutting down...</source>
+        <translation>Rapids se gasi...</translation>
     </message>
     </context>
 <context>
@@ -2310,15 +2310,15 @@
         <translation>Učitavanje...</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Version %1</source>
@@ -2333,8 +2333,8 @@
         <translation>Dash Core developeri</translation>
     </message>
     <message>
-        <source>The PIVX Core developers</source>
-        <translation>PIVX Core developeri</translation>
+        <source>The Rapids developers</source>
+        <translation>Rapids developeri</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -2367,32 +2367,32 @@
         <translation>Obrazac</translation>
     </message>
     <message>
-        <source>480.0685 PIV</source>
-        <translation>480.0685 PIV</translation>
+        <source>480.0685 RPD</source>
+        <translation>480.0685 RPD</translation>
     </message>
     <message>
-        <source>1,000 zPIV</source>
-        <translation>1,000 zPIV</translation>
+        <source>1,000 zRPD</source>
+        <translation>1,000 zRPD</translation>
     </message>
     <message>
         <source>Available</source>
         <translation>Dostupno</translation>
     </message>
     <message>
-        <source>6.943 PIV</source>
-        <translation>6.943 PIV</translation>
+        <source>6.943 RPD</source>
+        <translation>6.943 RPD</translation>
     </message>
     <message>
-        <source>10 PIV</source>
-        <translation>10 PIV</translation>
+        <source>10 RPD</source>
+        <translation>10 RPD</translation>
     </message>
     <message>
-        <source>60 zPIV</source>
-        <translation>60 zPIV</translation>
+        <source>60 zRPD</source>
+        <translation>60 zRPD</translation>
     </message>
     <message>
-        <source>10 zPIV</source>
-        <translation>10 zPIV</translation>
+        <source>10 zRPD</source>
+        <translation>10 zRPD</translation>
     </message>
     <message>
         <source>Error generating address</source>
@@ -2499,8 +2499,8 @@
         <translation>Naknada:</translation>
     </message>
     <message>
-        <source>0.0001 PIV</source>
-        <translation>0.0001 PIV</translation>
+        <source>0.0001 RPD</source>
+        <translation>0.0001 RPD</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -2522,8 +2522,8 @@
         <translation>Obrazac</translation>
     </message>
     <message>
-        <source>+0.000585 PIV</source>
-        <translation>+0.000585 PIV</translation>
+        <source>+0.000585 RPD</source>
+        <translation>+0.000585 RPD</translation>
     </message>
 </context>
 <context>
@@ -2597,8 +2597,8 @@
         <translation>Nedovoljno sredstava.</translation>
     </message>
     <message>
-        <source>Recalculating PIV supply...</source>
-        <translation>Preračunavanje ponude PIV-a...</translation>
+        <source>Recalculating RPD supply...</source>
+        <translation>Preračunavanje ponude RPD-a...</translation>
     </message>
     <message>
         <source>Loading addresses...</source>

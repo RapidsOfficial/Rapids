@@ -43,7 +43,7 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     ui->pushLeft->setChecked(true);
 
     // Subtitle
-    ui->labelSubtitle1->setText("Encrypt your PIVX addresses (key pair actually) using BIP38 encryption.\nUsing this mechanism you can share your keys without middle-man risk, only need to store your passphrase safely.");
+    ui->labelSubtitle1->setText("Encrypt your RPD addresses (key pair actually) using BIP38 encryption.\nUsing this mechanism you can share your keys without middle-man risk, only need to store your passphrase safely.");
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     // Key
@@ -82,7 +82,7 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     // Encrypt
 
     // Address
-    ui->labelSubtitleAddress->setText(tr("PIVX address"));
+    ui->labelSubtitleAddress->setText(tr("RPD address"));
     setCssProperty(ui->labelSubtitleAddress, "text-title");
 
     ui->addressIn_ENC->setPlaceholderText(tr("Enter address"));

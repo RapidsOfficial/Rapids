@@ -64,7 +64,6 @@ protected:
     void resizeEvent(QResizeEvent *event) override;
 private Q_SLOTS:
     void onBtnReceiveClicked();
-    void onThemeClicked();
     void onBtnLockClicked();
     void lockDropdownMouseLeave();
     void lockDropdownClicked(const StateClicked&);

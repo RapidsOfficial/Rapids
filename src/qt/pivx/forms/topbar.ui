@@ -42,7 +42,7 @@
     <number>0</number>
    </property>
    <item>
-    <widget class="PFBorderImage" name="containerTop" native="true">
+    <widget class="PFBorderImage" name="containerTop">
      <layout class="QVBoxLayout" name="verticalLayout_11">
       <property name="spacing">
        <number>0</number>
@@ -324,32 +324,6 @@ border:none;</string>
               <size>
                <width>36</width>
                <height>0</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="ExpandableButton" name="pushButtonTheme" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>36</width>
-               <height>36</height>
-              </size>
-             </property>
-             <property name="maximumSize">
-              <size>
-               <width>16777215</width>
-               <height>36</height>
-              </size>
-             </property>
-            </widget>
-           </item>
-           <item>
-            <widget class="ExpandableButton" name="pushButtonFAQ" native="true">
-             <property name="minimumSize">
-              <size>
-               <width>36</width>
-               <height>36</height>
               </size>
              </property>
             </widget>

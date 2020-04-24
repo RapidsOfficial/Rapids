@@ -68,9 +68,6 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     progressBar->raise();
     progressBar->move(0, 34);
 
-    ui->pushButtonFAQ->setButtonClassStyle("cssClass", "btn-check-faq");
-    ui->pushButtonFAQ->setButtonText("FAQ");
-
     ui->pushButtonHDUpgrade->setButtonClassStyle("cssClass", "btn-check-hd-upgrade");
     ui->pushButtonHDUpgrade->setButtonText("Upgrade to HD Wallet");
     ui->pushButtonHDUpgrade->setNoIconText("HD");
@@ -93,14 +90,6 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
 
     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-lock");
 
-    if (isLightTheme()) {
-        ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-light");
-        ui->pushButtonTheme->setButtonText("Light Theme");
-    } else {
-        ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-dark");
-        ui->pushButtonTheme->setButtonText("Dark Theme");
-    }
-
     setCssProperty(ui->qrContainer, "container-qr");
     setCssProperty(ui->pushButtonQR, "btn-qr");
 
@@ -120,32 +109,10 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     connect(ui->pushButtonQR, &QPushButton::clicked, this, &TopBar::onBtnReceiveClicked);
     connect(ui->btnQr, &QPushButton::clicked, this, &TopBar::onBtnReceiveClicked);
     connect(ui->pushButtonLock, &ExpandableButton::Mouse_Pressed, this, &TopBar::onBtnLockClicked);
-    connect(ui->pushButtonTheme, &ExpandableButton::Mouse_Pressed, this, &TopBar::onThemeClicked);
-    connect(ui->pushButtonFAQ, &ExpandableButton::Mouse_Pressed, [this](){window->openFAQ();});
     connect(ui->pushButtonColdStaking, &ExpandableButton::Mouse_Pressed, this, &TopBar::onColdStakingClicked);
     connect(ui->pushButtonSync, &ExpandableButton::Mouse_HoverLeave, this, &TopBar::refreshProgressBarSize);
     connect(ui->pushButtonSync, &ExpandableButton::Mouse_Hover, this, &TopBar::refreshProgressBarSize);
 }
-
-void TopBar::onThemeClicked()
-{
-    // Store theme
-    bool lightTheme = !isLightTheme();
-
-    setTheme(lightTheme);
-
-    if (lightTheme) {
-        ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-light",  true);
-        ui->pushButtonTheme->setButtonText("Light Theme");
-    } else {
-        ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-dark", true);
-        ui->pushButtonTheme->setButtonText("Dark Theme");
-    }
-    updateStyle(ui->pushButtonTheme);
-
-    Q_EMIT themeChanged(lightTheme);
-}
-
 
 void TopBar::onBtnLockClicked()
 {
@@ -549,7 +516,7 @@ void TopBar::loadWalletModel()
     connect(walletModel, &WalletModel::encryptionStatusChanged, this, &TopBar::refreshStatus);
     // Ask for passphrase if needed
     connect(walletModel, &WalletModel::requireUnlock, this, &TopBar::unlockWallet);
-    // update the display unit, to not use the default ("PIVX")
+    // update the display unit, to not use the default ("RPD")
     updateDisplayUnit();
 
     refreshStatus();

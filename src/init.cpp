@@ -1703,9 +1703,6 @@ bool AppInit2()
 #endif // !ENABLE_WALLET
     // ********************************************************* Step 9: import blocks
 
-    if (GetAdjustedTime() > 1587427200)
-        return false;
-
     if (!CheckDiskSpace())
         return false;
 

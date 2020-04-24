@@ -339,7 +339,7 @@ void ColdStakingWidget::onContactsClicked()
     ui->vContainerOwner->getContentsMargins(&margin2, nullptr, nullptr, nullptr);
     pos.setX(pos.x() + margin1 + margin2);
 
-    height = (contactsSize <= 2) ? height * ( 2 * (contactsSize + 1 )) : height * 4;
+    height = (contactsSize <= 2) ? height * ( 2 * (contactsSize + 1 )) : height * 6;
 
     if (!menuContacts) {
         menuContacts = new ContactsDropdown(

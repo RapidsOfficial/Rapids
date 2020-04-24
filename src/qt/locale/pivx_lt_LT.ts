@@ -76,12 +76,12 @@
         <translation>Gavimo adresai</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Tai jūsų PIVX adresai mokėjimų išsiuntimams. Visada patikrinkite sumą ir gavėjo adresą prieš siųsdami monetas.</translation>
+        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Tai jūsų RPD adresai mokėjimų išsiuntimams. Visada patikrinkite sumą ir gavėjo adresą prieš siųsdami monetas.</translation>
     </message>
     <message>
-        <source>These are your PIVX addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Tai jūsų PIVX adresai mokėjimų gavimams. Rekomenduojama naudoti naują adresą kiekvienam pavedimui.</translation>
+        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Tai jūsų RPD adresai mokėjimų gavimams. Rekomenduojama naudoti naują adresą kiekvienam pavedimui.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -196,16 +196,16 @@
         <translation>Patvirtinkite piniginės užšifravimą.</translation>
     </message>
     <message>
-        <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
-        <translation>Dabar PIVX išsijungs, kad būtų užbaigtas šifravimo procesas. Atminkite, kad jūsų piniginės užšifravimas negali visiškai apsaugoti jūsų PIV nuo kenkėjiškų programų, užkrėsto jūsų kompiuterio.</translation>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <translation>Dabar RPD išsijungs, kad būtų užbaigtas šifravimo procesas. Atminkite, kad jūsų piniginės užšifravimas negali visiškai apsaugoti jūsų RPD nuo kenkėjiškų programų, užkrėsto jūsų kompiuterio.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Ar tikrai norite užšifruoti savo piniginę?</translation>
     </message>
     <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
-        <translation>Įspėjimas: jei užšifruosite savo piniginę ir prarasite slaptafrazę, jūs &lt;b&gt;PRARASITE VISUS SAVO PIV&lt;/b&gt;!</translation>
+        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
+        <translation>Įspėjimas: jei užšifruosite savo piniginę ir prarasite slaptafrazę, jūs &lt;b&gt;PRARASITE VISUS SAVO RPD&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -518,8 +518,8 @@
 <context>
     <name>CoinControlPivWidget</name>
     <message>
-        <source>PIV:</source>
-        <translation>PIV:</translation>
+        <source>RPD:</source>
+        <translation>RPD:</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -599,8 +599,8 @@
         <translation>Teksto etiketė</translation>
     </message>
     <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
+        <source>zRPD</source>
+        <translation>zRPD</translation>
     </message>
     <message>
         <source>All</source>
@@ -676,8 +676,8 @@
         <translation>Keisti siuntimo adresą</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid PIVX address.</source>
-        <translation>Įvestas adresas "%1" nėra galiojantis PIVX adresas.</translation>
+        <source>The entered address "%1" is not a valid RPD address.</source>
+        <translation>Įvestas adresas "%1" nėra galiojantis RPD adresas.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -740,16 +740,16 @@
         <translation>versija</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>(%1-bit)</source>
         <translation>(%1-bitai)</translation>
     </message>
     <message>
-        <source>About PIVX Core</source>
-        <translation>Apie PIVX Core</translation>
+        <source>About Rapids</source>
+        <translation>Apie Rapids</translation>
     </message>
     <message>
         <source>Command-line options</source>
@@ -795,24 +795,24 @@
         <translation>Sveiki</translation>
     </message>
     <message>
-        <source>Welcome to PIVX Core.</source>
-        <translation>Sveiki atvykę į PIVX Core</translation>
+        <source>Welcome to Rapids.</source>
+        <translation>Sveiki atvykę į Rapids</translation>
     </message>
     <message>
-        <source>As this is the first time the program is launched, you can choose where PIVX Core will store its data.</source>
-        <translation>Kadangi programa paleista pirmą kartą, galite pasirinkti kur PIVX Core saugos savo duomenis.</translation>
+        <source>As this is the first time the program is launched, you can choose where Rapids will store its data.</source>
+        <translation>Kadangi programa paleista pirmą kartą, galite pasirinkti kur Rapids saugos savo duomenis.</translation>
     </message>
     <message>
-        <source>PIVX Core will download and store a copy of the PIVX block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>PIVX Core atsisiųs ir saugos PIVX blockchain'o kopiją. Šiame kataloge bus saugomas ne mažesnis kaip %1GB duomenų kiekis, kuris laikui bėgant augs. Piniginė taip pat bus saugoma šiame kataloge.</translation>
+        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Rapids atsisiųs ir saugos RPD blockchain'o kopiją. Šiame kataloge bus saugomas ne mažesnis kaip %1GB duomenų kiekis, kuris laikui bėgant augs. Piniginė taip pat bus saugoma šiame kataloge.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
         <translation>Naudoti numatytąjį duomenų katalogą</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Error: Specified data directory "%1" cannot be created.</source>
@@ -976,12 +976,12 @@
         <translation>Ekspertas</translation>
     </message>
     <message>
-        <source>Automatically start PIVX after logging in to the system.</source>
-        <translation>Automatiškai paleisti PIVX prisijungus prie sistemos.</translation>
+        <source>Automatically start RPD after logging in to the system.</source>
+        <translation>Automatiškai paleisti RPD prisijungus prie sistemos.</translation>
     </message>
     <message>
-        <source>&amp;Start PIVX on system login</source>
-        <translation>&amp;Paleisti PIVX sistemai įsijungiant</translation>
+        <source>&amp;Start RPD on system login</source>
+        <translation>&amp;Paleisti RPD sistemai įsijungiant</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -1008,8 +1008,8 @@
         <translation>&amp;Tinklas</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting PIVX.</source>
-        <translation>Čia galite nustatyti vartotojo sąsajos kalbą. Šis nustatymas įsigalios iš naujo paleidus "PIVX".</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
+        <translation>Čia galite nustatyti vartotojo sąsajos kalbą. Šis nustatymas įsigalios iš naujo paleidus "RPD".</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -1022,28 +1022,28 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Įrašyti prievadą naudojant &amp;UPnP</translation>
     </message>
     <message>
-        <source>Enable automatic minting of PIV units to zPIV</source>
-        <translation>Įgalinti automatinį konvertavimą iš PIV į zPIV</translation>
+        <source>Enable automatic minting of RPD units to zRPD</source>
+        <translation>Įgalinti automatinį konvertavimą iš RPD į zRPD</translation>
     </message>
     <message>
-        <source>Enable zPIV Automint</source>
-        <translation>Įgalinti zPIV Automatinį nukaldinima</translation>
+        <source>Enable zRPD Automint</source>
+        <translation>Įgalinti zRPD Automatinį nukaldinima</translation>
     </message>
     <message>
-        <source>Percentage of incoming PIV which get automatically converted to zPIV via Zerocoin Protocol (min: 10%)</source>
-        <translation>Procentas gauto PIV, kuris automatiškai bus konvertuotas į zPIV naudojant Zerocoin Protokolą (min: 10%)</translation>
+        <source>Percentage of incoming RPD which get automatically converted to zRPD via Zerocoin Protocol (min: 10%)</source>
+        <translation>Procentas gauto RPD, kuris automatiškai bus konvertuotas į zRPD naudojant Zerocoin Protokolą (min: 10%)</translation>
     </message>
     <message>
-        <source>Percentage of autominted zPIV</source>
-        <translation>Automatiškai sukurtų zPIV procentas</translation>
+        <source>Percentage of autominted zRPD</source>
+        <translation>Automatiškai sukurtų zRPD procentas</translation>
     </message>
     <message>
-        <source>Preferred Automint zPIV Denomination</source>
-        <translation>Pageidautinas zPIV Automatinio Nukaldinimo Nominalas</translation>
+        <source>Preferred Automint zRPD Denomination</source>
+        <translation>Pageidautinas zRPD Automatinio Nukaldinimo Nominalas</translation>
     </message>
     <message>
-        <source>Connect to the PIVX network through a SOCKS5 proxy.</source>
-        <translation>Jungtis prie PIVX tinklo naudojant SOCKS5 tarpinį serverį.</translation>
+        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
+        <translation>Jungtis prie RPD tinklo naudojant SOCKS5 tarpinį serverį.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -1145,8 +1145,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
 <context>
     <name>PIVXGUI</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     <message>
         <source>Wallet</source>
@@ -1173,8 +1173,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
         <translation>Uždaryti programą</translation>
     </message>
     <message>
-        <source>PIVX Core client</source>
-        <translation>PIVX Core piniginė</translation>
+        <source>Rapids client</source>
+        <translation>Rapids piniginė</translation>
     </message>
     <message>
         <source>Error</source>
@@ -1295,8 +1295,8 @@ Adresas: %4
         <translation>Suma</translation>
     </message>
     <message>
-        <source>Enter a PIVX address (e.g. %1)</source>
-        <translation>Įveskite PIVX adresą (pvz. %1)</translation>
+        <source>Enter a RPD address (e.g. %1)</source>
+        <translation>Įveskite RPD adresą (pvz. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -1331,8 +1331,8 @@ Adresas: %4
         <translation>N/A</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     </context>
 <context>
@@ -1458,8 +1458,8 @@ Adresas: %4
         <translation>Iš:</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Sveiki atvykę į PIVX RPC konsolę.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Sveiki atvykę į RPD RPC konsolę.</translation>
     </message>
     <message>
         <source>never</source>
@@ -1655,8 +1655,8 @@ Adresas: %4
         <translation>Teksto etiketė</translation>
     </message>
     <message>
-        <source>Welcome to the PIVX RPC console.</source>
-        <translation>Sveiki atvykę į PIVX RPC konsolę.</translation>
+        <source>Welcome to the RPD RPC console.</source>
+        <translation>Sveiki atvykę į RPD RPC konsolę.</translation>
     </message>
     </context>
 <context>
@@ -1886,15 +1886,15 @@ Adresas: %4
         <translation>Forma</translation>
     </message>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
 </context>
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
+        <source>Rapids</source>
+        <translation>Rapids</translation>
     </message>
     </context>
 <context>
@@ -2093,8 +2093,8 @@ Adresas: %4
         <translation>Klaida kraunant wallet.dat: Piniginė yra sugadinta</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>Klaida kraunant wallet.dat: Piniginė reikalauja naujesnės PIVX Core versijos</translation>
+        <source>Error loading wallet.dat: Wallet requires newer version of Rapids</source>
+        <translation>Klaida kraunant wallet.dat: Piniginė reikalauja naujesnės Rapids versijos</translation>
     </message>
     <message>
         <source>Error opening block database</source>
@@ -2261,8 +2261,8 @@ Adresas: %4
         <translation>Piniginė %s yra ne duomenų kataloge %s</translation>
     </message>
     <message>
-        <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
-        <translation>Piniginę reikia perrašyti: paleiskite PIVX Core iš naujo</translation>
+        <source>Wallet needed to be rewritten: restart Rapids to complete</source>
+        <translation>Piniginę reikia perrašyti: paleiskite Rapids iš naujo</translation>
     </message>
     <message>
         <source>Wallet options:</source>

@@ -53,12 +53,10 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     setCssSubtitleScreen(ui->labelSubtitle);
 
     // Staking Information
-    ui->labelMessage->setText(tr("Amount of RPD and zRPD staked."));
+    ui->labelMessage->setText(tr("Amount of RPD staked."));
     setCssSubtitleScreen(ui->labelMessage);
     setCssProperty(ui->labelSquarePiv, "square-chart-piv");
-    setCssProperty(ui->labelSquarezPiv, "square-chart-zpiv");
     setCssProperty(ui->labelPiv, "text-chart-piv");
-    setCssProperty(ui->labelZpiv, "text-chart-zpiv");
 
     // Staking Amount
     QFont fontBold;
@@ -66,10 +64,8 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
 
     setCssProperty(ui->labelChart, "legend-chart");
 
-    ui->labelAmountZpiv->setText("0 zRPD");
     ui->labelAmountPiv->setText("0 RPD");
     setCssProperty(ui->labelAmountPiv, "text-stake-piv-disable");
-    setCssProperty(ui->labelAmountZpiv, "text-stake-zpiv-disable");
 
     setCssProperty({ui->pushButtonAll,  ui->pushButtonMonth, ui->pushButtonYear}, "btn-check-time");
     setCssProperty({ui->comboBoxMonths,  ui->comboBoxYears}, "btn-combo-chart-selected");
@@ -132,10 +128,6 @@ DashboardWidget::DashboardWidget(PIVXGUI* parent) :
     setCssProperty(ui->labelEmpty, "text-empty");
     setCssProperty(ui->chartContainer, "container-chart");
     setCssProperty(ui->pushImgEmptyChart, "img-empty-staking-on");
-
-    ui->btnHowTo->setText(tr("How to get RPD or zRPD"));
-    setCssBtnSecondary(ui->btnHowTo);
-
 
     setCssProperty(ui->labelEmptyChart, "text-empty");
     ui->labelMessageEmpty->setText(tr("You can verify the staking activity in the status bar at the top right of the wallet.\nIt will start automatically as soon as the wallet has enough confirmations on any unspent balances, and the wallet has synced."));
@@ -208,7 +200,6 @@ void DashboardWidget::loadWalletModel()
         }
 
         connect(ui->pushImgEmpty, &QPushButton::clicked, window, &PIVXGUI::openFAQ);
-        connect(ui->btnHowTo, &QPushButton::clicked, window, &PIVXGUI::openFAQ);
         connect(txModel, &TransactionTableModel::txArrived, this, &DashboardWidget::onTxArrived);
 
         // Notification pop-up for new transaction
@@ -462,7 +453,6 @@ void DashboardWidget::changeChartColors()
     axisY->setLinePenColor(linePenColorY);
     chart->setBackgroundBrush(QBrush(backgroundColor));
     if (set0) set0->setBorderColor(gridLineColorX);
-    if (set1) set1->setBorderColor(gridLineColorX);
 }
 
 void DashboardWidget::updateStakeFilter()
@@ -542,7 +532,7 @@ const QMap<int, std::pair<qint64, qint64>> DashboardWidget::getAmountBy()
                 amountBy[time] = std::make_pair(amount, 0);
             } else {
                 amountBy[time] = std::make_pair(0, amount);
-                hasZpivStakes = true;
+                hasZpivStakes = false;
             }
         }
     }
@@ -571,21 +561,17 @@ bool DashboardWidget::loadChartData(bool withMonthNames)
     for (int j = range.first; j < range.second; j++) {
         int num = (isOrderedByMonth && j > daysInMonth) ? (j % daysInMonth) : j;
         qreal piv = 0;
-        qreal zpiv = 0;
         if (chartData->amountsByCache.contains(num)) {
             std::pair <qint64, qint64> pair = chartData->amountsByCache[num];
             piv = (pair.first != 0) ? pair.first / 100000000 : 0;
-            zpiv = (pair.second != 0) ? pair.second / 100000000 : 0;
             chartData->totalPiv += pair.first;
-            chartData->totalZpiv += pair.second;
         }
 
         chartData->xLabels << ((withMonthNames) ? monthsNames[num - 1] : QString::number(num));
 
         chartData->valuesPiv.append(piv);
-        chartData->valueszPiv.append(zpiv);
 
-        int max = std::max(piv, zpiv);
+        int max = piv;
         if (max > chartData->maxValue) {
             chartData->maxValue = max;
         }
@@ -643,9 +629,7 @@ void DashboardWidget::onChartRefreshed()
     }
     // init sets
     set0 = new QBarSet("RPD");
-    set1 = new QBarSet("zRPD");
     set0->setColor(QColor(92,75,125));
-    set1->setColor(QColor(176,136,255));
 
     if (!series) {
         series = new QBarSeries();
@@ -655,24 +639,16 @@ void DashboardWidget::onChartRefreshed()
     series->attachAxis(axisY);
 
     set0->append(chartData->valuesPiv);
-    set1->append(chartData->valueszPiv);
 
     // Total
     nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
-    if (chartData->totalPiv > 0 || chartData->totalZpiv > 0) {
+    if (chartData->totalPiv > 0) {
         setCssProperty(ui->labelAmountPiv, "text-stake-piv");
-        setCssProperty(ui->labelAmountZpiv, "text-stake-zpiv");
-    } else {
-        setCssProperty(ui->labelAmountPiv, "text-stake-piv-disable");
-        setCssProperty(ui->labelAmountZpiv, "text-stake-zpiv-disable");
     }
-    forceUpdateStyle({ui->labelAmountPiv, ui->labelAmountZpiv});
+    forceUpdateStyle({ui->labelAmountPiv, 0});
     ui->labelAmountPiv->setText(GUIUtil::formatBalance(chartData->totalPiv, nDisplayUnit));
-    ui->labelAmountZpiv->setText(GUIUtil::formatBalance(chartData->totalZpiv, nDisplayUnit, true));
 
     series->append(set0);
-    if (hasZpivStakes)
-        series->append(set1);
 
     // bar width
     if (chartShow == YEAR)
