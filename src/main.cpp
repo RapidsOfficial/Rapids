@@ -1596,22 +1596,27 @@ int64_t GetTotalValue(int nHeight)
 int64_t GetBlockValue(int nHeight)
 {
     int64_t nSubsidy = 0;
+    const int nHalvingPeriod = 2102400;
 
-    if (Params().NetworkID() == CBaseChainParams::TESTNET) {
-        if (nHeight < Params().GetConsensus().height_last_PoW)
-            return 5000 * COIN;
-    }
-    
-    if(IsBurnBlock(nHeight)) {
-		nSubsidy = GetBurnAward(nHeight);
+    //! unfortunately this must remain to validate the existing
+    //! chain, but we can just disable it at new client height
+    if (IsBurnBlock(nHeight) && nHeight < Params().GetConsensus().height_new_client) {
+        nSubsidy = GetBurnAward(nHeight);
+
     } else {
+
+        //! existing reward schema
         if (nHeight == 0) {
             nSubsidy = 20000000000 * COIN;
         } else {
-            nSubsidy =  3567.352 * COIN; 
-            nSubsidy >>= ((nHeight - 1) / 2102400);
+            nSubsidy = 3567.352 * COIN;
+            nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
         }
-        if(nHeight > 0) nSubsidy *= 0.9;
+
+        //! remove the old restriction on reward with new client
+        if (nHeight > 0 &&
+            nHeight < Params().GetConsensus().height_new_client)
+            nSubsidy *= 0.9;
     }
 
     if (nMoneySupply + nSubsidy >= Params().GetConsensus().nMaxMoneyOut)
@@ -1659,6 +1664,8 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue, int nMasternodeCou
     // Check if we reached coin supply
     if (nHeight < 50) {
         ret = 0;
+    } else if (nHeight >= Params().GetConsensus().height_new_client) {
+        ret = blockValue * 0.65;
     } else {
         ret = blockValue * 0.60 / 0.9; // 60% of block reward
     }

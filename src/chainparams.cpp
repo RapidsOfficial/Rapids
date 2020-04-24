@@ -178,6 +178,9 @@ public:
         consensus.height_start_ZC_SerialsV2 = disabled;
         consensus.height_ZC_RecalcAccumulators = disabled;
 
+        // fork away from old chain at this height
+        consensus.height_new_client = 793850;
+
         // validation by-pass
         consensus.nPivxBadBlockTime = disabled;
         consensus.nPivxBadBlockBits = 0x1c056dac;
