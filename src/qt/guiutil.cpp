@@ -76,7 +76,7 @@ extern double NSAppKitVersionNumber;
 #endif
 #endif
 
-#define URI_SCHEME "pivx"
+#define URI_SCHEME "rapids"
 
 #if defined(Q_OS_MAC)
 #pragma GCC diagnostic push
@@ -637,7 +637,7 @@ bool DHMSTableWidgetItem::operator<(QTableWidgetItem const& item) const
 #ifdef WIN32
 boost::filesystem::path static StartupShortcutPath()
 {
-    return GetSpecialFolderPath(CSIDL_STARTUP) / "RPD.lnk";
+    return GetSpecialFolderPath(CSIDL_STARTUP) / "Rapids.lnk";
 }
 
 bool GetStartOnSystemStartup()
@@ -716,7 +716,7 @@ boost::filesystem::path static GetAutostartDir()
 
 boost::filesystem::path static GetAutostartFilePath()
 {
-    return GetAutostartDir() / "pivx.desktop";
+    return GetAutostartDir() / "rapids.desktop";
 }
 
 bool GetStartOnSystemStartup()
@@ -755,7 +755,7 @@ bool SetStartOnSystemStartup(bool fAutoStart)
         // Write a pivx.desktop file to the autostart directory:
         optionFile << "[Desktop Entry]\n";
         optionFile << "Type=Application\n";
-        optionFile << "Name=RPD\n";
+        optionFile << "Name=Rapids\n";
         optionFile << "Exec=" << pszExePath << " -min\n";
         optionFile << "Terminal=false\n";
         optionFile << "Hidden=false\n";
