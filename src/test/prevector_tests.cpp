@@ -19,9 +19,11 @@ template<unsigned int N, typename T>
 class prevector_tester {
     typedef std::vector<T> realtype;
     realtype real_vector;
+    realtype real_vector_alt;
 
     typedef prevector<N, T> pretype;
     pretype pre_vector;
+    pretype pre_vector_alt;
 
     typedef typename pretype::size_type Size;
 
@@ -145,6 +147,12 @@ public:
         pre_vector.shrink_to_fit();
         test();
     }
+
+    void swap() {
+        real_vector.swap(real_vector_alt);
+        pre_vector.swap(pre_vector_alt);
+        test();
+    }
 };
 
 BOOST_AUTO_TEST_CASE(PrevectorTestInt)
@@ -200,11 +208,14 @@ BOOST_AUTO_TEST_CASE(PrevectorTestInt)
             if (test.size() > 0) {
                 test.update(InsecureRand32() % test.size(), InsecureRand32());
             }
-            if (((r >> 11) & 1024) == 11) {
+            if (((r >> 11) % 1024) == 11) {
                 test.clear();
             }
-            if (((r >> 21) & 512) == 12) {
+            if (((r >> 21) % 512) == 12) {
                 test.assign(InsecureRand32() % 32, InsecureRand32());
+            }
+            if (((r >> 15) % 64) == 3) {
+                test.swap();
             }
         }
     }
