@@ -1,59 +1,51 @@
-PIVX Core integration/staging repository
-=====================================
+<a href="https://imgbb.com/"><img src="https://i.ibb.co/Cwdp2XM/Rapids-V2-Logo-Side-Writing.png" alt="Rapids-V2-Logo-Side-Writing" border="0"></a>
 
-[![Build Status](https://travis-ci.org/PIVX-Project/PIVX.svg?branch=master)](https://travis-ci.org/PIVX-Project/PIVX) [![GitHub version](https://badge.fury.io/gh/PIVX-Project%2FPIVX.svg)](https://badge.fury.io/gh/PIVX-Project%2FPIVX)
+![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
-PIVX is an open source crypto-currency focused on fast private transactions using the Zerocoin protocol, with low transaction fees & environmental footprint.  It utilizes the first ever anonymous proof of stake protocol, called zPoS, combined with regular PoS and masternodes for securing its network. zPoS incentivises using the privacy features available in PIVX by granting a higher block reward for zPoS over regular PoS and masternodes. In practice PIVX has between 4 to 10 times higher use of it's privacy features in comparison to other coins that combine public and private transactions. This is thanks to innovations like zPoS and integrating the Zerocoin protocol into light/mobile wallets, allowing for a complete and lightweight privacy protocol that can be used on the go. As well as security improvements like [deterministic generation of zPIV for easy backups.](https://www.reddit.com/r/pivx/comments/8gbjf7/how_to_use_deterministic_zerocoin_generation/)
-The goal of PIVX is to achieve a decentralized sustainable crypto currency with near instant full-time private transactions, fair governance and community intelligence.
-- Anonymized transactions & consensus using the [_Zerocoin Protocol_](http://www.pivx.org/zpiv) and [zPoS](https://pivx.org/zpos/).
-- light/mobile wallet privacy using the [Zerocoin Light Node Protocol](https://pivx.org/wp-content/uploads/2018/11/Zerocoin_Light_Node_Protocol.pdf)
-- Fast transactions featuring guaranteed zero confirmation transactions, we call it _SwiftX_.
-- Decentralized blockchain voting utilizing Masternode technology to form a DAO. The blockchain will distribute monthly treasury funds based on successful proposals submitted by the community and voted on by the DAO.
 
-More information at [pivx.org](http://www.pivx.org) Visit our ANN thread at [BitcoinTalk](http://www.bitcointalk.org/index.php?topic=1262920)
+https://RapidsNetwork.io
 
-### Coin Specs
-<table>
-<tr><td>Algo</td><td>Quark</td></tr>
-<tr><td>Block Time</td><td>60 Seconds</td></tr>
-<tr><td>Difficulty Retargeting</td><td>Every Block</td></tr>
-<tr><td>Max Coin Supply (PoW Phase)</td><td>43,199,500 PIV</td></tr>
-<tr><td>Max Coin Supply (PoS Phase)</td><td>Infinite</td></tr>
-<tr><td>Premine</td><td>60,000 PIV*</td></tr>
-</table>
+What is Rapids?
+=================================================
+Rapids is a digital currency that enpowers users to send instant payments anywhere in the world with the use of peer-to-peer technology which operates with no central authority: managing transactions and issuing money are carried out by the Rapids network.
 
-*60,000 PIV Premine was burned in block [279917](http://www.presstab.pw/phpexplorer/PIVX/block.php?blockhash=206d9cfe859798a0b0898ab00d7300be94de0f5469bb446cecb41c3e173a57e0)
+License
+=================================================
+Rapids is released under the terms of the MIT license. See [COPYING](https://github.com/RapidsOfficial/Rapids/blob/master/COPYING) for more information or see https://opensource.org/licenses/MIT.
 
-### Reward Distribution
+Specifications
+=================================================
+|      **Parameter**    |   **Specification**       | 
+|-----------------------|---------------------------|
+| Block Time            | 60 Seconds                |
+| Max Coin Supply       | 35,000,000,000 RPD        |
+| Premine               | 20,000,000,000 RPD        |
+| Masternode Collateral | 10,000,000 RPD            |
+| Reward Rate per block | MN 65%. POS 35%           |    
+| Halving Cycle         | 4years (2102400 blocks)   |
 
-<table>
-<th colspan=4>Genesis Block</th>
-<tr><th>Block Height</th><th>Reward Amount</th><th>Notes</th></tr>
-<tr><td>1</td><td>60,000 PIV</td><td>Initial Pre-mine, burnt in block <a href="http://www.presstab.pw/phpexplorer/PIVX/block.php?blockhash=206d9cfe859798a0b0898ab00d7300be94de0f5469bb446cecb41c3e173a57e0">279917</a></td></tr>
-</table>
+Reward Distribution
+=================================================
+|  **Block Height**  | **Reward per block** 
+|--------------------|-----------------------|
+| 1                  |  20,000,000,000 RPD   | 
+| 2-2102401          |  3567.352 RPD         |
+| 2102402-4204801    |  1783.676 RPD         | 
+| 4204802-6307201    |  891.838 RPD          |
+| 6307202-8409601    |  445.919 RPD          | 
+| 8409602-10512001   |  222.959 RPD          | 
+| 10512002-Infinite  |  111.480 RPD          | 
 
-### PoW Rewards Breakdown
+Staking
+=================================================
+The Rapids Network utilizes the Proof of Stake mechanism to achieve distributed consensus. The PoS algorithm ensures the creator of the next block in the chain is chosen through random selection based on various combinations of weight and age. In contrast, Bitcoin's Proof of Work mechanism utilizes mining to computationally solve intensive puzzles to validate transactions which then creates new blocks in the chain.
 
-<table>
-<th>Block Height</th><th>Masternodes</th><th>Miner</th><th>Budget</th>
-<tr><td>2-43200</td><td>20% (50 PIV)</td><td>80% (200 PIV)</td><td>N/A</td></tr>
-<tr><td>43201-151200</td><td>20% (50 PIV)</td><td>70% (200 PIV)</td><td>10% (25 PIV)</td></tr>
-<tr><td>151201-259200</td><td>45% (22.5 PIV)</td><td>45% (22.5 PIV)</td><td>10% (5 PIV)</td></tr>
-</table>
+Masternode
+=================================================
+A masternode is a server connected to the blockchain network which guarantees a certain level of performance and functionality, and offers governance voting and funding proposals to masternode operators. 
 
-### PoS Rewards Breakdown
+Anyone can operate a masternode and the objective is to further decentralize the blockchain network. To avoid excessive masternodes, proof of ownership requires 10,000,000 RPD to be retained in a transparent manner. If the owner spends or moves those coins, the masternode no longer funtions and payments cease.
 
-<table>
-<th>Phase</th><th>Block Height</th><th>Reward</th><th>Masternodes & Stakers</th><th>Budget</th>
-<tr><td>Phase 0</td><td>259201-302399</td><td>50 PIV</td><td>90% (45 PIV)</td><td>10% (5 PIV)</td></tr>
-<tr><td>Phase 1</td><td>302400-345599</td><td>45 PIV</td><td>90% (40.5 PIV)</td><td>10% (4.5 PIV)</td></tr>
-<tr><td>Phase 2</td><td>345600-388799</td><td>40 PIV</td><td>90% (36 PIV)</td><td>10% (4 PIV)</td></tr>
-<tr><td>Phase 3</td><td>388800-431999</td><td>35 PIV</td><td>90% (31.5 PIV)</td><td>10% (3.5 PIV)</td></tr>
-<tr><td>Phase 4</td><td>432000-475199</td><td>30 PIV</td><td>90% (27 PIV)</td><td>10% (3 PIV)</td></tr>
-<tr><td>Phase 5</td><td>475200-518399</td><td>25 PIV</td><td>90% (22.5 PIV)</td><td>10% (2.5 PIV)</td></tr>
-<tr><td>Phase 6</td><td>518400-561599</td><td>20 PIV</td><td>90% (18 PIV)</td><td>10% (2 PIV)</td></tr>
-<tr><td>Phase 7</td><td>561600-604799</td><td>15 PIV</td><td>90% (13.5 PIV)</td><td>10% (1.5 PIV)</td></tr>
-<tr><td>Phase 8</td><td>604800-647999</td><td>10 PIV</td><td>90% (9 PIV)</td><td>10% (1 PIV)</td></tr>
-<tr><td>Phase 9</td><td>648000-1154203</td><td>5 PIV</td><td>90% (4.5 PIV)</td><td>10% (0.5 PIV)</td></tr>
-<tr><td>Phase X</td><td>1154203-∞</td><td>6 PIV</td><td>84% (5 PIV/zPIV)</td><td>16% (1 PIV)</td></tr>
-</table>
+Masternodes are paid by the network for the services they provide. As more masternodes are created, the duration between payments increases. Payment selection is always random due to the selection algorithm, but in the long term all masternode owners should receive similar payments. If a masternode stops providing services to the network for more than one hour, it is removed from the list until normal service resumes.
+
+These masternode servers hold a full copy of the blockchain, and thanks to the reward system, enough masternodes will always be available to provide the developers with a platform to quickly deploy any new decentralized feature. This is an incentivized system of distributed servers working around the clock to assure the network can scale more efficiently and deploy services more rapidly than a blockchain run entirely by unpaid volunteers.
