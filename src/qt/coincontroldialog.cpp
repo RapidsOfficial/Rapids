@@ -92,10 +92,7 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
 
     // Buttons
     setCssProperty({ui->pushButtonSelectAll, ui->pushButtonToggleLock}, "btn-check");
-    ui->btnEsc->setProperty("cssClass", "ic-close");
     ui->pushButtonOk->setProperty("cssClass", "btn-primary");
-
-    connect(ui->btnEsc, &QPushButton::clicked, this, &CoinControlDialog::close);
 
     this->fMultisigEnabled = fMultisigEnabled;
 
