@@ -153,6 +153,18 @@ public:
         pre_vector.swap(pre_vector_alt);
         test();
     }
+
+    void move() {
+        real_vector = std::move(real_vector_alt);
+        real_vector_alt.clear();
+        pre_vector = std::move(pre_vector_alt);
+        pre_vector_alt.clear();
+    }
+
+    void copy() {
+        real_vector = real_vector_alt;
+        pre_vector = pre_vector_alt;
+    }
 };
 
 BOOST_AUTO_TEST_CASE(PrevectorTestInt)
@@ -214,8 +226,14 @@ BOOST_AUTO_TEST_CASE(PrevectorTestInt)
             if (((r >> 21) % 512) == 12) {
                 test.assign(InsecureRand32() % 32, InsecureRand32());
             }
-            if (((r >> 15) % 64) == 3) {
+            if (((r >> 15) % 8) == 3) {
                 test.swap();
+            }
+            if (((r >> 15) % 16) == 8) {
+                test.copy();
+            }
+            if (((r >> 15) % 32) == 18) {
+                test.move();
             }
         }
     }
