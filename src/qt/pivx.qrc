@@ -22,8 +22,6 @@
         <file alias="splash_testnet">res/images/splash_testnet.png</file>
         <file alias="splash_regtest">res/images/splash_regtest.png</file>
     </qresource>
-    <qresource prefix="/movies">
-    </qresource>
     <qresource prefix="/">
         <file alias="bg-splash">pivx/res/img/bg-splash.svg</file>
         <file alias="bg-splash-png">pivx/res/img/bg-splash.png</file>
