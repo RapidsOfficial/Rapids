@@ -616,7 +616,7 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
     CMutableTransaction mergedTx(txVariants[0]);
 
     // Fetch previous transactions (inputs):
-    std::map<COutPoint, CScript> mapPrevOut;
+    std::map<COutPoint, std::pair<CScript, CAmount>> mapPrevOut; // todo: check why do we have this for regtest..
     if (Params().IsRegTestNet()) {
         for (const CTxIn &txbase : mergedTx.vin)
         {
@@ -624,7 +624,7 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
             uint256 hashBlock;
             if (GetTransaction(txbase.prevout.hash, tempTx, hashBlock, true)) {
                 // Copy results into mapPrevOut:
-                mapPrevOut[txbase.prevout] = tempTx.vout[txbase.prevout.n].scriptPubKey;
+                mapPrevOut[txbase.prevout] = std::make_pair(tempTx.vout[txbase.prevout.n].scriptPubKey, tempTx.vout[txbase.prevout.n].nValue);
             }
         }
     }
@@ -753,7 +753,8 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
                 continue;
             }
         }
-        const CScript& prevPubKey = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout] : coins->vout[txin.prevout.n].scriptPubKey);
+        const CScript& prevPubKey = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].first : coins->vout[txin.prevout.n].scriptPubKey);
+        const CAmount& amount = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].second : coins->vout[txin.prevout.n].nValue);
 
         txin.scriptSig.clear();
 
@@ -773,7 +774,7 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
             txin.scriptSig = CombineSignatures(prevPubKey, txConst, i, txin.scriptSig, txv.vin[i].scriptSig);
         }
         ScriptError serror = SCRIPT_ERR_OK;
-        if (!VerifyScript(txin.scriptSig, prevPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&txConst, i), &serror)) {
+        if (!VerifyScript(txin.scriptSig, prevPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&txConst, i, amount), &serror)) {
             TxInErrorToJSON(txin, vErrors, ScriptErrorString(serror));
         }
     }
