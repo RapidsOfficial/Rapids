@@ -1,5 +1,11 @@
 <a href="https://imgbb.com/"><img src="https://i.ibb.co/Cwdp2XM/Rapids-V2-Logo-Side-Writing.png" alt="Rapids-V2-Logo-Side-Writing" border="0"></a>
 
+Rapids staging tree 2.0
+=======================
+
+rebased over PIVX 4.1 (https://github.com/PIVX-Project/PIVX/tree/4.1)
+
+
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 
