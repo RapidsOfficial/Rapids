@@ -846,11 +846,10 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet, CWalletD
         wtx.BindWallet(this);
         bool fInsertedNew = ret.second;
         if (fInsertedNew) {
-            if (!wtx.nTimeReceived)
-                wtx.nTimeReceived = GetAdjustedTime();
+            wtx.nTimeReceived = GetAdjustedTime();
             wtx.nOrderPos = IncOrderPosNext(pwalletdb);
             wtxOrdered.insert(std::make_pair(wtx.nOrderPos, TxPair(&wtx, (CAccountingEntry*)0)));
-            wtx.nTimeSmart = ComputeTimeSmart(wtx);
+            wtx.UpdateTimeSmart();
             AddToSpends(hash);
             for (const CTxIn& txin : wtx.vin) {
                 if (mapWallet.count(txin.prevout.hash)) {
@@ -867,11 +866,13 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet, CWalletD
             // Merge
             if (!wtxIn.hashUnset() && wtxIn.hashBlock != wtx.hashBlock) {
                 wtx.hashBlock = wtxIn.hashBlock;
+                wtx.UpdateTimeSmart();
                 fUpdated = true;
             }
             // If no longer abandoned, update
             if (wtxIn.hashBlock.IsNull() && wtx.isAbandoned()) {
                 wtx.hashBlock = wtxIn.hashBlock;
+                if (!fUpdated) wtx.UpdateTimeSmart();
                 fUpdated = true;
             }
             if (wtxIn.nIndex != -1 && wtxIn.nIndex != wtx.nIndex) {
@@ -1175,6 +1176,24 @@ int64_t CWalletTx::GetTxTime() const
 {
     int64_t n = nTimeSmart;
     return n ? n : nTimeReceived;
+}
+
+/**
+ * Update smart timestamp for a transaction being added to the wallet.
+ *
+ * Logic:
+ * - If the transaction is not yet part of a block, assign its timestamp to the current time.
+ * - Else assign its timestamp to the block time
+ */
+void CWalletTx::UpdateTimeSmart()
+{
+    nTimeSmart = nTimeReceived;
+    if (!hashBlock.IsNull()) {
+        if (mapBlockIndex.count(hashBlock)) {
+            nTimeSmart = mapBlockIndex.at(hashBlock)->GetBlockTime();
+        } else
+            LogPrintf("%s : found %s in block %s not in index\n", __func__, GetHash().ToString(), hashBlock.ToString());
+    }
 }
 
 int CWalletTx::GetRequestCount() const
@@ -3309,25 +3328,6 @@ void CWallet::GetKeyBirthTimes(std::map<CKeyID, int64_t>& mapKeyBirth) const
     // Extract block timestamps for those keys
     for (std::map<CKeyID, CBlockIndex*>::const_iterator it = mapKeyFirstBlock.begin(); it != mapKeyFirstBlock.end(); it++)
         mapKeyBirth[it->first] = it->second->GetBlockTime() - 7200; // block times can be 2h off
-}
-
-/**
- * Update smart timestamp for a transaction being added to the wallet.
- *
- * Logic:
- * - If the transaction is not yet part of a block, assign its timestamp to the current time.
- * - Else assign its timestamp to the block time
- */
-unsigned int CWallet::ComputeTimeSmart(const CWalletTx& wtx) const
-{
-    unsigned int nTimeSmart = wtx.nTimeReceived;
-    if (!wtx.hashBlock.IsNull()) {
-        if (mapBlockIndex.count(wtx.hashBlock)) {
-            nTimeSmart = mapBlockIndex[wtx.hashBlock]->GetBlockTime();
-        } else
-            LogPrintf("%s : found %s in block %s not in index\n", __func__, wtx.GetHash().ToString(), wtx.hashBlock.ToString());
-    }
-    return nTimeSmart;
 }
 
 bool CWallet::AddDestData(const CTxDestination& dest, const std::string& key, const std::string& value)
