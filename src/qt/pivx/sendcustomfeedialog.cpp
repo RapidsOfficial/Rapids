@@ -70,6 +70,9 @@ void SendCustomFeeDialog::showEvent(QShowEvent *event)
     if (walletModel && walletModel->hasWalletCustomFee()) {
         ui->checkBoxCustom->setChecked(true);
         onCustomChecked();
+    } else {
+        ui->checkBoxRecommended->setChecked(true);
+        onRecommendedChecked();
     }
 }
 
@@ -80,10 +83,12 @@ void SendCustomFeeDialog::onCustomChecked()
     ui->comboBoxRecommended->setEnabled(!isChecked);
     ui->checkBoxRecommended->setChecked(!isChecked);
 
-    if (walletModel && ui->lineEditCustomFee->text().isEmpty()) {
+    if (isChecked && walletModel) {
         CAmount nFee;
         walletModel->getWalletCustomFee(nFee);
         ui->lineEditCustomFee->setText(BitcoinUnits::format(walletModel->getOptionsModel()->getDisplayUnit(), nFee));
+    } else {
+        ui->lineEditCustomFee->clear();
     }
 }
 
@@ -93,6 +98,9 @@ void SendCustomFeeDialog::onRecommendedChecked()
     ui->lineEditCustomFee->setEnabled(!isChecked);
     ui->comboBoxRecommended->setEnabled(isChecked);
     ui->checkBoxCustom->setChecked(!isChecked);
+    if (isChecked) {
+        ui->lineEditCustomFee->clear();
+    }
 }
 
 // Fast = 1.
@@ -123,8 +131,7 @@ void SendCustomFeeDialog::accept()
 
 void SendCustomFeeDialog::clear()
 {
-    onRecommendedChecked();
-    updateFee();
+    ui->comboBoxRecommended->setCurrentIndex(0);
 }
 
 CFeeRate SendCustomFeeDialog::getFeeRate()
