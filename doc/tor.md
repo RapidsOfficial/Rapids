@@ -46,6 +46,7 @@ config file): *Needed for Tor version 0.2.7.0 and older versions of Tor only. Fo
 versions of Tor see [Section 3](#3-automatically-listen-on-tor).*
 
 	HiddenServiceDir /var/lib/tor/pivx-service/
+	HiddenServiceVersion 2
 	HiddenServicePort 51472 127.0.0.1:51472
 	HiddenServicePort 61472 127.0.0.1:61472
 
@@ -53,7 +54,8 @@ The directory can be different of course, but (both) port numbers should be equa
 your pivxd's P2P listen port (51472 by default).
 
 	-externalip=X   You can tell pivx about its publicly reachable address using
-	                this option, and this can be a .onion address. Given the above
+	                this option, and this can be a v2 .onion address (v3 .onion
+	                addresses are not supported by the PIVX network). Given the above
 	                configuration, you can find your .onion address in
 	                /var/lib/tor/pivx-service/hostname. For connections
 	                coming from unroutable addresses (such as 127.0.0.1, where the
