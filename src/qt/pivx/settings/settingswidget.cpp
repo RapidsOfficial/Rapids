@@ -4,15 +4,6 @@
 
 #include "qt/pivx/settings/settingswidget.h"
 #include "qt/pivx/settings/forms/ui_settingswidget.h"
-#include "qt/pivx/settings/settingsbackupwallet.h"
-#include "qt/pivx/settings/settingsbittoolwidget.h"
-#include "qt/pivx/settings/settingswalletrepairwidget.h"
-#include "qt/pivx/settings/settingswalletoptionswidget.h"
-#include "qt/pivx/settings/settingsmainoptionswidget.h"
-#include "qt/pivx/settings/settingsdisplayoptionswidget.h"
-#include "qt/pivx/settings/settingsmultisendwidget.h"
-#include "qt/pivx/settings/settingsinformationwidget.h"
-#include "qt/pivx/settings/settingsconsolewidget.h"
 #include "qt/pivx/qtutils.h"
 #include "qt/pivx/defaultdialog.h"
 #include "optionsmodel.h"
@@ -84,6 +75,9 @@ SettingsWidget::SettingsWidget(PIVXGUI* parent) :
         ui->pushButtonTools2,
         ui->pushButtonTools5,
     };
+
+    /* disable multisend for now */
+    ui->pushButtonFile3->setVisible(false);
 
     menus.insert(ui->pushButtonFile, ui->fileButtonsWidget);
     menus.insert(ui->pushButtonConfiguration, ui->configurationButtonsWidget);
