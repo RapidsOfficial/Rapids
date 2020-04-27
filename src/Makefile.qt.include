@@ -624,7 +624,7 @@ RES_IMAGES = \
   qt/res/images/about.png \
   qt/res/images/splash.png \
   qt/res/images/splash_testnet.png \
-  qt/res/images/splash_regtest.png 
+  qt/res/images/splash_regtest.png
 
 RES_CSS = \
   qt/res/css/default.css \
