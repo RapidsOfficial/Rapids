@@ -56,10 +56,11 @@ BASE_SCRIPTS= [
     # Scripts that are run by the travis build process.
 
     # Longest test should go first, to favor running tests in parallel
-    'wallet_basic.py',                          # ~ 833 sec
+    'wallet_basic.py',                          # ~ 498 sec
     'wallet_backup.py',                         # ~ 477 sec
 
     # vv Tests less than 5m vv
+    'wallet_zapwallettxes.py',                  # ~ 300 sec
     'p2p_time_offset.py',                       # ~ 267 sec
     'mining_pos_coldStaking.py',                # ~ 215 sec
     'mining_pos_reorg.py',                      # ~ 212 sec
@@ -68,7 +69,6 @@ BASE_SCRIPTS= [
     'wallet_zerocoin_publicspends.py',          # ~ 202 sec
     'feature_logging.py',                       # ~ 200 sec
     'rpc_rawtransaction.py',                    # ~ 193 sec
-    'wallet_zapwallettxes.py',                  # ~ 180 sec
     'wallet_keypool_topup.py',                  # ~ 174 sec
     'wallet_txn_doublespend.py --mineblock',    # ~ 157 sec
     'wallet_txn_clone.py --mineblock',          # ~ 157 sec

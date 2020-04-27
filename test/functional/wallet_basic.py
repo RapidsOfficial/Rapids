@@ -11,8 +11,6 @@ from test_framework.util import (
     assert_raises_rpc_error,
     connect_nodes,
     Decimal,
-    sync_blocks,
-    sync_mempools,
     wait_until,
 )
 
@@ -30,14 +28,6 @@ class WalletTest(PivxTestFramework):
         connect_nodes(self.nodes[1], 2)
         connect_nodes(self.nodes[0], 2)
         self.sync_all([self.nodes[0:3]])
-
-    def check_fee_amount(self, curr_balance, balance_with_fee, fee_per_byte, tx_size):
-        """Return curr_balance after asserting the fee was in range"""
-        fee = balance_with_fee - curr_balance
-        fee2 = round(tx_size * fee_per_byte / 1000, 8)
-        self.log.info("current: %s, withfee: %s, perByte: %s, size: %s, fee: %s" % (str(curr_balance), str(balance_with_fee), str(fee_per_byte), str(tx_size), str(fee2)))
-        assert_fee_amount(fee, tx_size, fee_per_byte * 1000)
-        return curr_balance
 
     def get_vsize(self, txn):
         return self.nodes[0].decoderawtransaction(txn)['size']
@@ -70,35 +60,22 @@ class WalletTest(PivxTestFramework):
         assert_equal(len(self.nodes[1].listunspent()), 1)
         assert_equal(len(self.nodes[2].listunspent()), 0)
 
-        # Send 21 PIV from 0 to 2 using sendtoaddress call.
-        # Second transaction will be child of first, and will require a fee
-        self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 21)
-        #self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 10)
-
         walletinfo = self.nodes[0].getwalletinfo()
         assert_equal(walletinfo['immature_balance'], 0)
 
-        # Have node0 mine a block, thus it will collect its own fee.
-        self.nodes[0].generate(1)
-        self.sync_all([self.nodes[0:3]])
-
         # Exercise locking of unspent outputs
-        unspent_0 = self.nodes[2].listunspent()[0]
+        unspent_0 = self.nodes[1].listunspent()[0]
         unspent_0 = {"txid": unspent_0["txid"], "vout": unspent_0["vout"]}
-        self.nodes[2].lockunspent(False, [unspent_0])
-        assert_raises_rpc_error(-4, "Insufficient funds", self.nodes[2].sendtoaddress, self.nodes[2].getnewaddress(), 20)
-        assert_equal([unspent_0], self.nodes[2].listlockunspent())
-        self.nodes[2].lockunspent(True, [unspent_0])
-        assert_equal(len(self.nodes[2].listlockunspent()), 0)
+        self.nodes[1].lockunspent(False, [unspent_0])
+        assert_raises_rpc_error(-4, "Insufficient funds", self.nodes[1].sendtoaddress, self.nodes[1].getnewaddress(), 20)
+        assert_equal([unspent_0], self.nodes[1].listlockunspent())
+        self.nodes[1].lockunspent(True, [unspent_0])
+        assert_equal(len(self.nodes[1].listlockunspent()), 0)
 
-        # Have node1 generate 100 blocks (so node0 can recover the fee)
-        self.nodes[1].generate(100)
+        # Send 21 PIV from 1 to 0 using sendtoaddress call.
+        self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), 21)
+        self.nodes[1].generate(1)
         self.sync_all([self.nodes[0:3]])
-
-        # node0 should end up with 100 PIV in block rewards plus fees, but
-        # minus the 21 plus fees sent to node2
-        assert_equal(self.nodes[0].getbalance(), 500-21)
-        assert_equal(self.nodes[2].getbalance(), 21)
 
         # Node0 should have two unspent outputs.
         # Create a couple of transactions to send them to node2, submit them through
@@ -107,12 +84,13 @@ class WalletTest(PivxTestFramework):
         assert_equal(len(node0utxos), 2)
 
         # create both transactions
+        fee_per_kbyte = Decimal('0.001')
         txns_to_send = []
         for utxo in node0utxos:
             inputs = []
             outputs = {}
             inputs.append({ "txid" : utxo["txid"], "vout" : utxo["vout"]})
-            outputs[self.nodes[2].getnewaddress("from1")] = float(utxo["amount"])
+            outputs[self.nodes[2].getnewaddress("from1")] = float(utxo["amount"]) - float(fee_per_kbyte)
             raw_tx = self.nodes[0].createrawtransaction(inputs, outputs)
             txns_to_send.append(self.nodes[0].signrawtransaction(raw_tx))
 
@@ -125,77 +103,33 @@ class WalletTest(PivxTestFramework):
         self.sync_all([self.nodes[0:3]])
 
         assert_equal(self.nodes[0].getbalance(), 0)
-        assert_equal(self.nodes[2].getbalance(), 500)
-        assert_equal(self.nodes[2].getbalance("from1"), 500-21)
+        node_2_expected_bal = Decimal('250') + Decimal('21') - 2 * fee_per_kbyte
+        node_2_bal = self.nodes[2].getbalance()
+        assert_equal(node_2_bal, node_2_expected_bal)
+        assert_equal(self.nodes[2].getbalance("from1"), node_2_expected_bal)
 
         # Send 10 PIV normal
         address = self.nodes[0].getnewaddress("test")
-        fee_per_byte = Decimal('0.001') / 1000
-        self.nodes[2].settxfee(float(fee_per_byte * 1000))
+        self.nodes[2].settxfee(float(fee_per_kbyte))
         txid = self.nodes[2].sendtoaddress(address, 10, "", "")
         fee = self.nodes[2].gettransaction(txid)["fee"]
+        node_2_bal -= (Decimal('10') - fee)
+        assert_equal(self.nodes[2].getbalance(), node_2_bal)
         self.nodes[2].generate(1)
         self.sync_all([self.nodes[0:3]])
-        node_2_bal = self.nodes[2].getbalance()
-        assert_equal(self.nodes[0].getbalance(), Decimal('10'))
-
-        # Send 10 PIV with subtract fee from amount
-        txid = self.nodes[2].sendtoaddress(address, 10, "", "")
-        self.nodes[2].generate(1)
-        self.sync_all([self.nodes[0:3]])
-        node_2_bal -= Decimal('10')
-        assert_equal(self.nodes[2].getbalance() - fee, node_2_bal)
         node_0_bal = self.nodes[0].getbalance()
-        assert_equal(node_0_bal, Decimal('20'))
+        assert_equal(node_0_bal, Decimal('10'))
 
         # Sendmany 10 PIV
         txid = self.nodes[2].sendmany('from1', {address: 10}, 0, "")
+        fee = self.nodes[2].gettransaction(txid)["fee"]
         self.nodes[2].generate(1)
         self.sync_all([self.nodes[0:3]])
         node_0_bal += Decimal('10')
-        node_2_bal -= Decimal('10')
-        #node_2_bal = self.check_fee_amount(self.nodes[2].getbalance(), node_2_bal - Decimal('10'), fee_per_byte, self.get_vsize(self.nodes[2].getrawtransaction(txid)))
+        node_2_bal -= (Decimal('10') - fee)
+        assert_equal(self.nodes[2].getbalance(), node_2_bal)
         assert_equal(self.nodes[0].getbalance(), node_0_bal)
-
-        # Sendmany 10 PIV with subtract fee from amount
-        txid = self.nodes[2].sendmany('from1', {address: 10}, 0, "")
-        self.nodes[2].generate(1)
-        self.sync_all([self.nodes[0:3]])
-        node_2_bal -= Decimal('10')
-        assert_equal(self.nodes[2].getbalance(), node_2_bal + (fee * 3))
-        #node_0_bal = self.check_fee_amount(self.nodes[0].getbalance(), node_0_bal + Decimal('10'), fee_per_byte, self.get_vsize(self.nodes[2].getrawtransaction(txid)))
-
-        # Test ResendWalletTransactions:
-        # Create a couple of transactions, then start up a fourth
-        # node (nodes[3]) and ask nodes[0] to rebroadcast.
-        # EXPECT: nodes[3] should have those transactions in its mempool.
-        txid1 = self.nodes[0].sendtoaddress(self.nodes[1].getnewaddress(), 1)
-        txid2 = self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), 1)
-        sync_mempools(self.nodes[0:2])
-
-        self.start_node(3)
-        connect_nodes(self.nodes[0], 3)
-        sync_blocks(self.nodes)
-
-        # Exercise balance rpcs
-        assert_equal(self.nodes[0].getwalletinfo()["unconfirmed_balance"], 1)
-        assert_equal(self.nodes[0].getunconfirmedbalance(), 1)
-
-        #check if we can list zero value tx as available coins
-        #1. create rawtx
-        #2. hex-changed one output to 0.0
-        #3. sign and send
-        #4. check if recipient (node0) can list the zero value tx
-        usp = self.nodes[1].listunspent()
-        inputs = [{"txid":usp[0]['txid'], "vout":usp[0]['vout']}]
-        outputs = {self.nodes[1].getnewaddress(): 49.998, self.nodes[0].getnewaddress(): 11.11}
-
-        rawTx = self.nodes[1].createrawtransaction(inputs, outputs).replace("c0833842", "00000000") #replace 11.11 with 0.0 (int32)
-        decRawTx = self.nodes[1].decoderawtransaction(rawTx)
-        signedRawTx = self.nodes[1].signrawtransaction(rawTx)
-        decRawTx = self.nodes[1].decoderawtransaction(signedRawTx['hex'])
-        zeroValueTxid= decRawTx['txid']
-        assert_raises_rpc_error(-25, "", self.nodes[1].sendrawtransaction, signedRawTx['hex'])
+        assert_fee_amount(-fee, self.get_vsize(self.nodes[2].getrawtransaction(txid)), fee_per_kbyte)
 
         # This will raise an exception since generate does not accept a string
         assert_raises_rpc_error(-1, "not an integer", self.nodes[0].generate, "2")
@@ -203,7 +137,7 @@ class WalletTest(PivxTestFramework):
         # Import address and private key to check correct behavior of spendable unspents
         # 1. Send some coins to generate new UTXO
         address_to_import = self.nodes[2].getnewaddress()
-        txid = self.nodes[0].sendtoaddress(address_to_import, 1)
+        self.nodes[0].sendtoaddress(address_to_import, 1)
         self.nodes[0].generate(1)
         self.sync_all([self.nodes[0:3]])
 
@@ -238,18 +172,14 @@ class WalletTest(PivxTestFramework):
         maintenance = [
             '-rescan',
             '-reindex',
-            '-zapwallettxes=1',
-            '-zapwallettxes=2',
-            #'-salvagewallet',
         ]
-        chainlimit = 6
         for m in maintenance:
             self.log.info("check " + m)
             self.stop_nodes()
             # set lower ancestor limit for later
-            self.start_node(0, [m, "-limitancestorcount="+str(chainlimit)])
-            self.start_node(1, [m, "-limitancestorcount="+str(chainlimit)])
-            self.start_node(2, [m, "-limitancestorcount="+str(chainlimit)])
+            self.start_node(0, [m])
+            self.start_node(1, [m])
+            self.start_node(2, [m])
             if m == '-reindex':
                 # reindex will leave rpc warm up "early"; Wait for it to finish
                 wait_until(lambda: [block_count] * 3 == [self.nodes[i].getblockcount() for i in range(3)])
