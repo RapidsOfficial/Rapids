@@ -129,8 +129,8 @@ void SendCustomFeeDialog::accept()
         inform(tr("Fee too high. Must be below: %1").arg(
                 BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), insaneFee)));
     } else if (customFee < CWallet::minTxFee.GetFeePerK()) {
-        inform(tr("Fee too low. Must be above: %1").arg(
-                BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), CWallet::minTxFee.GetFeePerK() * 1000)));
+        inform(tr("Fee too low. Must be at least: %1").arg(
+                BitcoinUnits::formatWithUnit(walletModel->getOptionsModel()->getDisplayUnit(), CWallet::minTxFee.GetFeePerK())));
     } else {
         walletModel->setWalletCustomFee(fUseCustomFee, customFee);
         QDialog::accept();
