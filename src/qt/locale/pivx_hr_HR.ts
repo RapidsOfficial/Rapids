@@ -196,7 +196,7 @@
         <translation>Potvrdi šifriranje novčanika</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
         <translation>RPD se sada zatvara kako bi dovršio proces šifriranja. Ne zaboravite da šifriranje vašeg novčanika ne može u potpunosti zaštititi vaše RPD od krađe zlonamjernog softvera koji zarazi vaše računalo.</translation>
     </message>
     <message>

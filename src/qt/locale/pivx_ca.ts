@@ -360,7 +360,7 @@ for staking</source>
         <translation>Cancel·lar</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
         <translation>RPD es tancarà per finalitzar el procés d'encriptació. Recorda que encriptant el teu moneder no protegeix els teus RPD de ser robats si el teu ordinador està infectat amb programari maliciós.</translation>
     </message>
     <message>

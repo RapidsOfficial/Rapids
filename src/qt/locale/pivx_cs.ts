@@ -196,7 +196,7 @@
         <translation>Potvrdit zašifrování peněženky</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
         <translation>RPD se teď zavře pro dokončení šifrovacího procesu. Prosím, vemte na vědomí, že zašifrování Vaší peněženky plně neochrání Vaše PIVy před krádží, pokud je Váš počítač infikován malwarem.</translation>
     </message>
     <message>

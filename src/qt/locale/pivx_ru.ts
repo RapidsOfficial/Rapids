@@ -375,7 +375,7 @@ for staking</source>
         <translation>ОТМЕНА</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
         <translation>RPD сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши RPD от кражи с использованием вредоносного ПО.</translation>
     </message>
     <message>
@@ -892,7 +892,7 @@ for staking</source>
         <translation>Делегирование</translation>
     </message>
     <message>
-        <source>You can delegate your PIVs and let a hot node (24/7 online node)
+        <source>You can delegate your RPDs and let a hot node (24/7 online node)
 stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Вы можете делегировать свои RPD и позволить горячему узлу (онлайн-узел 24/7 )
 запускать стекинг от вашего имени, при этом удерживая ключи оффлайн в безопасном месте.</translation>

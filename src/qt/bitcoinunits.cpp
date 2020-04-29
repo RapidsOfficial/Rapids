@@ -98,7 +98,7 @@ QString BitcoinUnits::description(int unit)
     } else {
         switch (unit) {
         case RPD:
-            return QString("TestPIVs");
+            return QString("TestRPDs");
         case mPIV:
             return QString("Milli-TestPIV (1 / 1" THIN_SP_UTF8 "000)");
         case uPIV:
