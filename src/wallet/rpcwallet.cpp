@@ -3178,6 +3178,8 @@ unsigned int sumMultiSend()
 
 UniValue multisend(const UniValue& params, bool fHelp)
 {
+    throw std::runtime_error("Multisend is disabled in this wallet version");
+    /* disable multisend
     CWalletDB walletdb(pwalletMain->strWalletFile);
     bool fFileBacked;
     //MultiSend Commands
@@ -3285,31 +3287,6 @@ UniValue multisend(const UniValue& params, bool fHelp)
         }
     }
 
-    //if no commands are used
-    if (fHelp || params.size() != 2)
-        throw std::runtime_error(
-            "multisend <command>\n"
-            "****************************************************************\n"
-            "WHAT IS MULTISEND?\n"
-            "MultiSend allows a user to automatically send a percent of their stake reward to as many addresses as you would like\n"
-            "The MultiSend transaction is sent when the staked coins mature (100 confirmations)\n"
-            "****************************************************************\n"
-            "TO CREATE OR ADD TO THE MULTISEND VECTOR:\n"
-            "multisend <PIVX Address> <percent>\n"
-            "This will add a new address to the MultiSend vector\n"
-            "Percent is a whole number 1 to 100.\n"
-            "****************************************************************\n"
-            "MULTISEND COMMANDS (usage: multisend <command>)\n"
-            " print - displays the current MultiSend vector \n"
-            " clear - deletes the current MultiSend vector \n"
-            " enablestake/activatestake - activates the current MultiSend vector to be activated on stake rewards\n"
-            " enablemasternode/activatemasternode - activates the current MultiSend vector to be activated on masternode rewards\n"
-            " disable/deactivate - disables the current MultiSend vector \n"
-            " delete <Address #> - deletes an address from the MultiSend vector \n"
-            " disable <address> - prevents a specific address from sending MultiSend transactions\n"
-            " enableall - enables all addresses to be eligible to send MultiSend transactions\n"
-            "****************************************************************\n");
-
     //if the user is entering a new MultiSend item
     std::string strAddress = params[0].get_str();
     CBitcoinAddress address(strAddress);
@@ -3351,6 +3328,7 @@ UniValue multisend(const UniValue& params, bool fHelp)
         }
     }
     return printMultiSend();
+    */
 }
 
 UniValue getzerocoinbalance(const UniValue& params, bool fHelp)

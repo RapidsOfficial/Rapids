@@ -3455,6 +3455,8 @@ void CWallet::AutoCombineDust()
 
 bool CWallet::MultiSend()
 {
+    return false;
+    /* disable multisend
     LOCK2(cs_main, cs_wallet);
     // Stop the old blocks from sending multisends
     const CBlockIndex* tip = chainActive.Tip();
@@ -3569,6 +3571,7 @@ bool CWallet::MultiSend()
     }
 
     return true;
+    */
 }
 
 CKeyPool::CKeyPool()
