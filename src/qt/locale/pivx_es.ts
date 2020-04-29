@@ -376,8 +376,8 @@ para staking</translation>
         <translation>CANCELAR</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
-        <translation>RPD se cerrará para finalizar el proceso de cifrado. Recuerde que cifrar su monedero no garantiza que sus PIVs no sean robados mediante malware de su ordenador.</translation>
+        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
+        <translation>RPD se cerrará para finalizar el proceso de cifrado. Recuerde que cifrar su monedero no garantiza que sus RPDs no sean robados mediante malware de su ordenador.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
@@ -893,9 +893,9 @@ para staking</translation>
         <translation>Delegación </translation>
     </message>
     <message>
-        <source>You can delegate your PIVs and let a hot node (24/7 online node)
+        <source>You can delegate your RPDs and let a hot node (24/7 online node)
 stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation>Puedes delegar tus PIVs y dejar que un nodo de acceso directo (24/7 nodo en línea) Haga Stake en tu nombre, manteniendo las llaves en un lugar seguro fuera de línea.</translation>
+        <translation>Puedes delegar tus RPDs y dejar que un nodo de acceso directo (24/7 nodo en línea) Haga Stake en tu nombre, manteniendo las llaves en un lugar seguro fuera de línea.</translation>
     </message>
     <message>
         <source>Add owner address</source>
