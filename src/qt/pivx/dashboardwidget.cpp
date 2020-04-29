@@ -645,7 +645,7 @@ void DashboardWidget::onChartRefreshed()
     if (chartData->totalPiv > 0) {
         setCssProperty(ui->labelAmountPiv, "text-stake-piv");
     }
-    forceUpdateStyle({ui->labelAmountPiv, 0});
+    forceUpdateStyle({ui->labelAmountPiv});
     ui->labelAmountPiv->setText(GUIUtil::formatBalance(chartData->totalPiv, nDisplayUnit));
 
     series->append(set0);
