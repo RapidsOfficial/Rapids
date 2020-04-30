@@ -142,7 +142,7 @@ BOOST_AUTO_TEST_CASE(tx_valid)
             BOOST_CHECK_MESSAGE(CheckTransaction(tx, false, false, state), strTest);
             BOOST_CHECK(state.IsValid());
 
-            CachedHashes cachedHashes(tx);
+            PrecomputedTransactionData precomTxData(tx);
             for (unsigned int i = 0; i < tx.vin.size(); i++)
             {
                 if (!mapprevOutScriptPubKeys.count(tx.vin[i].prevout))
@@ -154,7 +154,7 @@ BOOST_AUTO_TEST_CASE(tx_valid)
                 CAmount amount = 0;
                 unsigned int verify_flags = ParseScriptFlags(test[2].get_str());
                 BOOST_CHECK_MESSAGE(VerifyScript(tx.vin[i].scriptSig, mapprevOutScriptPubKeys[tx.vin[i].prevout],
-                                                 verify_flags, TransactionSignatureChecker(&tx, i, amount, cachedHashes), &err),
+                                                 verify_flags, TransactionSignatureChecker(&tx, i, amount, precomTxData), &err),
                                     strTest);
                 BOOST_CHECK_MESSAGE(err == SCRIPT_ERR_OK, ScriptErrorString(err));
             }
@@ -218,7 +218,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid)
             CValidationState state;
             fValid = CheckTransaction(tx, false, false, state) && state.IsValid();
 
-            CachedHashes cachedHashes(tx);
+            PrecomputedTransactionData precomTxData(tx);
             for (unsigned int i = 0; i < tx.vin.size() && fValid; i++)
             {
                 if (!mapprevOutScriptPubKeys.count(tx.vin[i].prevout))
@@ -230,7 +230,7 @@ BOOST_AUTO_TEST_CASE(tx_invalid)
                 CAmount amount = 0;
                 unsigned int verify_flags = ParseScriptFlags(test[2].get_str());
                 fValid = VerifyScript(tx.vin[i].scriptSig, mapprevOutScriptPubKeys[tx.vin[i].prevout],
-                                      verify_flags, TransactionSignatureChecker(&tx, i, amount, cachedHashes), &err);
+                                      verify_flags, TransactionSignatureChecker(&tx, i, amount, precomTxData), &err);
             }
             BOOST_CHECK_MESSAGE(!fValid, strTest);
             BOOST_CHECK_MESSAGE(err != SCRIPT_ERR_OK, ScriptErrorString(err));
@@ -373,7 +373,7 @@ BOOST_AUTO_TEST_CASE(test_big_witness_transaction) {
     ssout >> tx;
 
     // check all inputs concurrently, with the cache
-    CachedHashes cachedHashes(tx);
+    PrecomputedTransactionData precomTxData(tx);
     boost::thread_group threadGroup;
     CCheckQueue<CScriptCheck> scriptcheckqueue(128);
     CCheckQueueControl<CScriptCheck> control(&scriptcheckqueue);
@@ -393,7 +393,7 @@ BOOST_AUTO_TEST_CASE(test_big_witness_transaction) {
 
     for(uint32_t i = 0; i < mtx.vin.size(); i++) {
         std::vector<CScriptCheck> vChecks;
-        CScriptCheck check(coins, tx, i, SCRIPT_VERIFY_P2SH, false, &cachedHashes);
+        CScriptCheck check(coins, tx, i, SCRIPT_VERIFY_P2SH, false, &precomTxData);
         vChecks.push_back(CScriptCheck());
         check.swap(vChecks.back());
         control.Add(vChecks);

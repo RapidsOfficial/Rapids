@@ -86,11 +86,11 @@ enum
 
 bool CheckSignatureEncoding(const std::vector<unsigned char> &vchSig, unsigned int flags, ScriptError* serror);
 
-struct CachedHashes
+struct PrecomputedTransactionData
 {
     uint256 hashPrevouts, hashSequence, hashOutputs;
 
-    CachedHashes(const CTransaction& tx);
+    PrecomputedTransactionData(const CTransaction& tx);
 };
 
 enum SigVersion
@@ -99,7 +99,7 @@ enum SigVersion
     SIGVERSION_WITNESS_V0 = 1,
 };
 
-uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, const CachedHashes* cache = nullptr);
+uint256 SignatureHash(const CScript &scriptCode, const CTransaction& txTo, unsigned int nIn, int nHashType, const CAmount& amount, SigVersion sigversion, const PrecomputedTransactionData* cache = nullptr);
 
 class BaseSignatureChecker
 {
@@ -128,14 +128,14 @@ private:
     const CTransaction* txTo;
     unsigned int nIn;
     const CAmount amount;
-    const CachedHashes* cachedHashes;
+    const PrecomputedTransactionData* precomTxData;
 
 protected:
     virtual bool VerifySignature(const std::vector<unsigned char>& vchSig, const CPubKey& vchPubKey, const uint256& sighash) const;
 
 public:
-    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn) : txTo(txToIn), nIn(nInIn), amount(amountIn), cachedHashes(nullptr) {}
-    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn, const CachedHashes& cachedHashesIn) : txTo(txToIn), nIn(nInIn), amount(amountIn), cachedHashes(&cachedHashesIn) {}
+    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn) : txTo(txToIn), nIn(nInIn), amount(amountIn), precomTxData(nullptr) {}
+    TransactionSignatureChecker(const CTransaction* txToIn, unsigned int nInIn, const CAmount& amountIn, const PrecomputedTransactionData& cachedHashesIn) : txTo(txToIn), nIn(nInIn), amount(amountIn), precomTxData(&cachedHashesIn) {}
 
     bool CheckSig(const std::vector<unsigned char>& scriptSig, const std::vector<unsigned char>& vchPubKey, const CScript& scriptCode, SigVersion sigversion) const override ;
     bool CheckLockTime(const CScriptNum& nLockTime) const override;

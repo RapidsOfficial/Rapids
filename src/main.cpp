@@ -1059,8 +1059,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         if (fCLTVIsActivated)
             flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
 
-        CachedHashes cachedHashes(tx);
-        if (!CheckInputs(tx, state, view, true, flags, true, cachedHashes)) {
+        PrecomputedTransactionData precomTxData(tx);
+        if (!CheckInputs(tx, state, view, true, flags, true, precomTxData)) {
             return false;
         }
 
@@ -1076,7 +1076,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         flags = MANDATORY_SCRIPT_VERIFY_FLAGS;
         if (fCLTVIsActivated)
             flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
-        if (!CheckInputs(tx, state, view, true, flags, true, cachedHashes)) {
+        if (!CheckInputs(tx, state, view, true, flags, true, precomTxData)) {
             return error("%s: BUG! PLEASE REPORT THIS! ConnectInputs failed against MANDATORY but not STANDARD flags %s, %s",
                     __func__, hash.ToString(), FormatStateMessage(state));
         }
@@ -1286,8 +1286,8 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
         if (fCLTVIsActivated)
             flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
 
-        CachedHashes cachedHashes(tx);
-        if (!CheckInputs(tx, state, view, false, flags, true, cachedHashes)) {
+        PrecomputedTransactionData precomTxData(tx);
+        if (!CheckInputs(tx, state, view, false, flags, true, precomTxData)) {
             return error("AcceptableInputs: : ConnectInputs failed %s", hash.ToString());
         }
 
@@ -1301,7 +1301,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
         // invalid blocks, however allowing such transactions into the mempool
         // can be exploited as a DoS attack.
         // for any real tx this will be checked on AcceptToMemoryPool anyway
-        //        if (!CheckInputs(tx, state, view, false, MANDATORY_SCRIPT_VERIFY_FLAGS, true, cachedHashes))
+        //        if (!CheckInputs(tx, state, view, false, MANDATORY_SCRIPT_VERIFY_FLAGS, true, precomTxData))
         //        {
         //            return error("AcceptableInputs: : BUG! PLEASE REPORT THIS! ConnectInputs failed against MANDATORY but not STANDARD flags %s", hash.ToString());
         //        }
@@ -1739,7 +1739,7 @@ void UpdateCoins(const CTransaction& tx, CCoinsViewCache &inputs, int nHeight)
 bool CScriptCheck::operator()()
 {
     const CScript& scriptSig = ptxTo->vin[nIn].scriptSig;
-    return VerifyScript(scriptSig, scriptPubKey, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, amount, cacheStore, *cachedHashes), &error);
+    return VerifyScript(scriptSig, scriptPubKey, nFlags, CachingTransactionSignatureChecker(ptxTo, nIn, amount, cacheStore, *precomTxData), &error);
 }
 
 std::map<COutPoint, COutPoint> mapInvalidOutPoints;
@@ -1862,7 +1862,7 @@ bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoins
 }
 }// namespace Consensus
 
-bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, CachedHashes& cachedHashes, std::vector<CScriptCheck> *pvChecks)
+bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, PrecomputedTransactionData& precomTxData, std::vector<CScriptCheck> *pvChecks)
 {
     if (!tx.IsCoinBase() && !tx.HasZerocoinSpendInputs()) {
 
@@ -1886,7 +1886,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
                 assert(coins);
 
                 // Verify signature
-                CScriptCheck check(*coins, tx, i, flags, cacheStore, &cachedHashes);
+                CScriptCheck check(*coins, tx, i, flags, cacheStore, &precomTxData);
                 if (pvChecks) {
                     pvChecks->push_back(CScriptCheck());
                     check.swap(pvChecks->back());
@@ -1899,7 +1899,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
                         // avoid splitting the network between upgraded and
                         // non-upgraded nodes.
                         CScriptCheck check2(*coins, tx, i,
-                            flags & ~STANDARD_NOT_MANDATORY_VERIFY_FLAGS, cacheStore, &cachedHashes);
+                            flags & ~STANDARD_NOT_MANDATORY_VERIFY_FLAGS, cacheStore, &precomTxData);
                         if (check2())
                             return state.Invalid(false, REJECT_NONSTANDARD, strprintf("non-mandatory-script-verify-flag (%s)", ScriptErrorString(check.GetScriptError())));
                     }
@@ -2243,8 +2243,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     std::vector<uint256> vSpendsInBlock;
     uint256 hashBlock = block.GetHash();
 
-    std::vector<CachedHashes> cachedHashes;
-    cachedHashes.reserve(block.vtx.size()); // Required so that pointers to individual CachedHashes don't get invalidated
+    std::vector<PrecomputedTransactionData> precomTxData;
+    precomTxData.reserve(block.vtx.size()); // Required so that pointers to individual precomTxData don't get invalidated
     for (unsigned int i = 0; i < block.vtx.size(); i++) {
         const CTransaction& tx = block.vtx[i];
 
@@ -2354,7 +2354,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         }
 
         // Cache the sig ser hashes
-        cachedHashes.emplace_back(tx);
+        precomTxData.emplace_back(tx);
 
         if (!tx.IsCoinBase()) {
             if (!tx.IsCoinStake())
@@ -2367,7 +2367,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 flags |= SCRIPT_VERIFY_CHECKLOCKTIMEVERIFY;
 
             bool fCacheResults = fJustCheck; /* Don't cache results if we're actually connecting blocks (still consult the cache, though) */
-            if (!CheckInputs(tx, state, view, fScriptChecks, flags, fCacheResults, cachedHashes[i], nScriptCheckThreads ? &vChecks : NULL))
+            if (!CheckInputs(tx, state, view, fScriptChecks, flags, fCacheResults, precomTxData[i], nScriptCheckThreads ? &vChecks : NULL))
                 return error("%s: Check inputs on %s failed with %s", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
             control.Add(vChecks);
         }
