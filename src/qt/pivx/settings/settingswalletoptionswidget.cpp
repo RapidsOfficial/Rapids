@@ -79,6 +79,11 @@ void SettingsWalletOptionsWidget::setMapper(QDataWidgetMapper *mapper){
     mapper->addMapping(ui->lineEditPort, OptionsModel::ProxyPort);
 }
 
+void SettingsWalletOptionsWidget::setSpinBoxStakeSplitThreshold(double val)
+{
+    ui->spinBoxStakeSplitThreshold->setValue(val);
+}
+
 SettingsWalletOptionsWidget::~SettingsWalletOptionsWidget(){
     delete ui;
 }
