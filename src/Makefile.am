@@ -106,6 +106,7 @@ BITCOIN_CORE_H = \
   consensus/tx_verify.h \
   consensus/zerocoin_verify.h \
   consensus/params.h \
+  consensus/upgrades.h \
   primitives/block.h \
   primitives/transaction.h \
   core_io.h \
@@ -388,6 +389,7 @@ libbitcoin_common_a_SOURCES = \
   base58.cpp \
   bip38.cpp \
   chainparams.cpp \
+  consensus/upgrades.cpp \
   coins.cpp \
   compressor.cpp \
   consensus/merkle.cpp \
