@@ -643,8 +643,7 @@ void SendWidget::onChangeCustomFeeClicked()
 {
     showHideOp(true);
     if (!customFeeDialog) {
-        customFeeDialog = new SendCustomFeeDialog(window);
-        customFeeDialog->setWalletModel(walletModel);
+        customFeeDialog = new SendCustomFeeDialog(window, walletModel);
     }
     if (openDialogWithOpaqueBackgroundY(customFeeDialog, window, 3, 5)) {
         const CAmount& nFeePerKb = customFeeDialog->getFeeRate().GetFeePerK();
