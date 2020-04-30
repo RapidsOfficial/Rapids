@@ -553,6 +553,7 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
             "         \"vout\":n,                  (numeric, required) The output number\n"
             "         \"scriptPubKey\": \"hex\",   (string, required) script key\n"
             "         \"redeemScript\": \"hex\"    (string, required for P2SH) redeem script\n"
+            "         \"amount\": value            (numeric, required) The amount spent\n"
             "       }\n"
             "       ,...\n"
             "    ]\n"
@@ -695,7 +696,10 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
                 if ((unsigned int)nOut >= coins->vout.size())
                     coins->vout.resize(nOut + 1);
                 coins->vout[nOut].scriptPubKey = scriptPubKey;
-                coins->vout[nOut].nValue = 0; // we don't know the actual output value
+                coins->vout[nOut].nValue = 0;
+                if (prevOut.exists("amount")) {
+                    coins->vout[nOut].nValue = AmountFromValue(find_value(prevOut, "amount"));
+                }
             }
 
             // if redeemScript given and not using the local wallet (private keys
@@ -763,8 +767,6 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
         const CScript& prevPubKey = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].first : coins->vout[txin.prevout.n].scriptPubKey);
         const CAmount& amount = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].second : coins->vout[txin.prevout.n].nValue);
 
-        txin.scriptSig.clear();
-
         // if this is a P2CS script, select which key to use
         bool fColdStake = false;
         if (prevPubKey.IsPayToColdStaking()) {
@@ -772,14 +774,18 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
             fColdStake = !bool(IsMine(keystore, prevPubKey) & ISMINE_SPENDABLE_DELEGATED);
         }
 
+        SignatureData sigdata;
         // Only sign SIGHASH_SINGLE if there's a corresponding output:
         if (!fHashSingle || (i < mergedTx.vout.size()))
-            SignSignature(keystore, prevPubKey, mergedTx, i, nHashType, fColdStake);
+            ProduceSignature(MutableTransactionSignatureCreator(&keystore, &mergedTx, i, amount, nHashType), prevPubKey, sigdata, fColdStake);
 
         // ... and merge in other signatures:
         for (const CMutableTransaction& txv : txVariants) {
-            txin.scriptSig = CombineSignatures(prevPubKey, txConst, i, amount, txin.scriptSig, txv.vin[i].scriptSig);
+            sigdata = CombineSignatures(prevPubKey, TransactionSignatureChecker(&txConst, i, amount), sigdata, DataFromTransaction(txv, i));
         }
+
+        UpdateTransaction(mergedTx, i, sigdata);
+
         ScriptError serror = SCRIPT_ERR_OK;
         if (!VerifyScript(txin.scriptSig, prevPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, TransactionSignatureChecker(&txConst, i, amount), &serror)) {
             TxInErrorToJSON(txin, vErrors, ScriptErrorString(serror));

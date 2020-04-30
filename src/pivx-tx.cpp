@@ -315,6 +315,24 @@ uint256 ParseHashUO(std::map<std::string, UniValue>& o, std::string strKey)
     return ParseHashUV(o[strKey], strKey);
 }
 
+static inline int64_t roundint64(double d)
+{
+    return (int64_t)(d > 0 ? d + 0.5 : d - 0.5);
+}
+
+static CAmount AmountFromValue(const UniValue& value)
+{
+    if (!value.isNum() && !value.isStr())
+        throw std::runtime_error("Amount is not a number or string");
+    double dAmount = value.get_real();
+    if (dAmount <= 0.0 || dAmount > 21000000.0)
+        throw std::runtime_error("Invalid amount");
+    CAmount nAmount = roundint64(dAmount * COIN);
+    if (!Params().GetConsensus().MoneyRange(nAmount))
+        throw std::runtime_error("Amount out of range");
+    return nAmount;
+}
+
 std::vector<unsigned char> ParseHexUO(std::map<std::string, UniValue>& o, std::string strKey)
 {
     if (!o.count(strKey)) {
@@ -393,7 +411,10 @@ static void MutateTxSign(CMutableTransaction& tx, const std::string& flagStr)
                 if ((unsigned int)nOut >= coins->vout.size())
                     coins->vout.resize(nOut + 1);
                 coins->vout[nOut].scriptPubKey = scriptPubKey;
-                coins->vout[nOut].nValue = 0; // we don't know the actual output value
+                coins->vout[nOut].nValue = 0;
+                if (prevOut.exists("amount")) {
+                    coins->vout[nOut].nValue = AmountFromValue(prevOut["amount"]);
+                }
             }
 
             // if redeemScript given and private keys given,
@@ -423,15 +444,21 @@ static void MutateTxSign(CMutableTransaction& tx, const std::string& flagStr)
         const CScript& prevPubKey = coins->vout[txin.prevout.n].scriptPubKey;
         const CAmount& amount = coins->vout[txin.prevout.n].nValue;
 
-        txin.scriptSig.clear();
+        SignatureData sigdata;
         // Only sign SIGHASH_SINGLE if there's a corresponding output:
         if (!fHashSingle || (i < mergedTx.vout.size()))
-            SignSignature(keystore, prevPubKey, mergedTx, i, nHashType);
+            ProduceSignature(
+                    MutableTransactionSignatureCreator(&keystore, &mergedTx, i, amount, nHashType),
+                    prevPubKey,
+                    sigdata,
+                    false // no cold stake
+            );
 
         // ... and merge in other signatures:
         for (const CTransaction& txv : txVariants) {
-            txin.scriptSig = CombineSignatures(prevPubKey, mergedTx, i, amount, txin.scriptSig, txv.vin[i].scriptSig);
+            sigdata = CombineSignatures(prevPubKey, MutableTransactionSignatureChecker(&mergedTx, i, amount), sigdata, DataFromTransaction(txv, i));
         }
+        UpdateTransaction(mergedTx, i, sigdata);
         if (!VerifyScript(txin.scriptSig, prevPubKey, STANDARD_SCRIPT_VERIFY_FLAGS, MutableTransactionSignatureChecker(&mergedTx, i, amount)))
             fComplete = false;
     }

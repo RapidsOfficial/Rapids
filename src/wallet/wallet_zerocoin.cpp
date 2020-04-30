@@ -335,11 +335,26 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue,
 
     // Sign
     int nIn = 0;
-    for (const std::pair<const CWalletTx*, unsigned int>& coin : setCoins) {
-        if (!SignSignature(*this, *coin.first, txNew, nIn++)) {
+    CTransaction txNewConst(txNew);
+    for (const PAIRTYPE(const CWalletTx*, unsigned int) & coin : setCoins) {
+        bool signSuccess;
+        const CScript& scriptPubKey = coin.first->vout[coin.second].scriptPubKey;
+        SignatureData sigdata;
+        signSuccess = ProduceSignature(
+                TransactionSignatureCreator(this, &txNewConst, nIn, coin.first->vout[coin.second].nValue, SIGHASH_ALL),
+                scriptPubKey,
+                sigdata,
+                false // fColdStake = false
+        );
+
+        if (!signSuccess) {
             strFailReason = _("Signing transaction failed");
             return false;
+        } else {
+            UpdateTransaction(txNew, nIn, sigdata);
         }
+
+        nIn++;
     }
 
     return true;

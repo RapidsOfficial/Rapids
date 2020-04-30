@@ -2676,15 +2676,25 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
                 for (const PAIRTYPE(const CWalletTx*, unsigned int) & coin : setCoins) {
                     bool signSuccess;
                     const CScript& scriptPubKey = coin.first->vout[coin.second].scriptPubKey;
-                    CScript& scriptSigRes = txNew.vin[nIn].scriptSig;
-                    if (sign)
-                        signSuccess = ProduceSignature(TransactionSignatureCreator(this, &txNewConst, nIn, SIGHASH_ALL), scriptPubKey, scriptSigRes, false);
-                    else
-                        signSuccess = ProduceSignature(DummySignatureCreator(this), scriptPubKey, scriptSigRes, false);
+                    SignatureData sigdata;
+                    bool haveKey = coin.first->GetStakeDelegationCredit() > 0;
+                    if (sign) {
+                        signSuccess = ProduceSignature(
+                                TransactionSignatureCreator(this, &txNewConst, nIn, coin.first->vout[coin.second].nValue, SIGHASH_ALL),
+                                scriptPubKey,
+                                sigdata,
+                                !haveKey // fColdStake = false
+                        );
+                    } else {
+                        signSuccess = ProduceSignature(
+                                DummySignatureCreator(this), scriptPubKey, sigdata, false);
+                    }
 
                     if (!signSuccess) {
                         strFailReason = _("Signing transaction failed");
                         return false;
+                    } else {
+                        UpdateTransaction(txNew, nIn, sigdata);
                     }
                     nIn++;
                 }
