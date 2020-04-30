@@ -3035,7 +3035,8 @@ UniValue setstakesplitthreshold(const UniValue& params, bool fHelp)
 
             "\nArguments:\n"
             "1. value                   (numeric, required) Threshold value (in PIV).\n"
-            "                                               Set to 0 to disable stake-splitting\n"
+            "                                     Set to 0 to disable stake-splitting\n"
+            "                                     If > 0, it must be >= " + FormatMoney(CWallet::minStakeSplitThreshold) + "\n"
 
             "\nResult:\n"
             "{\n"
@@ -3046,9 +3047,12 @@ UniValue setstakesplitthreshold(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("setstakesplitthreshold", "500.12") + HelpExampleRpc("setstakesplitthreshold", "500.12"));
 
-    EnsureWalletIsUnlocked();
-
     CAmount nStakeSplitThreshold = AmountFromValue(params[0]);
+    if (nStakeSplitThreshold > 0 && nStakeSplitThreshold < CWallet::minStakeSplitThreshold)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf(_("The threshold value cannot be less than %s"),
+                FormatMoney(CWallet::minStakeSplitThreshold)));
+
+    EnsureWalletIsUnlocked();
 
     CWalletDB walletdb(pwalletMain->strWalletFile);
     LOCK(pwalletMain->cs_wallet);

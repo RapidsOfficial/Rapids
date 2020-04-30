@@ -1683,6 +1683,13 @@ bool AppInit2()
                 strErrors << _("Error loading wallet.dat") << "\n";
         }
 
+        // check minimum stake split threshold
+        if (pwalletMain->nStakeSplitThreshold && pwalletMain->nStakeSplitThreshold < CWallet::minStakeSplitThreshold) {
+            LogPrintf("WARNING: stake split threshold value %s too low. Restoring to minimum value %s.\n",
+                    FormatMoney(pwalletMain->nStakeSplitThreshold), FormatMoney(CWallet::minStakeSplitThreshold));
+            pwalletMain->nStakeSplitThreshold = CWallet::minStakeSplitThreshold;
+        }
+
         int prev_version = pwalletMain->GetVersion();
 
         // Forced upgrade
