@@ -1,5 +1,7 @@
-// Copyright (c) 2020 The PIVX Core developers
+// Copyright (c) 2020 The PIVX developers
 // Distributed under the MIT software license, see the accompanying
+// file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
 #ifndef PIVX_HDCHAIN_H
 #define PIVX_HDCHAIN_H
 
