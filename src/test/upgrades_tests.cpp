@@ -5,7 +5,7 @@
 
 #include "chainparams.h"
 #include "consensus/upgrades.h"
-
+#include "optional.h"
 #include "test/test_pivx.h"
 
 #include <boost/test/unit_test.hpp>
@@ -116,6 +116,35 @@ BOOST_AUTO_TEST_CASE(IsActivationHeightForAnyUpgradeTest) {
     BOOST_CHECK(IsActivationHeightForAnyUpgrade(nActivationHeight, params));
     BOOST_CHECK(!IsActivationHeightForAnyUpgrade(nActivationHeight + 1, params));
     BOOST_CHECK(!IsActivationHeightForAnyUpgrade(1000000, params));
+}
+
+BOOST_AUTO_TEST_CASE(NextActivationHeightTest) {
+    SelectParams(CBaseChainParams::REGTEST);
+    const Consensus::Params& params = Params().GetConsensus();
+
+    // Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT
+    BOOST_CHECK(NextActivationHeight(-1, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(0, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(1, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(1000000, params) == nullopt);
+
+    UpdateNetworkUpgradeParameters(Consensus::UPGRADE_TESTDUMMY, Consensus::NetworkUpgrade::ALWAYS_ACTIVE);
+
+    BOOST_CHECK(NextActivationHeight(-1, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(0, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(1, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(1000000, params) == nullopt);
+
+    int nActivationHeight = 100;
+    UpdateNetworkUpgradeParameters(Consensus::UPGRADE_TESTDUMMY, nActivationHeight);
+
+    BOOST_CHECK(NextActivationHeight(-1, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(0, params) == nActivationHeight);
+    BOOST_CHECK(NextActivationHeight(1, params) == nActivationHeight);
+    BOOST_CHECK(NextActivationHeight(nActivationHeight - 1, params) == nActivationHeight);
+    BOOST_CHECK(NextActivationHeight(nActivationHeight, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(nActivationHeight + 1, params) == nullopt);
+    BOOST_CHECK(NextActivationHeight(1000000, params) == nullopt);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

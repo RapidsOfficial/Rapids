@@ -7,6 +7,7 @@
 #define PIVX_CONSENSUS_UPGRADES_H
 
 #include "consensus/params.h"
+#include "optional.h"
 
 enum UpgradeState {
     UPGRADE_DISABLED,
@@ -63,6 +64,20 @@ bool IsActivationHeight(
  * Returns true if the given block height is the activation height for any upgrade.
  */
 bool IsActivationHeightForAnyUpgrade(
+        int nHeight,
+        const Consensus::Params& params);
+
+/**
+ * Returns the index of the next upgrade after the given block height, or
+ * nullopt if there are no more known upgrades.
+ */
+Optional<int> NextEpoch(int nHeight, const Consensus::Params& params);
+
+/**
+ * Returns the activation height for the next upgrade after the given block height,
+ * or nullopt if there are no more known upgrades.
+ */
+Optional<int> NextActivationHeight(
         int nHeight,
         const Consensus::Params& params);
 

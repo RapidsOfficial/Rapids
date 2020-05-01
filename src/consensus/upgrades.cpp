@@ -96,3 +96,29 @@ bool IsActivationHeightForAnyUpgrade(
 
     return false;
 }
+
+Optional<int> NextEpoch(int nHeight, const Consensus::Params& params) {
+    if (nHeight < 0) {
+        return nullopt;
+    }
+
+    // BASE_NETWORK is never pending
+    for (auto idx = Consensus::BASE_NETWORK + 1; idx < Consensus::MAX_NETWORK_UPGRADES; idx++) {
+        if (NetworkUpgradeState(nHeight, params, Consensus::UpgradeIndex(idx)) == UPGRADE_PENDING) {
+            return idx;
+        }
+    }
+
+    return nullopt;
+}
+
+Optional<int> NextActivationHeight(
+        int nHeight,
+        const Consensus::Params& params)
+{
+    auto idx = NextEpoch(nHeight, params);
+    if (idx) {
+        return params.vUpgrades[idx.get()].nActivationHeight;
+    }
+    return nullopt;
+}
