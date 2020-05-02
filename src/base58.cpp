@@ -344,6 +344,13 @@ bool CBitcoinSecret::SetString(const std::string& strSecret)
     return SetString(strSecret.c_str());
 }
 
+CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Type addrType)
+{
+    CBitcoinAddress addr(keyID, addrType);
+    if (!addr.IsValid()) throw std::runtime_error("Error, trying to decode an invalid keyID");
+    return addr.Get();
+}
+
 std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType)
 {
     CBitcoinAddress addr(dest, addrType);
