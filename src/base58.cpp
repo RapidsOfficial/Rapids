@@ -343,3 +343,26 @@ bool CBitcoinSecret::SetString(const std::string& strSecret)
 {
     return SetString(strSecret.c_str());
 }
+
+std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType)
+{
+    CBitcoinAddress addr(dest, addrType);
+    if (!addr.IsValid()) return "";
+    return addr.ToString();
+}
+
+CTxDestination DecodeDestination(const std::string& str)
+{
+    return CBitcoinAddress(str).Get();
+}
+
+bool IsValidDestinationString(const std::string& str, bool fStaking, const CChainParams& params)
+{
+    return IsValidDestinationString(str, fStaking);
+}
+
+bool IsValidDestinationString(const std::string& str, bool isStaking)
+{
+    CBitcoinAddress address(str);
+    return address.IsValid() && (address.IsStakingAddress() == isStaking);
+}

@@ -854,7 +854,7 @@ void CoinControlDialog::updateView()
                 haveDest = ExtractDestination(out.tx->vout[out.i].scriptPubKey, outputAddress);
             }
             if (haveDest) {
-                sAddress = QString::fromStdString(CBitcoinAddress(outputAddress).ToString());
+                sAddress = QString::fromStdString(EncodeDestination(outputAddress).ToString());
 
                 // if listMode or change => show PIVX address. In tree mode, address is not shown again for direct wallet address outputs
                 if (!treeMode || (!(sAddress == sWalletAddress)))

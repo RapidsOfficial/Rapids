@@ -539,7 +539,7 @@ void SendWidget::updateEntryLabels(QList<SendCoinsRecipient> recipients)
         if (!label.isNull()) {
             QString labelOld = walletModel->getAddressTableModel()->labelForAddress(rec.address);
             if (label.compare(labelOld) != 0) {
-                CTxDestination dest = CBitcoinAddress(rec.address.toStdString()).Get();
+                CTxDestination dest = DecodeDestination(rec.address.toStdString());
                 if (!walletModel->updateAddressBookLabels(dest, label.toStdString(),
                                                           this->walletModel->isMine(dest) ?
                                                                   AddressBook::AddressBookPurpose::RECEIVE :
@@ -560,7 +560,7 @@ void SendWidget::onChangeAddressClicked()
     showHideOp(true);
     SendChangeAddressDialog* dialog = new SendChangeAddressDialog(window, walletModel);
     if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
-        dialog->setAddress(QString::fromStdString(CBitcoinAddress(CoinControlDialog::coinControl->destChange).ToString()));
+        dialog->setAddress(QString::fromStdString(EncodeDestination(CoinControlDialog::coinControl->destChange)));
     }
     if (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5)) {
         CBitcoinAddress address(dialog->getAddress().toStdString());
@@ -770,7 +770,7 @@ void SendWidget::onContactMultiClicked()
             inform(tr("Invalid address"));
             return;
         }
-        CBitcoinAddress pivAdd = CBitcoinAddress(address.toStdString());
+        CTxDestination pivAdd = DecodeDestination(address.toStdString());
         if (walletModel->isMine(pivAdd)) {
             inform(tr("Cannot store your own address as contact"));
             return;

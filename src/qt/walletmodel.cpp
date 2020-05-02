@@ -380,14 +380,13 @@ bool WalletModel::getMint(const uint256& hashSerial, CZerocoinMint& mint)
 
 bool WalletModel::validateAddress(const QString& address)
 {
-    CBitcoinAddress addressParsed(address.toStdString());
-    return addressParsed.IsValid();
+    // Only regular base58 addresses accepted here
+    return IsValidDestinationString(address.toStdString(), false);
 }
 
 bool WalletModel::validateAddress(const QString& address, bool fStaking)
 {
-    CBitcoinAddress addressParsed(address.toStdString());
-    return (addressParsed.IsValid() && fStaking == addressParsed.IsStakingAddress());
+    return IsValidDestinationString(address.toStdString(), fStaking);
 }
 
 bool WalletModel::updateAddressBookLabels(const CTxDestination& dest, const std::string& strName, const std::string& strPurpose)
@@ -1133,7 +1132,7 @@ void WalletModel::loadReceiveRequests(std::vector<std::string>& vReceiveRequests
 
 bool WalletModel::saveReceiveRequest(const std::string& sAddress, const int64_t nId, const std::string& sRequest)
 {
-    CTxDestination dest = CBitcoinAddress(sAddress).Get();
+    CTxDestination dest = DecodeDestination(sAddress);
 
     std::stringstream ss;
     ss << nId;
