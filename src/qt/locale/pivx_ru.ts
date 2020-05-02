@@ -196,6 +196,10 @@
         <translation>Дата</translation>
     </message>
     <message>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(нет ярлыка)</translation>
     </message>
@@ -215,8 +219,8 @@
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <source>Contact name</source>
@@ -247,7 +251,7 @@
         <translation>Например, Иван Петров</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
+        <source>Enter PIVX address</source>
         <translation>Ввести адрес PIVX</translation>
     </message>
     <message>
@@ -367,6 +371,18 @@ for staking</source>
         <translation>Подтверждение шифрования кошелька</translation>
     </message>
     <message>
+        <source>WARNING</source>
+        <translation>ВНИМАНИЕ</translation>
+    </message>
+    <message>
+        <source>If you encrypt your wallet and lose your passphrase, you will</source>
+        <translation>Если вы зашифруете свой кошелек и потеряете парольную фразу, вы</translation>
+    </message>
+    <message>
+        <source>LOSE ALL OF YOUR PIV</source>
+        <translation>ПОТЕРЯЕТЕ ВСЕ ВАШИ PIV</translation>
+    </message>
+    <message>
         <source>ENCRYPT</source>
         <translation>РАСШИФРОВАТЬ</translation>
     </message>
@@ -375,16 +391,16 @@ for staking</source>
         <translation>ОТМЕНА</translation>
     </message>
     <message>
+        <source>WARNING: The Caps Lock key is on!</source>
+        <translation>ВНИМАНИЕ: Включена клавиша Caps Lock!</translation>
+    </message>
+    <message>
         <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
         <translation>PIVX сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши PIVX от кражи с использованием вредоносного ПО.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Вы действительно хотите зашифровать свой кошелек?</translation>
-    </message>
-    <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR PIV&lt;/b&gt;!</source>
-        <translation>Внимание: если вы зашифруете свой кошелёк и потеряете от него пароль, то вы &lt;b&gt;ПОТЕРЯЕТЕ ВСЕ СВОИ PIV&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -426,10 +442,6 @@ for staking</source>
         <source>Wallet passphrase was successfully changed.</source>
         <translation>Кодовая фраза кошелька успешно изменена.</translation>
     </message>
-    <message>
-        <source>Warning: The Caps Lock key is on!</source>
-        <translation>Внимание: Клавиша Caps Lock включена!</translation>
-    </message>
 </context>
 <context>
     <name>BanTableModel</name>
@@ -440,37 +452,6 @@ for staking</source>
     <message>
         <source>Banned Until</source>
         <translation>Запрещено до</translation>
-    </message>
-</context>
-<context>
-    <name>BlockExplorer</name>
-    <message>
-        <source>Blockchain Explorer</source>
-        <translation>Обзор блокчейна</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Назад</translation>
-    </message>
-    <message>
-        <source>Forward</source>
-        <translation>вперед</translation>
-    </message>
-    <message>
-        <source>Address / Block / Transaction</source>
-        <translation>Адрес / Блок / Транзакция</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation>Поиск</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (pivx.conf).</source>
-        <translation>Будут показаны не все транзакции. Для отображения всех транзакций необходимо выставить txindex=1 в конфигурационном файле (pivx.conf).</translation>
     </message>
 </context>
 <context>
@@ -506,10 +487,6 @@ for staking</source>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
         <translation>Общее количество: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Неизвестные: %5)</translation>
     </message>
-    <message>
-        <source>Network Alert</source>
-        <translation>Сетевое предупреждение</translation>
-    </message>
 </context>
 <context>
     <name>CoinControlDialog</name>
@@ -528,6 +505,10 @@ for staking</source>
     <message>
         <source>Coin Selection</source>
         <translation>Выбор монеты</translation>
+    </message>
+    <message>
+        <source>Select PIV Outputs to Spend</source>
+        <translation>Выберите PIV выходы для расходов</translation>
     </message>
     <message>
         <source>Dust:</source>
@@ -552,14 +533,6 @@ for staking</source>
     <message>
         <source>Amount</source>
         <translation>Сумма</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
     </message>
     <message>
         <source>0.00 PIV</source>
@@ -630,40 +603,40 @@ for staking</source>
         <translation>Разблокировать неистраченные</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Копировать количество</translation>
-    </message>
-    <message>
-        <source>Copy fee</source>
-        <translation>Копировать комиссию</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>Копировать после вознаграждения </translation>
-    </message>
-    <message>
-        <source>Copy bytes</source>
-        <translation>Копировать байты</translation>
-    </message>
-    <message>
-        <source>Copy priority</source>
-        <translation>Копировать приоритет</translation>
-    </message>
-    <message>
-        <source>Copy dust</source>
-        <translation>Копировать пыль</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>Копировать изменение</translation>
-    </message>
-    <message>
         <source>Unselect all</source>
         <translation>Снять все</translation>
     </message>
     <message>
         <source>Please switch to "List mode" to use this function.</source>
         <translation>Для использования этой функции перейдите в "Режим списка"</translation>
+    </message>
+    <message>
+        <source>Quantity Copied</source>
+        <translation>Количество скопировано</translation>
+    </message>
+    <message>
+        <source>Amount Copied</source>
+        <translation>Сумма скопирована</translation>
+    </message>
+    <message>
+        <source>Fee Copied</source>
+        <translation>Комиссия скопирована</translation>
+    </message>
+    <message>
+        <source>After Fee Copied</source>
+        <translation>После того, как комиссия скопирована</translation>
+    </message>
+    <message>
+        <source>Bytes Copied</source>
+        <translation>Скопировано байтов</translation>
+    </message>
+    <message>
+        <source>Dust Copied</source>
+        <translation>Остаток скопирован</translation>
+    </message>
+    <message>
+        <source>Change Copied</source>
+        <translation>Скопировано сдачи</translation>
     </message>
     <message>
         <source>highest</source>
@@ -714,6 +687,10 @@ for staking</source>
         <translation>да</translation>
     </message>
     <message>
+        <source>delegated to %1 for cold staking</source>
+        <translation>делегирован в %1 для холодного стекинга</translation>
+    </message>
+    <message>
         <source>no</source>
         <translation>нет</translation>
     </message>
@@ -747,7 +724,7 @@ for staking</source>
     </message>
     <message>
         <source>(no label)</source>
-        <translation>(нет метки)</translation>
+        <translation>(нет ярлыка)</translation>
     </message>
     <message>
         <source>change from %1 (%2)</source>
@@ -756,89 +733,6 @@ for staking</source>
     <message>
         <source>(change)</source>
         <translation>(изменить)</translation>
-    </message>
-</context>
-<context>
-    <name>CoinControlPivWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Диалоговое окно</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>PIV:</source>
-        <translation>PIV:</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Количество:</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Комиссия:</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Сумма</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Метка</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Адрес</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Дата</translation>
-    </message>
-    <message>
-        <source>Confirmations</source>
-        <translation>Подтверждения</translation>
-    </message>
-    <message>
-        <source>CheckBox</source>
-        <translation>Флажок</translation>
-    </message>
-    <message>
-        <source>Bytes:</source>
-        <translation>Байты:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>Пыль:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Изменить:</translation>
-    </message>
-    <message>
-        <source>After Fee: </source>
-        <translation>После комиссии:</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>ОТМЕНА</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>ХОРОШО</translation>
     </message>
 </context>
 <context>
@@ -856,24 +750,16 @@ for staking</source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
+        <source>Owner address (optional, if empty a new address will be created)</source>
+        <translation>Адрес владельца (необязательно; если пусто, будет создан новый адрес)</translation>
     </message>
     <message>
-        <source>Owner Address (optional, if empty a new address will be created)</source>
-        <translation>Адрес владельца (по желанию; если пусто, то тогда будет создан новый адрес)</translation>
+        <source>Total Staking:</source>
+        <translation>Общий стекинг:</translation>
     </message>
     <message>
         <source>List of delegated balance by address</source>
         <translation>Список делегированного баланса по адресам</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation>В сумме</translation>
-    </message>
-    <message>
-        <source>Unconfirmed balance will not be shown</source>
-        <translation>Неподтвержденный баланс не будет показан</translation>
     </message>
     <message>
         <source>No balance delegated</source>
@@ -892,30 +778,12 @@ for staking</source>
         <translation>Делегирование</translation>
     </message>
     <message>
-        <source>You can delegate your PIVs and let a hot node (24/7 online node)
-stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation>Вы можете делегировать свои PIV и позволить горячему узлу (онлайн-узел 24/7 )
-запускать стекинг от вашего имени, при этом удерживая ключи оффлайн в безопасном месте.</translation>
-    </message>
-    <message>
-        <source>Add owner address</source>
-        <translation>Добавить адрес владельца</translation>
-    </message>
-    <message>
-        <source>Delegate or Accept PIV delegation</source>
-        <translation>Делегировать или принять делегирование PIV</translation>
-    </message>
-    <message>
         <source>Delegate</source>
         <translation>Делегировать</translation>
     </message>
     <message>
         <source>Clear All</source>
         <translation>Очистить все</translation>
-    </message>
-    <message>
-        <source>Add the staking address</source>
-        <translation>Добавить стекинг адрес</translation>
     </message>
     <message>
         <source>Delegated balance history</source>
@@ -934,8 +802,33 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Ошибка при загрузке делегаций: %1</translation>
     </message>
     <message>
+        <source>You can delegate your PIVs, letting a hot node (24/7 online node)
+stake on your behalf, while you keep the keys securely offline.</source>
+        <translation>Вы можете делегировать свои PIV, позволяя горячему узлу (онлайн-узлу, работаещему 24/7) делать стекинг от вашего имени, в то время как ключи надежно хранятся в автономном режиме.</translation>
+    </message>
+    <message>
+        <source>Enter owner address</source>
+        <translation>Введите адрес владельца</translation>
+    </message>
+    <message>
+        <source>Accept PIV delegation / Delegate PIV</source>
+        <translation>Принять делегацию PIV / Делегировать PIV</translation>
+    </message>
+    <message>
+        <source>Cold Staking address</source>
+        <translation>Адрес холодного стекинга</translation>
+    </message>
+    <message>
+        <source>No receive addresses available, you can go to the receive screen and create some there!</source>
+        <translation>Нет доступных адресов получения, вы можете перейти на экран получения и создать там несколько!</translation>
+    </message>
+    <message>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
         <translation>Нет доступных контактов. Вы можете перейти на вкладку контактов и добавить несколько!</translation>
+    </message>
+    <message>
+        <source>Cannot send delegation, wallet locked</source>
+        <translation>Не удается отправить делегацию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>Cold staking is networkely disabled</source>
@@ -946,8 +839,8 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Неверная запись</translation>
     </message>
     <message>
-        <source>Invalid entry, minimum delegable amount is 10 PIV</source>
-        <translation>Неверная запись, минимальная делегируемая сумма равна 10 PIV</translation>
+        <source>Invalid entry, minimum delegable amount is </source>
+        <translation>Неверная запись, минимальная делегируемая сумма</translation>
     </message>
     <message>
         <source>Owner address invalid</source>
@@ -987,6 +880,10 @@ Do you wish to proceed?</source>
     <message>
         <source>You don't have any PIV to select.</source>
         <translation>У вас нет PIV.</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Невозможно выполнить операцию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -1101,10 +998,6 @@ address</source>
         <translation>Нет транзакций</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Staking Rewards</source>
         <translation>Вознаграждения за стекинг</translation>
     </message>
@@ -1155,50 +1048,6 @@ address</source>
     <message>
         <source>Amount of PIV and zPIV staked.</source>
         <translation>Сумма добытых PIV и zPIV</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation>все</translation>
-    </message>
-    <message>
-        <source>Received</source>
-        <translation>Принято</translation>
-    </message>
-    <message>
-        <source>Sent</source>
-        <translation>Отправлено</translation>
-    </message>
-    <message>
-        <source>Mined</source>
-        <translation>заминированный</translation>
-    </message>
-    <message>
-        <source>Minted</source>
-        <translation>Чеканка</translation>
-    </message>
-    <message>
-        <source>MN reward</source>
-        <translation>Вознаграждение от MN</translation>
-    </message>
-    <message>
-        <source>To yourself</source>
-        <translation>Самому себе</translation>
-    </message>
-    <message>
-        <source>Cold stakes</source>
-        <translation>Холодные стекинг ставки</translation>
-    </message>
-    <message>
-        <source>Hot stakes</source>
-        <translation>Горячие стекинг ставки</translation>
-    </message>
-    <message>
-        <source>Delegated</source>
-        <translation>Делегирован</translation>
-    </message>
-    <message>
-        <source>Delegations</source>
-        <translation>Делегирования</translation>
     </message>
     <message>
         <source>Please wait until the wallet is fully synced to see your correct balance</source>
@@ -1256,69 +1105,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <message>
         <source>Text Label</source>
         <translation>Ярлык текста</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>ОТМЕНА</translation>
-    </message>
-    <message>
-        <source>SAVE</source>
-        <translation>СОХРАНИТЬ</translation>
-    </message>
-</context>
-<context>
-    <name>DenomGenerationDialog</name>
-    <message>
-        <source>Form</source>
-        <translation>Вид</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>This will unlock your wallet fully, so that anyone with access to it can spend until the wallet is closed or locked again.</source>
-        <translation>Это полностью разблокирует ваш кошелек и любой, кто имеет к нему доступ, может тратить монеты до тех пор, пока кошелек не будет закрыт или заблокирован снова.</translation>
-    </message>
-    <message>
-        <source>5000</source>
-        <translation>5000</translation>
-    </message>
-    <message>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
-        <source>1000</source>
-        <translation>1000</translation>
-    </message>
-    <message>
-        <source>50</source>
-        <translation>50</translation>
-    </message>
-    <message>
-        <source>500</source>
-        <translation>500</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation>5</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation>1</translation>
-    </message>
-    <message>
-        <source>Select All</source>
-        <translation>Выбрать все</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1415,49 +1201,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
 </context>
 <context>
-    <name>GovernancePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Вид</translation>
-    </message>
-    <message>
-        <source>GOVERNANCE</source>
-        <translation>УПРАВЛЕНИЕ</translation>
-    </message>
-    <message>
-        <source>Update Proposals</source>
-        <translation>Обновить предложения</translation>
-    </message>
-    <message>
-        <source>Next super block:</source>
-        <translation>Следующий супер блок:</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Blocks to next super block:</source>
-        <translation>Блоки до следующего суперблока:</translation>
-    </message>
-    <message>
-        <source>Days to budget payout (estimate):</source>
-        <translation>Дней до выплаты бюджета (приблизительно):</translation>
-    </message>
-    <message>
-        <source>Allotted budget:</source>
-        <translation>Выделенный бюджет:</translation>
-    </message>
-    <message>
-        <source>Budget left:</source>
-        <translation>Остаток Бюджета:</translation>
-    </message>
-    <message>
-        <source>Masternodes count:</source>
-        <translation>Количество мастернод:</translation>
-    </message>
-</context>
-<context>
     <name>HelpMessageDialog</name>
     <message>
         <source>version</source>
@@ -1498,6 +1241,10 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <message>
         <source>Show splash screen on startup (default: %u)</source>
         <translation>Показывать загрузочную заставку при запуске (по умолчанию: %u)</translation>
+    </message>
+    <message>
+        <source>Hide QT staking charts on startup (default: %u)</source>
+        <translation>Скрыть график стекинга QT при запуске (по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Set language, for example "de_DE" (default: system locale)</source>
@@ -1615,18 +1362,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <source>Form</source>
         <translation>Вид</translation>
     </message>
-    <message>
-        <source>user_masternode</source>
-        <translation>user_masternode</translation>
-    </message>
-    <message>
-        <source>Address: 88.26.164.88:51474</source>
-        <translation>Адрес: 88.26.164.88:51474 </translation>
-    </message>
-    <message>
-        <source>Jan. 19, 2019</source>
-        <translation>19 января, 2019</translation>
-    </message>
 </context>
 <context>
     <name>MasterNodeWizardDialog</name>
@@ -1659,28 +1394,28 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Адрес</translation>
     </message>
     <message>
-        <source>Create New Master Node Controller</source>
-        <translation>Создать новый контроллер мастерноды</translation>
+        <source>Create New Masternode Controller</source>
+        <translation>Создать новый контроллер Мастерноды</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a PIVX Masternode you must dedicate 10.000 PIV (the unit of PIVX) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Для того, чтобы создать мастерноду PIVX, вам необходимо внести в сеть 10.000 PIV (эти монеты остаются вашими и никогда не покинут вас).&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt; Вы можете отключить узел и разблокировать монеты в любое время.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>Set Masternode Name</source>
+        <translation>Установить имя мастерноды</translation>
+    </message>
+    <message>
+        <source>Set Masternode IP and Port</source>
+        <translation>Задать IP-адрес и порт Мастерноды</translation>
+    </message>
+    <message>
+        <source>Enter port</source>
+        <translation>Ввести порт</translation>
     </message>
     <message>
         <source>Make sure you have this amount of coins.</source>
         <translation>Убедитесь, что у вас есть такое количество монет.</translation>
     </message>
     <message>
-        <source>Set Master Node’s Name</source>
-        <translation>Установить имя мастерноды</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 PIV will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;На новый пустой адрес в вашем кошельке&lt;/p&gt;&lt;p&gt; будет сделана транзакция в 10 000 PIV. &lt;/p&gt;&lt;p&gt;Адрес отмечен под именем мастерноды.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Set Master Node’s IP and port</source>
-        <translation>Установите IP-адрес и порт мастерноды</translation>
     </message>
     <message>
         <source>Address of the node that must always be online running the actual master node.</source>
@@ -1689,10 +1424,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <message>
         <source>Enter IP address</source>
         <translation>Ввести IP-адрес</translation>
-    </message>
-    <message>
-        <source>Enter Port</source>
-        <translation>Ввести порт</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1723,12 +1454,34 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>IP и порт не могут быть пустыми</translation>
     </message>
     <message>
-        <source>Invalid port number</source>
-        <translation>Неверный номер порта</translation>
+        <source>Invalid IP address</source>
+        <translation>Неверный IP-адрес</translation>
     </message>
     <message>
-        <source>Prepare master node failed..</source>
-        <translation>Не удалось подготовить мастерноду</translation>
+        <source>Prepare master node failed.
+
+%1
+</source>
+        <translation>Не удалось подготовить мастерноду.
+
+ %1
+</translation>
+    </message>
+    <message>
+        <source>Invalid collateral output index</source>
+        <translation>Неверный индекс выхода коллатераля</translation>
+    </message>
+    <message>
+        <source>Master node created! Wait %1 confirmations before starting it.</source>
+        <translation>Мастернода создана! Подождите %1 подтверждений, прежде чем запустить его.</translation>
+    </message>
+    <message>
+        <source>Cannot send collateral transaction.
+
+%1</source>
+        <translation>Не удается отправить транзакцию коллатераля.
+
+%1</translation>
     </message>
     <message>
         <source>Invalid masternode.conf file</source>
@@ -1739,56 +1492,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Ошибка разбора файла masternode.conf</translation>
     </message>
     <message>
-        <source>Invalid collaterall output index</source>
-        <translation>Неверный индекс выхода залога</translation>
-    </message>
-    <message>
-        <source>Master node created!</source>
-        <translation>Мастернода успешно создана!</translation>
-    </message>
-    <message>
         <source>masternode.conf file doesn't exists</source>
         <translation>Файла masternode.cong не существует</translation>
-    </message>
-    <message>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation>Адрес получателя недействителен, повторите проверку.</translation>
-    </message>
-    <message>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation>Сумма для платежа должна быть больше, чем 0.</translation>
-    </message>
-    <message>
-        <source>The amount exceeds your balance.</source>
-        <translation>Сумма превышает ваш баланс.</translation>
-    </message>
-    <message>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>Сумма превышает ваш баланс, когда включена комиссия за транзакцию %1.</translation>
-    </message>
-    <message>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>Дублированный адрес найден, можно отправлять только на каждый адрес один раз за операцию отправки.</translation>
-    </message>
-    <message>
-        <source>Transaction creation failed!</source>
-        <translation>Не удалось создать транзакцию!</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Сделка была отклонена! Это может произойти, если некоторые из монет в вашем кошельке уже были потрачены, например, если вы использовали копию wallet.dat и монеты были потрачены в копии, но не отмечены как потраченные здесь.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation>Ошибка: кошелек был разблокирован только для анонимизации монет.</translation>
-    </message>
-    <message>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation>Плата в %1 раз выше, чем %2 за КБ, считается безумно высокой.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
-        <translation>Ошибка: кошелек был разблокирован только для анонимизации монет. Разблокировка отменена.</translation>
     </message>
 </context>
 <context>
@@ -1802,12 +1507,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
+        <source>Start All</source>
+        <translation>Запустить все</translation>
+    </message>
+    <message>
+        <source>Start Inactive/s</source>
+        <translation>Запустить неактивные</translation>
     </message>
     <message>
         <source>Masternodes</source>
@@ -1840,6 +1549,10 @@ and vote on the treasury system receiving a periodic reward.</source>
         <translation>Информация</translation>
     </message>
     <message>
+        <source>Please wait until the node is fully synced</source>
+        <translation>Пожалуйста, дождитесь полной синхронизации узла</translation>
+    </message>
+    <message>
         <source>Start Masternode</source>
         <translation>Запустить мастерноду</translation>
     </message>
@@ -1850,10 +1563,45 @@ and vote on the treasury system receiving a periodic reward.</source>
 </translation>
     </message>
     <message>
-        <source>Cannot start masternode, the collateral transaction has not been accepted by the network.
-Please wait few more minutes.</source>
-        <translation>Невозможно запустить мастерноду - транзакция залога не была принята сетью.
-Пожалуйста, подождите еще несколько минут.</translation>
+        <source>Cannot edit masternode, wallet locked</source>
+        <translation>Невозможно редактировать мастерноду, кошелек заблокирован</translation>
+    </message>
+    <message>
+        <source>Cannot start masternode, the collateral transaction has not been confirmed by the network yet.
+Please wait few more minutes (masternode collaterals require %1 confirmations).</source>
+        <translation>Невозможно запустить мастерноду, транзакция коллатераля еще не подтверждена сетью. Подождите еще несколько минут (для коллатералей мастерноды требуется %1 подтверждений).</translation>
+    </message>
+    <message>
+        <source>Background task is being executed, please wait</source>
+        <translation>Выполняется фоновая задача, пожалуйста, подождите</translation>
+    </message>
+    <message>
+        <source>Start ALL masternodes failed</source>
+        <translation>Не удалось запустить ВСЕ мастерноды</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>Разблокировка кошелька отменена</translation>
+    </message>
+    <message>
+        <source>Cannot perform Masternodes start</source>
+        <translation>Невозможно выполнить запуск Мастернод</translation>
+    </message>
+    <message>
+        <source>%1 Masternodes failed to start, %2 started</source>
+        <translation>Не удалось запустить %1 мастернод, запущено %2</translation>
+    </message>
+    <message>
+        <source>All Masternodes started!</source>
+        <translation>Все Мастерноды запущены!</translation>
+    </message>
+    <message>
+        <source>Cannot show Masternode information, wallet locked</source>
+        <translation>Невозможно отобразить информацию о Мастерноде, кошелек заблокирован</translation>
+    </message>
+    <message>
+        <source>Masternode data copied to the clipboard.</source>
+        <translation>Данные Мастерноды скопированы в буфер обмена.</translation>
     </message>
     <message>
         <source>Remote Masternode Data</source>
@@ -1876,10 +1624,6 @@ this controller wallet (select the Masternode in the list and press "start").
 вашего удаленного сервера и запустить его, а затем запустить мастерноду,
 используя этот кошелек контроллера (выберите мастерноду из списка и нажмите «Старт»).
 </translation>
-    </message>
-    <message>
-        <source>Masternode exported!, check your clipboard</source>
-        <translation>Мастернода экспортирована! Проверьте свой буфер обмена</translation>
     </message>
     <message>
         <source>Delete Masternode</source>
@@ -1908,6 +1652,10 @@ Are you sure?</source>
         <translation>Файла masternode.cong не существует</translation>
     </message>
     <message>
+        <source>Cannot create Masternode controller, wallet locked</source>
+        <translation>Невозможно создать контроллер Мастерноды, кошелек заблокирован</translation>
+    </message>
+    <message>
         <source>Not enough balance to create a masternode, 10,000 PIV required.</source>
         <translation>Недостаточно баланса для создания мастерноды. Требуется 10 000 PIV.</translation>
     </message>
@@ -1923,8 +1671,8 @@ Are you sure?</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <source>Master Node Information</source>
-        <translation>Информация по мастерноде</translation>
+        <source>Masternode Information</source>
+        <translation>Информация о Мастерноде</translation>
     </message>
     <message>
         <source>Public Key:</source>
@@ -1963,8 +1711,8 @@ Are you sure?</source>
         <translation>ОТСУТСТВУЕТ</translation>
     </message>
     <message>
-        <source>Export data to run the Master Node on a remote server</source>
-        <translation>Экспорт данных для запуска мастерноды на удаленном сервере</translation>
+        <source>Export data to run the Masternode on a remote server</source>
+        <translation>Экспорт данных для запуска Мастерноды на удаленном сервере</translation>
     </message>
 </context>
 <context>
@@ -2416,13 +2164,6 @@ Address: %4
     </message>
 </context>
 <context>
-    <name>PWidget</name>
-    <message>
-        <source>Wallet locked, you need to unlock it to perform this action</source>
-        <translation>Кошелек заблокирован. Для выполнения этого действия вам нужно его разблокировать</translation>
-    </message>
-</context>
-<context>
     <name>PaymentServer</name>
     <message>
         <source>Payment request error</source>
@@ -2547,8 +2288,8 @@ Address: %4
         <translation>Нажать кнопку</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <source>Privacy</source>
@@ -2572,8 +2313,8 @@ transaction history, making transactions untraceable </source>
         <translation>Чеканить новые zPIV или конвертировать обратно в PIV</translation>
     </message>
     <message>
-        <source>Last Zerocoin Movements</source>
-        <translation>Последние движения Zerocoin</translation>
+        <source>Last zPIV Movements</source>
+        <translation>Последние движения zPIV</translation>
     </message>
     <message>
         <source>No transactions yet</source>
@@ -2640,8 +2381,8 @@ transaction history, making transactions untraceable </source>
         <translation>Ваши чеканки zerocoin будут сканироваться из блокчейна с нуля</translation>
     </message>
     <message>
-        <source>Reset Spent Zerocoins</source>
-        <translation>Сбросить потраченные Zerocoins</translation>
+        <source>Reset Spent zPIV</source>
+        <translation>Сброс потраченных zPIV</translation>
     </message>
     <message>
         <source>Your zerocoin spends are going to be scanned from the blockchain from scratch</source>
@@ -2653,83 +2394,14 @@ transaction history, making transactions untraceable </source>
     </message>
 </context>
 <context>
-    <name>ProposalFrame</name>
-    <message>
-        <source>Open proposal page in browser</source>
-        <translation>Откройте страницу предложения в браузере</translation>
-    </message>
-    <message>
-        <source> remaining payment(s).</source>
-        <translation>оставшиеся платеж(и).</translation>
-    </message>
-    <message>
-        <source>Yes:</source>
-        <translation>Да:</translation>
-    </message>
-    <message>
-        <source>Abstain:</source>
-        <translation>Воздержаться:</translation>
-    </message>
-    <message>
-        <source>No:</source>
-        <translation>Нет:</translation>
-    </message>
-    <message>
-        <source>A proposal URL can be used for phishing, scams and computer viruses. Open this link only if you trust the following URL.
-</source>
-        <translation>URL-адрес предложения может быть использован для фишинга, мошенничества и компьютерных вирусов. Открывайте эту ссылку, только если вы доверяете данному URL.
-</translation>
-    </message>
-    <message>
-        <source>Open link</source>
-        <translation>Открыть ссылку</translation>
-    </message>
-    <message>
-        <source>Copy link</source>
-        <translation>Копировать ссылку</translation>
-    </message>
-    <message>
-        <source>Wallet Locked</source>
-        <translation>Кошелек заблокирован</translation>
-    </message>
-    <message>
-        <source>You must unlock your wallet to vote.</source>
-        <translation>Для того, чтобы голосовать вы должны разблокировать ваш кошелек.</translation>
-    </message>
-    <message>
-        <source>Do you want to vote %1 on</source>
-        <translation>Вы хотите проголосовать %1 за</translation>
-    </message>
-    <message>
-        <source>using all your masternodes?</source>
-        <translation>использовать все ваши мастерноды?</translation>
-    </message>
-    <message>
-        <source>Proposal Hash:</source>
-        <translation>Hash предложения:</translation>
-    </message>
-    <message>
-        <source>Proposal URL:</source>
-        <translation>URL предложения:</translation>
-    </message>
-    <message>
-        <source>Confirm Vote</source>
-        <translation>Подтвердить свой голос</translation>
-    </message>
-    <message>
-        <source>Vote Results</source>
-        <translation>Результаты голосования</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <source>Amount</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <source>Enter a PIVX address (e.g. %1)</source>
-        <translation>Введите адрес PIVX (например %1)</translation>
+        <source>Enter PIVX address (e.g. %1)</source>
+        <translation>Введите адрес PIVX (например, %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2754,10 +2426,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>BLOOM</source>
         <translation>BLOOM</translation>
-    </message>
-    <message>
-        <source>ZK_BLOOM</source>
-        <translation>ZK_BLOOM </translation>
     </message>
     <message>
         <source>UNKNOWN</source>
@@ -2798,6 +2466,102 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>PIVX Core didn't yet exit safely...</source>
         <translation>PIVX Core еще не вышел безопасно...</translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation>Контакты</translation>
+    </message>
+    <message>
+        <source>Receiving</source>
+        <translation>Получающий</translation>
+    </message>
+    <message>
+        <source>Delegator</source>
+        <translation>Делегатор</translation>
+    </message>
+    <message>
+        <source>Cold Staking</source>
+        <translation>Холодный стекинг</translation>
+    </message>
+    <message>
+        <source>Cold Staking Contact</source>
+        <translation>Контакт холодного стекинга</translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation>Спрятан</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>все</translation>
+    </message>
+    <message>
+        <source>Contacts</source>
+        <translation>Контакты</translation>
+    </message>
+    <message>
+        <source>Delegators</source>
+        <translation>Делегаторы</translation>
+    </message>
+    <message>
+        <source>Staking Contacts</source>
+        <translation>Контакты стекинга</translation>
+    </message>
+    <message>
+        <source>Received</source>
+        <translation>Принято</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Отправлено</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>заминированный</translation>
+    </message>
+    <message>
+        <source>Minted</source>
+        <translation>Чеканка</translation>
+    </message>
+    <message>
+        <source>MN reward</source>
+        <translation>Вознаграждение от MN</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>Самому себе</translation>
+    </message>
+    <message>
+        <source>Cold stakes</source>
+        <translation>Холодные стекинг ставки</translation>
+    </message>
+    <message>
+        <source>Hot stakes</source>
+        <translation>Горячие стекинг ставки</translation>
+    </message>
+    <message>
+        <source>Delegated</source>
+        <translation>Делегирован</translation>
+    </message>
+    <message>
+        <source>Delegations</source>
+        <translation>Делегирования</translation>
+    </message>
+    <message>
+        <source>by Label</source>
+        <translation>по метке</translation>
+    </message>
+    <message>
+        <source>by Address</source>
+        <translation>по адресу</translation>
+    </message>
+    <message>
+        <source>by Date</source>
+        <translation>по дате</translation>
     </message>
 </context>
 <context>
@@ -3157,7 +2921,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramifications of a command.</source>
-        <translation>ВНИМАНИЕ: мошенники активизировались, предлагая пользователям вводить здесь команды и воруя содержимое кошелька. Не используйте эту консоль без полного понимания последствий команды.</translation>
+        <translation>ВНИМАНИЕ: активизировались мошенники, которые предлагают пользователям вводить здесь команды и воруя содержимое их кошелька. Не используйте эту консоль без полного понимания последствий команды.</translation>
     </message>
     <message>
         <source>%1 B</source>
@@ -3219,10 +2983,6 @@ transaction history, making transactions untraceable </source>
         <translation>Детали транзакции</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
         <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
     </message>
@@ -3282,8 +3042,8 @@ transaction history, making transactions untraceable </source>
         <translation>Ошибка при генерации адреса</translation>
     </message>
     <message>
-        <source>Change Label</source>
-        <translation>Сменить ярлык</translation>
+        <source>Edit Label</source>
+        <translation>Изменить ярлык</translation>
     </message>
     <message>
         <source>Edit Address Label</source>
@@ -3298,12 +3058,20 @@ transaction history, making transactions untraceable </source>
         <translation>Ошибка при сохранении адресной метки</translation>
     </message>
     <message>
+        <source>Cannot create new address, wallet locked</source>
+        <translation>Невозможно создать новый адрес, кошелек заблокирован</translation>
+    </message>
+    <message>
         <source>New address created</source>
         <translation>Создан новый адрес</translation>
     </message>
     <message>
         <source>Address copied</source>
         <translation>Адрес скопирован</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Невозможно выполнить операцию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -3338,7 +3106,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <source>(no label)</source>
-        <translation>(нет метки)</translation>
+        <translation>(нет ярлыка)</translation>
     </message>
     <message>
         <source>(no message)</source>
@@ -3396,24 +3164,28 @@ transaction history, making transactions untraceable </source>
         <translation>ЗАПРОС</translation>
     </message>
     <message>
-        <source>Instead of only sharing a PIVX address, you can create a Payment Request message which bundles up more information than is contained in just a PIVX address.</source>
-        <translation>Вместо того, чтобы просто делиться адресом PIVX, вы можете создать сообщение с запросом платежа, в котором содержится больше информации, чем содержится в адресе PIVX.</translation>
-    </message>
-    <message>
         <source>Label</source>
         <translation>Метка</translation>
-    </message>
-    <message>
-        <source>Enter a label to be saved within the address</source>
-        <translation>Введите метку для сохранения в адресе</translation>
     </message>
     <message>
         <source>Description (optional)</source>
         <translation>Описание (необязательно)</translation>
     </message>
     <message>
-        <source>Add description </source>
-        <translation>Добавить описание</translation>
+        <source>New Payment Request</source>
+        <translation>Новый запрос на оплату</translation>
+    </message>
+    <message>
+        <source>Instead of sharing only a PIVX address, you can create a payment request, bundling up more information.</source>
+        <translation>Вместо того, чтобы делиться только адресом PIVX, вы можете создать запрос на оплату, объединив больше информации.</translation>
+    </message>
+    <message>
+        <source>Enter a label for the address</source>
+        <translation>Введите метку для адреса</translation>
+    </message>
+    <message>
+        <source>Enter description</source>
+        <translation>Введите описание</translation>
     </message>
     <message>
         <source>Error</source>
@@ -3431,6 +3203,10 @@ transaction history, making transactions untraceable </source>
         <source>New Cold Staking Address</source>
         <translation>Новый адрес для холодного стекинга</translation>
     </message>
+    <message>
+        <source>Amount (optional)</source>
+        <translation>Сумма (необязательно)</translation>
+    </message>
 </context>
 <context>
     <name>SendChangeAddressDialog</name>
@@ -3441,10 +3217,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Transaction Details</source>
         <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
     </message>
     <message>
         <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
@@ -3466,6 +3238,18 @@ transaction history, making transactions untraceable </source>
         <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" PIVX address</source>
         <translation>Остаточная часть значения, полученного от значения входов минус выходов, идет на «изменение» адреса PIVX</translation>
     </message>
+    <message>
+        <source>SAVE</source>
+        <translation>СОХРАНИТЬ</translation>
+    </message>
+    <message>
+        <source>RESET</source>
+        <translation>СБРОС</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>Неверный адрес</translation>
+    </message>
 </context>
 <context>
     <name>SendCustomFeeDialog</name>
@@ -3482,8 +3266,12 @@ transaction history, making transactions untraceable </source>
         <translation>Настроить комиссию за транзакцию на свой выбор, в зависимости от суммы комиссии, которая будет/не будет включена в вашу транзакцию в блокчейне.</translation>
     </message>
     <message>
-        <source>Recomended</source>
-        <translation>Рекоммендуется</translation>
+        <source>Recommended</source>
+        <translation>рекомендуемые</translation>
+    </message>
+    <message>
+        <source>PIV/kilobyte</source>
+        <translation>PIV/килобайт</translation>
     </message>
     <message>
         <source>0.00 KB</source>
@@ -3492,10 +3280,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Custom</source>
         <translation>Настроенная</translation>
-    </message>
-    <message>
-        <source>Per kilobyte</source>
-        <translation>За килобайт</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3510,8 +3294,8 @@ transaction history, making transactions untraceable </source>
         <translation>Настройка комиссии</translation>
     </message>
     <message>
-        <source>Customize the transaction fee, depending on the fee value your transaction will be included or not in the blockchain.</source>
-        <translation>Настройте комиссию за транзакцию. В зависимости от величины комиссии, ваша транзакция будет включена или не включена в блокчейн.</translation>
+        <source>Customize the transaction fee, depending on the fee value your transaction might be included faster in the blockchain.</source>
+        <translation>Настройка комиссии за транзакцию; в зависимости от величины комиссии ваша транзакция может быть быстрее включена в блокчейн.</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -3529,7 +3313,7 @@ transaction history, making transactions untraceable </source>
         <source>SAVE</source>
         <translation>СОХРАНИТЬ</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendMultiRow</name>
     <message>
@@ -3541,12 +3325,12 @@ transaction history, making transactions untraceable </source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Добавить адрес</translation>
+        <source>Enter address</source>
+        <translation>Ввести адрес</translation>
     </message>
     <message>
-        <source>Add description</source>
-        <translation>Добавить описание</translation>
+        <source>Enter label</source>
+        <translation>Введите метку</translation>
     </message>
 </context>
 <context>
@@ -3562,10 +3346,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Select coin type to spend</source>
         <translation>Выберите тип монеты для трат</translation>
-    </message>
-    <message>
-        <source>Enter a PIVX address or contact label</source>
-        <translation>Введите адрес PIVX или метку контакта</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3608,6 +3388,18 @@ transaction history, making transactions untraceable </source>
         <translation>Всего осталось</translation>
     </message>
     <message>
+        <source>Warning!</source>
+        <translation>Предупреждение!</translation>
+    </message>
+    <message>
+        <source>The change address doesn't belong to this wallet.
+
+Do you want to continue?</source>
+        <translation>Смена адреса не относится к этому кошельку.
+
+Хотите продолжить?</translation>
+    </message>
+    <message>
         <source>Customize Fee</source>
         <translation>Настройка комиссии</translation>
     </message>
@@ -3616,8 +3408,16 @@ transaction history, making transactions untraceable </source>
         <translation>Достигнуто максимальное количество выходов</translation>
     </message>
     <message>
+        <source>PIVX address or contact label</source>
+        <translation>PIVX адрес или метка контакта</translation>
+    </message>
+    <message>
         <source>Invalid entry, previous entries must be valid before add a new one</source>
         <translation>Неверная запись. Прежде чем добавить новую запись, предыдущие записи должны быть действительными</translation>
+    </message>
+    <message>
+        <source>Possibly spend coins delegated for cold-staking (currently available: %1</source>
+        <translation>Возможно потратить монеты, выделенные для холодного стекинга (в настоящее время доступно: %1</translation>
     </message>
     <message>
         <source>Invalid entry</source>
@@ -3700,10 +3500,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Не удалось обновить метку адреса для адреса: %1</translation>
     </message>
     <message>
-        <source>Invalid change address</source>
-        <translation>Неверное изменение адреса</translation>
-    </message>
-    <message>
         <source>Invalid URI</source>
         <translation>Неверный URI</translation>
     </message>
@@ -3741,7 +3537,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Cannot store your own address as contact</source>
-        <translation>Невозможно хранить ваш личный адрес в качестве контакта</translation>
+        <translation>Невозможно сохранить ваш личный адрес в качестве контакта</translation>
     </message>
     <message>
         <source>Update Contact</source>
@@ -3771,22 +3567,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Backup Wallet </source>
         <translation>Сделать резервную копию кошелька</translation>
     </message>
     <message>
         <source>Change Wallet Passphrase</source>
         <translation>Изменить фразовый пароль кошелька</translation>
-    </message>
-    <message>
-        <source>Keep your wallet safe doing regular backups, store your backup file externally.
-This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device.</source>
-        <translation>Храните свой кошелек в безопасности, делайте регулярные резервные копии и храните файл резервной копии вне сети.
-Этот параметр создает файл wallet.dat, который можно использовать для восстановления всего вашего баланса (транзакций и адресов) с другого устройства.</translation>
     </message>
     <message>
         <source>This will decrypt the whole wallet data and encrypt it back with the new passphrase.
@@ -3798,12 +3584,14 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Где</translation>
     </message>
     <message>
-        <source>Set a folder location</source>
-        <translation>Установить местоположение папки</translation>
+        <source>Keep your wallet safe by doing regular backups and storing your backup file externally.
+This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) on another device.</source>
+        <translation>Обеспечьте безопасность своего кошелька, регулярно создавая резервные копии и храня файл резервной копии вне системы.
+Этот параметр создает файл wallet.dat, который можно использовать для восстановления всего баланса (транзакций и адресов) на другом устройстве.</translation>
     </message>
     <message>
-        <source>Backup</source>
-        <translation>Сделать резервную копию</translation>
+        <source>Select folder...</source>
+        <translation>Выберите папку...</translation>
     </message>
     <message>
         <source>Change Passphrase</source>
@@ -3897,16 +3685,16 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Расшифровать ключ</translation>
     </message>
     <message>
-        <source>Enter a PIVX address</source>
-        <translation>Ввести адрес PIVX</translation>
+        <source>PIVX address</source>
+        <translation>Адрес PIVX</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Добавить адрес</translation>
+        <source>Enter address</source>
+        <translation>Ввести адрес</translation>
     </message>
     <message>
-        <source>Write a message</source>
-        <translation>Написать сообщение</translation>
+        <source>Enter passphrase</source>
+        <translation>Введите кодовую фразу</translation>
     </message>
     <message>
         <source>Encrypted Key</source>
@@ -3989,8 +3777,8 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Ошибка при добавлении ключа к кошельку</translation>
     </message>
     <message>
-        <source>Successfully added pivate key to the wallet</source>
-        <translation>Добавление приватного ключа к кошельку прошло успешно</translation>
+        <source>Successfully added private key to the wallet</source>
+        <translation>Закрытый ключ успешно добавлен в кошелек</translation>
     </message>
 </context>
 <context>
@@ -4018,6 +3806,10 @@ Remember to write it down and store it safely, otherwise you might lose access t
     <message>
         <source>Open Debug File</source>
         <translation>Открыть файл отладки</translation>
+    </message>
+    <message>
+        <source>Clear history</source>
+        <translation>Очистить историю</translation>
     </message>
     <message>
         <source>Cannot open debug file.
@@ -4053,8 +3845,8 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
+        <source>Hide stake charts in the dashboard</source>
+        <translation>Скрыть график стекинга на панели инструментов</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -4106,6 +3898,108 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
 </context>
 <context>
+    <name>SettingsExportCSV</name>
+    <message>
+        <source>Form</source>
+        <translation>Вид</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>Экспорт учета</translation>
+    </message>
+    <message>
+        <source>Export your wallet's accounting data to a csv file.</source>
+        <translation>Экспорт учетных данных вашего кошелька в CSV-файл.</translation>
+    </message>
+    <message>
+        <source>Where</source>
+        <translation>Где</translation>
+    </message>
+    <message>
+        <source>Select folder...</source>
+        <translation>Выберите папку...</translation>
+    </message>
+    <message>
+        <source>Export Address Book</source>
+        <translation>Экспорт адресной книги</translation>
+    </message>
+    <message>
+        <source>Export CSV</source>
+        <translation>Экспорт CSV</translation>
+    </message>
+    <message>
+        <source>Export Address List</source>
+        <translation>Экспорт списка адресов</translation>
+    </message>
+    <message>
+        <source>PIVX_tx_csv_export(*.csv)</source>
+        <translation>PIVX_tx_csv_export(*.csv)</translation>
+    </message>
+    <message>
+        <source>PIVX_addresses_csv_export(*.csv)</source>
+        <translation>PIVX_addresses_csv_export(*.csv)</translation>
+    </message>
+    <message>
+        <source>Please select a folder to export the csv file first.</source>
+        <translation>Пожалуйста, сначало выберите папку для экспорта файла CSV.</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Подтверждено</translation>
+    </message>
+    <message>
+        <source>Watch-only</source>
+        <translation>смотреть только</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Метка</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>Номер</translation>
+    </message>
+    <message>
+        <source>Exporting Successful
+The transaction history was successfully saved to %1.</source>
+        <translation>Экспорт выполнен успешно.
+История транзакций была успешно сохранена в %1.</translation>
+    </message>
+    <message>
+        <source>Exporting Failed
+There was an error trying to save the transaction history to %1.</source>
+        <translation>Экспорт не удался. Произошла ошибка при попытке сохранить историю транзакций в %1.</translation>
+    </message>
+    <message>
+        <source>No available addresses to export under the selected filter</source>
+        <translation>Нет доступных адресов для экспорта под выбранным фильтром</translation>
+    </message>
+    <message>
+        <source>Exporting Successful
+The address book was successfully saved to %1.</source>
+        <translation>Экспорт выполнен успешно.
+Адресная книга успешно сохранена в %1.</translation>
+    </message>
+    <message>
+        <source>Exporting Failed
+There was an error trying to save the address list to %1. Please try again.</source>
+        <translation>Экспорт не удался.
+Произошла ошибка при попытке сохранить список адресов в %1. Пожалуйста, попробуйте еще раз.</translation>
+    </message>
+</context>
+<context>
     <name>SettingsFaqWidget</name>
     <message>
         <source>Form</source>
@@ -4154,12 +4048,12 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>8) Куда я могу обратиться за помощью?</translation>
     </message>
     <message>
-        <source>9) What is a Master Node?</source>
-        <translation>9) Что такое мастернода?</translation>
+        <source>9) What is a Masternode?</source>
+        <translation>9) Что такое Мастернода?</translation>
     </message>
     <message>
-        <source>10) What is a Master Node Controller?</source>
-        <translation>10) Что такое контролер мастерноды?</translation>
+        <source>10) What is a Masternode Controller?</source>
+        <translation>10) Что такое контроллер Мастерноды?</translation>
     </message>
     <message>
         <source>1</source>
@@ -4195,7 +4089,7 @@ PIVX - это форма цифровых онлайн-денег, исполь�
 PIVX использует консенсус PoS (Proof of Stake), позволяя всем владельцам PIVX участвовать в заработке вознаграждений
 при этом обеспечивая безопасность сети с помощью кошельков с полными узлами, а также позволяет
 запускать мастерноды для создания предложений и голосования по ним.
- &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>2</source>
@@ -4350,83 +4244,26 @@ zPIV можно потратить и отправить на любой адр�
         <translation>Как мне запустить стекинг PIV/zPIV?</translation>
     </message>
     <message>
-        <source>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           To Stake PIVX:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Make sure your wallet is completely synchronized and you are using the latest release.
-                           &lt;li&gt;
-                           You must have a balance of PIVX with a minimum of 101 confirmations.
-                           &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
-                           &lt;li&gt;
-                           Once all those steps are followed staking should be enabled.
-                           &lt;li&gt;
-                           You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state "Staking Enabled" to indicate it is staking.  Using the command line interface (pivx-cli); the command &lt;i&gt;getstakingstatus&lt;/i&gt; will confirm that staking is active.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           To Stake zPIV:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Make sure your wallet is completely synchronized and you are using the latest release.
-                           &lt;li&gt;
-                           Your newly minted or existing zPIV balance must have a minimum of 200 confirmations.
-                           &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
-                           Staking should now be enabled.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </source>
-        <translation>
-&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Чтобы запустить стекинг PIVX:
-&lt;/p&gt;&lt;p align="justify"&gt;
- &lt;ol&gt;&lt;li&gt;убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию.
-&lt;li&gt;
-Вы должны иметь баланс PIVX с минимумом в 101 подтверждение
-&lt;li&gt;
-Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга.
-&lt;li&gt;
-После того, как все эти шаги будут выполнены, следует включить стекинг.
-&lt;li&gt;
-Вы можете увидеть статус стекинга в кошельке, наведя курсор на соответствующий значок в строке в левом верхнем углу интерфейса кошелька. Там будет подсвечен значек, в котором будет указано «Стекинг включен», а это значит, что делает стекинг запущен. Использование интерфейса командной строки (pivx-cli); команда getstakingstatus подтвердит, что стекинг активен. Чтобы запустить стекинг zPIV: убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию. Ваш недавно отчеканенный или существующий баланс zPIV должен иметь, как минимум, 200 подтверждений. Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга. Стекинг будет включен.</translation>
+        <source>Where should I go if I need support?</source>
+        <translation>Куда мне обратиться, если мне нужна поддержка?</translation>
+    </message>
+    <message>
+        <source>What is a Masternode?</source>
+        <translation>Что такое мастернода?</translation>
+    </message>
+    <message>
+        <source>What is a Masternode Controller?</source>
+        <translation>Что такое контроллер Мастерноды?
+
+ </translation>
     </message>
     <message>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <source>Where I should go if I need support?</source>
-        <translation>Куда мне обращаться за помощью?</translation>
-    </message>
-    <message>
-        <source>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://Discord.PIVX.com'&gt;
-                           #support in our Discord&lt;/a&gt;.
-                           If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://PIVX.FreshDesk.com'&gt;
-                           our Freshdesk support site&lt;/a&gt;.
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </source>
-        <translation>
-&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-У нас есть каналы поддержки в большинстве наших официальных групп, например
-&lt;a style='color: #b088ff' href='https://Discord.PIVX.com'&gt;
-#support в нашем Discord&lt;/a&gt;.
-Если вы хотите задать вопрос, одним из способов это сделать может послужить
-&lt;a style='color: #b088ff' href='https://PIVX.FreshDesk.com'&gt;
-наш сайт поддержки Freshdesk&lt;/a&gt;.
-&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>9</source>
         <translation>9</translation>
-    </message>
-    <message>
-        <source>What is a Master Node?</source>
-        <translation>Что такое мастернода?</translation>
     </message>
     <message>
         <source>
@@ -4501,14 +4338,6 @@ zPIV можно потратить и отправить на любой адр�
         <translation>10</translation>
     </message>
     <message>
-        <source>What is a Master Node Controller?</source>
-        <translation>Что такое контролер мастерноды?</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 PIV collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Кошелек контролера мастерноды - это то место, где может находиться залог в 10 000 PIV во время настройки удаленного контролера мастерноды. Это кошелек, который может активировать удаленный кошелек / кошельки мастерноды и позволит вам сохранять ваши сопутствующие монеты в автономном режиме, пока удаленная мастернода остается в сети.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>Frequently Asked Questions</source>
         <translation>Часто задаваемые вопросы</translation>
     </message>
@@ -4528,10 +4357,6 @@ zPIV можно потратить и отправить на любой адр�
         <translation>Вид</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
         <source>Network Monitor</source>
         <translation>Сетевой монитор</translation>
     </message>
@@ -4544,24 +4369,48 @@ zPIV можно потратить и отправить на любой адр�
         <translation>Основное</translation>
     </message>
     <message>
-        <source>Client Version: </source>
-        <translation>Версия клиента:</translation>
+        <source>Client Version:</source>
+        <translation>Версия Клиента:</translation>
+    </message>
+    <message>
+        <source>BerkeleyDB version:</source>
+        <translation>Версия BerkeleyDB:</translation>
+    </message>
+    <message>
+        <source>Datadir:</source>
+        <translation>Datadir:</translation>
+    </message>
+    <message>
+        <source>Startup time:</source>
+        <translation>Время запуска:</translation>
+    </message>
+    <message>
+        <source>Connections:</source>
+        <translation>Соединения:</translation>
+    </message>
+    <message>
+        <source>Number of Masternodes:</source>
+        <translation>Число Мастернод:</translation>
+    </message>
+    <message>
+        <source>Current number of blocks:</source>
+        <translation>Текущее количество блоков:</translation>
+    </message>
+    <message>
+        <source>Last block time:</source>
+        <translation>Время последнего блока:</translation>
+    </message>
+    <message>
+        <source>Last block hash:</source>
+        <translation>Хэш последнего блока:</translation>
+    </message>
+    <message>
+        <source>Current number of transactions:</source>
+        <translation>Текущее количество транзакций:</translation>
     </message>
     <message>
         <source>User Agent:</source>
         <translation>Пользовательский агент:</translation>
-    </message>
-    <message>
-        <source>Using BerkeleyDB version:</source>
-        <translation>Используя версию BerkeleyDB:</translation>
-    </message>
-    <message>
-        <source>Datadir: </source>
-        <translation>Datadir: </translation>
-    </message>
-    <message>
-        <source>Startup Time:  </source>
-        <translation>Время запуска:</translation>
     </message>
     <message>
         <source>Network</source>
@@ -4572,28 +4421,12 @@ zPIV можно потратить и отправить на любой адр�
         <translation>Имя:</translation>
     </message>
     <message>
-        <source>Number Connections:</source>
-        <translation>Количество подключений:</translation>
-    </message>
-    <message>
         <source>Blockchain</source>
         <translation>Блокчейн</translation>
     </message>
     <message>
-        <source>Current Number of Blocks:</source>
-        <translation>Текущий номер блоков:</translation>
-    </message>
-    <message>
-        <source>Last Block Time:</source>
-        <translation>Время последнего блока:</translation>
-    </message>
-    <message>
         <source>Memory Pool</source>
         <translation>Пул памяти</translation>
-    </message>
-    <message>
-        <source>Current Number of Transactions:</source>
-        <translation>Текущий номер транзакций:</translation>
     </message>
     <message>
         <source>Main</source>
@@ -4732,12 +4565,12 @@ Are you sure?
         <translation>Новый получатель для мультиотправки</translation>
     </message>
     <message>
-        <source>Label (optional)</source>
-        <translation>Метка (необязательно)</translation>
+        <source>Address Label (optional)</source>
+        <translation>Лейбл Адреса (необязательно)</translation>
     </message>
     <message>
-        <source>Enter a label to add this address in your address book</source>
-        <translation>Введите метку, чтобы добавить этот адрес в адресную книгу</translation>
+        <source>Enter label to be saved with this address</source>
+        <translation>Введите лейбл для сохранения с этим адресом</translation>
     </message>
     <message>
         <source>Percentage</source>
@@ -4755,8 +4588,8 @@ Are you sure?
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <source>CheckBox</source>
@@ -4792,7 +4625,11 @@ Are you sure?
     </message>
     <message>
         <source>CLEAR ALL</source>
-        <translation>УБРАТЬ ВСЕ</translation>
+        <translation>ОЧИСТИТЬ ВСЕ</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Невозможно выполнить операцию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>Clear succeed</source>
@@ -4801,6 +4638,10 @@ Are you sure?
     <message>
         <source>Clear all failed, could not locate address in wallet file</source>
         <translation>Полная очистка не удалась. Не удалось найти адрес в файле кошелька</translation>
+    </message>
+    <message>
+        <source>Cannot add multisend recipient, wallet locked</source>
+        <translation>Невозможно добавить получателя мультисендинга, кошелек заблокирован</translation>
     </message>
     <message>
         <source>The entered address: %1 is invalid.
@@ -4862,24 +4703,12 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
         <source>Sign/Verify Message</source>
         <translation>Подписать/верифицировать сообщение</translation>
-    </message>
-    <message>
-        <source>Enter a PIVX address or contact label</source>
-        <translation>Введите адрес PIVX или метку контакта</translation>
-    </message>
-    <message>
-        <source>Add address</source>
-        <translation>Добавить адрес</translation>
     </message>
     <message>
         <source>Sign</source>
@@ -4898,7 +4727,15 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Сообщение</translation>
     </message>
     <message>
-        <source>Write a message</source>
+        <source>PIVX address or contact label</source>
+        <translation>PIVX адрес или лейбл контакта</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation>Ввести адрес</translation>
+    </message>
+    <message>
+        <source>Write message</source>
         <translation>Написать сообщение</translation>
     </message>
     <message>
@@ -4911,7 +4748,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     </message>
     <message>
         <source>CLEAR ALL</source>
-        <translation>УБРАТЬ ВСЕ</translation>
+        <translation>ОЧИСТИТЬ ВСЕ</translation>
     </message>
     <message>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
@@ -5005,10 +4842,6 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Отменить изменения</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Wallet</source>
         <translation>Кошелек</translation>
     </message>
@@ -5074,10 +4907,6 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     <message>
         <source>TextLabel</source>
         <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
     </message>
     <message>
         <source>Wallet Repair</source>
@@ -5171,10 +5000,6 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Вид</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
         <source>Wallet Data</source>
         <translation>Данные кошелька</translation>
     </message>
@@ -5185,6 +5010,10 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     <message>
         <source>Multisend</source>
         <translation>Multisend</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>Экспортный учета</translation>
     </message>
     <message>
         <source>Tools</source>
@@ -5393,14 +5222,6 @@ Are you sure?
         <translation>Вид</translation>
     </message>
     <message>
-        <source>480.0685 PIV</source>
-        <translation>480.0685 PIV</translation>
-    </message>
-    <message>
-        <source>1,000 zPIV</source>
-        <translation>1 000 zPIV</translation>
-    </message>
-    <message>
         <source>Available</source>
         <translation>Доступный</translation>
     </message>
@@ -5409,24 +5230,8 @@ Are you sure?
         <translation>В ожидании</translation>
     </message>
     <message>
-        <source>6.943 PIV</source>
-        <translation>6.943 PIV</translation>
-    </message>
-    <message>
         <source>Immature</source>
         <translation>Незрелый</translation>
-    </message>
-    <message>
-        <source>10 PIV</source>
-        <translation>10 PIV</translation>
-    </message>
-    <message>
-        <source>60 zPIV</source>
-        <translation>60 zPIV</translation>
-    </message>
-    <message>
-        <source>10 zPIV</source>
-        <translation>10 zPIV</translation>
     </message>
     <message>
         <source>Wallet Unlocked for staking</source>
@@ -5441,14 +5246,6 @@ Are you sure?
         <translation>Адрес скопирован</translation>
     </message>
     <message>
-        <source>Automint enabled</source>
-        <translation>Включена автоматическая чеканка</translation>
-    </message>
-    <message>
-        <source>Automint disabled</source>
-        <translation>Автоматическая чеканка отключена</translation>
-    </message>
-    <message>
         <source>Staking active</source>
         <translation>Стекинг активен</translation>
     </message>
@@ -5457,18 +5254,78 @@ Are you sure?
         <translation>Стекинг не активен</translation>
     </message>
     <message>
-        <source>Synchronized</source>
-        <translation>Синхронизировано</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hour(s)</source>
-        <translation><numerusform>%n час</numerusform><numerusform>%n часа</numerusform><numerusform>%n часов</numerusform><numerusform>%n часов</numerusform></translation>
+        <source>Synchronized - Block: %1</source>
+        <translation>Синхронизировано - Блок: %1</translation>
     </message>
     <message>
         <source>%1 and %2</source>
         <translation>%1 и %2</translation>
     </message>
-    </context>
+    <message>
+        <source>Wallet Upgrade</source>
+        <translation>Обновление кошелька</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet</source>
+        <translation>Обновить кошелек</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>Разблокировка кошелька отменена</translation>
+    </message>
+    <message>
+        <source>Tor Active: %1</source>
+        <translation>Активные Tor: %1</translation>
+    </message>
+    <message>
+        <source>Tor Disabled</source>
+        <translation>Tor отключен</translation>
+    </message>
+    <message>
+        <source>The wallet has been successfully upgraded to HD.</source>
+        <translation>Кошелек был успешно обновлен до HD.</translation>
+    </message>
+    <message>
+        <source>It is advised to make a backup.</source>
+        <translation>Рекомендуется сделать резервную копию.</translation>
+    </message>
+    <message>
+        <source>Do you wish to backup now?</source>
+        <translation>Вы хотите сделать резервную копию сейчас?</translation>
+    </message>
+    <message>
+        <source>Backup Wallet</source>
+        <translation>Резервная копия кошелька</translation>
+    </message>
+    <message>
+        <source>Wallet Data (*.dat)</source>
+        <translation>Данные кошелька (* .dat)</translation>
+    </message>
+    <message>
+        <source>Backup created</source>
+        <translation>Резервная копия сделана</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>Не удалось создать резервную копию</translation>
+    </message>
+    <message>
+        <source>no file selected</source>
+        <translation>файл не выбран</translation>
+    </message>
+    <message>
+        <source>Wallet upgraded successfully, but no backup created.</source>
+        <translation>Кошелек успешно обновлен, но резервная копия не создана.</translation>
+    </message>
+    <message>
+        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
+        <translation>НАПОМИНАНИЕ: не забудьте сделать копию своего файла wallet.dat!</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet Error</source>
+        <translation>Ошибка обновления кошелька</translation>
+    </message>
+</context>
 <context>
     <name>TrafficGraphWidget</name>
     <message>
@@ -5706,10 +5563,6 @@ Are you sure?
         <translation>Получен от</translation>
     </message>
     <message>
-        <source>Received via Obfuscation</source>
-        <translation>Получено через обфускацию</translation>
-    </message>
-    <message>
         <source>PIV Stake</source>
         <translation>Доля PIV</translation>
     </message>
@@ -5722,28 +5575,8 @@ Are you sure?
         <translation>Холодный стекинг PIV</translation>
     </message>
     <message>
-        <source>PIV Stake in behalf of</source>
-        <translation>Стекинг PIV от имени</translation>
-    </message>
-    <message>
         <source>Stake delegation</source>
         <translation>Делегация стекинга</translation>
-    </message>
-    <message>
-        <source>Obfuscation Denominate</source>
-        <translation>Обфускация</translation>
-    </message>
-    <message>
-        <source>Obfuscation Collateral Payment</source>
-        <translation>Обфускационный Сопутствующий платеж</translation>
-    </message>
-    <message>
-        <source>Obfuscation Make Collateral Inputs</source>
-        <translation>Обфускация</translation>
-    </message>
-    <message>
-        <source>Obfuscation Create Denominations</source>
-        <translation>Обфускация Создание конфессий</translation>
     </message>
     <message>
         <source>Converted PIV to zPIV</source>
@@ -5778,12 +5611,16 @@ Are you sure?
         <translation>Оплата себе</translation>
     </message>
     <message>
-        <source>Mined</source>
-        <translation>заминированный</translation>
+        <source>PIV Stake on behalf of</source>
+        <translation>Стекинг PIV от имени</translation>
     </message>
     <message>
-        <source>Obfuscated</source>
-        <translation>затемненный</translation>
+        <source>Stake delegation spent by</source>
+        <translation>Делегация стекинга потрачена</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>заминированный</translation>
     </message>
     <message>
         <source>watch-only</source>
@@ -5837,36 +5674,8 @@ Are you sure?
         <translation>Детали транзакции</translation>
     </message>
     <message>
-        <source>ID:</source>
-        <translation>ID:</translation>
-    </message>
-    <message>
-        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
-        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994 </translation>
-    </message>
-    <message>
-        <source>Sending to: </source>
-        <translation>Отправить:</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
-    </message>
-    <message>
         <source>Total amount</source>
         <translation>Общая сумма</translation>
-    </message>
-    <message>
-        <source>2 PIV</source>
-        <translation>2 PIV</translation>
-    </message>
-    <message>
-        <source>Coin inputs:</source>
-        <translation>Входы монеты:</translation>
-    </message>
-    <message>
-        <source>1 Inputs</source>
-        <translation>1 вход</translation>
     </message>
     <message>
         <source>Previous Transaction</source>
@@ -5877,52 +5686,52 @@ Are you sure?
         <translation>Индекс выхода</translation>
     </message>
     <message>
-        <source>Fee:</source>
-        <translation>Комиссия:</translation>
-    </message>
-    <message>
-        <source>0.0001 PIV</source>
-        <translation>0.0001 PIV</translation>
-    </message>
-    <message>
-        <source>Change address:</source>
-        <translation>Изменить адрес:</translation>
-    </message>
-    <message>
         <source>D7VFR83SQbie…BhjcWJtcfip5krte2Z </source>
         <translation>D7VFR83SQbie…BhjcWJtcfip5krte2Z</translation>
-    </message>
-    <message>
-        <source>Confirmations:</source>
-        <translation>Подтверждения:</translation>
-    </message>
-    <message>
-        <source>12</source>
-        <translation>12</translation>
-    </message>
-    <message>
-        <source>Size:</source>
-        <translation>Размер:</translation>
-    </message>
-    <message>
-        <source>2 kB</source>
-        <translation>2 kB</translation>
-    </message>
-    <message>
-        <source>Date:</source>
-        <translation>Дата:</translation>
     </message>
     <message>
         <source>May 25, 2017</source>
         <translation>25 мая, 2017</translation>
     </message>
     <message>
-        <source>Status:</source>
-        <translation>Статус:</translation>
+        <source>ID</source>
+        <translation>Номер</translation>
+    </message>
+    <message>
+        <source>Sending to</source>
+        <translation>Отправка в</translation>
+    </message>
+    <message>
+        <source>Coin inputs</source>
+        <translation>Входы монеты</translation>
+    </message>
+    <message>
+        <source>Fee</source>
+        <translation>Комиссия</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <source>Change address</source>
+        <translation>Изменить адрес</translation>
     </message>
     <message>
         <source>Spendable</source>
         <translation>Расходуемый</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>Подтверждения</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Дата</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -5984,38 +5793,7 @@ Are you sure?
     </message>
 </context>
 <context>
-    <name>WalletPasswordDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Диалоговое окно</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
-        <translation>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. </translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>ОТМЕНА</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>ХОРОШО</translation>
-    </message>
-</context>
-<context>
     <name>WelcomeContentWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Диалоговое окно</translation>
-    </message>
     <message>
         <source>1</source>
         <translation>1</translation>
@@ -6149,10 +5927,6 @@ PIVX Core Wallet</source>
         <translation>Привяжите к указанному адресу для прослушивания соединений JSON-RPC. Используйте [host]: обозначение порта для IPv6. Эта опция может быть указана несколько раз (по умолчанию: привязка ко всем интерфейсам)</translation>
     </message>
     <message>
-        <source>Calculated accumulator checkpoint is not what is recorded by block index</source>
-        <translation>Расчетная контрольная точка  не является тем, что регистрируется блочным индексом</translation>
-    </message>
-    <message>
         <source>Cannot obtain a lock on data directory %s. PIVX Core is probably already running.</source>
         <translation>Не удается получить блокировку в каталоге данных %s. PIVX Core, вероятно, уже запущен.</translation>
     </message>
@@ -6179,14 +5953,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Распространяется по лицензии программного обеспечения MIT, см. Сопроводительный файл COPYING или &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting from specific addresses (0-1, default: %u)</source>
-        <translation>Включить автоматическую чеканку Zerocoin с определенных адресов (0-1, по умолчанию:%u)</translation>
-    </message>
-    <message>
-        <source>Enable automatic wallet backups triggered after each zPIV minting (0-1, default: %u)</source>
-        <translation>Включить автоматическое резервное копирование кошелька, запускаемое после каждого чеканки zPIV (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable cold staking functionality (0-1, default: %u). Disabled if staking=0</source>
@@ -6219,6 +5985,10 @@ PIVX Core Wallet</source>
     <message>
         <source>Error: Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>
         <translation>Ошибка: обнаружен неподдерживаемый аргумент -socks. Настройка версии SOCKS больше невозможна, поддерживаются только прокси SOCKS5.</translation>
+    </message>
+    <message>
+        <source>Exclude debugging information for a category. Can be used in conjunction with -debug=1 to output debug logs for all categories except one or more specified categories.</source>
+        <translation>Исключить отладочную информацию для категории. Может использоваться вместе с -debug=1 для вывода журналов отладки для всех категорий, кроме одной или нескольких указанных категорий.</translation>
     </message>
     <message>
         <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
@@ -6293,10 +6063,6 @@ PIVX Core Wallet</source>
         <translation>Количество секунд, чтобы не допустить повторного подключения неверных пользователей (по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation>Obfuscation использует точные деноминированные суммы для отправки средств, вам просто нужно будет анонимизировать еще несколько монет.</translation>
-    </message>
-    <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>Выходная информация отладки (по умолчанию: %u, поставка &lt;category&gt; необязательна)</translation>
     </message>
@@ -6319,10 +6085,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
         <translation>Установите максимальный размер транзакций с высоким приоритетом / низкой оплатой в байтах (по умолчанию: %d)</translation>
-    </message>
-    <message>
-        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
-        <translation>Установить количество включенных блоков для предварительного вычисления за цикл. (минимум: %d) (максимум: %d) (по умолчанию: %d)</translation>
     </message>
     <message>
         <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
@@ -6357,18 +6119,6 @@ PIVX Core Wallet</source>
         <translation>Не удалось привязать к %s на этом компьютере. PIVX Core, вероятно, уже запущен.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
-        <translation>Не удалось найти достаточное количество средств, предназначенных для обфускации, для этой транзакции.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Невозможно найти достаточное количество средств, не предназначенных для обфускации, для этой транзакции, которые не равны 10000 PIV.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 PIV.</source>
-        <translation>Не удалось найти достаточное количество средств для этой транзакции, которые не равны 10000 PIV.</translation>
-    </message>
-    <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation>Используйте отдельный прокси SOCKS5 для доступа к сверстникам через скрытые сервисы Tor (по умолчанию: %s)</translation>
     </message>
@@ -6379,10 +6129,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
         <translation>Предупреждение: -paytxfee установлен очень высоко! Это комиссия за транзакцию, которую вы заплатите, если вы отправляете транзакцию.</translation>
-    </message>
-    <message>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
-        <translation>Предупреждение: пиры отключаются из-за разницы во времени. Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы настроены не правильно, PIVX Core не будет работать должным образом.</translation>
     </message>
     <message>
         <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
@@ -6449,10 +6195,6 @@ PIVX Core Wallet</source>
         <translation>Добавьте узел для подключения и попытку сохранить соединение открытым</translation>
     </message>
     <message>
-        <source>Adding Wrapped Serials supply...</source>
-        <translation>Добавление предложения завернутых серий...</translation>
-    </message>
-    <message>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
         <translation>Разрешить поиск в DNS для -addnode, -seednode и -connect</translation>
     </message>
@@ -6477,28 +6219,8 @@ PIVX Core Wallet</source>
         <translation>Варианты создания блока:</translation>
     </message>
     <message>
-        <source>Calculating missing accumulators...</source>
-        <translation>Вычисление недостающих аккумуляторов ...</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Нельзя понизить кошелек</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -bind address: '%s'</source>
-        <translation>Не удается разрешить -включить адрес: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -externalip address: '%s'</source>
-        <translation>Не удается разрешить -externalip адрес: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -whitebind address: '%s'</source>
-        <translation>Не удается разрешить -whitebind адрес: '%s'</translation>
-    </message>
-    <message>
-        <source>CoinSpend: failed check</source>
-        <translation>CoinSpend: неудачная проверка</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -6537,10 +6259,6 @@ PIVX Core Wallet</source>
         <translation>Не удалось разобрать masternode.conf</translation>
     </message>
     <message>
-        <source>Couldn't generate the accumulator witness</source>
-        <translation>Не удалось сгенерировать witness аккумулятор</translation>
-    </message>
-    <message>
         <source>Debugging/Testing options:</source>
         <translation>Параметры отладки / тестирования:</translation>
     </message>
@@ -6571,14 +6289,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Done loading</source>
         <translation>Загрузка выполнена</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
-        <translation>Включить автоматическую чистку Zerocoin (0-1, по умолчанию: %u)</translation>
-    </message>
-    <message>
-        <source>Enable precomputation of zPIV spends and stakes (0-1, default %u)</source>
-        <translation>Включить предварительное вычисление расходов и стекинга zPIV (0-1, по умолчанию %u)</translation>
     </message>
     <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
@@ -6633,6 +6343,10 @@ PIVX Core Wallet</source>
         <translation>Ошибка</translation>
     </message>
     <message>
+        <source>Error: </source>
+        <translation>Ошибка:</translation>
+    </message>
+    <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
         <translation>Ошибка: произошла фатальная внутренняя ошибка, подробности см. В файле debug.log.</translation>
     </message>
@@ -6647,10 +6361,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
         <translation>Ошибка: кошелек заблокирован, невозможно создать транзакцию!</translation>
-    </message>
-    <message>
-        <source>Failed to calculate accumulator checkpoint</source>
-        <translation>Не удалось вычислить контрольную точку аккумулятора</translation>
     </message>
     <message>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
@@ -6721,28 +6431,8 @@ PIVX Core Wallet</source>
         <translation>Недопустимый -онионный адрес или имя хоста: '%s'</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -maxtxfee =&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -minrelaytxfee&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -mintxfee =&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (должен быть не менее%s)</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -paytxfee =&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation>Недопустимая сумма для -reservebalance =&lt;amount&gt;</translation>
     </message>
     <message>
         <source>Invalid amount</source>
@@ -6761,20 +6451,8 @@ PIVX Core Wallet</source>
         <translation>Неверный порт обнаружен в файле masternode.conf</translation>
     </message>
     <message>
-        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
-        <translation>Процент автоматически отчеканенного Zerocoin (1-100, по умолчанию: %u)</translation>
-    </message>
-    <message>
         <source>Recalculating PIV supply...</source>
         <translation>Перерасчет предложения PIV...</translation>
-    </message>
-    <message>
-        <source>Recalculating minted ZPIV...</source>
-        <translation>Перерасчет отчеканенных ZPIV...</translation>
-    </message>
-    <message>
-        <source>Recalculating spent ZPIV...</source>
-        <translation>Перерасчет потраченных ZPIV...</translation>
     </message>
     <message>
         <source>Reindex the PIV and zPIV money supply statistics</source>
@@ -6791,10 +6469,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Selected coins value is less than payment target</source>
         <translation>Выбранная стоимость монет меньше цели платежа</translation>
-    </message>
-    <message>
-        <source>Support the zerocoin light node protocol (default: %u)</source>
-        <translation>Поддержка лайт узла zerocoin протокола (по умолчанию: %u)</translation>
     </message>
     <message>
         <source>SwiftX options:</source>
@@ -6833,10 +6507,6 @@ PIVX Core Wallet</source>
         <translation>Ошибка: транзакция была отклонена! Это может произойти, если некоторые из монет в вашем кошельке уже были потрачены, например, если вы использовали копию кошелька. Dat и монеты были потрачены в копии, но не отмечены как потраченные здесь.</translation>
     </message>
     <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation>Ошибка. Для этой транзакции требуется комиссия за транзакцию не менее %s из-за ее количества, сложности или использования недавно полученных средств!</translation>
-    </message>
-    <message>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
         <translation>Ошибка: обнаружен неподдерживаемый аргумент -checklevel. Контрольный уровень должен быть 4-го уровня.</translation>
     </message>
@@ -6851,14 +6521,6 @@ PIVX Core Wallet</source>
     <message>
         <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
         <translation>В редких случаях трата с 7 монетами превышает наш максимально допустимый размер транзакции, пожалуйста, попробуйте потратить, используя 6 или менее монет</translation>
-    </message>
-    <message>
-        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
-        <translation>Предпочтительный номинал для автоматически чеканившегося Zerocoin (1/5/10/50/100/500/1000/5000), 0 без предпочтений. default: %u)</translation>
-    </message>
-    <message>
-        <source>Specify custom backup path to add a copy of any automatic zPIV backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Укажите собственный путь резервного копирования, чтобы добавить копию любой автоматической резервной копии zPIV. Если задано как dir, каждая резервная копия генерирует файл с отметкой времени. Если он установлен как файл, он будет переписывать в этот файл каждую резервную копию. Если также установлен резервный путь, произойдет 4 резервных копии</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
@@ -6879,10 +6541,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Cannot create public spend input</source>
         <translation>Невозможно создать вход публичных расходов</translation>
-    </message>
-    <message>
-        <source>CoinSpend: Accumulator witness does not verify</source>
-        <translation>CoinSpend: Свидетель Аккумулятора не проверяет</translation>
     </message>
     <message>
         <source>Display the stake modifier calculations in the debug.log file.</source>
@@ -6919,10 +6577,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Ошибка: нет действительного utxo!</translation>
-    </message>
-    <message>
-        <source>Failed to create mint</source>
-        <translation>Не удалось создать монетный двор</translation>
     </message>
     <message>
         <source>Failed to find Zerocoins in wallet.dat</source>
@@ -6969,6 +6623,10 @@ PIVX Core Wallet</source>
         <translation>Загрузка адресов ...</translation>
     </message>
     <message>
+        <source>Loading banlist...</source>
+        <translation>Загрузка банлиста...</translation>
+    </message>
+    <message>
         <source>Loading block index...</source>
         <translation>Загружается индекс блока ...</translation>
     </message>
@@ -6989,10 +6647,6 @@ PIVX Core Wallet</source>
         <translation>Загрузка ...</translation>
     </message>
     <message>
-        <source>Loading wallet... (%3.2f %%)</source>
-        <translation>Загрузка кошелька ... (%3.2f %%)</translation>
-    </message>
-    <message>
         <source>Loading wallet...</source>
         <translation>Загрузка кошелька ...</translation>
     </message>
@@ -7007,6 +6661,10 @@ PIVX Core Wallet</source>
     <message>
         <source>Lookup(): Invalid -proxy address or hostname: '%s'</source>
         <translation>Lookup (): Invalid -proxy адрес или имя хоста: '%s'</translation>
+    </message>
+    <message>
+        <source>MNs synchronization pending...</source>
+        <translation>Ожидается синхронизация Мастернод...</translation>
     </message>
     <message>
         <source>Maintain at most &lt;n&gt; connections to peers (default: %u)</source>
@@ -7049,6 +6707,10 @@ PIVX Core Wallet</source>
         <translation>Количество резервных копий пользовательского местоположения для сохранения (по умолчанию: %d)</translation>
     </message>
     <message>
+        <source>On first run, create a legacy wallet instead of a HD wallet</source>
+        <translation>При первом запуске создайте предыдущий кошелек вместо HD-кошелька</translation>
+    </message>
+    <message>
         <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
         <translation>Учитывать встроенные контрольные точки с использованием цепочки блоков (по умолчанию: %u)</translation>
     </message>
@@ -7065,6 +6727,10 @@ PIVX Core Wallet</source>
         <translation>Пароль для подключений JSON-RPC</translation>
     </message>
     <message>
+        <source>Peers are being disconnected due time differences.</source>
+        <translation>Пиры отключены из-за разницы во времени.</translation>
+    </message>
+    <message>
         <source>Unable to find transaction containing mint %s</source>
         <translation>Не удалось найти транзакцию, содержащую чеканку %s</translation>
     </message>
@@ -7077,16 +6743,28 @@ PIVX Core Wallet</source>
         <translation>Использовать блок спам-фильтр (по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>could not get lock on cs_spendcache</source>
-        <translation>не удалось получить блокировку на cs_spendcache</translation>
-    </message>
-    <message>
         <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
         <translation>isValid (): Invalid -proxy адрес или имя хоста: '%s'</translation>
     </message>
     <message>
         <source>Preparing for resync...</source>
         <translation>Подготовка к повторной синхронизации ...</translation>
+    </message>
+    <message>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
+        <translation>Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы не точны, PIVX Core не будет работать должным образом.</translation>
+    </message>
+    <message>
+        <source>Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)</source>
+        <translation>Укажите местоположение файла журнала отладки: это может быть абсолютный путь или путь относительно каталога данных (по умолчанию: %s)</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -%s address: '%s'</source>
+        <translation>Не удается разрешить -%s адрес: '%s'</translation>
+    </message>
+    <message>
+        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
+        <translation>Невозможно обновить до HD-кошелька (поддержка HD уже работает). Версия: %d</translation>
     </message>
     <message>
         <source>Need destination or change address because change is not exact</source>
@@ -7119,14 +6797,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Rebuild block chain index from current blk000??.dat files</source>
         <translation>Перестроить индекс цепочки блоков из текущих файлов blk000 ?? .dat</translation>
-    </message>
-    <message>
-        <source>Receive and display P2P network alerts (default: %u)</source>
-        <translation>Получение и отображение оповещений сети P2P (по умолчанию: %u)</translation>
-    </message>
-    <message>
-        <source>Reindex the accumulator database</source>
-        <translation>Reindex база данных аккумулятора</translation>
     </message>
     <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
@@ -7163,10 +6833,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>Отправлять транзакции как транзакции с нулевой оплатой, если это возможно (по умолчанию: %u)</translation>
-    </message>
-    <message>
-        <source>Session timed out.</source>
-        <translation>Время сеанса истекло.</translation>
     </message>
     <message>
         <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
@@ -7211,10 +6877,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Сжать файл debug.log при запуске клиента (по умолчанию: 1, когда нет -debug)</translation>
-    </message>
-    <message>
-        <source>Signing timed out.</source>
-        <translation>Подписание закончилось.</translation>
     </message>
     <message>
         <source>Signing transaction failed</source>
@@ -7273,10 +6935,6 @@ PIVX Core Wallet</source>
         <translation>Синхронизация завершена</translation>
     </message>
     <message>
-        <source>Synchronization pending...</source>
-        <translation>Ожидается синхронизация ...</translation>
-    </message>
-    <message>
         <source>Synchronizing budgets...</source>
         <translation>Синхронизация бюджетов ...</translation>
     </message>
@@ -7295,14 +6953,6 @@ PIVX Core Wallet</source>
     <message>
         <source>Syncing zPIV wallet...</source>
         <translation>Синхронизация zPIV кошелька ...</translation>
-    </message>
-    <message>
-        <source>The coin spend has been used</source>
-        <translation>Расходы на монеты использовались</translation>
-    </message>
-    <message>
-        <source>The transaction did not verify</source>
-        <translation>Транзакция не подтверждена</translation>
     </message>
     <message>
         <source>This help message</source>
@@ -7369,6 +7019,10 @@ PIVX Core Wallet</source>
         <translation>Невозможно сгенерировать первоначальный ключ</translation>
     </message>
     <message>
+        <source>Unable to generate keys</source>
+        <translation>Невозможно сгенерировать ключи</translation>
+    </message>
+    <message>
         <source>Unable to sign spork message, wrong key?</source>
         <translation>Не удалось подписать сообщение , неправильный ключ?</translation>
     </message>
@@ -7379,6 +7033,10 @@ PIVX Core Wallet</source>
     <message>
         <source>Unknown network specified in -onlynet: '%s'</source>
         <translation>Неизвестная сеть, указанная в -onlynet: '%s'</translation>
+    </message>
+    <message>
+        <source>Unsupported logging category %s=%s.</source>
+        <translation>Неподдерживаемая категория протоколирования %s =%s.</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -7469,6 +7127,10 @@ PIVX Core Wallet</source>
         <translation>Опции уведомления ZeroMQ:</translation>
     </message>
     <message>
+        <source>Zerocoin minting available only on regtest</source>
+        <translation>Чеканка zerocoin доступна только на regtest</translation>
+    </message>
+    <message>
         <source>Zerocoin options:</source>
         <translation>Варианты Zerocoin:</translation>
     </message>
@@ -7494,6 +7156,10 @@ PIVX Core Wallet</source>
     <message>
         <source>TextLabel</source>
         <translation>Текстовая метка</translation>
+    </message>
+    <message>
+        <source>Include delegated</source>
+        <translation>Включить делегированного</translation>
     </message>
     <message>
         <source>PushButton</source>
