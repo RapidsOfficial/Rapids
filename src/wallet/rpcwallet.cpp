@@ -88,7 +88,7 @@ std::string AccountFromValue(const UniValue& value)
     return strAccount;
 }
 
-CBitcoinAddress GetNewAddressFromAccount(const std::string purpose, const UniValue &params,
+CTxDestination GetNewAddressFromAccount(const std::string purpose, const UniValue &params,
         const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS)
 {
     LOCK2(cs_main, pwalletMain->cs_wallet);
@@ -97,7 +97,7 @@ CBitcoinAddress GetNewAddressFromAccount(const std::string purpose, const UniVal
     if (!params.isNull() && params.size() > 0)
         strAccount = AccountFromValue(params[0]);
 
-    CBitcoinAddress address;
+    CTxDestination address;
     PairResult r = pwalletMain->getNewAddress(address, strAccount, purpose, addrType);
     if(!r.result)
         throw JSONRPCError(RPC_WALLET_KEYPOOL_RAN_OUT, *r.status);
@@ -368,7 +368,7 @@ UniValue getnewaddress(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getnewaddress", "") + HelpExampleRpc("getnewaddress", ""));
 
-    return GetNewAddressFromAccount(AddressBook::AddressBookPurpose::RECEIVE, params).ToString();
+    return EncodeDestination(GetNewAddressFromAccount(AddressBook::AddressBookPurpose::RECEIVE, params));
 }
 
 UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
@@ -389,7 +389,7 @@ UniValue getnewstakingaddress(const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getnewstakingaddress", "") + HelpExampleRpc("getnewstakingaddress", ""));
 
-    return GetNewAddressFromAccount("coldstaking", params, CChainParams::STAKING_ADDRESS).ToString();
+    return EncodeDestination(GetNewAddressFromAccount("coldstaking", params, CChainParams::STAKING_ADDRESS), CChainParams::STAKING_ADDRESS);
 }
 
 UniValue delegatoradd(const UniValue& params, bool fHelp)
@@ -864,9 +864,10 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
     EnsureWalletIsUnlocked();
 
     // Get Owner Address
-    CBitcoinAddress ownerAddr;
+    std::string ownerAddressStr;
     CKeyID ownerKey;
     if (params.size() > 2 && !params[2].isNull() && !params[2].get_str().empty()) {
+        CBitcoinAddress ownerAddr;
         // Address provided
         ownerAddr.SetString(params[2].get_str());
         if (!ownerAddr.IsValid() || ownerAddr.IsStakingAddress())
@@ -886,8 +887,9 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     } else {
         // Get new owner address from keypool
-        ownerAddr = GetNewAddressFromAccount("delegated", NullUniValue);
-        if (!ownerAddr.GetKeyID(ownerKey))
+        CTxDestination ownerAddr = GetNewAddressFromAccount("delegated", NullUniValue);
+        ownerKey = *boost::get<CKeyID>(&ownerAddr);
+        if (!ownerKey)
             throw JSONRPCError(RPC_WALLET_ERROR, "Unable to get spend pubkey hash from owneraddress");
     }
 
@@ -904,7 +906,7 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
     }
 
     UniValue result(UniValue::VOBJ);
-    result.push_back(Pair("owner_address", ownerAddr.ToString()));
+    result.push_back(Pair("owner_address", ownerAddressStr));
     result.push_back(Pair("staker_address", stakeAddr.ToString()));
     return result;
 }

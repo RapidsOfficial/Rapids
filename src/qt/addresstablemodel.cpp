@@ -586,7 +586,7 @@ QString AddressTableModel::getAddressToShow() const
         }
     } else {
         // For some reason we don't have any address in our address book, let's create one
-        CBitcoinAddress newAddress;
+        Destination newAddress;
         if (walletModel->getNewAddress(newAddress, "Default").result) {
             addressStr = QString::fromStdString(newAddress.ToString());
         }

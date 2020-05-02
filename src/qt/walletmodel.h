@@ -274,11 +274,11 @@ public:
     int64_t getCreationTime() const;
     int64_t getKeyCreationTime(const CPubKey& key);
     int64_t getKeyCreationTime(const CBitcoinAddress& address);
-    PairResult getNewAddress(CBitcoinAddress& ret, std::string label = "") const;
+    PairResult getNewAddress(Destination& ret, std::string label = "") const;
     /**
      * Return a new address used to receive for delegated cold stake purpose.
      */
-    PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label = "") const;
+    PairResult getNewStakingAddress(Destination& ret, std::string label = "") const;
 
     bool whitelistAddressFromColdStaking(const QString &addressStr);
     bool blacklistAddressFromColdStaking(const QString &address);

@@ -375,10 +375,10 @@ public:
     void ListLockedCoins(std::vector<COutPoint>& vOutpts);
 
     //  keystore implementation
-    PairResult getNewAddress(CBitcoinAddress& ret, const std::string addressLabel, const std::string purpose,
+    PairResult getNewAddress(CTxDestination& ret, const std::string addressLabel, const std::string purpose,
                                            const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
-    PairResult getNewAddress(CBitcoinAddress& ret, std::string label);
-    PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label);
+    PairResult getNewAddress(CTxDestination& ret, std::string label);
+    PairResult getNewStakingAddress(CTxDestination& ret, std::string label);
     int64_t GetKeyCreationTime(CPubKey pubkey);
     int64_t GetKeyCreationTime(const CBitcoinAddress& address);
 

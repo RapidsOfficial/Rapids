@@ -131,7 +131,7 @@ void ReceiveWidget::refreshView(QString refreshAddress)
     try {
         QString latestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getAddressToShow() : refreshAddress;
         if (latestAddress.isEmpty()) { // new default address
-            CBitcoinAddress newAddress;
+            Destination newAddress;
             PairResult r = walletModel->getNewAddress(newAddress, "Default");
             // Check for generation errors
             if (!r.result) {
@@ -227,7 +227,7 @@ void ReceiveWidget::onNewAddressClicked()
             inform(tr("Cannot create new address, wallet locked"));
             return;
         }
-        CBitcoinAddress address;
+        Destination address;
         PairResult r = walletModel->getNewAddress(address, "");
 
         // Check for validity
