@@ -953,13 +953,11 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
     if (!IsHex(serial_hash))
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid parameter, expected hex serial hash");
 
-    CBitcoinAddress address;
-    CBitcoinAddress* addr_ptr = nullptr;
+    CTxDestination dest{CNoDestination()};
     if (address_str != "") {
-        address = CBitcoinAddress(address_str);
-        if(!address.IsValid())
+        dest = DecodeDestination(address_str);
+        if(!IsValidDestination(dest))
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
-        addr_ptr = &address;
     }
 
     assert(pwalletMain != NULL);
@@ -980,9 +978,9 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
     CZerocoinSpendReceipt receipt;
     CReserveKey reserveKey(pwalletMain);
     std::vector<CDeterministicMint> vNewMints;
-    std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
-    if (addr_ptr) {
-        outputs.push_back(std::pair<CBitcoinAddress*, CAmount>(addr_ptr, nAmount));
+    std::list<std::pair<CTxDestination, CAmount>> outputs;
+    if (!IsValidDestination(dest)) {
+        outputs.push_back(std::pair<CTxDestination, CAmount>(dest, nAmount));
     }
     if (!pwalletMain->CreateZCPublicSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, outputs, nullptr))
         throw JSONRPCError(RPC_WALLET_ERROR, receipt.GetStatusMessage());

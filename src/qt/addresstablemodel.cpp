@@ -377,7 +377,7 @@ bool AddressTableModel::setData(const QModelIndex& index, const QVariant& value,
         } else if (index.column() == Address) {
             CTxDestination newAddress = DecodeDestination(value.toString().toStdString());
             // Refuse to set invalid address, set error status and return false
-            if (boost::get<CNoDestination>(&newAddress)) {
+            if (!IsValidDestination(newAddress)) {
                 editStatus = INVALID_ADDRESS;
                 return false;
             }
@@ -548,7 +548,7 @@ QString AddressTableModel::labelForAddress(const QString& address) const
  */
 std::string AddressTableModel::purposeForAddress(const std::string& address) const
 {
-    return wallet->purposeForAddress(CBitcoinAddress(address).Get());
+    return wallet->purposeForAddress(DecodeDestination(address));
 }
 
 int AddressTableModel::lookupAddress(const QString& address) const
@@ -578,9 +578,9 @@ QString AddressTableModel::getAddressToShow() const
     if (!wallet->mapAddressBook.empty()) {
         for (auto it = wallet->mapAddressBook.rbegin(); it != wallet->mapAddressBook.rend(); ++it ) {
             if (it->second.purpose == AddressBook::AddressBookPurpose::RECEIVE) {
-                const CBitcoinAddress &address = it->first;
-                if (address.IsValid() && IsMine(*wallet, address.Get())) {
-                    addressStr = QString::fromStdString(address.ToString());
+                const CTxDestination &address = it->first;
+                if (IsValidDestination(address) && IsMine(*wallet, address)) {
+                    addressStr = QString::fromStdString(EncodeDestination(address));
                 }
             }
         }

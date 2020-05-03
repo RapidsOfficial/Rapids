@@ -618,12 +618,12 @@ bool WalletModel::createZpivSpend(
         CWalletTx &wtxNew,
         std::vector<CZerocoinMint> &vMintsSelected,
         CZerocoinSpendReceipt &receipt,
-        std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
+        std::list<std::pair<CTxDestination, CAmount>> outputs,
         std::string changeAddress)
 {
     CBitcoinAddress *changeAdd = (!changeAddress.empty()) ? new CBitcoinAddress(changeAddress) : nullptr;
     CAmount value = 0;
-    for (std::pair<CBitcoinAddress*, CAmount> pair : outputs) {
+    for (std::pair<CTxDestination, CAmount> pair : outputs) {
         value += pair.second;
     }
 
@@ -655,12 +655,12 @@ bool WalletModel::createZpivSpend(
 bool WalletModel::sendZpiv(
         std::vector<CZerocoinMint> &vMintsSelected,
         CZerocoinSpendReceipt &receipt,
-        std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
+        std::list<std::pair<CTxDestination, CAmount>> outputs,
         std::string changeAddress)
 {
     CBitcoinAddress *changeAdd = (!changeAddress.empty()) ? new CBitcoinAddress(changeAddress) : nullptr;
     CAmount value = 0;
-    for (std::pair<CBitcoinAddress*, CAmount> pair : outputs) {
+    for (std::pair<CTxDestination, CAmount> pair : outputs) {
         value += pair.second;
     }
 
@@ -687,7 +687,7 @@ bool WalletModel::convertBackZpiv(
             wtxNew,
             receipt,
             vMintsSelected,
-            std::list<std::pair<CBitcoinAddress*, CAmount>>(),
+            std::list<std::pair<CTxDestination, CAmount>>(),
             nullptr
     );
 }
@@ -970,7 +970,7 @@ int64_t WalletModel::getKeyCreationTime(const CPubKey& key)
     return pwalletMain->GetKeyCreationTime(key);
 }
 
-int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address)
+int64_t WalletModel::getKeyCreationTime(const CTxDestination& address)
 {
     if (this->isMine(address)) {
         return pwalletMain->GetKeyCreationTime(address);
@@ -1151,9 +1151,9 @@ bool WalletModel::saveReceiveRequest(const std::string& sAddress, const int64_t 
         return wallet->AddDestData(dest, key, sRequest);
 }
 
-bool WalletModel::isMine(CBitcoinAddress address)
+bool WalletModel::isMine(const CTxDestination& address)
 {
-    return IsMine(*wallet, address.Get());
+    return IsMine(*wallet, address);
 }
 
 bool WalletModel::isMine(const QString& addressStr)

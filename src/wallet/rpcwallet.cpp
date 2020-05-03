@@ -3775,17 +3775,18 @@ UniValue spendzerocoinmints(const UniValue& params, bool fHelp)
 extern UniValue DoZpivSpend(const CAmount nAmount, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str)
 {
     int64_t nTimeStart = GetTimeMillis();
-    CBitcoinAddress address = CBitcoinAddress(); // Optional sending address. Dummy initialization here.
+    CTxDestination address{CNoDestination()}; // Optional sending address. Dummy initialization here.
     CWalletTx wtx;
     CZerocoinSpendReceipt receipt;
     bool fSuccess;
 
-    std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
+    std::list<std::pair<CTxDestination, CAmount>> outputs;
     if(address_str != "") { // Spend to supplied destination address
-        address = CBitcoinAddress(address_str);
-        if(!address.IsValid() || address.IsStakingAddress())
+        bool isStaking = false;
+        address = DecodeDestination(address_str, isStaking);
+        if(!IsValidDestination(address) || isStaking)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
-        outputs.push_back(std::pair<CBitcoinAddress*, CAmount>(&address, nAmount));
+        outputs.push_back(std::pair<CTxDestination, CAmount>(address, nAmount));
     }
 
     EnsureWalletIsUnlocked();

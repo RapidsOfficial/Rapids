@@ -142,7 +142,7 @@ void ReceiveWidget::refreshView(QString refreshAddress)
             latestAddress = QString::fromStdString(newAddress.ToString());
         }
         ui->labelAddress->setText(latestAddress);
-        int64_t time = walletModel->getKeyCreationTime(CBitcoinAddress(latestAddress.toStdString()));
+        int64_t time = walletModel->getKeyCreationTime(DecodeDestination(latestAddress.toStdString()));
         ui->labelDate->setText(GUIUtil::dateTimeStr(QDateTime::fromTime_t(static_cast<uint>(time))));
         updateQr(latestAddress);
         updateLabel();
@@ -200,9 +200,9 @@ void ReceiveWidget::onLabelClicked()
         dialog->setData(info->address, addressTableModel->labelForAddress(info->address));
         if (openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 6)) {
             QString label = dialog->getLabel();
-            const CBitcoinAddress address = CBitcoinAddress(info->address.toUtf8().constData());
+            const CTxDestination address = DecodeDestination(info->address.toUtf8().constData());
             if (!label.isEmpty() && walletModel->updateAddressBookLabels(
-                    address.Get(),
+                    address,
                     label.toUtf8().constData(),
                     AddressBook::AddressBookPurpose::RECEIVE
             )

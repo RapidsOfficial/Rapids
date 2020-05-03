@@ -363,6 +363,13 @@ CTxDestination DecodeDestination(const std::string& str)
     return CBitcoinAddress(str).Get();
 }
 
+CTxDestination DecodeDestination(const std::string& str, bool& isStaking)
+{
+    CBitcoinAddress addr(str);
+    isStaking = addr.IsStakingAddress();
+    return addr.Get();
+}
+
 bool IsValidDestinationString(const std::string& str, bool fStaking, const CChainParams& params)
 {
     return IsValidDestinationString(str, fStaking);

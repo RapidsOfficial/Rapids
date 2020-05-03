@@ -83,8 +83,8 @@ QValidator::State BitcoinAddressCheckValidator::validate(QString& input, int& po
 {
     Q_UNUSED(pos);
     // Validate the passed PIVX address
-    CBitcoinAddress addr(input.toStdString());
-    if (addr.IsValid())
+    CTxDestination addr = DecodeDestination(input.toStdString());
+    if (IsValidDestination(addr))
         return QValidator::Acceptable;
 
     return QValidator::Invalid;

@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(zerocoin_spend_test)
     CAmount nAmount = COIN;
 
     CZerocoinSpendReceipt receipt;
-    std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
+    std::list<std::pair<CTxDestination, CAmount>> outputs;
     pwalletMain->SpendZerocoin(nAmount, *wtx, receipt, vMints, outputs);
 
     BOOST_CHECK_MESSAGE(receipt.GetStatus() == ZPIV_TRX_FUNDS_PROBLEMS, strprintf("Failed Invalid Amount Check: %s", receipt.GetStatusMessage()));
