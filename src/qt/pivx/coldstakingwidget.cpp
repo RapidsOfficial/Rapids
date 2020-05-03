@@ -642,7 +642,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex)
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, &TooltipMenu::onEditClicked, this, &ColdStakingWidget::onEditClicked);
         connect(this->menu, &TooltipMenu::onDeleteClicked, this, &ColdStakingWidget::onDeleteClicked);
-        //connect(this->menu, &TooltipMenu::onCopyClicked, this, &ColdStakingWidget::onLabelClicked);
+        connect(this->menu, &TooltipMenu::onCopyClicked, [this](){onLabelClicked();});
         connect(this->menu, &TooltipMenu::onLastClicked, this, &ColdStakingWidget::onCopyOwnerClicked);
     } else {
         this->menu->hide();
