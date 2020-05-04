@@ -225,24 +225,21 @@ void CoinControlDialog::setModel(WalletModel* model)
 // (un)select all
 void CoinControlDialog::buttonSelectAllClicked()
 {
-    Qt::CheckState state = Qt::Checked;
-    for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++) {
-        if (ui->treeWidget->topLevelItem(i)->checkState(COLUMN_CHECKBOX) != Qt::Unchecked) {
-            state = Qt::Unchecked;
-            break;
-        }
-    }
+    // "Select all": if some entry is unchecked, then check it
+    // "Unselect all": if some entry is checked, then uncheck it
+    Qt::CheckState wantedState = fSelectAllToggled ? Qt::Checked : Qt::Unchecked;
     ui->treeWidget->setEnabled(false);
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++)
-        if (ui->treeWidget->topLevelItem(i)->checkState(COLUMN_CHECKBOX) != state)
-            ui->treeWidget->topLevelItem(i)->setCheckState(COLUMN_CHECKBOX, state);
+        if (ui->treeWidget->topLevelItem(i)->checkState(COLUMN_CHECKBOX) != wantedState)
+            ui->treeWidget->topLevelItem(i)->setCheckState(COLUMN_CHECKBOX, wantedState);
     ui->treeWidget->setEnabled(true);
-    if (state == Qt::Unchecked) {
+    if (!fSelectAllToggled) {
         coinControl->UnSelectAll(); // just to be sure
         ui->pushButtonSelectAll->setText(tr("Select all"));
-    }else{
+    } else {
         ui->pushButtonSelectAll->setText(tr("Unselect all"));
     }
+    fSelectAllToggled = !fSelectAllToggled;
     CoinControlDialog::updateLabels(model, this);
     updateDialogLabels();
 }
