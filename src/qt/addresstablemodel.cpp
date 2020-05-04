@@ -22,7 +22,8 @@
 const QString AddressTableModel::Send = "S";
 const QString AddressTableModel::Receive = "R";
 const QString AddressTableModel::Zerocoin = "X";
-const QString AddressTableModel::Delegators = "D";
+const QString AddressTableModel::Delegator = "D";
+const QString AddressTableModel::Delegable = "E";
 const QString AddressTableModel::ColdStaking = "C";
 const QString AddressTableModel::ColdStakingSend = "T";
 
@@ -31,7 +32,8 @@ struct AddressTableEntry {
         Sending,
         Receiving,
         Zerocoin,
-        Delegators,
+        Delegator,
+        Delegable,
         ColdStaking,
         ColdStakingSend,
         Hidden /* QSortFilterProxyModel will filter these out */
@@ -72,9 +74,10 @@ static AddressTableEntry::Type translateTransactionType(const QString& strPurpos
         addressType = AddressTableEntry::Sending;
     else if (strPurpose ==  QString::fromStdString(AddressBook::AddressBookPurpose::RECEIVE))
         addressType = AddressTableEntry::Receiving;
-    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGATOR)
-            || strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGABLE))
-        addressType = AddressTableEntry::Delegators;
+    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGATOR))
+        addressType = AddressTableEntry::Delegator;
+    else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::DELEGABLE))
+        addressType = AddressTableEntry::Delegable;
     else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::COLD_STAKING))
         addressType = AddressTableEntry::ColdStaking;
     else if (strPurpose == QString::fromStdString(AddressBook::AddressBookPurpose::COLD_STAKING_SEND))
@@ -91,8 +94,10 @@ static QString translateTypeToString(AddressTableEntry::Type type)
             return QObject::tr("Contact");
         case AddressTableEntry::Receiving:
             return QObject::tr("Receiving");
-        case AddressTableEntry::Delegators:
+        case AddressTableEntry::Delegator:
             return QObject::tr("Delegator");
+        case AddressTableEntry::Delegable:
+            return QObject::tr("Delegable");
         case AddressTableEntry::ColdStaking:
             return QObject::tr("Cold Staking");
         case AddressTableEntry::ColdStakingSend:
@@ -341,8 +346,10 @@ QVariant AddressTableModel::data(const QModelIndex& index, int role) const
                 return Send;
             case AddressTableEntry::Receiving:
                 return Receive;
-            case AddressTableEntry::Delegators:
-                return Delegators;
+            case AddressTableEntry::Delegator:
+                return Delegator;
+            case AddressTableEntry::Delegable:
+                return Delegable;
             case AddressTableEntry::ColdStaking:
                 return ColdStaking;
             case AddressTableEntry::ColdStakingSend:

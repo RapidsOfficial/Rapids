@@ -136,7 +136,8 @@ void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit)
     filter->addItem(QObject::tr("Receiving"), AddressTableModel::Receive);
     filter->addItem(QObject::tr("Contacts"), AddressTableModel::Send);
     filter->addItem(QObject::tr("Cold Staking"), AddressTableModel::ColdStaking);
-    filter->addItem(QObject::tr("Delegators"), AddressTableModel::Delegators);
+    filter->addItem(QObject::tr("Delegator"), AddressTableModel::Delegator);
+    filter->addItem(QObject::tr("Delegable"), AddressTableModel::Delegable);
     filter->addItem(QObject::tr("Staking Contacts"), AddressTableModel::ColdStakingSend);
 }
 
