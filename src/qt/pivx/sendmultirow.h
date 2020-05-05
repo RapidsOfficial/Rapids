@@ -73,7 +73,7 @@ protected:
 
 private Q_SLOTS:
     void amountChanged(const QString&);
-    bool addressChanged(const QString&);
+    bool addressChanged(const QString&, bool fOnlyValidate = false);
     void deleteClicked();
     //void on_payTo_textChanged(const QString& address);
     //void on_addressBookButton_clicked();
