@@ -202,6 +202,7 @@ void WelcomeContentWidget::checkLanguage(){
         settings.setValue("language", sel);
         settings.sync();
         Q_EMIT onLanguageSelected();
+        ui->retranslateUi(this);
     }
 }
 
