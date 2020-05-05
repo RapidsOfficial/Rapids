@@ -144,7 +144,7 @@ void SettingsDisplayOptionsWidget::onResetClicked()
 void SettingsDisplayOptionsWidget::setMapper(QDataWidgetMapper *mapper)
 {
     mapper->addMapping(ui->comboBoxDigits, OptionsModel::Digits);
-    mapper->addMapping(ui->comboBoxLanguage, OptionsModel::Language);
+    mapper->addMapping(ui->comboBoxLanguage, OptionsModel::Language, "currentData");
     mapper->addMapping(ui->comboBoxUnit, OptionsModel::DisplayUnit);
     mapper->addMapping(ui->pushButtonSwitchBalance, OptionsModel::HideZeroBalances);
 #ifdef USE_QTCHARTS

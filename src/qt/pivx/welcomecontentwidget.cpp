@@ -161,7 +161,7 @@ WelcomeContentWidget::WelcomeContentWidget(QWidget *parent) :
     connect(ui->pushButtonSkip, &QPushButton::clicked, this, &WelcomeContentWidget::close);
     connect(nextButton, &QPushButton::clicked, this, &WelcomeContentWidget::onNextClicked);
     connect(backButton, &QPushButton::clicked, this, &WelcomeContentWidget::onBackClicked);
-
+    connect(ui->comboBoxLanguage, static_cast<void (QComboBox::*)(int)>(&QComboBox::currentIndexChanged), this, &WelcomeContentWidget::checkLanguage);
     initLanguages();
 
 
@@ -200,7 +200,9 @@ void WelcomeContentWidget::checkLanguage(){
     QSettings settings;
     if (settings.value("language") != sel){
         settings.setValue("language", sel);
+        settings.sync();
         Q_EMIT onLanguageSelected();
+        ui->retranslateUi(this);
     }
 }
 
