@@ -19,19 +19,15 @@ SendMultiRow::SendMultiRow(PWidget *parent) :
     ui->setupUi(this);
     this->setStyleSheet(parent->styleSheet());
 
-    ui->lineEditAddress->setPlaceholderText(tr("Enter address"));
     setCssProperty(ui->lineEditAddress, "edit-primary-multi-book");
     ui->lineEditAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->stackedAddress);
 
-    ui->lineEditAmount->setPlaceholderText("0.00 PIV ");
     initCssEditLine(ui->lineEditAmount);
     GUIUtil::setupAmountWidget(ui->lineEditAmount, this);
 
     /* Description */
-    ui->labelSubtitleDescription->setText("Address label (optional)");
     setCssProperty(ui->labelSubtitleDescription, "text-title");
-    ui->lineEditDescription->setPlaceholderText(tr("Enter label"));
     initCssEditLine(ui->lineEditDescription);
 
     // Button menu

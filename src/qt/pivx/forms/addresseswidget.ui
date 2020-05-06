@@ -68,14 +68,14 @@
             <item>
              <widget class="QLabel" name="labelTitle">
               <property name="text">
-               <string>Send</string>
+               <string>Contacts</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignTop">
              <widget class="QLabel" name="labelSubtitle1">
               <property name="text">
-               <string>TextLabel</string>
+               <string>You can add a new one in the options menu to the side.</string>
               </property>
              </widget>
             </item>
@@ -279,7 +279,7 @@
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>N/A</string>
+                 <string>No contacts yet</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -358,7 +358,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEditName"/>
+              <widget class="QLineEdit" name="lineEditName">
+               <property name="placeholderText">
+                <string notr="true">e.g. John Doe</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -391,7 +395,11 @@
               </widget>
              </item>
              <item>
-              <widget class="QLineEdit" name="lineEditAddress"/>
+              <widget class="QLineEdit" name="lineEditAddress">
+               <property name="placeholderText">
+                <string notr="true">e.g. D8FpnBdmahyJNRsVzoKzyFHbGjcUbX43QN</string>
+               </property>
+              </widget>
              </item>
             </layout>
            </item>
@@ -441,7 +449,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string>OK</string>
+                <string>SAVE</string>
                </property>
               </widget>
              </item>

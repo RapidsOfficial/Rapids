@@ -92,24 +92,20 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
     fontLight.setWeight(QFont::Light);
 
     /* Title */
-    ui->labelTitle->setText(tr("Masternodes"));
     setCssTitleScreen(ui->labelTitle);
     ui->labelTitle->setFont(fontLight);
-
-    ui->labelSubtitle1->setText(tr("Full nodes that incentivize node operators to perform the core consensus functions\nand vote on the treasury system receiving a periodic reward."));
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     /* Buttons */
-    ui->pushButtonSave->setText(tr("Create Masternode Controller"));
     setCssBtnPrimary(ui->pushButtonSave);
     setCssBtnPrimary(ui->pushButtonStartAll);
     setCssBtnPrimary(ui->pushButtonStartMissing);
 
     /* Options */
-    ui->btnAbout->setTitleClassAndText("btn-title-grey", "What is a Masternode?");
-    ui->btnAbout->setSubTitleClassAndText("text-subtitle", "FAQ explaining what Masternodes are");
-    ui->btnAboutController->setTitleClassAndText("btn-title-grey", "What is a Controller?");
-    ui->btnAboutController->setSubTitleClassAndText("text-subtitle", "FAQ explaining what is a Masternode Controller");
+    ui->btnAbout->setTitleClassAndText("btn-title-grey", tr("What is a Masternode?"));
+    ui->btnAbout->setSubTitleClassAndText("text-subtitle", tr("FAQ explaining what Masternodes are"));
+    ui->btnAboutController->setTitleClassAndText("btn-title-grey", tr("What is a Controller?"));
+    ui->btnAboutController->setSubTitleClassAndText("text-subtitle", tr("FAQ explaining what is a Masternode Controller"));
 
     setCssProperty(ui->listMn, "container");
     ui->listMn->setItemDelegate(delegate);
@@ -120,7 +116,6 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
 
     ui->emptyContainer->setVisible(false);
     setCssProperty(ui->pushImgEmpty, "img-empty-master");
-    ui->labelEmpty->setText(tr("No active Masternode yet"));
     setCssProperty(ui->labelEmpty, "text-empty");
 
     connect(ui->pushButtonSave, &QPushButton::clicked, this, &MasterNodesWidget::onCreateMNClicked);

@@ -14,25 +14,21 @@ AddNewContactDialog::AddNewContactDialog(QWidget *parent) :
 
     // Stylesheet
     this->setStyleSheet(parent->styleSheet());
-
     ui->frame->setProperty("cssClass", "container-dialog");
+
     // Title
-    ui->labelTitle->setText(tr("Edit Contact"));
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
 
-    ui->labelMessage->setText(tr("Set a label for the selected address"));
+    // Description
     ui->labelMessage->setProperty("cssClass", "text-main-grey");
 
     // Address
-    ui->lineEditName->setPlaceholderText(tr("Enter a name for the address (e.g Exchange)"));
     initCssEditLine(ui->lineEditName, true);
 
     // Buttons
     ui->btnEsc->setText("");
     ui->btnEsc->setProperty("cssClass", "ic-close");
-
     ui->btnCancel->setProperty("cssClass", "btn-dialog-cancel");
-    ui->btnOk->setText(tr("SAVE"));
     ui->btnOk->setProperty("cssClass", "btn-primary");
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &AddNewContactDialog::close);

@@ -62,14 +62,14 @@
             <item>
              <widget class="QLabel" name="labelTitle">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Main</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="labelSubtitle1">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Customize the main application options</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -146,7 +146,7 @@
           <item>
            <widget class="QLabel" name="labelTitleSizeDb">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Size of database cache</string>
             </property>
            </widget>
           </item>
@@ -196,7 +196,7 @@
           <item>
            <widget class="QLabel" name="labelTitleThreads">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Number of script verification threads</string>
             </property>
            </widget>
           </item>
@@ -326,7 +326,7 @@
         <item>
          <widget class="QCheckBox" name="checkBoxMinTaskbar">
           <property name="text">
-           <string>CheckBox</string>
+           <string>Minimize to the tray instead of the taskbar</string>
           </property>
          </widget>
         </item>
@@ -349,7 +349,7 @@
         <item>
          <widget class="QCheckBox" name="checkBoxMinClose">
           <property name="text">
-           <string>CheckBox</string>
+           <string>Minimize on close</string>
           </property>
          </widget>
         </item>

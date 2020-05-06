@@ -98,7 +98,7 @@
                <item>
                 <widget class="QLabel" name="labelTitle">
                  <property name="text">
-                  <string>Title</string>
+                  <string>Cold Staking</string>
                  </property>
                 </widget>
                </item>
@@ -111,7 +111,8 @@
                   </size>
                  </property>
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>You can delegate your PIVs, letting a hot node (24/7 online node)
+stake on your behalf, while you keep the keys securely offline.</string>
                  </property>
                 </widget>
                </item>
@@ -187,7 +188,7 @@
                       <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>Staker</string>
                      </property>
                      <property name="checkable">
                       <bool>true</bool>
@@ -215,7 +216,7 @@
                       <enum>Qt::NoFocus</enum>
                      </property>
                      <property name="text">
-                      <string/>
+                      <string>Delegation</string>
                      </property>
                      <property name="checkable">
                       <bool>true</bool>
@@ -234,7 +235,7 @@
                 <item alignment="Qt::AlignTop">
                  <widget class="QLabel" name="labelSubtitle2">
                   <property name="text">
-                   <string>TextLabel</string>
+                   <string>Accept PIV delegation / Delegate PIV</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -299,7 +300,7 @@
                 <string notr="true">padding-left:20px; padding-bottom:3px;</string>
                </property>
                <property name="text">
-                <string/>
+                <string>Cold Staking address</string>
                </property>
               </widget>
              </item>
@@ -371,6 +372,9 @@
                   </property>
                   <property name="styleSheet">
                    <string notr="true"/>
+                  </property>
+                  <property name="placeholderText">
+                   <string>Enter owner address</string>
                   </property>
                  </widget>
                 </item>
@@ -453,7 +457,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string/>
+                <string>Clear All</string>
                </property>
               </widget>
              </item>
@@ -491,7 +495,7 @@
                 <enum>Qt::NoFocus</enum>
                </property>
                <property name="text">
-                <string/>
+                <string>Delegate</string>
                </property>
               </widget>
              </item>
@@ -542,7 +546,7 @@
               <item>
                <widget class="QLabel" name="labelListHistory">
                 <property name="text">
-                 <string>List of delegated balance by address</string>
+                 <string>Delegated balance history</string>
                 </property>
                </widget>
               </item>
@@ -710,7 +714,7 @@
                    <string notr="true"/>
                   </property>
                   <property name="text">
-                   <string>No balance delegated</string>
+                   <string>No delegations yet</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>

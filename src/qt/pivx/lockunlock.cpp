@@ -23,10 +23,6 @@ LockUnlock::LockUnlock(QWidget *parent) :
     ui->pushButtonStaking->setProperty("cssClass", "btn-check-lock-sub-menu-staking");
     ui->pushButtonStaking->setStyleSheet("padding-left: 34px;");
 
-    ui->pushButtonUnlocked->setText(tr("Unlock Wallet"));
-    ui->pushButtonLocked->setText(tr("Lock Wallet"));
-    ui->pushButtonStaking->setText(tr("Staking Only"));
-
     // Connect
     connect(ui->pushButtonUnlocked, &QPushButton::clicked, this, &LockUnlock::onUnlockClicked);
     connect(ui->pushButtonLocked, &QPushButton::clicked, this, &LockUnlock::onLockClicked);

@@ -50,7 +50,7 @@
       <item alignment="Qt::AlignHCenter">
        <widget class="QLabel" name="labelTitle">
         <property name="text">
-         <string>My Address</string>
+         <string>New Address</string>
         </property>
        </widget>
       </item>
@@ -190,7 +190,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string>OK</string>
+           <string>SAVE</string>
           </property>
          </widget>
         </item>

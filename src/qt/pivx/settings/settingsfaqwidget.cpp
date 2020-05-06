@@ -13,11 +13,8 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
     ui(new Ui::SettingsFaqWidget)
 {
     ui->setupUi(this);
-
     this->setStyleSheet(parent->styleSheet());
 
-    ui->labelTitle->setText(tr("Frequently Asked Questions"));
-    ui->labelWebLink->setText(tr("You can read more here"));
 #ifdef Q_OS_MAC
     ui->container->load("://bg-welcome");
     setCssProperty(ui->container, "container-welcome-no-image");
@@ -87,11 +84,9 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
     ui->labelContent8->setOpenExternalLinks(true);
 
     // Exit button
-    ui->pushButtonExit->setText(tr("Exit"));
     setCssProperty(ui->pushButtonExit, "btn-faq-exit");
 
     // Web Link
-    ui->pushButtonWebLink->setText("https://PIVX.org/");
     setCssProperty(ui->pushButtonWebLink, "btn-faq-web");
     setCssProperty(ui->containerButtons, "container-faq-buttons");
 

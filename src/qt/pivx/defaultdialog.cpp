@@ -20,11 +20,7 @@ DefaultDialog::DefaultDialog(QWidget *parent) :
     ui->frame->setProperty("cssClass", "container-dialog");
 
     // Text
-    ui->labelTitle->setText("Dialog Title");
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
-
-
-    ui->labelMessage->setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.");
     ui->labelMessage->setProperty("cssClass", "text-main-grey");
 
     // Buttons
@@ -32,7 +28,6 @@ DefaultDialog::DefaultDialog(QWidget *parent) :
     ui->btnEsc->setProperty("cssClass", "ic-close");
 
     ui->btnCancel->setProperty("cssClass", "btn-dialog-cancel");
-    ui->btnSave->setText("OK");
     ui->btnSave->setProperty("cssClass", "btn-primary");
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &DefaultDialog::close);

@@ -41,58 +41,38 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     fontLight.setWeight(QFont::Light);
 
     /* Title */
-    ui->labelTitle->setText(tr("Send"));
     setCssProperty(ui->labelTitle, "text-title-screen");
     ui->labelTitle->setFont(fontLight);
 
     /* Button Group */
-    ui->pushLeft->setText("PIV");
     setCssProperty(ui->pushLeft, "btn-check-left");
     ui->pushLeft->setChecked(true);
-    ui->pushRight->setText("zPIV");
     setCssProperty(ui->pushRight, "btn-check-right");
 
     /* Subtitle */
-    ui->labelSubtitle1->setText(tr("You can transfer public coins (PIV) or private coins (zPIV)"));
-    setCssProperty(ui->labelSubtitle1, "text-subtitle");
+    setCssProperty({ui->labelSubtitle1, ui->labelSubtitle2}, "text-subtitle");
 
-    ui->labelSubtitle2->setText(tr("Select coin type to spend"));
-    setCssProperty(ui->labelSubtitle2, "text-subtitle");
-
-    /* Address */
-    ui->labelSubtitleAddress->setText(tr("PIVX address or contact label"));
-    setCssProperty(ui->labelSubtitleAddress, "text-title");
-
-
-    /* Amount */
-    ui->labelSubtitleAmount->setText(tr("Amount"));
-    setCssProperty(ui->labelSubtitleAmount, "text-title");
+    /* Address - Amount*/
+    setCssProperty({ui->labelSubtitleAddress, ui->labelSubtitleAmount}, "text-title");
 
     /* Buttons */
-    ui->pushButtonFee->setText(tr("Customize fee"));
     setCssBtnSecondary(ui->pushButtonFee);
-
-    ui->pushButtonClear->setText(tr("Clear all"));
     setCssProperty(ui->pushButtonClear, "btn-secundary-clear");
-
-    ui->pushButtonAddRecipient->setText(tr("Add recipient"));
     setCssProperty(ui->pushButtonAddRecipient, "btn-secundary-add");
-
     setCssBtnPrimary(ui->pushButtonSave);
-    ui->pushButtonReset->setText(tr("Reset to default"));
     setCssBtnSecondary(ui->pushButtonReset);
 
     // Coin control
-    ui->btnCoinControl->setTitleClassAndText("btn-title-grey", "Coin Control");
-    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select the source of the coins.");
+    ui->btnCoinControl->setTitleClassAndText("btn-title-grey", tr("Coin Control"));
+    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", tr("Select the source of the coins"));
 
     // Change address option
-    ui->btnChangeAddress->setTitleClassAndText("btn-title-grey", "Change Address");
-    ui->btnChangeAddress->setSubTitleClassAndText("text-subtitle", "Customize the change address.");
+    ui->btnChangeAddress->setTitleClassAndText("btn-title-grey", tr("Change Address"));
+    ui->btnChangeAddress->setSubTitleClassAndText("text-subtitle", tr("Customize the change address"));
 
     // Uri
-    ui->btnUri->setTitleClassAndText("btn-title-grey", "Open URI");
-    ui->btnUri->setSubTitleClassAndText("text-subtitle", "Parse a payment request.");
+    ui->btnUri->setTitleClassAndText("btn-title-grey", tr("Open URI"));
+    ui->btnUri->setSubTitleClassAndText("text-subtitle", tr("Parse a payment request"));
 
     connect(ui->pushButtonFee, &QPushButton::clicked, this, &SendWidget::onChangeCustomFeeClicked);
     connect(ui->btnCoinControl, &OptionButton::clicked, this, &SendWidget::onCoinControlClicked);
@@ -106,15 +86,11 @@ SendWidget::SendWidget(PIVXGUI* parent) :
 
 
     // Total Send
-    ui->labelTitleTotalSend->setText(tr("Total to send"));
     setCssProperty(ui->labelTitleTotalSend, "text-title");
-
-    ui->labelAmountSend->setText("0.00 PIV");
     setCssProperty(ui->labelAmountSend, "text-body1");
 
     // Total Remaining
     setCssProperty(ui->labelTitleTotalRemaining, "text-title");
-
     setCssProperty(ui->labelAmountRemaining, "text-body1");
 
     // Icon Send

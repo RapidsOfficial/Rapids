@@ -78,14 +78,12 @@ AddressesWidget::AddressesWidget(PIVXGUI* parent) :
     setCssProperty(ui->listAddresses, "container");
 
     // Title
-    ui->labelTitle->setText(tr("Contacts"));
-    ui->labelSubtitle1->setText(tr("You can add a new one in the options menu to the side."));
     setCssTitleScreen(ui->labelTitle);
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     // Change address option
-    ui->btnAddContact->setTitleClassAndText("btn-title-grey", "Add new contact");
-    ui->btnAddContact->setSubTitleClassAndText("text-subtitle", "Generate a new address to receive tokens.");
+    ui->btnAddContact->setTitleClassAndText("btn-title-grey", tr("Add new contact"));
+    ui->btnAddContact->setSubTitleClassAndText("text-subtitle", tr("Generate a new address to receive tokens."));
     ui->btnAddContact->setRightIconClass("ic-arrow-down");
 
     // List Addresses
@@ -108,28 +106,21 @@ AddressesWidget::AddressesWidget(PIVXGUI* parent) :
     //Empty List
     ui->emptyContainer->setVisible(false);
     setCssProperty(ui->pushImgEmpty, "img-empty-contacts");
-
-    ui->labelEmpty->setText(tr("No contacts yet"));
     setCssProperty(ui->labelEmpty, "text-empty");
 
     // Add Contact
     setCssProperty(ui->layoutNewContact, "container-options");
 
     // Name
-    ui->labelName->setText(tr("Contact name"));
     setCssProperty(ui->labelName, "text-title");
-    ui->lineEditName->setPlaceholderText(tr("e.g. John Doe"));
     setCssEditLine(ui->lineEditName, true);
 
     // Address
-    ui->labelAddress->setText(tr("Enter PIVX address"));
     setCssProperty(ui->labelAddress, "text-title");
-    ui->lineEditAddress->setPlaceholderText("e.g. D7VFR83SQbiezrW72hjc…");
     setCssEditLine(ui->lineEditAddress, true);
     ui->lineEditAddress->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z0-9]+"), ui->lineEditName));
 
     // Buttons
-    ui->btnSave->setText(tr("SAVE"));
     setCssBtnPrimary(ui->btnSave);
 
     connect(ui->listAddresses, &QListView::clicked, this, &AddressesWidget::handleAddressClicked);

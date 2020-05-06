@@ -32,24 +32,16 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
     ui->left->setContentsMargins(10,10,10,10);
 
     // Title
-    ui->labelTitle->setText(tr("Sign/Verify Message"));
     ui->labelTitle->setProperty("cssClass", "text-title-screen");
-
-    // Subtitle
     ui->labelSubtitle1->setProperty("cssClass", "text-subtitle");
 
     // Address
-    ui->labelSubtitleAddress->setText(tr("PIVX address or contact label"));
     ui->labelSubtitleAddress->setProperty("cssClass", "text-title");
-
-    ui->addressIn_SM->setPlaceholderText(tr("Enter address"));
     ui->addressIn_SM->setProperty("cssClass", "edit-primary-multi-book");
     ui->addressIn_SM->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->addressIn_SM);
 
     /* Button Group */
-    ui->pushSign->setText(tr("Sign"));
-    ui->pushVerify->setText(tr("Verify"));
     setCssProperty(ui->pushSign, "btn-check-right");
     setCssProperty(ui->pushVerify, "btn-check-right");
     ui->labelSubtitleSwitch->setText(tr("Select mode"));
@@ -58,17 +50,13 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
     updateMode();
 
     // Message
-    ui->labelSubtitleMessage->setText(tr("Message"));
     ui->labelSubtitleMessage->setProperty("cssClass", "text-title");
-
-    ui->messageIn_SM->setPlaceholderText(tr("Write message"));
     ui->messageIn_SM->setProperty("cssClass","edit-primary");
     setShadow(ui->messageIn_SM);
     ui->messageIn_SM->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
-    ui->labelSubtitleSignature->setText(tr("Signature"));
+    // Signature
     ui->labelSubtitleSignature->setProperty("cssClass", "text-title");
-    ui->signatureOut_SM->setPlaceholderText(tr("Signature"));
     ui->signatureOut_SM->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
     initCssEditLine(ui->signatureOut_SM);
@@ -77,8 +65,6 @@ SettingsSignMessageWidgets::SettingsSignMessageWidgets(PIVXGUI* _window, QWidget
     // Buttons
     btnContact = ui->addressIn_SM->addAction(QIcon("://ic-contact-arrow-down"), QLineEdit::TrailingPosition);
 
-    ui->pushButtonSave->setText(tr("SIGN"));
-    ui->pushButtonClear->setText(tr("CLEAR ALL"));
     setCssBtnPrimary(ui->pushButtonSave);
     setCssBtnSecondary(ui->pushButtonClear);
 

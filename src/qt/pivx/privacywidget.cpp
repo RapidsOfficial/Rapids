@@ -33,79 +33,38 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
     fontLight.setWeight(QFont::Light);
 
     /* Title */
-    ui->labelTitle->setText(tr("Privacy"));
     setCssTitleScreen(ui->labelTitle);
     ui->labelTitle->setFont(fontLight);
 
     /* Button Group */
-    ui->pushLeft->setText(tr("Convert"));
     setCssProperty(ui->pushLeft, "btn-check-left");
-    ui->pushRight->setText(tr("Mint"));
     setCssProperty(ui->pushRight, "btn-check-right");
 
     /* Subtitle */
-    ui->labelSubtitle1->setText(tr("Minting zPIV anonymizes your PIV by removing any\ntransaction history, making transactions untraceable "));
     setCssSubtitleScreen(ui->labelSubtitle1);
-
-    ui->labelSubtitle2->setText(tr("Mint new zPIV or convert back to PIV"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
     setCssProperty(ui->labelSubtitleAmount, "text-title");
 
-    ui->lineEditAmount->setPlaceholderText("0.00 PIV ");
     ui->lineEditAmount->setValidator(new QRegExpValidator(QRegExp("[0-9]+")));
     initCssEditLine(ui->lineEditAmount);
 
     /* Denom */
-    ui->labelTitleDenom1->setText("Denom. with value 1:");
-    setCssProperty(ui->labelTitleDenom1, "text-subtitle");
-    ui->labelValueDenom1->setText("0x1 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom1, "text-body2");
-
-    ui->labelTitleDenom5->setText("Denom. with value 5:");
-    setCssProperty(ui->labelTitleDenom5, "text-subtitle");
-    ui->labelValueDenom5->setText("0x5 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom5, "text-body2");
-
-    ui->labelTitleDenom10->setText("Denom. with value 10:");
-    setCssProperty(ui->labelTitleDenom10, "text-subtitle");
-    ui->labelValueDenom10->setText("0x10 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom10, "text-body2");
-
-    ui->labelTitleDenom50->setText("Denom. with value 50:");
-    setCssProperty(ui->labelTitleDenom50, "text-subtitle");
-    ui->labelValueDenom50->setText("0x50 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom50, "text-body2");
-
-    ui->labelTitleDenom100->setText("Denom. with value 100:");
-    setCssProperty(ui->labelTitleDenom100, "text-subtitle");
-    ui->labelValueDenom100->setText("0x100 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom100, "text-body2");
-
-    ui->labelTitleDenom500->setText("Denom. with value 500:");
-    setCssProperty(ui->labelTitleDenom500, "text-subtitle");
-    ui->labelValueDenom500->setText("0x500 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom500, "text-body2");
-
-    ui->labelTitleDenom1000->setText("Denom. with value 1000:");
-    setCssProperty(ui->labelTitleDenom1000, "text-subtitle");
-    ui->labelValueDenom1000->setText("0x1000 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom1000, "text-body2");
-
-    ui->labelTitleDenom5000->setText("Denom. with value 5000:");
-    setCssProperty(ui->labelTitleDenom5000, "text-subtitle");
-    ui->labelValueDenom5000->setText("0x5000 = 0 zPIV");
-    setCssProperty(ui->labelValueDenom5000, "text-body2");
-
+    setCssProperty({ui->labelTitleDenom1, ui->labelTitleDenom5,
+                    ui->labelTitleDenom10, ui->labelTitleDenom50,
+                    ui->labelTitleDenom100, ui->labelTitleDenom500,
+                    ui->labelTitleDenom1000, ui->labelTitleDenom5000},"text-subtitle");
+    setCssProperty({ui->labelValueDenom1, ui->labelValueDenom5,
+                    ui->labelValueDenom10, ui->labelValueDenom50,
+                    ui->labelValueDenom100, ui->labelValueDenom500,
+                    ui->labelValueDenom1000, ui->labelValueDenom5000},"text-body2");
     ui->layoutDenom->setVisible(false);
 
     // List
-    ui->labelListHistory->setText(tr("Last zPIV Movements"));
     setCssProperty(ui->labelListHistory, "text-title");
 
     //ui->emptyContainer->setVisible(false);
     setCssProperty(ui->pushImgEmpty, "img-empty-privacy");
-    ui->labelEmpty->setText(tr("No transactions yet"));
     setCssProperty(ui->labelEmpty, "text-empty");
 
     // Buttons
@@ -115,18 +74,18 @@ PrivacyWidget::PrivacyWidget(PIVXGUI* parent) :
     ui->containerViewPrivacyChecks->setVisible(false);
     onMintSelected(false);
 
-    ui->btnTotalzPIV->setTitleClassAndText("btn-title-grey", "Total 0 zPIV");
-    ui->btnTotalzPIV->setSubTitleClassAndText("text-subtitle", "Show denominations of zPIV owned.");
+    ui->btnTotalzPIV->setTitleClassAndText("btn-title-grey", tr("Total 0 zPIV"));
+    ui->btnTotalzPIV->setSubTitleClassAndText("text-subtitle", tr("Show denominations of zPIV owned."));
     ui->btnTotalzPIV->setRightIconClass("ic-arrow");
 
-    ui->btnCoinControl->setTitleClassAndText("btn-title-grey", "Coin Control");
-    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select PIV outputs to mint into zPIV.");
+    ui->btnCoinControl->setTitleClassAndText("btn-title-grey", tr("Coin Control"));
+    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", tr("Select PIV outputs to mint into zPIV."));
 
-    ui->btnRescanMints->setTitleClassAndText("btn-title-grey", "Rescan Mints");
-    ui->btnRescanMints->setSubTitleClassAndText("text-subtitle", "Find mints in the blockchain.");
+    ui->btnRescanMints->setTitleClassAndText("btn-title-grey", tr("Rescan Mints"));
+    ui->btnRescanMints->setSubTitleClassAndText("text-subtitle", tr("Find mints in the blockchain."));
 
-    ui->btnResetZerocoin->setTitleClassAndText("btn-title-grey", "Reset Spent zPIV");
-    ui->btnResetZerocoin->setSubTitleClassAndText("text-subtitle", "Reset zerocoin database.");
+    ui->btnResetZerocoin->setTitleClassAndText("btn-title-grey", tr("Reset Spent zPIV"));
+    ui->btnResetZerocoin->setSubTitleClassAndText("text-subtitle", tr("Reset zerocoin database."));
 
     connect(ui->btnTotalzPIV, &OptionButton::clicked, this, &PrivacyWidget::onTotalZpivClicked);
     connect(ui->btnCoinControl, &OptionButton::clicked, this, &PrivacyWidget::onCoinControlClicked);

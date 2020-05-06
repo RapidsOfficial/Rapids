@@ -62,14 +62,14 @@
             <item>
              <widget class="QLabel" name="labelTitle">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Display</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="labelSubtitle1">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Customize the display view options</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -85,7 +85,7 @@
           <item>
            <widget class="QLabel" name="labelTitleLanguage">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Language</string>
             </property>
            </widget>
           </item>
@@ -125,7 +125,7 @@
           <item>
            <widget class="QLabel" name="labelTitleUnit">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Unit to show amount</string>
             </property>
            </widget>
           </item>
@@ -165,7 +165,7 @@
           <item>
            <widget class="QLabel" name="labelTitleDigits">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Decimal digits</string>
             </property>
            </widget>
           </item>
@@ -223,7 +223,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string/>
+           <string>Hide empty balances</string>
           </property>
           <property name="checkable">
            <bool>true</bool>
@@ -238,7 +238,7 @@
           <item>
            <widget class="QLabel" name="labelTitleUrl">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Third party transactions URLs</string>
             </property>
            </widget>
           </item>

@@ -250,7 +250,6 @@ SettingsConsoleWidget::SettingsConsoleWidget(PIVXGUI* _window, QWidget *parent) 
     ui->left->setContentsMargins(10,10,10,10);
 
     // Title
-    ui->labelTitle->setText(tr("Console"));
     setCssTitleScreen(ui->labelTitle);
 
     // Console container
@@ -263,14 +262,11 @@ SettingsConsoleWidget::SettingsConsoleWidget(PIVXGUI* _window, QWidget *parent) 
 
     // Buttons
     ui->pushButton->setProperty("cssClass", "ic-arrow");
-    ui->pushButtonCommandOptions->setText(tr("Command Line Options "));
-    ui->pushButtonOpenDebug->setText(tr("Open Debug File"));
     setCssBtnSecondary(ui->pushButtonOpenDebug);
     setCssBtnSecondary(ui->pushButtonClear);
     setCssBtnSecondary(ui->pushButtonCommandOptions);
 
     setShadow(ui->pushButtonClear);
-    ui->pushButtonClear->setToolTip(tr("Clear history"));
     connect(ui->pushButtonClear, &QPushButton::clicked, [this]{ clear(false); });
     connect(ui->pushButtonOpenDebug, &QPushButton::clicked, [this](){
         if(!GUIUtil::openDebugLogfile()){
