@@ -33,10 +33,10 @@
 #include "invalid.h"
 #include "zpivchain.h"
 
-
 #include <boost/thread.hpp>
 #include <boost/tuple/tuple.hpp>
 
+int64_t nLastCoinStakeSearchTime = 0;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -147,7 +147,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
     pblocktemplate->vTxSigOps.push_back(-1); // updated at end
 
     // ppcoin: if coinstake available add coinstake tx
-    static int64_t nLastCoinStakeSearchTime = GetAdjustedTime(); // only initialized at startup
+    nLastCoinStakeSearchTime = GetAdjustedTime(); // only initialized at startup
 
     if (fProofOfStake) {
         boost::this_thread::interruption_point();

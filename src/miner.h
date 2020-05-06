@@ -28,6 +28,8 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 void IncrementExtraNonce(CBlock* pblock, CBlockIndex* pindexPrev, unsigned int& nExtraNonce);
 /** Check mined block */
 void UpdateTime(CBlockHeader* block, const CBlockIndex* pindexPrev);
+/** Expose time the last template was generated */
+extern int64_t nLastCoinStakeSearchTime;
 
 #ifdef ENABLE_WALLET
     /** Run the miner threads */
