@@ -81,8 +81,9 @@ SettingsMainOptionsWidget::SettingsMainOptionsWidget(PIVXGUI* _window, QWidget *
     connect(ui->pushButtonClean, &QPushButton::clicked, [this] { Q_EMIT discardSettings(); });
 }
 
-void SettingsMainOptionsWidget::onResetClicked(){
-    if(clientModel) {
+void SettingsMainOptionsWidget::onResetClicked()
+{
+    if (clientModel) {
         if (!ask(tr("Reset Options"), tr("You are just about to reset the app\'s options to the default values.\n\nAre you sure?\n")))
             return;
         OptionsModel *optionsModel = clientModel->getOptionsModel();
@@ -96,7 +97,8 @@ void SettingsMainOptionsWidget::onResetClicked(){
     }
 }
 
-void SettingsMainOptionsWidget::setMapper(QDataWidgetMapper *mapper){
+void SettingsMainOptionsWidget::setMapper(QDataWidgetMapper *mapper)
+{
     mapper->addMapping(ui->pushSwitchStart, OptionsModel::StartAtStartup);
     mapper->addMapping(ui->threadsScriptVerif, OptionsModel::ThreadsScriptVerif);
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
@@ -107,6 +109,7 @@ void SettingsMainOptionsWidget::setMapper(QDataWidgetMapper *mapper){
 #endif
 }
 
-SettingsMainOptionsWidget::~SettingsMainOptionsWidget(){
+SettingsMainOptionsWidget::~SettingsMainOptionsWidget()
+{
     delete ui;
 }

@@ -64,11 +64,13 @@ RequestDialog::RequestDialog(QWidget *parent) :
     connect(ui->btnCopyUrl, &QPushButton::clicked, this, &RequestDialog::onCopyUriClicked);
 }
 
-void RequestDialog::setWalletModel(WalletModel *model){
+void RequestDialog::setWalletModel(WalletModel *model)
+{
     this->walletModel = model;
 }
 
-void RequestDialog::setPaymentRequest(bool isPaymentRequest) {
+void RequestDialog::setPaymentRequest(bool isPaymentRequest)
+{
     this->isPaymentRequest = isPaymentRequest;
     if (!this->isPaymentRequest) {
         ui->labelMessage->setText(tr("Creates an address to receive coin delegations and be able to stake them."));
@@ -77,8 +79,9 @@ void RequestDialog::setPaymentRequest(bool isPaymentRequest) {
     }
 }
 
-void RequestDialog::onNextClicked(){
-    if(walletModel) {
+void RequestDialog::onNextClicked()
+{
+    if (walletModel) {
 
         QString labelStr = ui->lineEditLabel->text();
 
@@ -139,16 +142,18 @@ void RequestDialog::onNextClicked(){
     }
 }
 
-void RequestDialog::onCopyClicked(){
-    if(info) {
+void RequestDialog::onCopyClicked()
+{
+    if (info) {
         GUIUtil::setClipboard(info->address);
         res = 2;
         accept();
     }
 }
 
-void RequestDialog::onCopyUriClicked(){
-    if(info) {
+void RequestDialog::onCopyUriClicked()
+{
+    if (info) {
         GUIUtil::setClipboard(GUIUtil::formatBitcoinURI(*info));
         res = 1;
         accept();
@@ -160,20 +165,22 @@ void RequestDialog::showEvent(QShowEvent *event)
     if (ui->lineEditAmount) ui->lineEditAmount->setFocus();
 }
 
-void RequestDialog::updateQr(QString str){
+void RequestDialog::updateQr(QString str)
+{
     QString uri = GUIUtil::formatBitcoinURI(*info);
     ui->labelQrImg->setText("");
     QString error;
     QPixmap pixmap = encodeToQr(uri, error);
-    if(!pixmap.isNull()){
+    if (!pixmap.isNull()) {
         qrImage = &pixmap;
         ui->labelQrImg->setPixmap(qrImage->scaled(ui->labelQrImg->width(), ui->labelQrImg->height()));
-    }else{
+    } else {
         ui->labelQrImg->setText(!error.isEmpty() ? error : "Error encoding address");
     }
 }
 
-void RequestDialog::inform(QString text){
+void RequestDialog::inform(QString text)
+{
     if (!snackBar)
         snackBar = new SnackBar(nullptr, this);
     snackBar->setText(text);
@@ -181,6 +188,7 @@ void RequestDialog::inform(QString text){
     openDialog(snackBar, this);
 }
 
-RequestDialog::~RequestDialog(){
+RequestDialog::~RequestDialog()
+{
     delete ui;
 }

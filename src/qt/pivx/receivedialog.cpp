@@ -45,23 +45,25 @@ ReceiveDialog::ReceiveDialog(QWidget *parent) :
     connect(ui->btnSave, &QPushButton::clicked, this, &ReceiveDialog::onCopy);
 }
 
-void ReceiveDialog::updateQr(QString address){
-    if(!info) info = new SendCoinsRecipient();
+void ReceiveDialog::updateQr(QString address)
+{
+    if (!info) info = new SendCoinsRecipient();
     info->address = address;
     QString uri = GUIUtil::formatBitcoinURI(*info);
     ui->labelQrImg->setText("");
     ui->labelAddress->setText(address);
     QString error;
     QPixmap pixmap = encodeToQr(uri, error);
-    if(!pixmap.isNull()){
+    if (!pixmap.isNull()) {
         qrImage = &pixmap;
         ui->labelQrImg->setPixmap(qrImage->scaled(ui->labelQrImg->width(), ui->labelQrImg->height()));
-    }else{
+    } else {
         ui->labelQrImg->setText(!error.isEmpty() ? error : "Error encoding address");
     }
 }
 
-void ReceiveDialog::onCopy(){
+void ReceiveDialog::onCopy()
+{
     GUIUtil::setClipboard(info->address);
     accept();
 }

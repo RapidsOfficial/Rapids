@@ -69,7 +69,7 @@ TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, const QSt
 
         connect(ui->btnCancel, &QPushButton::clicked, this, &TxDetailDialog::close);
         connect(ui->btnSave, &QPushButton::clicked, [this](){acceptTx();});
-    }else{
+    } else {
         ui->labelTitle->setText(tr("Transaction Details"));
         ui->containerButtons->setVisible(false);
     }
@@ -84,7 +84,8 @@ void TxDetailDialog::showEvent(QShowEvent *event)
     setFocus();
 }
 
-void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index){
+void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index)
+{
     this->model = model;
     TransactionRecord *rec = static_cast<TransactionRecord*>(index.internalPointer());
     QDateTime date = index.data(TransactionTableModel::DateRole).toDateTime();
@@ -94,7 +95,7 @@ void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index){
     ui->textAmount->setText(amountText);
 
     const CWalletTx* tx = model->getTx(rec->hash);
-    if(tx) {
+    if (tx) {
         this->txHash = rec->hash;
         QString hash = QString::fromStdString(tx->GetHash().GetHex());
         ui->textId->setText(hash.left(20) + "..." + hash.right(20));
@@ -168,7 +169,7 @@ void TxDetailDialog::onInputsClicked()
         if (!inputsLoaded) {
             inputsLoaded = true;
             const CWalletTx* tx = (this->tx) ? this->tx->getTransaction() : model->getTx(this->txHash);
-            if(tx) {
+            if (tx) {
                 ui->gridInputs->setMinimumHeight(50 + (50 * tx->vin.size()));
                 int i = 1;
                 for (const CTxIn &in : tx->vin) {
@@ -243,12 +244,12 @@ void TxDetailDialog::keyPressEvent(QKeyEvent *event)
 
 void TxDetailDialog::closeDialog()
 {
-    if(snackBar && snackBar->isVisible()) snackBar->hide();
+    if (snackBar && snackBar->isVisible()) snackBar->hide();
     close();
 }
 
 TxDetailDialog::~TxDetailDialog()
 {
-    if(snackBar) delete snackBar;
+    if (snackBar) delete snackBar;
     delete ui;
 }

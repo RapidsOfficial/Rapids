@@ -340,7 +340,7 @@ bool MasterNodeWizardDialog::createMN()
 
                 returnStr = tr("Master node created! Wait %1 confirmations before starting it.").arg(MASTERNODE_MIN_CONFIRMATIONS);
                 return true;
-            } else{
+            } else {
                 returnStr = tr("masternode.conf file doesn't exists");
             }
         } else {

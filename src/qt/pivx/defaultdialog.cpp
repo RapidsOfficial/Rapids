@@ -43,15 +43,15 @@ void DefaultDialog::showEvent(QShowEvent *event)
 
 void DefaultDialog::setText(const QString& title, const QString& message, const QString& okBtnText, const QString& cancelBtnText)
 {
-    if(!okBtnText.isNull()) ui->btnSave->setText(okBtnText);
-    if(!cancelBtnText.isNull()){
+    if (!okBtnText.isNull()) ui->btnSave->setText(okBtnText);
+    if (!cancelBtnText.isNull()) {
         ui->btnCancel->setVisible(true);
         ui->btnCancel->setText(cancelBtnText);
-    }else{
+    } else {
         ui->btnCancel->setVisible(false);
     }
-    if(!message.isNull()) ui->labelMessage->setText(message);
-    if(!title.isNull()) ui->labelTitle->setText(title);
+    if (!message.isNull()) ui->labelMessage->setText(message);
+    if (!title.isNull()) ui->labelTitle->setText(title);
 }
 
 void DefaultDialog::accept()
