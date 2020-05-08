@@ -43,9 +43,10 @@ bool CCoinControlWidgetItem::operator<(const QTreeWidgetItem &other) const {
 }
 
 
-CoinControlDialog::CoinControlDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
+CoinControlDialog::CoinControlDialog(QWidget* parent, bool _forDelegation) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
                                                         ui(new Ui::CoinControlDialog),
-                                                        model(0)
+                                                        model(0),
+                                                        forDelegation(_forDelegation)
 {
     ui->setupUi(this);
 
@@ -568,7 +569,6 @@ void CoinControlDialog::updateLabels()
     bool fDust = false;
     Q_FOREACH (const CAmount& amount, payAmounts) {
         nPayAmount += amount;
-
         if (amount > 0) {
             CTxOut txout(amount, (CScript)std::vector<unsigned char>(24, 0));
             if (txout.IsDust(::minRelayTxFee))
@@ -626,12 +626,22 @@ void CoinControlDialog::updateLabels()
                 nBytesInputs += 148; // in all error cases, simply assume 148 here
         } else
             nBytesInputs += 148;
+
+        // Additional byte for P2CS
+        if (out.tx->vout[out.i].scriptPubKey.IsPayToColdStaking())
+            nBytesInputs++;
     }
 
     // calculation
+    const int P2PKH_OUT_SIZE = 34;
+    const int P2CS_OUT_SIZE = 61;
     if (nQuantity > 0) {
-        // Bytes
-        nBytes = nBytesInputs + ((payAmounts.size() > 0 ? CoinControlDialog::payAmounts.size() + 1 : 2) * 34) + 10; // always assume +1 output for change here
+        // Bytes: nBytesInputs + (num_of_outputs * bytes_per_output)
+        nBytes = nBytesInputs + std::max(1, payAmounts.size()) * (forDelegation ? P2CS_OUT_SIZE : P2PKH_OUT_SIZE);
+        // always assume +1 (p2pkh) output for change here
+        nBytes += P2PKH_OUT_SIZE;
+        // nVersion, nLockTime and vin/vout len sizes
+        nBytes += 10;
 
         // Priority
         double mempoolEstimatePriority = mempool.estimatePriority(nTxConfirmTarget);
@@ -666,7 +676,7 @@ void CoinControlDialog::updateLabels()
             }
 
             if (nChange == 0)
-                nBytes -= 34;
+                nBytes -= P2PKH_OUT_SIZE;
         }
 
         // after fee

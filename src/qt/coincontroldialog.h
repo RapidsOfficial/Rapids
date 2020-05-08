@@ -44,7 +44,7 @@ class CoinControlDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CoinControlDialog(QWidget* parent = nullptr);
+    explicit CoinControlDialog(QWidget* parent = nullptr, bool _forDelegation = false);
     ~CoinControlDialog();
 
     void setModel(WalletModel* model);
@@ -65,6 +65,7 @@ private:
     WalletModel* model;
     int sortColumn;
     Qt::SortOrder sortOrder;
+    bool forDelegation;
     bool fSelectAllToggled{true};     // false when pushButtonSelectAll text is "Unselect All"
     QList<CAmount> payAmounts{};
 
