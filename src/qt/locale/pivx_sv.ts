@@ -468,8 +468,8 @@ for staking</source>
         <translation>text etikett</translation>
     </message>
     <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (pivx.conf).</source>
-        <translation>Alla transaktioner kommer inte visas. För att visa alla transaktioner behöver du sätta txindex=1 i konfigurationsfilen (pivx.conf).</translation>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
+        <translation>Alla transaktioner kommer inte visas. För att visa alla transaktioner behöver du sätta txindex=1 i konfigurationsfilen (rapids.conf).</translation>
     </message>
 </context>
 <context>
@@ -1662,14 +1662,14 @@ Please wait few more minutes.</source>
 on a remote server to your clipboard.
 
 
-You will only have to paste the data in the pivx.conf file
+You will only have to paste the data in the rapids.conf file
 of your remote server and start it, then start the Masternode using
 this controller wallet (select the Masternode in the list and press "start").
 </source>
         <translation>Du är precis på väg att exportera nödvändig data för att köra en Masternode
 på en server.
 
-Du behöver bara infoga data i filen pivx.conf
+Du behöver bara infoga data i filen rapids.conf
 på din server och starta den och starta sedan Masternode med
 denna plånbok (välj Masternode i listan och tryck på "start").</translation>
     </message>
@@ -2218,8 +2218,8 @@ Adress: %4
         <translation>Ogiltig betalningsadress %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
-        <translation>Kan ej starta pivx: klicka-för-att-betala hanterare</translation>
+        <source>Cannot start rapids: click-to-pay handler</source>
+        <translation>Kan ej starta rapids: klicka-för-att-betala hanterare</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>

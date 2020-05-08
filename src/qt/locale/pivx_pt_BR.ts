@@ -469,8 +469,8 @@ para 'Staking'</translation>
         <translation>Rótulo</translation>
     </message>
     <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (pivx.conf).</source>
-        <translation>Nem todas as transações serão exibidas. Para visualizar todas as transações você precisa definir txindex=1 no arquivo de configuração (pivx.conf). </translation>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
+        <translation>Nem todas as transações serão exibidas. Para visualizar todas as transações você precisa definir txindex=1 no arquivo de configuração (rapids.conf). </translation>
     </message>
 </context>
 <context>
@@ -1618,7 +1618,7 @@ Aguarde mais alguns minutos.</translation>
 on a remote server to your clipboard.
 
 
-You will only have to paste the data in the pivx.conf file
+You will only have to paste the data in the rapids.conf file
 of your remote server and start it, then start the Masternode using
 this controller wallet (select the Masternode in the list and press "start").
 </source>
@@ -1626,7 +1626,7 @@ this controller wallet (select the Masternode in the list and press "start").
 em um servidor remoto para a área de transferência.
 
 
-Você só precisará transferir os dados no arquivo pivx.conf
+Você só precisará transferir os dados no arquivo rapids.conf
 do servidor remoto e inicie-o, reinicie o Masternode usando
 esta carteira do controlador (selecione o Masternode na lista e pressione "Iniciar").
 
