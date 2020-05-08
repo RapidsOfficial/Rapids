@@ -84,8 +84,6 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
     /* Containers */
     setCssProperty(ui->left, "container");
     ui->left->setContentsMargins(0,20,0,20);
-    setCssProperty(ui->right, "container-right");
-    ui->right->setContentsMargins(20,20,20,20);
 
     /* Light Font */
     QFont fontLight;
@@ -104,12 +102,6 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
     setCssBtnPrimary(ui->pushButtonSave);
     setCssBtnPrimary(ui->pushButtonStartAll);
     setCssBtnPrimary(ui->pushButtonStartMissing);
-
-    /* Options */
-    ui->btnAbout->setTitleClassAndText("btn-title-grey", "What is a Masternode?");
-    ui->btnAbout->setSubTitleClassAndText("text-subtitle", "FAQ explaining what Masternodes are");
-    ui->btnAboutController->setTitleClassAndText("btn-title-grey", "What is a Controller?");
-    ui->btnAboutController->setSubTitleClassAndText("text-subtitle", "FAQ explaining what is a Masternode Controller");
 
     setCssProperty(ui->listMn, "container");
     ui->listMn->setItemDelegate(delegate);
@@ -131,8 +123,6 @@ MasterNodesWidget::MasterNodesWidget(PIVXGUI *parent) :
         onStartAllClicked(REQUEST_START_MISSING);
     });
     connect(ui->listMn, &QListView::clicked, this, &MasterNodesWidget::onMNClicked);
-    connect(ui->btnAbout, &OptionButton::clicked, [this](){window->openFAQ(9);});
-    connect(ui->btnAboutController, &OptionButton::clicked, [this](){window->openFAQ(10);});
 }
 
 void MasterNodesWidget::showEvent(QShowEvent *event)
@@ -484,7 +474,7 @@ void MasterNodesWidget::onCreateMNClicked()
     }
 
     if (walletModel->getBalance() <= (COIN * 10000)) {
-        inform(tr("Not enough balance to create a masternode, 10,000 RPD required."));
+        inform(tr("Not enough balance to create a masternode, 10,000,000 RPD required."));
         return;
     }
     showHideOp(true);
