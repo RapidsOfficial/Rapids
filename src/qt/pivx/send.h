@@ -103,7 +103,7 @@ private:
     void showHideCheckBoxDelegations();
     void updateEntryLabels(QList<SendCoinsRecipient> recipients);
     void setCustomFeeSelected(bool isSelected, const CAmount& customFee = DEFAULT_TRANSACTION_FEE);
-
+    void setCoinControlPayAmounts();
 };
 
 #endif // SEND_H

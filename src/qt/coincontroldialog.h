@@ -52,10 +52,11 @@ public:
     void updateLabels();
     void updateView();
     void refreshDialog();
+    void clearPayAmounts();
+    void addPayAmount(const CAmount& amount);
 
     static QString getPriorityLabel(double dPriority, double mempoolEstimatePriority);
 
-    static QList<CAmount> payAmounts;
     static CCoinControl* coinControl;
 
 private:
@@ -65,6 +66,7 @@ private:
     int sortColumn;
     Qt::SortOrder sortOrder;
     bool fSelectAllToggled{true};     // false when pushButtonSelectAll text is "Unselect All"
+    QList<CAmount> payAmounts{};
 
     QMenu* contextMenu;
     QTreeWidgetItem* contextMenuItem;

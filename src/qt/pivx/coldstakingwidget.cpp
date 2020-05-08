@@ -536,12 +536,20 @@ void ColdStakingWidget::onCoinControlClicked()
             } else {
                 coinControlDialog->refreshDialog();
             }
+            setCoinControlPayAmounts();
             coinControlDialog->exec();
             ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
         } else {
             inform(tr("You don't have any %1 to select.").arg(CURRENCY_UNIT.c_str()));
         }
     }
+}
+
+void ColdStakingWidget::setCoinControlPayAmounts()
+{
+    if (!coinControlDialog) return;
+    coinControlDialog->clearPayAmounts();
+    coinControlDialog->addPayAmount(sendMultiRow->getAmountValue());
 }
 
 void ColdStakingWidget::onColdStakeClicked()

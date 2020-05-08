@@ -122,6 +122,7 @@ private:
     void onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses);
     void updateStakingTotalLabel();
     void sortAddresses();
+    void setCoinControlPayAmounts();
 };
 
 #endif // COLDSTAKINGWIDGET_H
