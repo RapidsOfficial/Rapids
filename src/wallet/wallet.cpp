@@ -1787,7 +1787,7 @@ void CWalletTx::RelayWalletTransaction(std::string strCommand)
             uint256 hash = GetHash();
             LogPrintf("Relaying wtx %s\n", hash.ToString());
 
-            if (strCommand == "ix") {
+            if (strCommand == NetMsgType::IX) {
                 mapTxLockReq.insert(std::make_pair(hash, (CTransaction) * this));
                 CreateNewLock(((CTransaction) * this));
                 RelayTransactionLockReq((CTransaction) * this, true);

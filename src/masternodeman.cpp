@@ -718,7 +718,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
 
     LOCK(cs_process_message);
 
-    if (strCommand == "mnb") { //Masternode Broadcast
+    if (strCommand == NetMsgType::MNBROADCAST) { //Masternode Broadcast
         CMasternodeBroadcast mnb;
         vRecv >> mnb;
 
@@ -759,7 +759,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         }
     }
 
-    else if (strCommand == "mnp") { //Masternode Ping
+    else if (strCommand == NetMsgType::MNPING) { //Masternode Ping
         CMasternodePing mnp;
         vRecv >> mnp;
 
@@ -834,7 +834,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         }
 
         if (vin == CTxIn()) {
-            pfrom->PushMessage("ssc", MASTERNODE_SYNC_LIST, nInvCount);
+            pfrom->PushMessage(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_LIST, nInvCount);
             LogPrint(BCLog::MASTERNODE, "dseg - Sent %d Masternode entries to peer %i\n", nInvCount, pfrom->GetId());
         }
     }

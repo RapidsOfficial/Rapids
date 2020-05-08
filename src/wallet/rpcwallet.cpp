@@ -768,7 +768,7 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         LogPrintf("SendMoney() : %s\n", strError);
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
     }
-    if (!pwalletMain->CommitTransaction(wtxNew, reservekey, (!fUseIX ? "tx" : "ix")))
+    if (!pwalletMain->CommitTransaction(wtxNew, reservekey, (!fUseIX ? NetMsgType::TX : NetMsgType::IX)))
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
 }
 
@@ -945,7 +945,7 @@ UniValue delegatestake(const UniValue& params, bool fHelp)
     CReserveKey reservekey(pwalletMain);
     UniValue ret = CreateColdStakeDelegation(params, wtx, reservekey);
 
-    if (!pwalletMain->CommitTransaction(wtx, reservekey, "tx"))
+    if (!pwalletMain->CommitTransaction(wtx, reservekey, NetMsgType::TX))
         throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
 
     ret.push_back(Pair("txid", wtx.GetHash().GetHex()));
