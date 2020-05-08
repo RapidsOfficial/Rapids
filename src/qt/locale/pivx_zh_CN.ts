@@ -470,8 +470,8 @@ for staking</source>
         <translation>文本标签</translation>
     </message>
     <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (pivx.conf).</source>
-        <translation>并不显示所有的交易。要查看所有交易，您需要在配置文件(pivx.conf)中设置txindex=1。</translation>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
+        <translation>并不显示所有的交易。要查看所有交易，您需要在配置文件(rapids.conf)中设置txindex=1。</translation>
     </message>
 </context>
 <context>
@@ -1866,7 +1866,7 @@ Please wait few more minutes.</source>
 on a remote server to your clipboard.
 
 
-You will only have to paste the data in the pivx.conf file
+You will only have to paste the data in the rapids.conf file
 of your remote server and start it, then start the Masternode using
 this controller wallet (select the Masternode in the list and press "start").
 </source>
@@ -2447,7 +2447,7 @@ Address: %4
         <translation>无效支付地址%1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
+        <source>Cannot start rapids: click-to-pay handler</source>
         <translation>无法启动pivx:点击支付处理程序</translation>
     </message>
     <message>
@@ -4621,7 +4621,7 @@ PIVX零币(zRPD)技术文件
         <translation>无法打开备份文件夹</translation>
     </message>
     <message>
-        <source>Unable to open pivx.conf with default application</source>
+        <source>Unable to open rapids.conf with default application</source>
         <translation>无法使用默认应用程序打开pivx.conf</translation>
     </message>
     <message>

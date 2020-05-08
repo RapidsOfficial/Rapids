@@ -591,7 +591,7 @@ for staking</source>
     </message>
     <message>
         <location filename="../blockexplorer.cpp" line="+480"/>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (pivx.conf).</source>
+        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2316,7 +2316,7 @@ Please wait few more minutes.</source>
 on a remote server to your clipboard.
 
 
-You will only have to paste the data in the pivx.conf file
+You will only have to paste the data in the rapids.conf file
 of your remote server and start it, then start the Masternode using
 this controller wallet (select the Masternode in the list and press &quot;start&quot;).
 </source>
@@ -3034,7 +3034,7 @@ Address: %4
     </message>
     <message>
         <location line="-104"/>
-        <source>Cannot start pivx: click-to-pay handler</source>
+        <source>Cannot start rapids: click-to-pay handler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5354,7 +5354,7 @@ Verify that you have installed a predetermined text editor.</source>
                            you can disable the automatic minting in your RPD wallet by
                            going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
                            If you are not making use of the RPD-QT or GUI you can simply open
-                           your pivx.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
+                           your rapids.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            You can read more about zRPD in the
@@ -5684,7 +5684,7 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>Unable to open pivx.conf with default application</source>
+        <source>Unable to open rapids.conf with default application</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
