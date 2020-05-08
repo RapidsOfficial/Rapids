@@ -5,10 +5,9 @@
 #include "qt/pivx/defaultdialog.h"
 #include "qt/pivx/forms/ui_defaultdialog.h"
 #include "guiutil.h"
-#include <QKeyEvent>
 
 DefaultDialog::DefaultDialog(QWidget *parent) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::DefaultDialog)
 {
     ui->setupUi(this);
@@ -35,12 +34,6 @@ DefaultDialog::DefaultDialog(QWidget *parent) :
     connect(ui->btnSave, &QPushButton::clicked, this, &DefaultDialog::accept);
 }
 
-void DefaultDialog::showEvent(QShowEvent *event)
-{
-    setFocus();
-}
-
-
 void DefaultDialog::setText(const QString& title, const QString& message, const QString& okBtnText, const QString& cancelBtnText)
 {
     if (!okBtnText.isNull()) ui->btnSave->setText(okBtnText);
@@ -58,17 +51,6 @@ void DefaultDialog::accept()
 {
     this->isOk = true;
     QDialog::accept();
-}
-
-void DefaultDialog::keyPressEvent(QKeyEvent *event)
-{
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-        // Detect Enter key press
-        if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) accept();
-        // Detect Esc key press
-        if (ke->key() == Qt::Key_Escape) close();
-    }
 }
 
 DefaultDialog::~DefaultDialog()
