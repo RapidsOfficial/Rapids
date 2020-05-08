@@ -49,11 +49,10 @@ public:
 
     void setModel(WalletModel* model);
     void updateDialogLabels();
+    void updateLabels();
     void updateView();
     void refreshDialog();
 
-    // static because also called from sendcoinsdialog
-    static void updateLabels(WalletModel*, QDialog*);
     static QString getPriorityLabel(double dPriority, double mempoolEstimatePriority);
 
     static QList<CAmount> payAmounts;
