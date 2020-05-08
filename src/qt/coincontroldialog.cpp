@@ -33,7 +33,6 @@
 #include <QTreeWidget>
 
 QList<CAmount> CoinControlDialog::payAmounts;
-int CoinControlDialog::nSplitBlockDummy;
 CCoinControl* CoinControlDialog::coinControl = new CCoinControl();
 
 
@@ -568,13 +567,11 @@ void CoinControlDialog::updateLabels()
     // nPayAmount
     CAmount nPayAmount = 0;
     bool fDust = false;
-    CMutableTransaction txDummy;
     Q_FOREACH (const CAmount& amount, CoinControlDialog::payAmounts) {
         nPayAmount += amount;
 
         if (amount > 0) {
             CTxOut txout(amount, (CScript)std::vector<unsigned char>(24, 0));
-            txDummy.vout.push_back(txout);
             if (txout.IsDust(::minRelayTxFee))
                 fDust = true;
         }
@@ -635,7 +632,7 @@ void CoinControlDialog::updateLabels()
     // calculation
     if (nQuantity > 0) {
         // Bytes
-        nBytes = nBytesInputs + ((CoinControlDialog::payAmounts.size() > 0 ? CoinControlDialog::payAmounts.size() + std::max(1, CoinControlDialog::nSplitBlockDummy) : 2) * 34) + 10; // always assume +1 output for change here
+        nBytes = nBytesInputs + ((CoinControlDialog::payAmounts.size() > 0 ? CoinControlDialog::payAmounts.size() + 1 : 2) * 34) + 10; // always assume +1 output for change here
 
         // Priority
         double mempoolEstimatePriority = mempool.estimatePriority(nTxConfirmTarget);
