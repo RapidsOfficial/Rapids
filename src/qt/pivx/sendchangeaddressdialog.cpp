@@ -9,7 +9,7 @@
 #include "qt/pivx/qtutils.h"
 
 SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* model) :
-    QDialog(parent),
+    FocusedDialog(parent),
     walletModel(model),
     ui(new Ui::SendChangeAddressDialog)
 {
@@ -37,7 +37,7 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* m
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
     connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::reset);
-    connect(ui->btnSave, &QPushButton::clicked, this, &SendChangeAddressDialog::save);
+    connect(ui->btnSave, &QPushButton::clicked, this, &SendChangeAddressDialog::accept);
 }
 
 void SendChangeAddressDialog::setAddress(QString address)
@@ -66,13 +66,13 @@ void SendChangeAddressDialog::reset()
     close();
 }
 
-void SendChangeAddressDialog::save()
+void SendChangeAddressDialog::accept()
 {
     // validate address
     if (!walletModel->validateAddress(ui->lineEditAddress->text())) {
         inform(tr("Invalid address"));
     } else {
-        accept();
+        QDialog::accept();
     }
 }
 

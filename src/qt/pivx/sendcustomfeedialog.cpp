@@ -12,7 +12,7 @@
 #include <QComboBox>
 
 SendCustomFeeDialog::SendCustomFeeDialog(PIVXGUI* parent, WalletModel* model) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::SendCustomFeeDialog),
     walletModel(model)
 {
@@ -60,6 +60,7 @@ SendCustomFeeDialog::SendCustomFeeDialog(PIVXGUI* parent, WalletModel* model) :
 
 void SendCustomFeeDialog::showEvent(QShowEvent* event)
 {
+    FocusedDialog::showEvent(event);
     updateFee();
     if (walletModel->hasWalletCustomFee()) {
         ui->checkBoxCustom->setChecked(true);

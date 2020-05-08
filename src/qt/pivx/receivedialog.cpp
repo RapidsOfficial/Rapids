@@ -9,7 +9,7 @@
 #include <QFile>
 
 ReceiveDialog::ReceiveDialog(QWidget *parent) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::ReceiveDialog)
 {
     ui->setupUi(this);
