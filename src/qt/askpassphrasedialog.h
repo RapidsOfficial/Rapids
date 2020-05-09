@@ -66,7 +66,7 @@ private:
     bool fCapsLock;
     SecureString newpassCache = "";
 
-    void getWarnings();
+    void updateWarningsLabel();
     void run(int type) override;
     void onError(QString error, int type) override;
     QCheckBox *btnWatch;

@@ -272,7 +272,7 @@ bool AskPassphraseDialog::event(QEvent* event)
             fCapsLock = !fCapsLock;
         }
 
-        getWarnings();
+        updateWarningsLabel();
 
         // Detect Enter key press
         if ((ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) && ui->pushButtonOk->isEnabled()) {
@@ -303,7 +303,7 @@ bool AskPassphraseDialog::eventFilter(QObject* object, QEvent* event)
             }
         }
     }
-    getWarnings();
+    updateWarningsLabel();
 
     return QDialog::eventFilter(object, event);
 }
@@ -320,7 +320,7 @@ bool AskPassphraseDialog::openStandardDialog(QString title, QString body, QStrin
     return ret;
 }
 
-void AskPassphraseDialog::getWarnings()
+void AskPassphraseDialog::updateWarningsLabel()
 {
     // Merge warning labels together if there's two warnings
     bool validPassphrases = false;
