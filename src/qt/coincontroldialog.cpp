@@ -140,9 +140,9 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool _forDelegation) : QDi
     connect(ui->pushButtonDust, &QPushButton::clicked, this, &CoinControlDialog::clipboardLowOutput);
     connect(ui->pushButtonChange, &QPushButton::clicked, this, &CoinControlDialog::clipboardChange);
 
-    if (ui->pushButtonSelectAll->isChecked()){
+    if (ui->pushButtonSelectAll->isChecked()) {
         ui->pushButtonSelectAll->setText(tr("Unselect all"));
-    }else{
+    } else {
         ui->pushButtonSelectAll->setText(tr("Select all"));
     }
 
@@ -224,19 +224,15 @@ void CoinControlDialog::buttonSelectAllClicked()
 {
     // "Select all": if some entry is unchecked, then check it
     // "Unselect all": if some entry is checked, then uncheck it
-    Qt::CheckState wantedState = fSelectAllToggled ? Qt::Checked : Qt::Unchecked;
+    const bool fSelectAll = ui->pushButtonSelectAll->isChecked();
+    Qt::CheckState wantedState = fSelectAll ? Qt::Checked : Qt::Unchecked;
     ui->treeWidget->setEnabled(false);
     for (int i = 0; i < ui->treeWidget->topLevelItemCount(); i++)
         if (ui->treeWidget->topLevelItem(i)->checkState(COLUMN_CHECKBOX) != wantedState)
             ui->treeWidget->topLevelItem(i)->setCheckState(COLUMN_CHECKBOX, wantedState);
     ui->treeWidget->setEnabled(true);
-    if (!fSelectAllToggled) {
+    if (!fSelectAll)
         coinControl->UnSelectAll(); // just to be sure
-        ui->pushButtonSelectAll->setText(tr("Select all"));
-    } else {
-        ui->pushButtonSelectAll->setText(tr("Unselect all"));
-    }
-    fSelectAllToggled = !fSelectAllToggled;
     updateLabels();
     updateDialogLabels();
 }
@@ -632,6 +628,11 @@ void CoinControlDialog::updateLabels()
             nBytesInputs++;
     }
 
+    // update SelectAll button state
+    // if inputs selected > inputs unselected, set checked (label "Unselect All")
+    // if inputs selected <= inputs unselected, set unchecked (label "Select All")
+    updatePushButtonSelectAll(coinControl->QuantitySelected() * 2 > nSelectableInputs);
+
     // calculation
     const int P2PKH_OUT_SIZE = 34;
     const int P2CS_OUT_SIZE = 61;
@@ -773,6 +774,7 @@ void CoinControlDialog::updateView()
     int nDisplayUnit = model->getOptionsModel()->getDisplayUnit();
 //    double mempoolEstimatePriority = mempool.estimatePriority(nTxConfirmTarget);
 
+    nSelectableInputs = 0;
     std::map<QString, std::vector<COutput>> mapCoins;
     model->listCoins(mapCoins);
 
@@ -805,7 +807,7 @@ void CoinControlDialog::updateView()
         int nChildren = 0;
         int nInputSum = 0;
         for(const COutput& out: coins.second) {
-            isminetype mine = pwalletMain->IsMine(out.tx->vout[out.i]);
+            ++nSelectableInputs;
             int nInputSize = 0;
             nSum += out.tx->vout[out.i].nValue;
             nChildren++;
@@ -819,12 +821,12 @@ void CoinControlDialog::updateView()
             itemOutput->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
 
             // address
-            const bool fDelegated = (bool)(mine & ISMINE_SPENDABLE_DELEGATED);
+            const bool isP2CS = out.tx->vout[out.i].scriptPubKey.IsPayToColdStaking();
             CTxDestination outputAddress;
             CTxDestination outputAddressStaker;
             QString sAddress = "";
             bool haveDest = false;
-            if (fDelegated) {
+            if (isP2CS) {
                 txnouttype type; std::vector<CTxDestination> addresses; int nRequired;
                 haveDest = (ExtractDestinations(out.tx->vout[out.i].scriptPubKey, type, addresses, nRequired)
                             && addresses.size() == 2);
@@ -891,6 +893,7 @@ void CoinControlDialog::updateView()
             // disable locked coins
             const bool isLockedCoin = model->isLockedCoin(txhash, out.i);
             if (isLockedCoin) {
+                --nSelectableInputs;
                 COutPoint outpt(txhash, out.i);
                 coinControl->UnSelect(outpt); // just to be sure
                 itemOutput->setDisabled(true);
@@ -902,7 +905,7 @@ void CoinControlDialog::updateView()
                 itemOutput->setCheckState(COLUMN_CHECKBOX, Qt::Checked);
 
             // outputs delegated (for cold staking)
-            if (fDelegated) {
+            if (isP2CS) {
                 itemOutput->setData(COLUMN_CHECKBOX, Qt::UserRole, QString("Delegated"));
                 if (!isLockedCoin)
                     itemOutput->setIcon(COLUMN_CHECKBOX, QIcon("://ic-check-cold-staking-off"));
@@ -959,4 +962,10 @@ void CoinControlDialog::clearPayAmounts()
 void CoinControlDialog::addPayAmount(const CAmount& amount)
 {
     payAmounts.push_back(amount);
+}
+
+void CoinControlDialog::updatePushButtonSelectAll(bool checked)
+{
+    ui->pushButtonSelectAll->setChecked(checked);
+    ui->pushButtonSelectAll->setText(checked ? tr("Unselect all") : tr("Select All"));
 }
