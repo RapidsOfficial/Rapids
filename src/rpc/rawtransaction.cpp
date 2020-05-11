@@ -412,18 +412,18 @@ UniValue createrawtransaction(const UniValue& params, bool fHelp)
         rawTx.vin.push_back(in);
     }
 
-    std::set<CBitcoinAddress> setAddress;
+    std::set<CTxDestination> setAddress;
     std::vector<std::string> addrList = sendTo.getKeys();
     for (const std::string& name_ : addrList) {
-        CBitcoinAddress address(name_);
-        if (!address.IsValid())
+        CTxDestination address = DecodeDestination(name_);
+        if (!IsValidDestination(address))
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid PIVX address: ")+name_);
 
         if (setAddress.count(address))
             throw JSONRPCError(RPC_INVALID_PARAMETER, std::string("Invalid parameter, duplicated address: ")+name_);
         setAddress.insert(address);
 
-        CScript scriptPubKey = GetScriptForDestination(address.Get());
+        CScript scriptPubKey = GetScriptForDestination(address);
         CAmount nAmount = AmountFromValue(sendTo[name_]);
 
         CTxOut out(nAmount, scriptPubKey);
@@ -979,7 +979,7 @@ UniValue createrawzerocoinspend(const UniValue& params, bool fHelp)
     CReserveKey reserveKey(pwalletMain);
     std::vector<CDeterministicMint> vNewMints;
     std::list<std::pair<CTxDestination, CAmount>> outputs;
-    if (!IsValidDestination(dest)) {
+    if (IsValidDestination(dest)) {
         outputs.push_back(std::pair<CTxDestination, CAmount>(dest, nAmount));
     }
     if (!pwalletMain->CreateZCPublicSpendTransaction(nAmount, rawTx, reserveKey, receipt, vMintsSelected, vNewMints, outputs, nullptr))

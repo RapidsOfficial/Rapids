@@ -486,7 +486,7 @@ bool SendWidget::sendZpiv(QList<SendCoinsRecipient> recipients)
 
     std::string changeAddress = "";
     if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
-        changeAddress = CBitcoinAddress(CoinControlDialog::coinControl->destChange).ToString();
+        changeAddress = EncodeDestination(CoinControlDialog::coinControl->destChange);
     } else {
         changeAddress = walletModel->getAddressTableModel()->getAddressToShow().toStdString();
     }

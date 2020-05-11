@@ -383,14 +383,14 @@ UniValue validateaddress(const UniValue& params, bool fHelp)
     LOCK(cs_main);
 #endif
 
-    CBitcoinAddress address(params[0].get_str());
-    bool isValid = address.IsValid();
+    std::string currentAddress = params[0].get_str();
+    bool isStakingAddress = false;
+    CTxDestination dest = DecodeDestination(currentAddress, isStakingAddress);
+    bool isValid = IsValidDestination(dest);
 
     UniValue ret(UniValue::VOBJ);
     ret.push_back(Pair("isvalid", isValid));
     if (isValid) {
-        CTxDestination dest = address.Get();
-        std::string currentAddress = address.ToString();
         ret.push_back(Pair("address", currentAddress));
         CScript scriptPubKey = GetScriptForDestination(dest);
         ret.push_back(Pair("scriptPubKey", HexStr(scriptPubKey.begin(), scriptPubKey.end())));
@@ -398,7 +398,7 @@ UniValue validateaddress(const UniValue& params, bool fHelp)
 #ifdef ENABLE_WALLET
         isminetype mine = pwalletMain ? IsMine(*pwalletMain, dest) : ISMINE_NO;
         ret.push_back(Pair("ismine", bool(mine & (ISMINE_SPENDABLE_ALL | ISMINE_COLD))));
-        ret.push_back(Pair("isstaking", address.IsStakingAddress()));
+        ret.push_back(Pair("isstaking", isStakingAddress));
         ret.push_back(Pair("iswatchonly", bool(mine & ISMINE_WATCH_ONLY)));
         UniValue detail = boost::apply_visitor(DescribeAddressVisitor(mine), dest);
         ret.pushKVs(detail);

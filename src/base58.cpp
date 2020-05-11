@@ -375,6 +375,12 @@ bool IsValidDestinationString(const std::string& str, bool fStaking, const CChai
     return IsValidDestinationString(str, fStaking);
 }
 
+bool IsValidDestinationString(const std::string& str)
+{
+    CBitcoinAddress address(str);
+    return address.IsValid();
+}
+
 bool IsValidDestinationString(const std::string& str, bool isStaking)
 {
     CBitcoinAddress address(str);
