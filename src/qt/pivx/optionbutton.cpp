@@ -20,34 +20,41 @@ OptionButton::OptionButton(QWidget *parent) :
     setActive(false);
 }
 
-OptionButton::~OptionButton(){
+OptionButton::~OptionButton()
+{
     delete ui;
 }
 
-void OptionButton::setTitleClassAndText(QString className, QString text){
+void OptionButton::setTitleClassAndText(QString className, QString text)
+{
     ui->labelTitleChange->setText(text);
     setCssProperty(ui->labelTitleChange, className);
 }
 
-void OptionButton::setTitleText(QString text){
+void OptionButton::setTitleText(QString text)
+{
     ui->labelTitleChange->setText(text);
 }
 
-void OptionButton::setSubTitleClassAndText(QString className, QString text){
+void OptionButton::setSubTitleClassAndText(QString className, QString text)
+{
     ui->labelSubtitleChange->setText(text);
     setCssProperty(ui->labelSubtitleChange, className);
 }
 
-void OptionButton::setRightIconClass(QString className, bool forceUpdate){
+void OptionButton::setRightIconClass(QString className, bool forceUpdate)
+{
     setCssProperty(ui->labelArrow3, className);
-    if(forceUpdate) updateStyle(ui->labelArrow3);
+    if (forceUpdate) updateStyle(ui->labelArrow3);
 }
 
-void OptionButton::setRightIcon(QPixmap icon){
+void OptionButton::setRightIcon(QPixmap icon)
+{
     //ui->labelArrow3->setPixmap(icon);
 }
 
-void OptionButton::setActive(bool isActive){
+void OptionButton::setActive(bool isActive)
+{
     if (isActive) {
         ui->layoutCircle->setVisible(true);
         setCssProperty(ui->labelTitleChange, "btn-title-purple");
@@ -59,12 +66,14 @@ void OptionButton::setActive(bool isActive){
     }
 }
 
-void OptionButton::setChecked(bool checked){
+void OptionButton::setChecked(bool checked)
+{
     ui->labelArrow3->setChecked(checked);
     Q_EMIT clicked();
 }
 
-void OptionButton::mousePressEvent(QMouseEvent *qevent){
+void OptionButton::mousePressEvent(QMouseEvent *qevent)
+{
     if (qevent->button() == Qt::LeftButton){
         setChecked(!ui->labelArrow3->isChecked());
     }

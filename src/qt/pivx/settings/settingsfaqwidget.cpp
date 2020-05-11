@@ -13,11 +13,8 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
     ui(new Ui::SettingsFaqWidget)
 {
     ui->setupUi(this);
-
     this->setStyleSheet(parent->styleSheet());
 
-    ui->labelTitle->setText(tr("Frequently Asked Questions"));
-    ui->labelWebLink->setText(tr("You can read more here"));
 #ifdef Q_OS_MAC
     ui->container->load("://bg-welcome");
     setCssProperty(ui->container, "container-welcome-no-image");
@@ -87,11 +84,9 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
     ui->labelContent8->setOpenExternalLinks(true);
 
     // Exit button
-    ui->pushButtonExit->setText(tr("Exit"));
     setCssProperty(ui->pushButtonExit, "btn-faq-exit");
 
     // Web Link
-    ui->pushButtonWebLink->setText("https://PIVX.org/");
     setCssProperty(ui->pushButtonWebLink, "btn-faq-web");
     setCssProperty(ui->containerButtons, "container-faq-buttons");
 
@@ -112,57 +107,69 @@ SettingsFaqWidget::SettingsFaqWidget(PIVXGUI *parent) :
         connect(parent, &PIVXGUI::windowResizeEvent, this, &SettingsFaqWidget::windowResizeEvent);
 }
 
-void SettingsFaqWidget::showEvent(QShowEvent *event){
-    if(pos != 0){
+void SettingsFaqWidget::showEvent(QShowEvent *event)
+{
+    if (pos != 0) {
         QPushButton* btn = getButtons()[pos - 1];
         QMetaObject::invokeMethod(btn, "setChecked", Qt::QueuedConnection, Q_ARG(bool, true));
         QMetaObject::invokeMethod(btn, "clicked", Qt::QueuedConnection);
     }
 }
 
-void SettingsFaqWidget::setSection(int num){
+void SettingsFaqWidget::setSection(int num)
+{
     if (num < 1 || num > 10)
         return;
     pos = num;
 }
 
-void SettingsFaqWidget::onFaq1Clicked(){
+void SettingsFaqWidget::onFaq1Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq1->y());
 }
 
-void SettingsFaqWidget::onFaq2Clicked(){
+void SettingsFaqWidget::onFaq2Clicked()
+{
    ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq2->y());
 }
 
-void SettingsFaqWidget::onFaq3Clicked(){
+void SettingsFaqWidget::onFaq3Clicked()
+{
    ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq3->y());
 }
 
-void SettingsFaqWidget::onFaq4Clicked(){
+void SettingsFaqWidget::onFaq4Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq4->y());
 }
 
-void SettingsFaqWidget::onFaq5Clicked(){
+void SettingsFaqWidget::onFaq5Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq5->y());
 }
 
-void SettingsFaqWidget::onFaq6Clicked(){
+void SettingsFaqWidget::onFaq6Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq6->y());
 }
 
-void SettingsFaqWidget::onFaq7Clicked(){
+void SettingsFaqWidget::onFaq7Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq7->y());
 }
 
-void SettingsFaqWidget::onFaq8Clicked(){
+void SettingsFaqWidget::onFaq8Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq8->y());
 }
 
-void SettingsFaqWidget::onFaq9Clicked(){
+void SettingsFaqWidget::onFaq9Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq9->y());
 }
 
-void SettingsFaqWidget::onFaq10Clicked(){
+void SettingsFaqWidget::onFaq10Clicked()
+{
     ui->scrollAreaFaq->verticalScrollBar()->setValue(ui->widgetFaq10->y());
 }
 
@@ -173,7 +180,8 @@ void SettingsFaqWidget::windowResizeEvent(QResizeEvent* event)
     this->move(QPoint(0, 0));
 }
 
-std::vector<QPushButton*> SettingsFaqWidget::getButtons(){
+std::vector<QPushButton*> SettingsFaqWidget::getButtons()
+{
     return {
             ui->pushButtonFaq1,
             ui->pushButtonFaq2,
@@ -188,7 +196,8 @@ std::vector<QPushButton*> SettingsFaqWidget::getButtons(){
     };
 }
 
-SettingsFaqWidget::~SettingsFaqWidget(){
+SettingsFaqWidget::~SettingsFaqWidget()
+{
     delete ui;
 }
 

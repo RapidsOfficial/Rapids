@@ -81,7 +81,7 @@
             <item>
              <widget class="QLabel" name="labelSubtitle1">
               <property name="text">
-               <string>TextLabel</string>
+               <string>You can transfer public coins (PIV) or private coins (zPIV)</string>
               </property>
              </widget>
             </item>
@@ -147,7 +147,7 @@
                   <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
-                  <string/>
+                  <string>PIV</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -175,7 +175,7 @@
                   <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
-                  <string/>
+                  <string>zPIV</string>
                  </property>
                  <property name="checkable">
                   <bool>true</bool>
@@ -194,7 +194,7 @@
             <item>
              <widget class="QLabel" name="labelSubtitle2">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Select coin type to spend</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -244,7 +244,7 @@
              <string notr="true">margin-left:8px;</string>
             </property>
             <property name="text">
-             <string>TextLabel</string>
+             <string>PIVX address or contact label</string>
             </property>
            </widget>
           </item>
@@ -267,7 +267,7 @@
           <item>
            <widget class="QLabel" name="labelSubtitleAmount">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Amount</string>
             </property>
            </widget>
           </item>
@@ -401,7 +401,7 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>PushButton</string>
+             <string>Customize fee</string>
             </property>
            </widget>
           </item>
@@ -430,7 +430,7 @@
              <enum>Qt::RightToLeft</enum>
             </property>
             <property name="text">
-             <string>PushButton</string>
+             <string>Clear all</string>
             </property>
            </widget>
           </item>
@@ -456,7 +456,7 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>PushButton</string>
+             <string>Add recipient</string>
             </property>
            </widget>
           </item>
@@ -560,14 +560,14 @@
                      <item>
                       <widget class="QLabel" name="labelTitleTotalSend">
                        <property name="text">
-                        <string>TextLabel</string>
+                        <string>Total to send</string>
                        </property>
                       </widget>
                      </item>
                      <item>
                       <widget class="QLabel" name="labelAmountSend">
                        <property name="text">
-                        <string>TextLabel</string>
+                        <string notr="true">0.00 PIV</string>
                        </property>
                       </widget>
                      </item>
@@ -632,14 +632,14 @@
                      <item>
                       <widget class="QLabel" name="labelTitleTotalRemaining">
                        <property name="text">
-                        <string>TextLabel</string>
+                        <string notr="true">N/A</string>
                        </property>
                       </widget>
                      </item>
                      <item>
                       <widget class="QLabel" name="labelAmountRemaining">
                        <property name="text">
-                        <string>TextLabel</string>
+                        <string notr="true">N/A</string>
                        </property>
                       </widget>
                      </item>
@@ -796,7 +796,7 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string>PushButton</string>
+             <string>Reset to default</string>
             </property>
            </widget>
           </item>

@@ -58,7 +58,7 @@
         <item>
          <widget class="QLabel" name="labelTitle">
           <property name="text">
-           <string>TextLabel</string>
+           <string>Frequently Asked Questions</string>
           </property>
          </widget>
         </item>
@@ -78,7 +78,7 @@
         <item>
          <widget class="QPushButton" name="pushButtonExit">
           <property name="text">
-           <string>PushButton</string>
+           <string>Exit</string>
           </property>
          </widget>
         </item>
@@ -417,7 +417,7 @@
                <item>
                 <widget class="QLabel" name="labelWebLink">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>You can read more here</string>
                  </property>
                 </widget>
                </item>
@@ -443,7 +443,7 @@
                   <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
-                  <string>PushButton</string>
+                  <string>https://PIVX.org/</string>
                  </property>
                 </widget>
                </item>

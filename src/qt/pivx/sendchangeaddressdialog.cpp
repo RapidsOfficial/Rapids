@@ -23,13 +23,9 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* m
     ui->frame->setProperty("cssClass", "container-dialog");
 
     // Text
-    ui->labelTitle->setText(tr("Custom Change Address"));
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
-
-    ui->labelMessage->setText(tr("The remainder of the value resultant from the inputs minus the outputs value goes to the \"change\" PIVX address"));
     ui->labelMessage->setProperty("cssClass", "text-main-grey");
 
-    ui->lineEditAddress->setPlaceholderText("Enter PIVX address (e.g D7VFR83SQbiezrW72hjc… ");
     initCssEditLine(ui->lineEditAddress, true);
 
     // Buttons
@@ -37,7 +33,6 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* m
     ui->btnEsc->setProperty("cssClass", "ic-close");
 
     ui->btnCancel->setProperty("cssClass", "btn-dialog-cancel");
-    ui->btnSave->setText(tr("SAVE"));
     setCssBtnPrimary(ui->btnSave);
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &SendChangeAddressDialog::close);

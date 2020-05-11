@@ -65,14 +65,15 @@
             <item>
              <widget class="QLabel" name="labelTitle">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Masternodes</string>
               </property>
              </widget>
             </item>
             <item alignment="Qt::AlignTop">
              <widget class="QLabel" name="labelSubtitle1">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Full nodes that incentivize node operators to perform the core consensus functions
+and vote on the treasury system receiving a periodic reward.</string>
               </property>
              </widget>
             </item>
@@ -226,7 +227,7 @@
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>N/A</string>
+                 <string>No active Masternode yet</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -278,7 +279,7 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string/>
+             <string>Create Masternode Controller</string>
             </property>
            </widget>
           </item>

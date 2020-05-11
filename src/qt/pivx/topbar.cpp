@@ -69,36 +69,36 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     progressBar->move(0, 34);
 
     ui->pushButtonFAQ->setButtonClassStyle("cssClass", "btn-check-faq");
-    ui->pushButtonFAQ->setButtonText("FAQ");
+    ui->pushButtonFAQ->setButtonText(tr("FAQ"));
 
     ui->pushButtonHDUpgrade->setButtonClassStyle("cssClass", "btn-check-hd-upgrade");
-    ui->pushButtonHDUpgrade->setButtonText("Upgrade to HD Wallet");
+    ui->pushButtonHDUpgrade->setButtonText(tr("Upgrade to HD Wallet"));
     ui->pushButtonHDUpgrade->setNoIconText("HD");
 
     ui->pushButtonConnection->setButtonClassStyle("cssClass", "btn-check-connect-inactive");
-    ui->pushButtonConnection->setButtonText("No Connection");
+    ui->pushButtonConnection->setButtonText(tr("No Connection"));
 
     ui->pushButtonTor->setButtonClassStyle("cssClass", "btn-check-tor-inactive");
     ui->pushButtonTor->setButtonText(tr("Tor Disabled"));
     ui->pushButtonTor->setChecked(false);
 
     ui->pushButtonStack->setButtonClassStyle("cssClass", "btn-check-stack-inactive");
-    ui->pushButtonStack->setButtonText("Staking Disabled");
+    ui->pushButtonStack->setButtonText(tr("Staking Disabled"));
 
     ui->pushButtonColdStaking->setButtonClassStyle("cssClass", "btn-check-cold-staking-inactive");
-    ui->pushButtonColdStaking->setButtonText("Cold Staking Disabled");
+    ui->pushButtonColdStaking->setButtonText(tr("Cold Staking Disabled"));
 
     ui->pushButtonSync->setButtonClassStyle("cssClass", "btn-check-sync");
-    ui->pushButtonSync->setButtonText(" %54 Synchronizing..");
+    ui->pushButtonSync->setButtonText(tr(" %54 Synchronizing.."));
 
     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-lock");
 
     if (isLightTheme()) {
         ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-light");
-        ui->pushButtonTheme->setButtonText("Light Theme");
+        ui->pushButtonTheme->setButtonText(tr("Light Theme"));
     } else {
         ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-dark");
-        ui->pushButtonTheme->setButtonText("Dark Theme");
+        ui->pushButtonTheme->setButtonText(tr("Dark Theme"));
     }
 
     setCssProperty(ui->qrContainer, "container-qr");
@@ -113,7 +113,7 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
                          Qt::KeepAspectRatio))
                 );
 
-    ui->pushButtonLock->setButtonText("Wallet Locked  ");
+    ui->pushButtonLock->setButtonText(tr("Wallet Locked "));
     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock");
 
 
@@ -136,10 +136,10 @@ void TopBar::onThemeClicked()
 
     if (lightTheme) {
         ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-light",  true);
-        ui->pushButtonTheme->setButtonText("Light Theme");
+        ui->pushButtonTheme->setButtonText(tr("Light Theme"));
     } else {
         ui->pushButtonTheme->setButtonClassStyle("cssClass", "btn-check-theme-dark", true);
-        ui->pushButtonTheme->setButtonText("Dark Theme");
+        ui->pushButtonTheme->setButtonText(tr("Dark Theme"));
     }
     updateStyle(ui->pushButtonTheme);
 
@@ -210,7 +210,7 @@ void TopBar::encryptWallet()
 
 void TopBar::unlockWallet()
 {
-    if(!walletModel)
+    if (!walletModel)
         return;
     // Unlock wallet when requested by wallet model (if unlocked or unlocked for staking only)
     if (walletModel->isWalletLocked(false))
@@ -230,7 +230,7 @@ void TopBar::lockDropdownClicked(const StateClicked& state)
                 if (walletModel->getEncryptionStatus() == WalletModel::Locked)
                     break;
                 walletModel->setWalletLocked(true);
-                ui->pushButtonLock->setButtonText("Wallet Locked");
+                ui->pushButtonLock->setButtonText(tr("Wallet Locked"));
                 ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock", true);
                 // Directly update the staking status icon when the wallet is manually locked here
                 // so the feedback is instant (no need to wait for the polling timeout)
@@ -246,7 +246,7 @@ void TopBar::lockDropdownClicked(const StateClicked& state)
                 dlg->adjustSize();
                 openDialogWithOpaqueBackgroundY(dlg, window);
                 if (walletModel->getEncryptionStatus() == WalletModel::Unlocked) {
-                    ui->pushButtonLock->setButtonText("Wallet Unlocked");
+                    ui->pushButtonLock->setButtonText(tr("Wallet Unlocked"));
                     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-unlock", true);
                 }
                 dlg->deleteLater();
@@ -589,19 +589,19 @@ void TopBar::refreshStatus()
 
     switch (encStatus) {
         case WalletModel::EncryptionStatus::Unencrypted:
-            ui->pushButtonLock->setButtonText("Wallet Unencrypted");
+            ui->pushButtonLock->setButtonText(tr("Wallet Unencrypted"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-unlock", true);
             break;
         case WalletModel::EncryptionStatus::Locked:
-            ui->pushButtonLock->setButtonText("Wallet Locked");
+            ui->pushButtonLock->setButtonText(tr("Wallet Locked"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock", true);
             break;
         case WalletModel::EncryptionStatus::UnlockedForStaking:
-            ui->pushButtonLock->setButtonText("Wallet Unlocked for staking");
+            ui->pushButtonLock->setButtonText(tr("Wallet Unlocked for staking"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-staking", true);
             break;
         case WalletModel::EncryptionStatus::Unlocked:
-            ui->pushButtonLock->setButtonText("Wallet Unlocked");
+            ui->pushButtonLock->setButtonText(tr("Wallet Unlocked"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-unlock", true);
             break;
     }
@@ -724,6 +724,7 @@ void TopBar::run(int type)
         );
     }
 }
+
 void TopBar::onError(QString error, int type)
 {
     if (type == REQUEST_UPGRADE_WALLET) {

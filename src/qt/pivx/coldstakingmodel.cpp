@@ -15,16 +15,19 @@ ColdStakingModel::ColdStakingModel(WalletModel* _model,
                                    QObject *parent) : QAbstractTableModel(parent), model(_model), tableModel(_tableModel), addressTableModel(_addressTableModel), cachedAmount(0){
 }
 
-void ColdStakingModel::updateCSList() {
+void ColdStakingModel::updateCSList()
+{
     refresh();
     QMetaObject::invokeMethod(this, "emitDataSetChanged", Qt::QueuedConnection);
 }
 
-void ColdStakingModel::emitDataSetChanged() {
+void ColdStakingModel::emitDataSetChanged()
+{
     Q_EMIT dataChanged(index(0, 0, QModelIndex()), index(cachedDelegations.size(), COLUMN_COUNT, QModelIndex()) );
 }
 
-void ColdStakingModel::refresh() {
+void ColdStakingModel::refresh()
+{
     cachedDelegations.clear();
     cachedAmount = 0;
     // First get all of the p2cs utxo inside the wallet
@@ -69,7 +72,8 @@ void ColdStakingModel::refresh() {
     }
 }
 
-bool ColdStakingModel::parseCSDelegation(const CTxOut& out, CSDelegation& ret, const QString& txId, const int& utxoIndex) {
+bool ColdStakingModel::parseCSDelegation(const CTxOut& out, CSDelegation& ret, const QString& txId, const int& utxoIndex)
+{
     txnouttype type;
     std::vector<CTxDestination> addresses;
     int nRequired;
@@ -109,7 +113,7 @@ int ColdStakingModel::columnCount(const QModelIndex &parent) const
 
 QVariant ColdStakingModel::data(const QModelIndex &index, int role) const
 {
-    if(!index.isValid())
+    if (!index.isValid())
             return QVariant();
 
     int row = index.row();

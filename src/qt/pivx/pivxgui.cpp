@@ -78,8 +78,7 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
 #ifdef ENABLE_WALLET
     // Create wallet frame
-    if(enableWallet){
-
+    if (enableWallet) {
         QFrame* centralWidget = new QFrame(this);
         this->setMinimumWidth(BASE_WINDOW_MIN_WIDTH);
         this->setMinimumHeight(BASE_WINDOW_MIN_HEIGHT);
@@ -167,7 +166,8 @@ PIVXGUI::PIVXGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
 }
 
-void PIVXGUI::createActions(const NetworkStyle* networkStyle){
+void PIVXGUI::createActions(const NetworkStyle* networkStyle)
+{
     toggleHideAction = new QAction(networkStyle->getAppIcon(), tr("&Show / Hide"), this);
     toggleHideAction->setStatusTip(tr("Show or hide the main Window"));
 
@@ -183,7 +183,8 @@ void PIVXGUI::createActions(const NetworkStyle* networkStyle){
 /**
  * Here add every event connection
  */
-void PIVXGUI::connectActions() {
+void PIVXGUI::connectActions()
+{
     QShortcut *consoleShort = new QShortcut(this);
     consoleShort->setKey(QKeySequence(SHORT_KEY + Qt::Key_C));
     connect(consoleShort, &QShortcut::activated, [this](){
@@ -206,7 +207,8 @@ void PIVXGUI::connectActions() {
 }
 
 
-void PIVXGUI::createTrayIcon(const NetworkStyle* networkStyle) {
+void PIVXGUI::createTrayIcon(const NetworkStyle* networkStyle)
+{
 #ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
     QString toolTip = tr("PIVX Core client") + " " + networkStyle->getTitleAddText();
@@ -217,8 +219,8 @@ void PIVXGUI::createTrayIcon(const NetworkStyle* networkStyle) {
     notificator = new Notificator(QApplication::applicationName(), trayIcon, this);
 }
 
-//
-PIVXGUI::~PIVXGUI() {
+PIVXGUI::~PIVXGUI()
+{
     // Unsubscribe from notifications from core
     unsubscribeFromCoreSignals();
 
@@ -232,16 +234,17 @@ PIVXGUI::~PIVXGUI() {
 
 
 /** Get restart command-line parameters and request restart */
-void PIVXGUI::handleRestart(QStringList args){
+void PIVXGUI::handleRestart(QStringList args)
+{
     if (!ShutdownRequested())
         Q_EMIT requestedRestart(args);
 }
 
 
-void PIVXGUI::setClientModel(ClientModel* clientModel) {
+void PIVXGUI::setClientModel(ClientModel* clientModel)
+{
     this->clientModel = clientModel;
-    if(this->clientModel) {
-
+    if (this->clientModel) {
         // Create system tray menu (or setup the dock menu) that late to prevent users from calling actions,
         // while the client has not yet fully loaded
         createTrayIconMenu();
@@ -276,7 +279,8 @@ void PIVXGUI::setClientModel(ClientModel* clientModel) {
     }
 }
 
-void PIVXGUI::createTrayIconMenu() {
+void PIVXGUI::createTrayIconMenu()
+{
 #ifndef Q_OS_MAC
     // return if trayIcon is unset (only on non-macOSes)
     if (!trayIcon)
@@ -350,15 +354,17 @@ void PIVXGUI::closeEvent(QCloseEvent* event)
 }
 
 
-void PIVXGUI::messageInfo(const QString& text){
-    if(!this->snackBar) this->snackBar = new SnackBar(this, this);
+void PIVXGUI::messageInfo(const QString& text)
+{
+    if (!this->snackBar) this->snackBar = new SnackBar(this, this);
     this->snackBar->setText(text);
     this->snackBar->resize(this->width(), snackBar->height());
     openDialog(this->snackBar, this);
 }
 
 
-void PIVXGUI::message(const QString& title, const QString& message, unsigned int style, bool* ret) {
+void PIVXGUI::message(const QString& title, const QString& message, unsigned int style, bool* ret)
+{
     QString strTitle =  tr("PIVX Core"); // default title
     // Default to information icon
     int nNotifyIcon = Notificator::Information;
@@ -397,18 +403,18 @@ void PIVXGUI::message(const QString& title, const QString& message, unsigned int
         // Check for buttons, use OK as default, if none was supplied
         int r = 0;
         showNormalIfMinimized();
-        if(style & CClientUIInterface::BTN_MASK){
+        if (style & CClientUIInterface::BTN_MASK) {
             r = openStandardDialog(
                     (title.isEmpty() ? strTitle : title), message, "OK", "CANCEL"
                 );
-        }else{
+        } else {
             r = openStandardDialog((title.isEmpty() ? strTitle : title), message, "OK");
         }
         if (ret != NULL)
             *ret = r;
-    } else if(style & CClientUIInterface::MSG_INFORMATION_SNACK){
+    } else if (style & CClientUIInterface::MSG_INFORMATION_SNACK) {
         messageInfo(message);
-    }else {
+    } else {
         // Append title to "PIVX - "
         if (!msgType.isEmpty())
             strTitle += " - " + msgType;
@@ -416,7 +422,8 @@ void PIVXGUI::message(const QString& title, const QString& message, unsigned int
     }
 }
 
-bool PIVXGUI::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn){
+bool PIVXGUI::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn)
+{
     DefaultDialog *dialog;
     if (isVisible()) {
         showHide(true);
@@ -438,7 +445,8 @@ bool PIVXGUI::openStandardDialog(QString title, QString body, QString okBtn, QSt
 }
 
 
-void PIVXGUI::showNormalIfMinimized(bool fToggleHidden) {
+void PIVXGUI::showNormalIfMinimized(bool fToggleHidden)
+{
     if (!clientModel)
         return;
     if (!isHidden() && !isMinimized() && !GUIUtil::isObscured(this) && fToggleHidden) {
@@ -448,11 +456,13 @@ void PIVXGUI::showNormalIfMinimized(bool fToggleHidden) {
     }
 }
 
-void PIVXGUI::toggleHidden() {
+void PIVXGUI::toggleHidden()
+{
     showNormalIfMinimized(true);
 }
 
-void PIVXGUI::detectShutdown() {
+void PIVXGUI::detectShutdown()
+{
     if (ShutdownRequested()) {
         if (rpcConsole)
             rpcConsole->hide();
@@ -460,30 +470,36 @@ void PIVXGUI::detectShutdown() {
     }
 }
 
-void PIVXGUI::goToDashboard(){
-    if(stackedContainer->currentWidget() != dashboard){
+void PIVXGUI::goToDashboard()
+{
+    if (stackedContainer->currentWidget() != dashboard) {
         stackedContainer->setCurrentWidget(dashboard);
         topBar->showBottom();
     }
 }
 
-void PIVXGUI::goToSend(){
+void PIVXGUI::goToSend()
+{
     showTop(sendWidget);
 }
 
-void PIVXGUI::goToAddresses(){
+void PIVXGUI::goToAddresses()
+{
     showTop(addressesWidget);
 }
 
-void PIVXGUI::goToPrivacy(){
+void PIVXGUI::goToPrivacy()
+{
     if (privacyWidget) showTop(privacyWidget);
 }
 
-void PIVXGUI::goToMasterNodes(){
+void PIVXGUI::goToMasterNodes()
+{
     showTop(masterNodesWidget);
 }
 
-void PIVXGUI::goToColdStaking(){
+void PIVXGUI::goToColdStaking()
+{
     showTop(coldStakingWidget);
 }
 
@@ -491,18 +507,21 @@ void PIVXGUI::goToSettings(){
     showTop(settingsWidget);
 }
 
-void PIVXGUI::goToReceive(){
+void PIVXGUI::goToReceive()
+{
     showTop(receiveWidget);
 }
 
-void PIVXGUI::showTop(QWidget* view){
-    if(stackedContainer->currentWidget() != view){
+void PIVXGUI::showTop(QWidget* view)
+{
+    if (stackedContainer->currentWidget() != view) {
         stackedContainer->setCurrentWidget(view);
         topBar->showTop();
     }
 }
 
-void PIVXGUI::changeTheme(bool isLightTheme){
+void PIVXGUI::changeTheme(bool isLightTheme)
+{
 
     QString css = GUIUtil::loadStyleSheet();
     this->setStyleSheet(css);
@@ -514,7 +533,8 @@ void PIVXGUI::changeTheme(bool isLightTheme){
     updateStyle(this);
 }
 
-void PIVXGUI::resizeEvent(QResizeEvent* event){
+void PIVXGUI::resizeEvent(QResizeEvent* event)
+{
     // Parent..
     QMainWindow::resizeEvent(event);
     // background
@@ -523,19 +543,21 @@ void PIVXGUI::resizeEvent(QResizeEvent* event){
     Q_EMIT windowResizeEvent(event);
 }
 
-bool PIVXGUI::execDialog(QDialog *dialog, int xDiv, int yDiv){
+bool PIVXGUI::execDialog(QDialog *dialog, int xDiv, int yDiv)
+{
     return openDialogWithOpaqueBackgroundY(dialog, this);
 }
 
-void PIVXGUI::showHide(bool show){
-    if(!op) op = new QLabel(this);
-    if(!show){
+void PIVXGUI::showHide(bool show)
+{
+    if (!op) op = new QLabel(this);
+    if (!show) {
         op->setVisible(false);
         opEnabled = false;
-    }else{
+    } else {
         QColor bg("#000000");
         bg.setAlpha(200);
-        if(!isLightTheme()){
+        if (!isLightTheme()) {
             bg = QColor("#00000000");
             bg.setAlpha(150);
         }
@@ -554,11 +576,13 @@ void PIVXGUI::showHide(bool show){
     }
 }
 
-int PIVXGUI::getNavWidth(){
+int PIVXGUI::getNavWidth()
+{
     return this->navMenu->width();
 }
 
-void PIVXGUI::openFAQ(int section){
+void PIVXGUI::openFAQ(int section)
+{
     showHide(true);
     SettingsFaqWidget* dialog = new SettingsFaqWidget(this);
     if (section > 0) dialog->setSection(section);
@@ -571,7 +595,7 @@ void PIVXGUI::openFAQ(int section){
 bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
 {
     // Single wallet supported for now..
-    if(!stackedContainer || !clientModel || !walletModel)
+    if (!stackedContainer || !clientModel || !walletModel)
         return false;
 
     // set the model for every view
@@ -610,18 +634,21 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     return true;
 }
 
-bool PIVXGUI::setCurrentWallet(const QString& name) {
+bool PIVXGUI::setCurrentWallet(const QString& name)
+{
     // Single wallet supported.
     return true;
 }
 
-void PIVXGUI::removeAllWallets() {
+void PIVXGUI::removeAllWallets()
+{
     // Single wallet supported.
 }
 
-void PIVXGUI::incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address) {
+void PIVXGUI::incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address)
+{
     // Only send notifications when not disabled
-    if(!bdisableSystemnotifications){
+    if (!bdisableSystemnotifications) {
         // On new transaction, make an info balloon
         message((amount) < 0 ? (pwalletMain->fMultiSendNotify == true ? tr("Sent MultiSend transaction") : tr("Sent transaction")) : tr("Incoming transaction"),
             tr("Date: %1\n"

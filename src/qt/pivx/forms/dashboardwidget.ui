@@ -97,7 +97,7 @@
              <item>
               <widget class="QLabel" name="labelSubtitle">
                <property name="text">
-                <string>You can see here the history of your account</string>
+                <string>View your account's history</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -258,7 +258,7 @@
                   <string notr="true"/>
                  </property>
                  <property name="text">
-                  <string>Warning</string>
+                  <string notr="true">N/A</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -419,7 +419,7 @@
                <string notr="true"/>
               </property>
               <property name="text">
-               <string>No transactions</string>
+               <string>No transactions yet</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -454,7 +454,7 @@
             <enum>Qt::NoFocus</enum>
            </property>
            <property name="text">
-            <string/>
+            <string>How to get PIV</string>
            </property>
           </widget>
          </item>
@@ -519,7 +519,7 @@
             <item>
              <widget class="QLabel" name="labelMessage">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Amount of PIV and zPIV staked.</string>
               </property>
              </widget>
             </item>
@@ -567,7 +567,7 @@
           <item>
            <widget class="QLabel" name="labelAmountPiv">
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">0 PIV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -577,7 +577,7 @@
           <item>
            <widget class="QLabel" name="labelAmountZpiv">
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">0 zPIV</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -694,7 +694,7 @@
                 <item>
                  <widget class="QLabel" name="labelPiv">
                   <property name="text">
-                   <string>PIV</string>
+                   <string notr="true">PIV</string>
                   </property>
                  </widget>
                 </item>
@@ -736,7 +736,7 @@
                 <item>
                  <widget class="QLabel" name="labelZpiv">
                   <property name="text">
-                   <string>zPIV</string>
+                   <string notr="true">zPIV</string>
                   </property>
                  </widget>
                 </item>
@@ -923,7 +923,7 @@ margin:0px;</string>
            </item>
            <item alignment="Qt::AlignVCenter">
             <widget class="QWidget" name="containerSort" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="3,2">
+             <layout class="QHBoxLayout" name="horizontalLayout_61" stretch="3,2">
               <property name="spacing">
                <number>28</number>
               </property>
@@ -1291,7 +1291,7 @@ margin:0px;</string>
                  <string notr="true"/>
                 </property>
                 <property name="text">
-                 <string>LabelText</string>
+                 <string notr="true">N/A</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -1323,7 +1323,8 @@ margin:0px;</string>
 }</string>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>You can verify the staking activity in the status bar at the top right of the wallet.
+It will start automatically as soon as the wallet has enough confirmations on any unspent balances, and the wallet has synced.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>

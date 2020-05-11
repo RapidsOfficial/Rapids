@@ -62,14 +62,14 @@
             <item>
              <widget class="QLabel" name="labelTitle">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Wallet</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="labelSubtitle1">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Customize the internal wallet options</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -104,7 +104,7 @@
           <item>
            <widget class="QLabel" name="labelTitleStake">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Stake split threshold</string>
             </property>
            </widget>
           </item>
@@ -131,6 +131,9 @@
             </property>
             <property name="maximum">
              <number>999999</number>
+            </property>
+            <property name="value">
+             <number>500</number>
             </property>
            </widget>
           </item>
@@ -160,7 +163,7 @@
            <item>
             <widget class="QCheckBox" name="radioButtonSpend">
              <property name="text">
-              <string>CheckBox</string>
+              <string>Spend unconfirmed change</string>
              </property>
             </widget>
            </item>
@@ -231,14 +234,14 @@
             <item>
              <widget class="QLabel" name="labelTitleNetwork">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Network</string>
               </property>
              </widget>
             </item>
             <item>
              <widget class="QLabel" name="labelSubtitleNetwork">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Customize the node network options</string>
               </property>
               <property name="wordWrap">
                <bool>true</bool>
@@ -289,21 +292,21 @@
            <item>
             <widget class="QCheckBox" name="checkBoxMap">
              <property name="text">
-              <string>RadioButton</string>
+              <string>Map port using UPnP</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="checkBoxAllow">
              <property name="text">
-              <string>RadioButton</string>
+              <string>Allow incoming connections</string>
              </property>
             </widget>
            </item>
            <item>
             <widget class="QCheckBox" name="checkBoxConnect">
              <property name="text">
-              <string>RadioButton</string>
+              <string>Connect through SOCKS5 proxy (default proxy)</string>
              </property>
             </widget>
            </item>
@@ -339,7 +342,7 @@
             <item>
              <widget class="QLabel" name="labelSubtitleProxy">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Proxy IP</string>
               </property>
              </widget>
             </item>
@@ -356,6 +359,9 @@
                 <width>16777215</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="placeholderText">
+               <string>Enter proxy IP</string>
               </property>
              </widget>
             </item>
@@ -382,7 +388,7 @@
             <item>
              <widget class="QLabel" name="labelSubtitlePort">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Port</string>
               </property>
              </widget>
             </item>
@@ -399,6 +405,9 @@
                 <width>16777215</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="placeholderText">
+               <string>Enter port</string>
               </property>
              </widget>
             </item>
@@ -496,7 +505,7 @@
              <enum>Qt::NoFocus</enum>
             </property>
             <property name="text">
-             <string/>
+             <string>SAVE</string>
             </property>
            </widget>
           </item>

@@ -110,7 +110,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>Received from Bob</string>
+              <string notr="true">N/A</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -123,7 +123,7 @@
               <string notr="true"/>
              </property>
              <property name="text">
-              <string>18/05/18</string>
+              <string notr="true">N/A</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignTop</set>
@@ -138,7 +138,7 @@
             <string notr="true"/>
            </property>
            <property name="text">
-            <string>+0.000585 PIV</string>
+            <string notr="true">N/A</string>
            </property>
           </widget>
          </item>

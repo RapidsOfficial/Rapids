@@ -73,7 +73,7 @@
               <item>
                <widget class="QLabel" name="labelTitle">
                 <property name="text">
-                 <string>Title</string>
+                 <string>Privacy</string>
                 </property>
                </widget>
               </item>
@@ -86,7 +86,8 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string>Minting zPIV anonymizes your PIV by removing any
+transaction history, making transactions untraceable</string>
                 </property>
                </widget>
               </item>
@@ -162,7 +163,7 @@
                      <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
-                     <string>PushButton</string>
+                     <string>Convert</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -190,7 +191,7 @@
                      <enum>Qt::NoFocus</enum>
                     </property>
                     <property name="text">
-                     <string>PushButton</string>
+                     <string>Mint</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
@@ -209,7 +210,7 @@
                <item alignment="Qt::AlignTop">
                 <widget class="QLabel" name="labelSubtitle2">
                  <property name="text">
-                  <string>TextLabel</string>
+                  <string>Mint new zPIV or convert back to PIV</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -262,7 +263,7 @@
                  </size>
                 </property>
                 <property name="text">
-                 <string>TextLabel</string>
+                 <string notr="true">N/A</string>
                 </property>
                </widget>
               </item>
@@ -281,6 +282,9 @@
                   </property>
                   <property name="maxLength">
                    <number>8</number>
+                  </property>
+                  <property name="placeholderText">
+                   <string notr="true">0.00 PIV</string>
                   </property>
                  </widget>
                 </item>
@@ -348,7 +352,7 @@
           <item>
            <widget class="QLabel" name="labelListHistory">
             <property name="text">
-             <string>TextLabel</string>
+             <string>Last zPIV Movements</string>
             </property>
            </widget>
           </item>
@@ -492,7 +496,7 @@
                    <string notr="true"/>
                   </property>
                   <property name="text">
-                   <string>N/A</string>
+                   <string>No transactions yet</string>
                   </property>
                   <property name="alignment">
                    <set>Qt::AlignCenter</set>
@@ -595,14 +599,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom1">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 1:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom1">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x1 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -616,14 +620,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom5">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 5:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom5">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x5 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -637,14 +641,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom10">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 10:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom10">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x10 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -658,14 +662,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom50">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 50:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom50">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x50 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -679,14 +683,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom100">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 100:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom100">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x100 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -700,14 +704,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom500">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 500:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom500">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x500 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -721,14 +725,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom1000">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 1000:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom1000">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x1000 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -742,14 +746,14 @@
              <item>
               <widget class="QLabel" name="labelTitleDenom5000">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Denom. with value 5000:</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelValueDenom5000">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">0x5000 = 0 zPIV</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>

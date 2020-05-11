@@ -19,19 +19,15 @@ SendMultiRow::SendMultiRow(PWidget *parent) :
     ui->setupUi(this);
     this->setStyleSheet(parent->styleSheet());
 
-    ui->lineEditAddress->setPlaceholderText(tr("Enter address"));
     setCssProperty(ui->lineEditAddress, "edit-primary-multi-book");
     ui->lineEditAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->stackedAddress);
 
-    ui->lineEditAmount->setPlaceholderText("0.00 PIV ");
     initCssEditLine(ui->lineEditAmount);
     GUIUtil::setupAmountWidget(ui->lineEditAmount, this);
 
     /* Description */
-    ui->labelSubtitleDescription->setText("Address label (optional)");
     setCssProperty(ui->labelSubtitleDescription, "text-title");
-    ui->lineEditDescription->setPlaceholderText(tr("Enter label"));
     initCssEditLine(ui->lineEditDescription);
 
     // Button menu
@@ -62,8 +58,9 @@ SendMultiRow::SendMultiRow(PWidget *parent) :
     connect(ui->btnMenu, &QPushButton::clicked, [this](){Q_EMIT onMenuClicked(this);});
 }
 
-void SendMultiRow::amountChanged(const QString& amount){
-    if(!amount.isEmpty()) {
+void SendMultiRow::amountChanged(const QString& amount)
+{
+    if (!amount.isEmpty()) {
         QString amountStr = amount;
         CAmount value = getAmountValue(amountStr);
         if (value > 0) {
@@ -77,7 +74,8 @@ void SendMultiRow::amountChanged(const QString& amount){
 /**
  * Returns -1 if the value is invalid
  */
-CAmount SendMultiRow::getAmountValue(QString amount){
+CAmount SendMultiRow::getAmountValue(QString amount)
+{
     bool isValid = false;
     CAmount value = GUIUtil::parseValue(amount, displayUnit, &isValid);
     return isValid ? value : -1;
@@ -85,7 +83,7 @@ CAmount SendMultiRow::getAmountValue(QString amount){
 
 bool SendMultiRow::addressChanged(const QString& str, bool fOnlyValidate)
 {
-    if(!str.isEmpty()) {
+    if (!str.isEmpty()) {
         QString trimmedStr = str.trimmed();
         const bool valid = walletModel->validateAddress(trimmedStr, this->onlyStakingAddressAccepted);
         if (!valid) {
@@ -98,7 +96,7 @@ bool SendMultiRow::addressChanged(const QString& str, bool fOnlyValidate)
                 QString label = walletModel->getAddressTableModel()->labelForAddress(rcp.address);
                 if (!label.isNull() && !label.isEmpty()){
                     ui->lineEditDescription->setText(label);
-                } else if(!rcp.message.isEmpty())
+                } else if (!rcp.message.isEmpty())
                     ui->lineEditDescription->setText(rcp.message);
 
                 Q_EMIT onUriParsed(rcp);
@@ -121,7 +119,8 @@ bool SendMultiRow::addressChanged(const QString& str, bool fOnlyValidate)
 }
 
 
-void SendMultiRow::loadWalletModel() {
+void SendMultiRow::loadWalletModel()
+{
     if (walletModel && walletModel->getOptionsModel()) {
         displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
         connect(walletModel->getOptionsModel(), &OptionsModel::displayUnitChanged, this, &SendMultiRow::updateDisplayUnit);
@@ -129,16 +128,19 @@ void SendMultiRow::loadWalletModel() {
     clear();
 }
 
-void SendMultiRow::updateDisplayUnit(){
+void SendMultiRow::updateDisplayUnit()
+{
     // Update edit text..
     displayUnit = walletModel->getOptionsModel()->getDisplayUnit();
 }
 
-void SendMultiRow::deleteClicked() {
+void SendMultiRow::deleteClicked()
+{
     Q_EMIT removeEntry(this);
 }
 
-void SendMultiRow::clear() {
+void SendMultiRow::clear()
+{
     ui->lineEditAddress->clear();
     ui->lineEditAmount->clear();
     ui->lineEditDescription->clear();
@@ -182,7 +184,8 @@ bool SendMultiRow::validate()
     return retval;
 }
 
-SendCoinsRecipient SendMultiRow::getValue() {
+SendCoinsRecipient SendMultiRow::getValue()
+{
     // Payment request
     if (recipient.paymentRequest.IsInitialized())
         return recipient;
@@ -194,40 +197,49 @@ SendCoinsRecipient SendMultiRow::getValue() {
     return recipient;
 }
 
-QString SendMultiRow::getAddress() {
+QString SendMultiRow::getAddress()
+{
     return ui->lineEditAddress->text().trimmed();
 }
 
-CAmount SendMultiRow::getAmountValue() {
+CAmount SendMultiRow::getAmountValue()
+{
     return getAmountValue(ui->lineEditAmount->text());
 }
 
-QRect SendMultiRow::getEditLineRect(){
+QRect SendMultiRow::getEditLineRect()
+{
     return ui->lineEditAddress->rect();
 }
 
-int SendMultiRow::getEditHeight(){
+int SendMultiRow::getEditHeight()
+{
     return ui->stackedAddress->height();
 }
 
-int SendMultiRow::getEditWidth(){
+int SendMultiRow::getEditWidth()
+{
     return ui->lineEditAddress->width();
 }
 
-int SendMultiRow::getNumber(){
+int SendMultiRow::getNumber()
+{
     return number;
 }
 
-void SendMultiRow::setAddress(const QString& address) {
+void SendMultiRow::setAddress(const QString& address)
+{
     ui->lineEditAddress->setText(address);
     ui->lineEditAmount->setFocus();
 }
 
-void SendMultiRow::setAmount(const QString& amount){
+void SendMultiRow::setAmount(const QString& amount)
+{
     ui->lineEditAmount->setText(amount);
 }
 
-void SendMultiRow::setAddressAndLabelOrDescription(const QString& address, const QString& message){
+void SendMultiRow::setAddressAndLabelOrDescription(const QString& address, const QString& message)
+{
     QString label = walletModel->getAddressTableModel()->labelForAddress(address);
     if (!label.isNull() && !label.isEmpty()){
         ui->lineEditDescription->setText(label);
@@ -236,60 +248,72 @@ void SendMultiRow::setAddressAndLabelOrDescription(const QString& address, const
     setAddress(address);
 }
 
-void SendMultiRow::setLabel(const QString& label){
+void SendMultiRow::setLabel(const QString& label)
+{
     ui->lineEditDescription->setText(label);
 }
 
-bool SendMultiRow::isClear(){
+bool SendMultiRow::isClear()
+{
     return ui->lineEditAddress->text().isEmpty();
 }
 
-void SendMultiRow::setFocus(){
+void SendMultiRow::setFocus()
+{
     ui->lineEditAddress->setFocus();
 }
 
-void SendMultiRow::setOnlyStakingAddressAccepted(bool onlyStakingAddress) {
+void SendMultiRow::setOnlyStakingAddressAccepted(bool onlyStakingAddress)
+{
     this->onlyStakingAddressAccepted = onlyStakingAddress;
 }
 
 
-void SendMultiRow::setNumber(int _number){
+void SendMultiRow::setNumber(int _number)
+{
     number = _number;
     iconNumber->setText(QString::number(_number));
 }
 
-void SendMultiRow::hideLabels(){
+void SendMultiRow::hideLabels()
+{
     ui->layoutLabel->setVisible(false);
     iconNumber->setVisible(true);
 }
 
-void SendMultiRow::showLabels(){
+void SendMultiRow::showLabels()
+{
     ui->layoutLabel->setVisible(true);
     iconNumber->setVisible(false);
 }
 
-void SendMultiRow::resizeEvent(QResizeEvent *event) {
+void SendMultiRow::resizeEvent(QResizeEvent *event)
+{
     QWidget::resizeEvent(event);
 }
 
-void SendMultiRow::enterEvent(QEvent *) {
-    if(!this->isExpanded && iconNumber->isVisible()){
+void SendMultiRow::enterEvent(QEvent *)
+{
+    if (!this->isExpanded && iconNumber->isVisible()) {
         isExpanded = true;
         ui->btnMenu->setVisible(isExpanded);
     }
 }
 
-void SendMultiRow::leaveEvent(QEvent *) {
-    if(isExpanded){
+void SendMultiRow::leaveEvent(QEvent *)
+{
+    if (isExpanded) {
         isExpanded = false;
         ui->btnMenu->setVisible(isExpanded);
     }
 }
 
-int SendMultiRow::getMenuBtnWidth(){
+int SendMultiRow::getMenuBtnWidth()
+{
     return ui->btnMenu->width();
 }
 
-SendMultiRow::~SendMultiRow(){
+SendMultiRow::~SendMultiRow()
+{
     delete ui;
 }

@@ -32,46 +32,32 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     ui->left->setContentsMargins(10,10,10,10);
 
     /* Title */
-    ui->labelTitle->setText(tr("BIP38 Tool"));
     setCssTitleScreen(ui->labelTitle);
 
     //Button Group
-    ui->pushLeft->setText(tr("Encrypt"));
     setCssProperty(ui->pushLeft, "btn-check-left");
-    ui->pushRight->setText(tr("Decrypt"));
     setCssProperty(ui->pushRight, "btn-check-right");
     ui->pushLeft->setChecked(true);
 
     // Subtitle
-    ui->labelSubtitle1->setText("Encrypt your PIVX addresses (key pair actually) using BIP38 encryption.\nUsing this mechanism you can share your keys without middle-man risk, only need to store your passphrase safely.");
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     // Key
-    ui->labelSubtitleKey->setText(tr("Encrypted key"));
     setCssProperty(ui->labelSubtitleKey, "text-title");
-    ui->lineEditKey->setPlaceholderText(tr("Enter a encrypted key"));
     initCssEditLine(ui->lineEditKey);
 
     // Passphrase
-    ui->labelSubtitlePassphrase->setText(tr("Passphrase"));
     setCssProperty(ui->labelSubtitlePassphrase, "text-title");
-
-    ui->lineEditPassphrase->setPlaceholderText(tr("Enter a passphrase "));
     initCssEditLine(ui->lineEditPassphrase);
 
     // Decrypt controls
-    ui->labelSubtitleDecryptResult->setText(tr("Decrypted address result"));
     setCssProperty(ui->labelSubtitleDecryptResult, "text-title");
-    ui->lineEditDecryptResult->setPlaceholderText(tr("Decrypted Address"));
     ui->lineEditDecryptResult->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->lineEditDecryptResult->setReadOnly(true);
     initCssEditLine(ui->lineEditDecryptResult);
 
     // Buttons
-    ui->pushButtonDecrypt->setText(tr("DECRYPT KEY"));
     setCssBtnPrimary(ui->pushButtonDecrypt);
-
-    ui->pushButtonImport->setText(tr("Import Address"));
     setCssProperty(ui->pushButtonImport, "btn-text-primary");
     ui->pushButtonImport->setVisible(false);
 
@@ -82,35 +68,24 @@ SettingsBitToolWidget::SettingsBitToolWidget(PIVXGUI* _window, QWidget *parent) 
     // Encrypt
 
     // Address
-    ui->labelSubtitleAddress->setText(tr("PIVX address"));
     setCssProperty(ui->labelSubtitleAddress, "text-title");
-
-    ui->addressIn_ENC->setPlaceholderText(tr("Enter address"));
     setCssProperty(ui->addressIn_ENC, "edit-primary-multi-book");
     ui->addressIn_ENC->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->addressIn_ENC);
 
     // Message
-    ui->labelSubtitleMessage->setText(tr("Passphrase"));
     setCssProperty(ui->labelSubtitleMessage, "text-title");
-
     setCssProperty(ui->passphraseIn_ENC, "edit-primary");
-    ui->passphraseIn_ENC->setPlaceholderText(tr("Enter passphrase"));
-    setCssProperty(ui->passphraseIn_ENC,"edit-primary");
     setShadow(ui->passphraseIn_ENC);
     ui->passphraseIn_ENC->setAttribute(Qt::WA_MacShowFocusRect, 0);
 
-    ui->labelSubtitleEncryptedKey->setText(tr("Encrypted Key"));
+    // Encrypted Key
     setCssProperty(ui->labelSubtitleEncryptedKey, "text-title");
-    ui->encryptedKeyOut_ENC->setPlaceholderText(tr("Encrypted key"));
     ui->encryptedKeyOut_ENC->setAttribute(Qt::WA_MacShowFocusRect, 0);
     ui->encryptedKeyOut_ENC->setReadOnly(true);
     initCssEditLine(ui->encryptedKeyOut_ENC);
 
     btnContact = ui->addressIn_ENC->addAction(QIcon("://ic-contact-arrow-down"), QLineEdit::TrailingPosition);
-    ui->pushButtonEncrypt->setText(tr("ENCRYPT"));
-    ui->pushButtonClear->setText(tr("CLEAR ALL"));
-    ui->pushButtonDecryptClear->setText(tr("CLEAR"));
     setCssBtnPrimary(ui->pushButtonEncrypt);
     setCssBtnSecondary(ui->pushButtonClear);
     setCssBtnSecondary(ui->pushButtonDecryptClear);

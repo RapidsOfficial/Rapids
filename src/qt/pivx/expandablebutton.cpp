@@ -27,7 +27,7 @@ ExpandableButton::ExpandableButton(QWidget *parent) :
 void ExpandableButton::setButtonClassStyle(const char *name, const QVariant &value, bool forceUpdate)
 {
     ui->pushButton->setProperty(name, value);
-    if(forceUpdate){
+    if (forceUpdate) {
         updateStyle(ui->pushButton);
     }
 }
@@ -40,7 +40,7 @@ void ExpandableButton::setIcon(QString path)
 void ExpandableButton::setButtonText(const QString& _text)
 {
     this->text = _text;
-    if(this->isExpanded){
+    if (this->isExpanded) {
         ui->pushButton->setText(_text);
     }
 }
@@ -90,7 +90,7 @@ void ExpandableButton::setExpanded()
 
 void ExpandableButton::enterEvent(QEvent *)
 {
-    if(!this->isAnimating){
+    if (!this->isAnimating) {
         setExpanded();
         Q_EMIT Mouse_Hover();
     }
@@ -99,7 +99,7 @@ void ExpandableButton::enterEvent(QEvent *)
 
 void ExpandableButton::leaveEvent(QEvent *)
 {
-    if(!keepExpanded){
+    if (!keepExpanded) {
         this->setSmall();
     }
     Q_EMIT Mouse_HoverLeave();

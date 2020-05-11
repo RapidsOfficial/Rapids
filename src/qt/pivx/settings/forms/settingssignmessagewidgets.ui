@@ -75,14 +75,14 @@
              <item>
               <widget class="QLabel" name="labelTitle">
                <property name="text">
-                <string>TextLabel</string>
+                <string>Sign/Verify Message</string>
                </property>
               </widget>
              </item>
              <item>
               <widget class="QLabel" name="labelSubtitle1">
                <property name="text">
-                <string>TextLabel</string>
+                <string notr="true">N/A</string>
                </property>
                <property name="wordWrap">
                 <bool>true</bool>
@@ -162,7 +162,7 @@
                     <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="text">
-                    <string/>
+                    <string>Sign</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -190,7 +190,7 @@
                     <enum>Qt::NoFocus</enum>
                    </property>
                    <property name="text">
-                    <string/>
+                    <string>Verify</string>
                    </property>
                    <property name="checkable">
                     <bool>true</bool>
@@ -276,7 +276,7 @@
                </size>
               </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>PIVX address or contact label</string>
               </property>
              </widget>
             </item>
@@ -293,6 +293,9 @@
                 <width>16777215</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="placeholderText">
+               <string>Enter address</string>
               </property>
              </widget>
             </item>
@@ -335,7 +338,7 @@
               </size>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>Message</string>
              </property>
             </widget>
            </item>
@@ -352,6 +355,9 @@
                <width>16777215</width>
                <height>140</height>
               </size>
+             </property>
+             <property name="placeholderText">
+              <string>Write message here...</string>
              </property>
             </widget>
            </item>
@@ -415,7 +421,7 @@
                </size>
               </property>
               <property name="text">
-               <string>TextLabel</string>
+               <string>Signature</string>
               </property>
              </widget>
             </item>
@@ -426,6 +432,9 @@
                 <width>0</width>
                 <height>50</height>
                </size>
+              </property>
+              <property name="placeholderText">
+               <string>Signature</string>
               </property>
              </widget>
             </item>
@@ -438,7 +447,7 @@
             <string notr="true">padding-top:5px;</string>
            </property>
            <property name="text">
-            <string>TextLabel</string>
+            <string notr="true">N/A</string>
            </property>
           </widget>
          </item>
@@ -491,7 +500,7 @@
               <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
-              <string>Clear</string>
+              <string>CLEAR ALL</string>
              </property>
             </widget>
            </item>
@@ -513,7 +522,7 @@
               <enum>Qt::NoFocus</enum>
              </property>
              <property name="text">
-              <string/>
+              <string>SIGN</string>
              </property>
             </widget>
            </item>

@@ -21,12 +21,8 @@ void MNRow::updateView(QString address, QString label, QString status, bool wasC
 {
     ui->labelName->setText(label);
     ui->labelAddress->setText(address);
-    ui->labelDate->setText("Status: " + status);
-    if (!wasCollateralAccepted) {
-        ui->labelDate->setText("Status: Collateral tx not found");
-    } else {
-        ui->labelDate->setText("Status: " + status);
-    }
+    if (!wasCollateralAccepted) status = tr("Collateral tx not found");
+    ui->labelDate->setText(tr("Status: %1").arg(status));
 }
 
 MNRow::~MNRow()

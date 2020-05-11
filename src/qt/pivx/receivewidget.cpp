@@ -41,39 +41,31 @@ ReceiveWidget::ReceiveWidget(PIVXGUI* parent) :
     ui->right->setContentsMargins(0,9,0,0);
 
     // Title
-    ui->labelTitle->setText(tr("Receive"));
-    ui->labelSubtitle1->setText(tr("Scan the QR code or copy the address to receive PIV."));
     setCssTitleScreen(ui->labelTitle);
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     // Address
-    ui->labelAddress->setText(tr("No address "));
     setCssProperty(ui->labelAddress, "label-address-box");
 
-    ui->labelDate->setText("Dec. 19, 2018");
     setCssSubtitleScreen(ui->labelDate);
-    ui->labelLabel->setText("");
     setCssSubtitleScreen(ui->labelLabel);
 
     // Options
-    ui->btnMyAddresses->setTitleClassAndText("btn-title-grey", "My Addresses");
-    ui->btnMyAddresses->setSubTitleClassAndText("text-subtitle", "List your own addresses.");
+    ui->btnMyAddresses->setTitleClassAndText("btn-title-grey", tr("My Addresses"));
+    ui->btnMyAddresses->setSubTitleClassAndText("text-subtitle", tr("List your own addresses"));
     ui->btnMyAddresses->layout()->setMargin(0);
     ui->btnMyAddresses->setRightIconClass("ic-arrow");
 
-    ui->btnRequest->setTitleClassAndText("btn-title-grey", "Create Request");
-    ui->btnRequest->setSubTitleClassAndText("text-subtitle", "Request payment with a fixed amount.");
+    ui->btnRequest->setTitleClassAndText("btn-title-grey", tr("Create Request"));
+    ui->btnRequest->setSubTitleClassAndText("text-subtitle", tr("Request payment with a fixed amount"));
     ui->btnRequest->layout()->setMargin(0);
 
-    ui->pushButtonLabel->setText(tr("Add Label"));
     ui->pushButtonLabel->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonLabel, "btn-secundary-label");
 
-    ui->pushButtonNewAddress->setText(tr("Generate Address"));
     ui->pushButtonNewAddress->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonNewAddress, "btn-secundary-new-address");
 
-    ui->pushButtonCopy->setText(tr("Copy"));
     ui->pushButtonCopy->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonCopy, "btn-secundary-copy");
 
