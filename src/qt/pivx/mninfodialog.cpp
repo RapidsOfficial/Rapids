@@ -57,10 +57,10 @@ void MnInfoDialog::copyInform(QString& copyStr, QString message)
     openDialog(snackBar, this);
 }
 
-void MnInfoDialog::close()
+void MnInfoDialog::reject()
 {
     if (snackBar && snackBar->isVisible()) snackBar->hide();
-    FocusedDialog::close();
+    QDialog::reject();
 }
 
 MnInfoDialog::~MnInfoDialog()

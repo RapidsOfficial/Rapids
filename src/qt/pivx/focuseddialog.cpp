@@ -21,7 +21,7 @@ void FocusedDialog::keyPressEvent(QKeyEvent *e)
         // Detect Enter key press
         if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) accept();
         // Detect Esc key press
-        if (ke->key() == Qt::Key_Escape) close();
+        if (ke->key() == Qt::Key_Escape) reject();
     }
 }
 

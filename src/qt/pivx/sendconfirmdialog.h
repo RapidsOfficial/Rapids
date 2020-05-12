@@ -37,7 +37,7 @@ public:
 
 public Q_SLOTS:
     void accept() override;
-    void close();
+    void reject() override;
     void onInputsClicked();
     void onOutputsClicked();
 

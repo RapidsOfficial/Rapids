@@ -19,7 +19,7 @@ public:
     void showEvent(QShowEvent *event);
 
 protected:
-    // Detects a key press and calls accept() on ENTER and close() on ESC
+    // Detects a key press and calls accept() on ENTER and reject() on ESC
     void keyPressEvent(QKeyEvent *e);
 };
 

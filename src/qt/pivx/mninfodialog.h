@@ -27,7 +27,7 @@ public:
     void setData(QString privKey, QString name, QString address, QString txId, QString outputIndex, QString status);
 
 public Q_SLOTS:
-    void close();
+    void reject() override;
 
 private:
     Ui::MnInfoDialog *ui;

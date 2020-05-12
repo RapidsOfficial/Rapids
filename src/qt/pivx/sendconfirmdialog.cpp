@@ -221,10 +221,10 @@ void TxDetailDialog::onOutputsClicked()
     }
 }
 
-void TxDetailDialog::close()
+void TxDetailDialog::reject()
 {
     if (snackBar && snackBar->isVisible()) snackBar->hide();
-    QDialog::close();
+    QDialog::reject();
 }
 
 TxDetailDialog::~TxDetailDialog()
