@@ -80,6 +80,7 @@ BITCOIN_CORE_H = \
   activemasternode.h \
   addrman.h \
   allocators.h \
+  arith_uint256.h \
   amount.h \
   base58.h \
   bip38.h \
@@ -177,6 +178,8 @@ BITCOIN_CORE_H = \
   guiinterface.h \
   guiinterfaceutil.h \
   uint256.h \
+  uint512.h \
+  blob_uint256.h \
   undo.h \
   util/memory.h \
   util.h \
@@ -409,6 +412,7 @@ libbitcoin_common_a_SOURCES = \
 libbitcoin_util_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_util_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_util_a_SOURCES = \
+  arith_uint256.cpp \
   allocators.cpp \
   chainparamsbase.cpp \
   clientversion.cpp \
@@ -421,6 +425,7 @@ libbitcoin_util_a_SOURCES = \
   support/cleanse.cpp \
   sync.cpp \
   uint256.cpp \
+  blob_uint256.cpp \
   util.cpp \
   utilmoneystr.cpp \
   util/threadnames.cpp \
@@ -512,6 +517,7 @@ pivx_tx_LDADD += $(BOOST_LIBS) $(CRYPTO_LIBS)
 if BUILD_BITCOIN_LIBS
 include_HEADERS = script/bitcoinconsensus.h
 libbitcoinconsensus_la_SOURCES = \
+  arith_uint256.cpp \
   allocators.cpp \
   primitives/transaction.cpp \
   crypto/hmac_sha512.cpp \
@@ -526,6 +532,7 @@ libbitcoinconsensus_la_SOURCES = \
   script/interpreter.cpp \
   script/bitcoinconsensus.cpp \
   uint256.cpp \
+  blob_uint256.cpp \
   utilstrencodings.cpp
 
 if GLIBC_BACK_COMPAT
