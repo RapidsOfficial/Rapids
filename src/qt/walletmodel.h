@@ -122,7 +122,7 @@ public:
         AmountExceedsBalance,
         AmountWithFeeExceedsBalance,
         DuplicateAddress,
-        TransactionCreationFailed, // Error returned when wallet is still locked
+        TransactionCreationFailed,
         TransactionCommitFailed,
         StakingOnlyUnlocked,
         InsaneFee,
