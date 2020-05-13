@@ -13,7 +13,7 @@
 #include "optionsmodel.h"
 
 RequestDialog::RequestDialog(QWidget *parent) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::RequestDialog)
 {
     ui->setupUi(this);
@@ -58,7 +58,7 @@ RequestDialog::RequestDialog(QWidget *parent) :
 
     connect(ui->btnCancel, &QPushButton::clicked, this, &RequestDialog::close);
     connect(ui->btnEsc, &QPushButton::clicked, this, &RequestDialog::close);
-    connect(ui->btnSave, &QPushButton::clicked, this, &RequestDialog::onNextClicked);
+    connect(ui->btnSave, &QPushButton::clicked, this, &RequestDialog::accept);
     // TODO: Change copy address for save image (the method is already implemented in other class called exportQr or something like that)
     connect(ui->btnCopyAddress, &QPushButton::clicked, this, &RequestDialog::onCopyClicked);
     connect(ui->btnCopyUrl, &QPushButton::clicked, this, &RequestDialog::onCopyUriClicked);
@@ -79,10 +79,9 @@ void RequestDialog::setPaymentRequest(bool isPaymentRequest)
     }
 }
 
-void RequestDialog::onNextClicked()
+void RequestDialog::accept()
 {
     if (walletModel) {
-
         QString labelStr = ui->lineEditLabel->text();
 
         //Amount
@@ -147,7 +146,7 @@ void RequestDialog::onCopyClicked()
     if (info) {
         GUIUtil::setClipboard(info->address);
         res = 2;
-        accept();
+        QDialog::accept();
     }
 }
 
@@ -156,7 +155,7 @@ void RequestDialog::onCopyUriClicked()
     if (info) {
         GUIUtil::setClipboard(GUIUtil::formatBitcoinURI(*info));
         res = 1;
-        accept();
+        QDialog::accept();
     }
 }
 

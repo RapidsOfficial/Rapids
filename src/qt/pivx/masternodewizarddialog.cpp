@@ -19,7 +19,7 @@
 #include <QRegularExpressionValidator>
 
 MasterNodeWizardDialog::MasterNodeWizardDialog(WalletModel *model, QWidget *parent) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::MasterNodeWizardDialog),
     icConfirm1(new QPushButton()),
     icConfirm3(new QPushButton()),
@@ -89,7 +89,7 @@ MasterNodeWizardDialog::MasterNodeWizardDialog(WalletModel *model, QWidget *pare
     setCssProperty(ui->pushButtonSkip, "ic-close");
 
     connect(ui->pushButtonSkip, &QPushButton::clicked, this, &MasterNodeWizardDialog::close);
-    connect(ui->btnNext, &QPushButton::clicked, this, &MasterNodeWizardDialog::onNextClicked);
+    connect(ui->btnNext, &QPushButton::clicked, this, &MasterNodeWizardDialog::accept);
     connect(ui->btnBack, &QPushButton::clicked, this, &MasterNodeWizardDialog::onBackClicked);
 }
 
@@ -98,7 +98,7 @@ void MasterNodeWizardDialog::showEvent(QShowEvent *event)
     if (ui->btnNext) ui->btnNext->setFocus();
 }
 
-void MasterNodeWizardDialog::onNextClicked()
+void MasterNodeWizardDialog::accept()
 {
     switch(pos) {
         case 0:{
@@ -142,7 +142,7 @@ void MasterNodeWizardDialog::onNextClicked()
             ui->btnBack->setVisible(true);
             ui->btnBack->setVisible(true);
             isOk = createMN();
-            accept();
+            QDialog::accept();
         }
     }
     pos++;

@@ -119,6 +119,7 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/pivxgui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/loadingdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/pwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/pivx/focuseddialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/guitransactionsutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/snackbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/pivx/navmenuwidget.cpp

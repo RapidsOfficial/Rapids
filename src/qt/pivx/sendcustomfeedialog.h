@@ -5,8 +5,8 @@
 #ifndef SENDCUSTOMFEEDIALOG_H
 #define SENDCUSTOMFEEDIALOG_H
 
-#include <QDialog>
 #include "amount.h"
+#include "qt/pivx/focuseddialog.h"
 #include "qt/pivx/snackbar.h"
 
 class PIVXGUI;
@@ -16,7 +16,7 @@ namespace Ui {
 class SendCustomFeeDialog;
 }
 
-class SendCustomFeeDialog : public QDialog
+class SendCustomFeeDialog : public FocusedDialog
 {
     Q_OBJECT
 

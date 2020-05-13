@@ -13,10 +13,9 @@
 #include "qt/pivx/qtutils.h"
 #include <QList>
 #include <QDateTime>
-#include <QKeyEvent>
 
 TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, const QString& warningStr) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::TxDetailDialog),
     isConfirmDialog(_isConfirmDialog)
 {
@@ -68,20 +67,15 @@ TxDetailDialog::TxDetailDialog(QWidget *parent, bool _isConfirmDialog, const QSt
         ui->contentSize->setVisible(false);
 
         connect(ui->btnCancel, &QPushButton::clicked, this, &TxDetailDialog::close);
-        connect(ui->btnSave, &QPushButton::clicked, [this](){acceptTx();});
+        connect(ui->btnSave, &QPushButton::clicked, [this](){accept();});
     } else {
         ui->labelTitle->setText(tr("Transaction Details"));
         ui->containerButtons->setVisible(false);
     }
 
-    connect(ui->btnEsc, &QPushButton::clicked, this, &TxDetailDialog::closeDialog);
+    connect(ui->btnEsc, &QPushButton::clicked, this, &TxDetailDialog::close);
     connect(ui->pushInputs, &QPushButton::clicked, this, &TxDetailDialog::onInputsClicked);
     connect(ui->pushOutputs, &QPushButton::clicked, this, &TxDetailDialog::onOutputsClicked);
-}
-
-void TxDetailDialog::showEvent(QShowEvent *event)
-{
-    setFocus();
 }
 
 void TxDetailDialog::setData(WalletModel *model, const QModelIndex &index)
@@ -151,13 +145,13 @@ void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx)
     ui->textFee->setText(BitcoinUnits::formatWithUnit(nDisplayUnit, txFee, false, BitcoinUnits::separatorAlways));
 }
 
-void TxDetailDialog::acceptTx()
+void TxDetailDialog::accept()
 {
-    if (!isConfirmDialog)
-        throw GUIException(strprintf("%s called on non confirm dialog", __func__));
-    this->confirm = true;
-    this->sendStatus = model->sendCoins(*this->tx);
-    accept();
+    if (isConfirmDialog) {
+        this->confirm = true;
+        this->sendStatus = model->sendCoins(*this->tx);
+    }
+    QDialog::accept();
 }
 
 void TxDetailDialog::onInputsClicked()
@@ -227,25 +221,10 @@ void TxDetailDialog::onOutputsClicked()
     }
 }
 
-void TxDetailDialog::keyPressEvent(QKeyEvent *event)
-{
-    if (event->type() == QEvent::KeyPress) {
-        QKeyEvent* ke = static_cast<QKeyEvent*>(event);
-        // Detect Enter key press
-        if (ke->key() == Qt::Key_Enter || ke->key() == Qt::Key_Return) {
-            if (isConfirmDialog) acceptTx();
-            else accept();
-        }
-        // Detect Esc key press
-        if (ke->key() == Qt::Key_Escape)
-            closeDialog();
-    }
-}
-
-void TxDetailDialog::closeDialog()
+void TxDetailDialog::reject()
 {
     if (snackBar && snackBar->isVisible()) snackBar->hide();
-    close();
+    QDialog::reject();
 }
 
 TxDetailDialog::~TxDetailDialog()

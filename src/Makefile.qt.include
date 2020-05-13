@@ -107,6 +107,7 @@ QT_MOC_CPP = \
   qt/pivx/moc_loadingdialog.cpp \
   qt/moc_zpivcontroldialog.cpp \
   qt/pivx/moc_pwidget.cpp \
+  qt/pivx/moc_focuseddialog.cpp \
   qt/pivx/moc_snackbar.cpp \
   qt/pivx/moc_navmenuwidget.cpp \
   qt/pivx/moc_lockunlock.cpp \
@@ -228,6 +229,7 @@ BITCOIN_QT_H = \
   qt/winshutdownmonitor.h \
   qt/zpivcontroldialog.h \
   qt/pivx/pwidget.h \
+  qt/pivx/focuseddialog.h \
   qt/pivx/guitransactionsutils.h \
   qt/pivx/snackbar.h \
   qt/pivx/navmenuwidget.h \
@@ -553,6 +555,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/pivx/loadingdialog.cpp \
   qt/zpivcontroldialog.cpp \
   qt/pivx/pwidget.cpp \
+  qt/pivx/focuseddialog.cpp \
   qt/pivx/guitransactionsutils.cpp \
   qt/pivx/snackbar.cpp \
   qt/pivx/navmenuwidget.cpp \

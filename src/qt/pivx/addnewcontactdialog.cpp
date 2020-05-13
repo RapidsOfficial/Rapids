@@ -7,7 +7,7 @@
 #include "qt/pivx/qtutils.h"
 
 AddNewContactDialog::AddNewContactDialog(QWidget *parent) :
-    QDialog(parent),
+    FocusedDialog(parent),
     ui(new Ui::AddNewContactDialog)
 {
     ui->setupUi(this);
@@ -33,7 +33,7 @@ AddNewContactDialog::AddNewContactDialog(QWidget *parent) :
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &AddNewContactDialog::close);
     connect(ui->btnCancel, &QPushButton::clicked, this, &AddNewContactDialog::close);
-    connect(ui->btnOk, &QPushButton::clicked, this, &AddNewContactDialog::ok);
+    connect(ui->btnOk, &QPushButton::clicked, this, &AddNewContactDialog::accept);
 }
 
 void AddNewContactDialog::setTexts(QString title, const char* message) {
@@ -57,9 +57,9 @@ void AddNewContactDialog::showEvent(QShowEvent *event)
     if (ui->lineEditName) ui->lineEditName->setFocus();
 }
 
-void AddNewContactDialog::ok() {
+void AddNewContactDialog::accept() {
     this->res = true;
-    accept();
+    QDialog::accept();
 }
 
 QString AddNewContactDialog::getLabel(){

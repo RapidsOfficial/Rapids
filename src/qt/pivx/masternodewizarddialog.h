@@ -5,8 +5,8 @@
 #ifndef MASTERNODEWIZARDDIALOG_H
 #define MASTERNODEWIZARDDIALOG_H
 
-#include <QDialog>
 #include "walletmodel.h"
+#include "qt/pivx/focuseddialog.h"
 #include "qt/pivx/snackbar.h"
 #include "masternodeconfig.h"
 #include "qt/pivx/pwidget.h"
@@ -18,7 +18,7 @@ class MasterNodeWizardDialog;
 class QPushButton;
 }
 
-class MasterNodeWizardDialog : public QDialog, public PWidget::Translator
+class MasterNodeWizardDialog : public FocusedDialog, public PWidget::Translator
 {
     Q_OBJECT
 
@@ -33,7 +33,7 @@ public:
     CMasternodeConfig::CMasternodeEntry* mnEntry = nullptr;
 
 private Q_SLOTS:
-    void onNextClicked();
+    void accept() override;
     void onBackClicked();
 private:
     Ui::MasterNodeWizardDialog *ui;
