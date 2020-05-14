@@ -982,7 +982,7 @@ PairResult WalletModel::getNewAddress(Destination& ret, std::string label) const
 {
     CTxDestination dest;
     PairResult res = wallet->getNewAddress(dest, label);
-    ret = Destination(dest, false);
+    if (res.result) ret = Destination(dest, false);
     return res;
 }
 
@@ -990,7 +990,7 @@ PairResult WalletModel::getNewStakingAddress(Destination& ret,std::string label)
 {
     CTxDestination dest;
     PairResult res = wallet->getNewStakingAddress(dest, label);
-    ret = Destination(dest, true);
+    if (res.result) ret = Destination(dest, true);
     return res;
 }
 
