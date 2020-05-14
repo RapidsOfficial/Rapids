@@ -1275,6 +1275,16 @@ void MapPort(bool)
 }
 #endif
 
+static std::string GetDNSHost(const CDNSSeedData& data, ServiceFlags* requiredServiceBits)
+{
+    //use default host for non-filter-capable seeds or if we use the default service bits (NODE_NETWORK)
+    if (!data.supportsServiceBitsFiltering || *requiredServiceBits == NODE_NETWORK) {
+        *requiredServiceBits = NODE_NETWORK;
+        return data.host;
+    }
+
+    return strprintf("x%x.%s", *requiredServiceBits, data.host);
+}
 
 void ThreadDNSAddressSeed()
 {
@@ -1302,7 +1312,7 @@ void ThreadDNSAddressSeed()
             std::vector<CNetAddr> vIPs;
             std::vector<CAddress> vAdd;
             ServiceFlags requiredServiceBits = nRelevantServices;
-            if (LookupHost(seed.getHost(requiredServiceBits).c_str(), vIPs, 0, true)) {
+            if (LookupHost(GetDNSHost(seed, &requiredServiceBits).c_str(), vIPs, 0, true)) {
                 for (CNetAddr& ip : vIPs) {
                     int nOneDay = 24 * 3600;
                     CAddress addr = CAddress(CService(ip, Params().GetDefaultPort()), requiredServiceBits);
