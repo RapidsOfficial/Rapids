@@ -308,6 +308,8 @@ libbitcoin_wallet_a_SOURCES = \
 crypto_libbitcoin_crypto_a_CPPFLAGS = $(AM_CPPFLAGS) $(PIC_FLAGS)
 crypto_libbitcoin_crypto_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIC_FLAGS)
 crypto_libbitcoin_crypto_a_SOURCES = \
+  crypto/aes.cpp \
+  crypto/aes.h \
   crypto/sha1.cpp \
   crypto/sha256.cpp \
   crypto/sha512.cpp \
@@ -566,7 +568,13 @@ CLEANFILES += zmq/*.gcda zmq/*.gcno
 CLEANFILES += zpiv/*.gcda zpiv/*.gcno
 CLEANFILES += obj/build.h
 
-EXTRA_DIST =
+CTAES_DIST =  crypto/ctaes/bench.c
+CTAES_DIST += crypto/ctaes/ctaes.c
+CTAES_DIST += crypto/ctaes/ctaes.h
+CTAES_DIST += crypto/ctaes/README.md
+CTAES_DIST += crypto/ctaes/test.c
+
+EXTRA_DIST = $(CTAES_DIST)
 
 
 config/pivx-config.h: config/stamp-h1

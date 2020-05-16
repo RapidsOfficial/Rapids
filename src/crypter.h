@@ -14,6 +14,7 @@ class uint256;
 
 const unsigned int WALLET_CRYPTO_KEY_SIZE = 32;
 const unsigned int WALLET_CRYPTO_SALT_SIZE = 8;
+const unsigned int WALLET_CRYPTO_IV_SIZE = 16;
 
 /**
  * Private key encryption is done based on a CMasterKey,
@@ -68,18 +69,26 @@ public:
 
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CKeyingMaterial;
 
+namespace wallet_crypto
+{
+    class TestCrypter;
+}
+
 /** Encryption/decryption context with key information */
 class CCrypter
 {
+friend class wallet_crypto::TestCrypter; // for test access to chKey/chIV
 private:
     unsigned char chKey[WALLET_CRYPTO_KEY_SIZE];
-    unsigned char chIV[WALLET_CRYPTO_KEY_SIZE];
+    unsigned char chIV[WALLET_CRYPTO_IV_SIZE];
     bool fKeySet;
+
+    int BytesToKeySHA512AES(const std::vector<unsigned char>& chSalt, const SecureString& strKeyData, int count, unsigned char *key,unsigned char *iv) const;
 
 public:
     bool SetKeyFromPassphrase(const SecureString& strKeyData, const std::vector<unsigned char>& chSalt, const unsigned int nRounds, const unsigned int nDerivationMethod);
-    bool Encrypt(const CKeyingMaterial& vchPlaintext, std::vector<unsigned char>& vchCiphertext);
-    bool Decrypt(const std::vector<unsigned char>& vchCiphertext, CKeyingMaterial& vchPlaintext);
+    bool Encrypt(const CKeyingMaterial& vchPlaintext, std::vector<unsigned char>& vchCiphertext) const;
+    bool Decrypt(const std::vector<unsigned char>& vchCiphertext, CKeyingMaterial& vchPlaintext) const;
     bool SetKey(const CKeyingMaterial& chNewKey, const std::vector<unsigned char>& chNewIV);
 
     void CleanKey()
@@ -111,9 +120,6 @@ public:
 
 bool EncryptSecret(const CKeyingMaterial& vMasterKey, const CKeyingMaterial& vchPlaintext, const uint256& nIV, std::vector<unsigned char>& vchCiphertext);
 bool DecryptSecret(const CKeyingMaterial& vMasterKey, const std::vector<unsigned char>& vchCiphertext, const uint256& nIV, CKeyingMaterial& vchPlaintext);
-
-bool EncryptAES256(const SecureString& sKey, const SecureString& sPlaintext, const std::string& sIV, std::string& sCiphertext);
-bool DecryptAES256(const SecureString& sKey, const std::string& sCiphertext, const std::string& sIV, SecureString& sPlaintext);
 
 
 /** Keystore which keeps the private keys encrypted.
