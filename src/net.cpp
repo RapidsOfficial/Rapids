@@ -14,6 +14,7 @@
 #include "addrman.h"
 #include "chainparams.h"
 #include "clientversion.h"
+#include "crypto/common.h"
 #include "guiinterface.h"
 #include "main.h"
 #include "miner.h"
@@ -2255,7 +2256,7 @@ void CNode::EndMessage() UNLOCK_FUNCTION(cs_vSend)
 
     // Set the size
     unsigned int nSize = ssSend.size() - CMessageHeader::HEADER_SIZE;
-    memcpy((char*)&ssSend[CMessageHeader::MESSAGE_SIZE_OFFSET], &nSize, sizeof(nSize));
+    WriteLE32((uint8_t*)&ssSend[CMessageHeader::MESSAGE_SIZE_OFFSET], nSize);
 
     // Set the checksum
     uint256 hash = Hash(ssSend.begin() + CMessageHeader::HEADER_SIZE, ssSend.end());

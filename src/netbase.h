@@ -181,7 +181,7 @@ public:
     {
         READWRITE(FLATDATA(ip));
         unsigned short portN = htons(port);
-        READWRITE(portN);
+        READWRITE(FLATDATA(portN));
         if (ser_action.ForRead())
             port = ntohs(portN);
     }
