@@ -110,8 +110,8 @@ bool CCoinsViewDB::GetStats(CCoinsStats& stats) const
     /* It seems that there are no "const iterators" for LevelDB.  Since we
        only need read operations on it, use a const-cast to get around
        that restriction.  */
-    boost::scoped_ptr<leveldb::Iterator> pcursor(const_cast<CLevelDBWrapper*>(&db)->NewIterator());
-    pcursor->SeekToFirst();
+    boost::scoped_ptr<CLevelDBIterator> pcursor(const_cast<CLevelDBWrapper*>(&db)->NewIterator());
+    pcursor->Seek(DB_COINS);
 
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
     stats.hashBlock = GetBestBlock();
@@ -119,22 +119,10 @@ bool CCoinsViewDB::GetStats(CCoinsStats& stats) const
     CAmount nTotalAmount = 0;
     while (pcursor->Valid()) {
         boost::this_thread::interruption_point();
-        try {
-            leveldb::Slice slKey = pcursor->key();
-            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
-            char chType;
-            ssKey >> chType;
-            if (chType == DB_COINS) {
-                leveldb::Slice slValue = pcursor->value();
-                CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
-                CCoins coins;
-                ssValue >> coins;
-                uint256 txhash;
-                ssKey >> txhash;
-                ss << txhash;
-                ss << VARINT(coins.nVersion);
-                ss << (coins.fCoinBase ? DB_COINS : 'n');
-                ss << VARINT(coins.nHeight);
+        std::pair<char, uint256> key;
+        CCoins coins;
+        if (pcursor->GetKey(key) && key.first == DB_COINS) {
+            if (pcursor->GetValue(coins)) {
                 stats.nTransactions++;
                 for (unsigned int i = 0; i < coins.vout.size(); i++) {
                     const CTxOut& out = coins.vout[i];
@@ -145,15 +133,18 @@ bool CCoinsViewDB::GetStats(CCoinsStats& stats) const
                         nTotalAmount += out.nValue;
                     }
                 }
-                stats.nSerializedSize += 32 + slValue.size();
+                stats.nSerializedSize += 32 + pcursor->GetKeySize();
                 ss << VARINT(0);
+            } else {
+                return error("CCoinsViewDB::GetStats() : unable to read value");
             }
-            pcursor->Next();
-        } catch (const std::exception& e) {
-            return error("%s : Deserialize or I/O error - %s", __func__, e.what());
+        } else {
+            break;
         }
+        pcursor->Next();
     }
-    stats.nHeight = mapBlockIndex.find(GetBestBlock())->second->nHeight;
+
+    stats.nHeight = WITH_LOCK(cs_main, return mapBlockIndex.find(stats.hashBlock)->second->nHeight;);
     stats.hashSerialized = ss.GetHash();
     stats.nTotalAmount = nTotalAmount;
     return true;
@@ -220,26 +211,17 @@ bool CBlockTreeDB::ReadInt(const std::string& name, int& nValue)
 
 bool CBlockTreeDB::LoadBlockIndexGuts()
 {
-    boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
+    boost::scoped_ptr<CLevelDBIterator> pcursor(NewIterator());
 
-    CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
-    ssKeySet << std::make_pair(DB_BLOCK_INDEX, UINT256_ZERO);
-    pcursor->Seek(ssKeySet.str());
+    pcursor->Seek(std::make_pair(DB_BLOCK_INDEX, UINT256_ZERO));
 
     // Load mapBlockIndex
     while (pcursor->Valid()) {
         boost::this_thread::interruption_point();
-        try {
-            leveldb::Slice slKey = pcursor->key();
-            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
-            char chType;
-            ssKey >> chType;
-            if (chType == DB_BLOCK_INDEX) {
-                leveldb::Slice slValue = pcursor->value();
-                CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
-                CDiskBlockIndex diskindex;
-                ssValue >> diskindex;
-
+        std::pair<char, uint256> key;
+        if (pcursor->GetKey(key) && key.first == DB_BLOCK_INDEX) {
+            CDiskBlockIndex diskindex;
+            if (pcursor->GetValue(diskindex)) {
                 // Construct block index object
                 CBlockIndex* pindexNew = InsertBlockIndex(diskindex.GetBlockHash());
                 pindexNew->pprev = InsertBlockIndex(diskindex.hashPrev);
@@ -269,10 +251,10 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
 
                 pcursor->Next();
             } else {
-                break; // if shutdown requested or finished loading block index
+                return error("%s : failed to read value", __func__);
             }
-        } catch (const std::exception& e) {
-            return error("%s : Deserialize or I/O error - %s", __func__, e.what());
+        } else {
+            break;
         }
     }
 
@@ -364,33 +346,25 @@ bool CZerocoinDB::WipeCoins(std::string strType)
     if (strType != "spends" && strType != "mints")
         return error("%s: did not recognize type %s", __func__, strType);
 
-    boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
+    boost::scoped_ptr<CLevelDBIterator> pcursor(NewIterator());
 
     char type = (strType == "spends" ? 's' : 'm');
-    CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
-    ssKeySet << std::make_pair(type, UINT256_ZERO);
-    pcursor->Seek(ssKeySet.str());
+    pcursor->Seek(std::make_pair(type, UINT256_ZERO));
     // Load mapBlockIndex
     std::set<uint256> setDelete;
     while (pcursor->Valid()) {
         boost::this_thread::interruption_point();
-        try {
-            leveldb::Slice slKey = pcursor->key();
-            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
-            char chType;
-            ssKey >> chType;
-            if (chType == type) {
-                leveldb::Slice slValue = pcursor->value();
-                CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
-                uint256 hash;
-                ssValue >> hash;
+        std::pair<char, uint256> key;
+        if (pcursor->GetKey(key) && key.first == type) {
+            uint256 hash;
+            if (pcursor->GetValue(hash)) {
                 setDelete.insert(hash);
                 pcursor->Next();
             } else {
-                break; // if shutdown requested or finished loading block index
+                return error("%s : failed to read value", __func__);
             }
-        } catch (const std::exception& e) {
-            return error("%s : Deserialize or I/O error - %s", __func__, e.what());
+        } else {
+            break;
         }
     }
 
@@ -434,28 +408,22 @@ bool CZerocoinDB::EraseAccChecksum(const uint32_t& nChecksum, const libzerocoin:
 
 bool CZerocoinDB::WipeAccChecksums()
 {
-    boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
-    CDataStream ssKeySet(SER_DISK, CLIENT_VERSION);
-    ssKeySet << std::make_pair(LZC_ACCUMCS, (uint32_t) 0);
-    pcursor->Seek(ssKeySet.str());
+    boost::scoped_ptr<CLevelDBIterator> pcursor(NewIterator());
+    pcursor->Seek(std::make_pair(LZC_ACCUMCS, (uint32_t) 0));
     std::set<uint32_t> setDelete;
     while (pcursor->Valid()) {
         boost::this_thread::interruption_point();
-        try {
-            leveldb::Slice slKey = pcursor->key();
-            CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
-            char chType;
-            ssKey >> chType;
-            if (chType == LZC_ACCUMCS) {
-                leveldb::Slice slValue = pcursor->value();
-                CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
-                uint32_t acs;
-                ssValue >> acs;
+        std::pair<char, uint32_t> key;
+        if (pcursor->GetKey(key) && key.first == LZC_ACCUMCS) {
+            uint32_t acs;
+            if (pcursor->GetValue(acs)) {
                 setDelete.insert(acs);
                 pcursor->Next();
-            } else break;
-        } catch (const std::exception& e) {
-            return error("%s : Deserialize or I/O error - %s", __func__, e.what());
+            } else {
+                return error("%s : failed to read value", __func__);
+            }
+        } else {
+            break;
         }
     }
 
