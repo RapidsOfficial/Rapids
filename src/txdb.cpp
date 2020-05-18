@@ -25,18 +25,6 @@ static const char DB_REINDEX_FLAG = 'R';
 static const char DB_LAST_BLOCK = 'l';
 static const char DB_MONEY_SUPPLY = 'M';
 
-void static BatchWriteCoins(CLevelDBBatch& batch, const uint256& hash, const CCoins& coins)
-{
-    if (coins.IsPruned())
-        batch.Erase(std::make_pair(DB_COINS, hash));
-    else
-        batch.Write(std::make_pair(DB_COINS, hash), coins);
-}
-
-void static BatchWriteHashBestChain(CLevelDBBatch& batch, const uint256& hash)
-{
-    batch.Write(DB_BEST_BLOCK, hash);
-}
 
 CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe) : db(GetDataDir() / "chainstate", nCacheSize, fMemory, fWipe)
 {
@@ -67,7 +55,10 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
     size_t changed = 0;
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
         if (it->second.flags & CCoinsCacheEntry::DIRTY) {
-            BatchWriteCoins(batch, it->first, it->second.coins);
+            if (it->second.coins.IsPruned())
+                batch.Erase(std::make_pair(DB_COINS, it->first));
+            else
+                batch.Write(std::make_pair(DB_COINS, it->first), it->second.coins);
             changed++;
         }
         count++;
@@ -75,7 +66,7 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
         mapCoins.erase(itOld);
     }
     if (!hashBlock.IsNull())
-        BatchWriteHashBestChain(batch, hashBlock);
+        batch.Write(DB_BEST_BLOCK, hashBlock);
 
     LogPrint(BCLog::COINDB, "Committing %u changed transactions (out of %u) to coin database...\n", (unsigned int)changed, (unsigned int)count);
     return db.WriteBatch(batch);

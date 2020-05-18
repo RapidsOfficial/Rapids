@@ -7,11 +7,13 @@
 #include "util.h"
 
 #include <boost/filesystem.hpp>
+#include <boost/scoped_ptr.hpp>
 
 #include <leveldb/cache.h>
 #include <leveldb/env.h>
 #include <leveldb/filter_policy.h>
 #include <memenv.h>
+#include <stdint.h>
 
 void HandleError(const leveldb::Status& status)
 {
@@ -85,4 +87,11 @@ bool CLevelDBWrapper::WriteBatch(CLevelDBBatch& batch, bool fSync)
     leveldb::Status status = pdb->Write(fSync ? syncoptions : writeoptions, &batch.batch);
     HandleError(status);
     return true;
+}
+
+bool CLevelDBWrapper::IsEmpty()
+{
+    boost::scoped_ptr<leveldb::Iterator> it(NewIterator());
+    it->SeekToFirst();
+    return !(it->Valid());
 }
