@@ -985,10 +985,10 @@ class CSizeComputer
 protected:
     size_t nSize;
 
-public:
-    int nType;
-    int nVersion;
+    const int nType;
+    const int nVersion;
 
+public:
     CSizeComputer(int nTypeIn, int nVersionIn) : nSize(0), nType(nTypeIn), nVersion(nVersionIn) {}
 
     void write(const char* psz, size_t nSize)
