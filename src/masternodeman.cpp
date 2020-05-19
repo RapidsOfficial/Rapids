@@ -70,7 +70,7 @@ bool CMasternodeDB::Write(const CMasternodeMan& mnodemanToSave)
     ssMasternodes << hash;
 
     // open output file, and associate with CAutoFile
-    FILE* file = fopen(pathMN.string().c_str(), "wb");
+    FILE* file = fsbridge::fopen(pathMN, "wb");
     CAutoFile fileout(file, SER_DISK, CLIENT_VERSION);
     if (fileout.IsNull())
         return error("%s : Failed to open file %s", __func__, pathMN.string());
@@ -94,7 +94,7 @@ CMasternodeDB::ReadResult CMasternodeDB::Read(CMasternodeMan& mnodemanToLoad, bo
 {
     int64_t nStart = GetTimeMillis();
     // open input file, and associate with CAutoFile
-    FILE* file = fopen(pathMN.string().c_str(), "rb");
+    FILE* file = fsbridge::fopen(pathMN, "rb");
     CAutoFile filein(file, SER_DISK, CLIENT_VERSION);
     if (filein.IsNull()) {
         error("%s : Failed to open file %s", __func__, pathMN.string());

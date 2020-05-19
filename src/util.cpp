@@ -371,7 +371,7 @@ void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
     fs::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good()) {
         // Create empty pivx.conf if it does not exist
-        FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
+        FILE* configFile = fsbridge::fopen(GetConfigFile(), "a");
         if (configFile != NULL)
             fclose(configFile);
         return; // Nothing to read, so just return
@@ -411,7 +411,7 @@ fs::path GetPidFile()
 
 void CreatePidFile(const fs::path& path, pid_t pid)
 {
-    FILE* file = fopen(path.string().c_str(), "w");
+    FILE* file = fsbridge::fopen(path, "w");
     if (file) {
         fprintf(file, "%d\n", pid);
         fclose(file);

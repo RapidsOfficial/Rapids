@@ -435,7 +435,7 @@ void MasterNodesWidget::onDeleteMNClicked()
         if (lineNumToRemove != -1) {
             fs::path pathConfigFile("masternode_temp.conf");
             if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir() / pathConfigFile;
-            FILE* configFile = fopen(pathConfigFile.string().c_str(), "w");
+            FILE* configFile = fsbridge::fopen(pathConfigFile, "w");
             fwrite(lineCopy.c_str(), std::strlen(lineCopy.c_str()), 1, configFile);
             fclose(configFile);
 

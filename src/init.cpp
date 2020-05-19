@@ -221,7 +221,7 @@ void PrepareShutdown()
 
     if (fFeeEstimatesInitialized) {
         fs::path est_path = GetDataDir() / FEE_ESTIMATES_FILENAME;
-        CAutoFile est_fileout(fopen(est_path.string().c_str(), "wb"), SER_DISK, CLIENT_VERSION);
+        CAutoFile est_fileout(fsbridge::fopen(est_path, "wb"), SER_DISK, CLIENT_VERSION);
         if (!est_fileout.IsNull())
             mempool.WriteFeeEstimates(est_fileout);
         else
@@ -694,7 +694,7 @@ void ThreadImport(std::vector<fs::path> vImportFiles)
     // hardcoded $DATADIR/bootstrap.dat
     fs::path pathBootstrap = GetDataDir() / "bootstrap.dat";
     if (fs::exists(pathBootstrap)) {
-        FILE* file = fopen(pathBootstrap.string().c_str(), "rb");
+        FILE* file = fsbridge::fopen(pathBootstrap, "rb");
         if (file) {
             CImportingNow imp;
             fs::path pathBootstrapOld = GetDataDir() / "bootstrap.dat.old";
@@ -708,7 +708,7 @@ void ThreadImport(std::vector<fs::path> vImportFiles)
 
     // -loadblock=
     for (fs::path& path : vImportFiles) {
-        FILE* file = fopen(path.string().c_str(), "rb");
+        FILE* file = fsbridge::fopen(path, "rb");
         if (file) {
             CImportingNow imp;
             LogPrintf("Importing blocks file %s...\n", path.string());
@@ -1066,7 +1066,7 @@ bool AppInit2()
 #endif
     // Make sure only a single PIVX process is using the data directory.
     fs::path pathLockFile = GetDataDir() / ".lock";
-    FILE* file = fopen(pathLockFile.string().c_str(), "a"); // empty lock file; created if it doesn't exist.
+    FILE* file = fsbridge::fopen(pathLockFile, "a"); // empty lock file; created if it doesn't exist.
     if (file) fclose(file);
     static boost::interprocess::file_lock lock(pathLockFile.string().c_str());
 
@@ -1630,7 +1630,7 @@ bool AppInit2()
     }
 
     fs::path est_path = GetDataDir() / FEE_ESTIMATES_FILENAME;
-    CAutoFile est_filein(fopen(est_path.string().c_str(), "rb"), SER_DISK, CLIENT_VERSION);
+    CAutoFile est_filein(fsbridge::fopen(est_path, "rb"), SER_DISK, CLIENT_VERSION);
     // Allowed to fail as this file IS missing on first startup.
     if (!est_filein.IsNull())
         mempool.ReadFeeEstimates(est_filein);

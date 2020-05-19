@@ -292,7 +292,7 @@ bool CBudgetDB::Write(const CBudgetManager& objToSave)
     ssObj << hash;
 
     // open output file, and associate with CAutoFile
-    FILE* file = fopen(pathDB.string().c_str(), "wb");
+    FILE* file = fsbridge::fopen(pathDB, "wb");
     CAutoFile fileout(file, SER_DISK, CLIENT_VERSION);
     if (fileout.IsNull())
         return error("%s : Failed to open file %s", __func__, pathDB.string());
@@ -316,7 +316,7 @@ CBudgetDB::ReadResult CBudgetDB::Read(CBudgetManager& objToLoad, bool fDryRun)
 
     int64_t nStart = GetTimeMillis();
     // open input file, and associate with CAutoFile
-    FILE* file = fopen(pathDB.string().c_str(), "rb");
+    FILE* file = fsbridge::fopen(pathDB, "rb");
     CAutoFile filein(file, SER_DISK, CLIENT_VERSION);
     if (filein.IsNull()) {
         error("%s : Failed to open file %s", __func__, pathDB.string());
