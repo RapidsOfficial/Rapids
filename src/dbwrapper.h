@@ -22,7 +22,18 @@ public:
     dbwrapper_error(const std::string& msg) : std::runtime_error(msg) {}
 };
 
+class CDBWrapper;
+
+/** These should be considered an implementation detail of the specific database.
+ */
+namespace dbwrapper_private {
+
+/** Handle database error by throwing dbwrapper_error exception.
+ */
 void HandleError(const leveldb::Status& status);
+
+};
+
 
 /** Batch of changes queued to be written to a CDBWrapper */
 class CDBBatch
@@ -167,7 +178,7 @@ public:
             if (status.IsNotFound())
                 return false;
             LogPrintf("LevelDB read failure: %s\n", status.ToString());
-            HandleError(status);
+            dbwrapper_private::HandleError(status);
         }
         try {
             CDataStream ssValue(strValue.data(), strValue.data() + strValue.size(), SER_DISK, CLIENT_VERSION);
@@ -200,7 +211,7 @@ public:
             if (status.IsNotFound())
                 return false;
             LogPrintf("LevelDB read failure: %s\n", status.ToString());
-            HandleError(status);
+            dbwrapper_private::HandleError(status);
         }
         return true;
     }
