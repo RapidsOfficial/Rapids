@@ -44,6 +44,7 @@ private:
     leveldb::WriteBatch batch;
 
 public:
+
     template <typename K, typename V>
     void Write(const K& key, const V& value)
     {
@@ -79,9 +80,9 @@ private:
 
 public:
     /**
-     * @param[in] piterIn          The original leveldb iterator.
+     * @param[in] _piter            The original leveldb iterator.
      */
-    CDBIterator(leveldb::Iterator *piterIn) : piter(piterIn) { };
+    CDBIterator(leveldb::Iterator *_piter) : piter(_piter) { };
     ~CDBIterator();
 
     bool Valid();
