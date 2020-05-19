@@ -9,14 +9,13 @@
 
 
 #include "clientversion.h"
+#include "fs.h"
 #include "main.h"
 #include "utiltime.h"
 #include "test/test_pivx.h"
 
 #include <cstdio>
 
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/test/unit_test.hpp>
 
 

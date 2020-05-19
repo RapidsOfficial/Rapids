@@ -7,6 +7,7 @@
 #include "data/script_valid.json.h"
 
 #include "core_io.h"
+#include "fs.h"
 #include "key.h"
 #include "keystore.h"
 #include "main.h"
@@ -29,8 +30,6 @@
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <boost/filesystem/operations.hpp>
-#include <boost/filesystem/path.hpp>
 #include <boost/test/unit_test.hpp>
 
 #include <univalue.h>

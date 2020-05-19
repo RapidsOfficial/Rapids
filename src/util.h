@@ -16,6 +16,7 @@
 #include "config/pivx-config.h"
 #endif
 
+#include "fs.h"
 #include "logging.h"
 #include "compat.h"
 #include "tinyformat.h"
@@ -29,7 +30,6 @@
 #include <string>
 #include <vector>
 
-#include <boost/filesystem/path.hpp>
 #include <boost/thread/exceptions.hpp>
 #include <boost/thread/condition_variable.hpp> // for boost::thread_interrupted
 

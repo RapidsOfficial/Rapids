@@ -28,6 +28,7 @@
 #endif
 #include "masternodeconfig.h"
 
+#include "fs.h"
 #include "init.h"
 #include "main.h"
 #include "rpc/server.h"
@@ -40,7 +41,6 @@
 
 #include <stdint.h>
 
-#include <boost/filesystem/operations.hpp>
 #include <boost/thread.hpp>
 
 #include <QApplication>

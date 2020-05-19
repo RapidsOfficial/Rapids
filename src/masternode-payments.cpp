@@ -6,6 +6,7 @@
 #include "masternode-payments.h"
 #include "addrman.h"
 #include "chainparams.h"
+#include "fs.h"
 #include "masternode-budget.h"
 #include "masternode-sync.h"
 #include "masternodeman.h"
@@ -13,7 +14,7 @@
 #include "sync.h"
 #include "util.h"
 #include "utilmoneystr.h"
-#include <boost/filesystem.hpp>
+
 
 /** Object for who's going to get paid on which blocks */
 CMasternodePayments masternodePayments;

@@ -34,7 +34,6 @@
 #include <miniupnpc/upnperrors.h>
 #endif
 
-#include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 
 // Dump addresses to peers.dat and banlist.dat every 15 minutes (900s)

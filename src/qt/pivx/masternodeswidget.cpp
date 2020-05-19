@@ -12,6 +12,7 @@
 
 #include "activemasternode.h"
 #include "clientmodel.h"
+#include "fs.h"
 #include "guiutil.h"
 #include "init.h"
 #include "masternode-sync.h"
@@ -22,7 +23,6 @@
 #include "askpassphrasedialog.h"
 #include "util.h"
 #include "qt/pivx/optionbutton.h"
-#include <boost/filesystem.hpp>
 #include <iostream>
 #include <fstream>
 

@@ -8,7 +8,6 @@
 #include "logging.h"
 #include "utiltime.h"
 
-#include <boost/filesystem/fstream.hpp>
 
 const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
 namespace fs = boost::filesystem;

@@ -6,11 +6,11 @@
 #ifndef SRC_MASTERNODECONFIG_H_
 #define SRC_MASTERNODECONFIG_H_
 
+#include "fs.h"
+
 #include <string>
 #include <vector>
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 
 class CMasternodeConfig;
 extern CMasternodeConfig masternodeConfig;

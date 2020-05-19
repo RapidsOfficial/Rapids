@@ -7,6 +7,8 @@
 
 #include "wallet/walletdb.h"
 
+#include "fs.h"
+
 #include "base58.h"
 #include "protocol.h"
 #include "serialize.h"
@@ -17,7 +19,6 @@
 #include "wallet/wallet.h"
 #include <zpiv/deterministicmint.h>
 
-#include <boost/filesystem.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/thread.hpp>
 #include <fstream>

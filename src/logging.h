@@ -11,6 +11,7 @@
 #ifndef BITCOIN_LOGGING_H
 #define BITCOIN_LOGGING_H
 
+#include "fs.h"
 #include "tinyformat.h"
 
 #include <atomic>
@@ -19,7 +20,6 @@
 #include <mutex>
 #include <vector>
 
-#include <boost/filesystem.hpp>
 
 static const bool DEFAULT_LOGTIMEMICROS = false;
 static const bool DEFAULT_LOGIPS        = false;

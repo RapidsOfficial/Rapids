@@ -8,6 +8,7 @@
 
 #include "amount.h"
 #include "askpassphrasedialog.h"
+#include "fs.h"
 
 #include <QEvent>
 #include <QHeaderView>
@@ -18,7 +19,6 @@
 #include <QTableView>
 #include <QTableWidget>
 
-#include <boost/filesystem.hpp>
 
 class QValidatedLineEdit;
 class SendCoinsRecipient;

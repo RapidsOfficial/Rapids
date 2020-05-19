@@ -5,9 +5,9 @@
 #ifndef PIVX_TEST_TEST_PIVX_H
 #define PIVX_TEST_TEST_PIVX_H
 
+#include "fs.h"
 #include "txdb.h"
 
-#include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 
 extern uint256 insecure_rand_seed;

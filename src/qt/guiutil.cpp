@@ -37,12 +37,6 @@
 #include "shlwapi.h"
 #endif
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-#if BOOST_FILESYSTEM_VERSION >= 3
-#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
-#endif
-
 #include <QAbstractItemView>
 #include <QApplication>
 #include <QClipboard>

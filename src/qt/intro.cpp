@@ -7,12 +7,11 @@
 #include "intro.h"
 #include "ui_intro.h"
 
+#include "fs.h"
 #include "guiutil.h"
 
 #include "util.h"
 #include "qt/pivx/qtutils.h"
-
-#include <boost/filesystem.hpp>
 
 #include <QFileDialog>
 #include <QMessageBox>

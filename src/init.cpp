@@ -20,6 +20,7 @@
 #include "checkpoints.h"
 #include "compat/sanity.h"
 #include "consensus/zerocoin_verify.h"
+#include "fs.h"
 #include "httpserver.h"
 #include "httprpc.h"
 #include "invalid.h"
@@ -64,7 +65,6 @@
 
 #include <boost/algorithm/string/predicate.hpp>
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/interprocess/sync/file_lock.hpp>
 #include <boost/thread.hpp>
 #include <boost/foreach.hpp>

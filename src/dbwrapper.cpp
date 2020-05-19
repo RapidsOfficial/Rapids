@@ -6,7 +6,6 @@
 
 #include "util.h"
 
-#include <boost/filesystem.hpp>
 #include <boost/scoped_ptr.hpp>
 
 #include <leveldb/cache.h>

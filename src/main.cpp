@@ -20,6 +20,7 @@
 #include "consensus/tx_verify.h"
 #include "consensus/validation.h"
 #include "consensus/zerocoin_verify.h"
+#include "fs.h"
 #include "init.h"
 #include "kernel.h"
 #include "masternode-budget.h"
@@ -47,8 +48,6 @@
 #include <sstream>
 
 #include <boost/algorithm/string/replace.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/thread.hpp>
 #include <boost/foreach.hpp>
 #include <atomic>
