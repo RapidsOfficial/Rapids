@@ -9,7 +9,7 @@
 #include "leveldbwrapper.h"
 #include "spork.h"
 
-class CSporkDB : public CLevelDBWrapper
+class CSporkDB : public CDBWrapper
 {
 public:
     CSporkDB(size_t nCacheSize, bool fMemory = false, bool fWipe = false);
