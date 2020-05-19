@@ -372,7 +372,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 continue;
 
             CTxUndo txundo;
-            UpdateCoins(tx, state, view, txundo, nHeight);
+            UpdateCoins(tx, view, txundo, nHeight);
 
             // Added
             pblock->vtx.push_back(tx);
