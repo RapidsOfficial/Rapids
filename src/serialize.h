@@ -991,10 +991,9 @@ public:
 
     CSizeComputer(int nTypeIn, int nVersionIn) : nSize(0), nType(nTypeIn), nVersion(nVersionIn) {}
 
-    CSizeComputer& write(const char* psz, size_t nSize)
+    void write(const char* psz, size_t nSize)
     {
         this->nSize += nSize;
-        return *this;
     }
 
     /** Pretend _nSize bytes are written, without specifying them. */
