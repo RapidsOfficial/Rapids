@@ -6,7 +6,7 @@
 #define PIVX_CSPORKDB_H
 
 #include <boost/filesystem/path.hpp>
-#include "leveldbwrapper.h"
+#include "dbwrapper.h"
 #include "spork.h"
 
 class CSporkDB : public CDBWrapper
