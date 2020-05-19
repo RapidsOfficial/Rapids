@@ -76,7 +76,6 @@ public:
     bool Valid();
 
     void SeekToFirst();
-    void SeekToLast();
 
     template<typename K> void Seek(const K& key) {
         CDataStream ssKey(SER_DISK, CLIENT_VERSION);
@@ -87,7 +86,6 @@ public:
     }
 
     void Next();
-    void Prev();
 
     template<typename K> bool GetKey(K& key) {
         leveldb::Slice slKey = piter->key();
