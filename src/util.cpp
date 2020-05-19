@@ -22,8 +22,6 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-namespace fs = fs;
-
 
 #ifndef WIN32
 // for posix_fallocate
