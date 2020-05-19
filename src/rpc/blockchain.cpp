@@ -1364,7 +1364,7 @@ UniValue getblockindexstats(const UniValue& params, bool fHelp) {
             nFees_all += nValueIn - nValueOut;
             if (!tx.HasZerocoinMintOutputs()) {
                 nFees += nValueIn - nValueOut;
-                nBytes += tx.GetSerializeSize(SER_NETWORK, CLIENT_VERSION);
+                nBytes += GetSerializeSize(tx, SER_NETWORK, CLIENT_VERSION);
             }
         }
 

@@ -445,10 +445,6 @@ public:
         Check();
     }
 
-    unsigned int GetSerializeSize(int nType, int nVersion) const
-    {
-        return (CSizeComputer(nType, nVersion) << *this).size();
-    }
 
     void Clear()
     {

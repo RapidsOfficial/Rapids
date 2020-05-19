@@ -171,7 +171,7 @@ public:
         // and that means that fee per txout is 182 * 10000 / 1000 = 1820 upiv.
         // So dust is a txout less than 1820 *3 = 5460 upiv
         // with default -minrelaytxfee = minRelayTxFee = 10000 upiv per kB.
-        size_t nSize = GetSerializeSize(SER_DISK,0)+148u;
+        size_t nSize = GetSerializeSize(*this, SER_DISK, 0) + 148u;
         return (nValue < 3*minRelayTxFee.GetFee(nSize));
     }
 

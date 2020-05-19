@@ -283,11 +283,6 @@ public:
         return pn[0] | (uint64_t)pn[1] << 32;
     }
 
-    unsigned int GetSerializeSize(int nType, int nVersion) const
-    {
-        return sizeof(pn);
-    }
-
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const
     {

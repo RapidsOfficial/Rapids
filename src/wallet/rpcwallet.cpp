@@ -3832,7 +3832,7 @@ extern UniValue DoZpivSpend(const CAmount nAmount, std::vector<CZerocoinMint>& v
     //construct JSON to return
     UniValue ret(UniValue::VOBJ);
     ret.push_back(Pair("txid", wtx.GetHash().ToString()));
-    ret.push_back(Pair("bytes", (int64_t)wtx.GetSerializeSize(SER_NETWORK, CTransaction::CURRENT_VERSION)));
+    ret.push_back(Pair("bytes", (int64_t)GetSerializeSize(wtx, SER_NETWORK, CTransaction::CURRENT_VERSION)));
     ret.push_back(Pair("fee", ValueFromAmount(nValueIn - nValueOut)));
     ret.push_back(Pair("duration_millis", (GetTimeMillis() - nTimeStart)));
     ret.push_back(Pair("spends", arrSpends));

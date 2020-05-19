@@ -30,13 +30,6 @@ public:
     CTxInUndo() : txout(), fCoinBase(false), fCoinStake(false), nHeight(0), nVersion(0) {}
     CTxInUndo(const CTxOut& txoutIn, bool fCoinBaseIn = false, bool fCoinStakeIn = false, unsigned int nHeightIn = 0, int nVersionIn = 0) : txout(txoutIn), fCoinBase(fCoinBaseIn), fCoinStake(fCoinStakeIn), nHeight(nHeightIn), nVersion(nVersionIn) {}
 
-    unsigned int GetSerializeSize(int nType, int nVersion) const
-    {
-        return ::GetSerializeSize(VARINT(nHeight * 4 + (fCoinBase ? 2 : 0) + (fCoinStake ? 1 : 0)), nType, nVersion) +
-               (nHeight > 0 ? ::GetSerializeSize(VARINT(this->nVersion), nType, nVersion) : 0) +
-               ::GetSerializeSize(CTxOutCompressor(REF(txout)), nType, nVersion);
-    }
-
     template <typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const
     {
