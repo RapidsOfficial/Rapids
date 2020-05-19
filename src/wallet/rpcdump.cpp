@@ -395,15 +395,15 @@ UniValue dumpwallet(const UniValue& params, bool fHelp)
 
     ScriptPubKeyMan* spk_man = pwalletMain->GetScriptPubKeyMan();
 
-    boost::filesystem::path filepath = params[0].get_str().c_str();
-    filepath = boost::filesystem::absolute(filepath);
+    fs::path filepath = params[0].get_str().c_str();
+    filepath = fs::absolute(filepath);
 
     /* Prevent arbitrary files from being overwritten. There have been reports
      * that users have overwritten wallet files this way:
      * https://github.com/bitcoin/bitcoin/issues/9934
      * It may also avoid other security issues.
      */
-    if (boost::filesystem::exists(filepath)) {
+    if (fs::exists(filepath)) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, filepath.string() + " already exists. If you are sure this is what you want, move it out of the way first");
     }
 

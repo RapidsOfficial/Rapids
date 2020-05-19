@@ -246,14 +246,14 @@ bool MasterNodeWizardDialog::createMN()
             // now change the conf
             std::string strConfFile = "masternode.conf";
             std::string strDataDir = GetDataDir().string();
-            if (strConfFile != boost::filesystem::basename(strConfFile) + boost::filesystem::extension(strConfFile)) {
+            if (strConfFile != fs::basename(strConfFile) + fs::extension(strConfFile)) {
                 throw std::runtime_error(strprintf(_("masternode.conf %s resides outside data directory %s"), strConfFile, strDataDir));
             }
 
-            boost::filesystem::path pathBootstrap = GetDataDir() / strConfFile;
-            if (boost::filesystem::exists(pathBootstrap)) {
-                boost::filesystem::path pathMasternodeConfigFile = GetMasternodeConfigFile();
-                boost::filesystem::ifstream streamConfig(pathMasternodeConfigFile);
+            fs::path pathBootstrap = GetDataDir() / strConfFile;
+            if (fs::exists(pathBootstrap)) {
+                fs::path pathMasternodeConfigFile = GetMasternodeConfigFile();
+                fs::ifstream streamConfig(pathMasternodeConfigFile);
 
                 if (!streamConfig.good()) {
                     returnStr = tr("Invalid masternode.conf file");
@@ -318,21 +318,21 @@ bool MasterNodeWizardDialog::createMN()
                     ipAddress = "["+ipAddress+"]";
                 }
 
-                boost::filesystem::path pathConfigFile("masternode_temp.conf");
+                fs::path pathConfigFile("masternode_temp.conf");
                 if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir() / pathConfigFile;
                 FILE* configFile = fopen(pathConfigFile.string().c_str(), "w");
                 lineCopy += alias+" "+ipAddress+":"+port+" "+mnKeyString+" "+txID+" "+indexOutStr+"\n";
                 fwrite(lineCopy.c_str(), std::strlen(lineCopy.c_str()), 1, configFile);
                 fclose(configFile);
 
-                boost::filesystem::path pathOldConfFile("old_masternode.conf");
+                fs::path pathOldConfFile("old_masternode.conf");
                 if (!pathOldConfFile.is_complete()) pathOldConfFile = GetDataDir() / pathOldConfFile;
-                if (boost::filesystem::exists(pathOldConfFile)) {
-                    boost::filesystem::remove(pathOldConfFile);
+                if (fs::exists(pathOldConfFile)) {
+                    fs::remove(pathOldConfFile);
                 }
                 rename(pathMasternodeConfigFile, pathOldConfFile);
 
-                boost::filesystem::path pathNewConfFile("masternode.conf");
+                fs::path pathNewConfFile("masternode.conf");
                 if (!pathNewConfFile.is_complete()) pathNewConfFile = GetDataDir() / pathNewConfFile;
                 rename(pathConfigFile, pathNewConfFile);
 

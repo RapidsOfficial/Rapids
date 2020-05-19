@@ -10,7 +10,7 @@
 
 
 const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
-namespace fs = boost::filesystem;
+namespace fs = fs;
 
 /**
  * NOTE: the logger instances is leaked on exit. This is ugly, but will be

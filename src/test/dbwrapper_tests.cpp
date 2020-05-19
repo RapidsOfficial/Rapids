@@ -11,7 +11,6 @@
 #include <boost/assert.hpp>
 #include <boost/test/unit_test.hpp>
 
-
 // Test if a string consists entirely of null characters
 bool is_null_key(const std::vector<unsigned char>& key) {
     bool isnull = true;
@@ -27,7 +26,7 @@ BOOST_FIXTURE_TEST_SUITE(dbwrapper_tests, BasicTestingSetup)
 BOOST_AUTO_TEST_CASE(dbwrapper)
 {
     {
-        boost::filesystem::path ph = boost::filesystem::temp_directory_path() / boost::filesystem::unique_path();
+        fs::path ph = fs::temp_directory_path() / fs::unique_path();
         CDBWrapper dbw(ph, (1 << 20), true, false);
         char key = 'k';
         uint256 in = GetRandHash();
@@ -43,7 +42,7 @@ BOOST_AUTO_TEST_CASE(dbwrapper)
 BOOST_AUTO_TEST_CASE(dbwrapper_batch)
 {
     {
-        boost::filesystem::path ph = boost::filesystem::temp_directory_path() / boost::filesystem::unique_path();
+        fs::path ph = fs::temp_directory_path() / fs::unique_path();
         CDBWrapper dbw(ph, (1 << 20), true, false);
 
         char key = 'i';
@@ -78,7 +77,7 @@ BOOST_AUTO_TEST_CASE(dbwrapper_batch)
 BOOST_AUTO_TEST_CASE(dbwrapper_iterator)
 {
     {
-        boost::filesystem::path ph = boost::filesystem::temp_directory_path() / boost::filesystem::unique_path();
+        fs::path ph = fs::temp_directory_path() / fs::unique_path();
         CDBWrapper dbw(ph, (1 << 20), true, false);
 
         // The two keys are intentionally chosen for ordering

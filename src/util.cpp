@@ -22,7 +22,7 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
-namespace fs = boost::filesystem;
+namespace fs = fs;
 
 
 #ifndef WIN32
@@ -623,7 +623,7 @@ void SetupEnvironment()
     // The path locale is lazy initialized and to avoid deinitialization errors
     // in multithreading environments, it is set explicitly by the main thread.
     // A dummy locale is used to extract the internal default locale, used by
-    // boost::filesystem::path, which is then used to explicitly imbue the path.
+    // fs::path, which is then used to explicitly imbue the path.
     std::locale loc = fs::path::imbue(std::locale::classic());
     fs::path::imbue(loc);
 }

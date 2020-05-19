@@ -33,7 +33,7 @@ void DumpMasternodes();
 class CMasternodeDB
 {
 private:
-    boost::filesystem::path pathMN;
+    fs::path pathMN;
     std::string strMagicMessage;
 
 public:
