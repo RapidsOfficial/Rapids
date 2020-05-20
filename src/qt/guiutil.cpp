@@ -83,6 +83,7 @@ extern double NSAppKitVersionNumber;
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 #include <CoreServices/CoreServices.h>
+#include <QProcess>
 
 void ForceActivation();
 #endif
@@ -402,44 +403,40 @@ void bringToFront(QWidget* w)
     }
 }
 
+/* Open file with the associated application */
+bool openFile(boost::filesystem::path path, bool isTextFile)
+{
+    bool ret = false;
+    if (boost::filesystem::exists(path)) {
+        ret = QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(path)));
+#ifdef Q_OS_MAC
+        // Workaround for macOS-specific behavior; see btc@15409.
+        if (isTextFile && !ret) {
+            ret = QProcess::startDetached("/usr/bin/open", QStringList{"-t", boostPathToQString(path)});
+        }
+#endif
+    }
+    return ret;
+}
+
 bool openDebugLogfile()
 {
-    boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
-
-    /* Open debug.log with the associated application */
-    if (boost::filesystem::exists(pathDebug))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
-    return false;
+    return openFile(GetDataDir() / "debug.log", true);
 }
 
 bool openConfigfile()
 {
-    boost::filesystem::path pathConfig = GetConfigFile();
-
-    /* Open pivx.conf with the associated application */
-    if (boost::filesystem::exists(pathConfig))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
-    return false;
+    return openFile(GetConfigFile(), true);
 }
 
 bool openMNConfigfile()
 {
-    boost::filesystem::path pathConfig = GetMasternodeConfigFile();
-
-    /* Open masternode.conf with the associated application */
-    if (boost::filesystem::exists(pathConfig))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
-    return false;
+    return openFile(GetMasternodeConfigFile(), true);
 }
 
 bool showBackups()
 {
-    boost::filesystem::path pathBackups = GetDataDir() / "backups";
-
-    /* Open folder with default browser */
-    if (boost::filesystem::exists(pathBackups))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathBackups)));
-    return false;
+    return openFile(GetDataDir() / "backups", false);
 }
 
 void SubstituteFonts(const QString& language)
