@@ -131,7 +131,7 @@ void ReceiveWidget::refreshView(QString refreshAddress)
     try {
         QString latestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getAddressToShow() : refreshAddress;
         if (latestAddress.isEmpty()) { // new default address
-            CBitcoinAddress newAddress;
+            Destination newAddress;
             PairResult r = walletModel->getNewAddress(newAddress, "Default");
             // Check for generation errors
             if (!r.result) {
@@ -142,7 +142,7 @@ void ReceiveWidget::refreshView(QString refreshAddress)
             latestAddress = QString::fromStdString(newAddress.ToString());
         }
         ui->labelAddress->setText(latestAddress);
-        int64_t time = walletModel->getKeyCreationTime(CBitcoinAddress(latestAddress.toStdString()));
+        int64_t time = walletModel->getKeyCreationTime(DecodeDestination(latestAddress.toStdString()));
         ui->labelDate->setText(GUIUtil::dateTimeStr(QDateTime::fromTime_t(static_cast<uint>(time))));
         updateQr(latestAddress);
         updateLabel();
@@ -200,9 +200,9 @@ void ReceiveWidget::onLabelClicked()
         dialog->setData(info->address, addressTableModel->labelForAddress(info->address));
         if (openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 6)) {
             QString label = dialog->getLabel();
-            const CBitcoinAddress address = CBitcoinAddress(info->address.toUtf8().constData());
+            const CTxDestination address = DecodeDestination(info->address.toUtf8().constData());
             if (!label.isEmpty() && walletModel->updateAddressBookLabels(
-                    address.Get(),
+                    address,
                     label.toUtf8().constData(),
                     AddressBook::AddressBookPurpose::RECEIVE
             )
@@ -227,7 +227,7 @@ void ReceiveWidget::onNewAddressClicked()
             inform(tr("Cannot create new address, wallet locked"));
             return;
         }
-        CBitcoinAddress address;
+        Destination address;
         PairResult r = walletModel->getNewAddress(address, "");
 
         // Check for validity

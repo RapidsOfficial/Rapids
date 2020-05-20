@@ -211,14 +211,14 @@ public:
             CWalletTx &wtxNew,
             std::vector<CZerocoinMint> &vMintsSelected,
             CZerocoinSpendReceipt &receipt,
-            std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
+            std::list<std::pair<CTxDestination, CAmount>> outputs,
             std::string changeAddress = ""
     );
 
     bool sendZpiv(
             std::vector<CZerocoinMint> &vMintsSelected,
             CZerocoinSpendReceipt &receipt,
-            std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
+            std::list<std::pair<CTxDestination, CAmount>> outputs,
             std::string changeAddress = ""
     );
 
@@ -273,12 +273,12 @@ public:
     bool getPubKey(const CKeyID& address, CPubKey& vchPubKeyOut) const;
     int64_t getCreationTime() const;
     int64_t getKeyCreationTime(const CPubKey& key);
-    int64_t getKeyCreationTime(const CBitcoinAddress& address);
-    PairResult getNewAddress(CBitcoinAddress& ret, std::string label = "") const;
+    int64_t getKeyCreationTime(const CTxDestination& address);
+    PairResult getNewAddress(Destination& ret, std::string label = "") const;
     /**
      * Return a new address used to receive for delegated cold stake purpose.
      */
-    PairResult getNewStakingAddress(CBitcoinAddress& ret, std::string label = "") const;
+    PairResult getNewStakingAddress(Destination& ret, std::string label = "") const;
 
     bool whitelistAddressFromColdStaking(const QString &addressStr);
     bool blacklistAddressFromColdStaking(const QString &address);
@@ -286,7 +286,7 @@ public:
     std::string getLabelForAddress(const CBitcoinAddress& address);
     bool getKeyId(const CBitcoinAddress& address, CKeyID& keyID);
 
-    bool isMine(CBitcoinAddress address);
+    bool isMine(const CTxDestination& address);
     bool isMine(const QString& addressStr);
     bool isUsed(CBitcoinAddress address);
     void getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs);

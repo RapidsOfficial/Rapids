@@ -739,9 +739,9 @@ void ColdStakingWidget::onLabelClicked(QString dialogTitle, const QModelIndex &i
             QString label = dialog->getLabel();
             std::string stdString = qAddress.toStdString();
             std::string purpose = walletModel->getAddressTableModel()->purposeForAddress(stdString);
-            const CBitcoinAddress address = CBitcoinAddress(stdString.data());
+            const CTxDestination address = DecodeDestination(stdString.data());
             if (!label.isEmpty() && walletModel->updateAddressBookLabels(
-                    address.Get(),
+                    address,
                     label.toUtf8().constData(),
                     purpose
             )) {

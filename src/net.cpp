@@ -411,8 +411,10 @@ CNode* FindNode(const CService& addr)
 CNode* ConnectNode(CAddress addrConnect, const char* pszDest, bool fCountFailure)
 {
     if (pszDest == NULL) {
-        if (IsLocal(addrConnect))
-            return NULL;
+        if (IsLocal(addrConnect)) {
+            LogPrintf("%s: cannot connect to local node\n", __func__);
+            return nullptr;
+        }
 
         // Look for an existing connection
         CNode* pnode = FindNode((CService)addrConnect);

@@ -182,4 +182,43 @@ public:
 typedef CBitcoinExtKeyBase<CExtKey, 74, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
 typedef CBitcoinExtKeyBase<CExtPubKey, 74, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
 
+
+CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Type addrType);
+std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
+// DecodeDestinationisStaking flag is set to true when the string arg is from an staking address
+CTxDestination DecodeDestination(const std::string& str, bool& isStaking);
+CTxDestination DecodeDestination(const std::string& str);
+// Return true if the address is valid without care on the type.
+bool IsValidDestinationString(const std::string& str);
+// Return true if the address is valid and is following the fStaking flag type (true means that the destination must be a staking address, false the opposite).
+bool IsValidDestinationString(const std::string& str, bool fStaking);
+bool IsValidDestinationString(const std::string& str, bool fStaking, const CChainParams& params);
+
+/**
+ * Wrapper class for every supported address
+ */
+struct Destination {
+public:
+    explicit Destination() {}
+    explicit Destination(const CTxDestination& _dest, bool _isP2CS) : dest(_dest), isP2CS(_isP2CS) {}
+
+    const CTxDestination dest{CNoDestination()};
+    bool isP2CS{false};
+
+    Destination& operator=(Destination from)
+    {
+        std::swap(*this, from);
+        return *this;
+    }
+
+    std::string ToString()
+    {
+        if (boost::get<CNoDestination>(&dest)) {
+            // Invalid address
+            return "";
+        }
+        return EncodeDestination(dest, isP2CS ? CChainParams::PUBKEY_ADDRESS : CChainParams::STAKING_ADDRESS);
+    }
+};
+
 #endif // BITCOIN_BASE58_H

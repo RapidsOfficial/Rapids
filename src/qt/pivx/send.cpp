@@ -441,11 +441,11 @@ bool SendWidget::sendZpiv(QList<SendCoinsRecipient> recipients)
         return false;
     }
 
-    std::list<std::pair<CBitcoinAddress*, CAmount>> outputs;
+    std::list<std::pair<CTxDestination, CAmount>> outputs;
     CAmount total = 0;
     for (SendCoinsRecipient rec : recipients) {
         total += rec.amount;
-        outputs.push_back(std::pair<CBitcoinAddress*, CAmount>(new CBitcoinAddress(rec.address.toStdString()),rec.amount));
+        outputs.push_back(std::pair<CTxDestination, CAmount>(DecodeDestination(rec.address.toStdString()),rec.amount));
     }
 
     // use mints from zPIV selector if applicable
@@ -486,7 +486,7 @@ bool SendWidget::sendZpiv(QList<SendCoinsRecipient> recipients)
 
     std::string changeAddress = "";
     if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
-        changeAddress = CBitcoinAddress(CoinControlDialog::coinControl->destChange).ToString();
+        changeAddress = EncodeDestination(CoinControlDialog::coinControl->destChange);
     } else {
         changeAddress = walletModel->getAddressTableModel()->getAddressToShow().toStdString();
     }
@@ -539,7 +539,7 @@ void SendWidget::updateEntryLabels(QList<SendCoinsRecipient> recipients)
         if (!label.isNull()) {
             QString labelOld = walletModel->getAddressTableModel()->labelForAddress(rec.address);
             if (label.compare(labelOld) != 0) {
-                CTxDestination dest = CBitcoinAddress(rec.address.toStdString()).Get();
+                CTxDestination dest = DecodeDestination(rec.address.toStdString());
                 if (!walletModel->updateAddressBookLabels(dest, label.toStdString(),
                                                           this->walletModel->isMine(dest) ?
                                                                   AddressBook::AddressBookPurpose::RECEIVE :
@@ -560,17 +560,16 @@ void SendWidget::onChangeAddressClicked()
     showHideOp(true);
     SendChangeAddressDialog* dialog = new SendChangeAddressDialog(window, walletModel);
     if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
-        dialog->setAddress(QString::fromStdString(CBitcoinAddress(CoinControlDialog::coinControl->destChange).ToString()));
+        dialog->setAddress(QString::fromStdString(EncodeDestination(CoinControlDialog::coinControl->destChange)));
     }
     if (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5)) {
-        CBitcoinAddress address(dialog->getAddress().toStdString());
-
+        CTxDestination dest = DecodeDestination(dialog->getAddress().toStdString());
         // Ask if it's what the user really wants
-        if (!walletModel->isMine(address) &&
+        if (!walletModel->isMine(dest) &&
             !ask(tr("Warning!"), tr("The change address doesn't belong to this wallet.\n\nDo you want to continue?"))) {
             return;
         }
-        CoinControlDialog::coinControl->destChange = address.Get();
+        CoinControlDialog::coinControl->destChange = dest;
         ui->btnChangeAddress->setActive(true);
     }
     // check if changeAddress has been reset to NoDestination (or wasn't set at all)
@@ -770,7 +769,7 @@ void SendWidget::onContactMultiClicked()
             inform(tr("Invalid address"));
             return;
         }
-        CBitcoinAddress pivAdd = CBitcoinAddress(address.toStdString());
+        CTxDestination pivAdd = DecodeDestination(address.toStdString());
         if (walletModel->isMine(pivAdd)) {
             inform(tr("Cannot store your own address as contact"));
             return;
@@ -791,7 +790,7 @@ void SendWidget::onContactMultiClicked()
             if (label == dialog->getLabel()) {
                 return;
             }
-            if (walletModel->updateAddressBookLabels(pivAdd.Get(), dialog->getLabel().toStdString(),
+            if (walletModel->updateAddressBookLabels(pivAdd, dialog->getLabel().toStdString(),
                     AddressBook::AddressBookPurpose::SEND)) {
                 inform(tr("New Contact Stored"));
             } else {

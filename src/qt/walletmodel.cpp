@@ -380,14 +380,13 @@ bool WalletModel::getMint(const uint256& hashSerial, CZerocoinMint& mint)
 
 bool WalletModel::validateAddress(const QString& address)
 {
-    CBitcoinAddress addressParsed(address.toStdString());
-    return addressParsed.IsValid();
+    // Only regular base58 addresses accepted here
+    return IsValidDestinationString(address.toStdString(), false);
 }
 
 bool WalletModel::validateAddress(const QString& address, bool fStaking)
 {
-    CBitcoinAddress addressParsed(address.toStdString());
-    return (addressParsed.IsValid() && fStaking == addressParsed.IsStakingAddress());
+    return IsValidDestinationString(address.toStdString(), fStaking);
 }
 
 bool WalletModel::updateAddressBookLabels(const CTxDestination& dest, const std::string& strName, const std::string& strPurpose)
@@ -450,28 +449,28 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             ++nAddresses;
 
             CScript scriptPubKey;
-            CBitcoinAddress out = CBitcoinAddress(rcp.address.toStdString());
+            CTxDestination out = DecodeDestination(rcp.address.toStdString());
 
             if (rcp.isP2CS) {
-                CBitcoinAddress ownerAdd;
+                Destination ownerAdd;
                 if (rcp.ownerAddress.isEmpty()) {
                     // Create new internal owner address
                     if (!getNewAddress(ownerAdd).result)
                         return CannotCreateInternalAddress;
                 } else {
-                    ownerAdd = CBitcoinAddress(rcp.ownerAddress.toStdString());
+                    ownerAdd = Destination(DecodeDestination(rcp.ownerAddress.toStdString()), false);
                 }
 
-                CKeyID stakerId;
-                CKeyID ownerId;
-                if (!out.GetKeyID(stakerId) || !ownerAdd.GetKeyID(ownerId)) {
+                const CKeyID* stakerId = boost::get<CKeyID>(&out);
+                const CKeyID* ownerId = boost::get<CKeyID>(&ownerAdd.dest);
+                if (!stakerId || !ownerId) {
                     return InvalidAddress;
                 }
 
-                scriptPubKey = GetScriptForStakeDelegation(stakerId, ownerId);
+                scriptPubKey = GetScriptForStakeDelegation(*stakerId, *ownerId);
             } else {
                 // Regular P2PK or P2PKH
-                scriptPubKey = GetScriptForDestination(out.Get());
+                scriptPubKey = GetScriptForDestination(out);
             }
             vecSend.push_back(std::pair<CScript, CAmount>(scriptPubKey, rcp.amount));
 
@@ -619,12 +618,12 @@ bool WalletModel::createZpivSpend(
         CWalletTx &wtxNew,
         std::vector<CZerocoinMint> &vMintsSelected,
         CZerocoinSpendReceipt &receipt,
-        std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
+        std::list<std::pair<CTxDestination, CAmount>> outputs,
         std::string changeAddress)
 {
     CBitcoinAddress *changeAdd = (!changeAddress.empty()) ? new CBitcoinAddress(changeAddress) : nullptr;
     CAmount value = 0;
-    for (std::pair<CBitcoinAddress*, CAmount> pair : outputs) {
+    for (std::pair<CTxDestination, CAmount> pair : outputs) {
         value += pair.second;
     }
 
@@ -656,12 +655,12 @@ bool WalletModel::createZpivSpend(
 bool WalletModel::sendZpiv(
         std::vector<CZerocoinMint> &vMintsSelected,
         CZerocoinSpendReceipt &receipt,
-        std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
+        std::list<std::pair<CTxDestination, CAmount>> outputs,
         std::string changeAddress)
 {
     CBitcoinAddress *changeAdd = (!changeAddress.empty()) ? new CBitcoinAddress(changeAddress) : nullptr;
     CAmount value = 0;
-    for (std::pair<CBitcoinAddress*, CAmount> pair : outputs) {
+    for (std::pair<CTxDestination, CAmount> pair : outputs) {
         value += pair.second;
     }
 
@@ -688,7 +687,7 @@ bool WalletModel::convertBackZpiv(
             wtxNew,
             receipt,
             vMintsSelected,
-            std::list<std::pair<CBitcoinAddress*, CAmount>>(),
+            std::list<std::pair<CTxDestination, CAmount>>(),
             nullptr
     );
 }
@@ -971,7 +970,7 @@ int64_t WalletModel::getKeyCreationTime(const CPubKey& key)
     return pwalletMain->GetKeyCreationTime(key);
 }
 
-int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address)
+int64_t WalletModel::getKeyCreationTime(const CTxDestination& address)
 {
     if (this->isMine(address)) {
         return pwalletMain->GetKeyCreationTime(address);
@@ -979,14 +978,20 @@ int64_t WalletModel::getKeyCreationTime(const CBitcoinAddress& address)
     return 0;
 }
 
-PairResult WalletModel::getNewAddress(CBitcoinAddress& ret, std::string label) const
+PairResult WalletModel::getNewAddress(Destination& ret, std::string label) const
 {
-    return wallet->getNewAddress(ret, label);
+    CTxDestination dest;
+    PairResult res = wallet->getNewAddress(dest, label);
+    if (res.result) ret = Destination(dest, false);
+    return res;
 }
 
-PairResult WalletModel::getNewStakingAddress(CBitcoinAddress& ret,std::string label) const
+PairResult WalletModel::getNewStakingAddress(Destination& ret,std::string label) const
 {
-    return wallet->getNewStakingAddress(ret, label);
+    CTxDestination dest;
+    PairResult res = wallet->getNewStakingAddress(dest, label);
+    if (res.result) ret = Destination(dest, true);
+    return res;
 }
 
 bool WalletModel::whitelistAddressFromColdStaking(const QString &addressStr)
@@ -1133,7 +1138,7 @@ void WalletModel::loadReceiveRequests(std::vector<std::string>& vReceiveRequests
 
 bool WalletModel::saveReceiveRequest(const std::string& sAddress, const int64_t nId, const std::string& sRequest)
 {
-    CTxDestination dest = CBitcoinAddress(sAddress).Get();
+    CTxDestination dest = DecodeDestination(sAddress);
 
     std::stringstream ss;
     ss << nId;
@@ -1146,9 +1151,9 @@ bool WalletModel::saveReceiveRequest(const std::string& sAddress, const int64_t 
         return wallet->AddDestData(dest, key, sRequest);
 }
 
-bool WalletModel::isMine(CBitcoinAddress address)
+bool WalletModel::isMine(const CTxDestination& address)
 {
-    return IsMine(*wallet, address.Get());
+    return IsMine(*wallet, address);
 }
 
 bool WalletModel::isMine(const QString& addressStr)
