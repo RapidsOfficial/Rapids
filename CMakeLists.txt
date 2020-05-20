@@ -301,6 +301,7 @@ set(SERVER_SOURCES
         ./src/miner.cpp
         ./src/net.cpp
         ./src/noui.cpp
+        ./src/policy/fees.cpp
         ./src/pow.cpp
         ./src/rest.cpp
         ./src/rpc/blockchain.cpp
