@@ -125,7 +125,7 @@ SendWidget::SendWidget(PIVXGUI* parent) :
 void SendWidget::refreshView()
 {
     const bool isChecked = ui->pushLeft->isChecked();
-    ui->pushButtonSave->setText(isChecked ? tr("Send PIV") : tr("Send zPIV"));
+    ui->pushButtonSave->setText((isChecked ? tr("Send ") : tr("Send z")) + QString(CURRENCY_UNIT.c_str()));
     ui->pushButtonAddRecipient->setVisible(isChecked);
     refreshAmounts();
 }
@@ -640,7 +640,7 @@ void SendWidget::onCoinControlClicked()
             ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
             refreshAmounts();
         } else {
-            inform(tr("You don't have any PIV to select."));
+            inform(tr("You don't have any %1 to select.").arg(CURRENCY_UNIT.c_str()));
         }
     } else {
         if (walletModel->getZerocoinBalance() > 0) {
