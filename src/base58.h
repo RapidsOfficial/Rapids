@@ -202,12 +202,13 @@ public:
     explicit Destination() {}
     explicit Destination(const CTxDestination& _dest, bool _isP2CS) : dest(_dest), isP2CS(_isP2CS) {}
 
-    const CTxDestination dest{CNoDestination()};
+    CTxDestination dest{CNoDestination()};
     bool isP2CS{false};
 
-    Destination& operator=(Destination from)
+    Destination& operator=(const Destination& from)
     {
-        std::swap(*this, from);
+        this->dest = from.dest;
+        this->isP2CS = from.isP2CS;
         return *this;
     }
 
