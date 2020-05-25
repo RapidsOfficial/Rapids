@@ -365,7 +365,6 @@ static const CRPCCommand vRPCCommands[] =
         /* PIVX features */
         {"pivx", "listmasternodes", &listmasternodes, true, true, false},
         {"pivx", "getmasternodecount", &getmasternodecount, true, true, false},
-        {"pivx", "masternodeconnect", &masternodeconnect, true, true, false},
         {"pivx", "createmasternodebroadcast", &createmasternodebroadcast, true, true, false},
         {"pivx", "decodemasternodebroadcast", &decodemasternodebroadcast, true, true, false},
         {"pivx", "relaymasternodebroadcast", &relaymasternodebroadcast, true, true, false},
