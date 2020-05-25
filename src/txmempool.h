@@ -15,6 +15,9 @@
 #include "sync.h"
 #include "random.h"
 
+#include "boost/multi_index_container.hpp"
+#include "boost/multi_index/ordered_index.hpp"
+
 class CAutoFile;
 
 inline double AllowFreeThreshold()
@@ -44,6 +47,7 @@ private:
     size_t nTxSize;       //! ... and avoid recomputing tx size
     size_t nModSize;      //! ... and modified size for priority
     size_t nUsageSize;    //! ... and total memory usage
+    CFeeRate feeRate;     //! ... and fee per kB
     bool hasZerocoins{false}; //! ... and checking if it contains zPIV (mints/spends)
     int64_t nTime;        //! Local time when entering the mempool
     double dPriority;     //! Priority when entering the mempool
@@ -58,12 +62,34 @@ public:
     const CTransaction& GetTx() const { return this->tx; }
     double GetPriority(unsigned int currentHeight) const;
     CAmount GetFee() const { return nFee; }
+    CFeeRate GetFeeRate() const { return feeRate; }
     size_t GetTxSize() const { return nTxSize; }
     int64_t GetTime() const { return nTime; }
     unsigned int GetHeight() const { return nHeight; }
     bool HasZerocoins() const { return hasZerocoins; }
     bool WasClearAtEntry() const { return hadNoDependencies; }
     size_t DynamicMemoryUsage() const { return nUsageSize; }
+};
+
+// extracts a TxMemPoolEntry's transaction hash
+struct mempoolentry_txid
+{
+    typedef uint256 result_type;
+    result_type operator() (const CTxMemPoolEntry &entry) const
+    {
+        return entry.GetTx().GetHash();
+    }
+};
+
+class CompareTxMemPoolEntryByFee
+{
+public:
+    bool operator()(const CTxMemPoolEntry& a, const CTxMemPoolEntry& b)
+    {
+        if (a.GetFeeRate() == b.GetFeeRate())
+            return a.GetTime() < b.GetTime();
+        return a.GetFeeRate() > b.GetFeeRate();
+    }
 };
 
 
@@ -113,6 +139,19 @@ private:
     uint64_t cachedInnerUsage; //! sum of dynamic memory usage of all the map elements (NOT the maps themselves)
 
 public:
+    typedef boost::multi_index_container<
+        CTxMemPoolEntry,
+        boost::multi_index::indexed_by<
+            // sorted by txid
+            boost::multi_index::ordered_unique<mempoolentry_txid>,
+            // sorted by fee rate
+            boost::multi_index::ordered_non_unique<
+                boost::multi_index::identity<CTxMemPoolEntry>,
+                CompareTxMemPoolEntryByFee
+            >
+        >
+    > indexed_transaction_set;
+
     /**
      * This mutex needs to be locked when accessing `mapTx` or other members
      * that are guarded by it.
@@ -141,7 +180,7 @@ public:
      * the mempool is consistent with the new chain tip and fully populated.
      */
     mutable RecursiveMutex cs;
-    std::map<uint256, CTxMemPoolEntry> mapTx;
+    indexed_transaction_set mapTx;
     std::map<COutPoint, CInPoint> mapNextTx;
     std::map<uint256, std::pair<double, CAmount> > mapDeltas;
 
