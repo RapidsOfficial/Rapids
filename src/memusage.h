@@ -105,8 +105,8 @@ static inline size_t DynamicUsage(const prevector<N, X, S, D>& v)
     return MallocUsage(v.allocated_memory());
 }
 
-template<typename X>
-static inline size_t DynamicUsage(const std::set<X>& s)
+template<typename X, typename Y>
+static inline size_t DynamicUsage(const std::set<X, Y>& s)
 {
     return MallocUsage(sizeof(stl_tree_node<X>)) * s.size();
 }
@@ -119,6 +119,18 @@ static inline size_t RecursiveDynamicUsage(const std::set<X>& v)
         usage += RecursiveDynamicUsage(x);
     }
     return usage;
+}
+
+template<typename X, typename Y>
+static inline size_t IncrementalDynamicUsage(const std::set<X, Y>& s)
+{
+    return MallocUsage(sizeof(stl_tree_node<X>));
+}
+
+template<typename X, typename Y, typename Z>
+static inline size_t DynamicUsage(const std::map<X, Y, Z>& m)
+{
+    return MallocUsage(sizeof(stl_tree_node<std::pair<const X, Y> >)) * m.size();
 }
 
 template<typename X, typename Y>
@@ -135,6 +147,12 @@ static inline size_t RecursiveDynamicUsage(const std::map<X, Y>& v)
         usage += RecursiveDynamicUsage(*it);
     }
     return usage;
+}
+
+template<typename X, typename Y, typename Z>
+static inline size_t IncrementalDynamicUsage(const std::map<X, Y, Z>& m)
+{
+    return MallocUsage(sizeof(stl_tree_node<std::pair<const X, Y> >));
 }
 
 template<typename X, typename Y>
