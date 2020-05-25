@@ -17,6 +17,9 @@ from test_framework.util import (
 def satoshi_round(amount):
     return Decimal(amount).quantize(Decimal('0.00000001'), rounding=ROUND_DOWN)
 
+MAX_ANCESTORS = 25
+MAX_DESCENDANTS = 25
+
 class MempoolPackagesTest(PivxTestFramework):
     def set_test_params(self):
         self.num_nodes = 1
@@ -45,17 +48,17 @@ class MempoolPackagesTest(PivxTestFramework):
         value = utxo[0]['amount']
 
         fee = Decimal("0.0001")
-        # 100 transactions off a confirmed tx should be fine
+        # MAX_ANCESTORS transactions off a confirmed tx should be fine
         chain = []
-        for i in range(100):
+        for i in range(MAX_ANCESTORS):
             (txid, sent_value) = self.chain_transaction(txid, 0, value, fee, 1)
             value = sent_value
             chain.append(txid)
 
-        # Check mempool has 100 transactions in it, and descendant
+        # Check mempool has MAX_ANCESTORS transactions in it, and descendant
         # count and fees should look correct
         mempool = self.nodes[0].getrawmempool(True)
-        assert_equal(len(mempool), 100)
+        assert_equal(len(mempool), MAX_ANCESTORS)
         descendant_count = 1
         descendant_fees = 0
         descendant_size = 0
@@ -89,18 +92,18 @@ class MempoolPackagesTest(PivxTestFramework):
         for i in range(10):
             transaction_package.append({'txid': txid, 'vout': i, 'amount': sent_value})
 
-        for i in range(1000):
+        for i in range(MAX_DESCENDANTS):
             utxo = transaction_package.pop(0)
             try:
                 (txid, sent_value) = self.chain_transaction(utxo['txid'], utxo['vout'], utxo['amount'], fee, 10)
                 for j in range(10):
                     transaction_package.append({'txid': txid, 'vout': j, 'amount': sent_value})
-                if i == 998:
+                if i == MAX_DESCENDANTS - 2:
                     mempool = self.nodes[0].getrawmempool(True)
-                    assert_equal(mempool[parent_transaction]['descendantcount'], 1000)
+                    assert_equal(mempool[parent_transaction]['descendantcount'], MAX_DESCENDANTS)
             except JSONRPCException as e:
                 self.log.info(e.error['message'])
-                assert_equal(i, 999)
+                assert_equal(i, MAX_DESCENDANTS - 1)
                 self.log.info("tx that would create too large descendant package successfully rejected")
 
         # TODO: test descendant size limits
