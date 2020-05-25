@@ -555,6 +555,7 @@ void CTxMemPool::check(const CCoinsViewCache* pcoins) const
         innerUsage += memusage::DynamicUsage(links.parents) + memusage::DynamicUsage(links.children);
         bool fDependsWait = false;
         setEntries setParentCheck;
+        bool fHasZerocoinSpends = false;
         for (const CTxIn& txin : tx.vin) {
             // Check that every mempool transaction's inputs refer to available coins, or other mempool tx's.
             indexed_transaction_set::const_iterator it2 = mapTx.find(txin.prevout.hash);
@@ -563,13 +564,14 @@ void CTxMemPool::check(const CCoinsViewCache* pcoins) const
                 assert(tx2.vout.size() > txin.prevout.n && !tx2.vout[txin.prevout.n].IsNull());
                 fDependsWait = true;
                 setParentCheck.insert(it2);
-            } else {
+            } else if(!txin.IsZerocoinSpend() && !txin.IsZerocoinPublicSpend()) {
                 const CCoins* coins = pcoins->AccessCoins(txin.prevout.hash);
-                if(!txin.IsZerocoinSpend() && !txin.IsZerocoinPublicSpend())
-                    assert(coins && coins->IsAvailable(txin.prevout.n));
+                assert(coins && coins->IsAvailable(txin.prevout.n));
+            } else {
+                fHasZerocoinSpends = true;
             }
             // Check whether its inputs are marked in mapNextTx.
-            if(!txin.IsZerocoinSpend()  && !txin.IsZerocoinPublicSpend()) {
+            if(!fHasZerocoinSpends) {
                 std::map<COutPoint, CInPoint>::const_iterator it3 = mapNextTx.find(txin.prevout);
                 assert(it3 != mapNextTx.end());
                 assert(it3->second.ptx == &tx);
@@ -581,30 +583,32 @@ void CTxMemPool::check(const CCoinsViewCache* pcoins) const
         }
         assert(setParentCheck == GetMemPoolParents(it));
         // Check children against mapNextTx
-        CTxMemPool::setEntries setChildrenCheck;
-        std::map<COutPoint, CInPoint>::const_iterator iter = mapNextTx.lower_bound(COutPoint(it->GetTx().GetHash(), 0));
-        int64_t childSizes = 0;
-        CAmount childFees = 0;
-        for (; iter != mapNextTx.end() && iter->first.hash == it->GetTx().GetHash(); ++iter) {
-            txiter childit = mapTx.find(iter->second.ptx->GetHash());
-            assert(childit != mapTx.end()); // mapNextTx points to in-mempool transactions
-            if (setChildrenCheck.insert(childit).second) {
-                childSizes += childit->GetTxSize();
-                childFees += childit->GetFee();
+        if (!fHasZerocoinSpends) {
+            CTxMemPool::setEntries setChildrenCheck;
+            std::map<COutPoint, CInPoint>::const_iterator iter = mapNextTx.lower_bound(COutPoint(tx.GetHash(), 0));
+            int64_t childSizes = 0;
+            CAmount childFees = 0;
+            for (; iter != mapNextTx.end() && iter->first.hash == tx.GetHash(); ++iter) {
+                txiter childit = mapTx.find(iter->second.ptx->GetHash());
+                assert(childit != mapTx.end()); // mapNextTx points to in-mempool transactions
+                if (setChildrenCheck.insert(childit).second) {
+                    childSizes += childit->GetTxSize();
+                    childFees += childit->GetFee();
+                }
             }
+            assert(setChildrenCheck == GetMemPoolChildren(it));
+            // Also check to make sure size/fees is greater than sum with immediate children.
+            // just a sanity check, not definitive that this calc is correct...
+            // also check that the size is less than the size of the entire mempool.
+            if (!it->IsDirty()) {
+                assert(it->GetSizeWithDescendants() >= childSizes + it->GetTxSize());
+                assert(it->GetFeesWithDescendants() >= childFees + it->GetFee());
+            } else {
+                assert(it->GetSizeWithDescendants() == it->GetTxSize());
+                assert(it->GetFeesWithDescendants() == it->GetFee());
+            }
+            assert(it->GetFeesWithDescendants() >= 0);
         }
-        assert(setChildrenCheck == GetMemPoolChildren(it));
-        // Also check to make sure size/fees is greater than sum with immediate children.
-        // just a sanity check, not definitive that this calc is correct...
-        // also check that the size is less than the size of the entire mempool.
-        if (!it->IsDirty()) {
-            assert(it->GetSizeWithDescendants() >= childSizes + it->GetTxSize());
-            assert(it->GetFeesWithDescendants() >= childFees + it->GetFee());
-        } else {
-            assert(it->GetSizeWithDescendants() == it->GetTxSize());
-            assert(it->GetFeesWithDescendants() == it->GetFee());
-        }
-        assert(it->GetFeesWithDescendants() >= 0);
 
         if (fDependsWait)
             waitingOnDependants.push_back(&(*it));
@@ -615,6 +619,7 @@ void CTxMemPool::check(const CCoinsViewCache* pcoins) const
             UpdateCoins(tx, state, mempoolDuplicate, undo, 1000000);
         }
     }
+
     unsigned int stepsSinceLastRemove = 0;
     while (!waitingOnDependants.empty()) {
         const CTxMemPoolEntry* entry = waitingOnDependants.front();
