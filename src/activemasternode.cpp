@@ -67,11 +67,11 @@ void CActiveMasternode::ManageStatus()
                 return;
             }
         } else {
-            service = CService(strMasterNodeAddr);
+            LookupNumeric(strMasterNodeAddr.c_str(), service, GetListenPort());
         }
 
         // The service needs the correct default port to work properly
-        if(!CMasternodeBroadcast::CheckDefaultPort(strMasterNodeAddr, errorMessage, "CActiveMasternode::ManageStatus()"))
+        if(!CMasternodeBroadcast::CheckDefaultPort(service, errorMessage, "CActiveMasternode::ManageStatus()"))
             return;
 
         LogPrintf("CActiveMasternode::ManageStatus() - Checking inbound connection to '%s'\n", service.ToString());
@@ -218,6 +218,7 @@ bool CActiveMasternode::CreateBroadcast(std::string strService, std::string strK
     CKey keyCollateralAddress;
     CPubKey pubKeyMasternode;
     CKey keyMasternode;
+    CService _service;
 
     //need correct blocks to send ping
     if (!fOffline && !masternodeSync.IsBlockchainSynced()) {
@@ -238,11 +239,16 @@ bool CActiveMasternode::CreateBroadcast(std::string strService, std::string strK
         return false;
     }
 
+    int nPort;
+    std::string strHost;
+    SplitHostPort(strService, nPort, strHost);
+    LookupNumeric(strHost.c_str(), _service, nPort);
+
     // The service needs the correct default port to work properly
-    if(!CMasternodeBroadcast::CheckDefaultPort(strService, errorMessage, "CActiveMasternode::CreateBroadcast()"))
+    if(!CMasternodeBroadcast::CheckDefaultPort(_service, errorMessage, "CActiveMasternode::CreateBroadcast()"))
         return false;
 
-    return CreateBroadcast(vin, CService(strService), keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage, mnb);
+    return CreateBroadcast(vin, _service, keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage, mnb);
 }
 
 bool CActiveMasternode::CreateBroadcast(CTxIn vin, CService service, CKey keyCollateralAddress, CPubKey pubKeyCollateralAddress, CKey keyMasternode, CPubKey pubKeyMasternode, std::string& errorMessage, CMasternodeBroadcast &mnb)

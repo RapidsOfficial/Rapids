@@ -983,6 +983,13 @@ bool AppInit2()
     // Check level must be 4 for zerocoin checks
     if (mapArgs.count("-checklevel"))
         return UIError(_("Error: Unsupported argument -checklevel found. Checklevel must be level 4."));
+    // Exit early if -masternode=1 and -listen=0
+    if (GetBoolArg("-masternode", false) && !GetBoolArg("-listen", true))
+        return UIError(_("Error: -listen must be true if -masternode is set."));
+    // Exit early if -masternode=1 and -port is not the default port
+    if (GetBoolArg("-masternode", false) && GetListenPort() != Params().GetDefaultPort())
+        return UIError(strprintf(_("Error: Invalid port %d for running a masternode."), GetListenPort()) + "\n\n" +
+                       strprintf(_("Masternodes are required to run on port %d for %s-net"), Params().GetDefaultPort(), Params().NetworkIDString()));
 
     if (GetBoolArg("-benchmark", false))
         UIWarning(_("Warning: Unsupported argument -benchmark ignored, use -debug=bench."));
@@ -1932,9 +1939,22 @@ bool AppInit2()
         LogPrintf(" addr %s\n", strMasterNodeAddr.c_str());
 
         if (!strMasterNodeAddr.empty()) {
-            CService addrTest = CService(strMasterNodeAddr);
+            int nPort;
+            int nDefaultPort = Params().GetDefaultPort();
+            std::string strHost;
+            SplitHostPort(strMasterNodeAddr, nPort, strHost);
+
+            // Allow for the port number to be omitted here and just double check
+            // that if a port is supplied, it matches the required default port.
+            if (nPort == 0) nPort = nDefaultPort;
+            if (nPort != nDefaultPort) {
+                return UIError(strprintf(_("Invalid -masternodeaddr port %d, only %d is supported on %s-net."),
+                    nPort, nDefaultPort, Params().NetworkIDString()));
+            }
+            CService addrTest;
+            LookupNumeric(strHost.c_str(), addrTest, nPort);
             if (!addrTest.IsValid()) {
-                return UIError("Invalid -masternodeaddr address: " + strMasterNodeAddr);
+                return UIError(strprintf(_("Invalid -masternodeaddr address: %s"), strMasterNodeAddr));
             }
         }
 
