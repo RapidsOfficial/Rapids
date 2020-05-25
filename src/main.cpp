@@ -5676,10 +5676,9 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             RelayTransaction(tx);
             vWorkQueue.push_back(inv.hash);
 
-            LogPrint(BCLog::MEMPOOL, "AcceptToMemoryPool: peer=%d %s : accepted %s (poolsz %u)\n",
-                     pfrom->id, pfrom->cleanSubVer,
-                     tx.GetHash().ToString(),
-                     mempool.size());
+            LogPrint(BCLog::MEMPOOL, "%s : peer=%d %s : accepted %s (poolsz %u txn, %u kB)\n",
+                    __func__, pfrom->id, pfrom->cleanSubVer, tx.GetHash().ToString(),
+                    mempool.size(), mempool.DynamicMemoryUsage() / 1000);
 
             // Recursively process any orphan transactions that depended on this one
             std::set<NodeId> setMisbehaving;
