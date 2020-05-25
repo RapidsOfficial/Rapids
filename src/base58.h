@@ -218,7 +218,7 @@ public:
             // Invalid address
             return "";
         }
-        return EncodeDestination(dest, isP2CS ? CChainParams::PUBKEY_ADDRESS : CChainParams::STAKING_ADDRESS);
+        return EncodeDestination(dest, isP2CS ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS);
     }
 };
 

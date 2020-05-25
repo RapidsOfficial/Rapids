@@ -439,7 +439,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
             }
             total += subtotal;
         } else { // User-entered pivx address / amount:
-            if (!validateAddress(rcp.address)) {
+            if (!validateAddress(rcp.address, rcp.isP2CS)) {
                 return InvalidAddress;
             }
             if (rcp.amount <= 0) {
