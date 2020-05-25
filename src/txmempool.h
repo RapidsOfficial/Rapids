@@ -43,6 +43,7 @@ private:
     CAmount nFee;         //! Cached to avoid expensive parent-transaction lookups
     size_t nTxSize;       //! ... and avoid recomputing tx size
     size_t nModSize;      //! ... and modified size for priority
+    size_t nUsageSize;    //! ... and total memory usage
     bool hasZerocoins{false}; //! ... and checking if it contains zPIV (mints/spends)
     int64_t nTime;        //! Local time when entering the mempool
     double dPriority;     //! Priority when entering the mempool
@@ -62,6 +63,7 @@ public:
     unsigned int GetHeight() const { return nHeight; }
     bool HasZerocoins() const { return hasZerocoins; }
     bool WasClearAtEntry() const { return hadNoDependencies; }
+    size_t DynamicMemoryUsage() const { return nUsageSize; }
 };
 
 
@@ -86,6 +88,7 @@ public:
         n = (uint32_t)-1;
     }
     bool IsNull() const { return (ptx == NULL && n == (uint32_t)-1); }
+    size_t DynamicMemoryUsage() const { return 0; }
 };
 
 /**
@@ -107,6 +110,7 @@ private:
 
     CFeeRate minRelayFee; //! Passed to constructor to avoid dependency on main
     uint64_t totalTxSize; //! sum of all mempool tx' byte sizes
+    uint64_t cachedInnerUsage; //! sum of dynamic memory usage of all the map elements (NOT the maps themselves)
 
 public:
     /**
@@ -203,6 +207,8 @@ public:
     /** Write/Read estimates to disk */
     bool WriteFeeEstimates(CAutoFile& fileout) const;
     bool ReadFeeEstimates(CAutoFile& filein);
+
+    size_t DynamicMemoryUsage() const;
 };
 
 /** 
