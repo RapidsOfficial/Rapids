@@ -147,7 +147,7 @@ struct mempoolentry_txid
 class CompareTxMemPoolEntryByFee
 {
 public:
-    bool operator()(const CTxMemPoolEntry& a, const CTxMemPoolEntry& b)
+    bool operator()(const CTxMemPoolEntry& a, const CTxMemPoolEntry& b) const
     {
         bool fUseADescendants = UseDescendantFeeRate(a);
         bool fUseBDescendants = UseDescendantFeeRate(b);
@@ -169,7 +169,7 @@ public:
     }
 
     // Calculate which feerate to use for an entry (avoiding division).
-    bool UseDescendantFeeRate(const CTxMemPoolEntry &a)
+    bool UseDescendantFeeRate(const CTxMemPoolEntry &a) const
     {
         double f1 = (double)a.GetFee() * a.GetSizeWithDescendants();
         double f2 = (double)a.GetFeesWithDescendants() * a.GetTxSize();
@@ -181,7 +181,7 @@ public:
 class CompareTxMemPoolEntryByEntryTime
 {
 public:
-    bool operator()(const CTxMemPoolEntry& a, const CTxMemPoolEntry& b)
+    bool operator()(const CTxMemPoolEntry& a, const CTxMemPoolEntry& b) const
     {
         return a.GetTime() < b.GetTime();
     }
