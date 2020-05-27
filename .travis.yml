@@ -165,7 +165,7 @@ jobs:
         NO_DEPENDS=1
         RUN_FUNCTIONAL_TESTS=false
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no"
+        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no --disable-bench"
 
     - stage: test
       name: 'x86_64 Linux  [GOAL: install]  [xenial]  [no depends, only system libs]'
