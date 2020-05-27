@@ -4,6 +4,8 @@
 
 #include "bench.h"
 
+#include "perf.h"
+
 #include <iomanip>
 #include <iostream>
 #include <sys/time.h>
@@ -26,7 +28,9 @@ BenchRunner::BenchRunner(std::string name, BenchFunction func)
 void
 BenchRunner::RunAll(double elapsedTimeForOne)
 {
-    std::cout << "#Benchmark" << "," << "count" << "," << "min" << "," << "max" << "," << "average" << "\n";
+    perf_init();
+    std::cout << "#Benchmark" << "," << "count" << "," << "min" << "," << "max" << "," << "average" << ","
+              << "min_cycles" << "," << "max_cycles" << "," << "average_cycles" << "\n";
 
     for (std::map<std::string,BenchFunction>::iterator it = benchmarks.begin();
          it != benchmarks.end(); ++it) {
@@ -35,6 +39,7 @@ BenchRunner::RunAll(double elapsedTimeForOne)
         BenchFunction& func = it->second;
         func(state);
     }
+    perf_fini();
 }
 
 bool State::KeepRunning()
@@ -44,8 +49,10 @@ bool State::KeepRunning()
       return true;
     }
     double now;
+    uint64_t nowCycles;
     if (count == 0) {
         beginTime = now = gettimedouble();
+        lastCycles = beginCycles = nowCycles = perf_cpucycles();
     }
     else {
         now = gettimedouble();
@@ -53,6 +60,13 @@ bool State::KeepRunning()
         double elapsedOne = elapsed * countMaskInv;
         if (elapsedOne < minTime) minTime = elapsedOne;
         if (elapsedOne > maxTime) maxTime = elapsedOne;
+
+        // We only use relative values, so don't have to handle 64-bit wrap-around specially
+        nowCycles = perf_cpucycles();
+        uint64_t elapsedOneCycles = (nowCycles - lastCycles) * countMaskInv;
+        if (elapsedOneCycles < minCycles) minCycles = elapsedOneCycles;
+        if (elapsedOneCycles > maxCycles) maxCycles = elapsedOneCycles;
+
         if (elapsed*128 < maxElapsed) {
           // If the execution was much too fast (1/128th of maxElapsed), increase the count mask by 8x and restart timing.
           // The restart avoids including the overhead of this code in the measurement.
@@ -61,6 +75,8 @@ bool State::KeepRunning()
           count = 0;
           minTime = std::numeric_limits<double>::max();
           maxTime = std::numeric_limits<double>::min();
+          minCycles = std::numeric_limits<uint64_t>::max();
+          maxCycles = std::numeric_limits<uint64_t>::min();
           return true;
         }
         if (elapsed*16 < maxElapsed) {
@@ -72,6 +88,7 @@ bool State::KeepRunning()
         }
     }
     lastTime = now;
+    lastCycles = nowCycles;
     ++count;
 
     if (now - beginTime < maxElapsed) return true; // Keep going
@@ -80,7 +97,9 @@ bool State::KeepRunning()
 
     // Output results
     double average = (now-beginTime)/count;
-    std::cout << std::fixed << std::setprecision(15) << name << "," << count << "," << minTime << "," << maxTime << "," << average << "\n";
+    int64_t averageCycles = (nowCycles-beginCycles)/count;
+    std::cout << std::fixed << std::setprecision(15) << name << "," << count << "," << minTime << "," << maxTime << "," << average << ","
+              << minCycles << "," << maxCycles << "," << averageCycles << "\n";
 
     return false;
 }
