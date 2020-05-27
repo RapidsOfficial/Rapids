@@ -116,4 +116,4 @@ static inline size_t DynamicUsage(const X& x)
 
 }
 
-#endif
+#endif // BITCOIN_MEMUSAGE_H
