@@ -10,9 +10,7 @@
 #include <iostream>
 #include <sys/time.h>
 
-using namespace benchmark;
-
-std::map<std::string, BenchFunction> BenchRunner::benchmarks;
+std::map<std::string, benchmark::BenchFunction> benchmark::BenchRunner::benchmarks;
 
 static double gettimedouble(void) {
     struct timeval tv;
@@ -20,13 +18,13 @@ static double gettimedouble(void) {
     return tv.tv_usec * 0.000001 + tv.tv_sec;
 }
 
-BenchRunner::BenchRunner(std::string name, BenchFunction func)
+benchmark::BenchRunner::BenchRunner(std::string name, benchmark::BenchFunction func)
 {
     benchmarks.insert(std::make_pair(name, func));
 }
 
 void
-BenchRunner::RunAll(double elapsedTimeForOne)
+benchmark::BenchRunner::RunAll(double elapsedTimeForOne)
 {
     perf_init();
     std::cout << "#Benchmark" << "," << "count" << "," << "min" << "," << "max" << "," << "average" << ","
@@ -42,7 +40,7 @@ BenchRunner::RunAll(double elapsedTimeForOne)
     perf_fini();
 }
 
-bool State::KeepRunning()
+bool benchmark::State::KeepRunning()
 {
     if (count & countMask) {
       ++count;
