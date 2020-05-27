@@ -10,7 +10,10 @@
 #include <iostream>
 #include <sys/time.h>
 
-std::map<std::string, benchmark::BenchFunction> benchmark::BenchRunner::benchmarks;
+benchmark::BenchRunner::BenchmarkMap &benchmark::BenchRunner::benchmarks() {
+    static std::map<std::string, benchmark::BenchFunction> benchmarks_map;
+    return benchmarks_map;
+}
 
 static double gettimedouble(void) {
     struct timeval tv;
@@ -20,7 +23,7 @@ static double gettimedouble(void) {
 
 benchmark::BenchRunner::BenchRunner(std::string name, benchmark::BenchFunction func)
 {
-    benchmarks.insert(std::make_pair(name, func));
+    benchmarks().insert(std::make_pair(name, func));
 }
 
 void
@@ -30,12 +33,9 @@ benchmark::BenchRunner::RunAll(double elapsedTimeForOne)
     std::cout << "#Benchmark" << "," << "count" << "," << "min" << "," << "max" << "," << "average" << ","
               << "min_cycles" << "," << "max_cycles" << "," << "average_cycles" << "\n";
 
-    for (std::map<std::string,BenchFunction>::iterator it = benchmarks.begin();
-         it != benchmarks.end(); ++it) {
-
-        State state(it->first, elapsedTimeForOne);
-        BenchFunction& func = it->second;
-        func(state);
+    for (const auto &p: benchmarks()) {
+        State state(p.first, elapsedTimeForOne);
+        p.second(state);
     }
     perf_fini();
 }
