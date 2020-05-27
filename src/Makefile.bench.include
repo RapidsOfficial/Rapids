@@ -9,6 +9,7 @@ bench_bench_pivx_SOURCES = \
   bench/bench.h \
   bench/Examples.cpp \
   bench/base58.cpp \
+  bench/checkqueue.cpp \
   bench/crypto_hash.cpp \
   bench/perf.cpp \
   bench/perf.h
