@@ -39,7 +39,7 @@ namespace benchmark {
         std::string name;
         double maxElapsed;
         double beginTime;
-        double lastTime, minTime, maxTime, countMaskInv;
+        double lastTime, minTime, maxTime;
         uint64_t count;
         uint64_t countMask;
         uint64_t beginCycles;
@@ -53,7 +53,6 @@ namespace benchmark {
             minCycles = std::numeric_limits<uint64_t>::max();
             maxCycles = std::numeric_limits<uint64_t>::min();
             countMask = 1;
-            countMaskInv = 1./(countMask + 1);
         }
         bool KeepRunning();
     };
