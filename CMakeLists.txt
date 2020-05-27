@@ -295,7 +295,7 @@ set(SERVER_SOURCES
         ./src/httprpc.cpp
         ./src/httpserver.cpp
         ./src/init.cpp
-        ./src/leveldbwrapper.cpp
+        ./src/dbwrapper.cpp
         ./src/main.cpp
         ./src/merkleblock.cpp
         ./src/miner.cpp
