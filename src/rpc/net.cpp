@@ -442,8 +442,7 @@ UniValue setban(const UniValue& params, bool fHelp)
         CNetAddr resolved;
         LookupHost(params[0].get_str().c_str(), resolved, false);
         netAddr = resolved;
-    }
-    else
+    } else
         LookupSubNet(params[0].get_str().c_str(), subNet);
 
     if (! (isSubnet ? subNet.IsValid() : netAddr.IsValid()) )

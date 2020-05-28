@@ -373,7 +373,7 @@ bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMast
     CService _service(LookupNumeric(strHost.c_str(), nPort));
 
     // The service needs the correct default port to work properly
-    if(!CheckDefaultPort(_service, strErrorRet, "CMasternodeBroadcast::Create"))
+    if (!CheckDefaultPort(_service, strErrorRet, "CMasternodeBroadcast::Create"))
         return false;
 
     return Create(txin, _service, keyCollateralAddressNew, pubKeyCollateralAddressNew, keyMasternodeNew, pubKeyMasternodeNew, strErrorRet, mnbRet);
@@ -480,7 +480,7 @@ bool CMasternodeBroadcast::CheckDefaultPort(CService service, std::string& strEr
 
     if (service.GetPort() != nDefaultPort) {
         strErrorRet = strprintf("Invalid port %u for masternode %s, only %d is supported on %s-net.",
-                                        service.GetPort(), service.ToString(), nDefaultPort, Params().NetworkIDString());
+            service.GetPort(), service.ToString(), nDefaultPort, Params().NetworkIDString());
         LogPrint(BCLog::MASTERNODE, "%s - %s\n", strContext, strErrorRet);
         return false;
     }

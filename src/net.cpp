@@ -1824,7 +1824,7 @@ void StartNode(boost::thread_group& threadGroup, CScheduler& scheduler)
         semOutbound = new CSemaphore(nMaxOutbound);
     }
 
-    if (pnodeLocalHost == NULL) {
+    if (pnodeLocalHost == nullptr) {
         CNetAddr local;
         LookupHost("127.0.0.1", local, false);
         pnodeLocalHost = new CNode(INVALID_SOCKET, CAddress(CService(local, 0), nLocalServices));

@@ -1015,7 +1015,7 @@ void RPCConsole::banSelectedNode(int bantime)
         SplitHostPort(nStr, port, addr);
 
         CNetAddr resolved;
-        if(!LookupHost(addr.c_str(), resolved, false))
+        if (!LookupHost(addr.c_str(), resolved, false))
             return;
         CNode::Ban(resolved, BanReasonManuallyAdded, bantime);
 

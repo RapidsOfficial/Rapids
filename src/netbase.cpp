@@ -202,7 +202,7 @@ bool LookupHost(const char* pszName, CNetAddr& addr, bool fAllowLookup)
 {
     std::vector<CNetAddr> vIP;
     LookupHost(pszName, vIP, 1, fAllowLookup);
-    if(vIP.empty())
+    if (vIP.empty())
         return false;
     addr = vIP.front();
     return true;
@@ -241,7 +241,7 @@ CService LookupNumeric(const char* pszName, int portDefault)
     CService addr;
     // "1.2:345" will fail to resolve the ip, but will still set the port.
     // If the ip fails to resolve, re-init the result.
-    if(!Lookup(pszName, addr, portDefault, false))
+    if (!Lookup(pszName, addr, portDefault, false))
         addr = CService();
     return addr;
 }
@@ -679,16 +679,14 @@ bool LookupSubNet(const char* pszName, CSubNet& ret)
     if (LookupHost(strAddress.c_str(), vIP, 1, false))
     {
         CNetAddr network = vIP[0];
-        if (slash != strSubnet.npos)
-        {
+        if (slash != strSubnet.npos) {
             std::string strNetmask = strSubnet.substr(slash + 1);
             int32_t n;
             // IPv4 addresses start at offset 12, and first 12 bytes must match, so just offset n
             if (ParseInt32(strNetmask, &n)) { // If valid number, assume /24 syntax
                 ret = CSubNet(network, n);
                 return ret.IsValid();
-            }
-            else // If not a valid number, try full netmask syntax
+            } else // If not a valid number, try full netmask syntax
             {
                 // Never allow lookup for netmask
                 if (LookupHost(strNetmask.c_str(), vIP, 1, false)) {
@@ -696,9 +694,7 @@ bool LookupSubNet(const char* pszName, CSubNet& ret)
                     return ret.IsValid();
                 }
             }
-        }
-        else
-        {
+        } else {
             ret = CSubNet(network);
             return ret.IsValid();
         }
