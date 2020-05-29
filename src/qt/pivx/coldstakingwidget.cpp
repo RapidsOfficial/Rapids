@@ -414,13 +414,6 @@ void ColdStakingWidget::onSendClicked()
     if (!walletModel || !walletModel->getOptionsModel())
         return;
 
-    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
-    if (!ctx.isValid()) {
-        // Unlock wallet was cancelled
-        inform(tr("Cannot send delegation, wallet locked"));
-        return;
-    }
-
     if (!walletModel->isColdStakingNetworkelyEnabled()) {
         inform(tr("Cold staking is networkely disabled"));
         return;
@@ -451,25 +444,27 @@ void ColdStakingWidget::onSendClicked()
 
 
     bool isStakingAddressFromThisWallet = walletModel->isMine(dest.address);
-    bool isOwnerAddressFromThisWallet = isOwnerEmpty;
+    bool isOwnerAddressFromThisWallet = isOwnerEmpty || walletModel->isMine(inputOwner);
 
-    if (!isOwnerAddressFromThisWallet) {
-        isOwnerAddressFromThisWallet = walletModel->isMine(inputOwner);
-
-        // Warn the user if the owner address is not from this wallet
-        if (!isOwnerAddressFromThisWallet &&
-            !ask(tr("ALERT!"),
-                    tr("Delegating to an external owner address!\n\n"
-                       "The delegated coins will NOT be spendable by this wallet.\nSpending these coins will need to be done from the wallet or\ndevice containing the owner address.\n\n"
-                       "Do you wish to proceed?"))
-            ) {
-                return;
-        }
+    // Warn the user if the owner address is not from this wallet
+    if (!isOwnerAddressFromThisWallet && !ask(tr("ALERT!"),
+                tr("Delegating to an external owner address!\n\n"
+                   "The delegated coins will NOT be spendable by this wallet.\nSpending these coins will need to be done from the wallet or\ndevice containing the owner address.\n\n"
+                   "Do you wish to proceed?"))) {
+            return;
     }
 
     // Don't try to delegate the balance if both addresses are from this wallet
     if (isStakingAddressFromThisWallet && isOwnerAddressFromThisWallet) {
         inform(tr("Staking address corresponds to this wallet, change it to an external node"));
+        return;
+    }
+
+    // Unlock wallet
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot send delegation, wallet locked"));
         return;
     }
 
