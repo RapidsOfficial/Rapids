@@ -1039,6 +1039,21 @@ void WalletModel::getOutputs(const std::vector<COutPoint>& vOutpoints, std::vect
     }
 }
 
+// returns a COutPoint of 10000 PIV if found
+bool WalletModel::getMNCollateralCandidate(COutPoint& outPoint)
+{
+    std::vector<COutput> vCoins;
+    wallet->AvailableCoins(&vCoins, nullptr, false, false, ONLY_10000);
+    for (const COutput& out : vCoins) {
+        // skip locked collaterals
+        if (!isLockedCoin(out.tx->GetHash(), out.i)) {
+            outPoint = COutPoint(out.tx->GetHash(), out.i);
+            return true;
+        }
+    }
+    return false;
+}
+
 bool WalletModel::isSpent(const COutPoint& outpoint) const
 {
     LOCK2(cs_main, wallet->cs_wallet);
