@@ -106,6 +106,7 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     setCssProperty(ui->lineEditOwnerAddress, "edit-primary-multi-book");
     ui->lineEditOwnerAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->lineEditOwnerAddress);
+    connect(ui->lineEditOwnerAddress, &QLineEdit::textChanged, this, &ColdStakingWidget::onOwnerAddressChanged);
 
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
@@ -772,6 +773,14 @@ void ColdStakingWidget::onMyStakingAddressesClicked()
         ui->sortWidget->setVisible(false);
         ui->rightContainer->addItem(spacerDiv);
     }
+}
+
+void ColdStakingWidget::onOwnerAddressChanged()
+{
+    const bool isValid = ui->lineEditOwnerAddress->text().isEmpty() || (
+            walletModel && walletModel->validateAddress(ui->lineEditOwnerAddress->text()));
+
+    setCssProperty(ui->lineEditOwnerAddress, isValid ? "edit-primary-multi-book" : "edit-primary-multi-book-error", true);
 }
 
 void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme)
