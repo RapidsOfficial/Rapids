@@ -8,16 +8,6 @@
 #include "tinyformat.h"
 #include "utilstrencodings.h"
 
-namespace {
-inline std::string ValueString(const std::vector<unsigned char>& vch)
-{
-    if (vch.size() <= 4)
-        return strprintf("%d", CScriptNum(vch, false).getint());
-    else
-        return HexStr(vch);
-}
-} // anon namespace
-
 
 const char* GetOpName(opcodetype opcode)
 {
@@ -303,33 +293,4 @@ bool CScript::IsPushOnly(const_iterator pc) const
 bool CScript::IsPushOnly() const
 {
     return this->IsPushOnly(begin());
-}
-
-std::string CScript::ToString() const
-{
-    std::string str;
-    opcodetype opcode;
-    std::vector<unsigned char> vch;
-    const_iterator pc = begin();
-    while (pc < end())
-    {
-        if (!str.empty())
-            str += " ";
-        if (!GetOp(pc, opcode, vch))
-        {
-            str += "[error]";
-            return str;
-        }
-        if (0 <= opcode && opcode <= OP_PUSHDATA4) {
-            str += ValueString(vch);
-        } else {
-            str += GetOpName(opcode);
-            if (opcode == OP_ZEROCOINSPEND) {
-                //Zerocoinspend has no further op codes.
-                break;
-            }
-        }
-
-    }
-    return str;
 }

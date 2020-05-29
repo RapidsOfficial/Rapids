@@ -646,7 +646,7 @@ bool AddOrphanTx(const CTransaction& tx, NodeId peer)
     // have been mined or received.
     // 10,000 orphans, each of which is at most 5,000 bytes big is
     // at most 500 megabytes of orphans:
-    unsigned int sz = tx.GetSerializeSize(SER_NETWORK, CTransaction::CURRENT_VERSION);
+    unsigned int sz = GetSerializeSize(tx, SER_NETWORK, CTransaction::CURRENT_VERSION);
     if (sz > 5000) {
         LogPrint(BCLog::MEMPOOL, "ignoring large orphan tx (size: %u, hash: %s)\n", sz, hash.ToString());
         return false;
@@ -742,7 +742,7 @@ bool IsStandardTx(const CTransaction& tx, std::string& reason)
     // almost as much to process as they cost the sender in fees, because
     // computing signature hashes is O(ninputs*txsize). Limiting transactions
     // to MAX_STANDARD_TX_SIZE mitigates CPU exhaustion attacks.
-    unsigned int sz = tx.GetSerializeSize(SER_NETWORK, CTransaction::CURRENT_VERSION);
+    unsigned int sz = GetSerializeSize(tx, SER_NETWORK, CTransaction::CURRENT_VERSION);
     unsigned int nMaxSize = tx.ContainsZerocoins() ? MAX_ZEROCOIN_TX_SIZE : MAX_STANDARD_TX_SIZE;
     if (sz >= nMaxSize) {
         reason = "tx-size";
@@ -1505,7 +1505,7 @@ bool WriteBlockToDisk(CBlock& block, CDiskBlockPos& pos)
         return error("WriteBlockToDisk : OpenBlockFile failed");
 
     // Write index header
-    unsigned int nSize = fileout.GetSerializeSize(block);
+    unsigned int nSize = GetSerializeSize(fileout, block);
     fileout << FLATDATA(Params().MessageStart()) << nSize;
 
     // Write block
@@ -4301,7 +4301,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, CBlock* pblock, CDis
     }
 
     LogPrintf("%s : ACCEPTED Block %ld in %ld milliseconds with size=%d\n", __func__, GetHeight(), GetTimeMillis() - nStartTime,
-              pblock->GetSerializeSize(SER_DISK, CLIENT_VERSION));
+              GetSerializeSize(*pblock, SER_DISK, CLIENT_VERSION));
 
     return true;
 }
@@ -6408,7 +6408,7 @@ bool CBlockUndo::WriteToDisk(CDiskBlockPos& pos, const uint256& hashBlock)
         return error("CBlockUndo::WriteToDisk : OpenUndoFile failed");
 
     // Write index header
-    unsigned int nSize = fileout.GetSerializeSize(*this);
+    unsigned int nSize = GetSerializeSize(fileout, *this);
     fileout << FLATDATA(Params().MessageStart()) << nSize;
 
     // Write undo data

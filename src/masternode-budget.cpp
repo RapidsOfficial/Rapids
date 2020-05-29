@@ -51,7 +51,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
             // Collateral for budget finalization
             // Note: there are still old valid budgets out there, but the check for the new 5 PIV finalization collateral
             //       will also cover the old 50 PIV finalization collateral.
-            LogPrint(BCLog::MNBUDGET, "Final Budget: o.scriptPubKey(%s) == findScript(%s) ?\n", o.scriptPubKey.ToString(), findScript.ToString());
+            LogPrint(BCLog::MNBUDGET, "Final Budget: o.scriptPubKey(%s) == findScript(%s) ?\n", HexStr(o.scriptPubKey), HexStr(findScript));
             if (o.scriptPubKey == findScript) {
                 LogPrint(BCLog::MNBUDGET, "Final Budget: o.nValue(%ld) >= BUDGET_FEE_TX(%ld) ?\n", o.nValue, BUDGET_FEE_TX);
                 if(o.nValue >= BUDGET_FEE_TX) {
@@ -61,7 +61,7 @@ bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, s
         }
         else {
             // Collateral for normal budget proposal
-            LogPrint(BCLog::MNBUDGET, "Normal Budget: o.scriptPubKey(%s) == findScript(%s) ?\n", o.scriptPubKey.ToString(), findScript.ToString());
+            LogPrint(BCLog::MNBUDGET, "Normal Budget: o.scriptPubKey(%s) == findScript(%s) ?\n", HexStr(o.scriptPubKey), HexStr(findScript));
             if (o.scriptPubKey == findScript) {
                 LogPrint(BCLog::MNBUDGET, "Normal Budget: o.nValue(%ld) >= PROPOSAL_FEE_TX(%ld) ?\n", o.nValue, PROPOSAL_FEE_TX);
                 if(o.nValue >= PROPOSAL_FEE_TX) {
@@ -1912,13 +1912,13 @@ void CFinalizedBudget::CheckAndVote()
 
         for (unsigned int i = 0; i < vecBudgetPaymentsSortedByHash.size(); i++) {
             LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Payments - nProp %d %s\n", i, vecBudgetPaymentsSortedByHash[i].nProposalHash.ToString());
-            LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Payments - Payee %d %s\n", i, vecBudgetPaymentsSortedByHash[i].payee.ToString());
+            LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Payments - Payee %d %s\n", i, HexStr(vecBudgetPaymentsSortedByHash[i].payee));
             LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Payments - nAmount %d %lli\n", i, vecBudgetPaymentsSortedByHash[i].nAmount);
         }
 
         for (unsigned int i = 0; i < vBudgetProposalsSortedByHash.size(); i++) {
             LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Proposals - nProp %d %s\n", i, vBudgetProposalsSortedByHash[i]->GetHash().ToString());
-            LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Proposals - Payee %d %s\n", i, vBudgetProposalsSortedByHash[i]->GetPayee().ToString());
+            LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Proposals - Payee %d %s\n", i, HexStr(vBudgetProposalsSortedByHash[i]->GetPayee()));
             LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck Budget-Proposals - nAmount %d %lli\n", i, vBudgetProposalsSortedByHash[i]->GetAmount());
         }
 
@@ -1945,8 +1945,8 @@ void CFinalizedBudget::CheckAndVote()
             }
 
             // if(vecBudgetPayments[i].payee != vBudgetProposals[i]->GetPayee()){ -- triggered with false positive
-            if (vecBudgetPaymentsSortedByHash[i].payee.ToString() != vBudgetProposalsSortedByHash[i]->GetPayee().ToString()) {
-                LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck - item #%d payee doesn't match %s %s\n", i, vecBudgetPaymentsSortedByHash[i].payee.ToString(), vBudgetProposalsSortedByHash[i]->GetPayee().ToString());
+            if (HexStr(vecBudgetPaymentsSortedByHash[i].payee) != HexStr(vBudgetProposalsSortedByHash[i]->GetPayee())) {
+                LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::AutoCheck - item #%d payee doesn't match %s %s\n", i, HexStr(vecBudgetPaymentsSortedByHash[i].payee), HexStr(vBudgetProposalsSortedByHash[i]->GetPayee()));
                 return;
             }
 
@@ -2160,7 +2160,7 @@ TrxValidationStatus CFinalizedBudget::IsTransactionValid(const CTransaction& txN
 
     for (CTxOut out : txNew.vout) {
         LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::IsTransactionValid - nCurrentBudgetPayment=%d, payee=%s == out.scriptPubKey=%s, amount=%ld == out.nValue=%ld\n",
-                 nCurrentBudgetPayment, vecBudgetPayments[nCurrentBudgetPayment].payee.ToString().c_str(), out.scriptPubKey.ToString().c_str(),
+                 nCurrentBudgetPayment, HexStr(vecBudgetPayments[nCurrentBudgetPayment].payee), HexStr(out.scriptPubKey),
                  vecBudgetPayments[nCurrentBudgetPayment].nAmount, out.nValue);
 
         if (vecBudgetPayments[nCurrentBudgetPayment].payee == out.scriptPubKey && vecBudgetPayments[nCurrentBudgetPayment].nAmount == out.nValue) {
