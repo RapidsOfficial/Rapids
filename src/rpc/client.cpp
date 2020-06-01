@@ -99,6 +99,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"createrawtransaction", 0},
         {"createrawtransaction", 1},
         {"createrawtransaction", 2},
+        {"fundrawtransaction", 1},
         {"signrawtransaction", 1},
         {"signrawtransaction", 2},
         {"sendrawtransaction", 1},
