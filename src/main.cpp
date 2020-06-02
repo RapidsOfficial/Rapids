@@ -98,7 +98,7 @@ size_t nCoinCacheUsage = 5000 * 300;
 /* If the tip is older than this (in seconds), the node is considered to be in initial block download. */
 int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
 
-/** Fees smaller than this (in upiv) are considered zero fee (for relaying and mining)
+/** Fees smaller than this (in upiv) are considered zero fee (for relaying, mining and transaction creation)
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minRelayTxFee only 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  */
@@ -1132,7 +1132,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         if (!hasZcSpendInputs)
             view.GetPriority(tx, chainHeight);
 
-        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight);
+        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight, mempool.HasNoInputsOf(tx));
         unsigned int nSize = entry.GetTxSize();
 
         // Don't accept it if it can't get into a block
@@ -1212,7 +1212,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         }
 
         // Store transaction in memory
-        pool.addUnchecked(hash, entry);
+        pool.addUnchecked(hash, entry, !IsInitialBlockDownload());
     }
 
     SyncWithWallets(tx, nullptr);
@@ -1329,7 +1329,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
         CAmount nFees = nValueIn - nValueOut;
         double dPriority = view.GetPriority(tx, chainHeight);
 
-        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight);
+        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight, mempool.HasNoInputsOf(tx));
         unsigned int nSize = entry.GetTxSize();
 
         // Don't accept it if it can't get into a block
@@ -2825,7 +2825,7 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, CBlock* 
 
     // Remove conflicting transactions from the mempool.
     std::list<CTransaction> txConflicted;
-    mempool.removeForBlock(pblock->vtx, pindexNew->nHeight, txConflicted);
+    mempool.removeForBlock(pblock->vtx, pindexNew->nHeight, txConflicted, !IsInitialBlockDownload());
     mempool.check(pcoinsTip);
     // Update chainActive & related variables.
     UpdateTip(pindexNew);
