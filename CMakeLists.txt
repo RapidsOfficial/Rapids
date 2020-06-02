@@ -505,6 +505,7 @@ set(UTIL_SOURCES
         ./src/compat/glibcxx_sanity.cpp
         ./src/chainparamsbase.cpp
         ./src/clientversion.cpp
+        ./src/fs.cpp
         ./src/logging.cpp
         ./src/random.cpp
         ./src/rpc/protocol.cpp

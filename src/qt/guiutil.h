@@ -8,6 +8,7 @@
 
 #include "amount.h"
 #include "askpassphrasedialog.h"
+#include "fs.h"
 
 #include <QEvent>
 #include <QHeaderView>
@@ -18,7 +19,6 @@
 #include <QTableView>
 #include <QTableWidget>
 
-#include <boost/filesystem.hpp>
 
 class QValidatedLineEdit;
 class SendCoinsRecipient;
@@ -235,10 +235,10 @@ QString loadStyleSheet();
 bool isExternal(QString theme);
 
 /* Convert QString to OS specific boost path through UTF-8 */
-boost::filesystem::path qstringToBoostPath(const QString& path);
+fs::path qstringToBoostPath(const QString& path);
 
 /* Convert OS specific boost path to QString through UTF-8 */
-QString boostPathToQString(const boost::filesystem::path& path);
+QString boostPathToQString(const fs::path& path);
 
 /* Convert seconds into a QString with days, hours, mins, secs */
 QString formatDurationStr(int secs);

@@ -8,10 +8,8 @@
 #include "logging.h"
 #include "utiltime.h"
 
-#include <boost/filesystem/fstream.hpp>
 
 const char * const DEFAULT_DEBUGLOGFILE = "debug.log";
-namespace fs = boost::filesystem;
 
 /**
  * NOTE: the logger instances is leaked on exit. This is ugly, but will be
@@ -43,7 +41,7 @@ bool BCLog::Logger::OpenDebugLog()
     assert(m_fileout == nullptr);
     assert(!m_file_path.empty());
 
-    m_fileout = fopen(m_file_path.string().c_str(), "a");
+    m_fileout = fsbridge::fopen(m_file_path, "a");
     if (!m_fileout) return false;
 
     setbuf(m_fileout, nullptr); // unbuffered
@@ -215,7 +213,7 @@ int BCLog::Logger::LogPrintStr(const std::string &str)
             // reopen the log file, if requested
             if (m_reopen_file) {
                 m_reopen_file = false;
-                if (freopen(m_file_path.string().c_str(),"a",m_fileout) != NULL)
+                if (fsbridge::freopen(m_file_path,"a",m_fileout) != NULL)
                     setbuf(m_fileout, NULL); // unbuffered
             }
 
@@ -234,7 +232,7 @@ void BCLog::Logger::ShrinkDebugFile()
     assert(!m_file_path.empty());
 
     // Scroll debug.log if it's getting too big
-    FILE* file = fopen(m_file_path.string().c_str(), "r");
+    FILE* file = fsbridge::fopen(m_file_path, "r");
     if (file && fs::file_size(m_file_path) > RECENT_DEBUG_HISTORY_SIZE) {
         // Restart the file with some of the end
         std::vector<char> vch(200000, 0);
@@ -242,7 +240,7 @@ void BCLog::Logger::ShrinkDebugFile()
         int nBytes = fread(vch.data(), 1, vch.size(), file);
         fclose(file);
 
-        file = fopen(m_file_path.string().c_str(), "w");
+        file = fsbridge::fopen(m_file_path, "w");
         if (file) {
             fwrite(vch.data(), 1, nBytes, file);
             fclose(file);
