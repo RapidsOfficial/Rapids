@@ -125,7 +125,7 @@ PairResult CWallet::getNewAddress(CTxDestination& ret, const std::string address
     if (!GetKeyFromPool(newKey, type)) {
         // inform the user to top-up the keypool or unlock the wallet
         return PairResult(false, new std::string(
-                "Keypool ran out, please call keypoolrefill first, or unlock the wallet."));
+                        _("Keypool ran out, please call keypoolrefill first, or unlock the wallet.")));
     }
     CKeyID keyID = newKey.GetID();
 
@@ -2560,9 +2560,10 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
 
                         // Reserve a new key pair from key pool
                         CPubKey vchPubKey;
-                        bool ret;
-                        ret = reservekey.GetReservedKey(vchPubKey, true);
-                        assert(ret); // should never fail, as we just unlocked
+                        if (!reservekey.GetReservedKey(vchPubKey, true)) {
+                            strFailReason = _("Can't generate a change-address key. Please call keypoolrefill first.");
+                            return false;
+                        }
 
                         scriptChange = GetScriptForDestination(vchPubKey.GetID());
                     }
