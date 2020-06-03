@@ -46,12 +46,6 @@ public:
     virtual bool RemoveWatchOnly(const CScript& dest) = 0;
     virtual bool HaveWatchOnly(const CScript& dest) const = 0;
     virtual bool HaveWatchOnly() const = 0;
-
-    //! Support for MultiSig addresses
-    virtual bool AddMultiSig(const CScript& dest) = 0;
-    virtual bool RemoveMultiSig(const CScript& dest) = 0;
-    virtual bool HaveMultiSig(const CScript& dest) const = 0;
-    virtual bool HaveMultiSig() const = 0;
 };
 
 typedef std::map<CKeyID, CKey> KeyMap;
@@ -82,11 +76,6 @@ public:
     virtual bool RemoveWatchOnly(const CScript& dest);
     virtual bool HaveWatchOnly(const CScript& dest) const;
     virtual bool HaveWatchOnly() const;
-
-    virtual bool AddMultiSig(const CScript& dest);
-    virtual bool RemoveMultiSig(const CScript& dest);
-    virtual bool HaveMultiSig(const CScript& dest) const;
-    virtual bool HaveMultiSig() const;
 };
 
 typedef std::vector<unsigned char, secure_allocator<unsigned char> > CKeyingMaterial;

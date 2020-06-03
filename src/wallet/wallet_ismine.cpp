@@ -35,18 +35,11 @@ isminetype IsMine(const CKeyStore& keystore, const CTxDestination& dest)
 
 isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
 {
-    if(keystore.HaveWatchOnly(scriptPubKey))
-        return ISMINE_WATCH_ONLY;
-    if(keystore.HaveMultiSig(scriptPubKey))
-        return ISMINE_MULTISIG;
-
     std::vector<valtype> vSolutions;
     txnouttype whichType;
     if(!Solver(scriptPubKey, whichType, vSolutions)) {
         if(keystore.HaveWatchOnly(scriptPubKey))
             return ISMINE_WATCH_ONLY;
-        if(keystore.HaveMultiSig(scriptPubKey))
-            return ISMINE_MULTISIG;
 
         return ISMINE_NO;
     }
@@ -106,8 +99,6 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
 
     if(keystore.HaveWatchOnly(scriptPubKey))
         return ISMINE_WATCH_ONLY;
-    if(keystore.HaveMultiSig(scriptPubKey))
-        return ISMINE_MULTISIG;
 
     return ISMINE_NO;
 }

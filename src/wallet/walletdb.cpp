@@ -512,17 +512,6 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             // Watch-only addresses have no birthday information for now,
             // so set the wallet birthday to the beginning of time.
             pwallet->nTimeFirstKey = 1;
-        } else if (strType == "multisig") {
-            CScript script;
-            ssKey >> *(CScriptBase*)(&script);
-            char fYes;
-            ssValue >> fYes;
-            if (fYes == '1')
-                pwallet->LoadMultiSig(script);
-
-            // MultiSig addresses have no birthday information for now,
-            // so set the wallet birthday to the beginning of time.
-            pwallet->nTimeFirstKey = 1;
         } else if (strType == "key" || strType == "wkey") {
             CPubKey vchPubKey;
             ssKey >> vchPubKey;

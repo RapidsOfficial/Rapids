@@ -45,7 +45,7 @@ bool CCoinControlWidgetItem::operator<(const QTreeWidgetItem &other) const {
 }
 
 
-CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
+CoinControlDialog::CoinControlDialog(QWidget* parent) : QDialog(parent, Qt::WindowSystemMenuHint | Qt::WindowTitleHint | Qt::WindowCloseButtonHint),
                                                         ui(new Ui::CoinControlDialog),
                                                         model(0)
 {
@@ -93,8 +93,6 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool fMultisigEnabled) : Q
     // Buttons
     setCssProperty({ui->pushButtonSelectAll, ui->pushButtonToggleLock}, "btn-check");
     ui->pushButtonOk->setProperty("cssClass", "btn-primary");
-
-    this->fMultisigEnabled = fMultisigEnabled;
 
     // context menu actions
     QAction* copyAddressAction = new QAction(tr("Copy address"), this);
@@ -811,10 +809,6 @@ void CoinControlDialog::updateView()
         int nInputSum = 0;
         for(const COutput& out: coins.second) {
             isminetype mine = pwalletMain->IsMine(out.tx->vout[out.i]);
-            bool fMultiSigUTXO = (mine & ISMINE_MULTISIG);
-            // when multisig is enabled, it will only display outputs from multisig addresses
-            if (fMultisigEnabled && !fMultiSigUTXO)
-                continue;
             int nInputSize = 0;
             nSum += out.tx->vout[out.i].nValue;
             nChildren++;
@@ -826,17 +820,6 @@ void CoinControlDialog::updateView()
                 itemOutput = new CCoinControlWidgetItem(ui->treeWidget);
             itemOutput->setFlags(flgCheckbox);
             itemOutput->setCheckState(COLUMN_CHECKBOX, Qt::Unchecked);
-
-            //MultiSig
-            if (fMultiSigUTXO) {
-
-                if (!fMultisigEnabled) {
-                    COutPoint outpt(out.tx->GetHash(), out.i);
-                    coinControl->UnSelect(outpt); // just to be sure
-                    itemOutput->setDisabled(true);
-                    itemOutput->setIcon(COLUMN_CHECKBOX, QIcon(":/icons/lock_closed"));
-                }
-            }
 
             // address
             const bool fDelegated = (bool)(mine & ISMINE_SPENDABLE_DELEGATED);
