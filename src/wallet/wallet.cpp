@@ -2447,6 +2447,7 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
     wtxNew.fTimeReceivedIsTxTime = true;
     wtxNew.BindWallet(this);
     CMutableTransaction txNew;
+    CScript scriptChange;
 
     {
         LOCK2(cs_main, cs_wallet);
@@ -2529,7 +2530,6 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
                     // Fill a vout to ourself
                     // TODO: pass in scriptChange instead of reservekey so
                     // change transaction isn't always pay-to-pivx-address
-                    CScript scriptChange;
                     bool combineChange = false;
 
                     // coin control: send change to custom address
@@ -2558,14 +2558,14 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
                         //  rediscover unknown transactions that were written with keys of ours to recover
                         //  post-backup change.
 
-                        // Reserve a new key pair from key pool
+                        // Reserve a new key pair from key pool. If it fails, provide a dummy
                         CPubKey vchPubKey;
                         if (!reservekey.GetReservedKey(vchPubKey, true)) {
                             strFailReason = _("Can't generate a change-address key. Please call keypoolrefill first.");
-                            return false;
+                            scriptChange = CScript();
+                        } else {
+                            scriptChange = GetScriptForDestination(vchPubKey.GetID());
                         }
-
-                        scriptChange = GetScriptForDestination(vchPubKey.GetID());
                     }
 
                     if (!combineChange) {
@@ -2657,6 +2657,11 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
                 // Include more fee and try again.
                 nFeeRet = nFeeNeeded;
                 continue;
+            }
+
+            // Give up if change keypool ran out and we failed to find a solution without change:
+            if (scriptChange.empty() && nChangePosRet != -1) {
+                return false;
             }
         }
     }
