@@ -294,3 +294,8 @@ bool CScript::IsPushOnly() const
 {
     return this->IsPushOnly(begin());
 }
+
+size_t CScript::DynamicMemoryUsage() const
+{
+    return memusage::DynamicUsage(*static_cast<const CScriptBase*>(this));
+}
