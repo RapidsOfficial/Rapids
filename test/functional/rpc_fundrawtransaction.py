@@ -397,8 +397,7 @@ class RawTransactionsTest(PivxTestFramework):
 
     def test_op_return(self):
         self.log.info("test fundrawtxn with OP_RETURN and no vin")
-        # just add 0.001 PIV since we don't allow 0-value outputs
-        rawtx = "010000000001a086010000000000066a047465737400000000"
+        rawtx = "0100000000010000000000000000066a047465737400000000"
 
         dec_tx = self.nodes[2].decoderawtransaction(rawtx)
 
