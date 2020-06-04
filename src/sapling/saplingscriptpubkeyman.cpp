@@ -40,7 +40,12 @@ libzcash::SaplingPaymentAddress SaplingScriptPubKeyMan::GenerateNewSaplingZKey()
     // Create new metadata
     int64_t nCreationTime = GetTime();
     auto ivk = xsk.expsk.full_viewing_key().in_viewing_key();
-    mapSaplingZKeyMetadata[ivk] = CKeyMetadata(nCreationTime);
+    CKeyMetadata metadata(nCreationTime);
+    metadata.key_origin.path.push_back(32 | BIP32_HARDENED_KEY_LIMIT);
+    metadata.key_origin.path.push_back(119 | BIP32_HARDENED_KEY_LIMIT);
+    metadata.key_origin.path.push_back(hdChain.nExternalChainCounter | BIP32_HARDENED_KEY_LIMIT);
+    metadata.hd_seed_id = hdChain.GetID();
+    mapSaplingZKeyMetadata[ivk] = metadata;
 
     auto addr = xsk.DefaultAddress();
     if (!AddSaplingZKey(xsk, addr)) {
