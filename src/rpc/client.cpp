@@ -112,6 +112,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"importprivkey", 2},
         {"importprivkey", 3},
         {"importaddress", 2},
+        {"importaddress", 3},
         {"verifychain", 0},
         {"verifychain", 1},
         {"keypoolrefill", 0},

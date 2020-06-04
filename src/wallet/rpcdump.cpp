@@ -151,21 +151,29 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
-void ImportScript(const CScript& script)
+void ImportAddress(const CTxDestination& dest, const std::string& strLabel, const std::string& strPurpose);
+
+void ImportScript(const CScript& script, const std::string& strLabel, bool isRedeemScript)
 {
-    if (::IsMine(*pwalletMain, script) == ISMINE_SPENDABLE)
+    if (!isRedeemScript && ::IsMine(*pwalletMain, script) == ISMINE_SPENDABLE)
         throw JSONRPCError(RPC_WALLET_ERROR, "The wallet already contains the private key for this address or script");
 
     pwalletMain->MarkDirty();
 
     if (!pwalletMain->HaveWatchOnly(script) && !pwalletMain->AddWatchOnly(script))
         throw JSONRPCError(RPC_WALLET_ERROR, "Error adding address to wallet");
+
+    if (isRedeemScript) {
+        if (!pwalletMain->HaveCScript(script) && !pwalletMain->AddCScript(script))
+            throw JSONRPCError(RPC_WALLET_ERROR, "Error adding p2sh redeemScript to wallet");
+        ImportAddress(CScriptID(script), strLabel,  "receive");
+    }
 }
 
 void ImportAddress(const CTxDestination& dest, const std::string& strLabel, const std::string& strPurpose)
 {
     CScript script = GetScriptForDestination(dest);
-    ImportScript(script);
+    ImportScript(script, strLabel, false);
     // add to address book or update label
     if (IsValidDestination(dest)) {
         pwalletMain->SetAddressBook(dest, strLabel, strPurpose);
@@ -174,7 +182,7 @@ void ImportAddress(const CTxDestination& dest, const std::string& strLabel, cons
 
 UniValue importaddress(const UniValue& params, bool fHelp)
 {
-    if (fHelp || params.size() < 1 || params.size() > 3)
+    if (fHelp || params.size() < 1 || params.size() > 4)
         throw std::runtime_error(
             "importaddress \"address\" ( \"label\" rescan )\n"
             "\nAdds an address or script (in hex) that can be watched as if it were in your wallet but cannot be used to spend.\n"
@@ -183,6 +191,7 @@ UniValue importaddress(const UniValue& params, bool fHelp)
             "1. \"address\"          (string, required) The address\n"
             "2. \"label\"            (string, optional, default=\"\") An optional label\n"
             "3. rescan               (boolean, optional, default=true) Rescan the wallet for transactions\n"
+            "4. p2sh                 (boolean, optional, default=false) Add the P2SH version of the script as well\n"
 
             "\nNote: This call can take minutes to complete if rescan is true.\n"
 
@@ -194,14 +203,11 @@ UniValue importaddress(const UniValue& params, bool fHelp)
             "\nAs a JSON-RPC call\n" +
             HelpExampleRpc("importaddress", "\"myaddress\", \"testing\", false"));
 
-    std::string strLabel = "";
-    if (params.size() > 1)
-        strLabel = params[1].get_str();
-
+    const std::string strLabel = (params.size() > 1 ? params[1].get_str() : "");
     // Whether to perform rescan after import
-    bool fRescan = true;
-    if (params.size() > 2)
-        fRescan = params[2].get_bool();
+    const bool fRescan = (params.size() > 2 ? params[2].get_bool() : true);
+    // Whether to import a p2sh version, too
+    const bool fP2SH = (params.size() > 3 ? params[3].get_bool() : false);
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
@@ -209,13 +215,15 @@ UniValue importaddress(const UniValue& params, bool fHelp)
     CTxDestination dest = DecodeDestination(params[0].get_str(), isStakingAddress);
 
     if (IsValidDestination(dest)) {
+        if (fP2SH)
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Cannot use the p2sh flag with an address - use a script instead");
         ImportAddress(dest, strLabel, isStakingAddress ?
                                         AddressBook::AddressBookPurpose::COLD_STAKING :
                                         AddressBook::AddressBookPurpose::RECEIVE);
 
     } else if (IsHex(params[0].get_str())) {
         std::vector<unsigned char> data(ParseHex(params[0].get_str()));
-        ImportScript(CScript(data.begin(), data.end()));
+        ImportScript(CScript(data.begin(), data.end()), strLabel, fP2SH);
 
     } else {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address or script");
