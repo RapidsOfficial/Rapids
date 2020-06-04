@@ -5,10 +5,12 @@
 
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
+    assert_fee_amount,
     assert_equal,
     assert_raises_rpc_error,
     assert_greater_than,
     connect_nodes,
+    count_bytes,
     find_vout_for_address,
     Decimal,
     DecimalAmt,
@@ -54,11 +56,11 @@ class RawTransactionsTest(PivxTestFramework):
         return wi['balance'] + wi['immature_balance']
 
     def run_test(self):
-        min_relay_tx_fee = self.nodes[0].getnetworkinfo()['relayfee']
+        self.min_relay_tx_fee = self.nodes[0].getnetworkinfo()['relayfee']
         # This test is not meant to test fee estimation and we'd like
         # to be sure all txs are sent at a consistent desired feerate
         for node in self.nodes:
-            node.settxfee(float(min_relay_tx_fee))
+            node.settxfee(float(self.min_relay_tx_fee))
 
         # if the fee's positive delta is higher than this value tests will fail,
         # neg. delta always fail the tests.
@@ -66,7 +68,7 @@ class RawTransactionsTest(PivxTestFramework):
         # than a minimum sized signature.
 
         #            = 2 bytes * minRelayTxFeePerByte
-        self.fee_tolerance = 2 * min_relay_tx_fee/1000
+        self.fee_tolerance = 2 * self.min_relay_tx_fee/1000
 
         print("Mining blocks...")
         self.nodes[1].generate(1)
@@ -117,6 +119,7 @@ class RawTransactionsTest(PivxTestFramework):
         self.test_op_return()
         self.test_watchonly()
         self.test_all_watched_funds()
+        self.test_option_feerate()
 
 
     def test_simple(self):
@@ -489,6 +492,18 @@ class RawTransactionsTest(PivxTestFramework):
         self.nodes[0].sendrawtransaction(signedtx["hex"])
         self.nodes[0].generate(1)
         self.sync_all()
+
+    def test_option_feerate(self):
+        self.log.info("test feeRate option")
+        # Make sure there is exactly one input so coin selection can't skew the result.
+        assert_equal(len(self.nodes[1].listunspent()), 1)
+        rawtx = self.nodes[1].createrawtransaction([], {self.nodes[1].getnewaddress(): 0.001})
+        result = self.nodes[1].fundrawtransaction(rawtx)  # uses self.min_relay_tx_fee (set by settxfee)
+        result2 = self.nodes[1].fundrawtransaction(rawtx, {"feeRate": 2 * float(self.min_relay_tx_fee)})
+        result3 = self.nodes[1].fundrawtransaction(rawtx, {"feeRate": 10 * float(self.min_relay_tx_fee)})
+        result_fee_rate = result['fee'] * 1000 / count_bytes(result['hex'])
+        assert_fee_amount(result2['fee'], count_bytes(result2['hex']), 2 * result_fee_rate)
+        assert_fee_amount(result3['fee'], count_bytes(result3['hex']), 10 * result_fee_rate)
 
 
 

@@ -171,6 +171,7 @@ LEGACY_SKIP_TESTS = [
     'rpc_blockchain.py',
     'rpc_budget.py',
     'rpc_decodescript.py',
+    'rpc_fundrawtransaction.py',
     'rpc_net.py',
     'rpc_signmessage.py',
     'rpc_spork.py',
