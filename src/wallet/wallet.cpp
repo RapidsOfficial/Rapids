@@ -2065,7 +2065,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                       (mine == ISMINE_WATCH_ONLY && nWatchonlyConfig == 1) ||
                       (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) ||
                       (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue) ||
-                      (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected((*it).first, i))
+                      (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint((*it).first, i)))
                    ) continue;
 
                 // --Skip P2CS outputs
@@ -2402,14 +2402,7 @@ bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount &nFeeRet, int& nC
 
     // Add new txins (keeping original txin scriptSig/order)
     for (const CTxIn& txin : wtx.vin) {
-        bool found = false;
-        for (const CTxIn& origTxIn : tx.vin) {
-            if (txin.prevout.hash == origTxIn.prevout.hash && txin.prevout.n == origTxIn.prevout.n) {
-                found = true;
-                break;
-            }
-        }
-        if (!found)
+        if (!coinControl.IsSelected(txin.prevout))
             tx.vin.push_back(txin);
     }
 
