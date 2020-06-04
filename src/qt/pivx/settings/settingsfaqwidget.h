@@ -27,16 +27,7 @@ public Q_SLOTS:
    void windowResizeEvent(QResizeEvent* event);
    void setSection(int num);
 private Q_SLOTS:
-    void onFaq1Clicked();
-    void onFaq2Clicked();
-    void onFaq3Clicked();
-    void onFaq4Clicked();
-    void onFaq5Clicked();
-    void onFaq6Clicked();
-    void onFaq7Clicked();
-    void onFaq8Clicked();
-    void onFaq9Clicked();
-    void onFaq10Clicked();
+    void onFaqClicked(const QWidget* const widget);
 private:
     Ui::SettingsFaqWidget *ui;
     int pos = 0;
