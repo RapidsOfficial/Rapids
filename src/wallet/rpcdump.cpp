@@ -151,6 +151,27 @@ UniValue importprivkey(const UniValue& params, bool fHelp)
     return NullUniValue;
 }
 
+void ImportScript(const CScript& script)
+{
+    if (::IsMine(*pwalletMain, script) == ISMINE_SPENDABLE)
+        throw JSONRPCError(RPC_WALLET_ERROR, "The wallet already contains the private key for this address or script");
+
+    pwalletMain->MarkDirty();
+
+    if (!pwalletMain->HaveWatchOnly(script) && !pwalletMain->AddWatchOnly(script))
+        throw JSONRPCError(RPC_WALLET_ERROR, "Error adding address to wallet");
+}
+
+void ImportAddress(const CTxDestination& dest, const std::string& strLabel, const std::string& strPurpose)
+{
+    CScript script = GetScriptForDestination(dest);
+    ImportScript(script);
+    // add to address book or update label
+    if (IsValidDestination(dest)) {
+        pwalletMain->SetAddressBook(dest, strLabel, strPurpose);
+    }
+}
+
 UniValue importaddress(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 3)
@@ -173,22 +194,6 @@ UniValue importaddress(const UniValue& params, bool fHelp)
             "\nAs a JSON-RPC call\n" +
             HelpExampleRpc("importaddress", "\"myaddress\", \"testing\", false"));
 
-    LOCK2(cs_main, pwalletMain->cs_wallet);
-
-    CScript script;
-
-    bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(params[0].get_str(), isStakingAddress);
-    bool isAddressValid = IsValidDestination(dest);
-    if (isAddressValid) {
-        script = GetScriptForDestination(dest);
-    } else if (IsHex(params[0].get_str())) {
-        std::vector<unsigned char> data(ParseHex(params[0].get_str()));
-        script = CScript(data.begin(), data.end());
-    } else {
-        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address or script");
-    }
-
     std::string strLabel = "";
     if (params.size() > 1)
         strLabel = params[1].get_str();
@@ -198,31 +203,27 @@ UniValue importaddress(const UniValue& params, bool fHelp)
     if (params.size() > 2)
         fRescan = params[2].get_bool();
 
-    {
-        if (::IsMine(*pwalletMain, script) & ISMINE_SPENDABLE_ALL)
-            throw JSONRPCError(RPC_WALLET_ERROR, "The wallet already contains the private key for this address or script");
+    LOCK2(cs_main, pwalletMain->cs_wallet);
 
-        // add to address book or update label
-        if (isAddressValid) {
-            pwalletMain->SetAddressBook(dest, strLabel,
-                    (isStakingAddress ?
-                            AddressBook::AddressBookPurpose::COLD_STAKING :
-                            AddressBook::AddressBookPurpose::RECEIVE));
-        }
+    bool isStakingAddress = false;
+    CTxDestination dest = DecodeDestination(params[0].get_str(), isStakingAddress);
 
-        // Don't throw error in case an address is already there
-        if (pwalletMain->HaveWatchOnly(script))
-            return NullUniValue;
+    if (IsValidDestination(dest)) {
+        ImportAddress(dest, strLabel, isStakingAddress ?
+                                        AddressBook::AddressBookPurpose::COLD_STAKING :
+                                        AddressBook::AddressBookPurpose::RECEIVE);
 
-        pwalletMain->MarkDirty();
+    } else if (IsHex(params[0].get_str())) {
+        std::vector<unsigned char> data(ParseHex(params[0].get_str()));
+        ImportScript(CScript(data.begin(), data.end()));
 
-        if (!pwalletMain->AddWatchOnly(script))
-            throw JSONRPCError(RPC_WALLET_ERROR, "Error adding address to wallet");
+    } else {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address or script");
+    }
 
-        if (fRescan) {
-            pwalletMain->ScanForWalletTransactions(chainActive.Genesis(), true);
-            pwalletMain->ReacceptWalletTransactions();
-        }
+    if (fRescan) {
+        pwalletMain->ScanForWalletTransactions(chainActive.Genesis(), true);
+        pwalletMain->ReacceptWalletTransactions();
     }
 
     return NullUniValue;
