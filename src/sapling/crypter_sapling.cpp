@@ -83,7 +83,7 @@ bool CCryptoKeyStore::HaveSaplingSpendingKey(const libzcash::SaplingFullViewingK
 bool CCryptoKeyStore::UnlockSaplingKeys(const CKeyingMaterial& vMasterKeyIn, bool fDecryptionThoroughlyChecked)
 {
     if (mapCryptedSaplingSpendingKeys.empty()) {
-        LogPrintf("%s: mapCryptedSaplingSpendingKeys empty. No need to unlock anything.\n");
+        LogPrintf("%s: mapCryptedSaplingSpendingKeys empty. No need to unlock anything.\n", __func__);
         return true;
     }
 
