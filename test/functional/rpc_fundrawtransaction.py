@@ -99,6 +99,9 @@ class RawTransactionsTest(PivxTestFramework):
         self.test_simple_two_outputs()
         self.test_change()
         self.test_no_change()
+        self.test_invalid_option()
+        self.test_invalid_change_address()
+        self.test_valid_change_address()
         self.test_coin_selection()
         self.test_two_vin()
         self.test_two_vin_two_vout()
@@ -167,6 +170,33 @@ class RawTransactionsTest(PivxTestFramework):
         assert_equal(len(dec_tx['vin']) > 0, True)              # test if we have enought inputs
         assert_equal(changepos, -1)                             # check (no) change
         assert check_outputs(outputs, dec_tx)                   # check outputs
+
+    def test_invalid_option(self):
+        self.log.info("test with an invalid option")
+        outputs = {self.nodes[0].getnewaddress(): 1.0}
+        rawtx = self.nodes[2].createrawtransaction([], outputs)
+        assert_raises_rpc_error(-3, "Unexpected key foo",
+                                self.nodes[2].fundrawtransaction, rawtx, {'foo': 'bar'})
+
+    def test_invalid_change_address(self):
+        self.log.info("test with an invalid change address")
+        outputs = {self.nodes[0].getnewaddress(): 1.0}
+        rawtx = self.nodes[2].createrawtransaction([], outputs)
+        assert_raises_rpc_error(-8, "changeAddress must be a valid PIVX address",
+                                self.nodes[2].fundrawtransaction, rawtx, {'changeAddress': 'foobar'})
+
+    def test_valid_change_address(self):
+        self.log.info("test with a provided change address")
+        outputs = {self.nodes[0].getnewaddress(): 1.0}
+        rawtx = self.nodes[2].createrawtransaction([], outputs)
+        change = self.nodes[2].getnewaddress()
+        assert_raises_rpc_error(-8, "changePosition out of bounds",
+                                self.nodes[2].fundrawtransaction, rawtx, {'changeAddress': change,
+                                                                          'changePosition': 2})
+        rawtxfund = self.nodes[2].fundrawtransaction(rawtx, {'changeAddress': change, 'changePosition': 0})
+        dec_tx = self.nodes[2].decoderawtransaction(rawtxfund['hex'])
+        out = dec_tx['vout'][0]
+        assert_equal(change, out['scriptPubKey']['addresses'][0])
 
     def test_coin_selection(self):
         self.log.info("test with a vin < required amount")
