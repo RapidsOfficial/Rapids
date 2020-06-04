@@ -605,6 +605,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
     bool includeWatching = false;
     bool lockUnspents = false;
     CFeeRate feeRate = CFeeRate(0);
+    bool overrideEstimatedFeerate = false;
 
     if (params.size() > 1) {
         RPCTypeCheck(params, boost::assign::list_of(UniValue::VSTR)(UniValue::VOBJ));
@@ -627,8 +628,10 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
         if (options.exists("lockUnspents"))
             lockUnspents = options["lockUnspents"].get_bool();
 
-        if (options.exists("feeRate"))
+        if (options.exists("feeRate")) {
             feeRate = CFeeRate(AmountFromValue(options["feeRate"]));
+            overrideEstimatedFeerate = true;
+        }
     }
 
     // parse hex string from parameter
@@ -645,7 +648,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
     CMutableTransaction tx(origTx);
     CAmount nFeeOut;
     std::string strFailReason;
-    if(!pwalletMain->FundTransaction(tx, nFeeOut, feeRate, changePosition, strFailReason, includeWatching, lockUnspents, changeAddress))
+    if(!pwalletMain->FundTransaction(tx, nFeeOut, overrideEstimatedFeerate, feeRate, changePosition, strFailReason, includeWatching, lockUnspents, changeAddress))
         throw JSONRPCError(RPC_INTERNAL_ERROR, strFailReason);
 
     UniValue result(UniValue::VOBJ);
