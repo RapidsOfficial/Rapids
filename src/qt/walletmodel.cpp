@@ -473,7 +473,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
 
         transaction.newPossibleKeyChange(wallet);
         CAmount nFeeRequired = 0;
-        int nChangePosRet;
+        int nChangePosInOut = -1;
         std::string strFailReason;
 
         CWalletTx* newTx = transaction.getTransaction();
@@ -490,7 +490,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
                                                   *newTx,
                                                   *keyChange,
                                                   nFeeRequired,
-                                                  nChangePosRet,
+                                                  nChangePosInOut,
                                                   strFailReason,
                                                   coinControl,
                                                   recipients[0].inputType,

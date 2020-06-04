@@ -429,7 +429,7 @@ class RawTransactionsTest(PivxTestFramework):
         outputs = {self.nodes[2].getnewaddress(): float(self.watchonly_amount) / 2}
         rawtx = self.nodes[3].createrawtransaction([], outputs)
 
-        result = self.nodes[3].fundrawtransaction(rawtx, True)
+        result = self.nodes[3].fundrawtransaction(rawtx, {"includeWatching": True})
         res_dec = self.nodes[0].decoderawtransaction(result["hex"])
         assert_equal(len(res_dec["vin"]), 1)
         assert_equal(res_dec["vin"][0]["txid"], self.watchonly_txid)
@@ -443,8 +443,7 @@ class RawTransactionsTest(PivxTestFramework):
         outputs = {self.nodes[2].getnewaddress(): float(self.watchonly_amount)}
         rawtx = self.nodes[3].createrawtransaction([], outputs)
 
-        # Backward compatibility test (2nd param is includeWatching).
-        result = self.nodes[3].fundrawtransaction(rawtx, True)
+        result = self.nodes[3].fundrawtransaction(rawtx, {"includeWatching": True})
         res_dec = self.nodes[0].decoderawtransaction(result["hex"])
         assert_equal(len(res_dec["vin"]), 2)
         assert res_dec["vin"][0]["txid"] == self.watchonly_txid or res_dec["vin"][1]["txid"] == self.watchonly_txid

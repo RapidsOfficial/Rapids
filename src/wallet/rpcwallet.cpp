@@ -1689,8 +1689,8 @@ UniValue sendmany(const UniValue& params, bool fHelp)
     CReserveKey keyChange(pwalletMain);
     CAmount nFeeRequired = 0;
     std::string strFailReason;
-    int nChangePosRet;
-    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePosRet, strFailReason);
+    int nChangePosInOut = -1;
+    bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePosInOut, strFailReason);
     if (!fCreated)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, strFailReason);
     const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, keyChange);
