@@ -7,13 +7,11 @@ from test_framework.test_framework import PivxTestFramework
 from test_framework.util import (
     assert_equal,
     assert_raises_rpc_error,
-    assert_fee_amount,
     assert_greater_than,
-    count_bytes,
     connect_nodes,
+    find_vout_for_address,
     Decimal,
     DecimalAmt,
-    JSONRPCException,
 )
 
 
@@ -39,7 +37,7 @@ def check_outputs(outputs, dec_tx):
 class RawTransactionsTest(PivxTestFramework):
 
     def set_test_params(self):
-        self.num_nodes = 3
+        self.num_nodes = 4
         self.setup_clean_chain = True
 
     def create_and_fund(self, nodeid, inputs, outputs):
@@ -75,6 +73,19 @@ class RawTransactionsTest(PivxTestFramework):
         self.sync_all()
         self.nodes[0].generate(121)
         self.sync_all()
+
+        watchonly_address = self.nodes[0].getnewaddress()
+        watchonly_pubkey = self.nodes[0].validateaddress(watchonly_address)["pubkey"]
+        self.watchonly_amount = DecimalAmt(200.0)
+        self.nodes[3].importpubkey(watchonly_pubkey, "", True)
+        self.watchonly_txid = self.nodes[0].sendtoaddress(watchonly_address, float(self.watchonly_amount))
+
+        # Lock UTXO so nodes[0] doesn't accidentally spend it
+        self.watchonly_vout = find_vout_for_address(self.nodes[0], self.watchonly_txid, watchonly_address)
+        self.nodes[0].lockunspent(False, [{"txid": self.watchonly_txid, "vout": self.watchonly_vout}])
+
+        self.nodes[0].sendtoaddress(self.nodes[3].getnewaddress(), float(self.watchonly_amount) / 10)
+
         self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 1.5)
         self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 1.0)
         self.nodes[0].sendtoaddress(self.nodes[2].getnewaddress(), 5.0)
@@ -101,6 +112,8 @@ class RawTransactionsTest(PivxTestFramework):
         self.test_many_inputs_fee()
         self.test_many_inputs()
         self.test_op_return()
+        self.test_watchonly()
+        self.test_all_watched_funds()
 
 
     def test_simple(self):
@@ -409,6 +422,44 @@ class RawTransactionsTest(PivxTestFramework):
 
         assert_greater_than(len(dec_tx['vin']), 0)      # at least one vin
         assert_equal(len(dec_tx['vout']), 2)            # one change output added
+
+    def test_watchonly(self):
+        self.log.info("test using only watchonly")
+
+        outputs = {self.nodes[2].getnewaddress(): float(self.watchonly_amount) / 2}
+        rawtx = self.nodes[3].createrawtransaction([], outputs)
+
+        result = self.nodes[3].fundrawtransaction(rawtx, True)
+        res_dec = self.nodes[0].decoderawtransaction(result["hex"])
+        assert_equal(len(res_dec["vin"]), 1)
+        assert_equal(res_dec["vin"][0]["txid"], self.watchonly_txid)
+
+        assert "fee" in result.keys()
+        assert_greater_than(result["changepos"], -1)
+
+    def test_all_watched_funds(self):
+        self.log.info("test using entirety of watched funds")
+
+        outputs = {self.nodes[2].getnewaddress(): float(self.watchonly_amount)}
+        rawtx = self.nodes[3].createrawtransaction([], outputs)
+
+        # Backward compatibility test (2nd param is includeWatching).
+        result = self.nodes[3].fundrawtransaction(rawtx, True)
+        res_dec = self.nodes[0].decoderawtransaction(result["hex"])
+        assert_equal(len(res_dec["vin"]), 2)
+        assert res_dec["vin"][0]["txid"] == self.watchonly_txid or res_dec["vin"][1]["txid"] == self.watchonly_txid
+
+        assert_greater_than(result["fee"], 0)
+        assert_greater_than(result["changepos"], -1)
+        assert_equal(result["fee"] + res_dec["vout"][result["changepos"]]["value"], float(self.watchonly_amount) / 10)
+
+        signedtx = self.nodes[3].signrawtransaction(result["hex"])
+        assert not signedtx["complete"]
+        signedtx = self.nodes[0].signrawtransaction(signedtx["hex"])
+        assert signedtx["complete"]
+        self.nodes[0].sendrawtransaction(signedtx["hex"])
+        self.nodes[0].generate(1)
+        self.sync_all()
 
 
 

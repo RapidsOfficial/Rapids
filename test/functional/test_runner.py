@@ -62,7 +62,7 @@ BASE_SCRIPTS= [
     # vv Tests less than 5m vv
     'wallet_zapwallettxes.py',                  # ~ 300 sec
     'p2p_time_offset.py',                       # ~ 267 sec
-    'rpc_fundrawtransaction.py',                # ~ 222 sec
+    'rpc_fundrawtransaction.py',                # ~ 260 sec
     'mining_pos_coldStaking.py',                # ~ 215 sec
     'mining_pos_reorg.py',                      # ~ 212 sec
     'wallet_abandonconflict.py',                # ~ 212 sec
