@@ -2376,7 +2376,7 @@ bool CWallet::GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, boo
     return true;
 }
 
-bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount& nFeeRet, int& nChangePosInOut, std::string& strFailReason, bool includeWatching, const CTxDestination& destChange)
+bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount& nFeeRet, int& nChangePosInOut, std::string& strFailReason, bool includeWatching, bool lockUnspents, const CTxDestination& destChange)
 {
     std::vector<CRecipient> vecSend;
 
@@ -2403,8 +2403,14 @@ bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount& nFeeRet, int& nC
 
     // Add new txins (keeping original txin scriptSig/order)
     for (const CTxIn& txin : wtx.vin) {
-        if (!coinControl.IsSelected(txin.prevout))
+        if (!coinControl.IsSelected(txin.prevout)) {
             tx.vin.push_back(txin);
+
+            if (lockUnspents) {
+              LOCK2(cs_main, cs_wallet);
+              LockCoin(txin.prevout);
+            }
+        }
     }
 
     return true;

@@ -574,6 +574,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
             "     \"changeAddress\"     (string, optional, default pool address) The PIVX address to receive the change\n"
             "     \"changePosition\"    (numeric, optional, default random) The index of the change output\n"
             "     \"includeWatching\"   (boolean, optional, default false) Also select inputs which are watch only\n"
+            "     \"lockUnspents\"      (boolean, optional, default false) Lock selected unspent outputs\n"
             "   }\n"
             "\nResult:\n"
             "{\n"
@@ -601,11 +602,12 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
     CTxDestination changeAddress = CNoDestination();
     int changePosition = -1;
     bool includeWatching = false;
+    bool lockUnspents = false;
 
     if (params.size() > 1) {
         RPCTypeCheck(params, boost::assign::list_of(UniValue::VSTR)(UniValue::VOBJ));
         UniValue options = params[1];
-        RPCTypeCheckObj(options, boost::assign::map_list_of("changeAddress", UniValue::VSTR)("changePosition", UniValue::VNUM)("includeWatching", UniValue::VBOOL), true, true);
+        RPCTypeCheckObj(options, boost::assign::map_list_of("changeAddress", UniValue::VSTR)("changePosition", UniValue::VNUM)("includeWatching", UniValue::VBOOL)("lockUnspents", UniValue::VBOOL), true, true);
 
         if (options.exists("changeAddress")) {
             changeAddress = DecodeDestination(options["changeAddress"].get_str());
@@ -619,6 +621,9 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
 
         if (options.exists("includeWatching"))
             includeWatching = options["includeWatching"].get_bool();
+
+        if (options.exists("lockUnspents"))
+            lockUnspents = options["lockUnspents"].get_bool();
     }
 
     // parse hex string from parameter
@@ -635,7 +640,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
     CMutableTransaction tx(origTx);
     CAmount nFee;
     std::string strFailReason;
-    if(!pwalletMain->FundTransaction(tx, nFee, changePosition, strFailReason, includeWatching, changeAddress))
+    if(!pwalletMain->FundTransaction(tx, nFee, changePosition, strFailReason, includeWatching, lockUnspents, changeAddress))
         throw JSONRPCError(RPC_INTERNAL_ERROR, strFailReason);
 
     UniValue result(UniValue::VOBJ);
