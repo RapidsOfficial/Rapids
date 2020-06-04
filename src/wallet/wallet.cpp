@@ -2078,6 +2078,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
 
                 bool fIsValid = (
                         ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
+                        (coinControl && coinControl->fAllowWatchOnly && (mine & ISMINE_WATCH_SOLVABLE) != ISMINE_NO) ||
                         ((mine & ((fIncludeColdStaking ? ISMINE_COLD : ISMINE_NO) |
                                 (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO));
 
@@ -2375,7 +2376,7 @@ bool CWallet::GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, boo
     return true;
 }
 
-bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount &nFeeRet, int& nChangePosRet, std::string& strFailReason)
+bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount &nFeeRet, int& nChangePosRet, std::string& strFailReason, bool includeWatching)
 {
     std::vector<CRecipient> vecSend;
 
@@ -2387,6 +2388,7 @@ bool CWallet::FundTransaction(CMutableTransaction& tx, CAmount &nFeeRet, int& nC
 
     CCoinControl coinControl;
     coinControl.fAllowOtherInputs = true;
+    coinControl.fAllowWatchOnly = includeWatching;
     for (const CTxIn& txin : tx.vin)
         coinControl.Select(txin.prevout);
 

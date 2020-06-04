@@ -36,7 +36,7 @@ public:
         setSelected.clear();
         useSwiftTX = false;
         fAllowOtherInputs = false;
-        fAllowWatchOnly = true;
+        fAllowWatchOnly = false;
         nMinimumTotalFee = 0;
         fSplitBlock = false;
         nSplitBlock = 1;
