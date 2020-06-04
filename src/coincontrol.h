@@ -24,6 +24,8 @@ public:
     bool fAllowWatchOnly;
     //! Minimum absolute fee (not per kilobyte)
     CAmount nMinimumTotalFee;
+    //! Feerate to use (0 = estimate fee with payTxFee fallback)
+    CFeeRate nFeeRate;
 
     CCoinControl()
     {
@@ -38,6 +40,7 @@ public:
         fAllowOtherInputs = false;
         fAllowWatchOnly = false;
         nMinimumTotalFee = 0;
+        nFeeRate = CFeeRate(0);
         fSplitBlock = false;
         nSplitBlock = 1;
     }

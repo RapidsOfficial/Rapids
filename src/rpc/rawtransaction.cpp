@@ -563,7 +563,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
             "Note that inputs which were signed may need to be resigned after completion since in/outputs have been added.\n"
             "The inputs added will not be signed, use signrawtransaction for that.\n"
             "Note that all existing inputs must have their previous output transaction be in the wallet.\n"
-            "Note that all inputs selected must be of standard form and P2SH scripts must be"
+            "Note that all inputs selected must be of standard form and P2SH scripts must be "
             "in the wallet using importaddress or addmultisigaddress (to calculate fees).\n"
             "Only pay-to-pubkey, multisig, and P2SH versions thereof are currently supported for watch-only\n"
 
@@ -575,6 +575,7 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
             "     \"changePosition\"    (numeric, optional, default random) The index of the change output\n"
             "     \"includeWatching\"   (boolean, optional, default false) Also select inputs which are watch only\n"
             "     \"lockUnspents\"      (boolean, optional, default false) Lock selected unspent outputs\n"
+                " \"feeRate\"           (numeric, optional, default 0=estimate) Set a specific feerate (PIV per KB)\n"
             "   }\n"
             "\nResult:\n"
             "{\n"
@@ -603,11 +604,12 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
     int changePosition = -1;
     bool includeWatching = false;
     bool lockUnspents = false;
+    CFeeRate feeRate = CFeeRate(0);
 
     if (params.size() > 1) {
         RPCTypeCheck(params, boost::assign::list_of(UniValue::VSTR)(UniValue::VOBJ));
         UniValue options = params[1];
-        RPCTypeCheckObj(options, boost::assign::map_list_of("changeAddress", UniValue::VSTR)("changePosition", UniValue::VNUM)("includeWatching", UniValue::VBOOL)("lockUnspents", UniValue::VBOOL), true, true);
+        RPCTypeCheckObj(options, boost::assign::map_list_of("changeAddress", UniValue::VSTR)("changePosition", UniValue::VNUM)("includeWatching", UniValue::VBOOL)("lockUnspents", UniValue::VBOOL)("feeRate", UniValue::VNUM), true, true);
 
         if (options.exists("changeAddress")) {
             changeAddress = DecodeDestination(options["changeAddress"].get_str());
@@ -624,6 +626,9 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
 
         if (options.exists("lockUnspents"))
             lockUnspents = options["lockUnspents"].get_bool();
+
+        if (options.exists("feeRate"))
+            feeRate = CFeeRate(AmountFromValue(options["feeRate"]));
     }
 
     // parse hex string from parameter
@@ -638,15 +643,15 @@ UniValue fundrawtransaction(const UniValue& params, bool fHelp)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "changePosition out of bounds");
 
     CMutableTransaction tx(origTx);
-    CAmount nFee;
+    CAmount nFeeOut;
     std::string strFailReason;
-    if(!pwalletMain->FundTransaction(tx, nFee, changePosition, strFailReason, includeWatching, lockUnspents, changeAddress))
+    if(!pwalletMain->FundTransaction(tx, nFeeOut, feeRate, changePosition, strFailReason, includeWatching, lockUnspents, changeAddress))
         throw JSONRPCError(RPC_INTERNAL_ERROR, strFailReason);
 
     UniValue result(UniValue::VOBJ);
     result.push_back(Pair("hex", EncodeHexTx(tx)));
     result.push_back(Pair("changepos", changePosition));
-    result.push_back(Pair("fee", ValueFromAmount(nFee)));
+    result.push_back(Pair("fee", ValueFromAmount(nFeeOut)));
 
     return result;
 }
