@@ -36,13 +36,13 @@ static boost::filesystem::path ZC_GetBaseParamsDir()
     // Copied from GetDefaultDataDir and adapter for zcash params.
 
     namespace fs = boost::filesystem;
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\ZcashParams
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\ZcashParams
-    // Mac: ~/Library/Application Support/ZcashParams
-    // Unix: ~/.zcash-params
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\PIVXParams
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\PIVXParams
+    // Mac: ~/Library/Application Support/PIVXParams
+    // Unix: ~/.pivx-params
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "ZcashParams";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "PIVXParams";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -54,10 +54,10 @@ static boost::filesystem::path ZC_GetBaseParamsDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDir(pathRet);
-    return pathRet / "ZcashParams";
+    return pathRet / "PIVXParams";
 #else
     // Unix
-    return pathRet / ".zcash-params";
+    return pathRet / ".pivx-params";
 #endif
 #endif
 }

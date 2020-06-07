@@ -3,9 +3,9 @@
 set -eu
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    PARAMS_DIR="$HOME/Library/Application Support/ZcashParams"
+    PARAMS_DIR="$HOME/Library/Application Support/PIVXParams"
 else
-    PARAMS_DIR="$HOME/.zcash-params"
+    PARAMS_DIR="$HOME/.pivx-params"
 fi
 
 SPROUT_PKEY_NAME='sprout-proving.key'
@@ -88,7 +88,7 @@ EOF
 function fetch_failure {
     cat >&2 <<EOF
 
-Failed to fetch the Zcash zkSNARK parameters!
+Failed to fetch the PIVX zkSNARK parameters!
 Try installing one of the following programs and make sure you're online:
 
  * ipfs
@@ -173,9 +173,9 @@ function main() {
     || exit_locked_error
 
     cat <<EOF
-Zcash - fetch-params.sh
+PIVX - fetch-params.sh
 
-This script will fetch the Zcash zkSNARK parameters and verify their
+This script will fetch the PIVX zkSNARK parameters and verify their
 integrity with sha256sum.
 
 If they already exist locally, it will exit now and do nothing else.
@@ -187,7 +187,7 @@ EOF
         mkdir -p "$PARAMS_DIR"
         README_PATH="$PARAMS_DIR/README"
         cat >> "$README_PATH" <<EOF
-This directory stores common Zcash zkSNARK parameters. Note that it is
+This directory stores common PIVX zkSNARK parameters. Note that it is
 distinct from the daemon's -datadir argument because the parameters are
 large and may be shared across multiple distinct -datadir's such as when
 setting up test networks.
@@ -209,12 +209,6 @@ EOF
     fi
 
     cd "$PARAMS_DIR"
-
-    # Sprout parameters:
-    # Commented out because they are unneeded, but we will eventually update
-    # this to delete the parameters if possible.
-    #fetch_params "$SPROUT_PKEY_NAME" "$PARAMS_DIR/$SPROUT_PKEY_NAME" "8bc20a7f013b2b58970cddd2e7ea028975c88ae7ceb9259a5344a16bc2c0eef7"
-    #fetch_params "$SPROUT_VKEY_NAME" "$PARAMS_DIR/$SPROUT_VKEY_NAME" "4bd498dae0aacfd8e98dc306338d017d9c08dd0918ead18172bd0aec2fc5df82"
 
     # Sapling parameters:
     fetch_params "$SAPLING_SPEND_NAME" "$PARAMS_DIR/$SAPLING_SPEND_NAME" "8e48ffd23abb3a5fd9c5589204f32d9c31285a04b78096ba40a79b75677efc13"
