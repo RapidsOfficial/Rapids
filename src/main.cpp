@@ -2453,7 +2453,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
             bool fCacheResults = fJustCheck; /* Don't cache results if we're actually connecting blocks (still consult the cache, though) */
             if (!CheckInputs(tx, state, view, fScriptChecks, flags, fCacheResults, nScriptCheckThreads ? &vChecks : NULL))
-                return false;
+                return error("%s: Check inputs on %s failed with %s", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
             control.Add(vChecks);
         }
         nValueOut += tx.GetValueOut();
@@ -3699,7 +3699,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
                 isBlockBetweenFakeSerialAttackRange(blockHeight),
                 fColdStakingActive
         ))
-            return error("%s : CheckTransaction failed", __func__);
+            return error("%s : CheckTransaction of %s failed with", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
 
         // double check that there are no double spent zPIV spends in this block
         if (tx.HasZerocoinSpendInputs()) {
@@ -5786,7 +5786,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         if (state.IsInvalid(nDoS)) {
             LogPrint(BCLog::MEMPOOL, "%s from peer=%d %s was not accepted into the memory pool: %s\n", tx.GetHash().ToString(),
                 pfrom->id, pfrom->cleanSubVer,
-                state.GetRejectReason());
+                FormatStateMessage(state));
             if (state.GetRejectCode() < REJECT_INTERNAL) // Never send AcceptToMemoryPool's internal codes over P2P
                 pfrom->PushMessage(NetMsgType::REJECT, strCommand, state.GetRejectCode(),
                         state.GetRejectReason().substr(0, MAX_REJECT_MESSAGE_LENGTH), inv.hash);
