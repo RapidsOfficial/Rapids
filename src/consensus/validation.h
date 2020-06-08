@@ -32,14 +32,20 @@ private:
     std::string strRejectReason;
     unsigned int chRejectCode;
     bool corruptionPossible;
+    std::string strDebugMessage;
 
 public:
     CValidationState() : mode(MODE_VALID), nDoS(0), chRejectCode(0), corruptionPossible(false) {}
-    bool DoS(int level, bool ret = false, unsigned int chRejectCodeIn = 0, std::string strRejectReasonIn = "", bool corruptionIn = false)
+    bool DoS(int level, bool ret = false,
+            unsigned int chRejectCodeIn = 0,
+            std::string strRejectReasonIn = "",
+            bool corruptionIn = false,
+            const std::string& strDebugMessageIn = "")
     {
         chRejectCode = chRejectCodeIn;
         strRejectReason = strRejectReasonIn;
         corruptionPossible = corruptionIn;
+        strDebugMessage = strDebugMessageIn;
         if (mode == MODE_ERROR)
             return ret;
         nDoS += level;
@@ -48,9 +54,10 @@ public:
     }
     bool Invalid(bool ret = false,
         unsigned int _chRejectCode = 0,
-        std::string _strRejectReason = "")
+        const std::string& _strRejectReason = "",
+        const std::string& _strDebugMessage = "")
     {
-        return DoS(0, ret, _chRejectCode, _strRejectReason);
+        return DoS(0, ret, _chRejectCode, _strRejectReason, false, _strDebugMessage);
     }
     bool Error(std::string strRejectReasonIn = "")
     {
@@ -85,6 +92,7 @@ public:
     }
     unsigned int GetRejectCode() const { return chRejectCode; }
     std::string GetRejectReason() const { return strRejectReason; }
+    std::string GetDebugMessage() const { return strDebugMessage; }
 };
 
 #endif // BITCOIN_CONSENSUS_VALIDATION_H
