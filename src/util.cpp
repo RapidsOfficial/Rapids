@@ -19,6 +19,7 @@
 #include "utiltime.h"
 
 #include <stdarg.h>
+#include <thread>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
@@ -649,4 +650,9 @@ void SetThreadPriority(int nPriority)
     setpriority(PRIO_PROCESS, 0, nPriority);
 #endif // PRIO_THREAD
 #endif // WIN32
+}
+
+int GetNumCores()
+{
+    return std::thread::hardware_concurrency();
 }
