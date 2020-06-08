@@ -423,4 +423,7 @@ extern CSporkDB* pSporkDB;
  */
 int GetSpendHeight(const CCoinsViewCache& inputs);
 
+/** local "reject" message codes for RPC which can not be triggered by p2p trasactions */
+static const unsigned int REJECT_HIGHFEE = 0x100;
+
 #endif // BITCOIN_MAIN_H
