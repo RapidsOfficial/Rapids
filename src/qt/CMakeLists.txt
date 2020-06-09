@@ -80,7 +80,6 @@ PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${CMAKE_CURRENT_SOURCE_DIR}/paymentr
 SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/bantablemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinaddressvalidator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinamountfield.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinunits.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/clientmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/csvmodelwriter.cpp
