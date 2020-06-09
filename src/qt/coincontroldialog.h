@@ -44,7 +44,7 @@ class CoinControlDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CoinControlDialog(QWidget* parent = nullptr, bool fMultisigEnabled = false);
+    explicit CoinControlDialog(QWidget* parent = nullptr);
     ~CoinControlDialog();
 
     void setModel(WalletModel* model);
@@ -66,7 +66,6 @@ private:
     WalletModel* model;
     int sortColumn;
     Qt::SortOrder sortOrder;
-    bool fMultisigEnabled;
     bool fSelectAllToggled{true};     // false when pushButtonSelectAll text is "Unselect All"
 
     QMenu* contextMenu;
