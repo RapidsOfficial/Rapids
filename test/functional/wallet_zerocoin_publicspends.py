@@ -141,7 +141,7 @@ class ZerocoinSpendTest(PivxTestFramework):
 
         # 7) Try to relay old v3 spend now (serial_1)
         self.log.info("Trying to send old v3 spend now...")
-        assert_raises_rpc_error(-26, "bad-txns-invalid-zpiv",
+        assert_raises_rpc_error(-26, "bad-zc-spend-version",
                                 self.nodes[2].sendrawtransaction, old_spend_v3)
         self.log.info("GOOD: Old transaction not sent.")
 
