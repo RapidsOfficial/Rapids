@@ -32,15 +32,13 @@ NavMenuWidget::NavMenuWidget(PIVXGUI *mainWindow, QWidget *parent) :
     ui->btnReceive->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     ui->btnAddress->setProperty("name", "address");
     ui->btnAddress->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    ui->btnPrivacy->setProperty("name", "privacy");
-    ui->btnPrivacy->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     ui->btnMaster->setProperty("name", "master");
     ui->btnMaster->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     ui->btnColdStaking->setProperty("name", "cold-staking");
     ui->btnColdStaking->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     ui->btnSettings->setProperty("name", "settings");
     ui->btnSettings->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    btns = {ui->btnDashboard, ui->btnSend, ui->btnReceive, ui->btnAddress, ui->btnPrivacy, ui->btnMaster, ui->btnColdStaking, ui->btnSettings, ui->btnColdStaking};
+    btns = {ui->btnDashboard, ui->btnSend, ui->btnReceive, ui->btnAddress, ui->btnMaster, ui->btnColdStaking, ui->btnSettings, ui->btnColdStaking};
     onNavSelected(ui->btnDashboard, true);
 
     ui->scrollAreaNav->setWidgetResizable(true);
@@ -57,15 +55,8 @@ NavMenuWidget::NavMenuWidget(PIVXGUI *mainWindow, QWidget *parent) :
 }
 
 void NavMenuWidget::loadWalletModel() {
-    if (walletModel) {
-        if (walletModel->getZerocoinBalance() > 0) {
-            connect(ui->btnPrivacy, &QPushButton::clicked, this, &NavMenuWidget::onPrivacyClicked);
-        } else {
-            ui->btnPrivacy->setVisible(false);
-        }
-
-        if (walletModel->getOptionsModel())
-            ui->btnColdStaking->setVisible(walletModel->getOptionsModel()->isColdStakingScreenEnabled());
+    if (walletModel && walletModel->getOptionsModel()) {
+        ui->btnColdStaking->setVisible(walletModel->getOptionsModel()->isColdStakingScreenEnabled());
     }
 }
 
@@ -85,10 +76,9 @@ void NavMenuWidget::connectActions() {
     ui->btnSend->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_2));
     ui->btnReceive->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_3));
     ui->btnAddress->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_4));
-    ui->btnPrivacy->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_5));
-    ui->btnMaster->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_6));
-    ui->btnColdStaking->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_7));
-    ui->btnSettings->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_8));
+    ui->btnMaster->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_5));
+    ui->btnColdStaking->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_6));
+    ui->btnSettings->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_7));
 }
 
 void NavMenuWidget::onSendClicked(){
@@ -104,12 +94,6 @@ void NavMenuWidget::onDashboardClicked(){
 void NavMenuWidget::onAddressClicked(){
     window->goToAddresses();
     onNavSelected(ui->btnAddress);
-}
-
-
-void NavMenuWidget::onPrivacyClicked(){
-    window->goToPrivacy();
-    onNavSelected(ui->btnPrivacy);
 }
 
 void NavMenuWidget::onMasterNodesClicked(){
@@ -166,7 +150,6 @@ void NavMenuWidget::updateButtonStyles(){
          ui->btnDashboard,
          ui->btnSend,
          ui->btnAddress,
-         ui->btnPrivacy,
          ui->btnMaster,
          ui->btnSettings,
          ui->btnReceive,
