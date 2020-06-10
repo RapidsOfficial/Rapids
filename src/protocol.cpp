@@ -53,6 +53,7 @@ const char* BUDGETVOTESYNC = "mnvs";
 const char* FINALBUDGET = "fbs";
 const char* FINALBUDGETVOTE = "fbvote";
 const char* SYNCSTATUSCOUNT = "ssc";
+const char* GETMNLIST = "dseg";
 }; // namespace NetMsgType
 
 static const char* ppszTypeName[] = {
@@ -68,6 +69,7 @@ static const char* ppszTypeName[] = {
     NetMsgType::MNPING,
     NetMsgType::MNWINNER,
     NetMsgType::GETMNWINNERS,
+    NetMsgType::GETMNLIST,
     NetMsgType::BUDGETPROPOSAL,
     NetMsgType::BUDGETVOTE,
     NetMsgType::FINALBUDGET,
@@ -108,6 +110,7 @@ const static std::string allNetMessageTypes[] = {
     NetMsgType::MNPING,
     NetMsgType::MNWINNER,
     NetMsgType::GETMNWINNERS,
+    NetMsgType::GETMNLIST,
     NetMsgType::BUDGETPROPOSAL,
     NetMsgType::BUDGETVOTE,
     NetMsgType::BUDGETVOTESYNC,
