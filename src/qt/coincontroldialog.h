@@ -44,21 +44,20 @@ class CoinControlDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CoinControlDialog(QWidget* parent = nullptr);
+    explicit CoinControlDialog(QWidget* parent = nullptr, bool _forDelegation = false);
     ~CoinControlDialog();
 
     void setModel(WalletModel* model);
     void updateDialogLabels();
+    void updateLabels();
     void updateView();
     void refreshDialog();
+    void clearPayAmounts();
+    void addPayAmount(const CAmount& amount);
 
-    // static because also called from sendcoinsdialog
-    static void updateLabels(WalletModel*, QDialog*);
     static QString getPriorityLabel(double dPriority, double mempoolEstimatePriority);
 
-    static QList<CAmount> payAmounts;
     static CCoinControl* coinControl;
-    static int nSplitBlockDummy;
 
 private:
     Ui::CoinControlDialog* ui;
@@ -66,7 +65,9 @@ private:
     WalletModel* model;
     int sortColumn;
     Qt::SortOrder sortOrder;
+    bool forDelegation;
     bool fSelectAllToggled{true};     // false when pushButtonSelectAll text is "Unselect All"
+    QList<CAmount> payAmounts{};
 
     QMenu* contextMenu;
     QTreeWidgetItem* contextMenuItem;
