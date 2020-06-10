@@ -124,10 +124,10 @@
           <item>
            <widget class="QDoubleSpinBox" name="spinBoxStakeSplitThreshold">
             <property name="decimals">
-             <number>3</number>
+             <number>8</number>
             </property>
             <property name="minimum">
-             <number>1</number>
+             <number>0</number>
             </property>
             <property name="maximum">
              <number>999999</number>

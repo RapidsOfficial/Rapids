@@ -66,6 +66,8 @@ static const CAmount nHighTransactionMaxFeeWarning = 100 * nHighTransactionFeeWa
 static const unsigned int MAX_FREE_TRANSACTION_CREATE_SIZE = 1000;
 //! -custombackupthreshold default
 static const int DEFAULT_CUSTOMBACKUPTHRESHOLD = 1;
+//! -minstakesplit default
+static const CAmount DEFAULT_MIN_STAKE_SPLIT_THRESHOLD = 100 * COIN;
 
 class CAccountingEntry;
 class CCoinControl;
@@ -290,6 +292,8 @@ public:
 
     // Stake split threshold
     CAmount nStakeSplitThreshold;
+    // minimum value allowed for nStakeSplitThreshold (customizable with -minstakesplit flag)
+    static CAmount minStakeSplitThreshold;
     // Staker status (last hashed block and time)
     CStakerStatus* pStakerStatus = nullptr;
 

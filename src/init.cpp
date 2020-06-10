@@ -533,9 +533,8 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageGroup(_("Staking options:"));
     strUsage += HelpMessageOpt("-staking=<n>", strprintf(_("Enable staking functionality (0-1, default: %u)"), 1));
     strUsage += HelpMessageOpt("-coldstaking=<n>", strprintf(_("Enable cold staking functionality (0-1, default: %u). Disabled if staking=0"), 1));
-    strUsage += HelpMessageOpt("-pivstake=<n>", strprintf(_("Enable or disable staking functionality for %s inputs (0-1, default: %u)"), CURRENCY_UNIT, 1));
-    strUsage += HelpMessageOpt("-zpivstake=<n>", strprintf(_("Enable or disable staking functionality for zPIV inputs (0-1, default: %u)"), 1));
-    strUsage += HelpMessageOpt("-reservebalance=<amt>", _("Keep the specified amount available for spending at all times (default: 0)"));
+    strUsage += HelpMessageOpt("-minstakesplit=<amt>", strprintf(_("Minimum positive amount (in PIV) allowed by GUI and RPC for the stake split threshold (default: %s)"),
+                    FormatMoney(DEFAULT_MIN_STAKE_SPLIT_THRESHOLD)));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-printstakemodifier", _("Display the stake modifier calculations in the debug.log file."));
         strUsage += HelpMessageOpt("-printcoinstake", _("Display verbose coin stake messages in the debug.log file."));
@@ -1682,6 +1681,13 @@ bool AppInit2()
                 return UIError(strErrors.str());
             } else
                 strErrors << _("Error loading wallet.dat") << "\n";
+        }
+
+        // check minimum stake split threshold
+        if (pwalletMain->nStakeSplitThreshold && pwalletMain->nStakeSplitThreshold < CWallet::minStakeSplitThreshold) {
+            LogPrintf("WARNING: stake split threshold value %s too low. Restoring to minimum value %s.\n",
+                    FormatMoney(pwalletMain->nStakeSplitThreshold), FormatMoney(CWallet::minStakeSplitThreshold));
+            pwalletMain->nStakeSplitThreshold = CWallet::minStakeSplitThreshold;
         }
 
         int prev_version = pwalletMain->GetVersion();

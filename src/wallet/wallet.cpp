@@ -42,6 +42,11 @@ bool fPayAtLeastCustomFee = true;
  */
 CFeeRate CWallet::minTxFee = CFeeRate(10000);
 
+/**
+ * minimum accpeted value for stake split threshold
+ */
+CAmount CWallet::minStakeSplitThreshold = DEFAULT_MIN_STAKE_SPLIT_THRESHOLD;
+
 const uint256 CMerkleTx::ABANDON_HASH(uint256S("0000000000000000000000000000000000000000000000000000000000000001"));
 
 /** @defgroup mapWallet
@@ -543,6 +548,13 @@ bool CWallet::ParameterInteraction()
             return UIError(strprintf(_("Invalid amount for -maxtxfee=<amount>: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)"),
                                        mapArgs["-maxtxfee"], ::minRelayTxFee.ToString()));
         }
+    }
+    if (mapArgs.count("-minstakesplit")) {
+        CAmount n = 0;
+        if (ParseMoney(mapArgs["-minstakesplit"], n) && n > 0)
+            CWallet::minStakeSplitThreshold = n;
+        else
+            return UIError(AmountErrMsg("minstakesplit", mapArgs["-minstakesplit"]));
     }
     nTxConfirmTarget = GetArg("-txconfirmtarget", 1);
     bSpendZeroConfChange = GetBoolArg("-spendzeroconfchange", false);

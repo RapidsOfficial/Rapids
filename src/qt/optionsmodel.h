@@ -73,6 +73,8 @@ public:
     void setDisplayUnit(const QVariant& value);
     /* Update StakeSplitThreshold's value in wallet */
     void setStakeSplitThreshold(const CAmount value);
+    double getSSTMinimum() const;
+    bool isSSTValid();
     /* Update Custom Fee value in wallet */
     void setUseCustomFee(bool fUse);
     void setCustomFeeValue(const CAmount& value);
@@ -90,6 +92,8 @@ public:
     /* Restart flag helper */
     void setRestartRequired(bool fRequired);
     bool isRestartRequired();
+    void setSSTChanged(bool fChanged);
+    bool isSSTChanged();
     bool resetSettings;
 
     bool isColdStakingScreenEnabled() { return showColdStakingScreen; }
