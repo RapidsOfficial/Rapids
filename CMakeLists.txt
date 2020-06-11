@@ -419,6 +419,7 @@ set(UTIL_SOURCES
 add_library(UTIL_A STATIC ${BitcoinHeaders} ${UTIL_SOURCES})
 target_include_directories(UTIL_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/src/univalue/include
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/rust/include
         ${OPENSSL_INCLUDE_DIR}
         )
 
