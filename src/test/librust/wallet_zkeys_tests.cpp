@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(StoreAndLoadSaplingZkeys) {
     SelectParams(CBaseChainParams::MAIN);
 
     CWallet wallet;
-
+    LOCK(wallet.cs_wallet);
     // wallet should be empty
     std::set<libzcash::SaplingPaymentAddress> addrs;
     wallet.GetSaplingPaymentAddresses(addrs);
