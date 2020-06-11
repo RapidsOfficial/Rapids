@@ -5,12 +5,13 @@
 
 #include "sapling/util.h"
 #include "sync.h"
+
 #include <algorithm>
 #include <librustzcash.h>
 #include <stdexcept>
 #include <iostream>
 
-static boost::filesystem::path zc_paramsPathCached;
+static fs::path zc_paramsPathCached;
 static RecursiveMutex csPathCached;
 
 /**
@@ -18,12 +19,12 @@ static RecursiveMutex csPathCached;
  * Specifically handles case where path p exists, but it wasn't possible for the user to
  * write to the parent directory.
  */
-bool TryCreateDir(const boost::filesystem::path& p)
+bool TryCreateDir(const fs::path& p)
 {
     try {
-        return boost::filesystem::create_directory(p);
-    } catch (const boost::filesystem::filesystem_error&) {
-        if (!boost::filesystem::exists(p) || !boost::filesystem::is_directory(p))
+        return fs::create_directory(p);
+    } catch (const fs::filesystem_error&) {
+        if (!fs::exists(p) || !fs::is_directory(p))
             throw;
     }
 
@@ -31,11 +32,9 @@ bool TryCreateDir(const boost::filesystem::path& p)
     return false;
 }
 
-static boost::filesystem::path ZC_GetBaseParamsDir()
+static fs::path ZC_GetBaseParamsDir()
 {
     // Copied from GetDefaultDataDir and adapter for zcash params.
-
-    namespace fs = boost::filesystem;
     // Windows < Vista: C:\Documents and Settings\Username\Application Data\PIVXParams
     // Windows >= Vista: C:\Users\Username\AppData\Roaming\PIVXParams
     // Mac: ~/Library/Application Support/PIVXParams
@@ -62,10 +61,8 @@ static boost::filesystem::path ZC_GetBaseParamsDir()
 #endif
 }
 
-const boost::filesystem::path &ZC_GetParamsDir()
+const fs::path &ZC_GetParamsDir()
 {
-    namespace fs = boost::filesystem;
-
     LOCK(csPathCached); // Reuse the same lock as upstream.
 
     fs::path &path = zc_paramsPathCached;
@@ -82,19 +79,19 @@ const boost::filesystem::path &ZC_GetParamsDir()
 
 void initZKSNARKS()
 {
-    boost::filesystem::path sapling_spend = ZC_GetParamsDir() / "sapling-spend.params";
-    boost::filesystem::path sapling_output = ZC_GetParamsDir() / "sapling-output.params";
-    boost::filesystem::path sprout_groth16 = ZC_GetParamsDir() / "sprout-groth16.params";
+    fs::path sapling_spend = ZC_GetParamsDir() / "sapling-spend.params";
+    fs::path sapling_output = ZC_GetParamsDir() / "sapling-output.params";
+    fs::path sprout_groth16 = ZC_GetParamsDir() / "sprout-groth16.params";
 
-    if (!(boost::filesystem::exists(sapling_spend) &&
-          boost::filesystem::exists(sapling_output) &&
-          boost::filesystem::exists(sprout_groth16)
+    if (!(fs::exists(sapling_spend) &&
+          fs::exists(sapling_output) &&
+          fs::exists(sprout_groth16)
     )) {
         throw std::runtime_error("Sapling params don't exist");
     }
 
     static_assert(
-            sizeof(boost::filesystem::path::value_type) == sizeof(codeunit),
+            sizeof(fs::path::value_type) == sizeof(codeunit),
             "librustzcash not configured correctly");
     auto sapling_spend_str = sapling_spend.native();
     auto sapling_output_str = sapling_output.native();

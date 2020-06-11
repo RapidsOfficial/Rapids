@@ -6,12 +6,11 @@
 #ifndef ZC_UTIL_H_
 #define ZC_UTIL_H_
 
+#include "fs.h"
 #include "sapling/uint252.h"
 #include "uint256.h"
 
 #include <sodium.h>
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <vector>
 #include <cstdint>
 
@@ -19,7 +18,7 @@
 void initZKSNARKS();
 
 // Sapling network dir
-const boost::filesystem::path &ZC_GetParamsDir();
+const fs::path &ZC_GetParamsDir();
 
 std::vector<unsigned char> convertIntToVectorLE(const uint64_t val_int);
 std::vector<bool> convertBytesVectorToVector(const std::vector<unsigned char>& bytes);
