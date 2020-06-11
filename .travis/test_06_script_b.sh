@@ -8,6 +8,14 @@ export LC_ALL=C.UTF-8
 
 cd "build/pivx-$HOST" || (echo "could not enter distdir build/pivx-$HOST"; exit 1)
 
+BEGIN_FOLD params
+if [ -n "$CONFIG_SHELL" ]; then
+  DOCKER_EXEC "$CONFIG_SHELL" -c "util/fetch-params.sh"
+else
+  DOCKER_EXEC util/fetch-params.sh
+fi
+END_FOLD
+
 if [ "$RUN_UNIT_TESTS" = "true" ]; then
   BEGIN_FOLD unit-tests
   DOCKER_EXEC LD_LIBRARY_PATH=$TRAVIS_BUILD_DIR/depends/$HOST/lib make $MAKEJOBS check VERBOSE=1
