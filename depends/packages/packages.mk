@@ -5,7 +5,7 @@ rust_crates := \
   crate_arrayref \
   crate_arrayvec \
   crate_autocfg \
-  crate_bech32 \
+  crate_bellman \
   crate_bit_vec \
   crate_blake2b_simd \
   crate_blake2s_simd \
@@ -28,11 +28,14 @@ rust_crates := \
   crate_digest \
   crate_directories \
   crate_fake_simd \
+  crate_ff_derive \
+  crate_ff \
   crate_fpe \
   crate_futures_cpupool \
   crate_futures \
   crate_generic_array \
   crate_getrandom \
+  crate_group \
   crate_hex \
   crate_lazy_static \
   crate_libc \
@@ -44,13 +47,13 @@ rust_crates := \
   crate_num_integer \
   crate_num_traits \
   crate_opaque_debug \
+  crate_pairing \
   crate_ppv_lite86 \
   crate_proc_macro2 \
   crate_quote \
   crate_rand_chacha \
   crate_rand_core \
   crate_rand_hc \
-  crate_rand_os \
   crate_rand_xorshift \
   crate_rand \
   crate_rustc_version \
@@ -64,9 +67,11 @@ rust_crates := \
   crate_wasi \
   crate_winapi_i686_pc_windows_gnu \
   crate_winapi \
-  crate_winapi_x86_64_pc_windows_gnu
+  crate_winapi_x86_64_pc_windows_gnu \
+  crate_zcash_primitives \
+  crate_zcash_proofs
 
-rust_packages := rust $(rust_crates) librustzcash
+rust_packages := rust $(rust_crates)
 packages:=boost openssl libevent gmp $(zcash_packages) libsodium
 
 qt_native_packages = native_protobuf

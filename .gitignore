@@ -90,7 +90,9 @@ PIVX-Qt.app
 background.tiff*
 
 # Rust
-src/rust/target
+.cargo/.configured-for-*
+.cargo/config
+target/
 
 # Unit-tests
 Makefile.test
