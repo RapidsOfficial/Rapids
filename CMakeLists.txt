@@ -86,6 +86,7 @@ endif()
 find_package(ZMQ)
 find_package(Miniupnp)
 find_package(Boost COMPONENTS system filesystem thread program_options REQUIRED)
+find_package(Sodium REQUIRED)
 
 # run autogen.sh if missing header files from configure on Linux/Mac
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/configure")
@@ -111,6 +112,17 @@ ExternalProject_Add (
         SOURCE_DIR ${CMAKE_SOURCE_DIR}/src/univalue
         CONFIGURE_COMMAND ""
         BUILD_COMMAND $(MAKE)
+        BUILD_IN_SOURCE 1
+        INSTALL_COMMAND ""
+        )
+
+find_program(CARGO_PROGRAM cargo)
+find_program(RUSTC_PROGRAM rustc)
+ExternalProject_Add (
+        libzcashrust
+        SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}
+        CONFIGURE_COMMAND ""
+        BUILD_COMMAND ${CARGO_PROGRAM} build --release
         BUILD_IN_SOURCE 1
         INSTALL_COMMAND ""
         )
@@ -144,6 +156,8 @@ file(GLOB RPC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/rpc/*.h)
 file(GLOB COMPAT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/compat/*.h)
 file(GLOB CONSENSUS_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/consensus/*.h)
 file(GLOB CTAES_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/*.h)
+file(GLOB ZRUST_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/rust/include/*.h)
+file(GLOB SAPLING_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/sapling/*.h)
 
 source_group("BitcoinHeaders" FILES
         ${HEADERS}
@@ -155,6 +169,8 @@ source_group("BitcoinHeaders" FILES
         ${COMPAT_HEADERS}
         ${CONSENSUS_HEADERS}
         ${CTAES_HEADERS}
+        ${ZRUST_HEADERS}
+        ${SAPLING_HEADERS}
         ./src/support/cleanse.h
         )
 
@@ -204,6 +220,7 @@ target_include_directories(SERVER_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
     ${CMAKE_CURRENT_SOURCE_DIR}/src/univalue/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include
     ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/helpers/memenv
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/rust/include
     ${ZMQ_INCLUDE_DIR} ${LIBEVENT_INCLUDE_DIR} ${OPENSSL_INCLUDE_DIR} ${BerkeleyDB_INCLUDE_DIRS}
     )
 
@@ -411,23 +428,49 @@ target_include_directories(CLI_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/src/univalue/include
         )
 
+set(SAPLING_SOURCES
+        ./src/bech32.cpp
+        ./src/sapling/util.cpp
+        ./src/sapling/key_io_sapling.cpp
+        ./src/sapling/prf.cpp
+        ./src/sapling/noteencryption.cpp
+        ./src/sapling/address.cpp
+        ./src/sapling/note.cpp
+        ./src/sapling/zip32.cpp
+        ./src/sapling/crypter_sapling.cpp
+        ./src/sapling/saplingscriptpubkeyman.cpp
+        )
+
+add_library(SAPLING_A STATIC ${BitcoinHeaders} ${SAPLING_SOURCES})
+target_include_directories(SAPLING_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/sapling
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/rust/include
+        ${OPENSSL_INCLUDE_DIR}
+        ${BerkeleyDB_INCLUDE_DIRS}
+        )
+
 link_directories(
         ${CMAKE_SOURCE_DIR}/src/univalue/.libs
         ${CMAKE_SOURCE_DIR}/src/secp256k1/.libs
+        ${CMAKE_SOURCE_DIR}/target/release
         )
+
+link_directories(${CMAKE_BINARY_DIR})
 
 set(pivx-cli_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/pivx-cli.cpp)
 if($ENV{target} MATCHES "Windows")
     list(APPEND pivx-cli_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/pivx-cli-res.rc)
 endif()
 add_executable(pivx-cli ${pivx-cli_SOURCES})
-add_dependencies(pivx-cli libunivalue)
+add_dependencies(pivx-cli libunivalue libzcashrust)
 target_link_libraries(pivx-cli
         CLI_A
         univalue
         UTIL_A
         BITCOIN_CRYPTO_A
-        ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBEVENT_LIB}
+        SAPLING_A
+        rustzcash
+        ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBEVENT_LIB} ${sodium_LIBRARY_RELEASE} -ldl pthread
         )
 if($ENV{target} MATCHES "Windows")
     target_link_libraries(pivx-cli ${WINDOWS_LDADD})
@@ -438,7 +481,7 @@ if($ENV{target} MATCHES "Windows")
     list(APPEND pivx-tx_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/pivx-tx-res.rc)
 endif()
 add_executable(pivx-tx ${pivx-tx_SOURCES})
-add_dependencies(pivx-tx libunivalue libsecp256k1)
+add_dependencies(pivx-tx libunivalue libsecp256k1 libzcashrust)
 target_link_libraries(pivx-tx
         univalue
         COMMON_A
@@ -446,7 +489,9 @@ target_link_libraries(pivx-tx
         UTIL_A
         BITCOIN_CRYPTO_A
         secp256k1
-        ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBEVENT_LIB}
+        SAPLING_A
+        rustzcash
+        ${Boost_LIBRARIES} ${OPENSSL_LIBRARIES} ${LIBEVENT_LIB} ${sodium_LIBRARY_RELEASE} -ldl pthread
         )
 if($ENV{target} MATCHES "Windows")
     target_link_libraries(pivx-tx ${WINDOWS_LDADD})
@@ -455,14 +500,12 @@ if(GMP_FOUND)
     target_link_libraries(pivx-tx ${GMP_LIBRARY})
 endif()
 
-link_directories(${CMAKE_BINARY_DIR})
-
 set(pivxd_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/pivxd.cpp)
 if($ENV{target} MATCHES "Windows")
     list(APPEND pivxd_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/pivxd-res.rc)
 endif()
 add_executable(pivxd ${pivxd_SOURCES} ${BitcoinHeaders})
-add_dependencies(pivxd libunivalue libsecp256k1 leveldb crc32c)
+add_dependencies(pivxd libunivalue libsecp256k1 libzcashrust leveldb crc32c)
 target_include_directories(pivxd PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb
         ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include
@@ -476,10 +519,12 @@ target_link_libraries(pivxd
         univalue
         ZEROCOIN_A
         UTIL_A
+        SAPLING_A
         BITCOIN_CRYPTO_A
         leveldb
         crc32c
         secp256k1
+        rustzcash
         ${BerkeleyDB_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${LIBEVENT_LIB} pthread
         )
 if($ENV{target} MATCHES "Windows")
@@ -500,6 +545,6 @@ if(MINIUPNP_FOUND)
     target_include_directories(pivxd PUBLIC ${MINIUPNP_INCLUDE_DIR})
 endif()
 
-target_link_libraries(pivxd -lpthread)
+target_link_libraries(pivxd ${sodium_LIBRARY_RELEASE} -ldl -lpthread)
 
 add_subdirectory(src/qt)
