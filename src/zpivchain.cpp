@@ -209,11 +209,6 @@ void FindMints(std::vector<CMintMeta> vMintsToFind, std::vector<CMintMeta>& vMin
     }
 }
 
-int GetZerocoinStartHeight()
-{
-    return Params().GetConsensus().height_start_ZC;
-}
-
 bool GetZerocoinMint(const CBigNum& bnPubcoin, uint256& txHash)
 {
     txHash = UINT256_ZERO;
@@ -267,7 +262,7 @@ std::string ReindexZerocoinDB()
     for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
 
     const Consensus::Params& consensus = Params().GetConsensus();
-    const int zc_start_height = GetZerocoinStartHeight();
+    const int zc_start_height = consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight;
     CBlockIndex* pindex = chainActive[zc_start_height];
     std::vector<std::pair<libzerocoin::CoinSpend, uint256> > vSpendInfo;
     std::vector<std::pair<libzerocoin::PublicCoin, uint256> > vMintInfo;
@@ -319,7 +314,8 @@ std::string ReindexZerocoinDB()
                                 continue;
 
                             CValidationState state;
-                            libzerocoin::PublicCoin coin(consensus.Zerocoin_Params(pindex->nHeight < consensus.height_start_ZC_SerialsV2));
+                            const bool v1params = !consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC_V2);
+                            libzerocoin::PublicCoin coin(consensus.Zerocoin_Params(v1params));
                             TxOutToPublicCoin(out, coin, state);
                             vMintInfo.push_back(std::make_pair(coin, txid));
                         }
@@ -424,7 +420,7 @@ bool UpdateZPIVSupplyConnect(const CBlock& block, CBlockIndex* pindex, bool fJus
     AssertLockHeld(cs_main);
 
     const Consensus::Params& consensus = Params().GetConsensus();
-    if (pindex->nHeight < consensus.height_start_ZC)
+    if (!consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC))
         return true;
 
     //Add mints to zPIV supply (mints are forever disabled after last checkpoint)
@@ -483,7 +479,7 @@ bool UpdateZPIVSupplyDisconnect(const CBlock& block, CBlockIndex* pindex)
     AssertLockHeld(cs_main);
 
     const Consensus::Params& consensus = Params().GetConsensus();
-    if (pindex->nHeight < consensus.height_start_ZC)
+    if (!consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC))
         return true;
 
     // Undo Update Wrapped Serials amount

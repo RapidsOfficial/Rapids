@@ -163,11 +163,9 @@ public:
         consensus.height_start_MessSignaturesV2 = 2153200;  // height_start_TimeProtoV2
         consensus.height_start_StakeModifierV2 = 1967000;   // Block v6: 0ef2556e40f3b9f6e02ce611b832e0bbfe7734a8ea751c7b555310ee49b61456
         consensus.height_start_TimeProtoV2 = 2153200;       // Block v7: 14e477e597d24549cac5e59d97d32155e6ec2861c1003b42d0566f9bf39b65d5
-        consensus.height_start_ZC = 863787;                 // Block v4: 5b2482eca24caf2a46bb22e0545db7b7037282733faa3a42ec20542509999a64
         consensus.height_start_ZC_InvalidSerials = 891737;
         consensus.height_start_ZC_PublicSpends = 1880000;
         consensus.height_start_ZC_SerialRangeCheck = 895400;
-        consensus.height_start_ZC_SerialsV2 = 1153160;
         consensus.height_ZC_RecalcAccumulators = 908000;
 
         // validation by-pass
@@ -194,10 +192,17 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 259201;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight = 615800;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 259201;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 615800;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = 863787;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = 1153160;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
+
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =
+                uint256S("0x5b2482eca24caf2a46bb22e0545db7b7037282733faa3a42ec20542509999a64");
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].hashActivationBlock =
+                uint256S("0x37ea75fe1c9314171cff429a91b25b9f11331076d1c9de50ee4054d61877f8af");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -284,11 +289,9 @@ public:
         consensus.height_start_MessSignaturesV2 = 1347000;      // height_start_TimeProtoV2
         consensus.height_start_StakeModifierV2 = 1214000;       // Block v6: 1822577176173752aea33d1f60607cefe9e0b1c54ebaa77eb40201a385506199
         consensus.height_start_TimeProtoV2 = 1347000;           // Block v7: 30c173ffc09a13f288bf6e828216107037ce5b79536b1cebd750a014f4939882
-        consensus.height_start_ZC = 201576;                     // Block v4: 258c489f42f03cb97db2255e47938da4083eee4e242853c2d48bae2b1d0110a6
         consensus.height_start_ZC_InvalidSerials = 999999999;
         consensus.height_start_ZC_PublicSpends = 1106100;
         consensus.height_start_ZC_SerialRangeCheck = 1;
-        consensus.height_start_ZC_SerialsV2 = 444020;
         consensus.height_ZC_RecalcAccumulators = 999999999;
 
         // validation by-pass
@@ -315,10 +318,17 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 201;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight = 51197;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 201;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 51197;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = 201576;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = 444020;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
+
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =
+                uint256S("0x258c489f42f03cb97db2255e47938da4083eee4e242853c2d48bae2b1d0110a6");
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].hashActivationBlock =
+                uint256S("0xfcc6a4c1da22e4db2ada87d257d6eef5e6922347ca1bb7879edfee27d24f64b5");
 
         /**
          * The message start string is designed to be unlikely to occur in normal data.
@@ -413,11 +423,9 @@ public:
         consensus.height_start_MessSignaturesV2 = 1;
         consensus.height_start_StakeModifierV2 = 251;       // start with modifier V2 on regtest
         consensus.height_start_TimeProtoV2 = 999999999;
-        consensus.height_start_ZC = 300;
         consensus.height_start_ZC_InvalidSerials = 999999999;
         consensus.height_start_ZC_PublicSpends = 400;
         consensus.height_start_ZC_SerialRangeCheck = 300;
-        consensus.height_start_ZC_SerialsV2 = 300;
         consensus.height_ZC_RecalcAccumulators = 999999999;
 
         // Zerocoin-related params
@@ -440,8 +448,10 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 251;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight = 251;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 251;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 251;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = 300;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = 300;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 

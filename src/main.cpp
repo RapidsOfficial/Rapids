@@ -975,8 +975,9 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     // Check transaction
     int chainHeight = chainActive.Height();
     bool fColdStakingActive = sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT);
-    if (!CheckTransaction(tx, chainHeight >= consensus.height_start_ZC, true, state, isBlockBetweenFakeSerialAttackRange(chainHeight), fColdStakingActive))
-        return error("%s : CheckTransaction of %s failed with %s", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
+    if (!CheckTransaction(tx, consensus.NetworkUpgradeActive(chainHeight, Consensus::UPGRADE_ZC),
+            true, state, isBlockBetweenFakeSerialAttackRange(chainHeight), fColdStakingActive))
+        return error("%s : transaction checks for %s failed with %s", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
 
     // Coinbase is only valid in a block, not as a loose transaction
     if (tx.IsCoinBase())
@@ -1248,9 +1249,10 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
         *pfMissingInputs = false;
 
     const int chainHeight = chainActive.Height();
+    const Consensus::Params& consensus = Params().GetConsensus();
 
-    if (!CheckTransaction(tx, chainHeight >= Params().GetConsensus().height_start_ZC, true, state))
-        return error("%s : CheckTransaction of %s failed with", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
+    if (!CheckTransaction(tx, consensus.NetworkUpgradeActive(chainHeight, Consensus::UPGRADE_ZC), true, state))
+        return error("%s : transaction checks for %s failed with %s", __func__, tx.GetHash().ToString(), FormatStateMessage(state));
 
     // Coinbase is only valid in a block, not as a loose transaction
     if (tx.IsCoinBase())
@@ -1402,7 +1404,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
                 hash.ToString(),
                 nFees, ::minRelayTxFee.GetFee(nSize) * 10000);
 
-        bool fCLTVIsActivated = chainActive.Tip()->nHeight >= Params().GetConsensus().height_start_BIP65;
+        bool fCLTVIsActivated = chainActive.Tip()->nHeight >= consensus.height_start_BIP65;
 
         // Check against previous transactions
         // This is done last to help prevent CPU exhaustion denial-of-service attacks.
@@ -1641,7 +1643,7 @@ int64_t GetBlockValue(int nHeight)
         nSubsidy = 13.5 * COIN;
     } else if (nHeight <= 647999 && nHeight >= 604800) {
         nSubsidy = 9 * COIN;
-    } else if (nHeight < Params().GetConsensus().height_start_ZC_SerialsV2) {
+    } else if (!consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC_V2)) {
         nSubsidy = 4.5 * COIN;
     } else {
         nSubsidy = 5 * COIN;
@@ -2043,7 +2045,7 @@ void DataBaseAccChecksum(CBlockIndex* pindex, bool fWrite)
 {
     const Consensus::Params& consensus = Params().GetConsensus();
     if (!pindex ||
-            pindex->nHeight < consensus.height_start_ZC_SerialsV2 ||
+            !consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC_V2) ||
             pindex->nHeight > consensus.height_last_ZC_AccumCheckpoint ||
             pindex->nAccumulatorCheckpoint == pindex->pprev->nAccumulatorCheckpoint)
         return;
@@ -2219,7 +2221,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
     view.SetBestBlock(pindex->pprev->GetBlockHash());
 
     const Consensus::Params& consensus = Params().GetConsensus();
-    if (pindex->nHeight >= consensus.height_start_ZC_SerialsV2 &&
+    if (consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC_V2) &&
             pindex->nHeight <= consensus.height_last_ZC_AccumCheckpoint) {
         // Legacy Zerocoin DB: If Accumulators Checkpoint is changed, remove changed checksums
         DataBaseAccChecksum(pindex, false);
@@ -2568,7 +2570,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // A one-time event where the zPIV supply was off (due to serial duplication off-chain on main net)
     if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == consensus.height_last_ZC_WrappedSerials + 1
             && GetZerocoinSupply() != consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount()) {
-        RecalculatePIVSupply(consensus.height_start_ZC, false);
+        RecalculatePIVSupply(consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight, false);
     }
 
     // Add fraudulent funds to the supply and remove any recovered funds.
@@ -2601,7 +2603,8 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
             pindex->nHeight <= consensus.height_ZC_RecalcAccumulators + 1)
         AddInvalidSpendsToMap(block);
 
-    if (pindex->nHeight >= consensus.height_start_ZC_SerialsV2 && pindex->nHeight < consensus.height_last_ZC_AccumCheckpoint) {
+    if (consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC_V2) &&
+            pindex->nHeight < consensus.height_last_ZC_AccumCheckpoint) {
         // Legacy Zerocoin DB: If Accumulators Checkpoint is changed, database the checksums
         DataBaseAccChecksum(pindex, true);
     } else if (pindex->nHeight == consensus.height_last_ZC_AccumCheckpoint) {
@@ -3826,7 +3829,7 @@ bool ContextualCheckBlockHeader(const CBlockHeader& block, CValidationState& sta
 
     // Reject outdated version blocks
     if((block.nVersion < 3 && nHeight >= 1) ||
-        (block.nVersion < 4 && nHeight >= consensus.height_start_ZC) ||
+        (block.nVersion < 4 && consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC)) ||
         (block.nVersion < 5 && nHeight >= consensus.height_start_BIP65) ||
         (block.nVersion < 6 && nHeight >= consensus.height_start_StakeModifierV2) ||
         (block.nVersion < 7 && nHeight >= consensus.height_start_TimeProtoV2))
@@ -3952,9 +3955,11 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
     CBlockIndex*& pindex = *ppindex;
 
+    const Consensus::Params& consensus = Params().GetConsensus();
+
     // Get prev block index
     CBlockIndex* pindexPrev = NULL;
-    if (block.GetHash() != Params().GetConsensus().hashGenesisBlock) {
+    if (block.GetHash() != consensus.hashGenesisBlock) {
         BlockMap::iterator mi = mapBlockIndex.find(block.hashPrevBlock);
         if (mi == mapBlockIndex.end())
             return state.DoS(0, error("%s : prev block %s not found", __func__, block.hashPrevBlock.GetHex()), 0, "bad-prevblk");
@@ -3975,7 +3980,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         }
     }
 
-    if (block.GetHash() != Params().GetConsensus().hashGenesisBlock && !CheckWork(block, pindexPrev))
+    if (block.GetHash() != consensus.hashGenesisBlock && !CheckWork(block, pindexPrev))
         return false;
 
     bool isPoS = block.IsProofOfStake();
@@ -4036,7 +4041,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         std::vector<CBigNum> inBlockSerials;
         for (const CTransaction& tx : block.vtx) {
             for (const CTxIn& in: tx.vin) {
-                if(nHeight >= Params().GetConsensus().height_start_ZC) {
+                if(consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC)) {
                     bool isPublicSpend = in.IsZerocoinPublicSpend();
                     bool isPrivZerocoinSpend = in.IsZerocoinSpend();
                     if (isPrivZerocoinSpend || isPublicSpend) {
@@ -4048,7 +4053,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
 
                         libzerocoin::CoinSpend spend;
                         if (isPublicSpend) {
-                            libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
+                            libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
                             PublicCoinSpend publicSpend(params);
                             if (!ZPIVModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
                                 return false;

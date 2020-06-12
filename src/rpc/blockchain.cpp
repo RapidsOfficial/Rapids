@@ -746,7 +746,7 @@ static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Con
         activated = pindex->nHeight >= 1;
         break;
     case 4:
-        activated = pindex->nHeight >= consensusParams.height_start_ZC;
+        activated = consensusParams.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC);
         break;
     case 5:
         activated = pindex->nHeight >= consensusParams.height_start_BIP65;
@@ -1193,7 +1193,8 @@ UniValue getserials(const UniValue& params, bool fHelp) {
             HelpExampleRpc("getserials", "1254000, 1000"));
 
     int heightStart, heightEnd;
-    validaterange(params, heightStart, heightEnd, Params().GetConsensus().height_start_ZC);
+    const int heightMax = Params().GetConsensus().vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight;
+    validaterange(params, heightStart, heightEnd, heightMax);
 
     bool fVerbose = false;
     if (params.size() > 2) {
