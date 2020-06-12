@@ -27,6 +27,7 @@ enum UpgradeIndex : uint32_t {
     BASE_NETWORK,
     UPGRADE_TESTDUMMY,
     UPGRADE_POS,
+    UPGRADE_POS_V2,
     UPGRADE_V5_DUMMY,
     // NOTE: Also add new upgrades to NetworkUpgradeInfo in upgrades.cpp
     MAX_NETWORK_UPGRADES
@@ -111,7 +112,6 @@ struct Params {
     int height_start_BIP65;                         // Blocks v5 start
     int height_start_InvalidUTXOsCheck;
     int height_start_MessSignaturesV2;
-    int height_start_StakeModifierNewSelection;
     int height_start_StakeModifierV2;               // Blocks v6 start
     int height_start_TimeProtoV2;                   // Blocks v7 start
     int height_start_ZC;                            // Blocks v4 start

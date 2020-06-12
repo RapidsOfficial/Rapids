@@ -15,8 +15,12 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "PIVX network",
         },
         {
-                /*.strName =*/ "PoS Activation",
-                /*.strInfo =*/ "Proof of Stake Consensus upgrade",
+                /*.strName =*/ "PoS",
+                /*.strInfo =*/ "Proof of Stake Consensus activation",
+        },
+        {
+                /*.strName =*/ "PoS v2",
+                /*.strInfo =*/ "New selection for stake modifier",
         },
         {
                 /*.strName =*/ "v5 dummy",
