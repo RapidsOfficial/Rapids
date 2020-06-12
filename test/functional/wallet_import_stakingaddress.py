@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2020 The PIVX developers
+# Copyright (c) 2018-2020 The Rapids developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,14 +12,14 @@ Node1 imports and rescans. The test checks that cold utxos and staking balance i
 
 from time import sleep
 
-from test_framework.test_framework import PivxTestFramework
+from test_framework.test_framework import RapidsTestFramework
 from test_framework.util import (
     assert_equal,
     DecimalAmt,
     sync_blocks,
 )
 
-class ImportStakingTest(PivxTestFramework):
+class ImportStakingTest(RapidsTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 2
@@ -43,7 +44,7 @@ class ImportStakingTest(PivxTestFramework):
                              for i in range(2 * NUM_OF_DELEGATIONS)]
         delegations = []
         for i, sa in enumerate(staking_addresses):
-            # delegate 10 PIV
+            # delegate 10 RPD
             delegations.append(self.nodes[0].delegatestake(sa, 10)['txid'])
             # mine a block and check staking balance
             self.nodes[0].generate(1)

@@ -1,9 +1,10 @@
 // Copyright (c) 2018 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PIVX_SPENDTYPE_H
-#define PIVX_SPENDTYPE_H
+#ifndef Rapids_SPENDTYPE_H
+#define Rapids_SPENDTYPE_H
 
 #include <cstdint>
 
@@ -16,4 +17,4 @@ namespace libzerocoin {
     };
 }
 
-#endif //PIVX_SPENDTYPE_H
+#endif //Rapids_SPENDTYPE_H

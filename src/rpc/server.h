@@ -1,6 +1,7 @@
 // Copyright (c) 2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -8,7 +9,7 @@
 #define BITCOIN_RPCSERVER_H
 
 #include "amount.h"
-#include "zpiv/zerocoin.h"
+#include "zrpd/zerocoin.h"
 #include "rpc/protocol.h"
 #include "uint256.h"
 
@@ -129,7 +130,7 @@ public:
 };
 
 /**
- * PIVX RPC command dispatcher.
+ * Rapids RPC command dispatcher.
  */
 class CRPCTable
 {
@@ -181,7 +182,7 @@ extern std::string HelpExampleRpc(std::string methodname, std::string args);
 extern void EnsureWalletIsUnlocked(bool fAllowAnonOnly = false);
 // Ensure the wallet's existence.
 extern void EnsureWallet();
-extern UniValue DoZpivSpend(const CAmount nAmount, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str);
+extern UniValue DoZrpdSpend(const CAmount nAmount, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str);
 
 extern UniValue getconnectioncount(const UniValue& params, bool fHelp); // in rpc/net.cpp
 extern UniValue getpeerinfo(const UniValue& params, bool fHelp);
@@ -280,11 +281,11 @@ extern UniValue importzerocoins(const UniValue& params, bool fHelp);
 extern UniValue exportzerocoins(const UniValue& params, bool fHelp);
 extern UniValue reconsiderzerocoins(const UniValue& params, bool fHelp);
 extern UniValue getspentzerocoinamount(const UniValue& params, bool fHelp);
-extern UniValue setzpivseed(const UniValue& params, bool fHelp);
-extern UniValue getzpivseed(const UniValue& params, bool fHelp);
+extern UniValue setzrpdseed(const UniValue& params, bool fHelp);
+extern UniValue getzrpdseed(const UniValue& params, bool fHelp);
 extern UniValue generatemintlist(const UniValue& params, bool fHelp);
-extern UniValue searchdzpiv(const UniValue& params, bool fHelp);
-extern UniValue dzpivstate(const UniValue& params, bool fHelp);
+extern UniValue searchdzrpd(const UniValue& params, bool fHelp);
+extern UniValue dzrpdstate(const UniValue& params, bool fHelp);
 
 extern UniValue getrawtransaction(const UniValue& params, bool fHelp); // in rpc/rawtransaction.cpp
 extern UniValue listunspent(const UniValue& params, bool fHelp);

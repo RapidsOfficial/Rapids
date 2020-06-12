@@ -1,14 +1,15 @@
 // Copyright (c) 2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PIVX_CONSENSUS_ZEROCOIN_VERIFY_H
-#define PIVX_CONSENSUS_ZEROCOIN_VERIFY_H
+#ifndef Rapids_CONSENSUS_ZEROCOIN_VERIFY_H
+#define Rapids_CONSENSUS_ZEROCOIN_VERIFY_H
 
 #include "consensus/consensus.h"
 #include "main.h"
 #include "script/interpreter.h"
-#include "zpivchain.h"
+#include "zrpdchain.h"
 
 /** Context-independent validity checks */
 bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidationState& state, bool fFakeSerialAttack = false);
@@ -20,7 +21,7 @@ int CurrentPublicCoinSpendVersion();
 bool CheckPublicCoinSpendVersion(int version);
 bool ContextualCheckZerocoinSpend(const CTransaction& tx, const libzerocoin::CoinSpend* spend, int nHeight, const uint256& hashBlock);
 bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const libzerocoin::CoinSpend* spend, int nHeight, const uint256& hashBlock);
-bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv = true);
+bool RecalculateRPDSupply(int nHeightStart, bool fSkipZrpd = true);
 CAmount GetInvalidUTXOValue();
 
-#endif //PIVX_CONSENSUS_ZEROCOIN_VERIFY_H
+#endif //Rapids_CONSENSUS_ZEROCOIN_VERIFY_H

@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -190,8 +191,8 @@ void OptionsModel::setDisplayDefaultOptions(QSettings& settings, bool reset)
     if (!SoftSetArg("-lang", settings.value("language").toString().toStdString()))
         addOverriddenOption("-lang");
 
-    if (settings.contains("nAnonymizePivxAmount") || reset)
-        SoftSetArg("-anonymizepivxamount", settings.value("nAnonymizePivxAmount").toString().toStdString());
+    if (settings.contains("nAnonymizeRapidsAmount") || reset)
+        SoftSetArg("-anonymizerapidsamount", settings.value("nAnonymizeRapidsAmount").toString().toStdString());
 
     if (!settings.contains("strThirdPartyTxUrls") || reset)
         settings.setValue("strThirdPartyTxUrls", "");
@@ -210,7 +211,7 @@ void OptionsModel::Reset()
 
     // Remove all entries from our QSettings object
     settings.clear();
-    resetSettings = true; // Needed in pivx.cpp during shotdown to also remove the window positions
+    resetSettings = true; // Needed in rapids.cpp during shotdown to also remove the window positions
 
     // default setting for OptionsModel::StartAtStartup - disabled
     if (GUIUtil::GetStartOnSystemStartup())

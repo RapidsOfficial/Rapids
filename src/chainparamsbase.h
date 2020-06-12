@@ -1,5 +1,6 @@
 // Copyright (c) 2014 The Bitcoin developers
 // Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,8 +11,8 @@
 #include <vector>
 
 /**
- * CBaseChainParams defines the base parameters (shared between pivx-cli and pivxd)
- * of a given instance of the Pivx system.
+ * CBaseChainParams defines the base parameters (shared between rapids-cli and rapidsd)
+ * of a given instance of the Rapids system.
  */
 class CBaseChainParams
 {

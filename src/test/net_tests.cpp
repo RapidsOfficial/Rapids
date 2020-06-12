@@ -9,7 +9,7 @@
 #include "serialize.h"
 #include "streams.h"
 
-#include "test/test_pivx.h"
+#include "test/test_rapids.h"
 
 #include <string>
 

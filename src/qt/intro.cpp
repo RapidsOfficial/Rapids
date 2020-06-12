@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +11,7 @@
 #include "guiutil.h"
 
 #include "util.h"
-#include "qt/pivx/qtutils.h"
+#include "qt/rapids/qtutils.h"
 
 #include <boost/filesystem.hpp>
 
@@ -210,7 +211,7 @@ bool Intro::pickDataDirectory()
 
     /* Only override -datadir if different from the default, to make it possible to
      * override -datadir in the rapids.conf file in the default data directory
-     * (to be consistent with pivxd behavior)
+     * (to be consistent with rapidsd behavior)
      */
 
     if (dataDir != getDefaultDataDirectory())

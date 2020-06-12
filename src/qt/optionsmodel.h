@@ -1,5 +1,6 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
 // Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -52,7 +53,7 @@ public:
         HideCharts,          // bool
         HideZeroBalances,    // bool
         HideOrphans,    // bool
-        AnonymizePivxAmount, //int
+        AnonymizeRapidsAmount, //int
         ShowMasternodesTab,  // bool
         Listen,              // bool
         StakeSplitThreshold,    // CAmount (LongLong)
@@ -133,7 +134,7 @@ Q_SIGNALS:
     void zeromintAddressesChanged(bool);
     void zeromintPercentageChanged(int);
     void preferredDenomChanged(int);
-    void anonymizePivxAmountChanged(int);
+    void anonymizeRapidsAmountChanged(int);
     void coinControlFeaturesChanged(bool);
     void showHideColdStakingScreen(bool);
     void hideChartsChanged(bool);

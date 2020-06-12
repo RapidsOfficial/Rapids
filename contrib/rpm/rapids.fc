@@ -1,0 +1,8 @@
+/usr/bin/rapids-cli		--	gen_context(system_u:object_r:rapids_exec_t,s0)
+/usr/sbin/rapidsd		--	gen_context(system_u:object_r:rapids_exec_t,s0)
+/usr/lib(64)?/rapids/rapidsd		--	gen_context(system_u:object_r:rapids_exec_t,s0)
+
+/etc/rapids(/.*)?		gen_context(system_u:object_r:rapids_conf_t,s0)
+/var/lib/rapids(/.*)?		gen_context(system_u:object_r:rapids_var_lib_t,s0)
+
+(/var)?/run/rapidsd(/.*)?   gen_context(system_u:object_r:rapids_var_run_t,s0)

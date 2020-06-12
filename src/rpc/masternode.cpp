@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2012 The Bitcoin developers
 // Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -584,7 +585,7 @@ UniValue getmasternodewinners (const UniValue& params, bool fHelp)
             "  {\n"
             "    \"nHeight\": n,           (numeric) block height\n"
             "    \"winner\": {\n"
-            "      \"address\": \"xxxx\",    (string) PIVX MN Address\n"
+            "      \"address\": \"xxxx\",    (string) Rapids MN Address\n"
             "      \"nVotes\": n,          (numeric) Number of votes for winner\n"
             "    }\n"
             "  }\n"
@@ -597,7 +598,7 @@ UniValue getmasternodewinners (const UniValue& params, bool fHelp)
             "    \"nHeight\": n,           (numeric) block height\n"
             "    \"winner\": [\n"
             "      {\n"
-            "        \"address\": \"xxxx\",  (string) PIVX MN Address\n"
+            "        \"address\": \"xxxx\",  (string) Rapids MN Address\n"
             "        \"nVotes\": n,        (numeric) Number of votes for winner\n"
             "      }\n"
             "      ,...\n"

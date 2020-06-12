@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +11,7 @@
 #include "swifttx.h"
 #include "timedata.h"
 #include "wallet/wallet.h"
-#include "zpivchain.h"
+#include "zrpdchain.h"
 #include "main.h"
 
 #include <algorithm>
@@ -31,7 +32,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     bool fZSpendFromMe = false;
 
     if (wtx.HasZerocoinSpendInputs()) {
-        libzerocoin::CoinSpend zcspend = wtx.HasZerocoinPublicSpendInputs() ? ZPIVModule::parseCoinSpend(wtx.vin[0]) : TxInToZerocoinSpend(wtx.vin[0]);
+        libzerocoin::CoinSpend zcspend = wtx.HasZerocoinPublicSpendInputs() ? ZRPDModule::parseCoinSpend(wtx.vin[0]) : TxInToZerocoinSpend(wtx.vin[0]);
         fZSpendFromMe = wallet->IsMyZerocoinSpend(zcspend.getCoinSerialNumber());
     }
 
@@ -42,10 +43,10 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
         if (!wtx.HasZerocoinSpendInputs() && !ExtractDestination(wtx.vout[1].scriptPubKey, address))
             return parts;
 
-        if (wtx.HasZerocoinSpendInputs() && (fZSpendFromMe || wallet->zpivTracker->HasMintTx(hash))) {
+        if (wtx.HasZerocoinSpendInputs() && (fZSpendFromMe || wallet->zrpdTracker->HasMintTx(hash))) {
             //zRPD stake reward
             sub.involvesWatchAddress = false;
-            sub.type = TransactionRecord::StakeZPIV;
+            sub.type = TransactionRecord::StakeZRPD;
             sub.address = mapValue["zerocoinmint"];
             sub.credit = 0;
             for (const CTxOut& out : wtx.vout) {
@@ -96,7 +97,7 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
                 isminetype mine = wallet->IsMine(txout);
                 TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
                 sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-                sub.type = TransactionRecord::ZerocoinSpend_Change_zPiv;
+                sub.type = TransactionRecord::ZerocoinSpend_Change_zRpd;
                 sub.address = mapValue["zerocoinmint"];
                 if (!fFeeAssigned) {
                     sub.debit -= (wtx.GetZerocoinSpent() - wtx.GetValueOut());
@@ -396,14 +397,14 @@ bool TransactionRecord::ExtractAddress(const CScript& scriptPubKey, bool fColdSt
     }
 }
 
-bool IsZPIVType(TransactionRecord::Type type)
+bool IsZRPDType(TransactionRecord::Type type)
 {
     switch (type) {
-        case TransactionRecord::StakeZPIV:
+        case TransactionRecord::StakeZRPD:
         case TransactionRecord::ZerocoinMint:
         case TransactionRecord::ZerocoinSpend:
         case TransactionRecord::RecvFromZerocoinSpend:
-        case TransactionRecord::ZerocoinSpend_Change_zPiv:
+        case TransactionRecord::ZerocoinSpend_Change_zRpd:
         case TransactionRecord::ZerocoinSpend_FromMe:
             return true;
         default:
@@ -454,7 +455,7 @@ void TransactionRecord::updateStatus(const CWalletTx& wtx)
     // For generated transactions, determine maturity
     else if (type == TransactionRecord::Generated ||
             type == TransactionRecord::StakeMint ||
-            type == TransactionRecord::StakeZPIV ||
+            type == TransactionRecord::StakeZRPD ||
             type == TransactionRecord::MNReward ||
             type == TransactionRecord::StakeDelegated ||
             type == TransactionRecord::StakeHot) {
@@ -507,7 +508,7 @@ int TransactionRecord::getOutputIndex() const
 
 bool TransactionRecord::isCoinStake() const
 {
-    return (type == TransactionRecord::StakeMint || type == TransactionRecord::Generated || type == TransactionRecord::StakeZPIV);
+    return (type == TransactionRecord::StakeMint || type == TransactionRecord::Generated || type == TransactionRecord::StakeZRPD);
 }
 
 bool TransactionRecord::isAnyColdStakingType() const

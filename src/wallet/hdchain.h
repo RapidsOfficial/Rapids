@@ -1,7 +1,7 @@
-// Copyright (c) 2020 The PIVX Core developers
+// Copyright (c) 2020 The Rapids Core developers
 // Distributed under the MIT software license, see the accompanying
-#ifndef PIVX_HDCHAIN_H
-#define PIVX_HDCHAIN_H
+#ifndef Rapids_HDCHAIN_H
+#define Rapids_HDCHAIN_H
 
 #include "key.h"
 
@@ -61,4 +61,4 @@ public:
     }
 };
 
-#endif // PIVX_HDCHAIN_H
+#endif // Rapids_HDCHAIN_H

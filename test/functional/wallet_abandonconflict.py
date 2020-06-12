@@ -4,7 +4,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 
-from test_framework.test_framework import PivxTestFramework
+from test_framework.test_framework import RapidsTestFramework
 from test_framework.util import (
     assert_equal,
     connect_nodes,
@@ -14,7 +14,7 @@ from test_framework.util import (
     sync_mempools
 )
 
-class AbandonConflictTest(PivxTestFramework):
+class AbandonConflictTest(RapidsTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
         self.setup_clean_chain = True

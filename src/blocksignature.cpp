@@ -1,10 +1,11 @@
 // Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "blocksignature.h"
 #include "main.h"
-#include "zpivchain.h"
+#include "zrpdchain.h"
 
 bool SignBlockWithKey(CBlock& block, const CKey& key)
 {
@@ -52,8 +53,8 @@ bool CheckBlockSignature(const CBlock& block)
      *  UTXO: The public key that signs must match the public key associated with the first utxo of the coinstake tx.
      */
     CPubKey pubkey;
-    bool fzPIVStake = block.vtx[1].vin[0].IsZerocoinSpend();
-    if (fzPIVStake) {
+    bool fzRPDStake = block.vtx[1].vin[0].IsZerocoinSpend();
+    if (fzRPDStake) {
         libzerocoin::CoinSpend spend = TxInToZerocoinSpend(block.vtx[1].vin[0]);
         pubkey = spend.getPubKey();
     } else {

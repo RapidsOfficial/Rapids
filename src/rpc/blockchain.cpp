@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -16,8 +17,8 @@
 #include "util.h"
 #include "utilmoneystr.h"
 #include "wallet/wallet.h"
-#include "zpiv/zpivmodule.h"
-#include "zpivchain.h"
+#include "zrpd/zrpdmodule.h"
+#include "zrpdchain.h"
 
 #include <stdint.h>
 #include <fstream>
@@ -1196,7 +1197,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
                         }
                         libzerocoin::ZerocoinParams *params = Params().GetConsensus().Zerocoin_Params(false);
                         PublicCoinSpend publicSpend(params);
-                        if (!ZPIVModule::parseCoinSpend(txin, tx, prevOut, publicSpend)) {
+                        if (!ZRPDModule::parseCoinSpend(txin, tx, prevOut, publicSpend)) {
                             throw JSONRPCError(RPC_INTERNAL_ERROR, "public zerocoin spend parse failed");
                         }
                         serial_str = publicSpend.getCoinSerialNumber().ToString(16);

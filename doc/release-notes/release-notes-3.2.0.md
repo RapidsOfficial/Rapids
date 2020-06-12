@@ -1,34 +1,34 @@
-PIVX Core version *3.2.0* is now available from:  <https://github.com/pivx-project/pivx/releases>
+Rapids Core version *3.2.0* is now available from:  <https://github.com/RapidsOfficial/Rapids/releases>
 
 This is a new major version release, including various bug fixes and performance improvements, as well as updated translations.
 
-Please report bugs using the issue tracker at github: <https://github.com/pivx-project/pivx/issues>
+Please report bugs using the issue tracker at github: <https://github.com/RapidsOfficial/Rapids/issues>
 
 
 Mandatory Update
 ==============
 
-PIVX Core v3.2.0 is a **mandatory update** for all block creators, masternodes, and integrated services (exchanges). Old version 4 blocks will be rejected once 95% of a rolling 7 days worth of blocks have signaled the new version 5.
+Rapids Core v3.2.0 is a **mandatory update** for all block creators, masternodes, and integrated services (exchanges). Old version 4 blocks will be rejected once 95% of a rolling 7 days worth of blocks have signaled the new version 5.
 
 Masternodes will need to be restarted once both the masternode daemon and the controller wallet have been upgraded.
 
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/PIVX-Qt (on Mac) or pivxd/pivx-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/Rapids-Qt (on Mac) or rapidsd/rapids-qt (on Linux).
 
 Wallets for existing users upgrading from an earlier version will undergo a supply recalculation the first time v3.2.0 is started. An initial light weight (partial) recalculation will be attempted first, but if that fails then the wallet will do a full recalculation the next time it is started. This recalculation is a one-time event.
 
 Compatibility
 ==============
 
-PIVX Core is extensively tested on multiple operating systems using the Linux kernel, macOS 10.10+, and Windows 7 and later.
+Rapids Core is extensively tested on multiple operating systems using the Linux kernel, macOS 10.10+, and Windows 7 and later.
 
 Microsoft ended support for Windows XP on [April 8th, 2014](https://www.microsoft.com/en-us/WindowsForBusiness/end-of-xp-support), No attempt is made to prevent installing or running the software on Windows XP, you can still do so at your own risk but be aware that there are known instabilities and issues. Please do not report issues about Windows XP to the issue tracker.
 
-Apple released it's last Mountain Lion update August 13, 2015, and officially ended support on [December 14, 2015](http://news.fnal.gov/2015/10/mac-os-x-mountain-lion-10-8-end-of-life-december-14/). PIVX Core software starting with v3.2.0 will no longer run on MacOS versions prior to Yosemite (10.10). Please do not report issues about MacOS versions prior to Yosemite to the issue tracker.
+Apple released it's last Mountain Lion update August 13, 2015, and officially ended support on [December 14, 2015](http://news.fnal.gov/2015/10/mac-os-x-mountain-lion-10-8-end-of-life-december-14/). Rapids Core software starting with v3.2.0 will no longer run on MacOS versions prior to Yosemite (10.10). Please do not report issues about MacOS versions prior to Yosemite to the issue tracker.
 
-PIVX Core should also work on most other Unix-like systems but is not frequently tested on them.
+Rapids Core should also work on most other Unix-like systems but is not frequently tested on them.
 
  
 Notable Changes
@@ -37,7 +37,7 @@ Notable Changes
 Minimum Supported MacOS Version
 ------
 
-The minimum supported version of MacOS (OSX) has been moved from 10.8 Mountain Lion to 10.10 Yosemite. Users still running a MacOS version prior to Yosemite will need to upgrade their OS if they wish to continue using the latest version(s) of the PIVX Core wallet.
+The minimum supported version of MacOS (OSX) has been moved from 10.8 Mountain Lion to 10.10 Yosemite. Users still running a MacOS version prior to Yosemite will need to upgrade their OS if they wish to continue using the latest version(s) of the Rapids Core wallet.
 
 Attacks, Exploits, and Mitigations
 ------
@@ -46,28 +46,28 @@ Attacks, Exploits, and Mitigations
 
 On Janurary 22 2019, Decentralized Systems Lab out of the University of Illinois published a study entitled “[‘Fake Stake’ attacks on chain-based Proof-of-Stake cryptocurrencies](https://medium.com/@dsl_uiuc/fake-stake-attacks-on-chain-based-proof-of-stake-cryptocurrencies-b8b05723f806)”, which outlined a type of Denial of Service attack that could take place on a number of Proof of Stake based networks by exhausting a client's RAM or Disk resources.
 
-A full report provided by PIVX developers is available on the [PIVX Website](https://pivx.org/fake-stake-official-pivx-report/), which includes additional findings, mitigation details, and resources for testing. This type of attack has no risk to users' privacy and does not affect their holdings.
+A full report provided by Rapids developers is available on the [Rapids Website](https://rapids.org/fake-stake-official-rapids-report/), which includes additional findings, mitigation details, and resources for testing. This type of attack has no risk to users' privacy and does not affect their holdings.
 
 ### Wrapped Serials
 
-On March 6th 2019, an attack was detected on the PIVX network zerocoin protocol, or zPIV. The vulnerability allows an attacker to fake serials accepted by the network and thus to spend zerocoins that have never been minted. As severe as it is, it does not harm users’ privacy and does not affect their holdings directly.
+On March 6th 2019, an attack was detected on the Rapids network zerocoin protocol, or zRPD. The vulnerability allows an attacker to fake serials accepted by the network and thus to spend zerocoins that have never been minted. As severe as it is, it does not harm users’ privacy and does not affect their holdings directly.
 
-As a result of this, all zPIV functionality was disabled via one of our sporks shortly after verification of this exploit. A full report, detailing how this attack was performed, as well as investigation results and mitigation methods is available [On Medium](https://medium.com/@dev.pivx/report-wrapped-serials-attack-5f4bf7b51701).
+As a result of this, all zRPD functionality was disabled via one of our sporks shortly after verification of this exploit. A full report, detailing how this attack was performed, as well as investigation results and mitigation methods is available [On Medium](https://medium.com/@dev.rapids/report-wrapped-serials-attack-5f4bf7b51701).
 
-zPIV functions will be restored after v3.2.0 is pushed out and the majority of the network has upgraded.
+zRPD functions will be restored after v3.2.0 is pushed out and the majority of the network has upgraded.
 
 Major New Features
 ------
 
 ### BIP65 (CHECKLOCKTIMEVERIFY) Soft-Fork
 
-PIVX Core v3.2.0 introduces new consensus rules for scripting pathways to support the [BIP65](https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki) standard. This is being carried out as a soft-fork in order to provide ample time for stakers to update their wallet version.
+Rapids Core v3.2.0 introduces new consensus rules for scripting pathways to support the [BIP65](https://github.com/bitcoin/bips/blob/master/bip-0065.mediawiki) standard. This is being carried out as a soft-fork in order to provide ample time for stakers to update their wallet version.
 
 ### Automint Addresses
 
-A new "Automint Addresses" feature has been added to the wallet that allows for the creation of new addresses who's purpose is to automatically convert any PIV funds received by such addresses to zPIV. The feature as a whole can be enabled/disabled either at runtime using the `-enableautoconvertaddress` option, via RPC/Console with the `enableautomintaddress` command, or via the GUI's options dialog, with the default being enabled.
+A new "Automint Addresses" feature has been added to the wallet that allows for the creation of new addresses who's purpose is to automatically convert any RPD funds received by such addresses to zRPD. The feature as a whole can be enabled/disabled either at runtime using the `-enableautoconvertaddress` option, via RPC/Console with the `enableautomintaddress` command, or via the GUI's options dialog, with the default being enabled.
 
-Creation of these automint addresses is currently only available via the RPC/Console `createautomintaddress` command, which takes no additional arguments. The command returns a new PIVX address each time, but addresses created by this command can be re-used if desired.
+Creation of these automint addresses is currently only available via the RPC/Console `createautomintaddress` command, which takes no additional arguments. The command returns a new Rapids address each time, but addresses created by this command can be re-used if desired.
 
 ### In-wallet Proposal Voting
 
@@ -77,13 +77,13 @@ A new UI wallet tab has been introduced that allows users to view the current bu
 
 Support for the ZLN Protocol has been added, which allows for a node to opt-in to providing extended network services for the protocol. By default, this functionality is disabled, but can be enabled by using the `-peerbloomfilterszc` runtime option.
 
-A full technical writeup of the protocol can be found [Here](https://pivx.org/wp-content/uploads/2018/11/Zerocoin_Light_Node_Protocol.pdf).
+A full technical writeup of the protocol can be found [Here](https://rapids.org/wp-content/uploads/2018/11/Zerocoin_Light_Node_Protocol.pdf).
 
 ### Precomputed Zerocoin Proofs
 
-This introduces the ability to do most of the heavy computation required for zPIV spends **before** actually initiating the spend. A new thread, `ThreadPrecomputeSpends`, is added which constantly runs in the background.
+This introduces the ability to do most of the heavy computation required for zRPD spends **before** actually initiating the spend. A new thread, `ThreadPrecomputeSpends`, is added which constantly runs in the background.
 
-`ThreadPrecomputeSpends`' purpose is to monitor the wallet's zPIV mints and perform partial witness accumulations up to `nHeight - 20` blocks from the chain's tip (to ensure that it only ever computes data that is at least 2 accumulator checkpoints deep), retaining the results in memory.
+`ThreadPrecomputeSpends`' purpose is to monitor the wallet's zRPD mints and perform partial witness accumulations up to `nHeight - 20` blocks from the chain's tip (to ensure that it only ever computes data that is at least 2 accumulator checkpoints deep), retaining the results in memory.
 
 Additionally, a file based cache is introduced, `precomputes.dat`, which serves as a place to store any precomputed data between sessions, or when the in-memory cache size is exhausted. Swapping data between memory and disk file is done as needed, and periodic cache flushes to the disk are routine.
 
@@ -94,11 +94,11 @@ This also introduces 2 new runtime configuration options:
 
 A new RPC command, `clearspendcache`, has been added that allows for the clearing/resetting of the precompute cache (both memory and disk). This command takes no additional arguments.
 
-Finally, the "security level" option for spending zPIV has been completely removed, and all zPIV spends now spend at what was formerly "security level" `100`. This change has been reflected in any RPC command that previously took a security level argument, as well as in the GUI's Privacy section for spending zPIV.
+Finally, the "security level" option for spending zRPD has been completely removed, and all zRPD spends now spend at what was formerly "security level" `100`. This change has been reflected in any RPC command that previously took a security level argument, as well as in the GUI's Privacy section for spending zRPD.
 
 ### Regression Test Suite
 
-The RegTest network mode has been re-worked to once again allow for the generation of on-demand PoW and PoS blocks. Additionally, many of the existing functional test scripts have been adapted for use with PIVX, and we now have a solid testing base for highly customizable tests to be written.
+The RegTest network mode has been re-worked to once again allow for the generation of on-demand PoW and PoS blocks. Additionally, many of the existing functional test scripts have been adapted for use with Rapids, and we now have a solid testing base for highly customizable tests to be written.
 
 With this, the old `setgenerate` RPC command no longer functions in regtest mode, instead a new `generate` command has been introduced that is more suited for use in regtest mode.
 
@@ -173,7 +173,7 @@ Build System Changes
 
 ### Completely Disallow Qt4
 
-Compiling the PIVX Core wallet against Qt4 hasn't been supported for quite some time now, but the build system still recognized Qt4 as a valid option if Qt5 couldn't be found. This has now been remedied and Qt4 will no longer be considered valid during the `configure` pre-compilation phase.
+Compiling the Rapids Core wallet against Qt4 hasn't been supported for quite some time now, but the build system still recognized Qt4 as a valid option if Qt5 couldn't be found. This has now been remedied and Qt4 will no longer be considered valid during the `configure` pre-compilation phase.
 
 ### Further OpenSSL Deprecation
 
@@ -234,16 +234,16 @@ Detailed release notes follow. This overview includes changes that affect behavi
  - #781 `10e1a8a306` [Qt] Don't show staking/automint status icons without a wallet (Fuzzbawls)
  - #776 `3fcdc932d9` [Qt] Add a security warning to the debug console's default output. (Fuzzbawls)
  - #747 `feb87c10fa` [GUI] Hide orphans - contextMenu action (random-zebra)
- - #741 `ea2637838c` [GUI] Sort by 'data' in zPIV and coin control dialogs (random-zebra)
+ - #741 `ea2637838c` [GUI] Sort by 'data' in zRPD and coin control dialogs (random-zebra)
  - #733 `9a792d73e9` [GUI] Hide orphans (random-zebra)
  - #735 `44840c5069` [Qt] Stop using dummy strings in clientversion.cpp (Fuzzbawls)
- - #725 `793db15baf` [UI] Sort numbers correctly in zPIV and coin control dialogs (random-zebra)
+ - #725 `793db15baf` [UI] Sort numbers correctly in zRPD and coin control dialogs (random-zebra)
  - #714 `bf2ad88066` [UI] Add address field in receive tab (warrows)
  - #683 `ec1180b52c` [Qt] receivecoinsdialog - address control + clean UI (random-zebra)
  - #677 `29fab5982f` [Qt] change colors for tx labels in history/overview (random-zebra)
  - #693 `022b58257c` [UI] Add address to the payment request history (warrows)
  - #698 `3f35bc81d8` [Qt] Remove Qt4 build support & code fallbacks (Wladimir J. van der Laan)
- - #655 `de0c4e0888` [Qt] Fix PIV balances on overview page (Fuzzbawls)
+ - #655 `de0c4e0888` [Qt] Fix RPD balances on overview page (Fuzzbawls)
  - #680 `71ac5285e5` [Qt] Privacy dialog: hide/show denominations (random-zebra)
  - #675 `8a26ba0b07` [Qt] SwiftX - intuitiveness (random-zebra)
  - #668 `4a68c9ed43` [Qt] Clean up Multisend Dialog UI (Fuzzbawls)
@@ -268,11 +268,11 @@ Detailed release notes follow. This overview includes changes that affect behavi
  - #688 `64071d142d` [Zerocoin]  RPC import/export zerocoins private key standardized + Cleanup in AccPoK and SoK to avoid redundant calculations. (furszy)
 
 ### Wallet
- - #842 `c6c84fe85f` [Wallet] [zPIV] Precomputed Zerocoin Proofs (Fuzzbawls)
+ - #842 `c6c84fe85f` [Wallet] [zRPD] Precomputed Zerocoin Proofs (Fuzzbawls)
  - #817 `37a06eaa93` [Wallet] Fix segfault with runtime -disablewallet (Fuzzbawls)
  - #763 `d4762f7e7a` [Wallet] Add automint address (Fuzzbawls)
- - #759 `19fd0877cd` [Wallet] Avoid failed zPIV spend because of changed seed (warrows)
- - #755 `65be6b611b` [Wallet] Fix zPIV spend when too much mints are selected (warrows)
+ - #759 `19fd0877cd` [Wallet] Avoid failed zRPD spend because of changed seed (warrows)
+ - #755 `65be6b611b` [Wallet] Fix zRPD spend when too much mints are selected (warrows)
  - #734 `5df105fed2` [Staking] Ensure nCredit is correctly initialized in CreateCoinStake (warrows)
  - #730 `394d48b2c9` [Wallet] fix bug with fWalletUnlockAnonymizeOnly flag setting (random-zebra)
  - #715 `30048cce62` [Refactor] Remove GetCoinAge (Fuzzbawls)
@@ -292,7 +292,7 @@ Detailed release notes follow. This overview includes changes that affect behavi
  - #667 `49f9a0fa9e` [Zerocoin] Clean zerocoin bignum file (warrows)
  - #669 `dd6909fd30` [Utils] Fix syntax error in gitian-build.sh (Aitor González)
  - #632 `0d91550ff6` [MoveOnly] Move non-wallet RPC files to subdir (Fuzzbawls)
- - #731 `f7f49cfa7c` [zPIV] Fix bignum overloads when using OpenSSL (Fuzzbawls)
+ - #731 `f7f49cfa7c` [zRPD] Fix bignum overloads when using OpenSSL (Fuzzbawls)
  - #692 `1fde9b2b7a` [Zerocoin] Remove explicit copy assignement operator from Accumulator (warrows)
  - #761 `88a93bd35a` [Refactoring] Abstract out and switch openssl cleanse (Adam Langley)
  - #743 `af0c340fe0` [Refactor] remove CPubKey::GetHex (random-zebra)
@@ -339,4 +339,4 @@ Thanks to everyone who directly contributed to this release:
 - veilgets
 - warrows
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/), the QA team during Testing and the Node hosts supporting our Testnet.
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/rapids-project-translations/), the QA team during Testing and the Node hosts supporting our Testnet.

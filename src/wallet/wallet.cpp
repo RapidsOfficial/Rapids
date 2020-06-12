@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -17,7 +18,7 @@
 #include "swifttx.h"    // mapTxLockReq
 #include "util.h"
 #include "utilmoneystr.h"
-#include "zpivchain.h"
+#include "zrpdchain.h"
 
 #include <boost/algorithm/string/replace.hpp>
 #include <boost/thread.hpp>
@@ -35,7 +36,7 @@ bool fSendFreeTransactions = false;
 bool fPayAtLeastCustomFee = true;
 
 /**
- * Fees smaller than this (in upiv) are considered zero fee (for transaction creation)
+ * Fees smaller than this (in urpd) are considered zero fee (for transaction creation)
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minTxFee 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  * Override with -mintxfee
@@ -1641,9 +1642,9 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate, b
 {
     int ret = 0;
     int64_t nNow = GetTime();
-    bool fCheckZPIV = GetBoolArg("-zapwallettxes", false);
-    if (fCheckZPIV)
-        zpivTracker->Init();
+    bool fCheckZRPD = GetBoolArg("-zapwallettxes", false);
+    if (fCheckZRPD)
+        zrpdTracker->Init();
 
     CBlockIndex* pindex = pindexStart;
     {
@@ -1673,8 +1674,8 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate, b
                     ret++;
             }
 
-            //If this is a zapwallettx, need to readd zpiv
-            if (fCheckZPIV && pindex->nHeight >= Params().GetConsensus().height_start_ZC) {
+            //If this is a zapwallettx, need to readd zrpd
+            if (fCheckZRPD && pindex->nHeight >= Params().GetConsensus().height_start_ZC) {
                 std::list<CZerocoinMint> listMints;
                 BlockToZerocoinMintList(block, listMints, true);
                 CWalletDB walletdb(strWalletFile);

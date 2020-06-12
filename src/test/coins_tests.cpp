@@ -1,5 +1,6 @@
 // Copyright (c) 2014 The Bitcoin Core developers
 // Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -7,7 +8,7 @@
 #include "script/standard.h"
 #include "uint256.h"
 #include "utilstrencodings.h"
-#include "test/test_pivx.h"
+#include "test/test_rapids.h"
 
 #include <vector>
 #include <map>

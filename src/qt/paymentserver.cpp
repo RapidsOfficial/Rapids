@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -42,14 +43,14 @@
 
 
 const int BITCOIN_IPC_CONNECT_TIMEOUT = 1000; // milliseconds
-const QString BITCOIN_IPC_PREFIX("pivx:");
+const QString BITCOIN_IPC_PREFIX("rapids:");
 // BIP70 payment protocol messages
 const char* BIP70_MESSAGE_PAYMENTACK = "PaymentACK";
 const char* BIP70_MESSAGE_PAYMENTREQUEST = "PaymentRequest";
 // BIP71 payment protocol media types
-const char* BIP71_MIMETYPE_PAYMENT = "application/pivx-payment";
-const char* BIP71_MIMETYPE_PAYMENTACK = "application/pivx-paymentack";
-const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/pivx-paymentrequest";
+const char* BIP71_MIMETYPE_PAYMENT = "application/rapids-payment";
+const char* BIP71_MIMETYPE_PAYMENTACK = "application/rapids-paymentack";
+const char* BIP71_MIMETYPE_PAYMENTREQUEST = "application/rapids-paymentrequest";
 // BIP70 max payment request size in bytes (DoS protection)
 const qint64 BIP70_MAX_PAYMENTREQUEST_SIZE = 50000;
 
@@ -76,7 +77,7 @@ namespace // Anon namespace
 //
 static QString ipcServerName()
 {
-    QString name("PIVXQt");
+    QString name("RapidsQt");
 
     // Append a simple hash of the datadir
     // Note that GetDataDir(true) returns a different path
@@ -507,7 +508,7 @@ bool PaymentServer::processPaymentRequest(PaymentRequestPlus& request, SendCoins
             // Append destination address
             addresses.append(QString::fromStdString(CBitcoinAddress(dest).ToString()));
         } else if (!recipient.authenticatedMerchant.isEmpty()) {
-            // Insecure payments to custom pivx addresses are not supported
+            // Insecure payments to custom rapids addresses are not supported
             // (there is no good way to tell the user where they are paying in a way
             // they'd have a chance of understanding).
             Q_EMIT message(tr("Payment request rejected"),

@@ -1,6 +1,7 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -11,10 +12,10 @@
 #include "guiconstants.h"
 #include "guiutil.h"
 #include "walletmodel.h"
-#include "qt/pivx/qtutils.h"
-#include "qt/pivx/loadingdialog.h"
-#include "qt/pivx/defaultdialog.h"
-#include "qt/pivx/pivxgui.h"
+#include "qt/rapids/qtutils.h"
+#include "qt/rapids/loadingdialog.h"
+#include "qt/rapids/defaultdialog.h"
+#include "qt/rapids/rapidsgui.h"
 #include <QDebug>
 
 #include <QKeyEvent>
@@ -191,7 +192,7 @@ void AskPassphraseDialog::accept()
         if (ret) {
             if (newpass1 == newpass2) {
                 newpassCache = newpass1;
-                PIVXGUI* window = static_cast<PIVXGUI*>(parentWidget());
+                RapidsGUI* window = static_cast<RapidsGUI*>(parentWidget());
                 LoadingDialog *dialog = new LoadingDialog(window);
                 dialog->execute(this, 1);
                 openDialogWithOpaqueBackgroundFullScreen(dialog, window);
@@ -313,7 +314,7 @@ bool AskPassphraseDialog::eventFilter(QObject* object, QEvent* event)
 
 bool AskPassphraseDialog::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn)
 {
-    PIVXGUI* gui = static_cast<PIVXGUI*>(parentWidget());
+    RapidsGUI* gui = static_cast<RapidsGUI*>(parentWidget());
     DefaultDialog *confirmDialog = new DefaultDialog(gui);
     confirmDialog->setText(title, body, okBtn, cancelBtn);
     confirmDialog->adjustSize();
@@ -326,7 +327,7 @@ bool AskPassphraseDialog::openStandardDialog(QString title, QString body, QStrin
 void AskPassphraseDialog::warningMessage()
 {
     hide();
-    static_cast<PIVXGUI*>(parentWidget())->showHide(true);
+    static_cast<RapidsGUI*>(parentWidget())->showHide(true);
     openStandardDialog(
             tr("Wallet encrypted"),
             "<qt>" +

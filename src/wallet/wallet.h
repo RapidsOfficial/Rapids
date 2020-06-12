@@ -2,6 +2,7 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -20,7 +21,7 @@
 #include "pairresult.h"
 #include "primitives/block.h"
 #include "primitives/transaction.h"
-#include "zpiv/zerocoin.h"
+#include "zrpd/zerocoin.h"
 #include "guiinterface.h"
 #include "util.h"
 #include "util/memory.h"
@@ -28,9 +29,9 @@
 #include "wallet/wallet_ismine.h"
 #include "wallet/scriptpubkeyman.h"
 #include "wallet/walletdb.h"
-#include "zpiv/zpivmodule.h"
-#include "zpiv/zpivwallet.h"
-#include "zpiv/zpivtracker.h"
+#include "zrpd/zrpdmodule.h"
+#include "zrpd/zrpdwallet.h"
+#include "zrpd/zrpdtracker.h"
 
 #include <algorithm>
 #include <map>
@@ -82,7 +83,7 @@ enum WalletFeature {
     FEATURE_WALLETCRYPT = 40000, // wallet encryption
     FEATURE_COMPRPUBKEY = 60000, // compressed public keys
 
-    FEATURE_PRE_PIVX = 61000, // inherited version..
+    FEATURE_PRE_Rapids = 61000, // inherited version..
 
     // The following features were implemented in BTC but not in our wallet, we can simply skip them.
     // FEATURE_HD = 130000,  Hierarchical key derivation after BIP32 (HD Wallet)
@@ -101,23 +102,23 @@ enum AvailableCoinsType {
 
 // Possible states for zRPD send
 enum ZerocoinSpendStatus {
-    ZPIV_SPEND_OKAY = 0,                            // No error
-    ZPIV_SPEND_ERROR = 1,                           // Unspecified class of errors, more details are (hopefully) in the returning text
-    ZPIV_WALLET_LOCKED = 2,                         // Wallet was locked
-    ZPIV_COMMIT_FAILED = 3,                         // Commit failed, reset status
-    ZPIV_ERASE_SPENDS_FAILED = 4,                   // Erasing spends during reset failed
-    ZPIV_ERASE_NEW_MINTS_FAILED = 5,                // Erasing new mints during reset failed
-    ZPIV_TRX_FUNDS_PROBLEMS = 6,                    // Everything related to available funds
-    ZPIV_TRX_CREATE = 7,                            // Everything related to create the transaction
-    ZPIV_TRX_CHANGE = 8,                            // Everything related to transaction change
-    ZPIV_TXMINT_GENERAL = 9,                        // General errors in MintsToInputVectorPublicSpend
-    ZPIV_INVALID_COIN = 10,                         // Selected mint coin is not valid
-    ZPIV_FAILED_ACCUMULATOR_INITIALIZATION = 11,    // Failed to initialize witness
-    ZPIV_INVALID_WITNESS = 12,                      // Spend coin transaction did not verify
-    ZPIV_BAD_SERIALIZATION = 13,                    // Transaction verification failed
-    ZPIV_SPENT_USED_ZPIV = 14,                      // Coin has already been spend
-    ZPIV_TX_TOO_LARGE = 15,                         // The transaction is larger than the max tx size
-    ZPIV_SPEND_V1_SEC_LEVEL                         // Spend is V1 and security level is not set to 100
+    ZRPD_SPEND_OKAY = 0,                            // No error
+    ZRPD_SPEND_ERROR = 1,                           // Unspecified class of errors, more details are (hopefully) in the returning text
+    ZRPD_WALLET_LOCKED = 2,                         // Wallet was locked
+    ZRPD_COMMIT_FAILED = 3,                         // Commit failed, reset status
+    ZRPD_ERASE_SPENDS_FAILED = 4,                   // Erasing spends during reset failed
+    ZRPD_ERASE_NEW_MINTS_FAILED = 5,                // Erasing new mints during reset failed
+    ZRPD_TRX_FUNDS_PROBLEMS = 6,                    // Everything related to available funds
+    ZRPD_TRX_CREATE = 7,                            // Everything related to create the transaction
+    ZRPD_TRX_CHANGE = 8,                            // Everything related to transaction change
+    ZRPD_TXMINT_GENERAL = 9,                        // General errors in MintsToInputVectorPublicSpend
+    ZRPD_INVALID_COIN = 10,                         // Selected mint coin is not valid
+    ZRPD_FAILED_ACCUMULATOR_INITIALIZATION = 11,    // Failed to initialize witness
+    ZRPD_INVALID_WITNESS = 12,                      // Spend coin transaction did not verify
+    ZRPD_BAD_SERIALIZATION = 13,                    // Transaction verification failed
+    ZRPD_SPENT_USED_ZRPD = 14,                      // Coin has already been spend
+    ZRPD_TX_TOO_LARGE = 15,                         // The transaction is larger than the max tx size
+    ZRPD_SPEND_V1_SEC_LEVEL                         // Spend is V1 and security level is not set to 100
 };
 
 struct CompactTallyItem {
@@ -590,7 +591,7 @@ public:
     //- ZC Mints (Only for regtest)
     std::string MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const CCoinControl* coinControl = NULL);
     std::string MintZerocoinFromOutPoint(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const std::vector<COutPoint> vOutpts);
-    bool CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, CTxOut& outMint, CDeterministicMint& dMint);
+    bool CreateZRPDOutPut(libzerocoin::CoinDenomination denomination, CTxOut& outMint, CDeterministicMint& dMint);
     bool CreateZerocoinMintTransaction(const CAmount nValue,
             CMutableTransaction& txNew,
             std::vector<CDeterministicMint>& vDMints,
@@ -618,10 +619,10 @@ public:
     std::map<libzerocoin::CoinDenomination, CAmount> GetMyZerocoinDistribution() const;
 
     // zRPD wallet
-    CzPIVWallet* zwalletMain{nullptr};
-    std::unique_ptr<CzPIVTracker> zpivTracker{nullptr};
-    void setZWallet(CzPIVWallet* zwallet);
-    CzPIVWallet* getZWallet();
+    CzRPDWallet* zwalletMain{nullptr};
+    std::unique_ptr<CzRPDTracker> zrpdTracker{nullptr};
+    void setZWallet(CzRPDWallet* zwallet);
+    CzRPDWallet* getZWallet();
     bool IsMyZerocoinSpend(const CBigNum& bnSerial) const;
     bool IsMyMint(const CBigNum& bnValue) const;
     std::string ResetMintZerocoin();
@@ -636,7 +637,7 @@ public:
     // Zerocoin entry changed. (called with lock cs_wallet held)
     boost::signals2::signal<void(CWallet* wallet, const std::string& pubCoin, const std::string& isUsed, ChangeType status)> NotifyZerocoinChanged;
     // zRPD reset
-    boost::signals2::signal<void()> NotifyzPIVReset;
+    boost::signals2::signal<void()> NotifyzRPDReset;
 
     /* Wallets parameter interaction */
     static bool ParameterInteraction();

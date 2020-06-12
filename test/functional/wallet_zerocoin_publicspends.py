@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2019 The PIVX developers
+# Copyright (c) 2018-2020 The Rapids developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -10,7 +11,7 @@ Tests v2, v3 and v4 Zerocoin Spends
 from time import sleep
 
 from test_framework.authproxy import JSONRPCException
-from test_framework.test_framework import PivxTestFramework
+from test_framework.test_framework import RapidsTestFramework
 from test_framework.util import (
     sync_blocks,
     assert_equal,
@@ -20,7 +21,7 @@ from test_framework.util import (
 )
 
 
-class ZerocoinSpendTest(PivxTestFramework):
+class ZerocoinSpendTest(RapidsTestFramework):
 
     def set_test_params(self):
         self.num_nodes = 3
@@ -62,13 +63,13 @@ class ZerocoinSpendTest(PivxTestFramework):
         def get_zerocoin_data(coin):
             return coin["s"], coin["r"], coin["k"], coin["id"], coin["d"], coin["t"]
 
-        def check_balances(denom, zpiv_bal, piv_bal):
-            zpiv_bal -= denom
-            assert_equal(self.nodes[2].getzerocoinbalance()['Total'], zpiv_bal)
-            piv_bal += denom
+        def check_balances(denom, zrpd_bal, rpd_bal):
+            zrpd_bal -= denom
+            assert_equal(self.nodes[2].getzerocoinbalance()['Total'], zrpd_bal)
+            rpd_bal += denom
             wi = self.nodes[2].getwalletinfo()
-            assert_equal(wi['balance'] + wi['immature_balance'], piv_bal)
-            return zpiv_bal, piv_bal
+            assert_equal(wi['balance'] + wi['immature_balance'], rpd_bal)
+            return zrpd_bal, rpd_bal
 
         def stake_4_blocks(block_time):
             for peer in range(2):
@@ -84,9 +85,9 @@ class ZerocoinSpendTest(PivxTestFramework):
         # Start with cache balances
         wi = self.nodes[2].getwalletinfo()
         balance = wi['balance'] + wi['immature_balance']
-        zpiv_balance = self.nodes[2].getzerocoinbalance()['Total']
+        zrpd_balance = self.nodes[2].getzerocoinbalance()['Total']
         assert_equal(balance, DecimalAmt(13833.92))
-        assert_equal(zpiv_balance, 6666)
+        assert_equal(zrpd_balance, 6666)
 
         # Export zerocoin data
         listmints = self.nodes[2].listmintedzerocoins(True, True)
@@ -112,7 +113,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         # stake 4 blocks - check it gets included on chain and check balances
         block_time = stake_4_blocks(block_time)
         self.check_tx_in_chain(0, txid)
-        zpiv_balance, balance = check_balances(denom_2, zpiv_balance, balance)
+        zrpd_balance, balance = check_balances(denom_2, zrpd_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v3) PASSED")
 
         # 3) Check double spends - spend v3
@@ -131,7 +132,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         # stake 4 blocks - check it gets included on chain and check balances
         block_time = stake_4_blocks(block_time)
         self.check_tx_in_chain(0, txid)
-        zpiv_balance, balance = check_balances(denom_3, zpiv_balance, balance)
+        zrpd_balance, balance = check_balances(denom_3, zrpd_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v4) PASSED")
 
         # 6) Check double spends - spend v4
@@ -141,7 +142,7 @@ class ZerocoinSpendTest(PivxTestFramework):
 
         # 7) Try to relay old v3 spend now (serial_1)
         self.log.info("Trying to send old v3 spend now...")
-        assert_raises_rpc_error(-26, "bad-txns-invalid-zpiv",
+        assert_raises_rpc_error(-26, "bad-txns-invalid-zrpd",
                                 self.nodes[2].sendrawtransaction, old_spend_v3)
         self.log.info("GOOD: Old transaction not sent.")
 
@@ -160,7 +161,7 @@ class ZerocoinSpendTest(PivxTestFramework):
         self.check_tx_in_chain(0, txid)
         # need to reset spent mints since this was a raw broadcast
         self.nodes[2].resetmintzerocoin()
-        _, _ = check_balances(denom_1, zpiv_balance, balance)
+        _, _ = check_balances(denom_1, zrpd_balance, balance)
         self.log.info("--> VALID PUBLIC COIN SPEND (v3) PASSED")
 
 

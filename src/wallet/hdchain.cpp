@@ -1,4 +1,4 @@
-// Copyright (c) 2020 The PIVX Core developers
+// Copyright (c) 2020 The Rapids Core developers
 // Distributed under the MIT software license, see the accompanying
 #include "wallet/hdchain.h"
 

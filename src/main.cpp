@@ -5,6 +5,7 @@
 // Copyright (c) 2013-2014 The NovaCoin Developers
 // Copyright (c) 2014-2018 The BlackCoin Developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -38,12 +39,12 @@
 #include "util.h"
 #include "utilmoneystr.h"
 #include "validationinterface.h"
-#include "zpivchain.h"
+#include "zrpdchain.h"
 
 #include "invalid.h"
 #include "libzerocoin/Denominations.h"
 #include "masternode-sync.h"
-#include "zpiv/zerocoin.h"
+#include "zrpd/zerocoin.h"
 #include <sstream>
 
 #include <boost/algorithm/string/replace.hpp>
@@ -58,7 +59,7 @@ using namespace boost;
 using namespace std;
 
 #if defined(NDEBUG)
-#error "PIVX cannot be compiled without assertions."
+#error "Rapids cannot be compiled without assertions."
 #endif
 
 /**
@@ -104,7 +105,7 @@ unsigned int nCoinCacheSize = 5000;
 /* If the tip is older than this (in seconds), the node is considered to be in initial block download. */
 int64_t nMaxTipAge = DEFAULT_MAX_TIP_AGE;
 
-/** Fees smaller than this (in upiv) are considered zero fee (for relaying and mining)
+/** Fees smaller than this (in urpd) are considered zero fee (for relaying and mining)
  * We are ~100 times smaller then bitcoin now (2015-06-23), set minRelayTxFee only 10 times higher
  * so it's still 10 times lower comparing to bitcoin.
  */
@@ -1051,21 +1052,21 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                 // Only allow for public zc spends inputs
                 if (!txIn.IsZerocoinPublicSpend())
                     return state.Invalid(error("%s: failed for tx %s, every input must be a zcpublicspend",
-                            __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                            __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zrpd");
 
                 libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
                 PublicCoinSpend publicSpend(params);
-                if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
+                if (!ZRPDModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
                     return false;
                 }
                 if (!ContextualCheckZerocoinSpend(tx, &publicSpend, chainHeight, UINT256_ZERO))
                     return state.Invalid(error("%s: ContextualCheckZerocoinSpend failed for tx %s",
-                            __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                            __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-zrpd");
 
                 // Check that the version matches the one enforced with SPORK_18
                 if (!CheckPublicCoinSpendVersion(publicSpend.getVersion())) {
                     return state.Invalid(error("%s : Public Zerocoin spend version %d not accepted. must be version %d.",
-                            __func__, publicSpend.getVersion(), CurrentPublicCoinSpendVersion()), REJECT_INVALID, "bad-txns-invalid-zpiv");
+                            __func__, publicSpend.getVersion(), CurrentPublicCoinSpendVersion()), REJECT_INVALID, "bad-txns-invalid-zrpd");
                 }
 
             }
@@ -1881,7 +1882,7 @@ void AddInvalidSpendsToMap(const CBlock& block)
                 if (isPublicSpend) {
                     PublicCoinSpend publicSpend(params);
                     CValidationState state;
-                    if (!ZPIVModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
+                    if (!ZRPDModule::ParseZerocoinPublicSpend(in, tx, state, publicSpend)){
                         throw std::runtime_error("Failed to parse public spend");
                     }
                     spend = &publicSpend;
@@ -2075,7 +2076,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
         return error("DisconnectBlock() : block and undo data inconsistent");
 
     //Track zRPD money supply
-    if (!UpdateZPIVSupplyDisconnect(block, pindex))
+    if (!UpdateZRPDSupplyDisconnect(block, pindex))
         return error("%s: Failed to calculate new zRPD supply", __func__);
 
     // undo transactions in reverse order
@@ -2083,7 +2084,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
         const CTransaction& tx = block.vtx[i];
 
         /** UNDO ZEROCOIN DATABASING
-         * note we only undo zerocoin databasing in the following statement, value to and from PIVX
+         * note we only undo zerocoin databasing in the following statement, value to and from Rapids
          * addresses should still be handled by the typical bitcoin based undo code
          * */
         if (tx.ContainsZerocoins()) {
@@ -2097,7 +2098,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
                         if (isPublicSpend) {
                             PublicCoinSpend publicSpend(params);
                             CValidationState state;
-                            if (!ZPIVModule::ParseZerocoinPublicSpend(txin, tx, state, publicSpend)) {
+                            if (!ZRPDModule::ParseZerocoinPublicSpend(txin, tx, state, publicSpend)) {
                                 return error("Failed to parse public spend");
                             }
                             serial = publicSpend.getCoinSerialNumber();
@@ -2242,7 +2243,7 @@ static CCheckQueue<CScriptCheck> scriptcheckqueue(128);
 
 void ThreadScriptCheck()
 {
-    util::ThreadRename("pivx-scriptch");
+    util::ThreadRename("rapids-scriptch");
     scriptcheckqueue.Thread();
 }
 
@@ -2364,7 +2365,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 if (isPublicSpend) {
                     libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
                     PublicCoinSpend publicSpend(params);
-                    if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
+                    if (!ZRPDModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
                         return false;
                     }
                     nValueIn += publicSpend.getDenomination() * COIN;
@@ -2516,7 +2517,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     view.SetBestBlock(pindex->GetBlockHash());
 
     // Update zRPD money supply map
-    if (!UpdateZPIVSupplyConnect(block, pindex, fJustCheck)) {
+    if (!UpdateZRPDSupplyConnect(block, pindex, fJustCheck)) {
         return state.DoS(100, error("%s: Failed to calculate new zRPD supply for block=%s height=%d", __func__,
                                     block.GetHash().GetHex(), pindex->nHeight), REJECT_INVALID);
     }
@@ -2524,7 +2525,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     // A one-time event where the zRPD supply was off (due to serial duplication off-chain on main net)
     if (Params().NetworkID() == CBaseChainParams::MAIN && pindex->nHeight == consensus.height_last_ZC_WrappedSerials + 1
             && GetZerocoinSupply() != consensus.ZC_WrappedSerialsSupply + GetWrapppedSerialInflationAmount()) {
-        RecalculatePIVSupply(consensus.height_start_ZC, false);
+        RecalculateRPDSupply(consensus.height_start_ZC, false);
     }
 
     // Add fraudulent funds to the supply and remove any recovered funds.
@@ -3548,7 +3549,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
                 nHeight = (*mi).second->nHeight + 1;
         }
 
-        // PIVX
+        // Rapids
         // It is entierly possible that we don't have enough data and this could fail
         // (i.e. the block could indeed be valid). Store the block for later consideration
         // but issue an initial reject message.
@@ -3600,7 +3601,7 @@ bool CheckBlock(const CBlock& block, CValidationState& state, bool fCheckPOW, bo
                     if (isPublicSpend) {
                         libzerocoin::ZerocoinParams* params = Params().GetConsensus().Zerocoin_Params(false);
                         PublicCoinSpend publicSpend(params);
-                        if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
+                        if (!ZRPDModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
                             return false;
                         }
                         spend = publicSpend;
@@ -3654,11 +3655,11 @@ bool CheckWork(const CBlock block, CBlockIndex* const pindexPrev)
     }
 
     if (block.nBits != nBitsRequired) {
-        // Pivx Specific reference to the block with the wrong threshold was used.
+        // Rapids Specific reference to the block with the wrong threshold was used.
         const Consensus::Params& consensus = Params().GetConsensus();
-        if ((block.nTime == (uint32_t) consensus.nPivxBadBlockTime) &&
-                (block.nBits == (uint32_t) consensus.nPivxBadBlockBits)) {
-            // accept PIVX block minted with incorrect proof of work threshold
+        if ((block.nTime == (uint32_t) consensus.nRapidsBadBlockTime) &&
+                (block.nBits == (uint32_t) consensus.nRapidsBadBlockBits)) {
+            // accept Rapids block minted with incorrect proof of work threshold
             return true;
         }
 
@@ -3909,7 +3910,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
         CTransaction &stakeTxIn = block.vtx[1];
 
         // Inputs
-        std::vector<CTxIn> pivInputs;
+        std::vector<CTxIn> rpdInputs;
 
         // Check whether is a fork or not
         if (isBlockFromFork) {
@@ -3938,7 +3939,7 @@ bool AcceptBlock(CBlock& block, CValidationState& state, CBlockIndex** ppindex, 
                 for (const CTransaction &t : bl.vtx) {
                     for (const CTxIn &in: t.vin) {
                         // Loop through every input of the staking tx
-                        for (const CTxIn &stakeIn : pivInputs) {
+                        for (const CTxIn &stakeIn : rpdInputs) {
                             if (stakeIn.prevout == in.prevout) {
                                 return state.DoS(100, error("%s: input already spent on a previous block", __func__));
                             }
@@ -5122,7 +5123,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             return true;
         }
 
-        // PIVX: We use certain sporks during IBD, so check to see if they are
+        // Rapids: We use certain sporks during IBD, so check to see if they are
         // available. If not, ask the first peer connected for them.
         // TODO: Move this to an instant broadcast of the sporks.
         bool fMissingSporks = !pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) ||

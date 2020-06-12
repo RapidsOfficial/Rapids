@@ -5,7 +5,7 @@
 """Test node disconnect and ban behavior"""
 import time
 
-from test_framework.test_framework import PivxTestFramework
+from test_framework.test_framework import RapidsTestFramework
 from test_framework.util import (
     assert_equal,
     connect_nodes,
@@ -13,7 +13,7 @@ from test_framework.util import (
     wait_until,
 )
 
-class DisconnectBanTest(PivxTestFramework):
+class DisconnectBanTest(RapidsTestFramework):
     def set_test_params(self):
         self.num_nodes = 2
 
