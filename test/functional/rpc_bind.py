@@ -7,11 +7,11 @@
 import socket
 import sys
 
-from test_framework.test_framework import PivxTestFramework, SkipTest
+from test_framework.test_framework import RapidsTestFramework, SkipTest
 from test_framework.util import *
 from test_framework.netutil import *
 
-class RPCBindTest(PivxTestFramework):
+class RPCBindTest(RapidsTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1

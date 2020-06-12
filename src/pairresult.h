@@ -1,9 +1,10 @@
 // Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PIVX_PAIRRESULT_H
-#define PIVX_PAIRRESULT_H
+#ifndef Rapids_PAIRRESULT_H
+#define Rapids_PAIRRESULT_H
 
 
 class PairResult {
@@ -17,4 +18,4 @@ public:
 };
 
 
-#endif //PIVX_PAIRRESULT_H
+#endif //Rapids_PAIRRESULT_H

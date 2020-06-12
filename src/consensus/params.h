@@ -64,8 +64,8 @@ struct Params {
     int height_new_client;
 
     // validation by-pass
-    int64_t nPivxBadBlockTime;
-    unsigned int nPivxBadBlockBits;
+    int64_t nRapidsBadBlockTime;
+    unsigned int nRapidsBadBlockBits;
 
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }

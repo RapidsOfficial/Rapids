@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Rapids Core
+Comment=Rapids P2P Cryptocurrency
+Comment[fr]=Rapids, monnaie virtuelle cryptographique pair à pair
+Comment[tr]=Rapids, eşten eşe kriptografik sanal para birimi
+Exec=rapids-qt %u
+Terminal=false
+Type=Application
+Icon=rapids128
+MimeType=x-scheme-handler/rapids;
+Categories=Office;Finance;
+StartupWMClass=Rapids-qt

@@ -4,7 +4,7 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test various net timeouts.
 
-- Create three pivxd nodes:
+- Create three rapidsd nodes:
 
     no_verack_node - we never send a verack in response to their version
     no_version_node - we never send a version (only a ping)
@@ -24,7 +24,7 @@
 from time import sleep
 
 from test_framework.mininode import *
-from test_framework.test_framework import PivxTestFramework
+from test_framework.test_framework import RapidsTestFramework
 from test_framework.util import *
 
 class TestNode(P2PInterface):
@@ -32,7 +32,7 @@ class TestNode(P2PInterface):
         # Don't send a verack in response
         pass
 
-class TimeoutsTest(PivxTestFramework):
+class TimeoutsTest(RapidsTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
         self.num_nodes = 1

@@ -131,8 +131,8 @@
         </spacer>
        </item>
        <item>
-        <widget class="QWidget" name="verticalZpivOptionsWidget" native="true">
-         <layout class="QVBoxLayout" name="verticalZpivOptionsLayout">
+        <widget class="QWidget" name="verticalZrpdOptionsWidget" native="true">
+         <layout class="QVBoxLayout" name="verticalZrpdOptionsLayout">
           <property name="margin">
            <number>0</number>
           </property>
@@ -533,7 +533,7 @@
          </property>
          <property name="text">
           <string>Language missing or translation incomplete? Help contributing translations here:
-https://www.transifex.com/pivx-project/pivx-project-translations</string>
+https://www.transifex.com/rapids-project/rapids-project-translations</string>
          </property>
          <property name="wordWrap">
           <bool>true</bool>
@@ -561,8 +561,8 @@ https://www.transifex.com/pivx-project/pivx-project-translations</string>
         </layout>
        </item>
        <item>
-        <widget class="QWidget" name="verticalZpivDisplayWidget" native="true">
-         <layout class="QVBoxLayout" name="verticalZpivDisplayLayout">
+        <widget class="QWidget" name="verticalZrpdDisplayWidget" native="true">
+         <layout class="QVBoxLayout" name="verticalZrpdDisplayLayout">
           <property name="margin">
            <number>0</number>
           </property>

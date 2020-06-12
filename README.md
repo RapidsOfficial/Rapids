@@ -3,7 +3,7 @@
 Rapids staging tree 2.0
 =======================
 
-rebased over PIVX 4.1 (https://github.com/PIVX-Project/PIVX/tree/4.1)
+rebased over Rapids 4.1 (https://github.com/RapidsOfficial/Rapids/tree/4.1)
 
 
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
@@ -17,7 +17,7 @@ Rapids is a digital currency that enpowers users to send instant payments anywhe
 
 License
 =================================================
-Rapids is released under the terms of the MIT license. See [COPYING](https://github.com/RapidsOfficial/Rapids/blob/master/COPYING) for more information or see https://opensource.org/licenses/MIT.
+Rapids is released under the terms of the MIT license. See [COPYING](https://github.com/RapidsOfficial/Rapids/blob/develop/COPYING) for more information or see https://opensource.org/licenses/MIT.
 
 Specifications
 =================================================

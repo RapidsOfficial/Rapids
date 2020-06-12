@@ -1,24 +1,24 @@
-PIVX Core version *3.1.1* is now available from:  <https://github.com/pivx-project/pivx/releases>
+Rapids Core version *3.1.1* is now available from:  <https://github.com/RapidsOfficial/Rapids/releases>
 
 This is a new minor version release, including various bug fixes and performance improvements, as well as updated translations.
 
-Please report bugs using the issue tracker at github: <https://github.com/pivx-project/pivx/issues>
+Please report bugs using the issue tracker at github: <https://github.com/RapidsOfficial/Rapids/issues>
 
 Non-Mandatory Update
 ==============
 
-PIVX Core v3.1.1 is a non-mandatory update to address bugs and introduce minor enhancements that do not require a network change.
+Rapids Core v3.1.1 is a non-mandatory update to address bugs and introduce minor enhancements that do not require a network change.
 
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/PIVX-Qt (on Mac) or pivxd/pivx-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/Rapids-Qt (on Mac) or rapidsd/rapids-qt (on Linux).
 
 
 Compatibility
 ==============
 
-PIVX Core is extensively tested on multiple operating systems using
+Rapids Core is extensively tested on multiple operating systems using
 the Linux kernel, macOS 10.8+, and Windows Vista and later.
 
 Microsoft ended support for Windows XP on [April 8th, 2014](https://www.microsoft.com/en-us/WindowsForBusiness/end-of-xp-support),
@@ -26,7 +26,7 @@ No attempt is made to prevent installing or running the software on Windows XP, 
 can still do so at your own risk but be aware that there are known instabilities and issues.
 Please do not report issues about Windows XP to the issue tracker.
 
-PIVX Core should also work on most other Unix-like systems but is not
+Rapids Core should also work on most other Unix-like systems but is not
 frequently tested on them.
 
 ### :exclamation::exclamation::exclamation: MacOS 10.13 High Sierra :exclamation::exclamation::exclamation:
@@ -36,16 +36,16 @@ frequently tested on them.
 Notable Changes
 ==============
 
-zPIV Updates
+zRPD Updates
 --------------
 
-### Fix spending for v1 zPIV created before block 1050020
+### Fix spending for v1 zRPD created before block 1050020
 
-The transition to v2 zPIV and reset of the accumulators caused blocks 1050000 - 1050010 to be accumulated twice. This was causing a number v1 zPIV to not create valid witnesses, and thus were not spendable. This problem is fixed by double accumulating blocks 1050000-1050010 when creating the witness. Any user that had issues spending zPIV v1 will now be able to convert that into PIV and then zPIV v2 (if desired).
+The transition to v2 zRPD and reset of the accumulators caused blocks 1050000 - 1050010 to be accumulated twice. This was causing a number v1 zRPD to not create valid witnesses, and thus were not spendable. This problem is fixed by double accumulating blocks 1050000-1050010 when creating the witness. Any user that had issues spending zRPD v1 will now be able to convert that into RPD and then zRPD v2 (if desired).
 
 ### Adjustment to staking properties to reduce orphaned blocks
 
-zPIV stake set to update more frequently and lowering the stake hashdrift to 30 seconds to reduce the number of orphans being experienced by PIVX stakers.
+zRPD stake set to update more frequently and lowering the stake hashdrift to 30 seconds to reduce the number of orphans being experienced by Rapids stakers.
 
 Further work is being done to improve the efficiently of zPoS beyond this, and will be available in a subsequent release at a later date.
 
@@ -57,7 +57,7 @@ User Experience
 
 Fixes a display issue introduced with a previous change. This was a "display only" issue, all your coins were there all the time.
 
-### Show progress percent for zpiv reindex operations
+### Show progress percent for zrpd reindex operations
 
 When starting the wallet with `-reindexaccumulators` and/or `-reindexzerocoin`, these operations can take a considerable time to complete depending on system hardware. A progress percent on the splash screen is now shown for these processes to avoid confusion in thinking that the wallet has frozen.
 
@@ -67,7 +67,7 @@ When starting the wallet with `-reindexaccumulators` and/or `-reindexzerocoin`, 
 An icon is now shown for clients that are connected and operating over the TOR network. Included is a mouse-over tooltip showing the onion address associated with the client. This icon is only shown when a connection to the TOR network can be established, and will be hidden otherwise.
 
 
-PIVX Daemon & Client (RPC Changes)
+Rapids Daemon & Client (RPC Changes)
 --------------
 
 ### Fix listtransactions RPC function
@@ -81,7 +81,7 @@ Technical Changes
 
 ### Switch to libsecp256k1 signature verification
 
-Here is the long overdue update for PIVX to let go of OpenSSL in its consensus code. The rationale behind it is to avoid depending on an external and changing library where our consensus code is affected. This is security and consensus critical. PIVX users will experience quicker block validations and sync times as block transactions are verified under libsecp256k1.
+Here is the long overdue update for Rapids to let go of OpenSSL in its consensus code. The rationale behind it is to avoid depending on an external and changing library where our consensus code is affected. This is security and consensus critical. Rapids users will experience quicker block validations and sync times as block transactions are verified under libsecp256k1.
 
 The recent [CVE-2018-0495](https://www.nccgroup.trust/us/our-research/technical-advisory-return-of-the-hidden-number-problem/) brings into question a potential vulnerability with OpenSSL (and other crypto libraries) that libsecp256k1 is not susceptible to.
 
@@ -93,7 +93,7 @@ Secondary improvement area is in ConnectBlock() when multiple zerocoin transacti
 
 ### Resolution of excessive peer banning
 
-It was found that following a forced closure of the PIVX core wallet (ungraceful), a situation could arise that left partial/incomplete data in the disk cache. This caused the client to fail a basic sanity test and ban any peer which was sending the (complete) data. This, in turn, was causing the wallet to become stuck. This issue has been resolved client side by guarding against this partial/incomplete data in the disk cache.
+It was found that following a forced closure of the Rapids core wallet (ungraceful), a situation could arise that left partial/incomplete data in the disk cache. This caused the client to fail a basic sanity test and ban any peer which was sending the (complete) data. This, in turn, was causing the wallet to become stuck. This issue has been resolved client side by guarding against this partial/incomplete data in the disk cache.
 
 *3.1.1* Change log
 --------------
@@ -102,7 +102,7 @@ Detailed release notes follow. This overview includes changes that affect behavi
 
 ### Core Features
  - #549 `8bf13a5ad` [Crypto] Switch to libsecp256k1 signature verification and update the lib (warrows)
- - #609 `6b73598b9` [MoveOnly] Remove zPIV code from main.cpp (presstab)
+ - #609 `6b73598b9` [MoveOnly] Remove zRPD code from main.cpp (presstab)
  - #610 `6c3bc8c76` [Main] Check whether tx is in chain in ContextualCheckZerocoinMint(). (presstab)
  - #624 `1a82aec96` [Core] Missing seesaw value for block 325000 (warrows)
  - #636 `d359c6136` [Main] Write to the zerocoinDB in batches (Fuzzbawls)
@@ -120,15 +120,15 @@ Detailed release notes follow. This overview includes changes that affect behavi
 ### GUI
  - #580 `c296b7572` Fixed Multisend dialog to show settings properly (SHTDJ)
  - #598 `f0d894253` [GUI] Fix wrongly displayed balance on Overview tab (Mrs-X)
- - #600 `217433561` [GUI] Only enable/disable PrivacyDialog zPIV elements if needed. (presstab)
- - #612 `6dd752cb5` [Qt] Show progress percent for zpiv reindex operations (Fuzzbawls)
+ - #600 `217433561` [GUI] Only enable/disable PrivacyDialog zRPD elements if needed. (presstab)
+ - #612 `6dd752cb5` [Qt] Show progress percent for zrpd reindex operations (Fuzzbawls)
  - #626 `9b6a42ba0` [Qt] Add Tor service icon to status bar (Fuzzbawls)
  - #629 `14e125795` [Qt] Remove useless help button from QT dialogs (windows) (warrows)
  - #646 `c66b7b632` [Qt] Periodic translation update (Fuzzbawls)
  
 ### Wallet
  - #597 `766d5196c` [Wallet] Write new transactions to wtxOrdered properly (Fuzzbawls)
- - #603 `779d8d597` Fix spending for v1 zPIV created before block 1050020. (presstab)
+ - #603 `779d8d597` Fix spending for v1 zRPD created before block 1050020. (presstab)
  - #617 `6b525f0df` [Wallet] Adjust staking properties to lower orphan rates. (presstab)
  - #625 `5f2e61d60` [Wallet] Add some LOCK to avoid crash (warrows)
  
@@ -151,4 +151,4 @@ Thanks to everyone who directly contributed to this release:
  - presstab
 
 
-As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/pivx-project-translations/).
+As well as everyone that helped translating on [Transifex](https://www.transifex.com/projects/p/rapids-project-translations/).

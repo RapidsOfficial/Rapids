@@ -4,11 +4,11 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the wallet accounts properly when there is a double-spend conflict."""
 
-from test_framework.test_framework import PivxTestFramework
+from test_framework.test_framework import RapidsTestFramework
 from test_framework.util import *
 import time
 
-class TxnMallTest(PivxTestFramework):
+class TxnMallTest(RapidsTestFramework):
     def set_test_params(self):
         self.num_nodes = 4
 
@@ -23,7 +23,7 @@ class TxnMallTest(PivxTestFramework):
         disconnect_nodes(self.nodes[2], 1)
 
     def run_test(self):
-        # All nodes should start with 6,250 PIV:
+        # All nodes should start with 6,250 RPD:
         starting_balance = 6250
         for i in range(4):
             assert_equal(self.nodes[i].getbalance(), starting_balance)

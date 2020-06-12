@@ -1,11 +1,12 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2016 The Dash developers
 // Copyright (c) 2017-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PIVX_QT_WALLETMODEL_H
-#define PIVX_QT_WALLETMODEL_H
+#ifndef Rapids_QT_WALLETMODEL_H
+#define Rapids_QT_WALLETMODEL_H
 
 #include "askpassphrasedialog.h"
 #include "paymentrequestplus.h"
@@ -207,7 +208,7 @@ public:
     // Mint zRPD
     bool mintCoins(CAmount value, CCoinControl* coinControl, std::string &strError);
 
-    bool createZpivSpend(
+    bool createZrpdSpend(
             CWalletTx &wtxNew,
             std::vector<CZerocoinMint> &vMintsSelected,
             CZerocoinSpendReceipt &receipt,
@@ -215,14 +216,14 @@ public:
             std::string changeAddress = ""
     );
 
-    bool sendZpiv(
+    bool sendZrpd(
             std::vector<CZerocoinMint> &vMintsSelected,
             CZerocoinSpendReceipt &receipt,
             std::list<std::pair<CBitcoinAddress*, CAmount>> outputs,
             std::string changeAddress = ""
     );
 
-    bool convertBackZpiv(
+    bool convertBackZrpd(
             CAmount value,
             std::vector<CZerocoinMint> &vMintsSelected,
             CZerocoinSpendReceipt &receipt
@@ -396,4 +397,4 @@ public Q_SLOTS:
     bool updateAddressBookLabels(const CTxDestination& address, const std::string& strName, const std::string& strPurpose);
 };
 
-#endif // PIVX_QT_WALLETMODEL_H
+#endif // Rapids_QT_WALLETMODEL_H

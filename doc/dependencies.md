@@ -1,7 +1,7 @@
 Dependencies
 ============
 
-These are the dependencies currently used by PIVX Core. You can find instructions for installing them in the `build-*.md` file for your platform.
+These are the dependencies currently used by Rapids Core. You can find instructions for installing them in the `build-*.md` file for your platform.
 
 | Dependency | Version used | Minimum required | CVEs | Shared | [Bundled Qt library](https://doc.qt.io/qt-5/configure-options.html#third-party-libraries) |
 | --- | --- | --- | --- | --- | --- |
@@ -15,19 +15,19 @@ These are the dependencies currently used by PIVX Core. You can find instruction
 | GCC |  | [4.8+](https://gcc.gnu.org/) (C++11 support) |  |  |  |
 | HarfBuzz-NG |  |  |  |  |  |
 | libevent | [2.1.8-stable](https://github.com/libevent/libevent/releases) | 2.0.22 | No |  |  |
-| libjpeg |  |  |  |  | [Yes](https://github.com/pivx-project/pivx/blob/master/depends/packages/qt.mk#L65) |
-| libpng |  |  |  |  | [Yes](https://github.com/pivx-project/pivx/blob/master/depends/packages/qt.mk#L64) |
+| libjpeg |  |  |  |  | [Yes](https://github.com/RapidsOfficial/Rapids/blob/develop/depends/packages/qt.mk#L73) |
+| libpng |  |  |  |  | [Yes](https://github.com/RapidsOfficial/Rapids/blob/develop/depends/packages/qt.mk#L72) |
 | librsvg | |  |  |  |  |
 | MiniUPnPc | [2.0.20180203](http://miniupnp.free.fr/files) |  | No |  |  |
 | OpenSSL | [1.0.1k](https://www.openssl.org/source) |  | Yes |  |  |
 | GMP | [6.1.2](https://gmplib.org/) | | No | | |
-| PCRE |  |  |  |  | [Yes](https://github.com/pivx-project/pivx/blob/master/depends/packages/qt.mk#L66) |
+| PCRE |  |  |  |  | [Yes](https://github.com/RapidsOfficial/Rapids/blob/develop/depends/packages/qt.mk#L75) |
 | protobuf | [2.6.1](https://github.com/google/protobuf/releases) |  | No |  |  |
 | Python (tests) |  | [3.5](https://www.python.org/downloads) |  |  |  |
 | qrencode | [3.4.4](https://fukuchi.org/works/qrencode) |  | No |  |  |
 | Qt | [5.9.7](https://download.qt.io/official_releases/qt/) | [5.5.1](https://github.com/bitcoin/bitcoin/issues/13478) | No |  |  |
-| XCB |  |  |  |  | [Yes](https://github.com/pivx-project/pivx/blob/master/depends/packages/qt.mk#L87) (Linux only) |
-| xkbcommon |  |  |  |  | [Yes](https://github.com/pivx-project/pivx/blob/master/depends/packages/qt.mk#L86) (Linux only) |
+| XCB |  |  |  |  | [Yes](https://github.com/RapidsOfficial/Rapids/blob/develop/depends/packages/qt.mk#L108) (Linux only) |
+| xkbcommon |  |  |  |  | [Yes](https://github.com/RapidsOfficial/Rapids/blob/develop/depends/packages/qt.mk#L107) (Linux only) |
 | ZeroMQ | [4.3.1](https://github.com/zeromq/libzmq/releases) | 4.0.0 | No |  |  |
 | zlib | [1.2.11](https://zlib.net/) |  |  |  | No |
 

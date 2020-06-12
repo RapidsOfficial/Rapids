@@ -1,4 +1,5 @@
 // Copyright (c) 2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -56,7 +57,7 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
             }
             libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
             PublicCoinSpend publicSpend(params);
-            if (!ZPIVModule::parseCoinSpend(txin, tx, prevOut, publicSpend)){
+            if (!ZRPDModule::parseCoinSpend(txin, tx, prevOut, publicSpend)){
                 return state.DoS(100, error("CheckZerocoinSpend(): public zerocoin spend parse failed"));
             }
             newSpend = publicSpend;
@@ -79,7 +80,7 @@ bool CheckZerocoinSpend(const CTransaction& tx, bool fVerifySignature, CValidati
         if (isPublicSpend) {
             libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
             PublicCoinSpend ret(params);
-            if (!ZPIVModule::validateInput(txin, prevOut, tx, ret)){
+            if (!ZRPDModule::validateInput(txin, prevOut, tx, ret)){
                 return state.DoS(100, error("CheckZerocoinSpend(): public zerocoin spend did not verify"));
             }
         }
@@ -189,7 +190,7 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
     return true;
 }
 
-bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
+bool RecalculateRPDSupply(int nHeightStart, bool fSkipZrpd)
 {
     AssertLockHeld(cs_main);
 
@@ -202,7 +203,7 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
     if (nHeightStart == consensus.height_start_ZC)
         nMoneySupply = CAmount(5449796547496199);
 
-    if (!fSkipZpiv) {
+    if (!fSkipZrpd) {
         // initialize supply to 0
         mapZerocoinSupply.clear();
         for (auto& denom : libzerocoin::zerocoinDenomList) mapZerocoinSupply.insert(std::make_pair(denom, 0));
@@ -249,9 +250,9 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         // Rewrite money supply
         nMoneySupply += (nValueOut - nValueIn);
 
-        // Rewrite zpiv supply too
-        if (!fSkipZpiv && pindex->nHeight >= consensus.height_start_ZC) {
-            UpdateZPIVSupplyConnect(block, pindex, true);
+        // Rewrite zrpd supply too
+        if (!fSkipZrpd && pindex->nHeight >= consensus.height_start_ZC) {
+            UpdateZRPDSupplyConnect(block, pindex, true);
         }
 
         // Add fraudulent funds to the supply and remove any recovered funds.

@@ -5,6 +5,7 @@
 // Copyright (c) 2013-2014 The NovaCoin Developers
 // Copyright (c) 2014-2018 The BlackCoin Developers
 // Copyright (c) 2015-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -45,7 +46,7 @@
 #include "utilmoneystr.h"
 #include "util/threadnames.h"
 #include "validationinterface.h"
-#include "zpivchain.h"
+#include "zrpdchain.h"
 
 #ifdef ENABLE_WALLET
 #include "wallet/db.h"
@@ -75,7 +76,7 @@
 
 
 #ifdef ENABLE_WALLET
-CzPIVWallet* zwalletMain = NULL;
+CzRPDWallet* zwalletMain = NULL;
 int nWalletBackups = 10;
 #endif
 volatile bool fFeeEstimatesInitialized = false;
@@ -197,7 +198,7 @@ void PrepareShutdown()
     /// for example if the data directory was found to be locked.
     /// Be sure that anything that writes files or flushes caches only does this if the respective
     /// module was initialized.
-    util::ThreadRename("pivx-shutoff");
+    util::ThreadRename("rapids-shutoff");
     mempool.AddTransactionsUpdated(1);
     StopHTTPRPC();
     StopREST();
@@ -392,7 +393,7 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageOpt("-maxorphantx=<n>", strprintf(_("Keep at most <n> unconnectable transactions in memory (default: %u)"), DEFAULT_MAX_ORPHAN_TRANSACTIONS));
     strUsage += HelpMessageOpt("-par=<n>", strprintf(_("Set the number of script verification threads (%u to %d, 0 = auto, <0 = leave that many cores free, default: %d)"), -(int)boost::thread::hardware_concurrency(), MAX_SCRIPTCHECK_THREADS, DEFAULT_SCRIPTCHECK_THREADS));
 #ifndef WIN32
-    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "pivxd.pid"));
+    strUsage += HelpMessageOpt("-pid=<file>", strprintf(_("Specify pid file (default: %s)"), "rapidsd.pid"));
 #endif
     strUsage += HelpMessageOpt("-reindex", _("Rebuild block chain index from current blk000??.dat files") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-reindexmoneysupply", _("Reindex the RPD and zRPD money supply statistics") + " " + _("on startup"));
@@ -533,8 +534,8 @@ std::string HelpMessage(HelpMessageMode mode)
     strUsage += HelpMessageGroup(_("Staking options:"));
     strUsage += HelpMessageOpt("-staking=<n>", strprintf(_("Enable staking functionality (0-1, default: %u)"), 1));
     strUsage += HelpMessageOpt("-coldstaking=<n>", strprintf(_("Enable cold staking functionality (0-1, default: %u). Disabled if staking=0"), 1));
-    strUsage += HelpMessageOpt("-pivstake=<n>", strprintf(_("Enable or disable staking functionality for RPD inputs (0-1, default: %u)"), 1));
-    strUsage += HelpMessageOpt("-zpivstake=<n>", strprintf(_("Enable or disable staking functionality for zRPD inputs (0-1, default: %u)"), 1));
+    strUsage += HelpMessageOpt("-rpdstake=<n>", strprintf(_("Enable or disable staking functionality for RPD inputs (0-1, default: %u)"), 1));
+    strUsage += HelpMessageOpt("-zrpdstake=<n>", strprintf(_("Enable or disable staking functionality for zRPD inputs (0-1, default: %u)"), 1));
     strUsage += HelpMessageOpt("-reservebalance=<amt>", _("Keep the specified amount available for spending at all times (default: 0)"));
     if (GetBoolArg("-help-debug", false)) {
         strUsage += HelpMessageOpt("-printstakemodifier", _("Display the stake modifier calculations in the debug.log file."));
@@ -597,7 +598,9 @@ std::string LicenseInfo()
            "\n" +
            FormatParagraph(strprintf(_("Copyright (C) 2014-%i The Dash Core Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
-           FormatParagraph(strprintf(_("Copyright (C) 2015-%i The Rapids Developers"), COPYRIGHT_YEAR)) + "\n" +
+           FormatParagraph(strprintf(_("Copyright (C) 2015-%i The PIVX Developers"), COPYRIGHT_YEAR)) + "\n" +
+		   "\n" +
+           FormatParagraph(strprintf(_("Copyright (C) 2018-%i The Rapids Developers"), COPYRIGHT_YEAR)) + "\n" +
            "\n" +
            FormatParagraph(_("This is experimental software.")) + "\n" +
            "\n" +
@@ -647,7 +650,7 @@ struct CImportingNow {
 
 void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 {
-    util::ThreadRename("pivx-loadblk");
+    util::ThreadRename("rapids-loadblk");
 
     // -reindex
     if (fReindex) {
@@ -705,7 +708,7 @@ void ThreadImport(std::vector<boost::filesystem::path> vImportFiles)
 }
 
 /** Sanity checks
- *  Ensure that PIVX is running in a usable environment with all
+ *  Ensure that Rapids is running in a usable environment with all
  *  necessary library support.
  */
 bool InitSanityCheck(void)
@@ -908,7 +911,7 @@ void InitLogging()
     LogPrintf("Rapids version %s (%s)\n", version_string, CLIENT_DATE);
 }
 
-/** Initialize pivx.
+/** Initialize rapids.
  *  @pre Parameters should be parsed and config file should be read.
  */
 bool AppInit2()
@@ -1432,7 +1435,7 @@ bool AppInit2()
                 delete zerocoinDB;
                 delete pSporkDB;
 
-                //PIVX specific: zerocoin and spork DB's
+                //Rapids specific: zerocoin and spork DB's
                 pSporkDB = new CSporkDB(0, false, false);
 
                 pblocktree = new CBlockTreeDB(nBlockTreeDBCache, false, fReindex);
@@ -1446,7 +1449,7 @@ bool AppInit2()
                 // End loop if shutdown was requested
                 if (ShutdownRequested()) break;
 
-                // PIVX: load previous sessions sporks if we have them.
+                // Rapids: load previous sessions sporks if we have them.
                 uiInterface.InitMessage(_("Loading sporks..."));
                 sporkManager.LoadSporksFromDB();
 
@@ -1578,7 +1581,7 @@ bool AppInit2()
         // Forced upgrade
         const bool fLegacyWallet = GetBoolArg("-legacywallet", false);
         if (GetBoolArg("-upgradewallet", fFirstRun && !fLegacyWallet)) {
-            if (prev_version <= FEATURE_PRE_PIVX && pwalletMain->IsLocked()) {
+            if (prev_version <= FEATURE_PRE_Rapids && pwalletMain->IsLocked()) {
                 // Cannot upgrade a locked wallet
                 std::string strProblem = "Cannot upgrade a locked wallet.\n";
                 strErrors << _("Error: ") << strProblem;
@@ -1623,7 +1626,7 @@ bool AppInit2()
                 }
                 // Create legacy wallet
                 LogPrintf("Creating Pre-HD Wallet\n");
-                pwalletMain->SetMaxVersion(FEATURE_PRE_PIVX);
+                pwalletMain->SetMaxVersion(FEATURE_PRE_Rapids);
             }
 
             // Top up the keypool
@@ -1638,7 +1641,7 @@ bool AppInit2()
 
         LogPrintf("Init errors: %s\n", strErrors.str());
         LogPrintf("Wallet completed loading in %15dms\n", GetTimeMillis() - nWalletStartTime);
-        zwalletMain = new CzPIVWallet(pwalletMain);
+        zwalletMain = new CzRPDWallet(pwalletMain);
         pwalletMain->setZWallet(zwalletMain);
 
         RegisterValidationInterface(pwalletMain);
