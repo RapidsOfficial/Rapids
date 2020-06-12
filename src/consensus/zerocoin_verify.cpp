@@ -112,7 +112,7 @@ bool isBlockBetweenFakeSerialAttackRange(int nHeight)
 
 bool CheckPublicCoinSpendEnforced(int blockHeight, bool isPublicSpend)
 {
-    if (blockHeight >= Params().GetConsensus().height_start_ZC_PublicSpends) {
+    if (Params().GetConsensus().NetworkUpgradeActive(blockHeight, Consensus::UPGRADE_ZC_PUBLIC)) {
         // reject old coin spend
         if (!isPublicSpend) {
             return error("%s: failed to add block with older zc spend version", __func__);

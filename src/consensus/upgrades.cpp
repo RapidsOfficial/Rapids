@@ -35,6 +35,10 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "CLTV (BIP65) activation - start block v5",
         },
         {
+                /*.strName =*/ "Zerocoin Public",
+                /*.strInfo =*/ "activation of zerocoin public spends (spend v3)",
+        },
+        {
                 /*.strName =*/ "v5 dummy",
                 /*.strInfo =*/ "Placeholder for future PIVX version 5.0 upgrade",
         },

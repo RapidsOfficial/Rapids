@@ -31,6 +31,7 @@ enum UpgradeIndex : uint32_t {
     UPGRADE_ZC,
     UPGRADE_ZC_V2,
     UPGRADE_BIP65,
+    UPGRADE_ZC_PUBLIC,
     UPGRADE_V5_DUMMY,
     // NOTE: Also add new upgrades to NetworkUpgradeInfo in upgrades.cpp
     MAX_NETWORK_UPGRADES
@@ -117,7 +118,6 @@ struct Params {
     int height_start_StakeModifierV2;               // Blocks v6 start
     int height_start_TimeProtoV2;                   // Blocks v7 start
     int height_start_ZC_InvalidSerials;
-    int height_start_ZC_PublicSpends;
     int height_start_ZC_SerialRangeCheck;
     int height_ZC_RecalcAccumulators;
 
