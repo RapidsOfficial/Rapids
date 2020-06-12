@@ -146,8 +146,9 @@ UniValue generate(const UniValue& params, bool fHelp)
         nHeightEnd = nHeight + nGenerate;
     }
 
-    const int last_pow_block = Params().GetConsensus().height_last_PoW;
-    bool fPoS = nHeight >= last_pow_block;
+    const Consensus::Params& consensus = Params().GetConsensus();
+    bool fPoS = consensus.NetworkUpgradeActive(nHeight + 1, Consensus::UPGRADE_POS);
+
     if (fPoS) {
         // If we are in PoS, wallet must be unlocked.
         EnsureWalletIsUnlocked();
@@ -185,7 +186,8 @@ UniValue generate(const UniValue& params, bool fHelp)
         blockHashes.push_back(pblock->GetHash().GetHex());
 
         // Check PoS if needed.
-        if (!fPoS) fPoS = (nHeight >= last_pow_block);
+        if (!fPoS)
+            fPoS = consensus.NetworkUpgradeActive(nHeight + 1, Consensus::UPGRADE_POS);
     }
 
     const int nGenerated = blockHashes.size();
@@ -225,7 +227,8 @@ UniValue setgenerate(const UniValue& params, bool fHelp)
     if (params.size() > 0)
         fGenerate = params[0].get_bool();
 
-    if (fGenerate && (chainActive.Height() >= Params().GetConsensus().height_last_PoW))
+    const int nHeight = WITH_LOCK(cs_main, return chainActive.Height() + 1);
+    if (fGenerate && Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_POS))
         throw JSONRPCError(RPC_INVALID_REQUEST, "Proof of Work phase has already ended");
 
     int nGenProcLimit = -1;

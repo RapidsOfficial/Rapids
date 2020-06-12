@@ -1612,7 +1612,8 @@ int64_t GetBlockValue(int nHeight)
 
     }
 
-    const int last_pow_block = Params().GetConsensus().height_last_PoW;
+    const Consensus::Params& consensus = Params().GetConsensus();
+    const bool isPoSActive = consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_POS);
     int64_t nSubsidy = 0;
     if (nHeight == 0) {
         nSubsidy = 60001 * COIN;
@@ -1620,9 +1621,9 @@ int64_t GetBlockValue(int nHeight)
         nSubsidy = 250 * COIN;
     } else if (nHeight < (Params().NetworkID() == CBaseChainParams::TESTNET ? 145000 : 151200) && nHeight >= 86400) {
         nSubsidy = 225 * COIN;
-    } else if (nHeight <= last_pow_block && nHeight >= 151200) {
+    } else if (nHeight >= 151200 && !isPoSActive) {
         nSubsidy = 45 * COIN;
-    } else if (nHeight <= 302399 && nHeight > last_pow_block) {
+    } else if (isPoSActive && nHeight <= 302399) {
         nSubsidy = 45 * COIN;
     } else if (nHeight <= 345599 && nHeight >= 302400) {
         nSubsidy = 40.5 * COIN;
@@ -2301,12 +2302,12 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
         return true;
     }
 
-    const int last_pow_block = consensus.height_last_PoW;
-    if (pindex->nHeight <= last_pow_block && block.IsProofOfStake())
+    const bool isPoSActive = consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_POS);
+    if (!isPoSActive && block.IsProofOfStake())
         return state.DoS(100, error("ConnectBlock() : PoS period not active"),
             REJECT_INVALID, "PoS-early");
 
-    if (pindex->nHeight > last_pow_block && block.IsProofOfWork())
+    if (isPoSActive && block.IsProofOfWork())
         return state.DoS(100, error("ConnectBlock() : PoW period ended"),
             REJECT_INVALID, "PoW-ended");
 

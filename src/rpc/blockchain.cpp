@@ -854,7 +854,7 @@ UniValue getblockchaininfo(const UniValue& params, bool fHelp)
     softforks.push_back(SoftForkDesc("bip65", 5, tip));
     obj.push_back(Pair("softforks",             softforks));
     UniValue upgrades(UniValue::VOBJ);
-    for (int i = Consensus::UPGRADE_PURPLE_FENIX; i < (int) Consensus::MAX_NETWORK_UPGRADES; i++) {
+    for (int i = Consensus::BASE_NETWORK + 1; i < (int) Consensus::MAX_NETWORK_UPGRADES; i++) {
         NetworkUpgradeDescPushBack(upgrades, consensusParams, Consensus::UpgradeIndex(i), tip->nHeight);
     }
     obj.push_back(Pair("upgrades", upgrades));

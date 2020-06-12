@@ -156,7 +156,6 @@ public:
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
         // height-based activations
-        consensus.height_last_PoW = 259200;
         consensus.height_last_ZC_AccumCheckpoint = 1686240;
         consensus.height_last_ZC_WrappedSerials = 1686229;
         consensus.height_start_BIP65 = 1808634;             // Block v5: 82629b7a9978f5c7ea3f70a12db92633a7d2e436711500db28b97efd48b1e527
@@ -196,7 +195,8 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_PURPLE_FENIX].nActivationHeight =
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 259201;
+        consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         /**
@@ -277,7 +277,6 @@ public:
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
         // height based activations
-        consensus.height_last_PoW = 200;
         consensus.height_last_ZC_AccumCheckpoint = 1106090;
         consensus.height_last_ZC_WrappedSerials = -1;
         consensus.height_start_BIP65 = 851019;                  // Block v5: d1ec8838ba8f644e78dd4f8e861d31e75457dfe607b31deade30e806b5f46c1c
@@ -317,7 +316,8 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_PURPLE_FENIX].nActivationHeight =
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 201;
+        consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         /**
@@ -406,7 +406,6 @@ public:
         consensus.nTime_RejectOldSporkKey = 0;
 
         // height based activations
-        consensus.height_last_PoW = 250;
         consensus.height_last_ZC_AccumCheckpoint = 310;     // no checkpoints on regtest
         consensus.height_last_ZC_WrappedSerials = -1;
         consensus.height_start_BIP65 = 851019;              // Not defined for regtest. Inherit TestNet value.
@@ -442,7 +441,8 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_PURPLE_FENIX].nActivationHeight =
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight = 251;
+        consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         /**

@@ -25,8 +25,9 @@ namespace Consensus {
 */
 enum UpgradeIndex : uint32_t {
     BASE_NETWORK,
-    UPGRADE_PURPLE_FENIX,
     UPGRADE_TESTDUMMY,
+    UPGRADE_POS,
+    UPGRADE_V5_DUMMY,
     // NOTE: Also add new upgrades to NetworkUpgradeInfo in upgrades.cpp
     MAX_NETWORK_UPGRADES
 };
@@ -105,7 +106,6 @@ struct Params {
     int64_t nTime_RejectOldSporkKey;
 
     // height-based activations
-    int height_last_PoW;
     int height_last_ZC_AccumCheckpoint;
     int height_last_ZC_WrappedSerials;
     int height_start_BIP65;                         // Blocks v5 start
@@ -125,7 +125,7 @@ struct Params {
     int64_t nPivxBadBlockTime;
     unsigned int nPivxBadBlockBits;
 
-    // Map with network updates (Starting with 'Purple Fenix')
+    // Map with network updates
     NetworkUpgrade vUpgrades[MAX_NETWORK_UPGRADES];
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
@@ -139,7 +139,7 @@ struct Params {
         // PoS (TimeV2): 14 seconds
         if (IsTimeProtocolV2(nHeight)) return nTimeSlotLength - 1;
         // PoS (TimeV1): 3 minutes - PoW: 2 hours
-        return (nHeight > height_last_PoW ? nFutureTimeDriftPoS : nFutureTimeDriftPoW);
+        return (NetworkUpgradeActive(nHeight, UPGRADE_POS) ? nFutureTimeDriftPoS : nFutureTimeDriftPoW);
     }
 
     bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
