@@ -62,7 +62,7 @@ bool NetworkUpgradeActive(
 }
 
 int CurrentEpoch(int nHeight, const Consensus::Params& params) {
-    for (auto idxInt = Consensus::MAX_NETWORK_UPGRADES - 1; idxInt >= Consensus::BASE_NETWORK; idxInt--) {
+    for (auto idxInt = Consensus::MAX_NETWORK_UPGRADES - 1; idxInt > Consensus::BASE_NETWORK; idxInt--) {
         if (NetworkUpgradeActive(nHeight, params, Consensus::UpgradeIndex(idxInt))) {
             return idxInt;
         }
