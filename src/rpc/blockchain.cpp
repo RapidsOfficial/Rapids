@@ -749,7 +749,7 @@ static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Con
         activated = consensusParams.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC);
         break;
     case 5:
-        activated = pindex->nHeight >= consensusParams.height_start_BIP65;
+        activated = consensusParams.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_BIP65);
         break;
     case 6:
         activated = pindex->nHeight >= consensusParams.height_start_StakeModifierV2;
