@@ -1238,7 +1238,7 @@ UniValue getserials(const UniValue& params, bool fHelp) {
                     if (!ExtractDestinations(tx.vout[0].scriptPubKey, type, addresses, nRequired)) {
                         spentTo = strprintf("type: %d", GetTxnOutputType(type));
                     } else {
-                        spentTo = CBitcoinAddress(addresses[0]).ToString();
+                        spentTo = EncodeDestination(addresses[0]);
                     }
                 }
             }

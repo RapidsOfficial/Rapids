@@ -263,12 +263,12 @@ public:
     bool whitelistAddressFromColdStaking(const QString &addressStr);
     bool blacklistAddressFromColdStaking(const QString &address);
     bool updateAddressBookPurpose(const QString &addressStr, const std::string& purpose);
-    std::string getLabelForAddress(const CBitcoinAddress& address);
-    bool getKeyId(const CBitcoinAddress& address, CKeyID& keyID);
+    std::string getLabelForAddress(const CTxDestination& address);
+    bool getKeyId(const CTxDestination& address, CKeyID& keyID);
 
     bool isMine(const CTxDestination& address);
     bool isMine(const QString& addressStr);
-    bool isUsed(CBitcoinAddress address);
+    bool isUsed(CTxDestination address);
     void getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs);
     bool getMNCollateralCandidate(COutPoint& outPoint);
     bool isSpent(const COutPoint& outpoint) const;

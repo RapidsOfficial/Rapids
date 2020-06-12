@@ -578,10 +578,11 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
     Q_FOREACH (const SendCoinsRecipient& rcp, transaction.getRecipients()) {
         // Don't touch the address book when we have a payment request
         if (!rcp.paymentRequest.IsInitialized()) {
-            CBitcoinAddress address = CBitcoinAddress(rcp.address.toStdString());
-            std::string purpose = address.IsStakingAddress() ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND;
+            bool isStaking = false;
+            CTxDestination address = DecodeDestination(rcp.address.toStdString(), isStaking);
+            std::string purpose = isStaking ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND;
             std::string strLabel = rcp.label.toStdString();
-            updateAddressBookLabels(address.Get(), strLabel, purpose);
+            updateAddressBookLabels(address, strLabel, purpose);
         }
         Q_EMIT coinsSent(wallet, rcp, transaction_array);
     }
@@ -699,7 +700,7 @@ static void NotifyKeyStoreStatusChanged(WalletModel* walletmodel, CCryptoKeyStor
 
 static void NotifyAddressBookChanged(WalletModel* walletmodel, CWallet* wallet, const CTxDestination& address, const std::string& label, bool isMine, const std::string& purpose, ChangeType status)
 {
-    QString strAddress = QString::fromStdString(pwalletMain->ParseIntoAddress(address, purpose).ToString());
+    QString strAddress = QString::fromStdString(pwalletMain->ParseIntoAddress(address, purpose));
     QString strLabel = QString::fromStdString(label);
     QString strPurpose = QString::fromStdString(purpose);
 
@@ -879,8 +880,9 @@ bool WalletModel::blacklistAddressFromColdStaking(const QString &addressStr)
 
 bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std::string& purpose)
 {
-    CBitcoinAddress address(addressStr.toStdString());
-    if (address.IsStakingAddress())
+    bool isStaking = false;
+    CTxDestination address = DecodeDestination(addressStr.toStdString(), isStaking);
+    if (isStaking)
         return error("Invalid PIVX address, cold staking address");
     CKeyID keyID;
     if (!getKeyId(address, keyID))
@@ -888,23 +890,25 @@ bool WalletModel::updateAddressBookPurpose(const QString &addressStr, const std:
     return pwalletMain->SetAddressBook(keyID, getLabelForAddress(address), purpose);
 }
 
-bool WalletModel::getKeyId(const CBitcoinAddress& address, CKeyID& keyID)
+bool WalletModel::getKeyId(const CTxDestination& address, CKeyID& keyID)
 {
-    if (!address.IsValid())
+    if (!IsValidDestination(address))
         return error("Invalid PIVX address");
 
-    if (!address.GetKeyID(keyID))
+    const CKeyID* inKeyID = boost::get<CKeyID>(&address);
+    if (!inKeyID)
         return error("Unable to get KeyID from PIVX address");
 
+    keyID = *inKeyID;
     return true;
 }
 
-std::string WalletModel::getLabelForAddress(const CBitcoinAddress& address)
+std::string WalletModel::getLabelForAddress(const CTxDestination& address)
 {
     std::string label = "";
     {
         LOCK(wallet->cs_wallet);
-        std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address.Get());
+        std::map<CTxDestination, AddressBook::CAddressBookData>::iterator mi = wallet->mapAddressBook.find(address);
         if (mi != wallet->mapAddressBook.end()) {
             label = mi->second.name;
         }
@@ -980,7 +984,7 @@ void WalletModel::listCoins(std::map<QString, std::vector<COutput> >& mapCoins) 
         CTxDestination address;
         if (!out.fSpendable || !ExtractDestination(cout.tx->vout[cout.i].scriptPubKey, address))
             continue;
-        mapCoins[QString::fromStdString(CBitcoinAddress(address).ToString())].push_back(out);
+        mapCoins[QString::fromStdString(EncodeDestination(address))].push_back(out);
     }
 }
 
@@ -1039,11 +1043,10 @@ bool WalletModel::isMine(const CTxDestination& address)
 
 bool WalletModel::isMine(const QString& addressStr)
 {
-    CBitcoinAddress address(addressStr.toStdString());
-    return IsMine(*wallet, address.Get());
+    return IsMine(*wallet, DecodeDestination(addressStr.toStdString()));
 }
 
-bool WalletModel::isUsed(CBitcoinAddress address)
+bool WalletModel::isUsed(CTxDestination address)
 {
     return wallet->IsUsed(address);
 }

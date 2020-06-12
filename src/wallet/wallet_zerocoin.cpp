@@ -293,7 +293,7 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue,
 // - ZC PublicSpends
 
 bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendReceipt& receipt, std::vector<CZerocoinMint>& vMintsSelected,
-        std::list<std::pair<CTxDestination, CAmount>> addressesTo, CBitcoinAddress* changeAddress)
+        std::list<std::pair<CTxDestination, CAmount>> addressesTo, CTxDestination* changeAddress)
 {
     // Default: assume something goes wrong. Depending on the problem this gets more specific below
     int nStatus = ZPIV_SPEND_ERROR;
@@ -454,7 +454,7 @@ bool CWallet::CreateZCPublicSpendTransaction(
         std::vector<CZerocoinMint>& vSelectedMints,
         std::vector<CDeterministicMint>& vNewMints,
         std::list<std::pair<CTxDestination,CAmount>> addressesTo,
-        CBitcoinAddress* changeAddress)
+        CTxDestination * changeAddress)
 {
     // Check available funds
     int nStatus = ZPIV_TRX_FUNDS_PROBLEMS;
@@ -622,7 +622,7 @@ bool CWallet::CreateZCPublicSpendTransaction(
                 CScript scriptChange;
                 // Change address
                 if(changeAddress){
-                    scriptChange = GetScriptForDestination(changeAddress->Get());
+                    scriptChange = GetScriptForDestination(*changeAddress);
                 } else {
                     // Reserve a new key pair from key pool
                     CPubKey vchPubKey;
