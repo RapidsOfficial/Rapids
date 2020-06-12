@@ -109,6 +109,19 @@ AC_ARG_ENABLE([online-rust],
   [enable_online_rust=yes])
 AM_CONDITIONAL(ENABLE_ONLINE_RUST, test "$enable_online_rust" != no)
 
+AC_ARG_WITH([params-dir],
+  AS_HELP_STRING([--with-params-dir=PARAMS_DIR],
+  [specify zk params path]),
+  [
+  if test -d "$withval"
+  then
+          params_path="$withval"
+  else
+          AC_MSG_ERROR(--with-params-dir expected directory name)
+  fi
+  ],
+  [params_path=""])
+
 # Enable wallet
 AC_ARG_ENABLE([wallet],
   [AS_HELP_STRING([--disable-wallet],
@@ -1033,6 +1046,11 @@ if test x$use_tests = xyes; then
     AC_MSG_ERROR(hexdump is required for tests)
   fi
 
+  use_custom_params=no
+  if test x$params_path != x; then
+    AC_DEFINE([USE_CUSTOM_PARAMS],[1],[Define if using a custom zk params path])
+    use_custom_params=yes
+  fi
 
   if test x$use_boost = xyes; then
 
@@ -1401,6 +1419,7 @@ AM_CONDITIONAL([ENABLE_QT],[test x$bitcoin_enable_qt = xyes])
 AM_CONDITIONAL([ENABLE_QT_TESTS],[test x$BUILD_TEST_QT = xyes])
 AM_CONDITIONAL([ENABLE_BENCH],[test x$use_bench = xyes])
 AM_CONDITIONAL([USE_QTCHARTS], [test x$use_qtcharts = xyes])
+AM_CONDITIONAL([USE_CUSTOM_PARAMS],[test x$use_custom_params = xyes])
 AM_CONDITIONAL([USE_LCOV],[test x$use_lcov = xyes])
 AM_CONDITIONAL([GLIBC_BACK_COMPAT],[test x$use_glibc_compat = xyes])
 AM_CONDITIONAL([HARDEN],[test x$use_hardening = xyes])
@@ -1418,6 +1437,7 @@ AC_DEFINE(CLIENT_VERSION_REVISION, _CLIENT_VERSION_REVISION, [Build revision])
 AC_DEFINE(CLIENT_VERSION_BUILD, _CLIENT_VERSION_BUILD, [Version Build])
 AC_DEFINE(CLIENT_VERSION_IS_RELEASE, _CLIENT_VERSION_IS_RELEASE, [Version is release])
 AC_DEFINE(COPYRIGHT_YEAR, _COPYRIGHT_YEAR, [Version is release])
+AC_DEFINE_UNQUOTED(PARAMS_DIR, ["$params_path"], [Path to the zk params dir during unit tests on windows])
 AC_SUBST(CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MAJOR)
 AC_SUBST(CLIENT_VERSION_MINOR, _CLIENT_VERSION_MINOR)
 AC_SUBST(CLIENT_VERSION_REVISION, _CLIENT_VERSION_REVISION)
@@ -1549,6 +1569,7 @@ echo "  with bignum   = $set_bignum"
 echo "  with test     = $use_tests"
 echo "  with bench    = $use_bench"
 echo "  with upnp     = $use_upnp"
+echo "  with params   = $params_path"
 echo "  use asm       = $use_asm"
 echo "  sanitizers    = $use_sanitizers"
 echo "  debug enabled = $enable_debug"

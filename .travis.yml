@@ -122,7 +122,7 @@ jobs:
         PACKAGES="python3 nsis g++-mingw-w64-x86-64 wine-binfmt wine64"
         RUN_FUNCTIONAL_TESTS=false
         GOAL="deploy"
-        BITCOIN_CONFIG="--with-gui=auto --enable-reduce-exports --disable-online-rust"
+        BITCOIN_CONFIG="--with-gui=auto --enable-reduce-exports --disable-online-rust --with-params-dir=$PARAMS_DIR"
 
     - stage: test
       name: '32-bit + dash  [GOAL: install]'
@@ -130,7 +130,7 @@ jobs:
         HOST=i686-pc-linux-gnu
         PACKAGES="g++-multilib python3-zmq"
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-gui=qt5 --enable-glibc-back-compat --enable-reduce-exports --disable-online-rust LDFLAGS=-static-libstdc++"
+        BITCOIN_CONFIG="--enable-zmq --with-gui=qt5 --enable-glibc-back-compat --enable-reduce-exports --disable-online-rust --with-params-dir=$PARAMS_DIR LDFLAGS=-static-libstdc++"
         CONFIG_SHELL="/bin/dash"
 
     - stage: test
@@ -142,7 +142,7 @@ jobs:
         RUN_FUNCTIONAL_TESTS=true
         #TEST_RUNNER_EXTRA="--coverage --extended"  # Run extended tests so that coverage does not fail, but exclude the very slow dbcrash
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-gui=qt5 --enable-glibc-back-compat --enable-reduce-exports --disable-online-rust"
+        BITCOIN_CONFIG="--enable-zmq --with-gui=qt5 --enable-glibc-back-compat --enable-reduce-exports --disable-online-rust --with-params-dir=$PARAMS_DIR"
         BUILD_TIMEOUT=800
 
     - stage: test
@@ -155,7 +155,7 @@ jobs:
         RUN_FUNCTIONAL_TESTS=true
         TEST_RUNNER_EXTRA="--legacywallet"  # Run functional tests on pre-HD wallet
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-gui=no --enable-glibc-back-compat --enable-reduce-exports --disable-online-rust"
+        BITCOIN_CONFIG="--enable-zmq --with-gui=no --enable-glibc-back-compat --enable-reduce-exports --disable-online-rust --with-params-dir=$PARAMS_DIR"
         BUILD_TIMEOUT=800
 
     - stage: test
@@ -166,7 +166,7 @@ jobs:
         PACKAGES="python3-zmq qtbase5-dev qttools5-dev-tools libqt5svg5-dev libssl-dev libevent-dev bsdmainutils libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libminiupnpc-dev libzmq3-dev libprotobuf-dev protobuf-compiler libqrencode-dev libgmp-dev libsodium-dev cargo"
         NO_DEPENDS=1
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=qt5 CPPFLAGS=-DDEBUG_LOCKORDER --disable-hardening --disable-asm"
+        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=qt5 CPPFLAGS=-DDEBUG_LOCKORDER --disable-hardening --disable-asm --with-params-dir=$PARAMS_DIR"
 
     - stage: test
       name: 'x86_64 Linux  [GOAL: install]  [bionic]  [no depends, only system libs]'
@@ -175,7 +175,7 @@ jobs:
         PACKAGES="python3-zmq qtbase5-dev qttools5-dev-tools libqt5svg5-dev libqt5charts5-dev libssl1.0-dev libevent-dev bsdmainutils libboost-system-dev libboost-filesystem-dev libboost-chrono-dev libboost-program-options-dev libboost-test-dev libboost-thread-dev libdb5.3++-dev libminiupnpc-dev libzmq3-dev libprotobuf-dev protobuf-compiler libqrencode-dev libgmp-dev libsodium-dev cargo"
         NO_DEPENDS=1
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=qt5 CPPFLAGS=-DDEBUG_LOCKORDER"
+        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=qt5 --with-params-dir=$PARAMS_DIR CPPFLAGS=-DDEBUG_LOCKORDER"
 
 #    - stage: test
 #      name: 'x86_64 Linux  [GOAL: install]  [bionic]  [no depends, only system libs, sanitizers: fuzzer,address]'

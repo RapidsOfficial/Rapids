@@ -1,11 +1,22 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Copyright (c) 2015-2020 The Zcash developers
+# Copyright (c) 2020 The PIVX developers
+# Distributed under the MIT software license, see the accompanying
+# file COPYING or http://www.opensource.org/licenses/mit-license.php.
+
+export LC_ALL=C.UTF-8
 
 set -eu
 
-if [[ "$OSTYPE" == "darwin"* ]]; then
-    PARAMS_DIR="$HOME/Library/Application Support/PIVXParams"
+if [ -n "${1:-}" ]; then
+    PARAMS_DIR="$1"
 else
-    PARAMS_DIR="$HOME/.pivx-params"
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+        PARAMS_DIR="$HOME/Library/Application Support/PIVXParams"
+    else
+        PARAMS_DIR="$HOME/.pivx-params"
+    fi
 fi
 
 SPROUT_PKEY_NAME='sprout-proving.key'

@@ -357,16 +357,29 @@ const fs::path &ZC_GetParamsDir()
     if (!path.empty())
         return path;
 
-    path = ZC_GetBaseParamsDir();
+#ifdef USE_CUSTOM_PARAMS
+    path = fs::system_complete(PARAMS_DIR);
+#else
+    if (mapArgs.count("-paramsdir")) {
+        path = fs::system_complete(mapArgs["-paramsdir"]);
+        if (!fs::is_directory(path)) {
+            path = "";
+            return path;
+        }
+    } else {
+        path = ZC_GetBaseParamsDir();
+    }
+#endif
 
     return path;
 }
 
 void initZKSNARKS()
 {
-    fs::path sapling_spend = ZC_GetParamsDir() / "sapling-spend.params";
-    fs::path sapling_output = ZC_GetParamsDir() / "sapling-output.params";
-    fs::path sprout_groth16 = ZC_GetParamsDir() / "sprout-groth16.params";
+    const fs::path& path = ZC_GetParamsDir();
+    fs::path sapling_spend = path / "sapling-spend.params";
+    fs::path sapling_output = path / "sapling-output.params";
+    fs::path sprout_groth16 = path / "sprout-groth16.params";
 
     if (!(fs::exists(sapling_spend) &&
           fs::exists(sapling_output) &&
