@@ -347,6 +347,11 @@ CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Typ
     return addr.Get();
 }
 
+std::string EncodeDestination(const CTxDestination& dest, bool isStaking)
+{
+    return EncodeDestination(dest, isStaking ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS);
+}
+
 std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType)
 {
     CBitcoinAddress addr(dest, addrType);
