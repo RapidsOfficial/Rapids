@@ -1,5 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2015 The Bitcoin Core developers
+// Copyright (c) 2020 CodePillow Team
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -13,10 +14,10 @@
 
 struct CMempoolAddressDelta
 {
-    int64_t time;
-    CAmount amount;
-    uint256 prevhash;
     unsigned int prevout;
+    uint256 prevhash;
+    CAmount amount;
+    int64_t time;
 
     CMempoolAddressDelta(int64_t t, CAmount a, uint256 hash, unsigned int out) {
         time = t;
@@ -35,11 +36,11 @@ struct CMempoolAddressDelta
 
 struct CMempoolAddressDeltaKey
 {
-    int type;
     uint160 addressBytes;
-    uint256 txhash;
     unsigned int index;
+    uint256 txhash;
     int spending;
+    int type;
 
     CMempoolAddressDeltaKey(int addressType, uint160 addressHash, uint256 hash, unsigned int i, int s) {
         type = addressType;
@@ -83,17 +84,18 @@ struct CMempoolAddressDeltaKeyCompare
 
 /** Address index */
 struct CAddressIndexKey {
+    unsigned int txindex;
     unsigned int type;
     uint160 hashBytes;
     int blockHeight;
-    unsigned int txindex;
     uint256 txhash;
-    size_t index;
     bool spending;
+    size_t index;
 
     size_t GetSerializeSize(int nType, int nVersion) const {
         return 66;
     }
+
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata8(s, type);
@@ -106,6 +108,7 @@ struct CAddressIndexKey {
         char f = spending;
         ser_writedata8(s, f);
     }
+
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
         type = ser_readdata8(s);
@@ -142,7 +145,6 @@ struct CAddressIndexKey {
         index = 0;
         spending = false;
     }
-
 };
 
 struct CAddressIndexIteratorKey {
@@ -152,11 +154,13 @@ struct CAddressIndexIteratorKey {
     size_t GetSerializeSize(int nType, int nVersion) const {
         return 21;
     }
+
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata8(s, type);
         hashBytes.Serialize(s, nType, nVersion);
     }
+
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
         type = ser_readdata8(s);
@@ -186,12 +190,14 @@ struct CAddressIndexIteratorHeightKey {
     size_t GetSerializeSize(int nType, int nVersion) const {
         return 25;
     }
+
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata8(s, type);
         hashBytes.Serialize(s, nType, nVersion);
         ser_writedata32be(s, blockHeight);
     }
+
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
         type = ser_readdata8(s);
@@ -217,34 +223,41 @@ struct CAddressIndexIteratorHeightKey {
 };
 
 struct CAddressUnspentKey {
+    unsigned int txindex;
     unsigned int type;
     uint160 hashBytes;
     uint256 txhash;
     size_t index;
 
     size_t GetSerializeSize(int nType, int nVersion) const {
-        return 57;
+        return 61;
     }
+
     template<typename Stream>
     void Serialize(Stream& s, int nType, int nVersion) const {
         ser_writedata8(s, type);
         hashBytes.Serialize(s, nType, nVersion);
         txhash.Serialize(s, nType, nVersion);
         ser_writedata32(s, index);
+        ser_writedata32be(s, txindex);
     }
+
     template<typename Stream>
     void Unserialize(Stream& s, int nType, int nVersion) {
         type = ser_readdata8(s);
         hashBytes.Unserialize(s, nType, nVersion);
         txhash.Unserialize(s, nType, nVersion);
         index = ser_readdata32(s);
+        txindex = ser_readdata32be(s);
     }
 
-    CAddressUnspentKey(unsigned int addressType, uint160 addressHash, uint256 txid, size_t indexValue) {
+    CAddressUnspentKey(unsigned int addressType, uint160 addressHash,
+        uint256 txid, size_t indexValue, int blockindex) {
         type = addressType;
         hashBytes = addressHash;
         txhash = txid;
         index = indexValue;
+        txindex = blockindex;
     }
 
     CAddressUnspentKey() {
@@ -256,6 +269,7 @@ struct CAddressUnspentKey {
         hashBytes.SetNull();
         txhash.SetNull();
         index = 0;
+        txindex = 0;
     }
 };
 

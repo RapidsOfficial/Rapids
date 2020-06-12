@@ -311,6 +311,58 @@ template<typename K> bool GetKey(leveldb::Slice slKey, K& key) {
     return true;
 }
 
+bool CBlockTreeDB::ReadAddressIndex(uint160 addressHash, int type,
+                                    std::vector<std::pair<CAddressIndexKey, CAmount> > &addressIndex,
+                                    int start, int end) {
+
+    // boost::scoped_ptr<CDBIterator> pcursor(NewIterator());
+    boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
+
+    CDataStream ssKey(SER_DISK, CLIENT_VERSION);
+
+    if (start > 0 && end > 0) {
+        // pcursor->Seek(make_pair(DB_ADDRESSINDEX, CAddressIndexIteratorHeightKey(type, addressHash, start)));
+        pair<char, CAddressIndexIteratorHeightKey> heightKey = make_pair(DB_ADDRESSINDEX, CAddressIndexIteratorHeightKey(type, addressHash, start));
+        ssKey.reserve(ssKey.GetSerializeSize(heightKey));
+        ssKey << heightKey;
+    } else {
+        // pcursor->Seek(make_pair(DB_ADDRESSINDEX, CAddressIndexIteratorKey(type, addressHash)));
+        pair<char, CAddressIndexIteratorKey> key = make_pair(DB_ADDRESSINDEX, CAddressIndexIteratorKey(type, addressHash));
+        ssKey.reserve(ssKey.GetSerializeSize(key));
+        ssKey << key;
+    }
+    
+    leveldb::Slice slKey(&ssKey[0], ssKey.size());
+    pcursor->Seek(slKey);
+
+    while (pcursor->Valid()) {
+        boost::this_thread::interruption_point();
+        std::pair<char,CAddressIndexKey> key;
+        // if (pcursor->GetKey(key) && key.first == DB_ADDRESSINDEX && key.second.hashBytes == addressHash) {
+        if (GetKey(pcursor->key(), key) && key.first == DB_ADDRESSINDEX && key.second.hashBytes == addressHash) {
+            if (end > 0 && key.second.blockHeight > end) {
+                break;
+            }
+
+            try{
+                leveldb::Slice slValue = pcursor->value();
+                CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);
+                CAmount nValue;
+                ssValue >> nValue;
+            
+                addressIndex.push_back(make_pair(key.second, nValue));
+                pcursor->Next();
+            } catch (const std::exception&) {
+                return error("failed to get address index value");
+            }
+        } else {
+            break;
+        }
+    }
+
+    return true;
+}
+
 bool CBlockTreeDB::ReadAddressUnspentIndex(uint160 addressHash, int type,
                                            std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > &unspentOutputs) {
 

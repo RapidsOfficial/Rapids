@@ -478,6 +478,12 @@ static const CRPCCommand vRPCCommands[] =
         {"zerocoin", "searchdzrpd", &searchdzrpd, false, false, true},
         {"zerocoin", "dzrpdstate", &dzrpdstate, false, false, true},
 
+        /* address index */
+        { "addressindex", "getaddresstxids", &getaddresstxids, false, false },
+        { "addressindex", "getaddressbalance", &getaddressbalance, false, false },
+        { "addressindex", "getaddressmempool", &getaddressmempool, false, false },
+        { "addressindex", "getaddressutxos", &getaddressutxos, false, false },
+
 #endif // ENABLE_WALLET
 };
 
