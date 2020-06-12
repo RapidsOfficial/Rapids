@@ -132,7 +132,7 @@ PairResult CWallet::getNewAddress(CTxDestination& ret, const std::string address
     if (!SetAddressBook(keyID, addressLabel, purpose))
         throw std::runtime_error("CWallet::getNewAddress() : SetAddressBook failed");
 
-    ret = DestinationFor(keyID, addrType);
+    ret = CTxDestination(keyID);
     return PairResult(true);
 }
 

@@ -18,7 +18,6 @@
 #include "chainparams.h"
 #include "key.h"
 #include "pubkey.h"
-#include "script/script.h"
 #include "script/standard.h"
 
 #include <string>
@@ -141,7 +140,6 @@ typedef CBitcoinExtKeyBase<CExtKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_SECRET_
 typedef CBitcoinExtKeyBase<CExtPubKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
 
 
-CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Type addrType);
 std::string EncodeDestination(const CTxDestination& dest, bool isStaking);
 std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
 // DecodeDestinationisStaking flag is set to true when the string arg is from an staking address
