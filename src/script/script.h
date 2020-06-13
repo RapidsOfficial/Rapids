@@ -613,8 +613,10 @@ public:
      */
     unsigned int GetSigOpCount(const CScript& scriptSig) const;
 
+    bool IsPayToPublicKey() const;
     bool IsNormalPaymentScript() const;
     bool IsPayToScriptHash() const;
+    bool IsPayToPublicKeyHash() const;
     bool IsPayToColdStaking() const;
     bool StartsWithOpcode(const opcodetype opcode) const;
     bool IsZerocoinMint() const;

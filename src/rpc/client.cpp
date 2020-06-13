@@ -166,6 +166,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         {"getserials", 1},
         {"getserials", 2},
         {"getfeeinfo", 0},
+        {"getaddressutxos", 1},
     };
 
 class CRPCConvertTable
