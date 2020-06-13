@@ -223,14 +223,13 @@ struct CAddressIndexIteratorHeightKey {
 };
 
 struct CAddressUnspentKey {
-    unsigned int txindex;
     unsigned int type;
     uint160 hashBytes;
     uint256 txhash;
     size_t index;
 
     size_t GetSerializeSize(int nType, int nVersion) const {
-        return 61;
+        return 57;
     }
 
     template<typename Stream>
@@ -239,7 +238,6 @@ struct CAddressUnspentKey {
         hashBytes.Serialize(s, nType, nVersion);
         txhash.Serialize(s, nType, nVersion);
         ser_writedata32(s, index);
-        ser_writedata32be(s, txindex);
     }
 
     template<typename Stream>
@@ -248,16 +246,14 @@ struct CAddressUnspentKey {
         hashBytes.Unserialize(s, nType, nVersion);
         txhash.Unserialize(s, nType, nVersion);
         index = ser_readdata32(s);
-        txindex = ser_readdata32be(s);
     }
 
     CAddressUnspentKey(unsigned int addressType, uint160 addressHash,
-        uint256 txid, size_t indexValue, int blockindex) {
+        uint256 txid, size_t indexValue) {
         type = addressType;
         hashBytes = addressHash;
         txhash = txid;
         index = indexValue;
-        txindex = blockindex;
     }
 
     CAddressUnspentKey() {
@@ -269,7 +265,6 @@ struct CAddressUnspentKey {
         hashBytes.SetNull();
         txhash.SetNull();
         index = 0;
-        txindex = 0;
     }
 };
 
