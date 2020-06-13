@@ -43,6 +43,10 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "new 256-bit stake modifier - start block v6",
         },
         {
+                /*.strName =*/ "PIVX v4.0",
+                /*.strInfo =*/ "new message sigs - start block v7 - time protocol - zc spend v4",
+        },
+        {
                 /*.strName =*/ "v5 dummy",
                 /*.strInfo =*/ "Placeholder for future PIVX version 5.0 upgrade",
         },

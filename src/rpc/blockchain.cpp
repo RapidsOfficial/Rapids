@@ -738,27 +738,30 @@ UniValue verifychain(const UniValue& params, bool fHelp)
 static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Consensus::Params& consensusParams)
 {
     UniValue rv(UniValue::VOBJ);
-    bool activated = false;
+    Consensus::UpgradeIndex idx;
     switch(version) {
     case 1:
     case 2:
     case 3:
-        activated = pindex->nHeight >= 1;
+        idx = Consensus::BASE_NETWORK;
         break;
     case 4:
-        activated = consensusParams.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC);
+        idx = Consensus::UPGRADE_ZC;
         break;
     case 5:
-        activated = consensusParams.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_BIP65);
+        idx = Consensus::UPGRADE_BIP65;
         break;
     case 6:
-        activated = consensusParams.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_V3_4);
+        idx = Consensus::UPGRADE_V3_4;
         break;
     case 7:
-        activated = pindex->nHeight >= consensusParams.height_start_TimeProtoV2;
+        idx = Consensus::UPGRADE_V4_0;
         break;
+    default:
+        rv.push_back(Pair("status", false));
+        return rv;
     }
-    rv.push_back(Pair("status", activated));
+    rv.push_back(Pair("status", consensusParams.NetworkUpgradeActive(pindex->nHeight, idx)));
     return rv;
 }
 static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)

@@ -33,6 +33,7 @@ enum UpgradeIndex : uint32_t {
     UPGRADE_BIP65,
     UPGRADE_ZC_PUBLIC,
     UPGRADE_V3_4,
+    UPGRADE_V4_0,
     UPGRADE_V5_DUMMY,
     // NOTE: Also add new upgrades to NetworkUpgradeInfo in upgrades.cpp
     MAX_NETWORK_UPGRADES
@@ -115,8 +116,6 @@ struct Params {
     int height_last_ZC_AccumCheckpoint;
     int height_last_ZC_WrappedSerials;
     int height_start_InvalidUTXOsCheck;
-    int height_start_MessSignaturesV2;
-    int height_start_TimeProtoV2;                   // Blocks v7 start
     int height_start_ZC_InvalidSerials;
     int height_start_ZC_SerialRangeCheck;
     int height_ZC_RecalcAccumulators;
@@ -131,8 +130,8 @@ struct Params {
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
-    bool IsMessSigV2(const int nHeight) const { return nHeight >= height_start_MessSignaturesV2; }
-    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= height_start_TimeProtoV2; }
+    bool IsMessSigV2(const int nHeight) const { return NetworkUpgradeActive(nHeight, UPGRADE_V4_0); }
+    bool IsTimeProtocolV2(const int nHeight) const { return NetworkUpgradeActive(nHeight, UPGRADE_V4_0); }
 
     int FutureBlockTimeDrift(const int nHeight) const
     {
