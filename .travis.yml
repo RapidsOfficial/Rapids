@@ -238,7 +238,7 @@ jobs:
     - stage: cmake
       name: 'CMake macOS'
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11.1
       language: cpp
       compiler:
         - clang
@@ -261,9 +261,7 @@ jobs:
             - libevent
             - qrencode
             - gmp
-#         Set 'update: true' below until TravisCI updates their macOS build images.
-#         See https://travis-ci.community/t/macos-build-fails-because-of-homebrew-bundle-unknown-command/7296/16
-          update: true
+          update: false
       before_install:
       install:
       before_script:
