@@ -368,7 +368,6 @@ bool CBlockTreeDB::ReadAddressUnspentIndex(uint160 addressHash, int type,
 
     boost::scoped_ptr<leveldb::Iterator> pcursor(NewIterator());
 
-    // pcursor->Seek(make_pair(DB_ADDRESSUNSPENTINDEX, CAddressIndexIteratorKey(type, addressHash)));
     CDataStream ssKey(SER_DISK, CLIENT_VERSION);
     pair<char, CAddressIndexIteratorKey> key = make_pair(DB_ADDRESSUNSPENTINDEX, CAddressIndexIteratorKey(type, addressHash));
     ssKey.reserve(ssKey.GetSerializeSize(key));
@@ -380,10 +379,7 @@ bool CBlockTreeDB::ReadAddressUnspentIndex(uint160 addressHash, int type,
     while (pcursor->Valid()) {
         boost::this_thread::interruption_point();
         std::pair<char,CAddressUnspentKey> key;
-        // if (pcursor->GetKey(key) && key.first == DB_ADDRESSUNSPENTINDEX && key.second.hashBytes == addressHash) {
         if (GetKey(pcursor->key(), key) && key.first == DB_ADDRESSUNSPENTINDEX && key.second.hashBytes == addressHash) {
-            // CAddressUnspentValue nValue;
-            //if (pcursor->GetValue(nValue)) {
             try {
                 leveldb::Slice slValue = pcursor->value();
                 CDataStream ssValue(slValue.data(), slValue.data() + slValue.size(), SER_DISK, CLIENT_VERSION);

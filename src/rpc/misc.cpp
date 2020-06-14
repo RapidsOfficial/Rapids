@@ -1001,29 +1001,16 @@ UniValue getaddressutxos(const UniValue& params, bool fHelp)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unknown address type");
         }
 
-        CBlockIndex* pblockindex = chainActive[it->second.blockHeight];
-        bool valide = true;
+        output.pushKV("address", address);
+        output.pushKV("txid", it->first.txhash.GetHex());
+        output.pushKV("outputIndex", (int)it->first.index);
+        output.pushKV("script", HexStr(it->second.script.begin(), it->second.script.end()));
+        output.pushKV("satoshis", it->second.satoshis);
+        output.pushKV("height", it->second.blockHeight);
+        
+        utxos.push_back(output);
 
-        if (pblockindex->IsProofOfStake()) {
-            if (it->first.txindex == 1 && ((chainActive.Height() - it->second.blockHeight) > Params().GetConsensus().nCoinbaseMaturity))
-                valide = false;
-        } else {
-            if (it->first.txindex == 0 && ((chainActive.Height() - it->second.blockHeight) > Params().GetConsensus().nCoinbaseMaturity))
-                valide = false;
-        }
-
-        if (valide) {
-            output.pushKV("address", address);
-            output.pushKV("txid", it->first.txhash.GetHex());
-            output.pushKV("outputIndex", (int)it->first.index);
-            output.pushKV("script", HexStr(it->second.script.begin(), it->second.script.end()));
-            output.pushKV("satoshis", it->second.satoshis);
-            output.pushKV("height", it->second.blockHeight);
-            
-            utxos.push_back(output);
-
-            total += it->second.satoshis;
-        }
+        total += it->second.satoshis;
     }
 
     if (includeChainInfo) {

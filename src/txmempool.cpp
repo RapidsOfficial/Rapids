@@ -534,6 +534,7 @@ void CTxMemPool::remove(const CTransaction& origTx, std::list<CTransaction>& rem
             totalTxSize -= mapTx[hash].GetTxSize();
             mapTx.erase(hash);
             nTransactionsUpdated++;
+            removeAddressIndex(hash);
         }
     }
 }
