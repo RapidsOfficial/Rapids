@@ -254,6 +254,10 @@ extern const char* MNWINNER;
  */
 extern const char* GETMNWINNERS;
 /**
+* The dseg message is used to request the Masternode list or an specific entry
+*/
+extern const char* GETMNLIST;
+/**
  * The budgetproposal message is used to broadcast or relay budget proposal metadata to connected peers
  */
 extern const char* BUDGETPROPOSAL;
