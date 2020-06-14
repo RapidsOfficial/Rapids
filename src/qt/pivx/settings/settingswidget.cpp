@@ -403,6 +403,11 @@ void SettingsWidget::onAboutClicked()
 
 }
 
+void SettingsWidget::openNetworkMonitor()
+{
+    settingsInformationWidget->openNetworkMonitor();
+}
+
 void SettingsWidget::selectOption(QPushButton* option)
 {
     for (QPushButton* wid : options) {

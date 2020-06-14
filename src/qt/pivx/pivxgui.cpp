@@ -514,6 +514,11 @@ void PIVXGUI::goToReceive()
     showTop(receiveWidget);
 }
 
+void PIVXGUI::openNetworkMonitor()
+{
+    settingsWidget->openNetworkMonitor();
+}
+
 void PIVXGUI::showTop(QWidget* view)
 {
     if (stackedContainer->currentWidget() != view) {
