@@ -367,6 +367,14 @@ void SettingsWidget::showDebugConsole()
     onDebugConsoleClicked();
 }
 
+void SettingsWidget::showInformation()
+{
+    ui->pushButtonTools->setChecked(true);
+    onToolsClicked();
+    ui->pushButtonTools1->setChecked(true);
+    onInformationClicked();
+}
+
 void SettingsWidget::onDebugConsoleClicked()
 {
     ui->stackedWidgetContainer->setCurrentWidget(settingsConsoleWidget);

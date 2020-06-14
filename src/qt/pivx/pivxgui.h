@@ -68,6 +68,7 @@ public Q_SLOTS:
     void goToMasterNodes();
     void goToColdStaking();
     void goToSettings();
+    void goToSettingsInfo();
 
     void connectActions();
 

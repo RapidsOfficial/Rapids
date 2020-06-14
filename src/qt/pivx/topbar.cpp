@@ -125,6 +125,7 @@ TopBar::TopBar(PIVXGUI* _mainWindow, QWidget *parent) :
     connect(ui->pushButtonColdStaking, &ExpandableButton::Mouse_Pressed, this, &TopBar::onColdStakingClicked);
     connect(ui->pushButtonSync, &ExpandableButton::Mouse_HoverLeave, this, &TopBar::refreshProgressBarSize);
     connect(ui->pushButtonSync, &ExpandableButton::Mouse_Hover, this, &TopBar::refreshProgressBarSize);
+    connect(ui->pushButtonSync, &ExpandableButton::Mouse_Pressed, [this](){window->goToSettingsInfo();});
 }
 
 void TopBar::onThemeClicked()
@@ -145,7 +146,6 @@ void TopBar::onThemeClicked()
 
     Q_EMIT themeChanged(lightTheme);
 }
-
 
 void TopBar::onBtnLockClicked()
 {

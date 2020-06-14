@@ -41,6 +41,7 @@ public:
     void loadWalletModel() override;
     void setMapper();
     void showDebugConsole();
+    void showInformation();
 
 Q_SIGNALS:
     /** Get restart command-line parameters and handle restart */
@@ -75,7 +76,6 @@ private Q_SLOTS:
     // Help
     void onHelpClicked();
     void onAboutClicked();
-
     void onResetAction();
     void onSaveOptionsClicked();
 
