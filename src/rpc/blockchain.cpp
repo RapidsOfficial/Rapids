@@ -348,9 +348,8 @@ UniValue mempoolToJSON(bool fVerbose = false)
     if (fVerbose) {
         LOCK(mempool.cs);
         UniValue o(UniValue::VOBJ);
-        for (const PAIRTYPE(uint256, CTxMemPoolEntry) & entry : mempool.mapTx) {
-            const uint256& hash = entry.first;
-            const CTxMemPoolEntry& e = entry.second;
+        for (const CTxMemPoolEntry& e : mempool.mapTx) {
+            const uint256& hash = e.GetTx().GetHash();
             UniValue info(UniValue::VOBJ);
             info.push_back(Pair("size", (int)e.GetTxSize()));
             info.push_back(Pair("fee", ValueFromAmount(e.GetFee())));
@@ -358,6 +357,9 @@ UniValue mempoolToJSON(bool fVerbose = false)
             info.push_back(Pair("height", (int)e.GetHeight()));
             info.push_back(Pair("startingpriority", e.GetPriority(e.GetHeight())));
             info.push_back(Pair("currentpriority", e.GetPriority(chainActive.Height())));
+            info.push_back(Pair("descendantcount", e.GetCountWithDescendants()));
+            info.push_back(Pair("descendantsize", e.GetSizeWithDescendants()));
+            info.push_back(Pair("descendantfees", e.GetFeesWithDescendants()));
             const CTransaction& tx = e.GetTx();
             std::set<std::string> setDepends;
             for (const CTxIn& txin : tx.vin) {
@@ -411,6 +413,9 @@ UniValue getrawmempool(const UniValue& params, bool fHelp)
             "    \"height\" : n,           (numeric) block height when transaction entered pool\n"
             "    \"startingpriority\" : n, (numeric) priority when transaction entered pool\n"
             "    \"currentpriority\" : n,  (numeric) transaction priority now\n"
+            "    \"descendantcount\" : n,  (numeric) number of in-mempool descendant transactions (including this one)\n"
+            "    \"descendantsize\" : n,   (numeric) size of in-mempool descendants (including this one)\n"
+            "    \"descendantfees\" : n,   (numeric) fees of in-mempool descendants (including this one)\n"
             "    \"depends\" : [           (array) unconfirmed transactions used as inputs for this transaction\n"
             "        \"transactionid\",    (string) parent transaction id\n"
             "       ... ]\n"

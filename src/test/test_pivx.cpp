@@ -68,6 +68,11 @@ TestingSetup::~TestingSetup()
         fs::remove_all(pathTemp);
 }
 
+CTxMemPoolEntry TestMemPoolEntryHelper::FromTx(CMutableTransaction &tx, CTxMemPool *pool) {
+    return CTxMemPoolEntry(tx, nFee, nTime, dPriority, nHeight,
+                           pool ? pool->HasNoInputsOf(tx) : hadNoDependencies);
+}
+
 [[noreturn]] void Shutdown(void* parg)
 {
     std::exit(0);

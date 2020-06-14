@@ -93,6 +93,7 @@ BASE_SCRIPTS= [
     'rpc_net.py',                               # ~ 83 sec
     'rpc_bip38.py',                             # ~ 82 sec
     'interface_bitcoin_cli.py',                 # ~ 80 sec
+    'mempool_packages.py',                      # ~ 63 sec
 
     # vv Tests less than 60s vv
     'wallet_accounts.py',                       # ~ 57 sec
