@@ -438,10 +438,12 @@ UniValue setban(const UniValue& params, bool fHelp)
     if (params[0].get_str().find("/") != std::string::npos)
         isSubnet = true;
 
-    if (!isSubnet)
-        netAddr = CNetAddr(params[0].get_str());
-    else
-        subNet = CSubNet(params[0].get_str());
+    if (!isSubnet) {
+        CNetAddr resolved;
+        LookupHost(params[0].get_str().c_str(), resolved, false);
+        netAddr = resolved;
+    } else
+        LookupSubNet(params[0].get_str().c_str(), subNet);
 
     if (! (isSubnet ? subNet.IsValid() : netAddr.IsValid()) )
         throw JSONRPCError(RPC_CLIENT_NODE_ALREADY_ADDED, "Error: Invalid IP/Subnet");

@@ -11,6 +11,7 @@
 #include "masternode-sync.h"
 #include "masternode.h"
 #include "messagesigner.h"
+#include "netbase.h"
 #include "spork.h"
 #include "swifttx.h"
 #include "util.h"
@@ -403,7 +404,8 @@ void CMasternodeMan::CountNetworks(int protocolVersion, int& ipv4, int& ipv6, in
         std::string strHost;
         int port;
         SplitHostPort(mn.addr.ToString(), port, strHost);
-        CNetAddr node = CNetAddr(strHost);
+        CNetAddr node;
+        LookupHost(strHost.c_str(), node, false);
         int nNetwork = node.GetNetwork();
         switch (nNetwork) {
             case 1 :
