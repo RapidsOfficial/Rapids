@@ -134,9 +134,9 @@ void SendWidget::refreshAmounts()
         totalAmount = walletModel->getBalance(CoinControlDialog::coinControl) - total;
         ui->labelTitleTotalRemaining->setText(tr("Total remaining from the selected UTXO"));
     } else {
-        // Wallet's balance
-        totalAmount = walletModel->getBalance(nullptr, fDelegationsChecked) - total;
-        ui->labelTitleTotalRemaining->setText(tr("Total remaining"));
+        // Wallet's unlocked balance
+        totalAmount = walletModel->getUnlockedBalance(nullptr, fDelegationsChecked) - total;
+        ui->labelTitleTotalRemaining->setText(tr("Unlocked remaining"));
     }
     ui->labelAmountRemaining->setText(
             GUIUtil::formatBalance(
