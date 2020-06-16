@@ -259,7 +259,7 @@ public:
     bool MintableCoins();
     bool SelectStakeCoins(std::set<std::pair<const CWalletTx*, unsigned int> >& setCoins, CAmount nTargetAmount) const;
 
-    static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
+    static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500;
 
     //! Generates hd wallet //
     bool SetupSPKM();
