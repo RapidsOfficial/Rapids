@@ -1263,7 +1263,7 @@ void ThreadDNSAddressSeed()
 
         LOCK(cs_vNodes);
         if (vNodes.size() >= 2) {
-            LogPrintf("P2P peers available. Skipped DNS seeding.\n");
+            LogPrint(BCLog::NET,"P2P peers available. Skipped DNS seeding.\n");
             return;
         }
     }
@@ -1271,7 +1271,7 @@ void ThreadDNSAddressSeed()
     const std::vector<CDNSSeedData>& vSeeds = Params().DNSSeeds();
     int found = 0;
 
-    LogPrintf("Loading addresses from DNS seeds (could take a while)\n");
+    LogPrint(BCLog::NET,"Loading addresses from DNS seeds (could take a while)\n");
 
     for (const CDNSSeedData& seed : vSeeds) {
         if (HaveNameProxy()) {
@@ -1301,7 +1301,7 @@ void ThreadDNSAddressSeed()
         }
     }
 
-    LogPrintf("%d addresses found from DNS seeds\n", found);
+    LogPrint(BCLog::NET,"%d addresses found from DNS seeds\n", found);
 }
 
 
