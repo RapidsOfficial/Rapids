@@ -695,11 +695,8 @@ UniValue getstakingstatus(const UniValue& params, bool fHelp)
     {
         LOCK2(cs_main, &pwalletMain->cs_wallet);
 
-        //! have we attempted to stake in the past 60s?
-        bool fRecentlyStaked = (GetAdjustedTime() - nLastCoinStakeSearchTime < 60);
-
         UniValue obj(UniValue::VOBJ);
-        obj.push_back(Pair("staking_status", fRecentlyStaked ? true : false));
+        obj.push_back(Pair("staking_status", pwalletMain->pStakerStatus->IsActive()));
         obj.push_back(Pair("staking_enabled", GetBoolArg("-staking", true)));
         bool fColdStaking = GetBoolArg("-coldstaking", true);
         obj.push_back(Pair("coldstaking_enabled", fColdStaking));
