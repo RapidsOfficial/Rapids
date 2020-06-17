@@ -263,6 +263,7 @@ public:
     bool isMine(const QString& addressStr);
     bool isUsed(CBitcoinAddress address);
     void getOutputs(const std::vector<COutPoint>& vOutpoints, std::vector<COutput>& vOutputs);
+    bool getMNCollateralCandidate(COutPoint& outPoint);
     bool isSpent(const COutPoint& outpoint) const;
     void listCoins(std::map<QString, std::vector<COutput> >& mapCoins) const;
 
