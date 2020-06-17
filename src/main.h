@@ -416,4 +416,11 @@ extern CZerocoinDB* zerocoinDB;
 /** Global variable that points to the spork database (protected by cs_main) */
 extern CSporkDB* pSporkDB;
 
+/**
+ * Return the spend height, which is one more than the inputs.GetBestBlock().
+ * While checking, GetBestBlock() refers to the parent block. (protected by cs_main)
+ * This is also true for mempool checks.
+ */
+int GetSpendHeight(const CCoinsViewCache& inputs);
+
 #endif // BITCOIN_MAIN_H
