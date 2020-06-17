@@ -461,6 +461,8 @@ set(COMMON_SOURCES
         ./src/amount.cpp
         ./src/base58.cpp
         ./src/bip38.cpp
+        ./src/consensus/params.cpp
+        ./src/consensus/upgrades.cpp
         ./src/chainparams.cpp
         ./src/coins.cpp
         ./src/key_io.cpp
