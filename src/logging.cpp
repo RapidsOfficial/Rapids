@@ -112,6 +112,7 @@ const CLogCategoryDesc LogCategories[] = {
         {BCLog::ESTIMATEFEE,    "estimatefee"},
         {BCLog::ADDRMAN,        "addrman"},
         {BCLog::SELECTCOINS,    "selectcoins"},
+		{BCLog::SYNC,           "sync" },
         {BCLog::REINDEX,        "reindex"},
         {BCLog::CMPCTBLOCK,     "cmpctblock"},
         {BCLog::RAND,           "rand"},

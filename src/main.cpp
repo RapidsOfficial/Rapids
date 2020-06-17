@@ -1829,10 +1829,10 @@ void Misbehaving(NodeId pnode, int howmuch)
     state->nMisbehavior += howmuch;
     int banscore = GetArg("-banscore", 100);
     if (state->nMisbehavior >= banscore && state->nMisbehavior - howmuch < banscore) {
-        LogPrintf("Misbehaving: %s (%d -> %d) BAN THRESHOLD EXCEEDED\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
+        LogPrint(BCLog::NET,"Misbehaving: %s (%d -> %d) BAN THRESHOLD EXCEEDED\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
         state->fShouldBan = true;
     } else
-        LogPrintf("Misbehaving: %s (%d -> %d)\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
+        LogPrint(BCLog::NET,"Misbehaving: %s (%d -> %d)\n", state->name, state->nMisbehavior - howmuch, state->nMisbehavior);
 }
 
 void static InvalidChainFound(CBlockIndex* pindexNew)
@@ -5345,7 +5345,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                               !pSporkDB->SporkExists(SPORK_18_ZEROCOIN_PUBLICSPEND_V4);
 
         if (fMissingSporks || !fRequestedSporksIDB){
-            LogPrintf("asking peer for sporks\n");
+            LogPrint(BCLog::SYNC,"asking peer for sporks\n");
             pfrom->PushMessage("getsporks");
             fRequestedSporksIDB = true;
         }
@@ -5374,11 +5374,11 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                 CAddress addr = GetLocalAddress(&pfrom->addr);
                 FastRandomContext insecure_rand;
                 if (addr.IsRoutable()) {
-                    LogPrintf("ProcessMessages: advertising address %s\n", addr.ToString());
+                    LogPrint(BCLog::NET,"ProcessMessages: advertising address %s\n", addr.ToString());
                     pfrom->PushAddress(addr, insecure_rand);
                 } else if (IsPeerAddrLocalGood(pfrom)) {
                     addr.SetIP(pfrom->addrLocal);
-                    LogPrintf("ProcessMessages: advertising address %s\n", addr.ToString());
+                    LogPrint(BCLog::NET,"ProcessMessages: advertising address %s\n", addr.ToString());
                     pfrom->PushAddress(addr, insecure_rand);
                 }
             }
@@ -5400,7 +5400,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         if (fLogIPs)
             remoteAddr = ", peeraddr=" + pfrom->addr.ToString();
 
-        LogPrintf("receive version message: %s: version %d, blocks=%d, us=%s, peer=%d%s\n",
+        LogPrint(BCLog::NET,"receive version message: %s: version %d, blocks=%d, us=%s, peer=%d%s\n",
             pfrom->cleanSubVer, pfrom->nVersion,
             pfrom->nStartingHeight, addrMe.ToString(), pfrom->id,
             remoteAddr);
@@ -6152,10 +6152,10 @@ bool ProcessMessages(CNode* pfrom)
             pfrom->PushMessage("reject", strCommand, REJECT_MALFORMED, std::string("error parsing message"));
             if (strstr(e.what(), "end of data")) {
                 // Allow exceptions from under-length message on vRecv
-                LogPrintf("ProcessMessages(%s, %u bytes): Exception '%s' caught, normally caused by a message being shorter than its stated length\n", SanitizeString(strCommand), nMessageSize, e.what());
+                LogPrint(BCLog::NET,"ProcessMessages(%s, %u bytes): Exception '%s' caught, normally caused by a message being shorter than its stated length\n", SanitizeString(strCommand), nMessageSize, e.what());
             } else if (strstr(e.what(), "size too large")) {
                 // Allow exceptions from over-long size
-                LogPrintf("ProcessMessages(%s, %u bytes): Exception '%s' caught\n", SanitizeString(strCommand), nMessageSize, e.what());
+                LogPrint(BCLog::NET,"ProcessMessages(%s, %u bytes): Exception '%s' caught\n", SanitizeString(strCommand), nMessageSize, e.what());
             } else {
                 PrintExceptionContinue(&e, "ProcessMessages()");
             }
@@ -6168,7 +6168,7 @@ bool ProcessMessages(CNode* pfrom)
         }
 
         if (!fRet)
-            LogPrintf("ProcessMessage(%s, %u bytes) FAILED peer=%d\n", SanitizeString(strCommand), nMessageSize, pfrom->id);
+            LogPrint(BCLog::NET,"ProcessMessage(%s, %u bytes) FAILED peer=%d\n", SanitizeString(strCommand), nMessageSize, pfrom->id);
 
         break;
     }
