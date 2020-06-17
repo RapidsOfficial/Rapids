@@ -66,8 +66,8 @@ private:
     int sortColumn;
     Qt::SortOrder sortOrder;
     bool forDelegation;
-    bool fSelectAllToggled{true};     // false when pushButtonSelectAll text is "Unselect All"
     QList<CAmount> payAmounts{};
+    unsigned int nSelectableInputs{0};
 
     QMenu* contextMenu;
     QTreeWidgetItem* contextMenuItem;
@@ -75,6 +75,7 @@ private:
     QAction* lockAction;
     QAction* unlockAction;
 
+    void updatePushButtonSelectAll(bool checked);
     void sortView(int, Qt::SortOrder);
     void inform(const QString& text);
 
