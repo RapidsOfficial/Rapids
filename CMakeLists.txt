@@ -302,6 +302,7 @@ set(SERVER_SOURCES
         ./src/net.cpp
         ./src/noui.cpp
         ./src/policy/fees.cpp
+        ./src/policy/policy.cpp
         ./src/pow.cpp
         ./src/rest.cpp
         ./src/rpc/blockchain.cpp
