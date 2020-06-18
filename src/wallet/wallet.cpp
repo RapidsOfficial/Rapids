@@ -2646,7 +2646,7 @@ bool CWallet::CreateCoinStakeKernel(CScript &kernelScript, const CScript &stakeS
     return false;
 }
 
-bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int64_t nSearchInterval, CMutableTransaction& txNew, unsigned int& nTxNewTime)
+bool CWallet::CreateCoinStake(const CKeyStore& keystore, const CBlockIndex* pindexPrev, unsigned int nBits, int64_t nSearchInterval, CMutableTransaction& txNew, unsigned int& nTxNewTime)
 {
     txNew.vin.clear();
     txNew.vout.clear();
@@ -2676,6 +2676,9 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         return false;
     }
 
+  	// update staker status (hash)
+  	pStakerStatus->SetLastTip(pindexPrev);
+
     std::vector<const CWalletTx*> vwtxPrev;
     CAmount nCredit = 0;
     CScript scriptPubKeyKernel;
@@ -2703,6 +2706,10 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
         CScript kernelScript;
         auto stakeScript = pcoin.first->vout[pcoin.second].scriptPubKey;
         fKernelFound = CreateCoinStakeKernel(kernelScript, stakeScript, nBits, block, *pcoin.first, prevoutStake, nTxNewTime, false);
+
+    		// update staker status (time)
+		    pStakerStatus->SetLastTime(nTxNewTime);
+
         if(fKernelFound)
         {
             //Double check that this will pass time requirements
@@ -2747,7 +2754,7 @@ bool CWallet::CreateCoinStake(const CKeyStore& keystore, unsigned int nBits, int
             uint64_t nTotalSize = pcoin.first->vout[pcoin.second].nValue + GetBlockValue(pIndex0->nHeight);
 
             //presstab HyperStake - if MultiSend is set to send in coinstake we will add our outputs here (values asigned further down)
-            if (nTotalSize / 2 > nStakeSplitThreshold * COIN)
+            if (nTotalSize / 2 > nStakeSplitThreshold)
                 txNew.vout.push_back(CTxOut(0, scriptPubKeyOut)); //split stake
 
             if (GetBoolArg("-printcoinstake", false))
