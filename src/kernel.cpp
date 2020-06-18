@@ -11,6 +11,7 @@
 #include "legacy/stakemodifier.h"
 #include "script/interpreter.h"
 #include "util.h"
+#include "policy/policy.h"
 #include "stakeinput.h"
 #include "utilmoneystr.h"
 #include "zpivchain.h"

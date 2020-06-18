@@ -11,6 +11,7 @@
 #include "keystore.h"
 #include "main.h"
 #include "net.h"
+#include "policy/policy.h"
 #include "primitives/transaction.h"
 #include "zpiv/deterministicmint.h"
 #include "rpc/server.h"
