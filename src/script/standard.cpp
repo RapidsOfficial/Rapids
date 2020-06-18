@@ -55,6 +55,16 @@ static bool MatchPayToPubkeyHash(const CScript& script, valtype& pubkeyhash)
     return false;
 }
 
+static bool MatchPayToColdStaking(const CScript& script, valtype& stakerPubKeyHash, valtype& ownerPubKeyHash)
+{
+    if (script.IsPayToColdStaking()) {
+        stakerPubKeyHash = valtype(script.begin () + 6, script.begin() + 26);
+        ownerPubKeyHash = valtype(script.begin () + 28, script.begin() + 48);
+        return true;
+    }
+    return false;
+}
+
 /** Test for "small positive integer" script opcodes - OP_1 through OP_16. */
 static constexpr bool IsSmallInteger(opcodetype opcode)
 {
@@ -125,6 +135,14 @@ bool Solver(const CScript& scriptPubKey, txnouttype& typeRet, std::vector<std::v
     if (MatchPayToPubkeyHash(scriptPubKey, data)) {
         typeRet = TX_PUBKEYHASH;
         vSolutionsRet.push_back(std::move(data));
+        return true;
+    }
+
+    std::vector<unsigned char> data1;
+    if (MatchPayToColdStaking(scriptPubKey, data, data1)) {
+        typeRet = TX_COLDSTAKE;
+        vSolutionsRet.push_back(std::move(data));
+        vSolutionsRet.push_back(std::move(data1));
         return true;
     }
 
