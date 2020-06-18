@@ -2720,14 +2720,36 @@ bool CWallet::CreateCoinStake(
     return true;
 }
 
+std::string CWallet::CommitResult::ToString() const
+{
+    std::string strErrRet = strprintf(_("Failed to accept tx in the memory pool (reason: %s)\n"), FormatStateMessage(state));
+
+    switch (status) {
+        case CWallet::CommitStatus::OK:
+            return _("No error");
+        case CWallet::CommitStatus::Abandoned:
+            strErrRet += _("Transaction canceled.");
+            break;
+        case CWallet::CommitStatus::NotAccepted:
+            strErrRet += strprintf(_("WARNING: The transaction has been signed and recorded, so the wallet will try to re-send it. "
+                    "Use 'abandontransaction' to cancel it. (txid: %s)"), hashTx.ToString());
+            break;
+        default:
+            return _("Invalid status error.");
+    }
+
+    return strErrRet;
+}
+
 /**
  * Call after CreateTransaction unless you want to abort
  */
-bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, std::string strCommand)
+CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, std::string strCommand)
 {
+    CommitResult res;
     {
         LOCK2(cs_main, cs_wallet);
-        LogPrintf("CommitTransaction:\n%s", wtxNew.ToString());
+        LogPrintf("%s:\n%s", __func__, wtxNew.ToString());
         {
             // This is only to keep the database open to defeat the auto-flush for the
             // duration of this scope.  This is the only place where this optimization
@@ -2759,18 +2781,32 @@ bool CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, std:
                 delete pwalletdb;
         }
 
+        res.hashTx = wtxNew.GetHash();
+
+        // Try ATMP. This must not fail. The transaction has already been signed and recorded.
+        CValidationState state;
+        if (!AcceptToMemoryPool(mempool, state, wtxNew, false, nullptr, false, true, false)) {
+            res.state = state;
+            // Abandon the transaction
+            if (AbandonTransaction(res.hashTx)) {
+                res.status = CWallet::CommitStatus::Abandoned;
+                // Return the change key
+                reservekey.ReturnKey();
+            }
+
+            LogPrintf("%s: ERROR: %s\n", __func__, res.ToString());
+            return res;
+        }
+
+        res.status = CWallet::CommitStatus::OK;
+
         // Track how many getdata requests our transaction gets
-        mapRequestCount[wtxNew.GetHash()] = 0;
+        mapRequestCount[res.hashTx] = 0;
 
         // Broadcast
-        if (!wtxNew.AcceptToMemoryPool(false)) {
-            // This must not fail. The transaction has already been signed and recorded.
-            LogPrintf("CommitTransaction() : Error: Transaction not valid\n");
-            return false;
-        }
         wtxNew.RelayWalletTransaction(strCommand);
     }
-    return true;
+    return res;
 }
 
 bool CWallet::AddAccountingEntry(const CAccountingEntry& acentry, CWalletDB & pwalletdb)
@@ -3429,7 +3465,8 @@ void CWallet::AutoCombineDust()
         if (!maxSize && nTotalRewardsValue < nAutoCombineThreshold * COIN && nFeeRet > 0)
             continue;
 
-        if (!CommitTransaction(wtx, keyChange)) {
+        const CWallet::CommitResult& res = CommitTransaction(wtx, keyChange);
+        if (res.status != CWallet::CommitStatus::OK) {
             LogPrintf("AutoCombineDust transaction commit failed\n");
             continue;
         }
@@ -3532,7 +3569,8 @@ bool CWallet::MultiSend()
             return false;
         }
 
-        if (!CommitTransaction(wtx, keyChange)) {
+        const CWallet::CommitResult& res = CommitTransaction(wtx, keyChange);
+        if (res.status != CWallet::CommitStatus::OK) {
             LogPrintf("MultiSend transaction commit failed\n");
             return false;
         } else

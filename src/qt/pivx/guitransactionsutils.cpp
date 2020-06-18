@@ -15,8 +15,8 @@ namespace GuiTransactionsUtils {
         QString retStr;
         informType = CClientUIInterface::MSG_WARNING;
         // This comment is specific to SendCoinsDialog usage of WalletModel::SendCoinsReturn.
-        // WalletModel::TransactionCommitFailed is used only in WalletModel::sendCoins()
-        // all others are used only in WalletModel::prepareTransaction()
+        // WalletModel::TransactionCheckFailed and WalletModel::TransactionCommitFailed
+        // are used only in WalletModel::sendCoins(). All others are used only in WalletModel::prepareTransaction()
         switch (sendCoinsReturn.status) {
             case WalletModel::InvalidAddress:
                 retStr = parent->translate("The recipient address is not valid, please recheck.");
@@ -38,9 +38,12 @@ namespace GuiTransactionsUtils {
             case WalletModel::TransactionCreationFailed:
                 informType = CClientUIInterface::MSG_ERROR;
                 break;
+            case WalletModel::TransactionCheckFailed:
+                retStr = parent->translate("The transaction is not valid!");
+                informType = CClientUIInterface::MSG_ERROR;
+                break;
             case WalletModel::TransactionCommitFailed:
-                retStr = parent->translate(
-                        "The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+                retStr = QString::fromStdString(sendCoinsReturn.commitRes.ToString());
                 informType = CClientUIInterface::MSG_ERROR;
                 break;
             case WalletModel::StakingOnlyUnlocked:
