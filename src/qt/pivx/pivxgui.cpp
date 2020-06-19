@@ -607,6 +607,7 @@ bool PIVXGUI::addWallet(const QString& name, WalletModel* walletModel)
     // Connect actions..
     connect(walletModel, &WalletModel::message, this, &PIVXGUI::message);
     connect(masterNodesWidget, &MasterNodesWidget::message, this, &PIVXGUI::message);
+    connect(coldStakingWidget, &ColdStakingWidget::message, this, &PIVXGUI::message);
     connect(topBar, &TopBar::message, this, &PIVXGUI::message);
     connect(sendWidget, &SendWidget::message,this, &PIVXGUI::message);
     connect(receiveWidget, &ReceiveWidget::message,this, &PIVXGUI::message);
