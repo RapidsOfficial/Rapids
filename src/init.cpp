@@ -1828,10 +1828,14 @@ bool AppInit2()
         LogPrintf("Locking Masternodes:\n");
         uint256 mnTxHash;
         for (CMasternodeConfig::CMasternodeEntry mne : masternodeConfig.getEntries()) {
-            LogPrintf("  %s %s\n", mne.getTxHash(), mne.getOutputIndex());
             mnTxHash.SetHex(mne.getTxHash());
             COutPoint outpoint = COutPoint(mnTxHash, (unsigned int) std::stoul(mne.getOutputIndex().c_str()));
+#ifdef ENABLE_WALLET
+            unsigned int n = std::stoul(mne.getOutputIndex());
+            if (pwalletMain->IsSpent(mnTxHash, n)) continue;
+            LogPrintf("  %s %s\n", mne.getTxHash(), mne.getOutputIndex());
             pwalletMain->LockCoin(outpoint);
+#endif
         }
     }
 
