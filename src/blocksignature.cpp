@@ -62,14 +62,14 @@ bool CheckBlockSignature(const CBlock& block)
         const CTxOut& txout = block.vtx[1].vout[1];
         if (!Solver(txout.scriptPubKey, whichType, vSolutions))
             return false;
-        if (whichType == TX_PUBKEY || whichType == TX_PUBKEYHASH) {
+        if (whichType == TX_PUBKEY) {
             valtype& vchPubKey = vSolutions[0];
             pubkey = CPubKey(vchPubKey);
-        } else if (whichType == TX_COLDSTAKE) {
+        }  else if (whichType == TX_PUBKEYHASH || whichType == TX_COLDSTAKE) {
             // pick the public key from the P2CS input
             const CTxIn& txin = block.vtx[1].vin[0];
             int start = 1 + (int) *txin.scriptSig.begin(); // skip sig
-            start += 1 + (int) *(txin.scriptSig.begin()+start); // skip flag
+            if (whichType == TX_COLDSTAKE) start += 1 + (int) *(txin.scriptSig.begin()+start); // skip flag
             pubkey = CPubKey(txin.scriptSig.begin()+start+1, txin.scriptSig.end());
         }
     }
