@@ -761,6 +761,21 @@ int64_t CWallet::IncOrderPosNext(CWalletDB* pwalletdb)
     return nRet;
 }
 
+bool CWallet::IsKeyUsed(const CPubKey& vchPubKey) {
+    if (vchPubKey.IsValid()) {
+        CScript scriptPubKey = GetScriptForDestination(vchPubKey.GetID());
+        for (std::map<uint256, CWalletTx>::iterator it = mapWallet.begin();
+             it != mapWallet.end() && vchPubKey.IsValid();
+             ++it) {
+            const CWalletTx& wtx = (*it).second;
+            for (const CTxOut& txout : wtx.vout)
+                if (txout.scriptPubKey == scriptPubKey)
+                    return true;
+        }
+    }
+    return false;
+}
+
 bool CWallet::GetLabelDestination(CTxDestination& dest, const std::string& label, bool bForceNew)
 {
     CWalletDB walletdb(strWalletFile);
@@ -768,29 +783,17 @@ bool CWallet::GetLabelDestination(CTxDestination& dest, const std::string& label
     walletdb.ReadAccount(label, account);
 
     if (!bForceNew) {
-        if (!account.vchPubKey.IsValid())
-            bForceNew = true;
-        else {
-            // Check if the current key has been used
-            CScript scriptPubKey = GetScriptForDestination(account.vchPubKey.GetID());
-            for (std::map<uint256, CWalletTx>::iterator it = mapWallet.begin();
-                 it != mapWallet.end() && account.vchPubKey.IsValid();
-                 ++it) {
-                const CWalletTx& wtx = (*it).second;
-                for (const CTxOut& txout : wtx.vout) {
-                    if (txout.scriptPubKey == scriptPubKey) {
-                        bForceNew = true;
-                        break;
-                    }
-                }
-            }
-        }
+        // Check if the key is invalid or has been used
+        bForceNew = !account.vchPubKey.IsValid() || IsKeyUsed(account.vchPubKey);
     }
 
     // Generate a new key
     if (bForceNew) {
-        if (!GetKeyFromPool(account.vchPubKey))
-            return false;
+        // double check for used keys. todo: research why we have sometimes used keys in the keypool..
+        do {
+            if (!GetKeyFromPool(account.vchPubKey))
+                return false;
+        } while (IsKeyUsed(account.vchPubKey));
 
         dest = account.vchPubKey.GetID();
         SetAddressBook(dest, label, AddressBook::AddressBookPurpose::RECEIVE);

@@ -253,6 +253,8 @@ private:
 
     void SyncMetaData(std::pair<TxSpends::iterator, TxSpends::iterator>);
 
+    bool IsKeyUsed(const CPubKey& vchPubKey);
+
 public:
 
     static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
