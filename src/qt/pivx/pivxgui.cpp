@@ -502,9 +502,21 @@ void PIVXGUI::goToSettings(){
     showTop(settingsWidget);
 }
 
+void PIVXGUI::goToSettingsInfo()
+{
+    navMenu->selectSettings();
+    settingsWidget->showInformation();
+    goToSettings();
+}
+
 void PIVXGUI::goToReceive()
 {
     showTop(receiveWidget);
+}
+
+void PIVXGUI::openNetworkMonitor()
+{
+    settingsWidget->openNetworkMonitor();
 }
 
 void PIVXGUI::showTop(QWidget* view)
