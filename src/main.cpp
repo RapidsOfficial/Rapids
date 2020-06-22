@@ -954,7 +954,7 @@ static std::string FormatStateMessage(const CValidationState &state)
 {
     return strprintf("%s%s (code %i)",
         state.GetRejectReason(),
-        state.GetDebugMessage().empty() ? "" : ", " + state.GetDebugMessage(),
+        (state.GetDebugMessage().empty() ? "" : ", " + state.GetDebugMessage()),
         state.GetRejectCode());
 }
 
@@ -3546,7 +3546,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
         if (budget.IsBudgetPaymentBlock(nHeight)) {
             // if superblocks are not enabled, reject
             if (!sporkManager.IsSporkActive(SPORK_13_ENABLE_SUPERBLOCKS))
-                return error("%s: superblocks are not enabled");
+                return error("%s: superblocks are not enabled", __func__);
             return true;
         }
 

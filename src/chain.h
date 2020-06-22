@@ -399,12 +399,10 @@ public:
 
     std::string ToString() const
     {
-        std::string str = "CDiskBlockIndex(";
-        str += CBlockIndex::ToString();
-        str += strprintf("\n                hashBlock=%s, hashPrev=%s)",
-            GetBlockHash().ToString(),
-            hashPrev.ToString());
-        return str;
+        return strprintf("CDiskBlockIndex(%s\n                hashBlock=%s, hashPrev=%s)",
+                CBlockIndex::ToString(),
+                GetBlockHash().ToString(),
+                hashPrev.ToString());
     }
 };
 
