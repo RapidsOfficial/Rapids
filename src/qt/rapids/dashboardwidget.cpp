@@ -445,7 +445,7 @@ void DashboardWidget::changeChartColors()
     } else {
         gridY = QColor("#40ffffff");
         axisY->setGridLineColor(gridY);
-        gridLineColorX = QColor(5,83,31);
+        gridLineColorX = QColor(27,177,77);
         linePenColorY =  gridLineColorX;
         backgroundColor = linePenColorY;
     }
@@ -630,7 +630,7 @@ void DashboardWidget::onChartRefreshed()
     }
     // init sets
     set0 = new QBarSet("RPD");
-    set0->setColor(QColor(5,83,31));
+    set0->setColor(QColor(27,177,77));
 
     if (!series) {
         series = new QBarSeries();
