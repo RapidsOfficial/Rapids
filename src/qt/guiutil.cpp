@@ -149,7 +149,7 @@ void setupAddressWidget(QValidatedLineEdit* widget, QWidget* parent)
 
 void setupAmountWidget(QLineEdit* widget, QWidget* parent)
 {
-    QRegularExpression rx("^(\\d{0,8})((\\.|,)\\d{1,8})?$");
+    QRegularExpression rx("^(\\d{0,9})((\\.|,)\\d{1,8})?$");
     QValidator *validator = new QRegularExpressionValidator(rx, widget);
     widget->setValidator(validator);
 }
