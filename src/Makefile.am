@@ -199,6 +199,7 @@ BITCOIN_CORE_H = \
   validationinterface.h \
   version.h \
   wallet/hdchain.h \
+  wallet/rpcwallet.h \
   wallet/scriptpubkeyman.h \
   wallet/wallet.h \
   wallet/wallet_ismine.h \

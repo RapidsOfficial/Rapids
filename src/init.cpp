@@ -55,6 +55,7 @@
 #include "wallet/db.h"
 #include "wallet/wallet.h"
 #include "wallet/walletdb.h"
+#include "wallet/rpcwallet.h"
 
 #endif
 
@@ -1031,6 +1032,9 @@ bool AppInit2()
         if (SoftSetBoolArg("-staking", false))
             LogPrintf("AppInit2 : parameter interaction: wallet functionality not enabled -> setting -staking=0\n");
 #ifdef ENABLE_WALLET
+    } else {
+        // Register wallet RPC commands
+        walletRegisterRPCCommands();
     }
 #endif
 

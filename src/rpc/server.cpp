@@ -398,69 +398,12 @@ static const CRPCCommand vRPCCommands[] =
 
 #ifdef ENABLE_WALLET
         /* Wallet */
-        {"wallet", "addmultisigaddress", &addmultisigaddress, true },
-        {"wallet", "autocombinerewards", &autocombinerewards, false },
-        {"wallet", "backupwallet", &backupwallet, true },
-        {"wallet", "delegatestake", &delegatestake, false },
-        {"wallet", "dumpprivkey", &dumpprivkey, true },
-        {"wallet", "dumpwallet", &dumpwallet, true },
         {"wallet", "bip38encrypt", &bip38encrypt, true },
         {"wallet", "bip38decrypt", &bip38decrypt, true },
-        {"wallet", "encryptwallet", &encryptwallet, true },
-        {"wallet", "getaccountaddress", &getaccountaddress, true },
-        {"wallet", "getaccount", &getaccount, true },
-        {"wallet", "getaddressesbyaccount", &getaddressesbyaccount, true },
-        {"wallet", "getbalance", &getbalance, false },
-        {"wallet", "getcoldstakingbalance", &getcoldstakingbalance, false },
-        {"wallet", "getdelegatedbalance", &getdelegatedbalance, false },
-        {"wallet", "upgradewallet", &upgradewallet, true },
-        {"wallet", "sethdseed", &sethdseed, true },
         {"wallet", "getaddressinfo", &getaddressinfo, true },
-        {"wallet", "getnewaddress", &getnewaddress, true },
-        {"wallet", "getnewstakingaddress", &getnewstakingaddress, true },
-        {"wallet", "getrawchangeaddress", &getrawchangeaddress, true },
-        {"wallet", "getreceivedbyaccount", &getreceivedbyaccount, false },
-        {"wallet", "getreceivedbyaddress", &getreceivedbyaddress, false },
         {"wallet", "getstakingstatus", &getstakingstatus, false },
-        {"wallet", "getstakesplitthreshold", &getstakesplitthreshold, false },
-        {"wallet", "gettransaction", &gettransaction, false },
-        {"wallet", "abandontransaction", &abandontransaction, false },
-        {"wallet", "getunconfirmedbalance", &getunconfirmedbalance, false },
-        {"wallet", "getwalletinfo", &getwalletinfo, false },
-        {"wallet", "importprivkey", &importprivkey, true },
-        {"wallet", "importwallet", &importwallet, true },
-        {"wallet", "importaddress", &importaddress, true },
-        {"wallet", "importpubkey", &importpubkey, true},
-        {"wallet", "keypoolrefill", &keypoolrefill, true },
-        {"wallet", "listaccounts", &listaccounts, false },
-        {"wallet", "listdelegators", &listdelegators, false },
-        {"wallet", "liststakingaddresses", &liststakingaddresses, false },
-        {"wallet", "listaddressgroupings", &listaddressgroupings, false },
-        {"wallet", "listcoldutxos", &listcoldutxos, false },
-        {"wallet", "listlockunspent", &listlockunspent, false },
-        {"wallet", "listreceivedbyaccount", &listreceivedbyaccount, false },
-        {"wallet", "listreceivedbyaddress", &listreceivedbyaddress, false },
-        {"wallet", "listsinceblock", &listsinceblock, false },
-        {"wallet", "listtransactions", &listtransactions, false },
         {"wallet", "listunspent", &listunspent, false },
-        {"wallet", "lockunspent", &lockunspent, true },
-        {"wallet", "move", &movecmd, false },
         {"wallet", "multisend", &multisend, false },
-        {"wallet", "rawdelegatestake", &rawdelegatestake, false },
-        {"wallet", "sendfrom", &sendfrom, false },
-        {"wallet", "sendmany", &sendmany, false },
-        {"wallet", "sendtoaddress", &sendtoaddress, false },
-        {"wallet", "sendtoaddressix", &sendtoaddressix, false },
-        {"wallet", "setaccount", &setaccount, true },
-        {"wallet", "setstakesplitthreshold", &setstakesplitthreshold, false },
-        {"wallet", "settxfee", &settxfee, true },
-        {"wallet", "signmessage", &signmessage, true },
-        {"wallet", "walletlock", &walletlock, true },
-        {"wallet", "walletpassphrasechange", &walletpassphrasechange, true },
-        {"wallet", "walletpassphrase", &walletpassphrase, true },
-        {"wallet", "delegatoradd", &delegatoradd, true },
-        {"wallet", "delegatorremove", &delegatorremove, true },
-
         {"zerocoin", "createrawzerocoinspend", &createrawzerocoinspend, false },
         {"zerocoin", "getzerocoinbalance", &getzerocoinbalance, false },
         {"zerocoin", "listmintedzerocoins", &listmintedzerocoins, false },
@@ -503,6 +446,20 @@ const CRPCCommand *CRPCTable::operator[](const std::string &name) const
     if (it == mapCommands.end())
         return NULL;
     return (*it).second;
+}
+
+bool CRPCTable::appendCommand(const std::string& name, const CRPCCommand* pcmd)
+{
+    if (IsRPCRunning())
+        return false;
+
+    // don't allow overwriting for now
+    std::map<std::string, const CRPCCommand*>::const_iterator it = mapCommands.find(name);
+    if (it != mapCommands.end())
+        return false;
+
+    mapCommands[name] = pcmd;
+    return true;
 }
 
 bool StartRPC()
@@ -681,4 +638,4 @@ void RPCRunLater(const std::string& name, std::function<void(void)> func, int64_
     deadlineTimers.insert(std::make_pair(name, boost::shared_ptr<RPCTimerBase>(timerInterface->NewTimer(func, nSeconds*1000))));
 }
 
-const CRPCTable tableRPC;
+CRPCTable tableRPC;

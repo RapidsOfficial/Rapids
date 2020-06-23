@@ -8,6 +8,7 @@
 #include "rpc/server.h"
 #include "wallet/db.h"
 #include "wallet/wallet.h"
+#include "wallet/rpcwallet.h"
 
 void clean()
 {
@@ -22,14 +23,12 @@ WalletTestingSetup::WalletTestingSetup(): TestingSetup()
 {
     clean(); // todo: research why we have an initialized bitdb here.
     bitdb.MakeMock();
+    walletRegisterRPCCommands();
 
     bool fFirstRun;
     pwalletMain = new CWallet("test_wallet.dat");
     pwalletMain->LoadWallet(fFirstRun);
     RegisterValidationInterface(pwalletMain);
-
-    // todo: back port method.
-    //RegisterWalletRPCCommands(tableRPC);
 }
 
 WalletTestingSetup::~WalletTestingSetup()

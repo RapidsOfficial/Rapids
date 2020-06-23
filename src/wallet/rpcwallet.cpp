@@ -4552,3 +4552,84 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
     return DoZpivSpend(mint.GetDenominationAsAmount(), vMintsSelected, address_str);
 }
 
+extern UniValue dumpprivkey(const UniValue& params, bool fHelp); // in rpcdump.cpp
+extern UniValue importprivkey(const UniValue& params, bool fHelp);
+extern UniValue importaddress(const UniValue& params, bool fHelp);
+extern UniValue importpubkey(const UniValue& params, bool fHelp);
+extern UniValue dumpwallet(const UniValue& params, bool fHelp);
+extern UniValue importwallet(const UniValue& params, bool fHelp);
+
+const CRPCCommand vWalletRPCCommands[] =
+{       //  category              name                        actor (function)           okSafeMode
+        //  --------------------- ------------------------    -----------------------    ----------
+        //{ "rawtransactions",    "fundrawtransaction",       &fundrawtransaction,       false },
+        {"wallet",              "autocombinerewards",       &autocombinerewards,       false },
+        {"wallet",              "abandontransaction",       &abandontransaction,       false },
+        { "wallet",             "addmultisigaddress",       &addmultisigaddress,       true  },
+        { "wallet",             "backupwallet",             &backupwallet,             true  },
+        { "wallet",             "delegatestake",            &delegatestake,            false },
+        { "wallet",             "dumpprivkey",              &dumpprivkey,              true  },
+        { "wallet",             "dumpwallet",               &dumpwallet,               true  },
+        { "wallet",             "encryptwallet",            &encryptwallet,            true  },
+        { "wallet",             "getaccountaddress",        &getaccountaddress,        true  },
+        { "wallet",             "getaccount",               &getaccount,               true  },
+        { "wallet",             "getaddressesbyaccount",    &getaddressesbyaccount,    true  },
+        { "wallet",             "getbalance",               &getbalance,               false },
+        { "wallet",             "getcoldstakingbalance",    &getcoldstakingbalance,    false },
+        { "wallet",             "getdelegatedbalance",      &getdelegatedbalance,      false },
+        { "wallet",             "upgradewallet",            &upgradewallet,            true  },
+        { "wallet",             "sethdseed",                &sethdseed,                true  },
+        { "wallet",             "getnewaddress",            &getnewaddress,            true  },
+        { "wallet",             "getnewstakingaddress",     &getnewstakingaddress,     true  },
+        { "wallet",             "getrawchangeaddress",      &getrawchangeaddress,      true  },
+        { "wallet",             "getreceivedbyaccount",     &getreceivedbyaccount,     false },
+        { "wallet",             "getreceivedbyaddress",     &getreceivedbyaddress,     false },
+        { "wallet",             "gettransaction",           &gettransaction,           false },
+        { "wallet",             "getstakesplitthreshold",   &getstakesplitthreshold,   false },
+        { "wallet",             "getunconfirmedbalance",    &getunconfirmedbalance,    false },
+        { "wallet",             "getwalletinfo",            &getwalletinfo,            false },
+        { "wallet",             "importprivkey",            &importprivkey,            true  },
+        { "wallet",             "importwallet",             &importwallet,             true  },
+        { "wallet",             "importaddress",            &importaddress,            true  },
+        { "wallet",             "importpubkey",             &importpubkey,             true  },
+        { "wallet",             "keypoolrefill",            &keypoolrefill,            true  },
+        { "wallet",             "listaccounts",             &listaccounts,             false },
+        { "wallet",             "listaddressgroupings",     &listaddressgroupings,     false },
+        { "wallet",             "listdelegators",           &listdelegators,           false },
+        { "wallet",             "liststakingaddresses",     &liststakingaddresses,     false },
+        { "wallet",             "listcoldutxos",            &listcoldutxos,            false },
+        { "wallet",             "listlockunspent",          &listlockunspent,          false },
+        { "wallet",             "listreceivedbyaccount",    &listreceivedbyaccount,    false },
+        { "wallet",             "listreceivedbyaddress",    &listreceivedbyaddress,    false },
+        { "wallet",             "listsinceblock",           &listsinceblock,           false },
+        { "wallet",             "listtransactions",         &listtransactions,         false },
+        { "wallet",             "listunspent",              &listunspent,              false },
+        { "wallet",             "lockunspent",              &lockunspent,              true  },
+        { "wallet",             "move",                     &movecmd,                  false },
+        { "wallet",             "rawdelegatestake",         &rawdelegatestake,         false },
+        { "wallet",             "sendfrom",                 &sendfrom,                 false },
+        { "wallet",             "sendmany",                 &sendmany,                 false },
+        { "wallet",             "sendtoaddress",            &sendtoaddress,            false },
+        { "wallet",             "sendtoaddressix",          &sendtoaddressix,          false },
+        { "wallet",             "setaccount",               &setaccount,               true  },
+        { "wallet",             "settxfee",                 &settxfee,                 true  },
+        { "wallet",             "setstakesplitthreshold",   &setstakesplitthreshold,   false },
+        { "wallet",             "signmessage",              &signmessage,              true  },
+        { "wallet",             "walletlock",               &walletlock,               true  },
+        { "wallet",             "walletpassphrasechange",   &walletpassphrasechange,   true  },
+        { "wallet",             "walletpassphrase",         &walletpassphrase,         true  },
+        { "wallet",             "delegatoradd",             &delegatoradd,             true  },
+        { "wallet",             "delegatorremove",          &delegatorremove,          true  }
+};
+
+void walletRegisterRPCCommands()
+{
+    unsigned int vcidx;
+    for (vcidx = 0; vcidx < ARRAYLEN(vWalletRPCCommands); vcidx++)
+    {
+        const CRPCCommand *pcmd;
+
+        pcmd = &vWalletRPCCommands[vcidx];
+        tableRPC.appendCommand(pcmd->name, pcmd);
+    }
+}
