@@ -351,17 +351,13 @@ void ClearDatadirCache()
 fs::path GetConfigFile()
 {
     fs::path pathConfigFile(GetArg("-conf", "pivx.conf"));
-    if (!pathConfigFile.is_complete())
-        pathConfigFile = GetDataDir(false) / pathConfigFile;
-
-    return pathConfigFile;
+    return AbsPathForConfigVal(pathConfigFile, false);
 }
 
 fs::path GetMasternodeConfigFile()
 {
     fs::path pathConfigFile(GetArg("-mnconf", "masternode.conf"));
-    if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir() / pathConfigFile;
-    return pathConfigFile;
+    return AbsPathForConfigVal(pathConfigFile);
 }
 
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
@@ -404,8 +400,7 @@ fs::path AbsPathForConfigVal(const fs::path& path, bool net_specific)
 fs::path GetPidFile()
 {
     fs::path pathPidFile(GetArg("-pid", "pivxd.pid"));
-    if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
-    return pathPidFile;
+    return AbsPathForConfigVal(pathPidFile);
 }
 
 void CreatePidFile(const fs::path& path, pid_t pid)
