@@ -70,6 +70,7 @@ private:
     unsigned int entryHeight; //! Chain height when entering the mempool
     bool hadNoDependencies; //! Not dependent on any other txs when it entered the mempool
     CAmount inChainInputValue; //! Sum of all txin values that are already in blockchain
+    bool spendsCoinbaseOrCoinstake; //! keep track of transactions that spend a coinbase or a coinstake
 
     // Information about descendants of this transaction that are in the
     // mempool; if we remove this transaction we must remove all of these
@@ -83,7 +84,7 @@ private:
 public:
     CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee,
             int64_t _nTime, double _entryPriority, unsigned int _entryHeight,
-            bool poolHasNoInputsOf, CAmount _inChainInputValue);
+            bool poolHasNoInputsOf, CAmount _inChainInputValue, bool _spendsCoinbaseOrCoinstake);
     CTxMemPoolEntry(const CTxMemPoolEntry& other);
 
     const CTransaction& GetTx() const { return this->tx; }
@@ -113,6 +114,8 @@ public:
     uint64_t GetCountWithDescendants() const { return nCountWithDescendants; }
     uint64_t GetSizeWithDescendants() const { return nSizeWithDescendants; }
     CAmount GetFeesWithDescendants() const { return nFeesWithDescendants; }
+
+    bool GetSpendsCoinbaseOrCoinstake() const { return spendsCoinbaseOrCoinstake; }
 };
 
 // Helpers for modifying CTxMemPool::mapTx, which is a boost multi_index.
