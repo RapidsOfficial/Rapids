@@ -457,8 +457,12 @@ public:
     //! Check if the specific output is available in this view
     bool IsOutputAvailable(const uint256& txId, int index);
 
-    //! Return priority of tx at height nHeight
-    double GetPriority(const CTransaction& tx, int nHeight) const;
+    /**
+     * Return priority of tx at height nHeight. Also calculate the sum of the values of the inputs
+     * that are already in the chain.  These are the inputs that will age and increase priority as
+     * new blocks are added to the chain.
+     */
+    double GetPriority(const CTransaction& tx, int nHeight, CAmount &inChainInputValue) const;
 
     const CTxOut& GetOutputFor(const CTxIn& input) const;
 
