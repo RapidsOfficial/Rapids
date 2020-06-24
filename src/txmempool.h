@@ -66,8 +66,8 @@ private:
     CFeeRate feeRate;     //! ... and fee per kB
     bool hasZerocoins{false}; //! ... and checking if it contains zPIV (mints/spends)
     int64_t nTime;        //! Local time when entering the mempool
-    double dPriority;     //! Priority when entering the mempool
-    unsigned int nHeight; //! Chain height when entering the mempool
+    double entryPriority;     //! Priority when entering the mempool
+    unsigned int entryHeight; //! Chain height when entering the mempool
     bool hadNoDependencies; //! Not dependent on any other txs when it entered the mempool
 
     // Information about descendants of this transaction that are in the
@@ -80,7 +80,7 @@ private:
     CAmount nFeesWithDescendants;  //! ... and total fees (all including us)
 
 public:
-    CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee, int64_t _nTime, double _dPriority, unsigned int _nHeight, bool poolHasNoInputsOf = false);
+    CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee, int64_t _nTime, double _entryPriority, unsigned int _entryHeight, bool poolHasNoInputsOf = false);
     CTxMemPoolEntry(const CTxMemPoolEntry& other);
 
     const CTransaction& GetTx() const { return this->tx; }
@@ -88,7 +88,7 @@ public:
     const CAmount& GetFee() const { return nFee; }
     size_t GetTxSize() const { return nTxSize; }
     int64_t GetTime() const { return nTime; }
-    unsigned int GetHeight() const { return nHeight; }
+    unsigned int GetHeight() const { return entryHeight; }
     bool HasZerocoins() const { return hasZerocoins; }
     bool WasClearAtEntry() const { return hadNoDependencies; }
     size_t DynamicMemoryUsage() const { return nUsageSize; }

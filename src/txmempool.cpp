@@ -21,9 +21,9 @@
 
 
 CTxMemPoolEntry::CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee,
-                                 int64_t _nTime, double _dPriority,
-                                 unsigned int _nHeight, bool poolHasNoInputsOf) :
-     tx(_tx), nFee(_nFee), nTime(_nTime), dPriority(_dPriority), nHeight(_nHeight), hadNoDependencies(poolHasNoInputsOf)
+                                 int64_t _nTime, double _entryPriority,
+                                 unsigned int _entryHeight, bool poolHasNoInputsOf) :
+     tx(_tx), nFee(_nFee), nTime(_nTime), entryPriority(_entryPriority), entryHeight(_entryHeight), hadNoDependencies(poolHasNoInputsOf)
 {
     nTxSize = ::GetSerializeSize(tx, SER_NETWORK, PROTOCOL_VERSION);
     nModSize = tx.CalculateModifiedSize(nTxSize);
@@ -44,8 +44,8 @@ double
 CTxMemPoolEntry::GetPriority(unsigned int currentHeight) const
 {
     CAmount nValueIn = tx.GetValueOut() + nFee;
-    double deltaPriority = ((double)(currentHeight - nHeight) * nValueIn) / nModSize;
-    double dResult = dPriority + deltaPriority;
+    double deltaPriority = ((double)(currentHeight - entryHeight) * nValueIn) / nModSize;
+    double dResult = entryPriority + deltaPriority;
     return dResult;
 }
 
