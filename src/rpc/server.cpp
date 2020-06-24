@@ -402,7 +402,6 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "bip38decrypt", &bip38decrypt, true },
         {"wallet", "getaddressinfo", &getaddressinfo, true },
         {"wallet", "getstakingstatus", &getstakingstatus, false },
-        {"wallet", "listunspent", &listunspent, false },
         {"wallet", "multisend", &multisend, false },
         {"zerocoin", "createrawzerocoinspend", &createrawzerocoinspend, false },
         {"zerocoin", "getzerocoinbalance", &getzerocoinbalance, false },
