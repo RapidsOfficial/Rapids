@@ -25,8 +25,16 @@ namespace Consensus {
 */
 enum UpgradeIndex : uint32_t {
     BASE_NETWORK,
-    UPGRADE_PURPLE_FENIX,
     UPGRADE_TESTDUMMY,
+    UPGRADE_POS,
+    UPGRADE_POS_V2,
+    UPGRADE_ZC,
+    UPGRADE_ZC_V2,
+    UPGRADE_BIP65,
+    UPGRADE_ZC_PUBLIC,
+    UPGRADE_V3_4,
+    UPGRADE_V4_0,
+    UPGRADE_V5_DUMMY,
     // NOTE: Also add new upgrades to NetworkUpgradeInfo in upgrades.cpp
     MAX_NETWORK_UPGRADES
 };
@@ -105,41 +113,32 @@ struct Params {
     int64_t nTime_RejectOldSporkKey;
 
     // height-based activations
-    int height_last_PoW;
     int height_last_ZC_AccumCheckpoint;
     int height_last_ZC_WrappedSerials;
-    int height_start_BIP65;                         // Blocks v5 start
     int height_start_InvalidUTXOsCheck;
-    int height_start_MessSignaturesV2;
-    int height_start_StakeModifierNewSelection;
-    int height_start_StakeModifierV2;               // Blocks v6 start
-    int height_start_TimeProtoV2;                   // Blocks v7 start
-    int height_start_ZC;                            // Blocks v4 start
     int height_start_ZC_InvalidSerials;
-    int height_start_ZC_PublicSpends;
     int height_start_ZC_SerialRangeCheck;
-    int height_start_ZC_SerialsV2;
     int height_ZC_RecalcAccumulators;
 
     // validation by-pass
     int64_t nPivxBadBlockTime;
     unsigned int nPivxBadBlockBits;
 
-    // Map with network updates (Starting with 'Purple Fenix')
+    // Map with network updates
     NetworkUpgrade vUpgrades[MAX_NETWORK_UPGRADES];
 
     int64_t TargetTimespan(const bool fV2 = true) const { return fV2 ? nTargetTimespanV2 : nTargetTimespan; }
     uint256 ProofOfStakeLimit(const bool fV2) const { return fV2 ? posLimitV2 : posLimitV1; }
     bool MoneyRange(const CAmount& nValue) const { return (nValue >= 0 && nValue <= nMaxMoneyOut); }
-    bool IsMessSigV2(const int nHeight) const { return nHeight >= height_start_MessSignaturesV2; }
-    bool IsTimeProtocolV2(const int nHeight) const { return nHeight >= height_start_TimeProtoV2; }
+    bool IsMessSigV2(const int nHeight) const { return NetworkUpgradeActive(nHeight, UPGRADE_V4_0); }
+    bool IsTimeProtocolV2(const int nHeight) const { return NetworkUpgradeActive(nHeight, UPGRADE_V4_0); }
 
     int FutureBlockTimeDrift(const int nHeight) const
     {
         // PoS (TimeV2): 14 seconds
         if (IsTimeProtocolV2(nHeight)) return nTimeSlotLength - 1;
         // PoS (TimeV1): 3 minutes - PoW: 2 hours
-        return (nHeight > height_last_PoW ? nFutureTimeDriftPoS : nFutureTimeDriftPoW);
+        return (NetworkUpgradeActive(nHeight, UPGRADE_POS) ? nFutureTimeDriftPoS : nFutureTimeDriftPoW);
     }
 
     bool IsValidBlockTimeStamp(const int64_t nTime, const int nHeight) const
@@ -154,7 +153,7 @@ struct Params {
             const int utxoFromBlockHeight, const uint32_t utxoFromBlockTime) const
     {
         // before stake modifier V2, we require the utxo to be nStakeMinAge old
-        if (contextHeight < height_start_StakeModifierV2)
+        if (!NetworkUpgradeActive(contextHeight, Consensus::UPGRADE_V3_4))
             return (utxoFromBlockTime + nStakeMinAge <= contextTime);
         // with stake modifier V2+, we require the utxo to be nStakeMinDepth deep in the chain
         return (contextHeight - utxoFromBlockHeight >= nStakeMinDepth);

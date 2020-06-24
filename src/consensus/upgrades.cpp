@@ -15,8 +15,40 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "PIVX network",
         },
         {
-                /*.strName =*/ "Purple Fenix",
-                /*.strInfo =*/ "PIVX network v5.0.0 update",
+                /*.strName =*/ "PoS",
+                /*.strInfo =*/ "Proof of Stake Consensus activation",
+        },
+        {
+                /*.strName =*/ "PoS v2",
+                /*.strInfo =*/ "New selection for stake modifier",
+        },
+        {
+                /*.strName =*/ "Zerocoin",
+                /*.strInfo =*/ "ZeroCoin protocol activation - start block v4",
+        },
+        {
+                /*.strName =*/ "Zerocoin v2",
+                /*.strInfo =*/ "new zerocoin serials and zPOS start",
+        },
+        {
+                /*.strName =*/ "BIP65",
+                /*.strInfo =*/ "CLTV (BIP65) activation - start block v5",
+        },
+        {
+                /*.strName =*/ "Zerocoin Public",
+                /*.strInfo =*/ "activation of zerocoin public spends (spend v3)",
+        },
+        {
+                /*.strName =*/ "PIVX v3.4",
+                /*.strInfo =*/ "new 256-bit stake modifier - start block v6",
+        },
+        {
+                /*.strName =*/ "PIVX v4.0",
+                /*.strInfo =*/ "new message sigs - start block v7 - time protocol - zc spend v4",
+        },
+        {
+                /*.strName =*/ "v5 dummy",
+                /*.strInfo =*/ "Placeholder for future PIVX version 5.0 upgrade",
         },
         {
                 /*.strName =*/ "Test dummy",
@@ -58,7 +90,7 @@ bool NetworkUpgradeActive(
 }
 
 int CurrentEpoch(int nHeight, const Consensus::Params& params) {
-    for (auto idxInt = Consensus::MAX_NETWORK_UPGRADES - 1; idxInt >= Consensus::BASE_NETWORK; idxInt--) {
+    for (auto idxInt = Consensus::MAX_NETWORK_UPGRADES - 1; idxInt > Consensus::BASE_NETWORK; idxInt--) {
         if (NetworkUpgradeActive(nHeight, params, Consensus::UpgradeIndex(idxInt))) {
             return idxInt;
         }

@@ -349,7 +349,7 @@ public:
             READWRITE(nMint);
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
-            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
+            if (!Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4)) {
                 uint64_t nStakeModifier = 0;
                 READWRITE(nStakeModifier);
                 this->SetStakeModifier(nStakeModifier, this->GeneratedStakeModifier());
@@ -475,7 +475,7 @@ public:
             READWRITE(nMint);
             READWRITE(nMoneySupply);
             READWRITE(nFlags);
-            if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) {
+            if (!Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4)) {
                 READWRITE(nStakeModifier);
             } else {
                 READWRITE(nStakeModifierV2);

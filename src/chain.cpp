@@ -132,8 +132,8 @@ int64_t CBlockIndex::MinPastBlockTime() const
 
     // on the transition from Time Protocol v1 to v2
     // pindexPrev->nTime might be in the future (up to the allowed drift)
-    // so we allow the nBlockTimeProtocolV2 to be at most (180-14) seconds earlier than previous block
-    if (nHeight + 1 == consensus.height_start_TimeProtoV2)
+    // so we allow the nBlockTimeProtocolV2 (PIVX v4.0) to be at most (180-14) seconds earlier than previous block
+    if (nHeight + 1 == consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight)
         return GetBlockTime() - consensus.FutureBlockTimeDrift(nHeight) + consensus.FutureBlockTimeDrift(nHeight + 1);
 
     // Time Protocol v2: pindexPrev->nTime
@@ -209,7 +209,7 @@ void CBlockIndex::SetStakeModifier(const uint256& nStakeModifier)
 void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
 {
     // Shouldn't be called on V1 modifier's blocks (or before setting pprev)
-    if (nHeight < Params().GetConsensus().height_start_StakeModifierV2) return;
+    if (!Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4)) return;
     if (!pprev) throw std::runtime_error(strprintf("%s : ERROR: null pprev", __func__));
 
     // Generate Hash(prevoutId | prevModifier) - switch with genesis modifier (0) on upgrade block
@@ -222,7 +222,7 @@ void CBlockIndex::SetNewStakeModifier(const uint256& prevoutId)
 // Returns V1 stake modifier (uint64_t)
 uint64_t CBlockIndex::GetStakeModifierV1() const
 {
-    if (vStakeModifier.empty() || nHeight >= Params().GetConsensus().height_start_StakeModifierV2)
+    if (vStakeModifier.empty() || Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4))
         return 0;
     uint64_t nStakeModifier;
     std::memcpy(&nStakeModifier, vStakeModifier.data(), vStakeModifier.size());
@@ -232,7 +232,7 @@ uint64_t CBlockIndex::GetStakeModifierV1() const
 // Returns V2 stake modifier (uint256)
 uint256 CBlockIndex::GetStakeModifierV2() const
 {
-    if (vStakeModifier.empty() || nHeight < Params().GetConsensus().height_start_StakeModifierV2)
+    if (vStakeModifier.empty() || !Params().GetConsensus().NetworkUpgradeActive(nHeight, Consensus::UPGRADE_V3_4))
         return UINT256_ZERO;
     uint256 nStakeModifier;
     std::memcpy(nStakeModifier.begin(), vStakeModifier.data(), vStakeModifier.size());

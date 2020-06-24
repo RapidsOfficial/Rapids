@@ -914,10 +914,11 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
 
     //get block value and calculate from that
     CAmount nSubsidy = 0;
-    const int last_pow_block = Params().GetConsensus().height_last_PoW;
-    if (nHeight <= last_pow_block && nHeight >= 151200) {
+    const Consensus::Params& consensus = Params().GetConsensus();
+    const bool isPoSActive = consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_POS);
+    if (nHeight >= 151200 && !isPoSActive) {
         nSubsidy = 50 * COIN;
-    } else if (nHeight <= 302399 && nHeight > last_pow_block) {
+    } else if (isPoSActive && nHeight <= 302399) {
         nSubsidy = 50 * COIN;
     } else if (nHeight <= 345599 && nHeight >= 302400) {
         nSubsidy = 45 * COIN;
@@ -935,7 +936,7 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
         nSubsidy = 15 * COIN;
     } else if (nHeight <= 647999 && nHeight >= 604800) {
         nSubsidy = 10 * COIN;
-    } else if (nHeight >= Params().GetConsensus().height_start_ZC_SerialsV2) {
+    } else if (consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC_V2)) {
         nSubsidy = 10 * COIN;
     } else {
         nSubsidy = 5 * COIN;

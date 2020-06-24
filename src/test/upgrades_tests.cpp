@@ -10,11 +10,25 @@
 
 #include <boost/test/unit_test.hpp>
 
-struct UpgradesTest : public TestingSetup {
-    UpgradesTest() {}
-    ~UpgradesTest() {
+struct UpgradesTest : public TestingSetup
+{
+    int DefaultActivation[Consensus::MAX_NETWORK_UPGRADES];
+    UpgradesTest()
+    {
+        SelectParams(CBaseChainParams::REGTEST);
+        // Save activation heights in DefaultActivation and set all upgrades to inactive.
+        for (uint32_t idx = Consensus::BASE_NETWORK + 1; idx < Consensus::MAX_NETWORK_UPGRADES; idx++) {
+            DefaultActivation[idx] = Params().GetConsensus().vUpgrades[idx].nActivationHeight;
+            UpdateNetworkUpgradeParameters(Consensus::UpgradeIndex(idx), Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT);
+        }
+    }
+    ~UpgradesTest()
+    {
         // Revert to default
-        UpdateNetworkUpgradeParameters(Consensus::UPGRADE_TESTDUMMY, Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT);
+        for (uint32_t idx = Consensus::BASE_NETWORK + 1; idx < Consensus::MAX_NETWORK_UPGRADES; idx++) {
+            UpdateNetworkUpgradeParameters(Consensus::UpgradeIndex(idx), DefaultActivation[idx]);
+        }
+        SelectParams(CBaseChainParams::MAIN);
     }
 };
 
@@ -22,7 +36,6 @@ BOOST_FIXTURE_TEST_SUITE(network_upgrades_tests, UpgradesTest)
 
 BOOST_AUTO_TEST_CASE(networkUpgradeStateTest)
 {
-    SelectParams(CBaseChainParams::REGTEST);
     const Consensus::Params& params = Params().GetConsensus();
 
     // Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT
@@ -61,7 +74,6 @@ BOOST_AUTO_TEST_CASE(networkUpgradeStateTest)
 
 BOOST_AUTO_TEST_CASE(IsActivationHeightTest)
 {
-    SelectParams(CBaseChainParams::REGTEST);
     const Consensus::Params& params = Params().GetConsensus();
 
     // Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT
@@ -89,8 +101,8 @@ BOOST_AUTO_TEST_CASE(IsActivationHeightTest)
     BOOST_CHECK(!IsActivationHeight(1000000, params, Consensus::UPGRADE_TESTDUMMY));
 }
 
-BOOST_AUTO_TEST_CASE(IsActivationHeightForAnyUpgradeTest) {
-    SelectParams(CBaseChainParams::REGTEST);
+BOOST_AUTO_TEST_CASE(IsActivationHeightForAnyUpgradeTest)
+{
     const Consensus::Params& params = Params().GetConsensus();
 
     // Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT
@@ -118,8 +130,8 @@ BOOST_AUTO_TEST_CASE(IsActivationHeightForAnyUpgradeTest) {
     BOOST_CHECK(!IsActivationHeightForAnyUpgrade(1000000, params));
 }
 
-BOOST_AUTO_TEST_CASE(NextActivationHeightTest) {
-    SelectParams(CBaseChainParams::REGTEST);
+BOOST_AUTO_TEST_CASE(NextActivationHeightTest)
+{
     const Consensus::Params& params = Params().GetConsensus();
 
     // Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT

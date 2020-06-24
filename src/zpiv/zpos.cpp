@@ -59,7 +59,7 @@ CBlockIndex* CLegacyZPivStake::GetIndexFrom()
 
     // Not found. Scan the chain.
     const Consensus::Params& consensus = Params().GetConsensus();
-    CBlockIndex* pindex = chainActive[consensus.height_start_ZC];
+    CBlockIndex* pindex = chainActive[consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight];
     if (!pindex) return nullptr;
     while (pindex && pindex->nHeight <= consensus.height_last_ZC_AccumCheckpoint) {
         if (ParseAccChecksum(pindex->nAccumulatorCheckpoint, denom) == nChecksum) {
@@ -93,7 +93,7 @@ CDataStream CLegacyZPivStake::GetUniqueness() const
 bool CLegacyZPivStake::ContextCheck(int nHeight, uint32_t nTime)
 {
     const Consensus::Params& consensus = Params().GetConsensus();
-    if (nHeight < consensus.height_start_ZC_SerialsV2 || nHeight >= consensus.height_last_ZC_AccumCheckpoint)
+    if (!consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC_V2) || nHeight >= consensus.height_last_ZC_AccumCheckpoint)
         return error("%s : zPIV stake block: height %d outside range", __func__, nHeight);
 
     // The checkpoint needs to be from 200 blocks ago

@@ -13,6 +13,7 @@
 #include "script/interpreter.h"
 #include "spork.h"               // for sporkManager
 #include "txdb.h"
+#include "upgrades.h"            // for IsActivationHeight
 #include "utilmoneystr.h"        // for FormatMoney
 
 
@@ -111,7 +112,7 @@ bool isBlockBetweenFakeSerialAttackRange(int nHeight)
 
 bool CheckPublicCoinSpendEnforced(int blockHeight, bool isPublicSpend)
 {
-    if (blockHeight >= Params().GetConsensus().height_start_ZC_PublicSpends) {
+    if (Params().GetConsensus().NetworkUpgradeActive(blockHeight, Consensus::UPGRADE_ZC_PUBLIC)) {
         // reject old coin spend
         if (!isPublicSpend) {
             return error("%s: failed to add block with older zc spend version", __func__);
@@ -152,7 +153,7 @@ bool ContextualCheckZerocoinSpendNoSerialCheck(const CTransaction& tx, const lib
 {
     const Consensus::Params& consensus = Params().GetConsensus();
     //Check to see if the zPIV is properly signed
-    if (nHeight >= consensus.height_start_ZC_SerialsV2) {
+    if (consensus.NetworkUpgradeActive(nHeight, Consensus::UPGRADE_ZC_V2)) {
         try {
             if (!spend->HasValidSignature())
                 return error("%s: V2 zPIV spend does not have a valid signature\n", __func__);
@@ -199,7 +200,7 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         return false;
 
     CBlockIndex* pindex = chainActive[nHeightStart];
-    if (nHeightStart == consensus.height_start_ZC)
+    if (IsActivationHeight(nHeightStart, consensus, Consensus::UPGRADE_ZC))
         nMoneySupply = CAmount(5449796547496199);
 
     if (!fSkipZpiv) {
@@ -250,7 +251,7 @@ bool RecalculatePIVSupply(int nHeightStart, bool fSkipZpiv)
         nMoneySupply += (nValueOut - nValueIn);
 
         // Rewrite zpiv supply too
-        if (!fSkipZpiv && pindex->nHeight >= consensus.height_start_ZC) {
+        if (!fSkipZpiv && consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC)) {
             UpdateZPIVSupplyConnect(block, pindex, true);
         }
 

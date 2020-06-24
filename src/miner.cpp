@@ -496,7 +496,7 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet)
 
     // If we're building a late PoW block, don't continue
     // PoS blocks are built directly with CreateNewBlock
-    if ((nHeightNext > Params().GetConsensus().height_last_PoW)) {
+    if (Params().GetConsensus().NetworkUpgradeActive(nHeightNext, Consensus::UPGRADE_POS)) {
         LogPrintf("%s: Aborting PoW block creation during PoS phase\n", __func__);
         // sleep 1/2 a block time so we don't go into a tight loop.
         MilliSleep((Params().GetConsensus().nTargetSpacing * 1000) >> 1);
@@ -563,8 +563,8 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
     LogPrintf("PIVXMiner started\n");
     SetThreadPriority(THREAD_PRIORITY_LOWEST);
     util::ThreadRename("pivx-miner");
-    const int64_t nSpacingMillis = Params().GetConsensus().nTargetSpacing * 1000;
-    const int last_pow_block = Params().GetConsensus().height_last_PoW;
+    const Consensus::Params& consensus = Params().GetConsensus();
+    const int64_t nSpacingMillis = consensus.nTargetSpacing * 1000;
 
     // Each thread has its own key and counter
     CReserveKey reservekey(pwallet);
@@ -577,7 +577,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             continue;
         }
         if (fProofOfStake) {
-            if (pindexPrev->nHeight < last_pow_block) {
+            if (!consensus.NetworkUpgradeActive(pindexPrev->nHeight + 1, Consensus::UPGRADE_POS)) {
                 // The last PoW block hasn't even been mined yet.
                 MilliSleep(nSpacingMillis);       // sleep a block
                 continue;
@@ -601,7 +601,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                 continue;
             }
 
-        } else if ((pindexPrev->nHeight - 6) > last_pow_block) {
+        } else if (consensus.NetworkUpgradeActive(pindexPrev->nHeight - 6, Consensus::UPGRADE_POS)) {
             // Late PoW: run for a little while longer, just in case there is a rewind on the chain.
             LogPrintf("%s: Exiting PoW Mining Thread at height: %d\n", __func__, pindexPrev->nHeight);
             return;

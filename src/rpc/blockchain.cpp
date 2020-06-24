@@ -143,7 +143,7 @@ UniValue blockToJSON(const CBlock& block, const CBlockIndex* blockindex, bool tx
         if (!GetStakeKernelHash(hashProofOfStakeRet, block, blockindex->pprev))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Cannot get proof of stake hash");
 
-        std::string stakeModifier = (blockindex->nHeight >= Params().GetConsensus().height_start_StakeModifierV2 ?
+        std::string stakeModifier = (Params().GetConsensus().NetworkUpgradeActive(blockindex->nHeight, Consensus::UPGRADE_V3_4) ?
                                      blockindex->GetStakeModifierV2().GetHex() :
                                      strprintf("%016x", blockindex->GetStakeModifierV1()));
         result.push_back(Pair("stakeModifier", stakeModifier));
@@ -738,27 +738,30 @@ UniValue verifychain(const UniValue& params, bool fHelp)
 static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Consensus::Params& consensusParams)
 {
     UniValue rv(UniValue::VOBJ);
-    bool activated = false;
+    Consensus::UpgradeIndex idx;
     switch(version) {
     case 1:
     case 2:
     case 3:
-        activated = pindex->nHeight >= 1;
+        idx = Consensus::BASE_NETWORK;
         break;
     case 4:
-        activated = pindex->nHeight >= consensusParams.height_start_ZC;
+        idx = Consensus::UPGRADE_ZC;
         break;
     case 5:
-        activated = pindex->nHeight >= consensusParams.height_start_BIP65;
+        idx = Consensus::UPGRADE_BIP65;
         break;
     case 6:
-        activated = pindex->nHeight >= consensusParams.height_start_StakeModifierV2;
+        idx = Consensus::UPGRADE_V3_4;
         break;
     case 7:
-        activated = pindex->nHeight >= consensusParams.height_start_TimeProtoV2;
+        idx = Consensus::UPGRADE_V4_0;
         break;
+    default:
+        rv.push_back(Pair("status", false));
+        return rv;
     }
-    rv.push_back(Pair("status", activated));
+    rv.push_back(Pair("status", consensusParams.NetworkUpgradeActive(pindex->nHeight, idx)));
     return rv;
 }
 static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
@@ -854,7 +857,7 @@ UniValue getblockchaininfo(const UniValue& params, bool fHelp)
     softforks.push_back(SoftForkDesc("bip65", 5, tip));
     obj.push_back(Pair("softforks",             softforks));
     UniValue upgrades(UniValue::VOBJ);
-    for (int i = Consensus::UPGRADE_PURPLE_FENIX; i < (int) Consensus::MAX_NETWORK_UPGRADES; i++) {
+    for (int i = Consensus::BASE_NETWORK + 1; i < (int) Consensus::MAX_NETWORK_UPGRADES; i++) {
         NetworkUpgradeDescPushBack(upgrades, consensusParams, Consensus::UpgradeIndex(i), tip->nHeight);
     }
     obj.push_back(Pair("upgrades", upgrades));
@@ -1193,7 +1196,8 @@ UniValue getserials(const UniValue& params, bool fHelp) {
             HelpExampleRpc("getserials", "1254000, 1000"));
 
     int heightStart, heightEnd;
-    validaterange(params, heightStart, heightEnd, Params().GetConsensus().height_start_ZC);
+    const int heightMax = Params().GetConsensus().vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight;
+    validaterange(params, heightStart, heightEnd, heightMax);
 
     bool fVerbose = false;
     if (params.size() > 2) {
