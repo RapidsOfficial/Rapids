@@ -439,7 +439,6 @@ void SendWidget::updateEntryLabels(QList<SendCoinsRecipient> recipients)
     }
 }
 
-
 void SendWidget::onChangeAddressClicked()
 {
     showHideOp(true);
@@ -447,19 +446,25 @@ void SendWidget::onChangeAddressClicked()
     if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
         dialog->setAddress(QString::fromStdString(EncodeDestination(CoinControlDialog::coinControl->destChange)));
     }
-    if (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5)) {
-        CTxDestination dest = DecodeDestination(dialog->getAddress().toStdString());
-        // Ask if it's what the user really wants
-        if (!walletModel->isMine(dest) &&
-            !ask(tr("Warning!"), tr("The change address doesn't belong to this wallet.\n\nDo you want to continue?"))) {
+
+    CTxDestination destChange = (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5) ?
+                                 dialog->getDestination() : CNoDestination());
+
+    if (boost::get<CNoDestination>(&destChange)) {
+        // no change address set
+        ui->btnChangeAddress->setActive(false);
+    } else {
+        // Ask confirmation if external address
+        if (!walletModel->isMine(destChange) && !ask(tr("Warning!"),
+                tr("The change address doesn't belong to this wallet.\n\nDo you want to continue?"))) {
+            dialog->deleteLater();
             return;
         }
-        CoinControlDialog::coinControl->destChange = dest;
         ui->btnChangeAddress->setActive(true);
     }
-    // check if changeAddress has been reset to NoDestination (or wasn't set at all)
-    if (boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange))
-        ui->btnChangeAddress->setActive(false);
+
+    // save change address in coin control
+    CoinControlDialog::coinControl->destChange = destChange;
     dialog->deleteLater();
 }
 
