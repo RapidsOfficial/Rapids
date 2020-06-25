@@ -998,17 +998,18 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         CAmount nFees = nValueIn - nValueOut;
         CAmount inChainInputValue = 0;
         double dPriority = 0;
-        if (!hasZcSpendInputs)
+        bool fSpendsCoinbaseOrCoinstake = false;
+        if (!hasZcSpendInputs) {
             dPriority = view.GetPriority(tx, chainHeight, inChainInputValue);
 
-        // Keep track of transactions that spend a coinbase, which we re-scan
-        // during reorgs to ensure COINBASE_MATURITY is still met.
-        bool fSpendsCoinbaseOrCoinstake = false;
-        for (const CTxIn &txin : tx.vin) {
-            const CCoins *coins = view.AccessCoins(txin.prevout.hash);
-            if (coins->IsCoinBase() || coins->IsCoinStake()) {
-                fSpendsCoinbaseOrCoinstake = true;
-                break;
+            // Keep track of transactions that spend a coinbase, which we re-scan
+            // during reorgs to ensure COINBASE_MATURITY is still met.
+            for (const CTxIn &txin : tx.vin) {
+                const CCoins *coins = view.AccessCoins(txin.prevout.hash);
+                if (coins->IsCoinBase() || coins->IsCoinStake()) {
+                    fSpendsCoinbaseOrCoinstake = true;
+                    break;
+                }
             }
         }
 
