@@ -8,7 +8,7 @@ NO_QT ?=
 NO_WALLET ?=
 NO_ZMQ ?=
 NO_UPNP ?=
-FALLBACK_DOWNLOAD_PATH ?= https://bitcoincore.org/depends-sources
+FALLBACK_DOWNLOAD_PATH ?= https://depends.pivx.org
 
 BUILD = $(shell ./config.guess)
 HOST ?= $(BUILD)
