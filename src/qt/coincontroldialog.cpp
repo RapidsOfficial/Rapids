@@ -32,8 +32,6 @@
 #include <QString>
 #include <QTreeWidget>
 
-CCoinControl* CoinControlDialog::coinControl = new CCoinControl();
-
 
 bool CCoinControlWidgetItem::operator<(const QTreeWidgetItem &other) const {
     int column = treeWidget()->sortColumn();
@@ -48,6 +46,7 @@ CoinControlDialog::CoinControlDialog(QWidget* parent, bool _forDelegation) : QDi
                                                         model(0),
                                                         forDelegation(_forDelegation)
 {
+    coinControl = new CCoinControl();
     ui->setupUi(this);
 
     /* Open CSS when configured */
@@ -205,6 +204,7 @@ CoinControlDialog::~CoinControlDialog()
     settings.setValue("nCoinControlSortOrder", (int)sortOrder);
 
     delete ui;
+    delete coinControl;
 }
 
 void CoinControlDialog::setModel(WalletModel* model)

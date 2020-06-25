@@ -111,6 +111,8 @@ SendWidget::SendWidget(PIVXGUI* parent) :
     connect(ui->pushButtonSave, &QPushButton::clicked, this, &SendWidget::onSendClicked);
     connect(ui->pushButtonAddRecipient, &QPushButton::clicked, this, &SendWidget::onAddEntryClicked);
     connect(ui->pushButtonClear, &QPushButton::clicked, [this](){clearAll(true);});
+
+    coinControlDialog = new CoinControlDialog();
 }
 
 void SendWidget::refreshAmounts()
@@ -129,9 +131,9 @@ void SendWidget::refreshAmounts()
     ui->labelAmountSend->setText(GUIUtil::formatBalance(total, nDisplayUnit, false));
 
     CAmount totalAmount = 0;
-    if (CoinControlDialog::coinControl->HasSelected()) {
+    if (coinControlDialog->coinControl->HasSelected()) {
         // Set remaining balance to the sum of the coinControl selected inputs
-        totalAmount = walletModel->getBalance(CoinControlDialog::coinControl) - total;
+        totalAmount = walletModel->getBalance(coinControlDialog->coinControl) - total;
         ui->labelTitleTotalRemaining->setText(tr("Total remaining from the selected UTXO"));
     } else {
         // Wallet's balance
@@ -161,6 +163,7 @@ void SendWidget::loadClientModel()
 void SendWidget::loadWalletModel()
 {
     if (walletModel) {
+        coinControlDialog->setModel(walletModel);
         if (walletModel->getOptionsModel()) {
             // display unit
             nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
@@ -207,7 +210,7 @@ void SendWidget::onResetSettings()
 
 void SendWidget::onResetCustomOptions(bool fRefreshAmounts)
 {
-    CoinControlDialog::coinControl->SetNull();
+    coinControlDialog->coinControl->SetNull();
     ui->btnChangeAddress->setActive(false);
     ui->btnCoinControl->setActive(false);
     if (ui->checkBoxDelegations->isChecked()) ui->checkBoxDelegations->setChecked(false);
@@ -300,7 +303,7 @@ void SendWidget::showHideCheckBoxDelegations()
 {
     // Show checkbox only when there is any available owned delegation and
     // coincontrol is not selected.
-    const bool isCControl = CoinControlDialog::coinControl->HasSelected();
+    const bool isCControl = coinControlDialog->coinControl->HasSelected();
     const bool hasDel = cachedDelegatedBalance > 0;
 
     const bool showCheckBox = !isCControl && hasDel;
@@ -354,7 +357,7 @@ bool SendWidget::send(QList<SendCoinsRecipient> recipients)
     WalletModelTransaction currentTransaction(recipients);
     WalletModel::SendCoinsReturn prepareStatus;
 
-    prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl, fDelegationsChecked);
+    prepareStatus = walletModel->prepareTransaction(currentTransaction, coinControlDialog->coinControl, fDelegationsChecked);
 
     // process prepareStatus and on error generate message shown to user
     GuiTransactionsUtils::ProcessSendCoinsReturnAndInform(
@@ -443,8 +446,8 @@ void SendWidget::onChangeAddressClicked()
 {
     showHideOp(true);
     SendChangeAddressDialog* dialog = new SendChangeAddressDialog(window, walletModel);
-    if (!boost::get<CNoDestination>(&CoinControlDialog::coinControl->destChange)) {
-        dialog->setAddress(QString::fromStdString(EncodeDestination(CoinControlDialog::coinControl->destChange)));
+    if (!boost::get<CNoDestination>(&coinControlDialog->coinControl->destChange)) {
+        dialog->setAddress(QString::fromStdString(EncodeDestination(coinControlDialog->coinControl->destChange)));
     }
 
     CTxDestination destChange = (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5) ?
@@ -464,7 +467,7 @@ void SendWidget::onChangeAddressClicked()
     }
 
     // save change address in coin control
-    CoinControlDialog::coinControl->destChange = destChange;
+    coinControlDialog->coinControl->destChange = destChange;
     dialog->deleteLater();
 }
 
@@ -519,15 +522,10 @@ void SendWidget::onChangeCustomFeeClicked()
 void SendWidget::onCoinControlClicked()
 {
     if (walletModel->getBalance() > 0) {
-        if (!coinControlDialog) {
-            coinControlDialog = new CoinControlDialog();
-            coinControlDialog->setModel(walletModel);
-        } else {
-            coinControlDialog->refreshDialog();
-        }
+        coinControlDialog->refreshDialog();
         setCoinControlPayAmounts();
         coinControlDialog->exec();
-        ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
+        ui->btnCoinControl->setActive(coinControlDialog->coinControl->HasSelected());
         refreshAmounts();
     } else {
         inform(tr("You don't have any %1 to select.").arg(CURRENCY_UNIT.c_str()));
@@ -740,10 +738,11 @@ void SendWidget::setCustomFeeSelected(bool isSelected, const CAmount& customFee)
 
 void SendWidget::changeTheme(bool isLightTheme, QString& theme)
 {
-    if (coinControlDialog) coinControlDialog->setStyleSheet(theme);
+    coinControlDialog->setStyleSheet(theme);
 }
 
 SendWidget::~SendWidget()
 {
     delete ui;
+    delete coinControlDialog;
 }
