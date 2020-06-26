@@ -214,7 +214,7 @@ public:
 
     std::string ToString()
     {
-        if (boost::get<CNoDestination>(&dest)) {
+        if (!IsValidDestination(dest)) {
             // Invalid address
             return "";
         }

@@ -414,7 +414,7 @@ UniValue delegatoradd(const UniValue& params, bool fHelp)
 
     bool isStakingAddress = false;
     CTxDestination dest = DecodeDestination(params[0].get_str(), isStakingAddress);
-    if (boost::get<CNoDestination>(&dest) || isStakingAddress)
+    if (!IsValidDestination(dest) || isStakingAddress)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
     const std::string strLabel = (params.size() > 1 ? params[1].get_str() : "");
@@ -446,7 +446,7 @@ UniValue delegatorremove(const UniValue& params, bool fHelp)
 
     bool isStakingAddress = false;
     CTxDestination dest = DecodeDestination(params[0].get_str(), isStakingAddress);
-    if (boost::get<CNoDestination>(&dest) || isStakingAddress)
+    if (!IsValidDestination(dest) || isStakingAddress)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX address");
 
     CKeyID keyID = *boost::get<CKeyID>(&dest);
@@ -872,7 +872,7 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
         // Address provided
         bool isStaking = false;
         CTxDestination dest = DecodeDestination(params[2].get_str(), isStaking);
-        if (boost::get<CNoDestination>(&dest) || isStaking)
+        if (!IsValidDestination(dest) || isStaking)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid PIVX spending address");
         ownerKey = *boost::get<CKeyID>(&dest);
         if (!ownerKey)

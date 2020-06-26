@@ -446,14 +446,14 @@ void SendWidget::onChangeAddressClicked()
 {
     showHideOp(true);
     SendChangeAddressDialog* dialog = new SendChangeAddressDialog(window, walletModel);
-    if (!boost::get<CNoDestination>(&coinControlDialog->coinControl->destChange)) {
+    if (IsValidDestination(coinControlDialog->coinControl->destChange)) {
         dialog->setAddress(QString::fromStdString(EncodeDestination(coinControlDialog->coinControl->destChange)));
     }
 
     CTxDestination destChange = (openDialogWithOpaqueBackgroundY(dialog, window, 3, 5) ?
                                  dialog->getDestination() : CNoDestination());
 
-    if (boost::get<CNoDestination>(&destChange)) {
+    if (!IsValidDestination(destChange)) {
         // no change address set
         ui->btnChangeAddress->setActive(false);
     } else {
