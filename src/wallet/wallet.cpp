@@ -12,6 +12,7 @@
 #include "guiinterfaceutil.h"
 #include "masternode-budget.h"
 #include "masternode-payments.h"
+#include "policy/policy.h"
 #include "script/sign.h"
 #include "spork.h"
 #include "swifttx.h"    // mapTxLockReq

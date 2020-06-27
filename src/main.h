@@ -74,16 +74,9 @@ static const unsigned int DEFAULT_DESCENDANT_SIZE_LIMIT = 101;
 static const unsigned int DEFAULT_MAX_MEMPOOL_SIZE = 300;
 /** Default for -mempoolexpiry, expiration time for mempool transactions in hours */
 static const unsigned int DEFAULT_MEMPOOL_EXPIRY = 72;
-/** Default for -blockmaxsize and -blockminsize, which control the range of sizes the mining code will create **/
-static const unsigned int DEFAULT_BLOCK_MAX_SIZE = 750000;
-static const unsigned int DEFAULT_BLOCK_MIN_SIZE = 0;
-/** Default for -blockprioritysize, maximum space for zero/low-fee transactions **/
-static const unsigned int DEFAULT_BLOCK_PRIORITY_SIZE = 50000;
 /** The maximum size for transactions we're willing to relay/mine */
 static const unsigned int MAX_STANDARD_TX_SIZE = 100000;
 static const unsigned int MAX_ZEROCOIN_TX_SIZE = 150000;
-/** Maximum number of signature check operations in an IsStandard() P2SH script */
-static const unsigned int MAX_P2SH_SIGOPS = 15;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
 /** The maximum size of a blk?????.dat file (since 0.8) */
@@ -278,13 +271,6 @@ CAmount GetMinRelayFee(const CTransaction& tx, const CTxMemPool& pool, unsigned 
  */
 
 /**
- * Check for standard transaction types
- * @param[in] mapInputs    Map of previous transactions that have outputs we're spending
- * @return True if all inputs (scriptSigs) use only standard transaction forms
- */
-bool AreInputsStandard(const CTransaction& tx, const CCoinsViewCache& mapInputs);
-
-/**
  * Check whether all inputs of this transaction are valid (no double spends, scripts & sigs, amounts)
  * This does not modify the UTXO set. If pvChecks is not NULL, script checks are pushed onto it
  * instead of being performed inline.
@@ -307,11 +293,6 @@ bool ValidOutPoint(const COutPoint& out, int nHeight);
  * See consensus/consensus.h for flag definitions.
  */
 bool CheckFinalTx(const CTransaction& tx, int flags = -1);
-
-/** Check for standard transaction types
- * @return True if all outputs (scriptPubKeys) use only standard transaction forms
- */
-bool IsStandardTx(const CTransaction& tx, std::string& reason);
 
 /**
  * Closure representing one script verification
