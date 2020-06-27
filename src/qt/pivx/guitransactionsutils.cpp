@@ -25,11 +25,11 @@ namespace GuiTransactionsUtils {
                 retStr = parent->translate("The amount to pay must be larger than 0.");
                 break;
             case WalletModel::AmountExceedsBalance:
-                retStr = parent->translate("The amount exceeds your balance.");
+                retStr = parent->translate("The amount to pay exceeds the available balance.");
                 break;
             case WalletModel::AmountWithFeeExceedsBalance:
                 retStr = parent->translate(
-                        "The total exceeds your balance when the %1 transaction fee is included.").arg(msgArg);
+                        "The total amount to pay exceeds the available balance when the %1 transaction fee is included.").arg(msgArg);
                 break;
             case WalletModel::DuplicateAddress:
                 retStr = parent->translate(

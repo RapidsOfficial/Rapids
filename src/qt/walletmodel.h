@@ -152,7 +152,8 @@ public:
     bool isHDEnabled() const;
     bool upgradeWallet(std::string& upgradeError);
 
-    CAmount getBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true) const;
+    CAmount getBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true, bool fUnlockedOnly = false) const;
+    CAmount getUnlockedBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true) const;
     CAmount getUnconfirmedBalance() const;
     CAmount getImmatureBalance() const;
     CAmount getLockedBalance() const;

@@ -97,20 +97,27 @@ bool WalletModel::upgradeWallet(std::string& upgradeError)
     return wallet->Upgrade(upgradeError, prev_version);
 }
 
-CAmount WalletModel::getBalance(const CCoinControl* coinControl, bool fIncludeDelegated) const
+CAmount WalletModel::getBalance(const CCoinControl* coinControl, bool fIncludeDelegated, bool fUnlockedOnly) const
 {
     if (coinControl) {
         CAmount nBalance = 0;
         std::vector<COutput> vCoins;
         wallet->AvailableCoins(&vCoins, coinControl, fIncludeDelegated);
-        for (const COutput& out : vCoins)
-            if (out.fSpendable)
+        for (const COutput& out : vCoins) {
+            bool fSkip = fUnlockedOnly && isLockedCoin(out.tx->GetHash(), out.i);
+            if (out.fSpendable && !fSkip)
                 nBalance += out.tx->vout[out.i].nValue;
+        }
 
         return nBalance;
     }
 
-    return wallet->GetBalance(fIncludeDelegated);
+    return wallet->GetBalance(fIncludeDelegated) - (fUnlockedOnly ? wallet->GetLockedCoins() : CAmount(0));
+}
+
+CAmount WalletModel::getUnlockedBalance(const CCoinControl* coinControl, bool fIncludeDelegated) const
+{
+    return getBalance(coinControl, fIncludeDelegated, true);
 }
 
 CAmount WalletModel::getMinColdStakingAmount() const
@@ -455,9 +462,9 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         return DuplicateAddress;
     }
 
-    CAmount nBalance = getBalance(coinControl, fIncludeDelegations);
+    CAmount nSpendableBalance = getUnlockedBalance(coinControl, fIncludeDelegations);
 
-    if (total > nBalance) {
+    if (total > nSpendableBalance) {
         return AmountExceedsBalance;
     }
 
@@ -497,7 +504,7 @@ WalletModel::SendCoinsReturn WalletModel::prepareTransaction(WalletModelTransact
         }
 
         if (!fCreated) {
-            if ((total + nFeeRequired) > nBalance) {
+            if ((total + nFeeRequired) > nSpendableBalance) {
                 return SendCoinsReturn(AmountWithFeeExceedsBalance);
             }
 
