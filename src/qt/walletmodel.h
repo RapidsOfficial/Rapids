@@ -122,6 +122,7 @@ public:
         AmountWithFeeExceedsBalance,
         DuplicateAddress,
         TransactionCreationFailed,
+        TransactionCheckFailed,
         TransactionCommitFailed,
         StakingOnlyUnlocked,
         InsaneFee,
@@ -185,7 +186,12 @@ public:
     // Return status record for SendCoins, contains error id + information
     struct SendCoinsReturn {
         SendCoinsReturn(StatusCode status = OK) : status(status) {}
+        SendCoinsReturn(CWallet::CommitResult _commitRes) : commitRes(_commitRes)
+        {
+            status = (_commitRes.status == CWallet::CommitStatus::OK ? OK : TransactionCommitFailed);
+        }
         StatusCode status;
+        CWallet::CommitResult commitRes;
     };
 
     void setWalletDefaultFee(CAmount fee = DEFAULT_TRANSACTION_FEE);

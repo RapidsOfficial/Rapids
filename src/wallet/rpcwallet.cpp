@@ -770,8 +770,9 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         LogPrintf("SendMoney() : %s\n", strError);
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
     }
-    if (!pwalletMain->CommitTransaction(wtxNew, reservekey, (!fUseIX ? NetMsgType::TX : NetMsgType::IX)))
-        throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+    const CWallet::CommitResult&& res = pwalletMain->CommitTransaction(wtxNew, reservekey, (!fUseIX ? NetMsgType::TX : NetMsgType::IX));
+    if (res.status != CWallet::CommitStatus::OK)
+        throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 }
 
 UniValue sendtoaddress(const UniValue& params, bool fHelp)
@@ -951,8 +952,9 @@ UniValue delegatestake(const UniValue& params, bool fHelp)
     CReserveKey reservekey(pwalletMain);
     UniValue ret = CreateColdStakeDelegation(params, wtx, reservekey);
 
-    if (!pwalletMain->CommitTransaction(wtx, reservekey, NetMsgType::TX))
-        throw JSONRPCError(RPC_WALLET_ERROR, "Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, NetMsgType::TX);
+    if (res.status != CWallet::CommitStatus::OK)
+        throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 
     ret.push_back(Pair("txid", wtx.GetHash().GetHex()));
     return ret;
@@ -1685,8 +1687,9 @@ UniValue sendmany(const UniValue& params, bool fHelp)
     bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, strFailReason);
     if (!fCreated)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, strFailReason);
-    if (!pwalletMain->CommitTransaction(wtx, keyChange))
-        throw JSONRPCError(RPC_WALLET_ERROR, "Transaction commit failed");
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, keyChange);
+    if (res.status != CWallet::CommitStatus::OK)
+        throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 
     return wtx.GetHash().GetHex();
 }

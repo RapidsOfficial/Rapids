@@ -530,7 +530,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
     // Double check tx before do anything
     CValidationState state;
     if (!CheckTransaction(*transaction.getTransaction(), true, true, state, true, fColdStakingActive)) {
-        return TransactionCommitFailed;
+        return TransactionCheckFailed;
     }
 
     {
@@ -552,8 +552,10 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
         }
 
         CReserveKey* keyChange = transaction.getPossibleKeyChange();
-        if (!wallet->CommitTransaction(*newTx, *keyChange, (recipients[0].useSwiftTX) ? NetMsgType::IX : NetMsgType::TX))
-            return TransactionCommitFailed;
+        const CWallet::CommitResult& res = wallet->CommitTransaction(*newTx, *keyChange, (recipients[0].useSwiftTX) ? NetMsgType::IX : NetMsgType::TX);
+        if (res.status != CWallet::CommitStatus::OK) {
+            return SendCoinsReturn(res);
+        }
 
         CTransaction* t = (CTransaction*)newTx;
         CDataStream ssTx(SER_NETWORK, PROTOCOL_VERSION);

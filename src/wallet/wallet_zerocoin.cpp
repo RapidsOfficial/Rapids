@@ -136,8 +136,9 @@ std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector
     }
 
     //commit the transaction to the network
-    if (!CommitTransaction(wtxNew, reservekey)) {
-        return _("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.");
+    const CWallet::CommitResult& res = CommitTransaction(wtxNew, reservekey);
+    if (res.status != CWallet::CommitStatus::OK) {
+        return res.ToString();
     } else {
         //update mints with full transaction hash and then database them
         CWalletDB walletdb(strWalletFile);
@@ -319,7 +320,8 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
 
 
     CWalletDB walletdb(strWalletFile);
-    if (!CommitTransaction(wtxNew, reserveKey)) {
+    const CWallet::CommitResult& res = CommitTransaction(wtxNew, reserveKey);
+    if (res.status != CWallet::CommitStatus::OK) {
         LogPrintf("%s: failed to commit\n", __func__);
         nStatus = ZPIV_COMMIT_FAILED;
 
