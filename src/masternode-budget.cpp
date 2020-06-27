@@ -2203,19 +2203,13 @@ void CFinalizedBudget::SubmitVote()
     CPubKey pubKeyMasternode;
     CKey keyMasternode;
 
-    bool fNewSigs = false;
-    {
-        LOCK(cs_main);
-        fNewSigs = chainActive.NewSigsActive();
-    }
-
     if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, keyMasternode, pubKeyMasternode)) {
         LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::SubmitVote - Error upon calling GetKeysFromSecret\n");
         return;
     }
 
     CFinalizedBudgetVote vote(activeMasternode.vin, GetHash());
-    if (!vote.Sign(keyMasternode, pubKeyMasternode, fNewSigs)) {
+    if (!vote.Sign(keyMasternode, pubKeyMasternode)) {
         LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::SubmitVote - Failure to sign.");
         return;
     }
