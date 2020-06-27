@@ -881,11 +881,10 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
         // Check that the owner address belongs to this wallet, or fForceExternalAddr is true
         bool fForceExternalAddr = params.size() > 3 && !params[3].isNull() ? params[3].get_bool() : false;
         if (!fForceExternalAddr && !pwalletMain->HaveKey(ownerKey)) {
-            std::string errMsg = strprintf("The provided owneraddress \"%s\" is not present in this wallet.\n"
-                    "Set 'fExternalOwner' argument to true, in order to force the stake delegation to an external owner address.\n"
+            std::string errMsg = strprintf("The provided owneraddress \"%s\" is not present in this wallet.\n", params[2].get_str());
+            errMsg += "Set 'fExternalOwner' argument to true, in order to force the stake delegation to an external owner address.\n"
                     "e.g. delegatestake stakingaddress amount owneraddress true.\n"
-                    "WARNING: Only the owner of the key to owneraddress will be allowed to spend these coins after the delegation.",
-                    params[2].get_str());
+                    "WARNING: Only the owner of the key to owneraddress will be allowed to spend these coins after the delegation.";
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, errMsg);
         }
         ownerAddressStr = params[2].get_str();

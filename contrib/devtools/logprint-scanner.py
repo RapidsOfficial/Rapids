@@ -18,7 +18,9 @@ def countRelevantCommas(line):
             openParensPosStack.append(charCounter)
 
         if char == ')':
-            openParensPosStack.pop()
+            x = openParensPosStack.pop()
+            if x == firstOpenParensIndex:
+                return numRelevantCommas
 
         if char == "," and openParensPosStack[-1] == firstOpenParensIndex:
             numRelevantCommas += 1
@@ -48,8 +50,10 @@ if __name__ == "__main__":
             # Collapse multiple lines into one
             tempLine += row
 
-            # Line contains LogPrint or LogPrintf
-            if tempLine.find("LogPrint") != -1:
+            # Line contains LogPrint, LogPrintf or error
+            if tempLine.find("LogPrint") != -1 or \
+                    (tempLine.find("error(") != -1 and tempLine.find("_error") == -1)  or \
+                    tempLine.find("strprintf") != -1:
                 if tempLine.count("(") == tempLine.count(")"):
                     havePercents = tempLine.count('%') > 0
 
@@ -61,8 +65,12 @@ if __name__ == "__main__":
 
                         # First, determine the position of the comma after the format specifier section, named commaAfterEndSpecifierStringIndex
                         firstSpecifierIndex = tempLine.find('%')
-                        startSpecifierStringIndex = tempLine.rfind('"',firstSpecifierIndex)
                         endSpecifierStringIndex = tempLine.find('"',firstSpecifierIndex)
+
+                        # Skip escaped quotes
+                        while tempLine[endSpecifierStringIndex - 1] == '\\':
+                            endSpecifierStringIndex = tempLine.find('"', endSpecifierStringIndex + 1)
+
                         commaAfterEndSpecifierStringIndex = tempLine.find(',',endSpecifierStringIndex)
 
                         # Count the number of commas after the specifier string
@@ -77,7 +85,7 @@ if __name__ == "__main__":
                         numPercents = tempLine.count('%') - numExtraPercents - 2*tempLine.count('%%')
 
                         if numPercents != numCommas:
-                            print("Incorrect number of arguments for LogPrint(f) statement found.")
+                            print("Incorrect number of arguments for LogPrint(f)/error/strprintf statement found.")
                             print(str(file) + ":" + str(lineCounter - tempCount))
                             print("Line = " + tempLine)
                             print("numRelevantCommas = " + str(numCommas) + ", numRelevantPercents = " + str(numPercents))

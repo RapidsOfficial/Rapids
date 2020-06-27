@@ -2667,7 +2667,7 @@ bool CWallet::CreateCoinStake(
         // Limit size
         unsigned int nBytes = ::GetSerializeSize(txNew, SER_NETWORK, PROTOCOL_VERSION);
         if (nBytes >= DEFAULT_BLOCK_MAX_SIZE / 5)
-            return error("CreateCoinStake : exceeded coinstake size limit");
+            return error("%s : exceeded coinstake size limit", __func__);
 
         // Masternode payment
         FillBlockPayee(txNew, nMinFee, true, false);

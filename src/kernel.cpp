@@ -98,7 +98,7 @@ bool LoadStakeInput(const CBlock& block, const CBlockIndex* pindexPrev, std::uni
     } else {
         // check that is the actual parent block
         if (block.hashPrevBlock != pindexPrev->GetBlockHash())
-            return error("%s : previous block mismatch");
+            return error("%s : previous block mismatch", __func__);
     }
 
     // Check that this is a PoS block
