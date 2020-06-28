@@ -92,7 +92,8 @@ void RPCTypeCheck(const UniValue& params,
 
 void RPCTypeCheckObj(const UniValue& o,
                   const std::map<std::string, UniValue::VType>& typesExpected,
-                  bool fAllowNull)
+                  bool fAllowNull,
+                  bool fStrict)
 {
     for (const PAIRTYPE(std::string, UniValue::VType)& t : typesExpected) {
         const UniValue& v = find_value(o, t.first);
@@ -103,6 +104,15 @@ void RPCTypeCheckObj(const UniValue& o,
             std::string err = strprintf("Expected type %s for %s, got %s",
                                    uvTypeName(t.second), t.first, uvTypeName(v.type()));
             throw JSONRPCError(RPC_TYPE_ERROR, err);
+        }
+    }
+
+    if (fStrict) {
+        for (const std::string& k : o.getKeys()) {
+            if (typesExpected.count(k) == 0) {
+                std::string err = strprintf("Unexpected key %s", k);
+                throw JSONRPCError(RPC_TYPE_ERROR, err);
+            }
         }
     }
 }
@@ -343,6 +353,7 @@ static const CRPCCommand vRPCCommands[] =
         {"rawtransactions", "decoderawtransaction", &decoderawtransaction, true, false, false},
         {"rawtransactions", "decodescript", &decodescript, true, false, false},
         {"rawtransactions", "getrawtransaction", &getrawtransaction, true, false, false},
+        {"rawtransactions", "fundrawtransaction", &fundrawtransaction, false, false, false},
         {"rawtransactions", "sendrawtransaction", &sendrawtransaction, false, false, false},
         {"rawtransactions", "signrawtransaction", &signrawtransaction, false, false, false}, /* uses wallet if enabled */
 
@@ -424,6 +435,7 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "importprivkey", &importprivkey, true, false, true},
         {"wallet", "importwallet", &importwallet, true, false, true},
         {"wallet", "importaddress", &importaddress, true, false, true},
+        {"wallet", "importpubkey", &importpubkey, true, false, true},
         {"wallet", "keypoolrefill", &keypoolrefill, true, false, true},
         {"wallet", "listaccounts", &listaccounts, false, false, true},
         {"wallet", "listdelegators", &listdelegators, false, false, true},
