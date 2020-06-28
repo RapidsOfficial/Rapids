@@ -101,6 +101,7 @@ class RawTransactionsTest(PivxTestFramework):
         self.test_simple_two_outputs()
         self.test_change()
         self.test_no_change()
+        self.test_change_position()
         self.test_invalid_option()
         self.test_invalid_change_address()
         self.test_valid_change_address()
@@ -120,7 +121,6 @@ class RawTransactionsTest(PivxTestFramework):
         self.test_watchonly()
         self.test_all_watched_funds()
         self.test_option_feerate()
-
 
     def test_simple(self):
         self.log.info("simple test")
@@ -173,6 +173,16 @@ class RawTransactionsTest(PivxTestFramework):
         assert_equal(len(dec_tx['vin']) > 0, True)              # test if we have enought inputs
         assert_equal(changepos, -1)                             # check (no) change
         assert check_outputs(outputs, dec_tx)                   # check outputs
+
+    def test_change_position(self):
+        """Ensure setting changePosition in fundraw with an exact match is handled properly."""
+        self.log.info("test not-used changePosition option")
+        utx = get_unspent(self.nodes[2].listunspent(), 5)
+        inputs = [{'txid': utx['txid'], 'vout': utx['vout']}]
+        outputs = {self.nodes[0].getnewaddress(): 5.0 - float(self.test_no_change_fee) - float(self.fee_tolerance)}
+        rawtx = self.nodes[2].createrawtransaction(inputs, outputs)
+        rawtxfund = self.nodes[2].fundrawtransaction(rawtx, {"changePosition": 0})
+        assert_equal(rawtxfund["changepos"], -1)
 
     def test_invalid_option(self):
         self.log.info("test with an invalid option")
