@@ -564,27 +564,18 @@ void PaymentServer::fetchPaymentACK(CWallet* wallet, SendCoinsRecipient recipien
     payment.add_transactions(transaction.data(), transaction.size());
 
     // Create a new refund address, or re-use:
-    QString account = tr("Refund from %1").arg(recipient.authenticatedMerchant);
-    std::string strAccount = account.toStdString();
-    std::set<CTxDestination> refundAddresses = wallet->GetAccountAddresses(strAccount);
-    if (!refundAddresses.empty()) {
-        CScript s = GetScriptForDestination(*refundAddresses.begin());
+    CPubKey newKey;
+    if (wallet->GetKeyFromPool(newKey)) {
+        CKeyID keyID = newKey.GetID();
+        std::string label = tr("Refund from %1").arg(recipient.authenticatedMerchant).toStdString();
+        wallet->SetAddressBook(keyID, label, "refund");
+        CScript s = GetScriptForDestination(keyID);
         payments::Output* refund_to = payment.add_refund_to();
         refund_to->set_script(&s[0], s.size());
     } else {
-        CPubKey newKey;
-        if (wallet->GetKeyFromPool(newKey)) {
-            CKeyID keyID = newKey.GetID();
-            wallet->SetAddressBook(keyID, strAccount, "refund");
-
-            CScript s = GetScriptForDestination(keyID);
-            payments::Output* refund_to = payment.add_refund_to();
-            refund_to->set_script(&s[0], s.size());
-        } else {
-            // This should never happen, because sending coins should have
-            // just unlocked the wallet and refilled the keypool.
-            qWarning() << "PaymentServer::fetchPaymentACK : Error getting refund key, refund_to not set";
-        }
+        // This should never happen, because sending coins should have
+        // just unlocked the wallet and refilled the keypool.
+        qWarning() << "PaymentServer::fetchPaymentACK : Error getting refund key, refund_to not set";
     }
 
     int length = payment.ByteSize();

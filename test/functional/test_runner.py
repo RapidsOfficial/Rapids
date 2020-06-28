@@ -97,7 +97,7 @@ BASE_SCRIPTS= [
     'mempool_packages.py',                      # ~ 63 sec
 
     # vv Tests less than 60s vv
-    'wallet_accounts.py',                       # ~ 57 sec
+    'wallet_labels.py',                         # ~ 57 sec
     'rpc_signmessage.py',                       # ~ 54 sec
     'mempool_resurrect.py',                     # ~ 51 sec
     'rpc_budget.py',                            # ~ 50 sec

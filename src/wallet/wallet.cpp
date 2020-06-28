@@ -761,6 +761,47 @@ int64_t CWallet::IncOrderPosNext(CWalletDB* pwalletdb)
     return nRet;
 }
 
+bool CWallet::GetLabelDestination(CTxDestination& dest, const std::string& label, bool bForceNew)
+{
+    CWalletDB walletdb(strWalletFile);
+    CAccount account;
+    walletdb.ReadAccount(label, account);
+
+    if (!bForceNew) {
+        if (!account.vchPubKey.IsValid())
+            bForceNew = true;
+        else {
+            // Check if the current key has been used
+            CScript scriptPubKey = GetScriptForDestination(account.vchPubKey.GetID());
+            for (std::map<uint256, CWalletTx>::iterator it = mapWallet.begin();
+                 it != mapWallet.end() && account.vchPubKey.IsValid();
+                 ++it) {
+                const CWalletTx& wtx = (*it).second;
+                for (const CTxOut& txout : wtx.vout) {
+                    if (txout.scriptPubKey == scriptPubKey) {
+                        bForceNew = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // Generate a new key
+    if (bForceNew) {
+        if (!GetKeyFromPool(account.vchPubKey))
+            return false;
+
+        dest = account.vchPubKey.GetID();
+        SetAddressBook(dest, label, AddressBook::AddressBookPurpose::RECEIVE);
+        walletdb.WriteAccount(label, account);
+    } else {
+        dest = account.vchPubKey.GetID();
+    }
+
+    return true;
+}
+
 void CWallet::MarkDirty()
 {
     {
@@ -3299,14 +3340,14 @@ std::set<std::set<CTxDestination> > CWallet::GetAddressGroupings()
     return ret;
 }
 
-std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) const
+std::set<CTxDestination> CWallet::GetLabelAddresses(const std::string& label) const
 {
     LOCK(cs_wallet);
     std::set<CTxDestination> result;
-    for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : mapAddressBook) {
+    for (const std::pair<CTxDestination, AddressBook::CAddressBookData>& item : mapAddressBook) {
         const CTxDestination& address = item.first;
         const std::string& strName = item.second.name;
-        if (strName == strAccount)
+        if (strName == label)
             result.insert(address);
     }
     return result;
