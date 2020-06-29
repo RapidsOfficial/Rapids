@@ -85,51 +85,6 @@ void CActiveMasternode::ManageStatus()
             LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
             return;
         }
-
-        // Choose coins to use
-        CPubKey pubKeyCollateralAddress;
-        CKey keyCollateralAddress;
-
-        if (GetMasterNodeVin(vin, pubKeyCollateralAddress, keyCollateralAddress)) {
-            if (GetInputAge(vin) < MASTERNODE_MIN_CONFIRMATIONS) {
-                status = ACTIVE_MASTERNODE_INPUT_TOO_NEW;
-                notCapableReason = strprintf("%s - %d confirmations", GetStatus(), GetInputAge(vin));
-                LogPrintf("CActiveMasternode::ManageStatus() - %s\n", notCapableReason);
-                return;
-            }
-
-            LOCK(pwalletMain->cs_wallet);
-            pwalletMain->LockCoin(vin.prevout);
-
-            // send to all nodes
-            CPubKey pubKeyMasternode;
-            CKey keyMasternode;
-
-            if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, keyMasternode, pubKeyMasternode)) {
-                LogPrintf("%s : Invalid masternode key", __func__);
-                return;
-            }
-
-            CMasternodeBroadcast mnb;
-            if (!CMasternodeBroadcast::Create(vin, service, keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage, mnb)) {
-                notCapableReason = "Error on Register: " + errorMessage;
-                LogPrintf("CActiveMasternode::ManageStatus() - %s\n", notCapableReason);
-                return;
-            }
-
-            //send to all peers
-            LogPrintf("CActiveMasternode::ManageStatus() - Relay broadcast vin = %s\n", vin.ToString());
-            mnb.Relay();
-
-            LogPrintf("CActiveMasternode::ManageStatus() - Is capable master node!\n");
-            status = ACTIVE_MASTERNODE_STARTED;
-
-            return;
-        } else {
-            notCapableReason = "Could not find suitable coins!";
-            LogPrintf("CActiveMasternode::ManageStatus() - %s\n", notCapableReason);
-            return;
-        }
     }
 
     //send to all peers
