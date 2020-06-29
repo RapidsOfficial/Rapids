@@ -491,7 +491,7 @@ bool ReadKeyValue(CWallet* pwallet, CDataStream& ssKey, CDataStream& ssValue, CW
             if (wtx.nOrderPos == -1)
                 wss.fAnyUnordered = true;
 
-            pwallet->AddToWallet(wtx, true, nullptr);
+            pwallet->LoadToWallet(wtx);
         } else if (strType == "acentry") {
             std::string strAccount;
             ssKey >> strAccount;
