@@ -302,10 +302,14 @@ bool CWallet::CreateZerocoinMintTransaction(const CAmount nValue,
     // calculate fee
     CAmount nTotalValue = nValue + Params().GetConsensus().ZC_MinMintFee * txNew.vout.size();
 
+    // Get the available coins
+    std::vector<COutput> vAvailableCoins;
+    AvailableCoins(&vAvailableCoins, coinControl);
+
     CAmount nValueIn = 0;
     std::set<std::pair<const CWalletTx*, unsigned int> > setCoins;
     // select UTXO's to use
-    if (!SelectCoinsToSpend(nTotalValue, setCoins, nValueIn, coinControl)) {
+    if (!SelectCoinsToSpend(vAvailableCoins, nTotalValue, setCoins, nValueIn, coinControl)) {
         strFailReason = _("Insufficient or insufficient confirmed funds, you might need to wait a few minutes and try again.");
         return false;
     }
