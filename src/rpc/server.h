@@ -276,7 +276,6 @@ extern UniValue decodemasternodebroadcast(const UniValue& params, bool fHelp);
 extern UniValue relaymasternodebroadcast(const UniValue& params, bool fHelp);
 extern UniValue masternodeconnect(const UniValue& params, bool fHelp);
 extern UniValue masternodecurrent(const UniValue& params, bool fHelp);
-extern UniValue masternodedebug(const UniValue& params, bool fHelp);
 extern UniValue startmasternode(const UniValue& params, bool fHelp);
 extern UniValue createmasternodekey(const UniValue& params, bool fHelp);
 extern UniValue getmasternodeoutputs(const UniValue& params, bool fHelp);
