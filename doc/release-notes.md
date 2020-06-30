@@ -112,6 +112,8 @@ and are affected by this change: RPC `getrawtransaction`, RPC `decoderawtransact
 
 ### Removed commands
 
+- `masternodedebug`. Use `getmasternodestatus` instead. ([#1698](https://github.com/PIVX-Project/PIVX/pull/1698)).
+
 ### Newly introduced commands
 
 
