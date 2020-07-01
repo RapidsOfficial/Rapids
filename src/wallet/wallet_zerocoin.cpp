@@ -101,7 +101,6 @@ void CWallet::doZPivRescan(const CBlockIndex* pindex, const CBlock& block,
     if (fCheckZPIV && consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC)) {
         std::list<CZerocoinMint> listMints;
         BlockToZerocoinMintList(block, listMints, true);
-        CWalletDB walletdb(strWalletFile);
 
         for (auto& m : listMints) {
             if (IsMyMint(m.GetValue())) {
@@ -117,7 +116,7 @@ void CWallet::doZPivRescan(const CBlockIndex* pindex, const CBlock& block,
                         CWalletTx wtx(this, tx);
                         wtx.nTimeReceived = block.GetBlockTime();
                         wtx.SetMerkleBranch(block);
-                        AddToWallet(wtx, &walletdb);
+                        AddToWallet(wtx);
                         setAddedToWallet.insert(txid);
                     }
                 }
@@ -137,7 +136,7 @@ void CWallet::doZPivRescan(const CBlockIndex* pindex, const CBlock& block,
                         wtx.SetMerkleBranch(blockSpend);
 
                     wtx.nTimeReceived = pindexSpend->nTime;
-                    AddToWallet(wtx, &walletdb);
+                    AddToWallet(wtx);
                     setAddedToWallet.emplace(txidSpend);
                 }
             }

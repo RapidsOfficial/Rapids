@@ -814,10 +814,12 @@ void CWallet::MarkDirty()
     }
 }
 
-bool CWallet::AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb)
+bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFlushOnClose)
 {
-    uint256 hash = wtxIn.GetHash();
     LOCK(cs_wallet);
+    CWalletDB walletdb(strWalletFile, "r+", fFlushOnClose);
+    uint256 hash = wtxIn.GetHash();
+
     // Inserts only if not already there, returns tx inserted or tx found
     std::pair<std::map<uint256, CWalletTx>::iterator, bool> ret = mapWallet.insert(std::make_pair(hash, wtxIn));
     CWalletTx& wtx = (*ret.first).second;
@@ -825,7 +827,7 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb)
     bool fInsertedNew = ret.second;
     if (fInsertedNew) {
         wtx.nTimeReceived = GetAdjustedTime();
-        wtx.nOrderPos = IncOrderPosNext(pwalletdb);
+        wtx.nOrderPos = IncOrderPosNext(&walletdb);
         wtxOrdered.insert(std::make_pair(wtx.nOrderPos, TxPair(&wtx, (CAccountingEntry*)0)));
         wtx.UpdateTimeSmart();
         AddToSpends(hash);
@@ -860,11 +862,8 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb)
 
     // Write to disk
     if (fInsertedNew || fUpdated) {
-        if (!pwalletdb) {
-            CWalletDB(strWalletFile).WriteTx(wtx);
-        } else if (!pwalletdb->WriteTx(wtx)) {
+        if (!walletdb.WriteTx(wtx))
             return false;
-        }
     }
 
     // Break debit/credit balance caches:
@@ -944,11 +943,8 @@ bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pbl
             // Get merkle branch if transaction was found in a block
             if (pblock)
                 wtx.SetMerkleBranch(*pblock);
-            // Do not flush the wallet here for performance reasons
-            // this is safe, as in case of a crash, we rescan the necessary blocks on startup through our SetBestChain-mechanism
-            CWalletDB walletdb(strWalletFile, "r+", false);
 
-            return AddToWallet(wtx, &walletdb);
+            return AddToWallet(wtx, false);
         }
     }
     return false;
@@ -2961,7 +2957,7 @@ CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey&
 
             // Add tx to wallet, because if it has change it's also ours,
             // otherwise just for transaction history.
-            AddToWallet(wtxNew, pwalletdb);
+            AddToWallet(wtxNew);
 
             // Notify that old coins are spent
             if (!wtxNew.HasZerocoinSpendInputs()) {

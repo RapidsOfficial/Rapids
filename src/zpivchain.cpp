@@ -443,7 +443,7 @@ bool UpdateZPIVSupplyConnect(const CBlock& block, CBlockIndex* pindex, bool fJus
                             CWalletTx wtx(pwalletMain, tx);
                             wtx.nTimeReceived = block.GetBlockTime();
                             wtx.SetMerkleBranch(block);
-                            pwalletMain->AddToWallet(wtx, nullptr);
+                            pwalletMain->AddToWallet(wtx);
                             setAddedToWallet.insert(txid);
                         }
                     }
