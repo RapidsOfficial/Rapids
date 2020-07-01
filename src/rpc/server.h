@@ -122,8 +122,6 @@ public:
     std::string name;
     rpcfn_type actor;
     bool okSafeMode;
-    bool threadSafe;
-    bool reqWallet;
 };
 
 /**
@@ -153,9 +151,16 @@ public:
     * @returns List of registered commands.
     */
     std::vector<std::string> listCommands() const;
+
+    /**
+     * Appends a CRPCCommand to the dispatch table.
+     * Returns false if RPC server is already running (dump concurrency protection).
+     * Commands cannot be overwritten (returns false).
+     */
+    bool appendCommand(const std::string& name, const CRPCCommand* pcmd);
 };
 
-extern const CRPCTable tableRPC;
+extern CRPCTable tableRPC;
 
 /**
  * Utilities: convert hex-encoded Values
@@ -192,12 +197,6 @@ extern UniValue setban(const UniValue& params, bool fHelp);
 extern UniValue listbanned(const UniValue& params, bool fHelp);
 extern UniValue clearbanned(const UniValue& params, bool fHelp);
 
-extern UniValue dumpprivkey(const UniValue& params, bool fHelp); // in rpcdump.cpp
-extern UniValue importprivkey(const UniValue& params, bool fHelp);
-extern UniValue importaddress(const UniValue& params, bool fHelp);
-extern UniValue importpubkey(const UniValue& params, bool fHelp);
-extern UniValue dumpwallet(const UniValue& params, bool fHelp);
-extern UniValue importwallet(const UniValue& params, bool fHelp);
 extern UniValue bip38encrypt(const UniValue& params, bool fHelp);
 extern UniValue bip38decrypt(const UniValue& params, bool fHelp);
 
@@ -212,58 +211,10 @@ extern UniValue getblocktemplate(const UniValue& params, bool fHelp);
 extern UniValue submitblock(const UniValue& params, bool fHelp);
 extern UniValue estimatefee(const UniValue& params, bool fHelp);
 extern UniValue estimatepriority(const UniValue& params, bool fHelp);
-
-extern UniValue delegatestake(const UniValue& params, bool fHelp); // in rpcwallet.cpp
-extern UniValue rawdelegatestake(const UniValue& params, bool fHelp);
-extern UniValue delegatoradd(const UniValue& params, bool fHelp);
-extern UniValue delegatorremove(const UniValue& params, bool fHelp);
-extern UniValue upgradewallet(const UniValue& params, bool fHelp);
-extern UniValue sethdseed(const UniValue& params, bool fHelp);
 extern UniValue getaddressinfo(const UniValue& params, bool fHelp);
-extern UniValue getnewaddress(const UniValue& params, bool fHelp);
-extern UniValue getnewstakingaddress(const UniValue& params, bool fHelp);
-extern UniValue getaccountaddress(const UniValue& params, bool fHelp);
-extern UniValue getrawchangeaddress(const UniValue& params, bool fHelp);
-extern UniValue setaccount(const UniValue& params, bool fHelp);
-extern UniValue getaccount(const UniValue& params, bool fHelp);
-extern UniValue getaddressesbyaccount(const UniValue& params, bool fHelp);
-extern UniValue sendtoaddress(const UniValue& params, bool fHelp);
-extern UniValue sendtoaddressix(const UniValue& params, bool fHelp);
-extern UniValue signmessage(const UniValue& params, bool fHelp);
-extern UniValue getreceivedbyaddress(const UniValue& params, bool fHelp);
-extern UniValue getreceivedbyaccount(const UniValue& params, bool fHelp);
-extern UniValue getbalance(const UniValue& params, bool fHelp);
-extern UniValue getcoldstakingbalance(const UniValue& params, bool fHelp);
-extern UniValue getdelegatedbalance(const UniValue& params, bool fHelp);
-extern UniValue getunconfirmedbalance(const UniValue& params, bool fHelp);
-extern UniValue movecmd(const UniValue& params, bool fHelp);
-extern UniValue sendfrom(const UniValue& params, bool fHelp);
-extern UniValue sendmany(const UniValue& params, bool fHelp);
-extern UniValue addmultisigaddress(const UniValue& params, bool fHelp);
-extern UniValue listcoldutxos(const UniValue& params, bool fHelp);
-extern UniValue listreceivedbyaddress(const UniValue& params, bool fHelp);
-extern UniValue listreceivedbyaccount(const UniValue& params, bool fHelp);
-extern UniValue listtransactions(const UniValue& params, bool fHelp);
-extern UniValue listaddressgroupings(const UniValue& params, bool fHelp);
-extern UniValue listaccounts(const UniValue& params, bool fHelp);
-extern UniValue listdelegators(const UniValue& params, bool fHelp);
-extern UniValue liststakingaddresses(const UniValue& params, bool fHelp);
-extern UniValue listsinceblock(const UniValue& params, bool fHelp);
-extern UniValue gettransaction(const UniValue& params, bool fHelp);
-extern UniValue abandontransaction(const UniValue& params, bool fHelp);
-extern UniValue backupwallet(const UniValue& params, bool fHelp);
-extern UniValue keypoolrefill(const UniValue& params, bool fHelp);
-extern UniValue walletpassphrase(const UniValue& params, bool fHelp);
-extern UniValue walletpassphrasechange(const UniValue& params, bool fHelp);
-extern UniValue walletlock(const UniValue& params, bool fHelp);
-extern UniValue encryptwallet(const UniValue& params, bool fHelp);
-extern UniValue getwalletinfo(const UniValue& params, bool fHelp);
 extern UniValue getblockchaininfo(const UniValue& params, bool fHelp);
 extern UniValue getnetworkinfo(const UniValue& params, bool fHelp);
-extern UniValue setstakesplitthreshold(const UniValue& params, bool fHelp);
-extern UniValue getstakesplitthreshold(const UniValue& params, bool fHelp);
 extern UniValue multisend(const UniValue& params, bool fHelp);
-extern UniValue autocombinerewards(const UniValue& params, bool fHelp);
 extern UniValue getzerocoinbalance(const UniValue& params, bool fHelp);
 extern UniValue listmintedzerocoins(const UniValue& params, bool fHelp);
 extern UniValue listspentzerocoins(const UniValue& params, bool fHelp);
@@ -286,9 +237,6 @@ extern UniValue searchdzpiv(const UniValue& params, bool fHelp);
 extern UniValue dzpivstate(const UniValue& params, bool fHelp);
 
 extern UniValue getrawtransaction(const UniValue& params, bool fHelp); // in rpc/rawtransaction.cpp
-extern UniValue listunspent(const UniValue& params, bool fHelp);
-extern UniValue lockunspent(const UniValue& params, bool fHelp);
-extern UniValue listlockunspent(const UniValue& params, bool fHelp);
 extern UniValue createrawtransaction(const UniValue& params, bool fHelp);
 extern UniValue decoderawtransaction(const UniValue& params, bool fHelp);
 extern UniValue decodescript(const UniValue& params, bool fHelp);
@@ -304,7 +252,6 @@ extern UniValue waitfornewblock(const UniValue& params, bool fHelp);
 extern UniValue waitforblock(const UniValue& params, bool fHelp);
 extern UniValue waitforblockheight(const UniValue& params, bool fHelp);
 extern UniValue getdifficulty(const UniValue& params, bool fHelp);
-extern UniValue settxfee(const UniValue& params, bool fHelp);
 extern UniValue getmempoolinfo(const UniValue& params, bool fHelp);
 extern UniValue getrawmempool(const UniValue& params, bool fHelp);
 extern UniValue getblockhash(const UniValue& params, bool fHelp);

@@ -2774,6 +2774,133 @@ UniValue encryptwallet(const UniValue& params, bool fHelp)
     return "wallet encrypted; pivx server stopping, restart to run with encrypted wallet. The keypool has been flushed, you need to make a new backup.";
 }
 
+UniValue listunspent(const UniValue& params, bool fHelp)
+{
+    if (fHelp || params.size() > 4)
+        throw std::runtime_error(
+                "listunspent ( minconf maxconf  [\"address\",...] watchonlyconfig )\n"
+                "\nReturns array of unspent transaction outputs\n"
+                "with between minconf and maxconf (inclusive) confirmations.\n"
+                "Optionally filter to only include txouts paid to specified addresses.\n"
+                "Results are an array of Objects, each of which has:\n"
+                "{txid, vout, scriptPubKey, amount, confirmations, spendable}\n"
+
+                "\nArguments:\n"
+                "1. minconf          (numeric, optional, default=1) The minimum confirmations to filter\n"
+                "2. maxconf          (numeric, optional, default=9999999) The maximum confirmations to filter\n"
+                "3. \"addresses\"    (string) A json array of pivx addresses to filter\n"
+                "    [\n"
+                "      \"address\"   (string) pivx address\n"
+                "      ,...\n"
+                "    ]\n"
+                "4. watchonlyconfig  (numeric, optional, default=1) 1 = list regular unspent transactions, 2 = list only watchonly transactions,  3 = list all unspent transactions (including watchonly)\n"
+
+                "\nResult\n"
+                "[                   (array of json object)\n"
+                "  {\n"
+                "    \"txid\" : \"txid\",        (string) the transaction id\n"
+                "    \"vout\" : n,               (numeric) the vout value\n"
+                "    \"address\" : \"address\",  (string) the pivx address\n"
+                "    \"account\" : \"account\",  (string) DEPRECATED. The associated account, or \"\" for the default account\n"
+                "    \"scriptPubKey\" : \"key\", (string) the script key\n"
+                "    \"redeemScript\" : \"key\", (string) the redeemscript key\n"
+                "    \"amount\" : x.xxx,         (numeric) the transaction amount in PIV\n"
+                "    \"confirmations\" : n,      (numeric) The number of confirmations\n"
+                "    \"spendable\" : true|false  (boolean) Whether we have the private keys to spend this output\n"
+                "  }\n"
+                "  ,...\n"
+                "]\n"
+
+                "\nExamples\n" +
+                HelpExampleCli("listunspent", "") + HelpExampleCli("listunspent", "6 9999999 \"[\\\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\\\",\\\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\\\"]\"") + HelpExampleRpc("listunspent", "6, 9999999 \"[\\\"1PGFqEzfmQch1gKD3ra4k18PNj3tTUUSqg\\\",\\\"1LtvqCaApEdUGFkpKMM4MstjcaL4dKg8SP\\\"]\""));
+
+    RPCTypeCheck(params, boost::assign::list_of(UniValue::VNUM)(UniValue::VNUM)(UniValue::VARR)(UniValue::VNUM));
+
+    int nMinDepth = 1;
+    if (params.size() > 0)
+        nMinDepth = params[0].get_int();
+
+    int nMaxDepth = 9999999;
+    if (params.size() > 1)
+        nMaxDepth = params[1].get_int();
+
+    std::set<CTxDestination> destinations;
+    if (params.size() > 2) {
+        UniValue inputs = params[2].get_array();
+        for (unsigned int inx = 0; inx < inputs.size(); inx++) {
+            const UniValue& input = inputs[inx];
+            CTxDestination dest = DecodeDestination(input.get_str());
+            if (!IsValidDestination(dest))
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid PIVX address: ") + input.get_str());
+            if (destinations.count(dest))
+                throw JSONRPCError(RPC_INVALID_PARAMETER, std::string("Invalid parameter, duplicated address: ") + input.get_str());
+            destinations.insert(dest);
+        }
+    }
+
+    int nWatchonlyConfig = 1;
+    if(params.size() > 3) {
+        nWatchonlyConfig = params[3].get_int();
+        if (nWatchonlyConfig > 3 || nWatchonlyConfig < 1)
+            nWatchonlyConfig = 1;
+    }
+
+    UniValue results(UniValue::VARR);
+    std::vector<COutput> vecOutputs;
+    assert(pwalletMain != NULL);
+    LOCK2(cs_main, pwalletMain->cs_wallet);
+    pwalletMain->AvailableCoins(&vecOutputs,
+                                nullptr,    // coin control
+                                true,       // include delegated
+                                false,      // include cold staking
+                                ALL_COINS,  // coin type
+                                false,      // only confirmed
+                                false,      // include zero value
+                                false,      // use IX
+                                nWatchonlyConfig);
+    for (const COutput& out : vecOutputs) {
+        if (out.nDepth < nMinDepth || out.nDepth > nMaxDepth)
+            continue;
+
+        if (destinations.size()) {
+            CTxDestination address;
+            if (!ExtractDestination(out.tx->vout[out.i].scriptPubKey, address))
+                continue;
+
+            if (!destinations.count(address))
+                continue;
+        }
+
+        CAmount nValue = out.tx->vout[out.i].nValue;
+        const CScript& pk = out.tx->vout[out.i].scriptPubKey;
+        UniValue entry(UniValue::VOBJ);
+        entry.push_back(Pair("txid", out.tx->GetHash().GetHex()));
+        entry.push_back(Pair("vout", out.i));
+        CTxDestination address;
+        if (ExtractDestination(out.tx->vout[out.i].scriptPubKey, address)) {
+            entry.push_back(Pair("address", EncodeDestination(address)));
+            if (pwalletMain->mapAddressBook.count(address))
+                entry.push_back(Pair("account", pwalletMain->mapAddressBook[address].name));
+        }
+        entry.push_back(Pair("scriptPubKey", HexStr(pk.begin(), pk.end())));
+        if (pk.IsPayToScriptHash()) {
+            CTxDestination address;
+            if (ExtractDestination(pk, address)) {
+                const CScriptID& hash = boost::get<CScriptID>(address);
+                CScript redeemScript;
+                if (pwalletMain->GetCScript(hash, redeemScript))
+                    entry.push_back(Pair("redeemScript", HexStr(redeemScript.begin(), redeemScript.end())));
+            }
+        }
+        entry.push_back(Pair("amount", ValueFromAmount(nValue)));
+        entry.push_back(Pair("confirmations", out.nDepth));
+        entry.push_back(Pair("spendable", out.fSpendable));
+        results.push_back(entry);
+    }
+
+    return results;
+}
+
 UniValue lockunspent(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() < 1 || params.size() > 2)
@@ -4552,3 +4679,84 @@ UniValue spendrawzerocoin(const UniValue& params, bool fHelp)
     return DoZpivSpend(mint.GetDenominationAsAmount(), vMintsSelected, address_str);
 }
 
+extern UniValue dumpprivkey(const UniValue& params, bool fHelp); // in rpcdump.cpp
+extern UniValue importprivkey(const UniValue& params, bool fHelp);
+extern UniValue importaddress(const UniValue& params, bool fHelp);
+extern UniValue importpubkey(const UniValue& params, bool fHelp);
+extern UniValue dumpwallet(const UniValue& params, bool fHelp);
+extern UniValue importwallet(const UniValue& params, bool fHelp);
+
+const CRPCCommand vWalletRPCCommands[] =
+{       //  category              name                        actor (function)           okSafeMode
+        //  --------------------- ------------------------    -----------------------    ----------
+        //{ "rawtransactions",    "fundrawtransaction",       &fundrawtransaction,       false },
+        {"wallet",              "autocombinerewards",       &autocombinerewards,       false },
+        {"wallet",              "abandontransaction",       &abandontransaction,       false },
+        { "wallet",             "addmultisigaddress",       &addmultisigaddress,       true  },
+        { "wallet",             "backupwallet",             &backupwallet,             true  },
+        { "wallet",             "delegatestake",            &delegatestake,            false },
+        { "wallet",             "dumpprivkey",              &dumpprivkey,              true  },
+        { "wallet",             "dumpwallet",               &dumpwallet,               true  },
+        { "wallet",             "encryptwallet",            &encryptwallet,            true  },
+        { "wallet",             "getaccountaddress",        &getaccountaddress,        true  },
+        { "wallet",             "getaccount",               &getaccount,               true  },
+        { "wallet",             "getaddressesbyaccount",    &getaddressesbyaccount,    true  },
+        { "wallet",             "getbalance",               &getbalance,               false },
+        { "wallet",             "getcoldstakingbalance",    &getcoldstakingbalance,    false },
+        { "wallet",             "getdelegatedbalance",      &getdelegatedbalance,      false },
+        { "wallet",             "upgradewallet",            &upgradewallet,            true  },
+        { "wallet",             "sethdseed",                &sethdseed,                true  },
+        { "wallet",             "getnewaddress",            &getnewaddress,            true  },
+        { "wallet",             "getnewstakingaddress",     &getnewstakingaddress,     true  },
+        { "wallet",             "getrawchangeaddress",      &getrawchangeaddress,      true  },
+        { "wallet",             "getreceivedbyaccount",     &getreceivedbyaccount,     false },
+        { "wallet",             "getreceivedbyaddress",     &getreceivedbyaddress,     false },
+        { "wallet",             "gettransaction",           &gettransaction,           false },
+        { "wallet",             "getstakesplitthreshold",   &getstakesplitthreshold,   false },
+        { "wallet",             "getunconfirmedbalance",    &getunconfirmedbalance,    false },
+        { "wallet",             "getwalletinfo",            &getwalletinfo,            false },
+        { "wallet",             "importprivkey",            &importprivkey,            true  },
+        { "wallet",             "importwallet",             &importwallet,             true  },
+        { "wallet",             "importaddress",            &importaddress,            true  },
+        { "wallet",             "importpubkey",             &importpubkey,             true  },
+        { "wallet",             "keypoolrefill",            &keypoolrefill,            true  },
+        { "wallet",             "listaccounts",             &listaccounts,             false },
+        { "wallet",             "listaddressgroupings",     &listaddressgroupings,     false },
+        { "wallet",             "listdelegators",           &listdelegators,           false },
+        { "wallet",             "liststakingaddresses",     &liststakingaddresses,     false },
+        { "wallet",             "listcoldutxos",            &listcoldutxos,            false },
+        { "wallet",             "listlockunspent",          &listlockunspent,          false },
+        { "wallet",             "listreceivedbyaccount",    &listreceivedbyaccount,    false },
+        { "wallet",             "listreceivedbyaddress",    &listreceivedbyaddress,    false },
+        { "wallet",             "listsinceblock",           &listsinceblock,           false },
+        { "wallet",             "listtransactions",         &listtransactions,         false },
+        { "wallet",             "listunspent",              &listunspent,              false },
+        { "wallet",             "lockunspent",              &lockunspent,              true  },
+        { "wallet",             "move",                     &movecmd,                  false },
+        { "wallet",             "rawdelegatestake",         &rawdelegatestake,         false },
+        { "wallet",             "sendfrom",                 &sendfrom,                 false },
+        { "wallet",             "sendmany",                 &sendmany,                 false },
+        { "wallet",             "sendtoaddress",            &sendtoaddress,            false },
+        { "wallet",             "sendtoaddressix",          &sendtoaddressix,          false },
+        { "wallet",             "setaccount",               &setaccount,               true  },
+        { "wallet",             "settxfee",                 &settxfee,                 true  },
+        { "wallet",             "setstakesplitthreshold",   &setstakesplitthreshold,   false },
+        { "wallet",             "signmessage",              &signmessage,              true  },
+        { "wallet",             "walletlock",               &walletlock,               true  },
+        { "wallet",             "walletpassphrasechange",   &walletpassphrasechange,   true  },
+        { "wallet",             "walletpassphrase",         &walletpassphrase,         true  },
+        { "wallet",             "delegatoradd",             &delegatoradd,             true  },
+        { "wallet",             "delegatorremove",          &delegatorremove,          true  }
+};
+
+void walletRegisterRPCCommands()
+{
+    unsigned int vcidx;
+    for (vcidx = 0; vcidx < ARRAYLEN(vWalletRPCCommands); vcidx++)
+    {
+        const CRPCCommand *pcmd;
+
+        pcmd = &vWalletRPCCommands[vcidx];
+        tableRPC.appendCommand(pcmd->name, pcmd);
+    }
+}
