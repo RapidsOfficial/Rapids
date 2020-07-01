@@ -113,6 +113,11 @@ std::string CActiveMasternode::GetStatus()
 
 bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
 {
+    if (vin == nullopt) {
+        errorMessage = "Active Masternode not initialized";
+        return false;
+    }
+
     if (status != ACTIVE_MASTERNODE_STARTED) {
         errorMessage = "Masternode is not in a running status";
         return false;
@@ -126,16 +131,16 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
         return false;
     }
 
-    LogPrintf("CActiveMasternode::SendMasternodePing() - Relay Masternode Ping vin = %s\n", vin.ToString());
+    LogPrintf("CActiveMasternode::SendMasternodePing() - Relay Masternode Ping vin = %s\n", vin->ToString());
 
-    CMasternodePing mnp(vin);
+    CMasternodePing mnp(*vin);
     if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
         errorMessage = "Couldn't sign Masternode Ping";
         return false;
     }
 
     // Update lastPing for our masternode in Masternode list
-    CMasternode* pmn = mnodeman.Find(vin);
+    CMasternode* pmn = mnodeman.Find(*vin);
     if (pmn != NULL) {
         if (pmn->IsPingedWithin(MASTERNODE_PING_SECONDS, mnp.sigTime)) {
             errorMessage = "Too early to send Masternode Ping";
@@ -155,7 +160,7 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
 
     } else {
         // Seems like we are trying to send a ping while the Masternode is not registered in the network
-        errorMessage = "Masternode List doesn't include our Masternode, shutting down Masternode pinging service! " + vin.ToString();
+        errorMessage = "Masternode List doesn't include our Masternode, shutting down Masternode pinging service! " + vin->ToString();
         status = ACTIVE_MASTERNODE_NOT_CAPABLE;
         notCapableReason = errorMessage;
         return false;

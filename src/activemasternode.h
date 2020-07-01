@@ -35,7 +35,7 @@ public:
     CPubKey pubKeyMasternode;
 
     // Initialized while registering Masternode
-    CTxIn vin;
+    Optional<CTxIn> vin;
     CService service;
 
     int status;
@@ -43,6 +43,7 @@ public:
 
     CActiveMasternode()
     {
+        vin = nullopt;
         status = ACTIVE_MASTERNODE_INITIAL;
     }
 

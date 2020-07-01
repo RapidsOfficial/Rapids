@@ -1889,6 +1889,11 @@ void CFinalizedBudget::CheckAndVote()
         return;
     }
 
+    if (activeMasternode.vin == nullopt) {
+        LogPrint(BCLog::MNBUDGET,"%s: Active Masternode not initialized.\n", __func__);
+        return;
+    }
+
     // Do this 1 in 4 blocks -- spread out the voting activity
     // -- this function is only called every fourteenth block, so this is really 1 in 56 blocks
     if (rand() % 4 != 0) {
@@ -2199,6 +2204,9 @@ TrxValidationStatus CFinalizedBudget::IsTransactionValid(const CTransaction& txN
 
 void CFinalizedBudget::SubmitVote()
 {
+    // function called only from initialized masternodes
+    assert(fMasterNode && activeMasternode.vin != nullopt);
+
     std::string strError = "";
     CPubKey pubKeyMasternode;
     CKey keyMasternode;
@@ -2208,7 +2216,7 @@ void CFinalizedBudget::SubmitVote()
         return;
     }
 
-    CFinalizedBudgetVote vote(activeMasternode.vin, GetHash());
+    CFinalizedBudgetVote vote(*(activeMasternode.vin), GetHash());
     if (!vote.Sign(keyMasternode, pubKeyMasternode)) {
         LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::SubmitVote - Failure to sign.");
         return;

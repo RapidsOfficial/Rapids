@@ -264,7 +264,11 @@ void DoConsensusVote(CTransaction& tx, int64_t nBlockHeight)
 {
     if (!fMasterNode) return;
 
-    int n = mnodeman.GetMasternodeRank(activeMasternode.vin, nBlockHeight, MIN_SWIFTTX_PROTO_VERSION);
+    if (activeMasternode.vin == nullopt)
+        LogPrint(BCLog::MASTERNODE, "%s: Active Masternode not initialized.", __func__);
+        return;
+
+    int n = mnodeman.GetMasternodeRank(*(activeMasternode.vin), nBlockHeight, MIN_SWIFTTX_PROTO_VERSION);
 
     if (n == -1) {
         LogPrint(BCLog::MASTERNODE, "%s : Unknown Masternode\n", __func__);
@@ -282,7 +286,7 @@ void DoConsensusVote(CTransaction& tx, int64_t nBlockHeight)
     LogPrint(BCLog::MASTERNODE, "%s : In the top %d (%d)\n", __func__, SWIFTTX_SIGNATURES_TOTAL, n);
 
     CConsensusVote ctx;
-    ctx.vinMasternode = activeMasternode.vin;
+    ctx.vinMasternode = *(activeMasternode.vin);
     ctx.txHash = tx.GetHash();
     ctx.nBlockHeight = nBlockHeight;
 
