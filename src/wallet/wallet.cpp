@@ -2928,15 +2928,15 @@ CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey&
 
             // Notify that old coins are spent
             if (!wtxNew.HasZerocoinSpendInputs()) {
-                std::set<uint256> updated_hahes;
+                std::set<uint256> updated_hashes;
                 for (const CTxIn& txin : wtxNew.vin) {
                     // notify only once
-                    if (updated_hahes.find(txin.prevout.hash) != updated_hahes.end()) continue;
+                    if (updated_hashes.find(txin.prevout.hash) != updated_hashes.end()) continue;
 
                     CWalletTx& coin = mapWallet[txin.prevout.hash];
                     coin.BindWallet(this);
                     NotifyTransactionChanged(this, txin.prevout.hash, CT_UPDATED);
-                    updated_hahes.insert(txin.prevout.hash);
+                    updated_hashes.insert(txin.prevout.hash);
                 }
             }
 
