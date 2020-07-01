@@ -37,9 +37,10 @@ void CActiveMasternode::ManageStatus()
     if (status == ACTIVE_MASTERNODE_INITIAL) {
         CMasternode* pmn;
         pmn = mnodeman.Find(pubKeyMasternode);
-        if (pmn != NULL) {
+        if (pmn != nullptr) {
             pmn->Check();
-            if (pmn->IsEnabled() && pmn->protocolVersion == PROTOCOL_VERSION) EnableHotColdMasterNode(pmn->vin, pmn->addr);
+            if (pmn->IsEnabled() && pmn->protocolVersion == PROTOCOL_VERSION)
+                EnableHotColdMasterNode(pmn->vin, pmn->addr);
         }
     }
 
@@ -100,8 +101,6 @@ std::string CActiveMasternode::GetStatus()
         return "Node just started, not yet activated";
     case ACTIVE_MASTERNODE_SYNC_IN_PROCESS:
         return "Sync in progress. Must wait until sync is complete to start Masternode";
-    case ACTIVE_MASTERNODE_INPUT_TOO_NEW:
-        return strprintf("Masternode input must have at least %d confirmations", MASTERNODE_MIN_CONFIRMATIONS);
     case ACTIVE_MASTERNODE_NOT_CAPABLE:
         return "Not capable masternode: " + notCapableReason;
     case ACTIVE_MASTERNODE_STARTED:
