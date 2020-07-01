@@ -435,14 +435,16 @@ bool UpdateZPIVSupplyConnect(const CBlock& block, CBlockIndex* pindex, bool fJus
                 if (pwalletMain->IsMyMint(m.GetValue())) {
                     pwalletMain->UpdateMint(m.GetValue(), pindex->nHeight, m.GetTxHash(), m.GetDenomination());
                     // Add the transaction to the wallet
-                    for (auto& tx : block.vtx) {
+                    int posInBlock = 0;
+                    for (posInBlock = 0; posInBlock < (int)block.vtx.size(); posInBlock++) {
+                        auto& tx = block.vtx[posInBlock];
                         uint256 txid = tx.GetHash();
                         if (setAddedToWallet.count(txid))
                             continue;
                         if (txid == m.GetTxHash()) {
                             CWalletTx wtx(pwalletMain, tx);
                             wtx.nTimeReceived = block.GetBlockTime();
-                            wtx.SetMerkleBranch(block);
+                            wtx.SetMerkleBranch(pindex, posInBlock);
                             pwalletMain->AddToWallet(wtx);
                             setAddedToWallet.insert(txid);
                         }
