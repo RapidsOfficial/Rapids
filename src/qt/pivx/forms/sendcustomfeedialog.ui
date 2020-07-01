@@ -280,7 +280,7 @@
            <item alignment="Qt::AlignHCenter">
             <widget class="QLineEdit" name="lineEditCustomFee">
              <property name="placeholderText">
-              <string notr="true">0.000001</string>
+              <string notr="true">0.0001</string>
              </property>
             </widget>
            </item>
