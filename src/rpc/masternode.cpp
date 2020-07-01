@@ -286,14 +286,13 @@ UniValue startmasternode (const UniValue& params, bool fHelp)
     if (strCommand == "local") {
         if (!fMasterNode) throw std::runtime_error("you must set masternode=1 in the configuration\n");
 
-        if (activeMasternode.status != ACTIVE_MASTERNODE_STARTED) {
-            activeMasternode.status = ACTIVE_MASTERNODE_INITIAL; // TODO: consider better way
-            activeMasternode.ManageStatus();
+        if (activeMasternode.GetStatus() != ACTIVE_MASTERNODE_STARTED) {
+            activeMasternode.ResetStatus();
             if (fLock)
                 pwalletMain->Lock();
         }
 
-        return activeMasternode.GetStatus();
+        return activeMasternode.GetStatusMessage();
     }
 
     if (strCommand == "all" || strCommand == "many" || strCommand == "missing" || strCommand == "disabled") {
@@ -514,12 +513,12 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
         mnObj.push_back(Pair("outputidx", (uint64_t)activeMasternode.vin->prevout.n));
         mnObj.push_back(Pair("netaddr", activeMasternode.service.ToString()));
         mnObj.push_back(Pair("addr", EncodeDestination(pmn->pubKeyCollateralAddress.GetID())));
-        mnObj.push_back(Pair("status", activeMasternode.status));
-        mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
+        mnObj.push_back(Pair("status", activeMasternode.GetStatus()));
+        mnObj.push_back(Pair("message", activeMasternode.GetStatusMessage()));
         return mnObj;
     }
     throw std::runtime_error("Masternode not found in the list of available masternodes. Current status: "
-                        + activeMasternode.GetStatus());
+                        + activeMasternode.GetStatusMessage());
 }
 
 UniValue getmasternodewinners (const UniValue& params, bool fHelp)
