@@ -2780,7 +2780,7 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     UpdateTip(pindexNew);
 
     for(unsigned int i=0; i < pblock->vtx.size(); i++) {
-        txChanged.push_back(std::make_tuple(pblock->vtx[i], pindexNew, i));
+        txChanged.emplace_back(pblock->vtx[i], pindexNew, i);
     }
 
     int64_t nTime6 = GetTimeMicros();
@@ -3001,12 +3001,15 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
 
     CBlockIndex* pindexNewTip = nullptr;
     CBlockIndex* pindexMostWork = nullptr;
+    std::vector<std::tuple<CTransaction,CBlockIndex*,int>> txChanged;
+    if (pblock)
+        txChanged.reserve(pblock->vtx.size());
     do {
+        txChanged.clear();
         boost::this_thread::interruption_point();
 
         const CBlockIndex *pindexFork;
         std::list<CTransaction> txConflicted;
-        std::vector<std::tuple<CTransaction,CBlockIndex*,int>> txChanged;
         bool fInitialDownload;
         while (true) {
             TRY_LOCK(cs_main, lockMain);
