@@ -346,11 +346,6 @@ bool IsValidDestinationString(const std::string& str, bool fStaking, const CChai
     return IsValidDestination(DecodeDestination(str, params, isStaking)) && (isStaking == fStaking);
 }
 
-bool IsValidDestinationString(const std::string& str)
-{
-    return IsValidDestinationString(str, false, Params());
-}
-
 bool IsValidDestinationString(const std::string& str, bool isStaking)
 {
     return IsValidDestinationString(str, isStaking, Params());
