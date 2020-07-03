@@ -1270,61 +1270,6 @@ UniValue getreceivedbylabel(const UniValue& params, bool fHelp)
     return (double)nAmount / (double)COIN;
 }
 
-
-CAmount GetAccountBalance(CWalletDB& walletdb, const std::string& strAccount, int nMinDepth, const isminefilter& filter)
-{
-    CAmount nBalance = 0;
-
-    // Tally wallet transactions
-    for (std::map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
-        const CWalletTx& wtx = (*it).second;
-        bool fConflicted;
-        int depth = wtx.GetDepthAndMempool(fConflicted);
-
-        if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || depth < 0 || fConflicted)
-            continue;
-
-        if (strAccount == "*") {
-            // Calculate total balance a different way from GetBalance()
-            // (GetBalance() sums up all unspent TxOuts)
-            CAmount allFee;
-            std::string strSentAccount;
-            std::list<COutputEntry> listReceived;
-            std::list<COutputEntry> listSent;
-            wtx.GetAmounts(listReceived, listSent, allFee, strSentAccount, filter);
-            if (wtx.GetDepthInMainChain() >= nMinDepth) {
-                for (const COutputEntry& r : listReceived)
-                    nBalance += r.amount;
-            }
-            for (const COutputEntry& s : listSent)
-                nBalance -= s.amount;
-            nBalance -= allFee;
-
-        } else {
-
-            CAmount nReceived, nSent, nFee;
-            wtx.GetAccountAmounts(strAccount, nReceived, nSent, nFee, filter);
-
-            if (nReceived != 0 && depth >= nMinDepth)
-                nBalance += nReceived;
-            nBalance -= nSent + nFee;
-        }
-    }
-
-    // Tally internal accounting entries
-    if (strAccount != "*")
-        nBalance += walletdb.GetAccountCreditDebit(strAccount);
-
-    return nBalance;
-}
-
-CAmount GetAccountBalance(const std::string& strAccount, int nMinDepth, const isminefilter& filter)
-{
-    CWalletDB walletdb(pwalletMain->strWalletFile);
-    return GetAccountBalance(walletdb, strAccount, nMinDepth, filter);
-}
-
-
 UniValue getbalance(const UniValue& params, bool fHelp)
 {
     if (fHelp || params.size() > 4)
@@ -1357,6 +1302,8 @@ UniValue getbalance(const UniValue& params, bool fHelp)
     if (params.size() == 0)
         return ValueFromAmount(pwalletMain->GetBalance());
 
+    const std::string* account = params[0].get_str() != "*" ? &params[0].get_str() : nullptr;
+
     int nMinDepth = 1;
     if (params.size() > 1)
         nMinDepth = params[1].get_int();
@@ -1366,8 +1313,7 @@ UniValue getbalance(const UniValue& params, bool fHelp)
     if ( !(params.size() > 3) || params[3].get_bool() )
         filter = filter | ISMINE_SPENDABLE_DELEGATED;
 
-    std::string strAccount = params[0].get_str();
-    return ValueFromAmount(GetAccountBalance(strAccount, nMinDepth, filter));
+    return ValueFromAmount(pwalletMain->GetLegacyBalance(filter, nMinDepth, account));
 }
 
 UniValue getcoldstakingbalance(const UniValue& params, bool fHelp)
@@ -1398,7 +1344,7 @@ UniValue getcoldstakingbalance(const UniValue& params, bool fHelp)
         return ValueFromAmount(pwalletMain->GetColdStakingBalance());
 
     std::string strAccount = params[0].get_str();
-    return ValueFromAmount(GetAccountBalance(strAccount, /*nMinDepth*/ 1, ISMINE_COLD));
+    return ValueFromAmount(pwalletMain->GetLegacyBalance(ISMINE_COLD, 1, &strAccount));
 }
 
 UniValue getdelegatedbalance(const UniValue& params, bool fHelp)
@@ -1430,7 +1376,7 @@ UniValue getdelegatedbalance(const UniValue& params, bool fHelp)
         return ValueFromAmount(pwalletMain->GetDelegatedBalance());
 
     std::string strAccount = params[0].get_str();
-    return ValueFromAmount(GetAccountBalance(strAccount, /*nMinDepth*/ 1, ISMINE_SPENDABLE_DELEGATED));
+    return ValueFromAmount(pwalletMain->GetLegacyBalance(ISMINE_SPENDABLE_DELEGATED, 1, &strAccount));
 }
 
 UniValue getunconfirmedbalance(const UniValue &params, bool fHelp)
@@ -1574,7 +1520,7 @@ UniValue sendfrom(const UniValue& params, bool fHelp)
     EnsureWalletIsUnlocked();
 
     // Check funds
-    CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, filter);
+    CAmount nBalance = pwalletMain->GetLegacyBalance(filter, nMinDepth, &strAccount);
     if (nAmount > nBalance)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Account has insufficient funds");
 
@@ -1657,7 +1603,7 @@ UniValue sendmany(const UniValue& params, bool fHelp)
     EnsureWalletIsUnlocked();
 
     // Check funds
-    CAmount nBalance = GetAccountBalance(strAccount, nMinDepth, ISMINE_SPENDABLE);
+    CAmount nBalance = pwalletMain->GetLegacyBalance(ISMINE_SPENDABLE, nMinDepth, &strAccount);
     if (totalAmount > nBalance)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Account has insufficient funds");
 

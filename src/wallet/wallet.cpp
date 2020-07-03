@@ -1573,36 +1573,6 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
     }
 }
 
-void CWalletTx::GetAccountAmounts(const std::string& strAccount, CAmount& nReceived, CAmount& nSent, CAmount& nFee, const isminefilter& filter) const
-{
-    nReceived = nSent = nFee = 0;
-
-    CAmount allFee;
-    std::string strSentAccount;
-    std::list<COutputEntry> listReceived;
-    std::list<COutputEntry> listSent;
-    GetAmounts(listReceived, listSent, allFee, strSentAccount, filter);
-
-    if (strAccount == strSentAccount) {
-        for (const COutputEntry& s : listSent)
-            nSent += s.amount;
-        nFee = allFee;
-    }
-    {
-        LOCK(pwallet->cs_wallet);
-        for (const COutputEntry& r : listReceived) {
-            if (pwallet->mapAddressBook.count(r.destination)) {
-                std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = pwallet->mapAddressBook.find(r.destination);
-                if (mi != pwallet->mapAddressBook.end() && (*mi).second.name == strAccount)
-                    nReceived += r.amount;
-            } else if (strAccount.empty()) {
-                nReceived += r.amount;
-            }
-        }
-    }
-}
-
-
 bool CWalletTx::WriteToDisk(CWalletDB *pwalletdb)
 {
     if (pwalletdb)
@@ -1969,6 +1939,50 @@ CAmount CWallet::GetLockedWatchOnlyBalance() const
             if (pcoin.IsTrusted() && pcoin.GetDepthInMainChain() > 0)
                 nTotal += pcoin.GetLockedWatchOnlyCredit();
     });
+}
+
+// Calculate total balance in a different way from GetBalance. The biggest
+// difference is that GetBalance sums up all unspent TxOuts paying to the
+// wallet, while this sums up both spent and unspent TxOuts paying to the
+// wallet, and then subtracts the values of TxIns spending from the wallet. This
+// also has fewer restrictions on which unconfirmed transactions are considered
+// trusted.
+CAmount CWallet::GetLegacyBalance(const isminefilter& filter, int minDepth, const std::string* account) const
+{
+    LOCK2(cs_main, cs_wallet);
+
+    CAmount balance = 0;
+    for (const auto& entry : mapWallet) {
+        const CWalletTx& wtx = entry.second;
+        bool fConflicted;
+        const int depth = wtx.GetDepthAndMempool(fConflicted);
+        if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || depth < 0 || fConflicted) {
+            continue;
+        }
+
+        // Loop through tx outputs and add incoming payments. For outgoing txs,
+        // treat change outputs specially, as part of the amount debited.
+        CAmount debit = wtx.GetDebit(filter);
+        const bool outgoing = debit > 0;
+        for (const CTxOut& out : wtx.vout) {
+            if (outgoing && IsChange(out)) {
+                debit -= out.nValue;
+            } else if (IsMine(out) & filter && depth >= minDepth && (!account || *account == GetAccountName(out.scriptPubKey))) {
+                balance += out.nValue;
+            }
+        }
+
+        // For outgoing txs, subtract amount debited.
+        if (outgoing && (!account || *account == wtx.strFromAccount)) {
+            balance -= debit;
+        }
+    }
+
+    if (account) {
+        balance += CWalletDB(strWalletFile).GetAccountCreditDebit(*account);
+    }
+
+    return balance;
 }
 
 void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
@@ -3159,6 +3173,21 @@ std::string CWallet::purposeForAddress(const CTxDestination& address) const
         }
     }
     return "";
+}
+
+const std::string& CWallet::GetAccountName(const CScript& scriptPubKey) const
+{
+    CTxDestination address;
+    if (ExtractDestination(scriptPubKey, address) && !scriptPubKey.IsUnspendable()) {
+        auto mi = mapAddressBook.find(address);
+        if (mi != mapAddressBook.end()) {
+            return mi->second.name;
+        }
+    }
+    // A scriptPubKey that doesn't have an entry in the address book is
+    // associated with the default account ("").
+    const static std::string DEFAULT_ACCOUNT_NAME;
+    return DEFAULT_ACCOUNT_NAME;
 }
 
 bool CWallet::HasAddressBook(const CTxDestination& address) const

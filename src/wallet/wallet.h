@@ -461,6 +461,7 @@ public:
     CAmount GetUnconfirmedWatchOnlyBalance() const;
     CAmount GetImmatureWatchOnlyBalance() const;
     CAmount GetLockedWatchOnlyBalance() const;
+    CAmount GetLegacyBalance(const isminefilter& filter, int minDepth, const std::string* account) const;
     bool FundTransaction(CMutableTransaction& tx, CAmount &nFeeRet, bool overrideEstimatedFeeRate, const CFeeRate& specificFeeRate, int& nChangePosInOut, std::string& strFailReason, bool includeWatching, bool lockUnspents, const CTxDestination& destChange = CNoDestination());
     /**
      * Create a new transaction paying the recipients with a set of coins
@@ -557,6 +558,7 @@ public:
     bool HasDelegator(const CTxOut& out) const;
 
     std::string purposeForAddress(const CTxDestination& address) const;
+    const std::string& GetAccountName(const CScript& scriptPubKey) const;
 
     bool UpdatedTransaction(const uint256& hashTx);
 
@@ -920,8 +922,6 @@ public:
         CAmount& nFee,
         std::string& strSentAccount,
         const isminefilter& filter) const;
-
-    void GetAccountAmounts(const std::string& strAccount, CAmount& nReceived, CAmount& nSent, CAmount& nFee, const isminefilter& filter) const;
 
     bool IsFromMe(const isminefilter& filter) const;
 
