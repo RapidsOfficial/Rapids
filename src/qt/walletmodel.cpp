@@ -238,7 +238,14 @@ void WalletModel::pollBalanceChanged()
     if (!lockWallet)
         return;
 
-    int chainHeight = chainActive.Height();
+    // Don't continue processing if the chain tip time is less than the first
+    // key creation time as there is no need to iterate over the transaction
+    // table model in this case.
+    auto tip = chainActive.Tip();
+    if (tip->GetBlockTime() < getCreationTime())
+        return;
+
+    int chainHeight = tip->nHeight;
     if (fForceCheckBalanceChanged || chainHeight != cachedNumBlocks) {
         fForceCheckBalanceChanged = false;
 
