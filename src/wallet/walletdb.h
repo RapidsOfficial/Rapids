@@ -155,6 +155,7 @@ public:
 
     bool ReadAccount(const std::string& strAccount, CAccount& account);
     bool WriteAccount(const std::string& strAccount, const CAccount& account);
+    bool EraseAccount(const std::string& strAccount);
 
     //! write the hdchain model (external/internal chain child index counter)
     bool WriteHDChain(const CHDChain& chain);

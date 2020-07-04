@@ -59,6 +59,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "listreceivedbylabel", 0 },
         { "listreceivedbylabel", 1 },
         { "listreceivedbylabel", 2 },
+        { "getlabeladdress", 1 },
         {"getbalance", 1},
         {"getbalance", 2},
         {"getblockhash", 0},

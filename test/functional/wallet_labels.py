@@ -12,6 +12,7 @@ RPCs tested are:
     - sendfrom (with account arguments)
     - move (with account arguments)
 """
+from collections import defaultdict
 
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import assert_equal
@@ -74,8 +75,11 @@ class WalletlabelsTest(PivxTestFramework):
         # recognize the label/address associations.
         labels = [Label(name) for name in ("a", "b", "c", "d", "e")]
         for label in labels:
-            label.add_receive_address(node.getlabeladdress(label.name))
+            label.add_receive_address(node.getlabeladdress(label.name, True))
             label.verify(node)
+
+        # Check all labels are returned by listlabels.
+        assert_equal(node.listlabels(), [label.name for label in labels])
 
         # Send a transaction to each label, and make sure this forces
         # getlabeladdress to generate a new receiving address.
@@ -111,7 +115,7 @@ class WalletlabelsTest(PivxTestFramework):
 
         # Check that setlabel can assign a label to a new unused address.
         for label in labels:
-            address = node.getlabeladdress("")
+            address = node.getlabeladdress("", True)
             node.setlabel(address, label.name)
             label.add_address(address)
             label.verify(node)
@@ -124,6 +128,7 @@ class WalletlabelsTest(PivxTestFramework):
                 addresses.append(node.getnewaddress())
             multisig_address = node.addmultisigaddress(5, addresses, label.name)
             label.add_address(multisig_address)
+            label.purpose[multisig_address] = "send"
             label.verify(node)
             node.sendfrom("", multisig_address, 50)
         #node.generate(101)
@@ -143,9 +148,7 @@ class WalletlabelsTest(PivxTestFramework):
         change_label(node, labels[2].addresses[0], labels[2], labels[2])
 
         # Check that setlabel can set the label of an address which is
-        # already the receiving address of the label. It would probably make
-        # sense for this to be a no-op, but right now it resets the receiving
-        # address, causing getaccountaddress to return a brand new address.
+        # already the receiving address of the label. This is a no-op.
         change_label(node, labels[2].receive_address, labels[2], labels[2])
 
 class Label:
@@ -156,6 +159,8 @@ class Label:
         self.receive_address = None
         # List of all addresses assigned with this label
         self.addresses = []
+        # Map of address to address purpose
+        self.purpose = defaultdict(lambda: "receive")
 
     def add_address(self, address):
         assert_equal(address not in self.addresses, True)
@@ -168,10 +173,18 @@ class Label:
     def verify(self, node):
         if self.receive_address is not None:
             assert self.receive_address in self.addresses
-            assert_equal(node.getaccountaddress(self.name), self.receive_address)
+            assert_equal(node.getlabeladdress(self.name), self.receive_address)
 
         for address in self.addresses:
+            assert_equal(
+                node.getaddressinfo(address)['labels'][0],
+                {"name": self.name,
+                 "purpose": self.purpose[address]})
             assert_equal(node.getaccount(address), self.name)
+
+        assert_equal(
+            node.getaddressesbylabel(self.name),
+            {address: {"purpose": self.purpose[address]} for address in self.addresses})
 
         assert_equal(
             set(node.getaddressesbyaccount(self.name)), set(self.addresses))
@@ -188,8 +201,8 @@ def change_label(node, address, old_label, new_label):
     # address of a different label should reset the receiving address of
     # the old label, causing getlabeladdress to return a brand new
     # address.
-    if address == old_label.receive_address:
-        new_address = node.getaccountaddress(old_label.name)
+    if old_label.name != new_label.name and address == old_label.receive_address:
+        new_address = node.getlabeladdress(old_label.name)
         assert_equal(new_address not in old_label.addresses, True)
         assert_equal(new_address not in new_label.addresses, True)
         old_label.add_receive_address(new_address)

@@ -527,6 +527,7 @@ public:
     std::map<CTxDestination, CAmount> GetAddressBalances();
 
     std::set<CTxDestination> GetLabelAddresses(const std::string& strAccount) const;
+    void DeleteLabel(const std::string& label);
 
     bool GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useIX);
     bool GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX); // Only used for budget finalization
@@ -998,7 +999,7 @@ public:
 
 
 /**
- * Account information.
+ * DEPRECATED Account information.
  * Stored in wallet with key "acc"+string account name.
  */
 class CAccount
@@ -1030,7 +1031,7 @@ public:
 
 
 /**
- * Internal transfers.
+ * DEPRECATED Internal transfers.
  * Database key is acentry<account><counter>.
  */
 class CAccountingEntry

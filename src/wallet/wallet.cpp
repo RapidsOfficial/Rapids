@@ -3369,6 +3369,12 @@ std::set<std::set<CTxDestination> > CWallet::GetAddressGroupings()
     return ret;
 }
 
+void CWallet::DeleteLabel(const std::string &label)
+{
+    CWalletDB walletdb(strWalletFile);
+    walletdb.EraseAccount(label);
+}
+
 std::set<CTxDestination> CWallet::GetLabelAddresses(const std::string& label) const
 {
     LOCK(cs_wallet);
