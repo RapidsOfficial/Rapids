@@ -24,18 +24,18 @@ URL:		https://rapids.org/
 Source0:	https://rapids.org/bin/rapids-core-%{version}/rapids-%{version}.tar.gz
 Source1:	http://download.oracle.com/berkeley-db/db-%{bdbv}.NC.tar.gz
 
-Source10:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/contrib/debian/examples/rapids.conf
+Source10:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/contrib/debian/examples/rapids.conf
 
 #man pages
-Source20:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/doc/man/rapidsd.1
-Source21:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/doc/man/rapids-cli.1
-Source22:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/doc/man/rapids-qt.1
+Source20:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/doc/man/rapidsd.1
+Source21:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/doc/man/rapids-cli.1
+Source22:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/doc/man/rapids-qt.1
 
 #selinux
-Source30:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/contrib/rpm/rapids.te
+Source30:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/contrib/rpm/rapids.te
 # Source31 - what about rapids-tx and bench_rapids ???
-Source31:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/contrib/rpm/rapids.fc
-Source32:	https://raw.githubusercontent.com/RapidsOfficial/Rapids/v%{version}/contrib/rpm/rapids.if
+Source31:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/contrib/rpm/rapids.fc
+Source32:	https://raw.githubusercontent.com/rapids-project/rapids/v%{version}/contrib/rpm/rapids.if
 
 Source100:	https://upload.wikimedia.org/wikipedia/commons/4/46/Bitcoin.svg
 
@@ -311,8 +311,7 @@ rm -f %{buildroot}%{_bindir}/test_*
 
 %check
 make check
-srcdir=src test/rapids-util-test.py
-test/functional/test_runner.py --extended
+srcdir=src
 
 %post libs -p /sbin/ldconfig
 

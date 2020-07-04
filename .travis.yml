@@ -14,14 +14,14 @@
 #
 # These caches can be manually removed if necessary. This is one of the very
 # few manual operations that is possible with Travis, and it can be done by a
-# PIVX GitHub member via the Travis web interface [0].
+# Rapids GitHub member via the Travis web interface [0].
 #
 # Travis CI uploads the cache after the script phase of the build [1].
 # However, the build is terminated without saving the chache if it takes over
 # 50 minutes [2]. Thus, if we spent too much time in early build stages, fail
 # with an error and save the cache.
 #
-# [0] https://travis-ci.org/pivx-project/pivx/caches
+# [0] https://travis-ci.org/rapids-project/rapids/caches
 # [1] https://docs.travis-ci.com/user/caching/#build-phases
 # [2] https://docs.travis-ci.com/user/customizing-the-build#build-timeouts
 
@@ -165,7 +165,7 @@ jobs:
         NO_DEPENDS=1
         RUN_FUNCTIONAL_TESTS=false
         GOAL="install"
-        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no"
+        BITCOIN_CONFIG="--enable-zmq --with-incompatible-bdb --with-gui=no --disable-bench"
 
     - stage: test
       name: 'x86_64 Linux  [GOAL: install]  [xenial]  [no depends, only system libs]'
@@ -238,7 +238,7 @@ jobs:
     - stage: cmake
       name: 'CMake macOS'
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode11.1
       language: cpp
       compiler:
         - clang
@@ -261,9 +261,7 @@ jobs:
             - libevent
             - qrencode
             - gmp
-#         Set 'update: true' below until TravisCI updates their macOS build images.
-#         See https://travis-ci.community/t/macos-build-fails-because-of-homebrew-bundle-unknown-command/7296/16
-          update: true
+          update: false
       before_install:
       install:
       before_script:

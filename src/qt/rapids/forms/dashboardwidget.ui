@@ -97,7 +97,7 @@
              <item>
               <widget class="QLabel" name="labelSubtitle">
                <property name="text">
-                <string>You can see here the history of your account</string>
+                <string>View your account's history</string>
                </property>
                <property name="alignment">
                 <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
@@ -258,7 +258,7 @@
                   <string notr="true"/>
                  </property>
                  <property name="text">
-                  <string>Warning</string>
+                  <string notr="true">N/A</string>
                  </property>
                  <property name="alignment">
                   <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
@@ -326,7 +326,7 @@
         <property name="frameShadow">
          <enum>QFrame::Raised</enum>
         </property>
-        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,8,0">
+        <layout class="QVBoxLayout" name="verticalLayout_7" stretch="1,8,0,0">
          <property name="spacing">
           <number>0</number>
          </property>
@@ -419,7 +419,7 @@
                <string notr="true"/>
               </property>
               <property name="text">
-               <string>No transactions</string>
+               <string>No transactions yet</string>
               </property>
               <property name="alignment">
                <set>Qt::AlignCenter</set>
@@ -441,6 +441,22 @@
             </size>
            </property>
           </spacer>
+         </item>
+         <item alignment="Qt::AlignHCenter">
+          <widget class="QPushButton" name="btnHowTo">
+           <property name="minimumSize">
+            <size>
+             <width>280</width>
+             <height>50</height>
+            </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::NoFocus</enum>
+           </property>
+           <property name="text">
+            <string>How to get RPD</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -487,7 +503,7 @@
             <property name="spacing">
              <number>5</number>
             </property>
-            <item alignment="Qt::AlignHCenter">
+            <item>
              <widget class="QLabel" name="labelTitle2">
               <property name="minimumSize">
                <size>
@@ -500,14 +516,30 @@
               </property>
              </widget>
             </item>
-            <item alignment="Qt::AlignHCenter">
+            <item>
              <widget class="QLabel" name="labelMessage">
               <property name="text">
-               <string>TextLabel</string>
+               <string>Amount of RPD staked.</string>
               </property>
              </widget>
             </item>
            </layout>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::MinimumExpanding</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -528,14 +560,14 @@
          </spacer>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0">
+         <layout class="QHBoxLayout" name="horizontalLayout_5" stretch="0,0">
           <property name="spacing">
            <number>0</number>
           </property>
           <item>
            <widget class="QLabel" name="labelAmountRpd">
             <property name="text">
-             <string>TextLabel</string>
+             <string notr="true">0 RPD</string>
             </property>
             <property name="alignment">
              <set>Qt::AlignCenter</set>
@@ -652,28 +684,25 @@
                 <item>
                  <widget class="QLabel" name="labelRpd">
                   <property name="text">
-                   <string>RPD</string>
+                   <string notr="true">RPD</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QLabel" name="labelSquarezRpd">
-                  <property name="minimumSize">
+                 <spacer name="horizontalSpacer_5">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Fixed</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
                    <size>
-                    <width>14</width>
-                    <height>14</height>
+                    <width>10</width>
+                    <height>20</height>
                    </size>
                   </property>
-                  <property name="maximumSize">
-                   <size>
-                    <width>14</width>
-                    <height>14</height>
-                   </size>
-                  </property>
-                  <property name="text">
-                   <string/>
-                  </property>
-                 </widget>
+                 </spacer>
                 </item>
                </layout>
               </item>
@@ -858,7 +887,7 @@ margin:0px;</string>
            </item>
            <item alignment="Qt::AlignVCenter">
             <widget class="QWidget" name="containerSort" native="true">
-             <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="3,2">
+             <layout class="QHBoxLayout" name="horizontalLayout_61" stretch="3,2">
               <property name="spacing">
                <number>28</number>
               </property>
@@ -1131,10 +1160,7 @@ margin:0px;</string>
            <enum>QFrame::StyledPanel</enum>
           </property>
           <property name="frameShadow">
-           <enum>QFrame::Plain</enum>
-          </property>
-          <property name="lineWidth">
-           <number>0</number>
+           <enum>QFrame::Raised</enum>
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_71" stretch="1,8,0,0">
            <property name="spacing">
@@ -1177,10 +1203,7 @@ margin:0px;</string>
               <enum>QFrame::StyledPanel</enum>
              </property>
              <property name="frameShadow">
-              <enum>QFrame::Plain</enum>
-             </property>
-             <property name="lineWidth">
-              <number>0</number>
+              <enum>QFrame::Raised</enum>
              </property>
              <layout class="QVBoxLayout" name="verticalLayout">
               <property name="spacing">
@@ -1231,11 +1254,8 @@ margin:0px;</string>
                 <property name="styleSheet">
                  <string notr="true"/>
                 </property>
-                <property name="lineWidth">
-                 <number>0</number>
-                </property>
                 <property name="text">
-                 <string>LabelText</string>
+                 <string notr="true">N/A</string>
                 </property>
                 <property name="alignment">
                  <set>Qt::AlignCenter</set>
@@ -1267,7 +1287,8 @@ margin:0px;</string>
 }</string>
              </property>
              <property name="text">
-              <string>TextLabel</string>
+              <string>You can verify the staking activity in the status bar at the top right of the wallet.
+It will start automatically as soon as the wallet has enough confirmations on any unspent balances, and the wallet has synced.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>

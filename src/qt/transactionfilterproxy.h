@@ -60,9 +60,6 @@ public:
     /** Set whether to hide orphan stakes. */
     void setHideOrphans(bool fHide);
 
-    /** Only zc txes **/
-    void setShowZcTxes(bool fOnlyZc);
-
     /** Only stakes txes **/
     void setOnlyStakes(bool fOnlyStakes);
 
@@ -90,8 +87,6 @@ private:
     bool fOnlyZc = false;
     bool fOnlyStakes = false;
     bool fOnlyColdStaking = false;
-
-    bool isZcTx(int type) const;
     bool isStakeTx(int type) const;
     bool isColdStake(int type) const;
 };

@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2019-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -23,10 +23,6 @@ LockUnlock::LockUnlock(QWidget *parent) :
     ui->pushButtonLocked->setStyleSheet("padding-left: 34px;");
     ui->pushButtonStaking->setProperty("cssClass", "btn-check-lock-sub-menu-staking");
     ui->pushButtonStaking->setStyleSheet("padding-left: 34px;");
-
-    ui->pushButtonUnlocked->setText(tr("Unlock Wallet"));
-    ui->pushButtonLocked->setText(tr("Lock Wallet"));
-    ui->pushButtonStaking->setText(tr("Staking Only"));
 
     // Connect
     connect(ui->pushButtonUnlocked, &QPushButton::clicked, this, &LockUnlock::onUnlockClicked);

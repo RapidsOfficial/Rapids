@@ -15,7 +15,7 @@
     </message>
     <message>
         <source>PushButton</source>
-        <translation>Druk Knop</translation>
+        <translation>DrukKnop</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -54,7 +54,7 @@
     </message>
     <message>
         <source>Enter a name for the address (e.g Exchange)</source>
-        <translation>Voeg een naam toe bij het behorende adres</translation>
+        <translation>Voeg een naam toe bij het behorende adres (bv, Exchange)</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -130,12 +130,12 @@
         <translation>Ontvangstadressen</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Dit zijn uw RPD adressen om betalingen mee te verzenden. Controleer altijd zowel het bedrag als het ontvangstadres voor het verzenden van geld.</translation>
+        <source>These are your Rapids addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Dit zijn uw Rapids adressen om betalingen mee te verzenden. Controleer altijd zowel het bedrag als het ontvangstadres voor het verzenden van geld.</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Dit zijn uw RPD adressen waarop betalingen kunnen worden ontvangen. Het wordt aangeraden om een nieuw ontvangstadres voor elke transactie te gebruiken.</translation>
+        <source>These are your Rapids addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Dit zijn uw Rapids adressen waarop betalingen kunnen worden ontvangen. Het wordt aangeraden om een nieuw ontvangstadres voor elke transactie te gebruiken.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -163,7 +163,7 @@
     </message>
     <message>
         <source>There was an error trying to save the address list to %1. Please try again.</source>
-        <translation>Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Probeer het nogmaals.</translation>
+        <translation>Er is een fout opgetreden tijdens het opslaan van de adreslijst naar %1. Probeer het opnieuw.</translation>
     </message>
 </context>
 <context>
@@ -196,6 +196,10 @@
         <translation>Datum</translation>
     </message>
     <message>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(geen label)</translation>
     </message>
@@ -215,8 +219,8 @@
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Nog geen actieve Master Node</translation>
+        <source>N/A</source>
+        <translation>NB</translation>
     </message>
     <message>
         <source>Contact name</source>
@@ -247,8 +251,8 @@
         <translation>bv. Jan Jansen</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>Voeg een RPD adres toe</translation>
+        <source>Enter Rapids address</source>
+        <translation>Voer Rapids adres in</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -296,7 +300,7 @@ Are you sure?</source>
 
 %1
 
-Weet U het zeker?</translation>
+Weet u het zeker?</translation>
     </message>
     <message>
         <source>Contact Deleted</source>
@@ -368,6 +372,18 @@ voor bewijs van Inzet</translation>
         <translation>Bevestig versleuteling van de portemonnee</translation>
     </message>
     <message>
+        <source>WARNING</source>
+        <translation>WAARSCHUWING</translation>
+    </message>
+    <message>
+        <source>If you encrypt your wallet and lose your passphrase, you will</source>
+        <translation>Als u uw portemonnee versleutelt en uw wachtwoord vergeet, zal u</translation>
+    </message>
+    <message>
+        <source>LOSE ALL OF YOUR RPD</source>
+        <translation>AL UW RPD VERLIEZEN</translation>
+    </message>
+    <message>
         <source>ENCRYPT</source>
         <translation>Versleutelen</translation>
     </message>
@@ -376,16 +392,16 @@ voor bewijs van Inzet</translation>
         <translation>Annuleren</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
-        <translation>RPD zal nu afsluiten om het versleutelingsproces te voltooien. Onthoud dat het versleutelen van uw portemonnee u niet volledig kan beschermen tegen malware infecties op uw computer die uw RPD's kunnen stelen.</translation>
+        <source>WARNING: The Caps Lock key is on!</source>
+        <translation>Waarschuwing: De Caps Lock-toets staat aan!</translation>
+    </message>
+    <message>
+        <source>Rapids will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
+        <translation>Rapids zal nu afsluiten om het versleutelingsproces te voltooien. Onthoud dat het versleutelen van uw portemonnee u niet volledig kan beschermen tegen malware infecties op uw computer die uw RPD's kunnen stelen.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Weet u zeker dat u uw portemonnee wilt versleutelen?</translation>
-    </message>
-    <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
-        <translation>Waarschuwing: Als u uw portemonnee versleutelt en uw wachtwoord vergeet, zult u &lt;b&gt;AL UW RPD VERLIEZEN&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -427,10 +443,6 @@ voor bewijs van Inzet</translation>
         <source>Wallet passphrase was successfully changed.</source>
         <translation>Portemonnee wachtwoordzin is met succes gewijzigd.</translation>
     </message>
-    <message>
-        <source>Warning: The Caps Lock key is on!</source>
-        <translation>Waarschuwing: De Caps-Lock-toets staat aan!</translation>
-    </message>
 </context>
 <context>
     <name>BanTableModel</name>
@@ -441,37 +453,6 @@ voor bewijs van Inzet</translation>
     <message>
         <source>Banned Until</source>
         <translation>Verboden tot</translation>
-    </message>
-</context>
-<context>
-    <name>BlockExplorer</name>
-    <message>
-        <source>Blockchain Explorer</source>
-        <translation>Blockchain Verkenner</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Terug</translation>
-    </message>
-    <message>
-        <source>Forward</source>
-        <translation>Volgende</translation>
-    </message>
-    <message>
-        <source>Address / Block / Transaction</source>
-        <translation>Adres / Block / Transactie</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation>Zoeken</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>TextLabel</translation>
-    </message>
-    <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
-        <translation>Niet alle transacties zullen worden getoond. Om alle transacties te bekijken moet u txindex=1 instellen in het configuratie bestand (rapids.conf).</translation>
     </message>
 </context>
 <context>
@@ -507,10 +488,6 @@ voor bewijs van Inzet</translation>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
         <translation>Totaal: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Onbekend: %5)</translation>
     </message>
-    <message>
-        <source>Network Alert</source>
-        <translation>Netwerk waarschuwing</translation>
-    </message>
 </context>
 <context>
     <name>CoinControlDialog</name>
@@ -529,6 +506,10 @@ voor bewijs van Inzet</translation>
     <message>
         <source>Coin Selection</source>
         <translation>Munt Selectie</translation>
+    </message>
+    <message>
+        <source>Select RPD Outputs to Spend</source>
+        <translation>Selecteer RPD Outputs om te besteden</translation>
     </message>
     <message>
         <source>Dust:</source>
@@ -553,14 +534,6 @@ voor bewijs van Inzet</translation>
     <message>
         <source>Amount</source>
         <translation>Bedrag</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Transactie details</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
     </message>
     <message>
         <source>0.00 RPD</source>
@@ -631,40 +604,40 @@ voor bewijs van Inzet</translation>
         <translation>Unlock niet besteed</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Kopieer kwantiteit</translation>
-    </message>
-    <message>
-        <source>Copy fee</source>
-        <translation>Kopieer fee</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>Kopieer na fee</translation>
-    </message>
-    <message>
-        <source>Copy bytes</source>
-        <translation>Kopieer bytes</translation>
-    </message>
-    <message>
-        <source>Copy priority</source>
-        <translation>Kopieer prioriteit</translation>
-    </message>
-    <message>
-        <source>Copy dust</source>
-        <translation>Kopieer dust</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>Kopieer wisselgeld</translation>
-    </message>
-    <message>
         <source>Unselect all</source>
         <translation>Deselecteer alles</translation>
     </message>
     <message>
         <source>Please switch to "List mode" to use this function.</source>
         <translation>Schakel alsjeblieft over naar "Lijst modus" om deze functie te gebruiken.</translation>
+    </message>
+    <message>
+        <source>Quantity Copied</source>
+        <translation>Aantal gekopieerd</translation>
+    </message>
+    <message>
+        <source>Amount Copied</source>
+        <translation>Hoeveelheid gekopieerd</translation>
+    </message>
+    <message>
+        <source>Fee Copied</source>
+        <translation>Kost gekopieerd</translation>
+    </message>
+    <message>
+        <source>After Fee Copied</source>
+        <translation>Na Vergoeding Gekopieerd</translation>
+    </message>
+    <message>
+        <source>Bytes Copied</source>
+        <translation>Bytes gekopieerd</translation>
+    </message>
+    <message>
+        <source>Dust Copied</source>
+        <translation>Dust Gekopieerd</translation>
+    </message>
+    <message>
+        <source>Change Copied</source>
+        <translation>Wissel Gekopieerd</translation>
     </message>
     <message>
         <source>highest</source>
@@ -715,6 +688,10 @@ voor bewijs van Inzet</translation>
         <translation>ja</translation>
     </message>
     <message>
+        <source>delegated to %1 for cold staking</source>
+        <translation>gedelegeerd naar %1 voor cold staking</translation>
+    </message>
+    <message>
         <source>no</source>
         <translation>nee</translation>
     </message>
@@ -760,89 +737,6 @@ voor bewijs van Inzet</translation>
     </message>
 </context>
 <context>
-    <name>CoinControlRpdWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Dialoog</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Transactie details</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
-        <source>RPD:</source>
-        <translation>RPD:</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>TextLabel</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Kwantiteit:</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Fee:</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Bedrag</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Label</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Adres</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Type</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Datum</translation>
-    </message>
-    <message>
-        <source>Confirmations</source>
-        <translation>Bevestigingen</translation>
-    </message>
-    <message>
-        <source>CheckBox</source>
-        <translation>Selectievakje</translation>
-    </message>
-    <message>
-        <source>Bytes:</source>
-        <translation>Bytes:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>Dust:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Wisselgeld:</translation>
-    </message>
-    <message>
-        <source>After Fee: </source>
-        <translation>Na kosten</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>Akkoord</translation>
-    </message>
-</context>
-<context>
     <name>ColdStakingWidget</name>
     <message>
         <source>Form</source>
@@ -857,24 +751,16 @@ voor bewijs van Inzet</translation>
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
+        <source>Owner address (optional, if empty a new address will be created)</source>
+        <translation>Eigenaarsadres (optioneel, indien leeg wordt er een nieuw adres aangemaakt)</translation>
     </message>
     <message>
-        <source>Owner Address (optional, if empty a new address will be created)</source>
-        <translation>Eigenaarsadres (optioneel, indien leeg zal er een nieuw adres aangemaakt worden)</translation>
+        <source>Total Staking:</source>
+        <translation>Totaal Staking:</translation>
     </message>
     <message>
         <source>List of delegated balance by address</source>
         <translation>Lijst van gedelegeerde balans gesorteerd op adres</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation>Totaal</translation>
-    </message>
-    <message>
-        <source>Unconfirmed balance will not be shown</source>
-        <translation>Onbevestigde saldi zal niet getoond worden</translation>
     </message>
     <message>
         <source>No balance delegated</source>
@@ -893,30 +779,12 @@ voor bewijs van Inzet</translation>
         <translation>Delegatie</translation>
     </message>
     <message>
-        <source>You can delegate your RPDs and let a hot node (24/7 online node)
-stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation>Je kan jouw RPDs delegeren en een hot node (24/7 online node)
-laten staken in jouw naam, waardoor de sleutels in een veilige offline opslag bewaard worden.</translation>
-    </message>
-    <message>
-        <source>Add owner address</source>
-        <translation>Eigenaarsadres toevoegen</translation>
-    </message>
-    <message>
-        <source>Delegate or Accept RPD delegation</source>
-        <translation>Delegeer of Accepteer RPD delegatie</translation>
-    </message>
-    <message>
         <source>Delegate</source>
         <translation>Delegeer</translation>
     </message>
     <message>
         <source>Clear All</source>
         <translation>Alles wissen</translation>
-    </message>
-    <message>
-        <source>Add the staking address</source>
-        <translation>Staking-adres toevoegen</translation>
     </message>
     <message>
         <source>Delegated balance history</source>
@@ -935,8 +803,34 @@ laten staken in jouw naam, waardoor de sleutels in een veilige offline opslag be
         <translation>Fout bij laden delegaties: %1</translation>
     </message>
     <message>
+        <source>You can delegate your RPDs, letting a hot node (24/7 online node)
+stake on your behalf, while you keep the keys securely offline.</source>
+        <translation>Je kan jouw RPDs delegeren en een hot node (24/7 online node)
+voor je laten staken, terwijl je de sleutels veilig offline opslag bewaart.</translation>
+    </message>
+    <message>
+        <source>Enter owner address</source>
+        <translation>Voer eigenaarsadres in</translation>
+    </message>
+    <message>
+        <source>Accept RPD delegation / Delegate RPD</source>
+        <translation>Accepteer RPD delegatie / Delegeer RPD</translation>
+    </message>
+    <message>
+        <source>Cold Staking address</source>
+        <translation>Cold Staking adres</translation>
+    </message>
+    <message>
+        <source>No receive addresses available, you can go to the receive screen and create some there!</source>
+        <translation>Geen ontvangstadressen beschikbare, je kan naar het ontvangstscherm gaan en daar enkele toevoegen!</translation>
+    </message>
+    <message>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
         <translation>Geen beschikbare contacten, je kan naar het contactscherm gaan en daar enkele toevoegen!</translation>
+    </message>
+    <message>
+        <source>Cannot send delegation, wallet locked</source>
+        <translation>Kan delegatie niet versturen, portemonnee vergrendeld</translation>
     </message>
     <message>
         <source>Cold staking is networkely disabled</source>
@@ -947,8 +841,8 @@ laten staken in jouw naam, waardoor de sleutels in een veilige offline opslag be
         <translation>Ongeldige invoer</translation>
     </message>
     <message>
-        <source>Invalid entry, minimum delegable amount is 10 RPD</source>
-        <translation>Ongeldige invoer, de minimum gedelegeerde hoeveelheid is 10 RPD</translation>
+        <source>Invalid entry, minimum delegable amount is </source>
+        <translation>Ongeldige invoer, minimaal te delegeren bedrag is</translation>
     </message>
     <message>
         <source>Owner address invalid</source>
@@ -989,6 +883,10 @@ Wil je verdergaan?</translation>
     <message>
         <source>You don't have any RPD to select.</source>
         <translation>Je hebt geen RPD om te selecteren</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Kan deze actie niet uitvoeren, portemonnee vergrendeld</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -1102,10 +1000,6 @@ address</source>
         <translation>Geen transacties</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
         <source>Staking Rewards</source>
         <translation>Staking Beloningen</translation>
     </message>
@@ -1156,50 +1050,6 @@ address</source>
     <message>
         <source>Amount of RPD and zRPD staked.</source>
         <translation>Hoeveelheid aan gestaked RPD en zRPD.</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation>Alle</translation>
-    </message>
-    <message>
-        <source>Received</source>
-        <translation>Ontvangen</translation>
-    </message>
-    <message>
-        <source>Sent</source>
-        <translation>Verstuurd</translation>
-    </message>
-    <message>
-        <source>Mined</source>
-        <translation>Mined</translation>
-    </message>
-    <message>
-        <source>Minted</source>
-        <translation>Minted</translation>
-    </message>
-    <message>
-        <source>MN reward</source>
-        <translation>MN beloning</translation>
-    </message>
-    <message>
-        <source>To yourself</source>
-        <translation>Naar jezelf</translation>
-    </message>
-    <message>
-        <source>Cold stakes</source>
-        <translation>Cold stakes</translation>
-    </message>
-    <message>
-        <source>Hot stakes</source>
-        <translation>Hot stakes</translation>
-    </message>
-    <message>
-        <source>Delegated</source>
-        <translation>Gedelegeerd</translation>
-    </message>
-    <message>
-        <source>Delegations</source>
-        <translation>Delegaties</translation>
     </message>
     <message>
         <source>Please wait until the wallet is fully synced to see your correct balance</source>
@@ -1268,69 +1118,6 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
     </message>
 </context>
 <context>
-    <name>DenomGenerationDialog</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Transactie details</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
-        <source>This will unlock your wallet fully, so that anyone with access to it can spend until the wallet is closed or locked again.</source>
-        <translation>Hiermee wordt uw portemonnee volledig ontgrendeld, zodat iedereen die er toegang toe heeft, deze kan uitgeven totdat de portemonnee weer wordt gesloten of vergrendeld.</translation>
-    </message>
-    <message>
-        <source>5000</source>
-        <translation>5000</translation>
-    </message>
-    <message>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
-        <source>1000</source>
-        <translation>1000</translation>
-    </message>
-    <message>
-        <source>50</source>
-        <translation>50</translation>
-    </message>
-    <message>
-        <source>500</source>
-        <translation>500</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation>5</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation>1</translation>
-    </message>
-    <message>
-        <source>Select All</source>
-        <translation>Selecteer Alles</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>SAVE</source>
-        <translation>Opslaan</translation>
-    </message>
-</context>
-<context>
     <name>EditAddressDialog</name>
     <message>
         <source>Edit Address</source>
@@ -1369,8 +1156,8 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Wijzig verzend adres</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid RPD address.</source>
-        <translation>Het ingevoerde adres: "%1" is geen geldig RPD adres.</translation>
+        <source>The entered address "%1" is not a valid Rapids address.</source>
+        <translation>Het ingevoerde adres: "%1" is geen geldig Rapids adres.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1416,49 +1203,6 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
     </message>
 </context>
 <context>
-    <name>GovernancePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Formulier</translation>
-    </message>
-    <message>
-        <source>GOVERNANCE</source>
-        <translation>BESTUUR</translation>
-    </message>
-    <message>
-        <source>Update Proposals</source>
-        <translation>Voorstellen Bijwerken</translation>
-    </message>
-    <message>
-        <source>Next super block:</source>
-        <translation>Volgende superblok:</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Blocks to next super block:</source>
-        <translation>Blokken tot de volgende superblok:</translation>
-    </message>
-    <message>
-        <source>Days to budget payout (estimate):</source>
-        <translation>Dagen tot budgetuitbetaling (schatting):</translation>
-    </message>
-    <message>
-        <source>Allotted budget:</source>
-        <translation>Toegewezen budget:</translation>
-    </message>
-    <message>
-        <source>Budget left:</source>
-        <translation>Resterend budget:</translation>
-    </message>
-    <message>
-        <source>Masternodes count:</source>
-        <translation>Masternodes aantal:</translation>
-    </message>
-</context>
-<context>
     <name>HelpMessageDialog</name>
     <message>
         <source>version</source>
@@ -1501,6 +1245,10 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Toon splash scherm bij opstarten (standaard: %u)</translation>
     </message>
     <message>
+        <source>Hide QT staking charts on startup (default: %u)</source>
+        <translation>Verberg QT stakinggrafieken bij opstarten (standaard: %u)</translation>
+    </message>
+    <message>
         <source>Set language, for example "de_DE" (default: system locale)</source>
         <translation>Stel taal in, bijvoorbeeld "de_DE" (standaard: systeem locale)</translation>
     </message>
@@ -1532,8 +1280,8 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Aangezien dit de eerste keer is dat het programma is gestart, kun je kiezen waar Rapids zijn data opslaat.</translation>
     </message>
     <message>
-        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Rapids zal een kopie van de RPD blockchain downloaden en opslaan. Tenminste %1GB aan data zal worden opgeslagen in deze map en het zal over de tijd groeien. De portemonnee zal ook in deze map worden opgeslagen.</translation>
+        <source>Rapids will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Rapids zal een kopie van de Rapids blockchain downloaden en opslaan. Tenminste %1GB aan data zal worden opgeslagen in deze map en het zal over de tijd groeien. De portemonnee zal ook in deze map worden opgeslagen.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1616,18 +1364,6 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <source>Form</source>
         <translation>Formulier</translation>
     </message>
-    <message>
-        <source>user_masternode</source>
-        <translation>user_masternode</translation>
-    </message>
-    <message>
-        <source>Address: 88.26.164.88:51474</source>
-        <translation>Adres: 88.26.164.88:51474</translation>
-    </message>
-    <message>
-        <source>Jan. 19, 2019</source>
-        <translation>Jan. 19, 2019</translation>
-    </message>
 </context>
 <context>
     <name>MasterNodeWizardDialog</name>
@@ -1660,28 +1396,32 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Adres</translation>
     </message>
     <message>
-        <source>Create New Master Node Controller</source>
-        <translation>Creëer een Nieuwe Masternode Controller</translation>
+        <source>Create New Masternode Controller</source>
+        <translation>Creëer Nieuwe Masternode Controller</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Om een RPD Masternode te maken moet u 10.000 RPD (de eenheid van RPD) aan het netwerk wijden (deze munten zijn echter nog steeds van u en zullen nooit uw bezit verlaten). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;U kunt de node op elk gewenst moment deactiveren en de munten ontgrendelen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a Rapids Masternode you must dedicate 10,000 RPD (the unit of Rapids) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Om een Rapids Masternode te creëren moet u 10.000 RPD (de eenheid van Rapids) aan het netwerk wijden (deze munten zijn echter nog steeds van u en zullen nooit uw bezit verlaten). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;U kunt de node op elk gewenst moment deactiveren en de munten ontgrendelen.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Set Masternode Name</source>
+        <translation>Stel de naam voor de Masternode in</translation>
+    </message>
+    <message>
+        <source>Set Masternode IP and Port</source>
+        <translation>Stel het IP-adres en de Poort voor de Masternode in</translation>
+    </message>
+    <message>
+        <source>Enter port</source>
+        <translation>Voer poort in</translation>
     </message>
     <message>
         <source>Make sure you have this amount of coins.</source>
         <translation>Zorg ervoor dat je deze hoeveelheid munten hebt.</translation>
     </message>
     <message>
-        <source>Set Master Node’s Name</source>
-        <translation>Masternode's Naam instellen</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Een transactie van 10,000 RPD zal gemaakt worden&lt;/p&gt;&lt;p&gt;naar een nieuw leeg adres in uw portemonnee.&lt;/p&gt;&lt;p&gt;Het adres is gelabeld onder de masternode's naam.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Set Master Node’s IP and port</source>
-        <translation>Masternode's IP en poort instellen</translation>
     </message>
     <message>
         <source>Address of the node that must always be online running the actual master node.</source>
@@ -1690,10 +1430,6 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
     <message>
         <source>Enter IP address</source>
         <translation>Voer IP-adres in</translation>
-    </message>
-    <message>
-        <source>Enter Port</source>
-        <translation>Voer Poort In</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1724,12 +1460,34 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>IP of poort kan niet leeg zijn</translation>
     </message>
     <message>
-        <source>Invalid port number</source>
-        <translation>Ongeldige poortnummer</translation>
+        <source>Invalid IP address</source>
+        <translation>Ongeldig IP-adres</translation>
     </message>
     <message>
-        <source>Prepare master node failed..</source>
-        <translation>Voorbereiden masternode mislukt..</translation>
+        <source>Prepare master node failed.
+
+%1
+</source>
+        <translation>Voorbereiden masternode mislukt.
+
+%1
+</translation>
+    </message>
+    <message>
+        <source>Invalid collateral output index</source>
+        <translation>Ongeldige Collaterale Outputindex</translation>
+    </message>
+    <message>
+        <source>Master node created! Wait %1 confirmations before starting it.</source>
+        <translation>Masternode gecreëerd! Wacht op %1 bevestigingen vooraleer je het start. </translation>
+    </message>
+    <message>
+        <source>Cannot send collateral transaction.
+
+%1</source>
+        <translation>Kan geen collaterale transactie versturen.
+
+%1</translation>
     </message>
     <message>
         <source>Invalid masternode.conf file</source>
@@ -1740,56 +1498,8 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Fout opgelopen bij het parsen van het masternode.conf bestand</translation>
     </message>
     <message>
-        <source>Invalid collaterall output index</source>
-        <translation>Ongeldige Collaterale Outputindex</translation>
-    </message>
-    <message>
-        <source>Master node created!</source>
-        <translation>Masternode aangemaakt!</translation>
-    </message>
-    <message>
         <source>masternode.conf file doesn't exists</source>
         <translation>masternode.conf bestand bestaat niet</translation>
-    </message>
-    <message>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation>Het ontvangstadres is niet geldig, controleer deze.</translation>
-    </message>
-    <message>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation>Het te betalen bedrag moet groter zijn dan 0.</translation>
-    </message>
-    <message>
-        <source>The amount exceeds your balance.</source>
-        <translation>Het bedrag overschrijdt uw saldo.</translation>
-    </message>
-    <message>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>Het totaal overschrijdt uw saldo wanneer de transactievergoeding %1 is inbegrepen.</translation>
-    </message>
-    <message>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>Dubbel adres gevonden, kan alleen per keer per verzendoperatie naar elk adres versturen.</translation>
-    </message>
-    <message>
-        <source>Transaction creation failed!</source>
-        <translation>Transactie creatie mislukt!</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>De transactie is afgewezen! Dit kan gebeuren als sommige munten in je portemonnee al waren uitgegeven, zoals als je een kopie van de wallet.dat en munten in de kopie waren besteed maar niet gemarkeerd zoals hier besteed.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation>Fout: De portemonnee was alleen geopend om munten te anonimiseren.</translation>
-    </message>
-    <message>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation>Een vergoeding %1 keer hoger dan %2 per kB wordt beschouwd als een zwaar hoge vergoeding.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
-        <translation>Fout: De portemonnee was alleen geopend om munten te anonimiseren. Ontgrendelen geannuleerd.</translation>
     </message>
 </context>
 <context>
@@ -1803,12 +1513,16 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Nog geen actieve Master Node</translation>
+        <source>N/A</source>
+        <translation>NB</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
+        <source>Start All</source>
+        <translation>Alles starten</translation>
+    </message>
+    <message>
+        <source>Start Inactive/s</source>
+        <translation>Start Inactieve/s</translation>
     </message>
     <message>
         <source>Masternodes</source>
@@ -1841,6 +1555,10 @@ en stemmen over het treasury systeem met een periodieke beloning.</translation>
         <translation>Info</translation>
     </message>
     <message>
+        <source>Please wait until the node is fully synced</source>
+        <translation>Wacht tot de node volledig gesynchroniseerd is</translation>
+    </message>
+    <message>
         <source>Start Masternode</source>
         <translation>Start Masternode</translation>
     </message>
@@ -1851,10 +1569,46 @@ en stemmen over het treasury systeem met een periodieke beloning.</translation>
 </translation>
     </message>
     <message>
-        <source>Cannot start masternode, the collateral transaction has not been accepted by the network.
-Please wait few more minutes.</source>
-        <translation>Kan de masternode niet starten, de collaterale transactie is niet geaccepteerd door het netwerk.
-Gelieve nog enkele minuten te wachten.</translation>
+        <source>Cannot edit masternode, wallet locked</source>
+        <translation>Kan de masternode niet bewerken, portemonnee vergrendeld</translation>
+    </message>
+    <message>
+        <source>Cannot start masternode, the collateral transaction has not been confirmed by the network yet.
+Please wait few more minutes (masternode collaterals require %1 confirmations).</source>
+        <translation>Kan de masternode niet starten, de collaterale transactie is nog niet bevestigd door het netwerk.
+Gelieve nog enkele minuten te wachten (het onderpand van een masternode vereist %1 bevestigingen).</translation>
+    </message>
+    <message>
+        <source>Background task is being executed, please wait</source>
+        <translation>Achtergrondopdracht wordt nu uitgevoerd, even geduld</translation>
+    </message>
+    <message>
+        <source>Start ALL masternodes failed</source>
+        <translation>Opstarten van ALLE masternodes mislukt</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>Portemonnee ontgrendeling geannuleerd </translation>
+    </message>
+    <message>
+        <source>Cannot perform Masternodes start</source>
+        <translation>Kan geen Masternode opstart uitvoeren</translation>
+    </message>
+    <message>
+        <source>%1 Masternodes failed to start, %2 started</source>
+        <translation>%1 Masternodes niet succesvol opgestart, %2 opgestart</translation>
+    </message>
+    <message>
+        <source>All Masternodes started!</source>
+        <translation>Alle Masternodes zijn opgestart!</translation>
+    </message>
+    <message>
+        <source>Cannot show Masternode information, wallet locked</source>
+        <translation>Kan geen Masternode-informatie tonen, portemonnee vergrendeld</translation>
+    </message>
+    <message>
+        <source>Masternode data copied to the clipboard.</source>
+        <translation>Masternodegegevens gekopieerd naar het klembord</translation>
     </message>
     <message>
         <source>Remote Masternode Data</source>
@@ -1875,11 +1629,8 @@ op een externe server aan uw klembord.
 
 U hoeft alleen de gegevens in het rapids.conf bestand te plakken
 van uw externe server en start deze vervolgens de Masternode met
-deze controller portemonnee (selecteer de Masternode in de lijst en druk op "start").</translation>
-    </message>
-    <message>
-        <source>Masternode exported!, check your clipboard</source>
-        <translation>Masternode geëxporteerd, controleer uw klembord</translation>
+deze controller portemonnee (selecteer de Masternode in de lijst en druk op "start").
+</translation>
     </message>
     <message>
         <source>Delete Masternode</source>
@@ -1908,6 +1659,10 @@ Weet je het zeker?</translation>
         <translation>masternode.conf bestand bestaat niet</translation>
     </message>
     <message>
+        <source>Cannot create Masternode controller, wallet locked</source>
+        <translation>Kan geen Masternode controller aanmaken, portemonnee vergrendeld</translation>
+    </message>
+    <message>
         <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
         <translation>Niet genoeg balans om een masternode te creëren, 10,000 RPD vereist.</translation>
     </message>
@@ -1923,8 +1678,8 @@ Weet je het zeker?</translation>
         <translation>Formulier</translation>
     </message>
     <message>
-        <source>Master Node Information</source>
-        <translation>Masternode Informatie</translation>
+        <source>Masternode Information</source>
+        <translation>Masternode informatie</translation>
     </message>
     <message>
         <source>Public Key:</source>
@@ -1963,8 +1718,8 @@ Weet je het zeker?</translation>
         <translation>ONTBREKEND</translation>
     </message>
     <message>
-        <source>Export data to run the Master Node on a remote server</source>
-        <translation>Exporteer data om de Masternode uit te voeren op een externe server</translation>
+        <source>Export data to run the Masternode on a remote server</source>
+        <translation>Exporteer gegevens om de Masternode op een externe server uit te voeren</translation>
     </message>
 </context>
 <context>
@@ -2090,8 +1845,8 @@ Weet je het zeker?</translation>
         <translation>Als je de uitgaven van onbevestigde wijzigingen uitschakelt, de wijziging van een transactie&lt;br/&gt;kan niet worden gebruikt tot die transactie tenminste één bevestiging heeft.&lt;br/&gt;Dit beïnvloedt ook hoe uw saldo is berekend.</translation>
     </message>
     <message>
-        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Open de RPD client poort automatisch op de router. Dit werkt alleen als je router UPnP ondersteunt en het is ingeschakeld.</translation>
+        <source>Automatically open the Rapids client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Open de Rapids client poort automatisch op de router. Dit werkt alleen als je router UPnP ondersteunt en het is ingeschakeld.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -2110,12 +1865,12 @@ Weet je het zeker?</translation>
         <translation>Expert</translation>
     </message>
     <message>
-        <source>Automatically start RPD after logging in to the system.</source>
-        <translation>RPD automatisch opstarten na inloggen op het systeem.</translation>
+        <source>Automatically start Rapids after logging in to the system.</source>
+        <translation>Rapids automatisch opstarten na inloggen op het systeem.</translation>
     </message>
     <message>
-        <source>&amp;Start RPD on system login</source>
-        <translation>&amp;RPD starten bij systeemlogin</translation>
+        <source>&amp;Start Rapids on system login</source>
+        <translation>&amp;Rapids starten bij systeemlogin</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -2142,8 +1897,8 @@ Weet je het zeker?</translation>
         <translation>&amp;Netwerk</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
-        <translation>De gebruikersinterface taal kan hier ingesteld worden. Deze instelling zal uitgevoerd na herstart van RPD.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Rapids.</source>
+        <translation>De gebruikersinterface taal kan hier ingesteld worden. Deze instelling zal uitgevoerd na herstart van Rapids.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -2189,11 +1944,11 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
     </message>
     <message>
         <source>Stake split threshold:</source>
-        <translation>Inzet splitdrempel:</translation>
+        <translation>Stake splitsdrempel:</translation>
     </message>
     <message>
-        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
-        <translation>Maak verbinding met het RPD netwerk via een SOCKS5 proxy.</translation>
+        <source>Connect to the Rapids network through a SOCKS5 proxy.</source>
+        <translation>Maak verbinding met het Rapids netwerk via een SOCKS5 proxy.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -2411,15 +2166,8 @@ Adres: %4
 </translation>
     </message>
     <message>
-        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
-        <translation>Een kritieke fout is opgelopen. RPD kan niet langer veilig uitgevoerd worden en zal afsluiten.</translation>
-    </message>
-</context>
-<context>
-    <name>PWidget</name>
-    <message>
-        <source>Wallet locked, you need to unlock it to perform this action</source>
-        <translation>Portemonnee vergrendeld, je moet deze ontgrendelen om deze actie te kunnen uitvoeren</translation>
+        <source>A fatal error occurred. Rapids can no longer continue safely and will quit.</source>
+        <translation>Een kritieke fout is opgelopen. Rapids kan niet langer veilig uitgevoerd worden en zal afsluiten.</translation>
     </message>
 </context>
 <context>
@@ -2449,8 +2197,8 @@ Adres: %4
         <translation>Kan rapids niet starten: click-to-pay handler</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
-        <translation>URL kan niet ontleed worden! Dit kan worden veroorzaakt door een ongeldig RPD adres of misvormde URL parameters.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Rapids address or malformed URI parameters.</source>
+        <translation>URL kan niet ontleed worden! Dit kan worden veroorzaakt door een ongeldig Rapids adres of misvormde URL parameters.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -2547,8 +2295,8 @@ Adres: %4
         <translation>Druk Knop</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Nog geen actieve Master Node</translation>
+        <source>N/A</source>
+        <translation>NB</translation>
     </message>
     <message>
         <source>Privacy</source>
@@ -2573,8 +2321,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Munt nieuwe zRPD of converteer deze terug in RPD</translation>
     </message>
     <message>
-        <source>Last Zerocoin Movements</source>
-        <translation>Laatste Zerocoin Bewegingen</translation>
+        <source>Last zRPD Movements</source>
+        <translation>Laatste zRPD Bewegingen</translation>
     </message>
     <message>
         <source>No transactions yet</source>
@@ -2641,8 +2389,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Uw zerocoin muntingen zullen van de blockchain vanaf nul worden gescanned</translation>
     </message>
     <message>
-        <source>Reset Spent Zerocoins</source>
-        <translation>Bestede Zerocoins Resetten</translation>
+        <source>Reset Spent zRPD</source>
+        <translation>Reset Besteedde zRPD</translation>
     </message>
     <message>
         <source>Your zerocoin spends are going to be scanned from the blockchain from scratch</source>
@@ -2654,83 +2402,14 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
     </message>
 </context>
 <context>
-    <name>ProposalFrame</name>
-    <message>
-        <source>Open proposal page in browser</source>
-        <translation>Voorstelpagina in browser openen</translation>
-    </message>
-    <message>
-        <source> remaining payment(s).</source>
-        <translation>resterende betaling(en).</translation>
-    </message>
-    <message>
-        <source>Yes:</source>
-        <translation>Voor:</translation>
-    </message>
-    <message>
-        <source>Abstain:</source>
-        <translation>Onthouden:</translation>
-    </message>
-    <message>
-        <source>No:</source>
-        <translation>Tegen:</translation>
-    </message>
-    <message>
-        <source>A proposal URL can be used for phishing, scams and computer viruses. Open this link only if you trust the following URL.
-</source>
-        <translation>Een voorstel-URL kan worden gebruikt voor phishing, oplichting en computervirussen. Open deze link alleen als u de volgende URL vertrouwt.
-</translation>
-    </message>
-    <message>
-        <source>Open link</source>
-        <translation>Link openen</translation>
-    </message>
-    <message>
-        <source>Copy link</source>
-        <translation>Link kopiëren</translation>
-    </message>
-    <message>
-        <source>Wallet Locked</source>
-        <translation>Portemonnee Vergrendeld</translation>
-    </message>
-    <message>
-        <source>You must unlock your wallet to vote.</source>
-        <translation>Je moet uw portemonnee ontgrendelen om te stemmen.</translation>
-    </message>
-    <message>
-        <source>Do you want to vote %1 on</source>
-        <translation>Wil je stemmen op %1</translation>
-    </message>
-    <message>
-        <source>using all your masternodes?</source>
-        <translation>al je masternodes gebruiken?</translation>
-    </message>
-    <message>
-        <source>Proposal Hash:</source>
-        <translation>Voorstel Hash:</translation>
-    </message>
-    <message>
-        <source>Proposal URL:</source>
-        <translation>Voorstel URL:</translation>
-    </message>
-    <message>
-        <source>Confirm Vote</source>
-        <translation>Stem bevestigen</translation>
-    </message>
-    <message>
-        <source>Vote Results</source>
-        <translation>Stemresultaten</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <source>Amount</source>
         <translation>Bedrag</translation>
     </message>
     <message>
-        <source>Enter a RPD address (e.g. %1)</source>
-        <translation>Voer een RPD adres in (b.v. %1)</translation>
+        <source>Enter Rapids address (e.g. %1)</source>
+        <translation>Voer een Rapids adres in (b.v. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2755,10 +2434,6 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
     <message>
         <source>BLOOM</source>
         <translation>BLOOM</translation>
-    </message>
-    <message>
-        <source>ZK_BLOOM</source>
-        <translation>ZK_BLOOM</translation>
     </message>
     <message>
         <source>UNKNOWN</source>
@@ -2799,6 +2474,118 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
     <message>
         <source>Rapids didn't yet exit safely...</source>
         <translation>Rapids is nog niet veilig afgesloten...</translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation>Contacteer</translation>
+    </message>
+    <message>
+        <source>Receiving</source>
+        <translation>Ontvangen</translation>
+    </message>
+    <message>
+        <source>Delegator</source>
+        <translation>Delegator</translation>
+    </message>
+    <message>
+        <source>Cold Staking</source>
+        <translation>Cold Staking</translation>
+    </message>
+    <message>
+        <source>Cold Staking Contact</source>
+        <translation>Cold Staking Contact</translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation>Verborgen</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Ongekend</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>Alle</translation>
+    </message>
+    <message>
+        <source>Contacts</source>
+        <translation>Contacten</translation>
+    </message>
+    <message>
+        <source>Delegators</source>
+        <translation>Delegators</translation>
+    </message>
+    <message>
+        <source>Staking Contacts</source>
+        <translation>Staking Contacten</translation>
+    </message>
+    <message>
+        <source>Date desc</source>
+        <translation>Datum aflopend</translation>
+    </message>
+    <message>
+        <source>Date asc</source>
+        <translation>Datum oplopend</translation>
+    </message>
+    <message>
+        <source>Amount desc</source>
+        <translation>Aantal aflopend</translation>
+    </message>
+    <message>
+        <source>Amount asc</source>
+        <translation>Aantal oplopend</translation>
+    </message>
+    <message>
+        <source>Received</source>
+        <translation>Ontvangen</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Verstuurd</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>Mined</translation>
+    </message>
+    <message>
+        <source>Minted</source>
+        <translation>Minted</translation>
+    </message>
+    <message>
+        <source>MN reward</source>
+        <translation>MN beloning</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>Naar jezelf</translation>
+    </message>
+    <message>
+        <source>Cold stakes</source>
+        <translation>Cold stakes</translation>
+    </message>
+    <message>
+        <source>Hot stakes</source>
+        <translation>Hot stakes</translation>
+    </message>
+    <message>
+        <source>Delegated</source>
+        <translation>Gedelegeerd</translation>
+    </message>
+    <message>
+        <source>Delegations</source>
+        <translation>Delegaties</translation>
+    </message>
+    <message>
+        <source>by Label</source>
+        <translation>per Label</translation>
+    </message>
+    <message>
+        <source>by Address</source>
+        <translation>per Adres</translation>
+    </message>
+    <message>
+        <source>by Date</source>
+        <translation>per Datum</translation>
     </message>
 </context>
 <context>
@@ -2872,8 +2659,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Blockchain</translation>
     </message>
     <message>
-        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Open het RPD debug log bestand uit de huidige data directory. Dit kan enkele seconden duren voor grote logbestanden.</translation>
+        <source>Open the Rapids debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Open het Rapids debug log bestand uit de huidige data directory. Dit kan enkele seconden duren voor grote logbestanden.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
@@ -3096,8 +2883,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Uit:</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>Welkom bij de RPD RPC console.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Welkom bij de Rapids RPC console.</translation>
     </message>
     <message>
         <source>&amp;Disconnect Node</source>
@@ -3219,12 +3006,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Transactie details</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z</translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3282,8 +3065,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Genereren van adres misgelopen</translation>
     </message>
     <message>
-        <source>Change Label</source>
-        <translation>Wijzig Label</translation>
+        <source>Edit Label</source>
+        <translation>Label wijzigen</translation>
     </message>
     <message>
         <source>Edit Address Label</source>
@@ -3298,12 +3081,20 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Fout bij bewaren adreslabel</translation>
     </message>
     <message>
+        <source>Cannot create new address, wallet locked</source>
+        <translation>Kan geen nieuw adres aanmaken, portemonnee vergrendeld</translation>
+    </message>
+    <message>
         <source>New address created</source>
         <translation>Nieuw adres gecreëerd</translation>
     </message>
     <message>
         <source>Address copied</source>
         <translation>Adres gekopieerd</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Kan deze actie niet uitvoeren, portemonnee vergrendeld</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -3376,8 +3167,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z</translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z</translation>
     </message>
     <message>
         <source>COPY ADDRESS</source>
@@ -3396,24 +3187,28 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>VERZOEK</translation>
     </message>
     <message>
-        <source>Instead of only sharing a RPD address, you can create a Payment Request message which bundles up more information than is contained in just a RPD address.</source>
-        <translation>In plaats van een RPD-adres te delen, kunt u een bericht voor een betalingsverzoek maken dat meer informatie bundelt dan alleen in een RPD-adres.</translation>
-    </message>
-    <message>
         <source>Label</source>
         <translation>Label</translation>
-    </message>
-    <message>
-        <source>Enter a label to be saved within the address</source>
-        <translation>Voer een label in dat bij het adres moet worden opgeslagen</translation>
     </message>
     <message>
         <source>Description (optional)</source>
         <translation>Omschrijving (optioneel)</translation>
     </message>
     <message>
-        <source>Add description </source>
-        <translation>Voeg beschrijving toe</translation>
+        <source>New Payment Request</source>
+        <translation>Nieuw Betalingsverzoek</translation>
+    </message>
+    <message>
+        <source>Instead of sharing only a Rapids address, you can create a payment request, bundling up more information.</source>
+        <translation>In plaats van een Rapids-adres te delen, kunt u een betalingsverzoek creëren dat meer informatie bundelt.</translation>
+    </message>
+    <message>
+        <source>Enter a label for the address</source>
+        <translation>Voer een label in voor het adres</translation>
+    </message>
+    <message>
+        <source>Enter description</source>
+        <translation>Beschrijving toevoegen</translation>
     </message>
     <message>
         <source>Error</source>
@@ -3431,6 +3226,10 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <source>New Cold Staking Address</source>
         <translation>Nieuw Cold Staking Adres</translation>
     </message>
+    <message>
+        <source>Amount (optional)</source>
+        <translation>Bedrag (optioneel)</translation>
+    </message>
 </context>
 <context>
     <name>SendChangeAddressDialog</name>
@@ -3441,10 +3240,6 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
     <message>
         <source>Transaction Details</source>
         <translation>Transactie details</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
     </message>
     <message>
         <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
@@ -3463,8 +3258,20 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Aangepast wijzigingsadres</translation>
     </message>
     <message>
-        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" RPD address</source>
-        <translation>De rest van de waarde die resulteert uit de ingangen minus de waarde van de uitgangen gaat naar het "wijzig" RPD-adres</translation>
+        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" Rapids address</source>
+        <translation>De rest van de waarde die resulteert uit de ingangen minus de waarde van de uitgangen gaat naar het "wijzig" Rapids-adres</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>Opslaan</translation>
+    </message>
+    <message>
+        <source>RESET</source>
+        <translation>RESETTEN</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>Ongeldig adres</translation>
     </message>
 </context>
 <context>
@@ -3482,8 +3289,12 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Pas de transactiekosten naar wens aan, afhankelijk van de kostenwaarde die uw transactie wel of niet in de blockchain zal opnemen.</translation>
     </message>
     <message>
-        <source>Recomended</source>
+        <source>Recommended</source>
         <translation>Aanbevolen</translation>
+    </message>
+    <message>
+        <source>RPD/kilobyte</source>
+        <translation>RPD/kilobyte</translation>
     </message>
     <message>
         <source>0.00 KB</source>
@@ -3492,10 +3303,6 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
     <message>
         <source>Custom</source>
         <translation>Aangepast</translation>
-    </message>
-    <message>
-        <source>Per kilobyte</source>
-        <translation>Per kilobyte</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3510,8 +3317,8 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Kost Aanpassen</translation>
     </message>
     <message>
-        <source>Customize the transaction fee, depending on the fee value your transaction will be included or not in the blockchain.</source>
-        <translation>Pas de transactiekosten aan, afhankelijk van de kostenwaarde die uw transactie wel of niet in de blockchain zal opnemen.</translation>
+        <source>Customize the transaction fee, depending on the fee value your transaction might be included faster in the blockchain.</source>
+        <translation>Pas de transactie aan, afhankelijk van de kostenwaarde zal uw transactie mogelijks sneller opgenomen worden in de blockchain.</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -3529,7 +3336,7 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <source>SAVE</source>
         <translation>Opslaan</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendMultiRow</name>
     <message>
@@ -3541,12 +3348,12 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Adres toevoegen</translation>
+        <source>Enter address</source>
+        <translation>Voeg adres toe</translation>
     </message>
     <message>
-        <source>Add description</source>
-        <translation>Beschrijving toevoegen</translation>
+        <source>Enter label</source>
+        <translation>Label toevoegen</translation>
     </message>
 </context>
 <context>
@@ -3562,10 +3369,6 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
     <message>
         <source>Select coin type to spend</source>
         <translation>Selecteer munttype om te spenderen</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address or contact label</source>
-        <translation>Voer een RPD-adres of contactlabel in</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3608,6 +3411,18 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Totaal resterende</translation>
     </message>
     <message>
+        <source>Warning!</source>
+        <translation>Waarschuwing!</translation>
+    </message>
+    <message>
+        <source>The change address doesn't belong to this wallet.
+
+Do you want to continue?</source>
+        <translation>Het wisseladres behoort niet toe tot deze portemonnee.
+
+Wilt u verdergaan?</translation>
+    </message>
+    <message>
         <source>Customize Fee</source>
         <translation>Kost Aanpassen</translation>
     </message>
@@ -3616,8 +3431,16 @@ transactiegeschiedenis, waardoor transacties niet meer te traceren zijn</transla
         <translation>Maximum aantal uitvoeren bereikt</translation>
     </message>
     <message>
+        <source>Rapids address or contact label</source>
+        <translation>Rapids adres of contactlabel</translation>
+    </message>
+    <message>
         <source>Invalid entry, previous entries must be valid before add a new one</source>
         <translation>Ongeldige invoer, vorige invoeren moeten geldig zijn voordat je een nieuwe kan toevoegen</translation>
+    </message>
+    <message>
+        <source>Possibly spend coins delegated for cold-staking (currently available: %1</source>
+        <translation>Mogelijks besteedde munten gedelegeerd voor cold-staking (momenteel beschikbaar: %1</translation>
     </message>
     <message>
         <source>Invalid entry</source>
@@ -3700,10 +3523,6 @@ Ofwel het munten van hogere denominaties (dus minder invoer nodig) of het te bes
         <translation>Adreslabel bijwerken mislukt voor adres: %1</translation>
     </message>
     <message>
-        <source>Invalid change address</source>
-        <translation>Ongeldig wisseladres</translation>
-    </message>
-    <message>
         <source>Invalid URI</source>
         <translation>Ongeldige URI</translation>
     </message>
@@ -3771,22 +3590,12 @@ Ofwel het munten van hogere denominaties (dus minder invoer nodig) of het te bes
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
         <source>Backup Wallet </source>
         <translation>Wallet Back-uppen</translation>
     </message>
     <message>
         <source>Change Wallet Passphrase</source>
         <translation>Wijzig Portemonnee Wachtwoord</translation>
-    </message>
-    <message>
-        <source>Keep your wallet safe doing regular backups, store your backup file externally.
-This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device.</source>
-        <translation>Bewaar uw portemonnee veilig door middel van regelmatige back-ups, bewaar uw back-upbestand extern.
-Deze optie maakt een portemonnee.datbbestand aan dat kan worden gebruikt om uw volledige saldo (transacties en adressen) van een ander apparaat terug te krijgen.</translation>
     </message>
     <message>
         <source>This will decrypt the whole wallet data and encrypt it back with the new passphrase.
@@ -3799,12 +3608,14 @@ Vergeet deze niet op te schrijven en veilig te bewaren, anders verlies je mogeli
         <translation>Waar</translation>
     </message>
     <message>
-        <source>Set a folder location</source>
-        <translation>Maplocatie instellen</translation>
+        <source>Keep your wallet safe by doing regular backups and storing your backup file externally.
+This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) on another device.</source>
+        <translation>Bewaar uw portemonnee veilig door middel van regelmatige back-ups, bewaar uw back-upbestand extern.
+Deze optie maakt een wallet.dat bestand aan dat gebruikt kan worden om uw volledige saldo (transacties en adressen) van een ander apparaat terug te krijgen.</translation>
     </message>
     <message>
-        <source>Backup</source>
-        <translation>Back-up</translation>
+        <source>Select folder...</source>
+        <translation>Map Selecteren...</translation>
     </message>
     <message>
         <source>Change Passphrase</source>
@@ -3898,16 +3709,16 @@ Vergeet deze niet op te schrijven en veilig te bewaren, anders verlies je mogeli
         <translation>DECRYPTEER SLEUTEL</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>Voeg een RPD adres toe</translation>
+        <source>Rapids address</source>
+        <translation>Rapids adres</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Adres toevoegen</translation>
+        <source>Enter address</source>
+        <translation>Voeg adres toe</translation>
     </message>
     <message>
-        <source>Write a message</source>
-        <translation>Schrijf een bericht</translation>
+        <source>Enter passphrase</source>
+        <translation>Voer wachtwoordzin in</translation>
     </message>
     <message>
         <source>Encrypted Key</source>
@@ -3990,8 +3801,8 @@ Vergeet deze niet op te schrijven en veilig te bewaren, anders verlies je mogeli
         <translation>Fout bij toevoegen van sleutel aan de portemonnee</translation>
     </message>
     <message>
-        <source>Successfully added rpdate key to the wallet</source>
-        <translation>Geheime sleutel succesvol toegevoegd aan de portemonnee</translation>
+        <source>Successfully added private key to the wallet</source>
+        <translation>Privésleutel succesvol toegevoegd aan de portemonnee</translation>
     </message>
 </context>
 <context>
@@ -4021,14 +3832,18 @@ Vergeet deze niet op te schrijven en veilig te bewaren, anders verlies je mogeli
         <translation>Open debugbestand</translation>
     </message>
     <message>
+        <source>Clear history</source>
+        <translation>Geschiedenis verwijderen</translation>
+    </message>
+    <message>
         <source>Cannot open debug file.
 Verify that you have installed a predetermined text editor.</source>
         <translation>Kan het debugbestand niet openen.
 Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>Welkom bij de RPD RPC console.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Welkom bij de Rapids RPC console.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
@@ -4054,8 +3869,8 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
+        <source>Hide stake charts in the dashboard</source>
+        <translation>Verberg stakegrafieken in het dashboard</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -4107,6 +3922,109 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
     </message>
 </context>
 <context>
+    <name>SettingsExportCSV</name>
+    <message>
+        <source>Form</source>
+        <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>Exporteer Accounting</translation>
+    </message>
+    <message>
+        <source>Export your wallet's accounting data to a csv file.</source>
+        <translation>Exporteer je portemonnee's accountinggegevens naar een csv bestand.</translation>
+    </message>
+    <message>
+        <source>Where</source>
+        <translation>Waar</translation>
+    </message>
+    <message>
+        <source>Select folder...</source>
+        <translation>Map Selecteren...</translation>
+    </message>
+    <message>
+        <source>Export Address Book</source>
+        <translation>Adreslijst Exporteren</translation>
+    </message>
+    <message>
+        <source>Export CSV</source>
+        <translation>CSV Exporteren</translation>
+    </message>
+    <message>
+        <source>Export Address List</source>
+        <translation>Exporteer Adreslijst</translation>
+    </message>
+    <message>
+        <source>Rapids_tx_csv_export(*.csv)</source>
+        <translation>Rapids_tx_csv_export(*.csv)</translation>
+    </message>
+    <message>
+        <source>Rapids_addresses_csv_export(*.csv)</source>
+        <translation>Rapids_addresses_csv_export(*.csv)</translation>
+    </message>
+    <message>
+        <source>Please select a folder to export the csv file first.</source>
+        <translation>Selecteer eerst een map om het csv te exporteren te exporteren.</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Bevestigd</translation>
+    </message>
+    <message>
+        <source>Watch-only</source>
+        <translation>Watch-only</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Datum</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Type</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Label</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Adres</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>Exporting Successful
+The transaction history was successfully saved to %1.</source>
+        <translation>Export Succesvol
+De transactiegeschiedenis is succesvol bewaard in %1.</translation>
+    </message>
+    <message>
+        <source>Exporting Failed
+There was an error trying to save the transaction history to %1.</source>
+        <translation>Export Mislukt
+Er is een fout opgetreden om de transactiegeschiedenis te bewaren naar %1.</translation>
+    </message>
+    <message>
+        <source>No available addresses to export under the selected filter</source>
+        <translation>Geen beschikbare adressen om te exporteren onder de geselecteerde filter</translation>
+    </message>
+    <message>
+        <source>Exporting Successful
+The address book was successfully saved to %1.</source>
+        <translation>Export Succesvol
+Het adresboek is succesvol bewaard in %1.</translation>
+    </message>
+    <message>
+        <source>Exporting Failed
+There was an error trying to save the address list to %1. Please try again.</source>
+        <translation>Export Mislukt
+Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Probeer het nogmaals.</translation>
+    </message>
+</context>
+<context>
     <name>SettingsFaqWidget</name>
     <message>
         <source>Form</source>
@@ -4121,16 +4039,16 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>Druk Knop</translation>
     </message>
     <message>
-        <source>1) What is RPD?</source>
-        <translation>1) Wat is RPD?</translation>
+        <source>1) What is Rapids?</source>
+        <translation>1) Wat is Rapids?</translation>
     </message>
     <message>
         <source>2) Why are my RPD unspendable?</source>
         <translation>2) Waarom is mijn RPD niet besteedbaar?</translation>
     </message>
     <message>
-        <source>3) RPD privacy? What is Zerocoin (zRPD)?</source>
-        <translation>3) RPD privacy? Wat is Zerocoin (zRPD)?</translation>
+        <source>3) Rapids privacy? What is Zerocoin (zRPD)?</source>
+        <translation>3) Rapids privacy? Wat is Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>4) Why are my zRPD unspendable?</source>
@@ -4155,46 +4073,46 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>8) Waar moet ik heen gaan als ik ondersteuning nodig heb?</translation>
     </message>
     <message>
-        <source>9) What is a Master Node?</source>
+        <source>9) What is a Masternode?</source>
         <translation>9) Wat is een Masternode?</translation>
     </message>
     <message>
-        <source>10) What is a Master Node Controller?</source>
-        <translation>10) Wat is een Master Node Controller?</translation>
+        <source>10) What is a Masternode Controller?</source>
+        <translation>10) Wat is een Masternode Controller?</translation>
     </message>
     <message>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <source>What is RPD?</source>
-        <translation>Wat is RPD?</translation>
+        <source>What is Rapids?</source>
+        <translation>Wat is Rapids?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           RPD is a form of digital online money using blockchain technology
+                           Rapids is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  RPD incorporates market leading security &amp;
+                           zero fees.  Rapids incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
                            to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of RPD to participate in earning block rewards
+                           Rapids utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of Rapids to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           RPD is een vorm van digitaal online geld dat gebruik maakt van blockchain technologie.
+                           Rapids is een vorm van digitaal online geld dat gebruik maakt van blockchain technologie.
                            die gemakkelijk wereldwijd kan worden overgebracht, onmiddellijk en met bijna
-                           geen kosten.  RPD omvat marktleidende beveiliging &amp;
+                           geen kosten.  Rapids omvat marktleidende beveiliging &amp;
                            privacy en is ook de eerste PoS (Proof of Stake) Cryptovaluta
                            om ZeroCoin (zRPD) en Zerocoin staking te implementeren.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           RPD gebruikt een Proof of Stake (PoS) consensussysteemalgoritme,
-                           waardoor alle eigenaren van RPD kunnen deelnemen aan het verdienen van blokbeloningen
+                           Rapids gebruikt een Proof of Stake (PoS) consensussysteemalgoritme,
+                           waardoor alle eigenaren van Rapids kunnen deelnemen aan het verdienen van blokbeloningen
                            en tegelijkertijd het netwerk te beveiligen met volledige node portemonnees, en ook om
                            Masternodes uit te voeren en om voorstellen op te stellen en daarover te stemmen.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4211,19 +4129,19 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Newly received RPD requires 6 confirmations on the network
+                           Newly received Rapids requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Your RPD wallet also needs to be completely synchronized
+                           Your Rapids wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Nieuw ontvangen RPD vereist 6 bevestigingen op het netwerk
+                           Nieuw ontvangen Rapids vereist 6 bevestigingen op het netwerk
                            om in aanmerking te komen voor uitgaven die ongeveer 6 minuten in beslag kunnen nemen.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Uw RPD portemonnee moet ook volledig gesynchroniseerd zijn
+                           Uw Rapids portemonnee moet ook volledig gesynchroniseerd zijn
                            om de balans te zien en uit te geven op het netwerk.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </translation>
@@ -4233,26 +4151,26 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>3</translation>
     </message>
     <message>
-        <source>RPD privacy? What is Zerocoin (zRPD)?</source>
-        <translation>RPD privacy? Wat is Zerocoin (zRPD)?</translation>
+        <source>Rapids privacy? What is Zerocoin (zRPD)?</source>
+        <translation>Rapids privacy? Wat is Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            zRPD is an optional privacy-centric method of coin mixing on the
-                           RPD blockchain. Basically all your transactions cannot be tracked
+                           Rapids blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
-                           "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+                           "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            zRPD is een optionele privacy-gerichte methode om munten te mengen op de
-                           RPD blockchain. In principe kunnen al uw transacties niet worden gevolgd
+                           Rapids blockchain. In principe kunnen al uw transacties niet worden gevolgd
                            op enige block explorer. U kunt meer lezen over de technische gegevens in de
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
-                           "RPD Zerocoin (zRPD) Technische Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+                           "Rapids Zerocoin (zRPD) Technische Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </translation>
     </message>
@@ -4291,34 +4209,34 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           By default the RPD wallet will convert 10% of your entire RPD
+                           By default the Rapids wallet will convert 10% of your entire RPD
                            balance to zRPD to assist the network. If you do not wish to
                            stake zRPD or take advantage of the privacy benefit it brings,
-                           you can disable the automatic minting in your RPD wallet by
+                           you can disable the automatic minting in your Rapids wallet by
                            going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
-                           If you are not making use of the RPD-QT or GUI you can simply open
+                           If you are not making use of the Rapids-QT or GUI you can simply open
                            your rapids.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            You can read more about zRPD in the
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt; "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt; "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            If you would like to keep and stake your zRPD, please read the "How do I stake"
                            section of the FAQ below.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Standaard zal de RPD portemonnee 10% van uw gehele RPD-balans omzetten
+                           Standaard zal de Rapids portemonnee 10% van uw gehele RPD-balans omzetten
                           naar zRPD om het netwerk te helpen. Als u niet wenst om
                            zRPD te staken of voordeel te halen uit het privacyvoordeel dat dit oplevert,
-                           kan je deze automatische omzetting uitschakelen in je RPD portemonnee door
+                           kan je deze automatische omzetting uitschakelen in je Rapids portemonnee door
                            naar Instellingen &gt; Opties te gaan en dan “Schakel zRPD Automuntering in” te deselecteren.
-                           Als je geen gebruik maakt van de RPD-QT of GUI kan je simpelweg
+                           Als je geen gebruik maakt van de Rapids-QT of GUI kan je simpelweg
                            je rapids.conf bestand openen en er &lt;i&gt;"enablezeromint=0" aan toevoegen&lt;/i&gt; Zonder de aanhaling
                            en je portemonnee herstarten om automuntering uit te schakelen.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            Je kan meer lezen over zRPD in de
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt; "RPD Zerocoin (zRPD) Technische Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt; "Rapids Zerocoin (zRPD) Technische Paper"&lt;/a&gt;.
                            Als u uw zRPD wilt behouden en staken, lees dan de "Hoe stake ik"
                            sectie in onderstaande FAQ.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4335,16 +4253,16 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zRPD can be spent and sent to any RPD address. The receiver will
-                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
+                           zRPD can be spent and sent to any Rapids address. The receiver will
+                           receive standard Rapids but the origin of the Rapids is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zRPD kan worden uitgegeven en verzonden naar elk RPD-adres. De ontvanger zal
-                           gewone RPD ontvangen, maar de oorsprong van de RPD is geanonimiseerd door het zRPD-protocol
+                           zRPD kan worden uitgegeven en verzonden naar elk Rapids-adres. De ontvanger zal
+                           gewone Rapids ontvangen, maar de oorsprong van de Rapids is geanonimiseerd door het zRPD-protocol
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            Als u meer zRPD wilt, moet u uw balans op mint zetten in de "Privacy" tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4356,19 +4274,19 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
     </message>
     <message>
         <source>How do I stake RPD/zRPD?</source>
-        <translation>Hoe stakz ik RPD/zRPD?</translation>
+        <translation>Hoe stake ik RPD/zRPD?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           To Stake RPD:
+                           To Stake Rapids:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           You must have a balance of RPD with a minimum of 101 confirmations.
+                           You must have a balance of Rapids with a minimum of 600 confirmations.
                            &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
+                           Your wallet must stay online and be unlocked for staking purposes.
                            &lt;li&gt;
                            Once all those steps are followed staking should be enabled.
                            &lt;li&gt;
@@ -4389,16 +4307,16 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Om RPD te Staken:
+                           Om Rapids te Staken:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Zorg ervoor dat uw portemonnee volledig gesynchroniseerd is en dat u de laatste versie gebruikt.
                            &lt;li&gt;
-                           U moet een saldo van RPD hebben met een minimum van 101 bevestigingen.
+                           U moet een saldo van Rapids hebben met een minimum van 600 bevestigingen.
                            &lt;li&gt;
-                           Uw portemonnee moet online blijven en worden ontgrendeld voor anonimisering en staking-doeleinden.
+                           Uw portemonnee moet online blijven en ontgrendeld zijn voor staking-doeleinden.
                            &lt;li&gt;
-                           Zodra al deze stappen zijn gevolgd, zal het staken worden ingeschakeld.
+                           Zodra al deze stappen gevolgd zijn, zal het staken worden ingeschakeld.
                            &lt;li&gt;
                            U kunt de status van de staking in de portemonnee zien door op het pictogram in de rij linksboven in de portemonnee-interface te bewegen. Het pakket zal oplichten en zal "Staking Ingeschakeld" aangeven om aan te geven dat het pakket in de portemonnee is geplaatst. Met behulp van de opdrachtregel-interface (rapids-cli); het commando &lt;i&gt;getstakingstatus&lt;/i&gt; zal bevestigen dat de staking actief is.
                            &lt;/li&gt;&lt;/ol&gt;
@@ -4417,32 +4335,44 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
                          </translation>
     </message>
     <message>
-        <source>8</source>
-        <translation>8</translation>
+        <source>Where should I go if I need support?</source>
+        <translation>Waar moet ik heen gaan als ik ondersteuning nodig heb?</translation>
     </message>
     <message>
-        <source>Where I should go if I need support?</source>
-        <translation>Waar moet ik heen gaan als ik ondersteuning nodig heb?</translation>
+        <source>What is a Masternode?</source>
+        <translation>Wat is een Masternode?</translation>
+    </message>
+    <message>
+        <source>What is a Masternode Controller?</source>
+        <translation>Wat is een Masternode Controller</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet(s) and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Een Masternode Controller portemonnee is waar de 10.000 RPD onderpand zich kan bevinden tijdens een Controller-Remote masternode setup. Het is een portemonnee die de remote masternode portemonnee(s) kan activeren en waarmee u uw ondergepande munten offline kunt houden terwijl de remote masternode online blijft. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>8</source>
+        <translation>8</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
+                           &lt;a style='color: #B0B0B0' href='https://discord.Rapids.org'&gt;
                            #support in our Discord&lt;/a&gt;.
                            If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.freshdesk.com'&gt;
                            our Freshdesk support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            We hebben ondersteuningskanalen in de meeste van onze officiële chatgroepen, bijvoorbeeld
-                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
+                           &lt;a style='color: #B0B0B0' href='https://discord.Rapids.org'&gt;
                            #support in onze Discord&lt;/a&gt;.
                            Als u liever een ticket indient, kan men dat
-                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
-                           op onze Freshdesk support site&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.freshdesk.com'&gt;
+                           op onze Freshdesk supportsite&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </translation>
     </message>
@@ -4451,13 +4381,9 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>9</translation>
     </message>
     <message>
-        <source>What is a Master Node?</source>
-        <translation>Wat is een Masternode</translation>
-    </message>
-    <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           A masternode is a computer running a full node RPD core wallet with a
+                           A masternode is a computer running a full node Rapids wallet with a
                            requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
@@ -4480,10 +4406,10 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in Rapids Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
+                           &lt;li&gt;Help secure the Rapids network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
@@ -4499,7 +4425,7 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Een masternode is een computer met een volledige node RPD core portemonnee met een
+                           Een masternode is een computer met een volledige node Rapids portemonnee met een
                            vereiste van 10.000 RPD onderpand om extra diensten te kunnen verlenen
                            aan het netwerk en in ruil daarvoor ontvangt u regelmatig een deel van de blokbeloning.
                            Deze diensten omvatten::
@@ -4522,10 +4448,10 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
                            Masternode Voordelen:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Deelnemen in het RPD Bestuur&lt;/li&gt;
+                           &lt;li&gt;Deelnemen in het Rapids Bestuur&lt;/li&gt;
                            &lt;li&gt;Verdien Masternode Beloningen&lt;/li&gt;
                            &lt;li&gt;Commodity-optie voor toekomstige verkoop&lt;/li&gt;
-                           &lt;li&gt;Helpt bij het beveiligen van het RPD netwerk&lt;/li&gt;
+                           &lt;li&gt;Helpt bij het beveiligen van het Rapids netwerk&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
@@ -4543,14 +4469,6 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
     <message>
         <source>10</source>
         <translation>10</translation>
-    </message>
-    <message>
-        <source>What is a Master Node Controller?</source>
-        <translation>Wat is een Masternode Controller?</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Een Masternode Controller portemonnee is waar de 10.000 RPD onderpand zich kan bevinden tijdens een Controller-Remote masternode setup. Het is een portemonnee die de remote masternode portemonnee(s) kan activeren en waarmee u uw ondergepande munten offline kunt houden terwijl de remote masternode online blijft. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Frequently Asked Questions</source>
@@ -4572,10 +4490,6 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>Formulier</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>TextLabel</translation>
-    </message>
-    <message>
         <source>Network Monitor</source>
         <translation>Netwerkmonitor</translation>
     </message>
@@ -4588,24 +4502,48 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>Algemeen</translation>
     </message>
     <message>
-        <source>Client Version: </source>
+        <source>Client Version:</source>
         <translation>Client Versie:</translation>
+    </message>
+    <message>
+        <source>BerkeleyDB version:</source>
+        <translation>BerkeleyDB versie:</translation>
+    </message>
+    <message>
+        <source>Datadir:</source>
+        <translation>Datadir:</translation>
+    </message>
+    <message>
+        <source>Startup time:</source>
+        <translation>Opstarttijd:</translation>
+    </message>
+    <message>
+        <source>Connections:</source>
+        <translation>Verbindingen:</translation>
+    </message>
+    <message>
+        <source>Number of Masternodes:</source>
+        <translation>Aantal Masternodes:</translation>
+    </message>
+    <message>
+        <source>Current number of blocks:</source>
+        <translation>Huidige aantal blocks:</translation>
+    </message>
+    <message>
+        <source>Last block time:</source>
+        <translation>Laatste blocktijd:</translation>
+    </message>
+    <message>
+        <source>Last block hash:</source>
+        <translation>Laatste blockhash:</translation>
+    </message>
+    <message>
+        <source>Current number of transactions:</source>
+        <translation>Huidig aantal transacties:</translation>
     </message>
     <message>
         <source>User Agent:</source>
         <translation>User Agent:</translation>
-    </message>
-    <message>
-        <source>Using BerkeleyDB version:</source>
-        <translation>Gebruikt BerkeleyDB versie:</translation>
-    </message>
-    <message>
-        <source>Datadir: </source>
-        <translation>Datadir: </translation>
-    </message>
-    <message>
-        <source>Startup Time:  </source>
-        <translation>Starttijd:</translation>
     </message>
     <message>
         <source>Network</source>
@@ -4616,28 +4554,12 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>Naam:</translation>
     </message>
     <message>
-        <source>Number Connections:</source>
-        <translation>Nummer Verbindingen:</translation>
-    </message>
-    <message>
         <source>Blockchain</source>
         <translation>Blockchain</translation>
     </message>
     <message>
-        <source>Current Number of Blocks:</source>
-        <translation>Huidige nummer van blokken:</translation>
-    </message>
-    <message>
-        <source>Last Block Time:</source>
-        <translation>Laatste Bloktijd:</translation>
-    </message>
-    <message>
         <source>Memory Pool</source>
         <translation>Geheugenpool</translation>
-    </message>
-    <message>
-        <source>Current Number of Transactions:</source>
-        <translation>Huidige nummer van transacties:</translation>
     </message>
     <message>
         <source>Main</source>
@@ -4719,8 +4641,8 @@ Controleer of u een vooraf bepaalde teksteditor hebt geïnstalleerd.</translatio
         <translation>Aantal van script verificatiethreads</translation>
     </message>
     <message>
-        <source>Start RPD on system login</source>
-        <translation>Start RPD bij systeemlogin</translation>
+        <source>Start Rapids on system login</source>
+        <translation>Start Rapids bij systeemlogin</translation>
     </message>
     <message>
         <source>Minimize to the tray instead of the taskbar</source>
@@ -4776,12 +4698,12 @@ Weet u het zeker?
         <translation>Nieuwe ontvanger voor multisend</translation>
     </message>
     <message>
-        <source>Label (optional)</source>
-        <translation>Label (optioneel)</translation>
+        <source>Address Label (optional)</source>
+        <translation>Adreslabel (optioneel)</translation>
     </message>
     <message>
-        <source>Enter a label to add this address in your address book</source>
-        <translation>Voer een label in om dit adres toe te voegen aan uw adresboek.</translation>
+        <source>Enter label to be saved with this address</source>
+        <translation>Voer een label in dat bij het adres opgeslagen moet worden </translation>
     </message>
     <message>
         <source>Percentage</source>
@@ -4799,16 +4721,16 @@ Weet u het zeker?
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Nog geen actieve Master Node</translation>
+        <source>N/A</source>
+        <translation>NB</translation>
     </message>
     <message>
         <source>CheckBox</source>
         <translation>Selectievakje</translation>
     </message>
     <message>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other RPD addresses after it matures.</source>
-        <translation>Met MultiSend kunt u automatisch tot 100% van uw inzet of masternode beloning naar een lijst met andere RPD-adressen sturen nadat deze volwaardig zijn geworden.</translation>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other Rapids addresses after it matures.</source>
+        <translation>Met MultiSend kunt u automatisch tot 100% van uw inzet of masternode beloning naar een lijst met andere Rapids-adressen sturen nadat deze volwaardig zijn geworden.</translation>
     </message>
     <message>
         <source>Active</source>
@@ -4839,12 +4761,20 @@ Weet u het zeker?
         <translation>WIS ALLES</translation>
     </message>
     <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Kan deze actie niet uitvoeren, portemonnee vergrendeld</translation>
+    </message>
+    <message>
         <source>Clear succeed</source>
         <translation>Wissen geslaagd</translation>
     </message>
     <message>
         <source>Clear all failed, could not locate address in wallet file</source>
         <translation>Alles wissen mislukt, kon geen adres terugvinden in het portemonnee bestand</translation>
+    </message>
+    <message>
+        <source>Cannot add multisend recipient, wallet locked</source>
+        <translation>Kan geen multisendontvanger toevoegen, portemonnee vergrendeld</translation>
     </message>
     <message>
         <source>The entered address: %1 is invalid.
@@ -4906,24 +4836,12 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>TextLabel</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>Leegmaken</translation>
     </message>
     <message>
         <source>Sign/Verify Message</source>
         <translation>Onderteken/Verifiëer Bericht</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address or contact label</source>
-        <translation>Voer een RPD-adres of contactlabel in</translation>
-    </message>
-    <message>
-        <source>Add address</source>
-        <translation>Adres toevoegen</translation>
     </message>
     <message>
         <source>Sign</source>
@@ -4942,7 +4860,15 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Bericht</translation>
     </message>
     <message>
-        <source>Write a message</source>
+        <source>Rapids address or contact label</source>
+        <translation>Rapids adres of contactlabel</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation>Voeg adres toe</translation>
+    </message>
+    <message>
+        <source>Write message</source>
         <translation>Schrijf een bericht</translation>
     </message>
     <message>
@@ -5049,10 +4975,6 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Wijzigingen ongedaan maken</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
         <source>Wallet</source>
         <translation>Portemonnee</translation>
     </message>
@@ -5062,7 +4984,7 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     </message>
     <message>
         <source>Stake split threshold:</source>
-        <translation>Inzet splitdrempel:</translation>
+        <translation>Stake splitsdrempel:</translation>
     </message>
     <message>
         <source>Spend unconfirmed change</source>
@@ -5118,10 +5040,6 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     <message>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
     </message>
     <message>
         <source>Wallet Repair</source>
@@ -5215,10 +5133,6 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Formulier</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>TextLabel</translation>
-    </message>
-    <message>
         <source>Wallet Data</source>
         <translation>Portemonnee Data</translation>
     </message>
@@ -5229,6 +5143,10 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     <message>
         <source>Multisend</source>
         <translation>Multisend</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>Exporteer Accounting</translation>
     </message>
     <message>
         <source>Tools</source>
@@ -5268,7 +5186,7 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     </message>
     <message>
         <source>Wallet Repair</source>
-        <translation>Portemonnee Herstellen</translation>
+        <translation>Portemonnee Herstel</translation>
     </message>
     <message>
         <source>Help</source>
@@ -5279,8 +5197,8 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Veelgestelde vragen</translation>
     </message>
     <message>
-        <source>About RPD</source>
-        <translation>Over RPD</translation>
+        <source>About Rapids</source>
+        <translation>Over Rapids</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -5400,7 +5318,7 @@ Weet je zeker dat?
     </message>
     <message>
         <source>The Rapids developers</source>
-        <translation>De RPD Kernontwikkelaars</translation>
+        <translation>De Rapids Kernontwikkelaars</translation>
     </message>
     <message>
         <source>[testnet]</source>
@@ -5437,14 +5355,6 @@ Weet je zeker dat?
         <translation>Formulier</translation>
     </message>
     <message>
-        <source>480.0685 RPD</source>
-        <translation>480.0685 RPD</translation>
-    </message>
-    <message>
-        <source>1,000 zRPD</source>
-        <translation>1,000 zRPD</translation>
-    </message>
-    <message>
         <source>Available</source>
         <translation>Beschikbaar</translation>
     </message>
@@ -5453,24 +5363,8 @@ Weet je zeker dat?
         <translation>In afwachting</translation>
     </message>
     <message>
-        <source>6.943 RPD</source>
-        <translation>6.943 RPD</translation>
-    </message>
-    <message>
         <source>Immature</source>
         <translation>Onverwerkt</translation>
-    </message>
-    <message>
-        <source>10 RPD</source>
-        <translation>10 RPD</translation>
-    </message>
-    <message>
-        <source>60 zRPD</source>
-        <translation>60 zRPD</translation>
-    </message>
-    <message>
-        <source>10 zRPD</source>
-        <translation>10 zRPD</translation>
     </message>
     <message>
         <source>Wallet Unlocked for staking</source>
@@ -5485,14 +5379,6 @@ Weet je zeker dat?
         <translation>Adres Gekopieerd</translation>
     </message>
     <message>
-        <source>Automint enabled</source>
-        <translation>Automunt ingeschakeld</translation>
-    </message>
-    <message>
-        <source>Automint disabled</source>
-        <translation>Automunt uitgeschakeld</translation>
-    </message>
-    <message>
         <source>Staking active</source>
         <translation>Staking actief</translation>
     </message>
@@ -5505,8 +5391,8 @@ Weet je zeker dat?
         <translation><numerusform>%n actieve verbinding</numerusform><numerusform>%n actieve verbindingen</numerusform></translation>
     </message>
     <message>
-        <source>Synchronized</source>
-        <translation>Gesynchroniseerd</translation>
+        <source>Synchronized - Block: %1</source>
+        <translation>Gesynchroniseerd - Block: %1</translation>
     </message>
     <message numerus="yes">
         <source>%n hour(s)</source>
@@ -5528,6 +5414,90 @@ Weet je zeker dat?
         <source>%n year(s)</source>
         <translation><numerusform>%n jaar</numerusform><numerusform>%n jaren</numerusform></translation>
     </message>
+    <message>
+        <source>Wallet Upgrade</source>
+        <translation>Portemonneeupgrade</translation>
+    </message>
+    <message>
+        <source>Upgrading to HD wallet will improve
+the wallet's reliability and security.
+
+
+NOTE: after the upgrade, a new
+backup will be created.
+</source>
+        <translation>Upgrade naar HD portemonnee zal
+de portemonnee's betrouwbaarheid en veiligheid verbeteren.
+
+
+OPMERKING: na de upgrade, zal een
+nieuwe back-up aangemaakt worden.
+</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet</source>
+        <translation>Portemonnee upgraden</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>Portemonnee ontgrendeling geannuleerd </translation>
+    </message>
+    <message>
+        <source>Tor Active: %1</source>
+        <translation>Tor Actief: %1</translation>
+    </message>
+    <message>
+        <source>Tor Disabled</source>
+        <translation>Tor Uitgeschakeld</translation>
+    </message>
+    <message>
+        <source>Available (Locked included)</source>
+        <translation>Beschikbaar (inclusief vergrendelde)</translation>
+    </message>
+    <message>
+        <source>The wallet has been successfully upgraded to HD.</source>
+        <translation>De portemonnee is succesvol geüpgraded naar HD.</translation>
+    </message>
+    <message>
+        <source>It is advised to make a backup.</source>
+        <translation>Het is geadviseerd om een back-up te maken.</translation>
+    </message>
+    <message>
+        <source>Do you wish to backup now?</source>
+        <translation>Wilt u nu een back-up maken?</translation>
+    </message>
+    <message>
+        <source>Backup Wallet</source>
+        <translation>Backup portemonnee</translation>
+    </message>
+    <message>
+        <source>Wallet Data (*.dat)</source>
+        <translation>Portemonneegegevens (*.dat)</translation>
+    </message>
+    <message>
+        <source>Backup created</source>
+        <translation>Back-up aangemaakt</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>Aanmaak back-up mislukt</translation>
+    </message>
+    <message>
+        <source>no file selected</source>
+        <translation>geen bestand geselecteerd</translation>
+    </message>
+    <message>
+        <source>Wallet upgraded successfully, but no backup created.</source>
+        <translation>Portemonnee succesvol geüpgraded, maar geen back-up aangemaakt.</translation>
+    </message>
+    <message>
+        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
+        <translation>WAARSCHUWING: vergeet niet op je wallet.dat bestand te kopiëren!</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet Error</source>
+        <translation>Upgrade Portemonnee Error</translation>
+    </message>
 </context>
 <context>
     <name>TrafficGraphWidget</name>
@@ -5540,7 +5510,7 @@ Weet je zeker dat?
     <name>TransactionDesc</name>
     <message numerus="yes">
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Open voor nog %n blok</numerusform><numerusform>Open voor nog %n blokken</numerusform></translation>
+        <translation><numerusform>Open voor nog %n blokken</numerusform><numerusform>Open voor nog %n blok</numerusform></translation>
     </message>
     <message>
         <source>Open until %1</source>
@@ -5604,7 +5574,7 @@ Weet je zeker dat?
     </message>
     <message numerus="yes">
         <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, broadcast via %n node</numerusform><numerusform>, broadcast via %n nodes</numerusform></translation>
+        <translation><numerusform>, broadcast via %n nodes</numerusform><numerusform>, broadcast via %n node</numerusform></translation>
     </message>
     <message>
         <source>Date</source>
@@ -5648,7 +5618,7 @@ Weet je zeker dat?
     </message>
     <message numerus="yes">
         <source>matures in %n more block(s)</source>
-        <translation><numerusform>Volgroeid in %n blok</numerusform><numerusform>volgroeid in %n blokken</numerusform></translation>
+        <translation><numerusform>volgroeid in %n blokken</numerusform><numerusform>volgroeid in %n blok</numerusform></translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -5735,7 +5705,7 @@ Weet je zeker dat?
     </message>
     <message numerus="yes">
         <source>Open for %n more block(s)</source>
-        <translation><numerusform>Open voor nog %n blok</numerusform><numerusform>Open voor nog %n blokken</numerusform></translation>
+        <translation><numerusform>Open voor nog %n blokken</numerusform><numerusform>Open voor nog %n blok</numerusform></translation>
     </message>
     <message>
         <source>Open until %1</source>
@@ -5782,10 +5752,6 @@ Weet je zeker dat?
         <translation>Ontvangen van</translation>
     </message>
     <message>
-        <source>Received via Obfuscation</source>
-        <translation>Verkregen via verduistering</translation>
-    </message>
-    <message>
         <source>RPD Stake</source>
         <translation>RPD Stake</translation>
     </message>
@@ -5798,28 +5764,8 @@ Weet je zeker dat?
         <translation>RPD Cold Stake</translation>
     </message>
     <message>
-        <source>RPD Stake in behalf of</source>
-        <translation>RPD Stake in naam van</translation>
-    </message>
-    <message>
         <source>Stake delegation</source>
         <translation>Stake delegatie</translation>
-    </message>
-    <message>
-        <source>Obfuscation Denominate</source>
-        <translation>Verduistering denominatie</translation>
-    </message>
-    <message>
-        <source>Obfuscation Collateral Payment</source>
-        <translation>Verduistering zijdelingse betaling</translation>
-    </message>
-    <message>
-        <source>Obfuscation Make Collateral Inputs</source>
-        <translation>Verduistering maakt zijdelingse inputs</translation>
-    </message>
-    <message>
-        <source>Obfuscation Create Denominations</source>
-        <translation>Verduistering creëert denominaties</translation>
     </message>
     <message>
         <source>Converted RPD to zRPD</source>
@@ -5854,12 +5800,16 @@ Weet je zeker dat?
         <translation>Betaling naar jezelf</translation>
     </message>
     <message>
-        <source>Mined</source>
-        <translation>Mined</translation>
+        <source>RPD Stake on behalf of</source>
+        <translation>RPD Stake in naam van</translation>
     </message>
     <message>
-        <source>Obfuscated</source>
-        <translation>Verduisterd</translation>
+        <source>Stake delegation spent by</source>
+        <translation>Stake delegatie gespendeerd door</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>Mined</translation>
     </message>
     <message>
         <source>watch-only</source>
@@ -5913,36 +5863,8 @@ Weet je zeker dat?
         <translation>Transactie details</translation>
     </message>
     <message>
-        <source>ID:</source>
-        <translation>ID:</translation>
-    </message>
-    <message>
-        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
-        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</translation>
-    </message>
-    <message>
-        <source>Sending to: </source>
-        <translation>Versturen naar:</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z</translation>
-    </message>
-    <message>
         <source>Total amount</source>
         <translation>Totale hoeveelheid</translation>
-    </message>
-    <message>
-        <source>2 RPD</source>
-        <translation>2 RPD</translation>
-    </message>
-    <message>
-        <source>Coin inputs:</source>
-        <translation>Munt invoeren:</translation>
-    </message>
-    <message>
-        <source>1 Inputs</source>
-        <translation>1 Invoer</translation>
     </message>
     <message>
         <source>Previous Transaction</source>
@@ -5953,52 +5875,52 @@ Weet je zeker dat?
         <translation>Outputindex</translation>
     </message>
     <message>
-        <source>Fee:</source>
-        <translation>Fee:</translation>
-    </message>
-    <message>
-        <source>0.0001 RPD</source>
-        <translation>0.0001 RPD</translation>
-    </message>
-    <message>
-        <source>Change address:</source>
-        <translation>Wijzig adres:</translation>
-    </message>
-    <message>
         <source>D7VFR83SQbie…BhjcWJtcfip5krte2Z </source>
         <translation>D7VFR83SQbie…BhjcWJtcfip5krte2Z </translation>
-    </message>
-    <message>
-        <source>Confirmations:</source>
-        <translation>Bevestigingen:</translation>
-    </message>
-    <message>
-        <source>12</source>
-        <translation>12</translation>
-    </message>
-    <message>
-        <source>Size:</source>
-        <translation>Grootte:</translation>
-    </message>
-    <message>
-        <source>2 kB</source>
-        <translation>2 kB</translation>
-    </message>
-    <message>
-        <source>Date:</source>
-        <translation>Datum:</translation>
     </message>
     <message>
         <source>May 25, 2017</source>
         <translation>25 Mei, 2017</translation>
     </message>
     <message>
-        <source>Status:</source>
-        <translation>Status:</translation>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>Sending to</source>
+        <translation>Versturen naar:</translation>
+    </message>
+    <message>
+        <source>Coin inputs</source>
+        <translation>Munt invoeringen</translation>
+    </message>
+    <message>
+        <source>Fee</source>
+        <translation>Onkost</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Grootte</translation>
+    </message>
+    <message>
+        <source>Change address</source>
+        <translation>Wijzig adres</translation>
     </message>
     <message>
         <source>Spendable</source>
         <translation>Uitgeefbaar</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>Bevestigingen</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Status</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Datum</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -6060,38 +5982,7 @@ Weet je zeker dat?
     </message>
 </context>
 <context>
-    <name>WalletPasswordDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Dialoog</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>TextLabel</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Druk Knop</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
-        <translation>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>Annuleren</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>Akkoord</translation>
-    </message>
-</context>
-<context>
     <name>WelcomeContentWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Dialoog</translation>
-    </message>
     <message>
         <source>1</source>
         <translation>1</translation>
@@ -6135,20 +6026,20 @@ Rapids Wallet</source>
 Rapids Portemonnee</translation>
     </message>
     <message>
-        <source>RPD is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
-        <translation>RPD is 's werelds meest innovatieve Proof of Stake blockchain gebaseerde technologie. Ontwikkeld door een team van zeer ervaren ontwikkelaars en cryptografen.</translation>
+        <source>Rapids is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <translation>Rapids is 's werelds meest innovatieve Proof of Stake blockchain gebaseerde technologie. Ontwikkeld door een team van zeer ervaren ontwikkelaars en cryptografen.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - RPD believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zoals ons manifest zegt: Privacy is een niet-onderhandelbaar fundamenteel mensenrecht; het geeft gebruikers de vrijheid om hun gegevens te delen wanneer en met wie ze maar willen - RPD gelooft in soevereiniteit.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - Rapids believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Zoals ons manifest zegt: Privacy is een niet-onderhandelbaar fundamenteel mensenrecht; het geeft gebruikers de vrijheid om hun gegevens te delen wanneer en met wie ze maar willen - Rapids gelooft in soevereiniteit.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>The masternode network is RPD's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
-        <translation>Het masternode netwerk is RPD's tweedelaagse netwerk bovenop de blockchain die onze DAO in staat stelt om gedecentraliseerd bestuur, treasury te leveren</translation>
+        <source>The masternode network is Rapids's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
+        <translation>Het masternode netwerk is Rapids's tweedelaagse netwerk bovenop de blockchain die onze DAO in staat stelt om gedecentraliseerd bestuur, treasury te leveren</translation>
     </message>
     <message>
-        <source>How RPD respects your privacy?</source>
-        <translation>Hoe respecteert RPD uw privacy?</translation>
+        <source>How Rapids respects your privacy?</source>
+        <translation>Hoe respecteert Rapids uw privacy?</translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
@@ -6225,10 +6116,6 @@ Rapids Portemonnee</translation>
         <translation>Bind naar het opgegeven adres om te luisteren naar JSON-RPC verbindingen. Gebruik [host]:poort notatie voor IPv6. Deze optie kan meerdere keren worden opgegeven (standaard: bind aan alle interfaces)</translation>
     </message>
     <message>
-        <source>Calculated accumulator checkpoint is not what is recorded by block index</source>
-        <translation>Het berekende accumulatie controlepunt is niet wat wordt geregistreerd door de blokindex</translation>
-    </message>
-    <message>
         <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
         <translation>Kan geen vergrendeling op data directory %s verkrijgen. Rapids loopt waarschijnlijk al.</translation>
     </message>
@@ -6255,14 +6142,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Gedistribueerd onder de MIT software licentie, zie het bijgevoegde bestand COPYING of &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting from specific addresses (0-1, default: %u)</source>
-        <translation>Schakel automatische Zerocoin munting vanuit specifieke adressen in (0-1, standaard %u) </translation>
-    </message>
-    <message>
-        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
-        <translation>Schakel automatische portemonnee back-ups in geactiveerd na elke geminte zRPD (0-1, standaard: %u)</translation>
     </message>
     <message>
         <source>Enable cold staking functionality (0-1, default: %u). Disabled if staking=0</source>
@@ -6295,6 +6174,10 @@ Rapids Portemonnee</translation>
     <message>
         <source>Error: Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>
         <translation>Fout: Niet ondersteund argument -socks gevonden. Het instellen van SOCKS versie is niet meer mogelijk, alleen SOCKS5 proxy's worden ondersteund.</translation>
+    </message>
+    <message>
+        <source>Exclude debugging information for a category. Can be used in conjunction with -debug=1 to output debug logs for all categories except one or more specified categories.</source>
+        <translation>Sluit informatie voor een categorie uit. Kan worden gebruikt in combinatie met -debug=1 om foutopsporingslogboeken uit te voeren voor alle categorieën behalve een of meer gespecificeerde categorieën.</translation>
     </message>
     <message>
         <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
@@ -6369,10 +6252,6 @@ Rapids Portemonnee</translation>
         <translation>Aantal seconden om te voorkomen dat misdragende peers opnieuw connectoren (standaard: %u)</translation>
     </message>
     <message>
-        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation>Verduistering maakt gebruik van exacte gedenomineerde bedragen om fondsen te verzenden, je zou misschien nog wat munten moeten anonimiseren.</translation>
-    </message>
-    <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>Output debugging informatie (default: %u, verschaffen &lt;category&gt; is optioneel)</translation>
     </message>
@@ -6395,10 +6274,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
         <translation>Stel maximale grootte van transacties met hoge prioriteit/low-fee in bytes in (standaard: %d)</translation>
-    </message>
-    <message>
-        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
-        <translation>Stel het aantal ingesloten blokken in om vooraf te berekenen per cyclus. (minimum: %d) (maximum: %d) (standaard: %d)</translation>
     </message>
     <message>
         <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
@@ -6433,18 +6308,6 @@ Rapids Portemonnee</translation>
         <translation>Niet mogelijk te binden aan %s op deze computer. Rapids loopt waarschijnlijk al.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
-        <translation>Kan niet genoeg verduistering gedenomineerde fondsen voor deze transactie vinden.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>Kan niet genoeg verduistering niet gedenomineerde fondsen voor deze transactie vinden die niet gelijk zijn aan 10000 RPD.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>Kan niet genoeg fondsen voor deze transactie vinden die niet gelijk zijn aan 10000 RPD.</translation>
-    </message>
-    <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation>Gebruik aparte SOCKS5 proxy om peers via Tor verborgen services te bereiken (standaard: %s)</translation>
     </message>
@@ -6455,10 +6318,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
         <translation>Waarschuwing: -paytxfee is zeer hoog ingesteld! Dit zijn de transactie kosten die je betaalt als je een transactie verstuurt.</translation>
-    </message>
-    <message>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
-        <translation>Waarschuwing: Peers zijn afgesloten als gevolg van tijdsverschillen. Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd staat, werkt Rapids niet goed.</translation>
     </message>
     <message>
         <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
@@ -6493,8 +6352,8 @@ Rapids Portemonnee</translation>
         <translation>Je moet een masternodeprivkey opgeven in de configuratie. Raadpleeg de documentatie voor hulp.</translation>
     </message>
     <message>
-        <source>(51472 could be used only on mainnet)</source>
-        <translation>(51472 kan alleen op mainnet worden gebruikt)</translation>
+        <source>(28732 could be used only on mainnet)</source>
+        <translation>(28732 kan alleen op mainnet worden gebruikt)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6505,8 +6364,8 @@ Rapids Portemonnee</translation>
         <translation>(standaard: 1)</translation>
     </message>
     <message>
-        <source>(must be 51472 for mainnet)</source>
-        <translation>(moet 51472 voor mainnet zijn)</translation>
+        <source>(must be 28732 for mainnet)</source>
+        <translation>(moet 28732 voor mainnet zijn)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
@@ -6523,10 +6382,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation>Voeg een node toe om verbinding mee te maken en probeer de verbinding open te houden</translation>
-    </message>
-    <message>
-        <source>Adding Wrapped Serials supply...</source>
-        <translation>Toevoegen van Wrapped Serialvoorraad...</translation>
     </message>
     <message>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
@@ -6553,28 +6408,8 @@ Rapids Portemonnee</translation>
         <translation>Block creatie opties:</translation>
     </message>
     <message>
-        <source>Calculating missing accumulators...</source>
-        <translation>Calculeren van ontbrekende accumulators...</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Kan de portemonnee niet downgraden</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -bind address: '%s'</source>
-        <translation>Kan -bind adres niet oplossen: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -externalip address: '%s'</source>
-        <translation>Kan -externalip adres niet oplossen: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -whitebind address: '%s'</source>
-        <translation>Kan -whitebind adres niet oplossen: '%s'</translation>
-    </message>
-    <message>
-        <source>CoinSpend: failed check</source>
-        <translation>CoinSpend: controle mislukt</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -6602,7 +6437,7 @@ Rapids Portemonnee</translation>
     </message>
     <message>
         <source>Copyright (C) 2015-%i The Rapids Developers</source>
-        <translation>Copyright (C) 2015-%i The RPD Kernontwikkelaars</translation>
+        <translation>Copyright (C) 2015-%i The Rapids Kernontwikkelaars</translation>
     </message>
     <message>
         <source>Corrupted block database detected</source>
@@ -6611,10 +6446,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Could not parse masternode.conf</source>
         <translation>Kan masternode.conf niet parsen</translation>
-    </message>
-    <message>
-        <source>Couldn't generate the accumulator witness</source>
-        <translation>Kon de accumulator witness niet genereren</translation>
     </message>
     <message>
         <source>Debugging/Testing options:</source>
@@ -6647,14 +6478,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Done loading</source>
         <translation>Klaar met laden</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
-        <translation>Zet automatische Zerocoin minting aan (0-1, standaard: %u)</translation>
-    </message>
-    <message>
-        <source>Enable precomputation of zRPD spends and stakes (0-1, default %u)</source>
-        <translation>Schakel de precomputatie van zRPD-uitgaven en stakes in (0-1, standaard %u) </translation>
     </message>
     <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
@@ -6709,6 +6532,10 @@ Rapids Portemonnee</translation>
         <translation>Error</translation>
     </message>
     <message>
+        <source>Error: </source>
+        <translation>Error: </translation>
+    </message>
+    <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
         <translation>Fout: Er is een fatale interne fout opgetreden, zie debug.log voor details</translation>
     </message>
@@ -6723,10 +6550,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
         <translation>Fout: Portemonnee vergrendeld, niet in staat om transactie te creëren!</translation>
-    </message>
-    <message>
-        <source>Failed to calculate accumulator checkpoint</source>
-        <translation>Kon het controlepunt van de accumulator niet berekenen</translation>
     </message>
     <message>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
@@ -6797,28 +6620,8 @@ Rapids Portemonnee</translation>
         <translation>Ongeldig -onion adres of hostnaam: '%s'</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Ongeldige hoeveelheid voor -maxtxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Ongeldige hoeveelheid voor -minrelaytxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Ongeldige hoeveelheid voor -mintxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>Ongeldige hoeveelheid voor -paytxfee=&lt;amount&gt;: '%s' (moet tenminste %s zijn)</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Ongeldige hoeveelheid voor -paytxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation>Ongeldige hoeveelheid voor -reservebalance=&lt;amount&gt;</translation>
     </message>
     <message>
         <source>Invalid amount</source>
@@ -6837,20 +6640,8 @@ Rapids Portemonnee</translation>
         <translation>Ongeldige poort gedetecteerd in masternode.conf</translation>
     </message>
     <message>
-        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
-        <translation>Percentage automatisch geminte Zerocoin (10-100, standaard: %u)</translation>
-    </message>
-    <message>
         <source>Recalculating RPD supply...</source>
         <translation>Hercalculatie van RPD aanbod...</translation>
-    </message>
-    <message>
-        <source>Recalculating minted ZRPD...</source>
-        <translation>Herberekenen van gemunte ZRPD....</translation>
-    </message>
-    <message>
-        <source>Recalculating spent ZRPD...</source>
-        <translation>Herberekenen van bestede ZRPD....</translation>
     </message>
     <message>
         <source>Reindex the RPD and zRPD money supply statistics</source>
@@ -6867,10 +6658,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Selected coins value is less than payment target</source>
         <translation>Geselecteerde munt waarde is minder dan het betalingsdoel</translation>
-    </message>
-    <message>
-        <source>Support the zerocoin light node protocol (default: %u)</source>
-        <translation>Ondersteuning van het zerocoin light node protocol (standaard: %u)</translation>
     </message>
     <message>
         <source>SwiftX options:</source>
@@ -6897,8 +6684,8 @@ Rapids Portemonnee</translation>
 </translation>
     </message>
     <message>
-        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
-        <translation>Schakel alle specifieke RPD functionaliteit uit (Masternodes, Zerocoin, SwiftTX, Budgeting) (0-1, standaard: %u)</translation>
+        <source>Disable all Rapids specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <translation>Schakel alle specifieke Rapids functionaliteit uit (Masternodes, Zerocoin, SwiftTX, Budgeting) (0-1, standaard: %u)</translation>
     </message>
     <message>
         <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
@@ -6907,10 +6694,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>Fout: De transactie is afgewezen! Dit kan gebeuren als sommige munten in je portemonnee al waren uitgegeven, bijvoorbeeld als je een kopie van wallet.dat gebruikt en munten in de kopie waren besteed maar hier niet als zodanig gemarkeerd.</translation>
-    </message>
-    <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation>Fout: Deze transactie vereist transactiekosten van ten minste %s vanwege de hoeveelheid, de complexiteit of het gebruik van recent ontvangen fondsen!</translation>
     </message>
     <message>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
@@ -6927,14 +6710,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
         <translation>In zeldzame gevallen overschrijdt een besteding met 7 munten uw maximaal toegestane transactiegrootte. Probeer het opnieuw met 6 of minder munten</translation>
-    </message>
-    <message>
-        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
-        <translation>Voorkeur denominatie voor automatisch minted Zerocoin (1/5/10/50/100/500/1000/5000), 0 voor geen voorkeur. standaard: %u)</translation>
-    </message>
-    <message>
-        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Specificeer aangepast back-up pad om een kopie van elke automatische zRPD back-up toe te voegen. Indien ingesteld als dir zal elke back-up een bestand genereren met een tijdstempel. Indien ingesteld als file zal elke back-up herschreven worden naar dat bestand. Indien backuppath ook is ingesteld zullen 4 back-ups gedaan worden.</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
@@ -6955,10 +6730,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Cannot create public spend input</source>
         <translation>Kon geen publiek besteedadres aanmaken</translation>
-    </message>
-    <message>
-        <source>CoinSpend: Accumulator witness does not verify</source>
-        <translation>CoinSpend: Accumulator witness controleert niet</translation>
     </message>
     <message>
         <source>Display the stake modifier calculations in the debug.log file.</source>
@@ -6997,10 +6768,6 @@ Rapids Portemonnee</translation>
         <translation>Fout: geen geldige utxo!</translation>
     </message>
     <message>
-        <source>Failed to create mint</source>
-        <translation>Het is niet gelukt om mint te maken</translation>
-    </message>
-    <message>
         <source>Failed to find Zerocoins in wallet.dat</source>
         <translation>Niet gelukt om Zerocoins in wallet.dat te vinden.</translation>
     </message>
@@ -7019,6 +6786,10 @@ Rapids Portemonnee</translation>
     <message>
         <source>Failed to write coin serial number into wallet</source>
         <translation>Het serienummer van het muntstuk kan niet in de portemonnee worden geschreven</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -%s=&lt;amount&gt;: '%s'</source>
+        <translation>Ongeldige hoeveelheid voor -%s=&lt;amount&gt;: '%s'</translation>
     </message>
     <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
@@ -7045,6 +6816,10 @@ Rapids Portemonnee</translation>
         <translation>Adressen laden...</translation>
     </message>
     <message>
+        <source>Loading banlist...</source>
+        <translation>Banlijst aan het laden...</translation>
+    </message>
+    <message>
         <source>Loading block index...</source>
         <translation>Blockindex laden...</translation>
     </message>
@@ -7065,10 +6840,6 @@ Rapids Portemonnee</translation>
         <translation>Sporks laden...</translation>
     </message>
     <message>
-        <source>Loading wallet... (%3.2f %%)</source>
-        <translation>Portemonnee laden... (%3.2f %%)</translation>
-    </message>
-    <message>
         <source>Loading wallet...</source>
         <translation>Portemonnee aan het laden...</translation>
     </message>
@@ -7083,6 +6854,10 @@ Rapids Portemonnee</translation>
     <message>
         <source>Lookup(): Invalid -proxy address or hostname: '%s'</source>
         <translation>Lookup (): ongeldig -proxy-adres of hostnaam: '%s'</translation>
+    </message>
+    <message>
+        <source>MNs synchronization pending...</source>
+        <translation>Synchronisatie van MN's in afwachting...</translation>
     </message>
     <message>
         <source>Maintain at most &lt;n&gt; connections to peers (default: %u)</source>
@@ -7125,6 +6900,10 @@ Rapids Portemonnee</translation>
         <translation>Aantal aangepaste locatie back-ups om te behouden (standaard: %d)</translation>
     </message>
     <message>
+        <source>On first run, create a legacy wallet instead of a HD wallet</source>
+        <translation>Bij de initiële uitvoering, maak een legacy portemonnee aan in plaats van een HD portemonnee</translation>
+    </message>
+    <message>
         <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
         <translation>Accepteer alleen blockchain matching met ingebouwde controlepunten (standaard: %u)</translation>
     </message>
@@ -7141,6 +6920,10 @@ Rapids Portemonnee</translation>
         <translation>Wachtwoord voor JSON-RPC connecties</translation>
     </message>
     <message>
+        <source>Peers are being disconnected due time differences.</source>
+        <translation>Peers worden verbroken vanwege tijdsverschillen.</translation>
+    </message>
+    <message>
         <source>Unable to find transaction containing mint %s</source>
         <translation>Kan geen transactie terugvinden die munting %s bevat</translation>
     </message>
@@ -7153,16 +6936,28 @@ Rapids Portemonnee</translation>
         <translation>Gebruik block-spamfilter (standaard: %u)</translation>
     </message>
     <message>
-        <source>could not get lock on cs_spendcache</source>
-        <translation>kon niet op cs_spendcache terecht komen</translation>
-    </message>
-    <message>
         <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
         <translation>isValid (): ongeldig -proxy-adres of hostnaam: '%s'</translation>
     </message>
     <message>
         <source>Preparing for resync...</source>
         <translation>Voorbereiden van hersynchronisatie...</translation>
+    </message>
+    <message>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd ingesteld staat, werkt Rapids niet goed.</translation>
+    </message>
+    <message>
+        <source>Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)</source>
+        <translation>Geef de locatie van het foutopsporingslogboek op: dit kan een absoluut pad zijn of een pad ten opzichte van de gegevensmap (standaard: %s)</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -%s address: '%s'</source>
+        <translation>Kan oplossing -%s niet voltooien voor adres: '%s'</translation>
+    </message>
+    <message>
+        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
+        <translation>Kan niet upgraden naar een HD portemonnee (Voert alreeds HD ondersteuning uit). Versie: %d</translation>
     </message>
     <message>
         <source>Need destination or change address because change is not exact</source>
@@ -7197,14 +6992,6 @@ Rapids Portemonnee</translation>
         <translation>Herstel blockchain index van huidige blk000??.dat bestanden</translation>
     </message>
     <message>
-        <source>Receive and display P2P network alerts (default: %u)</source>
-        <translation>Ontvang en laat P2P netwerkmeldingen zien (standaard: %u)</translation>
-    </message>
-    <message>
-        <source>Reindex the accumulator database</source>
-        <translation>Herindexeer de verzameldatabase</translation>
-    </message>
-    <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
         <translation>Relay en mine data carrier transacties (standaard: %u)</translation>
     </message>
@@ -7221,14 +7008,6 @@ Rapids Portemonnee</translation>
         <translation>Opnieuw scannen...</translation>
     </message>
     <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>ResetMintZerocoin voltooid: </translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>ResetSpentZerocoin voltooid: </translation>
-    </message>
-    <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
         <translation>Voer regelmatig een thread om de portemonnee te spoelen uit (standaard: %u)</translation>
     </message>
@@ -7239,10 +7018,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>Zend transacties als zero fee transacties indien mogelijk (standaard: %u)</translation>
-    </message>
-    <message>
-        <source>Session timed out.</source>
-        <translation>Sessie verlopen.</translation>
     </message>
     <message>
         <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
@@ -7287,10 +7062,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Krimp debug.log bestand bij client startup (standaard: 1 wanneer geen -debug)</translation>
-    </message>
-    <message>
-        <source>Signing timed out.</source>
-        <translation>Ondertekening time out.</translation>
     </message>
     <message>
         <source>Signing transaction failed</source>
@@ -7349,10 +7120,6 @@ Rapids Portemonnee</translation>
         <translation>Synchronisatie voltooid</translation>
     </message>
     <message>
-        <source>Synchronization pending...</source>
-        <translation>Synchronisatie in afwachting...</translation>
-    </message>
-    <message>
         <source>Synchronizing budgets...</source>
         <translation>Budgeten synchroniseren...</translation>
     </message>
@@ -7371,14 +7138,6 @@ Rapids Portemonnee</translation>
     <message>
         <source>Syncing zRPD wallet...</source>
         <translation>Synchroniseren zRPD portemonnee...</translation>
-    </message>
-    <message>
-        <source>The coin spend has been used</source>
-        <translation>De muntuitgaven zijn gebruikt</translation>
-    </message>
-    <message>
-        <source>The transaction did not verify</source>
-        <translation>De transactie heeft niet geverifieerd</translation>
     </message>
     <message>
         <source>This help message</source>
@@ -7445,6 +7204,10 @@ Rapids Portemonnee</translation>
         <translation>Niet mogelijke om de initiële sleutel te genereren.</translation>
     </message>
     <message>
+        <source>Unable to generate keys</source>
+        <translation>Niet mogelijke om sleutels te genereren.</translation>
+    </message>
+    <message>
         <source>Unable to sign spork message, wrong key?</source>
         <translation>Kan sporkbericht niet tekenen, verkeerde sleutel?</translation>
     </message>
@@ -7455,6 +7218,10 @@ Rapids Portemonnee</translation>
     <message>
         <source>Unknown network specified in -onlynet: '%s'</source>
         <translation>Onbekend netwerk gespecificeerd in -onlynet: '%s'</translation>
+    </message>
+    <message>
+        <source>Unsupported logging category %s=%s.</source>
+        <translation>Niet-ondersteunde logboekcategorie %s=%s.</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -7545,6 +7312,10 @@ Rapids Portemonnee</translation>
         <translation>ZeroMQ notificatie opties:</translation>
     </message>
     <message>
+        <source>Zerocoin minting available only on regtest</source>
+        <translation>Zerocoin munting alleen beschikbaar via regtest</translation>
+    </message>
+    <message>
         <source>Zerocoin options:</source>
         <translation>Zerocoin opties:</translation>
     </message>
@@ -7570,6 +7341,10 @@ Rapids Portemonnee</translation>
     <message>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
+    </message>
+    <message>
+        <source>Include delegated</source>
+        <translation>Reken delegatie mee</translation>
     </message>
     <message>
         <source>PushButton</source>

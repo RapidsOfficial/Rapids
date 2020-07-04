@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -38,12 +38,6 @@
 #include "shlwapi.h"
 #endif
 
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
-#if BOOST_FILESYSTEM_VERSION >= 3
-#include <boost/filesystem/detail/utf8_codecvt_facet.hpp>
-#endif
-
 #include <QAbstractItemView>
 #include <QApplication>
 #include <QClipboard>
@@ -64,7 +58,7 @@
 
 
 #if BOOST_FILESYSTEM_VERSION >= 3
-static boost::filesystem::detail::utf8_codecvt_facet utf8;
+static fs::detail::utf8_codecvt_facet utf8;
 #endif
 
 #if defined(Q_OS_MAC)
@@ -84,6 +78,7 @@ extern double NSAppKitVersionNumber;
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 #include <CoreServices/CoreServices.h>
+#include <QProcess>
 
 void ForceActivation();
 #endif
@@ -130,9 +125,9 @@ CAmount parseValue(const QString& text, int displayUnit, bool* valid_out)
     return valid ? val : 0;
 }
 
-QString formatBalance(CAmount amount, int nDisplayUnit, bool isZrpd)
+QString formatBalance(CAmount amount, int nDisplayUnit)
 {
-    return (amount == 0) ? ("0.00 " + BitcoinUnits::name(nDisplayUnit, isZrpd)) : BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, amount, false, BitcoinUnits::separatorAlways, true, isZrpd);
+    return (amount == 0) ? ("0.00 " + BitcoinUnits::name(nDisplayUnit)) : BitcoinUnits::floorHtmlWithUnit(nDisplayUnit, amount, false, BitcoinUnits::separatorAlways, true);
 }
 
 void setupAddressWidget(QValidatedLineEdit* widget, QWidget* parent)
@@ -142,14 +137,14 @@ void setupAddressWidget(QValidatedLineEdit* widget, QWidget* parent)
     widget->setFont(bitcoinAddressFont());
     // We don't want translators to use own addresses in translations
     // and this is the only place, where this address is supplied.
-    widget->setPlaceholderText(QObject::tr("Enter RPD address (e.g. %1)").arg("RmphVWRT43hdZ9zncvPRgA94tuL2dvFXCL"));
+    widget->setPlaceholderText(QObject::tr("Enter Rapids address (e.g. %1)").arg("M6tGR83SQbie1SW72hjcWJvFfip5krte2Z"));
     widget->setValidator(new BitcoinAddressEntryValidator(parent));
     widget->setCheckValidator(new BitcoinAddressCheckValidator(parent));
 }
 
 void setupAmountWidget(QLineEdit* widget, QWidget* parent)
 {
-    QRegularExpression rx("^(\\d{0,9})((\\.|,)\\d{1,8})?$");
+    QRegularExpression rx("^(\\d{0,8})((\\.|,)\\d{1,8})?$");
     QValidator *validator = new QRegularExpressionValidator(rx, widget);
     widget->setValidator(validator);
 }
@@ -164,7 +159,7 @@ void updateWidgetTextAndCursorPosition(QLineEdit* widget, const QString& str)
 
 bool parseBitcoinURI(const QUrl& uri, SendCoinsRecipient* out)
 {
-    // return if URI is not valid or is no RPD: URI
+    // return if URI is not valid or is no Rapids: URI
     if (!uri.isValid() || uri.scheme() != QString(URI_SCHEME))
         return false;
 
@@ -251,7 +246,7 @@ QString formatBitcoinURI(const SendCoinsRecipient& info)
 
 bool isDust(const QString& address, const CAmount& amount)
 {
-    CTxDestination dest = CBitcoinAddress(address.toStdString()).Get();
+    CTxDestination dest = DecodeDestination(address.toStdString());
     CScript script = GetScriptForDestination(dest);
     CTxOut txOut(amount, script);
     return txOut.IsDust(::minRelayTxFee);
@@ -403,44 +398,40 @@ void bringToFront(QWidget* w)
     }
 }
 
+/* Open file with the associated application */
+bool openFile(fs::path path, bool isTextFile)
+{
+    bool ret = false;
+    if (fs::exists(path)) {
+        ret = QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(path)));
+#ifdef Q_OS_MAC
+        // Workaround for macOS-specific behavior; see btc@15409.
+        if (isTextFile && !ret) {
+            ret = QProcess::startDetached("/usr/bin/open", QStringList{"-t", boostPathToQString(path)});
+        }
+#endif
+    }
+    return ret;
+}
+
 bool openDebugLogfile()
 {
-    boost::filesystem::path pathDebug = GetDataDir() / "debug.log";
-
-    /* Open debug.log with the associated application */
-    if (boost::filesystem::exists(pathDebug))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathDebug)));
-    return false;
+    return openFile(GetDataDir() / "debug.log", true);
 }
 
 bool openConfigfile()
 {
-    boost::filesystem::path pathConfig = GetConfigFile();
-
-    /* Open rapids.conf with the associated application */
-    if (boost::filesystem::exists(pathConfig))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
-    return false;
+    return openFile(GetConfigFile(), true);
 }
 
 bool openMNConfigfile()
 {
-    boost::filesystem::path pathConfig = GetMasternodeConfigFile();
-
-    /* Open masternode.conf with the associated application */
-    if (boost::filesystem::exists(pathConfig))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathConfig)));
-    return false;
+    return openFile(GetMasternodeConfigFile(), true);
 }
 
 bool showBackups()
 {
-    boost::filesystem::path pathBackups = GetDataDir() / "backups";
-
-    /* Open folder with default browser */
-    if (boost::filesystem::exists(pathBackups))
-        return QDesktopServices::openUrl(QUrl::fromLocalFile(boostPathToQString(pathBackups)));
-    return false;
+    return openFile(GetDataDir() / "backups", false);
 }
 
 void SubstituteFonts(const QString& language)
@@ -636,21 +627,21 @@ bool DHMSTableWidgetItem::operator<(QTableWidgetItem const& item) const
 }
 
 #ifdef WIN32
-boost::filesystem::path static StartupShortcutPath()
+fs::path static StartupShortcutPath()
 {
     return GetSpecialFolderPath(CSIDL_STARTUP) / "Rapids.lnk";
 }
 
 bool GetStartOnSystemStartup()
 {
-    // check for RPD.lnk
-    return boost::filesystem::exists(StartupShortcutPath());
+    // check for Rapids.lnk
+    return fs::exists(StartupShortcutPath());
 }
 
 bool SetStartOnSystemStartup(bool fAutoStart)
 {
     // If the shortcut exists already, remove it for updating
-    boost::filesystem::remove(StartupShortcutPath());
+    fs::remove(StartupShortcutPath());
 
     if (fAutoStart) {
         CoInitialize(NULL);
@@ -704,10 +695,8 @@ bool SetStartOnSystemStartup(bool fAutoStart)
 // Follow the Desktop Application Autostart Spec:
 //  http://standards.freedesktop.org/autostart-spec/autostart-spec-latest.html
 
-boost::filesystem::path static GetAutostartDir()
+fs::path static GetAutostartDir()
 {
-    namespace fs = boost::filesystem;
-
     char* pszConfigHome = getenv("XDG_CONFIG_HOME");
     if (pszConfigHome) return fs::path(pszConfigHome) / "autostart";
     char* pszHome = getenv("HOME");
@@ -715,14 +704,14 @@ boost::filesystem::path static GetAutostartDir()
     return fs::path();
 }
 
-boost::filesystem::path static GetAutostartFilePath()
+fs::path static GetAutostartFilePath()
 {
     return GetAutostartDir() / "rapids.desktop";
 }
 
 bool GetStartOnSystemStartup()
 {
-    boost::filesystem::ifstream optionFile(GetAutostartFilePath());
+    fs::ifstream optionFile(GetAutostartFilePath());
     if (!optionFile.good())
         return false;
     // Scan through file for "Hidden=true":
@@ -741,16 +730,16 @@ bool GetStartOnSystemStartup()
 bool SetStartOnSystemStartup(bool fAutoStart)
 {
     if (!fAutoStart)
-        boost::filesystem::remove(GetAutostartFilePath());
+        fs::remove(GetAutostartFilePath());
     else {
         char pszExePath[MAX_PATH + 1];
         memset(pszExePath, 0, sizeof(pszExePath));
         if (readlink("/proc/self/exe", pszExePath, sizeof(pszExePath) - 1) == -1)
             return false;
 
-        boost::filesystem::create_directories(GetAutostartDir());
+        fs::create_directories(GetAutostartDir());
 
-        boost::filesystem::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out | std::ios_base::trunc);
+        fs::ofstream optionFile(GetAutostartFilePath(), std::ios_base::out | std::ios_base::trunc);
         if (!optionFile.good())
             return false;
         // Write a rapids.desktop file to the autostart directory:
@@ -865,7 +854,7 @@ bool isExternal(QString theme)
     if (theme.isEmpty())
         return false;
 
-    return (theme.operator!=("default") && theme.operator!=("default-dark"));
+    return (theme.operator!=("default"));
 }
 
 // Open CSS when configured
@@ -879,7 +868,7 @@ QString loadStyleSheet()
     if (isExternal(theme)) {
         // External CSS
         settings.setValue("fCSSexternal", true);
-        boost::filesystem::path pathAddr = GetDataDir() / "themes/";
+        fs::path pathAddr = GetDataDir() / "themes/";
         cssName = pathAddr.string().c_str() + theme + "/css/theme.css";
     } else {
         // Build-in CSS
@@ -907,23 +896,23 @@ void setClipboard(const QString& str)
 }
 
 #if BOOST_FILESYSTEM_VERSION >= 3
-boost::filesystem::path qstringToBoostPath(const QString& path)
+fs::path qstringToBoostPath(const QString& path)
 {
-    return boost::filesystem::path(path.toStdString(), utf8);
+    return fs::path(path.toStdString(), utf8);
 }
 
-QString boostPathToQString(const boost::filesystem::path& path)
+QString boostPathToQString(const fs::path& path)
 {
     return QString::fromStdString(path.string(utf8));
 }
 #else
 #warning Conversion between boost path and QString can use invalid character encoding with boost_filesystem v2 and older
-boost::filesystem::path qstringToBoostPath(const QString& path)
+fs::path qstringToBoostPath(const QString& path)
 {
-    return boost::filesystem::path(path.toStdString());
+    return fs::path(path.toStdString());
 }
 
-QString boostPathToQString(const boost::filesystem::path& path)
+QString boostPathToQString(const fs::path& path)
 {
     return QString::fromStdString(path.string());
 }

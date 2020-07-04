@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2019-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -21,7 +21,6 @@
 #include "qt/rapids/send.h"
 #include "qt/rapids/receivewidget.h"
 #include "qt/rapids/addresseswidget.h"
-#include "qt/rapids/privacywidget.h"
 #include "qt/rapids/coldstakingwidget.h"
 #include "qt/rapids/masternodeswidget.h"
 #include "qt/rapids/snackbar.h"
@@ -36,7 +35,7 @@ class WalletModel;
 
 
 /**
-  RPD GUI main class. This class represents the main window of the RPD UI. It communicates with both the client and
+  Rapids GUI main class. This class represents the main window of the Rapids UI. It communicates with both the client and
   wallet models to give the user an up-to-date view of the current core state.
 */
 class RapidsGUI : public QMainWindow
@@ -67,10 +66,11 @@ public Q_SLOTS:
     void goToSend();
     void goToReceive();
     void goToAddresses();
-    void goToPrivacy();
     void goToMasterNodes();
     void goToColdStaking();
     void goToSettings();
+    void goToSettingsInfo();
+    void openNetworkMonitor();
 
     void connectActions();
 
@@ -131,7 +131,6 @@ private:
     SendWidget *sendWidget = nullptr;
     ReceiveWidget *receiveWidget = nullptr;
     AddressesWidget *addressesWidget = nullptr;
-    PrivacyWidget *privacyWidget = nullptr;
     MasterNodesWidget *masterNodesWidget = nullptr;
     ColdStakingWidget *coldStakingWidget = nullptr;
     SettingsWidget* settingsWidget = nullptr;

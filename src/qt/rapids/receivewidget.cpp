@@ -42,39 +42,31 @@ ReceiveWidget::ReceiveWidget(RapidsGUI* parent) :
     ui->right->setContentsMargins(0,9,0,0);
 
     // Title
-    ui->labelTitle->setText(tr("Receive"));
-    ui->labelSubtitle1->setText(tr("Scan the QR code or copy the address to receive RPD."));
     setCssTitleScreen(ui->labelTitle);
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     // Address
-    ui->labelAddress->setText(tr("No address "));
     setCssProperty(ui->labelAddress, "label-address-box");
 
-    ui->labelDate->setText("Dec. 19, 2018");
     setCssSubtitleScreen(ui->labelDate);
-    ui->labelLabel->setText("");
     setCssSubtitleScreen(ui->labelLabel);
 
     // Options
-    ui->btnMyAddresses->setTitleClassAndText("btn-title-grey", "My Addresses");
-    ui->btnMyAddresses->setSubTitleClassAndText("text-subtitle", "List your own addresses.");
+    ui->btnMyAddresses->setTitleClassAndText("btn-title-grey", tr("My Addresses"));
+    ui->btnMyAddresses->setSubTitleClassAndText("text-subtitle", tr("List your own addresses"));
     ui->btnMyAddresses->layout()->setMargin(0);
     ui->btnMyAddresses->setRightIconClass("ic-arrow");
 
-    ui->btnRequest->setTitleClassAndText("btn-title-grey", "Create Request");
-    ui->btnRequest->setSubTitleClassAndText("text-subtitle", "Request payment with a fixed amount.");
+    ui->btnRequest->setTitleClassAndText("btn-title-grey", tr("Create Request"));
+    ui->btnRequest->setSubTitleClassAndText("text-subtitle", tr("Request payment with a fixed amount"));
     ui->btnRequest->layout()->setMargin(0);
 
-    ui->pushButtonLabel->setText(tr("Add Label"));
     ui->pushButtonLabel->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonLabel, "btn-secundary-label");
 
-    ui->pushButtonNewAddress->setText(tr("Generate Address"));
     ui->pushButtonNewAddress->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonNewAddress, "btn-secundary-new-address");
 
-    ui->pushButtonCopy->setText(tr("Copy"));
     ui->pushButtonCopy->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->pushButtonCopy, "btn-secundary-copy");
 
@@ -140,7 +132,7 @@ void ReceiveWidget::refreshView(QString refreshAddress)
     try {
         QString latestAddress = (refreshAddress.isEmpty()) ? this->addressTableModel->getAddressToShow() : refreshAddress;
         if (latestAddress.isEmpty()) { // new default address
-            CBitcoinAddress newAddress;
+            Destination newAddress;
             PairResult r = walletModel->getNewAddress(newAddress, "Default");
             // Check for generation errors
             if (!r.result) {
@@ -151,7 +143,7 @@ void ReceiveWidget::refreshView(QString refreshAddress)
             latestAddress = QString::fromStdString(newAddress.ToString());
         }
         ui->labelAddress->setText(latestAddress);
-        int64_t time = walletModel->getKeyCreationTime(CBitcoinAddress(latestAddress.toStdString()));
+        int64_t time = walletModel->getKeyCreationTime(DecodeDestination(latestAddress.toStdString()));
         ui->labelDate->setText(GUIUtil::dateTimeStr(QDateTime::fromTime_t(static_cast<uint>(time))));
         updateQr(latestAddress);
         updateLabel();
@@ -183,7 +175,7 @@ void ReceiveWidget::updateQr(QString address)
     ui->labelQrImg->setText("");
 
     QString error;
-    QColor qrColor("#384f2f");
+    QColor qrColor("#383838");
     QPixmap pixmap = encodeToQr(uri, error, qrColor);
     if (!pixmap.isNull()) {
         qrImage = &pixmap;
@@ -209,9 +201,9 @@ void ReceiveWidget::onLabelClicked()
         dialog->setData(info->address, addressTableModel->labelForAddress(info->address));
         if (openDialogWithOpaqueBackgroundY(dialog, window, 3.5, 6)) {
             QString label = dialog->getLabel();
-            const CBitcoinAddress address = CBitcoinAddress(info->address.toUtf8().constData());
+            const CTxDestination address = DecodeDestination(info->address.toUtf8().constData());
             if (!label.isEmpty() && walletModel->updateAddressBookLabels(
-                    address.Get(),
+                    address,
                     label.toUtf8().constData(),
                     AddressBook::AddressBookPurpose::RECEIVE
             )
@@ -236,7 +228,7 @@ void ReceiveWidget::onNewAddressClicked()
             inform(tr("Cannot create new address, wallet locked"));
             return;
         }
-        CBitcoinAddress address;
+        Destination address;
         PairResult r = walletModel->getNewAddress(address, "");
 
         // Check for validity

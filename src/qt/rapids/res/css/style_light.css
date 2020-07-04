@@ -805,8 +805,6 @@ QProgressBar[cssClass="progress-sync"]::chunk:horizontal {
     stop: 2 #000000,);
 }
 
-
-
 /*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 HH       LISTS ELEMENTS
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
@@ -989,6 +987,10 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     font-size:17px;
 }
 
+*[cssClass="text-main-hash"] {
+    color:#000000;
+    font-size:12px;
+}
 
 *[cssClass="text-main-settings"] {
     color:#000000;
@@ -1023,6 +1025,7 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     background-color:transparent;
     border-radius:0;
 }
+
 
 QGroupBox::title {
     color:#000000;
@@ -1642,7 +1645,7 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 *[cssClass="edit-primary-disabled"] {
     border:  1px solid #33ffffff;
-    background-color:#0f0b16;
+    background-color:#0c160b;
     font-size:18px;
     border-radius: 2px;
     padding:8px;
@@ -1671,7 +1674,6 @@ HH      SPLASH
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 *[cssClass="container-splash"] {
-    background-color:transparent;
     background-image: url("://bg-splash-png");
 }
 
@@ -1718,9 +1720,10 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     font-size:13px;
 }
 
-*[cssClass="text-amount-grey"] {
-    color:#ffffff;
-    font-size:20px;
+*[cssClass="ic-warning"] {
+    qproperty-icon: url("://ic-transaction-warning") off,
+    url("://ic-transaction-warning") on ;
+    qproperty-iconSize: 24px 24px;
 }
 
 *[cssClass="text-stake-rpd"] {
@@ -1768,10 +1771,6 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
     padding-left:4px;
 }
 
-*[cssClass="square-chart-zrpd"] {
-    background-color:#000000;
-    border:none;
-}
 
 *[cssClass="square-chart-rpd"] {
     background-color:#1bb14d;
@@ -2026,7 +2025,7 @@ HH       SPIN BOX
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 
-QSpinBox[cssClass="btn-spin-box"] {
+QSpinBox[cssClass="btn-spin-box"], QDoubleSpinBox[cssClass="btn-spin-box"] {
     background-color:#FFFFFF;
     padding:10px 20px 10px 10px;
     font-size:16px;
@@ -2037,7 +2036,7 @@ QSpinBox[cssClass="btn-spin-box"] {
 }
 
 
-QSpinBox[cssClass="btn-spin-box"]::up-button {
+QSpinBox[cssClass="btn-spin-box"]::up-button, QDoubleSpinBox[cssClass="btn-spin-box"]::up-button {
     image: url("://ic-arrow-drop-up-purple");
     subcontrol-position: top right; width: 20px; height: 20px;
     border: 0px;
@@ -2045,7 +2044,7 @@ QSpinBox[cssClass="btn-spin-box"]::up-button {
     margin:0px 5px 0px 0px;
 }
 
-QSpinBox[cssClass="btn-spin-box"]::down-button {
+QSpinBox[cssClass="btn-spin-box"]::down-button, QDoubleSpinBox[cssClass="btn-spin-box"]::down-button {
     image: url("://ic-arrow-drop-down-purple");
     subcontrol-position: bottom right; width: 20px; height: 20px;
     border: 0px;
@@ -2073,6 +2072,21 @@ QComboBox[cssClass="btn-combo"]::down-arrow {
     image: url("://ic-arrow-drop-down");
     width: 24px;
     height: 24px;
+}
+
+QComboBox[cssClass="btn-combo-small"] {
+    background-color:#ffffff;
+    padding:8px 14px 8px 8px;
+    font-size:13px;
+    border:1px solid #ffffff;
+    color: #707070;
+    text-align: right;
+}
+
+QComboBox[cssClass="btn-combo-small"]::down-arrow {
+    image: url("://ic-arrow-drop-down");
+    width: 15px;
+    height: 15px;
 }
 
 QComboBox[cssClass="btn-combo-edit"] {
@@ -2341,11 +2355,6 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 *[cssClass="coin-icon-rpd"] {
 }
 
-*[cssClass="coin-icon-zrpd"] {
-}
-
-
-
 /*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 HH      Dialog
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
@@ -2610,17 +2619,17 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 }
 
 *[cssClass="text-subtitle-faq"] {
-    color:#FFFFFF;
+    color:#000;
     font-size:22px;
 }
 
 *[cssClass="text-content-faq"] {
-    color:#FFFFFF;
+    color:#000;
     font-size:18px;
 }
 
 *[cssClass="container-number-faq"] {
-    color:#FFFFFF;
+    color:#fff;
     background-color: #222222;
     font-size:14px;
     border-radius: 2px;
@@ -2636,7 +2645,7 @@ QPushButton[cssClass="btn-faq-exit"] {
     border:none;
     padding:0 30px 0 0;
     font-size:18px;
-    color: #CCFFFFFF;
+    color: #CC000000;
     text-align:left;
 }
 
@@ -2654,16 +2663,16 @@ QPushButton[cssClass="btn-faq-options"] {
     background-color:transparent;
     border:none;
     font-size:18px;
-    color: #FFFFFF;
+    color: #222222;
     padding:0 20px;
     text-align:left;
 }
 
 QPushButton[cssClass="btn-faq-options"]:checked {
-    background-color: rgba(176 ,136 ,255, 0.2);
+    background-color: rgba(27, 177, 77, 0.2);
     border:none;
     font-size:18px;
-    color: #FFFFFF;
+    color: #222222;
     padding:0 20px;
     text-align:left;
 }
@@ -2671,7 +2680,7 @@ QPushButton[cssClass="btn-faq-options"]:checked {
 
 #scrollAreaFaq QScrollBar:vertical {
     border: 0px solid #bababa;
-    background:#0f0b16;
+    background:#0c160b;
     width:4px;
     margin: 0px 0px 0px 0px;
 }
@@ -2683,14 +2692,14 @@ QPushButton[cssClass="btn-faq-options"]:checked {
 }
 
 #scrollAreaFaq QScrollBar::add-line:vertical {
-    background: #0f0b16;
+    background: #0c160b;
     height: 0px;
     subcontrol-position: bottom;
     subcontrol-origin: margin;
 }
 
 #scrollAreaFaq QScrollBar::sub-line:vertical {
-    background: #0f0b16;
+    background: #0c160b;
     height: 0 px;
     subcontrol-position: top;
     subcontrol-origin: margin;
@@ -2714,7 +2723,6 @@ QPushButton[cssClass="btn-faq-options"]:checked {
     background: none;
     color: none;
 }
-
 
 /*HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 HH       WELCOME
@@ -3153,8 +3161,8 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 
 
 *[cssClass="container-snackbar"]{
-    background-color:#05531f;
-    border-top:2px solid #175201;
+    background-color:#1c1f26;
+    border-top:2px solid #214224;
 }
 
 *[cssClass="text-snackbar"]{

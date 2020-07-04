@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2016-2019 The PIVX developers
+// Copyright (c) 2016-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -21,9 +21,7 @@ enum SporkId : int32_t {
     SPORK_13_ENABLE_SUPERBLOCKS                 = 10012,
     SPORK_14_NEW_PROTOCOL_ENFORCEMENT           = 10013,
     SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2         = 10014,
-    SPORK_16_ZEROCOIN_MAINTENANCE_MODE          = 10015,
     SPORK_17_COLDSTAKING_ENFORCEMENT            = 10017,
-    SPORK_18_ZEROCOIN_PUBLICSPEND_V4            = 10018,
 
     SPORK_INVALID                               = -1
 };

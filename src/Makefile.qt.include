@@ -73,7 +73,6 @@ QT_MOC_CPP = \
   qt/moc_askpassphrasedialog.cpp \
   qt/moc_bantablemodel.cpp \
   qt/moc_bitcoinaddressvalidator.cpp \
-  qt/moc_bitcoinamountfield.cpp \
   qt/rapids/moc_rapidsgui.cpp \
   qt/moc_bitcoinunits.cpp \
   qt/moc_clientmodel.cpp \
@@ -104,6 +103,7 @@ QT_MOC_CPP = \
   qt/moc_walletmodel.cpp \
   qt/rapids/moc_loadingdialog.cpp \
   qt/rapids/moc_pwidget.cpp \
+  qt/rapids/moc_focuseddialog.cpp \
   qt/rapids/moc_snackbar.cpp \
   qt/rapids/moc_navmenuwidget.cpp \
   qt/rapids/moc_lockunlock.cpp \
@@ -139,7 +139,6 @@ QT_MOC_CPP = \
   qt/rapids/moc_tooltipmenu.cpp \
   qt/rapids/moc_addresseswidget.cpp \
   qt/rapids/moc_defaultdialog.cpp \
-  qt/rapids/moc_privacywidget.cpp \
   qt/rapids/moc_coldstakingwidget.cpp \
   qt/rapids/settings/moc_settingsbackupwallet.cpp \
   qt/rapids/settings/moc_settingsexportcsv.cpp \
@@ -164,7 +163,6 @@ BITCOIN_MM = \
 
 QT_MOC = \
   qt/rapids.moc \
-  qt/bitcoinamountfield.moc \
   qt/intro.moc \
   qt/rpcconsole.moc \
   qt/rapids/settings/moc_settingsconsolewidget.cpp
@@ -184,7 +182,6 @@ BITCOIN_QT_H = \
   qt/askpassphrasedialog.h \
   qt/bantablemodel.h \
   qt/bitcoinaddressvalidator.h \
-  qt/bitcoinamountfield.h \
   qt/rapids/rapidsgui.h \
   qt/bitcoinunits.h \
   qt/clientmodel.h \
@@ -224,6 +221,7 @@ BITCOIN_QT_H = \
   qt/rapids/loadingdialog.h \
   qt/winshutdownmonitor.h \
   qt/rapids/pwidget.h \
+  qt/rapids/focuseddialog.h \
   qt/rapids/guitransactionsutils.h \
   qt/rapids/snackbar.h \
   qt/rapids/navmenuwidget.h \
@@ -283,273 +281,215 @@ BITCOIN_QT_H = \
   qt/rapids/splash.h
 
 RES_ICONS = \
-  qt/res/icons/add.png \
-  qt/res/icons/address-book.png \
   qt/res/icons/bitcoin.ico \
   qt/res/icons/bitcoin.png \
-  qt/res/icons/bitcoin_testnet.ico \
-  qt/res/icons/bitcoin_testnet.png \
-  qt/res/icons/bitcoin_regtest.png \
-  qt/res/icons/browse.png \
-  qt/res/icons/clock1.png \
-  qt/res/icons/clock2.png \
-  qt/res/icons/clock3.png \
-  qt/res/icons/clock4.png \
-  qt/res/icons/clock5.png \
-  qt/res/icons/configure.png \
-  qt/res/icons/connect0_16.png \
-  qt/res/icons/connect1_16.png \
-  qt/res/icons/connect2_16.png \
-  qt/res/icons/connect3_16.png \
-  qt/res/icons/connect4_16.png \
-  qt/res/icons/debugwindow.png \
-  qt/res/icons/edit.png \
-  qt/res/icons/editcopy.png \
-  qt/res/icons/editpaste.png \
-  qt/res/icons/explorer.png \
-  qt/res/icons/export.png \
-  qt/res/icons/eye.png \
-  qt/res/icons/eye_minus.png \
-  qt/res/icons/eye_plus.png \
-  qt/res/icons/filesave.png \
-  qt/res/icons/history.png \
-  qt/res/icons/key.png \
   qt/res/icons/lock_closed.png \
   qt/res/icons/lock_open.png \
-  qt/res/icons/masternodes.png \
-  qt/res/icons/onion.png \
-  qt/res/icons/overview.png \
-  qt/res/icons/qrcode.png \
-  qt/res/icons/quit.png \
-  qt/res/icons/receive.png \
-  qt/res/icons/receive_dark.png \
-  qt/res/icons/privacy.png \
-  qt/res/icons/remove.png \
-  qt/res/icons/send.png \
-  qt/res/icons/send_dark.png \
-  qt/res/icons/governance.png \
-  qt/res/icons/governance_dark.png \
-  qt/res/icons/staking_active.png \
-  qt/res/icons/staking_inactive.png \
-  qt/res/icons/synced.png \
-  qt/res/icons/trade.png \
-  qt/res/icons/transaction0.png \
-  qt/res/icons/transaction2.png \
-  qt/res/icons/transaction_conflicted.png \
-  qt/res/icons/tx_inout.png \
-  qt/res/icons/tx_input.png \
-  qt/res/icons/tx_output.png \
-  qt/res/icons/tx_mined.png \
-  qt/res/icons/ic-transaction-received.svg \
-  qt/res/icons/ic-transaction-mint.svg \
-  qt/res/icons/ic-transaction-sent.svg \
-  qt/res/icons/ic-transaction-staked.svg \
-  qt/res/icons/unit_rapids.png \
-  qt/res/icons/unit_mrapids.png \
-  qt/res/icons/unit_urapids.png \
-  qt/res/icons/unit_trapids.png \
-  qt/res/icons/unit_tmrapids.png \
-  qt/res/icons/unit_turapids.png \
-  qt/res/icons/yesvote.png \
-  qt/res/icons/novote.png \
-  qt/res/icons/abstainvote.png \
+  qt/res/icons/ic-transaction-received.png \
+  qt/res/icons/ic-transaction-mint.png \
+  qt/res/icons/ic-transaction-sent.png \
+  qt/res/icons/ic-transaction-staked.png \
   qt/rapids/res/img/bg-dashboard-banner.png \
-  qt/rapids/res/img/bg-multi-number-dark.svg \
-  qt/rapids/res/img/ic-check-locked.svg \
-  qt/rapids/res/img/ic-nav-address.svg \
-  qt/rapids/res/img/ic-update.svg \
-  qt/rapids/res/img/bg-multi-number.svg \
-  qt/rapids/res/img/ic-check-mint-off.svg \
-  qt/rapids/res/img/ic-nav-cold-staking.svg \
-  qt/rapids/res/img/ic-nav-cold-staking-active.svg \
-  qt/rapids/res/img/ic-nav-dashboard-active.svg \
-  qt/rapids/res/img/ic-wallet-status-locked.svg \
-  qt/rapids/res/img/bg-splash.svg \
+  qt/rapids/res/img/bg-multi-number-dark.png \
+  qt/rapids/res/img/ic-check-locked.png \
+  qt/rapids/res/img/ic-nav-address.png \
+  qt/rapids/res/img/ic-update.png \
+  qt/rapids/res/img/bg-multi-number.png \
+  qt/rapids/res/img/ic-check-mint-off.png \
+  qt/rapids/res/img/ic-nav-cold-staking.png \
+  qt/rapids/res/img/ic-nav-cold-staking-active.png \
+  qt/rapids/res/img/ic-nav-dashboard-active.png \
+  qt/rapids/res/img/ic-wallet-status-locked.png \
   qt/rapids/res/img/bg-splash.png \
-  qt/rapids/res/img/ic-check-mint.svg \
-  qt/rapids/res/img/ic-nav-dashboard-hover.svg \
-  qt/rapids/res/img/ic-wallet-status-staking.svg \
-  qt/rapids/res/img/ic-check-peers-off.svg \
-  qt/rapids/res/img/ic-nav-dashboard.svg \
-  qt/rapids/res/img/ic-wallet-status-unlocked.svg \
-  qt/rapids/res/img/ic-check-peers.svg \
-  qt/rapids/res/img/ic-nav-master-active.svg \
-  qt/rapids/res/img/ic-watch-password-white.svg \
+  qt/rapids/res/img/bg-splash.png \
+  qt/rapids/res/img/ic-check-mint.png \
+  qt/rapids/res/img/ic-nav-dashboard-hover.png \
+  qt/rapids/res/img/ic-wallet-status-staking.png \
+  qt/rapids/res/img/ic-check-peers-off.png \
+  qt/rapids/res/img/ic-nav-dashboard.png \
+  qt/rapids/res/img/ic-wallet-status-unlocked.png \
+  qt/rapids/res/img/ic-check-peers.png \
+  qt/rapids/res/img/ic-nav-master-active.png \
+  qt/rapids/res/img/ic-watch-password-white.png \
   qt/rapids/res/img/bg-welcome-container.jpg \
   qt/rapids/res/img/bg-welcome-container.png \
-  qt/rapids/res/img/bg-welcome-container.svg \
-  qt/rapids/res/img/ic-check-staking-off.svg \
-  qt/rapids/res/img/ic-nav-master-hover.svg \
-  qt/rapids/res/img/ic-watch-password.svg \
+  qt/rapids/res/img/bg-welcome-container.png \
+  qt/rapids/res/img/bg-welcome-container@2x.png \
+  qt/rapids/res/img/bg-welcome-container@3x.png \
+  qt/rapids/res/img/ic-check-staking-off.png \
+  qt/rapids/res/img/ic-nav-master-hover.png \
+  qt/rapids/res/img/ic-watch-password.png \
   qt/rapids/res/img/bg-welcome.jpg \
-  qt/rapids/res/img/bg-welcome.svg \
   qt/rapids/res/img/bg-welcome.png \
-  qt/rapids/res/img/ic-check-staking.svg \
-  qt/rapids/res/img/ic-nav-master.svg \
+  qt/rapids/res/img/bg-welcome@2x.jpg \
+  qt/rapids/res/img/bg-welcome@3x.jpg \
+  qt/rapids/res/img/bg-welcome.png \
+  qt/rapids/res/img/ic-check-staking.png \
+  qt/rapids/res/img/ic-nav-master.png \
   qt/rapids/res/img/img-dashboard-banner.jpg \
-  qt/rapids/res/img/btn-radio-active.svg \
-  qt/rapids/res/img/ic-check-sync-off.svg \
-  qt/rapids/res/img/ic-nav-privacy-active.svg \
-  qt/rapids/res/img/img-empty-contacts.svg \
-  qt/rapids/res/img/btn-radio-off.svg \
+  qt/rapids/res/img/btn-radio-active.png \
+  qt/rapids/res/img/ic-check-sync-off.png \
+  qt/rapids/res/img/ic-nav-privacy-active.png \
+  qt/rapids/res/img/img-empty-contacts.png \
+  qt/rapids/res/img/btn-radio-off.png \
   qt/rapids/res/img/ic-check-sync.png \
-  qt/rapids/res/img/ic-nav-privacy-hover.svg \
-  qt/rapids/res/img/img-empty-dark-contacts.svg \
-  qt/rapids/res/img/ic-contact-arrow-down.svg \
-  qt/rapids/res/img/ic-contact-arrow-down-white.svg \
-  qt/rapids/res/img/ic-check-sync.svg \
-  qt/rapids/res/img/ic-check-faq.svg \
-  qt/rapids/res/img/ic-nav-privacy.svg \
-  qt/rapids/res/img/img-empty-dark-error.svg \
-  qt/rapids/res/img/ic-add-label.svg \
-  qt/rapids/res/img/ic-pending.svg \
-  qt/rapids/res/img/ic-check-theme-dark.svg \
-  qt/rapids/res/img/ic-nav-receive-active.svg \
-  qt/rapids/res/img/img-empty-dark-masternode.svg \
-  qt/rapids/res/img/ic-add-liliac.svg \
-  qt/rapids/res/img/ic-check-theme-light.svg \
-  qt/rapids/res/img/ic-nav-receive-hover.svg \
-  qt/rapids/res/img/img-empty-dark-multisend.svg \
-  qt/rapids/res/img/ic-add-purple.svg \
-  qt/rapids/res/img/ic-check-white.svg \
-  qt/rapids/res/img/ic-nav-receive.svg \
-  qt/rapids/res/img/img-empty-dark-peers.svg \
-  qt/rapids/res/img/ic-add.svg \
-  qt/rapids/res/img/ic-check.svg \
-  qt/rapids/res/img/ic-nav-send-active.svg \
-  qt/rapids/res/img/img-empty-dark-staking-off.svg \
-  qt/rapids/res/img/img-empty-dark-staking-on.svg \
-  qt/rapids/res/img/ic-address-book-grey.svg \
-  qt/rapids/res/img/ic-chevron-left.svg \
-  qt/rapids/res/img/ic-nav-send-hover.svg \
-  qt/rapids/res/img/img-empty-dark-transactions.svg \
-  qt/rapids/res/img/ic-address-book-white.svg \
-  qt/rapids/res/img/ic-chevron-right.svg \
-  qt/rapids/res/img/ic-nav-send.svg \
-  qt/rapids/res/img/img-empty-error.svg \
-  qt/rapids/res/img/ic-address-book.svg \
-  qt/rapids/res/img/ic-clear-liliac.svg \
-  qt/rapids/res/img/ic-nav-settings-active.svg \
-  qt/rapids/res/img/img-empty-masternode.svg \
-  qt/rapids/res/img/ic-address-send-white.svg \
-  qt/rapids/res/img/ic-clear-purple.svg \
-  qt/rapids/res/img/ic-nav-settings-hover.svg \
-  qt/rapids/res/img/img-empty-multisend.svg \
-  qt/rapids/res/img/ic-address-send.svg \
-  qt/rapids/res/img/ic-close-white.svg \
-  qt/rapids/res/img/ic-nav-settings.svg \
-  qt/rapids/res/img/img-empty-peers.svg \
-  qt/rapids/res/img/img-empty-privacy.svg \
-  qt/rapids/res/img/img-empty-privacy-dark.svg \
-  qt/rapids/res/img/ic-arrow-drop-down-white.svg \
-  qt/rapids/res/img/ic-close.svg \
-  qt/rapids/res/img/ic-radio-liliac-on.svg \
-  qt/rapids/res/img/img-empty-staking-off.svg \
-  qt/rapids/res/img/ic-arrow-drop-down.svg \
-  qt/rapids/res/img/ic-coin-rpd.svg \
-  qt/rapids/res/img/ic-receive-off.svg \
-  qt/rapids/res/img/img-empty-staking-on.svg \
-  qt/rapids/res/img/ic-arrow-drop-up-white.svg \
-  qt/rapids/res/img/ic-coin-zrpd.png \
-  qt/rapids/res/img/ic-receive-on.svg \
-  qt/rapids/res/img/img-empty-transactions.svg \
-  qt/rapids/res/img/ic-arrow-drop-up.svg \
-  qt/rapids/res/img/ic-coin-zrpd.svg \
-  qt/rapids/res/img/ic-received.svg \
+  qt/rapids/res/img/ic-nav-privacy-hover.png \
+  qt/rapids/res/img/img-empty-dark-contacts.png \
+  qt/rapids/res/img/ic-contact-arrow-down.png \
+  qt/rapids/res/img/ic-contact-arrow-down-white.png \
+  qt/rapids/res/img/ic-check-sync.png \
+  qt/rapids/res/img/ic-check-faq.png \
+  qt/rapids/res/img/ic-nav-privacy.png \
+  qt/rapids/res/img/img-empty-dark-error.png \
+  qt/rapids/res/img/ic-add-label.png \
+  qt/rapids/res/img/ic-pending.png \
+  qt/rapids/res/img/ic-check-theme-dark.png \
+  qt/rapids/res/img/ic-nav-receive-active.png \
+  qt/rapids/res/img/img-empty-dark-masternode.png \
+  qt/rapids/res/img/ic-add-liliac.png \
+  qt/rapids/res/img/ic-check-theme-light.png \
+  qt/rapids/res/img/ic-nav-receive-hover.png \
+  qt/rapids/res/img/img-empty-dark-multisend.png \
+  qt/rapids/res/img/ic-add-purple.png \
+  qt/rapids/res/img/ic-check-white.png \
+  qt/rapids/res/img/ic-nav-receive.png \
+  qt/rapids/res/img/img-empty-dark-peers.png \
+  qt/rapids/res/img/ic-add.png \
+  qt/rapids/res/img/ic-check.png \
+  qt/rapids/res/img/ic-nav-send-active.png \
+  qt/rapids/res/img/img-empty-dark-staking-off.png \
+  qt/rapids/res/img/img-empty-dark-staking-on.png \
+  qt/rapids/res/img/ic-address-book-grey.png \
+  qt/rapids/res/img/ic-chevron-left.png \
+  qt/rapids/res/img/ic-nav-send-hover.png \
+  qt/rapids/res/img/img-empty-dark-transactions.png \
+  qt/rapids/res/img/ic-address-book-white.png \
+  qt/rapids/res/img/ic-chevron-right.png \
+  qt/rapids/res/img/ic-nav-send.png \
+  qt/rapids/res/img/img-empty-error.png \
+  qt/rapids/res/img/ic-address-book.png \
+  qt/rapids/res/img/ic-clear-liliac.png \
+  qt/rapids/res/img/ic-nav-settings-active.png \
+  qt/rapids/res/img/img-empty-masternode.png \
+  qt/rapids/res/img/ic-address-send-white.png \
+  qt/rapids/res/img/ic-clear-purple.png \
+  qt/rapids/res/img/ic-nav-settings-hover.png \
+  qt/rapids/res/img/img-empty-multisend.png \
+  qt/rapids/res/img/ic-address-send.png \
+  qt/rapids/res/img/ic-close-white.png \
+  qt/rapids/res/img/ic-nav-settings.png \
+  qt/rapids/res/img/img-empty-peers.png \
+  qt/rapids/res/img/img-empty-privacy.png \
+  qt/rapids/res/img/img-empty-privacy-dark.png \
+  qt/rapids/res/img/ic-arrow-drop-down-white.png \
+  qt/rapids/res/img/ic-close.png \
+  qt/rapids/res/img/ic-radio-liliac-on.png \
+  qt/rapids/res/img/img-empty-staking-off.png \
+  qt/rapids/res/img/ic-arrow-drop-down.png \
+  qt/rapids/res/img/ic-coin-rpd.png \
+  qt/rapids/res/img/ic-receive-off.png \
+  qt/rapids/res/img/img-empty-staking-on.png \
+  qt/rapids/res/img/ic-arrow-drop-up-white.png \
+  qt/rapids/res/img/ic-receive-on.png \
+  qt/rapids/res/img/img-empty-transactions.png \
+  qt/rapids/res/img/ic-arrow-drop-up.png \
+  qt/rapids/res/img/ic-received.png \
   qt/rapids/res/img/img-logo-rapids.png \
-  qt/rapids/res/img/ic-arrow-drop-white-down.svg \
-  qt/rapids/res/img/ic-combo-box.svg \
-  qt/rapids/res/img/ic-send.svg \
-  qt/rapids/res/img/ic-arrow-purple-down.svg \
-  qt/rapids/res/img/ic-connect.svg \
-  qt/rapids/res/img/ic-submenu-lock.svg \
-  qt/rapids/res/img/img-logo-rapids.svg \
-  qt/rapids/res/img/ic-arrow-right-white.svg \
-  qt/rapids/res/img/ic-arrow-left-white.svg \
-  qt/rapids/res/img/ic-arrow-left.svg \
-  qt/rapids/res/img/ic-copy-liliac.svg \
-  qt/rapids/res/img/ic-submenu-staking.svg \
+  qt/rapids/res/img/ic-arrow-drop-white-down.png \
+  qt/rapids/res/img/ic-combo-box.png \
+  qt/rapids/res/img/ic-send.png \
+  qt/rapids/res/img/img-logo-rapids@2x.png \
+  qt/rapids/res/img/ic-arrow-purple-down.png \
+  qt/rapids/res/img/ic-connect.png \
+  qt/rapids/res/img/ic-submenu-lock.png \
+  qt/rapids/res/img/img-logo-rapids@3x.png \
+  qt/rapids/res/img/img-logo-rapids.png \
+  qt/rapids/res/img/ic-arrow-right-white.png \
+  qt/rapids/res/img/ic-arrow-left-white.png \
+  qt/rapids/res/img/ic-arrow-left.png \
+  qt/rapids/res/img/ic-copy-liliac.png \
+  qt/rapids/res/img/ic-submenu-staking.png \
   qt/rapids/res/img/img-nav-logo-rapids.png \
-  qt/rapids/res/img/ic-arrow-right.svg \
-  qt/rapids/res/img/ic-copy.svg \
-  qt/rapids/res/img/ic-copy-big.svg \
-  qt/rapids/res/img/ic-copy-big-white.svg \
-  qt/rapids/res/img/ic-submenu-unlock.svg \
+  qt/rapids/res/img/ic-arrow-right.png \
+  qt/rapids/res/img/ic-copy.png \
+  qt/rapids/res/img/ic-copy-big.png \
+  qt/rapids/res/img/ic-copy-big-white.png \
+  qt/rapids/res/img/ic-submenu-unlock.png \
   qt/rapids/res/img/img-nav-logo.png \
-  qt/rapids/res/img/ic-arrow-white-left.svg \
-  qt/rapids/res/img/ic-exit.svg \
-  qt/rapids/res/img/ic-switch-liliac-on.svg \
-  qt/rapids/res/img/img-nav-logo.svg \
-  qt/rapids/res/img/ic-arrow-white-right.svg \
-  qt/rapids/res/img/ic-expand.svg \
-  qt/rapids/res/img/ic-switch-off.svg \
+  qt/rapids/res/img/ic-arrow-white-left.png \
+  qt/rapids/res/img/ic-exit.png \
+  qt/rapids/res/img/ic-switch-liliac-on.png \
+  qt/rapids/res/img/img-nav-logo.png \
+  qt/rapids/res/img/ic-arrow-white-right.png \
+  qt/rapids/res/img/ic-expand.png \
+  qt/rapids/res/img/ic-switch-off.png \
   qt/rapids/res/img/img-qr-test-big.png \
-  qt/rapids/res/img/ic-check-active.svg \
-  qt/rapids/res/img/ic-folder.svg \
-  qt/rapids/res/img/ic-switch-on.svg \
+  qt/rapids/res/img/ic-check-active.png \
+  qt/rapids/res/img/ic-folder.png \
+  qt/rapids/res/img/ic-switch-on.png \
   qt/rapids/res/img/img-qr-test.png \
-  qt/rapids/res/img/ic-check-box.svg \
-  qt/rapids/res/img/ic-check-box-dark-active.svg \
-  qt/rapids/res/img/ic-check-box-indeterminate.svg \
-  qt/rapids/res/img/ic-check-box-liliac-indeterminate.svg \
-  qt/rapids/res/img/ic-label-liliac.svg \
-  qt/rapids/res/img/ic-transaction-warning.svg \
-  qt/rapids/res/img/ic-transaction-mint.svg \
-  qt/rapids/res/img/ic-transaction-mint-inactive.svg \
-  qt/rapids/res/img/ic-check-cold-staking.svg \
-  qt/rapids/res/img/ic-check-cold-staking-off.svg \
-  qt/rapids/res/img/ic-check-cold-staking-enabled.svg \
-  qt/rapids/res/img/dark/ic-transaction-cs-contract.svg \
-  qt/rapids/res/img/dark/ic-transaction-cs-contract-inactive.svg \
-  qt/rapids/res/img/img-qr.svg \
-  qt/rapids/res/img/ic-check-connect-off.svg \
-  qt/rapids/res/img/ic-check-tor-off.svg \
-  qt/rapids/res/img/ic-check-tor.svg \
-  qt/rapids/res/img/ic-label.svg \
-  qt/rapids/res/img/ic-transaction-received.svg \
-  qt/rapids/res/img/dark/ic-transaction-received.svg \
-  qt/rapids/res/img/dark/ic-transaction-warning.svg \
-  qt/rapids/res/img/dark/ic-transaction-mint.svg \
-  qt/rapids/res/img/dark/ic-transaction-mint-inactive.svg \
-  qt/rapids/res/img/ic-transaction-received-inactive.svg \
-  qt/rapids/res/img/dark/ic-transaction-received-inactive.svg \
+  qt/rapids/res/img/ic-check-box.png \
+  qt/rapids/res/img/ic-check-box-dark-active.png \
+  qt/rapids/res/img/ic-check-box-indeterminate.png \
+  qt/rapids/res/img/ic-check-box-liliac-indeterminate.png \
+  qt/rapids/res/img/ic-label-liliac.png \
+  qt/rapids/res/img/ic-transaction-warning.png \
+  qt/rapids/res/img/ic-transaction-mint.png \
+  qt/rapids/res/img/ic-transaction-mint-inactive.png \
+  qt/rapids/res/img/ic-check-cold-staking.png \
+  qt/rapids/res/img/ic-check-cold-staking-off.png \
+  qt/rapids/res/img/ic-check-cold-staking-enabled.png \
+  qt/rapids/res/img/dark/ic-transaction-cs-contract.png \
+  qt/rapids/res/img/dark/ic-transaction-cs-contract-inactive.png \
+  qt/rapids/res/img/img-qr.png \
+  qt/rapids/res/img/ic-check-connect-off.png \
+  qt/rapids/res/img/ic-check-tor-off.png \
+  qt/rapids/res/img/ic-check-tor.png \
+  qt/rapids/res/img/ic-label.png \
+  qt/rapids/res/img/ic-transaction-received.png \
+  qt/rapids/res/img/dark/ic-transaction-received.png \
+  qt/rapids/res/img/dark/ic-transaction-warning.png \
+  qt/rapids/res/img/dark/ic-transaction-mint.png \
+  qt/rapids/res/img/dark/ic-transaction-mint-inactive.png \
+  qt/rapids/res/img/ic-transaction-received-inactive.png \
+  qt/rapids/res/img/dark/ic-transaction-received-inactive.png \
   qt/rapids/res/img/img-welcome-step1.png \
-  qt/rapids/res/img/ic-check-connect.svg \
-  qt/rapids/res/img/ic-menu-hover.svg \
-  qt/rapids/res/img/ic-transaction-sent.svg \
-  qt/rapids/res/img/ic-transaction-sent-inactive.svg \
-  qt/rapids/res/img/dark/ic-transaction-sent.svg \
-  qt/rapids/res/img/dark/ic-transaction-sent-inactive.svg \
+  qt/rapids/res/img/ic-check-connect.png \
+  qt/rapids/res/img/ic-menu-hover.png \
+  qt/rapids/res/img/ic-transaction-sent.png \
+  qt/rapids/res/img/ic-transaction-sent-inactive.png \
+  qt/rapids/res/img/dark/ic-transaction-sent.png \
+  qt/rapids/res/img/dark/ic-transaction-sent-inactive.png \
   qt/rapids/res/img/img-welcome-step2.png \
-  qt/rapids/res/img/ic-check-dark.svg \
-  qt/rapids/res/img/ic-mint.svg \
-  qt/rapids/res/img/ic-transaction-staked.svg \
-  qt/rapids/res/img/ic-transaction-staked-inactive.svg \
-  qt/rapids/res/img/dark/ic-transaction-staked.svg \
-  qt/rapids/res/img/dark/ic-transaction-staked-inactive.svg \
+  qt/rapids/res/img/ic-check-dark.png \
+  qt/rapids/res/img/ic-mint.png \
+  qt/rapids/res/img/ic-transaction-staked.png \
+  qt/rapids/res/img/ic-transaction-staked-inactive.png \
+  qt/rapids/res/img/dark/ic-transaction-staked.png \
+  qt/rapids/res/img/dark/ic-transaction-staked-inactive.png \
   qt/rapids/res/img/img-welcome-step3.png \
-  qt/rapids/res/img/ic-check-liliac-on.svg \
-  qt/rapids/res/img/ic-nav-address-active.svg \
-  qt/rapids/res/img/ic-unlock-staking.svg \
+  qt/rapids/res/img/ic-check-liliac-on.png \
+  qt/rapids/res/img/ic-nav-address-active.png \
+  qt/rapids/res/img/ic-unlock-staking.png \
   qt/rapids/res/img/img-welcome-step4.png \
-  qt/rapids/res/img/ic-check-locked-off.svg \
-  qt/rapids/res/img/ic-nav-address-hover.svg \
-  qt/rapids/res/img/ic-update-liliac.svg \
-  qt/rapids/res/img/ic-arrow-drop-down-purple.svg \
-  qt/rapids/res/img/ic-arrow-drop-up-purple.svg \
-  qt/rapids/res/img/ic-check-liliac-indeterminate.svg \
-  qt/rapids/res/img/ic-check-box-liliac-indeterminate.svg \
-  qt/rapids/res/img/ic-transaction-stake-delegated.svg \
-  qt/rapids/res/img/ic-transaction-stake-delegated-inactive.svg \
-  qt/rapids/res/img/ic-transaction-stake-hot.svg \
-  qt/rapids/res/img/ic-transaction-stake-hot-inactive.svg \
-  qt/rapids/res/img/dark/ic-transaction-stake-hot.svg \
-  qt/rapids/res/img/dark/ic-transaction-stake-hot-inactive.svg \
-  qt/rapids/res/img/dark/ic-transaction-stake-delegated.svg \
-  qt/rapids/res/img/dark/ic-transaction-stake-delegated-inactive.svg \
-  qt/rapids/res/img/ic-transaction-cs-contract.svg \
-  qt/rapids/res/img/ic-transaction-cs-contract-inactive.svg \
-  qt/rapids/res/img/ic-check-box-indeterminate.svg \
+  qt/rapids/res/img/ic-check-locked-off.png \
+  qt/rapids/res/img/ic-nav-address-hover.png \
+  qt/rapids/res/img/ic-update-liliac.png \
+  qt/rapids/res/img/ic-arrow-drop-down-purple.png \
+  qt/rapids/res/img/ic-arrow-drop-up-purple.png \
+  qt/rapids/res/img/ic-check-liliac-indeterminate.png \
+  qt/rapids/res/img/ic-check-box-liliac-indeterminate.png \
+  qt/rapids/res/img/ic-transaction-stake-delegated.png \
+  qt/rapids/res/img/ic-transaction-stake-delegated-inactive.png \
+  qt/rapids/res/img/ic-transaction-stake-hot.png \
+  qt/rapids/res/img/ic-transaction-stake-hot-inactive.png \
+  qt/rapids/res/img/dark/ic-transaction-stake-hot.png \
+  qt/rapids/res/img/dark/ic-transaction-stake-hot-inactive.png \
+  qt/rapids/res/img/dark/ic-transaction-stake-delegated.png \
+  qt/rapids/res/img/dark/ic-transaction-stake-delegated-inactive.png \
+  qt/rapids/res/img/ic-transaction-cs-contract.png \
+  qt/rapids/res/img/ic-transaction-cs-contract-inactive.png \
+  qt/rapids/res/img/ic-check-box-indeterminate.png \
   qt/rapids/res/img/ani-loading-dark.gif \
   qt/rapids/res/img/ani-loading.gif
 
@@ -558,7 +498,6 @@ RES_ICONS = \
 BITCOIN_QT_BASE_CPP = \
   qt/bantablemodel.cpp \
   qt/bitcoinaddressvalidator.cpp \
-  qt/bitcoinamountfield.cpp \
   qt/rapids/rapidsgui.cpp \
   qt/bitcoinunits.cpp \
   qt/clientmodel.cpp \
@@ -599,6 +538,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/walletmodeltransaction.cpp \
   qt/rapids/loadingdialog.cpp \
   qt/rapids/pwidget.cpp \
+  qt/rapids/focuseddialog.cpp \
   qt/rapids/guitransactionsutils.cpp \
   qt/rapids/snackbar.cpp \
   qt/rapids/navmenuwidget.cpp \
@@ -666,25 +606,11 @@ BITCOIN_QT_CPP += $(BITCOIN_QT_WALLET_CPP)
 endif
 
 RES_IMAGES = \
-  qt/res/images/about.png \
-  qt/res/images/splash.png \
-  qt/res/images/splash_testnet.png \
-  qt/res/images/splash_regtest.png \
-  qt/res/images/rapids_logo_horizontal.png \
-  qt/res/images/downArrow_dark.png \
-  qt/res/images/downArrow_small_dark.png \
-  qt/res/images/downArrow_small.png \
-  qt/res/images/upArrow_small_dark.png \
-  qt/res/images/upArrow_small.png \
-  qt/res/images/leftArrow_small_dark.png \
-  qt/res/images/rightArrow_small_dark.png \
-  qt/res/images/qtreeview_selected.png
+  qt/res/images/about.png
 
 RES_CSS = \
   qt/res/css/default.css \
   qt/rapids/res/css/style_light.css
-
-RES_MOVIES = $(wildcard $(srcdir)/qt/res/movies/spinner-*.png)
 
 BITCOIN_RC = qt/res/rapids-qt-res.rc
 
@@ -697,7 +623,7 @@ qt_libbitcoinqt_a_CXXFLAGS = $(AM_CXXFLAGS) $(QT_PIE_FLAGS)
 qt_libbitcoinqt_a_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) $(QT_PIE_FLAGS)
 
 qt_libbitcoinqt_a_SOURCES = $(BITCOIN_QT_CPP) $(BITCOIN_QT_H) $(QT_FORMS_UI) \
-  $(QT_QRC) $(QT_QRC_LOCALE) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_MOVIES)
+  $(QT_QRC) $(QT_QRC_LOCALE) $(QT_TS) $(PROTOBUF_PROTO) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS)
 
 nodist_qt_libbitcoinqt_a_SOURCES = $(QT_MOC_CPP) $(QT_MOC) $(PROTOBUF_CC) \
   $(PROTOBUF_H) $(QT_QRC_CPP) $(QT_QRC_LOCALE_CPP)
@@ -734,7 +660,7 @@ endif
 if ENABLE_ZMQ
 qt_rapids_qt_LDADD += $(LIBBITCOIN_ZMQ) $(ZMQ_LIBS)
 endif
-qt_rapids_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
+qt_rapids_qt_LDADD += $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) \
   $(BOOST_LIBS) $(QT_LIBS) $(QT_DBUS_LIBS) $(QR_LIBS) $(PROTOBUF_LIBS) $(SVG_LIBS) $(CHARTS_LIBS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBSECP256K1) \
   $(EVENT_PTHREADS_LIBS) $(EVENT_LIBS)
 qt_rapids_qt_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(QT_LDFLAGS) $(LIBTOOL_APP_LDFLAGS)
@@ -760,7 +686,7 @@ $(QT_QRC_LOCALE_CPP): $(QT_QRC_LOCALE) $(QT_QM)
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@
 	@rm $(@D)/temp_$(<F)
 
-$(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(RES_MOVIES) $(PROTOBUF_H)
+$(QT_QRC_CPP): $(QT_QRC) $(QT_FORMS_H) $(RES_ICONS) $(RES_IMAGES) $(RES_CSS) $(PROTOBUF_H)
 	@test -f $(RCC)
 	$(AM_V_GEN) QT_SELECT=$(QT_SELECT) $(RCC) -name rapids $< | \
 	  $(SED) -e '/^\*\*.*Created:/d' -e '/^\*\*.*by:/d' > $@

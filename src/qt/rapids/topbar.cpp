@@ -45,7 +45,7 @@ TopBar::TopBar(RapidsGUI* _mainWindow, QWidget *parent) :
     ui->containerTop->setProperty("cssClass", "container-top");
 #endif
 
-    std::initializer_list<QWidget*> lblTitles = {ui->labelTitle1, ui->labelTitleAvailablezRpd, ui->labelTitle3, ui->labelTitle4, ui->labelTitlePendingzRpd, ui->labelTitleImmaturezRpd};
+    std::initializer_list<QWidget*> lblTitles = {ui->labelTitle1, ui->labelTitle3, ui->labelTitle4};
     setCssProperty(lblTitles, "text-title-topbar");
     QFont font;
     font.setWeight(QFont::Light);
@@ -53,9 +53,9 @@ TopBar::TopBar(RapidsGUI* _mainWindow, QWidget *parent) :
 
     // Amount information top
     ui->widgetTopAmount->setVisible(false);
-    setCssProperty({ui->labelAmountTopRpd, ui->labelAmountTopzRpd}, "amount-small-topbar");
-    setCssProperty({ui->labelAmountRpd, ui->labelAvailablezRpd}, "amount-topbar");
-    setCssProperty({ui->labelPendingRpd, ui->labelPendingzRpd, ui->labelImmatureRpd, ui->labelImmaturezRpd}, "amount-small-topbar");
+    setCssProperty({ui->labelAmountTopRpd}, "amount-small-topbar");
+    setCssProperty({ui->labelAmountRpd}, "amount-topbar");
+    setCssProperty({ui->labelPendingRpd, ui->labelImmatureRpd}, "amount-small-topbar");
 
     // Progress Sync
     progressBar = new QProgressBar(ui->layoutSync);
@@ -70,26 +70,27 @@ TopBar::TopBar(RapidsGUI* _mainWindow, QWidget *parent) :
     progressBar->move(0, 34);
 
     ui->pushButtonHDUpgrade->setButtonClassStyle("cssClass", "btn-check-hd-upgrade");
-    ui->pushButtonHDUpgrade->setButtonText("Upgrade to HD Wallet");
+    ui->pushButtonHDUpgrade->setButtonText(tr("Upgrade to HD Wallet"));
     ui->pushButtonHDUpgrade->setNoIconText("HD");
 
     ui->pushButtonConnection->setButtonClassStyle("cssClass", "btn-check-connect-inactive");
-    ui->pushButtonConnection->setButtonText("No Connection");
+    ui->pushButtonConnection->setButtonText(tr("No Connection"));
 
     ui->pushButtonTor->setButtonClassStyle("cssClass", "btn-check-tor-inactive");
-    ui->pushButtonTor->setButtonText("Tor Disabled");
+    ui->pushButtonTor->setButtonText(tr("Tor Disabled"));
     ui->pushButtonTor->setChecked(false);
 
     ui->pushButtonStack->setButtonClassStyle("cssClass", "btn-check-stack-inactive");
-    ui->pushButtonStack->setButtonText("Staking Disabled");
+    ui->pushButtonStack->setButtonText(tr("Staking Disabled"));
 
     ui->pushButtonColdStaking->setButtonClassStyle("cssClass", "btn-check-cold-staking-inactive");
-    ui->pushButtonColdStaking->setButtonText("Cold Staking Disabled");
+    ui->pushButtonColdStaking->setButtonText(tr("Cold Staking Disabled"));
 
     ui->pushButtonSync->setButtonClassStyle("cssClass", "btn-check-sync");
-    ui->pushButtonSync->setButtonText(" %54 Synchronizing..");
+    ui->pushButtonSync->setButtonText(tr(" %54 Synchronizing.."));
 
     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-lock");
+
 
     setCssProperty(ui->qrContainer, "container-qr");
     setCssProperty(ui->pushButtonQR, "btn-qr");
@@ -103,20 +104,18 @@ TopBar::TopBar(RapidsGUI* _mainWindow, QWidget *parent) :
                          Qt::KeepAspectRatio))
                 );
 
-    ui->pushButtonLock->setButtonText("Wallet Locked  ");
+    ui->pushButtonLock->setButtonText(tr("Wallet Locked "));
     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock");
 
 
     connect(ui->pushButtonQR, &QPushButton::clicked, this, &TopBar::onBtnReceiveClicked);
     connect(ui->btnQr, &QPushButton::clicked, this, &TopBar::onBtnReceiveClicked);
     connect(ui->pushButtonLock, &ExpandableButton::Mouse_Pressed, this, &TopBar::onBtnLockClicked);
-
-    //! only connect the signal if the spork is active (baz)
-    if (sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT))
-        connect(ui->pushButtonColdStaking, &ExpandableButton::Mouse_Pressed, this, &TopBar::onColdStakingClicked);
-
+    connect(ui->pushButtonColdStaking, &ExpandableButton::Mouse_Pressed, this, &TopBar::onColdStakingClicked);
     connect(ui->pushButtonSync, &ExpandableButton::Mouse_HoverLeave, this, &TopBar::refreshProgressBarSize);
     connect(ui->pushButtonSync, &ExpandableButton::Mouse_Hover, this, &TopBar::refreshProgressBarSize);
+    connect(ui->pushButtonSync, &ExpandableButton::Mouse_Pressed, [this](){window->goToSettingsInfo();});
+    connect(ui->pushButtonConnection, &ExpandableButton::Mouse_Pressed, [this](){window->openNetworkMonitor();});
 }
 
 void TopBar::onBtnLockClicked()
@@ -182,7 +181,7 @@ void TopBar::encryptWallet()
 
 void TopBar::unlockWallet()
 {
-    if(!walletModel)
+    if (!walletModel)
         return;
     // Unlock wallet when requested by wallet model (if unlocked or unlocked for staking only)
     if (walletModel->isWalletLocked(false))
@@ -202,7 +201,7 @@ void TopBar::lockDropdownClicked(const StateClicked& state)
                 if (walletModel->getEncryptionStatus() == WalletModel::Locked)
                     break;
                 walletModel->setWalletLocked(true);
-                ui->pushButtonLock->setButtonText("Wallet Locked");
+                ui->pushButtonLock->setButtonText(tr("Wallet Locked"));
                 ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock", true);
                 // Directly update the staking status icon when the wallet is manually locked here
                 // so the feedback is instant (no need to wait for the polling timeout)
@@ -218,7 +217,7 @@ void TopBar::lockDropdownClicked(const StateClicked& state)
                 dlg->adjustSize();
                 openDialogWithOpaqueBackgroundY(dlg, window);
                 if (walletModel->getEncryptionStatus() == WalletModel::Unlocked) {
-                    ui->pushButtonLock->setButtonText("Wallet Unlocked");
+                    ui->pushButtonLock->setButtonText(tr("Wallet Unlocked"));
                     ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-unlock", true);
                 }
                 dlg->deleteLater();
@@ -521,7 +520,7 @@ void TopBar::loadWalletModel()
     connect(walletModel, &WalletModel::encryptionStatusChanged, this, &TopBar::refreshStatus);
     // Ask for passphrase if needed
     connect(walletModel, &WalletModel::requireUnlock, this, &TopBar::unlockWallet);
-    // update the display unit, to not use the default ("RPD")
+    // update the display unit, to not use the default ("Rapids")
     updateDisplayUnit();
 
     refreshStatus();
@@ -561,19 +560,19 @@ void TopBar::refreshStatus()
 
     switch (encStatus) {
         case WalletModel::EncryptionStatus::Unencrypted:
-            ui->pushButtonLock->setButtonText("Wallet Unencrypted");
+            ui->pushButtonLock->setButtonText(tr("Wallet Unencrypted"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-unlock", true);
             break;
         case WalletModel::EncryptionStatus::Locked:
-            ui->pushButtonLock->setButtonText("Wallet Locked");
+            ui->pushButtonLock->setButtonText(tr("Wallet Locked"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-lock", true);
             break;
         case WalletModel::EncryptionStatus::UnlockedForStaking:
-            ui->pushButtonLock->setButtonText("Wallet Unlocked for staking");
+            ui->pushButtonLock->setButtonText(tr("Wallet Unlocked for staking"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-staking", true);
             break;
         case WalletModel::EncryptionStatus::Unlocked:
-            ui->pushButtonLock->setButtonText("Wallet Unlocked");
+            ui->pushButtonLock->setButtonText(tr("Wallet Unlocked"));
             ui->pushButtonLock->setButtonClassStyle("cssClass", "btn-check-status-unlock", true);
             break;
     }
@@ -587,14 +586,12 @@ void TopBar::updateDisplayUnit()
         nDisplayUnit = walletModel->getOptionsModel()->getDisplayUnit();
         if (displayUnitPrev != nDisplayUnit)
             updateBalances(walletModel->getBalance(), walletModel->getUnconfirmedBalance(), walletModel->getImmatureBalance(),
-                           walletModel->getZerocoinBalance(), walletModel->getUnconfirmedZerocoinBalance(), walletModel->getImmatureZerocoinBalance(),
                            walletModel->getWatchBalance(), walletModel->getWatchUnconfirmedBalance(), walletModel->getWatchImmatureBalance(),
                            walletModel->getDelegatedBalance(), walletModel->getColdStakedBalance());
     }
 }
 
 void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
-                            const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
                             const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
                             const CAmount& delegatedBalance, const CAmount& coldStakedBalance)
 {
@@ -606,13 +603,7 @@ void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBa
     ui->labelTitle1->setText(nLockedBalance > 0 ? tr("Available (Locked included)") : tr("Available"));
 
     // RPD Total
-    CAmount rpdAvailableBalance = balance;
-    // zRPD Balance
-    CAmount matureZerocoinBalance = zerocoinBalance - unconfirmedZerocoinBalance - immatureZerocoinBalance;
-
-    // Set
-    QString totalRpd = GUIUtil::formatBalance(rpdAvailableBalance, nDisplayUnit);
-    QString totalzRpd = GUIUtil::formatBalance(matureZerocoinBalance, nDisplayUnit, true);
+    QString totalRpd = GUIUtil::formatBalance(balance, nDisplayUnit);
 
     // RPD
     // Top
@@ -621,22 +612,6 @@ void TopBar::updateBalances(const CAmount& balance, const CAmount& unconfirmedBa
     ui->labelAmountRpd->setText(totalRpd);
     ui->labelPendingRpd->setText(GUIUtil::formatBalance(unconfirmedBalance, nDisplayUnit));
     ui->labelImmatureRpd->setText(GUIUtil::formatBalance(immatureBalance, nDisplayUnit));
-
-    // Update display state and/or values for zRPD balances as necessary
-    bool fHaveZerocoins = zerocoinBalance > 0;
-
-    // Set visibility of zRPD label titles/values
-    ui->typeSpacerTop->setVisible(fHaveZerocoins);
-    ui->typeSpacerExpanded->setVisible(fHaveZerocoins);
-    ui->labelAmountTopzRpd->setVisible(fHaveZerocoins);
-    ui->zerocoinBalances->setVisible(fHaveZerocoins);
-
-    // Top
-    ui->labelAmountTopzRpd->setText(totalzRpd);
-    // Expanded
-    ui->labelAvailablezRpd->setText(totalzRpd);
-    ui->labelPendingzRpd->setText(GUIUtil::formatBalance(unconfirmedZerocoinBalance, nDisplayUnit, true));
-    ui->labelImmaturezRpd->setText(GUIUtil::formatBalance(immatureZerocoinBalance, nDisplayUnit, true));
 }
 
 void TopBar::resizeEvent(QResizeEvent *event)
@@ -696,6 +671,7 @@ void TopBar::run(int type)
         );
     }
 }
+
 void TopBar::onError(QString error, int type)
 {
     if (type == REQUEST_UPGRADE_WALLET) {

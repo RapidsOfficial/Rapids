@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2019-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -73,6 +73,7 @@ private Q_SLOTS:
     void clearAll();
     void onLabelClicked();
     void onMyStakingAddressesClicked();
+    void onOwnerAddressChanged();
     void onDelegationsRefreshed();
     void onSortChanged(int idx);
     void onSortOrderChanged(int idx);
@@ -122,6 +123,7 @@ private:
     void onLabelClicked(QString dialogTitle, const QModelIndex &index, const bool& isMyColdStakingAddresses);
     void updateStakingTotalLabel();
     void sortAddresses();
+    void setCoinControlPayAmounts();
 };
 
 #endif // COLDSTAKINGWIDGET_H

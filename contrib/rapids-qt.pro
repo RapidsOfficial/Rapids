@@ -28,7 +28,6 @@ DEPENDPATH += . \
               src/qt/test \
               src/secp256k1/include \
               src/secp256k1/src \
-              src/test/data \
               src/leveldb/doc/bench \
               src/leveldb/helpers/memenv \
               src/leveldb/include/leveldb \
@@ -49,8 +48,6 @@ INCLUDEPATH += . \
                src/compat \
                src/secp256k1/include \
                src/leveldb/helpers/memenv \
-               src/test/data \
-               src/test \
                src/qt/test \
                src/secp256k1/src \
                src/secp256k1/src/java
@@ -264,9 +261,6 @@ HEADERS += src/activemasternode.h \
            src/leveldb/util/testharness.h \
            src/leveldb/util/testutil.h \
            src/qt/forms/ui_aboutdialog.h \
-           src/qt/test/paymentrequestdata.h \
-           src/qt/test/paymentservertests.h \
-           src/qt/test/uritests.h \
            src/secp256k1/include/secp256k1.h \
            src/secp256k1/src/ecdsa.h \
            src/secp256k1/src/ecdsa_impl.h \
@@ -302,17 +296,6 @@ HEADERS += src/activemasternode.h \
            src/secp256k1/src/testrand.h \
            src/secp256k1/src/testrand_impl.h \
            src/secp256k1/src/util.h \
-           src/test/data/alertTests.raw.h \
-           src/test/data/base58_encode_decode.json.h \
-           src/test/data/base58_keys_invalid.json.h \
-           src/test/data/base58_keys_valid.json.h \
-           src/test/data/script_invalid.json.h \
-           src/test/data/script_valid.json.h \
-           src/test/data/sig_canonical.json.h \
-           src/test/data/sig_noncanonical.json.h \
-           src/test/data/sighash.json.h \
-           src/test/data/tx_invalid.json.h \
-           src/test/data/tx_valid.json.h \
            src/leveldb/helpers/memenv/memenv.h \
            src/leveldb/include/leveldb/c.h \
            src/leveldb/include/leveldb/cache.h \
@@ -515,47 +498,6 @@ SOURCES += src/activemasternode.cpp \
            src/script/sigcache.cpp \
            src/script/sign.cpp \
            src/script/standard.cpp \
-           src/test/accounting_tests.cpp \
-           src/test/alert_tests.cpp \
-           src/test/allocator_tests.cpp \
-           src/test/base32_tests.cpp \
-           src/test/base58_tests.cpp \
-           src/test/base64_tests.cpp \
-           src/test/bip32_tests.cpp \
-           src/test/bloom_tests.cpp \
-           src/test/checkblock_tests.cpp \
-           src/test/Checkpoints_tests.cpp \
-           src/test/coins_tests.cpp \
-           src/test/compress_tests.cpp \
-           src/test/crypto_tests.cpp \
-           src/test/DoS_tests.cpp \
-           src/test/getarg_tests.cpp \
-           src/test/hash_tests.cpp \
-           src/test/key_tests.cpp \
-           src/test/main_tests.cpp \
-           src/test/mempool_tests.cpp \
-           src/test/miner_tests.cpp \
-           src/test/mruset_tests.cpp \
-           src/test/multisig_tests.cpp \
-           src/test/netbase_tests.cpp \
-           src/test/pmt_tests.cpp \
-           src/test/rpc_tests.cpp \
-           src/test/rpc_wallet_tests.cpp \
-           src/test/sanity_tests.cpp \
-           src/test/script_P2SH_tests.cpp \
-           src/test/script_tests.cpp \
-           src/test/scriptnum_tests.cpp \
-           src/test/serialize_tests.cpp \
-           src/test/sighash_tests.cpp \
-           src/test/sigopcount_tests.cpp \
-           src/test/skiplist_tests.cpp \
-           src/test/test_rapids.cpp \
-           src/test/timedata_tests.cpp \
-           src/test/transaction_tests.cpp \
-           src/test/uint256_tests.cpp \
-           src/test/univalue_tests.cpp \
-           src/test/util_tests.cpp \
-           src/test/wallet_tests.cpp \
            src/univalue/gen.cpp \
            src/univalue/univalue.cpp \
            src/univalue/univalue_read.cpp \
@@ -627,9 +569,6 @@ SOURCES += src/activemasternode.cpp \
            src/leveldb/util/status.cc \
            src/leveldb/util/testharness.cc \
            src/leveldb/util/testutil.cc \
-           src/qt/test/paymentservertests.cpp \
-           src/qt/test/test_main.cpp \
-           src/qt/test/uritests.cpp \
            src/secp256k1/src/bench_inv.c \
            src/secp256k1/src/bench_sign.c \
            src/secp256k1/src/bench_verify.c \

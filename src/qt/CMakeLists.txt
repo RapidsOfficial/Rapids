@@ -80,7 +80,6 @@ PROTOBUF_GENERATE_CPP(PROTO_SRCS PROTO_HDRS ${CMAKE_CURRENT_SOURCE_DIR}/paymentr
 SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/bantablemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinaddressvalidator.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinamountfield.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/bitcoinunits.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/clientmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/csvmodelwriter.cpp
@@ -102,7 +101,6 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/addresstablemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/askpassphrasedialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/coincontroldialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/zrpdcontroldialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/coincontroltreewidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/editaddressdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/openuridialog.cpp
@@ -115,10 +113,10 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/transactiontablemodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/walletmodel.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/walletmodeltransaction.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/zrpdcontroldialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/rapidsgui.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/loadingdialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/pwidget.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/rapids/focuseddialog.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/guitransactionsutils.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/snackbar.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/navmenuwidget.cpp
@@ -158,7 +156,6 @@ SET(QT_SOURCES
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/tooltipmenu.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/addresseswidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/defaultdialog.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/rapids/privacywidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/coldstakingwidget.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/settings/settingsbackupwallet.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/rapids/settings/settingsbittoolwidget.cpp
@@ -226,7 +223,7 @@ target_include_directories(rapids-qt PUBLIC ${ENDIAN_INCLUDES})
 target_link_libraries(rapids-qt
         qt_stuff
         univalue
-        SERVER_A UTIL_A WALLET_A CLI_A COMMON_A BITCOIN_CRYPTO_A ZEROCOIN_A
+        SERVER_A UTIL_A WALLET_A CLI_A COMMON_A BITCOIN_CRYPTO_A
         leveldb leveldb_sse42 memenv secp256k1
         ${BerkeleyDB_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${PROTOBUF_LIBRARIES} ${LIBEVENT_LIB}
         pthread

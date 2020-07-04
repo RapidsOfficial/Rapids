@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2017-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -180,7 +180,47 @@ public:
     CBitcoinExtKeyBase() {}
 };
 
-typedef CBitcoinExtKeyBase<CExtKey, 74, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
-typedef CBitcoinExtKeyBase<CExtPubKey, 74, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
+typedef CBitcoinExtKeyBase<CExtKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_SECRET_KEY> CBitcoinExtKey;
+typedef CBitcoinExtKeyBase<CExtPubKey, BIP32_EXTKEY_SIZE, CChainParams::EXT_PUBLIC_KEY> CBitcoinExtPubKey;
+
+
+CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Type addrType);
+std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS);
+// DecodeDestinationisStaking flag is set to true when the string arg is from an staking address
+CTxDestination DecodeDestination(const std::string& str, bool& isStaking);
+CTxDestination DecodeDestination(const std::string& str);
+// Return true if the address is valid without care on the type.
+bool IsValidDestinationString(const std::string& str);
+// Return true if the address is valid and is following the fStaking flag type (true means that the destination must be a staking address, false the opposite).
+bool IsValidDestinationString(const std::string& str, bool fStaking);
+bool IsValidDestinationString(const std::string& str, bool fStaking, const CChainParams& params);
+
+/**
+ * Wrapper class for every supported address
+ */
+struct Destination {
+public:
+    explicit Destination() {}
+    explicit Destination(const CTxDestination& _dest, bool _isP2CS) : dest(_dest), isP2CS(_isP2CS) {}
+
+    CTxDestination dest{CNoDestination()};
+    bool isP2CS{false};
+
+    Destination& operator=(const Destination& from)
+    {
+        this->dest = from.dest;
+        this->isP2CS = from.isP2CS;
+        return *this;
+    }
+
+    std::string ToString()
+    {
+        if (boost::get<CNoDestination>(&dest)) {
+            // Invalid address
+            return "";
+        }
+        return EncodeDestination(dest, isP2CS ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS);
+    }
+};
 
 #endif // BITCOIN_BASE58_H

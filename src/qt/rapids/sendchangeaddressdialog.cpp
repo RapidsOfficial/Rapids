@@ -1,17 +1,22 @@
-// Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2019-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "qt/rapids/sendchangeaddressdialog.h"
 #include "qt/rapids/forms/ui_sendchangeaddressdialog.h"
-#include "walletmodel.h"
+
+#include "coincontrol.h"
 #include "qt/rapids/qtutils.h"
 
-SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
-    QDialog(parent),
+SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* model) :
+    FocusedDialog(parent),
+    walletModel(model),
     ui(new Ui::SendChangeAddressDialog)
 {
+    if (!walletModel) {
+        throw std::runtime_error(strprintf("%s: No wallet model set", __func__));
+    }
     ui->setupUi(this);
     this->setStyleSheet(parent->styleSheet());
 
@@ -19,13 +24,9 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
     ui->frame->setProperty("cssClass", "container-dialog");
 
     // Text
-    ui->labelTitle->setText(tr("Custom Change Address"));
     ui->labelTitle->setProperty("cssClass", "text-title-dialog");
-
-    ui->labelMessage->setText(tr("The remainder of the value resultant from the inputs minus the outputs value goes to the \"change\" RPD address"));
     ui->labelMessage->setProperty("cssClass", "text-main-grey");
 
-    ui->lineEditAddress->setPlaceholderText("Enter RPD address (e.g D7VFR83SQbiezrW72hjc… ");
     initCssEditLine(ui->lineEditAddress, true);
 
     // Buttons
@@ -33,25 +34,22 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget *parent) :
     ui->btnEsc->setProperty("cssClass", "ic-close");
 
     ui->btnCancel->setProperty("cssClass", "btn-dialog-cancel");
-    ui->btnSave->setText("SAVE");
     setCssBtnPrimary(ui->btnSave);
 
     connect(ui->btnEsc, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
-    connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::close);
-    connect(ui->btnSave, &QPushButton::clicked, [this](){ selected = true; accept(); });
+    connect(ui->btnCancel, &QPushButton::clicked, this, &SendChangeAddressDialog::reset);
+    connect(ui->btnSave, &QPushButton::clicked, this, &SendChangeAddressDialog::accept);
 }
 
-void SendChangeAddressDialog::setAddress(QString address){
+void SendChangeAddressDialog::setAddress(QString address)
+{
     ui->lineEditAddress->setText(address);
+    ui->btnCancel->setText(tr("RESET"));
 }
 
-bool SendChangeAddressDialog::getAddress(WalletModel *model, QString *retAddress){
-    QString address = ui->lineEditAddress->text();
-    if(!address.isEmpty() && model->validateAddress(address)){
-        *retAddress = address;
-        return true;
-    }
-    return false;
+QString SendChangeAddressDialog::getAddress() const
+{
+    return ui->lineEditAddress->text();
 }
 
 void SendChangeAddressDialog::showEvent(QShowEvent *event)
@@ -59,6 +57,35 @@ void SendChangeAddressDialog::showEvent(QShowEvent *event)
     if (ui->lineEditAddress) ui->lineEditAddress->setFocus();
 }
 
-SendChangeAddressDialog::~SendChangeAddressDialog(){
+void SendChangeAddressDialog::reset()
+{
+    if (!ui->lineEditAddress->text().isEmpty()) {
+        ui->lineEditAddress->clear();
+        ui->btnCancel->setText(tr("CANCEL"));
+        CoinControlDialog::coinControl->destChange = CNoDestination();
+    }
+    close();
+}
+
+void SendChangeAddressDialog::accept()
+{
+    // validate address
+    if (!walletModel->validateAddress(ui->lineEditAddress->text())) {
+        inform(tr("Invalid address"));
+    } else {
+        QDialog::accept();
+    }
+}
+
+void SendChangeAddressDialog::inform(const QString& text)
+{
+    if (!snackBar) snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(text);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
+}
+
+SendChangeAddressDialog::~SendChangeAddressDialog()
+{
     delete ui;
 }

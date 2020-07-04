@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -12,8 +12,8 @@
 #include "masternodeconfig.h"
 #include "masternodeman.h"
 #include "messagesigner.h"
+#include "netbase.h"
 #include "protocol.h"
-#include "spork.h"
 
 //
 // Bootup the Masternode, look for a 10000 Rapids input and register on the network
@@ -68,16 +68,19 @@ void CActiveMasternode::ManageStatus()
                 return;
             }
         } else {
-            service = CService(strMasterNodeAddr);
+            int nPort;
+            std::string strHost;
+            SplitHostPort(strMasterNodeAddr, nPort, strHost);
+            service = LookupNumeric(strHost.c_str(), nPort);
         }
 
         // The service needs the correct default port to work properly
-        if(!CMasternodeBroadcast::CheckDefaultPort(strMasterNodeAddr, errorMessage, "CActiveMasternode::ManageStatus()"))
+        if (!CMasternodeBroadcast::CheckDefaultPort(service, errorMessage, "CActiveMasternode::ManageStatus()"))
             return;
 
         LogPrintf("CActiveMasternode::ManageStatus() - Checking inbound connection to '%s'\n", service.ToString());
 
-        CNode* pnode = ConnectNode((CAddress)service, NULL, true);
+        CNode* pnode = ConnectNode(CAddress(service, NODE_NETWORK), NULL, true);
         if (!pnode) {
             notCapableReason = "Could not connect to " + service.ToString();
             LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
@@ -175,11 +178,11 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = false;
+        fNewSigs = chainActive.NewSigsActive();
     }
 
     CMasternodePing mnp(vin);
-    if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
+    if (!mnp.Sign(keyMasternode, pubKeyMasternode, fNewSigs)) {
         errorMessage = "Couldn't sign Masternode Ping";
         return false;
     }
@@ -239,15 +242,16 @@ bool CActiveMasternode::CreateBroadcast(std::string strService, std::string strK
         return false;
     }
 
-    CService service = CService(strService);
+    int nPort;
+    std::string strHost;
+    SplitHostPort(strService, nPort, strHost);
+    CService _service(LookupNumeric(strHost.c_str(), nPort));
 
     // The service needs the correct default port to work properly
-    if(!CMasternodeBroadcast::CheckDefaultPort(strService, errorMessage, "CActiveMasternode::CreateBroadcast()"))
+    if (!CMasternodeBroadcast::CheckDefaultPort(_service, errorMessage, "CActiveMasternode::CreateBroadcast()"))
         return false;
 
-    addrman.Add(CAddress(service), CNetAddr("127.0.0.1"), 2 * 60 * 60);
-
-    return CreateBroadcast(vin, CService(strService), keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage, mnb);
+    return CreateBroadcast(vin, _service, keyCollateralAddress, pubKeyCollateralAddress, keyMasternode, pubKeyMasternode, errorMessage, mnb);
 }
 
 bool CActiveMasternode::CreateBroadcast(CTxIn vin, CService service, CKey keyCollateralAddress, CPubKey pubKeyCollateralAddress, CKey keyMasternode, CPubKey pubKeyMasternode, std::string& errorMessage, CMasternodeBroadcast &mnb)
@@ -258,11 +262,11 @@ bool CActiveMasternode::CreateBroadcast(CTxIn vin, CService service, CKey keyCol
     bool fNewSigs = false;
     {
         LOCK(cs_main);
-        fNewSigs = false;
+        fNewSigs = chainActive.NewSigsActive();
     }
 
     CMasternodePing mnp(vin);
-    if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
+    if (!mnp.Sign(keyMasternode, pubKeyMasternode, fNewSigs)) {
         errorMessage = strprintf("Failed to sign ping, vin: %s", vin.ToString());
         LogPrintf("CActiveMasternode::CreateBroadcast() -  %s\n", errorMessage);
         mnb = CMasternodeBroadcast();
@@ -271,7 +275,7 @@ bool CActiveMasternode::CreateBroadcast(CTxIn vin, CService service, CKey keyCol
 
     mnb = CMasternodeBroadcast(service, vin, pubKeyCollateralAddress, pubKeyMasternode, PROTOCOL_VERSION);
     mnb.lastPing = mnp;
-    if (!mnb.Sign(keyCollateralAddress)) {
+    if (!mnb.Sign(keyCollateralAddress, pubKeyCollateralAddress, fNewSigs)) {
         errorMessage = strprintf("Failed to sign broadcast, vin: %s", vin.ToString());
         LogPrintf("CActiveMasternode::CreateBroadcast() - %s\n", errorMessage);
         mnb = CMasternodeBroadcast();
@@ -350,15 +354,14 @@ bool CActiveMasternode::GetVinFromOutput(COutput out, CTxIn& vin, CPubKey& pubke
 
     CTxDestination address1;
     ExtractDestination(pubScript, address1);
-    CBitcoinAddress address2(address1);
 
-    CKeyID keyID;
-    if (!address2.GetKeyID(keyID)) {
+    const CKeyID* keyID = boost::get<CKeyID>(&address1);
+    if (!keyID) {
         LogPrintf("CActiveMasternode::GetMasterNodeVin - Address does not refer to a key\n");
         return false;
     }
 
-    if (!pwalletMain->GetKey(keyID, secretKey)) {
+    if (!pwalletMain->GetKey(*keyID, secretKey)) {
         LogPrintf("CActiveMasternode::GetMasterNodeVin - Private key for address is not known\n");
         return false;
     }

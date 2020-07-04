@@ -7,12 +7,12 @@ reset-files.bash
 *.tar.gz
 
 *.exe
-src/pivx
-src/pivxd
-src/pivx-cli
-src/pivx-tx
-src/test/test_pivx
-src/qt/test/test_pivx-qt
+src/rapids
+src/rapidsd
+src/rapids-cli
+src/rapids-tx
+src/bench/bench_rapids
+src/qt/test/test_rapids-qt
 
 # autoreconf
 Makefile.in
@@ -38,8 +38,8 @@ confdefs.h
 conftest.cpp
 conftest.err
 libtool
-src/config/pivx-config.h
-src/config/pivx-config.h.in
+src/config/rapids-config.h
+src/config/rapids-config.h.in
 src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
@@ -65,7 +65,7 @@ src/qt/test/moc*.cpp
 *.o
 *.o-*
 *.patch
-.pivx
+.rapids
 *.a
 *.pb.cc
 *.pb.h
@@ -84,14 +84,13 @@ src/qt/test/moc*.cpp
 # Compilation and Qt preprocessor part
 *.qm
 Makefile
-pivx-qt
-PIVX-Qt.app
+rapids-qt
+Rapids-Qt.app
 background.tiff*
 
 # Unit-tests
 Makefile.test
-pivx-qt_test
-src/test/buildenv.py
+rapids-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -106,7 +105,7 @@ build
 #lcov
 *.gcno
 /*.info
-test_pivx.coverage/
+test_rapids.coverage/
 total.coverage/
 coverage_percent.txt
 
@@ -114,8 +113,6 @@ coverage_percent.txt
 linux-coverage-build
 linux-build
 win32-build
-test/config.ini
-test/cache/*
 qa/pull-tester/run-bitcoind-for-test.sh
 qa/pull-tester/tests-config.sh
 qa/pull-tester/cache/*
@@ -137,5 +134,5 @@ moc_*
 *.tmp
 ui_*
 build*
-pivxd.*
-pivxd-new-gui.*
+rapidsd.*
+rapidsd-new-gui.*

@@ -271,6 +271,7 @@ file(GLOB SCRIPT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/script/*.h)
 file(GLOB RPC_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/rpc/*.h)
 file(GLOB COMPAT_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/compat/*.h)
 file(GLOB CONSENSUS_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/consensus/*.h)
+file(GLOB CTAES_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/ctaes/*.h)
 
 source_group("BitcoinHeaders" FILES
         ${HEADERS}
@@ -281,6 +282,7 @@ source_group("BitcoinHeaders" FILES
         ${RPC_HEADERS}
         ${COMPAT_HEADERS}
         ${CONSENSUS_HEADERS}
+        ${CTAES_HEADERS}
         ./src/support/cleanse.h
         )
 
@@ -293,12 +295,13 @@ set(SERVER_SOURCES
         ./src/httprpc.cpp
         ./src/httpserver.cpp
         ./src/init.cpp
-        ./src/leveldbwrapper.cpp
+        ./src/dbwrapper.cpp
         ./src/main.cpp
         ./src/merkleblock.cpp
         ./src/miner.cpp
         ./src/net.cpp
         ./src/noui.cpp
+        ./src/policy/fees.cpp
         ./src/pow.cpp
         ./src/rest.cpp
         ./src/rpc/blockchain.cpp
@@ -316,7 +319,6 @@ set(SERVER_SOURCES
         ./src/txdb.cpp
         ./src/txmempool.cpp
         ./src/validationinterface.cpp
-        ./src/zrpdchain.cpp
         )
 add_library(SERVER_A STATIC ${BitcoinHeaders} ${SERVER_SOURCES})
 if(MINIUPNP_FOUND)
@@ -343,7 +345,6 @@ endif()
 set(WALLET_SOURCES
         ./src/activemasternode.cpp
         ./src/bip38.cpp
-        ./src/denomination_functions.cpp
         ./src/wallet/db.cpp
         ./src/addressbook.cpp
         ./src/crypter.cpp
@@ -355,23 +356,15 @@ set(WALLET_SOURCES
         ./src/masternodeconfig.cpp
         ./src/masternodeman.cpp
         ./src/messagesigner.cpp
-        ./src/zrpd/mintpool.cpp
         ./src/wallet/hdchain.cpp
         ./src/wallet/rpcdump.cpp
-        ./src/zrpd/deterministicmint.cpp
-        ./src/zrpd/zerocoin.cpp
         ./src/wallet/scriptpubkeyman.cpp
         ./src/wallet/rpcwallet.cpp
         ./src/kernel.cpp
         ./src/legacy/stakemodifier.cpp
         ./src/wallet/wallet.cpp
-        ./src/wallet/wallet_zerocoin.cpp
         ./src/wallet/wallet_ismine.cpp
         ./src/wallet/walletdb.cpp
-        ./src/zrpd/zrpdwallet.cpp
-        ./src/zrpd/zrpdtracker.cpp
-        ./src/zrpd/zrpdmodule.cpp
-        ./src/zrpd/zpos.cpp
         ./src/stakeinput.cpp
         )
 add_library(WALLET_A STATIC ${BitcoinHeaders} ${WALLET_SOURCES})
@@ -384,6 +377,7 @@ target_include_directories(WALLET_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
         )
 
 set(BITCOIN_CRYPTO_SOURCES
+        ./src/crypto/aes.cpp
         ./src/crypto/sha1.cpp
         ./src/crypto/sha256.cpp
         ./src/crypto/sha512.cpp
@@ -421,59 +415,27 @@ set(BITCOIN_CRYPTO_SOURCES
 add_library(BITCOIN_CRYPTO_A STATIC ${BITCOIN_CRYPTO_SOURCES})
 target_include_directories(BITCOIN_CRYPTO_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src ${OPENSSL_INCLUDE_DIR})
 
-set(ZEROCOIN_SOURCES
-        ./src/libzerocoin/Accumulator.h
-        ./src/libzerocoin/bignum.h
-        ./src/libzerocoin/bignum.cpp
-        ./src/libzerocoin/Coin.h
-        ./src/libzerocoin/CoinRandomnessSchnorrSignature.h
-        ./src/libzerocoin/CoinSpend.h
-        ./src/libzerocoin/Commitment.h
-        ./src/libzerocoin/Denominations.h
-        ./src/libzerocoin/ParamGeneration.h
-        ./src/libzerocoin/Params.h
-        ./src/libzerocoin/SpendType.h
-        ./src/libzerocoin/ZerocoinDefines.h
-        ./src/libzerocoin/Accumulator.cpp
-        ./src/libzerocoin/Coin.cpp
-        ./src/libzerocoin/CoinRandomnessSchnorrSignature.cpp
-        ./src/libzerocoin/Denominations.cpp
-        ./src/libzerocoin/CoinSpend.cpp
-        ./src/libzerocoin/ParamGeneration.cpp
-        ./src/libzerocoin/Params.cpp
-        )
-if(GMP_FOUND)
-    list(APPEND ZEROCOIN_SOURCES ./src/libzerocoin/bignum_gmp.cpp)
-else()
-    list(APPEND ZEROCOIN_SOURCES ./src/libzerocoin/bignum_openssl.cpp)
-endif()
-add_library(ZEROCOIN_A STATIC ${ZEROCOIN_SOURCES})
-target_include_directories(ZEROCOIN_A PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
-        ${OPENSSL_INCLUDE_DIR}
-        )
-
 set(COMMON_SOURCES
         ./src/allocators.cpp
         ./src/amount.cpp
         ./src/base58.cpp
         ./src/bip38.cpp
+        ./src/consensus/params.cpp
+        ./src/consensus/upgrades.cpp
         ./src/chainparams.cpp
         ./src/coins.cpp
         ./src/key_io.cpp
         ./src/compressor.cpp
         ./src/consensus/merkle.cpp
         ./src/consensus/tx_verify.cpp
-        ./src/consensus/zerocoin_verify.cpp
         ./src/primitives/block.cpp
-        ./src/zrpd/deterministicmint.cpp
         ./src/primitives/transaction.cpp
-        ./src/zrpd/zerocoin.cpp
         ./src/core_read.cpp
         ./src/core_write.cpp
         ./src/hash.cpp
-        ./src/invalid.cpp
         ./src/key.cpp
         ./src/keystore.cpp
+        ./src/netaddress.cpp
         ./src/netbase.cpp
         ./src/protocol.cpp
         ./src/pubkey.cpp
@@ -502,10 +464,13 @@ set(UTIL_SOURCES
         ./src/compat/glibcxx_sanity.cpp
         ./src/chainparamsbase.cpp
         ./src/clientversion.cpp
+        ./src/fs.cpp
         ./src/logging.cpp
         ./src/random.cpp
         ./src/rpc/protocol.cpp
         ./src/sync.cpp
+        ./src/blob_uint256.cpp
+        ./src/arith_uint256.cpp
         ./src/uint256.cpp
         ./src/util/threadnames.cpp
         ./src/util.cpp
@@ -557,7 +522,6 @@ add_dependencies(rapids-tx libunivalue libsecp256k1)
 target_link_libraries(rapids-tx
         univalue
         COMMON_A
-        ZEROCOIN_A
         UTIL_A
         BITCOIN_CRYPTO_A
         secp256k1
@@ -589,7 +553,6 @@ target_link_libraries(rapidsd
         WALLET_A
         COMMON_A
         univalue
-        ZEROCOIN_A
         UTIL_A
         BITCOIN_CRYPTO_A
         ${CMAKE_BINARY_DIR}/libleveldb.a

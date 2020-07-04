@@ -20,10 +20,9 @@
 #include "utiltime.h"
 
 #include <stdarg.h>
+#include <thread>
 
 #include <boost/date_time/posix_time/posix_time.hpp>
-
-namespace fs = boost::filesystem;
 
 
 #ifndef WIN32
@@ -78,8 +77,6 @@ namespace fs = boost::filesystem;
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower()
 #include <boost/algorithm/string/join.hpp>
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
-#include <boost/filesystem.hpp>
-#include <boost/filesystem/fstream.hpp>
 #include <boost/program_options/detail/config_file.hpp>
 #include <boost/program_options/parsers.hpp>
 #include <boost/thread.hpp>
@@ -374,7 +371,7 @@ void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
     fs::ifstream streamConfig(GetConfigFile());
     if (!streamConfig.good()) {
         // Create empty rapids.conf if it does not exist
-        FILE* configFile = fopen(GetConfigFile().string().c_str(), "a");
+        FILE* configFile = fsbridge::fopen(GetConfigFile(), "a");
         if (configFile != NULL)
             fclose(configFile);
         return; // Nothing to read, so just return
@@ -414,7 +411,7 @@ fs::path GetPidFile()
 
 void CreatePidFile(const fs::path& path, pid_t pid)
 {
-    FILE* file = fopen(path.string().c_str(), "w");
+    FILE* file = fsbridge::fopen(path, "w");
     if (file) {
         fprintf(file, "%d\n", pid);
         fclose(file);
@@ -626,7 +623,7 @@ void SetupEnvironment()
     // The path locale is lazy initialized and to avoid deinitialization errors
     // in multithreading environments, it is set explicitly by the main thread.
     // A dummy locale is used to extract the internal default locale, used by
-    // boost::filesystem::path, which is then used to explicitly imbue the path.
+    // fs::path, which is then used to explicitly imbue the path.
     std::locale loc = fs::path::imbue(std::locale::classic());
     fs::path::imbue(loc);
 }
@@ -654,4 +651,9 @@ void SetThreadPriority(int nPriority)
     setpriority(PRIO_PROCESS, 0, nPriority);
 #endif // PRIO_THREAD
 #endif // WIN32
+}
+
+int GetNumCores()
+{
+    return std::thread::hardware_concurrency();
 }

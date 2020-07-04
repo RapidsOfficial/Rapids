@@ -47,7 +47,7 @@ public:
         QString address = index.data(Qt::DisplayRole).toString();
         QString label = index.sibling(index.row(), ColdStakingModel::OWNER_ADDRESS_LABEL).data(Qt::DisplayRole).toString();
         if (label.isEmpty()) {
-            label = "Address with no label";
+            label = QObject::tr("Address with no label");
         }
         bool isWhitelisted = index.sibling(index.row(), ColdStakingModel::IS_WHITELISTED).data(Qt::DisplayRole).toBool();
         QString amountStr = index.sibling(index.row(), ColdStakingModel::TOTAL_STACKEABLE_AMOUNT_STR).data(Qt::DisplayRole).toString();
@@ -91,40 +91,32 @@ ColdStakingWidget::ColdStakingWidget(RapidsGUI* parent) :
     fontLight.setWeight(QFont::Light);
 
     /* Title */
-    ui->labelTitle->setText(tr("Cold Staking"));
     setCssTitleScreen(ui->labelTitle);
     ui->labelTitle->setFont(fontLight);
 
     /* Button Group */
-    ui->pushLeft->setText(tr("Staker"));
-    ui->pushRight->setText(tr("Delegation"));
     setCssProperty(ui->pushLeft, "btn-check-left");
     setCssProperty(ui->pushRight, "btn-check-right");
 
     /* Subtitle */
-    ui->labelSubtitle1->setText(tr("You can delegate your RPDs, letting a hot node (24/7 online node)\nstake on your behalf, while you keep the keys securely offline."));
     setCssSubtitleScreen(ui->labelSubtitle1);
     spacerDiv = new QSpacerItem(40, 20, QSizePolicy::Maximum, QSizePolicy::Expanding);
 
     setCssProperty(ui->labelSubtitleDescription, "text-title");
-    ui->lineEditOwnerAddress->setPlaceholderText(tr("Enter owner address"));
     btnOwnerContact = ui->lineEditOwnerAddress->addAction(QIcon("://ic-contact-arrow-down"), QLineEdit::TrailingPosition);
     setCssProperty(ui->lineEditOwnerAddress, "edit-primary-multi-book");
     ui->lineEditOwnerAddress->setAttribute(Qt::WA_MacShowFocusRect, 0);
     setShadow(ui->lineEditOwnerAddress);
+    connect(ui->lineEditOwnerAddress, &QLineEdit::textChanged, this, &ColdStakingWidget::onOwnerAddressChanged);
 
-    ui->labelSubtitle2->setText(tr("Accept RPD delegation / Delegate RPD"));
     setCssSubtitleScreen(ui->labelSubtitle2);
     ui->labelSubtitle2->setContentsMargins(0,2,0,0);
 
-    ui->pushButtonSend->setText(tr("Delegate"));
-    ui->pushButtonClear->setText(tr("Clear All"));
     setCssBtnPrimary(ui->pushButtonSend);
     setCssBtnSecondary(ui->pushButtonClear);
 
     connect(ui->pushButtonClear, &QPushButton::clicked, this, &ColdStakingWidget::clearAll);
 
-    ui->labelEditTitle->setText(tr("Cold Staking address"));
     setCssProperty(ui->labelEditTitle, "text-title");
     sendMultiRow = new SendMultiRow(this);
     sendMultiRow->setOnlyStakingAddressAccepted(true);
@@ -132,18 +124,16 @@ ColdStakingWidget::ColdStakingWidget(RapidsGUI* parent) :
     connect(sendMultiRow, &SendMultiRow::onContactsClicked, [this](){ onContactsClicked(false); });
 
     // List
-    ui->labelListHistory->setText(tr("Delegated balance history"));
     setCssProperty(ui->labelStakingTotal, "text-title-right");
     setCssProperty(ui->labelListHistory, "text-title");
     setCssProperty(ui->pushImgEmpty, "img-empty-transactions");
-    ui->labelEmpty->setText(tr("No delegations yet"));
     setCssProperty(ui->labelEmpty, "text-empty");
 
-    ui->btnCoinControl->setTitleClassAndText("btn-title-grey", "Coin Control");
-    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", "Select RPD outputs to delegate.");
+    ui->btnCoinControl->setTitleClassAndText("btn-title-grey", tr("Coin Control"));
+    ui->btnCoinControl->setSubTitleClassAndText("text-subtitle", tr("Select %1 outputs to delegate.").arg(CURRENCY_UNIT.c_str()));
 
-    ui->btnColdStaking->setTitleClassAndText("btn-title-grey", "Create Cold Staking Address");
-    ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", "Creates an address to receive delegated coins\nand stake them on their owner's behalf.");
+    ui->btnColdStaking->setTitleClassAndText("btn-title-grey", tr("Create Cold Staking Address"));
+    ui->btnColdStaking->setSubTitleClassAndText("text-subtitle", tr("Creates an address to receive delegated coins\nand stake them on their owner's behalf."));
     ui->btnColdStaking->layout()->setMargin(0);
 
     connect(ui->btnCoinControl, &OptionButton::clicked, this, &ColdStakingWidget::onCoinControlClicked);
@@ -179,8 +169,8 @@ ColdStakingWidget::ColdStakingWidget(RapidsGUI* parent) :
     ui->btnMyStakingAddresses->setChecked(true);
     ui->listViewStakingAddress->setVisible(false);
 
-    ui->btnMyStakingAddresses->setTitleClassAndText("btn-title-grey", "My Cold Staking Addresses");
-    ui->btnMyStakingAddresses->setSubTitleClassAndText("text-subtitle", "List your own cold staking addresses.");
+    ui->btnMyStakingAddresses->setTitleClassAndText("btn-title-grey", tr("My Cold Staking Addresses"));
+    ui->btnMyStakingAddresses->setSubTitleClassAndText("text-subtitle", tr("List your own cold staking addresses."));
     ui->btnMyStakingAddresses->layout()->setMargin(0);
     ui->btnMyStakingAddresses->setRightIconClass("ic-arrow");
 
@@ -425,13 +415,6 @@ void ColdStakingWidget::onSendClicked()
     if (!walletModel || !walletModel->getOptionsModel())
         return;
 
-    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
-    if (!ctx.isValid()) {
-        // Unlock wallet was cancelled
-        inform(tr("Cannot send delegation, wallet locked"));
-        return;
-    }
-
     if (!walletModel->isColdStakingNetworkelyEnabled()) {
         inform(tr("Cold staking is networkely disabled"));
         return;
@@ -462,25 +445,27 @@ void ColdStakingWidget::onSendClicked()
 
 
     bool isStakingAddressFromThisWallet = walletModel->isMine(dest.address);
-    bool isOwnerAddressFromThisWallet = isOwnerEmpty;
+    bool isOwnerAddressFromThisWallet = isOwnerEmpty || walletModel->isMine(inputOwner);
 
-    if (!isOwnerAddressFromThisWallet) {
-        isOwnerAddressFromThisWallet = walletModel->isMine(inputOwner);
-
-        // Warn the user if the owner address is not from this wallet
-        if (!isOwnerAddressFromThisWallet &&
-            !ask(tr("ALERT!"),
-                    tr("Delegating to an external owner address!\n\n"
-                       "The delegated coins will NOT be spendable by this wallet.\nSpending these coins will need to be done from the wallet or\ndevice containing the owner address.\n\n"
-                       "Do you wish to proceed?"))
-            ) {
-                return;
-        }
+    // Warn the user if the owner address is not from this wallet
+    if (!isOwnerAddressFromThisWallet && !ask(tr("ALERT!"),
+                tr("Delegating to an external owner address!\n\n"
+                   "The delegated coins will NOT be spendable by this wallet.\nSpending these coins will need to be done from the wallet or\ndevice containing the owner address.\n\n"
+                   "Do you wish to proceed?"))) {
+            return;
     }
 
     // Don't try to delegate the balance if both addresses are from this wallet
     if (isStakingAddressFromThisWallet && isOwnerAddressFromThisWallet) {
         inform(tr("Staking address corresponds to this wallet, change it to an external node"));
+        return;
+    }
+
+    // Unlock wallet
+    WalletModel::UnlockContext ctx(walletModel->requestUnlock());
+    if (!ctx.isValid()) {
+        // Unlock wallet was cancelled
+        inform(tr("Cannot send delegation, wallet locked"));
         return;
     }
 
@@ -547,17 +532,25 @@ void ColdStakingWidget::onCoinControlClicked()
     if (isInDelegation) {
         if (walletModel->getBalance() > 0) {
             if (!coinControlDialog) {
-                coinControlDialog = new CoinControlDialog();
+                coinControlDialog = new CoinControlDialog(nullptr, true);
                 coinControlDialog->setModel(walletModel);
             } else {
                 coinControlDialog->refreshDialog();
             }
+            setCoinControlPayAmounts();
             coinControlDialog->exec();
             ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
         } else {
-            inform(tr("You don't have any RPD to select."));
+            inform(tr("You don't have any %1 to select.").arg(CURRENCY_UNIT.c_str()));
         }
     }
+}
+
+void ColdStakingWidget::setCoinControlPayAmounts()
+{
+    if (!coinControlDialog) return;
+    coinControlDialog->clearPayAmounts();
+    coinControlDialog->addPayAmount(sendMultiRow->getAmountValue());
 }
 
 void ColdStakingWidget::onColdStakeClicked()
@@ -643,7 +636,7 @@ void ColdStakingWidget::handleAddressClicked(const QModelIndex &rIndex)
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, &TooltipMenu::onEditClicked, this, &ColdStakingWidget::onEditClicked);
         connect(this->menu, &TooltipMenu::onDeleteClicked, this, &ColdStakingWidget::onDeleteClicked);
-        //connect(this->menu, &TooltipMenu::onCopyClicked, this, &ColdStakingWidget::onLabelClicked);
+        connect(this->menu, &TooltipMenu::onCopyClicked, [this](){onLabelClicked();});
         connect(this->menu, &TooltipMenu::onLastClicked, this, &ColdStakingWidget::onCopyOwnerClicked);
     } else {
         this->menu->hide();
@@ -751,9 +744,9 @@ void ColdStakingWidget::onLabelClicked(QString dialogTitle, const QModelIndex &i
             QString label = dialog->getLabel();
             std::string stdString = qAddress.toStdString();
             std::string purpose = walletModel->getAddressTableModel()->purposeForAddress(stdString);
-            const CBitcoinAddress address = CBitcoinAddress(stdString.data());
+            const CTxDestination address = DecodeDestination(stdString.data());
             if (!label.isEmpty() && walletModel->updateAddressBookLabels(
-                    address.Get(),
+                    address,
                     label.toUtf8().constData(),
                     purpose
             )) {
@@ -786,6 +779,14 @@ void ColdStakingWidget::onMyStakingAddressesClicked()
     }
 }
 
+void ColdStakingWidget::onOwnerAddressChanged()
+{
+    const bool isValid = ui->lineEditOwnerAddress->text().isEmpty() || (
+            walletModel && walletModel->validateAddress(ui->lineEditOwnerAddress->text()));
+
+    setCssProperty(ui->lineEditOwnerAddress, isValid ? "edit-primary-multi-book" : "edit-primary-multi-book-error", true);
+}
+
 void ColdStakingWidget::changeTheme(bool isLightTheme, QString& theme)
 {
     static_cast<CSDelegationHolder*>(delegate->getRowFactory())->isLightTheme = isLightTheme;
@@ -797,7 +798,7 @@ void ColdStakingWidget::updateStakingTotalLabel()
 {
     const CAmount& total = csModel->getTotalAmount();
     ui->labelStakingTotal->setText(tr("Total Staking: %1").arg(
-            (total == 0) ? "0.00 RPD" : GUIUtil::formatBalance(total, nDisplayUnit))
+            (total == 0) ? "0.00 " + QString(CURRENCY_UNIT.c_str()) : GUIUtil::formatBalance(total, nDisplayUnit))
     );
 }
 

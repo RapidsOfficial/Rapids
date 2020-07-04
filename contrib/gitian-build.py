@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # Copyright (c) 2018-2019 The Bitcoin Core developers
-# Copyright (c) 2019 The PIVX developers
-# Copyright (c) 2018-2020 The Rapids developers
+# Copyright (c) 2019-2018-2020 The Rapids developers
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -105,13 +104,13 @@ def setup_darwin():
 
 def setup_repos():
     if not os.path.isdir('gitian.sigs'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/rapids-Project/gitian.sigs.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/RapidsOfficial/gitian.sigs.git'])
     if not os.path.isdir('rapids-detached-sigs'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/RapidsOfficial/Rapids-detached-sigs.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/RapidsOfficial/Rapids.git'])
     if not os.path.isdir('gitian-builder'):
         subprocess.check_call(['git', 'clone', 'https://github.com/devrandom/gitian-builder.git'])
     if not os.path.isdir('rapids'):
-        subprocess.check_call(['git', 'clone', 'https://github.com/RapidsOfficial/Rapids.git'])
+        subprocess.check_call(['git', 'clone', 'https://github.com/RapidsOfficial/rapids.git'])
     os.chdir('gitian-builder')
     make_image_prog = ['bin/make-base-vm', '--suite', 'bionic', '--arch', 'amd64']
     if args.docker:
@@ -121,7 +120,7 @@ def setup_repos():
     if args.host_os == 'darwin':
         subprocess.check_call(['sed', '-i.old', '/50cacher/d', 'bin/make-base-vm'])
     if args.host_os == 'linux':
-        if args.is_fedora or args.is_centos:
+        if args.is_fedora or args.is_centos or args.is_wsl:
             subprocess.check_call(['sed', '-i', '/50cacher/d', 'bin/make-base-vm'])
     subprocess.check_call(make_image_prog)
     subprocess.check_call(['git', 'checkout', 'bin/make-base-vm'])
@@ -259,7 +258,7 @@ def main():
     parser = argparse.ArgumentParser(description='Script for running full Gitian builds.')
     parser.add_argument('-c', '--commit', action='store_true', dest='commit', help='Indicate that the version argument is for a commit or branch')
     parser.add_argument('-p', '--pull', action='store_true', dest='pull', help='Indicate that the version argument is the number of a github repository pull request')
-    parser.add_argument('-u', '--url', dest='url', default='https://github.com/RapidsOfficial/Rapids', help='Specify the URL of the repository. Default is %(default)s')
+    parser.add_argument('-u', '--url', dest='url', default='https://github.com/RapidsOfficial/rapids', help='Specify the URL of the repository. Default is %(default)s')
     parser.add_argument('-v', '--verify', action='store_true', dest='verify', help='Verify the Gitian build')
     parser.add_argument('-b', '--build', action='store_true', dest='build', help='Do a Gitian build')
     parser.add_argument('-s', '--sign', action='store_true', dest='sign', help='Make signed binaries for Windows and MacOS')
@@ -289,12 +288,15 @@ def main():
         args.is_bionic = False
         args.is_fedora = False
         args.is_centos = False
+        args.is_wsl    = False
         if os.path.isfile('/usr/bin/lsb_release'):
             args.is_bionic = b'bionic' in subprocess.check_output(['lsb_release', '-cs'])
         if os.path.isfile('/etc/fedora-release'):
             args.is_fedora = True
         if os.path.isfile('/etc/centos-release'):
             args.is_centos = True
+        if os.path.isfile('/proc/version') and open('/proc/version', 'r').read().find('Microsoft'):
+            args.is_wsl = True
 
     if args.kvm and args.docker:
         raise Exception('Error: cannot have both kvm and docker')

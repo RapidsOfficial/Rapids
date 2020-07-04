@@ -33,8 +33,8 @@
 
 
 #define BASE_WINDOW_WIDTH 1200
-#define BASE_WINDOW_HEIGHT 550 
-#define BASE_WINDOW_MIN_HEIGHT 500
+#define BASE_WINDOW_HEIGHT 740
+#define BASE_WINDOW_MIN_HEIGHT 620
 #define BASE_WINDOW_MIN_WIDTH 1100
 
 
@@ -79,8 +79,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
 #ifdef ENABLE_WALLET
     // Create wallet frame
-    if(enableWallet){
-
+    if (enableWallet) {
         QFrame* centralWidget = new QFrame(this);
         this->setMinimumWidth(BASE_WINDOW_MIN_WIDTH);
         this->setMinimumHeight(BASE_WINDOW_MIN_HEIGHT);
@@ -168,7 +167,8 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
 }
 
-void RapidsGUI::createActions(const NetworkStyle* networkStyle){
+void RapidsGUI::createActions(const NetworkStyle* networkStyle)
+{
     toggleHideAction = new QAction(networkStyle->getAppIcon(), tr("&Show / Hide"), this);
     toggleHideAction->setStatusTip(tr("Show or hide the main Window"));
 
@@ -184,7 +184,8 @@ void RapidsGUI::createActions(const NetworkStyle* networkStyle){
 /**
  * Here add every event connection
  */
-void RapidsGUI::connectActions() {
+void RapidsGUI::connectActions()
+{
     QShortcut *consoleShort = new QShortcut(this);
     consoleShort->setKey(QKeySequence(SHORT_KEY + Qt::Key_C));
     connect(consoleShort, &QShortcut::activated, [this](){
@@ -207,7 +208,8 @@ void RapidsGUI::connectActions() {
 }
 
 
-void RapidsGUI::createTrayIcon(const NetworkStyle* networkStyle) {
+void RapidsGUI::createTrayIcon(const NetworkStyle* networkStyle)
+{
 #ifndef Q_OS_MAC
     trayIcon = new QSystemTrayIcon(this);
     QString toolTip = tr("Rapids client") + " " + networkStyle->getTitleAddText();
@@ -218,8 +220,8 @@ void RapidsGUI::createTrayIcon(const NetworkStyle* networkStyle) {
     notificator = new Notificator(QApplication::applicationName(), trayIcon, this);
 }
 
-//
-RapidsGUI::~RapidsGUI() {
+RapidsGUI::~RapidsGUI()
+{
     // Unsubscribe from notifications from core
     unsubscribeFromCoreSignals();
 
@@ -233,16 +235,17 @@ RapidsGUI::~RapidsGUI() {
 
 
 /** Get restart command-line parameters and request restart */
-void RapidsGUI::handleRestart(QStringList args){
+void RapidsGUI::handleRestart(QStringList args)
+{
     if (!ShutdownRequested())
         Q_EMIT requestedRestart(args);
 }
 
 
-void RapidsGUI::setClientModel(ClientModel* clientModel) {
+void RapidsGUI::setClientModel(ClientModel* clientModel)
+{
     this->clientModel = clientModel;
-    if(this->clientModel) {
-
+    if (this->clientModel) {
         // Create system tray menu (or setup the dock menu) that late to prevent users from calling actions,
         // while the client has not yet fully loaded
         createTrayIconMenu();
@@ -277,7 +280,8 @@ void RapidsGUI::setClientModel(ClientModel* clientModel) {
     }
 }
 
-void RapidsGUI::createTrayIconMenu() {
+void RapidsGUI::createTrayIconMenu()
+{
 #ifndef Q_OS_MAC
     // return if trayIcon is unset (only on non-macOSes)
     if (!trayIcon)
@@ -351,15 +355,17 @@ void RapidsGUI::closeEvent(QCloseEvent* event)
 }
 
 
-void RapidsGUI::messageInfo(const QString& text){
-    if(!this->snackBar) this->snackBar = new SnackBar(this, this);
+void RapidsGUI::messageInfo(const QString& text)
+{
+    if (!this->snackBar) this->snackBar = new SnackBar(this, this);
     this->snackBar->setText(text);
     this->snackBar->resize(this->width(), snackBar->height());
     openDialog(this->snackBar, this);
 }
 
 
-void RapidsGUI::message(const QString& title, const QString& message, unsigned int style, bool* ret) {
+void RapidsGUI::message(const QString& title, const QString& message, unsigned int style, bool* ret)
+{
     QString strTitle =  tr("Rapids"); // default title
     // Default to information icon
     int nNotifyIcon = Notificator::Information;
@@ -398,26 +404,27 @@ void RapidsGUI::message(const QString& title, const QString& message, unsigned i
         // Check for buttons, use OK as default, if none was supplied
         int r = 0;
         showNormalIfMinimized();
-        if(style & CClientUIInterface::BTN_MASK){
+        if (style & CClientUIInterface::BTN_MASK) {
             r = openStandardDialog(
                     (title.isEmpty() ? strTitle : title), message, "OK", "CANCEL"
                 );
-        }else{
+        } else {
             r = openStandardDialog((title.isEmpty() ? strTitle : title), message, "OK");
         }
         if (ret != NULL)
             *ret = r;
-    } else if(style & CClientUIInterface::MSG_INFORMATION_SNACK){
+    } else if (style & CClientUIInterface::MSG_INFORMATION_SNACK) {
         messageInfo(message);
-    }else {
-        // Append title to "RPD - "
+    } else {
+        // Append title to "Rapids - "
         if (!msgType.isEmpty())
             strTitle += " - " + msgType;
         notificator->notify((Notificator::Class) nNotifyIcon, strTitle, message);
     }
 }
 
-bool RapidsGUI::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn){
+bool RapidsGUI::openStandardDialog(QString title, QString body, QString okBtn, QString cancelBtn)
+{
     DefaultDialog *dialog;
     if (isVisible()) {
         showHide(true);
@@ -439,7 +446,8 @@ bool RapidsGUI::openStandardDialog(QString title, QString body, QString okBtn, Q
 }
 
 
-void RapidsGUI::showNormalIfMinimized(bool fToggleHidden) {
+void RapidsGUI::showNormalIfMinimized(bool fToggleHidden)
+{
     if (!clientModel)
         return;
     if (!isHidden() && !isMinimized() && !GUIUtil::isObscured(this) && fToggleHidden) {
@@ -449,11 +457,13 @@ void RapidsGUI::showNormalIfMinimized(bool fToggleHidden) {
     }
 }
 
-void RapidsGUI::toggleHidden() {
+void RapidsGUI::toggleHidden()
+{
     showNormalIfMinimized(true);
 }
 
-void RapidsGUI::detectShutdown() {
+void RapidsGUI::detectShutdown()
+{
     if (ShutdownRequested()) {
         if (rpcConsole)
             rpcConsole->hide();
@@ -461,30 +471,31 @@ void RapidsGUI::detectShutdown() {
     }
 }
 
-void RapidsGUI::goToDashboard(){
-    if(stackedContainer->currentWidget() != dashboard){
+void RapidsGUI::goToDashboard()
+{
+    if (stackedContainer->currentWidget() != dashboard) {
         stackedContainer->setCurrentWidget(dashboard);
         topBar->showBottom();
     }
 }
 
-void RapidsGUI::goToSend(){
+void RapidsGUI::goToSend()
+{
     showTop(sendWidget);
 }
 
-void RapidsGUI::goToAddresses(){
+void RapidsGUI::goToAddresses()
+{
     showTop(addressesWidget);
 }
 
-void RapidsGUI::goToPrivacy(){
-    if (privacyWidget) showTop(privacyWidget);
-}
-
-void RapidsGUI::goToMasterNodes(){
+void RapidsGUI::goToMasterNodes()
+{
     showTop(masterNodesWidget);
 }
 
-void RapidsGUI::goToColdStaking(){
+void RapidsGUI::goToColdStaking()
+{
     showTop(coldStakingWidget);
 }
 
@@ -492,18 +503,33 @@ void RapidsGUI::goToSettings(){
     showTop(settingsWidget);
 }
 
-void RapidsGUI::goToReceive(){
+void RapidsGUI::goToSettingsInfo()
+{
+    navMenu->selectSettings();
+    settingsWidget->showInformation();
+    goToSettings();
+}
+
+void RapidsGUI::goToReceive()
+{
     showTop(receiveWidget);
 }
 
-void RapidsGUI::showTop(QWidget* view){
-    if(stackedContainer->currentWidget() != view){
+void RapidsGUI::openNetworkMonitor()
+{
+    settingsWidget->openNetworkMonitor();
+}
+
+void RapidsGUI::showTop(QWidget* view)
+{
+    if (stackedContainer->currentWidget() != view) {
         stackedContainer->setCurrentWidget(view);
         topBar->showTop();
     }
 }
 
-void RapidsGUI::changeTheme(bool isLightTheme){
+void RapidsGUI::changeTheme(bool isLightTheme)
+{
 
     QString css = GUIUtil::loadStyleSheet();
     this->setStyleSheet(css);
@@ -515,7 +541,8 @@ void RapidsGUI::changeTheme(bool isLightTheme){
     updateStyle(this);
 }
 
-void RapidsGUI::resizeEvent(QResizeEvent* event){
+void RapidsGUI::resizeEvent(QResizeEvent* event)
+{
     // Parent..
     QMainWindow::resizeEvent(event);
     // background
@@ -524,19 +551,21 @@ void RapidsGUI::resizeEvent(QResizeEvent* event){
     Q_EMIT windowResizeEvent(event);
 }
 
-bool RapidsGUI::execDialog(QDialog *dialog, int xDiv, int yDiv){
+bool RapidsGUI::execDialog(QDialog *dialog, int xDiv, int yDiv)
+{
     return openDialogWithOpaqueBackgroundY(dialog, this);
 }
 
-void RapidsGUI::showHide(bool show){
-    if(!op) op = new QLabel(this);
-    if(!show){
+void RapidsGUI::showHide(bool show)
+{
+    if (!op) op = new QLabel(this);
+    if (!show) {
         op->setVisible(false);
         opEnabled = false;
-    }else{
+    } else {
         QColor bg("#000000");
         bg.setAlpha(200);
-        if(!isLightTheme()){
+        if (!isLightTheme()) {
             bg = QColor("#00000000");
             bg.setAlpha(150);
         }
@@ -555,11 +584,13 @@ void RapidsGUI::showHide(bool show){
     }
 }
 
-int RapidsGUI::getNavWidth(){
+int RapidsGUI::getNavWidth()
+{
     return this->navMenu->width();
 }
 
-void RapidsGUI::openFAQ(int section){
+void RapidsGUI::openFAQ(int section)
+{
     showHide(true);
     SettingsFaqWidget* dialog = new SettingsFaqWidget(this);
     if (section > 0) dialog->setSection(section);
@@ -572,7 +603,7 @@ void RapidsGUI::openFAQ(int section){
 bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
 {
     // Single wallet supported for now..
-    if(!stackedContainer || !clientModel || !walletModel)
+    if (!stackedContainer || !clientModel || !walletModel)
         return false;
 
     // set the model for every view
@@ -587,6 +618,7 @@ bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
     settingsWidget->setWalletModel(walletModel);
 
     // Connect actions..
+    connect(walletModel, &WalletModel::message, this, &RapidsGUI::message);
     connect(masterNodesWidget, &MasterNodesWidget::message, this, &RapidsGUI::message);
     connect(coldStakingWidget, &ColdStakingWidget::message, this, &RapidsGUI::message);
     connect(topBar, &TopBar::message, this, &RapidsGUI::message);
@@ -601,18 +633,21 @@ bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
     return true;
 }
 
-bool RapidsGUI::setCurrentWallet(const QString& name) {
+bool RapidsGUI::setCurrentWallet(const QString& name)
+{
     // Single wallet supported.
     return true;
 }
 
-void RapidsGUI::removeAllWallets() {
+void RapidsGUI::removeAllWallets()
+{
     // Single wallet supported.
 }
 
-void RapidsGUI::incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address) {
+void RapidsGUI::incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address)
+{
     // Only send notifications when not disabled
-    if(!bdisableSystemnotifications){
+    if (!bdisableSystemnotifications) {
         // On new transaction, make an info balloon
         message((amount) < 0 ? (pwalletMain->fMultiSendNotify == true ? tr("Sent MultiSend transaction") : tr("Sent transaction")) : tr("Incoming transaction"),
             tr("Date: %1\n"

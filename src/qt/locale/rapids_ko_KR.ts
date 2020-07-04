@@ -2,6 +2,10 @@
 <context>
     <name>AddNewAddressDialog</name>
     <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
         <source>My Address</source>
         <translation>내 주소</translation>
     </message>
@@ -24,6 +28,10 @@
 </context>
 <context>
     <name>AddNewContactDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
     <message>
         <source>TextLabel</source>
         <translation>텍스트라벨</translation>
@@ -99,7 +107,7 @@
     </message>
     <message>
         <source>C&amp;lose</source>
-        <translation>닫&amp;기</translation>
+        <translation>&amp;닫기</translation>
     </message>
     <message>
         <source>Choose the address to send coins to</source>
@@ -111,7 +119,7 @@
     </message>
     <message>
         <source>C&amp;hoose</source>
-        <translation>선&amp;택</translation>
+        <translation>&amp;선택</translation>
     </message>
     <message>
         <source>Sending addresses</source>
@@ -122,12 +130,12 @@
         <translation>받을 주소</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>이 주소들은 송금할 RPD 주소입니다. 송금하기 전 항상 금액과 주소를 확인해주세요.</translation>
+        <source>These are your Rapids addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>이 주소들은 송금할 Rapids 주소입니다. 송금하기 전 항상 금액과 주소를 확인해주세요.</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>이 주소들은 입금 받을 RPD 주소입니다. 매 거래마다 새로운 입금 주소를 사용하는 것이 좋습니다.</translation>
+        <source>These are your Rapids addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>이 주소들은 입금 받을 Rapids 주소입니다. 매 거래마다 새로운 입금 주소를 사용하는 것이 좋습니다.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -168,7 +176,11 @@
         <source>Bob Allen</source>
         <translation>밥 앨런</translation>
     </message>
-    </context>
+    <message>
+        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
+        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+    </message>
+</context>
 <context>
     <name>AddressTableModel</name>
     <message>
@@ -182,6 +194,10 @@
     <message>
         <source>Date</source>
         <translation>날짜</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>분류</translation>
     </message>
     <message>
         <source>(no label)</source>
@@ -203,8 +219,8 @@
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>지금은 활성화된 마스터 노드가 없습니다.</translation>
+        <source>N/A</source>
+        <translation>N/A</translation>
     </message>
     <message>
         <source>Contact name</source>
@@ -235,8 +251,8 @@
         <translation>예) 홍길동</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>RPD 주소를 입력하세요.</translation>
+        <source>Enter Rapids address</source>
+        <translation>Rapids 주소를 입력하세요</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -273,6 +289,16 @@
     <message>
         <source>Delete Contact</source>
         <translation>연락처 삭제</translation>
+    </message>
+    <message>
+        <source>You are just about to remove the contact:
+
+%1
+
+Are you sure?</source>
+        <translation>%1
+
+위 주소를 삭제하시겠습니까?</translation>
     </message>
     <message>
         <source>Contact Deleted</source>
@@ -316,8 +342,7 @@
     <message>
         <source>Unlock wallet
 for staking</source>
-        <translation>스테이킹을 위한
-지갑 보안 해제</translation>
+        <translation>스테이킹 위해 지갑 열기</translation>
     </message>
     <message>
         <source>Unlock wallet</source>
@@ -344,6 +369,18 @@ for staking</source>
         <translation>지갑 암호화 확인</translation>
     </message>
     <message>
+        <source>WARNING</source>
+        <translation>경고</translation>
+    </message>
+    <message>
+        <source>If you encrypt your wallet and lose your passphrase, you will</source>
+        <translation>지갑 암호화 후 암호를 분실하게 되면</translation>
+    </message>
+    <message>
+        <source>LOSE ALL OF YOUR RPD</source>
+        <translation>모든 RPD를 잃게 됩니다</translation>
+    </message>
+    <message>
         <source>ENCRYPT</source>
         <translation>암호화</translation>
     </message>
@@ -352,16 +389,16 @@ for staking</source>
         <translation>취소</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
+        <source>WARNING: The Caps Lock key is on!</source>
+        <translation>경고: Caps Lock 키가 활성화 되있습니다!</translation>
+    </message>
+    <message>
+        <source>Rapids will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
         <translation>Rapids는 이제 암호화 프로세스를 마치기 위해 닫힐것입니다. 지갑을 암호화하더라도 맬웨어로 인한 RPDs 의 도난당하는 것을 완벽하게 보호 할 수는 없습니다.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>지갑을 암호화 하시겠습니까?</translation>
-    </message>
-    <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
-        <translation>경고: 지갑 암호화 후 암호를 분실하게 되면 &lt;b&gt;모든 RPD를 잃게 됩니다&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -403,10 +440,6 @@ for staking</source>
         <source>Wallet passphrase was successfully changed.</source>
         <translation>지갑 암호가 변경되었습니다.</translation>
     </message>
-    <message>
-        <source>Warning: The Caps Lock key is on!</source>
-        <translation>경고: Caps Lock 키가 켜져있습니다!</translation>
-    </message>
 </context>
 <context>
     <name>BanTableModel</name>
@@ -420,52 +453,37 @@ for staking</source>
     </message>
 </context>
 <context>
-    <name>BlockExplorer</name>
-    <message>
-        <source>Blockchain Explorer</source>
-        <translation>블록체인 탐색기</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>뒤로</translation>
-    </message>
-    <message>
-        <source>Forward</source>
-        <translation>앞으로</translation>
-    </message>
-    <message>
-        <source>Address / Block / Transaction</source>
-        <translation>주소 / 블록 / 트랜잭션</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation>검색</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
-        <translation>모든 트랜잭션이 표시되지는 않습니다. 모든 트랜잭션을 보려면 구성 파일 (rapids.conf)에 txindex = 1을 설정해야합니다.</translation>
-    </message>
-</context>
-<context>
     <name>CSRow</name>
     <message>
         <source>Form</source>
         <translation>Form</translation>
     </message>
-    </context>
+    <message>
+        <source>Savings</source>
+        <translation>계좌</translation>
+    </message>
+    <message>
+        <source>0,00 RPD</source>
+        <translation>0,00 RPD</translation>
+    </message>
+    <message>
+        <source>address</source>
+        <translation>주소</translation>
+    </message>
+    <message>
+        <source>Not Staking</source>
+        <translation>스테이킹 비활성 상태</translation>
+    </message>
+    <message>
+        <source>Own delegation</source>
+        <translation>오너 위임</translation>
+    </message>
+</context>
 <context>
     <name>ClientModel</name>
     <message>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
         <translation>전체 : %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / 미확인: %5)</translation>
-    </message>
-    <message>
-        <source>Network Alert</source>
-        <translation>네트워크 알림</translation>
     </message>
 </context>
 <context>
@@ -485,6 +503,10 @@ for staking</source>
     <message>
         <source>Coin Selection</source>
         <translation>코인 선택</translation>
+    </message>
+    <message>
+        <source>Select RPD Outputs to Spend</source>
+        <translation>사용할 RPD 아웃풋 선택</translation>
     </message>
     <message>
         <source>Dust:</source>
@@ -511,14 +533,6 @@ for staking</source>
         <translation>금액</translation>
     </message>
     <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
         <source>0.00 RPD</source>
         <translation>0.00 RPD</translation>
     </message>
@@ -531,12 +545,20 @@ for staking</source>
         <translation>모두 선택</translation>
     </message>
     <message>
+        <source>Toggle lock state</source>
+        <translation>토글 잠금상태 </translation>
+    </message>
+    <message>
         <source>Received with label</source>
         <translation>수신 된 라벨</translation>
     </message>
     <message>
         <source>Received with address</source>
         <translation>수신 된 주소</translation>
+    </message>
+    <message>
+        <source>After Fee: </source>
+        <translation>수수료 이후:</translation>
     </message>
     <message>
         <source>OK</source>
@@ -579,40 +601,40 @@ for staking</source>
         <translation>잠금해제되지 않음</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>수량 복사</translation>
-    </message>
-    <message>
-        <source>Copy fee</source>
-        <translation>수수료 복사</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>이용 수수료 복사</translation>
-    </message>
-    <message>
-        <source>Copy bytes</source>
-        <translation>바이트 복사</translation>
-    </message>
-    <message>
-        <source>Copy priority</source>
-        <translation>우선 사항 복사</translation>
-    </message>
-    <message>
-        <source>Copy dust</source>
-        <translation>현금 복사</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>변경 복사</translation>
-    </message>
-    <message>
         <source>Unselect all</source>
         <translation>모두 선택 해제</translation>
     </message>
     <message>
         <source>Please switch to "List mode" to use this function.</source>
         <translation>이 기능을 사용하려면 "목록 모드"로 전환하십시오.</translation>
+    </message>
+    <message>
+        <source>Quantity Copied</source>
+        <translation>수량 복사됨</translation>
+    </message>
+    <message>
+        <source>Amount Copied</source>
+        <translation>액수 복사됨</translation>
+    </message>
+    <message>
+        <source>Fee Copied</source>
+        <translation>수수료 복사됨</translation>
+    </message>
+    <message>
+        <source>After Fee Copied</source>
+        <translation>수수료 이후 복사됨</translation>
+    </message>
+    <message>
+        <source>Bytes Copied</source>
+        <translation>Bytes 복사됨</translation>
+    </message>
+    <message>
+        <source>Dust Copied</source>
+        <translation>Dust 복사됨</translation>
+    </message>
+    <message>
+        <source>Change Copied</source>
+        <translation>잔돈 복사됨</translation>
     </message>
     <message>
         <source>highest</source>
@@ -663,6 +685,10 @@ for staking</source>
         <translation>예</translation>
     </message>
     <message>
+        <source>delegated to %1 for cold staking</source>
+        <translation>콜드 스테이킹 주소 %1 로 위임 됨</translation>
+    </message>
+    <message>
         <source>no</source>
         <translation>아니오</translation>
     </message>
@@ -708,95 +734,230 @@ for staking</source>
     </message>
 </context>
 <context>
-    <name>CoinControlRpdWidget</name>
-    <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
-        <source>RPD:</source>
-        <translation>RPD:</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>수량:</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>수수료:</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>금액</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>라벨</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>주소</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>분류</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>날짜</translation>
-    </message>
-    <message>
-        <source>Confirmations</source>
-        <translation>확인</translation>
-    </message>
-    <message>
-        <source>Bytes:</source>
-        <translation>바이트:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>현금:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>잔돈:</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
-    </message>
-</context>
-<context>
     <name>ColdStakingWidget</name>
     <message>
         <source>Form</source>
         <translation>Form</translation>
     </message>
     <message>
+        <source>Title</source>
+        <translation>제목</translation>
+    </message>
+    <message>
         <source>TextLabel</source>
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>Owner address (optional, if empty a new address will be created)</source>
+        <translation>오너 주소 (선택과목, 입력 하지 않을경우 새로운 주소가 생성됨)</translation>
+    </message>
+    <message>
+        <source>Total Staking:</source>
+        <translation>스테이킹 총 액수</translation>
+    </message>
+    <message>
+        <source>List of delegated balance by address</source>
+        <translation>주소별 위임된 액수 리스트</translation>
+    </message>
+    <message>
+        <source>No balance delegated</source>
+        <translation>위임된 액수 없음</translation>
+    </message>
+    <message>
+        <source>Cold Staking</source>
+        <translation>콜드 스테이킹</translation>
+    </message>
+    <message>
+        <source>Staker</source>
+        <translation>스테이커</translation>
+    </message>
+    <message>
+        <source>Delegation</source>
+        <translation>위임</translation>
+    </message>
+    <message>
+        <source>Delegate</source>
+        <translation>위임 함</translation>
+    </message>
+    <message>
+        <source>Clear All</source>
+        <translation>전체 지우기</translation>
+    </message>
+    <message>
+        <source>Delegated balance history</source>
+        <translation>위임된 액수 기록</translation>
+    </message>
+    <message>
+        <source>No delegations yet</source>
+        <translation>아직 위임된 액수가 없습니다</translation>
+    </message>
+    <message>
+        <source>Total Staking: %1</source>
+        <translation>스테이킹 총 액수: %1</translation>
+    </message>
+    <message>
+        <source>Error loading delegations: %1</source>
+        <translation>위임 데이터 로딩 에러: %1</translation>
+    </message>
+    <message>
+        <source>You can delegate your RPDs, letting a hot node (24/7 online node)
+stake on your behalf, while you keep the keys securely offline.</source>
+        <translation>안전히 개인 프라이빗 키를 오프라인으로 보관한 상태로, 가지고 계신 RPD 를 매일 24시간 온라인으로 돌아가는 핫 노드로 위임하여, 대신 스테이킹을 하게 할수 있습니다. </translation>
+    </message>
+    <message>
+        <source>Enter owner address</source>
+        <translation>Owner 주소 입력</translation>
+    </message>
+    <message>
+        <source>Accept RPD delegation / Delegate RPD</source>
+        <translation>RPD 위임권 수락하기 / RPD 위임 하기</translation>
+    </message>
+    <message>
+        <source>Cold Staking address</source>
+        <translation>콜드 스테이킹 주소</translation>
+    </message>
+    <message>
+        <source>No receive addresses available, you can go to the receive screen and create some there!</source>
+        <translation>존재하는 입금 주소가 없습니다. 입금 화면에서 생성 하실수 있습니다.</translation>
+    </message>
+    <message>
+        <source>No contacts available, you can go to the contacts screen and add some there!</source>
+        <translation>존재하는 연락처가 없습니다. 연락처 화면에서 추가 하실수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Cannot send delegation, wallet locked</source>
+        <translation>위임을 할수가 없습니다. 지갑이 잠겨 있습니다.</translation>
+    </message>
+    <message>
+        <source>Cold staking is networkely disabled</source>
+        <translation>콜드 스테이킹 네트워크가 비활성화 된 상태입니다.</translation>
+    </message>
+    <message>
+        <source>Invalid entry</source>
+        <translation>잘못된 입력</translation>
+    </message>
+    <message>
+        <source>Invalid entry, minimum delegable amount is </source>
+        <translation>유효한 입력이 아닙니다. 최소 위임 액수: </translation>
+    </message>
+    <message>
+        <source>Owner address invalid</source>
+        <translation>유효한 오너 주소가 아닙니다.</translation>
+    </message>
+    <message>
+        <source>ALERT!</source>
+        <translation>경보!</translation>
+    </message>
+    <message>
+        <source>Delegating to an external owner address!
+
+The delegated coins will NOT be spendable by this wallet.
+Spending these coins will need to be done from the wallet or
+device containing the owner address.
+
+Do you wish to proceed?</source>
+        <translation>지갑 밖의 오너 주소로 위임을 선택 하셨습니다.
+
+위임된 코인들은 이 지갑에서 더 이상 전송이 불가해집니다.
+위임된 코인들의 사용/전송권은 위임된 오너 주소를 보유하고 있는 지갑으로 넘어갑니다.
+
+계속 진행 하시겠습니까?</translation>
+    </message>
+    <message>
+        <source>Staking address corresponds to this wallet, change it to an external node</source>
+        <translation>스테이킹 주소가 이 지갑과 일치합니다. 스테이킹 주소를 외부 노드로 변경하십시오.</translation>
+    </message>
+    <message>
+        <source>Cannot create transaction.</source>
+        <translation>전송 불가</translation>
+    </message>
+    <message>
+        <source>Coins delegated</source>
+        <translation>위임된 코인</translation>
+    </message>
+    <message>
+        <source>You don't have any RPD to select.</source>
+        <translation>선택할 RPD를 가지고 있지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>명령을 수행할 수 없습니다. 지갑이 잠겨 있습니다.</translation>
+    </message>
+    <message>
+        <source>URI copied to clipboard</source>
+        <translation>URI가 클립보드에 복사되었습니다.</translation>
+    </message>
+    <message>
+        <source>Address copied to clipboard</source>
+        <translation>주소가 클립보드에 복사됨</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>수정</translation>
+    </message>
+    <message>
+        <source>Stake</source>
+        <translation>스테이크</translation>
+    </message>
+    <message>
+        <source>Blacklist</source>
+        <translation>블랙리스트</translation>
+    </message>
+    <message>
+        <source>Edit Label</source>
+        <translation>라벨 수정하기</translation>
+    </message>
+    <message>
+        <source>Copy owner
+address</source>
+        <translation>소유자 복사
+주소</translation>
     </message>
     <message>
         <source>Address copied</source>
         <translation>주소가 복사되었습니다.</translation>
     </message>
-    </context>
+    <message>
+        <source>Edit Cold Address Label</source>
+        <translation>콜드 주소 라벨 수정하기</translation>
+    </message>
+    <message>
+        <source>Whitelist failed, please check the logs</source>
+        <translation>화이트 리스트 설정 실패, 로그를 확인해주세요.</translation>
+    </message>
+    <message>
+        <source> staking!</source>
+        <translation>스테이킹!</translation>
+    </message>
+    <message>
+        <source>Blacklist failed, please check the logs</source>
+        <translation>블랙리스트 설정 실패, 로그를 확인해주세요.</translation>
+    </message>
+    <message>
+        <source> blacklisted from staking</source>
+        <translation>블랙리스트 처리됨</translation>
+    </message>
+    <message>
+        <source>Owner address copied</source>
+        <translation>소유자 주소 복사됨</translation>
+    </message>
+    <message>
+        <source>Edit Owner Address Label</source>
+        <translation>소유자 주소 라벨 수정하기</translation>
+    </message>
+    <message>
+        <source>Address label saved</source>
+        <translation>주소 라벨이 저장됨</translation>
+    </message>
+    <message>
+        <source>Error storing address label</source>
+        <translation>주소 라벨 저장 오류</translation>
+    </message>
+</context>
 <context>
     <name>ContactDropdownRow</name>
     <message>
@@ -807,12 +968,16 @@ for staking</source>
         <source>Bob Allen</source>
         <translation>밥 앨런</translation>
     </message>
-    </context>
+    <message>
+        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
+        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+    </message>
+</context>
 <context>
     <name>DashboardWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Transactions</source>
@@ -829,10 +994,6 @@ for staking</source>
     <message>
         <source>No transactions</source>
         <translation>거래가 없음</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
     </message>
     <message>
         <source>Staking Rewards</source>
@@ -871,6 +1032,14 @@ for staking</source>
         <translation>연도</translation>
     </message>
     <message>
+        <source>Filter by</source>
+        <translation>Filter by</translation>
+    </message>
+    <message>
+        <source>LabelText</source>
+        <translation>LabelText</translation>
+    </message>
+    <message>
         <source>You can view your account's history</source>
         <translation>당신의 입출금 이력을 확인할 수 있습니다.</translation>
     </message>
@@ -879,40 +1048,29 @@ for staking</source>
         <translation>스테이킹 된 RPD와 zRPD 양</translation>
     </message>
     <message>
-        <source>All</source>
-        <translation>전체</translation>
+        <source>Please wait until the wallet is fully synced to see your correct balance</source>
+        <translation>정확한 잔액을 보기 위해 지갑이 완전히 동기화될 때까지 기다려주세요.</translation>
     </message>
     <message>
-        <source>Received</source>
-        <translation>받음</translation>
-    </message>
-    <message>
-        <source>Sent</source>
-        <translation>보냄</translation>
-    </message>
-    <message>
-        <source>Mined</source>
-        <translation>채굴</translation>
-    </message>
-    <message>
-        <source>Minted</source>
-        <translation>발행</translation>
-    </message>
-    <message>
-        <source>MN reward</source>
-        <translation>마스터노드 보상</translation>
-    </message>
-    <message>
-        <source>To yourself</source>
-        <translation>자신에게</translation>
+        <source>No transactions yet</source>
+        <translation>아직 전송기록 없음</translation>
     </message>
     <message>
         <source>How to get RPD or zRPD</source>
         <translation>RPD 혹은 zRPD를 얻는 법</translation>
     </message>
     <message>
+        <source>You can verify the staking activity in the status bar at the top right of the wallet.
+It will start automatically as soon as the wallet has enough confirmations on any unspent balances, and the wallet has synced.</source>
+        <translation>지갑 오른쪽 상단의 상태 표시 줄에서 스테이킹 활동을 확인할 수 있습니다. 지갑에서 사용하지 않은 잔액에 대한 컨펌이 충분하고, 지갑이 동기화되면 자동으로 시작됩니다.</translation>
+    </message>
+    <message>
         <source>You have no staking rewards</source>
         <translation>스테이킹된 보상이 없습니다.</translation>
+    </message>
+    <message>
+        <source>No charts library</source>
+        <translation>차트 라이브러리 없음</translation>
     </message>
     <message>
         <source>Loading chart..</source>
@@ -921,6 +1079,10 @@ for staking</source>
     <message>
         <source>Error loading chart, invalid show option</source>
         <translation>차트 로딩 에러, 보기 옵션이 없습니다.</translation>
+    </message>
+    <message>
+        <source>Error loading chart, invalid data</source>
+        <translation>차트 로딩 오류, 유효하지 않은 데이터</translation>
     </message>
     <message>
         <source>Error loading chart: %1</source>
@@ -938,47 +1100,8 @@ for staking</source>
         <translation>전송 상세내역</translation>
     </message>
     <message>
-        <source>CANCEL</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <source>SAVE</source>
-        <translation>저장</translation>
-    </message>
-</context>
-<context>
-    <name>DenomGenerationDialog</name>
-    <message>
-        <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
-        <source>5000</source>
-        <translation>5000</translation>
-    </message>
-    <message>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
-        <source>1000</source>
-        <translation>1000</translation>
-    </message>
-    <message>
-        <source>Select All</source>
-        <translation>모두 선택</translation>
+        <source>Text Label</source>
+        <translation>텍스트라벨</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1028,8 +1151,8 @@ for staking</source>
         <translation>보내는 주소 수정</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid RPD address.</source>
-        <translation>입력된 주소 "%1"는 올바른 RPD 주소가 아닙니다.</translation>
+        <source>The entered address "%1" is not a valid Rapids address.</source>
+        <translation>입력된 주소 "%1"는 올바른 Rapids 주소가 아닙니다.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1075,33 +1198,6 @@ for staking</source>
     </message>
 </context>
 <context>
-    <name>GovernancePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Update Proposals</source>
-        <translation>제안서 갱신</translation>
-    </message>
-    <message>
-        <source>Next super block:</source>
-        <translation>다음 슈퍼 블록</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Budget left:</source>
-        <translation>남은 예산</translation>
-    </message>
-    <message>
-        <source>Masternodes count:</source>
-        <translation>마스터노드 수</translation>
-    </message>
-</context>
-<context>
     <name>HelpMessageDialog</name>
     <message>
         <source>version</source>
@@ -1144,6 +1240,10 @@ for staking</source>
         <translation>실행시 초기화면 표시 (기본: %u)</translation>
     </message>
     <message>
+        <source>Hide QT staking charts on startup (default: %u)</source>
+        <translation>시작시 QT 스테이킹 차트 숨김 (기본값: %u)</translation>
+    </message>
+    <message>
         <source>Set language, for example "de_DE" (default: system locale)</source>
         <translation>언어 설정 예시 "de_DE" (기본값: 시스템 언어)</translation>
     </message>
@@ -1168,19 +1268,23 @@ for staking</source>
     </message>
     <message>
         <source>Welcome to Rapids.</source>
-        <translation>RPD Core에 오신 것을 환영합니다.</translation>
+        <translation>Rapids에 오신 것을 환영합니다.</translation>
     </message>
     <message>
         <source>As this is the first time the program is launched, you can choose where Rapids will store its data.</source>
-        <translation>이 프로그램이 처음 실행되었으므로 RPD Core가 데이터를 저장할 위치를 선택할 수 있습니다.</translation>
+        <translation>이 프로그램이 처음 실행되었으므로 Rapids가 데이터를 저장할 위치를 선택할 수 있습니다.</translation>
     </message>
     <message>
-        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>RPD Core는 RPD 블록체인을 다운로드하여 저장합니다. 최소 %1GB의 데이터가 디렉토리에 저장되며 시간이 지날수록 증가합니다. 또한 지갑도 해당 디렉토리에 저장됩니다.</translation>
+        <source>Rapids will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Rapids는 Rapids 블록체인을 다운로드하여 저장합니다. 최소 %1GB의 데이터가 디렉토리에 저장되며 시간이 지날수록 증가합니다. 또한 지갑도 해당 디렉토리에 저장됩니다.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
         <translation>기본 데이터 디렉토리 사용</translation>
+    </message>
+    <message>
+        <source>Use a custom data directory</source>
+        <translation>사용자 지정 데이터 디렉토리 사용</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1225,7 +1329,11 @@ for staking</source>
         <source>Loading</source>
         <translation>불러오는 중</translation>
     </message>
-    </context>
+    <message>
+        <source>.</source>
+        <translation>.</translation>
+    </message>
+</context>
 <context>
     <name>LockUnlock</name>
     <message>
@@ -1251,9 +1359,29 @@ for staking</source>
         <source>Form</source>
         <translation>Form</translation>
     </message>
-    </context>
+</context>
 <context>
     <name>MasterNodeWizardDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation>2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation>3</translation>
+    </message>
+    <message>
+        <source>Intro</source>
+        <translation>Intro</translation>
+    </message>
     <message>
         <source>Name</source>
         <translation>이름</translation>
@@ -1263,24 +1391,40 @@ for staking</source>
         <translation>주소</translation>
     </message>
     <message>
-        <source>Create New Master Node Controller</source>
-        <translation>새로운 마스터노드 컨트롤러 생성</translation>
+        <source>Create New Masternode Controller</source>
+        <translation>새로운 마스터노드 컨트롤러 만들기</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;RPD 마스터노드 생성을 위해서는 최소 10,000 RPD (RPD 단위) 가 네트워크 상에 존재해야 합니다. (해당 코인들의 소유권은 그대로 유지되며 사라지지 않습니다) &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt; 언제든지 소유하고 있는 노드를 비활성화 시키거나 코인의 잠금상태를 해제할 수 있습니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a Rapids Masternode you must dedicate 10,000 RPD (the unit of Rapids) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rapids 마스터노드를 생성하기 위해서는 10,000 RPD (Rapids 단위)를 네트워크에 예치해야 합니다. (예치한 코인은 계속 본인의 소유입니다.) &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;언제든지 노드를 비활성화 시키고 코인을 잠금해제할 수 있습니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>Set Master Node’s Name</source>
-        <translation>마스터노드 이름 지정</translation>
+        <source>Set Masternode Name</source>
+        <translation>마스터노드 이름 설정</translation>
+    </message>
+    <message>
+        <source>Set Masternode IP and Port</source>
+        <translation>마스터노드 IP와 Port 설정</translation>
+    </message>
+    <message>
+        <source>Enter port</source>
+        <translation>Port 입력</translation>
+    </message>
+    <message>
+        <source>Make sure you have this amount of coins.</source>
+        <translation>이만큼의 코인을 보유하고 있는지 확인하십시오.</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;10,000 RPD의 트랜잭션은&lt;/p&gt;&lt;p&gt;지갑의 새로운 빈 주소로 만들어질 것입니다.&lt;/p&gt;&lt;p&gt;그 주소는 마스터노드 이름에 따라 레이블링됩니다.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>Address of the node that must always be online running the actual master node.</source>
+        <translation>항상 온라인 상태인 실제 마스터노드의 주소</translation>
     </message>
     <message>
         <source>Enter IP address</source>
         <translation>IP 주소 입력</translation>
-    </message>
-    <message>
-        <source>Enter Port</source>
-        <translation>Port 입력</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1289,6 +1433,10 @@ for staking</source>
     <message>
         <source>OK</source>
         <translation>선택</translation>
+    </message>
+    <message>
+        <source>e.g user_masternode</source>
+        <translation>예) user_masternode</translation>
     </message>
     <message>
         <source>NEXT</source>
@@ -1303,56 +1451,50 @@ for staking</source>
         <translation>주소 라벨은 비어있으면 안됩니다.</translation>
     </message>
     <message>
+        <source>IP or port cannot be empty</source>
+        <translation>IP 혹은 Port 는 비울 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Invalid IP address</source>
+        <translation>유효하지 않은 IP 주소 임</translation>
+    </message>
+    <message>
+        <source>Prepare master node failed.
+
+%1
+</source>
+        <translation>마스터노드 실패에 대비하십시오.
+
+%1
+</translation>
+    </message>
+    <message>
+        <source>Invalid collateral output index</source>
+        <translation>유효하지 않은 collateral output index</translation>
+    </message>
+    <message>
+        <source>Master node created! Wait %1 confirmations before starting it.</source>
+        <translation>마스터노드가 생성되었습니다! 마스터노드를 시작하기 위해 %1 컨펌을 기다려야합니다.</translation>
+    </message>
+    <message>
+        <source>Cannot send collateral transaction.
+
+%1</source>
+        <translation>담보하려는 트랜잭션을 보낼 수 없습니다.
+
+%1</translation>
+    </message>
+    <message>
         <source>Invalid masternode.conf file</source>
         <translation>masternode.conf 파일이 유효하지 않습니다.</translation>
     </message>
     <message>
-        <source>Master node created!</source>
-        <translation>마스터노드가 생성되었습니다!</translation>
+        <source>Error parsing masternode.conf file</source>
+        <translation>masternode.conf 파일 문법 오류</translation>
     </message>
     <message>
         <source>masternode.conf file doesn't exists</source>
         <translation>masternode.conf 파일이 생성되지 않았습니다.</translation>
-    </message>
-    <message>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation>수신자 주소가 유효하지 않습니다. 다시 확인해주세요.</translation>
-    </message>
-    <message>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation>지불 할 금액은 0보다 커야합니다.</translation>
-    </message>
-    <message>
-        <source>The amount exceeds your balance.</source>
-        <translation>입력한 금액이 잔액을 초과합니다.</translation>
-    </message>
-    <message>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>%1 트랜잭션 수수료가 포함하면 현재 잔액을 초과합니다.</translation>
-    </message>
-    <message>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>중복된 주소를 발견했습니다. 각 주소는 전송 작업당 한 번씩만 보낼 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Transaction creation failed!</source>
-        <translation>트랜잭션 생성 실패!</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>트랜잭션이 거부되었습니다! 지갑에 있는 코인 중 일부가 이미 사용된 경우일 수 있습니다. wallet.dat 사본을 사용하고 코인을 이미 사용하고 현재 여기에 표시되지 않은 경우에 이런 현상이 발생할 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation>오류: 현재 지갑이 익명 처리를 위해 잠금해제 되어 있습니다. 익명화 및 스테이킹 전용을 해제하시고 다시 시도하세요.</translation>
-    </message>
-    <message>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation>KB당 %1보다 %2배 많은 수수료는 너무 높은 수수료입니다.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
-        <translation>에러 : 현재 지갑은 코인 익명화를 위해서만 잠금해제되었습니다. 잠금해제가 취소됩니다.</translation>
     </message>
 </context>
 <context>
@@ -1366,12 +1508,30 @@ for staking</source>
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>지금은 활성화된 마스터 노드가 없습니다.</translation>
+        <source>N/A</source>
+        <translation>N/A</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>Start All</source>
+        <translation>모두 시작</translation>
+    </message>
+    <message>
+        <source>Start Inactive/s</source>
+        <translation>비활성화된 노드 시작</translation>
+    </message>
+    <message>
+        <source>Masternodes</source>
+        <translation>마스터노드</translation>
+    </message>
+    <message>
+        <source>Full nodes that incentivize node operators to perform the core consensus functions
+and vote on the treasury system receiving a periodic reward.</source>
+        <translation>풀 노드를 통해 인센티브를 받는 노드 운영자들은, 핵심 합의 기능들을 수행하며,
+정기적인 보상을 받는 재무 시스템에 투표할 수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Create Masternode Controller</source>
+        <translation>마스터노드 컨트롤러 생성</translation>
     </message>
     <message>
         <source>No active Masternode yet</source>
@@ -1390,6 +1550,10 @@ for staking</source>
         <translation>정보</translation>
     </message>
     <message>
+        <source>Please wait until the node is fully synced</source>
+        <translation>노드가 완전히 동기화될 때까지 기다려주세요.</translation>
+    </message>
+    <message>
         <source>Start Masternode</source>
         <translation>마스터노드 시작</translation>
     </message>
@@ -1399,26 +1563,107 @@ for staking</source>
         <translation>마스터노드 %1을 시작하시겠습니까?</translation>
     </message>
     <message>
+        <source>Cannot edit masternode, wallet locked</source>
+        <translation>지갑이 잠겨, 마스터노드 수정을 할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Cannot start masternode, the collateral transaction has not been confirmed by the network yet.
+Please wait few more minutes (masternode collaterals require %1 confirmations).</source>
+        <translation>담보 거래가 아직 네트워크에 의해 컨펌되지 않았기 때문에 마스터노드를 시작할 수 없습니다.
+몇 분 더 기다려주십시오. (마스터노드 담보 거래가 완료되려면 %1 컨펌이 필요합니다.)</translation>
+    </message>
+    <message>
+        <source>Background task is being executed, please wait</source>
+        <translation>백그라운드 작업이 실행 중입니다. 기다려 주십시오.</translation>
+    </message>
+    <message>
+        <source>Start ALL masternodes failed</source>
+        <translation>실패한 모든 마스터노드 시작</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>지갑 열기 취소됨</translation>
+    </message>
+    <message>
+        <source>Cannot perform Masternodes start</source>
+        <translation>마스터노드 시작을 실행할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>%1 Masternodes failed to start, %2 started</source>
+        <translation>%1 마스터노드 시작 실패, %2 마스터노드 시작됨</translation>
+    </message>
+    <message>
+        <source>All Masternodes started!</source>
+        <translation>마스터노드 모두 시작!</translation>
+    </message>
+    <message>
+        <source>Cannot show Masternode information, wallet locked</source>
+        <translation>마스터노드 정보를 볼 수 없습니다. 지갑이 잠겨 있습니다.</translation>
+    </message>
+    <message>
+        <source>Masternode data copied to the clipboard.</source>
+        <translation>마스터노드 정보가 클립보드에 복사되었습니다.</translation>
+    </message>
+    <message>
         <source>Remote Masternode Data</source>
         <translation>마스터노드 데이터 원격 조종</translation>
+    </message>
+    <message>
+        <source>You are just about to export the required data to run a Masternode
+on a remote server to your clipboard.
+
+
+You will only have to paste the data in the rapids.conf file
+of your remote server and start it, then start the Masternode using
+this controller wallet (select the Masternode in the list and press "start").
+</source>
+        <translation>리모트 서버에서 마스터노드를 실행하기 위해 필요한 데이터를
+클립보드로 내보내려고 합니다.
+
+
+그 데이터를 리모트 서버의 rapids.conf 파일에
+붙여넣고 시작합니다. 그리고 컨트롤러 지갑에서 마스터노드를
+시작합니다. (리스트에서 마스터노드를 선택하고 "시작"을 누르십시오.)
+</translation>
     </message>
     <message>
         <source>Delete Masternode</source>
         <translation>마스터노드 삭제</translation>
     </message>
     <message>
+        <source>You are just about to delete Masternode:
+%1
+
+Are you sure?</source>
+        <translation>마스터노드를 삭제하려고 합니다:
+%1
+삭제하시겠습니까?</translation>
+    </message>
+    <message>
         <source>Invalid masternode.conf file</source>
         <translation>masternode.conf 파일이 유효하지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Error parsing masternode.conf file</source>
+        <translation>masternode.conf 파일 문법 오류</translation>
     </message>
     <message>
         <source>masternode.conf file doesn't exists</source>
         <translation>masternode.conf 파일이 생성되지 않았습니다.</translation>
     </message>
     <message>
+        <source>Cannot create Masternode controller, wallet locked</source>
+        <translation>마스터노드 컨트롤러를 생성할 수 없습니다. 지갑이 잠겨 있습니다.</translation>
+    </message>
+    <message>
         <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
         <translation>마스터노드 생성에 필요한 잔고가 부족합니다. 마스터노드 생성에는 10,000 RPD가 필요합니다.</translation>
     </message>
-    </context>
+    <message>
+        <source>Error creating masternode</source>
+        <translation>마스터노드 생성 오류</translation>
+    </message>
+</context>
 <context>
     <name>MnInfoDialog</name>
     <message>
@@ -1426,21 +1671,69 @@ for staking</source>
         <translation>Form</translation>
     </message>
     <message>
+        <source>Masternode Information</source>
+        <translation>마스터노드 정보</translation>
+    </message>
+    <message>
+        <source>Public Key:</source>
+        <translation>공개 키 : </translation>
+    </message>
+    <message>
+        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
+        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</translation>
+    </message>
+    <message>
         <source>Address: </source>
         <translation>주소:</translation>
+    </message>
+    <message>
+        <source>127.0.0.2:43223</source>
+        <translation>127.0.0.2:43223</translation>
+    </message>
+    <message>
+        <source>Collaterall tx id:</source>
+        <translation>담보 tx id:</translation>
+    </message>
+    <message>
+        <source>Output index:</source>
+        <translation>Output index:</translation>
+    </message>
+    <message>
+        <source>1 Inputs</source>
+        <translation>1 Inputs</translation>
     </message>
     <message>
         <source>Status:</source>
         <translation>상태:</translation>
     </message>
-    </context>
+    <message>
+        <source>MISSING</source>
+        <translation>MISSING</translation>
+    </message>
+    <message>
+        <source>Export data to run the Masternode on a remote server</source>
+        <translation>마스터노드를 원격 서버에 운용하기 위한 정보 추출</translation>
+    </message>
+</context>
 <context>
     <name>MyAddressRow</name>
     <message>
         <source>Form</source>
         <translation>Form</translation>
     </message>
-    </context>
+    <message>
+        <source>Savings</source>
+        <translation>계좌</translation>
+    </message>
+    <message>
+        <source>Jan. 19, 2019</source>
+        <translation>Jan. 19, 2019</translation>
+    </message>
+    <message>
+        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
+        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+    </message>
+</context>
 <context>
     <name>NavMenuWidget</name>
     <message>
@@ -1451,7 +1744,11 @@ for staking</source>
         <source>V 1.0.0</source>
         <translation>V.1.0.0</translation>
     </message>
-    </context>
+    <message>
+        <source>v%1</source>
+        <translation>v%1</translation>
+    </message>
+</context>
 <context>
     <name>OpenURIDialog</name>
     <message>
@@ -1482,7 +1779,19 @@ for staking</source>
         <source>Select payment request file to open</source>
         <translation>열려고하는 결제 요청 파일을 선택해주세요</translation>
     </message>
-    </context>
+    <message>
+        <source>File not found</source>
+        <translation>파일을 찾을 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Parsed data too large</source>
+        <translation>구문 분석된 데이터가 너무 큽니다.</translation>
+    </message>
+    <message>
+        <source>Invalid URI, not starting with "rapids" prefix</source>
+        <translation>"rapids"로 시작하지 않아 유효하지 않은 URI</translation>
+    </message>
+</context>
 <context>
     <name>OptionButton</name>
     <message>
@@ -1526,11 +1835,11 @@ for staking</source>
     </message>
     <message>
         <source>If you disable the spending of unconfirmed change, the change from a transaction&lt;br/&gt;cannot be used until that transaction has at least one confirmation.&lt;br/&gt;This also affects how your balance is computed.</source>
-        <translation>확인되지 않은 변경사항을 사용하지 않도록 설정하면 해당 트랜잭션에 하나 이상의 컨펌이 진행되야&lt;br/&gt;트랜잭션에 변경사항을 적용할 수 있습니다.&lt;br/&gt;또한 이것은 잔액 계산 방식에도 영향을 줍니다.</translation>
+        <translation>확인되지 않은 잔엑을 사용하지 않도록 설정하면 해당 트랜잭션에 하나 이상의 컨펌이 진행되야&lt;br/&gt;트랜잭션의 잔액을 전송할 수 있습니다.&lt;br/&gt;또한 이것은 잔액 계산 방식에도 영향을 줍니다.</translation>
     </message>
     <message>
-        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>라우터에서 RPD 클라이언트 포트를 자동으로 엽니다. 이 기능은 라우터가 UPnP를 지원하고 활성화 된 경우에만 사용할 수 있습니다.</translation>
+        <source>Automatically open the Rapids client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>라우터에서 Rapids 클라이언트 포트를 자동으로 엽니다. 이 기능은 라우터가 UPnP를 지원하고 활성화 된 경우에만 사용할 수 있습니다.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -1549,12 +1858,12 @@ for staking</source>
         <translation>전문적</translation>
     </message>
     <message>
-        <source>Automatically start RPD after logging in to the system.</source>
+        <source>Automatically start Rapids after logging in to the system.</source>
         <translation>시스템 로그인 후 Rapids을 자동으로 시작합니다.</translation>
     </message>
     <message>
-        <source>&amp;Start RPD on system login</source>
-        <translation>&amp;시스템 로그인시 RPD 시작</translation>
+        <source>&amp;Start Rapids on system login</source>
+        <translation>&amp;시스템 로그인시 Rapids 시작</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -1574,14 +1883,14 @@ for staking</source>
     </message>
     <message>
         <source>&amp;Spend unconfirmed change</source>
-        <translation>&amp;확인되지 않은 변경사항 전송</translation>
+        <translation>&amp;확인되지 않은 잔돈 전송</translation>
     </message>
     <message>
         <source>&amp;Network</source>
         <translation>&amp;네트워크</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
+        <source>The user interface language can be set here. This setting will take effect after restarting Rapids.</source>
         <translation>사용자 인터페이스 언어를 설정할 수 있습니다. 이 설정은 Rapids을 다시 시작한 후에 적용됩니다.</translation>
     </message>
     <message>
@@ -1601,6 +1910,10 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
     <message>
         <source>Enable zRPD Automint</source>
         <translation>zRPD 자동생성 활성화</translation>
+    </message>
+    <message>
+        <source>Enable automatic zRPD minting from specific addresses</source>
+        <translation>특정 주소들로부터 자동으로 zRPD 민트되는 것을 허용</translation>
     </message>
     <message>
         <source>Enable Automint Addresses</source>
@@ -1627,8 +1940,8 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
         <translation>Stake split threshold:</translation>
     </message>
     <message>
-        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
-        <translation>SOCKS5 프록시를 통해 RPD 네트워크에 연결해주세요.</translation>
+        <source>Connect to the Rapids network through a SOCKS5 proxy.</source>
+        <translation>SOCKS5 프록시를 통해 Rapids 네트워크에 연결해주세요.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -1679,6 +1992,10 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
         <translation>사용자 인터페이스 테마:</translation>
     </message>
     <message>
+        <source>Unit to show amounts in:</source>
+        <translation>금액을 표시할 단위:</translation>
+    </message>
+    <message>
         <source>Choose the default subdivision unit to show in the interface and when sending coins.</source>
         <translation>코인 전송시 인터페이스에 표시할 기본 세분화 단위를 선택해주세요.</translation>
     </message>
@@ -1689,6 +2006,14 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
     <message>
         <source>Hide empty balances</source>
         <translation>잔액 0 숨기기</translation>
+    </message>
+    <message>
+        <source>Hide orphan stakes in transaction lists</source>
+        <translation>트랜잭션 내역에서 고아 스테이크를 숨기기</translation>
+    </message>
+    <message>
+        <source>Hide orphan stakes</source>
+        <translation>고아 스테이크 숨기기</translation>
     </message>
     <message>
         <source>Third party URLs (e.g. a block explorer) that appear in the transactions tab as context menu items. %s in the URL is replaced by transaction hash. Multiple URLs are separated by vertical bar |.</source>
@@ -1811,7 +2136,7 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
     </message>
     <message>
         <source>Sent MultiSend transaction</source>
-        <translation>다중 보내기 방식으로 보냄</translation>
+        <translation>멀티 전송 방식으로 보냄</translation>
     </message>
     <message>
         <source>Sent transaction</source>
@@ -1833,10 +2158,11 @@ Address: %4
 주소: %4
 </translation>
     </message>
-    </context>
-<context>
-    <name>PWidget</name>
-    </context>
+    <message>
+        <source>A fatal error occurred. Rapids can no longer continue safely and will quit.</source>
+        <translation>치명적인 오류가 발생하였습니다. Rapids는 더 이상 안전하게 계속될 수 없으며, 곧 종료됩니다.</translation>
+    </message>
+</context>
 <context>
     <name>PaymentServer</name>
     <message>
@@ -1864,8 +2190,8 @@ Address: %4
         <translation>Rapids을 시작할 수 없습니다: 결제하기 위한 클릭 처리</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
-        <translation>URI를 분석할 수 없습니다! 이는 잘못된 RPD 주소 또는 URI 매개변수 손상으로 인해 발생할 수 있습니다.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Rapids address or malformed URI parameters.</source>
+        <translation>URI를 분석할 수 없습니다! 이는 잘못된 Rapids 주소 또는 URI 매개변수 손상으로 인해 발생할 수 있습니다.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -1950,6 +2276,10 @@ Address: %4
         <translation>Form</translation>
     </message>
     <message>
+        <source>Title</source>
+        <translation>제목</translation>
+    </message>
+    <message>
         <source>TextLabel</source>
         <translation>텍스트라벨</translation>
     </message>
@@ -1958,25 +2288,86 @@ Address: %4
         <translation>누르기</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>지금은 활성화된 마스터 노드가 없습니다.</translation>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>Privacy</source>
+        <translation>Privacy</translation>
+    </message>
+    <message>
+        <source>Convert</source>
+        <translation>변환하기</translation>
+    </message>
+    <message>
+        <source>Mint</source>
+        <translation>생성</translation>
+    </message>
+    <message>
+        <source>No transactions yet</source>
+        <translation>아직 전송기록 없음</translation>
+    </message>
+    <message>
+        <source>Mint zRPD</source>
+        <translation>zRPD 생성</translation>
+    </message>
+    <message>
+        <source>Enter amount of RPD to mint into zRPD</source>
+        <translation>zRPD 로 바꿀 RPD의 양을 넣으세요.</translation>
     </message>
     <message>
         <source>Convert back to RPD</source>
         <translation>RPD 로 재변환</translation>
     </message>
     <message>
+        <source>Enter amount of zRPD to convert back into RPD</source>
+        <translation>RPD로 바꿀 zRPD의 양을 넣으세요.</translation>
+    </message>
+    <message>
         <source>Zerocoin</source>
         <translation>제로코인</translation>
+    </message>
+    <message>
+        <source>zRPD is currently undergoing maintenance</source>
+        <translation>zRPD는 현재 점검중입니다</translation>
     </message>
     <message>
         <source>convert</source>
         <translation>변환</translation>
     </message>
-    </context>
-<context>
-    <name>ProposalFrame</name>
-    </context>
+    <message>
+        <source>mint</source>
+        <translation>생성</translation>
+    </message>
+    <message>
+        <source>Invalid value</source>
+        <translation>유효하지 않은 값</translation>
+    </message>
+    <message>
+        <source>zRPD minted successfully</source>
+        <translation>zRPD 생성 성공</translation>
+    </message>
+    <message>
+        <source>zRPD converted back to RPD</source>
+        <translation>RPD 로 zRPD 변환됨</translation>
+    </message>
+    <message>
+        <source>You don't have any RPD to select.</source>
+        <translation>선택할 RPD를 가지고 있지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Rescan Mints</source>
+        <translation>민트를 재탐색</translation>
+    </message>
+    <message>
+        <source>Reset Spent zRPD</source>
+        <translation>전송된 zRPD 초기화</translation>
+    </message>
+    <message>
+        <source>Total %1</source>
+        <translation>총 %1</translation>
+    </message>
+</context>
 <context>
     <name>QObject</name>
     <message>
@@ -1984,8 +2375,8 @@ Address: %4
         <translation>금액</translation>
     </message>
     <message>
-        <source>Enter a RPD address (e.g. %1)</source>
-        <translation>RPD 주소를 입력하세요 (예 %1)</translation>
+        <source>Enter Rapids address (e.g. %1)</source>
+        <translation>Rapids 주소 입력(예 : %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2030,6 +2421,98 @@ Address: %4
     <message>
         <source>Rapids</source>
         <translation>Rapids</translation>
+    </message>
+    <message>
+        <source>Error: Specified data directory "%1" does not exist.</source>
+        <translation>Error: Specified data directory "%1" does not exist.</translation>
+    </message>
+    <message>
+        <source>Rapids didn't yet exit safely...</source>
+        <translation>Rapids가 아직 안전하게 종료되지 않았습니다....</translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation>연락처</translation>
+    </message>
+    <message>
+        <source>Receiving</source>
+        <translation>받는중</translation>
+    </message>
+    <message>
+        <source>Cold Staking</source>
+        <translation>콜드 스테이킹</translation>
+    </message>
+    <message>
+        <source>Cold Staking Contact</source>
+        <translation>콜드 스테이킹 연락처</translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation>Hidden</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Unknown</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>전체</translation>
+    </message>
+    <message>
+        <source>Contacts</source>
+        <translation>연락처</translation>
+    </message>
+    <message>
+        <source>Delegators</source>
+        <translation>Delegators</translation>
+    </message>
+    <message>
+        <source>Staking Contacts</source>
+        <translation>스테이킹 연락처</translation>
+    </message>
+    <message>
+        <source>Date desc</source>
+        <translation>날짜 내림차순</translation>
+    </message>
+    <message>
+        <source>Date asc</source>
+        <translation>날짜 오름차순</translation>
+    </message>
+    <message>
+        <source>Amount desc</source>
+        <translation>금액 내림차순</translation>
+    </message>
+    <message>
+        <source>Amount asc</source>
+        <translation>금액 오름차순</translation>
+    </message>
+    <message>
+        <source>Received</source>
+        <translation>받음</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>보냄</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>채굴</translation>
+    </message>
+    <message>
+        <source>Minted</source>
+        <translation>발행</translation>
+    </message>
+    <message>
+        <source>MN reward</source>
+        <translation>마스터노드 보상</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>자신에게</translation>
+    </message>
+    <message>
+        <source>Cold stakes</source>
+        <translation>콜드 스테이크</translation>
     </message>
     </context>
 <context>
@@ -2103,12 +2586,20 @@ Address: %4
         <translation>블록체인</translation>
     </message>
     <message>
-        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>현재 데이터 디렉토리에서 RPD 디버그 로그 파일을 엽니다. 로그 파일이 클 경우, 약간의 시간이 걸릴 수 있습니다.</translation>
+        <source>Open the Rapids debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>현재 데이터 디렉토리에서 Rapids 디버그 로그 파일을 엽니다. 로그 파일이 클 경우, 약간의 시간이 걸릴 수 있습니다.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
         <translation>마스터노드 개수</translation>
+    </message>
+    <message>
+        <source>Data Directory</source>
+        <translation>데이터 디렉토리</translation>
+    </message>
+    <message>
+        <source>Last block hash</source>
+        <translation>최근 블록 hash 값</translation>
     </message>
     <message>
         <source>&amp;Console</source>
@@ -2320,8 +2811,8 @@ Address: %4
         <translation>출력:</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>RPD RPC 콘솔에 오신 것을 환영합니다.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Rapids RPC 콘솔에 오신 것을 환영합니다.</translation>
     </message>
     <message>
         <source>&amp;Disconnect Node</source>
@@ -2372,8 +2863,16 @@ Address: %4
         <translation>블록체인 동기화를 다시 하시겠습니까?</translation>
     </message>
     <message>
+        <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
+        <translation>위 아래 화살표를 사용하여 기록을 탐색할수 있으며 %1 으로 화면을 지울수 있습니다.</translation>
+    </message>
+    <message>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>사용가능한 명령을 보려면 &lt;b&gt;help&lt;/b&gt;를 입력하십시오.</translation>
+    </message>
+    <message>
+        <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramifications of a command.</source>
+        <translation>경고문: 남에게 도움 받을때 조심하시기 바랍니다. 이 터미널을 이용해 중요한 커맨드를 수행하게 해 코인을 훔쳐가는 케이스가 많습니다. 출력 내용을 남에게 알려주기 전에, 위험성을 확인하시길 바랍니다.</translation>
     </message>
     <message>
         <source>%1 B</source>
@@ -2427,12 +2926,16 @@ Address: %4
 <context>
     <name>ReceiveDialog</name>
     <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
         <source>Transaction Details</source>
         <translation>전송 상세내역</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -2454,10 +2957,82 @@ Address: %4
         <translation>텍스트라벨</translation>
     </message>
     <message>
+        <source>No address</source>
+        <translation>주소 없음</translation>
+    </message>
+    <message>
+        <source>Add Label</source>
+        <translation>라벨 추가</translation>
+    </message>
+    <message>
+        <source>Generate Address</source>
+        <translation>주소 생성</translation>
+    </message>
+    <message>
+        <source>Copy</source>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <source>Receive</source>
+        <translation>받기</translation>
+    </message>
+    <message>
+        <source>Scan the QR code or copy the address to receive RPD.</source>
+        <translation>RPD 를 받기 위해 QR 코드를 스캔하거나 주소를 복사 하십시요.</translation>
+    </message>
+    <message>
+        <source>No address </source>
+        <translation>주소 없음</translation>
+    </message>
+    <message>
+        <source>No available address, try unlocking the wallet</source>
+        <translation>사용 가능한 주소가 없습니다. 지갑 잠금을 풀어 보십시요.</translation>
+    </message>
+    <message>
+        <source>Error generating address</source>
+        <translation>주소 생성 오류</translation>
+    </message>
+    <message>
+        <source>Edit Label</source>
+        <translation>라벨 수정하기</translation>
+    </message>
+    <message>
+        <source>Edit Address Label</source>
+        <translation>주소 라벨 수정하기</translation>
+    </message>
+    <message>
+        <source>Address label saved</source>
+        <translation>주소 라벨이 저장됨</translation>
+    </message>
+    <message>
+        <source>Error storing address label</source>
+        <translation>주소 라벨 저장 오류</translation>
+    </message>
+    <message>
+        <source>Cannot create new address, wallet locked</source>
+        <translation>지갑이 잠겨 있어, 새로운 주소를 만들수 없습니다.</translation>
+    </message>
+    <message>
+        <source>New address created</source>
+        <translation>새로운 주소 생성 됨</translation>
+    </message>
+    <message>
         <source>Address copied</source>
         <translation>주소가 복사되었습니다.</translation>
     </message>
-    </context>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>명령을 수행할 수 없습니다. 지갑이 잠겨 있습니다.</translation>
+    </message>
+    <message>
+        <source>URI copied to clipboard</source>
+        <translation>URI가 클립보드에 복사되었습니다.</translation>
+    </message>
+    <message>
+        <source>Address copied to clipboard</source>
+        <translation>주소가 클립보드에 복사됨</translation>
+    </message>
+</context>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
@@ -2496,6 +3071,18 @@ Address: %4
 <context>
     <name>RequestDialog</name>
     <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <source>New Request Payment</source>
+        <translation>새로운 입금 결제 요청</translation>
+    </message>
+    <message>
+        <source>Lorem ipsum dolor sit amet, consectur cling elit, sed do </source>
+        <translation>Lorem ipsum dolor sit amet, consectur cling elit, sed do </translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation>금액</translation>
     </message>
@@ -2508,27 +3095,71 @@ Address: %4
         <translation>텍스트라벨</translation>
     </message>
     <message>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </translation>
+    </message>
+    <message>
+        <source>COPY ADDRESS</source>
+        <translation>주소 복사</translation>
+    </message>
+    <message>
+        <source>COPY URL</source>
+        <translation>URL 복사</translation>
+    </message>
+    <message>
         <source>CANCEL</source>
         <translation>취소</translation>
+    </message>
+    <message>
+        <source>REQUEST</source>
+        <translation>결제 신청</translation>
     </message>
     <message>
         <source>Label</source>
         <translation>라벨</translation>
     </message>
     <message>
+        <source>Description (optional)</source>
+        <translation>설명 (선택 과목)</translation>
+    </message>
+    <message>
+        <source>New Payment Request</source>
+        <translation>새로운 출금 결제 요청</translation>
+    </message>
+    <message>
+        <source>Enter a label for the address</source>
+        <translation>주소의 라벨을 입력 해주세요</translation>
+    </message>
+    <message>
         <source>Error</source>
         <translation>에러</translation>
     </message>
-    </context>
+    <message>
+        <source>GENERATE</source>
+        <translation>생성</translation>
+    </message>
+    <message>
+        <source>New Cold Staking Address</source>
+        <translation>새로운 콜드 스테이킹 주소</translation>
+    </message>
+    <message>
+        <source>Amount (optional)</source>
+        <translation>액수 (선택 과목)</translation>
+    </message>
+</context>
 <context>
     <name>SendChangeAddressDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
     <message>
         <source>Transaction Details</source>
         <translation>전송 상세내역</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
+        <translation>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -2538,7 +3169,19 @@ Address: %4
         <source>OK</source>
         <translation>선택</translation>
     </message>
-    </context>
+    <message>
+        <source>Custom Change Address</source>
+        <translation>커스텀 잔돈 주소</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>저장</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>잘못된 주소 입력</translation>
+    </message>
+</context>
 <context>
     <name>SendCustomFeeDialog</name>
     <message>
@@ -2550,6 +3193,22 @@ Address: %4
         <translation>전송 상세내역</translation>
     </message>
     <message>
+        <source>Recommended</source>
+        <translation>권장</translation>
+    </message>
+    <message>
+        <source>RPD/kilobyte</source>
+        <translation>RPD/Kilobyte</translation>
+    </message>
+    <message>
+        <source>0.00 KB</source>
+        <translation>0.00 KB</translation>
+    </message>
+    <message>
+        <source>Custom</source>
+        <translation>커스텀</translation>
+    </message>
+    <message>
         <source>CANCEL</source>
         <translation>취소</translation>
     </message>
@@ -2558,10 +3217,26 @@ Address: %4
         <translation>선택</translation>
     </message>
     <message>
+        <source>Customize Fee</source>
+        <translation>커스텀 수수료 변경</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>보통</translation>
+    </message>
+    <message>
+        <source>Slow</source>
+        <translation>느리게</translation>
+    </message>
+    <message>
+        <source>Fast</source>
+        <translation>빠르게</translation>
+    </message>
+    <message>
         <source>SAVE</source>
         <translation>저장</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendMultiRow</name>
     <message>
@@ -2572,7 +3247,15 @@ Address: %4
         <source>TextLabel</source>
         <translation>텍스트라벨</translation>
     </message>
-    </context>
+    <message>
+        <source>Enter address</source>
+        <translation>주소 입력</translation>
+    </message>
+    <message>
+        <source>Enter label</source>
+        <translation>라벨 입력</translation>
+    </message>
+</context>
 <context>
     <name>SendWidget</name>
     <message>
@@ -2580,8 +3263,88 @@ Address: %4
         <translation>보내기</translation>
     </message>
     <message>
+        <source>Select coin type to spend</source>
+        <translation>전송할 코인 타입을 선택 하십시요</translation>
+    </message>
+    <message>
         <source>Amount</source>
         <translation>금액</translation>
+    </message>
+    <message>
+        <source>Customize fee</source>
+        <translation>수수료 변경</translation>
+    </message>
+    <message>
+        <source>Clear all</source>
+        <translation>전체 지우기</translation>
+    </message>
+    <message>
+        <source>Add recipient</source>
+        <translation>받는이 추가</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>기본값으로 리셋</translation>
+    </message>
+    <message>
+        <source>Total to send</source>
+        <translation>전송할 총 액수</translation>
+    </message>
+    <message>
+        <source>Send RPD</source>
+        <translation>RPD 보내기</translation>
+    </message>
+    <message>
+        <source>Send zRPD</source>
+        <translation>zRPD 전송하기</translation>
+    </message>
+    <message>
+        <source>Total remaining from the selected UTXO</source>
+        <translation>선택된 UTXO 의 남은 액수</translation>
+    </message>
+    <message>
+        <source>Total remaining</source>
+        <translation>남은 총 액수</translation>
+    </message>
+    <message>
+        <source>Warning!</source>
+        <translation>경고!</translation>
+    </message>
+    <message>
+        <source>Customize Fee</source>
+        <translation>커스텀 수수료 변경</translation>
+    </message>
+    <message>
+        <source>Maximum amount of outputs reached</source>
+        <translation>최대 한도의 output 갯수에 도달함</translation>
+    </message>
+    <message>
+        <source>Rapids address or contact label</source>
+        <translation>Rapids 주소 / 연락처 라벨</translation>
+    </message>
+    <message>
+        <source>Invalid entry</source>
+        <translation>잘못된 입력</translation>
+    </message>
+    <message>
+        <source>Cannot send, wallet locked</source>
+        <translation>전송 불가, 지갑 잠김</translation>
+    </message>
+    <message>
+        <source>Cannot create transaction.</source>
+        <translation>전송 불가</translation>
+    </message>
+    <message>
+        <source>WARNING:
+Transaction spends a cold-stake delegation, voiding it.
+These coins will no longer be cold-staked.</source>
+        <translation>주의 :
+Cold-staking 중인 코인을 사용하여 전송하며, 무효화됩니다.
+이 코인은 더이상  cold-staking 되지 않습니다.</translation>
+    </message>
+    <message>
+        <source>Transaction sent</source>
+        <translation>전송 완료</translation>
     </message>
     <message>
         <source>Spend Zerocoin</source>
@@ -2590,6 +3353,22 @@ Address: %4
     <message>
         <source>zRPD is currently undergoing maintenance.</source>
         <translation>zRPD는 현재 점검중입니다.</translation>
+    </message>
+    <message>
+        <source>Sending %1 to address %2
+</source>
+        <translation>%2 주소로 %1 보내기
+</translation>
+    </message>
+    <message>
+        <source>Sending %1 to addresses:
+%2</source>
+        <translation>%1 보내는 주소:
+%2</translation>
+    </message>
+    <message>
+        <source>zRPD transaction sent!</source>
+        <translation>zRapids 전송 완료!</translation>
     </message>
     <message>
         <source>Version 1 zRPD require a security level of 100 to successfully spend.</source>
@@ -2611,8 +3390,52 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>높은 디노미네션 값으로 생성하거나, 보내실 금액을 줄여주세요.</translation>
     </message>
     <message>
+        <source>Address label update failed for address: %1</source>
+        <translation>주소의 라벨 변경에 실패 했습니다: %1</translation>
+    </message>
+    <message>
+        <source>Invalid URI</source>
+        <translation>잘못된 URI 입력</translation>
+    </message>
+    <message>
+        <source>Invalid address in URI</source>
+        <translation>URI 에 잘못된 주소 입력됨</translation>
+    </message>
+    <message>
+        <source>Custom Fee %1</source>
+        <translation>커스텀 수수료 %1</translation>
+    </message>
+    <message>
+        <source>You don't have any RPD to select.</source>
+        <translation>선택할 수 있는 RPD를 가지고 있지 않습니다.</translation>
+    </message>
+    <message>
+        <source>No contacts available, you can go to the contacts screen and add some there!</source>
+        <translation>존재하는 연락처가 없습니다. 연락처 화면에서 추가 하실수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Save contact</source>
+        <translation>연락처 저장</translation>
+    </message>
+    <message>
+        <source>Address field is empty</source>
+        <translation>주소 필드가 비어있음</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>잘못된 주소 입력</translation>
+    </message>
+    <message>
         <source>Cannot store your own address as contact</source>
         <translation>자신의 주소는 연락처로 저장할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Update Contact</source>
+        <translation>연락처 업데이트</translation>
+    </message>
+    <message>
+        <source>Create New Contact</source>
+        <translation>새로운 주소 만들기</translation>
     </message>
     <message>
         <source>New Contact Stored</source>
@@ -2634,8 +3457,24 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>Backup Wallet </source>
+        <translation>지갑 백업</translation>
+    </message>
+    <message>
+        <source>Change Wallet Passphrase</source>
+        <translation>지갑 암호 변경</translation>
+    </message>
+    <message>
+        <source>Where</source>
+        <translation>위치</translation>
+    </message>
+    <message>
+        <source>Select folder...</source>
+        <translation>폴더 선택</translation>
+    </message>
+    <message>
+        <source>Change Passphrase</source>
+        <translation>암호 변경</translation>
     </message>
     <message>
         <source>Backup Wallet</source>
@@ -2645,7 +3484,19 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>Wallet Data (*.dat)</source>
         <translation>지갑 데이터 (*.dat)</translation>
     </message>
-    </context>
+    <message>
+        <source>Backup created</source>
+        <translation>백업 생성 완료</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>백업 생성 실패</translation>
+    </message>
+    <message>
+        <source>Please select a folder to export the backup first.</source>
+        <translation>백업을 추출하기 전 폴더를 선택해주세요.</translation>
+    </message>
+</context>
 <context>
     <name>SettingsBitToolWidget</name>
     <message>
@@ -2661,6 +3512,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>누르기</translation>
     </message>
     <message>
+        <source>Decrypt Address Result</source>
+        <translation>주소 결과 암호화 해제</translation>
+    </message>
+    <message>
         <source>Import Address</source>
         <translation>주소 가져오기</translation>
     </message>
@@ -2669,12 +3524,72 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>지우기</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>RPD 주소를 입력하세요.</translation>
+        <source>BIP38 Tool</source>
+        <translation>BIP38 Tool</translation>
+    </message>
+    <message>
+        <source>Encrypt</source>
+        <translation>암호화</translation>
+    </message>
+    <message>
+        <source>Decrypt</source>
+        <translation>암호화 해제</translation>
+    </message>
+    <message>
+        <source>Encrypted key</source>
+        <translation>암호화된 키</translation>
+    </message>
+    <message>
+        <source>Enter a encrypted key</source>
+        <translation>암호화된 키를 입력 하십시요</translation>
+    </message>
+    <message>
+        <source>Passphrase</source>
+        <translation>암호</translation>
+    </message>
+    <message>
+        <source>Enter a passphrase </source>
+        <translation>암호를 입력 하십시요</translation>
+    </message>
+    <message>
+        <source>Decrypted address result</source>
+        <translation>암호 해재된 주소 결과</translation>
+    </message>
+    <message>
+        <source>Decrypted Address</source>
+        <translation>암호 해재된 주소</translation>
+    </message>
+    <message>
+        <source>DECRYPT KEY</source>
+        <translation>키 암호 해재</translation>
+    </message>
+    <message>
+        <source>Rapids address</source>
+        <translation>Rapids 주소</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation>주소 입력</translation>
+    </message>
+    <message>
+        <source>Enter passphrase</source>
+        <translation>암호 입력</translation>
+    </message>
+    <message>
+        <source>Encrypted Key</source>
+        <translation>암호화된 키</translation>
     </message>
     <message>
         <source>ENCRYPT</source>
         <translation>암호화</translation>
+    </message>
+    <message>
+        <source>CLEAR ALL</source>
+        <translation>모두 지우기</translation>
+    </message>
+    <message>
+        <source>CLEAR</source>
+        <translation>지우기</translation>
     </message>
     <message>
         <source>The entered passphrase is invalid. </source>
@@ -2705,6 +3620,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>입력한 주소의 개인 키를 사용할 수 없습니다.</translation>
     </message>
     <message>
+        <source>Address encrypted.</source>
+        <translation>주소 암호화 완료</translation>
+    </message>
+    <message>
         <source>Failed to decrypt.</source>
         <translation>암호해제에 실패하였습니다.</translation>
     </message>
@@ -2724,7 +3643,15 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>Please wait while key is imported</source>
         <translation>키를 가져오는 동안 기다려주세요.</translation>
     </message>
-    </context>
+    <message>
+        <source>Error adding key to the wallet</source>
+        <translation>지갑에 키를 추가하는 도중 에러가 발생했습니다</translation>
+    </message>
+    <message>
+        <source>Successfully added private key to the wallet</source>
+        <translation>지갑에 개인 키를 추가하였습니다.</translation>
+    </message>
+</context>
 <context>
     <name>SettingsConsoleWidget</name>
     <message>
@@ -2736,14 +3663,48 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>RPD RPC 콘솔에 오신 것을 환영합니다.</translation>
+        <source>Console</source>
+        <translation>콘솔</translation>
+    </message>
+    <message>
+        <source>Console input</source>
+        <translation>콘솔 입력</translation>
+    </message>
+    <message>
+        <source>Command Line Options </source>
+        <translation>명령행 옵션</translation>
+    </message>
+    <message>
+        <source>Open Debug File</source>
+        <translation>디버그 파일 열기</translation>
+    </message>
+    <message>
+        <source>Clear history</source>
+        <translation>히스토리 초기화</translation>
+    </message>
+    <message>
+        <source>Cannot open debug file.
+Verify that you have installed a predetermined text editor.</source>
+        <translation>디버그 파일을 열수 없습니다.
+미리 결정된 텍스트 에디터를 인스톨했는지 확인하세요.</translation>
+    </message>
+    <message>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Rapids RPC 콘솔에 오신 것을 환영합니다.</translation>
+    </message>
+    <message>
+        <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
+        <translation>위 아래 화살표를 사용하여 기록을 탐색할수 있으며 %1 으로 화면을 지울수 있습니다.</translation>
     </message>
     <message>
         <source>Type &lt;b&gt;help&lt;/b&gt; for an overview of available commands.</source>
         <translation>사용가능한 명령을 보려면 &lt;b&gt;help&lt;/b&gt;를 입력하십시오.</translation>
     </message>
-    </context>
+    <message>
+        <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramifications of a command.</source>
+        <translation>경고문: 남에게 도움 받을때 조심하시기 바랍니다. 이 터미널을 이용해 중요한 커맨드를 수행하게 해 코인을 훔쳐가는 케이스가 많습니다. 출력 내용을 남에게 알려주기 전에, 위험성을 확인하시길 바랍니다.</translation>
+    </message>
+</context>
 <context>
     <name>SettingsDisplayOptionsWidget</name>
     <message>
@@ -2755,16 +3716,40 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>Hide stake charts in the dashboard</source>
+        <translation>홈 화면에서 스테이킹 차트를 숨김</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>기본값으로 리셋</translation>
+    </message>
+    <message>
+        <source>Discard changes</source>
+        <translation>변경 사항 폐기</translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation>디스플레이</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>언어</translation>
+    </message>
+    <message>
+        <source>Unit to show amount</source>
+        <translation>금액을 표시할 단위</translation>
     </message>
     <message>
         <source>Decimal digits</source>
         <translation>10진수</translation>
     </message>
     <message>
+        <source>Third party transactions URLs</source>
+        <translation>서드파티 트랜잭션 URL</translation>
+    </message>
+    <message>
         <source>Hide empty balances</source>
-        <translation>잔액 0 숨기기</translation>
+        <translation>빈 계좌 숨기기</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -2773,6 +3758,81 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>default</source>
         <translation>기본값</translation>
+    </message>
+    <message>
+        <source>Options reset succeed</source>
+        <translation>옵션 리셋 성공</translation>
+    </message>
+</context>
+<context>
+    <name>SettingsExportCSV</name>
+    <message>
+        <source>Form</source>
+        <translation>Form</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>회계 데이터 출력</translation>
+    </message>
+    <message>
+        <source>Export your wallet's accounting data to a csv file.</source>
+        <translation>지갑의 회계 기록을 csv 포멧 파일로 출력할수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Where</source>
+        <translation>위치</translation>
+    </message>
+    <message>
+        <source>Select folder...</source>
+        <translation>폴더 선택</translation>
+    </message>
+    <message>
+        <source>Export Address Book</source>
+        <translation>주소집 내보내기</translation>
+    </message>
+    <message>
+        <source>Export CSV</source>
+        <translation>CSV 내보내기</translation>
+    </message>
+    <message>
+        <source>Export Address List</source>
+        <translation>주소록 내보내기</translation>
+    </message>
+    <message>
+        <source>Please select a folder to export the csv file first.</source>
+        <translation>csv 파일을 내보내기 위해 폴더를 선택해주세요.</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>확정됨</translation>
+    </message>
+    <message>
+        <source>Watch-only</source>
+        <translation>읽기 전용</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>날짜</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>분류</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>라벨</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>주소</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>No available addresses to export under the selected filter</source>
+        <translation>선택된 필터로는 내보낼 주소가 없습니다.</translation>
     </message>
     </context>
 <context>
@@ -2790,10 +3850,38 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>누르기</translation>
     </message>
     <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation>2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation>3</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation>4</translation>
+    </message>
+    <message>
+        <source>What is a Masternode?</source>
+        <translation>마스터로드란?</translation>
+    </message>
+    <message>
         <source>10</source>
         <translation>10</translation>
     </message>
-    </context>
+    <message>
+        <source>Frequently Asked Questions</source>
+        <translation>자주 하는 질문들</translation>
+    </message>
+    <message>
+        <source>Exit</source>
+        <translation>닫기</translation>
+    </message>
+</context>
 <context>
     <name>SettingsInformationWidget</name>
     <message>
@@ -2801,8 +3889,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Form</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <source>Network Monitor</source>
+        <translation>네트워크 모니터</translation>
     </message>
     <message>
         <source>Information</source>
@@ -2813,8 +3901,76 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>일반</translation>
     </message>
     <message>
+        <source>Client Version:</source>
+        <translation>클라이언트 버전:</translation>
+    </message>
+    <message>
+        <source>Datadir:</source>
+        <translation>Datadir:</translation>
+    </message>
+    <message>
+        <source>Startup time:</source>
+        <translation>시작 시간:</translation>
+    </message>
+    <message>
+        <source>Connections:</source>
+        <translation>연결 개수:</translation>
+    </message>
+    <message>
+        <source>Number of Masternodes:</source>
+        <translation>마스터노드 개수:</translation>
+    </message>
+    <message>
+        <source>Current number of blocks:</source>
+        <translation>현재 블록 개수:</translation>
+    </message>
+    <message>
+        <source>Last block time:</source>
+        <translation>최근 블록 시간:</translation>
+    </message>
+    <message>
+        <source>Last block hash:</source>
+        <translation>최근 블록 hash 값:</translation>
+    </message>
+    <message>
+        <source>Current number of transactions:</source>
+        <translation>현재 트랜젝션 개수</translation>
+    </message>
+    <message>
+        <source>User Agent:</source>
+        <translation>User Agent:</translation>
+    </message>
+    <message>
         <source>Network</source>
         <translation>네트워크</translation>
+    </message>
+    <message>
+        <source>Name:</source>
+        <translation>이름:</translation>
+    </message>
+    <message>
+        <source>Blockchain</source>
+        <translation>블록체인</translation>
+    </message>
+    <message>
+        <source>Memory Pool</source>
+        <translation>메모리 풀</translation>
+    </message>
+    <message>
+        <source>Main</source>
+        <translation>메인 옵션</translation>
+    </message>
+    <message>
+        <source>No information</source>
+        <translation>정보 없음</translation>
+    </message>
+    <message>
+        <source>Unable to open backups folder</source>
+        <translation>백업 폴더를 열 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Unable to open rapids.conf with default application</source>
+        <translation>rapids.conf 파일을 기본 앱으로 열 수 없습니다.</translation>
     </message>
     <message>
         <source>In:</source>
@@ -2836,10 +3992,72 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
+        <source>Window</source>
+        <translation>윈도우</translation>
+    </message>
+    <message>
+        <source>Customize the application window options</source>
+        <translation>지갑 어플의 윈도우 옵션 설정</translation>
+    </message>
+    <message>
+        <source>CheckBox</source>
+        <translation>체크박스</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>기본값으로 리셋</translation>
+    </message>
+    <message>
+        <source>Discard changes</source>
+        <translation>변경 사항 폐기</translation>
+    </message>
+    <message>
         <source>SAVE</source>
         <translation>저장</translation>
     </message>
-    </context>
+    <message>
+        <source>Main</source>
+        <translation>메인 옵션</translation>
+    </message>
+    <message>
+        <source>Size of database cache</source>
+        <translation>데이터베이스 캐시 크기</translation>
+    </message>
+    <message>
+        <source>Number of script verification threads</source>
+        <translation>스크립트 검증 스레드 개수</translation>
+    </message>
+    <message>
+        <source>Start Rapids on system login</source>
+        <translation>시스템 로그인시 Rapids 지갑 시작</translation>
+    </message>
+    <message>
+        <source>Minimize to the tray instead of the taskbar</source>
+        <translation>최소화시 작업표시줄이 아닌 시스템 트레이로 최소화</translation>
+    </message>
+    <message>
+        <source>Minimize on close</source>
+        <translation>닫기시 최소화</translation>
+    </message>
+    <message>
+        <source>Reset Options</source>
+        <translation>옵션 초기화</translation>
+    </message>
+    <message>
+        <source>You are just about to reset the app's options to the default values.
+
+Are you sure?
+</source>
+        <translation>모든 지갑의 옵션이 초기화 됩니다.
+
+진행 하시겠습니까?
+</translation>
+    </message>
+    <message>
+        <source>Options reset succeed</source>
+        <translation>옵션 리셋이 성공하였습니다.</translation>
+    </message>
+</context>
 <context>
     <name>SettingsMultisendDialog</name>
     <message>
@@ -2862,7 +4080,23 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>SAVE</source>
         <translation>저장</translation>
     </message>
-    </context>
+    <message>
+        <source>New recipient for multisend</source>
+        <translation>새로운 멀티 전송 받는이</translation>
+    </message>
+    <message>
+        <source>Address Label (optional)</source>
+        <translation>주소 라벨 (선택사항)</translation>
+    </message>
+    <message>
+        <source>Enter label to be saved with this address</source>
+        <translation>저장될 이 주소의 라벨을 입력하여 주십시요</translation>
+    </message>
+    <message>
+        <source>Percentage</source>
+        <translation>퍼센티지</translation>
+    </message>
+</context>
 <context>
     <name>SettingsMultisendWidget</name>
     <message>
@@ -2874,18 +4108,80 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>지금은 활성화된 마스터 노드가 없습니다.</translation>
+        <source>N/A</source>
+        <translation>N/A</translation>
+    </message>
+    <message>
+        <source>CheckBox</source>
+        <translation>체크박스</translation>
+    </message>
+    <message>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other Rapids addresses after it matures.</source>
+        <translation>멀티 전송 기능은 확인된 새로 받은 스테이킹 혹은 마스터노드 보상을 100% 전부 까지 지정된 다른 주소로 자동 전송할수 있는 기능입니다.</translation>
     </message>
     <message>
         <source>Active</source>
         <translation>누적 활성 시간</translation>
     </message>
     <message>
-        <source>MultiSend activated</source>
-        <translation>멀티 전송이 활성화 되었습니다.</translation>
+        <source>Disable</source>
+        <translation>비활성화</translation>
     </message>
-    </context>
+    <message>
+        <source>No active recipient yet</source>
+        <translation>활성화된 받는이 주소가 아직 없음</translation>
+    </message>
+    <message>
+        <source>Send stakes</source>
+        <translation>스테이크 보상 전송</translation>
+    </message>
+    <message>
+        <source>Send masternode rewards</source>
+        <translation>마스터노드 보상 전송</translation>
+    </message>
+    <message>
+        <source>ADD RECIPIENT</source>
+        <translation>받는이 추가 하기</translation>
+    </message>
+    <message>
+        <source>CLEAR ALL</source>
+        <translation>모두 지우기</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>명령을 수행할 수 없습니다. 지갑이 잠겨 있습니다.</translation>
+    </message>
+    <message>
+        <source>Cannot add multisend recipient, wallet locked</source>
+        <translation>지갑이 잠겨있어 멀티 전송 받는이 추가가 불가 합니다.</translation>
+    </message>
+    <message>
+        <source>The entered address: %1 is invalid.
+Please check the address and try again.</source>
+        <translation>입력된 주소: %1 은 올바르지 않습니다.
+주소를 확인하고 다시 시도해주세요.</translation>
+    </message>
+    <message>
+        <source>Invalid percentage, please enter values from 1 to 100.</source>
+        <translation>올바르지 않은 퍼센트 값이 입력되었습니다. 1 부터 100 사이로 입력해주십시요.</translation>
+    </message>
+    <message>
+        <source>The total amount of your MultiSend vector is over 100% of your stake reward</source>
+        <translation>멀티전송 벡터의 총 금액이 스테이크 보상 금액의 100 % 이상입니다</translation>
+    </message>
+    <message>
+        <source>Unable to activate MultiSend, no available recipients</source>
+        <translation>멀티전송 보내기에 실패했습니다. 유효한 연락처가 존재하지 않습니다.</translation>
+    </message>
+    <message>
+        <source>MultiSend activated</source>
+        <translation>멀티 전송 기능이 활성화 됨</translation>
+    </message>
+    <message>
+        <source>MultiSend deactivated</source>
+        <translation>멀티 전송 기능이 비활성화 됨</translation>
+    </message>
+</context>
 <context>
     <name>SettingsSignMessageWidgets</name>
     <message>
@@ -2897,20 +4193,52 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>지우기</translation>
+    </message>
+    <message>
+        <source>Sign/Verify Message</source>
+        <translation>메세지 서명 / 검증</translation>
+    </message>
+    <message>
+        <source>Sign</source>
+        <translation>서명</translation>
+    </message>
+    <message>
+        <source>Verify</source>
+        <translation>검증</translation>
+    </message>
+    <message>
+        <source>Select mode</source>
+        <translation>모드 선택</translation>
     </message>
     <message>
         <source>Message</source>
         <translation>메세지</translation>
     </message>
     <message>
+        <source>Rapids address or contact label</source>
+        <translation>Rapids 주소 / 연락처 라벨</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation>주소 입력</translation>
+    </message>
+    <message>
+        <source>Write message</source>
+        <translation>메세지 입력</translation>
+    </message>
+    <message>
         <source>Signature</source>
         <translation>서명</translation>
+    </message>
+    <message>
+        <source>SIGN</source>
+        <translation>서명</translation>
+    </message>
+    <message>
+        <source>CLEAR ALL</source>
+        <translation>모두 지우기</translation>
     </message>
     <message>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
@@ -2919,6 +4247,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Enter the signing address, message (ensure you copy line breaks, spaces, tabs, etc. exactly) and signature below to verify the message. Be careful not to read more into the signature than what is in the signed message itself, to avoid being tricked by a man-in-the-middle attack.</source>
         <translation>메세지를 확인하기 위해 서명 주소, 메세지 (줄 바꿈, 공백, 탭 등을 정확하게 복사해주세요) 및 서명을 입력하십시오. 중간자 공격에 주의해서 서명을 입력해주세요.</translation>
+    </message>
+    <message>
+        <source>VERIFY</source>
+        <translation>검증</translation>
     </message>
     <message>
         <source>The entered address is invalid.</source>
@@ -2980,30 +4312,78 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>CheckBox</source>
+        <translation>체크박스</translation>
+    </message>
+    <message>
+        <source>RadioButton</source>
+        <translation>라디오버튼</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>기본값으로 리셋</translation>
+    </message>
+    <message>
+        <source>Discard changes</source>
+        <translation>변경 사항 폐기</translation>
     </message>
     <message>
         <source>Wallet</source>
         <translation>지갑</translation>
     </message>
     <message>
+        <source>Customize the internal wallet options</source>
+        <translation>지갑의 내부 설정 옵션</translation>
+    </message>
+    <message>
         <source>Stake split threshold:</source>
         <translation>Stake split threshold:</translation>
+    </message>
+    <message>
+        <source>Spend unconfirmed change</source>
+        <translation>확인되지 않은 잔돈 전송</translation>
     </message>
     <message>
         <source>Network</source>
         <translation>네트워크</translation>
     </message>
     <message>
+        <source>Customize the node network options</source>
+        <translation>네트워크 노드 설정 옵션</translation>
+    </message>
+    <message>
+        <source>Proxy IP:</source>
+        <translation>프록시 IP 주소:</translation>
+    </message>
+    <message>
+        <source>Enter proxy IP</source>
+        <translation>프록시 IP 주소 입력</translation>
+    </message>
+    <message>
+        <source>Port:</source>
+        <translation>포트:</translation>
+    </message>
+    <message>
+        <source>Map port using UPnP</source>
+        <translation>UPnP 를 사용하여 포트 매핑</translation>
+    </message>
+    <message>
         <source>Allow incoming connections</source>
         <translation>들어오는 연결 허용</translation>
+    </message>
+    <message>
+        <source>Connect through SOCKS5 proxy (default proxy):</source>
+        <translation>SOCKS5 프록시를 통해 연결 (기본 프록시):</translation>
     </message>
     <message>
         <source>SAVE</source>
         <translation>저장</translation>
     </message>
-    </context>
+    <message>
+        <source>Options reset succeed</source>
+        <translation>옵션 리셋이 성공하였습니다.</translation>
+    </message>
+</context>
 <context>
     <name>SettingsWalletRepairWidget</name>
     <message>
@@ -3015,16 +4395,36 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>텍스트라벨</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <source>Wallet Repair</source>
+        <translation>지갑 복구</translation>
+    </message>
+    <message>
+        <source>The buttons below will restart the wallet with command-line options to repair this wallet, fix issues with corrupt blockchain files or missing/obsolete transactions.</source>
+        <translation>아래 버튼들은 지갑을 고치기 위한 명령어 옵션들로 실행시 지갑을 재시작합니다, 손상된 블록체인 파일 또는 누락되었거나 오래된 트랜잭션들에 대한 문제를 해결합니다.</translation>
     </message>
     <message>
         <source>Attempt to recover private keys from a corrupt wallet.dat.</source>
         <translation>손상된 wallet.dat로 부터 개인키 복구 시도</translation>
     </message>
     <message>
+        <source>Rescan the blockchain for missing wallet transactions.</source>
+        <translation>누락된 지갑 트랜잭션에 대해 블록체인을 다시 스캔합니다.</translation>
+    </message>
+    <message>
+        <source>Recover transactions from blockchain (keep-meta-data, e.g. account owner).</source>
+        <translation>블록체인에서 트랜잭션 복구 (계정 소유자 등 메타 데이터는 보관).</translation>
+    </message>
+    <message>
         <source>Recover transactions from blockchain (drop meta-data).</source>
         <translation>블록체인에서 거래내역 복구 (메타 데이터 삭제)</translation>
+    </message>
+    <message>
+        <source>Upgrade wallet to latest format on startup. (Note: this is NOT an update of the wallet itself)</source>
+        <translation>시작시 지갑 파일을 최신 포맷으로 업그레이드 (참고 : 지갑 자체의 업데이트가 아님)</translation>
+    </message>
+    <message>
+        <source>Rebuild blockchain index from current blk000???.dat files.</source>
+        <translation>현재 blk000??.dat 파일로부터 블록체인 인덱스를 재구성 합니다.</translation>
     </message>
     <message>
         <source>Deletes all local blockchain folders so the wallet synchronizes from scratch.</source>
@@ -3033,6 +4433,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Salvage wallet</source>
         <translation>지갑 복구</translation>
+    </message>
+    <message>
+        <source>Rescan blockchain file</source>
+        <translation>블록체인 파일 재스캔</translation>
     </message>
     <message>
         <source>Recover transactions 1</source>
@@ -3049,6 +4453,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Rebuild index</source>
         <translation>색인 재구축</translation>
+    </message>
+    <message>
+        <source>Delete local blockchain </source>
+        <translation>로컬 블록체인 폴더 삭제</translation>
     </message>
     <message>
         <source>This will delete your local blockchain folders and the wallet will synchronize the complete Blockchain from scratch.&lt;br /&gt;&lt;br /&gt;</source>
@@ -3078,20 +4486,72 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Form</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <source>Wallet Data</source>
+        <translation>지갑 데이터</translation>
     </message>
     <message>
         <source>Wallet</source>
         <translation>지갑</translation>
     </message>
     <message>
+        <source>Multisend</source>
+        <translation>멀티 전송</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>회계 데이터 출력</translation>
+    </message>
+    <message>
+        <source>Tools</source>
+        <translation>도구</translation>
+    </message>
+    <message>
+        <source>Sign/Verify Message</source>
+        <translation>메세지 서명 / 검증</translation>
+    </message>
+    <message>
+        <source>BIP38 Tool</source>
+        <translation>BIP38 Tool</translation>
+    </message>
+    <message>
         <source>Options</source>
         <translation>옵션</translation>
     </message>
     <message>
+        <source>Main</source>
+        <translation>메인 옵션</translation>
+    </message>
+    <message>
+        <source>Display</source>
+        <translation>디스플레이</translation>
+    </message>
+    <message>
         <source>Information</source>
         <translation>정보</translation>
+    </message>
+    <message>
+        <source>Console</source>
+        <translation>콘솔</translation>
+    </message>
+    <message>
+        <source>Wallet Repair</source>
+        <translation>지갑 복구</translation>
+    </message>
+    <message>
+        <source>Help</source>
+        <translation>도움말</translation>
+    </message>
+    <message>
+        <source>FAQ</source>
+        <translation>FAQ</translation>
+    </message>
+    <message>
+        <source>About Rapids</source>
+        <translation>Rapids 정보</translation>
+    </message>
+    <message>
+        <source>Settings</source>
+        <translation>설정</translation>
     </message>
     <message>
         <source>Confirm options reset</source>
@@ -3105,12 +4565,56 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>Client will be shutdown, do you want to proceed?</source>
         <translation>클라이언트가 종료됩니다. 계속 진행하시겠습니까?</translation>
     </message>
-    </context>
+    <message>
+        <source>Restart required</source>
+        <translation>지갑 재시작이 필요합니다</translation>
+    </message>
+    <message>
+        <source>Your wallet needs to be restarted to apply the changes
+</source>
+        <translation>변경 사항이 적용되려면 지갑을 재시작 해야합니다
+</translation>
+    </message>
+    <message>
+        <source>Restart Now</source>
+        <translation>지금 재시작</translation>
+    </message>
+    <message>
+        <source>Restart Later</source>
+        <translation>나중에 재시작</translation>
+    </message>
+    <message>
+        <source>Options will be applied on next wallet restart</source>
+        <translation>저장된 옵션은 재시작시 적용됩니다.</translation>
+    </message>
+    <message>
+        <source>Options stored</source>
+        <translation>옵션 저장됨</translation>
+    </message>
+    <message>
+        <source>Options store failed</source>
+        <translation>옵션 저장 실패</translation>
+    </message>
+    <message>
+        <source>Discard Unsaved Changes</source>
+        <translation>저장 되지 않은 변경 사항 폐기</translation>
+    </message>
+    <message>
+        <source>You are just about to discard all of your unsaved options.
+
+Are you sure?
+</source>
+        <translation>저장 되지 않은 옵션내용은 적용되지 않습니다.
+
+확실 합니까?
+</translation>
+    </message>
+</context>
 <context>
     <name>ShutdownWindow</name>
     <message>
         <source>Rapids is shutting down...</source>
-        <translation>RPD Core가 종료됩니다...</translation>
+        <translation>Rapids가 종료됩니다...</translation>
     </message>
     <message>
         <source>Do not shut down the computer until this window disappears.</source>
@@ -3123,12 +4627,20 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>Form</source>
         <translation>Form</translation>
     </message>
-    </context>
+    <message>
+        <source>Contact Stored</source>
+        <translation>주소 저장됨</translation>
+    </message>
+</context>
 <context>
     <name>Splash</name>
     <message>
         <source>Form</source>
         <translation>Form</translation>
+    </message>
+    <message>
+        <source>Loading…</source>
+        <translation>로딩중...</translation>
     </message>
     <message>
         <source>Rapids</source>
@@ -3169,10 +4681,22 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Form</translation>
     </message>
     <message>
+        <source>Copy</source>
+        <translation>복사</translation>
+    </message>
+    <message>
+        <source>Edit</source>
+        <translation>수정</translation>
+    </message>
+    <message>
         <source>Delete</source>
         <translation>삭제</translation>
     </message>
-    </context>
+    <message>
+        <source>Last</source>
+        <translation>마지막</translation>
+    </message>
+</context>
 <context>
     <name>TopBar</name>
     <message>
@@ -3180,10 +4704,148 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Form</translation>
     </message>
     <message>
+        <source>Available</source>
+        <translation>가능함</translation>
+    </message>
+    <message>
+        <source>Pending</source>
+        <translation>대기중</translation>
+    </message>
+    <message>
+        <source>Immature</source>
+        <translation>미완료</translation>
+    </message>
+    <message>
+        <source>Wallet Unlocked for staking</source>
+        <translation>스테이킹 위해 지갑 열기</translation>
+    </message>
+    <message>
+        <source>Error generating address</source>
+        <translation>주소 생성 오류</translation>
+    </message>
+    <message>
+        <source>Address Copied</source>
+        <translation>주소 복사됨</translation>
+    </message>
+    <message>
+        <source>Staking active</source>
+        <translation>스테이킹 활성화</translation>
+    </message>
+    <message>
+        <source>Staking not active</source>
+        <translation>스테이킹 비활성화</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n active connection(s)</source>
+        <translation><numerusform>%n 개 연결됨</numerusform></translation>
+    </message>
+    <message>
+        <source>Synchronized - Block: %1</source>
+        <translation>동기화 - Block : %1</translation>
+    </message>
+    <message numerus="yes">
+        <source>%n hour(s)</source>
+        <translation><numerusform>%n 시간</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <source>%n day(s)</source>
+        <translation><numerusform>%n 일</numerusform></translation>
+    </message>
+    <message numerus="yes">
+        <source>%n week(s)</source>
+        <translation><numerusform>%n 주</numerusform></translation>
+    </message>
+    <message>
         <source>%1 and %2</source>
         <translation>%1 그리고 %2</translation>
     </message>
-    </context>
+    <message numerus="yes">
+        <source>%n year(s)</source>
+        <translation><numerusform>%n 년</numerusform></translation>
+    </message>
+    <message>
+        <source>Wallet Upgrade</source>
+        <translation>지갑 업그레이드</translation>
+    </message>
+    <message>
+        <source>Upgrading to HD wallet will improve
+the wallet's reliability and security.
+
+
+NOTE: after the upgrade, a new
+backup will be created.
+</source>
+        <translation>HD 지갑은 신뢰성과 보안성이 뛰어납니다.
+
+NOTE: 업그레이드 이후에는
+새로운 백업이 만들어 집니다.
+</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet</source>
+        <translation>지갑 업그레이드</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>지갑 열기 취소됨</translation>
+    </message>
+    <message>
+        <source>Tor Active: %1</source>
+        <translation>Tor 활성화: %1</translation>
+    </message>
+    <message>
+        <source>Tor Disabled</source>
+        <translation>Tor 비활성화</translation>
+    </message>
+    <message>
+        <source>Available (Locked included)</source>
+        <translation>사용가능(잠긴 것 포함)</translation>
+    </message>
+    <message>
+        <source>The wallet has been successfully upgraded to HD.</source>
+        <translation>HD 지갑으로 업그레이드가 되었습니다.</translation>
+    </message>
+    <message>
+        <source>It is advised to make a backup.</source>
+        <translation>백업하기를 권유드립니다.</translation>
+    </message>
+    <message>
+        <source>Do you wish to backup now?</source>
+        <translation>지금 백업할까요?</translation>
+    </message>
+    <message>
+        <source>Backup Wallet</source>
+        <translation>지갑 백업</translation>
+    </message>
+    <message>
+        <source>Wallet Data (*.dat)</source>
+        <translation>지갑 데이터 (*.dat)</translation>
+    </message>
+    <message>
+        <source>Backup created</source>
+        <translation>백업 생성 완료</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>백업 생성 실패</translation>
+    </message>
+    <message>
+        <source>no file selected</source>
+        <translation>선택된 파일 없음</translation>
+    </message>
+    <message>
+        <source>Wallet upgraded successfully, but no backup created.</source>
+        <translation>지갑이 성공적으로 업그레이드 되었지만, 백업이 만들어지지 않았습니다.</translation>
+    </message>
+    <message>
+        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
+        <translation>주의 : 당신의 wallet.dat 파일을 만드는 것을 꼭 기억하세요.</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet Error</source>
+        <translation>지갑 업그레이드 오류</translation>
+    </message>
+</context>
 <context>
     <name>TrafficGraphWidget</name>
     <message>
@@ -3193,6 +4855,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
 </context>
 <context>
     <name>TransactionDesc</name>
+    <message numerus="yes">
+        <source>Open for %n more block(s)</source>
+        <translation><numerusform>%n 블럭 더 열기</numerusform></translation>
+    </message>
     <message>
         <source>Open until %1</source>
         <translation>%1까지 열기</translation>
@@ -3254,6 +4920,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>, has not been successfully broadcast yet</source>
         <translation>, 아직 성공적으로 브로드캐스트되지 않았습니다</translation>
     </message>
+    <message numerus="yes">
+        <source>, broadcast through %n node(s)</source>
+        <translation><numerusform>, %n 노드를 통한 브로드캐스트</numerusform></translation>
+    </message>
     <message>
         <source>Date</source>
         <translation>날짜</translation>
@@ -3293,6 +4963,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Credit</source>
         <translation>크레딧</translation>
+    </message>
+    <message numerus="yes">
+        <source>matures in %n more block(s)</source>
+        <translation><numerusform>%n 블록안에 생성됨</numerusform></translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -3377,6 +5051,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>Address</source>
         <translation>주소</translation>
     </message>
+    <message numerus="yes">
+        <source>Open for %n more block(s)</source>
+        <translation><numerusform>%n 블럭 더 열기</numerusform></translation>
+    </message>
     <message>
         <source>Open until %1</source>
         <translation>%1까지 열기</translation>
@@ -3422,10 +5100,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>수신됨</translation>
     </message>
     <message>
-        <source>Received via Obfuscation</source>
-        <translation>난독화를 통해 수신 됨</translation>
-    </message>
-    <message>
         <source>RPD Stake</source>
         <translation>RPD stake</translation>
     </message>
@@ -3434,20 +5108,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>zRPD stake</translation>
     </message>
     <message>
-        <source>Obfuscation Denominate</source>
-        <translation>난독화 표시</translation>
+        <source>RPD Cold Stake</source>
+        <translation>RPD Cold Stake</translation>
     </message>
     <message>
-        <source>Obfuscation Collateral Payment</source>
-        <translation>난독화 보증 결제 </translation>
-    </message>
-    <message>
-        <source>Obfuscation Make Collateral Inputs</source>
-        <translation>난독화로 보증 입력</translation>
-    </message>
-    <message>
-        <source>Obfuscation Create Denominations</source>
-        <translation>난독화 표시 만들기</translation>
+        <source>Stake delegation</source>
+        <translation>Stake delegation</translation>
     </message>
     <message>
         <source>Converted RPD to zRPD</source>
@@ -3486,12 +5152,16 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>채굴</translation>
     </message>
     <message>
-        <source>Obfuscated</source>
-        <translation>난독화</translation>
-    </message>
-    <message>
         <source>watch-only</source>
         <translation>읽기 전용</translation>
+    </message>
+    <message>
+        <source>Anonymous</source>
+        <translation>익명</translation>
+    </message>
+    <message>
+        <source>No information</source>
+        <translation>정보 없음</translation>
     </message>
     <message>
         <source>(n/a)</source>
@@ -3533,12 +5203,56 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>전송 상세내역</translation>
     </message>
     <message>
-        <source>Fee:</source>
-        <translation>수수료:</translation>
+        <source>Total amount</source>
+        <translation>총량</translation>
     </message>
     <message>
-        <source>Status:</source>
-        <translation>상태:</translation>
+        <source>Previous Transaction</source>
+        <translation>이전 전송</translation>
+    </message>
+    <message>
+        <source>Output Index</source>
+        <translation>출력 인덱스</translation>
+    </message>
+    <message>
+        <source>D7VFR83SQbie…BhjcWJtcfip5krte2Z </source>
+        <translation>D7VFR83SQbie…BhjcWJtcfip5krte2Z </translation>
+    </message>
+    <message>
+        <source>May 25, 2017</source>
+        <translation>May 25, 2017</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>Fee</source>
+        <translation>수수료</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>사이즈</translation>
+    </message>
+    <message>
+        <source>Change address</source>
+        <translation>주소 변경</translation>
+    </message>
+    <message>
+        <source>Spendable</source>
+        <translation>사용가능</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>확인</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>상태</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>날짜</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -3553,8 +5267,16 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>선택</translation>
     </message>
     <message>
+        <source>Confirm Your Transaction</source>
+        <translation>당신의 전송을 확인해주세요</translation>
+    </message>
+    <message>
         <source>SEND</source>
         <translation>보내기</translation>
+    </message>
+    <message>
+        <source>ID copied</source>
+        <translation>ID 복사됨</translation>
     </message>
     <message>
         <source>Unknown</source>
@@ -3567,7 +5289,15 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <source>Form</source>
         <translation>Form</translation>
     </message>
-    </context>
+    <message>
+        <source>18/05/18</source>
+        <translation>18/05/18</translation>
+    </message>
+    <message>
+        <source>+0.000585 RPD</source>
+        <translation>+0.000585 RPD</translation>
+    </message>
+</context>
 <context>
     <name>WalletModel</name>
     <message>
@@ -3580,29 +5310,64 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
 </context>
 <context>
-    <name>WalletPasswordDialog</name>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
-    </message>
-</context>
-<context>
     <name>WelcomeContentWidget</name>
+    <message>
+        <source>1</source>
+        <translation>1</translation>
+    </message>
+    <message>
+        <source>2</source>
+        <translation>2</translation>
+    </message>
+    <message>
+        <source>3</source>
+        <translation>3</translation>
+    </message>
+    <message>
+        <source>4</source>
+        <translation>4</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>언어</translation>
+    </message>
     <message>
         <source>Welcome</source>
         <translation>환영합니다</translation>
+    </message>
+    <message>
+        <source>Privacy</source>
+        <translation>Privacy</translation>
+    </message>
+    <message>
+        <source>Masternodes</source>
+        <translation>마스터노드</translation>
+    </message>
+    <message>
+        <source>Select your language</source>
+        <translation>원하시는 언어를 선택하세요.</translation>
+    </message>
+    <message>
+        <source>Welcome to
+Rapids Wallet</source>
+        <translation>환영합니다.
+Rapids Wallet</translation>
+    </message>
+    <message>
+        <source>Rapids is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <translation>Rapids 는 많은 경험과 뛰어난 실력을 겸비한 개발자와 암호학자로 구성된 팀이 개발하는 연신적인 Proof of Stake 블록체인 기술을 자랑하는 오픈소스 프로젝트 입니다. </translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - Rapids believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Rapids 는 Manifesto 선언서에 적힌대로: 프라이버시는 협상이 불가능한 인간의 기본적인 인권중 하나이다. 이로 인해 그 언제나 그 누구에게나 데이터를 공유할수 있는 자유를 얻게 될것이다. Rapids 프로젝트는 개인 독립을 추구한다. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <source>How Rapids respects your privacy?</source>
+        <translation>Rapids 가 당신의 프라이버시를 존중하는 방법은?</translation>
+    </message>
+    <message>
+        <source>What is a Masternode?</source>
+        <translation>마스터로드란?</translation>
     </message>
     <message>
         <source>default</source>
@@ -3626,6 +5391,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>zRpd</source>
         <translation>zRpd</translation>
+    </message>
+    <message>
+        <source>0.00 </source>
+        <translation>0.00 </translation>
     </message>
     <message>
         <source>Quantity:</source>
@@ -3667,12 +5436,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>JSON-RPC연결 수신을 위해 주어진 주소를 지정합니다. [host]: IPv6 포트 표기법 사용. 이 옵션은 여러번 지정할 수 있습니다. (기본값 : 모든 인터페이스에 지정)</translation>
     </message>
     <message>
-        <source>Calculated accumulator checkpoint is not what is recorded by block index</source>
-        <translation>계산된 누산기 체크포인트는 블록 인덱스에 의해 기록되는 것이 아닙니다.</translation>
-    </message>
-    <message>
         <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
-        <translation>        &lt;translation&gt;잠겨진 데이터 디렉토리 %s 를 가져올 수 없습니다. RPD Core는 이미 실행 중입니다.</translation>
+        <translation>        &lt;translation&gt;잠겨진 데이터 디렉토리 %s 를 가져올 수 없습니다. Rapids는 이미 실행 중입니다.</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -3697,10 +5462,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>MIT 소프트웨어 라이센스에 따라 배포, 첨부 파일 COPYING 또는 &lt;http://www.opensource.org/licenses/mit-license.php&gt; 를 참조하십시오.</translation>
-    </message>
-    <message>
-        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
-        <translation>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</translation>
     </message>
     <message>
         <source>Enable or disable staking functionality for RPD inputs (0-1, default: %u)</source>
@@ -3795,10 +5556,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>재연결로 인해 피어가 오작동을 유지하는 초 단위 시간 (기본값: %u)</translation>
     </message>
     <message>
-        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation>난독화는 정확한 금액을 사용하여 자금을 송금하기 때문에 더 많은 코인을 익명화해야 할 수도 있습니다.</translation>
-    </message>
-    <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>디버깅 정보 출력 (기본값: %u, &lt;category&gt; 공급은 선택입니다)</translation>
     </message>
@@ -3844,19 +5601,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Unable to bind to %s on this computer. Rapids is probably already running.</source>
-        <translation>이 컴퓨터를 %s 로 지정하는것은 불가능합니다. RPD Core는 이미 실행 중입니다.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
-        <translation>이 트랜잭션를 위해 난독화 표기된 충분한 금액을 찾을 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>이 트랜잭션를 위해 난독화 표기가 안된 충분한 금액을 찾을 수 없습니다. 10000 RPD과 일치하지 않음.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>트랜잭션에 대한 충분한 금액을 찾을 수 없습니다. 10000 RPD와 같지 않음</translation>
+        <translation>이 컴퓨터를 %s 로 지정하는것은 불가능합니다. Rapids는 이미 실행 중입니다.</translation>
     </message>
     <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
@@ -3872,7 +5617,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
-        <translation>경고: 컴퓨터의 날짜와 시간이 올바르게 설정되어 있는지 확인해 주세요! 만일 시계가 잘못되어 있다면 RPD 코어는 정상적으로 작동하지 않을 수 있습니다.</translation>
+        <translation>경고: 컴퓨터의 날짜와 시간이 올바르게 설정되어 있는지 확인해 주세요! 만일 시계가 잘못되어 있다면 Rapids 코어는 정상적으로 작동하지 않을 수 있습니다.</translation>
     </message>
     <message>
         <source>Warning: The network does not appear to fully agree! Some miners appear to be experiencing issues.</source>
@@ -3903,8 +5648,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>환경설정에서 masternodeprivkey를 지정해야 합니다. 도움말을 참조하십시오.</translation>
     </message>
     <message>
-        <source>(51472 could be used only on mainnet)</source>
-        <translation>(51472 은 메인넷에서만 사용될 수 있습니다)</translation>
+        <source>(28732 could be used only on mainnet)</source>
+        <translation>(28732 은 메인넷에서만 사용될 수 있습니다)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -3915,8 +5660,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>(기본값: 1)</translation>
     </message>
     <message>
-        <source>(must be 51472 for mainnet)</source>
-        <translation>(메인넷 일경우 51472)</translation>
+        <source>(must be 28732 for mainnet)</source>
+        <translation>(메인넷 일경우 28732)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
@@ -3955,24 +5700,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>블록 생성 옵션:</translation>
     </message>
     <message>
-        <source>Calculating missing accumulators...</source>
-        <translation>누락된 누산기 계산중...</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>지갑을 다운그레이드 할 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -bind address: '%s'</source>
-        <translation>주소를 변환할 수 없습니다 주소 -bind: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -externalip address: '%s'</source>
-        <translation>주소를 변환할 수 없습니다 -externalip 주소: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -whitebind address: '%s'</source>
-        <translation>해결할 수 없습니다 -whitebind 주소: '%s'</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -4043,10 +5772,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>로딩 완료</translation>
     </message>
     <message>
-        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
-        <translation>자동 제로코인 생성 (0-1, 기본값: %u)</translation>
-    </message>
-    <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
         <translation>&lt;address&gt; 에서 해시 전송 게시 가능 (SwiftTX로 설정된)</translation>
     </message>
@@ -4080,7 +5805,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Error loading wallet.dat: Wallet requires newer version of Rapids</source>
-        <translation>wallet.dat를 로드하는 중 오류가 발생했습니다. 지갑에 최신 버전의 RPD 코어가 필요합니다.</translation>
+        <translation>wallet.dat를 로드하는 중 오류가 발생했습니다. 지갑에 최신 버전의 Rapids 코어가 필요합니다.</translation>
     </message>
     <message>
         <source>Error opening block database</source>
@@ -4099,6 +5824,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>에러</translation>
     </message>
     <message>
+        <source>Error: </source>
+        <translation>에러:</translation>
+    </message>
+    <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
         <translation>오류 : 내부에서 치명적인 오류가 발생했습니다. 자세한 내용은 debug.log를 참조하십시오</translation>
     </message>
@@ -4113,10 +5842,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
         <translation>오류 : 지갑이 잠겼습니다, 트랜잭션을 생성할 수 없습니다!</translation>
-    </message>
-    <message>
-        <source>Failed to calculate accumulator checkpoint</source>
-        <translation>축 압기 체크 포인트를 계산하지 못했습니다.</translation>
     </message>
     <message>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
@@ -4172,7 +5897,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Initialization sanity check failed. Rapids is shutting down.</source>
-        <translation>초기화 정확성 검사에 실패 했습니다. RPD Core가 종료됩니다.</translation>
+        <translation>초기화 정확성 검사에 실패 했습니다. Rapids가 종료됩니다.</translation>
     </message>
     <message>
         <source>Insufficient funds</source>
@@ -4187,28 +5912,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>잘못된 -onion 주소거나 호스트네임 : '%s'</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
-        <translation>-maxtxfee=&lt;amount&gt; 에 대한 유효하지 않은 값: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>-minrelaytxfee=&lt;amount&gt;; 에 대한 유효하지 않은 값: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
-        <translation>-mintxfee=&lt;amount&gt;; 에 대한 유효하지 않은 값: '%s'</translation>
-    </message>
-    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>-paytxfee=&lt;amount&gt; 에 대한 유효하지 않은 값: '%s' (적어도 %s 가 필요합니다)</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>-paytxfee=&lt;amount&gt; 에 대한 유효하지 않은 값: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation>-reservebalance=&lt;amount&gt;에 대한 금액이 유효하지 않은 값</translation>
     </message>
     <message>
         <source>Invalid amount</source>
@@ -4227,8 +5932,8 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>masternode.conf 에서 유효하지 않은 포트가 감지되었습니다</translation>
     </message>
     <message>
-        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
-        <translation>자동생성 zRPD 비율  (1-100, default: %u)</translation>
+        <source>Recalculating RPD supply...</source>
+        <translation>RPD 공급 재계산중...</translation>
     </message>
     <message>
         <source>Reindex the RPD and zRPD money supply statistics</source>
@@ -4271,7 +5976,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
 </translation>
     </message>
     <message>
-        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <source>Disable all Rapids specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation>Rapids의 모든 특정 기능들을 비활성화합니다(마스터노드, 난독화, SwiftTX, Budgeting) (0-1, 기본값: %u)</translation>
     </message>
     <message>
@@ -4281,10 +5986,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>에러 : 거래가 거부되었습니다. 예를 들어 다른 사본 wallet.dat에서 코인을 사용했다면 2중 사용으로 인식될수 있습니다. 혹은, 일부가 이미 소비 된 경우에 이런 일이 발생할 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation>에러 :이 거래에는 전송량, 복잡성 또는 최근에 받은 자금의 사용등으로 인해 적어도 %s의 거래 수수료가 필요합니다!</translation>
     </message>
     <message>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
@@ -4303,14 +6004,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</translation>
     </message>
     <message>
-        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
-        <translation>자동생성 제로코인 선호 디노미네이션 (1/5/10/50/100/500/1000/5000) 0사용안됨, 기본값 : %u)</translation>
-    </message>
-    <message>
-        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</translation>
-    </message>
-    <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
         <translation>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</translation>
     </message>
@@ -4325,10 +6018,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Attempt to force blockchain corruption recovery</source>
         <translation>블록체인 손상 복구 시도</translation>
-    </message>
-    <message>
-        <source>CoinSpend: Accumulator witness does not verify</source>
-        <translation>CoinSpend: 누산기가 제대로 작동하지 않았습니다.</translation>
     </message>
     <message>
         <source>Display the stake modifier calculations in the debug.log file.</source>
@@ -4367,10 +6056,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Error: 유효하지 않는 utxo!</translation>
     </message>
     <message>
-        <source>Failed to create mint</source>
-        <translation>생성 실패</translation>
-    </message>
-    <message>
         <source>Failed to find Zerocoins in wallet.dat</source>
         <translation>wallet.dat 에서 제로코인을 인식 실패</translation>
     </message>
@@ -4385,6 +6070,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Failed to write coin serial number into wallet</source>
         <translation>지갑에 코인 시리얼 번호 작성 실패</translation>
+    </message>
+    <message>
+        <source>Invalid amount for -%s=&lt;amount&gt;: '%s'</source>
+        <translation>-%s=&lt;amount&gt;; 에 대한 유효하지 않은 값: '%s'</translation>
     </message>
     <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
@@ -4411,6 +6100,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>주소를 불러오는 중...</translation>
     </message>
     <message>
+        <source>Loading banlist...</source>
+        <translation>차단 리스트 로딩중...</translation>
+    </message>
+    <message>
         <source>Loading block index...</source>
         <translation>블록 인덱스를 불러오는 중...</translation>
     </message>
@@ -4429,10 +6122,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Loading sporks...</source>
         <translation>sporks 로딩중...</translation>
-    </message>
-    <message>
-        <source>Loading wallet... (%3.2f %%)</source>
-        <translation>지갑을 불러오는 중… (%3.2f %%)</translation>
     </message>
     <message>
         <source>Loading wallet...</source>
@@ -4507,12 +6196,36 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>JSON-RPC 연결 비밀번호</translation>
     </message>
     <message>
+        <source>Unable to find transaction containing mint %s</source>
+        <translation>코인 생성이 포함된 거래를 찾을 수 없습니다 %s</translation>
+    </message>
+    <message>
+        <source>Unable to find transaction containing mint, txHash: %s</source>
+        <translation>코인 생성이 포함된 거래를 찾을 수 없습니다. txHash: %s</translation>
+    </message>
+    <message>
+        <source>Use block spam filter (default: %u)</source>
+        <translation>블록 스팸 필터 사용하기 (기본 : %u)</translation>
+    </message>
+    <message>
         <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
         <translation>isValid(): Invalid -proxy address or hostname: '%s'</translation>
     </message>
     <message>
         <source>Preparing for resync...</source>
         <translation>재동기화 준비중...</translation>
+    </message>
+    <message>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>컴퓨터의 날짜와 시간이 올바르게 설정되어 있는지 확인해 주세요! 만일 시계가 잘못되어 있다면 Rapids 코어는 정상적으로 작동하지 않을 수 있습니다.</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -%s address: '%s'</source>
+        <translation>주소를 변환할 수 없습니다 주소 -%s: '%s'</translation>
+    </message>
+    <message>
+        <source>Need destination or change address because change is not exact</source>
+        <translation>잔돈 액수가 정확히 일치하지 않아 받을 주소가 필요합니다.</translation>
     </message>
     <message>
         <source>Prepend debug output with timestamp (default: %u)</source>
@@ -4539,14 +6252,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>현재 blk000??.dat 파일의 블록체인 인덱스를 다시 구축합니다</translation>
     </message>
     <message>
-        <source>Receive and display P2P network alerts (default: %u)</source>
-        <translation>P2P 네크워크로 부터 경고를 받고 보여줍니다 (기본값: %u)</translation>
-    </message>
-    <message>
-        <source>Reindex the accumulator database</source>
-        <translation>누적 기 데이터베이스 다시 색인화</translation>
-    </message>
-    <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
         <translation>릴레이 및 채굴 데이터 이동매체 트랜잭션 (기본값: %u)</translation>
     </message>
@@ -4563,14 +6268,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>다시 스캔하는 중...</translation>
     </message>
     <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>생성된 제로코인 초기화 완료:</translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>사용된 제로코인 초기화 완료:</translation>
-    </message>
-    <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
         <translation>주기적으로 지갑을 플러쉬하는 스레드를 실행합니다 (기본값: %u)</translation>
     </message>
@@ -4581,10 +6278,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>무료 수수료 트랜잭션이 가능할 경우 무료 수수료로 트랜잭션을 전송합니다 (기본값: %u)</translation>
-    </message>
-    <message>
-        <source>Session timed out.</source>
-        <translation>세션이 만료되었습니다.</translation>
     </message>
     <message>
         <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
@@ -4631,10 +6324,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>클라이언트 시작시에 debug.log 파일을 축소시킵니다 (기본값:1 아닐경우 -debug)</translation>
     </message>
     <message>
-        <source>Signing timed out.</source>
-        <translation>인증 시간 초과.</translation>
-    </message>
-    <message>
         <source>Signing transaction failed</source>
         <translation>트랜잭션 인증 실패</translation>
     </message>
@@ -4672,7 +6361,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Spend unconfirmed change when sending transactions (default: %u)</source>
-        <translation>트랜잭션 전송시 승인되지 않은 변경사항을 전송합니다 (기본값: %u)</translation>
+        <translation>트랜잭션 전송시 승인되지 않은 잔돈을 전송합니다 (기본값: %u)</translation>
     </message>
     <message>
         <source>Staking options:</source>
@@ -4689,10 +6378,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Synchronization finished</source>
         <translation>동기화 완료</translation>
-    </message>
-    <message>
-        <source>Synchronization pending...</source>
-        <translation>동기화 대기중...</translation>
     </message>
     <message>
         <source>Synchronizing budgets...</source>
@@ -4713,14 +6398,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Syncing zRPD wallet...</source>
         <translation>zRPD 지갑 동기화중...</translation>
-    </message>
-    <message>
-        <source>The coin spend has been used</source>
-        <translation>전송이 이미 되었습니다.</translation>
-    </message>
-    <message>
-        <source>The transaction did not verify</source>
-        <translation>거래가 확인되지 않았습니다.</translation>
     </message>
     <message>
         <source>This help message</source>
@@ -4783,6 +6460,14 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>이 컴퓨터에서 %s 로 바인드할 수 없습니다 (바인드 리턴 오류 %s)</translation>
     </message>
     <message>
+        <source>Unable to generate initial key</source>
+        <translation>이니셜 키를 생성할 수 없습니다.</translation>
+    </message>
+    <message>
+        <source>Unable to generate keys</source>
+        <translation>키를 생성할 수 없습니다.</translation>
+    </message>
+    <message>
         <source>Unable to sign spork message, wrong key?</source>
         <translation>스포크 메시지를 인증할 수 없습니다, 키를 확인해주세요</translation>
     </message>
@@ -4836,7 +6521,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Wallet needed to be rewritten: restart Rapids to complete</source>
-        <translation>지갑을 다시 작성해야 합니다: 완료하려면 RPD 코어를 재시작해야 합니다</translation>
+        <translation>지갑을 다시 작성해야 합니다: 완료하려면 Rapids 코어를 재시작해야 합니다</translation>
     </message>
     <message>
         <source>Wallet options:</source>
@@ -4904,6 +6589,10 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>TextLabel</source>
         <translation>텍스트라벨</translation>
+    </message>
+    <message>
+        <source>Include delegated</source>
+        <translation>위임된 코인 포함</translation>
     </message>
     <message>
         <source>PushButton</source>

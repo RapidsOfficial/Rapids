@@ -61,7 +61,7 @@ bool TransactionFilterProxy::filterAcceptsRow(int sourceRow, const QModelIndex& 
     }
     if (amount < minAmount)
         return false;
-    if (fOnlyZc && !isZcTx(type)){
+    if (fOnlyZc){
         return false;
     }
     if (fOnlyStakes && !isStakeTx(type))
@@ -123,12 +123,6 @@ void TransactionFilterProxy::setHideOrphans(bool fHide)
     invalidateFilter();
 }
 
-void TransactionFilterProxy::setShowZcTxes(bool fOnlyZc)
-{
-    this->fOnlyZc = fOnlyZc;
-    invalidateFilter();
-}
-
 void TransactionFilterProxy::setOnlyStakes(bool fOnlyStakes)
 {
     this->fOnlyStakes = fOnlyStakes;
@@ -152,26 +146,15 @@ int TransactionFilterProxy::rowCount(const QModelIndex& parent) const
 
 bool TransactionFilterProxy::isOrphan(const int status, const int type)
 {
-    return ( (type == TransactionRecord::Generated || type == TransactionRecord::StakeMint ||
-            type == TransactionRecord::StakeZRPD || type == TransactionRecord::MNReward)
+    return ( (type == TransactionRecord::Generated || type == TransactionRecord::StakeMint ||type == TransactionRecord::MNReward)
             && (status == TransactionStatus::Conflicted || status == TransactionStatus::NotAccepted) );
 }
 
-bool TransactionFilterProxy::isZcTx(int type) const {
-    return (type == TransactionRecord::ZerocoinMint || type == TransactionRecord::ZerocoinSpend || type == TransactionRecord::ZerocoinSpend_Change_zRpd
-            || type == TransactionRecord::ZerocoinSpend_FromMe || type == TransactionRecord::RecvFromZerocoinSpend);
-}
-
 bool TransactionFilterProxy::isStakeTx(int type) const {
-    return type == TransactionRecord::StakeMint || type == TransactionRecord::Generated || type == TransactionRecord::StakeZRPD || type == TransactionRecord::StakeDelegated;
+    return type == TransactionRecord::StakeMint || type == TransactionRecord::Generated || type == TransactionRecord::StakeDelegated;
 }
 
 bool TransactionFilterProxy::isColdStake(int type) const {
     return type == TransactionRecord::P2CSDelegation || type == TransactionRecord::P2CSDelegationSent || type == TransactionRecord::P2CSDelegationSentOwner || type == TransactionRecord::StakeDelegated || type == TransactionRecord::StakeHot;
 }
 
-/*QVariant TransactionFilterProxy::dataFromSourcePos(int sourceRow, int role) const {
-    QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-    return index.data(index, role);
-}
- */

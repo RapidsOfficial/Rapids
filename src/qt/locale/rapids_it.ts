@@ -130,12 +130,12 @@
         <translation>Indirizzi di ricezione</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Questi sono gli indirizzi RPD per l'invio di pagamenti. Controlla sempre l'importo e l'indirizzo di ricezione prima di inviare valuta.</translation>
+        <source>These are your Rapids addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Questi sono gli indirizzi Rapids per l'invio di pagamenti. Controlla sempre l'importo e l'indirizzo di ricezione prima di inviare valuta.</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Questi sono gli indirizzi RPD per la ricezione di pagamenti. Si raccomanda di utilizzare un indirizzo diverso per ogni transazione.</translation>
+        <source>These are your Rapids addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Questi sono gli indirizzi Rapids per la ricezione di pagamenti. Si raccomanda di utilizzare un indirizzo diverso per ogni transazione.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -196,6 +196,10 @@
         <translation>Data</translation>
     </message>
     <message>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(nessuna etichetta)</translation>
     </message>
@@ -215,8 +219,8 @@
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Ancora nessun MasterNode attivo</translation>
+        <source>N/A</source>
+        <translation>N/D</translation>
     </message>
     <message>
         <source>Contact name</source>
@@ -245,10 +249,6 @@
     <message>
         <source>e.g. John Doe</source>
         <translation>ad es. John Doe</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address</source>
-        <translation>Inserisci un indirizzo RPD</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -369,23 +369,19 @@ per lo staking</translation>
     </message>
     <message>
         <source>ENCRYPT</source>
-        <translation>Crittografa</translation>
+        <translation>CRITTOGRAFA</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>CANCELLA</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
-        <translation>RPD verrà ora chiuso per completare il processo di cifratura. Ricorda che crittografare il tuo portafoglio non protegge completamente i tuoi RPD dal furto da parte di software malevoli che potrebbero infettare il tuo computer.</translation>
+        <source>Rapids will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
+        <translation>Rapids verrà ora chiuso per completare il processo di cifratura. Ricorda che crittografare il tuo portafoglio non protegge completamente i tuoi RPD dal furto da parte di software malevoli che potrebbero infettare il tuo computer.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Confermi di voler crittografare il portafoglio?</translation>
-    </message>
-    <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
-        <translation>Attenzione: Se crittografi il portafoglio e poi perdi la parola d'ordine, &lt;b&gt;PERDERAI TUTTI I TUOI RPD&lt;7b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -427,10 +423,6 @@ per lo staking</translation>
         <source>Wallet passphrase was successfully changed.</source>
         <translation>La passphrase del portafoglio è stata modificata correttamente.</translation>
     </message>
-    <message>
-        <source>Warning: The Caps Lock key is on!</source>
-        <translation>Attenzione: il tasto Caps Lock è attivo!</translation>
-    </message>
 </context>
 <context>
     <name>BanTableModel</name>
@@ -441,37 +433,6 @@ per lo staking</translation>
     <message>
         <source>Banned Until</source>
         <translation>Bloccato fino a</translation>
-    </message>
-</context>
-<context>
-    <name>BlockExplorer</name>
-    <message>
-        <source>Blockchain Explorer</source>
-        <translation>Esplora catena dei blocchi</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Indietro</translation>
-    </message>
-    <message>
-        <source>Forward</source>
-        <translation>Avanti</translation>
-    </message>
-    <message>
-        <source>Address / Block / Transaction</source>
-        <translation>Indirizzo / Blocco / Transazione</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation>Cerca</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Etichetta</translation>
-    </message>
-    <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
-        <translation>Non tutte le transazioni verranno visualizzate. Per vedere tutte le transazioni è necessario aggiungere txindex=1 nel file di configurazione (rapids.conf)</translation>
     </message>
 </context>
 <context>
@@ -506,10 +467,6 @@ per lo staking</translation>
     <message>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
         <translation>Totale: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Sconosciuti: %5)</translation>
-    </message>
-    <message>
-        <source>Network Alert</source>
-        <translation>Avviso di rete</translation>
     </message>
 </context>
 <context>
@@ -553,14 +510,6 @@ per lo staking</translation>
     <message>
         <source>Amount</source>
         <translation>Ammontare</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Dettagli della transazione</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
     </message>
     <message>
         <source>0.00 RPD</source>
@@ -629,34 +578,6 @@ per lo staking</translation>
     <message>
         <source>Unlock unspent</source>
         <translation>Sblocca non spesi</translation>
-    </message>
-    <message>
-        <source>Copy quantity</source>
-        <translation>Copia importo</translation>
-    </message>
-    <message>
-        <source>Copy fee</source>
-        <translation>Copia commissione</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>Copia importo al netto della commissione</translation>
-    </message>
-    <message>
-        <source>Copy bytes</source>
-        <translation>Copia byte</translation>
-    </message>
-    <message>
-        <source>Copy priority</source>
-        <translation>Copia priorità</translation>
-    </message>
-    <message>
-        <source>Copy dust</source>
-        <translation>Copia polvere</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>Copia resto</translation>
     </message>
     <message>
         <source>Unselect all</source>
@@ -760,89 +681,6 @@ per lo staking</translation>
     </message>
 </context>
 <context>
-    <name>CoinControlRpdWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Finestra di dialogo</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Dettagli della transazione</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
-        <source>RPD:</source>
-        <translation>RPD:</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Etichetta</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Quantità:</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Commissione:</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Ammontare</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Etichetta</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Indirizzo</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Tipo</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Data</translation>
-    </message>
-    <message>
-        <source>Confirmations</source>
-        <translation>Conferme</translation>
-    </message>
-    <message>
-        <source>CheckBox</source>
-        <translation>CheckBox</translation>
-    </message>
-    <message>
-        <source>Bytes:</source>
-        <translation>Byte:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>Polvere:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Differenza:</translation>
-    </message>
-    <message>
-        <source>After Fee: </source>
-        <translation>Al netto della commissione:</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>CANCELLA</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-</context>
-<context>
     <name>ColdStakingWidget</name>
     <message>
         <source>Form</source>
@@ -857,24 +695,8 @@ per lo staking</translation>
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
-        <source>Owner Address (optional, if empty a new address will be created)</source>
-        <translation>Indirizzo del proprietario (facoltativo, se vuoto verrà creato un nuovo indirizzo)</translation>
-    </message>
-    <message>
         <source>List of delegated balance by address</source>
         <translation>Lista dei saldi delegati per indirizzo</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation>Totale</translation>
-    </message>
-    <message>
-        <source>Unconfirmed balance will not be shown</source>
-        <translation>Il saldo non confermato non verrà visualizzato</translation>
     </message>
     <message>
         <source>No balance delegated</source>
@@ -893,30 +715,12 @@ per lo staking</translation>
         <translation>Delega</translation>
     </message>
     <message>
-        <source>You can delegate your RPDs and let a hot node (24/7 online node)
-stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation>Puoi delegare i tuoi RPD e lasciare un nodo attivo (nodo online 24/7) ad
-effettuare lo stake a tuo nome, mantenendo le chiavi in ​​un luogo sicuro offline.</translation>
-    </message>
-    <message>
-        <source>Add owner address</source>
-        <translation>Aggiungi indirizzo proprietario</translation>
-    </message>
-    <message>
-        <source>Delegate or Accept RPD delegation</source>
-        <translation>Delegare o accettare la delega RPD</translation>
-    </message>
-    <message>
         <source>Delegate</source>
         <translation>Delegato</translation>
     </message>
     <message>
         <source>Clear All</source>
         <translation>Cancella tutto</translation>
-    </message>
-    <message>
-        <source>Add the staking address</source>
-        <translation>Aggiungere l'indirizzo di staking</translation>
     </message>
     <message>
         <source>Delegated balance history</source>
@@ -945,10 +749,6 @@ effettuare lo stake a tuo nome, mantenendo le chiavi in ​​un luogo sicuro of
     <message>
         <source>Invalid entry</source>
         <translation>Valore non valido</translation>
-    </message>
-    <message>
-        <source>Invalid entry, minimum delegable amount is 10 RPD</source>
-        <translation>Voce non valida, importo minimo delegabile è 10 RPD</translation>
     </message>
     <message>
         <source>Owner address invalid</source>
@@ -1103,10 +903,6 @@ proprietario</translation>
         <translation>Nessuna transazione</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
         <source>Staking Rewards</source>
         <translation>Premi dello Staking</translation>
     </message>
@@ -1157,50 +953,6 @@ proprietario</translation>
     <message>
         <source>Amount of RPD and zRPD staked.</source>
         <translation>Quantità di RPD e zRPD dallo stake.</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation>Tutto</translation>
-    </message>
-    <message>
-        <source>Received</source>
-        <translation>Ricevuto</translation>
-    </message>
-    <message>
-        <source>Sent</source>
-        <translation>Inviato</translation>
-    </message>
-    <message>
-        <source>Mined</source>
-        <translation>Minato</translation>
-    </message>
-    <message>
-        <source>Minted</source>
-        <translation>Forgiato</translation>
-    </message>
-    <message>
-        <source>MN reward</source>
-        <translation>Premio del MN</translation>
-    </message>
-    <message>
-        <source>To yourself</source>
-        <translation>A te stesso</translation>
-    </message>
-    <message>
-        <source>Cold stakes</source>
-        <translation>Cold stakes</translation>
-    </message>
-    <message>
-        <source>Hot stakes</source>
-        <translation>Hot stakes</translation>
-    </message>
-    <message>
-        <source>Delegated</source>
-        <translation>Delegato</translation>
-    </message>
-    <message>
-        <source>Delegations</source>
-        <translation>Deleghe</translation>
     </message>
     <message>
         <source>Please wait until the wallet is fully synced to see your correct balance</source>
@@ -1269,69 +1021,6 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
     </message>
 </context>
 <context>
-    <name>DenomGenerationDialog</name>
-    <message>
-        <source>Form</source>
-        <translation>Modulo</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Dettagli della transazione</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
-        <source>This will unlock your wallet fully, so that anyone with access to it can spend until the wallet is closed or locked again.</source>
-        <translation>Questo sbloccherà completamente il tuo portafoglio, in modo che chiunque abbia accesso ad esso possa spendere fino a quando il portafoglio non verrà chiuso o nuovamente bloccato.</translation>
-    </message>
-    <message>
-        <source>5000</source>
-        <translation>5000</translation>
-    </message>
-    <message>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
-        <source>1000</source>
-        <translation>1000</translation>
-    </message>
-    <message>
-        <source>50</source>
-        <translation>50</translation>
-    </message>
-    <message>
-        <source>500</source>
-        <translation>500</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation>5</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation>1</translation>
-    </message>
-    <message>
-        <source>Select All</source>
-        <translation>Seleziona tutto</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>CANCELLA</translation>
-    </message>
-    <message>
-        <source>SAVE</source>
-        <translation>SALVA</translation>
-    </message>
-</context>
-<context>
     <name>EditAddressDialog</name>
     <message>
         <source>Edit Address</source>
@@ -1370,8 +1059,8 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Modifica indirizzo di invio</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid RPD address.</source>
-        <translation>L'indirizzo inserito "%1" non è un indirizzo RPD valido.</translation>
+        <source>The entered address "%1" is not a valid Rapids address.</source>
+        <translation>L'indirizzo inserito "%1" non è un indirizzo Rapids valido.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1414,49 +1103,6 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
     <message>
         <source>Cannot create data directory here.</source>
         <translation>Impossibile creare la cartella dati qui.</translation>
-    </message>
-</context>
-<context>
-    <name>GovernancePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Modulo</translation>
-    </message>
-    <message>
-        <source>GOVERNANCE</source>
-        <translation>GOVERNANCE</translation>
-    </message>
-    <message>
-        <source>Update Proposals</source>
-        <translation>Proposte di aggiornamento</translation>
-    </message>
-    <message>
-        <source>Next super block:</source>
-        <translation>Prossimo super blocco:</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Blocks to next super block:</source>
-        <translation>Blocchi al prossimo super blocco:</translation>
-    </message>
-    <message>
-        <source>Days to budget payout (estimate):</source>
-        <translation>Giorni di pagamento del budget (stima):</translation>
-    </message>
-    <message>
-        <source>Allotted budget:</source>
-        <translation>Budget assegnato:</translation>
-    </message>
-    <message>
-        <source>Budget left:</source>
-        <translation>Budget residuo:</translation>
-    </message>
-    <message>
-        <source>Masternodes count:</source>
-        <translation>Numero dei Masternodes:</translation>
     </message>
 </context>
 <context>
@@ -1533,8 +1179,8 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Essendo il primo avvio dell'applicazione, puoi scegliere dove Rapids salverà i propri dati.</translation>
     </message>
     <message>
-        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Rapids scaricherà e salverà una copia della blockchain RPD. Verranno salvati almeno %1GB di dati in questa cartella, che cresceranno nel tempo. In questa cartella verrà salvato anche il portafoglio.</translation>
+        <source>Rapids will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Rapids scaricherà e salverà una copia della blockchain Rapids. Verranno salvati almeno %1GB di dati in questa cartella, che cresceranno nel tempo. In questa cartella verrà salvato anche il portafoglio.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1617,18 +1263,6 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <source>Form</source>
         <translation>Modulo</translation>
     </message>
-    <message>
-        <source>user_masternode</source>
-        <translation>user_masternode</translation>
-    </message>
-    <message>
-        <source>Address: 88.26.164.88:51474</source>
-        <translation>Address: 88.26.164.88:51474</translation>
-    </message>
-    <message>
-        <source>Jan. 19, 2019</source>
-        <translation>19 Gennaio 2019</translation>
-    </message>
 </context>
 <context>
     <name>MasterNodeWizardDialog</name>
@@ -1661,28 +1295,12 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Indirizzo</translation>
     </message>
     <message>
-        <source>Create New Master Node Controller</source>
-        <translation>Crea nuovo controller Masternode</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Per creare un Masternode RPD devi dedicare 10.000 RPD (l'unità di RPD) alla rete (tuttavia, queste valute sono ancora tue e saranno sempre in tuo possesso). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;Puoi disattivare il nodo e sbloccare le valute in qualsiasi momento.</translation>
-    </message>
-    <message>
         <source>Make sure you have this amount of coins.</source>
         <translation>Assicurati di avere questa quantità di valuta.</translation>
     </message>
     <message>
-        <source>Set Master Node’s Name</source>
-        <translation>Imposta il nome del Masternode</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Verrà effettuata una transazione di 10.000 RPD&lt;/p&gt;&lt;p&gt;a un nuovo indirizzo vuoto nel tuo portafoglio.&lt;p&gt;L'indirizzo è etichettato con il nome del Masternode.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Set Master Node’s IP and port</source>
-        <translation>Imposta indirizzo IP e porta del Masternode</translation>
     </message>
     <message>
         <source>Address of the node that must always be online running the actual master node.</source>
@@ -1691,10 +1309,6 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
     <message>
         <source>Enter IP address</source>
         <translation>Inserire indirizzo IP</translation>
-    </message>
-    <message>
-        <source>Enter Port</source>
-        <translation>Inserisci porta</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1725,14 +1339,6 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>IP o porta non possono essere vuoti</translation>
     </message>
     <message>
-        <source>Invalid port number</source>
-        <translation>Valore della porta non valido</translation>
-    </message>
-    <message>
-        <source>Prepare master node failed..</source>
-        <translation>Preparazione del Masternode non riuscita...</translation>
-    </message>
-    <message>
         <source>Invalid masternode.conf file</source>
         <translation>Il file masternode.conf non è valido</translation>
     </message>
@@ -1741,56 +1347,8 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Errore durante l'analisi del file masternode.conf</translation>
     </message>
     <message>
-        <source>Invalid collaterall output index</source>
-        <translation>Indice di output collaterale non valido</translation>
-    </message>
-    <message>
-        <source>Master node created!</source>
-        <translation>Masternode creato!</translation>
-    </message>
-    <message>
         <source>masternode.conf file doesn't exists</source>
         <translation>il file masternode.conf non esiste</translation>
-    </message>
-    <message>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation>L'indirizzo destinatario non è un indirizzo valido, controllare.</translation>
-    </message>
-    <message>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation>L'importo da pagare deve essere maggiore di 0.</translation>
-    </message>
-    <message>
-        <source>The amount exceeds your balance.</source>
-        <translation>L'importo eccede il tuo saldo.</translation>
-    </message>
-    <message>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>Il totale supera il saldo quando è incluso %1 quale commissione di transazione.</translation>
-    </message>
-    <message>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>È stato trovato un indirizzo duplicato, può essere inviato a ciascun indirizzo solo una volta per operazione di invio.</translation>
-    </message>
-    <message>
-        <source>Transaction creation failed!</source>
-        <translation>Creazione della transazione non riuscita!</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>La transazione è stata rifiutata! Ciò può accadere se alcune delle valute nel tuo portafoglio fossero già state spese, come se tu avessi usato una copia di wallet.dat e le valute fossero state spese nella copia ma non contrassegnate come spese qui.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation>Errore: il portafoglio è stato sbloccato solo per rendere anonime le valute.</translation>
-    </message>
-    <message>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation>Una commissione %1 volte superiore a %2 per kB è considerata una commissione follemente alta.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
-        <translation>Errore: il portafoglio è stato sbloccato solo per rendere anonime le valute. Sblocco annullato.</translation>
     </message>
 </context>
 <context>
@@ -1804,12 +1362,8 @@ Si avvierà automaticamente non appena il portafoglio avrà sufficienti conferme
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Ancora nessun MasterNode attivo</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
+        <source>N/A</source>
+        <translation>N/D</translation>
     </message>
     <message>
         <source>Masternodes</source>
@@ -1852,12 +1406,6 @@ e votano il sistema di tesoreria ricevendo una ricompensa periodica.</translatio
 </translation>
     </message>
     <message>
-        <source>Cannot start masternode, the collateral transaction has not been accepted by the network.
-Please wait few more minutes.</source>
-        <translation>Impossibile avviare il masternode, la transazione collaterale non è stata accettata dalla rete.
-Per favore, attendi qualche minuto.</translation>
-    </message>
-    <message>
         <source>Remote Masternode Data</source>
         <translation>Remote Masternode Data</translation>
     </message>
@@ -1880,10 +1428,6 @@ come controller (selezionare il Masternode nell'elenco e premere "start").
 </translation>
     </message>
     <message>
-        <source>Masternode exported!, check your clipboard</source>
-        <translation>Masternode esportato!, controlla gli appunti</translation>
-    </message>
-    <message>
         <source>Delete Masternode</source>
         <translation>Cancella Masternode</translation>
     </message>
@@ -1899,7 +1443,7 @@ Sei sicuro?</translation>
     </message>
     <message>
         <source>Invalid masternode.conf file</source>
-        <translation>il file masternode.conf non è valido</translation>
+        <translation>Il file masternode.conf non è valido</translation>
     </message>
     <message>
         <source>Error parsing masternode.conf file</source>
@@ -1923,10 +1467,6 @@ Sei sicuro?</translation>
     <message>
         <source>Form</source>
         <translation>Modulo</translation>
-    </message>
-    <message>
-        <source>Master Node Information</source>
-        <translation>Informazioni sul Masternode</translation>
     </message>
     <message>
         <source>Public Key:</source>
@@ -1964,11 +1504,7 @@ Sei sicuro?</translation>
         <source>MISSING</source>
         <translation>MANCANTE</translation>
     </message>
-    <message>
-        <source>Export data to run the Master Node on a remote server</source>
-        <translation>Esporta i dati per eseguire il Masternode su un server remoto</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>MyAddressRow</name>
     <message>
@@ -2092,8 +1628,8 @@ Sei sicuro?</translation>
         <translation>Se si disabilita la spesa per la modifica non confermata, la modifica da una transazione&lt;br/&gt;non può essere utilizzata fino a quando tale transazione non ha almeno una conferma.&lt;br/&gt;Ciò influisce anche sul modo in cui viene calcolato il saldo.</translation>
     </message>
     <message>
-        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Apri automaticamente la porta client RPD sul router. Funziona solo quando il router supporta UPnP ed è abilitato.</translation>
+        <source>Automatically open the Rapids client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Apri automaticamente la porta client Rapids sul router. Funziona solo quando il router supporta UPnP ed è abilitato.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -2112,12 +1648,12 @@ Sei sicuro?</translation>
         <translation>Esperto</translation>
     </message>
     <message>
-        <source>Automatically start RPD after logging in to the system.</source>
-        <translation>Avvia automaticamente RPD dopo aver effettuato l'accesso al sistema.</translation>
+        <source>Automatically start Rapids after logging in to the system.</source>
+        <translation>Avvia automaticamente Rapids dopo aver effettuato l'accesso al sistema.</translation>
     </message>
     <message>
-        <source>&amp;Start RPD on system login</source>
-        <translation>&amp;Start RPD all'accesso al sistema</translation>
+        <source>&amp;Start Rapids on system login</source>
+        <translation>&amp;Start Rapids all'accesso al sistema</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -2144,8 +1680,8 @@ Sei sicuro?</translation>
         <translation>&amp;Network</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
-        <translation>La lingua dell'interfaccia utente può essere impostata qui. Questa impostazione avrà effetto dopo il riavvio di RPD.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Rapids.</source>
+        <translation>La lingua dell'interfaccia utente può essere impostata qui. Questa impostazione avrà effetto dopo il riavvio di Rapids.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -2194,8 +1730,8 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
         <translation>Soglia di divisione dello stake</translation>
     </message>
     <message>
-        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
-        <translation>Connettiti alla rete RPD tramite un proxy SOCKS5.</translation>
+        <source>Connect to the Rapids network through a SOCKS5 proxy.</source>
+        <translation>Connettiti alla rete Rapids tramite un proxy SOCKS5.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -2413,15 +1949,8 @@ Indirizzo: %4
 </translation>
     </message>
     <message>
-        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
-        <translation>Si è verificato un errore irreversibile. RPD non può più continuare in modo sicuro e verrà chiuso.</translation>
-    </message>
-</context>
-<context>
-    <name>PWidget</name>
-    <message>
-        <source>Wallet locked, you need to unlock it to perform this action</source>
-        <translation>Portafoglio bloccato, è necessario sbloccarlo per eseguire questa azione</translation>
+        <source>A fatal error occurred. Rapids can no longer continue safely and will quit.</source>
+        <translation>Si è verificato un errore irreversibile. Rapids non può più continuare in modo sicuro e verrà chiuso.</translation>
     </message>
 </context>
 <context>
@@ -2451,8 +1980,8 @@ Indirizzo: %4
         <translation>Impossibile avviare rapids: gestore click-to-pay</translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
-        <translation>Impossibile leggere il file della richiesta di pagamento! Ciò può essere causato da un indirizzo RPD non valido o parametri URI non validi.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Rapids address or malformed URI parameters.</source>
+        <translation>Impossibile leggere il file della richiesta di pagamento! Ciò può essere causato da un indirizzo Rapids non valido o parametri URI non validi.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -2549,8 +2078,8 @@ Indirizzo: %4
         <translation>Premi il bottone</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Ancora nessun MasterNode attivo</translation>
+        <source>N/A</source>
+        <translation>N/D</translation>
     </message>
     <message>
         <source>Privacy</source>
@@ -2573,10 +2102,6 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
     <message>
         <source>Mint new zRPD or convert back to RPD</source>
         <translation>Forgia nuovi zRPD o converti nuovamente in RPD</translation>
-    </message>
-    <message>
-        <source>Last Zerocoin Movements</source>
-        <translation>Ultimi movimenti Zerocoin</translation>
     </message>
     <message>
         <source>No transactions yet</source>
@@ -2643,10 +2168,6 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>I tuoi movimenti Zerocoin forgiati saranno ora ricercati sulla blockchain da capo</translation>
     </message>
     <message>
-        <source>Reset Spent Zerocoins</source>
-        <translation>Azzera movimenti Zerocoin</translation>
-    </message>
-    <message>
         <source>Your zerocoin spends are going to be scanned from the blockchain from scratch</source>
         <translation>I tuoi movimenti Zerocoin saranno ora ricercati sulla blockchain da capo</translation>
     </message>
@@ -2656,83 +2177,10 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
     </message>
 </context>
 <context>
-    <name>ProposalFrame</name>
-    <message>
-        <source>Open proposal page in browser</source>
-        <translation>Apri la pagina della proposta nel browser</translation>
-    </message>
-    <message>
-        <source> remaining payment(s).</source>
-        <translation>pagamenti rimanenti.</translation>
-    </message>
-    <message>
-        <source>Yes:</source>
-        <translation>Si:</translation>
-    </message>
-    <message>
-        <source>Abstain:</source>
-        <translation>Astenersi:</translation>
-    </message>
-    <message>
-        <source>No:</source>
-        <translation>No:</translation>
-    </message>
-    <message>
-        <source>A proposal URL can be used for phishing, scams and computer viruses. Open this link only if you trust the following URL.
-</source>
-        <translation>Un URL proposto può essere utilizzato per phishing, truffe e virus informatici. Apri questo link solo se ti fidi del seguente URL.
-</translation>
-    </message>
-    <message>
-        <source>Open link</source>
-        <translation>Apri link</translation>
-    </message>
-    <message>
-        <source>Copy link</source>
-        <translation>Copia link</translation>
-    </message>
-    <message>
-        <source>Wallet Locked</source>
-        <translation>Portafoglio bloccato</translation>
-    </message>
-    <message>
-        <source>You must unlock your wallet to vote.</source>
-        <translation>Devi sbloccare il portafoglio per votare</translation>
-    </message>
-    <message>
-        <source>Do you want to vote %1 on</source>
-        <translation>Vuoi votare %1 su</translation>
-    </message>
-    <message>
-        <source>using all your masternodes?</source>
-        <translation>utilizzare tutti i masternode?</translation>
-    </message>
-    <message>
-        <source>Proposal Hash:</source>
-        <translation>Hash proposto:</translation>
-    </message>
-    <message>
-        <source>Proposal URL:</source>
-        <translation>URL proposto:</translation>
-    </message>
-    <message>
-        <source>Confirm Vote</source>
-        <translation>Conferma il voto</translation>
-    </message>
-    <message>
-        <source>Vote Results</source>
-        <translation>Risultati del voto</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <source>Amount</source>
         <translation>Ammontare</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address (e.g. %1)</source>
-        <translation>Inserisci un indirizzo RPD (ad es. %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2757,10 +2205,6 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
     <message>
         <source>BLOOM</source>
         <translation>BLOOM</translation>
-    </message>
-    <message>
-        <source>ZK_BLOOM</source>
-        <translation>ZK_BLOOM</translation>
     </message>
     <message>
         <source>UNKNOWN</source>
@@ -2802,7 +2246,63 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <source>Rapids didn't yet exit safely...</source>
         <translation>Rapids non è ancora uscito in modo sicuro...</translation>
     </message>
-</context>
+    <message>
+        <source>Cold Staking</source>
+        <translation>Cold Staking</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Sconosciuto</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>Tutto</translation>
+    </message>
+    <message>
+        <source>Contacts</source>
+        <translation>Contatti</translation>
+    </message>
+    <message>
+        <source>Received</source>
+        <translation>Ricevuto</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Inviato</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>Minato</translation>
+    </message>
+    <message>
+        <source>Minted</source>
+        <translation>Forgiato</translation>
+    </message>
+    <message>
+        <source>MN reward</source>
+        <translation>Premio del MN</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>A te stesso</translation>
+    </message>
+    <message>
+        <source>Cold stakes</source>
+        <translation>Cold stakes</translation>
+    </message>
+    <message>
+        <source>Hot stakes</source>
+        <translation>Hot stakes</translation>
+    </message>
+    <message>
+        <source>Delegated</source>
+        <translation>Delegato</translation>
+    </message>
+    <message>
+        <source>Delegations</source>
+        <translation>Deleghe</translation>
+    </message>
+    </context>
 <context>
     <name>RPCConsole</name>
     <message>
@@ -2874,8 +2374,8 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Blockchain</translation>
     </message>
     <message>
-        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Aprire il file di registro di debug RPD dalla directory dei dati corrente. Questa operazione può richiedere alcuni secondi per file di registro di grandi dimensioni.</translation>
+        <source>Open the Rapids debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Aprire il file di registro di debug Rapids dalla directory dei dati corrente. Questa operazione può richiedere alcuni secondi per file di registro di grandi dimensioni.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
@@ -3098,8 +2598,8 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Out:</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>Benvenuti nella console RPC di RPD.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Benvenuti nella console RPC di Rapids.</translation>
     </message>
     <message>
         <source>&amp;Disconnect Node</source>
@@ -3221,12 +2721,8 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Dettagli della transazione</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3284,8 +2780,8 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Errore generando l'indirizzo</translation>
     </message>
     <message>
-        <source>Change Label</source>
-        <translation>Cambia etichetta</translation>
+        <source>Edit Label</source>
+        <translation>Modifica etichetta</translation>
     </message>
     <message>
         <source>Edit Address Label</source>
@@ -3378,8 +2874,8 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </translation>
     </message>
     <message>
         <source>COPY ADDRESS</source>
@@ -3398,24 +2894,12 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>RICHIESTA</translation>
     </message>
     <message>
-        <source>Instead of only sharing a RPD address, you can create a Payment Request message which bundles up more information than is contained in just a RPD address.</source>
-        <translation>Invece di condividere solo un indirizzo RPD, è possibile creare un messaggio di richiesta di pagamento che raggruppa più informazioni di quelle contenute in un solo indirizzo RPD.</translation>
-    </message>
-    <message>
         <source>Label</source>
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>Enter a label to be saved within the address</source>
-        <translation>Inserisci un'etichetta da salvare con l'indirizzo</translation>
-    </message>
-    <message>
         <source>Description (optional)</source>
         <translation>Descrizione (opzionale)</translation>
-    </message>
-    <message>
-        <source>Add description </source>
-        <translation>Aggiungi descrizione</translation>
     </message>
     <message>
         <source>Error</source>
@@ -3433,7 +2917,7 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <source>New Cold Staking Address</source>
         <translation>Nuovo indirizzo di Cold Staking</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendChangeAddressDialog</name>
     <message>
@@ -3443,10 +2927,6 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
     <message>
         <source>Transaction Details</source>
         <translation>Dettagli della transazione</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
     </message>
     <message>
         <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
@@ -3465,8 +2945,16 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Modifica indirizzo personalizzata</translation>
     </message>
     <message>
-        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" RPD address</source>
-        <translation>Il resto del valore risultante dagli ingressi meno il valore delle uscite va all'indirizzo RPD "cambio"</translation>
+        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" Rapids address</source>
+        <translation>Il resto del valore risultante dagli ingressi meno il valore delle uscite va all'indirizzo Rapids "cambio"</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>SALVA</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>Indirizzo non valido</translation>
     </message>
 </context>
 <context>
@@ -3484,20 +2972,12 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Personalizza la commissione di transazione a tuo piacimento; a seconda del valore della commissione, la transazione verrà inclusa o meno nella blockchain.</translation>
     </message>
     <message>
-        <source>Recomended</source>
-        <translation>Raccomandato</translation>
-    </message>
-    <message>
         <source>0.00 KB</source>
         <translation>0.00 KB</translation>
     </message>
     <message>
         <source>Custom</source>
         <translation>Personalizzato</translation>
-    </message>
-    <message>
-        <source>Per kilobyte</source>
-        <translation>Per kilobyte</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3510,10 +2990,6 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
     <message>
         <source>Customize Fee</source>
         <translation>Tariffa personalizzata</translation>
-    </message>
-    <message>
-        <source>Customize the transaction fee, depending on the fee value your transaction will be included or not in the blockchain.</source>
-        <translation>Personalizza la commissione di transazione; a seconda del valore della commissione, la transazione verrà inclusa o meno nella blockchain.</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -3531,7 +3007,7 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <source>SAVE</source>
         <translation>SALVA</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendMultiRow</name>
     <message>
@@ -3543,14 +3019,10 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Aggiungi indirizzo</translation>
+        <source>Enter address</source>
+        <translation>Inserire indirizzo</translation>
     </message>
-    <message>
-        <source>Add description</source>
-        <translation>Aggiungi descrizione</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>SendWidget</name>
     <message>
@@ -3564,10 +3036,6 @@ cronologia delle transazioni, rendendo le transazioni non rintracciabili</transl
     <message>
         <source>Select coin type to spend</source>
         <translation>Seleziona il tipo di valuta da spendere</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address or contact label</source>
-        <translation>Inserisci un indirizzo RPD o etichetta</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3702,10 +3170,6 @@ Alternativamente forgia denominazioni più alte (quindi sono necessari meno inpu
         <translation>Aggiornamento dell'etichetta dell'indirizzo non riuscito per l'indirizzo: %1</translation>
     </message>
     <message>
-        <source>Invalid change address</source>
-        <translation>Indirizzo di cambio non valido</translation>
-    </message>
-    <message>
         <source>Invalid URI</source>
         <translation>URI non valido</translation>
     </message>
@@ -3773,22 +3237,12 @@ Alternativamente forgia denominazioni più alte (quindi sono necessari meno inpu
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
         <source>Backup Wallet </source>
         <translation>Backup portafoglio</translation>
     </message>
     <message>
         <source>Change Wallet Passphrase</source>
         <translation>Cambia frase d'accesso al wallet</translation>
-    </message>
-    <message>
-        <source>Keep your wallet safe doing regular backups, store your backup file externally.
-This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device.</source>
-        <translation>Mantieni il tuo portafoglio sicuro eseguendo backup regolari, archivia il tuo file di backup esternamente.
-Questa opzione crea un file wallet.dat che può essere utilizzato per recuperare l'intero saldo (transazioni e indirizzi) da un altro dispositivo.</translation>
     </message>
     <message>
         <source>This will decrypt the whole wallet data and encrypt it back with the new passphrase.
@@ -3799,14 +3253,6 @@ Ricordati di scriverlo e conservarlo in modo sicuro, altrimenti potresti perdere
     <message>
         <source>Where</source>
         <translation>Dove</translation>
-    </message>
-    <message>
-        <source>Set a folder location</source>
-        <translation>Imposta un percorso per la cartella</translation>
-    </message>
-    <message>
-        <source>Backup</source>
-        <translation>Backup</translation>
     </message>
     <message>
         <source>Change Passphrase</source>
@@ -3900,16 +3346,12 @@ Ricordati di scriverlo e conservarlo in modo sicuro, altrimenti potresti perdere
         <translation>DECRITTOGRAFA LA CHIAVE</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>Inserisci un indirizzo RPD</translation>
+        <source>Enter address</source>
+        <translation>Inserire indirizzo</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Aggiungi indirizzo</translation>
-    </message>
-    <message>
-        <source>Write a message</source>
-        <translation>Scrivi un messaggio</translation>
+        <source>Enter passphrase</source>
+        <translation>Inserire parola d'ordine</translation>
     </message>
     <message>
         <source>Encrypted Key</source>
@@ -3991,11 +3433,7 @@ Ricordati di scriverlo e conservarlo in modo sicuro, altrimenti potresti perdere
         <source>Error adding key to the wallet</source>
         <translation>Errore nell'inserimento della chiave nel portafoglio</translation>
     </message>
-    <message>
-        <source>Successfully added rpdate key to the wallet</source>
-        <translation>Chiave privata inserita correttamente nel portafoglio</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>SettingsConsoleWidget</name>
     <message>
@@ -4029,8 +3467,8 @@ Verify that you have installed a predetermined text editor.</source>
 Verifica di aver installato un editor di testo predeterminato.</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>Benvenuti nella console RPC di RPD.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Benvenuti nella console RPC di Rapids.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
@@ -4054,10 +3492,6 @@ Verifica di aver installato un editor di testo predeterminato.</translation>
     <message>
         <source>TextLabel</source>
         <translation>Etichetta</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -4109,6 +3543,41 @@ Verifica di aver installato un editor di testo predeterminato.</translation>
     </message>
 </context>
 <context>
+    <name>SettingsExportCSV</name>
+    <message>
+        <source>Form</source>
+        <translation>Modulo</translation>
+    </message>
+    <message>
+        <source>Where</source>
+        <translation>Dove</translation>
+    </message>
+    <message>
+        <source>Export Address List</source>
+        <translation>Esporta elenco indirizzi</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Confermata</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Data</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Tipo</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Etichetta</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Indirizzo</translation>
+    </message>
+    </context>
+<context>
     <name>SettingsFaqWidget</name>
     <message>
         <source>Form</source>
@@ -4123,16 +3592,16 @@ Verifica di aver installato un editor di testo predeterminato.</translation>
         <translation>Premi il bottone</translation>
     </message>
     <message>
-        <source>1) What is RPD?</source>
-        <translation>1) Che cos'è RPD?</translation>
+        <source>1) What is Rapids?</source>
+        <translation>1) Che cos'è Rapids?</translation>
     </message>
     <message>
         <source>2) Why are my RPD unspendable?</source>
         <translation>2) Perché i miei RPD non sono spendibili?</translation>
     </message>
     <message>
-        <source>3) RPD privacy? What is Zerocoin (zRPD)?</source>
-        <translation>3) Privacy RPD? Che cos'è Zerocoin (zRPD)?</translation>
+        <source>3) Rapids privacy? What is Zerocoin (zRPD)?</source>
+        <translation>3) Privacy Rapids? Che cos'è Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>4) Why are my zRPD unspendable?</source>
@@ -4157,46 +3626,38 @@ Verifica di aver installato un editor di testo predeterminato.</translation>
         <translation>8) Dove dovrei andare se ho bisogno di supporto?</translation>
     </message>
     <message>
-        <source>9) What is a Master Node?</source>
-        <translation>9) Cos'è un Masternode?</translation>
-    </message>
-    <message>
-        <source>10) What is a Master Node Controller?</source>
-        <translation>10) Cos'è un Masternode controller?</translation>
-    </message>
-    <message>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <source>What is RPD?</source>
-        <translation>Che cos'è RPD?</translation>
+        <source>What is Rapids?</source>
+        <translation>Che cos'è Rapids?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           RPD is a form of digital online money using blockchain technology
+                           Rapids is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  RPD incorporates market leading security &amp;
+                           zero fees.  Rapids incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
                            to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of RPD to participate in earning block rewards
+                           Rapids utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of Rapids to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-RPD è una forma di denaro online digitale che utilizza la tecnologia blockchain
+Rapids è una forma di denaro online digitale che utilizza la tecnologia blockchain
 che può essere facilmente trasferito a livello globale, istantaneamente e con quasi
-zero costi. RPD incorpora le tecniche di sicurezza e privacy più avanzate del mercato
+zero costi. Rapids incorpora le tecniche di sicurezza e privacy più avanzate del mercato
 ed è anche la prima criptovaluta PoS (Proof of Stake)
 ad implementare lo staking di ZeroCoin (zRPD) e Zerocoin.
 &lt;/p&gt;&lt;p align="justify"&gt;
-RPD utilizza un algoritmo del sistema di consenso Proof of Stake (PoS),
-consentendo a tutti i proprietari di RPD di partecipare alle ricompense dei blocchi
+Rapids utilizza un algoritmo del sistema di consenso Proof of Stake (PoS),
+consentendo a tutti i proprietari di Rapids di partecipare alle ricompense dei blocchi
 proteggendo la rete con portafogli full node, oltre a
 eseguire Masternode per creare e votare proposte.
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4213,19 +3674,19 @@ eseguire Masternode per creare e votare proposte.
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Newly received RPD requires 6 confirmations on the network
+                           Newly received Rapids requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Your RPD wallet also needs to be completely synchronized
+                           Your Rapids wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           RPD appeni ricevuti richiedono 6 conferme sulla rete
+                           Rapids appeni ricevuti richiedono 6 conferme sulla rete
  per poter essere spendibili, cioè può richiedere ~6 minuti.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Anche il tuo portafoglio RPD deve essere completamente sincronizzato
+                           Anche il tuo portafoglio Rapids deve essere completamente sincronizzato
 per vedere e spendere i saldi sulla rete.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </translation>
@@ -4235,26 +3696,26 @@ per vedere e spendere i saldi sulla rete.
         <translation>3</translation>
     </message>
     <message>
-        <source>RPD privacy? What is Zerocoin (zRPD)?</source>
-        <translation>RPD privacy? What is Zerocoin (zRPD)?</translation>
+        <source>Rapids privacy? What is Zerocoin (zRPD)?</source>
+        <translation>Rapids privacy? What is Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            zRPD is an optional privacy-centric method of coin mixing on the
-                           RPD blockchain. Basically all your transactions cannot be tracked
+                           Rapids blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
-                           "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+                           "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            zRPD è un metodo opzionale incentrato sulla privacy per la miscelazione delle valute sulla
-Blockchain RPD. Essenzialmente, tutte le tue transazioni non potranno essere tracciate
+Blockchain Rapids. Essenzialmente, tutte le tue transazioni non potranno essere tracciate
 su un block explorer. Puoi leggere di più sugli aspetti tecnici nel
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
-                           "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+                           "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </translation>
     </message>
@@ -4293,34 +3754,34 @@ per diventare idoneo alla spesa.
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           By default the RPD wallet will convert 10% of your entire RPD
+                           By default the Rapids wallet will convert 10% of your entire RPD
                            balance to zRPD to assist the network. If you do not wish to
                            stake zRPD or take advantage of the privacy benefit it brings,
-                           you can disable the automatic minting in your RPD wallet by
+                           you can disable the automatic minting in your Rapids wallet by
                            going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
-                           If you are not making use of the RPD-QT or GUI you can simply open
+                           If you are not making use of the Rapids-QT or GUI you can simply open
                            your rapids.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            You can read more about zRPD in the
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt; "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt; "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            If you would like to keep and stake your zRPD, please read the "How do I stake"
                            section of the FAQ below.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-Come impostazione predefinita, il portafoglio RPD convertirà il 10% dell'intero
+Come impostazione predefinita, il portafoglio Rapids convertirà il 10% dell'intero
 saldo RPD con zRPD, per supportare la rete. Se non desideri effettuare lo
 staking di zRPD o sfruttare il vantaggio sulla privacy che ne comporta,
-puoi disabilitare la forgiatura automatica nel tuo portafoglio RPD
+puoi disabilitare la forgiatura automatica nel tuo portafoglio Rapids
 andando su Impostazioni-&gt;Opzioni e deselezionando “Abilita zRPD Automint”.
-Se non si utilizzi RPD-QT o la GUI, è possibile aprire semplicemente
+Se non si utilizzi Rapids-QT o la GUI, è possibile aprire semplicemente
 il tuo file rapids.conf e aggiungere&lt;i&gt;enablezeromint=0&lt;/i&gt; senza gli apostrofi
 e far ripartire il portafoglio per disabilitare la forgiatura automatica.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            Puoi leggere di più su zRPD nel
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt; "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt; "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            Se desideri effettuare lo staking dei tuoi zRPD, leggi "Come faccio ad effettuare lo staking"
 nella sezione delle FAQ di seguito.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4337,16 +3798,16 @@ nella sezione delle FAQ di seguito.
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zRPD can be spent and sent to any RPD address. The receiver will
-                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
+                           zRPD can be spent and sent to any Rapids address. The receiver will
+                           receive standard Rapids but the origin of the Rapids is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zRPD può essere speso e inviato a qualsiasi indirizzo RPD. Il ricevente
-otterrà RPD standard ma l'origine dei RPD è anonimizzata dal protocollo zRPD.
+                           zRPD può essere speso e inviato a qualsiasi indirizzo Rapids. Il ricevente
+otterrà Rapids standard ma l'origine dei Rapids è anonimizzata dal protocollo zRPD.
 &lt;/p&gt;&lt;p align="justify"&gt;
 Se desideri più zRPD, dovrai forgiare il saldo nella scheda "Privacy".
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -4361,105 +3822,21 @@ Se desideri più zRPD, dovrai forgiare il saldo nella scheda "Privacy".
         <translation>Come posso fare lo stake di RPD / zRPD?</translation>
     </message>
     <message>
-        <source>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           To Stake RPD:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Make sure your wallet is completely synchronized and you are using the latest release.
-                           &lt;li&gt;
-                           You must have a balance of RPD with a minimum of 101 confirmations.
-                           &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
-                           &lt;li&gt;
-                           Once all those steps are followed staking should be enabled.
-                           &lt;li&gt;
-                           You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state "Staking Enabled" to indicate it is staking.  Using the command line interface (rapids-cli); the command &lt;i&gt;getstakingstatus&lt;/i&gt; will confirm that staking is active.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           To Stake zRPD:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Make sure your wallet is completely synchronized and you are using the latest release.
-                           &lt;li&gt;
-                           Your newly minted or existing zRPD balance must have a minimum of 200 confirmations.
-                           &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
-                           Staking should now be enabled.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </source>
-        <translation>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Per fare lo Stake di RPD:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Assicurati che il tuo portafoglio sia completamente sincronizzato e stai utilizzando l'ultima versione.
-                           &lt;li&gt;
-                           Devi avere un saldo di RPD con un minimo di 101 conferme.
-                           &lt;li&gt;
-                           Il tuo portafoglio deve rimanere online ed essere sbloccato per scopi di anonimizzazione e staking.
-                           &lt;li&gt;
-                           Una volta seguiti tutti questi passaggi, è necessario abilitare lo staking.
-                           &lt;li&gt;
-                           Puoi vedere lo stato dello staking nel portafoglio spostando il mouse sull'icona del pacchetto nella riga in alto a sinistra dell'interfaccia del portafoglio. Il pacchetto verrà illuminato e indicherà "Staking Enabled" per indicare che sta effettuando lo staking. Utilizzando l'interfaccia della riga di comando (rapids-cli); il comando&lt;i&gt;getstakingstatus&lt;/i&gt; confermerà che lo staking é attivo.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           Per fare Staking zRPD:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Assicurati che il tuo portafoglio sia completamente sincronizzato e stai utilizzando l'ultima versione.
-                           &lt;li&gt;
-                           Il saldo zRPD appena forgiato o esistente deve avere un minimo di 200 conferme.
-                           &lt;li&gt;
-                           Il tuo portafoglio deve rimanere online ed essere sbloccato per scopi di anonimizzazione e staking.
-                           Lo Staking dovrebbe ora essere attivo.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </translation>
+        <source>What is a Masternode?</source>
+        <translation>Cos'è un Masternode?</translation>
     </message>
     <message>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <source>Where I should go if I need support?</source>
-        <translation>Dove dovrei andare se ho bisogno di supporto?</translation>
-    </message>
-    <message>
-        <source>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
-                           #support in our Discord&lt;/a&gt;.
-                           If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
-                           our Freshdesk support site&lt;/a&gt;.
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </source>
-        <translation>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Abbiamo canali di supporto nella maggior parte dei nostri gruppi di chat ufficiali, ad esempio
-                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
-                           #support nel nostro Discord&lt;/a&gt;.
-                           Se preferisci aprire un ticket, puoi farlo su
-                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
-                           il nostro sito di supporto Freshdesk&lt;/a&gt;.
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </translation>
-    </message>
-    <message>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <source>What is a Master Node?</source>
-        <translation>Cos'è un Masternode?</translation>
-    </message>
-    <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           A masternode is a computer running a full node RPD core wallet with a
+                           A masternode is a computer running a full node Rapids wallet with a
                            requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
@@ -4482,10 +3859,10 @@ Se desideri più zRPD, dovrai forgiare il saldo nella scheda "Privacy".
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in Rapids Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
+                           &lt;li&gt;Help secure the Rapids network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
@@ -4501,7 +3878,7 @@ Se desideri più zRPD, dovrai forgiare il saldo nella scheda "Privacy".
                          </source>
         <translation>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Un masternode è un computer che esegue un portafoglio core RPD a nodo completo
+                           Un masternode è un computer che esegue un portafoglio core Rapids a nodo completo
 con un requisito di 10.000 RPD a garanzia per fornire servizi extra
 alla rete e, in cambio, riceve una parte del premio del blocco
 regolarmente. Questi servizi includono:
@@ -4524,10 +3901,10 @@ regolarmente. Questi servizi includono:
                            Vantaggi del Masternode:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Partecipare alla Governance di RPD &lt;/li&gt;
+                           &lt;li&gt;Partecipare alla Governance di Rapids &lt;/li&gt;
                            &lt;li&gt;Guadagnare i premi del Masternode&lt;/li&gt;
                            &lt;li&gt;Opzione di una commodity per vendita futura&lt;/li&gt;
-                           &lt;li&gt;Aiuta a proteggere la rete RPD&lt;/li&gt;
+                           &lt;li&gt;Aiuta a proteggere la rete Rapids&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
@@ -4545,14 +3922,6 @@ regolarmente. Questi servizi includono:
     <message>
         <source>10</source>
         <translation>10</translation>
-    </message>
-    <message>
-        <source>What is a Master Node Controller?</source>
-        <translation>Cos'è un Masternode controller?</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Un portafoglio Masternode Controller è dove i 10.000 RPD collaterali possono risiedere durante l'impostazione del Masternode Controller remoto. È un portafoglio che può attivare uno o più portafogli masternode remoti e ti consente di mantenere offline le tue valute collaterali mentre il masternode remoto rimane online.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Frequently Asked Questions</source>
@@ -4574,10 +3943,6 @@ regolarmente. Questi servizi includono:
         <translation>Modulo</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>Etichetta</translation>
-    </message>
-    <message>
         <source>Network Monitor</source>
         <translation>Monitor rete</translation>
     </message>
@@ -4590,24 +3955,8 @@ regolarmente. Questi servizi includono:
         <translation>Generale</translation>
     </message>
     <message>
-        <source>Client Version: </source>
-        <translation>Versione del client:</translation>
-    </message>
-    <message>
         <source>User Agent:</source>
         <translation>User Agent:</translation>
-    </message>
-    <message>
-        <source>Using BerkeleyDB version:</source>
-        <translation>Utilizza versione BerkeleyDB:</translation>
-    </message>
-    <message>
-        <source>Datadir: </source>
-        <translation>Datadir: </translation>
-    </message>
-    <message>
-        <source>Startup Time:  </source>
-        <translation>Tempo di avvio:</translation>
     </message>
     <message>
         <source>Network</source>
@@ -4618,28 +3967,12 @@ regolarmente. Questi servizi includono:
         <translation>Nome:</translation>
     </message>
     <message>
-        <source>Number Connections:</source>
-        <translation>Numero delle connessioni:</translation>
-    </message>
-    <message>
         <source>Blockchain</source>
         <translation>Blockchain</translation>
     </message>
     <message>
-        <source>Current Number of Blocks:</source>
-        <translation>Numero attuale dei blocchi:</translation>
-    </message>
-    <message>
-        <source>Last Block Time:</source>
-        <translation>Ultimo blocco:</translation>
-    </message>
-    <message>
         <source>Memory Pool</source>
         <translation>Pool di memoria</translation>
-    </message>
-    <message>
-        <source>Current Number of Transactions:</source>
-        <translation>Numero attuale delle transazioni:</translation>
     </message>
     <message>
         <source>Main</source>
@@ -4721,8 +4054,8 @@ regolarmente. Questi servizi includono:
         <translation>Numero di script e processi di verifica</translation>
     </message>
     <message>
-        <source>Start RPD on system login</source>
-        <translation>Avvia RPD all'accesso al sistema</translation>
+        <source>Start Rapids on system login</source>
+        <translation>Avvia Rapids all'accesso al sistema</translation>
     </message>
     <message>
         <source>Minimize to the tray instead of the taskbar</source>
@@ -4778,14 +4111,6 @@ Sei sicuro?
         <translation>Nuovo destinatario per multisend</translation>
     </message>
     <message>
-        <source>Label (optional)</source>
-        <translation>Etichetta (opzionale)</translation>
-    </message>
-    <message>
-        <source>Enter a label to add this address in your address book</source>
-        <translation>Inserisci un'etichetta per questo indirizzo da aggiungere alla tua rubrica</translation>
-    </message>
-    <message>
         <source>Percentage</source>
         <translation>Percentuale</translation>
     </message>
@@ -4801,16 +4126,16 @@ Sei sicuro?
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Ancora nessun MasterNode attivo</translation>
+        <source>N/A</source>
+        <translation>N/D</translation>
     </message>
     <message>
         <source>CheckBox</source>
         <translation>CheckBox</translation>
     </message>
     <message>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other RPD addresses after it matures.</source>
-        <translation>MultiSend ti consente di inviare automaticamente fino al 100% dei tuoi stake o ricompense masternode a un elenco di altri indirizzi RPD dopo la loro maturazione.</translation>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other Rapids addresses after it matures.</source>
+        <translation>MultiSend ti consente di inviare automaticamente fino al 100% dei tuoi stake o ricompense masternode a un elenco di altri indirizzi Rapids dopo la loro maturazione.</translation>
     </message>
     <message>
         <source>Active</source>
@@ -4908,24 +4233,12 @@ Seleziona una o entrambe le caselle di controllo per inviare gli stake e/o i pre
         <translation>Etichetta</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>Cancella</translation>
     </message>
     <message>
         <source>Sign/Verify Message</source>
         <translation>Firma/Verifica messaggio</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address or contact label</source>
-        <translation>Inserisci un indirizzo RPD o etichetta</translation>
-    </message>
-    <message>
-        <source>Add address</source>
-        <translation>Aggiungi indirizzo</translation>
     </message>
     <message>
         <source>Sign</source>
@@ -4944,8 +4257,8 @@ Seleziona una o entrambe le caselle di controllo per inviare gli stake e/o i pre
         <translation>Messaggio</translation>
     </message>
     <message>
-        <source>Write a message</source>
-        <translation>Scrivi un messaggio</translation>
+        <source>Enter address</source>
+        <translation>Inserire indirizzo</translation>
     </message>
     <message>
         <source>Signature</source>
@@ -5051,10 +4364,6 @@ Seleziona una o entrambe le caselle di controllo per inviare gli stake e/o i pre
         <translation>Non salvare le modifiche</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
         <source>Wallet</source>
         <translation>Portafoglio</translation>
     </message>
@@ -5120,10 +4429,6 @@ Seleziona una o entrambe le caselle di controllo per inviare gli stake e/o i pre
     <message>
         <source>TextLabel</source>
         <translation>Etichetta</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
     </message>
     <message>
         <source>Wallet Repair</source>
@@ -5217,10 +4522,6 @@ Seleziona una o entrambe le caselle di controllo per inviare gli stake e/o i pre
         <translation>Modulo</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>Etichetta</translation>
-    </message>
-    <message>
         <source>Wallet Data</source>
         <translation>Wallet Data</translation>
     </message>
@@ -5281,8 +4582,8 @@ Seleziona una o entrambe le caselle di controllo per inviare gli stake e/o i pre
         <translation>FAQ</translation>
     </message>
     <message>
-        <source>About RPD</source>
-        <translation>Informazioni su RPD</translation>
+        <source>About Rapids</source>
+        <translation>Informazioni su Rapids</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -5439,14 +4740,6 @@ Sei sicuro?
         <translation>Modulo</translation>
     </message>
     <message>
-        <source>480.0685 RPD</source>
-        <translation>480.0685 RPD</translation>
-    </message>
-    <message>
-        <source>1,000 zRPD</source>
-        <translation>1,000 zRPD</translation>
-    </message>
-    <message>
         <source>Available</source>
         <translation>Disponibile</translation>
     </message>
@@ -5455,24 +4748,8 @@ Sei sicuro?
         <translation>In attesa</translation>
     </message>
     <message>
-        <source>6.943 RPD</source>
-        <translation>6.943 RPD</translation>
-    </message>
-    <message>
         <source>Immature</source>
         <translation>Immaturo</translation>
-    </message>
-    <message>
-        <source>10 RPD</source>
-        <translation>10 RPD</translation>
-    </message>
-    <message>
-        <source>60 zRPD</source>
-        <translation>60 zRPD</translation>
-    </message>
-    <message>
-        <source>10 zRPD</source>
-        <translation>10 zRPD</translation>
     </message>
     <message>
         <source>Wallet Unlocked for staking</source>
@@ -5487,14 +4764,6 @@ Sei sicuro?
         <translation>Indirizzo copiato</translation>
     </message>
     <message>
-        <source>Automint enabled</source>
-        <translation>Forgiatura automatica abilitata</translation>
-    </message>
-    <message>
-        <source>Automint disabled</source>
-        <translation>Forgiatura automatica disabilitata</translation>
-    </message>
-    <message>
         <source>Staking active</source>
         <translation>Stacking attivo</translation>
     </message>
@@ -5502,35 +4771,27 @@ Sei sicuro?
         <source>Staking not active</source>
         <translation>Stacking non attivo</translation>
     </message>
-    <message numerus="yes">
-        <source>%n active connection(s)</source>
-        <translation><numerusform>%n connessioni attive</numerusform><numerusform>%n connessioni attive</numerusform></translation>
-    </message>
-    <message>
-        <source>Synchronized</source>
-        <translation>Sincronizzato</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hour(s)</source>
-        <translation><numerusform>%n ora</numerusform><numerusform>%n ore</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <source>%n day(s)</source>
-        <translation><numerusform>%n giorno</numerusform><numerusform>%n giorni</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <source>%n week(s)</source>
-        <translation><numerusform>%n settimana</numerusform><numerusform>%n settimane</numerusform></translation>
-    </message>
     <message>
         <source>%1 and %2</source>
         <translation>%1 e %2</translation>
     </message>
-    <message numerus="yes">
-        <source>%n year(s)</source>
-        <translation><numerusform>%n anno</numerusform><numerusform>%n anni</numerusform></translation>
+    <message>
+        <source>Backup Wallet</source>
+        <translation>Backup portafoglio</translation>
     </message>
-</context>
+    <message>
+        <source>Wallet Data (*.dat)</source>
+        <translation>Wallet Data (*.dat)</translation>
+    </message>
+    <message>
+        <source>Backup created</source>
+        <translation>Backup creato</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>Creazione del backup non riuscita</translation>
+    </message>
+    </context>
 <context>
     <name>TrafficGraphWidget</name>
     <message>
@@ -5540,10 +4801,6 @@ Sei sicuro?
 </context>
 <context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Aperto per altro %n blocco</numerusform><numerusform>Aperto per altri %n blocchi</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>Apri fino a %1</translation>
@@ -5604,10 +4861,6 @@ Sei sicuro?
         <source>, has not been successfully broadcast yet</source>
         <translation>, non è stato ancora trasmesso con successo</translation>
     </message>
-    <message numerus="yes">
-        <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, trasmesso attraverso %n nodo</numerusform><numerusform>, trasmesso attraverso %n nodi</numerusform></translation>
-    </message>
     <message>
         <source>Date</source>
         <translation>Data</translation>
@@ -5647,10 +4900,6 @@ Sei sicuro?
     <message>
         <source>Credit</source>
         <translation>Credito</translation>
-    </message>
-    <message numerus="yes">
-        <source>matures in %n more block(s)</source>
-        <translation><numerusform>matura in %n blocco</numerusform><numerusform>matura in altri %n blocchi</numerusform></translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -5735,10 +4984,6 @@ Sei sicuro?
         <source>Address</source>
         <translation>Indirizzo</translation>
     </message>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Aperto per %n blocco</numerusform><numerusform>Aperto per altri %n blocchi</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>Apri fino a %1</translation>
@@ -5784,10 +5029,6 @@ Sei sicuro?
         <translation>Ricevuto da</translation>
     </message>
     <message>
-        <source>Received via Obfuscation</source>
-        <translation>Ricevuto tramite offuscamento</translation>
-    </message>
-    <message>
         <source>RPD Stake</source>
         <translation>RPD Stake</translation>
     </message>
@@ -5800,28 +5041,8 @@ Sei sicuro?
         <translation>RPD Cold Stake</translation>
     </message>
     <message>
-        <source>RPD Stake in behalf of</source>
-        <translation>RPD Stake per conto di</translation>
-    </message>
-    <message>
         <source>Stake delegation</source>
         <translation>Delega allo stake</translation>
-    </message>
-    <message>
-        <source>Obfuscation Denominate</source>
-        <translation>Denominazione Offuscamento</translation>
-    </message>
-    <message>
-        <source>Obfuscation Collateral Payment</source>
-        <translation>Offuscamento del pagamento collaterale</translation>
-    </message>
-    <message>
-        <source>Obfuscation Make Collateral Inputs</source>
-        <translation>L'offuscamento produce input collaterali</translation>
-    </message>
-    <message>
-        <source>Obfuscation Create Denominations</source>
-        <translation>L'offuscamento crea denominazioni</translation>
     </message>
     <message>
         <source>Converted RPD to zRPD</source>
@@ -5858,10 +5079,6 @@ Sei sicuro?
     <message>
         <source>Mined</source>
         <translation>Minato</translation>
-    </message>
-    <message>
-        <source>Obfuscated</source>
-        <translation>Offuscato</translation>
     </message>
     <message>
         <source>watch-only</source>
@@ -5915,36 +5132,8 @@ Sei sicuro?
         <translation>Dettagli della transazione</translation>
     </message>
     <message>
-        <source>ID:</source>
-        <translation>ID:</translation>
-    </message>
-    <message>
-        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
-        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</translation>
-    </message>
-    <message>
-        <source>Sending to: </source>
-        <translation>Inviando a:</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
-    </message>
-    <message>
         <source>Total amount</source>
         <translation>Importo totale</translation>
-    </message>
-    <message>
-        <source>2 RPD</source>
-        <translation>2 RPD</translation>
-    </message>
-    <message>
-        <source>Coin inputs:</source>
-        <translation>Coin inputs:</translation>
-    </message>
-    <message>
-        <source>1 Inputs</source>
-        <translation>1 Input</translation>
     </message>
     <message>
         <source>Previous Transaction</source>
@@ -5955,52 +5144,28 @@ Sei sicuro?
         <translation>Indice di uscita</translation>
     </message>
     <message>
-        <source>Fee:</source>
-        <translation>Commissione:</translation>
-    </message>
-    <message>
-        <source>0.0001 RPD</source>
-        <translation>0.0001 RPD</translation>
-    </message>
-    <message>
-        <source>Change address:</source>
-        <translation>Modifica indirizzo:</translation>
-    </message>
-    <message>
         <source>D7VFR83SQbie…BhjcWJtcfip5krte2Z </source>
         <translation>D7VFR83SQbie…BhjcWJtcfip5krte2Z </translation>
-    </message>
-    <message>
-        <source>Confirmations:</source>
-        <translation>Conferme:</translation>
-    </message>
-    <message>
-        <source>12</source>
-        <translation>12</translation>
-    </message>
-    <message>
-        <source>Size:</source>
-        <translation>Dimensione:</translation>
-    </message>
-    <message>
-        <source>2 kB</source>
-        <translation>2 kB</translation>
-    </message>
-    <message>
-        <source>Date:</source>
-        <translation>Data:</translation>
     </message>
     <message>
         <source>May 25, 2017</source>
         <translation>25 Maggio, 2017</translation>
     </message>
     <message>
-        <source>Status:</source>
-        <translation>Stato:</translation>
-    </message>
-    <message>
         <source>Spendable</source>
         <translation>Spendibile</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>Conferme</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Stato</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Data</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -6062,38 +5227,7 @@ Sei sicuro?
     </message>
 </context>
 <context>
-    <name>WalletPasswordDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Finestra di dialogo</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Etichetta</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Premi il bottone</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
-        <translation>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>CANCELLA</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>OK</translation>
-    </message>
-</context>
-<context>
     <name>WelcomeContentWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Finestra di dialogo</translation>
-    </message>
     <message>
         <source>1</source>
         <translation>1</translation>
@@ -6137,20 +5271,20 @@ Rapids Wallet</source>
 Portafoglio Rapids.</translation>
     </message>
     <message>
-        <source>RPD is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
-        <translation>RPD è la tecnologia basata su blockchain Proof of Stake più innovativa al mondo. Sviluppato da un team di sviluppatori e crittografi di grande esperienza.</translation>
+        <source>Rapids is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <translation>Rapids è la tecnologia basata su blockchain Proof of Stake più innovativa al mondo. Sviluppato da un team di sviluppatori e crittografi di grande esperienza.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - RPD believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Come dice il nostro manifesto: la privacy è un diritto umano di base non negoziabile; garantisce agli utenti la libertà di condividere i propri dati quando e con chi vuole - RPD crede nell'auto sovranità.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - Rapids believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Come dice il nostro manifesto: la privacy è un diritto umano di base non negoziabile; garantisce agli utenti la libertà di condividere i propri dati quando e con chi vuole - Rapids crede nell'auto sovranità.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>The masternode network is RPD's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
-        <translation>La rete masternode è la rete di secondo livello di RPD sopra alla blockchain che consente al nostro DAO di fornire governance decentralizzata e tesoreria.</translation>
+        <source>The masternode network is Rapids's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
+        <translation>La rete masternode è la rete di secondo livello di Rapids sopra alla blockchain che consente al nostro DAO di fornire governance decentralizzata e tesoreria.</translation>
     </message>
     <message>
-        <source>How RPD respects your privacy?</source>
-        <translation>In che modo RPD rispetta la tua privacy?</translation>
+        <source>How Rapids respects your privacy?</source>
+        <translation>In che modo Rapids rispetta la tua privacy?</translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
@@ -6227,10 +5361,6 @@ Portafoglio Rapids.</translation>
         <translation>Associa l'indirizzo indicato per ascoltare le connessioni JSON-RPC. Usa la notazione [host]:porta per IPv6. Questa opzione può essere specificata più volte (impostazione predefinita: associa a tutte le interfacce)</translation>
     </message>
     <message>
-        <source>Calculated accumulator checkpoint is not what is recorded by block index</source>
-        <translation>Il punto di controllo dell'accumulatore calcolato non è ciò che viene registrato dall'indice di blocco</translation>
-    </message>
-    <message>
         <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
         <translation>Impossibile allocare la directory di dati %s. Probabilmente Rapids è già in esecuzione.</translation>
     </message>
@@ -6257,14 +5387,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Distribuito sotto la licenza del software MIT, consultare il file di accompagnamento COPYING o &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting from specific addresses (0-1, default: %u)</source>
-        <translation>Abilita forgiatura automatica Zerocoin da indirizzi specifici (0-1, impostazione predefinita: %u)</translation>
-    </message>
-    <message>
-        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
-        <translation>Abilita i backup automatici del portafoglio attivati ​​dopo ogni forgiatura zRPD (0-1, impostazione predefinita: %u)</translation>
     </message>
     <message>
         <source>Enable cold staking functionality (0-1, default: %u). Disabled if staking=0</source>
@@ -6371,10 +5493,6 @@ Portafoglio Rapids.</translation>
         <translation>Numero di secondi per impedire la riconnessione dei peer che si comportano male (impostazione predefinita: %u)</translation>
     </message>
     <message>
-        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation>L'offuscamento utilizza importi esatti per inviare fondi, potrebbe essere necessario anonimizzare altre valute.</translation>
-    </message>
-    <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>Informazioni sul debug dell'output (impostazione predefinita: %u, fornitura &lt;category&gt; è opzionale)</translation>
     </message>
@@ -6397,10 +5515,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
         <translation>Imposta la dimensione massima delle transazioni ad alta priorità / a basso costo in byte (impostazione predefinita: %d)</translation>
-    </message>
-    <message>
-        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
-        <translation>Imposta il numero di blocchi inclusi da pre-calcolare per ciclo. (minimo: %d) (massimo: %d) (valore predefinito: %d)</translation>
     </message>
     <message>
         <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
@@ -6435,18 +5549,6 @@ Portafoglio Rapids.</translation>
         <translation>Impossibile associare %s su questo computer. Probabilmente Rapids è già in esecuzione.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
-        <translation>Impossibile individuare abbastanza fondi denominati di offuscamento per questa transazione.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>Impossibile individuare fondi non denominati di offuscamento sufficienti per questa transazione non uguali a 10000 RPD.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>Impossibile individuare fondi per questa transazione non uguali a 10000 RPD.</translation>
-    </message>
-    <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation>Utilizza un proxy SOCKS5 separato per raggiungere i peer tramite i servizi nascosti Tor (impostazione predefinita: %s)</translation>
     </message>
@@ -6457,10 +5559,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
         <translation>Attenzione: -paytxfee è impostato molto alto! Questa è la commissione di transazione che dovrai pagare se invii una transazione.</translation>
-    </message>
-    <message>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
-        <translation>Avvertenza: i peer vengono disconnessi a causa di differenze temporali. Verifica che la data e l'ora del tuo computer siano corrette! Se l'orologio è sbagliato, Rapids non funzionerà correttamente.</translation>
     </message>
     <message>
         <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
@@ -6495,8 +5593,8 @@ Portafoglio Rapids.</translation>
         <translation>È necessario specificare una chiave masternodepriv nella configurazione. Consultare la documentazione per assistenza.</translation>
     </message>
     <message>
-        <source>(51472 could be used only on mainnet)</source>
-        <translation>(51472 potrebbe essere utilizzato solo su mainnet)</translation>
+        <source>(28732 could be used only on mainnet)</source>
+        <translation>(28732 potrebbe essere utilizzato solo su mainnet)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6507,8 +5605,8 @@ Portafoglio Rapids.</translation>
         <translation>(default: 1)</translation>
     </message>
     <message>
-        <source>(must be 51472 for mainnet)</source>
-        <translation>(deve essere 51472 per mainnet)</translation>
+        <source>(must be 28732 for mainnet)</source>
+        <translation>(deve essere 28732 per mainnet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
@@ -6525,10 +5623,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation>Aggiungere un nodo a cui connettersi e tentare di mantenere aperta la connessione</translation>
-    </message>
-    <message>
-        <source>Adding Wrapped Serials supply...</source>
-        <translation>Aggiunta la fornitura dei Wrapped Serials...</translation>
     </message>
     <message>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
@@ -6555,28 +5649,8 @@ Portafoglio Rapids.</translation>
         <translation>Opzioni di creazione del blocco:</translation>
     </message>
     <message>
-        <source>Calculating missing accumulators...</source>
-        <translation>Calcolo degli accumulatori mancanti...</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Impossibile eseguire il downgrade del portafoglio</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -bind address: '%s'</source>
-        <translation>Impossibile risolvere l'indirizzo -bind: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -externalip address: '%s'</source>
-        <translation>Impossibile risolvere l'indirizzo -externalip: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -whitebind address: '%s'</source>
-        <translation>Impossibile risolvere l'indirizzo -whitebind: '%s'</translation>
-    </message>
-    <message>
-        <source>CoinSpend: failed check</source>
-        <translation>CoinSpend: controllo fallito</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -6615,10 +5689,6 @@ Portafoglio Rapids.</translation>
         <translation>Impossibile effettuare l'analisi del file masternode.conf</translation>
     </message>
     <message>
-        <source>Couldn't generate the accumulator witness</source>
-        <translation>Impossibile generare il testimone dell'accumulatore</translation>
-    </message>
-    <message>
         <source>Debugging/Testing options:</source>
         <translation>Opzioni di debug / test:</translation>
     </message>
@@ -6649,14 +5719,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Done loading</source>
         <translation>Caricamento completato</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
-        <translation>Abilita forgiatura automatica Zerocoin (0-1, impostazione predefinita: %u)</translation>
-    </message>
-    <message>
-        <source>Enable precomputation of zRPD spends and stakes (0-1, default %u)</source>
-        <translation>Abilita pre-calcolo delle spese e degli stake di zRPD (0-1, valore predefinito %u)</translation>
     </message>
     <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
@@ -6727,10 +5789,6 @@ Portafoglio Rapids.</translation>
         <translation>Errore: portafoglio bloccato, impossibile creare la transazione!</translation>
     </message>
     <message>
-        <source>Failed to calculate accumulator checkpoint</source>
-        <translation>Calcolo del checkpoint dell'accumulatore non riuscito</translation>
-    </message>
-    <message>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
         <translation>Impossibile ascoltare su qualsiasi porta. Usa -listen=0 se vuoi questo.</translation>
     </message>
@@ -6799,28 +5857,8 @@ Portafoglio Rapids.</translation>
         <translation>Invalid -proxy address or hostname: '%s'</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Importo invalido per -maxtxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Importo invalido per -mintxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (deve essere almeno %s)</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation>Invalid amount for -reservebalance=&lt;amount&gt;</translation>
     </message>
     <message>
         <source>Invalid amount</source>
@@ -6839,20 +5877,8 @@ Portafoglio Rapids.</translation>
         <translation>Invalid port detected in masternode.conf</translation>
     </message>
     <message>
-        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
-        <translation>Percentuale di Zerocoin forgiati automaticamente (1-100, valore predefinito: %u)</translation>
-    </message>
-    <message>
         <source>Recalculating RPD supply...</source>
         <translation>Ricalcolo della supply RPD...</translation>
-    </message>
-    <message>
-        <source>Recalculating minted ZRPD...</source>
-        <translation>Ricalcolo ZRPD forgiati...</translation>
-    </message>
-    <message>
-        <source>Recalculating spent ZRPD...</source>
-        <translation>Ricalcolo spese ZRPD...</translation>
     </message>
     <message>
         <source>Reindex the RPD and zRPD money supply statistics</source>
@@ -6869,10 +5895,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Selected coins value is less than payment target</source>
         <translation>Il valore delle coin selezionate è inferiore all'obiettivo di pagamento</translation>
-    </message>
-    <message>
-        <source>Support the zerocoin light node protocol (default: %u)</source>
-        <translation>Supporta il protocollo zerocoin light node (impostazione predefinita: %u)</translation>
     </message>
     <message>
         <source>SwiftX options:</source>
@@ -6899,8 +5921,8 @@ Portafoglio Rapids.</translation>
 </translation>
     </message>
     <message>
-        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
-        <translation>Disabilita tutte le funzionalità specifiche di RPD (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</translation>
+        <source>Disable all Rapids specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <translation>Disabilita tutte le funzionalità specifiche di Rapids (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</translation>
     </message>
     <message>
         <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
@@ -6909,10 +5931,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>Errore: la transazione è stata rifiutata! Ciò potrebbe accadere se alcune delle coin nel tuo portafoglio fossero già state spese, come se tu avessi usato una copia di wallet.dat e le coin fossero state spese nella copia ma non contrassegnate come spese qui.</translation>
-    </message>
-    <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation>Errore: questa transazione richiede una commissione di transazione di almeno %s a causa della sua quantità, complessità o utilizzo dei fondi ricevuti di recente!</translation>
     </message>
     <message>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
@@ -6929,14 +5947,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
         <translation>In rari casi, una spesa con 7 coin supera la dimensione massima consentita della transazione, riprovare a utilizzare 6 o meno coin</translation>
-    </message>
-    <message>
-        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
-        <translation>Denominazione preferita per Zerocoin forgiato automaticamente (1/5/10/50/100/500/1000/5000), 0 per nessuna preferenza. impostazione predefinita: %u)</translation>
-    </message>
-    <message>
-        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Specificare il percorso di backup personalizzato per aggiungere una copia di qualsiasi backup zRPD automatico. Se impostato come dir, ogni backup genera un file con data e ora. Se impostato come file, riscriverà su quel file ogni backup. Se viene impostato anche il backuppath, verranno eseguiti 4 backup</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
@@ -6957,10 +5967,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Cannot create public spend input</source>
         <translation>Impossibile creare input di spesa pubblica</translation>
-    </message>
-    <message>
-        <source>CoinSpend: Accumulator witness does not verify</source>
-        <translation>CoinSpend: il testimone dell'accumulatore non verifica</translation>
     </message>
     <message>
         <source>Display the stake modifier calculations in the debug.log file.</source>
@@ -6997,10 +6003,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Errore: Nessun utxo valido!</translation>
-    </message>
-    <message>
-        <source>Failed to create mint</source>
-        <translation>Errore durante la forgiatura</translation>
     </message>
     <message>
         <source>Failed to find Zerocoins in wallet.dat</source>
@@ -7065,10 +6067,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Loading sporks...</source>
         <translation>Caricamento sporks...</translation>
-    </message>
-    <message>
-        <source>Loading wallet... (%3.2f %%)</source>
-        <translation>Caricamento portafoglio... (%3.2f %%)</translation>
     </message>
     <message>
         <source>Loading wallet...</source>
@@ -7155,10 +6153,6 @@ Portafoglio Rapids.</translation>
         <translation>Usa il filtro antispam di blocco (default: %u)</translation>
     </message>
     <message>
-        <source>could not get lock on cs_spendcache</source>
-        <translation>impossibile ottenere il blocco su cs_spendcache</translation>
-    </message>
-    <message>
         <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
         <translation>isValid(): Invalid -proxy address or hostname: '%s'</translation>
     </message>
@@ -7199,14 +6193,6 @@ Portafoglio Rapids.</translation>
         <translation>Ricostruisce l'indice della blockchain dai file blk000??.dat corrente.</translation>
     </message>
     <message>
-        <source>Receive and display P2P network alerts (default: %u)</source>
-        <translation>Ricevi e visualizza avvisi di rete P2P (default: %u)</translation>
-    </message>
-    <message>
-        <source>Reindex the accumulator database</source>
-        <translation>Reindicizzazione del database accumulatore</translation>
-    </message>
-    <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
         <translation>Transazioni e operazioni di estrazione dati da mining (default: %u)</translation>
     </message>
@@ -7223,14 +6209,6 @@ Portafoglio Rapids.</translation>
         <translation>Scansiona nuovamente...</translation>
     </message>
     <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>ResetMintZerocoin terminato: </translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>ResetSpentZerocoin terminato: </translation>
-    </message>
-    <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
         <translation>Esegui un thread per scaricare periodicamente il portafoglio (default: %u)</translation>
     </message>
@@ -7241,10 +6219,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>Invia transazioni come transazioni a costo zero, se possibile (default: %u)</translation>
-    </message>
-    <message>
-        <source>Session timed out.</source>
-        <translation>La sessione è scaduta.</translation>
     </message>
     <message>
         <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
@@ -7289,10 +6263,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Riduci il file debug.log all'avvio del client (impostazione predefinita: 1 se non -debug)</translation>
-    </message>
-    <message>
-        <source>Signing timed out.</source>
-        <translation>Firma scaduta.</translation>
     </message>
     <message>
         <source>Signing transaction failed</source>
@@ -7351,10 +6321,6 @@ Portafoglio Rapids.</translation>
         <translation>Sincronizzazione finita</translation>
     </message>
     <message>
-        <source>Synchronization pending...</source>
-        <translation>Sincronizzazione in attesa...</translation>
-    </message>
-    <message>
         <source>Synchronizing budgets...</source>
         <translation>Sincronizzazione budgets...</translation>
     </message>
@@ -7373,14 +6339,6 @@ Portafoglio Rapids.</translation>
     <message>
         <source>Syncing zRPD wallet...</source>
         <translation>Sincronizzazione del portafoglio zRPD...</translation>
-    </message>
-    <message>
-        <source>The coin spend has been used</source>
-        <translation>La coin spend è stata utilizzata</translation>
-    </message>
-    <message>
-        <source>The transaction did not verify</source>
-        <translation>La transazione non è stata verificata</translation>
     </message>
     <message>
         <source>This help message</source>

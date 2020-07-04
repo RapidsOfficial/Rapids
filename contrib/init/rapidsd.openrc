@@ -18,7 +18,7 @@ BITCOIND_BIN=${BITCOIND_BIN:-/usr/bin/rapidsd}
 BITCOIND_NICE=${BITCOIND_NICE:-${NICELEVEL:-0}}
 BITCOIND_OPTS="${BITCOIND_OPTS:-${BITCOIN_OPTS}}"
 
-name="Rapids Core Daemon"
+name="Rapids Daemon"
 description="Rapids crypto-currency p2p network daemon"
 
 command="/usr/bin/rapidsd"

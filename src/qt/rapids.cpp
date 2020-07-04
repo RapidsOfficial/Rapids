@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -29,6 +29,7 @@
 #endif
 #include "masternodeconfig.h"
 
+#include "fs.h"
 #include "init.h"
 #include "main.h"
 #include "rpc/server.h"
@@ -41,7 +42,6 @@
 
 #include <stdint.h>
 
-#include <boost/filesystem/operations.hpp>
 #include <boost/thread.hpp>
 
 #include <QApplication>
@@ -86,7 +86,7 @@ static std::string Translate(const char* psz)
     return QCoreApplication::translate("rapids-core", psz).toStdString();
 }
 
-static QString GetLangTerritory()
+static QString GetLangTerritory(bool forceLangFromSetting = false)
 {
     QSettings settings;
     // Get desired locale (e.g. "de_DE")
@@ -98,11 +98,11 @@ static QString GetLangTerritory()
         lang_territory = lang_territory_qsettings;
     // 3) -lang command line argument
     lang_territory = QString::fromStdString(GetArg("-lang", lang_territory.toStdString()));
-    return lang_territory;
+    return (forceLangFromSetting) ? lang_territory_qsettings : lang_territory;
 }
 
 /** Set up translations */
-static void initTranslations(QTranslator& qtTranslatorBase, QTranslator& qtTranslator, QTranslator& translatorBase, QTranslator& translator)
+static void initTranslations(QTranslator& qtTranslatorBase, QTranslator& qtTranslator, QTranslator& translatorBase, QTranslator& translator, bool forceLangFromSettings = false)
 {
     // Remove old translators
     QApplication::removeTranslator(&qtTranslatorBase);
@@ -112,7 +112,7 @@ static void initTranslations(QTranslator& qtTranslatorBase, QTranslator& qtTrans
 
     // Get desired locale (e.g. "de_DE")
     // 1) System default language
-    QString lang_territory = GetLangTerritory();
+    QString lang_territory = GetLangTerritory(forceLangFromSettings);
 
     // Convert to "de" only by truncating "_DE"
     QString lang = lang_territory;
@@ -177,7 +177,7 @@ private:
     void handleRunawayException(const std::exception* e);
 };
 
-/** Main RPD application object */
+/** Main Rapids application object */
 class BitcoinApplication : public QApplication
 {
     Q_OBJECT
@@ -217,7 +217,7 @@ public Q_SLOTS:
     void shutdownResult(int retval);
     /// Handle runaway exceptions. Shows a message box with the problem and quits the program.
     void handleRunawayException(const QString& message);
-    void updateTranslation();
+    void updateTranslation(bool forceLangFromSettings = false);
 
 Q_SIGNALS:
     void requestedInitialize();
@@ -383,7 +383,7 @@ bool BitcoinApplication::createTutorialScreen()
     WelcomeContentWidget* widget = new WelcomeContentWidget();
 
     connect(widget, &WelcomeContentWidget::onLanguageSelected, [this](){
-        updateTranslation();
+        updateTranslation(true);
     });
 
     widget->exec();
@@ -392,9 +392,9 @@ bool BitcoinApplication::createTutorialScreen()
     return ret;
 }
 
-void BitcoinApplication::updateTranslation(){
+void BitcoinApplication::updateTranslation(bool forceLangFromSettings){
     // Re-initialize translations after change them
-    initTranslations(this->qtTranslatorBase, this->qtTranslator, this->translatorBase, this->translator);
+    initTranslations(this->qtTranslatorBase, this->qtTranslator, this->translatorBase, this->translator, forceLangFromSettings);
 }
 
 void BitcoinApplication::startThread()
@@ -495,7 +495,7 @@ void BitcoinApplication::initializeResult(int retval)
 
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
-        // RPD: URIs or payment requests:
+        // Rapids: URIs or payment requests:
         //connect(paymentServer, &PaymentServer::receivedPaymentRequest, window, &RapidsGUI::handlePaymentRequest);
         connect(window, &RapidsGUI::receivedURI, paymentServer, &PaymentServer::handleURIOrFile);
         connect(paymentServer, &PaymentServer::message, [this](const QString& title, const QString& message, unsigned int style) {
@@ -516,7 +516,7 @@ void BitcoinApplication::shutdownResult(int retval)
 
 void BitcoinApplication::handleRunawayException(const QString& message)
 {
-    QMessageBox::critical(0, "Runaway exception", RapidsGUI::tr("A fatal error occurred. RPD can no longer continue safely and will quit.") + QString("\n\n") + message);
+    QMessageBox::critical(0, "Runaway exception", QObject::tr("A fatal error occurred. Rapids can no longer continue safely and will quit.") + QString("\n\n") + message);
     ::exit(1);
 }
 
@@ -588,7 +588,7 @@ int main(int argc, char* argv[])
 
     /// 6. Determine availability of data directory and parse rapids.conf
     /// - Do not call GetDataDir(true) before this step finishes
-    if (!boost::filesystem::is_directory(GetDataDir(false))) {
+    if (!fs::is_directory(GetDataDir(false))) {
         QMessageBox::critical(0, QObject::tr("Rapids"),
             QObject::tr("Error: Specified data directory \"%1\" does not exist.").arg(QString::fromStdString(mapArgs["-datadir"])));
         return 1;
@@ -670,12 +670,12 @@ int main(int argc, char* argv[])
     std::string strWalletFile = GetArg("-wallet", "wallet.dat");
     std::string strDataDir = GetDataDir().string();
     // Wallet file must be a plain filename without a directory
-    if (strWalletFile != boost::filesystem::basename(strWalletFile) + boost::filesystem::extension(strWalletFile)){
+    if (strWalletFile != fs::basename(strWalletFile) + fs::extension(strWalletFile)){
         throw std::runtime_error(strprintf(_("Wallet %s resides outside data directory %s"), strWalletFile, strDataDir));
     }
 
-    boost::filesystem::path pathBootstrap = GetDataDir() / strWalletFile;
-    if (!boost::filesystem::exists(pathBootstrap)) {
+    fs::path pathBootstrap = GetDataDir() / strWalletFile;
+    if (!fs::exists(pathBootstrap)) {
         // wallet doesn't exist, popup tutorial screen.
         ret = app.createTutorialScreen();
     }

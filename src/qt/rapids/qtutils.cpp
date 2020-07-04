@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2019-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -137,7 +137,8 @@ void setFilterAddressBook(QComboBox* filter, SortEdit* lineEdit)
     filter->addItem(QObject::tr("Receiving"), AddressTableModel::Receive);
     filter->addItem(QObject::tr("Contacts"), AddressTableModel::Send);
     filter->addItem(QObject::tr("Cold Staking"), AddressTableModel::ColdStaking);
-    filter->addItem(QObject::tr("Delegators"), AddressTableModel::Delegators);
+    filter->addItem(QObject::tr("Delegator"), AddressTableModel::Delegator);
+    filter->addItem(QObject::tr("Delegable"), AddressTableModel::Delegable);
     filter->addItem(QObject::tr("Staking Contacts"), AddressTableModel::ColdStakingSend);
 }
 
@@ -195,7 +196,7 @@ bool isLightTheme()
 void setTheme(bool isLight)
 {
     QSettings* settings = getSettings();
-    settings->setValue("theme", isLight ? "default" : "default-dark");
+    settings->setValue("theme", "default");
     settings->setValue("lightTheme", isLight);
 }
 
@@ -222,11 +223,11 @@ QColor getRowColor(bool isLightTheme, bool isHovered, bool isSelected)
         }
     } else {
         if (isSelected) {
-            return QColor("#250A2900");
-        } else if (isHovered) {
             return QColor("#25175201");
+        } else if (isHovered) {
+            return QColor("#25bababa");
         } else {
-            return QColor("#123C00");
+            return QColor("#0F0F0F");
         }
     }
 }

@@ -1,5 +1,5 @@
 ---
-name: "rapids-osx-4.1"
+name: "rapids-osx-4.2"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -29,7 +29,7 @@ packages:
 - "python3-setuptools"
 - "fonts-tuffy"
 remotes:
-- "url": "https://github.com/RapidsOfficial/Rapids.git"
+- "url": "https://github.com/RapidsOfficial/rapids.git"
   "dir": "rapids"
 files:
 - "MacOSX10.11.sdk.tar.gz"
