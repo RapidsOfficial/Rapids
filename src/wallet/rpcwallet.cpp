@@ -1923,6 +1923,17 @@ UniValue ListReceived(const UniValue& params, bool by_label)
         if (params[2].get_bool())
             filter = filter | ISMINE_WATCH_ONLY;
 
+    bool has_filtered_address = false;
+    CTxDestination filtered_address = CNoDestination();
+    if (!by_label && params.size() > 3) {
+        CTxDestination dest = DecodeDestination(params[3].get_str());
+        if (!IsValidDestination(dest)) {
+            throw JSONRPCError(RPC_WALLET_ERROR, "address_filter parameter was invalid");
+        }
+        filtered_address = dest;
+        has_filtered_address = true;
+    }
+
     // Tally
     std::map<CTxDestination, tallyitem> mapTally;
     for (std::map<uint256, CWalletTx>::iterator it = pwalletMain->mapWallet.begin(); it != pwalletMain->mapWallet.end(); ++it) {
@@ -1941,6 +1952,10 @@ UniValue ListReceived(const UniValue& params, bool by_label)
             if (!ExtractDestination(txout.scriptPubKey, address))
                 continue;
 
+            if (has_filtered_address && !(filtered_address == address)) {
+                continue;
+            }
+
             isminefilter mine = IsMine(*pwalletMain, address);
             if (!(mine & filter))
                 continue;
@@ -1958,10 +1973,23 @@ UniValue ListReceived(const UniValue& params, bool by_label)
     // Reply
     UniValue ret(UniValue::VARR);
     std::map<std::string, tallyitem> label_tally;
-    for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : pwalletMain->mapAddressBook) {
-        const CTxDestination& address = item.first;
-        const std::string& label = item.second.name;
-        std::map<CTxDestination, tallyitem>::iterator it = mapTally.find(address);
+    // Create mapAddressBook iterator
+    // If we aren't filtering, go from begin() to end()
+    auto start = pwalletMain->mapAddressBook.begin();
+    auto end = pwalletMain->mapAddressBook.end();
+    // If we are filtering, find() the applicable entry
+    if (has_filtered_address) {
+        start = pwalletMain->mapAddressBook.find(filtered_address);
+        if (start != end) {
+            end = std::next(start);
+        }
+    }
+
+    for (auto item_it = start; item_it != end; ++item_it)
+    {
+        const CTxDestination& address = item_it->first;
+        const std::string& label = item_it->second.name;
+        auto it = mapTally.find(address);
         if (it == mapTally.end() && !fIncludeEmpty)
             continue;
 
@@ -1977,11 +2005,11 @@ UniValue ListReceived(const UniValue& params, bool by_label)
         }
 
         if (by_label) {
-            tallyitem& item = label_tally[label];
-            item.nAmount += nAmount;
-            item.nConf = std::min(item.nConf, nConf);
-            item.nBCConf = std::min(item.nBCConf, nBCConf);
-            item.fIsWatchonly = fIsWatchonly;
+            tallyitem& _item = label_tally[label];
+            _item.nAmount += nAmount;
+            _item.nConf = std::min(_item.nConf, nConf);
+            _item.nBCConf = std::min(_item.nBCConf, nBCConf);
+            _item.fIsWatchonly = fIsWatchonly;
         } else {
             UniValue obj(UniValue::VOBJ);
             if (fIsWatchonly)
@@ -2004,18 +2032,18 @@ UniValue ListReceived(const UniValue& params, bool by_label)
     }
 
     if (by_label) {
-        for (std::map<std::string, tallyitem>::iterator it = label_tally.begin(); it != label_tally.end(); ++it) {
-            CAmount nAmount = (*it).second.nAmount;
-            int nConf = (*it).second.nConf;
-            int nBCConf = (*it).second.nBCConf;
+        for (const auto& entry : label_tally) {
+            CAmount nAmount = entry.second.nAmount;
+            int nConf = entry.second.nConf;
+            int nBCConf = entry.second.nBCConf;
             UniValue obj(UniValue::VOBJ);
-            if ((*it).second.fIsWatchonly)
+            if (entry.second.fIsWatchonly)
                 obj.push_back(Pair("involvesWatchonly", true));
-            obj.push_back(Pair("account", (*it).first));
+            obj.push_back(Pair("account", entry.first));
             obj.push_back(Pair("amount", ValueFromAmount(nAmount)));
             obj.push_back(Pair("confirmations", (nConf == std::numeric_limits<int>::max() ? 0 : nConf)));
             obj.push_back(Pair("bcconfirmations", (nBCConf == std::numeric_limits<int>::max() ? 0 : nBCConf)));
-            obj.push_back(Pair("label", (*it).first));
+            obj.push_back(Pair("label", entry.first));
             ret.push_back(obj);
         }
     }
@@ -2025,15 +2053,16 @@ UniValue ListReceived(const UniValue& params, bool by_label)
 
 UniValue listreceivedbyaddress(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() > 3)
+    if (request.fHelp || request.params.size() > 4)
         throw std::runtime_error(
-            "listreceivedbyaddress ( minconf includeempty includeWatchonly)\n"
+            "listreceivedbyaddress ( minconf includeempty includeWatchonly addressFilter)\n"
             "\nList balances by receiving address.\n"
 
             "\nArguments:\n"
             "1. minconf       (numeric, optional, default=1) The minimum number of confirmations before payments are included.\n"
             "2. includeempty  (numeric, optional, default=false) Whether to include addresses that haven't received any payments.\n"
             "3. includeWatchonly (bool, optional, default=false) Whether to include watchonly addresses (see 'importaddress').\n"
+            "4. addressFilter    (string, optional) If present, only return information on this address.\n"
 
             "\nResult:\n"
             "[\n"
@@ -2050,7 +2079,10 @@ UniValue listreceivedbyaddress(const JSONRPCRequest& request)
             "]\n"
 
             "\nExamples:\n" +
-            HelpExampleCli("listreceivedbyaddress", "") + HelpExampleCli("listreceivedbyaddress", "6 true") + HelpExampleRpc("listreceivedbyaddress", "6, true, true"));
+            HelpExampleCli("listreceivedbyaddress", "") +
+            HelpExampleCli("listreceivedbyaddress", "6 true") +
+            HelpExampleRpc("listreceivedbyaddress", "6, true, true") +
+            HelpExampleRpc("listreceivedbyaddress", "6, true, true, \"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 

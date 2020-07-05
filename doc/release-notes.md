@@ -147,6 +147,8 @@ and are affected by this change: RPC `getrawtransaction`, RPC `decoderawtransact
 
 - new "upgrades" field in the output of `getblockchaininfo`, showing upcoming and active network upgrades ([#1665](https://github.com/PIVX-Project/PIVX/pull/1665), [#1687](https://github.com/PIVX-Project/PIVX/pull/1687)).
 
+- `listreceivedbyaddress` has a new optional "addressFilter" argument that will filter the results to only the specified address
+
 ### Removed commands
 
 - `masternodedebug`. Use `getmasternodestatus` instead. ([#1698](https://github.com/PIVX-Project/PIVX/pull/1698)).
