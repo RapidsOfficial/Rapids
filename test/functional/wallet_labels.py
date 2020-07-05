@@ -5,26 +5,39 @@
 """Test label RPCs.
 
 RPCs tested are:
-    - getlabeladdress
-    - getaddressesbyaccount
+    - getaccountaddress
+    - getaddressesbyaccount/getaddressesbylabel
     - listaddressgroupings
     - setlabel
     - sendfrom (with account arguments)
     - move (with account arguments)
+
+Run the test twice - once using the accounts API and once using the labels API.
+The accounts API test can be removed in v5.0.
 """
 from collections import defaultdict
 
 from test_framework.test_framework import PivxTestFramework
-from test_framework.util import assert_equal
+from test_framework.util import assert_equal, assert_raises_rpc_error
 
 class WalletlabelsTest(PivxTestFramework):
     def set_test_params(self):
         self.setup_clean_chain = True
-        self.num_nodes = 1
-        self.extra_args = [[]]
+        self.num_nodes = 2
+        self.extra_args = [['-deprecatedrpc=accounts'], []]
+
+    def setup_network(self):
+        """Don't connect nodes."""
+        self.setup_nodes()
 
     def run_test(self):
-        node = self.nodes[0]
+        """Run the test twice - once using the accounts API and once using the labels API."""
+        self.log.info("Test accounts API")
+        self._run_subtest(True, self.nodes[0])
+        self.log.info("Test labels API")
+        self._run_subtest(False, self.nodes[1])
+
+    def _run_subtest(self, accounts_api, node):
         # Check that there's no UTXO on any of the nodes
         assert_equal(len(node.listunspent()), 0)
 
@@ -68,24 +81,32 @@ class WalletlabelsTest(PivxTestFramework):
         # we want to reset so that the "" account has what's expected.
         # otherwise we're off by exactly the fee amount as that's mined
         # and matures in the next 100 blocks
-        node.sendfrom("", common_address, float(fee))
+        if accounts_api:
+            node.sendfrom("", common_address, float(fee))
         amount_to_send = 5.0
 
         # Create accounts and make sure subsequent label API calls
         # recognize the label/address associations.
-        labels = [Label(name) for name in ("a", "b", "c", "d", "e")]
+        labels = [Label(name, accounts_api) for name in ("a", "b", "c", "d", "e")]
         for label in labels:
-            label.add_receive_address(node.getlabeladdress(label.name, True))
+            if accounts_api:
+                address = node.getaccountaddress(label.name)
+            else:
+                address = node.getnewaddress(label.name)
+            label.add_receive_address(address)
             label.verify(node)
 
         # Check all labels are returned by listlabels.
         assert_equal(node.listlabels(), [label.name for label in labels])
 
         # Send a transaction to each label, and make sure this forces
-        # getlabeladdress to generate a new receiving address.
+        # getaccountaddress to generate a new receiving address.
         for label in labels:
-            node.sendtoaddress(label.receive_address, amount_to_send)
-            label.add_receive_address(node.getlabeladdress(label.name))
+            if accounts_api:
+                node.sendtoaddress(label.receive_address, amount_to_send)
+                label.add_receive_address(node.getaccountaddress(label.name))
+            else:
+                node.sendtoaddress(label.addresses[0], amount_to_send)
             label.verify(node)
 
         # Check the amounts received.
@@ -97,29 +118,51 @@ class WalletlabelsTest(PivxTestFramework):
 
         # Check that sendfrom label reduces listaccounts balances.
         for i, label in enumerate(labels):
-            to_label = labels[(i+1) % len(labels)]
-            node.sendfrom(label.name, to_label.receive_address, amount_to_send)
+            to_label = labels[(i + 1) % len(labels)]
+            if accounts_api:
+                node.sendfrom(label.name, to_label.receive_address, amount_to_send)
+            else:
+                node.sendtoaddress(to_label.addresses[0], amount_to_send)
         node.generate(1)
         for label in labels:
-            label.add_receive_address(node.getlabeladdress(label.name))
+            if accounts_api:
+                address = node.getaccountaddress(label.name)
+            else:
+                address = node.getnewaddress(label.name)
+            label.add_receive_address(address)
             label.verify(node)
             assert_equal(node.getreceivedbylabel(label.name), 10)
-            node.move(label.name, "", float(node.getbalance(label.name)))
+            if accounts_api:
+                node.move(label.name, "", float(node.getbalance(label.name)))
             label.verify(node)
         node.generate(101)
-        #expected_account_balances = {"": 26149.99985650}
-        #for label in labels:
+        # expected_account_balances = {"": 26149.99985650}
+        # for label in labels:
         #    expected_account_balances[label.name] = 0
-        #assert_equal(node.listaccounts(), expected_account_balances)
-        #assert_equal(node.getbalance(""), 26149.99985650)
+        # if accounts_api:
+        # assert_equal(node.listaccounts(), expected_account_balances)
+        # assert_equal(node.getbalance(""), 5200)
 
         # Check that setlabel can assign a label to a new unused address.
         for label in labels:
-            address = node.getlabeladdress("", True)
+            address = node.getnewaddress()
             node.setlabel(address, label.name)
             label.add_address(address)
             label.verify(node)
-            assert(address not in node.getaddressesbyaccount(""))
+            if accounts_api:
+                assert address not in node.getaddressesbyaccount("")
+            else:
+                assert_raises_rpc_error(-11, "No addresses with label", node.getaddressesbylabel, "")
+
+        # Check that setlabel can assign a label to a new unused staking address.
+        if not accounts_api:
+            for label in labels:
+                staking_address = node.getnewstakingaddress()
+                node.setlabel(staking_address, label.name)
+                label.add_address(staking_address)
+                label.purpose[staking_address] = "coldstaking"
+                label.verify(node)
+                assert_raises_rpc_error(-11, "No addresses with label", node.getaddressesbylabel, "")
 
         # Check that addmultisigaddress can assign labels.
         for label in labels:
@@ -130,31 +173,35 @@ class WalletlabelsTest(PivxTestFramework):
             label.add_address(multisig_address)
             label.purpose[multisig_address] = "send"
             label.verify(node)
-            node.sendfrom("", multisig_address, 50)
-        #node.generate(101)
-        #for account in accounts:
-        #    assert_equal(node.getbalance(account.name), 50)
+            if accounts_api:
+                node.sendfrom("", multisig_address, 50)
+            # node.generate(101)
+            # if accounts_api:
+            #     for label in labels:
+            #         assert_equal(node.getbalance(label.name), 50)
 
         # Check that setlabel can change the label of an address from a
         # different label.
-        change_label(node, labels[0].addresses[0], labels[0], labels[1])
-
-        # Check that setlabel can change the label of an address which
-        # is the receiving address of a different label.
-        change_label(node, labels[0].receive_address, labels[0], labels[1])
+        change_label(node, labels[0].addresses[0], labels[0], labels[1], accounts_api)
 
         # Check that setlabel can set the label of an address already
         # in the label. This is a no-op.
-        change_label(node, labels[2].addresses[0], labels[2], labels[2])
+        change_label(node, labels[2].addresses[0], labels[2], labels[2], accounts_api)
 
-        # Check that setlabel can set the label of an address which is
-        # already the receiving address of the label. This is a no-op.
-        change_label(node, labels[2].receive_address, labels[2], labels[2])
+        if accounts_api:
+            # Check that setaccount can change the label of an address which
+            # is the receiving address of a different label.
+            change_label(node, labels[0].receive_address, labels[0], labels[1], accounts_api)
+
+            # Check that setaccount can set the label of an address which is
+            # already the receiving address of the label. This is a no-op.
+            change_label(node, labels[2].receive_address, labels[2], labels[2], accounts_api)
 
 class Label:
-    def __init__(self, name):
+    def __init__(self, name, accounts_api):
         # Label name
         self.name = name
+        self.accounts_api = accounts_api
         # Current receiving address associated with this label.
         self.receive_address = None
         # List of all addresses assigned with this label
@@ -168,44 +215,53 @@ class Label:
 
     def add_receive_address(self, address):
         self.add_address(address)
-        self.receive_address = address
+        if self.accounts_api:
+            self.receive_address = address
 
     def verify(self, node):
         if self.receive_address is not None:
             assert self.receive_address in self.addresses
-            assert_equal(node.getlabeladdress(self.name), self.receive_address)
+            if self.accounts_api:
+                assert_equal(node.getaccountaddress(self.name), self.receive_address)
 
         for address in self.addresses:
             assert_equal(
                 node.getaddressinfo(address)['labels'][0],
                 {"name": self.name,
                  "purpose": self.purpose[address]})
-            assert_equal(node.getaccount(address), self.name)
+            if self.accounts_api:
+                assert_equal(node.getaccount(address), self.name)
+            else:
+                assert_equal(node.getaddressinfo(address)['label'], self.name)
 
         assert_equal(
             node.getaddressesbylabel(self.name),
             {address: {"purpose": self.purpose[address]} for address in self.addresses})
 
-        assert_equal(
-            set(node.getaddressesbyaccount(self.name)), set(self.addresses))
+        if self.accounts_api:
+            assert_equal(set(node.getaddressesbyaccount(self.name)), set(self.addresses))
 
 
-def change_label(node, address, old_label, new_label):
+def change_label(node, address, old_label, new_label, accounts_api):
     assert_equal(address in old_label.addresses, True)
-    node.setlabel(address, new_label.name)
+    if accounts_api:
+        node.setaccount(address, new_label.name)
+    else:
+        node.setlabel(address, new_label.name)
 
     old_label.addresses.remove(address)
     new_label.add_address(address)
 
-    # Calling setlabel on an address which was previously the receiving
-    # address of a different label should reset the receiving address of
-    # the old label, causing getlabeladdress to return a brand new
+    # Calling setaccount on an address which was previously the receiving
+    # address of a different account should reset the receiving address of
+    # the old account, causing getaccountaddress to return a brand new
     # address.
-    if old_label.name != new_label.name and address == old_label.receive_address:
-        new_address = node.getlabeladdress(old_label.name)
-        assert_equal(new_address not in old_label.addresses, True)
-        assert_equal(new_address not in new_label.addresses, True)
-        old_label.add_receive_address(new_address)
+    if accounts_api:
+        if old_label.name != new_label.name and address == old_label.receive_address:
+            new_address = node.getaccountaddress(old_label.name)
+            assert_equal(new_address not in old_label.addresses, True)
+            assert_equal(new_address not in new_label.addresses, True)
+            old_label.add_receive_address(new_address)
 
     old_label.verify(node)
     new_label.verify(node)
