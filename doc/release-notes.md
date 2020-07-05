@@ -57,11 +57,13 @@ The output will be similar to:
 Base58CheckEncode,131072,7697,8065,7785,20015,20971,20242
 ```
 
-'label' API for wallet
-----------------------
+'label' and 'account' APIs for wallet
+-------------------------------------
 
 A new 'label' API has been introduced for the wallet. This is intended as a
-replacement for the deprecated 'account' API.
+replacement for the deprecated 'account' API. The 'account' can continue to
+be used in v4.2 by starting pivxd with the '-deprecatedrpc=accounts'
+argument, and will be fully removed in v5.0.
 
 The label RPC methods mirror the account functionality, with the following functional differences:
 
@@ -75,7 +77,7 @@ Here are the changes to RPC methods:
 | Deprecated Method       | New Method            | Notes       |
 | :---------------------- | :-------------------- | :-----------|
 | `getaccount`            | `getaddressinfo`      | `getaddressinfo` returns a json object with address information instead of just the name of the account as a string. |
-| `getaccountaddress`     | `getlabeladdress`     | `getlabeladdress` throws an error by default if the label does not already exist, but provides a `force` option for compatibility with existing applications. |
+| `getaccountaddress`     | n/a                   | There is no replacement for `getaccountaddress` since labels do not have an associated receive address. |
 | `getaddressesbyaccount` | `getaddressesbylabel` | `getaddressesbylabel` returns a json object with the addresses as keys, instead of a list of strings. |
 | `getreceivedbyaccount`  | `getreceivedbylabel`  | _no change in behavior_ |
 | `listaccounts`          | `listlabels`          | `listlabels` does not return a balance or accept `minconf` and `watchonly` arguments. |
@@ -86,7 +88,12 @@ Here are the changes to RPC methods:
 
 | Changed Method         | Notes   |
 | :--------------------- | :------ |
-| `listunspent`          | Returns new `label` fields, along with `account` fields for backward compatibility. |
+| `listunspent`          | Returns new `label` fields, along with `account` fields for backward compatibility if running with the `-deprecatedrpc=accounts` argument |
+| `sendmany`             | The first parameter has been renamed to `dummy`, and must be set to an empty string, unless running with the `-deprecatedrpc=accounts` argument (in which case functionality is unchanged). |
+| `listtransactions`     | The first parameter has been renamed to `dummy`, and must be set to the string `*`, unless running with the `-deprecatedrpc=accounts` argument (in which case functionality is unchanged). |
+| `getbalance`           | `account`, `minconf` and `include_watchonly` parameters are deprecated, and can only be used if running with the `-deprecatedrpc=accounts` argument |
+| `getcoldstakingbalance`| The `account` parameter is deprecated, and can only be used if running with the `-deprecatedrpc=accounts` argument (in which case functionality is unchanged) |
+| `getdelegatedbalance`  | The `account` parameter is deprecated, and can only be used if running with the `-deprecatedrpc=accounts` argument (in which case functionality is unchanged) |
 
 GUI Changes
 ----------
