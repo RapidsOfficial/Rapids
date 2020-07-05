@@ -337,7 +337,7 @@ void SettingsMultisendWidget::activate()
         strRet = tr("Unable to activate MultiSend, no available recipients");
     else if (!(ui->checkBoxStake->isChecked() || ui->checkBoxRewards->isChecked())) {
         strRet = tr("Unable to activate MultiSend\nCheck one or both of the check boxes to send on stake and/or masternode rewards");
-    } else if (IsValidDestinationString(pwalletMain->vMultiSend[0].first)) {
+    } else if (IsValidDestinationString(pwalletMain->vMultiSend[0].first, false, Params())) {
         pwalletMain->fMultiSendStake = ui->checkBoxStake->isChecked();
         pwalletMain->fMultiSendMasternodeReward = ui->checkBoxRewards->isChecked();
 

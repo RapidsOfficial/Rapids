@@ -6,15 +6,15 @@
 #include "base58.h"
 
 #include "hash.h"
+#include "script/script.h"
 #include "uint256.h"
 
-#include <assert.h>
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/variant/static_visitor.hpp>
+
+#include <algorithm>
+#include <assert.h>
 #include <sstream>
-#include <stdint.h>
-#include <string.h>
-#include <string>
 #include <vector>
 
 /** All alphanumeric characters except for "0", "I", "O", and "l" */
@@ -231,94 +231,64 @@ int CBase58Data::CompareTo(const CBase58Data& b58) const
 
 namespace
 {
-class CBitcoinAddressVisitor : public boost::static_visitor<bool>
+class DestinationEncoder : public boost::static_visitor<std::string>
 {
 private:
-    CBitcoinAddress* addr;
-    CChainParams::Base58Type type;
+    const CChainParams& m_params;
+    const CChainParams::Base58Type m_addrType;
 
 public:
-    CBitcoinAddressVisitor(CBitcoinAddress* addrIn,
-            const CChainParams::Base58Type addrType = CChainParams::PUBKEY_ADDRESS) :
-        addr(addrIn),
-        type(addrType){};
+    DestinationEncoder(const CChainParams& params, const CChainParams::Base58Type _addrType = CChainParams::PUBKEY_ADDRESS) : m_params(params), m_addrType(_addrType) {}
 
-    bool operator()(const CKeyID& id) const { return addr->Set(id, type); }
-    bool operator()(const CScriptID& id) const { return addr->Set(id); }
-    bool operator()(const CNoDestination& no) const { return false; }
+    std::string operator()(const CKeyID& id) const
+    {
+        std::vector<unsigned char> data = m_params.Base58Prefix(m_addrType);
+        data.insert(data.end(), id.begin(), id.end());
+        return EncodeBase58Check(data);
+    }
+
+    std::string operator()(const CScriptID& id) const
+    {
+        std::vector<unsigned char> data = m_params.Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+        data.insert(data.end(), id.begin(), id.end());
+        return EncodeBase58Check(data);
+    }
+
+    std::string operator()(const CNoDestination& no) const { return ""; }
 };
 
+CTxDestination DecodeDestination(const std::string& str, const CChainParams& params, bool& isStaking)
+{
+    std::vector<unsigned char> data;
+    uint160 hash;
+    if (DecodeBase58Check(str, data)) {
+        // base58-encoded PIVX addresses.
+        // Public-key-hash-addresses have version 30 (or 139 testnet).
+        // The data vector contains RIPEMD160(SHA256(pubkey)), where pubkey is the serialized public key.
+        const std::vector<unsigned char>& pubkey_prefix = params.Base58Prefix(CChainParams::PUBKEY_ADDRESS);
+        if (data.size() == hash.size() + pubkey_prefix.size() && std::equal(pubkey_prefix.begin(), pubkey_prefix.end(), data.begin())) {
+            std::copy(data.begin() + pubkey_prefix.size(), data.end(), hash.begin());
+            return CKeyID(hash);
+        }
+        // Public-key-hash-coldstaking-addresses have version 63 (or 73 testnet).
+        const std::vector<unsigned char>& staking_prefix = params.Base58Prefix(CChainParams::STAKING_ADDRESS);
+        if (data.size() == hash.size() + staking_prefix.size() && std::equal(staking_prefix.begin(), staking_prefix.end(), data.begin())) {
+            isStaking = true;
+            std::copy(data.begin() + staking_prefix.size(), data.end(), hash.begin());
+            return CKeyID(hash);
+        }
+        // Script-hash-addresses have version 13 (or 19 testnet).
+        // The data vector contains RIPEMD160(SHA256(cscript)), where cscript is the serialized redemption script.
+        const std::vector<unsigned char>& script_prefix = params.Base58Prefix(CChainParams::SCRIPT_ADDRESS);
+        if (data.size() == hash.size() + script_prefix.size() && std::equal(script_prefix.begin(), script_prefix.end(), data.begin())) {
+            std::copy(data.begin() + script_prefix.size(), data.end(), hash.begin());
+            return CScriptID(hash);
+        }
+    }
+    return CNoDestination();
+}
+
 } // anon namespace
-
-bool CBitcoinAddress::Set(const CKeyID& id, const CChainParams::Base58Type addrType)
-{
-    SetData(Params().Base58Prefix(addrType), &id, 20);
-    return true;
-}
-
-bool CBitcoinAddress::Set(const CScriptID& id)
-{
-    SetData(Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS), &id, 20);
-    return true;
-}
-
-bool CBitcoinAddress::Set(const CTxDestination& dest, const CChainParams::Base58Type addrType)
-{
-    return boost::apply_visitor(CBitcoinAddressVisitor(this, addrType), dest);
-}
-
-bool CBitcoinAddress::IsValid() const
-{
-    return IsValid(Params());
-}
-
-bool CBitcoinAddress::IsValid(const CChainParams& params) const
-{
-    bool fCorrectSize = vchData.size() == 20;
-    bool fKnownVersion = vchVersion == params.Base58Prefix(CChainParams::PUBKEY_ADDRESS) ||
-                         vchVersion == params.Base58Prefix(CChainParams::SCRIPT_ADDRESS) ||
-                         vchVersion == params.Base58Prefix(CChainParams::STAKING_ADDRESS);
-    return fCorrectSize && fKnownVersion;
-}
-
-CTxDestination CBitcoinAddress::Get() const
-{
-    if (!IsValid())
-        return CNoDestination();
-    uint160 id;
-    memcpy(&id, &vchData[0], 20);
-    if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS) ||
-            vchVersion == Params().Base58Prefix(CChainParams::STAKING_ADDRESS))
-        return CKeyID(id);
-    else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS))
-        return CScriptID(id);
-    else
-        return CNoDestination();
-}
-
-bool CBitcoinAddress::GetKeyID(CKeyID& keyID) const
-{
-    if (!IsValid() ||
-            (vchVersion != Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS) &&
-            vchVersion != Params().Base58Prefix(CChainParams::STAKING_ADDRESS)))
-        return false;
-    uint160 id;
-    memcpy(&id, &vchData[0], 20);
-    keyID = CKeyID(id);
-    return true;
-}
-
-bool CBitcoinAddress::IsScript() const
-{
-    bool fCorrectSize = vchData.size() == 20;
-    return fCorrectSize && vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS);
-}
-
-bool CBitcoinAddress::IsStakingAddress() const
-{
-    bool fCorrectSize = vchData.size() == 20;
-    return fCorrectSize && vchVersion == Params().Base58Prefix(CChainParams::STAKING_ADDRESS);
-}
 
 CKey DecodeSecret(const std::string& str)
 {
@@ -349,13 +319,6 @@ std::string EncodeSecret(const CKey& key)
     return ret;
 }
 
-CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Type addrType)
-{
-    CBitcoinAddress addr(keyID, addrType);
-    if (!addr.IsValid()) throw std::runtime_error("Error, trying to decode an invalid keyID");
-    return addr.Get();
-}
-
 std::string EncodeDestination(const CTxDestination& dest, bool isStaking)
 {
     return EncodeDestination(dest, isStaking ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS);
@@ -363,36 +326,27 @@ std::string EncodeDestination(const CTxDestination& dest, bool isStaking)
 
 std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType)
 {
-    CBitcoinAddress addr(dest, addrType);
-    if (!addr.IsValid()) return "";
-    return addr.ToString();
+    return boost::apply_visitor(DestinationEncoder(Params(), addrType), dest);
 }
 
 CTxDestination DecodeDestination(const std::string& str)
 {
-    return CBitcoinAddress(str).Get();
+    bool isStaking;
+    return DecodeDestination(str, Params(), isStaking);
 }
 
 CTxDestination DecodeDestination(const std::string& str, bool& isStaking)
 {
-    CBitcoinAddress addr(str);
-    isStaking = addr.IsStakingAddress();
-    return addr.Get();
+    return DecodeDestination(str, Params(), isStaking);
 }
 
 bool IsValidDestinationString(const std::string& str, bool fStaking, const CChainParams& params)
 {
-    return IsValidDestinationString(str, fStaking);
-}
-
-bool IsValidDestinationString(const std::string& str)
-{
-    CBitcoinAddress address(str);
-    return address.IsValid();
+    bool isStaking = false;
+    return IsValidDestination(DecodeDestination(str, params, isStaking)) && (isStaking == fStaking);
 }
 
 bool IsValidDestinationString(const std::string& str, bool isStaking)
 {
-    CBitcoinAddress address(str);
-    return address.IsValid() && (address.IsStakingAddress() == isStaking);
+    return IsValidDestinationString(str, isStaking, Params());
 }
