@@ -907,33 +907,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
         CAmount nValueIn = 0;
         if (hasZcSpendInputs) {
-            nValueIn = tx.GetZerocoinSpent();
-
-            //Check that txid is not already in the chain
-            int nHeightTx = 0;
-            if (IsTransactionInChain(tx.GetHash(), nHeightTx))
-                return state.Invalid(error("%s : zPIV spend tx %s already in block %d", __func__, tx.GetHash().GetHex(), nHeightTx),
-                        REJECT_DUPLICATE, "bad-txns-inputs-spent");
-
-            //Check for double spending of serial #'s
-            for (const CTxIn& txIn : tx.vin) {
-                // Only allow for public zc spends inputs
-                if (!txIn.IsZerocoinPublicSpend())
-                    return state.Invalid(false, REJECT_INVALID, "bad-zc-spend-notpublic");
-
-                libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
-                PublicCoinSpend publicSpend(params);
-                if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
-                    return false;
-                }
-                if (!ContextualCheckZerocoinSpend(tx, &publicSpend, chainHeight, UINT256_ZERO))
-                    return state.Invalid(false, REJECT_INVALID, "bad-zc-spend-contextcheck");
-
-                // Check that the version matches the one enforced with SPORK_18
-                if (!CheckPublicCoinSpendVersion(publicSpend.getVersion())) {
-                    return state.Invalid(false, REJECT_INVALID, "bad-zc-spend-version");
-                }
-
+            if (!AcceptToMemoryPoolZerocoin(tx, nValueIn, chainHeight, state, consensus)) {
+                return false;
             }
         } else {
             LOCK(pool.cs);
