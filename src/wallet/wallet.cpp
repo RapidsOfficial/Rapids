@@ -1941,19 +1941,21 @@ bool CheckTXAvailability(const CWalletTx* pcoin, bool fOnlyConfirmed, bool fUseI
     return true;
 }
 
-bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& keyRet, std::string strTxHash, std::string strOutputIndex)
+bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& keyRet, std::string strTxHash, std::string strOutputIndex, std::string& strError)
 {
     // wait for reindex and/or import to finish
     if (fImporting || fReindex) return false;
 
     if (strTxHash.empty() || strOutputIndex.empty()) {
-        return error("%s: Invalid masternode hash or output index", __func__);
+        strError = "Invalid masternode collateral hash or output index";
+        return error("%s: %s", __func__, strError);
     }
 
     int nOutputIndex;
     try {
         nOutputIndex = std::stoi(strOutputIndex.c_str());
     } catch (const std::exception& e) {
+        strError = "Invalid masternode output index";
         return error("%s: %s on strOutputIndex", __func__, e.what());
     }
 
@@ -1961,36 +1963,48 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
     uint256 txHash = uint256S(strTxHash);
     std::map<uint256, CWalletTx>::const_iterator mi = mapWallet.find(txHash);
     if (mi == mapWallet.end()) {
-        return error("%s: tx hash %s not found in the wallet", __func__, strTxHash);
+        strError = "collateral tx not found in the wallet";
+        return error("%s: %s", __func__, strError);
     }
 
     const CWalletTx& wtx = mi->second;
 
     // Verify index limits
-    if (nOutputIndex < 0 || nOutputIndex >= (int) wtx.vout.size())
+    if (nOutputIndex < 0 || nOutputIndex >= (int) wtx.vout.size()) {
+        strError = "Invalid masternode output index";
         return error("%s: output index %d not found in %s", __func__, nOutputIndex, strTxHash);
+    }
 
     CTxOut txOut = wtx.vout[nOutputIndex];
 
     // Masternode collateral value
     if (txOut.nValue != 10000 * COIN) {
+        strError = "Invalid collateral tx value, must be 10,000 PIV";
         return error("%s: tx %s, index %d not a masternode collateral", __func__, strTxHash, nOutputIndex);
     }
 
     // Check availability
     int nDepth = 0;
     if (!CheckTXAvailability(&wtx, true, false, nDepth)) {
+        strError = "Not available collateral transaction";
         return error("%s: tx %s not available", __func__, strTxHash);
     }
     // Skip spent coins
-    if (IsSpent(txHash, nOutputIndex)) return error("%s: tx %s already spent", __func__, strTxHash);
+    if (IsSpent(txHash, nOutputIndex)) {
+        strError = "Error: collateral already spent";
+        return error("%s: tx %s already spent", __func__, strTxHash);
+    }
 
     // Depth must be at least MASTERNODE_MIN_CONFIRMATIONS
-    if (nDepth < MASTERNODE_MIN_CONFIRMATIONS) return error("%s: tx %s must be at least %d deep", __func__, strTxHash, MASTERNODE_MIN_CONFIRMATIONS);
+    if (nDepth < MASTERNODE_MIN_CONFIRMATIONS) {
+        strError = strprintf("Collateral tx must have at least %d confirmations", MASTERNODE_MIN_CONFIRMATIONS);
+        return error("%s: %s", __func__, strError);
+    }
 
     // utxo need to be mine.
     isminetype mine = IsMine(txOut);
     if (mine != ISMINE_SPENDABLE) {
+        strError = "Invalid collateral transaction. Not from this wallet";
         return error("%s: tx %s not mine", __func__, strTxHash);
     }
 
