@@ -10,6 +10,8 @@
 #include "main.h"
 #include "policy/fees.h"
 #include "streams.h"
+#include "timedata.h"
+#include "consensus/tx_verify.h"
 #include "util.h"
 #include "utilmoneystr.h"
 #include "utiltime.h"
@@ -19,9 +21,10 @@
 
 
 CTxMemPoolEntry::CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee,
-                                 int64_t _nTime, double _dPriority,
-                                 unsigned int _nHeight, bool poolHasNoInputsOf) :
-     tx(_tx), nFee(_nFee), nTime(_nTime), dPriority(_dPriority), nHeight(_nHeight), hadNoDependencies(poolHasNoInputsOf)
+                                 int64_t _nTime, double _entryPriority,
+                                 unsigned int _entryHeight, bool poolHasNoInputsOf, CAmount _inChainInputValue,
+                                 bool _spendsCoinbaseOrCoinstake) :
+     tx(_tx), nFee(_nFee), nTime(_nTime), entryPriority(_entryPriority), entryHeight(_entryHeight), hadNoDependencies(poolHasNoInputsOf), inChainInputValue(_inChainInputValue), spendsCoinbaseOrCoinstake(_spendsCoinbaseOrCoinstake)
 {
     nTxSize = ::GetSerializeSize(tx, SER_NETWORK, PROTOCOL_VERSION);
     nModSize = tx.CalculateModifiedSize(nTxSize);
@@ -31,6 +34,8 @@ CTxMemPoolEntry::CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee,
     nCountWithDescendants = 1;
     nSizeWithDescendants = nTxSize;
     nFeesWithDescendants = nFee;
+    CAmount nValueIn = tx.GetValueOut()+nFee;
+    assert(inChainInputValue <= nValueIn);
 }
 
 CTxMemPoolEntry::CTxMemPoolEntry(const CTxMemPoolEntry& other)
@@ -41,9 +46,10 @@ CTxMemPoolEntry::CTxMemPoolEntry(const CTxMemPoolEntry& other)
 double
 CTxMemPoolEntry::GetPriority(unsigned int currentHeight) const
 {
-    CAmount nValueIn = tx.GetValueOut() + nFee;
-    double deltaPriority = ((double)(currentHeight - nHeight) * nValueIn) / nModSize;
-    double dResult = dPriority + deltaPriority;
+    double deltaPriority = ((double)(currentHeight - entryHeight) * inChainInputValue) / nModSize;
+    double dResult = entryPriority + deltaPriority;
+    if (dResult < 0) // This should only happen if it was called with a height below entry height
+        dResult = 0;
     return dResult;
 }
 
@@ -160,26 +166,30 @@ void CTxMemPool::UpdateTransactionsFromBlock(const std::vector<uint256> &vHashes
     }
 }
 
-bool CTxMemPool::CalculateMemPoolAncestors(const CTxMemPoolEntry &entry, setEntries &setAncestors, uint64_t limitAncestorCount, uint64_t limitAncestorSize, uint64_t limitDescendantCount, uint64_t limitDescendantSize, std::string &errString)
+bool CTxMemPool::CalculateMemPoolAncestors(const CTxMemPoolEntry &entry, setEntries &setAncestors, uint64_t limitAncestorCount, uint64_t limitAncestorSize, uint64_t limitDescendantCount, uint64_t limitDescendantSize, std::string &errString, bool fSearchForParents /* = true */)
 {
     setEntries parentHashes;
     const CTransaction &tx = entry.GetTx();
 
-    // Get parents of this transaction that are in the mempool
-    // Entry may or may not already be in the mempool, and GetMemPoolParents()
-    // is only valid for entries in the mempool, so we iterate mapTx to find
-    // parents.
-    // TODO: optimize this so that we only check limits and walk
-    // tx.vin when called on entries not already in the mempool.
-    for (unsigned int i = 0; i < tx.vin.size(); i++) {
-        txiter piter = mapTx.find(tx.vin[i].prevout.hash);
-        if (piter != mapTx.end()) {
-            parentHashes.insert(piter);
-            if (parentHashes.size() + 1 > limitAncestorCount) {
-                errString = strprintf("too many unconfirmed parents [limit: %u]", limitAncestorCount);
-                return false;
+    if (fSearchForParents) {
+        // Get parents of this transaction that are in the mempool
+        // GetMemPoolParents() is only valid for entries in the mempool, so we
+        // iterate mapTx to find parents.
+        for (unsigned int i = 0; i < tx.vin.size(); i++) {
+            txiter piter = mapTx.find(tx.vin[i].prevout.hash);
+            if (piter != mapTx.end()) {
+                parentHashes.insert(piter);
+                if (parentHashes.size() + 1 > limitAncestorCount) {
+                    errString = strprintf("too many unconfirmed parents [limit: %u]", limitAncestorCount);
+                    return false;
+                }
             }
         }
+    } else {
+        // If we're not searching for parents, we require this to be an
+        // entry in the mempool already.
+        txiter it = mapTx.iterator_to(entry);
+        parentHashes = GetMemPoolParents(it);
     }
 
     size_t totalSizeWithAncestors = entry.GetTxSize();
@@ -250,7 +260,24 @@ void CTxMemPool::UpdateForRemoveFromMempool(const setEntries &entriesToRemove)
         setEntries setAncestors;
         const CTxMemPoolEntry &entry = *removeIt;
         std::string dummy;
-        CalculateMemPoolAncestors(entry, setAncestors, nNoLimit, nNoLimit, nNoLimit, nNoLimit, dummy);
+        // Since this is a tx that is already in the mempool, we can call CMPA
+        // with fSearchForParents = false.  If the mempool is in a consistent
+        // state, then using true or false should both be correct, though false
+        // should be a bit faster.
+        // However, if we happen to be in the middle of processing a reorg, then
+        // the mempool can be in an inconsistent state.  In this case, the set
+        // of ancestors reachable via mapLinks will be the same as the set of
+        // ancestors whose packages include this transaction, because when we
+        // add a new transaction to the mempool in addUnchecked(), we assume it
+        // has no children, and in the case of a reorg where that assumption is
+        // false, the in-mempool children aren't linked to the in-block tx's
+        // until UpdateTransactionsFromBlock() is called.
+        // So if we're being called during a reorg, ie before
+        // UpdateTransactionsFromBlock() has been called, then mapLinks[] will
+        // differ from the set of mempool parents we'd calculate by searching,
+        // and it's important that we use the mapLinks[] notion of ancestor
+        // transactions as the set of things to update for removal.
+        CalculateMemPoolAncestors(entry, setAncestors, nNoLimit, nNoLimit, nNoLimit, nNoLimit, dummy, false);
         // Note that UpdateAncestorsOf severs the child links that point to
         // removeIt in the entries for the parents of removeIt.  This is
         // fine since we don't need to use the mempool children of any entries
@@ -458,23 +485,26 @@ void CTxMemPool::remove(const CTransaction& origTx, std::list<CTransaction>& rem
     }
 }
 
-void CTxMemPool::removeCoinbaseSpends(const CCoinsViewCache* pcoins, unsigned int nMemPoolHeight)
+void CTxMemPool::removeForReorg(const CCoinsViewCache *pcoins, unsigned int nMemPoolHeight, int flags)
 {
-    // Remove transactions spending a coinbase which are now immature
+    // Remove transactions spending a coinbase which are now immature and no-longer-final transactions
     LOCK(cs);
     std::list<CTransaction> transactionsToRemove;
     for (indexed_transaction_set::const_iterator it = mapTx.begin(); it != mapTx.end(); it++) {
         const CTransaction& tx = it->GetTx();
-        for (const CTxIn& txin : tx.vin) {
-            indexed_transaction_set::const_iterator it2 = mapTx.find(txin.prevout.hash);
-            if (it2 != mapTx.end())
-                continue;
-
-            const CCoins *coins = pcoins->AccessCoins(txin.prevout.hash);
-            if (nCheckFrequency != 0) assert(coins);
-            if (!coins || ((coins->IsCoinBase() || coins->IsCoinStake()) && ((signed long)nMemPoolHeight) - coins->nHeight < (unsigned)Params().GetConsensus().nCoinbaseMaturity)) {
-                transactionsToRemove.push_back(tx);
-                break;
+        if (!CheckFinalTx(tx, flags)) {
+            transactionsToRemove.push_back(tx);
+        } else if (it->GetSpendsCoinbaseOrCoinstake()) {
+            for (const CTxIn& txin : tx.vin) {
+                indexed_transaction_set::const_iterator it2 = mapTx.find(txin.prevout.hash);
+                if (it2 != mapTx.end())
+                    continue;
+                const CCoins *coins = pcoins->AccessCoins(txin.prevout.hash);
+                if (nCheckFrequency != 0) assert(coins);
+                if (!coins || ((coins->IsCoinBase() || coins->IsCoinStake()) && ((signed long)nMemPoolHeight) - coins->nHeight < (unsigned)Params().GetConsensus().nCoinbaseMaturity)) {
+                    transactionsToRemove.push_back(tx);
+                    break;
+                }
             }
         }
     }

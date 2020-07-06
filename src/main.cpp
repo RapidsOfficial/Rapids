@@ -996,11 +996,24 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
         CAmount nValueOut = tx.GetValueOut();
         CAmount nFees = nValueIn - nValueOut;
+        CAmount inChainInputValue = 0;
         double dPriority = 0;
-        if (!hasZcSpendInputs)
-            dPriority = view.GetPriority(tx, chainHeight);
+        bool fSpendsCoinbaseOrCoinstake = false;
+        if (!hasZcSpendInputs) {
+            dPriority = view.GetPriority(tx, chainHeight, inChainInputValue);
 
-        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight, pool.HasNoInputsOf(tx));
+            // Keep track of transactions that spend a coinbase, which we re-scan
+            // during reorgs to ensure COINBASE_MATURITY is still met.
+            for (const CTxIn &txin : tx.vin) {
+                const CCoins *coins = view.AccessCoins(txin.prevout.hash);
+                if (coins->IsCoinBase() || coins->IsCoinStake()) {
+                    fSpendsCoinbaseOrCoinstake = true;
+                    break;
+                }
+            }
+        }
+
+        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight, pool.HasNoInputsOf(tx), inChainInputValue, fSpendsCoinbaseOrCoinstake);
         unsigned int nSize = entry.GetTxSize();
 
         // Don't accept it if it can't get into a block
@@ -1011,7 +1024,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
                     strprintf("%d < %d", nFees, txMinFee));
 
             // Require that free transactions have sufficient priority to be mined in the next block.
-            if (!hasZcSpendInputs && GetBoolArg("-relaypriority", true) && nFees < ::minRelayTxFee.GetFee(nSize) && !AllowFree(view.GetPriority(tx, chainHeight + 1))) {
+            if (!hasZcSpendInputs && GetBoolArg("-relaypriority", true) && nFees < ::minRelayTxFee.GetFee(nSize) && !AllowFree(entry.GetPriority(chainHeight + 1))) {
                 return state.DoS(0, false, REJECT_INSUFFICIENTFEE, "insufficient priority");
             }
 
@@ -1222,9 +1235,20 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
 
         CAmount nValueOut = tx.GetValueOut();
         CAmount nFees = nValueIn - nValueOut;
-        double dPriority = view.GetPriority(tx, chainHeight);
+        CAmount inChainInputValue;
+        double dPriority = view.GetPriority(tx, chainHeight, inChainInputValue);
 
-        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight, mempool.HasNoInputsOf(tx));
+        // Keep track of transactions that spend a coinbase, which we re-scan
+        // during reorgs to ensure COINBASE_MATURITY is still met.
+        bool fSpendsCoinbaseOrCoinstake = false;
+        for (const CTxIn &txin : tx.vin) {
+            const CCoins *coins = view.AccessCoins(txin.prevout.hash);
+            if (coins->IsCoinBase() || coins->IsCoinStake()) {
+                fSpendsCoinbaseOrCoinstake = true;
+                break;
+            }
+        }
+        CTxMemPoolEntry entry(tx, nFees, GetTime(), dPriority, chainHeight, mempool.HasNoInputsOf(tx), inChainInputValue, fSpendsCoinbaseOrCoinstake);
         unsigned int nSize = entry.GetTxSize();
 
         // Don't accept it if it can't get into a block
@@ -1242,7 +1266,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
             if (mempoolRejectFee > 0 && nFees < mempoolRejectFee) {
                 return state.DoS(0, error("%s : insuffiecient fee: %d < %d",
                         __func__, nFees, mempoolRejectFee), REJECT_INSUFFICIENTFEE, "mempool min fee not met", false);
-            } else if (GetBoolArg("-relaypriority", true) && nFees < ::minRelayTxFee.GetFee(nSize) && !AllowFree(view.GetPriority(tx, chainActive.Height() + 1))) {
+            } else if (GetBoolArg("-relaypriority", true) && nFees < ::minRelayTxFee.GetFee(nSize) && !AllowFree(entry.GetPriority(chainActive.Height() + 1))) {
                 // Require that free transactions have sufficient priority to be mined in the next block.
                 return state.DoS(0, false, REJECT_INSUFFICIENTFEE, "insufficient priority");
             }
@@ -2637,12 +2661,11 @@ void static UpdateTip(CBlockIndex* pindexNew)
     }
 }
 
-/** Disconnect chainActive's tip. You want to manually re-limit mempool size after this */
+/** Disconnect chainActive's tip. You probably want to call mempool.removeForReorg and manually re-limit mempool size after this, with cs_main held. */
 bool static DisconnectTip(CValidationState& state)
 {
     CBlockIndex* pindexDelete = chainActive.Tip();
     assert(pindexDelete);
-    mempool.check(pcoinsTip);
     // Read block from disk.
     CBlock block;
     if (!ReadBlockFromDisk(block, pindexDelete))
@@ -2677,8 +2700,6 @@ bool static DisconnectTip(CValidationState& state)
     // UpdateTransactionsFromBlock finds descendants of any transactions in this
     // block that were added back and cleans up the mempool state.
     mempool.UpdateTransactionsFromBlock(vHashUpdate);
-    mempool.removeCoinbaseSpends(pcoinsTip, pindexDelete->nHeight);
-    mempool.check(pcoinsTip);
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev);
     // Let wallets know transactions went from 1-confirmed to
@@ -2702,7 +2723,6 @@ static int64_t nTimePostConnect = 0;
 bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CBlock* pblock, bool fAlreadyChecked)
 {
     assert(pindexNew->pprev == chainActive.Tip());
-    mempool.check(pcoinsTip);
 
     if (pblock == NULL)
         fAlreadyChecked = false;
@@ -2752,7 +2772,6 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     // Remove conflicting transactions from the mempool.
     std::list<CTransaction> txConflicted;
     mempool.removeForBlock(pblock->vtx, pindexNew->nHeight, txConflicted, !IsInitialBlockDownload());
-    mempool.check(pcoinsTip);
     // Update chainActive & related variables.
     UpdateTip(pindexNew);
     // Tell wallet about transactions that went from mempool
@@ -3024,8 +3043,11 @@ static bool ActivateBestChainStep(CValidationState& state, CBlockIndex* pindexMo
         }
     }
 
-    if (fBlocksDisconnected)
+    if (fBlocksDisconnected) {
+        mempool.removeForReorg(pcoinsTip, chainActive.Tip()->nHeight + 1, STANDARD_LOCKTIME_VERIFY_FLAGS);
         mempool.TrimToSize(GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000);
+    }
+    mempool.check(pcoinsTip);
 
     // Callbacks/notifications for a new best chain.
     if (fInvalidFound)
@@ -3140,6 +3162,7 @@ bool InvalidateBlock(CValidationState& state, CBlockIndex* pindex)
         // ActivateBestChain considers blocks already in chainActive
         // unconditionally valid already, so force disconnect away from it.
         if (!DisconnectTip(state)) {
+            mempool.removeForReorg(pcoinsTip, chainActive.Tip()->nHeight + 1, STANDARD_LOCKTIME_VERIFY_FLAGS);
             return false;
         }
     }
@@ -3157,6 +3180,7 @@ bool InvalidateBlock(CValidationState& state, CBlockIndex* pindex)
     }
 
     InvalidChainFound(pindex);
+    mempool.removeForReorg(pcoinsTip, chainActive.Tip()->nHeight + 1, STANDARD_LOCKTIME_VERIFY_FLAGS);
     return true;
 }
 

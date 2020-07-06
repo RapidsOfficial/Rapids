@@ -66,9 +66,11 @@ private:
     CFeeRate feeRate;     //! ... and fee per kB
     bool hasZerocoins{false}; //! ... and checking if it contains zPIV (mints/spends)
     int64_t nTime;        //! Local time when entering the mempool
-    double dPriority;     //! Priority when entering the mempool
-    unsigned int nHeight; //! Chain height when entering the mempool
+    double entryPriority;     //! Priority when entering the mempool
+    unsigned int entryHeight; //! Chain height when entering the mempool
     bool hadNoDependencies; //! Not dependent on any other txs when it entered the mempool
+    CAmount inChainInputValue; //! Sum of all txin values that are already in blockchain
+    bool spendsCoinbaseOrCoinstake; //! keep track of transactions that spend a coinbase or a coinstake
 
     // Information about descendants of this transaction that are in the
     // mempool; if we remove this transaction we must remove all of these
@@ -80,15 +82,21 @@ private:
     CAmount nFeesWithDescendants;  //! ... and total fees (all including us)
 
 public:
-    CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee, int64_t _nTime, double _dPriority, unsigned int _nHeight, bool poolHasNoInputsOf = false);
+    CTxMemPoolEntry(const CTransaction& _tx, const CAmount& _nFee,
+            int64_t _nTime, double _entryPriority, unsigned int _entryHeight,
+            bool poolHasNoInputsOf, CAmount _inChainInputValue, bool _spendsCoinbaseOrCoinstake);
     CTxMemPoolEntry(const CTxMemPoolEntry& other);
 
     const CTransaction& GetTx() const { return this->tx; }
+    /**
+     * Fast calculation of lower bound of current priority as update
+     * from entry priority. Only inputs that were originally in-chain will age.
+     */
     double GetPriority(unsigned int currentHeight) const;
     const CAmount& GetFee() const { return nFee; }
     size_t GetTxSize() const { return nTxSize; }
     int64_t GetTime() const { return nTime; }
-    unsigned int GetHeight() const { return nHeight; }
+    unsigned int GetHeight() const { return entryHeight; }
     bool HasZerocoins() const { return hasZerocoins; }
     bool WasClearAtEntry() const { return hadNoDependencies; }
     size_t DynamicMemoryUsage() const { return nUsageSize; }
@@ -106,6 +114,8 @@ public:
     uint64_t GetCountWithDescendants() const { return nCountWithDescendants; }
     uint64_t GetSizeWithDescendants() const { return nSizeWithDescendants; }
     CAmount GetFeesWithDescendants() const { return nFeesWithDescendants; }
+
+    bool GetSpendsCoinbaseOrCoinstake() const { return spendsCoinbaseOrCoinstake; }
 };
 
 // Helpers for modifying CTxMemPool::mapTx, which is a boost multi_index.
@@ -410,7 +420,7 @@ public:
     bool addUnchecked(const uint256& hash, const CTxMemPoolEntry& entry, bool fCurrentEstimate = true);
     bool addUnchecked(const uint256& hash, const CTxMemPoolEntry &entry, setEntries &setAncestors, bool fCurrentEstimate = true);
     void remove(const CTransaction& tx, std::list<CTransaction>& removed, bool fRecursive = false);
-    void removeCoinbaseSpends(const CCoinsViewCache* pcoins, unsigned int nMemPoolHeight);
+    void removeForReorg(const CCoinsViewCache* pcoins, unsigned int nMemPoolHeight, int flags);
     void removeConflicts(const CTransaction& tx, std::list<CTransaction>& removed);
     void removeForBlock(const std::vector<CTransaction>& vtx, unsigned int nBlockHeight, std::list<CTransaction>& conflicts, bool fCurrentEstimate = true);
     void clear();
@@ -454,8 +464,10 @@ public:
      *  limitDescendantCount = max number of descendants any ancestor can have
      *  limitDescendantSize = max size of descendants any ancestor can have
      *  errString = populated with error reason if any limits are hit
+     *  fSearchForParents = whether to search a tx's vin for in-mempool parents, or
+     *    look up parents from mapLinks. Must be true for entries not in the mempool
      */
-    bool CalculateMemPoolAncestors(const CTxMemPoolEntry &entry, setEntries &setAncestors, uint64_t limitAncestorCount, uint64_t limitAncestorSize, uint64_t limitDescendantCount, uint64_t limitDescendantSize, std::string &errString);
+    bool CalculateMemPoolAncestors(const CTxMemPoolEntry &entry, setEntries &setAncestors, uint64_t limitAncestorCount, uint64_t limitAncestorSize, uint64_t limitDescendantCount, uint64_t limitDescendantSize, std::string &errString, bool fSearchForParents = true);
 
     /** The minimum fee to get into the mempool, which may itself not be enough
      *  for larger-sized transactions.

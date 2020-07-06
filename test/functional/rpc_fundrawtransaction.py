@@ -375,7 +375,7 @@ class RawTransactionsTest(PivxTestFramework):
         self.nodes[1].getrawchangeaddress()
         utx = get_unspent(self.nodes[1].listunspent(), DecimalAmt(250.0))
         inputs = [{'txid': utx['txid'], 'vout': utx['vout']}]
-        outputs = {self.nodes[0].getnewaddress(): 250.0 - float(self.test_no_change_fee) - float(self.fee_tolerance)}
+        outputs = {self.nodes[0].getnewaddress(): round(250.0 - float(self.test_no_change_fee) - float(self.fee_tolerance), 8)}
         rawtx = self.nodes[1].createrawtransaction(inputs, outputs)
         # fund a transaction that does not require a new key for the change output
         self.nodes[1].fundrawtransaction(rawtx)
@@ -413,7 +413,7 @@ class RawTransactionsTest(PivxTestFramework):
         self.log.info("test with many inputs (%s)" % info)
 
         # Empty node1, send some small coins from node0 to node1.
-        self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), float(self.nodes[1].getbalance()) - 0.001)
+        self.nodes[1].sendtoaddress(self.nodes[0].getnewaddress(), round((float(self.nodes[1].getbalance()) - 0.001), 8))
         self.nodes[1].generate(1)
         self.sync_all()
 

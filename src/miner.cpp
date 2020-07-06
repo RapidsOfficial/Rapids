@@ -508,7 +508,7 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet)
     return CreateNewBlock(scriptPubKey, pwallet, false);
 }
 
-bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
+bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, Optional<CReserveKey>& reservekey)
 {
     LogPrintf("%s\n", pblock->ToString());
     LogPrintf("generated %s\n", FormatMoney(pblock->vtx[0].vout[0].nValue));
@@ -521,7 +521,8 @@ bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, CReserveKey& reservekey)
     }
 
     // Remove key from key pool
-    reservekey.KeepKey();
+    if (reservekey)
+        reservekey->KeepKey();
 
     // Track how many getdata requests this block gets
     {
@@ -568,7 +569,12 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
     const int64_t nSpacingMillis = consensus.nTargetSpacing * 1000;
 
     // Each thread has its own key and counter
-    CReserveKey reservekey(pwallet);
+    Optional<CReserveKey> opReservekey{nullopt};
+    if (!fProofOfStake) {
+        opReservekey = CReserveKey(pwallet);
+
+    }
+
     unsigned int nExtraNonce = 0;
 
     while (fGenerateBitcoins || fProofOfStake) {
@@ -615,7 +621,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
         std::unique_ptr<CBlockTemplate> pblocktemplate((fProofOfStake ?
                                                         CreateNewBlock(CScript(), pwallet, fProofOfStake) :
-                                                        CreateNewBlockWithKey(reservekey, pwallet)));
+                                                        CreateNewBlockWithKey(*opReservekey, pwallet)));
         if (!pblocktemplate.get()) continue;
         CBlock* pblock = &pblocktemplate->block;
 
@@ -623,7 +629,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
         if (fProofOfStake) {
             LogPrintf("%s : proof-of-stake block was signed %s \n", __func__, pblock->GetHash().ToString().c_str());
             SetThreadPriority(THREAD_PRIORITY_NORMAL);
-            if (!ProcessBlockFound(pblock, *pwallet, reservekey)) {
+            if (!ProcessBlockFound(pblock, *pwallet, opReservekey)) {
                 LogPrintf("%s: New block orphaned\n", __func__);
                 continue;
             }
@@ -653,7 +659,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
                     SetThreadPriority(THREAD_PRIORITY_NORMAL);
                     LogPrintf("%s:\n", __func__);
                     LogPrintf("proof-of-work found  \n  hash: %s  \ntarget: %s\n", hash.GetHex(), hashTarget.GetHex());
-                    ProcessBlockFound(pblock, *pwallet, reservekey);
+                    ProcessBlockFound(pblock, *pwallet, opReservekey);
                     SetThreadPriority(THREAD_PRIORITY_LOWEST);
 
                     // In regression test mode, stop mining after a block is found. This
