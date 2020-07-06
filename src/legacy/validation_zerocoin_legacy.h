@@ -10,5 +10,6 @@
 #include "txdb.h" // for the zerocoinDB implementation.
 
 bool DisconnectZerocoinTx(const CTransaction& tx, CAmount& nValueIn, CZerocoinDB* zerocoinDB);
+void DataBaseAccChecksum(CBlockIndex* pindex, bool fWrite);
 
 #endif //VALIDATION_ZEROCOIN_LEGACY_H
