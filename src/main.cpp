@@ -44,6 +44,7 @@
 #include "zpivchain.h"
 
 #include "invalid.h"
+#include "legacy/validation_zerocoin_legacy.h"
 #include "libzerocoin/Denominations.h"
 #include "masternode-sync.h"
 #include "zpiv/zerocoin.h"
@@ -1994,64 +1995,10 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
     for (int i = block.vtx.size() - 1; i >= 0; i--) {
         const CTransaction& tx = block.vtx[i];
 
-        /** UNDO ZEROCOIN DATABASING
-         * note we only undo zerocoin databasing in the following statement, value to and from PIVX
-         * addresses should still be handled by the typical bitcoin based undo code
-         * */
-        if (tx.ContainsZerocoins()) {
-            libzerocoin::ZerocoinParams *params = Params().GetConsensus().Zerocoin_Params(false);
-            if (tx.HasZerocoinSpendInputs()) {
-                //erase all zerocoinspends in this transaction
-                for (const CTxIn &txin : tx.vin) {
-                    bool isPublicSpend = txin.IsZerocoinPublicSpend();
-                    if (txin.scriptSig.IsZerocoinSpend() || isPublicSpend) {
-                        CBigNum serial;
-                        if (isPublicSpend) {
-                            PublicCoinSpend publicSpend(params);
-                            CValidationState state;
-                            if (!ZPIVModule::ParseZerocoinPublicSpend(txin, tx, state, publicSpend)) {
-                                return error("Failed to parse public spend");
-                            }
-                            serial = publicSpend.getCoinSerialNumber();
-                            nValueIn += publicSpend.getDenomination() * COIN;
-                        } else {
-                            libzerocoin::CoinSpend spend = TxInToZerocoinSpend(txin);
-                            serial = spend.getCoinSerialNumber();
-                            nValueIn += spend.getDenomination() * COIN;
-                        }
+        if (!DisconnectZerocoinTx(tx, nValueIn, zerocoinDB))
+            return false;
 
-                        if (!zerocoinDB->EraseCoinSpend(serial))
-                            return error("failed to erase spent zerocoin in block");
-
-                        //if this was our spend, then mark it unspent now
-                        if (pwalletMain) {
-                            if (pwalletMain->IsMyZerocoinSpend(serial)) {
-                                if (!pwalletMain->SetMintUnspent(serial))
-                                    LogPrintf("%s: failed to automatically reset mint", __func__);
-                            }
-                        }
-                    }
-
-                }
-            }
-
-            if (tx.HasZerocoinMintOutputs()) {
-                //erase all zerocoinmints in this transaction
-                for (const CTxOut &txout : tx.vout) {
-                    if (txout.scriptPubKey.empty() || !txout.IsZerocoinMint())
-                        continue;
-
-                    libzerocoin::PublicCoin pubCoin(params);
-                    if (!TxOutToPublicCoin(txout, pubCoin, state))
-                        return error("DisconnectBlock(): TxOutToPublicCoin() failed");
-
-                    if (!zerocoinDB->EraseCoinMint(pubCoin.getValue()))
-                        return error("DisconnectBlock(): Failed to erase coin mint");
-                }
-            }
-        }
         nValueOut += tx.GetValueOut();
-
         uint256 hash = tx.GetHash();
 
 
