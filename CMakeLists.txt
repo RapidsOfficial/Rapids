@@ -296,6 +296,7 @@ set(SERVER_SOURCES
         ./src/httpserver.cpp
         ./src/init.cpp
         ./src/dbwrapper.cpp
+        ./src/legacy/validation_zerocoin_legacy.cpp
         ./src/main.cpp
         ./src/merkleblock.cpp
         ./src/miner.cpp
