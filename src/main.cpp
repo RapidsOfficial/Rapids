@@ -2052,36 +2052,38 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
             outs->Clear();
         }
 
+        // not coinbases or zerocoinspend because they dont have traditional inputs
+        if (tx.IsCoinBase() || tx.HasZerocoinSpendInputs())
+            continue;
+
         // restore inputs
-        if (!tx.IsCoinBase() && !tx.HasZerocoinSpendInputs()) { // not coinbases or zerocoinspend because they dont have traditional inputs
-            const CTxUndo& txundo = blockUndo.vtxundo[i - 1];
-            if (txundo.vprevout.size() != tx.vin.size())
-                return error("DisconnectBlock() : transaction and undo data inconsistent - txundo.vprevout.siz=%d tx.vin.siz=%d", txundo.vprevout.size(), tx.vin.size());
-            for (unsigned int j = tx.vin.size(); j-- > 0;) {
-                const COutPoint& out = tx.vin[j].prevout;
-                const CTxInUndo& undo = txundo.vprevout[j];
-                CCoinsModifier coins = view.ModifyCoins(out.hash);
-                if (undo.nHeight != 0) {
-                    // undo data contains height: this is the last output of the prevout tx being spent
-                    if (!coins->IsPruned())
-                        fClean = fClean && error("DisconnectBlock() : undo data overwriting existing transaction");
-                    coins->Clear();
-                    coins->fCoinBase = undo.fCoinBase;
-                    coins->nHeight = undo.nHeight;
-                    coins->nVersion = undo.nVersion;
-                } else {
-                    if (coins->IsPruned())
-                        fClean = fClean && error("DisconnectBlock() : undo data adding output to missing transaction");
-                }
-                if (coins->IsAvailable(out.n))
-                    fClean = fClean && error("DisconnectBlock() : undo data overwriting existing output");
-                if (coins->vout.size() < out.n + 1)
-                    coins->vout.resize(out.n + 1);
-                coins->vout[out.n] = undo.txout;
+        const CTxUndo& txundo = blockUndo.vtxundo[i - 1];
+        if (txundo.vprevout.size() != tx.vin.size())
+            return error("DisconnectBlock() : transaction and undo data inconsistent - txundo.vprevout.siz=%d tx.vin.siz=%d", txundo.vprevout.size(), tx.vin.size());
+        for (unsigned int j = tx.vin.size(); j-- > 0;) {
+            const COutPoint& out = tx.vin[j].prevout;
+            const CTxInUndo& undo = txundo.vprevout[j];
+            CCoinsModifier coins = view.ModifyCoins(out.hash);
+            if (undo.nHeight != 0) {
+                // undo data contains height: this is the last output of the prevout tx being spent
+                if (!coins->IsPruned())
+                    fClean = fClean && error("DisconnectBlock() : undo data overwriting existing transaction");
+                coins->Clear();
+                coins->fCoinBase = undo.fCoinBase;
+                coins->nHeight = undo.nHeight;
+                coins->nVersion = undo.nVersion;
+            } else {
+                if (coins->IsPruned())
+                    fClean = fClean && error("DisconnectBlock() : undo data adding output to missing transaction");
             }
+            if (coins->IsAvailable(out.n))
+                fClean = fClean && error("DisconnectBlock() : undo data overwriting existing output");
+            if (coins->vout.size() < out.n + 1)
+                coins->vout.resize(out.n + 1);
+            coins->vout[out.n] = undo.txout;
         }
 
-        if (!tx.HasZerocoinSpendInputs() && !tx.IsCoinBase() && view.HaveInputs(tx))
+        if (view.HaveInputs(tx))
             nValueIn += view.GetValueIn(tx);
     }
 
