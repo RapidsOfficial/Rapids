@@ -4,8 +4,6 @@
 
 #include "qt/pivx/sendchangeaddressdialog.h"
 #include "qt/pivx/forms/ui_sendchangeaddressdialog.h"
-
-#include "coincontrol.h"
 #include "qt/pivx/qtutils.h"
 
 SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* model) :
@@ -13,6 +11,9 @@ SendChangeAddressDialog::SendChangeAddressDialog(QWidget* parent, WalletModel* m
     walletModel(model),
     ui(new Ui::SendChangeAddressDialog)
 {
+    // Change address
+    dest = CNoDestination();
+
     if (!walletModel) {
         throw std::runtime_error(strprintf("%s: No wallet model set", __func__));
     }
@@ -46,9 +47,9 @@ void SendChangeAddressDialog::setAddress(QString address)
     ui->btnCancel->setText(tr("RESET"));
 }
 
-QString SendChangeAddressDialog::getAddress() const
+CTxDestination SendChangeAddressDialog::getDestination() const
 {
-    return ui->lineEditAddress->text();
+    return dest;
 }
 
 void SendChangeAddressDialog::showEvent(QShowEvent *event)
@@ -61,18 +62,27 @@ void SendChangeAddressDialog::reset()
     if (!ui->lineEditAddress->text().isEmpty()) {
         ui->lineEditAddress->clear();
         ui->btnCancel->setText(tr("CANCEL"));
-        CoinControlDialog::coinControl->destChange = CNoDestination();
     }
     close();
 }
 
 void SendChangeAddressDialog::accept()
 {
-    // validate address
-    if (!walletModel->validateAddress(ui->lineEditAddress->text())) {
-        inform(tr("Invalid address"));
-    } else {
+    if (ui->lineEditAddress->text().isEmpty()) {
+        // no custom change address set
+        dest = CNoDestination();
         QDialog::accept();
+    } else {
+        // validate address
+        bool isStakingAddr;
+        dest = DecodeDestination(ui->lineEditAddress->text().toStdString(), isStakingAddr);
+        if (!IsValidDestination(dest)) {
+            inform(tr("Invalid address"));
+        } else if (isStakingAddr) {
+            inform(tr("Cannot use cold staking addresses for change"));
+        } else {
+            QDialog::accept();
+        }
     }
 }
 

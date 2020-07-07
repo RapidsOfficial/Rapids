@@ -197,11 +197,14 @@ ColdStakingWidget::ColdStakingWidget(PIVXGUI* parent) :
     connect(ui->listView, &QListView::clicked, this, &ColdStakingWidget::handleAddressClicked);
     connect(ui->listViewStakingAddress, &QListView::clicked, this, &ColdStakingWidget::handleMyColdAddressClicked);
     connect(ui->btnMyStakingAddresses, &OptionButton::clicked, this, &ColdStakingWidget::onMyStakingAddressesClicked);
+
+    coinControlDialog = new CoinControlDialog(nullptr, true);
 }
 
 void ColdStakingWidget::loadWalletModel()
 {
     if (walletModel) {
+        coinControlDialog->setModel(walletModel);
         sendMultiRow->setWalletModel(walletModel);
         txModel = walletModel->getTransactionTableModel();
         csModel = new ColdStakingModel(walletModel, txModel, walletModel->getAddressTableModel(), this);
@@ -474,7 +477,7 @@ void ColdStakingWidget::onSendClicked()
 
     // Prepare transaction for getting txFee earlier (exlude delegated coins)
     WalletModelTransaction currentTransaction(recipients);
-    WalletModel::SendCoinsReturn prepareStatus = walletModel->prepareTransaction(currentTransaction, CoinControlDialog::coinControl, false);
+    WalletModel::SendCoinsReturn prepareStatus = walletModel->prepareTransaction(currentTransaction, coinControlDialog->coinControl, false);
 
     // process prepareStatus and on error generate message shown to user
     GuiTransactionsUtils::ProcessSendCoinsReturnAndInform(
@@ -520,8 +523,8 @@ void ColdStakingWidget::clearAll()
 {
     if (sendMultiRow) sendMultiRow->clear();
     ui->lineEditOwnerAddress->clear();
-    if (CoinControlDialog::coinControl) {
-        CoinControlDialog::coinControl->SetNull();
+    if (coinControlDialog->coinControl) {
+        coinControlDialog->coinControl->SetNull();
         ui->btnCoinControl->setActive(false);
     }
 }
@@ -530,15 +533,10 @@ void ColdStakingWidget::onCoinControlClicked()
 {
     if (isInDelegation) {
         if (walletModel->getBalance() > 0) {
-            if (!coinControlDialog) {
-                coinControlDialog = new CoinControlDialog(nullptr, true);
-                coinControlDialog->setModel(walletModel);
-            } else {
-                coinControlDialog->refreshDialog();
-            }
+            coinControlDialog->refreshDialog();
             setCoinControlPayAmounts();
             coinControlDialog->exec();
-            ui->btnCoinControl->setActive(CoinControlDialog::coinControl->HasSelected());
+            ui->btnCoinControl->setActive(coinControlDialog->coinControl->HasSelected());
         } else {
             inform(tr("You don't have any %1 to select.").arg(CURRENCY_UNIT.c_str()));
         }
@@ -834,4 +832,5 @@ ColdStakingWidget::~ColdStakingWidget()
     ui->rightContainer->removeItem(spacerDiv);
     delete spacerDiv;
     delete ui;
+    delete coinControlDialog;
 }

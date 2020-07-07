@@ -57,7 +57,7 @@ public:
 
     static QString getPriorityLabel(double dPriority, double mempoolEstimatePriority);
 
-    static CCoinControl* coinControl;
+    CCoinControl* coinControl;
 
 private:
     Ui::CoinControlDialog* ui;
