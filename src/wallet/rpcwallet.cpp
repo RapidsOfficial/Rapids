@@ -306,7 +306,7 @@ UniValue listlabels(const JSONRPCRequest& request)
             "\nReturns the list of all labels, or labels that are assigned to addresses with a specific purpose.\n"
 
             "\nArguments:\n"
-            "1. \"purpose\"    (string, optional) Address purpose to list labels for ('send','receive'). An empty string is the same as not providing this argument.\n"
+            "1. \"purpose\"    (string, optional) Address purpose to list labels for ('send','receive', 'delegable', 'delegator', 'coldstaking', 'coldstaking_send', 'refund'). An empty string is the same as not providing this argument.\n"
 
             "\nResult:\n"
             "[               (json array of string)\n"
@@ -755,14 +755,13 @@ UniValue setlabel(const JSONRPCRequest& request)
     std::string label = LabelFromValue(request.params[1]);
 
     if (IsMine(*pwalletMain, dest)) {
-        pwalletMain->SetAddressBook(dest, label, AddressBook::AddressBookPurpose::RECEIVE);
         if (request.strMethod == "setaccount" && old_label != label && dest == GetLabelDestination(pwalletMain, old_label)) {
             // for setaccount, call GetLabelDestination so a new receive address is created for the old account
             GetLabelDestination(pwalletMain, old_label, true);
         }
-    } else {
-        pwalletMain->SetAddressBook(dest, label, AddressBook::AddressBookPurpose::SEND);
     }
+
+    pwalletMain->SetAddressBook(dest, label, "");
 
     // Detect when there are no addresses using this label.
     // If so, delete the account record for it. Labels, unlike addresses, can be deleted,
@@ -1505,8 +1504,8 @@ UniValue getcoldstakingbalance(const JSONRPCRequest& request)
         if (request.params.size() == 0)
             return ValueFromAmount(pwalletMain->GetColdStakingBalance());
 
-        std::string strAccount = request.params[0].get_str();
-        return ValueFromAmount(pwalletMain->GetLegacyBalance(ISMINE_COLD, 1, &strAccount));
+        const std::string* strAccount = request.params[0].get_str() != "*" ? &request.params[0].get_str() : nullptr;
+        return ValueFromAmount(pwalletMain->GetLegacyBalance(ISMINE_COLD, 1, strAccount));
     }
 
     return ValueFromAmount(pwalletMain->GetColdStakingBalance());
@@ -1543,8 +1542,8 @@ UniValue getdelegatedbalance(const JSONRPCRequest& request)
         if (request.params.size() == 0)
             return ValueFromAmount(pwalletMain->GetDelegatedBalance());
 
-        std::string strAccount = request.params[0].get_str();
-        return ValueFromAmount(pwalletMain->GetLegacyBalance(ISMINE_SPENDABLE_DELEGATED, 1, &strAccount));
+        const std::string* strAccount = request.params[0].get_str() != "*" ? &request.params[0].get_str() : nullptr;
+        return ValueFromAmount(pwalletMain->GetLegacyBalance(ISMINE_SPENDABLE_DELEGATED, 1, strAccount));
     }
 
     return ValueFromAmount(pwalletMain->GetDelegatedBalance());
