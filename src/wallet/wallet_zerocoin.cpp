@@ -94,6 +94,57 @@ bool CWallet::GetDeterministicSeed(const uint256& hashSeed, uint256& seedOut)
     return error("%s: Failed to %s\n", __func__, strErr);
 }
 
+void CWallet::doZPivRescan(const CBlockIndex* pindex, const CBlock& block,
+        std::set<uint256>& setAddedToWallet, const Consensus::Params& consensus, bool fCheckZPIV)
+{
+    //If this is a zapwallettx, need to read zpiv
+    if (fCheckZPIV && consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC)) {
+        std::list<CZerocoinMint> listMints;
+        BlockToZerocoinMintList(block, listMints, true);
+        CWalletDB walletdb(strWalletFile);
+
+        for (auto& m : listMints) {
+            if (IsMyMint(m.GetValue())) {
+                LogPrint(BCLog::LEGACYZC, "%s: found mint\n", __func__);
+                UpdateMint(m.GetValue(), pindex->nHeight, m.GetTxHash(), m.GetDenomination());
+
+                // Add the transaction to the wallet
+                for (auto& tx : block.vtx) {
+                    uint256 txid = tx.GetHash();
+                    if (setAddedToWallet.count(txid) || mapWallet.count(txid))
+                        continue;
+                    if (txid == m.GetTxHash()) {
+                        CWalletTx wtx(this, tx);
+                        wtx.nTimeReceived = block.GetBlockTime();
+                        wtx.SetMerkleBranch(block);
+                        AddToWallet(wtx, false, &walletdb);
+                        setAddedToWallet.insert(txid);
+                    }
+                }
+
+                //Check if the mint was ever spent
+                int nHeightSpend = 0;
+                uint256 txidSpend;
+                CTransaction txSpend;
+                if (IsSerialInBlockchain(GetSerialHash(m.GetSerialNumber()), nHeightSpend, txidSpend, txSpend)) {
+                    if (setAddedToWallet.count(txidSpend) || mapWallet.count(txidSpend))
+                        continue;
+
+                    CWalletTx wtx(this, txSpend);
+                    CBlockIndex* pindexSpend = chainActive[nHeightSpend];
+                    CBlock blockSpend;
+                    if (ReadBlockFromDisk(blockSpend, pindexSpend))
+                        wtx.SetMerkleBranch(blockSpend);
+
+                    wtx.nTimeReceived = pindexSpend->nTime;
+                    AddToWallet(wtx, false, &walletdb);
+                    setAddedToWallet.emplace(txidSpend);
+                }
+            }
+        }
+    }
+}
+
 //- ZC Mints (Only for regtest)
 
 std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector<CDeterministicMint>& vDMints, const CCoinControl* coinControl)
