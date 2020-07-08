@@ -200,16 +200,13 @@ std::string CRPCTable::help(std::string strCommand) const
     std::set<rpcfn_type> setDone;
     std::vector<std::pair<std::string, const CRPCCommand*> > vCommands;
 
-    for (std::map<std::string, const CRPCCommand*>::const_iterator mi = mapCommands.begin(); mi != mapCommands.end(); ++mi)
-        vCommands.push_back(std::make_pair(mi->second->category + mi->first, mi->second));
+    for (const auto& entry : mapCommands)
+        vCommands.push_back(std::make_pair(entry.second->category + entry.first, entry.second));
     std::sort(vCommands.begin(), vCommands.end());
 
-    for (const PAIRTYPE(std::string, const CRPCCommand*) & command : vCommands) {
+    for (const std::pair<std::string, const CRPCCommand*>& command : vCommands) {
         const CRPCCommand* pcmd = command.second;
         std::string strMethod = pcmd->name;
-        // We already filter duplicates, but these deprecated screw up the sort order
-        if (strMethod.find("label") != std::string::npos)
-            continue;
         if ((strCommand != "" || pcmd->category == "hidden") && strMethod != strCommand)
             continue;
         try {
