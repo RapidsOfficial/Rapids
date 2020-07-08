@@ -175,31 +175,6 @@ UniValue masternodecurrent (const UniValue& params, bool fHelp)
     throw std::runtime_error("unknown");
 }
 
-UniValue masternodedebug (const UniValue& params, bool fHelp)
-{
-    if (fHelp || (params.size() != 0))
-        throw std::runtime_error(
-            "masternodedebug\n"
-            "\nPrint masternode status\n"
-
-            "\nResult:\n"
-            "\"status\"     (string) Masternode status message\n"
-
-            "\nExamples:\n" +
-            HelpExampleCli("masternodedebug", "") + HelpExampleRpc("masternodedebug", ""));
-
-    if (activeMasternode.status != ACTIVE_MASTERNODE_INITIAL || !masternodeSync.IsSynced())
-        return activeMasternode.GetStatus();
-
-    CTxIn vin = CTxIn();
-    CPubKey pubkey;
-    CKey key;
-    if (!activeMasternode.GetMasterNodeVin(vin, pubkey, key))
-        throw std::runtime_error("Missing masternode input, please look at the documentation for instructions on masternode creation\n");
-    else
-        return activeMasternode.GetStatus();
-}
-
 bool StartMasternodeEntry(UniValue& statusObjRet, CMasternodeBroadcast& mnbRet, bool& fSuccessRet, const CMasternodeConfig::CMasternodeEntry& mne, std::string& errorMessage, std::string strCommand = "")
 {
     int nIndex;
@@ -214,7 +189,7 @@ bool StartMasternodeEntry(UniValue& statusObjRet, CMasternodeBroadcast& mnbRet, 
         if (strCommand == "disabled" && pmn->IsEnabled()) return false;
     }
 
-    fSuccessRet = activeMasternode.CreateBroadcast(mne.getIp(), mne.getPrivKey(), mne.getTxHash(), mne.getOutputIndex(), errorMessage, mnbRet);
+    fSuccessRet = CMasternodeBroadcast::Create(mne.getIp(), mne.getPrivKey(), mne.getTxHash(), mne.getOutputIndex(), errorMessage, mnbRet);
 
     statusObjRet.push_back(Pair("alias", mne.getAlias()));
     statusObjRet.push_back(Pair("result", fSuccessRet ? "success" : "failed"));
@@ -311,14 +286,13 @@ UniValue startmasternode (const UniValue& params, bool fHelp)
     if (strCommand == "local") {
         if (!fMasterNode) throw std::runtime_error("you must set masternode=1 in the configuration\n");
 
-        if (activeMasternode.status != ACTIVE_MASTERNODE_STARTED) {
-            activeMasternode.status = ACTIVE_MASTERNODE_INITIAL; // TODO: consider better way
-            activeMasternode.ManageStatus();
+        if (activeMasternode.GetStatus() != ACTIVE_MASTERNODE_STARTED) {
+            activeMasternode.ResetStatus();
             if (fLock)
                 pwalletMain->Lock();
         }
 
-        return activeMasternode.GetStatus();
+        return activeMasternode.GetStatusMessage();
     }
 
     if (strCommand == "all" || strCommand == "many" || strCommand == "missing" || strCommand == "disabled") {
@@ -429,7 +403,8 @@ UniValue getmasternodeoutputs (const UniValue& params, bool fHelp)
             HelpExampleCli("getmasternodeoutputs", "") + HelpExampleRpc("getmasternodeoutputs", ""));
 
     // Find possible candidates
-    std::vector<COutput> possibleCoins = activeMasternode.SelectCoinsMasternode();
+    std::vector<COutput> possibleCoins;
+    pwalletMain->AvailableCoins(&possibleCoins, nullptr, false, false, ONLY_10000);
 
     UniValue ret(UniValue::VARR);
     for (COutput& out : possibleCoins) {
@@ -514,7 +489,7 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
             "\nResult:\n"
             "{\n"
             "  \"txhash\": \"xxxx\",      (string) Collateral transaction hash\n"
-            "  \"outputidx\": n,        (numeric) Collateral transaction output index number\n"
+            "  \"outputidx\": n,          (numeric) Collateral transaction output index number\n"
             "  \"netaddr\": \"xxxx\",     (string) Masternode network address\n"
             "  \"addr\": \"xxxx\",        (string) PIVX address for masternode payments\n"
             "  \"status\": \"xxxx\",      (string) Masternode status\n"
@@ -524,22 +499,26 @@ UniValue getmasternodestatus (const UniValue& params, bool fHelp)
             "\nExamples:\n" +
             HelpExampleCli("getmasternodestatus", "") + HelpExampleRpc("getmasternodestatus", ""));
 
-    if (!fMasterNode) throw std::runtime_error("This is not a masternode");
+    if (!fMasterNode)
+        throw JSONRPCError(RPC_MISC_ERROR, _("This is not a masternode."));
 
-    CMasternode* pmn = mnodeman.Find(activeMasternode.vin);
+    if (activeMasternode.vin == nullopt)
+        throw JSONRPCError(RPC_MISC_ERROR, _("Active Masternode not initialized."));
+
+    CMasternode* pmn = mnodeman.Find(*(activeMasternode.vin));
 
     if (pmn) {
         UniValue mnObj(UniValue::VOBJ);
-        mnObj.push_back(Pair("txhash", activeMasternode.vin.prevout.hash.ToString()));
-        mnObj.push_back(Pair("outputidx", (uint64_t)activeMasternode.vin.prevout.n));
+        mnObj.push_back(Pair("txhash", activeMasternode.vin->prevout.hash.ToString()));
+        mnObj.push_back(Pair("outputidx", (uint64_t)activeMasternode.vin->prevout.n));
         mnObj.push_back(Pair("netaddr", activeMasternode.service.ToString()));
         mnObj.push_back(Pair("addr", EncodeDestination(pmn->pubKeyCollateralAddress.GetID())));
-        mnObj.push_back(Pair("status", activeMasternode.status));
-        mnObj.push_back(Pair("message", activeMasternode.GetStatus()));
+        mnObj.push_back(Pair("status", activeMasternode.GetStatus()));
+        mnObj.push_back(Pair("message", activeMasternode.GetStatusMessage()));
         return mnObj;
     }
     throw std::runtime_error("Masternode not found in the list of available masternodes. Current status: "
-                        + activeMasternode.GetStatus());
+                        + activeMasternode.GetStatusMessage());
 }
 
 UniValue getmasternodewinners (const UniValue& params, bool fHelp)

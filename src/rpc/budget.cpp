@@ -279,6 +279,13 @@ UniValue mnbudgetvote(const UniValue& params, bool fHelp)
     UniValue resultsObj(UniValue::VARR);
 
     if (strCommand == "local") {
+        // local node must be a masternode
+        if (!fMasterNode)
+            throw JSONRPCError(RPC_MISC_ERROR, _("This is not a masternode. 'local' option disabled."));
+
+        if (activeMasternode.vin == nullopt)
+            throw JSONRPCError(RPC_MISC_ERROR, _("Active Masternode not initialized."));
+
         CPubKey pubKeyMasternode;
         CKey keyMasternode;
 
@@ -294,17 +301,17 @@ UniValue mnbudgetvote(const UniValue& params, bool fHelp)
                 break;
             }
 
-            CMasternode* pmn = mnodeman.Find(activeMasternode.vin);
+            CMasternode* pmn = mnodeman.Find(*(activeMasternode.vin));
             if (pmn == NULL) {
                 failed++;
                 statusObj.push_back(Pair("node", "local"));
                 statusObj.push_back(Pair("result", "failed"));
-                statusObj.push_back(Pair("error", "Failure to find masternode in list : " + activeMasternode.vin.ToString()));
+                statusObj.push_back(Pair("error", "Failure to find masternode in list : " + activeMasternode.vin->ToString()));
                 resultsObj.push_back(statusObj);
                 break;
             }
 
-            CBudgetVote vote(activeMasternode.vin, hash, nVote);
+            CBudgetVote vote(*(activeMasternode.vin), hash, nVote);
             if (!vote.Sign(keyMasternode, pubKeyMasternode)) {
                 failed++;
                 statusObj.push_back(Pair("node", "local"));
@@ -758,7 +765,7 @@ UniValue mnfinalbudget(const UniValue& params, bool fHelp)
 
             "\nAvailable commands:\n"
             "  vote-many   - Vote on a finalized budget\n"
-            "  vote        - Vote on a finalized budget\n"
+            "  vote        - Vote on a finalized budget with local masternode\n"
             "  show        - Show existing finalized budgets\n"
             "  getvotes     - Get vote information for each finalized budget\n");
 
@@ -834,8 +841,14 @@ UniValue mnfinalbudget(const UniValue& params, bool fHelp)
     }
 
     if (strCommand == "vote") {
+        if (!fMasterNode)
+            throw JSONRPCError(RPC_MISC_ERROR, _("This is not a masternode. 'local' option disabled."));
+
+        if (activeMasternode.vin == nullopt)
+            throw JSONRPCError(RPC_MISC_ERROR, _("Active Masternode not initialized."));
+
         if (params.size() != 2)
-            throw std::runtime_error("Correct usage is 'mnfinalbudget vote BUDGET_HASH'");
+            throw JSONRPCError(RPC_INVALID_PARAMETER, _("Correct usage is 'mnfinalbudget vote BUDGET_HASH'"));
 
         std::string strHash = params[1].get_str();
         uint256 hash(uint256S(strHash));
@@ -846,12 +859,12 @@ UniValue mnfinalbudget(const UniValue& params, bool fHelp)
         if (!CMessageSigner::GetKeysFromSecret(strMasterNodePrivKey, keyMasternode, pubKeyMasternode))
             return "Error upon calling GetKeysFromSecret";
 
-        CMasternode* pmn = mnodeman.Find(activeMasternode.vin);
+        CMasternode* pmn = mnodeman.Find(*(activeMasternode.vin));
         if (pmn == NULL) {
-            return "Failure to find masternode in list : " + activeMasternode.vin.ToString();
+            return "Failure to find masternode in list : " + activeMasternode.vin->ToString();
         }
 
-        CFinalizedBudgetVote vote(activeMasternode.vin, hash);
+        CFinalizedBudgetVote vote(*(activeMasternode.vin), hash);
         if (!vote.Sign(keyMasternode, pubKeyMasternode)) {
             return "Failure to sign.";
         }
