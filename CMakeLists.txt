@@ -124,144 +124,16 @@ ExternalProject_Add (
         INSTALL_COMMAND ""
         )
 
-set(libleveldb_a_headers
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/atomic_pointer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port_example.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port_posix.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/win/stdint.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port_win.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/thread_annotations.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/db.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/options.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/comparator.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/filter_policy.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/slice.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/table_builder.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/env.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/c.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/iterator.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/cache.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/dumpfile.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/table.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/write_batch.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include/leveldb/status.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/log_format.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/memtable.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/version_set.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/write_batch_internal.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/filename.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/version_edit.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/dbformat.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/builder.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/log_writer.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/db_iter.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/skiplist.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/db_impl.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/table_cache.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/snapshot.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/log_reader.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/filter_block.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/block_builder.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/block.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/two_level_iterator.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/merger.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/format.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/iterator_wrapper.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/crc32c.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/env_posix_test_helper.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/arena.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/random.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/posix_logger.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/hash.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/histogram.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/coding.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/testutil.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/mutexlock.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/logging.h
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/testharness.h
-        )
+set(CRC32C_BUILD_TESTS OFF CACHE BOOL "Build CRC32C's unit tests" FORCE)
+set(CRC32C_BUILD_BENCHMARKS OFF CACHE BOOL "Build CRC32C's benchmarks" FORCE)
+set(CRC32C_USE_GLOG OFF CACHE BOOL "Build CRC32C's tests with Google Logging" FORCE)
+set(CRC32C_INSTALL OFF CACHE BOOL "Install CRC32C's header and library" FORCE)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/crc32c)
 
-set(libleveldb_a_sources
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/builder.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/c.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/dbformat.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/db_impl.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/db_iter.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/dumpfile.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/filename.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/log_reader.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/log_writer.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/memtable.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/repair.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/table_cache.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/version_edit.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/version_set.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/db/write_batch.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/block_builder.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/block.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/filter_block.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/format.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/iterator.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/merger.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/table_builder.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/table.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/table/two_level_iterator.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/arena.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/bloom.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/cache.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/coding.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/comparator.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/crc32c.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/env.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/env_posix.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/filter_policy.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/hash.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/histogram.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/logging.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/options.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/status.cc
-        )
-
-set(libleveldb_cpp_flags)
-if($ENV{target} MATCHES "Windows")
-        set(libleveldb_cpp_flags -DOS_WINDOWS -DLEVELDB_PLATFORM_WINDOWS -DWINVER=0x0500 -D__USE_MINGW_ANSI_STDIO=1)
-        set(libleveldb_a_sources ${libleveldb_a_sources} ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/util/env_win.cc
-            ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port_win.cc)
-else()
-    if(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-        set(libleveldb_cpp_flags -DOS_MACOSX -DLEVELDB_PLATFORM_POSIX)
-    else()
-        set(libleveldb_cpp_flags -DOS_LINUX -DLEVELDB_PLATFORM_POSIX)
-    endif()
-    set(libleveldb_a_sources ${libleveldb_a_sources} ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port_posix.cc)
-endif()
-
-add_library(leveldb STATIC ${libleveldb_a_headers} ${libleveldb_a_sources})
-target_compile_definitions(leveldb PUBLIC ${libleveldb_cpp_flags} -DLEVELDB_ATOMIC_PRESENT -D__STDC_LIMIT_MACROS)
-target_include_directories(leveldb PUBLIC ${ENDIAN_INCLUDES}
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/helpers/memenv
-        )
-
-set(libmemenv_a_sources
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/helpers/memenv/memenv.cc
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/helpers/memenv/memenv.h
-        )
-add_library(memenv STATIC ${libmemenv_a_sources})
-target_compile_definitions(memenv PUBLIC ${libleveldb_cpp_flags})
-target_include_directories(memenv PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/helpers/memenv
-        )
-
-set(libleveldb_sse42_a_sources ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/port/port_posix_sse.cc)
-add_library(leveldb_sse42 ${libleveldb_sse42_a_sources})
-target_include_directories(leveldb_sse42 PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/helpers/memenv
-        )
+set(LEVELDB_BUILD_TESTS OFF CACHE BOOL "Build LevelDB's unit tests" FORCE)
+set(LEVELDB_BUILD_BENCHMARKS OFF CACHE BOOL "Build LevelDB's benchmarks" FORCE)
+set(LEVELDB_INSTALL OFF CACHE BOOL "Install LevelDB's header and library" FORCE)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/leveldb)
 
 file(GLOB HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/*.h)
 file(GLOB CRYPTO_HEADERS ${CMAKE_CURRENT_SOURCE_DIR}/src/crypto/*.h)
@@ -588,7 +460,7 @@ if($ENV{target} MATCHES "Windows")
     list(APPEND pivxd_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/src/pivxd-res.rc)
 endif()
 add_executable(pivxd ${pivxd_SOURCES} ${BitcoinHeaders})
-add_dependencies(pivxd libunivalue libsecp256k1 leveldb leveldb_sse42 memenv)
+add_dependencies(pivxd libunivalue libsecp256k1 leveldb crc32c)
 target_include_directories(pivxd PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/src
         ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb
         ${CMAKE_CURRENT_SOURCE_DIR}/src/leveldb/include
@@ -603,9 +475,8 @@ target_link_libraries(pivxd
         ZEROCOIN_A
         UTIL_A
         BITCOIN_CRYPTO_A
-        ${CMAKE_BINARY_DIR}/libleveldb.a
-        ${CMAKE_BINARY_DIR}/libleveldb_sse42.a
-        ${CMAKE_BINARY_DIR}/libmemenv.a
+        leveldb
+        crc32c
         secp256k1
         ${BerkeleyDB_LIBRARIES} ${OPENSSL_LIBRARIES} ${Boost_LIBRARIES} ${LIBEVENT_LIB} pthread
         )
