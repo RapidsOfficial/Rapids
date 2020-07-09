@@ -90,7 +90,7 @@ class WalletTest(PivxTestFramework):
             inputs = []
             outputs = {}
             inputs.append({ "txid" : utxo["txid"], "vout" : utxo["vout"]})
-            outputs[self.nodes[2].getnewaddress("from1")] = float(utxo["amount"]) - float(fee_per_kbyte)
+            outputs[self.nodes[2].getnewaddress()] = float(utxo["amount"]) - float(fee_per_kbyte)
             raw_tx = self.nodes[0].createrawtransaction(inputs, outputs)
             txns_to_send.append(self.nodes[0].signrawtransaction(raw_tx))
 
@@ -106,7 +106,6 @@ class WalletTest(PivxTestFramework):
         node_2_expected_bal = Decimal('250') + Decimal('21') - 2 * fee_per_kbyte
         node_2_bal = self.nodes[2].getbalance()
         assert_equal(node_2_bal, node_2_expected_bal)
-        assert_equal(self.nodes[2].getbalance("from1"), node_2_expected_bal)
 
         # Send 10 PIV normal
         address = self.nodes[0].getnewaddress("test")
@@ -121,7 +120,7 @@ class WalletTest(PivxTestFramework):
         assert_equal(node_0_bal, Decimal('10'))
 
         # Sendmany 10 PIV
-        txid = self.nodes[2].sendmany('from1', {address: 10}, 0, "")
+        txid = self.nodes[2].sendmany('', {address: 10}, 0, "")
         fee = self.nodes[2].gettransaction(txid)["fee"]
         self.nodes[2].generate(1)
         self.sync_all([self.nodes[0:3]])
@@ -162,7 +161,7 @@ class WalletTest(PivxTestFramework):
                            {"address": address_to_import},
                            {"spendable": True})
 
-        #check if wallet or blochchain maintenance changes the balance
+        # check if wallet or blochchain maintenance changes the balance
         self.sync_all([self.nodes[0:3]])
         blocks = self.nodes[0].generate(2)
         self.sync_all([self.nodes[0:3]])
@@ -191,6 +190,7 @@ class WalletTest(PivxTestFramework):
         assert_equal(len(coinbase_tx_1["transactions"]), 1)
         assert_equal(coinbase_tx_1["transactions"][0]["blockhash"], blocks[1])
         assert_equal(len(self.nodes[0].listsinceblock(blocks[1])["transactions"]), 0)
+
 
 if __name__ == '__main__':
     WalletTest().main()

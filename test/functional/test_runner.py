@@ -86,18 +86,19 @@ BASE_SCRIPTS= [
     'mining_pos_fakestake.py',                  # ~ 113 sec
     'feature_reindex.py',                       # ~ 110 sec
     'interface_http.py',                        # ~ 105 sec
-    'rpc_listtransactions.py',                  # ~ 97 sec
+    'wallet_listtransactions.py',               # ~ 97 sec
     'mempool_reorg.py',                         # ~ 92 sec
     'wallet_encryption.py',                     # ~ 89 sec
     'wallet_keypool.py',                        # ~ 88 sec
     'wallet_dump.py',                           # ~ 83 sec
     'rpc_net.py',                               # ~ 83 sec
     'rpc_bip38.py',                             # ~ 82 sec
+    'rpc_deprecated.py',                        # ~ 82 sec
     'interface_bitcoin_cli.py',                 # ~ 80 sec
     'mempool_packages.py',                      # ~ 63 sec
 
     # vv Tests less than 60s vv
-    'wallet_accounts.py',                       # ~ 57 sec
+    'wallet_labels.py',                         # ~ 57 sec
     'rpc_signmessage.py',                       # ~ 54 sec
     'mempool_resurrect.py',                     # ~ 51 sec
     'rpc_budget.py',                            # ~ 50 sec
@@ -117,7 +118,6 @@ BASE_SCRIPTS= [
     # 'rpc_getchaintips.py',
     # 'mempool_persist.py',
     # 'rpc_users.py',
-    # 'rpc_deprecated.py',
     # 'p2p_mempool.py',
     # 'mining_prioritisetransaction.py',
     # 'p2p_invalid_block.py',
@@ -139,7 +139,7 @@ EXTENDED_SCRIPTS = [
     # These tests are not run by the travis build process.
     # Longest test should go first, to favor running tests in parallel
     # vv Tests less than 20m vv
-    'feature_fee_estimation.py',                        # ~ 360 sec
+    'feature_fee_estimation.py',                # ~ 360 sec
     # vv Tests less than 5m vv
     # vv Tests less than 2m vv
     #'p2p_timeouts.py',

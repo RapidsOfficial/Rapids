@@ -430,6 +430,7 @@ public:
      */
     int64_t IncOrderPosNext(CWalletDB* pwalletdb = NULL);
 
+    bool GetLabelDestination(CTxDestination& dest, const std::string& label, bool bForceNew = false);
     void MarkDirty();
     bool AddToWallet(const CWalletTx& wtxIn, bool fFromLoadWallet, CWalletDB* pwalletdb);
     void SyncTransaction(const CTransaction& tx, const CBlock* pblock);
@@ -460,6 +461,7 @@ public:
     CAmount GetUnconfirmedWatchOnlyBalance() const;
     CAmount GetImmatureWatchOnlyBalance() const;
     CAmount GetLockedWatchOnlyBalance() const;
+    CAmount GetLegacyBalance(const isminefilter& filter, int minDepth, const std::string* account) const;
     bool FundTransaction(CMutableTransaction& tx, CAmount &nFeeRet, bool overrideEstimatedFeeRate, const CFeeRate& specificFeeRate, int& nChangePosInOut, std::string& strFailReason, bool includeWatching, bool lockUnspents, const CTxDestination& destChange = CNoDestination());
     /**
      * Create a new transaction paying the recipients with a set of coins
@@ -524,7 +526,8 @@ public:
     std::set<std::set<CTxDestination> > GetAddressGroupings();
     std::map<CTxDestination, CAmount> GetAddressBalances();
 
-    std::set<CTxDestination> GetAccountAddresses(std::string strAccount) const;
+    std::set<CTxDestination> GetLabelAddresses(const std::string& label) const;
+    void DeleteLabel(const std::string& label);
 
     bool GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useIX);
     bool GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX); // Only used for budget finalization
@@ -556,6 +559,7 @@ public:
     bool HasDelegator(const CTxOut& out) const;
 
     std::string purposeForAddress(const CTxDestination& address) const;
+    const std::string& GetAccountName(const CScript& scriptPubKey) const;
 
     bool UpdatedTransaction(const uint256& hashTx);
 
@@ -923,8 +927,6 @@ public:
         std::string& strSentAccount,
         const isminefilter& filter) const;
 
-    void GetAccountAmounts(const std::string& strAccount, CAmount& nReceived, CAmount& nSent, CAmount& nFee, const isminefilter& filter) const;
-
     bool IsFromMe(const isminefilter& filter) const;
 
     bool InMempool() const;
@@ -1000,7 +1002,7 @@ public:
 
 
 /**
- * Account information.
+ * DEPRECATED Account information.
  * Stored in wallet with key "acc"+string account name.
  */
 class CAccount
@@ -1032,7 +1034,7 @@ public:
 
 
 /**
- * Internal transfers.
+ * DEPRECATED Internal transfers.
  * Database key is acentry<account><counter>.
  */
 class CAccountingEntry

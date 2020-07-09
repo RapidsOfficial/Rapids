@@ -761,6 +761,47 @@ int64_t CWallet::IncOrderPosNext(CWalletDB* pwalletdb)
     return nRet;
 }
 
+bool CWallet::GetLabelDestination(CTxDestination& dest, const std::string& label, bool bForceNew)
+{
+    CWalletDB walletdb(strWalletFile);
+    CAccount account;
+    walletdb.ReadAccount(label, account);
+
+    if (!bForceNew) {
+        if (!account.vchPubKey.IsValid())
+            bForceNew = true;
+        else {
+            // Check if the current key has been used
+            CScript scriptPubKey = GetScriptForDestination(account.vchPubKey.GetID());
+            for (std::map<uint256, CWalletTx>::iterator it = mapWallet.begin();
+                 it != mapWallet.end() && account.vchPubKey.IsValid();
+                 ++it) {
+                const CWalletTx& wtx = (*it).second;
+                for (const CTxOut& txout : wtx.vout) {
+                    if (txout.scriptPubKey == scriptPubKey) {
+                        bForceNew = true;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    // Generate a new key
+    if (bForceNew) {
+        if (!GetKeyFromPool(account.vchPubKey))
+            return false;
+
+        dest = account.vchPubKey.GetID();
+        SetAddressBook(dest, label, AddressBook::AddressBookPurpose::RECEIVE);
+        walletdb.WriteAccount(label, account);
+    } else {
+        dest = account.vchPubKey.GetID();
+    }
+
+    return true;
+}
+
 void CWallet::MarkDirty()
 {
     {
@@ -1532,36 +1573,6 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
     }
 }
 
-void CWalletTx::GetAccountAmounts(const std::string& strAccount, CAmount& nReceived, CAmount& nSent, CAmount& nFee, const isminefilter& filter) const
-{
-    nReceived = nSent = nFee = 0;
-
-    CAmount allFee;
-    std::string strSentAccount;
-    std::list<COutputEntry> listReceived;
-    std::list<COutputEntry> listSent;
-    GetAmounts(listReceived, listSent, allFee, strSentAccount, filter);
-
-    if (strAccount == strSentAccount) {
-        for (const COutputEntry& s : listSent)
-            nSent += s.amount;
-        nFee = allFee;
-    }
-    {
-        LOCK(pwallet->cs_wallet);
-        for (const COutputEntry& r : listReceived) {
-            if (pwallet->mapAddressBook.count(r.destination)) {
-                std::map<CTxDestination, AddressBook::CAddressBookData>::const_iterator mi = pwallet->mapAddressBook.find(r.destination);
-                if (mi != pwallet->mapAddressBook.end() && (*mi).second.name == strAccount)
-                    nReceived += r.amount;
-            } else if (strAccount.empty()) {
-                nReceived += r.amount;
-            }
-        }
-    }
-}
-
-
 bool CWalletTx::WriteToDisk(CWalletDB *pwalletdb)
 {
     if (pwalletdb)
@@ -1884,6 +1895,50 @@ CAmount CWallet::GetLockedWatchOnlyBalance() const
             if (pcoin.IsTrusted() && pcoin.GetDepthInMainChain() > 0)
                 nTotal += pcoin.GetLockedWatchOnlyCredit();
     });
+}
+
+// Calculate total balance in a different way from GetBalance. The biggest
+// difference is that GetBalance sums up all unspent TxOuts paying to the
+// wallet, while this sums up both spent and unspent TxOuts paying to the
+// wallet, and then subtracts the values of TxIns spending from the wallet. This
+// also has fewer restrictions on which unconfirmed transactions are considered
+// trusted.
+CAmount CWallet::GetLegacyBalance(const isminefilter& filter, int minDepth, const std::string* account) const
+{
+    LOCK2(cs_main, cs_wallet);
+
+    CAmount balance = 0;
+    for (const auto& entry : mapWallet) {
+        const CWalletTx& wtx = entry.second;
+        bool fConflicted;
+        const int depth = wtx.GetDepthAndMempool(fConflicted);
+        if (!IsFinalTx(wtx) || wtx.GetBlocksToMaturity() > 0 || depth < 0 || fConflicted) {
+            continue;
+        }
+
+        // Loop through tx outputs and add incoming payments. For outgoing txs,
+        // treat change outputs specially, as part of the amount debited.
+        CAmount debit = wtx.GetDebit(filter);
+        const bool outgoing = debit > 0;
+        for (const CTxOut& out : wtx.vout) {
+            if (outgoing && IsChange(out)) {
+                debit -= out.nValue;
+            } else if (IsMine(out) & filter && depth >= minDepth && (!account || *account == GetAccountName(out.scriptPubKey))) {
+                balance += out.nValue;
+            }
+        }
+
+        // For outgoing txs, subtract amount debited.
+        if (outgoing && (!account || *account == wtx.strFromAccount)) {
+            balance -= debit;
+        }
+    }
+
+    if (account) {
+        balance += CWalletDB(strWalletFile).GetAccountCreditDebit(*account);
+    }
+
+    return balance;
 }
 
 void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
@@ -3076,6 +3131,21 @@ std::string CWallet::purposeForAddress(const CTxDestination& address) const
     return "";
 }
 
+const std::string& CWallet::GetAccountName(const CScript& scriptPubKey) const
+{
+    CTxDestination address;
+    if (ExtractDestination(scriptPubKey, address) && !scriptPubKey.IsUnspendable()) {
+        auto mi = mapAddressBook.find(address);
+        if (mi != mapAddressBook.end()) {
+            return mi->second.name;
+        }
+    }
+    // A scriptPubKey that doesn't have an entry in the address book is
+    // associated with the default account ("").
+    const static std::string DEFAULT_ACCOUNT_NAME;
+    return DEFAULT_ACCOUNT_NAME;
+}
+
 bool CWallet::HasAddressBook(const CTxDestination& address) const
 {
     LOCK(cs_wallet); // mapAddressBook
@@ -3255,14 +3325,20 @@ std::set<std::set<CTxDestination> > CWallet::GetAddressGroupings()
     return ret;
 }
 
-std::set<CTxDestination> CWallet::GetAccountAddresses(std::string strAccount) const
+void CWallet::DeleteLabel(const std::string &label)
+{
+    CWalletDB walletdb(strWalletFile);
+    walletdb.EraseAccount(label);
+}
+
+std::set<CTxDestination> CWallet::GetLabelAddresses(const std::string& label) const
 {
     LOCK(cs_wallet);
     std::set<CTxDestination> result;
-    for (const PAIRTYPE(CTxDestination, AddressBook::CAddressBookData) & item : mapAddressBook) {
+    for (const std::pair<CTxDestination, AddressBook::CAddressBookData>& item : mapAddressBook) {
         const CTxDestination& address = item.first;
         const std::string& strName = item.second.name;
-        if (strName == strAccount)
+        if (strName == label)
             result.insert(address);
     }
     return result;
