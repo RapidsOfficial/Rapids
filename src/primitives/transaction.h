@@ -190,7 +190,6 @@ public:
     }
 
     bool IsZerocoinMint() const;
-    CAmount GetZerocoinMinted() const;
 
     friend bool operator==(const CTxOut& a, const CTxOut& b)
     {
@@ -284,12 +283,7 @@ public:
         return HasZerocoinSpendInputs() || HasZerocoinMintOutputs();
     }
 
-    CAmount GetZerocoinMinted() const;
     CAmount GetZerocoinSpent() const;
-    int GetZerocoinMintCount() const;
-
-    bool UsesUTXO(const COutPoint out);
-    std::list<COutPoint> GetOutPoints() const;
 
     bool IsCoinBase() const
     {
