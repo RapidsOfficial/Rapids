@@ -192,15 +192,13 @@ void SettingsWidget::loadClientModel()
 
         OptionsModel *optionsModel = this->clientModel->getOptionsModel();
         if (optionsModel) {
+            settingsDisplayOptionsWidget->setClientModel(clientModel);
+            settingsMainOptionsWidget->setClientModel(clientModel);
+            settingsWalletOptionsWidget->setClientModel(clientModel);
+
             mapper->setModel(optionsModel);
             setMapper();
             mapper->toFirst();
-            settingsMainOptionsWidget->setClientModel(clientModel);
-            settingsDisplayOptionsWidget->setClientModel(clientModel);
-            settingsWalletOptionsWidget->setClientModel(clientModel);
-            /* keep consistency for action triggered elsewhere */
-
-            // TODO: Connect show restart needed and apply changes.
         }
     }
 }
