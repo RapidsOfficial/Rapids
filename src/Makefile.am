@@ -133,6 +133,7 @@ BITCOIN_CORE_H = \
   dbwrapper.h \
   limitedmap.h \
   logging.h \
+  legacy/validation_zerocoin_legacy.h \
   main.h \
   memusage.h \
   masternode.h \
@@ -239,6 +240,7 @@ libbitcoin_server_a_SOURCES = \
   httpserver.cpp \
   init.cpp \
   dbwrapper.cpp \
+  legacy/validation_zerocoin_legacy.cpp \
   main.cpp \
   merkleblock.cpp \
   miner.cpp \
