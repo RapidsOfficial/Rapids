@@ -929,8 +929,6 @@ bool InitNUParams()
                     found = true;
                     LogPrintf("Setting network upgrade activation parameters for %s to height=%d\n", vDeploymentParams[0], nActivationHeight);
                     break;
-                } else {
-                    UIError(vDeploymentParams[0]);
                 }
             }
             if (!found) {
