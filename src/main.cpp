@@ -2047,16 +2047,16 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
     CAmount nValueIn = 0;
     CDiskBlockPos pos = pindex->GetUndoPos();
     if (pos.IsNull()) {
-        error("DisconnectBlock() : no undo data available");
+        error("%s: no undo data available", __func__);
         return DISCONNECT_FAILED;
     }
     if (!UndoReadFromDisk(blockUndo, pos, pindex->pprev->GetBlockHash())) {
-        error("DisconnectBlock() : failure reading undo data");
+        error("%s: failure reading undo data", __func__);
         return DISCONNECT_FAILED;
     }
 
     if (blockUndo.vtxundo.size() + 1 != block.vtx.size()) {
-        error("DisconnectBlock() : block and undo data inconsistent");
+        error("%s: block and undo data inconsistent", __func__);
         return DISCONNECT_FAILED;
     }
 
@@ -2090,7 +2090,7 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
             if (outsBlock.nVersion < 0)
                 outs->nVersion = outsBlock.nVersion;
             if (*outs != outsBlock)
-                fClean = fClean && error("DisconnectBlock() : added transaction mismatch? database corrupted");
+                fClean = fClean && error("%s : added transaction mismatch? database corrupted", __func__);
 
             // remove outputs
             outs->Clear();
@@ -2103,8 +2103,8 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
         // restore inputs
         const CTxUndo& txundo = blockUndo.vtxundo[i - 1];
         if (txundo.vprevout.size() != tx.vin.size()) {
-            error("DisconnectBlock() : transaction and undo data inconsistent - txundo.vprevout.siz=%d tx.vin.siz=%d",
-                  txundo.vprevout.size(), tx.vin.size());
+            error("%s: transaction and undo data inconsistent - txundo.vprevout.siz=%d tx.vin.siz=%d",
+                    __func__, txundo.vprevout.size(), tx.vin.size());
             return DISCONNECT_FAILED;
         }
         for (unsigned int j = tx.vin.size(); j-- > 0;) {
