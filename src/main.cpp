@@ -1726,6 +1726,12 @@ void UpdateCoins(const CTransaction& tx, CCoinsViewCache& inputs, CTxUndo& txund
     inputs.ModifyCoins(tx.GetHash())->FromTx(tx, nHeight);
 }
 
+void UpdateCoins(const CTransaction& tx, CCoinsViewCache &inputs, int nHeight)
+{
+    CTxUndo txundo;
+    UpdateCoins(tx, inputs, txundo, nHeight);
+}
+
 bool CScriptCheck::operator()()
 {
     const CScript& scriptSig = ptxTo->vin[nIn].scriptSig;
