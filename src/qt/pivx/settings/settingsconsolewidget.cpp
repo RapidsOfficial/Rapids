@@ -347,6 +347,8 @@ bool SettingsConsoleWidget::eventFilter(QObject* obj, QEvent* event)
                     QApplication::postEvent(ui->lineEdit, new QKeyEvent(*keyevt));
                     return true;
                 }
+                if (mod == Qt::ControlModifier && key == Qt::Key_L)
+                    clear(false);
         }
     }
     return QWidget::eventFilter(obj, event);
