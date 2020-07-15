@@ -69,7 +69,7 @@ CAmount CPivStake::GetValue() const
     return txFrom.vout[nPosition].nValue;
 }
 
-bool CPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal)
+bool CPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal, const bool onlyP2PK)
 {
     std::vector<valtype> vSolutions;
     txnouttype whichType;
@@ -87,8 +87,16 @@ bool CPivStake::CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmoun
         if (!pwallet->GetKey(CKeyID(uint160(vSolutions[0])), key))
             return error("%s: Unable to get staking private key", __func__);
     }
-    // keep the same script
-    scriptPubKey = scriptPubKeyKernel;
+
+    // Consensus check: P2PKH block signatures were not accepted before v5 update.
+    // This can be removed after v5.0 enforcement
+    if (whichType == TX_PUBKEYHASH && onlyP2PK) {
+        // convert to P2PK inputs
+        scriptPubKey << key.GetPubKey() << OP_CHECKSIG;
+    } else {
+        // keep the same script
+        scriptPubKey = scriptPubKeyKernel;
+    }
 
     vout.emplace_back(CTxOut(0, scriptPubKey));
 
