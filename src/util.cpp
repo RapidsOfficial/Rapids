@@ -351,17 +351,13 @@ void ClearDatadirCache()
 fs::path GetConfigFile()
 {
     fs::path pathConfigFile(GetArg("-conf", "pivx.conf"));
-    if (!pathConfigFile.is_complete())
-        pathConfigFile = GetDataDir(false) / pathConfigFile;
-
-    return pathConfigFile;
+    return AbsPathForConfigVal(pathConfigFile, false);
 }
 
 fs::path GetMasternodeConfigFile()
 {
     fs::path pathConfigFile(GetArg("-mnconf", "masternode.conf"));
-    if (!pathConfigFile.is_complete()) pathConfigFile = GetDataDir() / pathConfigFile;
-    return pathConfigFile;
+    return AbsPathForConfigVal(pathConfigFile);
 }
 
 void ReadConfigFile(std::map<std::string, std::string>& mapSettingsRet,
@@ -404,8 +400,7 @@ fs::path AbsPathForConfigVal(const fs::path& path, bool net_specific)
 fs::path GetPidFile()
 {
     fs::path pathPidFile(GetArg("-pid", "pivxd.pid"));
-    if (!pathPidFile.is_complete()) pathPidFile = GetDataDir() / pathPidFile;
-    return pathPidFile;
+    return AbsPathForConfigVal(pathPidFile);
 }
 
 void CreatePidFile(const fs::path& path, pid_t pid)
@@ -560,25 +555,7 @@ fs::path GetSpecialFolderPath(int nFolder, bool fCreate)
 
 fs::path GetTempPath()
 {
-#if BOOST_FILESYSTEM_VERSION == 3
     return fs::temp_directory_path();
-#else
-    // TODO: remove when we don't support filesystem v2 anymore
-    fs::path path;
-#ifdef WIN32
-    char pszPath[MAX_PATH] = "";
-
-    if (GetTempPathA(MAX_PATH, pszPath))
-        path = fs::path(pszPath);
-#else
-    path = fs::path("/tmp");
-#endif
-    if (path.empty() || !fs::is_directory(path)) {
-        LogPrintf("GetTempPath(): failed to find temp path\n");
-        return fs::path("");
-    }
-    return path;
-#endif
 }
 
 double double_safe_addition(double fValue, double fIncrement)
