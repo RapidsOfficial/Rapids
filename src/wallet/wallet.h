@@ -652,19 +652,12 @@ public:
     CzPIVWallet* getZWallet();
     bool IsMyZerocoinSpend(const CBigNum& bnSerial) const;
     bool IsMyMint(const CBigNum& bnValue) const;
-    std::string ResetMintZerocoin();
-    std::string ResetSpentZerocoin();
     void ReconsiderZerocoins(std::list<CZerocoinMint>& listMintsRestored, std::list<CDeterministicMint>& listDMintsRestored);
-    bool GetZerocoinKey(const CBigNum& bnSerial, CKey& key);
     bool GetMint(const uint256& hashSerial, CZerocoinMint& mint);
-    bool GetMintFromStakeHash(const uint256& hashStake, CZerocoinMint& mint);
-    bool DatabaseMint(CDeterministicMint& dMint);
     bool SetMintUnspent(const CBigNum& bnSerial);
     bool UpdateMint(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const libzerocoin::CoinDenomination& denom);
     // Zerocoin entry changed. (called with lock cs_wallet held)
     boost::signals2::signal<void(CWallet* wallet, const std::string& pubCoin, const std::string& isUsed, ChangeType status)> NotifyZerocoinChanged;
-    // zPIV reset
-    boost::signals2::signal<void()> NotifyzPIVReset;
 
     /* Wallets parameter interaction */
     static bool ParameterInteraction();

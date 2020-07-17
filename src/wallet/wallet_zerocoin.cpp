@@ -811,79 +811,6 @@ bool CWallet::IsMyMint(const CBigNum& bnValue) const
     return zwalletMain->IsInMintPool(bnValue);
 }
 
-std::string CWallet::ResetMintZerocoin()
-{
-    long updates = 0;
-    long deletions = 0;
-    CWalletDB walletdb(strWalletFile);
-
-    std::set<CMintMeta> setMints = zpivTracker->ListMints(false, false, true);
-    std::vector<CMintMeta> vMintsToFind(setMints.begin(), setMints.end());
-    std::vector<CMintMeta> vMintsMissing;
-    std::vector<CMintMeta> vMintsToUpdate;
-
-    // search all of our available data for these mints
-    FindMints(vMintsToFind, vMintsToUpdate, vMintsMissing);
-
-    // Update the meta data of mints that were marked for updating
-    for (CMintMeta meta : vMintsToUpdate) {
-        updates++;
-        zpivTracker->UpdateState(meta);
-    }
-
-    // Delete any mints that were unable to be located on the blockchain
-    for (CMintMeta mint : vMintsMissing) {
-        deletions++;
-        if (!zpivTracker->Archive(mint))
-            LogPrintf("%s: failed to archive mint\n", __func__);
-    }
-
-    NotifyzPIVReset();
-
-    std::string strResult = _("ResetMintZerocoin finished: ") + std::to_string(updates) + _(" mints updated, ") + std::to_string(deletions) + _(" mints deleted\n");
-    return strResult;
-}
-
-std::string CWallet::ResetSpentZerocoin()
-{
-    long removed = 0;
-    CWalletDB walletdb(strWalletFile);
-
-    std::set<CMintMeta> setMints = zpivTracker->ListMints(false, false, true);
-    std::list<CZerocoinSpend> listSpends = walletdb.ListSpentCoins();
-    std::list<CZerocoinSpend> listUnconfirmedSpends;
-
-    for (CZerocoinSpend spend : listSpends) {
-        CTransaction tx;
-        uint256 hashBlock = UINT256_ZERO;
-        if (!GetTransaction(spend.GetTxHash(), tx, hashBlock)) {
-            listUnconfirmedSpends.push_back(spend);
-            continue;
-        }
-
-        //no confirmations
-        if (hashBlock.IsNull())
-            listUnconfirmedSpends.push_back(spend);
-    }
-
-    for (CZerocoinSpend spend : listUnconfirmedSpends) {
-        for (CMintMeta meta : setMints) {
-            if (meta.hashSerial == GetSerialHash(spend.GetSerial())) {
-                removed++;
-                meta.isUsed = false;
-                zpivTracker->UpdateState(meta);
-                walletdb.EraseZerocoinSpendSerialEntry(spend.GetSerial());
-                continue;
-            }
-        }
-    }
-
-    NotifyzPIVReset();
-
-    std::string strResult = _("ResetSpentZerocoin finished: ") + std::to_string(removed) + _(" unconfirmed transactions removed\n");
-    return strResult;
-}
-
 bool IsMintInChain(const uint256& hashPubcoin, uint256& txid, int& nHeight)
 {
     if (!IsPubcoinInBlockchain(hashPubcoin, txid))
@@ -949,16 +876,6 @@ void CWallet::ReconsiderZerocoins(std::list<CZerocoinMint>& listMintsRestored, s
     }
 }
 
-bool CWallet::GetZerocoinKey(const CBigNum& bnSerial, CKey& key)
-{
-    CWalletDB walletdb(strWalletFile);
-    CZerocoinMint mint;
-    if (!GetMint(GetSerialHash(bnSerial), mint))
-        return error("%s: could not find serial %s in walletdb!", __func__, bnSerial.GetHex());
-
-    return mint.GetKeyPair(key);
-}
-
 bool CWallet::GetMint(const uint256& hashSerial, CZerocoinMint& mint)
 {
     if (!zpivTracker->HasSerialHash(hashSerial))
@@ -978,21 +895,6 @@ bool CWallet::GetMint(const uint256& hashSerial, CZerocoinMint& mint)
         return error("%s: failed to read zerocoinmint from database", __func__);
     }
 
-    return true;
-}
-
-bool CWallet::GetMintFromStakeHash(const uint256& hashStake, CZerocoinMint& mint)
-{
-    CMintMeta meta;
-    if (!zpivTracker->GetMetaFromStakeHash(hashStake, meta))
-        return error("%s: failed to find meta associated with hashStake", __func__);
-    return GetMint(meta.hashSerial, mint);
-}
-
-bool CWallet::DatabaseMint(CDeterministicMint& dMint)
-{
-    CWalletDB walletdb(strWalletFile);
-    zpivTracker->Add(dMint, true);
     return true;
 }
 
