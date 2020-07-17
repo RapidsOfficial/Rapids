@@ -76,12 +76,17 @@ bool CWallet::SetupSPKM(bool newKeypool)
 {
     if (m_spk_man->SetupGeneration(newKeypool, true)) {
         LogPrintf("%s : spkm setup completed\n", __func__);
-        if (m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
-            LogPrintf("%s : sapling spkm setup completed\n", __func__);
-            return true;
-        }
+        return ActivateSaplingWallet();
     }
+    return false;
+}
 
+bool CWallet::ActivateSaplingWallet()
+{
+    if (m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
+        LogPrintf("%s : sapling spkm setup completed\n", __func__);
+        return true;
+    }
     return false;
 }
 
@@ -1612,13 +1617,29 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
 
 bool CWallet::Upgrade(std::string& error, const int& prevVersion)
 {
-    LOCK(cs_wallet);
+    LOCK2(cs_wallet, cs_KeyStore);
+
     // Do not upgrade versions if we are already in the last one
-    if (prevVersion >= FEATURE_PRE_SPLIT_KEYPOOL) {
-        error = strprintf(_("Cannot upgrade to HD wallet (already running HD support). Version: %d"), prevVersion);
+    if (prevVersion >= FEATURE_SAPLING) {
+        error = strprintf(_("Cannot upgrade to Sapling wallet (already running Sapling support). Version: %d"), prevVersion);
         return false;
     }
-    return m_spk_man->Upgrade(prevVersion, error);
+
+    // Check if we need to upgrade to HD
+    if (prevVersion < FEATURE_PRE_SPLIT_KEYPOOL) {
+        if (!m_spk_man->Upgrade(prevVersion, error)) {
+            return false;
+        }
+    }
+
+    // Now upgrade to Sapling manager
+    if (prevVersion < FEATURE_SAPLING) {
+        if (!ActivateSaplingWallet()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**

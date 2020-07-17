@@ -28,7 +28,8 @@ private:
     CKeyID seed_id;
 
 public:
-    static const int CURRENT_VERSION = 1;
+    // Standard/Sapling hd chain
+    static const int CURRENT_VERSION = 2;
     // Single account counters.
     uint32_t nExternalChainCounter{0};
     uint32_t nInternalChainCounter{0};
@@ -44,13 +45,11 @@ public:
     {
         READWRITE(nVersion);
         READWRITE(seed_id);
-        READWRITE(chainType);
-        // Single account counters.
         READWRITE(nExternalChainCounter);
-        if (chainType != HDChain::ChainCounterType::Standard) {
-            READWRITE(nInternalChainCounter);
-            READWRITE(nStakingChainCounter);
-        }
+        READWRITE(nInternalChainCounter);
+        READWRITE(nStakingChainCounter);
+        if (nVersion == 1) chainType = HDChain::ChainCounterType::Standard;
+        else READWRITE(chainType);
     }
 
     bool SetNull();

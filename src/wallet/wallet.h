@@ -95,7 +95,9 @@ enum WalletFeature {
 
     FEATURE_PRE_SPLIT_KEYPOOL = 169900, // Upgraded to HD SPLIT and can have a pre-split keypool
 
-    FEATURE_LATEST = FEATURE_PRE_SPLIT_KEYPOOL
+    FEATURE_SAPLING = 170000, // Upgraded to Saplings key manager.
+
+    FEATURE_LATEST = FEATURE_SAPLING
 };
 
 enum AvailableCoinsType {
@@ -483,9 +485,10 @@ public:
     void EraseFromWallet(const uint256& hash);
 
     /**
-     * Upgrade wallet to HD if needed. Does nothing if not.
+     * Upgrade wallet to HD and Sapling if needed. Does nothing if not.
      */
     bool Upgrade(std::string& error, const int& prevVersion);
+    bool ActivateSaplingWallet();
 
     int ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate = false, bool fromStartup = false);
     void ReacceptWalletTransactions(bool fFirstLoad = false);

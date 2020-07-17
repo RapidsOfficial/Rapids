@@ -370,7 +370,9 @@ UniValue upgradewallet(const JSONRPCRequest& request)
                                  "Bump the wallet features to the latest supported version. Non-HD wallets will be upgraded to HD wallet functionality. "
                                  "Marking all the previous keys as pre-split keys and managing them separately. Once the last key in the pre-split keypool gets marked as used (received balance), the wallet will automatically start using the HD generated keys.\n"
                                  "The upgraded HD wallet will have a new HD seed set so that new keys added to the keypool will be derived from this new seed.\n"
-                                 "Wallets that are already runnning the latest HD version will not be upgraded\n"
+                                 "Wallets that are already runnning the latest HD version will be upgraded to Sapling support\n"
+                                 "Enabling the Sapling key manager. Sapling keys will be deterministically derived by the same HD wallet seed.\n"
+                                 "Wallets that are running the latest Sapling version will not be upgraded"
                                  "\nNote that you will need to MAKE A NEW BACKUP of your wallet after upgrade it.\n"
                                  + HelpExampleCli("upgradewallet", "") + HelpExampleRpc("upgradewallet", "")
         );
@@ -381,7 +383,7 @@ UniValue upgradewallet(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     // Do not do anything to non-HD wallets
-    if (pwalletMain->IsHDEnabled()) {
+    if (pwalletMain->HasSaplingSPKM()) {
         throw JSONRPCError(RPC_WALLET_ERROR, "Cannot upgrade the wallet. The wallet is already running the latest version");
     }
 
