@@ -122,65 +122,19 @@ CAmount WalletModel::getMinColdStakingAmount() const
     return MIN_COLDSTAKING_AMOUNT;
 }
 
-CAmount WalletModel::getUnconfirmedBalance() const
-{
-    return wallet->GetUnconfirmedBalance();
-}
-
-CAmount WalletModel::getImmatureBalance() const
-{
-    return wallet->GetImmatureBalance();
-}
-
 CAmount WalletModel::getLockedBalance() const
 {
     return wallet->GetLockedCoins();
 }
-
-CAmount WalletModel::getZerocoinBalance() const
-{
-    return wallet->GetZerocoinBalance(false);
-}
-
-CAmount WalletModel::getUnconfirmedZerocoinBalance() const
-{
-    return wallet->GetUnconfirmedZerocoinBalance();
-}
-
-CAmount WalletModel::getImmatureZerocoinBalance() const
-{
-    return wallet->GetImmatureZerocoinBalance();
-}
-
 
 bool WalletModel::haveWatchOnly() const
 {
     return fHaveWatchOnly;
 }
 
-CAmount WalletModel::getWatchBalance() const
-{
-    return wallet->GetWatchOnlyBalance();
-}
-
-CAmount WalletModel::getWatchUnconfirmedBalance() const
-{
-    return wallet->GetUnconfirmedWatchOnlyBalance();
-}
-
-CAmount WalletModel::getWatchImmatureBalance() const
-{
-    return wallet->GetImmatureWatchOnlyBalance();
-}
-
 CAmount WalletModel::getDelegatedBalance() const
 {
     return wallet->GetDelegatedBalance();
-}
-
-CAmount WalletModel::getColdStakedBalance() const
-{
-    return wallet->GetColdStakingBalance();
 }
 
 bool WalletModel::isColdStaking() const

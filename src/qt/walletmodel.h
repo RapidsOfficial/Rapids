@@ -158,19 +158,9 @@ public:
 
     CAmount getBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true, bool fUnlockedOnly = false) const;
     CAmount getUnlockedBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true) const;
-    CAmount getUnconfirmedBalance() const;
-    CAmount getImmatureBalance() const;
     CAmount getLockedBalance() const;
-    CAmount getZerocoinBalance() const;
-    CAmount getUnconfirmedZerocoinBalance() const;
-    CAmount getImmatureZerocoinBalance() const;
     bool haveWatchOnly() const;
-    CAmount getWatchBalance() const;
-    CAmount getWatchUnconfirmedBalance() const;
-    CAmount getWatchImmatureBalance() const;
-
     CAmount getDelegatedBalance() const;
-    CAmount getColdStakedBalance() const;
 
     bool isColdStaking() const;
 
