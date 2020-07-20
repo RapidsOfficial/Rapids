@@ -107,6 +107,7 @@ BASE_SCRIPTS= [
     'rpc_decodescript.py',                      # ~ 50 sec
     'rpc_blockchain.py',                        # ~ 50 sec
     'wallet_disable.py',                        # ~ 50 sec
+    'mining_v5_upgrade.py',                     # ~ 48 sec
     'feature_help.py',                          # ~ 30 sec
 
     # Don't append tests at the end to avoid merge conflicts
