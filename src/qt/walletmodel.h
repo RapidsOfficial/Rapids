@@ -11,6 +11,8 @@
 #include "paymentrequestplus.h"
 #include "walletmodeltransaction.h"
 
+#include "interface/wallet.h"
+
 #include "allocators.h" /* for SecureString */
 #include "swifttx.h"
 #include "wallet/wallet.h"
@@ -152,6 +154,8 @@ public:
     bool isHDEnabled() const;
     bool upgradeWallet(std::string& upgradeError);
 
+    interfaces::WalletBalances GetWalletBalances() { return m_cached_balances; };
+
     CAmount getBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true, bool fUnlockedOnly = false) const;
     CAmount getUnlockedBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true) const;
     CAmount getUnconfirmedBalance() const;
@@ -285,6 +289,11 @@ public:
 
 private:
     CWallet* wallet;
+    // Simple Wallet interface.
+    // todo: Goal would be to move every CWallet* call to the wallet wrapper and
+    //  in the model only perform the data organization (and QT wrappers) to be presented on the UI.
+    interfaces::Wallet walletWrapper;
+
     bool fHaveWatchOnly;
     bool fForceCheckBalanceChanged;
 
@@ -296,35 +305,21 @@ private:
     TransactionTableModel* transactionTableModel;
     RecentRequestsTableModel* recentRequestsTableModel;
 
-    // Cache some values to be able to detect changes
-    CAmount cachedBalance;
-    CAmount cachedUnconfirmedBalance;
-    CAmount cachedImmatureBalance;
-    CAmount cachedZerocoinBalance;
-    CAmount cachedUnconfirmedZerocoinBalance;
-    CAmount cachedImmatureZerocoinBalance;
-    CAmount cachedWatchOnlyBalance;
-    CAmount cachedWatchUnconfBalance;
-    CAmount cachedWatchImmatureBalance;
-    CAmount cachedDelegatedBalance;
-    CAmount cachedColdStakedBalance;
+    // Cache balance to be able to detect changes
+    interfaces::WalletBalances m_cached_balances;
 
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
-    int cachedTxLocks;
 
     QTimer* pollTimer;
 
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
-    Q_INVOKABLE void checkBalanceChanged();
+    Q_INVOKABLE void checkBalanceChanged(const interfaces::WalletBalances& new_balances);
 
 Q_SIGNALS:
     // Signal that balance in wallet changed
-    void balanceChanged(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
-                        const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
-                        const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
-                        const CAmount& delegatedBalance, const CAmount& coldStakingBalance);
+    void balanceChanged(const interfaces::WalletBalances& walletBalances);
 
     // Encryption status of wallet changed
     void encryptionStatusChanged(int status);
