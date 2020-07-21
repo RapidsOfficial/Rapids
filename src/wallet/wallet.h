@@ -993,19 +993,10 @@ public:
     int nDepth;
     bool fSpendable;
 
-    COutput(const CWalletTx* txIn, int iIn, int nDepthIn, bool fSpendableIn)
-    {
-        tx = txIn;
-        i = iIn;
-        nDepth = nDepthIn;
-        fSpendable = fSpendableIn;
-    }
+    COutput(const CWalletTx* txIn, int iIn, int nDepthIn, bool fSpendableIn) :
+        tx(txIn), i(iIn), nDepth(nDepthIn), fSpendable(fSpendableIn) {}
 
-    CAmount Value() const
-    {
-        return tx->vout[i].nValue;
-    }
-
+    CAmount Value() const { return tx->vout[i].nValue; }
     std::string ToString() const;
 };
 
