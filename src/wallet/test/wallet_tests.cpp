@@ -40,10 +40,8 @@ static void add_coin(const CAmount& nValue, int nAge = 6*24, bool fIsFromMe = fa
         tx.vin.resize(1);
     }
     CWalletTx* wtx = new CWalletTx(pwalletMain, tx);
-    if (fIsFromMe)
-    {
-        wtx->fDebitCached = true;
-        wtx->nDebitCached = 1;
+    if (fIsFromMe) {
+        wtx->m_amounts[CWalletTx::DEBIT].Set(ISMINE_SPENDABLE, 1);
     }
     COutput output(wtx, nInput, nAge, true, true);
     vCoins.push_back(output);
