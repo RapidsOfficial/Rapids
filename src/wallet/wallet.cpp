@@ -2013,10 +2013,9 @@ void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
                     if (utxo.scriptPubKey.IsPayToColdStaking()) {
                         isminetype mine = IsMine(utxo);
                         bool isMineSpendable = mine & ISMINE_SPENDABLE_DELEGATED;
-                        bool fIsSolvable = (mine & (ISMINE_SPENDABLE_ALL | ISMINE_WATCH_SOLVABLE)) != ISMINE_NO;
                         if (mine & ISMINE_COLD || isMineSpendable)
-                            // Depth is not used, no need waste resources and set it for now.
-                            vCoins.emplace_back(COutput(pcoin, i, 0, isMineSpendable, fIsSolvable));
+                            // Depth and solvability members are not used, no need waste resources and set them for now.
+                            vCoins.emplace_back(COutput(pcoin, i, 0, isMineSpendable, true));
                     }
                 }
             }
@@ -2180,7 +2179,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                 // skip auto-delegated coins
                 if (mine == ISMINE_SPENDABLE_STAKEABLE && !fIncludeColdStaking && !fIncludeDelegated) continue;
 
-                bool solvable = (mine & (ISMINE_SPENDABLE_ALL | ISMINE_WATCH_SOLVABLE)) != ISMINE_NO;
+                bool solvable = IsSolvable(*this, pcoin->vout[i].scriptPubKey);
 
                 bool spendable = ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
                         (((mine & ISMINE_WATCH_ONLY) != ISMINE_NO) && (coinControl && coinControl->fAllowWatchOnly && solvable)) ||
