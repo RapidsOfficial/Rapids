@@ -1357,23 +1357,6 @@ CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
     return GetUnspentCredit(ISMINE_SPENDABLE_DELEGATED);
 }
 
-CAmount CWalletTx::UpdateAmount(CAmount& amountToUpdate, bool& cacheFlagToUpdate, bool fUseCache, isminetype mimeType, bool fCredit) const
-{
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    if (fUseCache && cacheFlagToUpdate)
-        return amountToUpdate;
-
-    amountToUpdate = (fCredit) ? GetCredit(mimeType) : GetDebit(mimeType);
-    cacheFlagToUpdate = true;
-    return amountToUpdate;
-}
-
 // Return sum of unlocked coins
 CAmount CWalletTx::GetUnlockedCredit() const
 {
