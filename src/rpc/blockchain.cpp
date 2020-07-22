@@ -799,8 +799,10 @@ void NetworkUpgradeDescPushBack(
     // hidden. This is used when network upgrade implementations are merged
     // without specifying the activation height.
     if (consensusParams.vUpgrades[idx].nActivationHeight != Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT) {
+        std::string name = NetworkUpgradeInfo[idx].strName;
+        std::replace(name.begin(), name.end(), '_', ' '); // Beautify the name
         networkUpgrades.push_back(Pair(
-                NetworkUpgradeInfo[idx].strName,
+                name,
                 NetworkUpgradeDesc(consensusParams, idx, height)));
     }
 }

@@ -8,6 +8,9 @@
 /**
  * General information about each network upgrade.
  * Ordered by Consensus::UpgradeIndex.
+ *
+ * If the upgrade name has many words, use the '_' character to divide them.
+ * We are using it in the -nuparams startup arg and input it with spaces is just ugly.
  */
 const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
         {
@@ -19,7 +22,7 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "Proof of Stake Consensus activation",
         },
         {
-                /*.strName =*/ "PoS v2",
+                /*.strName =*/ "PoS_v2",
                 /*.strInfo =*/ "New selection for stake modifier",
         },
         {
@@ -27,7 +30,7 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "ZeroCoin protocol activation - start block v4",
         },
         {
-                /*.strName =*/ "Zerocoin v2",
+                /*.strName =*/ "Zerocoin_v2",
                 /*.strInfo =*/ "new zerocoin serials and zPOS start",
         },
         {
@@ -35,23 +38,23 @@ const struct NUInfo NetworkUpgradeInfo[Consensus::MAX_NETWORK_UPGRADES] = {
                 /*.strInfo =*/ "CLTV (BIP65) activation - start block v5",
         },
         {
-                /*.strName =*/ "Zerocoin Public",
+                /*.strName =*/ "Zerocoin_Public",
                 /*.strInfo =*/ "activation of zerocoin public spends (spend v3)",
         },
         {
-                /*.strName =*/ "PIVX v3.4",
+                /*.strName =*/ "PIVX_v3.4",
                 /*.strInfo =*/ "new 256-bit stake modifier - start block v6",
         },
         {
-                /*.strName =*/ "PIVX v4.0",
+                /*.strName =*/ "PIVX_v4.0",
                 /*.strInfo =*/ "new message sigs - start block v7 - time protocol - zc spend v4",
         },
         {
-                /*.strName =*/ "v5 dummy",
+                /*.strName =*/ "v5_dummy",
                 /*.strInfo =*/ "Placeholder for future PIVX version 5.0 upgrade",
         },
         {
-                /*.strName =*/ "Test dummy",
+                /*.strName =*/ "Test_dummy",
                 /*.strInfo =*/ "Test dummy info",
         },
 };
