@@ -182,7 +182,18 @@ void DashboardWidget::loadWalletModel()
         filter->setFilterCaseSensitivity(Qt::CaseInsensitive);
         filter->setSortRole(Qt::EditRole);
         filter->setSourceModel(txModel);
-        filter->sort(TransactionTableModel::Date, Qt::DescendingOrder);
+
+        // Read filter settings
+        QSettings settings;
+        int filterByType = settings.value("transactionType", TransactionFilterProxy::ALL_TYPES).toInt();
+
+        filter->setTypeFilter(filterByType); // Set filter
+        int filterIndex = ui->comboBoxSortType->findData(filterByType); // Find index
+        ui->comboBoxSortType->setCurrentIndex(filterIndex); // Set item in ComboBox
+
+        // Read sort settings
+        changeSort(settings.value("transactionSort", SortTx::DATE_DESC).toInt());
+
         txHolder->setFilter(filter);
         ui->listTransactions->setModel(filter);
         ui->listTransactions->setModelColumn(TransactionTableModel::ToAddress);
@@ -256,39 +267,59 @@ void DashboardWidget::updateDisplayUnit()
 void DashboardWidget::onSortChanged(const QString& value)
 {
     if (!filter) return;
-    int columnIndex = 0;
-    Qt::SortOrder order = Qt::DescendingOrder;
-    if (!value.isNull()) {
-        switch (ui->comboBoxSort->itemData(ui->comboBoxSort->currentIndex()).toInt()) {
-            case SortTx::DATE_ASC:{
-                columnIndex = TransactionTableModel::Date;
-                order = Qt::AscendingOrder;
-                break;
-            }
-            case SortTx::DATE_DESC:{
-                columnIndex = TransactionTableModel::Date;
-                break;
-            }
-            case SortTx::AMOUNT_ASC:{
-                columnIndex = TransactionTableModel::Amount;
-                order = Qt::AscendingOrder;
-                break;
-            }
-            case SortTx::AMOUNT_DESC:{
-                columnIndex = TransactionTableModel::Amount;
-                break;
-            }
 
+    if (!value.isNull()) {
+        changeSort(ui->comboBoxSort->currentIndex());
+    } else {
+        changeSort(SortTx::DATE_DESC);
+    }
+}
+
+void DashboardWidget::changeSort(int nSortIndex)
+{
+    int nColumnIndex = TransactionTableModel::Date;
+    Qt::SortOrder order = Qt::DescendingOrder;
+
+    switch (nSortIndex) {
+        case SortTx::DATE_DESC:
+        {
+            nColumnIndex = TransactionTableModel::Date;
+            break;
+        }
+        case SortTx::DATE_ASC:
+        {
+            nColumnIndex = TransactionTableModel::Date;
+            order = Qt::AscendingOrder;
+            break;
+        }
+        case SortTx::AMOUNT_DESC:
+        {
+            nColumnIndex = TransactionTableModel::Amount;
+            break;
+        }
+        case SortTx::AMOUNT_ASC:
+        {
+            nColumnIndex = TransactionTableModel::Amount;
+            order = Qt::AscendingOrder;
+            break;
         }
     }
-    filter->sort(columnIndex, order);
+
+    ui->comboBoxSort->setCurrentIndex(nSortIndex);
+    filter->sort(nColumnIndex, order);
     ui->listTransactions->update();
+
+    // Store settings
+    QSettings settings;
+    settings.setValue("transactionSort", nSortIndex);
 }
 
 void DashboardWidget::onSortTypeChanged(const QString& value)
 {
     if (!filter) return;
-    int filterByType = ui->comboBoxSortType->itemData(ui->comboBoxSortType->currentIndex()).toInt();
+    int filterIndex = ui->comboBoxSortType->currentIndex();
+    int filterByType = ui->comboBoxSortType->itemData(filterIndex).toInt();
+
     filter->setTypeFilter(filterByType);
     ui->listTransactions->update();
 
