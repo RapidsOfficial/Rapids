@@ -8,6 +8,7 @@
 #include "addressbook.h"
 #include "amount.h"
 #include "base58.h"
+#include "coincontrol.h"
 #include "core_io.h"
 #include "init.h"
 #include "key_io.h"
@@ -3054,7 +3055,7 @@ UniValue listunspent(const JSONRPCRequest& request)
                 "      \"address\"   (string) pivx address\n"
                 "      ,...\n"
                 "    ]\n"
-                "4. watchonlyconfig  (numeric, optional, default=1) 1 = list regular unspent transactions, 2 = list only watchonly transactions,  3 = list all unspent transactions (including watchonly)\n"
+                "4. watchonlyconfig  (numeric, optional, default=1) 1 = list regular unspent transactions,  2 = list all unspent transactions (including watchonly)\n"
 
                 "\nResult\n"
                 "[                   (array of json object)\n"
@@ -3100,26 +3101,30 @@ UniValue listunspent(const JSONRPCRequest& request)
         }
     }
 
+    // List watch only utxo
     int nWatchonlyConfig = 1;
     if(request.params.size() > 3) {
         nWatchonlyConfig = request.params[3].get_int();
-        if (nWatchonlyConfig > 3 || nWatchonlyConfig < 1)
+        if (nWatchonlyConfig > 2 || nWatchonlyConfig < 1)
             nWatchonlyConfig = 1;
     }
+
+    CCoinControl coinControl;
+    coinControl.fAllowWatchOnly = nWatchonlyConfig == 2;
 
     UniValue results(UniValue::VARR);
     std::vector<COutput> vecOutputs;
     assert(pwalletMain != NULL);
     LOCK2(cs_main, pwalletMain->cs_wallet);
     pwalletMain->AvailableCoins(&vecOutputs,
-                                nullptr,    // coin control
+                                &coinControl,    // coin control
                                 true,       // include delegated
                                 false,      // include cold staking
                                 ALL_COINS,  // coin type
                                 false,      // only confirmed
                                 false,      // include zero value
-                                false,      // use IX
-                                nWatchonlyConfig);
+                                false       // use IX
+                                );
     for (const COutput& out : vecOutputs) {
         if (out.nDepth < nMinDepth || out.nDepth > nMaxDepth)
             continue;

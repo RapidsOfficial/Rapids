@@ -2079,8 +2079,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                              AvailableCoinsType nCoinType,      // Default: ALL_COINS
                              bool fOnlyConfirmed,               // Default: true
                              bool fIncludeZeroValue,            // Default: false
-                             bool fUseIX,                       // Default: false
-                             int nWatchonlyConfig               // Default: 1
+                             bool fUseIX                       // Default: false
                              ) const
 {
     if (pCoins) pCoins->clear();
@@ -2117,8 +2116,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
 
                 isminetype mine = IsMine(pcoin->vout[i]);
                 if (  (mine == ISMINE_NO) ||
-                      (mine == ISMINE_SPENDABLE && nWatchonlyConfig == 2) ||
-                      (mine == ISMINE_WATCH_ONLY && nWatchonlyConfig == 1) ||
+                      (mine == ISMINE_WATCH_ONLY && coinControl && !coinControl->fAllowWatchOnly) ||
                       (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) ||
                       (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue) ||
                       (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint((*it).first, i)))

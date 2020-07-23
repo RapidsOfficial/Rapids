@@ -147,7 +147,7 @@ class WalletTest(PivxTestFramework):
         assert(self.nodes[1].validateaddress(address_to_import)["iswatchonly"])
 
         # 4. Check that the unspents after import are not spendable
-        listunspent = self.nodes[1].listunspent(1, 9999999, [], 3)
+        listunspent = self.nodes[1].listunspent(1, 9999999, [], 2)
         assert_array_result(listunspent,
                            {"address": address_to_import},
                            {"spendable": False})
