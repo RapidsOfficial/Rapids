@@ -362,7 +362,6 @@ public:
                         bool fIncludeColdStaking        = false,
                         AvailableCoinsType nCoinType    = ALL_COINS,
                         bool fOnlyConfirmed             = true,
-                        bool fIncludeZeroValue          = false,
                         bool fUseIX                     = false
                         ) const;
     //! >> Available coins (spending)

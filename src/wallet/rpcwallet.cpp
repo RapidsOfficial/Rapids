@@ -3194,7 +3194,6 @@ UniValue listunspent(const JSONRPCRequest& request)
                                 false,      // include cold staking
                                 ALL_COINS,  // coin type
                                 false,      // only confirmed
-                                false,      // include zero value
                                 false       // use IX
                                 );
     for (const COutput& out : vecOutputs) {

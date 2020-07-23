@@ -2128,7 +2128,6 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                              bool fIncludeColdStaking,          // Default: false
                              AvailableCoinsType nCoinType,      // Default: ALL_COINS
                              bool fOnlyConfirmed,               // Default: true
-                             bool fIncludeZeroValue,            // Default: false
                              bool fUseIX                       // Default: false
                              ) const
 {
@@ -2175,7 +2174,7 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                 if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) continue;
 
                 // Check if we should include zero value utxo
-                if (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue) continue;
+                if (pcoin->vout[i].nValue <= 0) continue;
 
                 if (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint((*it).first, i)))
                     continue;
@@ -2569,7 +2568,6 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
                 false,                  // fIncludeColdStaking
                 coin_type,
                 true,                   // fOnlyConfirmed
-                false,                  // fIncludeZeroValue
                 useIX);
 
             nFeeRet = 0;
