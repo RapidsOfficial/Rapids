@@ -6,10 +6,6 @@
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>My Address</source>
-        <translation>내 주소</translation>
-    </message>
-    <message>
         <source>Address</source>
         <translation>주소</translation>
     </message>
@@ -22,8 +18,8 @@
         <translation>취소</translation>
     </message>
     <message>
-        <source>OK</source>
-        <translation>선택</translation>
+        <source>SAVE</source>
+        <translation>저장</translation>
     </message>
 </context>
 <context>
@@ -33,16 +29,8 @@
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
     </message>
     <message>
         <source>Edit Contact</source>
@@ -51,10 +39,6 @@
     <message>
         <source>Set a label for the selected address</source>
         <translation>선택된 주소에 라벨 설정하기</translation>
-    </message>
-    <message>
-        <source>Enter a name for the address (e.g Exchange)</source>
-        <translation>주소 이름 입력 (예 : 거래소)</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -170,7 +154,7 @@
     <name>AddressLabelRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Bob Allen</source>
@@ -208,19 +192,7 @@
     <name>AddressesWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Send</source>
-        <translation>보내기</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Contact name</source>
@@ -229,10 +201,6 @@
     <message>
         <source>Enter address</source>
         <translation>주소 입력</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
     </message>
     <message>
         <source>Contacts</source>
@@ -245,14 +213,6 @@
     <message>
         <source>No contacts yet</source>
         <translation>연락처가 비어 있습니다.</translation>
-    </message>
-    <message>
-        <source>e.g. John Doe</source>
-        <translation>예) 홍길동</translation>
-    </message>
-    <message>
-        <source>Enter PIVX address</source>
-        <translation>PIVX 주소를 입력하세요</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -377,20 +337,12 @@ for staking</source>
         <translation>지갑 암호화 후 암호를 분실하게 되면</translation>
     </message>
     <message>
-        <source>LOSE ALL OF YOUR PIV</source>
-        <translation>모든 PIV를 잃게 됩니다</translation>
-    </message>
-    <message>
         <source>ENCRYPT</source>
         <translation>암호화</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>WARNING: The Caps Lock key is on!</source>
-        <translation>경고: Caps Lock 키가 활성화 되있습니다!</translation>
     </message>
     <message>
         <source>PIVX will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your PIVs from being stolen by malware infecting your computer.</source>
@@ -456,7 +408,7 @@ for staking</source>
     <name>CSRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Savings</source>
@@ -689,6 +641,10 @@ for staking</source>
         <translation>콜드 스테이킹 주소 %1 로 위임 됨</translation>
     </message>
     <message>
+        <source>Select All</source>
+        <translation>모두 선택</translation>
+    </message>
+    <message>
         <source>no</source>
         <translation>아니오</translation>
     </message>
@@ -717,10 +673,6 @@ for staking</source>
         <translation>받는 사람이 %1 보다 작은 금액을 받으면 라벨이 빨간색으로 변경됩니다.</translation>
     </message>
     <message>
-        <source>Can vary +/- %1 upiv per input.</source>
-        <translation>Can vary +/- %1 upiv per input.</translation>
-    </message>
-    <message>
         <source>(no label)</source>
         <translation>(라벨 없음)</translation>
     </message>
@@ -737,15 +689,7 @@ for staking</source>
     <name>ColdStakingWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>제목</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Owner address (optional, if empty a new address will be created)</source>
@@ -754,14 +698,6 @@ for staking</source>
     <message>
         <source>Total Staking:</source>
         <translation>스테이킹 총 액수</translation>
-    </message>
-    <message>
-        <source>List of delegated balance by address</source>
-        <translation>주소별 위임된 액수 리스트</translation>
-    </message>
-    <message>
-        <source>No balance delegated</source>
-        <translation>위임된 액수 없음</translation>
     </message>
     <message>
         <source>Cold Staking</source>
@@ -833,6 +769,10 @@ stake on your behalf, while you keep the keys securely offline.</source>
         <translation>콜드 스테이킹 네트워크가 비활성화 된 상태입니다.</translation>
     </message>
     <message>
+        <source>Coin Control</source>
+        <translation>코인 설정</translation>
+    </message>
+    <message>
         <source>Invalid entry</source>
         <translation>잘못된 입력</translation>
     </message>
@@ -874,10 +814,6 @@ Do you wish to proceed?</source>
     <message>
         <source>Coins delegated</source>
         <translation>위임된 코인</translation>
-    </message>
-    <message>
-        <source>You don't have any PIV to select.</source>
-        <translation>선택할 PIV를 가지고 있지 않습니다.</translation>
     </message>
     <message>
         <source>Cannot perform operation, wallet locked</source>
@@ -962,15 +898,7 @@ address</source>
     <name>ContactDropdownRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Bob Allen</source>
-        <translation>밥 앨런</translation>
-    </message>
-    <message>
-        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
-        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+        <translation>양식</translation>
     </message>
 </context>
 <context>
@@ -984,36 +912,12 @@ address</source>
         <translation>전송</translation>
     </message>
     <message>
-        <source>You can see here the history of your account</source>
-        <translation>이곳에서 계정 이력을 확인할 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Warning</source>
-        <translation>경고</translation>
-    </message>
-    <message>
-        <source>No transactions</source>
-        <translation>거래가 없음</translation>
-    </message>
-    <message>
         <source>Staking Rewards</source>
         <translation>스테이킹 보상</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
         <source>Staking statistics</source>
         <translation>스테이킹 통계</translation>
-    </message>
-    <message>
-        <source>PIV</source>
-        <translation>PIV</translation>
-    </message>
-    <message>
-        <source>zPIV</source>
-        <translation>zPIV</translation>
     </message>
     <message>
         <source>Sort by</source>
@@ -1036,14 +940,6 @@ address</source>
         <translation>Filter by</translation>
     </message>
     <message>
-        <source>LabelText</source>
-        <translation>LabelText</translation>
-    </message>
-    <message>
-        <source>You can view your account's history</source>
-        <translation>당신의 입출금 이력을 확인할 수 있습니다.</translation>
-    </message>
-    <message>
         <source>Amount of PIV and zPIV staked.</source>
         <translation>스테이킹 된 PIV와 zPIV 양</translation>
     </message>
@@ -1054,10 +950,6 @@ address</source>
     <message>
         <source>No transactions yet</source>
         <translation>아직 전송기록 없음</translation>
-    </message>
-    <message>
-        <source>How to get PIV or zPIV</source>
-        <translation>PIV 혹은 zPIV를 얻는 법</translation>
     </message>
     <message>
         <source>You can verify the staking activity in the status bar at the top right of the wallet.
@@ -1093,23 +985,15 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <name>DefaultDialog</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
-    </message>
-    <message>
-        <source>Text Label</source>
-        <translation>텍스트라벨</translation>
+        <source>OK</source>
+        <translation>선택</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>SAVE</source>
-        <translation>저장</translation>
     </message>
 </context>
 <context>
@@ -1171,7 +1055,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <name>ExpandableButton</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
 </context>
 <context>
@@ -1319,7 +1203,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <name>LoadingDialog</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -1338,7 +1222,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <name>LockUnlock</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Unlock Wallet</source>
@@ -1357,9 +1241,9 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <name>MNRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>MasterNodeWizardDialog</name>
     <message>
@@ -1427,18 +1311,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>IP 주소 입력</translation>
     </message>
     <message>
-        <source>CANCEL</source>
-        <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
-    </message>
-    <message>
-        <source>e.g user_masternode</source>
-        <translation>예) user_masternode</translation>
-    </message>
-    <message>
         <source>NEXT</source>
         <translation>다음</translation>
     </message>
@@ -1501,15 +1373,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <name>MasterNodesWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>N/A</source>
-        <translation>N/A</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Start All</source>
@@ -1609,6 +1473,10 @@ Please wait few more minutes (masternode collaterals require %1 confirmations).<
         <translation>마스터노드 데이터 원격 조종</translation>
     </message>
     <message>
+        <source>What is a Masternode?</source>
+        <translation>마스터로드란?</translation>
+    </message>
+    <message>
         <source>You are just about to export the required data to run a Masternode
 on a remote server to your clipboard.
 
@@ -1656,10 +1524,6 @@ Are you sure?</source>
         <translation>마스터노드 컨트롤러를 생성할 수 없습니다. 지갑이 잠겨 있습니다.</translation>
     </message>
     <message>
-        <source>Not enough balance to create a masternode, 10,000 PIV required.</source>
-        <translation>마스터노드 생성에 필요한 잔고가 부족합니다. 마스터노드 생성에는 10,000 PIV가 필요합니다.</translation>
-    </message>
-    <message>
         <source>Error creating masternode</source>
         <translation>마스터노드 생성 오류</translation>
     </message>
@@ -1668,7 +1532,7 @@ Are you sure?</source>
     <name>MnInfoDialog</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Masternode Information</source>
@@ -1679,16 +1543,8 @@ Are you sure?</source>
         <translation>공개 키 : </translation>
     </message>
     <message>
-        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
-        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</translation>
-    </message>
-    <message>
         <source>Address: </source>
         <translation>주소:</translation>
-    </message>
-    <message>
-        <source>127.0.0.2:43223</source>
-        <translation>127.0.0.2:43223</translation>
     </message>
     <message>
         <source>Collaterall tx id:</source>
@@ -1707,38 +1563,22 @@ Are you sure?</source>
         <translation>상태:</translation>
     </message>
     <message>
-        <source>MISSING</source>
-        <translation>MISSING</translation>
-    </message>
-    <message>
         <source>Export data to run the Masternode on a remote server</source>
         <translation>마스터노드를 원격 서버에 운용하기 위한 정보 추출</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>MyAddressRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Savings</source>
-        <translation>계좌</translation>
-    </message>
-    <message>
-        <source>Jan. 19, 2019</source>
-        <translation>Jan. 19, 2019</translation>
-    </message>
-    <message>
-        <source>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</source>
-        <translation>DN6i46dytMPVhV1JMGZFuQBh7BZZ6nNLox</translation>
+        <translation>양식</translation>
     </message>
 </context>
 <context>
     <name>NavMenuWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>V 1.0.0</source>
@@ -1796,11 +1636,7 @@ Are you sure?</source>
     <name>OptionButton</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
 </context>
 <context>
@@ -2005,7 +1841,7 @@ https://www.transifex.com/pivx-project/pivx-project-translations</translation>
     </message>
     <message>
         <source>Hide empty balances</source>
-        <translation>잔액 0 숨기기</translation>
+        <translation>빈 계좌 숨기기</translation>
     </message>
     <message>
         <source>Hide orphan stakes in transaction lists</source>
@@ -2158,10 +1994,6 @@ Address: %4
 주소: %4
 </translation>
     </message>
-    <message>
-        <source>A fatal error occurred. PIVX can no longer continue safely and will quit.</source>
-        <translation>치명적인 오류가 발생하였습니다. PIVX는 더 이상 안전하게 계속될 수 없으며, 곧 종료됩니다.</translation>
-    </message>
 </context>
 <context>
     <name>PaymentServer</name>
@@ -2270,105 +2102,6 @@ Address: %4
     </message>
 </context>
 <context>
-    <name>PrivacyWidget</name>
-    <message>
-        <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Title</source>
-        <translation>제목</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
-        <source>N/A</source>
-        <translation>N/A</translation>
-    </message>
-    <message>
-        <source>Privacy</source>
-        <translation>Privacy</translation>
-    </message>
-    <message>
-        <source>Convert</source>
-        <translation>변환하기</translation>
-    </message>
-    <message>
-        <source>Mint</source>
-        <translation>생성</translation>
-    </message>
-    <message>
-        <source>No transactions yet</source>
-        <translation>아직 전송기록 없음</translation>
-    </message>
-    <message>
-        <source>Mint zPIV</source>
-        <translation>zPIV 생성</translation>
-    </message>
-    <message>
-        <source>Enter amount of PIV to mint into zPIV</source>
-        <translation>zPIV 로 바꿀 PIV의 양을 넣으세요.</translation>
-    </message>
-    <message>
-        <source>Convert back to PIV</source>
-        <translation>PIV 로 재변환</translation>
-    </message>
-    <message>
-        <source>Enter amount of zPIV to convert back into PIV</source>
-        <translation>PIV로 바꿀 zPIV의 양을 넣으세요.</translation>
-    </message>
-    <message>
-        <source>Zerocoin</source>
-        <translation>제로코인</translation>
-    </message>
-    <message>
-        <source>zPIV is currently undergoing maintenance</source>
-        <translation>zPIV는 현재 점검중입니다</translation>
-    </message>
-    <message>
-        <source>convert</source>
-        <translation>변환</translation>
-    </message>
-    <message>
-        <source>mint</source>
-        <translation>생성</translation>
-    </message>
-    <message>
-        <source>Invalid value</source>
-        <translation>유효하지 않은 값</translation>
-    </message>
-    <message>
-        <source>zPIV minted successfully</source>
-        <translation>zPIV 생성 성공</translation>
-    </message>
-    <message>
-        <source>zPIV converted back to PIV</source>
-        <translation>PIV 로 zPIV 변환됨</translation>
-    </message>
-    <message>
-        <source>You don't have any PIV to select.</source>
-        <translation>선택할 PIV를 가지고 있지 않습니다.</translation>
-    </message>
-    <message>
-        <source>Rescan Mints</source>
-        <translation>민트를 재탐색</translation>
-    </message>
-    <message>
-        <source>Reset Spent zPIV</source>
-        <translation>전송된 zPIV 초기화</translation>
-    </message>
-    <message>
-        <source>Total %1</source>
-        <translation>총 %1</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <source>Amount</source>
@@ -2419,6 +2152,10 @@ Address: %4
         <translation>%1 ms</translation>
     </message>
     <message>
+        <source>A fatal error occurred. PIVX can no longer continue safely and will quit.</source>
+        <translation>치명적인 오류가 발생하였습니다. PIVX는 더 이상 안전하게 계속될 수 없으며, 곧 종료됩니다.</translation>
+    </message>
+    <message>
         <source>PIVX Core</source>
         <translation>PIVX Core</translation>
     </message>
@@ -2461,10 +2198,6 @@ Address: %4
     <message>
         <source>Contacts</source>
         <translation>연락처</translation>
-    </message>
-    <message>
-        <source>Delegators</source>
-        <translation>Delegators</translation>
     </message>
     <message>
         <source>Staking Contacts</source>
@@ -2930,31 +2663,19 @@ Address: %4
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
+        <source>My Address</source>
+        <translation>내 주소</translation>
     </message>
     <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
     </message>
 </context>
 <context>
     <name>ReceiveWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>No address</source>
@@ -2975,14 +2696,6 @@ Address: %4
     <message>
         <source>Receive</source>
         <translation>받기</translation>
-    </message>
-    <message>
-        <source>Scan the QR code or copy the address to receive PIV.</source>
-        <translation>PIV 를 받기 위해 QR 코드를 스캔하거나 주소를 복사 하십시요.</translation>
-    </message>
-    <message>
-        <source>No address </source>
-        <translation>주소 없음</translation>
     </message>
     <message>
         <source>No available address, try unlocking the wallet</source>
@@ -3075,24 +2788,12 @@ Address: %4
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>New Request Payment</source>
-        <translation>새로운 입금 결제 요청</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consectur cling elit, sed do </source>
-        <translation>Lorem ipsum dolor sit amet, consectur cling elit, sed do </translation>
-    </message>
-    <message>
         <source>Amount</source>
         <translation>금액</translation>
     </message>
     <message>
         <source>PIV</source>
         <translation>PIV</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
     </message>
     <message>
         <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
@@ -3109,10 +2810,6 @@ Address: %4
     <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>REQUEST</source>
-        <translation>결제 신청</translation>
     </message>
     <message>
         <source>Label</source>
@@ -3146,7 +2843,11 @@ Address: %4
         <source>Amount (optional)</source>
         <translation>액수 (선택 과목)</translation>
     </message>
-</context>
+    <message>
+        <source>Invalid amount</source>
+        <translation>잘못된 수량</translation>
+    </message>
+    </context>
 <context>
     <name>SendChangeAddressDialog</name>
     <message>
@@ -3154,20 +2855,8 @@ Address: %4
         <translation>Dialog</translation>
     </message>
     <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
-        <translation>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</translation>
-    </message>
-    <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
     </message>
     <message>
         <source>Custom Change Address</source>
@@ -3181,16 +2870,12 @@ Address: %4
         <source>Invalid address</source>
         <translation>잘못된 주소 입력</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendCustomFeeDialog</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>전송 상세내역</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Recommended</source>
@@ -3211,10 +2896,6 @@ Address: %4
     <message>
         <source>CANCEL</source>
         <translation>취소</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>선택</translation>
     </message>
     <message>
         <source>Customize Fee</source>
@@ -3241,11 +2922,7 @@ Address: %4
     <name>SendMultiRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Enter address</source>
@@ -3259,52 +2936,8 @@ Address: %4
 <context>
     <name>SendWidget</name>
     <message>
-        <source>Send</source>
-        <translation>보내기</translation>
-    </message>
-    <message>
-        <source>Select coin type to spend</source>
-        <translation>전송할 코인 타입을 선택 하십시요</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>금액</translation>
-    </message>
-    <message>
-        <source>Customize fee</source>
-        <translation>수수료 변경</translation>
-    </message>
-    <message>
-        <source>Clear all</source>
-        <translation>전체 지우기</translation>
-    </message>
-    <message>
-        <source>Add recipient</source>
-        <translation>받는이 추가</translation>
-    </message>
-    <message>
-        <source>Reset to default</source>
-        <translation>기본값으로 리셋</translation>
-    </message>
-    <message>
-        <source>Total to send</source>
-        <translation>전송할 총 액수</translation>
-    </message>
-    <message>
-        <source>Send PIV</source>
-        <translation>PIV 보내기</translation>
-    </message>
-    <message>
-        <source>Send zPIV</source>
-        <translation>zPIV 전송하기</translation>
-    </message>
-    <message>
         <source>Total remaining from the selected UTXO</source>
         <translation>선택된 UTXO 의 남은 액수</translation>
-    </message>
-    <message>
-        <source>Total remaining</source>
-        <translation>남은 총 액수</translation>
     </message>
     <message>
         <source>Warning!</source>
@@ -3317,10 +2950,6 @@ Address: %4
     <message>
         <source>Maximum amount of outputs reached</source>
         <translation>최대 한도의 output 갯수에 도달함</translation>
-    </message>
-    <message>
-        <source>PIVX address or contact label</source>
-        <translation>PIVX 주소 / 연락처 라벨</translation>
     </message>
     <message>
         <source>Invalid entry</source>
@@ -3347,49 +2976,6 @@ Cold-staking 중인 코인을 사용하여 전송하며, 무효화됩니다.
         <translation>전송 완료</translation>
     </message>
     <message>
-        <source>Spend Zerocoin</source>
-        <translation>제로코인 보내기</translation>
-    </message>
-    <message>
-        <source>zPIV is currently undergoing maintenance.</source>
-        <translation>zPIV는 현재 점검중입니다.</translation>
-    </message>
-    <message>
-        <source>Sending %1 to address %2
-</source>
-        <translation>%2 주소로 %1 보내기
-</translation>
-    </message>
-    <message>
-        <source>Sending %1 to addresses:
-%2</source>
-        <translation>%1 보내는 주소:
-%2</translation>
-    </message>
-    <message>
-        <source>zPIV transaction sent!</source>
-        <translation>zPIVX 전송 완료!</translation>
-    </message>
-    <message>
-        <source>Version 1 zPIV require a security level of 100 to successfully spend.</source>
-        <translation>zPIV 버전 1은 성공적으로 보내기 위해서 100 시큐리티 레벨이 필요합니다.</translation>
-    </message>
-    <message>
-        <source>Too much inputs (</source>
-        <translation>너무 많은 입력 (</translation>
-    </message>
-    <message>
-        <source>) needed.
-Maximum allowed: </source>
-        <translation>) 가 필요함.
-가능한 최대값 :</translation>
-    </message>
-    <message>
-        <source>
-Either mint higher denominations (so fewer inputs are needed) or reduce the amount to spend.</source>
-        <translation>높은 디노미네션 값으로 생성하거나, 보내실 금액을 줄여주세요.</translation>
-    </message>
-    <message>
         <source>Address label update failed for address: %1</source>
         <translation>주소의 라벨 변경에 실패 했습니다: %1</translation>
     </message>
@@ -3406,8 +2992,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>커스텀 수수료 %1</translation>
     </message>
     <message>
-        <source>You don't have any PIV to select.</source>
-        <translation>선택할 수 있는 PIV를 가지고 있지 않습니다.</translation>
+        <source>Coin Control</source>
+        <translation>코인 설정</translation>
+    </message>
+    <message>
+        <source>Open URI</source>
+        <translation>URI 열기</translation>
     </message>
     <message>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
@@ -3450,15 +3040,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <name>SettingsBackupWallet</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>Backup Wallet </source>
-        <translation>지갑 백업</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Change Wallet Passphrase</source>
@@ -3501,27 +3083,11 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <name>SettingsBitToolWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
-        <source>Decrypt Address Result</source>
-        <translation>주소 결과 암호화 해제</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Import Address</source>
         <translation>주소 가져오기</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation>지우기</translation>
     </message>
     <message>
         <source>BIP38 Tool</source>
@@ -3546,10 +3112,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Passphrase</source>
         <translation>암호</translation>
-    </message>
-    <message>
-        <source>Enter a passphrase </source>
-        <translation>암호를 입력 하십시요</translation>
     </message>
     <message>
         <source>Decrypted address result</source>
@@ -3656,11 +3218,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <name>SettingsConsoleWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Console</source>
@@ -3669,10 +3227,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     <message>
         <source>Console input</source>
         <translation>콘솔 입력</translation>
-    </message>
-    <message>
-        <source>Command Line Options </source>
-        <translation>명령행 옵션</translation>
     </message>
     <message>
         <source>Open Debug File</source>
@@ -3709,11 +3263,7 @@ Verify that you have installed a predetermined text editor.</source>
     <name>SettingsDisplayOptionsWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Hide stake charts in the dashboard</source>
@@ -3768,7 +3318,7 @@ Verify that you have installed a predetermined text editor.</source>
     <name>SettingsExportCSV</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Export Accounting</source>
@@ -3839,15 +3389,7 @@ Verify that you have installed a predetermined text editor.</source>
     <name>SettingsFaqWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>1</source>
@@ -3870,10 +3412,6 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>마스터로드란?</translation>
     </message>
     <message>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
         <source>Frequently Asked Questions</source>
         <translation>자주 하는 질문들</translation>
     </message>
@@ -3886,7 +3424,7 @@ Verify that you have installed a predetermined text editor.</source>
     <name>SettingsInformationWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Network Monitor</source>
@@ -3985,11 +3523,7 @@ Verify that you have installed a predetermined text editor.</source>
     <name>SettingsMainOptionsWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Window</source>
@@ -3998,10 +3532,6 @@ Verify that you have installed a predetermined text editor.</source>
     <message>
         <source>Customize the application window options</source>
         <translation>지갑 어플의 윈도우 옵션 설정</translation>
-    </message>
-    <message>
-        <source>CheckBox</source>
-        <translation>체크박스</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -4055,14 +3585,14 @@ Are you sure?
     </message>
     <message>
         <source>Options reset succeed</source>
-        <translation>옵션 리셋이 성공하였습니다.</translation>
+        <translation>옵션 리셋 성공</translation>
     </message>
 </context>
 <context>
     <name>SettingsMultisendDialog</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Transaction Details</source>
@@ -4101,7 +3631,7 @@ Are you sure?
     <name>SettingsMultisendWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -4186,15 +3716,7 @@ Please check the address and try again.</source>
     <name>SettingsSignMessageWidgets</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>Clear</source>
-        <translation>지우기</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Sign/Verify Message</source>
@@ -4223,10 +3745,6 @@ Please check the address and try again.</source>
     <message>
         <source>Enter address</source>
         <translation>주소 입력</translation>
-    </message>
-    <message>
-        <source>Write message</source>
-        <translation>메세지 입력</translation>
     </message>
     <message>
         <source>Signature</source>
@@ -4305,19 +3823,7 @@ Please check the address and try again.</source>
     <name>SettingsWalletOptionsWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
-    </message>
-    <message>
-        <source>CheckBox</source>
-        <translation>체크박스</translation>
-    </message>
-    <message>
-        <source>RadioButton</source>
-        <translation>라디오버튼</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -4336,10 +3842,6 @@ Please check the address and try again.</source>
         <translation>지갑의 내부 설정 옵션</translation>
     </message>
     <message>
-        <source>Stake split threshold:</source>
-        <translation>Stake split threshold:</translation>
-    </message>
-    <message>
         <source>Spend unconfirmed change</source>
         <translation>확인되지 않은 잔돈 전송</translation>
     </message>
@@ -4352,16 +3854,12 @@ Please check the address and try again.</source>
         <translation>네트워크 노드 설정 옵션</translation>
     </message>
     <message>
-        <source>Proxy IP:</source>
-        <translation>프록시 IP 주소:</translation>
+        <source>Enter port</source>
+        <translation>Port 입력</translation>
     </message>
     <message>
         <source>Enter proxy IP</source>
         <translation>프록시 IP 주소 입력</translation>
-    </message>
-    <message>
-        <source>Port:</source>
-        <translation>포트:</translation>
     </message>
     <message>
         <source>Map port using UPnP</source>
@@ -4372,67 +3870,35 @@ Please check the address and try again.</source>
         <translation>들어오는 연결 허용</translation>
     </message>
     <message>
-        <source>Connect through SOCKS5 proxy (default proxy):</source>
-        <translation>SOCKS5 프록시를 통해 연결 (기본 프록시):</translation>
-    </message>
-    <message>
         <source>SAVE</source>
         <translation>저장</translation>
     </message>
     <message>
         <source>Options reset succeed</source>
-        <translation>옵션 리셋이 성공하였습니다.</translation>
+        <translation>옵션 리셋 성공</translation>
     </message>
 </context>
 <context>
     <name>SettingsWalletRepairWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Wallet Repair</source>
         <translation>지갑 복구</translation>
     </message>
     <message>
-        <source>The buttons below will restart the wallet with command-line options to repair this wallet, fix issues with corrupt blockchain files or missing/obsolete transactions.</source>
-        <translation>아래 버튼들은 지갑을 고치기 위한 명령어 옵션들로 실행시 지갑을 재시작합니다, 손상된 블록체인 파일 또는 누락되었거나 오래된 트랜잭션들에 대한 문제를 해결합니다.</translation>
-    </message>
-    <message>
-        <source>Attempt to recover private keys from a corrupt wallet.dat.</source>
-        <translation>손상된 wallet.dat로 부터 개인키 복구 시도</translation>
-    </message>
-    <message>
-        <source>Rescan the blockchain for missing wallet transactions.</source>
-        <translation>누락된 지갑 트랜잭션에 대해 블록체인을 다시 스캔합니다.</translation>
-    </message>
-    <message>
-        <source>Recover transactions from blockchain (keep-meta-data, e.g. account owner).</source>
-        <translation>블록체인에서 트랜잭션 복구 (계정 소유자 등 메타 데이터는 보관).</translation>
-    </message>
-    <message>
-        <source>Recover transactions from blockchain (drop meta-data).</source>
-        <translation>블록체인에서 거래내역 복구 (메타 데이터 삭제)</translation>
-    </message>
-    <message>
         <source>Upgrade wallet to latest format on startup. (Note: this is NOT an update of the wallet itself)</source>
         <translation>시작시 지갑 파일을 최신 포맷으로 업그레이드 (참고 : 지갑 자체의 업데이트가 아님)</translation>
     </message>
     <message>
-        <source>Rebuild blockchain index from current blk000???.dat files.</source>
-        <translation>현재 blk000??.dat 파일로부터 블록체인 인덱스를 재구성 합니다.</translation>
-    </message>
-    <message>
-        <source>Deletes all local blockchain folders so the wallet synchronizes from scratch.</source>
-        <translation>블록체인을 재동기화를 위해 모든 블록체인 폴더 삭제</translation>
-    </message>
-    <message>
         <source>Salvage wallet</source>
         <translation>지갑 복구</translation>
+    </message>
+    <message>
+        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
+        <translation>손상된 wallet.dat으로 부터 개인 키 복구를 시도합니다.</translation>
     </message>
     <message>
         <source>Rescan blockchain file</source>
@@ -4453,10 +3919,6 @@ Please check the address and try again.</source>
     <message>
         <source>Rebuild index</source>
         <translation>색인 재구축</translation>
-    </message>
-    <message>
-        <source>Delete local blockchain </source>
-        <translation>로컬 블록체인 폴더 삭제</translation>
     </message>
     <message>
         <source>This will delete your local blockchain folders and the wallet will synchronize the complete Blockchain from scratch.&lt;br /&gt;&lt;br /&gt;</source>
@@ -4483,7 +3945,7 @@ Please check the address and try again.</source>
     <name>SettingsWidget</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Wallet Data</source>
@@ -4625,7 +4087,7 @@ Are you sure?
     <name>SnackBar</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Contact Stored</source>
@@ -4636,7 +4098,7 @@ Are you sure?
     <name>Splash</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Loading…</source>
@@ -4650,26 +4112,6 @@ Are you sure?
 <context>
     <name>SplashScreen</name>
     <message>
-        <source>PIVX Core</source>
-        <translation>PIVX Core</translation>
-    </message>
-    <message>
-        <source>Version %1</source>
-        <translation>버전 %1</translation>
-    </message>
-    <message>
-        <source>The Bitcoin Core developers</source>
-        <translation>비트코인 Core 개발자</translation>
-    </message>
-    <message>
-        <source>The Dash Core developers</source>
-        <translation>Dash Core 개발자</translation>
-    </message>
-    <message>
-        <source>The PIVX Core developers</source>
-        <translation>PIVX Core 개발자</translation>
-    </message>
-    <message>
         <source>[testnet]</source>
         <translation>[테스트넷]</translation>
     </message>
@@ -4678,7 +4120,7 @@ Are you sure?
     <name>TooltipMenu</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Copy</source>
@@ -4701,7 +4143,7 @@ Are you sure?
     <name>TopBar</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Available</source>
@@ -4735,33 +4177,13 @@ Are you sure?
         <source>Staking not active</source>
         <translation>스테이킹 비활성화</translation>
     </message>
-    <message numerus="yes">
-        <source>%n active connection(s)</source>
-        <translation><numerusform>%n 개 연결됨</numerusform></translation>
-    </message>
     <message>
         <source>Synchronized - Block: %1</source>
         <translation>동기화 - Block : %1</translation>
     </message>
-    <message numerus="yes">
-        <source>%n hour(s)</source>
-        <translation><numerusform>%n 시간</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <source>%n day(s)</source>
-        <translation><numerusform>%n 일</numerusform></translation>
-    </message>
-    <message numerus="yes">
-        <source>%n week(s)</source>
-        <translation><numerusform>%n 주</numerusform></translation>
-    </message>
     <message>
         <source>%1 and %2</source>
         <translation>%1 그리고 %2</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n year(s)</source>
-        <translation><numerusform>%n 년</numerusform></translation>
     </message>
     <message>
         <source>Wallet Upgrade</source>
@@ -4796,6 +4218,10 @@ NOTE: 업그레이드 이후에는
     <message>
         <source>Tor Disabled</source>
         <translation>Tor 비활성화</translation>
+    </message>
+    <message>
+        <source>FAQ</source>
+        <translation>FAQ</translation>
     </message>
     <message>
         <source>Available (Locked included)</source>
@@ -4855,10 +4281,6 @@ NOTE: 업그레이드 이후에는
 </context>
 <context>
     <name>TransactionDesc</name>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>%n 블럭 더 열기</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>%1까지 열기</translation>
@@ -4920,10 +4342,6 @@ NOTE: 업그레이드 이후에는
         <source>, has not been successfully broadcast yet</source>
         <translation>, 아직 성공적으로 브로드캐스트되지 않았습니다</translation>
     </message>
-    <message numerus="yes">
-        <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, %n 노드를 통한 브로드캐스트</numerusform></translation>
-    </message>
     <message>
         <source>Date</source>
         <translation>날짜</translation>
@@ -4963,10 +4381,6 @@ NOTE: 업그레이드 이후에는
     <message>
         <source>Credit</source>
         <translation>크레딧</translation>
-    </message>
-    <message numerus="yes">
-        <source>matures in %n more block(s)</source>
-        <translation><numerusform>%n 블록안에 생성됨</numerusform></translation>
     </message>
     <message>
         <source>not accepted</source>
@@ -5051,10 +4465,6 @@ NOTE: 업그레이드 이후에는
         <source>Address</source>
         <translation>주소</translation>
     </message>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>%n 블럭 더 열기</numerusform></translation>
-    </message>
     <message>
         <source>Open until %1</source>
         <translation>%1까지 열기</translation>
@@ -5100,40 +4510,8 @@ NOTE: 업그레이드 이후에는
         <translation>수신됨</translation>
     </message>
     <message>
-        <source>PIV Stake</source>
-        <translation>PIV stake</translation>
-    </message>
-    <message>
-        <source>zPIV Stake</source>
-        <translation>zPIV stake</translation>
-    </message>
-    <message>
-        <source>PIV Cold Stake</source>
-        <translation>PIV Cold Stake</translation>
-    </message>
-    <message>
         <source>Stake delegation</source>
         <translation>Stake delegation</translation>
-    </message>
-    <message>
-        <source>Converted PIV to zPIV</source>
-        <translation>PIV를 zPIV로 변환</translation>
-    </message>
-    <message>
-        <source>Spent zPIV</source>
-        <translation>zPIV 사용</translation>
-    </message>
-    <message>
-        <source>Received PIV from zPIV</source>
-        <translation>zPIV를 PIV로 받음</translation>
-    </message>
-    <message>
-        <source>Minted Change as zPIV from zPIV Spend</source>
-        <translation>zPIV 전송후 남은 zPIV로 잔돈 생성</translation>
-    </message>
-    <message>
-        <source>Converted zPIV to PIV</source>
-        <translation>zPIV를 PIV로 변환</translation>
     </message>
     <message>
         <source>Sent to</source>
@@ -5196,7 +4574,7 @@ NOTE: 업그레이드 이후에는
     <name>TxDetailDialog</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Transaction Details</source>
@@ -5287,15 +4665,7 @@ NOTE: 업그레이드 이후에는
     <name>TxRow</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
-    </message>
-    <message>
-        <source>18/05/18</source>
-        <translation>18/05/18</translation>
-    </message>
-    <message>
-        <source>+0.000585 PIV</source>
-        <translation>+0.000585 PIV</translation>
+        <translation>양식</translation>
     </message>
 </context>
 <context>
@@ -5304,11 +4674,7 @@ NOTE: 업그레이드 이후에는
         <source>Send Coins</source>
         <translation>코인 전송 </translation>
     </message>
-    <message>
-        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 PIV.</source>
-        <translation>SwiftTX는 아직 높은 값을 전송하는 것을 지원하지 않습니다. 트랜잭션은 현재 %1 PIV로 제한됩니다.</translation>
-    </message>
-</context>
+    </context>
 <context>
     <name>WelcomeContentWidget</name>
     <message>
@@ -5375,45 +4741,6 @@ PIVX Core Wallet</translation>
     </message>
 </context>
 <context>
-    <name>ZPivControlDialog</name>
-    <message>
-        <source>Select zPIV to Spend</source>
-        <translation>사용할 zPIV 선택</translation>
-    </message>
-    <message>
-        <source>Coin Control</source>
-        <translation>코인 설정</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
-    </message>
-    <message>
-        <source>zPiv</source>
-        <translation>zPiv</translation>
-    </message>
-    <message>
-        <source>0.00 </source>
-        <translation>0.00 </translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>수량:</translation>
-    </message>
-    <message>
-        <source>Is Spendable</source>
-        <translation>전송가능한 코인수</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Select/Deselect All</source>
-        <translation>전체 선택 / 해제</translation>
-    </message>
-    </context>
-<context>
     <name>pivx-core</name>
     <message>
         <source>(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</source>
@@ -5464,14 +4791,6 @@ PIVX Core Wallet</translation>
         <translation>MIT 소프트웨어 라이센스에 따라 배포, 첨부 파일 COPYING 또는 &lt;http://www.opensource.org/licenses/mit-license.php&gt; 를 참조하십시오.</translation>
     </message>
     <message>
-        <source>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</source>
-        <translation>Enable or disable staking functionality for PIV inputs (0-1, default: %u)</translation>
-    </message>
-    <message>
-        <source>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</source>
-        <translation>Enable or disable staking functionality for zPIV inputs (0-1, default: %u)</translation>
-    </message>
-    <message>
         <source>Enable spork administration functionality with the appropriate private key.</source>
         <translation>올바른 개인키로 spork 관리 기능을 사용 가능</translation>
     </message>
@@ -5504,14 +4823,6 @@ PIVX Core Wallet</translation>
         <translation>최고 블록이 변경될 경우 명령을 실행하십시오 (명령 내 %s 는 블록 해시로 대체 되었습니다)</translation>
     </message>
     <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for relaying (default: %s)</source>
-        <translation>이것보다 작은 수수료 (PIV/Kb)는 중계 수수료가 없는 것으로 간주됩니다 (기본값: %s)</translation>
-    </message>
-    <message>
-        <source>Fees (in PIV/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
-        <translation>이것보다 작은 수수료 (PIV/Kb)는 트랜잭션 생성 수수료가 없는 것으로 간주됩니다 (기본값: %s)</translation>
-    </message>
-    <message>
         <source>Flush database activity from memory pool to disk log every &lt;n&gt; megabytes (default: %u)</source>
         <translation>메모리 풀에서 디스크로 매 &lt;n&gt; 메가바이트만큼 데이터베이스 활동 플러쉬를 기록합니다 (기본값: %u)</translation>
     </message>
@@ -5530,10 +4841,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s' (must be at least the minrelay fee of %s to prevent stuck transactions)</source>
         <translation>-maxtxfee=&lt;amount&gt;에 대한 잘못된 금액: '%s' (트랜잭션 정지를 막을려면 적어도 %s의 minrelay 수수료가 있어야 합니다)</translation>
-    </message>
-    <message>
-        <source>Keep the specified amount available for spending at all times (default: 0)</source>
-        <translation>항상 송금할수 있도록 지정된 수량 유지 (기본값 : 0)</translation>
     </message>
     <message>
         <source>Log transaction priority and fee per kB when mining blocks (default: %u)</source>
@@ -5558,10 +4865,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>디버깅 정보 출력 (기본값: %u, &lt;category&gt; 공급은 선택입니다)</translation>
-    </message>
-    <message>
-        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect)</source>
-        <translation>DNS 검색을 통한 피어 주소 쿼리, 주소가 부족할 경우 (-connect 아닌 이상 기본값:1)</translation>
     </message>
     <message>
         <source>Randomize credentials for every proxy connection. This enables Tor stream isolation (default: %u)</source>
@@ -5648,10 +4951,6 @@ PIVX Core Wallet</translation>
         <translation>환경설정에서 masternodeprivkey를 지정해야 합니다. 도움말을 참조하십시오.</translation>
     </message>
     <message>
-        <source>(51472 could be used only on mainnet)</source>
-        <translation>(51472 은 메인넷에서만 사용될 수 있습니다)</translation>
-    </message>
-    <message>
         <source>(default: %s)</source>
         <translation>(기본값: %s)</translation>
     </message>
@@ -5660,16 +4959,8 @@ PIVX Core Wallet</translation>
         <translation>(기본값: 1)</translation>
     </message>
     <message>
-        <source>(must be 51472 for mainnet)</source>
-        <translation>(메인넷 일경우 51472)</translation>
-    </message>
-    <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation> command line 과 JSON-RPC 적용</translation>
-    </message>
-    <message>
-        <source>Accept connections from outside (default: 1 if no -proxy or -connect)</source>
-        <translation>외부에서의 접속을 허용 (1 -프록시 또는 -연결이 없을 경우 기본값)</translation>
     </message>
     <message>
         <source>Accept public REST requests (default: %u)</source>
@@ -5702,10 +4993,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Cannot downgrade wallet</source>
         <translation>지갑을 다운그레이드 할 수 없습니다.</translation>
-    </message>
-    <message>
-        <source>Connect only to the specified node(s)</source>
-        <translation>지정된 노드(s)로만 연결이 가능합니다.</translation>
     </message>
     <message>
         <source>Connect through SOCKS5 proxy</source>
@@ -5852,14 +5139,6 @@ PIVX Core Wallet</translation>
         <translation>호스트 : 포트 문자열을 구문 분석하지 못했습니다.</translation>
     </message>
     <message>
-        <source>Failed to read block</source>
-        <translation>블록을 받아오는데 실패했습니다.</translation>
-    </message>
-    <message>
-        <source>Fee (in PIV/kB) to add to transactions you send (default: %s)</source>
-        <translation>당신이 보내는 트랜잭션에 추가 할 수수료 (PIV/kB) (기본값: %s)</translation>
-    </message>
-    <message>
         <source>Force safe mode (default: %u)</source>
         <translation>강제 안전 모드 (기본값: %u)</translation>
     </message>
@@ -5928,16 +5207,8 @@ PIVX Core Wallet</translation>
         <translation>-whitelist: '%s' 에 지정된 넷마스크가 유효하지 않습니다.</translation>
     </message>
     <message>
-        <source>Invalid port detected in masternode.conf</source>
-        <translation>masternode.conf 에서 유효하지 않은 포트가 감지되었습니다</translation>
-    </message>
-    <message>
         <source>Recalculating PIV supply...</source>
         <translation>PIV 공급 재계산중...</translation>
-    </message>
-    <message>
-        <source>Reindex the PIV and zPIV money supply statistics</source>
-        <translation>PIV 및 zPIV 공급량 다시 색인</translation>
     </message>
     <message>
         <source>Reindexing zerocoin database...</source>
@@ -5982,10 +5253,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
         <translation>swiftTX 활성화, 잠긴 트랜잭션들에 대한 확인 표시 (bool, 기본값: %s)</translation>
-    </message>
-    <message>
-        <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>에러 : 거래가 거부되었습니다. 예를 들어 다른 사본 wallet.dat에서 코인을 사용했다면 2중 사용으로 인식될수 있습니다. 혹은, 일부가 이미 소비 된 경우에 이런 일이 발생할 수 있습니다.</translation>
     </message>
     <message>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
@@ -6078,10 +5345,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
         <translation>메모리에서 연결 불가능한 트랜잭션을 &lt;n&gt;개까지 유지하십시오. (기본값: %u)</translation>
-    </message>
-    <message>
-        <source>Limit size of signature cache to &lt;n&gt; entries (default: %u)</source>
-        <translation>시그니처 캐시의 크기 제한을 &lt;n&gt; 항목으로 합니다 (기본값: %u)</translation>
     </message>
     <message>
         <source>Line: %d</source>
@@ -6588,23 +5851,43 @@ PIVX Core Wallet</translation>
     <name>send</name>
     <message>
         <source>Form</source>
-        <translation>Form</translation>
+        <translation>양식</translation>
     </message>
     <message>
         <source>Send</source>
         <translation>보내기</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>텍스트라벨</translation>
+        <source>PIVX address or contact label</source>
+        <translation>PIVX 주소 / 연락처 라벨</translation>
+    </message>
+    <message>
+        <source>Amount</source>
+        <translation>금액</translation>
+    </message>
+    <message>
+        <source>Customize fee</source>
+        <translation>수수료 변경</translation>
+    </message>
+    <message>
+        <source>Clear all</source>
+        <translation>전체 지우기</translation>
+    </message>
+    <message>
+        <source>Add recipient</source>
+        <translation>받는이 추가</translation>
+    </message>
+    <message>
+        <source>Total to send</source>
+        <translation>전송할 총 액수</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>기본값으로 리셋</translation>
     </message>
     <message>
         <source>Include delegated</source>
         <translation>위임된 코인 포함</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>누르기</translation>
     </message>
 </context>
 </TS>

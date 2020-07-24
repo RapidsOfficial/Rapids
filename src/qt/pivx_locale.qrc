@@ -4,6 +4,7 @@
         <file alias="en">locale/pivx_en.qm</file>
         <file alias="en_US">locale/pivx_en_US.qm</file>
         <file alias="es">locale/pivx_es.qm</file>
+        <file alias="es_ES">locale/pivx_es_ES.qm</file>
         <file alias="fr_FR">locale/pivx_fr_FR.qm</file>
         <file alias="hr_HR">locale/pivx_hr_HR.qm</file>
         <file alias="it">locale/pivx_it.qm</file>
