@@ -67,13 +67,30 @@ static CBlock CreateGenesisBlock(uint32_t nTime, uint32_t nNonce, uint32_t nBits
  */
 static Checkpoints::MapCheckpoints mapCheckpoints =
     boost::assign::map_list_of
-    (0, uint256S("00000cfd7a591438310d014bc55bad37b8d98b42ac83702d3634ee69293e0674"))
+	(0, uint256S("00000cfd7a591438310d014bc55bad37b8d98b42ac83702d3634ee69293e0674"))
+	(5049, uint256S("e5958b4dc556ce401e358d42b915d35e3592f5011203eb17f58e782a1af537e1"))
+	(13548, uint256S("dd1b0098b0b4e5c2cc6e839c05ad167428f3809a4437e67281f23d39f3b0b143"))
+	(87265, uint256S("bd6a2c72b26bbac468244fbcac2558ae1dd71d4feee825e8b339740e232f98cb"))
+	(154284, uint256S("0e473785777571b1245210fbfffef4805c64721cf54d3728456cf5dd27b9652e"))
+	(199425, uint256S("aa81695bbbc0a756f650f3293fe2e3b33af7e66d6551b45fc9daac717c855362"))
+	(228415, uint256S("3c01623c466c5da6dbc3ce2b3fa1c7f987805e5e4d19d0ea013341bc58a66a82"))
+	(286457, uint256S("2d9f0579f5f796e34118fdb0cc99a89f8c19702989286ee2ce062f75bbd2886b"))
+	(356784, uint256S("ba1f448bcc20273778d334d9aac6d8c6a7700aaf5a91181af866d2c944949bfa"))
+	(467826, uint256S("4e386a5b8cdad98f5403aa0179f0dbac71927fce309dd8508e728dd2095768e4"))
+	(501487, uint256S("896f16f8aee715dc2feffdab54958f51175c6e766ba3a9bc5e8cbf8f85264a4b"))
+	(587547, uint256S("b480eddf906f1acd69eecf4679a058c52244411f0bd482a40fdf6edfb565d3f4"))
+	(635085, uint256S("f0e5182d2893d9dc2d146134197f71b753a02a60a4d1d44d187e10cfdd3051ae"))
+	(699737, uint256S("8d295d7a7e3cff2480f69ee42a989f247e649f168b06089c043da34c7d70a260"))
+	(704512, uint256S("b4edf5fb8e2342106b18b994baa65b4b1f0def525c6061483b5f05bf398213e3"))
+	(755412, uint256S("5885d6eef921c2d7016ec49936e2af5113f5ffe8fce7979e5b681a61a24c8519"))
+	(798231, uint256S("a5da3511d904362f0fba2dfcf1e20e8f8f21bb4df0bd879921ffd2a87c00dd78"))
+	(882587, uint256S("f973a1306324aeebd98f3b60bcefc228cefebf7e156a6e7379670a250396984a"))
     ; 
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1578332625, // * UNIX timestamp of last checkpoint block
-    5116987,    // * total number of transactions between genesis and last checkpoint
+	1595665031, // * UNIX timestamp of last checkpoint block
+	1975704,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the SetBestChain debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
 };
@@ -138,10 +155,10 @@ public:
         // height-based activations
         consensus.height_last_PoW = 200;
         consensus.height_start_BIP65 = 0;             
-        consensus.height_start_MessSignaturesV2 = 2000000;  // height_start_TimeProtoV2
+        consensus.height_start_MessSignaturesV2 = 915000;  // height_start_TimeProtoV2
         consensus.height_start_StakeModifierNewSelection = 1;
-        consensus.height_start_StakeModifierV2 = 2000000;   
-        consensus.height_start_TimeProtoV2 = 2000000;       
+        consensus.height_start_StakeModifierV2 = 915000;
+        consensus.height_start_TimeProtoV2 = 915000;
 
         // Network upgrades
         consensus.vUpgrades[Consensus::BASE_NETWORK].nActivationHeight =
@@ -168,7 +185,7 @@ public:
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 61);
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 6);
-        base58Prefixes[STAKING_ADDRESS] = std::vector<unsigned char>(1, 55);     // starting with 'R'
+        base58Prefixes[STAKING_ADDRESS] = std::vector<unsigned char>(1, 28);     // starting with 'C'
         base58Prefixes[SECRET_KEY] = std::vector<unsigned char>(1, 46);
         base58Prefixes[EXT_PUBLIC_KEY] = boost::assign::list_of(0x04)(0x88)(0xB2)(0x1E).convert_to_container<std::vector<unsigned char> >();
         base58Prefixes[EXT_SECRET_KEY] = boost::assign::list_of(0x04)(0x88)(0xAD)(0xE4).convert_to_container<std::vector<unsigned char> >();

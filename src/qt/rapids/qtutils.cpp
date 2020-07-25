@@ -190,13 +190,13 @@ QSettings* getSettings()
 
 bool isLightTheme()
 {
-    return getSettings()->value("lightTheme", true).toBool();
+    return false;
 }
 
 void setTheme(bool isLight)
 {
     QSettings* settings = getSettings();
-    settings->setValue("theme", "default");
+    settings->setValue("theme", "default-dark");
     settings->setValue("lightTheme", isLight);
 }
 
@@ -219,7 +219,7 @@ QColor getRowColor(bool isLightTheme, bool isHovered, bool isSelected)
         } else if (isHovered) {
             return QColor("#25bababa");
         } else {
-            return QColor("#ffffff");
+            return QColor("#0F0F0F");
         }
     } else {
         if (isSelected) {

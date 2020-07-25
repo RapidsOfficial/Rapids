@@ -119,7 +119,7 @@ CAmount AmountFromValue(const UniValue& value)
         throw JSONRPCError(RPC_TYPE_ERROR, "Amount is not a number");
 
     double dAmount = value.get_real();
-    if (dAmount <= 0.0 || dAmount > 1000000000.0)
+    if (dAmount <= 0.0 || dAmount > 35000000000.0)
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid amount");
     CAmount nAmount = roundint64(dAmount * COIN);
     if (!Params().GetConsensus().MoneyRange(nAmount))
@@ -452,6 +452,12 @@ static const CRPCCommand vRPCCommands[] =
         {"wallet", "walletpassphrase", &walletpassphrase, true, false, true},
         {"wallet", "delegatoradd", &delegatoradd, true, false, true},
         {"wallet", "delegatorremove", &delegatorremove, true, false, true},
+
+		/* address index */
+		{ "addressindex", "getaddresstxids", &getaddresstxids, false, false },
+		{ "addressindex", "getaddressbalance", &getaddressbalance, false, false },
+		{ "addressindex", "getaddressmempool", &getaddressmempool, false, false },
+		{ "addressindex", "getaddressutxos", &getaddressutxos, false, false },
 #endif // ENABLE_WALLET
 };
 

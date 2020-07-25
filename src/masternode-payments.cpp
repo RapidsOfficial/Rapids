@@ -322,14 +322,10 @@ bool IsBlockPayeeValid(const CBlock& block, int nBlockHeight)
 		return true;
 	LogPrint(BCLog::MASTERNODE, "Invalid mn payment detected %s\n", txNew.ToString().c_str());
 
-	if ((nBlockHeight > 1495 && nBlockHeight <= 1530) || (nBlockHeight > 2995 && nBlockHeight <= 4530) || (nBlockHeight > 4495 && nBlockHeight <= 30030) || (nBlockHeight > 29995 && nBlockHeight <= 40030)) {
-		LogPrint(BCLog::MASTERNODE, "Masternode payment enforcement is disabled, accepting block\n");
-		return true;
-	}
-	else {
-		if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT))
-			return false;
-	}
+	if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT))
+		return false;
+
+	return true;
 
 }
 
@@ -564,6 +560,16 @@ bool CMasternodePayments::AddWinningMasternode(CMasternodePaymentWinner& winnerI
 	uint256 blockHash;
 	if (!GetBlockHash(blockHash, winnerIn.nBlockHeight - 100)) {
 		return false;
+	}
+
+	{
+		CTxDestination address1;
+		ExtractDestination(winnerIn.payee, address1);
+		CBitcoinAddress address2(address1);
+		int n = mnodeman.GetMasternodeRank(winnerIn.vinMasternode, winnerIn.nBlockHeight - 100, ActiveProtocol());
+		if (n > 20 || n < 0) {
+			return false;
+		}
 	}
 
 	{

@@ -10,6 +10,7 @@
 #include "main.h"
 #include "pow.h"
 #include "uint256.h"
+#include <index/addressindex.h>
 
 #include <stdint.h>
 
@@ -19,6 +20,8 @@ static const char DB_COINS = 'c';
 static const char DB_BLOCK_FILES = 'f';
 static const char DB_TXINDEX = 't';
 static const char DB_BLOCK_INDEX = 'b';
+static const char DB_ADDRESSINDEX = 'a';
+static const char DB_ADDRESSUNSPENTINDEX = 'u';
 
 static const char DB_BEST_BLOCK = 'B';
 static const char DB_FLAG = 'F';
@@ -258,6 +261,119 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
 
     return true;
 }
+
+bool CBlockTreeDB::WriteAddressIndex(const std::vector<std::pair<CAddressIndexKey, CAmount > >&vect) {
+	CDBBatch batch;
+	for (std::vector<std::pair<CAddressIndexKey, CAmount> >::const_iterator it = vect.begin(); it != vect.end(); it++)
+		batch.Write(std::make_pair(DB_ADDRESSINDEX, it->first), it->second);
+	return WriteBatch(batch);
+}
+
+bool CBlockTreeDB::EraseAddressIndex(const std::vector<std::pair<CAddressIndexKey, CAmount > >&vect) {
+	CDBBatch batch;
+	for (std::vector<std::pair<CAddressIndexKey, CAmount> >::const_iterator it = vect.begin(); it != vect.end(); it++)
+		batch.Erase(std::make_pair(DB_ADDRESSINDEX, it->first));
+	return WriteBatch(batch);
+}
+
+bool CBlockTreeDB::UpdateAddressUnspentIndex(const std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue > >&vect) {
+	CDBBatch batch;
+	for (std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> >::const_iterator it = vect.begin(); it != vect.end(); it++) {
+		if (it->second.IsNull()) {
+			batch.Erase(std::make_pair(DB_ADDRESSUNSPENTINDEX, it->first));
+		}
+		else {
+			batch.Write(std::make_pair(DB_ADDRESSUNSPENTINDEX, it->first), it->second);
+		}
+	}
+	return WriteBatch(batch);
+}
+
+template<typename K> bool GetKey(leveldb::Slice slKey, K& key) {
+	try {
+		CDataStream ssKey(slKey.data(), slKey.data() + slKey.size(), SER_DISK, CLIENT_VERSION);
+		ssKey >> key;
+	}
+	catch (const std::exception&) {
+		return false;
+	}
+	return true;
+}
+
+bool CBlockTreeDB::ReadAddressIndex(uint160 addressHash, int type,
+	std::vector<std::pair<CAddressIndexKey, CAmount> > &addressIndex,
+	int start, int end) {
+
+	boost::scoped_ptr<CDBIterator> pcursor(NewIterator());
+
+	CDataStream ssKey(SER_DISK, CLIENT_VERSION);
+
+	if (start > 0 && end > 0) {
+		pcursor->Seek(std::make_pair(DB_ADDRESSINDEX, CAddressIndexIteratorHeightKey(type, addressHash, start)));
+	}
+	else {
+		pcursor->Seek(std::make_pair(DB_ADDRESSINDEX, CAddressIndexIteratorKey(type, addressHash)));
+	}
+
+	//leveldb::Slice slKey(&ssKey[0], ssKey.size());
+	//pcursor->Seek(slKey);
+
+	while (pcursor->Valid()) {
+		boost::this_thread::interruption_point();
+		std::pair<char, CAddressIndexKey> key;
+		if (pcursor->GetKey(key) && key.first == DB_ADDRESSINDEX && key.second.hashBytes == addressHash) {
+			if (end > 0 && key.second.blockHeight > end) {
+				break;
+			}
+			CAmount nValue;
+			if (pcursor->GetValue(nValue)) {
+				addressIndex.push_back(std::make_pair(key.second, nValue));
+				pcursor->Next();
+			}
+			else {
+				return error("failed to get address index value");
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+	return true;
+}
+
+bool CBlockTreeDB::ReadAddressUnspentIndex(uint160 addressHash, int type,
+	std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > &unspentOutputs) {
+
+	boost::scoped_ptr<CDBIterator> pcursor(NewIterator());
+
+	CDataStream ssKey(SER_DISK, CLIENT_VERSION);
+	pcursor->Seek(std::make_pair(DB_ADDRESSUNSPENTINDEX, CAddressIndexIteratorKey(type, addressHash)));
+
+	//leveldb::Slice slKey(&ssKey[0], ssKey.size());
+	//pcursor->Seek(slKey);
+
+	while (pcursor->Valid()) {
+		boost::this_thread::interruption_point();
+		std::pair<char, CAddressUnspentKey> key;
+		if (pcursor->GetKey(key) && key.first == DB_ADDRESSUNSPENTINDEX && key.second.hashBytes == addressHash) {
+			CAddressUnspentValue nValue;
+			if (pcursor->GetValue(nValue)) {
+				unspentOutputs.push_back(std::make_pair(key.second, nValue));
+				pcursor->Next();
+			}
+			else {
+				return error("failed to get address unspent value");
+			}
+		}
+		else {
+			break;
+		}
+	}
+
+	return true;
+}
+
 
 bool CBlockTreeDB::ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet)
 {

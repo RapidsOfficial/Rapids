@@ -10,7 +10,7 @@
 
 #include <list>
 #include <set>
-
+#include <index/addressindex.h>
 #include "amount.h"
 #include "coins.h"
 #include "primitives/transaction.h"
@@ -306,6 +306,12 @@ private:
 
     void trackPackageRemoved(const CFeeRate& rate);
 
+	typedef std::map<CMempoolAddressDeltaKey, CMempoolAddressDelta, CMempoolAddressDeltaKeyCompare> addressDeltaMap;
+	addressDeltaMap mapAddress;
+
+	typedef std::map<uint256, std::vector<CMempoolAddressDeltaKey> > addressDeltaMapInserted;
+	addressDeltaMapInserted mapAddressInserted;
+
 public:
 
     static const int ROLLING_FEE_HALFLIFE = 60 * 60 * 12; // public only for testing
@@ -424,6 +430,11 @@ public:
      * the tx is not dependent on other mempool transactions to be included in a block.
      */
     bool HasNoInputsOf(const CTransaction& tx) const;
+
+	void addAddressIndex(const CTxMemPoolEntry &entry, const CCoinsViewCache &view);
+	bool getAddressIndex(std::vector<std::pair<uint160, int> > &addresses,
+		std::vector<std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> > &results);
+	bool removeAddressIndex(const uint256 txhash);
 
     /** Affect CreateNewBlock prioritisation of transactions */
     void PrioritiseTransaction(const uint256 hash, const std::string strHash, double dPriorityDelta, const CAmount& nFeeDelta);

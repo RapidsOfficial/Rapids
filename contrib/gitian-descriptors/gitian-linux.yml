@@ -33,7 +33,7 @@ packages:
 - "ca-certificates"
 - "python3"
 remotes:
-- "url": "https://github.com/RapidsOfficial/rapids.git"
+- "url": "https://github.com/RapidsOfficial/Rapids.git"
   "dir": "rapids"
 files: []
 script: |

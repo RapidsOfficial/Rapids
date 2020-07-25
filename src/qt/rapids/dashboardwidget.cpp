@@ -441,7 +441,7 @@ void DashboardWidget::changeChartColors()
 	QColor backgroundColor;
 	QColor gridY;
 	if (isLightTheme()) {
-		gridLineColorX = QColor(255, 255, 255);
+		gridLineColorX = QColor(15, 15, 15);
 		linePenColorY = gridLineColorX;
 		backgroundColor = linePenColorY;
 		axisY->setGridLineColor(QColor("#1a000000"));
@@ -449,7 +449,7 @@ void DashboardWidget::changeChartColors()
 	else {
 		gridY = QColor("#40ffffff");
 		axisY->setGridLineColor(gridY);
-		gridLineColorX = QColor(27, 177, 77);
+		gridLineColorX = QColor(15, 15, 15);
 		linePenColorY = gridLineColorX;
 		backgroundColor = linePenColorY;
 	}
@@ -734,7 +734,7 @@ std::pair<int, int> DashboardWidget::getChartRange(QMap<int, std::pair<qint64, q
 			inform(tr("Error loading chart, invalid data"));
 			return std::make_pair(0, 0);
 		}
-		qSort(keys);
+		std::sort(keys.begin(), keys.end());
 		return std::make_pair(keys.first(), keys.last() + 1);
 	}
 	case MONTH:

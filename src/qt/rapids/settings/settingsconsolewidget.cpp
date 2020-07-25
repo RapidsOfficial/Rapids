@@ -252,6 +252,8 @@ SettingsConsoleWidget::SettingsConsoleWidget(RapidsGUI* _window, QWidget *parent
 	// Containers
 	setCssProperty({ ui->left, ui->messagesWidget }, "container");
 	ui->left->setContentsMargins(10, 10, 10, 10);
+	ui->messagesWidget->setReadOnly(true);
+	ui->messagesWidget->setTextInteractionFlags(Qt::TextInteractionFlag::TextSelectableByMouse);
 
 	// Title
 	setCssTitleScreen(ui->labelTitle);
@@ -348,6 +350,8 @@ bool SettingsConsoleWidget::eventFilter(QObject* obj, QEvent* event)
 				QApplication::postEvent(ui->lineEdit, new QKeyEvent(*keyevt));
 				return true;
 			}
+			if (mod == Qt::ControlModifier && key == Qt::Key_L)
+				clear(false);
 		}
 	}
 	return QWidget::eventFilter(obj, event);
