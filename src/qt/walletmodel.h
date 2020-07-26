@@ -11,6 +11,8 @@
 #include "paymentrequestplus.h"
 #include "walletmodeltransaction.h"
 
+#include "interface/wallet.h"
+
 #include "allocators.h" /* for SecureString */
 #include "swifttx.h"
 #include "wallet/wallet.h"
@@ -152,31 +154,19 @@ public:
     bool isHDEnabled() const;
     bool upgradeWallet(std::string& upgradeError);
 
+    interfaces::WalletBalances GetWalletBalances() { return m_cached_balances; };
+
     CAmount getBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true, bool fUnlockedOnly = false) const;
     CAmount getUnlockedBalance(const CCoinControl* coinControl = nullptr, bool fIncludeDelegated = true) const;
-    CAmount getUnconfirmedBalance() const;
-    CAmount getImmatureBalance() const;
     CAmount getLockedBalance() const;
-    CAmount getZerocoinBalance() const;
-    CAmount getUnconfirmedZerocoinBalance() const;
-    CAmount getImmatureZerocoinBalance() const;
     bool haveWatchOnly() const;
-    CAmount getWatchBalance() const;
-    CAmount getWatchUnconfirmedBalance() const;
-    CAmount getWatchImmatureBalance() const;
-
     CAmount getDelegatedBalance() const;
-    CAmount getColdStakedBalance() const;
 
     bool isColdStaking() const;
 
     EncryptionStatus getEncryptionStatus() const;
     bool isWalletUnlocked() const;
     bool isWalletLocked(bool fFullUnlocked = true) const;
-    CKey generateNewKey() const; //for temporary paper wallet key generation
-    bool setAddressBook(const CTxDestination& address, const std::string& strName, const std::string& strPurpose);
-    void encryptKey(const CKey key, const std::string& pwd, const std::string& slt, std::vector<unsigned char>& crypted);
-    void decryptKey(const std::vector<unsigned char>& crypted, const std::string& slt, const std::string& pwd, CKey& key);
     void emitBalanceChanged(); // Force update of UI-elements even when no values have changed
 
     // Check address for validity
@@ -285,6 +275,11 @@ public:
 
 private:
     CWallet* wallet;
+    // Simple Wallet interface.
+    // todo: Goal would be to move every CWallet* call to the wallet wrapper and
+    //  in the model only perform the data organization (and QT wrappers) to be presented on the UI.
+    interfaces::Wallet walletWrapper;
+
     bool fHaveWatchOnly;
     bool fForceCheckBalanceChanged;
 
@@ -296,35 +291,21 @@ private:
     TransactionTableModel* transactionTableModel;
     RecentRequestsTableModel* recentRequestsTableModel;
 
-    // Cache some values to be able to detect changes
-    CAmount cachedBalance;
-    CAmount cachedUnconfirmedBalance;
-    CAmount cachedImmatureBalance;
-    CAmount cachedZerocoinBalance;
-    CAmount cachedUnconfirmedZerocoinBalance;
-    CAmount cachedImmatureZerocoinBalance;
-    CAmount cachedWatchOnlyBalance;
-    CAmount cachedWatchUnconfBalance;
-    CAmount cachedWatchImmatureBalance;
-    CAmount cachedDelegatedBalance;
-    CAmount cachedColdStakedBalance;
+    // Cache balance to be able to detect changes
+    interfaces::WalletBalances m_cached_balances;
 
     EncryptionStatus cachedEncryptionStatus;
     int cachedNumBlocks;
-    int cachedTxLocks;
 
     QTimer* pollTimer;
 
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
-    Q_INVOKABLE void checkBalanceChanged();
+    Q_INVOKABLE void checkBalanceChanged(const interfaces::WalletBalances& new_balances);
 
 Q_SIGNALS:
     // Signal that balance in wallet changed
-    void balanceChanged(const CAmount& balance, const CAmount& unconfirmedBalance, const CAmount& immatureBalance,
-                        const CAmount& zerocoinBalance, const CAmount& unconfirmedZerocoinBalance, const CAmount& immatureZerocoinBalance,
-                        const CAmount& watchOnlyBalance, const CAmount& watchUnconfBalance, const CAmount& watchImmatureBalance,
-                        const CAmount& delegatedBalance, const CAmount& coldStakingBalance);
+    void balanceChanged(const interfaces::WalletBalances& walletBalances);
 
     // Encryption status of wallet changed
     void encryptionStatusChanged(int status);

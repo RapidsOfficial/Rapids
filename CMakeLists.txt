@@ -295,6 +295,7 @@ set(SERVER_SOURCES
         ./src/httprpc.cpp
         ./src/httpserver.cpp
         ./src/init.cpp
+        ./src/interface/wallet.cpp
         ./src/dbwrapper.cpp
         ./src/legacy/validation_zerocoin_legacy.cpp
         ./src/main.cpp
