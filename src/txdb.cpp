@@ -245,6 +245,7 @@ bool CBlockTreeDB::LoadBlockIndexGuts()
                 pindexNew->nFlags = diskindex.nFlags;
                 pindexNew->vStakeModifier = diskindex.vStakeModifier;
 
+
                 if (pindexNew->nHeight <= Params().GetConsensus().height_last_PoW) {
                     if (!CheckProofOfWork(pindexNew->GetBlockHash(), pindexNew->nBits))
                         return error("LoadBlockIndex() : CheckProofOfWork failed: %s", pindexNew->ToString());

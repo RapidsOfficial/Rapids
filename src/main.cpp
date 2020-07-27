@@ -43,6 +43,7 @@
 
 #include <index/addressindex.h>
 
+
 #include "masternode-sync.h"
 #include <sstream>
 
@@ -89,7 +90,9 @@ int nScriptCheckThreads = 0;
 std::atomic<bool> fImporting{false};
 std::atomic<bool> fReindex{false};
 bool fTxIndex = true;
+
 bool fAddressIndex = true;
+
 bool fIsBareMultisigStd = true;
 bool fCheckBlockIndex = false;
 bool fVerifyingBlocks = false;
@@ -1246,6 +1249,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
         pool.TrimToSize(GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000);
         if (!pool.exists(tx.GetHash()))
             return state.DoS(0, false, REJECT_INSUFFICIENTFEE, "mempool full");
+
     }
 
     SyncWithWallets(tx, nullptr);
@@ -1478,7 +1482,6 @@ bool GetAddressUnspent(uint160 addressHash, int type,
 
 	return true;
 }
-
 
 /** Return transaction in tx, and if it was found inside a block, its hash is placed in hashBlock */
 bool GetTransaction(const uint256& hash, CTransaction& txOut, uint256& hashBlock, bool fAllowSlow, CBlockIndex* blockIndex)
@@ -2072,6 +2075,9 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
 	std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
 	std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
 
+    std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
+    std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
+
     // undo transactions in reverse order
     for (int i = block.vtx.size() - 1; i >= 0; i--) {
         const CTransaction& tx = block.vtx[i];
@@ -2121,6 +2127,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
 
 			}
 		}
+
 
         // Check that all outputs are available and match the outputs in the block itself
         // exactly. Note that transactions with only provably unspendable outputs won't
@@ -2207,8 +2214,7 @@ bool DisconnectBlock(CBlock& block, CValidationState& state, CBlockIndex* pindex
 						continue;
 					}
 				}
-
-            }
+        }
         }
 
         if (!tx.IsCoinBase() && view.HaveInputs(tx))
@@ -2334,8 +2340,10 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     vPos.reserve(block.vtx.size());
     CBlockUndo blockundo;
     blockundo.vtxundo.reserve(block.vtx.size() - 1);
-	std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
-	std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
+
+    std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
+    std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
+
     CAmount nValueOut = 0;
     CAmount nValueIn = 0;
     unsigned int nMaxBlockSigOps = MAX_BLOCK_SIGOPS_CURRENT;
@@ -2344,7 +2352,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     for (unsigned int i = 0; i < block.vtx.size(); i++) {
         const CTransaction& tx = block.vtx[i];
-		const uint256 txhash = tx.GetHash();
+		    const uint256 txhash = tx.GetHash();
         // First check for BIP30.
         // Do not allow blocks that contain transactions which 'overwrite' older transactions,
         // unless those are already completely spent.
@@ -2407,6 +2415,39 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 					}
 				}
 			}
+
+            if (fAddressIndex)
+            {
+                for (size_t j = 0; j < tx.vin.size(); j++) {
+
+                    const CTxIn input = tx.vin[j];
+                    const CTxOut &prevout = view.GetOutputFor(tx.vin[j]);
+                    uint160 hashBytes;
+                    int addressType;
+
+                    if (prevout.scriptPubKey.IsPayToScriptHash()) {
+                        hashBytes = uint160(vector <unsigned char>(prevout.scriptPubKey.begin() + 2, prevout.scriptPubKey.begin() + 22));
+                        addressType = 2;
+                    } else if (prevout.scriptPubKey.IsPayToPublicKeyHash()) {
+                        hashBytes = uint160(vector <unsigned char>(prevout.scriptPubKey.begin() + 3, prevout.scriptPubKey.begin() + 23));
+                        addressType = 1;
+                    } else if (prevout.scriptPubKey.IsPayToPublicKey()) {
+                        hashBytes = Hash160(prevout.scriptPubKey.begin() + 1, prevout.scriptPubKey.end() - 1);
+                        addressType = 1;
+                    } else {
+                        hashBytes.SetNull();
+                        addressType = 0;
+                    }
+
+                    if (fAddressIndex && addressType > 0) {
+                        // record spending activity
+                        addressIndex.push_back(make_pair(CAddressIndexKey(addressType, hashBytes, pindex->nHeight, i, txhash, j, true), prevout.nValue * -1));
+
+                        // remove address from unspent index
+                        addressUnspentIndex.push_back(make_pair(CAddressUnspentKey(addressType, hashBytes, input.prevout.hash, input.prevout.n), CAddressUnspentValue()));
+                    }
+                }
+            }
 
             // Add in sigops done by pay-to-script-hash inputs;
             // this is to prevent a "rogue miner" from creating
@@ -4339,9 +4380,10 @@ bool static LoadBlockIndexDB(std::string& strError)
     pblocktree->ReadFlag("txindex", fTxIndex);
     LogPrintf("LoadBlockIndexDB(): transaction index %s\n", fTxIndex ? "enabled" : "disabled");
 
-	// Check whether we have an address index
-	pblocktree->ReadFlag("addressindex", fAddressIndex);
-	LogPrintf("%s: address index %s\n", __func__, fAddressIndex ? "enabled" : "disabled");
+
+    // Check whether we have an address index
+    pblocktree->ReadFlag("addressindex", fAddressIndex);
+    LogPrintf("%s: address index %s\n", __func__, fAddressIndex ? "enabled" : "disabled");
 
     // If this is written true before the next client init, then we know the shutdown process failed
     pblocktree->WriteFlag("shutdown", false);
@@ -4499,9 +4541,11 @@ bool InitBlockIndex()
     // Use the provided setting for -txindex in the new database
     fTxIndex = GetBoolArg("-txindex", true);
     pblocktree->WriteFlag("txindex", fTxIndex);
-	// Use the provided setting for -addressindex in the new database
-	fAddressIndex = GetBoolArg("-addressindex", DEFAULT_ADDRESSINDEX);
-	pblocktree->WriteFlag("addressindex", fAddressIndex);
+
+    // Use the provided setting for -addressindex in the new database
+    fAddressIndex = GetBoolArg("-addressindex", DEFAULT_ADDRESSINDEX);
+    pblocktree->WriteFlag("addressindex", fAddressIndex);
+
     LogPrintf("Initializing databases...\n");
 
     // Only add the genesis block if not reindexing (in which case we reuse the one already on disk)

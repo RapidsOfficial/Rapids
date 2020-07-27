@@ -112,6 +112,7 @@ static const unsigned int MAX_REJECT_MESSAGE_LENGTH = 111;
 
 static const bool DEFAULT_ADDRESSINDEX = true;
 
+
 /** Enable bloom filter */
  static const bool DEFAULT_PEERBLOOMFILTERS = true;
 

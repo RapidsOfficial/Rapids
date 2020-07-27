@@ -314,3 +314,4 @@ bool GetAddressUnspent(uint160 addressHash, int type,
 	std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > &unspentOutputs);
 
 #endif // BITCOIN_ADDRESSINDEX_H
+
