@@ -1,5 +1,6 @@
 // Copyright (c) 2019 The Bitcoin Core developers
-// Copyright (c) 2020 The Rapids Core developers
+// Copyright (c) 2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 

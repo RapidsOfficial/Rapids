@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2017-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -273,7 +273,7 @@ bool BIP38_Decrypt(std::string strPassphrase, std::string strEncryptedKey, uint2
     CKey k;
     k.Set(privKey.begin(), privKey.end(), fCompressed);
     CPubKey pubkey = k.GetPubKey();
-    std::string address = CBitcoinAddress(pubkey.GetID()).ToString();
+    std::string address = EncodeDestination(pubkey.GetID());
 
     return strAddressHash == AddressToBip38Hash(address);
 }

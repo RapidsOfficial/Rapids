@@ -1,7 +1,7 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
-// Copyright (c) 2009-2014 The Bitcoin developers
+// Copyright (c) 2009-2015 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -20,11 +20,9 @@
 
 typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
 
-class CDNSSeedData {
-public:
+struct CDNSSeedData {
     std::string name, host;
     bool supportsServiceBitsFiltering;
-    std::string getHost(uint64_t requiredServiceBits) const;
     CDNSSeedData(const std::string& strName, const std::string& strHost, bool supportsServiceBitsFilteringIn = false) : name(strName), host(strHost), supportsServiceBitsFiltering(supportsServiceBitsFilteringIn) {}
 };
 
@@ -72,12 +70,12 @@ public:
     std::string NetworkIDString() const { return strNetworkID; }
     const std::vector<CDNSSeedData>& DNSSeeds() const { return vSeeds; }
     const std::vector<unsigned char>& Base58Prefix(Base58Type type) const { return base58Prefixes[type]; }
-    const std::vector<CAddress>& FixedSeeds() const { return vFixedSeeds; }
+    const std::vector<SeedSpec6>& FixedSeeds() const { return vFixedSeeds; }
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
 
     CBaseChainParams::Network NetworkID() const { return networkID; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
-    std::string MasternodePoolDummyAddress() const { return strMasternodePoolDummyAddress; }
+
 
 protected:
     CChainParams() {}
@@ -90,8 +88,7 @@ protected:
     int nDefaultPort;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];
-    std::vector<CAddress> vFixedSeeds;
-    std::string strMasternodePoolDummyAddress;
+    std::vector<SeedSpec6> vFixedSeeds;
 };
 
 /**
@@ -111,5 +108,10 @@ void SelectParams(CBaseChainParams::Network network);
  * Returns false if an invalid combination is given.
  */
 bool SelectParamsFromCommandLine();
+
+/**
+ * Allows modifying the network upgrade regtest parameters.
+ */
+void UpdateNetworkUpgradeParameters(Consensus::UpgradeIndex idx, int nActivationHeight);
 
 #endif // BITCOIN_CHAINPARAMS_H

@@ -163,12 +163,12 @@
     </message>
     <message>
         <location line="+7"/>
-        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <source>These are your Rapids addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <source>These are your Rapids addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -228,7 +228,7 @@
 <context>
     <name>AddressTableModel</name>
     <message>
-        <location filename="../addresstablemodel.cpp" line="+279"/>
+        <location filename="../addresstablemodel.cpp" line="+283"/>
         <source>Label</source>
         <translation>Label</translation>
     </message>
@@ -243,7 +243,12 @@
         <translation type="unfinished">Date</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+0"/>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
+    </message>
+    <message>
+        <location line="+38"/>
         <source>(no label)</source>
         <translation>(no label)</translation>
     </message>
@@ -266,13 +271,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+154"/>
-        <source>No active Master Node yet</source>
-        <translation type="unfinished"></translation>
+        <location line="+204"/>
+        <source>N/A</source>
+        <translation type="unfinished">N/A</translation>
     </message>
     <message>
         <location line="+74"/>
-        <location filename="../rapids/addresseswidget.cpp" line="+109"/>
+        <location filename="../rapids/addresseswidget.cpp" line="+119"/>
         <source>Contact name</source>
         <translation type="unfinished"></translation>
     </message>
@@ -287,7 +292,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/addresseswidget.cpp" line="-28"/>
+        <location filename="../rapids/addresseswidget.cpp" line="-38"/>
         <source>Contacts</source>
         <translation type="unfinished"></translation>
     </message>
@@ -297,7 +302,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+30"/>
         <source>No contacts yet</source>
         <translation type="unfinished"></translation>
     </message>
@@ -308,7 +313,7 @@
     </message>
     <message>
         <location line="+4"/>
-        <source>Enter a RPD address</source>
+        <source>Enter Rapids address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -317,7 +322,7 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+56"/>
+        <location line="+58"/>
         <source>Invalid Contact Address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -402,7 +407,7 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../askpassphrasedialog.cpp" line="+85"/>
+        <location filename="../askpassphrasedialog.cpp" line="+86"/>
         <source>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</source>
         <translation>Enter the new passphrase to the wallet.&lt;br/&gt;Please use a passphrase of &lt;b&gt;ten or more random characters&lt;/b&gt;, or &lt;b&gt;eight or more words&lt;/b&gt;.</translation>
     </message>
@@ -454,7 +459,22 @@ for staking</source>
         <translation>Confirm wallet encryption</translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
+        <source>WARNING</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>If you encrypt your wallet and lose your passphrase, you will</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>LOSE ALL OF YOUR RPD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>ENCRYPT</source>
         <translation type="unfinished"></translation>
     </message>
@@ -464,19 +484,20 @@ for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+144"/>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
+        <location line="+87"/>
+        <location line="+26"/>
+        <source>WARNING: The Caps Lock key is on!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>Rapids will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="-145"/>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Are you sure you wish to encrypt your wallet?</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+46"/>
@@ -537,61 +558,17 @@ for staking</source>
         <source>Wallet passphrase was successfully changed.</source>
         <translation>Wallet passphrase was successfully changed.</translation>
     </message>
-    <message>
-        <location line="+42"/>
-        <location line="+26"/>
-        <source>Warning: The Caps Lock key is on!</source>
-        <translation>Warning: The Caps Lock key is on!</translation>
-    </message>
 </context>
 <context>
     <name>BanTableModel</name>
     <message>
-        <location filename="../bantablemodel.cpp" line="+87"/>
+        <location filename="../bantablemodel.cpp" line="+89"/>
         <source>IP/Netmask</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+0"/>
         <source>Banned Until</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>BlockExplorer</name>
-    <message>
-        <location filename="../forms/blockexplorer.ui" line="+14"/>
-        <source>Blockchain Explorer</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+18"/>
-        <source>Back</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Forward</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+29"/>
-        <source>Address / Block / Transaction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+25"/>
-        <source>Search</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+39"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../blockexplorer.cpp" line="+480"/>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -631,50 +608,50 @@ for staking</source>
 <context>
     <name>ClientModel</name>
     <message>
-        <location filename="../clientmodel.cpp" line="+82"/>
+        <location filename="../clientmodel.cpp" line="+83"/>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
         <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+110"/>
-        <source>Network Alert</source>
-        <translation>Network Alert</translation>
     </message>
 </context>
 <context>
     <name>CoinControlDialog</name>
     <message>
-        <location filename="../forms/coincontroldialog.ui" line="+198"/>
+        <location filename="../forms/coincontroldialog.ui" line="+202"/>
         <source>Quantity:</source>
         <translation>Quantity:</translation>
     </message>
     <message>
-        <location line="+333"/>
+        <location line="+385"/>
         <source>Bytes:</source>
         <translation>Bytes:</translation>
     </message>
     <message>
-        <location line="-297"/>
+        <location line="-323"/>
         <source>Fee:</source>
         <translation>Fee:</translation>
     </message>
     <message>
-        <location line="-214"/>
+        <location line="-244"/>
         <source>Coin Selection</source>
         <translation>Coin Selection</translation>
     </message>
     <message>
-        <location line="+531"/>
+        <location line="+81"/>
+        <source>Select RPD Outputs to Spend</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+532"/>
         <source>Dust:</source>
         <translation>Dust:</translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+46"/>
         <source>Change:</source>
         <translation>Change:</translation>
     </message>
     <message>
-        <location line="-157"/>
+        <location line="-209"/>
         <source>Tree mode</source>
         <translation>Tree mode</translation>
     </message>
@@ -689,38 +666,28 @@ for staking</source>
         <translation>(1 locked)</translation>
     </message>
     <message>
-        <location line="-278"/>
-        <location line="+322"/>
+        <location line="-356"/>
+        <location line="+400"/>
         <source>Amount</source>
         <translation>Amount</translation>
     </message>
     <message>
-        <location line="-380"/>
-        <source>Transaction Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <location line="+72"/>
-        <location line="+357"/>
+        <location line="-393"/>
+        <location line="+124"/>
+        <location line="+461"/>
         <source>0.00 RPD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-393"/>
-        <location line="+333"/>
-        <location line="+40"/>
+        <location line="-523"/>
+        <location line="+385"/>
+        <location line="+92"/>
         <source>0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-267"/>
-        <location filename="../coincontroldialog.cpp" line="+163"/>
+        <location line="-319"/>
+        <location filename="../coincontroldialog.cpp" line="+149"/>
         <location line="+93"/>
         <source>Select all</source>
         <translation type="unfinished"></translation>
@@ -741,17 +708,17 @@ for staking</source>
         <translation>Received with address</translation>
     </message>
     <message>
-        <location line="+97"/>
+        <location line="+175"/>
         <source>After Fee: </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+49"/>
+        <location line="+75"/>
         <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-141"/>
+        <location line="-245"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
@@ -766,7 +733,7 @@ for staking</source>
         <translation>Confirmed</translation>
     </message>
     <message>
-        <location filename="../coincontroldialog.cpp" line="-149"/>
+        <location filename="../coincontroldialog.cpp" line="-142"/>
         <source>Copy address</source>
         <translation>Copy address</translation>
     </message>
@@ -777,12 +744,11 @@ for staking</source>
     </message>
     <message>
         <location line="+1"/>
-        <location line="+26"/>
         <source>Copy amount</source>
         <translation>Copy amount</translation>
     </message>
     <message>
-        <location line="-25"/>
+        <location line="+1"/>
         <source>Copy transaction ID</source>
         <translation>Copy transaction ID</translation>
     </message>
@@ -797,53 +763,53 @@ for staking</source>
         <translation>Unlock unspent</translation>
     </message>
     <message>
-        <location line="+22"/>
-        <source>Copy quantity</source>
-        <translation>Copy quantity</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Copy fee</source>
-        <translation>Copy fee</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Copy after fee</source>
-        <translation>Copy after fee</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Copy bytes</source>
-        <translation>Copy bytes</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Copy priority</source>
-        <translation>Copy priority</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Copy dust</source>
-        <translation>Copy dust</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Copy change</source>
-        <translation>Copy change</translation>
-    </message>
-    <message>
-        <location line="+20"/>
+        <location line="+42"/>
         <location line="+97"/>
         <source>Unselect all</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+39"/>
         <source>Please switch to &quot;List mode&quot; to use this function.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+210"/>
+        <location line="+96"/>
+        <source>Quantity Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Amount Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Fee Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>After Fee Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Bytes Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Dust Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Change Copied</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+83"/>
         <source>highest</source>
         <translation>highest</translation>
     </message>
@@ -903,8 +869,13 @@ for staking</source>
         <translation>yes</translation>
     </message>
     <message>
-        <location filename="../forms/coincontroldialog.ui" line="+51"/>
-        <location filename="../coincontroldialog.cpp" line="+0"/>
+        <location line="+220"/>
+        <source>delegated to %1 for cold staking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../forms/coincontroldialog.ui" line="+77"/>
+        <location filename="../coincontroldialog.cpp" line="-220"/>
         <source>no</source>
         <translation>no</translation>
     </message>
@@ -946,7 +917,7 @@ for staking</source>
     </message>
     <message>
         <location line="+49"/>
-        <location line="+78"/>
+        <location line="+92"/>
         <source>(no label)</source>
         <translation>(no label)</translation>
     </message>
@@ -959,115 +930,6 @@ for staking</source>
         <location line="+1"/>
         <source>(change)</source>
         <translation>(change)</translation>
-    </message>
-</context>
-<context>
-    <name>CoinControlRpdWidget</name>
-    <message>
-        <location filename="../rapids/forms/coincontrolrpdwidget.ui" line="+14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+78"/>
-        <source>Transaction Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>PushButton</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+30"/>
-        <source>RPD:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+36"/>
-        <location line="+36"/>
-        <location line="+143"/>
-        <location line="+20"/>
-        <location line="+20"/>
-        <location line="+20"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-246"/>
-        <source>Quantity:</source>
-        <translation type="unfinished">Quantity:</translation>
-    </message>
-    <message>
-        <location line="+36"/>
-        <source>Fee:</source>
-        <translation type="unfinished">Fee:</translation>
-    </message>
-    <message>
-        <location line="+37"/>
-        <source>Amount</source>
-        <translation type="unfinished">Amount</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Label</source>
-        <translation type="unfinished">Label</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Address</source>
-        <translation type="unfinished">Address</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Type</source>
-        <translation type="unfinished">Type</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Date</source>
-        <translation type="unfinished">Date</translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Confirmations</source>
-        <translation type="unfinished">Confirmations</translation>
-    </message>
-    <message>
-        <location line="+39"/>
-        <source>CheckBox</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+17"/>
-        <source>Bytes:</source>
-        <translation type="unfinished">Bytes:</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Dust:</source>
-        <translation type="unfinished">Dust:</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>Change:</source>
-        <translation type="unfinished">Change:</translation>
-    </message>
-    <message>
-        <location line="+20"/>
-        <source>After Fee: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+65"/>
-        <source>CANCEL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>OK</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1089,17 +951,17 @@ for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+331"/>
+        <location line="+117"/>
+        <source>Owner address (optional, if empty a new address will be created)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+214"/>
         <source>Total Staking:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-214"/>
-        <source>Owner Address (optional, if empty a new address will be created)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+191"/>
+        <location line="-23"/>
         <source>List of delegated balance by address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1109,7 +971,7 @@ for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/coldstakingwidget.cpp" line="+88"/>
+        <location filename="../rapids/coldstakingwidget.cpp" line="+93"/>
         <source>Cold Staking</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1124,23 +986,7 @@ for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>You can delegate your RPDs and let a hot node (24/7 online node)
-stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Add owner address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Delegate or Accept RPD delegation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+20"/>
         <source>Delegate</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1150,12 +996,7 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Add the staking address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location line="+14"/>
         <source>Delegated balance history</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1165,17 +1006,38 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+124"/>
+        <location line="+660"/>
         <source>Total Staking: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="-501"/>
         <source>Error loading delegations: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="-193"/>
+        <source>You can delegate your RPDs, letting a hot node (24/7 online node)
+stake on your behalf, while you keep the keys securely offline.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Enter owner address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Accept RPD delegation / Delegate RPD</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>Cold Staking address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+189"/>
         <source>No receive addresses available, you can go to the receive screen and create some there!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1185,7 +1047,12 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+103"/>
+        <location line="+114"/>
+        <source>Cannot send delegation, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Cold staking is networkely disabled</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1236,12 +1103,17 @@ Do you wish to proceed?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+30"/>
         <source>You don&apos;t have any RPD to select.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+16"/>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>URI copied to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1282,47 +1154,47 @@ address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+40"/>
         <source>Address copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Edit Cold Address Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Whitelist failed, please check the logs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source> staking!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>Blacklist failed, please check the logs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source> blacklisted from staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+12"/>
         <source>Owner address copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+6"/>
         <source>Edit Owner Address Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+29"/>
         <source>Address label saved</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1379,7 +1251,7 @@ address</source>
     </message>
     <message>
         <location line="+93"/>
-        <location filename="../rapids/dashboardwidget.cpp" line="+49"/>
+        <location filename="../rapids/dashboardwidget.cpp" line="+47"/>
         <source>Staking Rewards</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1447,62 +1319,7 @@ address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
-        <source>All</source>
-        <translation type="unfinished">All</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Received</source>
-        <translation type="unfinished">Received</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Sent</source>
-        <translation type="unfinished">Sent</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Mined</source>
-        <translation type="unfinished">Mined</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Minted</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>MN reward</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>To yourself</source>
-        <translation type="unfinished">To yourself</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Cold stakes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Hot stakes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Delegated</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Delegations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
+        <location line="+67"/>
         <source>Please wait until the wallet is fully synced to see your correct balance</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1524,34 +1341,34 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+23"/>
-        <location line="+235"/>
+        <location line="+245"/>
         <source>You have no staking rewards</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-233"/>
+        <location line="-243"/>
         <source>No charts library</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+233"/>
+        <location line="+243"/>
         <source>Loading chart..</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+119"/>
-        <location line="+215"/>
-        <location line="+49"/>
+        <location line="+123"/>
+        <location line="+220"/>
+        <location line="+52"/>
         <source>Error loading chart, invalid show option</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-58"/>
+        <location line="-61"/>
         <source>Error loading chart, invalid data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+84"/>
+        <location line="+97"/>
         <source>Error loading chart: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1580,79 +1397,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+22"/>
-        <source>SAVE</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>DenomGenerationDialog</name>
-    <message>
-        <location filename="../rapids/forms/denomgenerationdialog.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished">Form</translation>
-    </message>
-    <message>
-        <location line="+81"/>
-        <source>Transaction Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+66"/>
-        <source>This will unlock your wallet fully, so that anyone with access to it can spend until the wallet is closed or locked again.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+52"/>
-        <source>5000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>100</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>10</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>1000</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>50</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>500</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>5</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>1</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Select All</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+52"/>
-        <source>CANCEL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
         <source>SAVE</source>
         <translation type="unfinished"></translation>
     </message>
@@ -1706,7 +1450,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+67"/>
-        <source>The entered address &quot;%1&quot; is not a valid RPD address.</source>
+        <source>The entered address &quot;%1&quot; is not a valid Rapids address.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -1759,64 +1503,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <location line="+6"/>
         <source>Cannot create data directory here.</source>
         <translation>Cannot create data directory here.</translation>
-    </message>
-</context>
-<context>
-    <name>GovernancePage</name>
-    <message>
-        <location filename="../forms/governancepage.ui" line="+14"/>
-        <source>Form</source>
-        <translation type="unfinished">Form</translation>
-    </message>
-    <message>
-        <location line="+41"/>
-        <source>GOVERNANCE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+141"/>
-        <source>Update Proposals</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+33"/>
-        <source>Next super block:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <location line="+14"/>
-        <location line="+14"/>
-        <location line="+14"/>
-        <location line="+14"/>
-        <location line="+14"/>
-        <source>0</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-63"/>
-        <source>Blocks to next super block:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Days to budget payout (estimate):</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Allotted budget:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Budget left:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Masternodes count:</source>
-        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -1873,7 +1559,12 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-3"/>
+        <location line="+1"/>
+        <source>Hide QT staking charts on startup (default: %u)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-4"/>
         <source>Set language, for example &quot;de_DE&quot; (default: system locale)</source>
         <translation>Set language, for example &quot;de_DE&quot; (default: system locale)</translation>
     </message>
@@ -1912,7 +1603,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+18"/>
-        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <source>Rapids will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2015,21 +1706,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <source>Form</source>
         <translation type="unfinished">Form</translation>
     </message>
-    <message>
-        <location line="+69"/>
-        <source>user_masternode</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>Address: 88.26.164.88:51474</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+23"/>
-        <source>Jan. 19, 2019</source>
-        <translation type="unfinished"></translation>
-    </message>
 </context>
 <context>
     <name>MasterNodeWizardDialog</name>
@@ -2070,36 +1746,41 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+94"/>
-        <source>Create New Master Node Controller</source>
+        <source>Create New Masternode Controller</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+23"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a Rapids Masternode you must dedicate 10,000 RPD (the unit of Rapids) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+89"/>
+        <source>Set Masternode Name</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+83"/>
+        <source>Set Masternode IP and Port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+81"/>
+        <source>Enter port</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-218"/>
         <source>Make sure you have this amount of coins.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+54"/>
-        <source>Set Master Node’s Name</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+39"/>
+        <location line="+93"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node&apos;s name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
-        <source>Set Master Node’s IP and port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+51"/>
         <source>Address of the node that must always be online running the actual master node.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2109,12 +1790,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
-        <source>Enter Port</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+89"/>
+        <location line="+134"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2124,12 +1800,12 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/masternodewizarddialog.cpp" line="+51"/>
+        <location filename="../rapids/masternodewizarddialog.cpp" line="+56"/>
         <source>e.g user_masternode</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+34"/>
         <source>NEXT</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2139,7 +1815,7 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+82"/>
+        <location line="+84"/>
         <source>address label cannot be empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2149,17 +1825,37 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
-        <source>Invalid port number</source>
+        <location line="+4"/>
+        <source>Invalid IP address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Prepare master node failed.
+
+%1
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+77"/>
+        <source>Invalid collateral output index</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+36"/>
-        <source>Prepare master node failed..</source>
+        <source>Master node created! Wait %1 confirmations before starting it.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+6"/>
+        <source>Cannot send collateral transaction.
+
+%1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-92"/>
         <source>Invalid masternode.conf file</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2169,68 +1865,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>Invalid collaterall output index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <source>Master node created!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+66"/>
         <source>masternode.conf file doesn&apos;t exists</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+51"/>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation type="unfinished">The recipient address is not valid, please recheck.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation type="unfinished">The amount to pay must be larger than 0.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>The amount exceeds your balance.</source>
-        <translation type="unfinished">The amount exceeds your balance.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation type="unfinished">The total exceeds your balance when the %1 transaction fee is included.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation type="unfinished">Duplicate address found, can only send to each address once per send operation.</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Transaction creation failed!</source>
-        <translation type="unfinished">Transaction creation failed!</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation type="unfinished">The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation type="unfinished">Error: The wallet was unlocked only to anonymize coins.</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation type="unfinished">A fee %1 times higher than %2 per kB is considered an insanely high fee.</translation>
-    </message>
-    <message>
-        <location line="+12"/>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2249,11 +1885,21 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
     <message>
         <location line="+154"/>
-        <source>No active Master Node yet</source>
+        <source>N/A</source>
+        <translation type="unfinished">N/A</translation>
+    </message>
+    <message>
+        <location line="+65"/>
+        <source>Start All</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/masternodeswidget.cpp" line="+90"/>
+        <location line="+13"/>
+        <source>Start Inactive/s</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rapids/masternodeswidget.cpp" line="+95"/>
         <source>Masternodes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2269,12 +1915,12 @@ and vote on the treasury system receiving a periodic reward.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+20"/>
         <source>No active Masternode yet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+56"/>
         <source>Start</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2289,7 +1935,12 @@ and vote on the treasury system receiving a periodic reward.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+22"/>
+        <source>Please wait until the node is fully synced</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
         <source>Start Masternode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2300,13 +1951,58 @@ and vote on the treasury system receiving a periodic reward.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>Cannot start masternode, the collateral transaction has not been accepted by the network.
-Please wait few more minutes.</source>
+        <location line="+4"/>
+        <source>Cannot edit masternode, wallet locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
+        <location line="+6"/>
+        <source>Cannot start masternode, the collateral transaction has not been confirmed by the network yet.
+Please wait few more minutes (masternode collaterals require %1 confirmations).</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
+        <source>Background task is being executed, please wait</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
+        <source>Start ALL masternodes failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Wallet unlock cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
+        <source>Cannot perform Masternodes start</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+31"/>
+        <source>%1 Masternodes failed to start, %2 started</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>All Masternodes started!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
+        <source>Cannot show Masternode information, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>Masternode data copied to the clipboard.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-11"/>
         <source>Remote Masternode Data</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2323,12 +2019,7 @@ this controller wallet (select the Masternode in the list and press &quot;start&
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>Masternode exported!, check your clipboard</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+24"/>
         <source>Delete Masternode</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2351,12 +2042,17 @@ Are you sure?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+53"/>
         <source>masternode.conf file doesn&apos;t exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+9"/>
+        <source>Cannot create Masternode controller, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2375,8 +2071,7 @@ Are you sure?</source>
     </message>
     <message>
         <location line="+84"/>
-        <location filename="../rapids/mninfodialog.cpp" line="+20"/>
-        <source>Master Node Information</source>
+        <source>Masternode Information</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2427,7 +2122,7 @@ Are you sure?</source>
     </message>
     <message>
         <location line="+38"/>
-        <source>Export data to run the Master Node on a remote server</source>
+        <source>Export data to run the Masternode on a remote server</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -2462,12 +2157,12 @@ Are you sure?</source>
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+276"/>
+        <location line="+373"/>
         <source>V 1.0.0</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/navmenuwidget.cpp" line="+22"/>
+        <location filename="../rapids/navmenuwidget.cpp" line="+23"/>
         <source>v%1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2583,7 +2278,7 @@ Are you sure?</source>
     </message>
     <message>
         <location line="+33"/>
-        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <source>Automatically open the Rapids client port on the router. This only works when your router supports UPnP and it is enabled.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2608,12 +2303,12 @@ Are you sure?</source>
     </message>
     <message>
         <location line="-236"/>
-        <source>Automatically start RPD after logging in to the system.</source>
+        <source>Automatically start Rapids after logging in to the system.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>&amp;Start RPD on system login</source>
+        <source>&amp;Start Rapids on system login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2648,7 +2343,7 @@ Are you sure?</source>
     </message>
     <message>
         <location line="+192"/>
-        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
+        <source>The user interface language can be set here. This setting will take effect after restarting Rapids.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2710,7 +2405,7 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
     </message>
     <message>
         <location line="+98"/>
-        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
+        <source>Connect to the Rapids network through a SOCKS5 proxy.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -2841,7 +2536,7 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
         <translation>&amp;Cancel</translation>
     </message>
     <message>
-        <location filename="../optionsdialog.cpp" line="+92"/>
+        <location filename="../optionsdialog.cpp" line="+91"/>
         <source>Any</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2856,7 +2551,7 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
         <translation>none</translation>
     </message>
     <message>
-        <location line="+98"/>
+        <location line="+95"/>
         <source>Confirm options reset</source>
         <translation>Confirm options reset</translation>
     </message>
@@ -2895,14 +2590,14 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
 <context>
     <name>RapidsGUI</name>
     <message>
-        <location filename="../rapids/rapidsgui.cpp" line="+53"/>
-        <location line="+294"/>
+        <location filename="../rapids/rapidsgui.cpp" line="+70"/>
+        <location line="+292"/>
         <location line="+68"/>
         <source>Rapids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-361"/>
+        <location line="-359"/>
         <source>Wallet</source>
         <translation type="unfinished">Wallet</translation>
     </message>
@@ -2912,7 +2607,7 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
         <translation type="unfinished">Node</translation>
     </message>
     <message>
-        <location line="+108"/>
+        <location line="+100"/>
         <source>&amp;Show / Hide</source>
         <translation type="unfinished">&amp;Show / Hide</translation>
     </message>
@@ -2932,12 +2627,12 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
         <translation type="unfinished">Quit application</translation>
     </message>
     <message>
-        <location line="+38"/>
+        <location line="+37"/>
         <source>Rapids client</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+155"/>
+        <location line="+162"/>
         <source>Error</source>
         <translation type="unfinished">Error</translation>
     </message>
@@ -2957,7 +2652,7 @@ https://www.transifex.com/rapids-project/rapids-project-translations</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+242"/>
+        <location line="+243"/>
         <source>Sent MultiSend transaction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -2985,16 +2680,8 @@ Address: %4
 </translation>
     </message>
     <message>
-        <location filename="../rapids.cpp" line="+505"/>
-        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>PWidget</name>
-    <message>
-        <location filename="../rapids/pwidget.cpp" line="+94"/>
-        <source>Wallet locked, you need to unlock it to perform this action</source>
+        <location filename="../rapids.cpp" line="+518"/>
+        <source>A fatal error occurred. Rapids can no longer continue safely and will quit.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3002,7 +2689,7 @@ Address: %4
     <name>PaymentServer</name>
     <message>
         <location filename="../paymentserver.cpp" line="+287"/>
-        <location line="+205"/>
+        <location line="+202"/>
         <location line="+33"/>
         <location line="+104"/>
         <location line="+12"/>
@@ -3011,7 +2698,7 @@ Address: %4
         <translation>Payment request error</translation>
     </message>
     <message>
-        <location line="-275"/>
+        <location line="-274"/>
         <location line="+12"/>
         <location line="+5"/>
         <source>URI handling</source>
@@ -3033,13 +2720,13 @@ Address: %4
         <translation>Invalid payment address %1</translation>
     </message>
     <message>
-        <location line="-104"/>
+        <location line="-102"/>
         <source>Cannot start rapids: click-to-pay handler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+110"/>
-        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
+        <location line="+108"/>
+        <source>URI cannot be parsed! This can be caused by an invalid Rapids address or malformed URI parameters.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3048,7 +2735,7 @@ Address: %4
         <translation>Payment request file cannot be read! This can be caused by an invalid payment request file.</translation>
     </message>
     <message>
-        <location line="+67"/>
+        <location line="+66"/>
         <location line="+8"/>
         <location line="+30"/>
         <source>Payment request rejected</source>
@@ -3123,7 +2810,7 @@ Address: %4
 <context>
     <name>PeerTableModel</name>
     <message>
-        <location filename="../peertablemodel.cpp" line="+114"/>
+        <location filename="../peertablemodel.cpp" line="+116"/>
         <source>Address/Hostname</source>
         <translation>Address/Hostname</translation>
     </message>
@@ -3155,7 +2842,7 @@ Address: %4
         <location line="+123"/>
         <location line="+53"/>
         <location line="+86"/>
-        <location line="+257"/>
+        <location line="+247"/>
         <location line="+7"/>
         <location line="+14"/>
         <location line="+7"/>
@@ -3175,7 +2862,7 @@ Address: %4
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-597"/>
+        <location line="-587"/>
         <location line="+28"/>
         <location line="+119"/>
         <source>PushButton</source>
@@ -3183,11 +2870,11 @@ Address: %4
     </message>
     <message>
         <location line="+183"/>
-        <source>No active Master Node yet</source>
-        <translation type="unfinished"></translation>
+        <source>N/A</source>
+        <translation type="unfinished">N/A</translation>
     </message>
     <message>
-        <location filename="../rapids/privacywidget.cpp" line="+38"/>
+        <location filename="../rapids/privacywidget.cpp" line="+36"/>
         <source>Privacy</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3214,7 +2901,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+53"/>
-        <source>Last Zerocoin Movements</source>
+        <source>Last zRPD Movements</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3243,7 +2930,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+35"/>
+        <location line="+39"/>
         <source>Zerocoin</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3253,7 +2940,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>You need to unlock the wallet to be able to %1 zRPD</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3273,22 +2960,22 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+19"/>
         <source>zRPD minted successfully</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+19"/>
         <source>zRPD converted back to RPD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+19"/>
+        <location line="+20"/>
         <source>You don&apos;t have any RPD to select.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+7"/>
         <source>Rescan Mints</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3298,8 +2985,8 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
-        <source>Reset Spent Zerocoins</source>
+        <location line="+9"/>
+        <source>Reset Spent zRPD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3308,92 +2995,8 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+96"/>
+        <location line="+95"/>
         <source>Total %1</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>ProposalFrame</name>
-    <message>
-        <location filename="../proposalframe.cpp" line="+94"/>
-        <source>Open proposal page in browser</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source> remaining payment(s).</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Yes:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>Abstain:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+10"/>
-        <source>No:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+42"/>
-        <source>A proposal URL can be used for phishing, scams and computer viruses. Open this link only if you trust the following URL.
-</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Open link</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Copy link</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+50"/>
-        <source>Wallet Locked</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>You must unlock your wallet to vote.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Do you want to vote %1 on</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>using all your masternodes?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Proposal Hash:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Proposal URL:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Confirm Vote</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+69"/>
-        <source>Vote Results</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3405,12 +3008,12 @@ transaction history, making transactions untraceable </source>
         <translation>Amount</translation>
     </message>
     <message>
-        <location filename="../guiutil.cpp" line="+143"/>
-        <source>Enter a RPD address (e.g. %1)</source>
+        <location filename="../guiutil.cpp" line="+144"/>
+        <source>Enter Rapids address (e.g. %1)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+783"/>
+        <location line="+796"/>
         <source>%1 d</source>
         <translation>%1 d</translation>
     </message>
@@ -3426,23 +3029,18 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+2"/>
-        <location line="+43"/>
+        <location line="+40"/>
         <source>%1 s</source>
         <translation>%1 s</translation>
     </message>
     <message>
-        <location line="-28"/>
+        <location line="-25"/>
         <source>NETWORK</source>
         <translation>NETWORK</translation>
     </message>
     <message>
         <location line="+4"/>
         <source>BLOOM</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>ZK_BLOOM</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3466,7 +3064,7 @@ transaction history, making transactions untraceable </source>
         <translation>%1 ms</translation>
     </message>
     <message>
-        <location filename="../rapids.cpp" line="+75"/>
+        <location filename="../rapids.cpp" line="+73"/>
         <location line="+7"/>
         <location line="+13"/>
         <location line="+19"/>
@@ -3494,8 +3092,151 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+61"/>
+        <location line="+63"/>
         <source>Rapids didn&apos;t yet exit safely...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../addresstablemodel.cpp" line="-230"/>
+        <source>Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../rapids/qtutils.cpp" line="+136"/>
+        <source>Receiving</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Delegator</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <location filename="../rapids/qtutils.cpp" line="+2"/>
+        <source>Cold Staking</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Cold Staking Contact</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Hidden</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Unknown</source>
+        <translation type="unfinished">Unknown</translation>
+    </message>
+    <message>
+        <location filename="../rapids/qtutils.cpp" line="-3"/>
+        <location line="+21"/>
+        <source>All</source>
+        <translation type="unfinished">All</translation>
+    </message>
+    <message>
+        <location line="-19"/>
+        <source>Contacts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Delegators</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Staking Contacts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Date desc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Date asc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Amount desc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Amount asc</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Received</source>
+        <translation type="unfinished">Received</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Sent</source>
+        <translation type="unfinished">Sent</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Mined</source>
+        <translation type="unfinished">Mined</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Minted</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>MN reward</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>To yourself</source>
+        <translation type="unfinished">To yourself</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cold stakes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Hot stakes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Delegated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Delegations</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+84"/>
+        <source>by Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>by Address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>by Date</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -3620,7 +3361,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+93"/>
-        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <source>Open the Rapids debug log file from the current data directory. This can take a few seconds for large log files.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -3685,8 +3426,8 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+59"/>
-        <location filename="../rpcconsole.cpp" line="+326"/>
-        <location line="+730"/>
+        <location filename="../rpcconsole.cpp" line="+317"/>
+        <location line="+728"/>
         <source>Select a peer to view detailed information.</source>
         <translation>Select a peer to view detailed information.</translation>
     </message>
@@ -3902,11 +3643,11 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="-39"/>
-        <source>Welcome to the RPD RPC console.</source>
+        <source>Welcome to the Rapids RPC console.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-219"/>
+        <location line="-218"/>
         <source>&amp;Disconnect Node</source>
         <translation type="unfinished"></translation>
     </message>
@@ -3939,7 +3680,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+45"/>
         <source>&amp;Unban Node</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4060,7 +3801,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+104"/>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4091,13 +3832,13 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+25"/>
-        <location filename="../rapids/receivewidget.cpp" line="+218"/>
+        <location filename="../rapids/receivewidget.cpp" line="+248"/>
         <source>No address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+31"/>
-        <location filename="../rapids/receivewidget.cpp" line="-150"/>
+        <location filename="../rapids/receivewidget.cpp" line="-180"/>
         <source>Add Label</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4129,7 +3870,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+76"/>
+        <location line="+96"/>
         <location line="+12"/>
         <source>No available address, try unlocking the wallet</source>
         <translation type="unfinished"></translation>
@@ -4141,12 +3882,12 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
-        <source>Change Label</source>
+        <location line="+12"/>
+        <source>Edit Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+33"/>
+        <location line="+36"/>
         <source>Edit Address Label</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4161,17 +3902,27 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+13"/>
+        <source>Cannot create new address, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>New address created</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>Address copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
+        <location line="+15"/>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
         <source>URI copied to clipboard</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4184,7 +3935,7 @@ transaction history, making transactions untraceable </source>
 <context>
     <name>RecentRequestsTableModel</name>
     <message>
-        <location filename="../recentrequeststablemodel.cpp" line="+27"/>
+        <location filename="../recentrequeststablemodel.cpp" line="+29"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
@@ -4233,7 +3984,6 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+81"/>
-        <location filename="../rapids/requestdialog.cpp" line="+25"/>
         <source>New Request Payment</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4244,7 +3994,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+43"/>
-        <location filename="../rapids/requestdialog.cpp" line="+17"/>
+        <location filename="../rapids/requestdialog.cpp" line="+42"/>
         <source>Amount</source>
         <translation type="unfinished">Amount</translation>
     </message>
@@ -4261,7 +4011,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+99"/>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4285,28 +4035,33 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/requestdialog.cpp" line="-14"/>
-        <source>Instead of only sharing a RPD address, you can create a Payment Request message which bundles up more information than is contained in just a RPD address.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+8"/>
+        <location filename="../rapids/requestdialog.cpp" line="-6"/>
         <source>Label</source>
         <translation type="unfinished">Label</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Enter a label to be saved within the address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+11"/>
+        <location line="+13"/>
         <source>Description (optional)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="-24"/>
+        <source>New Payment Request</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location line="+3"/>
-        <source>Add description </source>
+        <source>Instead of sharing only a Rapids address, you can create a payment request, bundling up more information.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+10"/>
+        <source>Enter a label for the address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Enter description</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4354,6 +4109,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+82"/>
+        <location filename="../rapids/sendchangeaddressdialog.cpp" line="+68"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4363,13 +4119,28 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/sendchangeaddressdialog.cpp" line="+21"/>
+        <location filename="../rapids/sendchangeaddressdialog.cpp" line="-42"/>
         <source>Custom Change Address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the &quot;change&quot; RPD address</source>
+        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the &quot;change&quot; Rapids address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>SAVE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+11"/>
+        <source>RESET</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+27"/>
+        <source>Invalid address</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4392,11 +4163,16 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location line="+46"/>
-        <source>Recomended</source>
+        <source>Recommended</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+82"/>
+        <source>RPD/kilobyte</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-59"/>
         <source>0.00 KB</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4406,12 +4182,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
-        <source>Per kilobyte</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+49"/>
+        <location line="+75"/>
         <source>CANCEL</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4421,13 +4192,13 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/sendcustomfeedialog.cpp" line="+25"/>
+        <location filename="../rapids/sendcustomfeedialog.cpp" line="+28"/>
         <source>Customize Fee</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Customize the transaction fee, depending on the fee value your transaction will be included or not in the blockchain.</source>
+        <source>Customize the transaction fee, depending on the fee value your transaction might be included faster in the blockchain.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4446,8 +4217,18 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location line="+11"/>
         <source>SAVE</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+79"/>
+        <source>Fee too high. Must be below: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Fee too low. Must be at least: %1</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4465,12 +4246,12 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <location filename="../rapids/sendmultirow.cpp" line="+22"/>
-        <source>Add address</source>
+        <source>Enter address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+12"/>
-        <source>Add description</source>
+        <source>Enter label</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -4492,12 +4273,7 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Enter a RPD address or contact label</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+9"/>
         <source>Amount</source>
         <translation type="unfinished">Amount</translation>
     </message>
@@ -4522,48 +4298,69 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+27"/>
         <source>Total to send</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+40"/>
+        <location line="+43"/>
         <source>Send RPD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+0"/>
         <source>Send zRPD</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+25"/>
         <source>Total remaining from the selected UTXO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+6"/>
         <source>Total remaining</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
-        <location line="+355"/>
+        <location line="+411"/>
+        <source>Warning!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>The change address doesn&apos;t belong to this wallet.
+
+Do you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+285"/>
         <source>Customize Fee</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-321"/>
+        <location line="-595"/>
         <source>Maximum amount of outputs reached</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="-221"/>
+        <source>Rapids address or contact label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+249"/>
         <source>Invalid entry, previous entries must be valid before add a new one</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+26"/>
+        <location line="+43"/>
+        <source>Possibly spend coins delegated for cold-staking (currently available: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+18"/>
         <source>Invalid entry</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4573,29 +4370,29 @@ transaction history, making transactions untraceable </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+9"/>
         <source>Cannot send, wallet locked</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+29"/>
         <source>Cannot create transaction.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+8"/>
         <source>WARNING:
 Transaction spends a cold-stake delegation, voiding it.
 These coins will no longer be cold-staked.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
+        <location line="+23"/>
         <source>Transaction sent</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <location line="+38"/>
         <source>Spend Zerocoin</source>
         <translation type="unfinished"></translation>
@@ -4623,7 +4420,7 @@ These coins will no longer be cold-staked.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+29"/>
         <source>zRPD transaction sent!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4650,17 +4447,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+29"/>
+        <location line="+33"/>
         <source>Address label update failed for address: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
-        <source>Invalid change address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+15"/>
+        <location line="+42"/>
         <source>Invalid URI</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4670,12 +4462,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+31"/>
+        <location line="+260"/>
         <source>Custom Fee %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="-210"/>
         <source>You don&apos;t have any RPD to select.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4685,17 +4477,17 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+24"/>
+        <location line="+36"/>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+58"/>
         <source>Save contact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+16"/>
+        <location line="+17"/>
         <source>Address field is empty</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4720,7 +4512,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+10"/>
         <source>New Contact Stored</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4741,7 +4533,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <location line="+41"/>
         <location line="+7"/>
         <location line="+30"/>
-        <location line="+139"/>
+        <location line="+68"/>
         <location line="+7"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
@@ -4757,13 +4549,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>Keep your wallet safe doing regular backups, store your backup file externally.
-This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+8"/>
         <source>This will decrypt the whole wallet data and encrypt it back with the new passphrase.
 Remember to write it down and store it safely, otherwise you might lose access to your funds.</source>
         <translation type="unfinished"></translation>
@@ -4774,23 +4560,24 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <location line="+33"/>
-        <source>Set a folder location</source>
+        <location line="-7"/>
+        <source>Keep your wallet safe by doing regular backups and storing your backup file externally.
+This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) on another device.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-28"/>
-        <source>Backup</source>
+        <location line="+10"/>
+        <location line="+22"/>
+        <source>Select folder...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="-17"/>
         <source>Change Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+10"/>
         <source>Backup Wallet</source>
         <translation type="unfinished">Backup Wallet</translation>
     </message>
@@ -4800,7 +4587,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished">Wallet Data (*.dat)</translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+4"/>
         <source>Backup created</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4810,7 +4597,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
+        <location line="+3"/>
         <source>Please select a folder to export the backup first.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -4873,23 +4660,23 @@ Remember to write it down and store it safely, otherwise you might lose access t
     </message>
     <message>
         <location line="+9"/>
-        <location line="+54"/>
+        <location line="+55"/>
         <source>Encrypted key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-52"/>
+        <location line="-53"/>
         <source>Enter a encrypted key</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
-        <location line="+37"/>
+        <location line="+38"/>
         <source>Passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-34"/>
+        <location line="-35"/>
         <source>Enter a passphrase </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4909,18 +4696,18 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
-        <source>Enter a RPD address</source>
+        <location line="+14"/>
+        <source>Rapids address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Add address</source>
+        <source>Enter address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+10"/>
-        <source>Write a message</source>
+        <source>Enter passphrase</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -4944,7 +4731,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+51"/>
+        <location line="+54"/>
         <source>The entered passphrase is invalid. </source>
         <translation type="unfinished"></translation>
     </message>
@@ -4971,12 +4758,12 @@ Remember to write it down and store it safely, otherwise you might lose access t
     </message>
     <message>
         <location line="+7"/>
-        <location line="+106"/>
+        <location line="+114"/>
         <source>Wallet unlock was cancelled.</source>
         <translation type="unfinished">Wallet unlock was cancelled.</translation>
     </message>
     <message>
-        <location line="-99"/>
+        <location line="-107"/>
         <source>Private key for the entered address is not available.</source>
         <translation type="unfinished">Private key for the entered address is not available.</translation>
     </message>
@@ -4986,12 +4773,12 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+16"/>
         <source>No addresses available, you can go to the receive screen and add some there!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+67"/>
         <source>Failed to decrypt.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5001,7 +4788,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+25"/>
         <source>Data Not Valid.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5027,7 +4814,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
     </message>
     <message>
         <location line="+10"/>
-        <source>Successfully added rpdate key to the wallet</source>
+        <source>Successfully added private key to the wallet</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5044,7 +4831,7 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/settings/settingsconsolewidget.cpp" line="+254"/>
+        <location filename="../rapids/settings/settingsconsolewidget.cpp" line="+253"/>
         <source>Console</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5065,13 +4852,18 @@ Remember to write it down and store it safely, otherwise you might lose access t
     </message>
     <message>
         <location line="+6"/>
+        <source>Clear history</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Cannot open debug file.
 Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+142"/>
-        <source>Welcome to the RPD RPC console.</source>
+        <location line="+144"/>
+        <source>Welcome to the Rapids RPC console.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5100,16 +4892,21 @@ Verify that you have installed a predetermined text editor.</source>
     <message>
         <location line="+51"/>
         <location line="+7"/>
-        <location line="+32"/>
-        <location line="+56"/>
-        <location line="+56"/>
-        <location line="+94"/>
+        <location line="+16"/>
+        <location line="+40"/>
+        <location line="+40"/>
+        <location line="+73"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+58"/>
-        <location filename="../rapids/settings/settingsdisplayoptionswidget.cpp" line="+97"/>
+        <location line="-33"/>
+        <source>Hide stake charts in the dashboard</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+91"/>
+        <location filename="../rapids/settings/settingsdisplayoptionswidget.cpp" line="+103"/>
         <source>Reset to default</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5119,7 +4916,7 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/settings/settingsdisplayoptionswidget.cpp" line="-68"/>
+        <location filename="../rapids/settings/settingsdisplayoptionswidget.cpp" line="-74"/>
         <source>Display</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5154,18 +4951,144 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+45"/>
+        <location line="+51"/>
         <source>SAVE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+15"/>
+        <location line="+16"/>
         <source>default</source>
         <translation type="unfinished">default</translation>
     </message>
     <message>
         <location line="+22"/>
         <source>Options reset succeed</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>SettingsExportCSV</name>
+    <message>
+        <location filename="../rapids/settings/forms/settingsexportcsv.ui" line="+14"/>
+        <source>Form</source>
+        <translation type="unfinished">Form</translation>
+    </message>
+    <message>
+        <location line="+41"/>
+        <source>Export Accounting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Export your wallet&apos;s accounting data to a csv file.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+35"/>
+        <source>Where</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+58"/>
+        <location line="+115"/>
+        <location filename="../rapids/settings/settingsexportcsv.cpp" line="+70"/>
+        <location line="+7"/>
+        <source>Select folder...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-48"/>
+        <source>Export Address Book</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../rapids/settings/settingsexportcsv.cpp" line="-16"/>
+        <source>Export CSV</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Export Address List</source>
+        <translation type="unfinished">Export Address List</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Rapids_tx_csv_export(*.csv)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Rapids_addresses_csv_export(*.csv)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
+        <location line="+72"/>
+        <source>Please select a folder to export the csv file first.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-22"/>
+        <source>Confirmed</source>
+        <translation type="unfinished">Confirmed</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Watch-only</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Date</source>
+        <translation type="unfinished">Date</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Type</source>
+        <translation type="unfinished">Type</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Label</source>
+        <translation type="unfinished">Label</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Address</source>
+        <translation type="unfinished">Address</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>ID</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Exporting Successful
+The transaction history was successfully saved to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Exporting Failed
+There was an error trying to save the transaction history to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+26"/>
+        <source>No available addresses to export under the selected filter</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+14"/>
+        <source>Exporting Successful
+The address book was successfully saved to %1.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Exporting Failed
+There was an error trying to save the address list to %1. Please try again.</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -5190,7 +5113,7 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="-280"/>
-        <source>1) What is RPD?</source>
+        <source>1) What is Rapids?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5200,7 +5123,7 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+28"/>
-        <source>3) RPD privacy? What is Zerocoin (zRPD)?</source>
+        <source>3) Rapids privacy? What is Zerocoin (zRPD)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5231,12 +5154,12 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+22"/>
-        <source>9) What is a Master Node?</source>
+        <source>9) What is a Masternode?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+22"/>
-        <source>10) What is a Master Node Controller?</source>
+        <source>10) What is a Masternode Controller?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5246,21 +5169,21 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+18"/>
-        <source>What is RPD?</source>
+        <source>What is Rapids?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+26"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           RPD is a form of digital online money using blockchain technology
+                           Rapids is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  RPD incorporates market leading security &amp;
+                           zero fees.  Rapids incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
                            to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
-                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of RPD to participate in earning block rewards
+                           Rapids utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of Rapids to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -5281,10 +5204,10 @@ Verify that you have installed a predetermined text editor.</source>
         <location line="+26"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           Newly received RPD requires 6 confirmations on the network
+                           Newly received Rapids requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
-                           Your RPD wallet also needs to be completely synchronized
+                           Your Rapids wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
@@ -5297,7 +5220,7 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+18"/>
-        <source>RPD privacy? What is Zerocoin (zRPD)?</source>
+        <source>Rapids privacy? What is Zerocoin (zRPD)?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5305,10 +5228,10 @@ Verify that you have installed a predetermined text editor.</source>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
                            zRPD is an optional privacy-centric method of coin mixing on the
-                           RPD blockchain. Basically all your transactions cannot be tracked
+                           Rapids blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://RPD.org/zrpd/&apos;&gt;
-                           &quot;RPD Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
+                           &lt;a style=&apos;color: #B0B0B0&apos; href=&apos;https://Rapids.org/zrpd/&apos;&gt;
+                           &quot;Rapids Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation type="unfinished"></translation>
@@ -5348,17 +5271,17 @@ Verify that you have installed a predetermined text editor.</source>
         <location line="+26"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           By default the RPD wallet will convert 10% of your entire RPD
+                           By default the Rapids wallet will convert 10% of your entire RPD
                            balance to zRPD to assist the network. If you do not wish to
                            stake zRPD or take advantage of the privacy benefit it brings,
-                           you can disable the automatic minting in your RPD wallet by
+                           you can disable the automatic minting in your Rapids wallet by
                            going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
-                           If you are not making use of the RPD-QT or GUI you can simply open
+                           If you are not making use of the Rapids-QT or GUI you can simply open
                            your rapids.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            You can read more about zRPD in the
-                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://RPD.org/zrpd/&apos;&gt; &quot;RPD Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
+                           &lt;a style=&apos;color: #B0B0B0&apos; href=&apos;https://Rapids.org/zrpd/&apos;&gt; &quot;Rapids Zerocoin (zRPD) Technical Paper&quot;&lt;/a&gt;.
                            If you would like to keep and stake your zRPD, please read the &quot;How do I stake&quot;
                            section of the FAQ below.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -5379,8 +5302,8 @@ Verify that you have installed a predetermined text editor.</source>
         <location line="+26"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           zRPD can be spent and sent to any RPD address. The receiver will
-                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
+                           zRPD can be spent and sent to any Rapids address. The receiver will
+                           receive standard Rapids but the origin of the Rapids is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
@@ -5401,14 +5324,14 @@ Verify that you have installed a predetermined text editor.</source>
         <location line="+26"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           To Stake RPD:
+                           To Stake Rapids:
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            &lt;ol&gt;&lt;li&gt;
                            Make sure your wallet is completely synchronized and you are using the latest release.
                            &lt;li&gt;
-                           You must have a balance of RPD with a minimum of 101 confirmations.
+                           You must have a balance of Rapids with a minimum of 600 confirmations.
                            &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
+                           Your wallet must stay online and be unlocked for staking purposes.
                            &lt;li&gt;
                            Once all those steps are followed staking should be enabled.
                            &lt;li&gt;
@@ -5430,24 +5353,39 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+73"/>
-        <source>8</source>
+        <location line="+91"/>
+        <source>Where should I go if I need support?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>Where I should go if I need support?</source>
+        <location line="+99"/>
+        <source>What is a Masternode?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+131"/>
+        <source>What is a Masternode Controller?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+26"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet(s) and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-274"/>
+        <source>8</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+44"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
                            We have support channels in most of our official chat groups, for example
-                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://discord.RPD.org&apos;&gt;
+                           &lt;a style=&apos;color: #B0B0B0&apos; href=&apos;https://discord.Rapids.org&apos;&gt;
                            #support in our Discord&lt;/a&gt;.
                            If you prefer to submit a ticket, One can be
-                           &lt;a style=&apos;color: #b088ff&apos; href=&apos;https://RPD.freshdesk.com&apos;&gt;
+                           &lt;a style=&apos;color: #B0B0B0&apos; href=&apos;https://Rapids.freshdesk.com&apos;&gt;
                            our Freshdesk support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
@@ -5459,15 +5397,10 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>What is a Master Node?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+26"/>
+        <location line="+44"/>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;
-                           A masternode is a computer running a full node RPD core wallet with a
+                           A masternode is a computer running a full node Rapids wallet with a
                            requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
@@ -5490,10 +5423,10 @@ Verify that you have installed a predetermined text editor.</source>
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in Rapids Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
+                           &lt;li&gt;Help secure the Rapids network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;
 
@@ -5515,16 +5448,6 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+18"/>
-        <source>What is a Master Node Controller?</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;justify&quot;&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../rapids/settings/settingsfaqwidget.cpp" line="+19"/>
         <source>Frequently Asked Questions</source>
         <translation type="unfinished"></translation>
@@ -5535,7 +5458,7 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+65"/>
+        <location line="+70"/>
         <source>Exit</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5548,132 +5471,112 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+46"/>
-        <location line="+161"/>
-        <location line="+24"/>
-        <location line="+7"/>
-        <location line="+26"/>
-        <location line="+7"/>
-        <location line="+26"/>
-        <location line="+7"/>
-        <location line="+26"/>
-        <location line="+7"/>
-        <location line="+29"/>
-        <location line="+7"/>
-        <location line="+28"/>
-        <location line="+24"/>
-        <location line="+7"/>
-        <location line="+39"/>
-        <location line="+7"/>
-        <location line="+26"/>
-        <location line="+24"/>
-        <location line="+7"/>
-        <location line="+39"/>
-        <location line="+7"/>
-        <location line="+26"/>
-        <location line="+24"/>
-        <location line="+7"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-536"/>
-        <location filename="../rapids/settings/settingsinformationwidget.cpp" line="+96"/>
+        <location line="+102"/>
         <source>Network Monitor</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/settings/settingsinformationwidget.cpp" line="-67"/>
+        <location line="-56"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+161"/>
         <source>General</source>
         <translation type="unfinished">General</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Client Version: </source>
+        <location line="+24"/>
+        <source>Client Version:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+78"/>
+        <source>BerkeleyDB version:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+39"/>
+        <source>Datadir:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+42"/>
+        <source>Startup time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+104"/>
+        <source>Connections:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Number of Masternodes:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Current number of blocks:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+39"/>
+        <source>Last block time:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+52"/>
+        <source>Last block hash:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+63"/>
+        <source>Current number of transactions:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="-493"/>
         <source>User Agent:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Using BerkeleyDB version:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Datadir: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Startup Time:  </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+161"/>
         <source>Network</source>
         <translation type="unfinished">Network</translation>
     </message>
     <message>
-        <location line="+1"/>
+        <location line="+24"/>
         <source>Name:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Number Connections:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+31"/>
+        <location line="+130"/>
         <source>Blockchain</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Current Number of Blocks:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Last Block Time:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
+        <location line="+154"/>
         <source>Memory Pool</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
-        <source>Current Number of Transactions:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location filename="../rapids/settings/settingsinformationwidget.cpp" line="+72"/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+10"/>
+        <location filename="../rapids/settings/forms/settingsinformationwidget.ui" line="-587"/>
         <source>Wallet Conf</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="-28"/>
         <source>Backups</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location filename="../rapids/settings/settingsinformationwidget.cpp" line="+22"/>
         <source>No information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5688,7 +5591,7 @@ Verify that you have installed a predetermined text editor.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+31"/>
         <source>In:</source>
         <translation type="unfinished">In:</translation>
     </message>
@@ -5763,7 +5666,7 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>Start RPD on system login</source>
+        <source>Start Rapids on system login</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5831,12 +5734,12 @@ Are you sure?
     </message>
     <message>
         <location line="+4"/>
-        <source>Label (optional)</source>
+        <source>Address Label (optional)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+3"/>
-        <source>Enter a label to add this address in your address book</source>
+        <source>Enter label to be saved with this address</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5860,8 +5763,8 @@ Are you sure?
     </message>
     <message>
         <location line="+228"/>
-        <source>No active Master Node yet</source>
-        <translation type="unfinished"></translation>
+        <source>N/A</source>
+        <translation type="unfinished">N/A</translation>
     </message>
     <message>
         <location line="+50"/>
@@ -5870,8 +5773,8 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/settings/settingsmultisendwidget.cpp" line="+156"/>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other RPD addresses after it matures.</source>
+        <location filename="../rapids/settings/settingsmultisendwidget.cpp" line="+164"/>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other Rapids addresses after it matures.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -5910,7 +5813,12 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+57"/>
+        <location line="+51"/>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+15"/>
         <source>Clear succeed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5920,7 +5828,12 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
+        <location line="+14"/>
+        <source>Cannot add multisend recipient, wallet locked</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+21"/>
         <source>The entered address: %1 is invalid.
 Please check the address and try again.</source>
         <translation type="unfinished"></translation>
@@ -5936,12 +5849,12 @@ Please check the address and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Error saving  MultiSend, failed saving properties to the database.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+15"/>
         <source>Unable to activate MultiSend, no available recipients</source>
         <translation type="unfinished"></translation>
     </message>
@@ -5967,7 +5880,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+12"/>
         <source>MultiSend deactivated but writing settings to DB failed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6005,17 +5918,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>Enter a RPD address or contact label</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Add address</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+6"/>
+        <location line="+16"/>
         <source>Sign</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6035,29 +5938,39 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished">Message</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Write a message</source>
+        <location line="-19"/>
+        <source>Rapids address or contact label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+3"/>
+        <source>Enter address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+19"/>
+        <source>Write message</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
         <location line="+2"/>
         <source>Signature</source>
         <translation type="unfinished">Signature</translation>
     </message>
     <message>
         <location line="+9"/>
-        <location line="+41"/>
+        <location line="+45"/>
         <source>SIGN</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-40"/>
+        <location line="-44"/>
         <source>CLEAR ALL</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+39"/>
+        <location line="+43"/>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
         <translation type="unfinished">You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</translation>
     </message>
@@ -6072,7 +5985,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+44"/>
+        <location line="+48"/>
         <location line="+55"/>
         <source>The entered address is invalid.</source>
         <translation type="unfinished">The entered address is invalid.</translation>
@@ -6138,7 +6051,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished">Message verified.</translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+7"/>
         <source>No addresses available, you can go to the receive screen and add some there!</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6154,7 +6067,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <location line="+51"/>
         <location line="+7"/>
         <location line="+35"/>
-        <location line="+124"/>
+        <location line="+127"/>
         <location line="+7"/>
         <location line="+101"/>
         <location line="+43"/>
@@ -6389,33 +6302,33 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+58"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+155"/>
+        <location line="+255"/>
         <source>Wallet Data</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
-        <location line="+267"/>
+        <location line="+55"/>
+        <location line="+321"/>
         <source>Wallet</source>
         <translation type="unfinished">Wallet</translation>
     </message>
     <message>
-        <location line="-239"/>
+        <location line="-293"/>
         <source>Multisend</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+42"/>
+        <location line="+28"/>
+        <source>Export Accounting</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+55"/>
         <source>Tools</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+55"/>
         <source>Sign/Verify Message</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6430,7 +6343,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished">Options</translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+54"/>
         <source>Main</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6445,7 +6358,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+54"/>
         <source>Information</source>
         <translation type="unfinished">Information</translation>
     </message>
@@ -6465,22 +6378,22 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+48"/>
+        <location line="+54"/>
         <source>FAQ</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+31"/>
-        <source>About RPD</source>
+        <source>About Rapids</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/settings/settingswidget.cpp" line="+47"/>
+        <location line="-870"/>
         <source>Settings</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+150"/>
+        <location filename="../rapids/settings/settingswidget.cpp" line="+220"/>
         <source>Confirm options reset</source>
         <translation type="unfinished">Confirm options reset</translation>
     </message>
@@ -6531,7 +6444,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+169"/>
+        <location line="+123"/>
         <source>Discard Unsaved Changes</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6547,7 +6460,7 @@ Are you sure?
 <context>
     <name>ShutdownWindow</name>
     <message>
-        <location filename="../utilitydialog.cpp" line="+70"/>
+        <location filename="../utilitydialog.cpp" line="+71"/>
         <source>Rapids is shutting down...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6657,62 +6570,31 @@ Are you sure?
         <translation type="unfinished">Form</translation>
     </message>
     <message>
-        <location line="+96"/>
-        <location line="+279"/>
-        <source>480.0685 RPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-210"/>
-        <location line="+321"/>
-        <source>1,000 zRPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-118"/>
-        <location line="+111"/>
+        <location line="+378"/>
+        <location line="+121"/>
+        <location filename="../rapids/topbar.cpp" line="+634"/>
         <source>Available</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-88"/>
-        <location line="+111"/>
+        <location line="-98"/>
+        <location line="+121"/>
         <source>Pending</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-104"/>
-        <source>6.943 RPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <location line="+111"/>
+        <location line="-87"/>
+        <location line="+121"/>
         <source>Immature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-104"/>
-        <source>10 RPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+77"/>
-        <source>60 zRPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+34"/>
-        <source>10 zRPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../rapids/topbar.cpp" line="+240"/>
+        <location filename="../rapids/topbar.cpp" line="-362"/>
         <source>Wallet Unlocked for staking</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+28"/>
+        <location line="+30"/>
         <source>Error generating address</source>
         <translation type="unfinished"></translation>
     </message>
@@ -6722,27 +6604,17 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+73"/>
-        <source>Automint enabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Automint disabled</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+79"/>
         <source>Staking active</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+0"/>
         <source>Staking not active</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location line="+20"/>
+        <location line="+31"/>
         <source>%n active connection(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -6751,7 +6623,7 @@ Are you sure?
     </message>
     <message>
         <location line="+34"/>
-        <source>Synchronized</source>
+        <source>Synchronized - Block: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
@@ -6791,6 +6663,104 @@ Are you sure?
             <numerusform>%n year</numerusform>
             <numerusform>%n years</numerusform>
         </translation>
+    </message>
+    <message>
+        <location line="+20"/>
+        <source>Wallet Upgrade</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Upgrading to HD wallet will improve
+the wallet&apos;s reliability and security.
+
+
+NOTE: after the upgrade, a new
+backup will be created.
+</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Upgrade Wallet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Wallet unlock cancelled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+49"/>
+        <source>Tor Active: %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+5"/>
+        <source>Tor Disabled</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+57"/>
+        <source>Available (Locked included)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+60"/>
+        <source>The wallet has been successfully upgraded to HD.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>It is advised to make a backup.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>Do you wish to backup now?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Backup Wallet</source>
+        <translation type="unfinished">Backup Wallet</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Wallet Data (*.dat)</source>
+        <translation type="unfinished">Wallet Data (*.dat)</translation>
+    </message>
+    <message>
+        <location line="+2"/>
+        <source>Backup created</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <location line="+2"/>
+        <source>Backup creation failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+0"/>
+        <source>no file selected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <source>Wallet upgraded successfully, but no backup created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+3"/>
+        <location line="+20"/>
+        <source>Upgrade Wallet Error</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
@@ -7056,7 +7026,7 @@ Are you sure?
 <context>
     <name>TransactionTableModel</name>
     <message>
-        <location filename="../transactiontablemodel.cpp" line="+292"/>
+        <location filename="../transactiontablemodel.cpp" line="+314"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
@@ -7134,11 +7104,6 @@ Are you sure?
         <translation>Received from</translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>Received via Obfuscation</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+7"/>
         <source>RPD Stake</source>
         <translation type="unfinished"></translation>
@@ -7154,37 +7119,12 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
-        <source>RPD Stake in behalf of</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+6"/>
         <source>Stake delegation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Obfuscation Denominate</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Obfuscation Collateral Payment</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Obfuscation Make Collateral Inputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Obfuscation Create Denominations</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
+        <location line="+7"/>
         <source>Converted RPD to zRPD</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7209,42 +7149,47 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-35"/>
+        <location line="-29"/>
         <source>Sent to</source>
         <translation>Sent to</translation>
     </message>
     <message>
-        <location line="-44"/>
+        <location line="-42"/>
         <source>Orphan Block - Generated but not accepted. This does not impact your holdings.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+46"/>
+        <location line="+44"/>
         <source>Payment to yourself</source>
         <translation>Payment to yourself</translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+8"/>
+        <source>RPD Stake on behalf of</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+7"/>
+        <source>Stake delegation spent by</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+2"/>
         <source>Mined</source>
         <translation>Mined</translation>
     </message>
     <message>
-        <location line="+10"/>
-        <source>Obfuscated</source>
-        <translation>Obfuscated</translation>
-    </message>
-    <message>
-        <location line="+43"/>
+        <location line="+42"/>
         <source>watch-only</source>
         <translation>watch-only</translation>
     </message>
     <message>
-        <location line="+23"/>
+        <location line="+20"/>
         <source>Anonymous</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+14"/>
         <source>No information</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7293,122 +7238,87 @@ Are you sure?
     </message>
     <message>
         <location line="+90"/>
-        <location filename="../rapids/sendconfirmdialog.cpp" line="+74"/>
+        <location filename="../rapids/sendconfirmdialog.cpp" line="+73"/>
         <source>Transaction Details</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+163"/>
-        <source>ID:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+72"/>
-        <source>Sending to: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+96"/>
+        <location line="+418"/>
         <source>Total amount</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
-        <source>2 RPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+47"/>
-        <source>Coin inputs:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>1 Inputs</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+50"/>
+        <location line="+117"/>
         <source>Previous Transaction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="-16"/>
         <source>Output Index</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+41"/>
-        <source>Fee:</source>
-        <translation type="unfinished">Fee:</translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>0.0001 RPD</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>Change address:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+167"/>
         <source>D7VFR83SQbie…BhjcWJtcfip5krte2Z </source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>Confirmations:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>12</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>Size:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
-        <source>2 kB</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+38"/>
-        <source>Date:</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+7"/>
+        <location line="+103"/>
         <source>May 25, 2017</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>Status:</source>
+        <location line="-621"/>
+        <source>ID</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+7"/>
+        <location line="+101"/>
+        <source>Sending to</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+168"/>
+        <source>Coin inputs</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+146"/>
+        <source>Fee</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+34"/>
+        <source>Size</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+62"/>
+        <source>Change address</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+42"/>
         <source>Spendable</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location line="+16"/>
+        <source>Confirmations</source>
+        <translation type="unfinished">Confirmations</translation>
+    </message>
+    <message>
+        <location line="+16"/>
+        <source>Status</source>
+        <translation type="unfinished">Status</translation>
+    </message>
+    <message>
         <location line="+26"/>
+        <source>Date</source>
+        <translation type="unfinished">Date</translation>
+    </message>
+    <message>
+        <location line="+55"/>
         <source>TextLabel</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7423,7 +7333,7 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/sendconfirmdialog.cpp" line="-26"/>
+        <location filename="../rapids/sendconfirmdialog.cpp" line="-21"/>
         <source>Confirm Your Transaction</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7433,12 +7343,12 @@ Are you sure?
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+63"/>
+        <location line="+64"/>
         <source>ID copied</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+91"/>
+        <location line="+96"/>
         <source>Unknown</source>
         <translation type="unfinished">Unknown</translation>
     </message>
@@ -7469,58 +7379,23 @@ Are you sure?
 <context>
     <name>WalletModel</name>
     <message>
-        <location filename="../walletmodel.cpp" line="+434"/>
-        <location line="+9"/>
+        <location filename="../walletmodel.cpp" line="+503"/>
+        <location line="+18"/>
         <location line="+9"/>
         <source>Send Coins</source>
         <translation>Send Coins</translation>
     </message>
     <message>
-        <location line="-18"/>
-        <location line="+9"/>
+        <location line="-27"/>
+        <location line="+18"/>
         <source>SwiftX doesn&apos;t support sending values that high yet. Transactions are currently limited to %1 RPD.</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
-    <name>WalletPasswordDialog</name>
-    <message>
-        <location filename="../rapids/forms/walletpassworddialog.ui" line="+14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+81"/>
-        <location line="+115"/>
-        <location line="+113"/>
-        <source>TextLabel</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="-156"/>
-        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+222"/>
-        <source>CANCEL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>OK</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>WelcomeContentWidget</name>
     <message>
-        <location filename="../rapids/forms/welcomecontentwidget.ui" line="+14"/>
-        <source>Dialog</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+230"/>
+        <location filename="../rapids/forms/welcomecontentwidget.ui" line="+244"/>
         <source>1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7572,22 +7447,22 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+27"/>
-        <source>RPD is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <source>Rapids is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+93"/>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - RPD believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - Rapids believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+83"/>
-        <source>The masternode network is RPD&apos;s second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
+        <source>The masternode network is Rapids&apos;s second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="-103"/>
-        <source>How RPD respects your privacy?</source>
+        <source>How Rapids respects your privacy?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -7596,7 +7471,7 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../rapids/welcomecontentwidget.cpp" line="+173"/>
+        <location filename="../rapids/welcomecontentwidget.cpp" line="+178"/>
         <source>default</source>
         <translation type="unfinished">default</translation>
     </message>
@@ -7649,7 +7524,7 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../zrpdcontroldialog.cpp" line="+39"/>
+        <location filename="../zrpdcontroldialog.cpp" line="+38"/>
         <source>Select zRPD Denominations to Spend</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7683,11 +7558,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+4"/>
-        <source>Calculated accumulator checkpoint is not what is recorded by block index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
         <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7723,16 +7593,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+5"/>
-        <source>Enable automatic Zerocoin minting from specific addresses (0-1, default: %u)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
         <source>Enable cold staking functionality (0-1, default: %u). Disabled if staking=0</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7767,12 +7627,17 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+11"/>
+        <location line="+8"/>
         <source>Error: Unsupported argument -socks found. Setting SOCKS version isn&apos;t possible anymore, only SOCKS5 proxies are supported.</source>
         <translation type="unfinished">Error: Unsupported argument -socks found. Setting SOCKS version isn&apos;t possible anymore, only SOCKS5 proxies are supported.</translation>
     </message>
     <message>
         <location line="+3"/>
+        <source>Exclude debugging information for a category. Can be used in conjunction with -debug=1 to output debug logs for all categories except one or more specified categories.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+4"/>
         <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
         <translation type="unfinished">Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</translation>
     </message>
@@ -7863,11 +7728,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+2"/>
-        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation type="unfinished">Output debugging information (default: %u, supplying &lt;category&gt; is optional)</translation>
     </message>
@@ -7898,11 +7758,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+2"/>
-        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
         <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
         <translation type="unfinished">Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</translation>
     </message>
@@ -7917,7 +7772,7 @@ Rapids Wallet</source>
         <translation type="unfinished">Show N confirmations for a successfully locked transaction (0-9999, default: %u)</translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+10"/>
         <source>Support filtering of blocks and transaction with bloom filters (default: %u)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7943,21 +7798,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+2"/>
-        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation type="unfinished">Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</translation>
     </message>
@@ -7973,11 +7813,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+3"/>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer&apos;s date and time are correct! If your clock is wrong Rapids will not work properly.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
         <source>Warning: Please check that your computer&apos;s date and time are correct! If your clock is wrong Rapids will not work properly.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8018,8 +7853,8 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+3"/>
-        <source>(51472 could be used only on mainnet)</source>
-        <translation type="unfinished">(51472 could be used only on mainnet)</translation>
+        <source>(28732 could be used only on mainnet)</source>
+        <translation type="unfinished">(28732 could be used only on mainnet)</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8033,7 +7868,7 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>(must be 51472 for mainnet)</source>
+        <source>(must be 28732 for mainnet)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8055,11 +7890,6 @@ Rapids Wallet</source>
         <location line="+1"/>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation type="unfinished">Add a node to connect to and attempt to keep the connection open</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Adding Wrapped Serials supply...</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8092,37 +7922,12 @@ Rapids Wallet</source>
         <translation type="unfinished">Block creation options:</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Calculating missing accumulators...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location line="+2"/>
         <source>Cannot downgrade wallet</source>
         <translation type="unfinished">Cannot downgrade wallet</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Cannot resolve -bind address: &apos;%s&apos;</source>
-        <translation type="unfinished">Cannot resolve -bind address: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Cannot resolve -externalip address: &apos;%s&apos;</source>
-        <translation type="unfinished">Cannot resolve -externalip address: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Cannot resolve -whitebind address: &apos;%s&apos;</source>
-        <translation type="unfinished">Cannot resolve -whitebind address: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>CoinSpend: failed check</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Connect only to the specified node(s)</source>
         <translation type="unfinished">Connect only to the specified node(s)</translation>
     </message>
@@ -8168,11 +7973,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Couldn&apos;t generate the accumulator witness</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Debugging/Testing options:</source>
         <translation type="unfinished">Debugging/Testing options:</translation>
     </message>
@@ -8210,16 +8010,6 @@ Rapids Wallet</source>
         <location line="+1"/>
         <source>Done loading</source>
         <translation type="unfinished">Done loading</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Enable precomputation of zRPD spends and stakes (0-1, default %u)</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+2"/>
@@ -8288,6 +8078,11 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>Error: </source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
         <translation type="unfinished">Error: A fatal internal error occured, see debug.log for details</translation>
     </message>
@@ -8307,12 +8102,7 @@ Rapids Wallet</source>
         <translation type="unfinished">Error: Wallet locked, unable to create transaction!</translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Failed to calculate accumulator checkpoint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
         <translation type="unfinished">Failed to listen on any port. Use -listen=0 if you want this.</translation>
     </message>
@@ -8397,34 +8187,9 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+1"/>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished">Invalid amount for -maxtxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished">Invalid amount for -minrelaytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished">Invalid amount for -mintxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+2"/>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos; (must be at least %s)</source>
         <translation type="unfinished">Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos; (must be at least %s)</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos;</source>
-        <translation type="unfinished">Invalid amount for -paytxfee=&lt;amount&gt;: &apos;%s&apos;</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -8447,32 +8212,17 @@ Rapids Wallet</source>
         <translation type="unfinished">Invalid port detected in masternode.conf</translation>
     </message>
     <message>
-        <location line="+32"/>
-        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+9"/>
+        <location line="+43"/>
         <source>Recalculating RPD supply...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
-        <source>Recalculating minted ZRPD...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Recalculating spent ZRPD...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
         <source>Reindex the RPD and zRPD money supply statistics</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+2"/>
+        <location line="+1"/>
         <source>Reindexing zerocoin database...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8487,22 +8237,17 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+27"/>
-        <source>Support the zerocoin light node protocol (default: %u)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+25"/>
         <source>SwiftX options:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-247"/>
+        <location line="-217"/>
         <source>This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-189"/>
+        <location line="-175"/>
         <source> mints deleted
 </source>
         <translation type="unfinished"></translation>
@@ -8519,8 +8264,8 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+38"/>
-        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <location line="+36"/>
+        <source>Disable all Rapids specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8529,22 +8274,17 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+22"/>
+        <location line="+17"/>
         <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+4"/>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+14"/>
+        <location line="+18"/>
         <source>Execute command when the best block changes and its size is over (%s in cmd is replaced by block hash, %d with the block size)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8559,47 +8299,32 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+37"/>
-        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+27"/>
-        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+5"/>
+        <location line="+58"/>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+9"/>
         <source>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+70"/>
+        <location line="+58"/>
         <source>&lt;category&gt; can be:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+8"/>
         <source>Attempt to force blockchain corruption recovery</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
+        <location line="+4"/>
         <source>Cannot create public spend input</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+5"/>
-        <source>CoinSpend: Accumulator witness does not verify</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+17"/>
+        <location line="+18"/>
         <source>Display the stake modifier calculations in the debug.log file.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8609,7 +8334,7 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+6"/>
+        <location line="+4"/>
         <source>Enable publish hash block in &lt;address&gt;</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8634,7 +8359,7 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+13"/>
+        <location line="+14"/>
         <source>Error: A fatal internal error occurred, see debug.log for details</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8644,12 +8369,7 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Failed to create mint</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+3"/>
         <source>Failed to find Zerocoins in wallet.dat</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8674,7 +8394,12 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+25"/>
+        <location line="+15"/>
+        <source>Invalid amount for -%s=&lt;amount&gt;: &apos;%s&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+6"/>
         <source>Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</source>
         <translation type="unfinished">Keep at most &lt;n&gt; unconnectable transactions in memory (default: %u)</translation>
     </message>
@@ -8705,6 +8430,11 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>Loading banlist...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Loading block index...</source>
         <translation type="unfinished">Loading block index...</translation>
     </message>
@@ -8730,11 +8460,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>Loading wallet... (%3.2f %%)</source>
-        <translation type="unfinished">Loading wallet... (%3.2f %%)</translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Loading wallet...</source>
         <translation type="unfinished">Loading wallet...</translation>
     </message>
@@ -8751,6 +8476,11 @@ Rapids Wallet</source>
     <message>
         <location line="+1"/>
         <source>Lookup(): Invalid -proxy address or hostname: &apos;%s&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>MNs synchronization pending...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -8805,6 +8535,11 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>On first run, create a legacy wallet instead of a HD wallet</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
         <translation type="unfinished">Only accept block chain matching built-in checkpoints (default: %u)</translation>
     </message>
@@ -8824,7 +8559,12 @@ Rapids Wallet</source>
         <translation type="unfinished">Password for JSON-RPC connections</translation>
     </message>
     <message>
-        <location line="+80"/>
+        <location line="+1"/>
+        <source>Peers are being disconnected due time differences.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+69"/>
         <source>Unable to find transaction containing mint %s</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8834,32 +8574,47 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+9"/>
+        <location line="+11"/>
         <source>Use block spam filter (default: %u)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+20"/>
-        <source>could not get lock on cs_spendcache</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
+        <location line="+21"/>
         <source>isValid(): Invalid -proxy address or hostname: &apos;%s&apos;</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-109"/>
+        <location line="-101"/>
         <source>Preparing for resync...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-11"/>
+        <location line="-213"/>
+        <source>Please check that your computer&apos;s date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+28"/>
+        <source>Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+77"/>
+        <source>Cannot resolve -%s address: &apos;%s&apos;</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+95"/>
         <source>Need destination or change address because change is not exact</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+12"/>
+        <location line="+13"/>
         <source>Prepend debug output with timestamp (default: %u)</source>
         <translation type="unfinished">Prepend debug output with timestamp (default: %u)</translation>
     </message>
@@ -8894,17 +8649,7 @@ Rapids Wallet</source>
         <translation type="unfinished">Rebuild block chain index from current blk000??.dat files</translation>
     </message>
     <message>
-        <location line="+4"/>
-        <source>Receive and display P2P network alerts (default: %u)</source>
-        <translation type="unfinished">Receive and display P2P network alerts (default: %u)</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Reindex the accumulator database</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
+        <location line="+5"/>
         <source>Relay and mine data carrier transactions (default: %u)</source>
         <translation type="unfinished">Relay and mine data carrier transactions (default: %u)</translation>
     </message>
@@ -8925,16 +8670,6 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
-        <source>ResetMintZerocoin finished: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
         <translation type="unfinished">Run a thread to flush wallet periodically (default: %u)</translation>
     </message>
@@ -8947,11 +8682,6 @@ Rapids Wallet</source>
         <location line="+2"/>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation type="unfinished">Send transactions as zero-fee transactions if possible (default: %u)</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Session timed out.</source>
-        <translation type="unfinished">Session timed out.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9007,11 +8737,6 @@ Rapids Wallet</source>
         <location line="+1"/>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation type="unfinished">Shrink debug.log file on client startup (default: 1 when no -debug)</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Signing timed out.</source>
-        <translation type="unfinished">Signing timed out.</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9074,7 +8799,7 @@ Rapids Wallet</source>
         <translation type="unfinished">Stop running after importing blocks from disk (default: %u)</translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>Synchronization failed</source>
         <translation type="unfinished">Synchronization failed</translation>
     </message>
@@ -9082,11 +8807,6 @@ Rapids Wallet</source>
         <location line="+1"/>
         <source>Synchronization finished</source>
         <translation type="unfinished">Synchronization finished</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Synchronization pending...</source>
-        <translation type="unfinished">Synchronization pending...</translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9111,16 +8831,6 @@ Rapids Wallet</source>
     <message>
         <location line="+1"/>
         <source>Syncing zRPD wallet...</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>The coin spend has been used</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>The transaction did not verify</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -9205,6 +8915,11 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>Unable to generate keys</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Unable to sign spork message, wrong key?</source>
         <translation type="unfinished">Unable to sign spork message, wrong key?</translation>
     </message>
@@ -9217,6 +8932,11 @@ Rapids Wallet</source>
         <location line="+1"/>
         <source>Unknown network specified in -onlynet: &apos;%s&apos;</source>
         <translation type="unfinished">Unknown network specified in -onlynet: &apos;%s&apos;</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Unsupported logging category %s=%s.</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>
@@ -9330,11 +9050,16 @@ Rapids Wallet</source>
     </message>
     <message>
         <location line="+1"/>
+        <source>Zerocoin minting available only on regtest</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+1"/>
         <source>Zerocoin options:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+3"/>
+        <location line="+2"/>
         <source>on startup</source>
         <translation type="unfinished">on startup</translation>
     </message>
@@ -9361,7 +9086,7 @@ Rapids Wallet</source>
         <location line="+113"/>
         <location line="+50"/>
         <location line="+23"/>
-        <location line="+280"/>
+        <location line="+293"/>
         <location line="+7"/>
         <location line="+65"/>
         <location line="+7"/>
@@ -9369,7 +9094,12 @@ Rapids Wallet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-238"/>
+        <location line="-261"/>
+        <source>Include delegated</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location line="+23"/>
         <location line="+29"/>
         <location line="+26"/>
         <location line="+340"/>

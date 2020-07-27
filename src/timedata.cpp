@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2017 The Bitcoin developers
-// Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2017-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -8,7 +8,7 @@
 
 #include "chainparams.h"
 #include "guiinterface.h"
-#include "netbase.h"
+#include "netaddress.h"
 #include "sync.h"
 #include "util.h"
 #include "utilstrencodings.h"
@@ -50,7 +50,7 @@ void AddTimeData(const CNetAddr& ip, int64_t nOffsetSample, int nOffsetLimit)
     // Add data
     static CMedianFilter<int64_t> vTimeOffsets(BITCOIN_TIMEDATA_MAX_SAMPLES, 0);
     vTimeOffsets.input(nOffsetSample);
-    LogPrint(BCLog::NET,"Added time data, samples %d, offset %+d (%+d minutes)\n", vTimeOffsets.size(), nOffsetSample, nOffsetSample / 60);
+    LogPrintf("Added time data, samples %d, offset %+d (%+d minutes)\n", vTimeOffsets.size(), nOffsetSample, nOffsetSample / 60);
 
     // There is a known issue here (see issue #4521):
     //
@@ -88,7 +88,7 @@ void AddTimeData(const CNetAddr& ip, int64_t nOffsetSample, int nOffsetLimit)
                 LogPrintf("%+d  ", n);
             LogPrintf("|  ");
         }
-        LogPrint(BCLog::NET,"nTimeOffset = %+d\n", nTimeOffset);
+        LogPrintf("nTimeOffset = %+d\n", nTimeOffset);
     }
 }
 

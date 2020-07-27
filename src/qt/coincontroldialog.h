@@ -45,21 +45,20 @@ class CoinControlDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit CoinControlDialog(QWidget* parent = nullptr, bool fMultisigEnabled = false);
+    explicit CoinControlDialog(QWidget* parent = nullptr, bool _forDelegation = false);
     ~CoinControlDialog();
 
     void setModel(WalletModel* model);
     void updateDialogLabels();
+    void updateLabels();
     void updateView();
     void refreshDialog();
+    void clearPayAmounts();
+    void addPayAmount(const CAmount& amount);
 
-    // static because also called from sendcoinsdialog
-    static void updateLabels(WalletModel*, QDialog*);
     static QString getPriorityLabel(double dPriority, double mempoolEstimatePriority);
 
-    static QList<CAmount> payAmounts;
     static CCoinControl* coinControl;
-    static int nSplitBlockDummy;
 
 private:
     Ui::CoinControlDialog* ui;
@@ -67,7 +66,9 @@ private:
     WalletModel* model;
     int sortColumn;
     Qt::SortOrder sortOrder;
-    bool fMultisigEnabled;
+    bool forDelegation;
+    QList<CAmount> payAmounts{};
+    unsigned int nSelectableInputs{0};
 
     QMenu* contextMenu;
     QTreeWidgetItem* contextMenuItem;
@@ -75,6 +76,7 @@ private:
     QAction* lockAction;
     QAction* unlockAction;
 
+    void updatePushButtonSelectAll(bool checked);
     void sortView(int, Qt::SortOrder);
     void inform(const QString& text);
 

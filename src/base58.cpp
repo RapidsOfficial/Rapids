@@ -290,19 +290,21 @@ CTxDestination CBitcoinAddress::Get() const
 
 bool CBitcoinAddress::GetIndexKey(uint160& hashBytes, int& type) const
 {
-    if (!IsValid()) {
-        return false;
-    } else if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS)) {
-        memcpy(&hashBytes, &vchData[0], 20);
-        type = 1;
-        return true;
-    } else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS)) {
-        memcpy(&hashBytes, &vchData[0], 20);
-        type = 2;
-        return true;
-    }
+	if (!IsValid()) {
+		return false;
+	}
+	else if (vchVersion == Params().Base58Prefix(CChainParams::PUBKEY_ADDRESS)) {
+		memcpy(&hashBytes, &vchData[0], 20);
+		type = 1;
+		return true;
+	}
+	else if (vchVersion == Params().Base58Prefix(CChainParams::SCRIPT_ADDRESS)) {
+		memcpy(&hashBytes, &vchData[0], 20);
+		type = 2;
+		return true;
+	}
 
-    return false;
+	return false;
 }
 
 bool CBitcoinAddress::GetKeyID(CKeyID& keyID) const
@@ -360,4 +362,47 @@ bool CBitcoinSecret::SetString(const char* pszSecret)
 bool CBitcoinSecret::SetString(const std::string& strSecret)
 {
     return SetString(strSecret.c_str());
+}
+
+CTxDestination DestinationFor(const CKeyID& keyID, const CChainParams::Base58Type addrType)
+{
+    CBitcoinAddress addr(keyID, addrType);
+    if (!addr.IsValid()) throw std::runtime_error("Error, trying to decode an invalid keyID");
+    return addr.Get();
+}
+
+std::string EncodeDestination(const CTxDestination& dest, const CChainParams::Base58Type addrType)
+{
+    CBitcoinAddress addr(dest, addrType);
+    if (!addr.IsValid()) return "";
+    return addr.ToString();
+}
+
+CTxDestination DecodeDestination(const std::string& str)
+{
+    return CBitcoinAddress(str).Get();
+}
+
+CTxDestination DecodeDestination(const std::string& str, bool& isStaking)
+{
+    CBitcoinAddress addr(str);
+    isStaking = addr.IsStakingAddress();
+    return addr.Get();
+}
+
+bool IsValidDestinationString(const std::string& str, bool fStaking, const CChainParams& params)
+{
+    return IsValidDestinationString(str, fStaking);
+}
+
+bool IsValidDestinationString(const std::string& str)
+{
+    CBitcoinAddress address(str);
+    return address.IsValid();
+}
+
+bool IsValidDestinationString(const std::string& str, bool isStaking)
+{
+    CBitcoinAddress address(str);
+    return address.IsValid() && (address.IsStakingAddress() == isStaking);
 }

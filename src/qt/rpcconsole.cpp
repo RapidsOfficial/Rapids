@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -14,7 +14,7 @@
 #include "peertablemodel.h"
 
 #include "chainparams.h"
-#include "main.h"
+#include "netbase.h"
 #include "rpc/client.h"
 #include "rpc/server.h"
 #include "util.h"
@@ -32,7 +32,6 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QScrollBar>
-#include <QSignalMapper>
 #include <QThread>
 #include <QTime>
 #include <QTimer>
@@ -86,7 +85,7 @@ class QtRPCTimerBase: public QObject, public RPCTimerBase
 {
     Q_OBJECT
 public:
-    QtRPCTimerBase(boost::function<void(void)>& _func, int64_t millis):
+    QtRPCTimerBase(std::function<void(void)>& _func, int64_t millis):
         func(_func)
     {
         timer.setSingleShot(true);
@@ -105,7 +104,7 @@ class QtRPCTimerInterface: public RPCTimerInterface
 public:
     ~QtRPCTimerInterface() {}
     const char *Name() { return "Qt"; }
-    RPCTimerBase* NewTimer(boost::function<void(void)>& func, int64_t millis)
+    RPCTimerBase* NewTimer(std::function<void(void)>& func, int64_t millis)
     {
         return new QtRPCTimerBase(func, millis);
     }
@@ -391,7 +390,6 @@ void RPCConsole::setClientModel(ClientModel* model)
         setNumBlocks(model->getNumBlocks());
         connect(model, &ClientModel::numBlocksChanged, this, &RPCConsole::setNumBlocks);
 
-        setMasternodeCount(model->getMasternodeCountString());
         connect(model, &ClientModel::strMasternodesChanged, this, &RPCConsole::setMasternodeCount);
 
         updateTrafficStats(model->getTotalBytesRecv(), model->getTotalBytesSent());
@@ -424,19 +422,10 @@ void RPCConsole::setClientModel(ClientModel* model)
         peersTableContextMenu->addAction(banAction7d);
         peersTableContextMenu->addAction(banAction365d);
 
-        // Add a signal mapping to allow dynamic context menu arguments.
-        // We need to use int (instead of int64_t), because signal mapper only supports
-        // int or objects, which is okay because max bantime (1 year) is < int_max.
-        QSignalMapper* signalMapper = new QSignalMapper(this);
-        signalMapper->setMapping(banAction1h, 60*60);
-        signalMapper->setMapping(banAction24h, 60*60*24);
-        signalMapper->setMapping(banAction7d, 60*60*24*7);
-        signalMapper->setMapping(banAction365d, 60*60*24*365);
-        connect(banAction1h, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(banAction24h, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(banAction7d, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(banAction365d, &QAction::triggered, signalMapper, static_cast<void (QSignalMapper::*)()>(&QSignalMapper::map));
-        connect(signalMapper, static_cast<void (QSignalMapper::*)(int)>(&QSignalMapper::mapped), this, &RPCConsole::banSelectedNode);
+		connect(banAction1h, &QAction::triggered, [this] { banSelectedNode(60 * 60); });
+		connect(banAction24h, &QAction::triggered, [this] { banSelectedNode(60 * 60 * 24); });
+		connect(banAction7d, &QAction::triggered, [this] { banSelectedNode(60 * 60 * 24 * 7); });
+		connect(banAction365d, &QAction::triggered, [this] { banSelectedNode(60 * 60 * 24 * 365); });
 
         // peer table context menu signals
         connect(ui->peerWidget, &QTableView::customContextMenuRequested, this, &RPCConsole::showPeersTableContextMenu);
@@ -628,7 +617,7 @@ void RPCConsole::clear()
     QString clsKey = "Ctrl-L";
 #endif
 
-    message(CMD_REPLY, (tr("Welcome to the RPD RPC console.") + "<br>" +
+    message(CMD_REPLY, (tr("Welcome to the Rapids RPC console.") + "<br>" +
                         tr("Use up and down arrows to navigate history, and %1 to clear screen.").arg("<b>"+clsKey+"</b>") + "<br>" +
                         tr("Type <b>help</b> for an overview of available commands.") +
                         "<br><span class=\"secwarning\"><br>" +
@@ -1016,7 +1005,10 @@ void RPCConsole::banSelectedNode(int bantime)
         int port = 0;
         SplitHostPort(nStr, port, addr);
 
-        CNode::Ban(CNetAddr(addr), BanReasonManuallyAdded, bantime);
+        CNetAddr resolved;
+        if (!LookupHost(addr.c_str(), resolved, false))
+            return;
+        CNode::Ban(resolved, BanReasonManuallyAdded, bantime);
 
         clearSelectedNode();
         clientModel->getBanTableModel()->refresh();
@@ -1030,8 +1022,9 @@ void RPCConsole::unbanSelectedNode()
 
     // Get currently selected ban address
     QString strNode = GUIUtil::getEntryData(ui->banlistWidget, 0, BanTableModel::Address);
-    CSubNet possibleSubnet(strNode.toStdString());
+    CSubNet possibleSubnet;
 
+    LookupSubNet(strNode.toStdString().c_str(), possibleSubnet);
     if (possibleSubnet.IsValid())
     {
         CNode::Unban(possibleSubnet);

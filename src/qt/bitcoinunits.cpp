@@ -1,6 +1,6 @@
 // Copyright (c) 2011-2014 The Bitcoin developers
 // Copyright (c) 2014-2015 The Dash developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -54,29 +54,28 @@ QString BitcoinUnits::id(int unit)
     }
 }
 
-QString BitcoinUnits::name(int unit, bool isZrpd)
+QString BitcoinUnits::name(int unit)
 {
-    QString z = "";
-    if(isZrpd) z = "z";
+    const QString CURR_UNIT = QString(CURRENCY_UNIT.c_str());
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
         case RPD:
-            return z + QString("RPD");
+            return CURR_UNIT;
         case mRPD:
-            return z + QString("mRPD");
+            return QString("m") + CURR_UNIT;
         case uRPD:
-            return z + QString::fromUtf8("μRPD");
+            return QString::fromUtf8("μ") + CURR_UNIT;
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
         case RPD:
-            return z + QString("tRPD");
+            return QString("t") + CURR_UNIT;
         case mRPD:
-            return z + QString("mtRPD");
+            return QString("mt") + CURR_UNIT;
         case uRPD:
-            return z + QString::fromUtf8("μtRPD");
+            return QString::fromUtf8("μt") + CURR_UNIT;
         default:
             return QString("???");
         }
@@ -85,25 +84,26 @@ QString BitcoinUnits::name(int unit, bool isZrpd)
 
 QString BitcoinUnits::description(int unit)
 {
+    const QString CURR_UNIT = QString(CURRENCY_UNIT.c_str());
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
         switch (unit) {
         case RPD:
-            return QString("RPD");
+            return CURR_UNIT;
         case mRPD:
-            return QString("Milli-RPD (1 / 1" THIN_SP_UTF8 "000)");
+            return QString("Milli-") + CURR_UNIT + QString(" (1 / 1" THIN_SP_UTF8 "000)");
         case uRPD:
-            return QString("Micro-RPD (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            return QString("Micro-") + CURR_UNIT + QString(" (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
     } else {
         switch (unit) {
         case RPD:
-            return QString("TestRPDs");
+            return QString("Test") + CURR_UNIT;
         case mRPD:
-            return QString("Milli-TestRPD (1 / 1" THIN_SP_UTF8 "000)");
+            return QString("Milli-Test") + CURR_UNIT + QString(" (1 / 1" THIN_SP_UTF8 "000)");
         case uRPD:
-            return QString("Micro-TestRPD (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
+            return QString("Micro-Test") + CURR_UNIT + QString(" (1 / 1" THIN_SP_UTF8 "000" THIN_SP_UTF8 "000)");
         default:
             return QString("???");
         }
@@ -213,7 +213,7 @@ QString BitcoinUnits::formatHtmlWithUnit(int unit, const CAmount& amount, bool p
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }
 
-QString BitcoinUnits::floorWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators, bool cleanRemainderZeros, bool isZRPD)
+QString BitcoinUnits::floorWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators, bool cleanRemainderZeros)
 {
     QSettings settings;
     int digits = settings.value("digits").toInt();
@@ -230,12 +230,12 @@ QString BitcoinUnits::floorWithUnit(int unit, const CAmount& amount, bool plussi
         }
     }
 
-    return result + QString(" ") + name(unit, isZRPD);
+    return result + QString(" ") + name(unit);
 }
 
-QString BitcoinUnits::floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators, bool cleanRemainderZeros, bool isZRPD)
+QString BitcoinUnits::floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign, SeparatorStyle separators, bool cleanRemainderZeros)
 {
-    QString str(floorWithUnit(unit, amount, plussign, separators, cleanRemainderZeros, isZRPD));
+    QString str(floorWithUnit(unit, amount, plussign, separators, cleanRemainderZeros));
     str.replace(QChar(THIN_SP_CP), QString(COMMA_HTML));
     return QString("<span style='white-space: nowrap;'>%1</span>").arg(str);
 }

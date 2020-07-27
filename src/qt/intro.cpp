@@ -8,12 +8,11 @@
 #include "intro.h"
 #include "ui_intro.h"
 
+#include "fs.h"
 #include "guiutil.h"
 
 #include "util.h"
 #include "qt/rapids/qtutils.h"
-
-#include <boost/filesystem.hpp>
 
 #include <QFileDialog>
 #include <QMessageBox>
@@ -64,12 +63,11 @@ FreespaceChecker::FreespaceChecker(Intro* intro)
 
 void FreespaceChecker::check()
 {
-    namespace fs = boost::filesystem;
     QString dataDirStr = intro->getPathToCheck();
     fs::path dataDir = GUIUtil::qstringToBoostPath(dataDirStr);
     uint64_t freeBytesAvailable = 0;
     int replyStatus = ST_OK;
-    QString replyMessage = tr("");
+    QString replyMessage = tr("A new data directory will be created.");
 
     /* Find first parent that exists, so that fs::space does not fail */
     fs::path parentDir = dataDir;
@@ -172,7 +170,6 @@ QString Intro::getDefaultDataDirectory()
 
 bool Intro::pickDataDirectory()
 {
-    namespace fs = boost::filesystem;
     QSettings settings;
     /* If data directory provided on command line, no need to look at settings
        or show a picking dialog */
@@ -200,7 +197,7 @@ bool Intro::pickDataDirectory()
                 TryCreateDirectory(GUIUtil::qstringToBoostPath(dataDir));
                 break;
             } catch (const fs::filesystem_error& e) {
-                QMessageBox::critical(0, tr("Rapids"),
+                QMessageBox::critical(0, tr("Rapids Core"),
                     tr("Error: Specified data directory \"%1\" cannot be created.").arg(dataDir));
                 // fall through, back to choosing screen
             }
@@ -242,7 +239,6 @@ void Intro::setStatus(int status, const QString& message, quint64 bytesAvailable
         } else {
             ui->freeSpace->setStyleSheet("");
         }
-        ui->freeSpace->setStyleSheet("QLabel { color: #000000 }");
         ui->freeSpace->setText(freeString + ".");
     }
     /* Don't allow confirm in ERROR state */

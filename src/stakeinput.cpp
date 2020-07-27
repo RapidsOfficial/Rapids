@@ -1,4 +1,4 @@
-// Copyright (c) 2017-2019 The PIVX developers
+// Copyright (c) 2017-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -8,13 +8,10 @@
 #include "chain.h"
 #include "main.h"
 #include "txdb.h"
-#include "zrpd/deterministicmint.h"
 #include "wallet/wallet.h"
 
 bool CRpdStake::InitFromTxIn(const CTxIn& txin)
 {
-    if (txin.IsZerocoinSpend())
-        return error("%s: unable to initialize CRpdStake from zerocoin spend");
 
     // Find the previous transaction in database
     uint256 hashBlock;
@@ -160,14 +157,10 @@ bool CRpdStake::ContextCheck(int nHeight, uint32_t nTime)
     const int nHeightBlockFrom = pindexFrom->nHeight;
     const uint32_t nTimeBlockFrom = pindexFrom->nTime;
 
-#if 0
     // Check that the stake has the required depth/age
-    if (nHeight >= consensus.height_start_ZC_PublicSpends - 1 &&
-            !consensus.HasStakeMinAgeOrDepth(nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom))
-        return error("%s : min age violation - height=%d - time=%d, nHeightBlockFrom=%d, nTimeBlockFrom=%d",
-                         __func__, nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom);
-#endif
-
+		if (!consensus.HasStakeMinAgeOrDepth(nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom))
+			return error("%s : min age violation - height=%d - time=%d, nHeightBlockFrom=%d, nTimeBlockFrom=%d",
+				__func__, nHeight, nTime, nHeightBlockFrom, nTimeBlockFrom);
     // All good
     return true;
 }

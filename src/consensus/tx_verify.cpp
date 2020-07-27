@@ -5,10 +5,8 @@
 #include "tx_verify.h"
 
 #include "consensus/consensus.h"
-#include "consensus/zerocoin_verify.h"
 #include "main.h"
 #include "script/interpreter.h"
-#include "timedata.h"
 
 bool IsFinalTx(const CTransaction& tx, int nBlockHeight, int64_t nBlockTime)
 {
@@ -42,8 +40,7 @@ unsigned int GetLegacySigOpCount(const CTransaction& tx)
 
 unsigned int GetP2SHSigOpCount(const CTransaction& tx, const CCoinsViewCache& inputs)
 {
-    if (tx.IsCoinBase() || tx.HasZerocoinSpendInputs())
-        // a tx containing a zc spend can have only zc inputs
+    if (tx.IsCoinBase())
         return 0;
 
     unsigned int nSigOps = 0;
@@ -55,107 +52,49 @@ unsigned int GetP2SHSigOpCount(const CTransaction& tx, const CCoinsViewCache& in
     return nSigOps;
 }
 
-bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fRejectBadUTXO, CValidationState& state, bool fFakeSerialAttack, bool fColdStakingActive)
+bool CheckTransaction(const CTransaction& tx, CValidationState& state, bool fColdStakingActive)
 {
     // Basic checks that don't depend on any context
     if (tx.vin.empty())
-        return state.DoS(10, error("CheckTransaction() : vin empty"),
-            REJECT_INVALID, "bad-txns-vin-empty");
+        return state.DoS(10, false, REJECT_INVALID, "bad-txns-vin-empty");
     if (tx.vout.empty())
-        return state.DoS(10, error("CheckTransaction() : vout empty"),
-            REJECT_INVALID, "bad-txns-vout-empty");
+        return state.DoS(10, false, REJECT_INVALID, "bad-txns-vout-empty");
 
     // Size limits
-    unsigned int nMaxSize = MAX_ZEROCOIN_TX_SIZE;
+    unsigned int nMaxSize = MAX_STANDARD_TX_SIZE;
 
     if (::GetSerializeSize(tx, SER_NETWORK, PROTOCOL_VERSION) > nMaxSize)
-        return state.DoS(100, error("CheckTransaction() : size limits failed"),
-            REJECT_INVALID, "bad-txns-oversize");
+        return state.DoS(100, false, REJECT_INVALID, "bad-txns-oversize");
 
     // Check for negative or overflow output values
     const Consensus::Params& consensus = Params().GetConsensus();
     CAmount nValueOut = 0;
     for (const CTxOut& txout : tx.vout) {
         if (txout.IsEmpty() && !tx.IsCoinBase() && !tx.IsCoinStake())
-            return state.DoS(100, error("CheckTransaction(): txout empty for user transaction"));
+            return state.DoS(100, false, REJECT_INVALID, "bad-txns-vout-empty");
         if (txout.nValue < 0)
-            return state.DoS(100, error("CheckTransaction() : txout.nValue negative"),
-                REJECT_INVALID, "bad-txns-vout-negative");
+            return state.DoS(100, false, REJECT_INVALID, "bad-txns-vout-negative");
         if (txout.nValue > consensus.nMaxMoneyOut)
-            return state.DoS(100, error("CheckTransaction() : txout.nValue too high"),
-                REJECT_INVALID, "bad-txns-vout-toolarge");
+            return state.DoS(100, false, REJECT_INVALID, "bad-txns-vout-toolarge");
         nValueOut += txout.nValue;
         if (!consensus.MoneyRange(nValueOut))
-            return state.DoS(100, error("CheckTransaction() : txout total out of range"),
-                REJECT_INVALID, "bad-txns-txouttotal-toolarge");
+            return state.DoS(100, false, REJECT_INVALID, "bad-txns-txouttotal-toolarge");
         // check cold staking enforcement (for delegations) and value out
         if (txout.scriptPubKey.IsPayToColdStaking()) {
             if (!fColdStakingActive)
-                return state.DoS(10, error("%s: cold staking not active", __func__), REJECT_INVALID, "bad-txns-cold-stake");
+                return state.DoS(10, false, REJECT_INVALID, "cold-stake-inactive");
             if (txout.nValue < MIN_COLDSTAKING_AMOUNT)
-                return state.DoS(100, error("%s: dust amount (%d) not allowed for cold staking. Min amount: %d",
-                        __func__, txout.nValue, MIN_COLDSTAKING_AMOUNT), REJECT_INVALID, "bad-txns-cold-stake");
-        }
-    }
-
-    std::set<COutPoint> vInOutPoints;
-    std::set<CBigNum> vZerocoinSpendSerials;
-    int nZCSpendCount = 0;
-
-    for (const CTxIn& txin : tx.vin) {
-        // Check for duplicate inputs
-        if (vInOutPoints.count(txin.prevout))
-            return state.DoS(100, error("CheckTransaction() : duplicate inputs"), REJECT_INVALID, "bad-txns-inputs-duplicate");
-
-        //duplicate zcspend serials are checked in CheckZerocoinSpend()
-        if (!txin.IsZerocoinSpend()) {
-            vInOutPoints.insert(txin.prevout);
-        } else if (!txin.IsZerocoinPublicSpend()) {
-            nZCSpendCount++;
-        }
-    }
-
-    if (fZerocoinActive) {
-        if (nZCSpendCount > consensus.ZC_MaxSpendsPerTx)
-            return state.DoS(100, error("CheckTransaction() : there are more zerocoin spends than are allowed in one transaction"));
-
-        //require that a zerocoinspend only has inputs that are zerocoins
-        if (tx.HasZerocoinSpendInputs()) {
-            for (const CTxIn& in : tx.vin) {
-                if (!in.IsZerocoinSpend() && !in.IsZerocoinPublicSpend())
-                    return state.DoS(100,
-                                     error("CheckTransaction() : zerocoinspend contains inputs that are not zerocoins"));
-            }
-
-            // Do not require signature verification if this is initial sync and a block over 24 hours old
-            bool fVerifySignature = !IsInitialBlockDownload() && (GetTime() - chainActive.Tip()->GetBlockTime() < (60*60*24));
-            if (!CheckZerocoinSpend(tx, fVerifySignature, state, fFakeSerialAttack))
-                return state.DoS(100, error("CheckTransaction() : invalid zerocoin spend"));
+                return state.DoS(100, false, REJECT_INVALID, "cold-stake-vout-toosmall");
         }
     }
 
     if (tx.IsCoinBase()) {
         if (tx.vin[0].scriptSig.size() < 2 || tx.vin[0].scriptSig.size() > 150)
-            return state.DoS(100, error("CheckTransaction() : coinbase script size=%d", tx.vin[0].scriptSig.size()),
-                REJECT_INVALID, "bad-cb-length");
-    } else if (fZerocoinActive && tx.HasZerocoinSpendInputs()) {
-        if (tx.vin.size() < 1)
-            return state.DoS(10, error("CheckTransaction() : Zerocoin Spend has less than allowed txin's"), REJECT_INVALID, "bad-zerocoinspend");
-        if (tx.HasZerocoinPublicSpendInputs()) {
-            // tx has public zerocoin spend inputs
-            if(static_cast<int>(tx.vin.size()) > consensus.ZC_MaxPublicSpendsPerTx)
-                return state.DoS(10, error("CheckTransaction() : Zerocoin Spend has more than allowed txin's"), REJECT_INVALID, "bad-zerocoinspend");
-        } else {
-            // tx has regular zerocoin spend inputs
-            if(static_cast<int>(tx.vin.size()) > consensus.ZC_MaxSpendsPerTx)
-                return state.DoS(10, error("CheckTransaction() : Zerocoin Spend has more than allowed txin's"), REJECT_INVALID, "bad-zerocoinspend");
-        }
-
+            return state.DoS(100, false, REJECT_INVALID, "bad-cb-length");
     } else {
         for (const CTxIn& txin : tx.vin)
-            if (txin.prevout.IsNull() && (fZerocoinActive && !txin.IsZerocoinSpend()))
-                return state.DoS(10, error("CheckTransaction() : prevout is null"),
-                    REJECT_INVALID, "bad-txns-prevout-null");
+            if (txin.prevout.IsNull())
+                return state.DoS(10, false, REJECT_INVALID, "bad-txns-prevout-null");
     }
 
     return true;

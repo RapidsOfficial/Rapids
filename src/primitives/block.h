@@ -1,6 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2013 The Bitcoin developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -24,14 +24,13 @@ class CBlockHeader
 {
 public:
     // header
-    static const int32_t CURRENT_VERSION=4;
+    static const int32_t CURRENT_VERSION=4;    
     int32_t nVersion;
     uint256 hashPrevBlock;
     uint256 hashMerkleRoot;
     uint32_t nTime;
     uint32_t nBits;
     uint32_t nNonce;
-    uint256 nAccumulatorCheckpoint;             // only for version 4, 5 and 6.
 
     CBlockHeader()
     {
@@ -41,18 +40,13 @@ public:
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        READWRITE(this->nVersion);
-        nVersion = this->nVersion;
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(nVersion);
         READWRITE(hashPrevBlock);
         READWRITE(hashMerkleRoot);
         READWRITE(nTime);
         READWRITE(nBits);
         READWRITE(nNonce);
-
-        //zerocoin active, header changes to include accumulator checksum
-        //if(nVersion > 3 && nVersion < 7)
-        //    READWRITE(nAccumulatorCheckpoint);
     }
 
     void SetNull()
@@ -63,7 +57,6 @@ public:
         nTime = 0;
         nBits = 0;
         nNonce = 0;
-        nAccumulatorCheckpoint.SetNull();
     }
 
     bool IsNull() const
@@ -92,7 +85,6 @@ public:
     // memory only
     mutable CScript payee;
     mutable bool fChecked;
-    mutable std::vector<uint256> vMerkleTree;
 
     CBlock()
     {
@@ -108,7 +100,7 @@ public:
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
+    inline void SerializationOp(Stream& s, Operation ser_action) {
         READWRITE(*(CBlockHeader*)this);
         READWRITE(vtx);
 	if(vtx.size() > 1 && vtx[1].IsCoinStake())
@@ -120,7 +112,6 @@ public:
         CBlockHeader::SetNull();
         vtx.clear();
         fChecked = false;
-        vMerkleTree.clear();
         payee = CScript();
         vchBlockSig.clear();
     }
@@ -134,8 +125,6 @@ public:
         block.nTime          = nTime;
         block.nBits          = nBits;
         block.nNonce         = nNonce;
-        //if(nVersion > 3 && nVersion < 7)
-        //    block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
         return block;
     }
 
@@ -149,19 +138,11 @@ public:
         return !IsProofOfStake();
     }
 
-    bool SignBlock(const CKeyStore& keystore);
-    bool CheckBlockSignature() const;
-    bool IsZerocoinStake() const;
-
     std::pair<COutPoint, unsigned int> GetProofOfStake() const
     {
         return IsProofOfStake()? std::make_pair(vtx[1].vin[0].prevout, nTime) : std::make_pair(COutPoint(), (unsigned int)0);
     }
 
-    uint256 BuildMerkleTree(bool* mutated = NULL) const;
-
-    std::vector<uint256> GetMerkleBranch(int nIndex) const;
-    static uint256 CheckMerkleBranch(uint256 hash, const std::vector<uint256>& vMerkleBranch, int nIndex);
     std::string ToString() const;
     void print() const;
 };
@@ -185,8 +166,9 @@ struct CBlockLocator
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion) {
-        if (!(nType & SER_GETHASH))
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        int nVersion = s.GetVersion();
+        if (!(s.GetType() & SER_GETHASH))
             READWRITE(nVersion);
         READWRITE(vHave);
     }

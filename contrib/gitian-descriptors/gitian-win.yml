@@ -1,5 +1,5 @@
 ---
-name: "rapids-win-4.1"
+name: "rapids-win-4.2"
 enable_cache: true
 distro: "ubuntu"
 suites:
@@ -24,7 +24,7 @@ packages:
 - "python3"
 - "rename"
 remotes:
-- "url": "https://github.com/RapidsOfficial/Rapids.git"
+- "url": "https://github.com/RapidsOfficial/rapids.git"
   "dir": "rapids"
 files: []
 script: |

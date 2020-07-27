@@ -1,11 +1,12 @@
 // Copyright (c) 2012-2014 The Bitcoin developers
-// Copyright (c) 2015-2019 The PIVX developers
+// Copyright (c) 2015-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "coins.h"
 
+#include "memusage.h"
 #include "random.h"
 
 #include <assert.h>
@@ -77,11 +78,15 @@ bool CCoinsViewBacked::GetStats(CCoinsStats& stats) const { return base->GetStat
 
 CCoinsKeyHasher::CCoinsKeyHasher() : salt(GetRandHash()) {}
 
-CCoinsViewCache::CCoinsViewCache(CCoinsView* baseIn) : CCoinsViewBacked(baseIn), hasModifier(false) {}
+CCoinsViewCache::CCoinsViewCache(CCoinsView* baseIn) : CCoinsViewBacked(baseIn), hasModifier(false), cachedCoinsUsage(0) {}
 
 CCoinsViewCache::~CCoinsViewCache()
 {
     assert(!hasModifier);
+}
+
+size_t CCoinsViewCache::DynamicMemoryUsage() const {
+    return memusage::DynamicUsage(cacheCoins) + cachedCoinsUsage;
 }
 
 CCoinsMap::const_iterator CCoinsViewCache::FetchCoins(const uint256& txid) const
@@ -99,6 +104,7 @@ CCoinsMap::const_iterator CCoinsViewCache::FetchCoins(const uint256& txid) const
         // version as fresh.
         ret->second.flags = CCoinsCacheEntry::FRESH;
     }
+    cachedCoinsUsage += memusage::DynamicUsage(ret->second.coins);
     return ret;
 }
 
@@ -116,6 +122,7 @@ CCoinsModifier CCoinsViewCache::ModifyCoins(const uint256& txid)
 {
     assert(!hasModifier);
     std::pair<CCoinsMap::iterator, bool> ret = cacheCoins.insert(std::make_pair(txid, CCoinsCacheEntry()));
+    size_t cachedCoinUsage = 0;
     if (ret.second) {
         if (!base->GetCoins(txid, ret.first->second.coins)) {
             // The parent view does not have this entry; mark it as fresh.
@@ -125,10 +132,12 @@ CCoinsModifier CCoinsViewCache::ModifyCoins(const uint256& txid)
             // The parent view only has a pruned entry for this; mark it as fresh.
             ret.first->second.flags = CCoinsCacheEntry::FRESH;
         }
+    } else {
+        cachedCoinUsage = memusage::DynamicUsage(ret.first->second.coins);
     }
     // Assume that whenever ModifyCoins is called, the entry will be modified.
     ret.first->second.flags |= CCoinsCacheEntry::DIRTY;
-    return CCoinsModifier(*this, ret.first);
+    return CCoinsModifier(*this, ret.first, cachedCoinUsage);
 }
 
 const CCoins* CCoinsViewCache::AccessCoins(const uint256& txid) const
@@ -178,6 +187,7 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn
                     assert(it->second.flags & CCoinsCacheEntry::FRESH);
                     CCoinsCacheEntry& entry = cacheCoins[it->first];
                     entry.coins.swap(it->second.coins);
+                    cachedCoinsUsage += memusage::DynamicUsage(entry.coins);
                     entry.flags = CCoinsCacheEntry::DIRTY | CCoinsCacheEntry::FRESH;
                 }
             } else {
@@ -185,10 +195,13 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn
                     // The grandparent does not have an entry, and the child is
                     // modified and being pruned. This means we can just delete
                     // it from the parent.
+                    cachedCoinsUsage -= memusage::DynamicUsage(itUs->second.coins);
                     cacheCoins.erase(itUs);
                 } else {
                     // A normal modification.
+                    cachedCoinsUsage -= memusage::DynamicUsage(itUs->second.coins);
                     itUs->second.coins.swap(it->second.coins);
+                    cachedCoinsUsage += memusage::DynamicUsage(itUs->second.coins);
                     itUs->second.flags |= CCoinsCacheEntry::DIRTY;
                 }
             }
@@ -204,6 +217,7 @@ bool CCoinsViewCache::Flush()
 {
     bool fOk = base->BatchWrite(cacheCoins, hashBlock);
     cacheCoins.clear();
+    cachedCoinsUsage = 0;
     return fOk;
 }
 
@@ -224,10 +238,6 @@ CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx) const
     if (tx.IsCoinBase())
         return 0;
 
-    //todo are there any security precautions to take here?
-    if (tx.HasZerocoinSpendInputs())
-        return tx.GetZerocoinSpent();
-
     CAmount nResult = 0;
     for (unsigned int i = 0; i < tx.vin.size(); i++)
         nResult += GetOutputFor(tx.vin[i]).nValue;
@@ -237,7 +247,7 @@ CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx) const
 
 bool CCoinsViewCache::HaveInputs(const CTransaction& tx) const
 {
-    if (!tx.IsCoinBase() && !tx.HasZerocoinSpendInputs()) {
+    if (!tx.IsCoinBase()) {
         for (unsigned int i = 0; i < tx.vin.size(); i++) {
             const COutPoint& prevout = tx.vin[i].prevout;
             const CCoins* coins = AccessCoins(prevout.hash);
@@ -270,7 +280,7 @@ double CCoinsViewCache::GetPriority(const CTransaction& tx, int nHeight) const
     return tx.ComputePriority(dResult);
 }
 
-CCoinsModifier::CCoinsModifier(CCoinsViewCache& cache_, CCoinsMap::iterator it_) : cache(cache_), it(it_)
+CCoinsModifier::CCoinsModifier(CCoinsViewCache& cache_, CCoinsMap::iterator it_, size_t usage) : cache(cache_), it(it_), cachedCoinUsage(usage)
 {
     assert(!cache.hasModifier);
     cache.hasModifier = true;
@@ -281,7 +291,11 @@ CCoinsModifier::~CCoinsModifier()
     assert(cache.hasModifier);
     cache.hasModifier = false;
     it->second.coins.Cleanup();
+    cache.cachedCoinsUsage -= cachedCoinUsage; // Subtract the old usage
     if ((it->second.flags & CCoinsCacheEntry::FRESH) && it->second.coins.IsPruned()) {
         cache.cacheCoins.erase(it);
+    } else {
+        // If the coin still exists after the modification, add the new usage
+        cache.cachedCoinsUsage += memusage::DynamicUsage(it->second.coins);
     }
 }

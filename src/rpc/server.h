@@ -9,7 +9,6 @@
 #define BITCOIN_RPCSERVER_H
 
 #include "amount.h"
-#include "zrpd/zerocoin.h"
 #include "rpc/protocol.h"
 #include "uint256.h"
 
@@ -18,18 +17,16 @@
 #include <stdint.h>
 #include <string>
 
-#include <boost/function.hpp>
-
 #include <univalue.h>
 
 class CRPCCommand;
 
 namespace RPCServer
 {
-    void OnStarted(boost::function<void ()> slot);
-    void OnStopped(boost::function<void ()> slot);
-    void OnPreCommand(boost::function<void (const CRPCCommand&)> slot);
-    void OnPostCommand(boost::function<void (const CRPCCommand&)> slot);
+    void OnStarted(std::function<void ()> slot);
+    void OnStopped(std::function<void ()> slot);
+    void OnPreCommand(std::function<void (const CRPCCommand&)> slot);
+    void OnPostCommand(std::function<void (const CRPCCommand&)> slot);
 }
 
 class CBlockIndex;
@@ -100,7 +97,7 @@ public:
      * This is needed to cope with the case in which there is no HTTP server, but
      * only GUI RPC console, and to break the dependency of pcserver on httprpc.
      */
-    virtual RPCTimerBase* NewTimer(boost::function<void(void)>& func, int64_t millis) = 0;
+    virtual RPCTimerBase* NewTimer(std::function<void(void)>& func, int64_t millis) = 0;
 };
 
 /** Set factory function for timers */
@@ -114,7 +111,7 @@ void RPCUnsetTimerInterface(RPCTimerInterface *iface);
  * Run func nSeconds from now.
  * Overrides previous timer <name> (if any).
  */
-void RPCRunLater(const std::string& name, boost::function<void(void)> func, int64_t nSeconds);
+void RPCRunLater(const std::string& name, std::function<void(void)> func, int64_t nSeconds);
 
 typedef UniValue(*rpcfn_type)(const UniValue& params, bool fHelp);
 
@@ -182,7 +179,6 @@ extern std::string HelpExampleRpc(std::string methodname, std::string args);
 extern void EnsureWalletIsUnlocked(bool fAllowAnonOnly = false);
 // Ensure the wallet's existence.
 extern void EnsureWallet();
-extern UniValue DoZrpdSpend(const CAmount nAmount, std::vector<CZerocoinMint>& vMintsSelected, std::string address_str);
 
 extern UniValue getconnectioncount(const UniValue& params, bool fHelp); // in rpc/net.cpp
 extern UniValue getpeerinfo(const UniValue& params, bool fHelp);
@@ -266,26 +262,6 @@ extern UniValue setstakesplitthreshold(const UniValue& params, bool fHelp);
 extern UniValue getstakesplitthreshold(const UniValue& params, bool fHelp);
 extern UniValue multisend(const UniValue& params, bool fHelp);
 extern UniValue autocombinerewards(const UniValue& params, bool fHelp);
-extern UniValue getzerocoinbalance(const UniValue& params, bool fHelp);
-extern UniValue listmintedzerocoins(const UniValue& params, bool fHelp);
-extern UniValue listspentzerocoins(const UniValue& params, bool fHelp);
-extern UniValue listzerocoinamounts(const UniValue& params, bool fHelp);
-extern UniValue mintzerocoin(const UniValue& params, bool fHelp);
-extern UniValue spendzerocoin(const UniValue& params, bool fHelp);
-extern UniValue spendrawzerocoin(const UniValue& params, bool fHelp);
-extern UniValue spendzerocoinmints(const UniValue& params, bool fHelp);
-extern UniValue resetmintzerocoin(const UniValue& params, bool fHelp);
-extern UniValue resetspentzerocoin(const UniValue& params, bool fHelp);
-extern UniValue getarchivedzerocoin(const UniValue& params, bool fHelp);
-extern UniValue importzerocoins(const UniValue& params, bool fHelp);
-extern UniValue exportzerocoins(const UniValue& params, bool fHelp);
-extern UniValue reconsiderzerocoins(const UniValue& params, bool fHelp);
-extern UniValue getspentzerocoinamount(const UniValue& params, bool fHelp);
-extern UniValue setzrpdseed(const UniValue& params, bool fHelp);
-extern UniValue getzrpdseed(const UniValue& params, bool fHelp);
-extern UniValue generatemintlist(const UniValue& params, bool fHelp);
-extern UniValue searchdzrpd(const UniValue& params, bool fHelp);
-extern UniValue dzrpdstate(const UniValue& params, bool fHelp);
 
 extern UniValue getrawtransaction(const UniValue& params, bool fHelp); // in rpc/rawtransaction.cpp
 extern UniValue listunspent(const UniValue& params, bool fHelp);
@@ -296,9 +272,7 @@ extern UniValue decoderawtransaction(const UniValue& params, bool fHelp);
 extern UniValue decodescript(const UniValue& params, bool fHelp);
 extern UniValue signrawtransaction(const UniValue& params, bool fHelp);
 extern UniValue sendrawtransaction(const UniValue& params, bool fHelp);
-extern UniValue createrawzerocoinspend(const UniValue& params, bool fHelp);
 
-extern UniValue findserial(const UniValue& params, bool fHelp); // in rpc/blockchain.cpp
 extern UniValue getblockcount(const UniValue& params, bool fHelp);
 extern UniValue getbestblockhash(const UniValue& params, bool fHelp);
 extern UniValue waitfornewblock(const UniValue& params, bool fHelp);
@@ -319,7 +293,6 @@ extern UniValue getchaintips(const UniValue& params, bool fHelp);
 extern UniValue invalidateblock(const UniValue& params, bool fHelp);
 extern UniValue reconsiderblock(const UniValue& params, bool fHelp);
 extern UniValue getblockindexstats(const UniValue& params, bool fHelp);
-extern UniValue getserials(const UniValue& params, bool fHelp);
 extern void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int minHeightStart=1);
 
 // in rpc/masternode.cpp

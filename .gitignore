@@ -11,7 +11,8 @@ src/rapids
 src/rapidsd
 src/rapids-cli
 src/rapids-tx
-src/test/test_rapids
+src/bench/bench_rapids
+
 src/qt/test/test_rapids-qt
 
 # autoreconf
@@ -85,13 +86,12 @@ src/qt/test/moc*.cpp
 *.qm
 Makefile
 rapids-qt
-PIVX-Qt.app
+Rapids-Qt.app
 background.tiff*
 
 # Unit-tests
 Makefile.test
 rapids-qt_test
-src/test/buildenv.py
 
 # Resources cpp
 qrc_*.cpp
@@ -114,8 +114,6 @@ coverage_percent.txt
 linux-coverage-build
 linux-build
 win32-build
-test/config.ini
-test/cache/*
 qa/pull-tester/run-bitcoind-for-test.sh
 qa/pull-tester/tests-config.sh
 qa/pull-tester/cache/*
@@ -139,3 +137,4 @@ ui_*
 build*
 rapidsd.*
 rapidsd-new-gui.*
+

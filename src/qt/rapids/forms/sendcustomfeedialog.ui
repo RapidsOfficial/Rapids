@@ -92,7 +92,7 @@
            <string notr="true">padding-left:24px;</string>
           </property>
           <property name="text">
-           <string>Transaction Details</string>
+           <string>Customize Fee</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -155,7 +155,7 @@
       <item>
        <widget class="QLabel" name="labelMessage">
         <property name="text">
-         <string>Customize the transaction fee at your to your liking, depending on the fee value your transaction will be included or not in the blockchain.</string>
+         <string>Customize the transaction fee, depending on the fee value your transaction might be included faster in the blockchain</string>
         </property>
         <property name="alignment">
          <set>Qt::AlignCenter</set>
@@ -278,7 +278,11 @@
             </spacer>
            </item>
            <item alignment="Qt::AlignHCenter">
-            <widget class="QLineEdit" name="lineEditCustomFee"/>
+            <widget class="QLineEdit" name="lineEditCustomFee">
+             <property name="placeholderText">
+              <string notr="true">0.000001</string>
+             </property>
+            </widget>
            </item>
            <item alignment="Qt::AlignHCenter">
             <widget class="QLabel" name="labelCustomFee">
@@ -348,7 +352,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string>OK</string>
+           <string>SAVE</string>
           </property>
          </widget>
         </item>

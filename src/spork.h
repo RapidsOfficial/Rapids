@@ -1,5 +1,5 @@
 // Copyright (c) 2014-2016 The Dash developers
-// Copyright (c) 2016-2019 The PIVX developers
+// Copyright (c) 2016-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -62,13 +62,14 @@ public:
 
     // override GetPublicKey - gets Params().SporkPubkey()
     const CPubKey GetPublicKey(std::string& strErrorRet) const override;
+    const CPubKey GetPublicKeyOld() const;
 
     void Relay();
 
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    inline void SerializationOp(Stream& s, Operation ser_action)
     {
         READWRITE(nSporkID);
         READWRITE(nValue);
@@ -99,7 +100,7 @@ public:
     ADD_SERIALIZE_METHODS;
 
     template <typename Stream, typename Operation>
-    inline void SerializationOp(Stream& s, Operation ser_action, int nType, int nVersion)
+    inline void SerializationOp(Stream& s, Operation ser_action)
     {
         READWRITE(mapSporksActive);
         // we don't serialize private key to prevent its leakage

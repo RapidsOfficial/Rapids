@@ -1,34 +1,14 @@
 QT_TS = \
-  qt/locale/rapids_bg.ts \
-  qt/locale/rapids_ca.ts \
-  qt/locale/rapids_cs.ts \
-  qt/locale/rapids_da.ts \
   qt/locale/rapids_de.ts \
   qt/locale/rapids_en.ts \
-  qt/locale/rapids_en_GB.ts \
   qt/locale/rapids_en_US.ts \
-  qt/locale/rapids_eo.ts \
   qt/locale/rapids_es.ts \
-  qt/locale/rapids_es_ES.ts \
-  qt/locale/rapids_fi.ts \
   qt/locale/rapids_fr_FR.ts \
-  qt/locale/rapids_hi_IN.ts \
-  qt/locale/rapids_hr.ts \
   qt/locale/rapids_hr_HR.ts \
   qt/locale/rapids_it.ts \
-  qt/locale/rapids_ja.ts \
   qt/locale/rapids_ko_KR.ts \
-  qt/locale/rapids_lt_LT.ts \
   qt/locale/rapids_nl.ts \
   qt/locale/rapids_pl.ts \
-  qt/locale/rapids_pt.ts \
-  qt/locale/rapids_pt_BR.ts \
-  qt/locale/rapids_ro_RO.ts \
   qt/locale/rapids_ru.ts \
-  qt/locale/rapids_sk.ts \
-  qt/locale/rapids_sv.ts \
   qt/locale/rapids_tr.ts \
-  qt/locale/rapids_uk.ts \
-  qt/locale/rapids_vi.ts \
-  qt/locale/rapids_zh_CN.ts \
-  qt/locale/rapids_zh_TW.ts
+  qt/locale/rapids_zh_CN.ts

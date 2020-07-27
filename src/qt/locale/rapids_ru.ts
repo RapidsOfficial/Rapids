@@ -130,12 +130,12 @@
         <translation>Адреса получения</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
-        <translation>Это ваши RPD-адреса для отправки платежей. Перед отправкой монет всегда проверяйте сумму и адрес получателя.</translation>
+        <source>These are your Rapids addresses for sending payments. Always check the amount and the receiving address before sending coins.</source>
+        <translation>Это ваши Rapids-адреса для отправки платежей. Перед отправкой монет всегда проверяйте сумму и адрес получателя.</translation>
     </message>
     <message>
-        <source>These are your RPD addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
-        <translation>Это ваши RPD-адреса для получения платежей. Для каждой транзакции рекомендуется использовать новый адрес получения.</translation>
+        <source>These are your Rapids addresses for receiving payments. It is recommended to use a new receiving address for each transaction.</source>
+        <translation>Это ваши Rapids-адреса для получения платежей. Для каждой транзакции рекомендуется использовать новый адрес получения.</translation>
     </message>
     <message>
         <source>&amp;Copy Address</source>
@@ -196,6 +196,10 @@
         <translation>Дата</translation>
     </message>
     <message>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
         <source>(no label)</source>
         <translation>(нет ярлыка)</translation>
     </message>
@@ -215,8 +219,8 @@
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <source>Contact name</source>
@@ -247,8 +251,8 @@
         <translation>Например, Иван Петров</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>Ввести адрес RPD</translation>
+        <source>Enter Rapids address</source>
+        <translation>Ввести адрес Rapids</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -367,6 +371,18 @@ for staking</source>
         <translation>Подтверждение шифрования кошелька</translation>
     </message>
     <message>
+        <source>WARNING</source>
+        <translation>ВНИМАНИЕ</translation>
+    </message>
+    <message>
+        <source>If you encrypt your wallet and lose your passphrase, you will</source>
+        <translation>Если вы зашифруете свой кошелек и потеряете парольную фразу, вы</translation>
+    </message>
+    <message>
+        <source>LOSE ALL OF YOUR RPD</source>
+        <translation>ПОТЕРЯЕТЕ ВСЕ ВАШИ RPD</translation>
+    </message>
+    <message>
         <source>ENCRYPT</source>
         <translation>РАСШИФРОВАТЬ</translation>
     </message>
@@ -375,16 +391,16 @@ for staking</source>
         <translation>ОТМЕНА</translation>
     </message>
     <message>
-        <source>RPD will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
-        <translation>RPD сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши RPD от кражи с использованием вредоносного ПО.</translation>
+        <source>WARNING: The Caps Lock key is on!</source>
+        <translation>ВНИМАНИЕ: Включена клавиша Caps Lock!</translation>
+    </message>
+    <message>
+        <source>Rapids will close now to finish the encryption process. Remember that encrypting your wallet cannot fully protect your RPDs from being stolen by malware infecting your computer.</source>
+        <translation>Rapids сейчас закроется, чтобы завершить процесс шифрования. Помните, что шифрование вашего кошелька не может полностью защитить ваши Rapids от кражи с использованием вредоносного ПО.</translation>
     </message>
     <message>
         <source>Are you sure you wish to encrypt your wallet?</source>
         <translation>Вы действительно хотите зашифровать свой кошелек?</translation>
-    </message>
-    <message>
-        <source>Warning: If you encrypt your wallet and lose your passphrase, you will &lt;b&gt;LOSE ALL OF YOUR RPD&lt;/b&gt;!</source>
-        <translation>Внимание: если вы зашифруете свой кошелёк и потеряете от него пароль, то вы &lt;b&gt;ПОТЕРЯЕТЕ ВСЕ СВОИ RPD&lt;/b&gt;!</translation>
     </message>
     <message>
         <source>Wallet encrypted</source>
@@ -426,10 +442,6 @@ for staking</source>
         <source>Wallet passphrase was successfully changed.</source>
         <translation>Кодовая фраза кошелька успешно изменена.</translation>
     </message>
-    <message>
-        <source>Warning: The Caps Lock key is on!</source>
-        <translation>Внимание: Клавиша Caps Lock включена!</translation>
-    </message>
 </context>
 <context>
     <name>BanTableModel</name>
@@ -440,37 +452,6 @@ for staking</source>
     <message>
         <source>Banned Until</source>
         <translation>Запрещено до</translation>
-    </message>
-</context>
-<context>
-    <name>BlockExplorer</name>
-    <message>
-        <source>Blockchain Explorer</source>
-        <translation>Обзор блокчейна</translation>
-    </message>
-    <message>
-        <source>Back</source>
-        <translation>Назад</translation>
-    </message>
-    <message>
-        <source>Forward</source>
-        <translation>вперед</translation>
-    </message>
-    <message>
-        <source>Address / Block / Transaction</source>
-        <translation>Адрес / Блок / Транзакция</translation>
-    </message>
-    <message>
-        <source>Search</source>
-        <translation>Поиск</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>Not all transactions will be shown. To view all transactions you need to set txindex=1 in the configuration file (rapids.conf).</source>
-        <translation>Будут показаны не все транзакции. Для отображения всех транзакций необходимо выставить txindex=1 в конфигурационном файле (rapids.conf).</translation>
     </message>
 </context>
 <context>
@@ -506,10 +487,6 @@ for staking</source>
         <source>Total: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Unknown: %5)</source>
         <translation>Общее количество: %1 (IPv4: %2 / IPv6: %3 / Tor: %4 / Неизвестные: %5)</translation>
     </message>
-    <message>
-        <source>Network Alert</source>
-        <translation>Сетевое предупреждение</translation>
-    </message>
 </context>
 <context>
     <name>CoinControlDialog</name>
@@ -528,6 +505,10 @@ for staking</source>
     <message>
         <source>Coin Selection</source>
         <translation>Выбор монеты</translation>
+    </message>
+    <message>
+        <source>Select RPD Outputs to Spend</source>
+        <translation>Выберите RPD выходы для расходов</translation>
     </message>
     <message>
         <source>Dust:</source>
@@ -552,14 +533,6 @@ for staking</source>
     <message>
         <source>Amount</source>
         <translation>Сумма</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
     </message>
     <message>
         <source>0.00 RPD</source>
@@ -630,40 +603,40 @@ for staking</source>
         <translation>Разблокировать неистраченные</translation>
     </message>
     <message>
-        <source>Copy quantity</source>
-        <translation>Копировать количество</translation>
-    </message>
-    <message>
-        <source>Copy fee</source>
-        <translation>Копировать комиссию</translation>
-    </message>
-    <message>
-        <source>Copy after fee</source>
-        <translation>Копировать после вознаграждения </translation>
-    </message>
-    <message>
-        <source>Copy bytes</source>
-        <translation>Копировать байты</translation>
-    </message>
-    <message>
-        <source>Copy priority</source>
-        <translation>Копировать приоритет</translation>
-    </message>
-    <message>
-        <source>Copy dust</source>
-        <translation>Копировать пыль</translation>
-    </message>
-    <message>
-        <source>Copy change</source>
-        <translation>Копировать изменение</translation>
-    </message>
-    <message>
         <source>Unselect all</source>
         <translation>Снять все</translation>
     </message>
     <message>
         <source>Please switch to "List mode" to use this function.</source>
         <translation>Для использования этой функции перейдите в "Режим списка"</translation>
+    </message>
+    <message>
+        <source>Quantity Copied</source>
+        <translation>Количество скопировано</translation>
+    </message>
+    <message>
+        <source>Amount Copied</source>
+        <translation>Сумма скопирована</translation>
+    </message>
+    <message>
+        <source>Fee Copied</source>
+        <translation>Комиссия скопирована</translation>
+    </message>
+    <message>
+        <source>After Fee Copied</source>
+        <translation>После того, как комиссия скопирована</translation>
+    </message>
+    <message>
+        <source>Bytes Copied</source>
+        <translation>Скопировано байтов</translation>
+    </message>
+    <message>
+        <source>Dust Copied</source>
+        <translation>Остаток скопирован</translation>
+    </message>
+    <message>
+        <source>Change Copied</source>
+        <translation>Скопировано сдачи</translation>
     </message>
     <message>
         <source>highest</source>
@@ -714,6 +687,10 @@ for staking</source>
         <translation>да</translation>
     </message>
     <message>
+        <source>delegated to %1 for cold staking</source>
+        <translation>делегирован в %1 для холодного стекинга</translation>
+    </message>
+    <message>
         <source>no</source>
         <translation>нет</translation>
     </message>
@@ -747,7 +724,7 @@ for staking</source>
     </message>
     <message>
         <source>(no label)</source>
-        <translation>(нет метки)</translation>
+        <translation>(нет ярлыка)</translation>
     </message>
     <message>
         <source>change from %1 (%2)</source>
@@ -756,89 +733,6 @@ for staking</source>
     <message>
         <source>(change)</source>
         <translation>(изменить)</translation>
-    </message>
-</context>
-<context>
-    <name>CoinControlRpdWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Диалоговое окно</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>RPD:</source>
-        <translation>RPD:</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>Quantity:</source>
-        <translation>Количество:</translation>
-    </message>
-    <message>
-        <source>Fee:</source>
-        <translation>Комиссия:</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Сумма</translation>
-    </message>
-    <message>
-        <source>Label</source>
-        <translation>Метка</translation>
-    </message>
-    <message>
-        <source>Address</source>
-        <translation>Адрес</translation>
-    </message>
-    <message>
-        <source>Type</source>
-        <translation>Тип</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Дата</translation>
-    </message>
-    <message>
-        <source>Confirmations</source>
-        <translation>Подтверждения</translation>
-    </message>
-    <message>
-        <source>CheckBox</source>
-        <translation>Флажок</translation>
-    </message>
-    <message>
-        <source>Bytes:</source>
-        <translation>Байты:</translation>
-    </message>
-    <message>
-        <source>Dust:</source>
-        <translation>Пыль:</translation>
-    </message>
-    <message>
-        <source>Change:</source>
-        <translation>Изменить:</translation>
-    </message>
-    <message>
-        <source>After Fee: </source>
-        <translation>После комиссии:</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>ОТМЕНА</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>ХОРОШО</translation>
     </message>
 </context>
 <context>
@@ -856,24 +750,16 @@ for staking</source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
+        <source>Owner address (optional, if empty a new address will be created)</source>
+        <translation>Адрес владельца (необязательно; если пусто, будет создан новый адрес)</translation>
     </message>
     <message>
-        <source>Owner Address (optional, if empty a new address will be created)</source>
-        <translation>Адрес владельца (по желанию; если пусто, то тогда будет создан новый адрес)</translation>
+        <source>Total Staking:</source>
+        <translation>Общий стекинг:</translation>
     </message>
     <message>
         <source>List of delegated balance by address</source>
         <translation>Список делегированного баланса по адресам</translation>
-    </message>
-    <message>
-        <source>Total</source>
-        <translation>В сумме</translation>
-    </message>
-    <message>
-        <source>Unconfirmed balance will not be shown</source>
-        <translation>Неподтвержденный баланс не будет показан</translation>
     </message>
     <message>
         <source>No balance delegated</source>
@@ -892,30 +778,12 @@ for staking</source>
         <translation>Делегирование</translation>
     </message>
     <message>
-        <source>You can delegate your RPDs and let a hot node (24/7 online node)
-stake in your behalf, keeping the keys in a secure place offline.</source>
-        <translation>Вы можете делегировать свои RPD и позволить горячему узлу (онлайн-узел 24/7 )
-запускать стекинг от вашего имени, при этом удерживая ключи оффлайн в безопасном месте.</translation>
-    </message>
-    <message>
-        <source>Add owner address</source>
-        <translation>Добавить адрес владельца</translation>
-    </message>
-    <message>
-        <source>Delegate or Accept RPD delegation</source>
-        <translation>Делегировать или принять делегирование RPD</translation>
-    </message>
-    <message>
         <source>Delegate</source>
         <translation>Делегировать</translation>
     </message>
     <message>
         <source>Clear All</source>
         <translation>Очистить все</translation>
-    </message>
-    <message>
-        <source>Add the staking address</source>
-        <translation>Добавить стекинг адрес</translation>
     </message>
     <message>
         <source>Delegated balance history</source>
@@ -934,8 +802,33 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Ошибка при загрузке делегаций: %1</translation>
     </message>
     <message>
+        <source>You can delegate your RPDs, letting a hot node (24/7 online node)
+stake on your behalf, while you keep the keys securely offline.</source>
+        <translation>Вы можете делегировать свои RPD, позволяя горячему узлу (онлайн-узлу, работаещему 24/7) делать стекинг от вашего имени, в то время как ключи надежно хранятся в автономном режиме.</translation>
+    </message>
+    <message>
+        <source>Enter owner address</source>
+        <translation>Введите адрес владельца</translation>
+    </message>
+    <message>
+        <source>Accept RPD delegation / Delegate RPD</source>
+        <translation>Принять делегацию RPD / Делегировать RPD</translation>
+    </message>
+    <message>
+        <source>Cold Staking address</source>
+        <translation>Адрес холодного стекинга</translation>
+    </message>
+    <message>
+        <source>No receive addresses available, you can go to the receive screen and create some there!</source>
+        <translation>Нет доступных адресов получения, вы можете перейти на экран получения и создать там несколько!</translation>
+    </message>
+    <message>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
         <translation>Нет доступных контактов. Вы можете перейти на вкладку контактов и добавить несколько!</translation>
+    </message>
+    <message>
+        <source>Cannot send delegation, wallet locked</source>
+        <translation>Не удается отправить делегацию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>Cold staking is networkely disabled</source>
@@ -946,8 +839,8 @@ stake in your behalf, keeping the keys in a secure place offline.</source>
         <translation>Неверная запись</translation>
     </message>
     <message>
-        <source>Invalid entry, minimum delegable amount is 10 RPD</source>
-        <translation>Неверная запись, минимальная делегируемая сумма равна 10 RPD</translation>
+        <source>Invalid entry, minimum delegable amount is </source>
+        <translation>Неверная запись, минимальная делегируемая сумма</translation>
     </message>
     <message>
         <source>Owner address invalid</source>
@@ -987,6 +880,10 @@ Do you wish to proceed?</source>
     <message>
         <source>You don't have any RPD to select.</source>
         <translation>У вас нет RPD.</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Невозможно выполнить операцию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -1101,10 +998,6 @@ address</source>
         <translation>Нет транзакций</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Staking Rewards</source>
         <translation>Вознаграждения за стекинг</translation>
     </message>
@@ -1155,50 +1048,6 @@ address</source>
     <message>
         <source>Amount of RPD and zRPD staked.</source>
         <translation>Сумма добытых RPD и zRPD</translation>
-    </message>
-    <message>
-        <source>All</source>
-        <translation>все</translation>
-    </message>
-    <message>
-        <source>Received</source>
-        <translation>Принято</translation>
-    </message>
-    <message>
-        <source>Sent</source>
-        <translation>Отправлено</translation>
-    </message>
-    <message>
-        <source>Mined</source>
-        <translation>заминированный</translation>
-    </message>
-    <message>
-        <source>Minted</source>
-        <translation>Чеканка</translation>
-    </message>
-    <message>
-        <source>MN reward</source>
-        <translation>Вознаграждение от MN</translation>
-    </message>
-    <message>
-        <source>To yourself</source>
-        <translation>Самому себе</translation>
-    </message>
-    <message>
-        <source>Cold stakes</source>
-        <translation>Холодные стекинг ставки</translation>
-    </message>
-    <message>
-        <source>Hot stakes</source>
-        <translation>Горячие стекинг ставки</translation>
-    </message>
-    <message>
-        <source>Delegated</source>
-        <translation>Делегирован</translation>
-    </message>
-    <message>
-        <source>Delegations</source>
-        <translation>Делегирования</translation>
     </message>
     <message>
         <source>Please wait until the wallet is fully synced to see your correct balance</source>
@@ -1267,69 +1116,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
 </context>
 <context>
-    <name>DenomGenerationDialog</name>
-    <message>
-        <source>Form</source>
-        <translation>Вид</translation>
-    </message>
-    <message>
-        <source>Transaction Details</source>
-        <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>This will unlock your wallet fully, so that anyone with access to it can spend until the wallet is closed or locked again.</source>
-        <translation>Это полностью разблокирует ваш кошелек и любой, кто имеет к нему доступ, может тратить монеты до тех пор, пока кошелек не будет закрыт или заблокирован снова.</translation>
-    </message>
-    <message>
-        <source>5000</source>
-        <translation>5000</translation>
-    </message>
-    <message>
-        <source>100</source>
-        <translation>100</translation>
-    </message>
-    <message>
-        <source>10</source>
-        <translation>10</translation>
-    </message>
-    <message>
-        <source>1000</source>
-        <translation>1000</translation>
-    </message>
-    <message>
-        <source>50</source>
-        <translation>50</translation>
-    </message>
-    <message>
-        <source>500</source>
-        <translation>500</translation>
-    </message>
-    <message>
-        <source>5</source>
-        <translation>5</translation>
-    </message>
-    <message>
-        <source>1</source>
-        <translation>1</translation>
-    </message>
-    <message>
-        <source>Select All</source>
-        <translation>Выбрать все</translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>ОТМЕНА</translation>
-    </message>
-    <message>
-        <source>SAVE</source>
-        <translation>СОХРАНИТЬ</translation>
-    </message>
-</context>
-<context>
     <name>EditAddressDialog</name>
     <message>
         <source>Edit Address</source>
@@ -1368,8 +1154,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Изменить адрес отправки</translation>
     </message>
     <message>
-        <source>The entered address "%1" is not a valid RPD address.</source>
-        <translation>Введенный адрес "%1" не является RPD адресом.</translation>
+        <source>The entered address "%1" is not a valid Rapids address.</source>
+        <translation>Введенный адрес "%1" не является Rapids адресом.</translation>
     </message>
     <message>
         <source>The entered address "%1" is already in the address book.</source>
@@ -1415,49 +1201,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     </message>
 </context>
 <context>
-    <name>GovernancePage</name>
-    <message>
-        <source>Form</source>
-        <translation>Вид</translation>
-    </message>
-    <message>
-        <source>GOVERNANCE</source>
-        <translation>УПРАВЛЕНИЕ</translation>
-    </message>
-    <message>
-        <source>Update Proposals</source>
-        <translation>Обновить предложения</translation>
-    </message>
-    <message>
-        <source>Next super block:</source>
-        <translation>Следующий супер блок:</translation>
-    </message>
-    <message>
-        <source>0</source>
-        <translation>0</translation>
-    </message>
-    <message>
-        <source>Blocks to next super block:</source>
-        <translation>Блоки до следующего суперблока:</translation>
-    </message>
-    <message>
-        <source>Days to budget payout (estimate):</source>
-        <translation>Дней до выплаты бюджета (приблизительно):</translation>
-    </message>
-    <message>
-        <source>Allotted budget:</source>
-        <translation>Выделенный бюджет:</translation>
-    </message>
-    <message>
-        <source>Budget left:</source>
-        <translation>Остаток Бюджета:</translation>
-    </message>
-    <message>
-        <source>Masternodes count:</source>
-        <translation>Количество мастернод:</translation>
-    </message>
-</context>
-<context>
     <name>HelpMessageDialog</name>
     <message>
         <source>version</source>
@@ -1500,6 +1243,10 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Показывать загрузочную заставку при запуске (по умолчанию: %u)</translation>
     </message>
     <message>
+        <source>Hide QT staking charts on startup (default: %u)</source>
+        <translation>Скрыть график стекинга QT при запуске (по умолчанию: %u)</translation>
+    </message>
+    <message>
         <source>Set language, for example "de_DE" (default: system locale)</source>
         <translation>Задайте язык, например "de_DE"(по умолчанию: язык системы)</translation>
     </message>
@@ -1531,8 +1278,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Поскольку это первый запуск программы, вы можете выбрать, где будут храниться данные Rapids.</translation>
     </message>
     <message>
-        <source>Rapids will download and store a copy of the RPD block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
-        <translation>Rapids загрузит и сохранит копию цепочки блоков RPD. Каталог будет занимать около %1GB и со временем размер будет увеличиваться. Кроме того, в этом каталоге будет храниться кошелек.</translation>
+        <source>Rapids will download and store a copy of the Rapids block chain. At least %1GB of data will be stored in this directory, and it will grow over time. The wallet will also be stored in this directory.</source>
+        <translation>Rapids загрузит и сохранит копию цепочки блоков Rapids. Каталог будет занимать около %1GB и со временем размер будет увеличиваться. Кроме того, в этом каталоге будет храниться кошелек.</translation>
     </message>
     <message>
         <source>Use the default data directory</source>
@@ -1615,18 +1362,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <source>Form</source>
         <translation>Вид</translation>
     </message>
-    <message>
-        <source>user_masternode</source>
-        <translation>user_masternode</translation>
-    </message>
-    <message>
-        <source>Address: 88.26.164.88:51474</source>
-        <translation>Адрес: 88.26.164.88:51474 </translation>
-    </message>
-    <message>
-        <source>Jan. 19, 2019</source>
-        <translation>19 января, 2019</translation>
-    </message>
 </context>
 <context>
     <name>MasterNodeWizardDialog</name>
@@ -1659,28 +1394,28 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Адрес</translation>
     </message>
     <message>
-        <source>Create New Master Node Controller</source>
-        <translation>Создать новый контроллер мастерноды</translation>
+        <source>Create New Masternode Controller</source>
+        <translation>Создать новый контроллер Мастерноды</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;To create a RPD Masternode you must dedicate 10.000 RPD (the unit of RPD) to the network (however, these coins are still yours and will never leave your possession). &lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt;You can deactivate the node and unlock the coins at any time.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Для того, чтобы создать мастерноду RPD, вам необходимо внести в сеть 10.000 RPD (эти монеты остаются вашими и никогда не покинут вас).&lt;/p&gt;&lt;p&gt;&lt;/p&gt;&lt;p&gt; Вы можете отключить узел и разблокировать монеты в любое время.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>Set Masternode Name</source>
+        <translation>Установить имя мастерноды</translation>
+    </message>
+    <message>
+        <source>Set Masternode IP and Port</source>
+        <translation>Задать IP-адрес и порт Мастерноды</translation>
+    </message>
+    <message>
+        <source>Enter port</source>
+        <translation>Ввести порт</translation>
     </message>
     <message>
         <source>Make sure you have this amount of coins.</source>
         <translation>Убедитесь, что у вас есть такое количество монет.</translation>
     </message>
     <message>
-        <source>Set Master Node’s Name</source>
-        <translation>Установить имя мастерноды</translation>
-    </message>
-    <message>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A transaction of 10,000 RPD will be made&lt;/p&gt;&lt;p&gt;to a new empty address in your wallet.&lt;/p&gt;&lt;p&gt;The Address is labeled under the master node's name.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;На новый пустой адрес в вашем кошельке&lt;/p&gt;&lt;p&gt; будет сделана транзакция в 10 000 RPD. &lt;/p&gt;&lt;p&gt;Адрес отмечен под именем мастерноды.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
-        <source>Set Master Node’s IP and port</source>
-        <translation>Установите IP-адрес и порт мастерноды</translation>
     </message>
     <message>
         <source>Address of the node that must always be online running the actual master node.</source>
@@ -1689,10 +1424,6 @@ It will start automatically as soon as the wallet has enough confirmations on an
     <message>
         <source>Enter IP address</source>
         <translation>Ввести IP-адрес</translation>
-    </message>
-    <message>
-        <source>Enter Port</source>
-        <translation>Ввести порт</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -1723,12 +1454,34 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>IP и порт не могут быть пустыми</translation>
     </message>
     <message>
-        <source>Invalid port number</source>
-        <translation>Неверный номер порта</translation>
+        <source>Invalid IP address</source>
+        <translation>Неверный IP-адрес</translation>
     </message>
     <message>
-        <source>Prepare master node failed..</source>
-        <translation>Не удалось подготовить мастерноду</translation>
+        <source>Prepare master node failed.
+
+%1
+</source>
+        <translation>Не удалось подготовить мастерноду.
+
+ %1
+</translation>
+    </message>
+    <message>
+        <source>Invalid collateral output index</source>
+        <translation>Неверный индекс выхода коллатераля</translation>
+    </message>
+    <message>
+        <source>Master node created! Wait %1 confirmations before starting it.</source>
+        <translation>Мастернода создана! Подождите %1 подтверждений, прежде чем запустить его.</translation>
+    </message>
+    <message>
+        <source>Cannot send collateral transaction.
+
+%1</source>
+        <translation>Не удается отправить транзакцию коллатераля.
+
+%1</translation>
     </message>
     <message>
         <source>Invalid masternode.conf file</source>
@@ -1739,56 +1492,8 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Ошибка разбора файла masternode.conf</translation>
     </message>
     <message>
-        <source>Invalid collaterall output index</source>
-        <translation>Неверный индекс выхода залога</translation>
-    </message>
-    <message>
-        <source>Master node created!</source>
-        <translation>Мастернода успешно создана!</translation>
-    </message>
-    <message>
         <source>masternode.conf file doesn't exists</source>
         <translation>Файла masternode.cong не существует</translation>
-    </message>
-    <message>
-        <source>The recipient address is not valid, please recheck.</source>
-        <translation>Адрес получателя недействителен, повторите проверку.</translation>
-    </message>
-    <message>
-        <source>The amount to pay must be larger than 0.</source>
-        <translation>Сумма для платежа должна быть больше, чем 0.</translation>
-    </message>
-    <message>
-        <source>The amount exceeds your balance.</source>
-        <translation>Сумма превышает ваш баланс.</translation>
-    </message>
-    <message>
-        <source>The total exceeds your balance when the %1 transaction fee is included.</source>
-        <translation>Сумма превышает ваш баланс, когда включена комиссия за транзакцию %1.</translation>
-    </message>
-    <message>
-        <source>Duplicate address found, can only send to each address once per send operation.</source>
-        <translation>Дублированный адрес найден, можно отправлять только на каждый адрес один раз за операцию отправки.</translation>
-    </message>
-    <message>
-        <source>Transaction creation failed!</source>
-        <translation>Не удалось создать транзакцию!</translation>
-    </message>
-    <message>
-        <source>The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
-        <translation>Сделка была отклонена! Это может произойти, если некоторые из монет в вашем кошельке уже были потрачены, например, если вы использовали копию wallet.dat и монеты были потрачены в копии, но не отмечены как потраченные здесь.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins.</source>
-        <translation>Ошибка: кошелек был разблокирован только для анонимизации монет.</translation>
-    </message>
-    <message>
-        <source>A fee %1 times higher than %2 per kB is considered an insanely high fee.</source>
-        <translation>Плата в %1 раз выше, чем %2 за КБ, считается безумно высокой.</translation>
-    </message>
-    <message>
-        <source>Error: The wallet was unlocked only to anonymize coins. Unlock canceled.</source>
-        <translation>Ошибка: кошелек был разблокирован только для анонимизации монет. Разблокировка отменена.</translation>
     </message>
 </context>
 <context>
@@ -1802,12 +1507,16 @@ It will start automatically as soon as the wallet has enough confirmations on an
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
+        <source>Start All</source>
+        <translation>Запустить все</translation>
+    </message>
+    <message>
+        <source>Start Inactive/s</source>
+        <translation>Запустить неактивные</translation>
     </message>
     <message>
         <source>Masternodes</source>
@@ -1840,6 +1549,10 @@ and vote on the treasury system receiving a periodic reward.</source>
         <translation>Информация</translation>
     </message>
     <message>
+        <source>Please wait until the node is fully synced</source>
+        <translation>Пожалуйста, дождитесь полной синхронизации узла</translation>
+    </message>
+    <message>
         <source>Start Masternode</source>
         <translation>Запустить мастерноду</translation>
     </message>
@@ -1850,10 +1563,45 @@ and vote on the treasury system receiving a periodic reward.</source>
 </translation>
     </message>
     <message>
-        <source>Cannot start masternode, the collateral transaction has not been accepted by the network.
-Please wait few more minutes.</source>
-        <translation>Невозможно запустить мастерноду - транзакция залога не была принята сетью.
-Пожалуйста, подождите еще несколько минут.</translation>
+        <source>Cannot edit masternode, wallet locked</source>
+        <translation>Невозможно редактировать мастерноду, кошелек заблокирован</translation>
+    </message>
+    <message>
+        <source>Cannot start masternode, the collateral transaction has not been confirmed by the network yet.
+Please wait few more minutes (masternode collaterals require %1 confirmations).</source>
+        <translation>Невозможно запустить мастерноду, транзакция коллатераля еще не подтверждена сетью. Подождите еще несколько минут (для коллатералей мастерноды требуется %1 подтверждений).</translation>
+    </message>
+    <message>
+        <source>Background task is being executed, please wait</source>
+        <translation>Выполняется фоновая задача, пожалуйста, подождите</translation>
+    </message>
+    <message>
+        <source>Start ALL masternodes failed</source>
+        <translation>Не удалось запустить ВСЕ мастерноды</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>Разблокировка кошелька отменена</translation>
+    </message>
+    <message>
+        <source>Cannot perform Masternodes start</source>
+        <translation>Невозможно выполнить запуск Мастернод</translation>
+    </message>
+    <message>
+        <source>%1 Masternodes failed to start, %2 started</source>
+        <translation>Не удалось запустить %1 мастернод, запущено %2</translation>
+    </message>
+    <message>
+        <source>All Masternodes started!</source>
+        <translation>Все Мастерноды запущены!</translation>
+    </message>
+    <message>
+        <source>Cannot show Masternode information, wallet locked</source>
+        <translation>Невозможно отобразить информацию о Мастерноде, кошелек заблокирован</translation>
+    </message>
+    <message>
+        <source>Masternode data copied to the clipboard.</source>
+        <translation>Данные Мастерноды скопированы в буфер обмена.</translation>
     </message>
     <message>
         <source>Remote Masternode Data</source>
@@ -1876,10 +1624,6 @@ this controller wallet (select the Masternode in the list and press "start").
 вашего удаленного сервера и запустить его, а затем запустить мастерноду,
 используя этот кошелек контроллера (выберите мастерноду из списка и нажмите «Старт»).
 </translation>
-    </message>
-    <message>
-        <source>Masternode exported!, check your clipboard</source>
-        <translation>Мастернода экспортирована! Проверьте свой буфер обмена</translation>
     </message>
     <message>
         <source>Delete Masternode</source>
@@ -1908,6 +1652,10 @@ Are you sure?</source>
         <translation>Файла masternode.cong не существует</translation>
     </message>
     <message>
+        <source>Cannot create Masternode controller, wallet locked</source>
+        <translation>Невозможно создать контроллер Мастерноды, кошелек заблокирован</translation>
+    </message>
+    <message>
         <source>Not enough balance to create a masternode, 10,000 RPD required.</source>
         <translation>Недостаточно баланса для создания мастерноды. Требуется 10 000 RPD.</translation>
     </message>
@@ -1923,8 +1671,8 @@ Are you sure?</source>
         <translation>Вид</translation>
     </message>
     <message>
-        <source>Master Node Information</source>
-        <translation>Информация по мастерноде</translation>
+        <source>Masternode Information</source>
+        <translation>Информация о Мастерноде</translation>
     </message>
     <message>
         <source>Public Key:</source>
@@ -1963,8 +1711,8 @@ Are you sure?</source>
         <translation>ОТСУТСТВУЕТ</translation>
     </message>
     <message>
-        <source>Export data to run the Master Node on a remote server</source>
-        <translation>Экспорт данных для запуска мастерноды на удаленном сервере</translation>
+        <source>Export data to run the Masternode on a remote server</source>
+        <translation>Экспорт данных для запуска Мастерноды на удаленном сервере</translation>
     </message>
 </context>
 <context>
@@ -2090,8 +1838,8 @@ Are you sure?</source>
         <translation>Отключив проведение неподтвержденных изменений все изменения о транзакции &lt;br/&gt;не будут использованы пока транзакция не получит хотя бы одно подтверждение.&lt;br/&gt;Также это влияет на расчет вашего баланса.</translation>
     </message>
     <message>
-        <source>Automatically open the RPD client port on the router. This only works when your router supports UPnP and it is enabled.</source>
-        <translation>Автоматически открыть клиентский порт RPD через роутер. Ваш роутер должен поддерживать UPnP, а сам сервис должен быть включен.</translation>
+        <source>Automatically open the Rapids client port on the router. This only works when your router supports UPnP and it is enabled.</source>
+        <translation>Автоматически открыть клиентский порт Rapids через роутер. Ваш роутер должен поддерживать UPnP, а сам сервис должен быть включен.</translation>
     </message>
     <message>
         <source>Accept connections from outside</source>
@@ -2110,12 +1858,12 @@ Are you sure?</source>
         <translation>Эксперт</translation>
     </message>
     <message>
-        <source>Automatically start RPD after logging in to the system.</source>
-        <translation>Автоматически запускать RPD после входа в систему.</translation>
+        <source>Automatically start Rapids after logging in to the system.</source>
+        <translation>Автоматически запускать Rapids после входа в систему.</translation>
     </message>
     <message>
-        <source>&amp;Start RPD on system login</source>
-        <translation>&amp;Запускать RPD при входе в систему</translation>
+        <source>&amp;Start Rapids on system login</source>
+        <translation>&amp;Запускать Rapids при входе в систему</translation>
     </message>
     <message>
         <source>Whether to show coin control features or not.</source>
@@ -2142,8 +1890,8 @@ Are you sure?</source>
         <translation>&amp;Сеть</translation>
     </message>
     <message>
-        <source>The user interface language can be set here. This setting will take effect after restarting RPD.</source>
-        <translation>Здесь можно выставить язык интерфейса. Изменения вступят в силу после перезапуска RPD.</translation>
+        <source>The user interface language can be set here. This setting will take effect after restarting Rapids.</source>
+        <translation>Здесь можно выставить язык интерфейса. Изменения вступят в силу после перезапуска Rapids.</translation>
     </message>
     <message>
         <source>Language missing or translation incomplete? Help contributing translations here:
@@ -2192,8 +1940,8 @@ https://www.transifex.com/rapids-project/rapids-project-translations</translatio
         <translation>Порог разделения доли:</translation>
     </message>
     <message>
-        <source>Connect to the RPD network through a SOCKS5 proxy.</source>
-        <translation>Подключиться к сети RPD через SOCKS5 прокси.</translation>
+        <source>Connect to the Rapids network through a SOCKS5 proxy.</source>
+        <translation>Подключиться к сети Rapids через SOCKS5 прокси.</translation>
     </message>
     <message>
         <source>Proxy &amp;IP:</source>
@@ -2411,15 +2159,8 @@ Address: %4
 </translation>
     </message>
     <message>
-        <source>A fatal error occurred. RPD can no longer continue safely and will quit.</source>
-        <translation>Произошла фатальная ошибка. RPD больше не может безопасно продолжать работу и завершит работу.</translation>
-    </message>
-</context>
-<context>
-    <name>PWidget</name>
-    <message>
-        <source>Wallet locked, you need to unlock it to perform this action</source>
-        <translation>Кошелек заблокирован. Для выполнения этого действия вам нужно его разблокировать</translation>
+        <source>A fatal error occurred. Rapids can no longer continue safely and will quit.</source>
+        <translation>Произошла фатальная ошибка. Rapids больше не может безопасно продолжать работу и завершит работу.</translation>
     </message>
 </context>
 <context>
@@ -2449,8 +2190,8 @@ Address: %4
         <translation>Не удалось запустить rapids: обработчик click-to-pay </translation>
     </message>
     <message>
-        <source>URI cannot be parsed! This can be caused by an invalid RPD address or malformed URI parameters.</source>
-        <translation>URI не интерпретируется! Причиной этому может быть неверный RPD адрес или неверные параметеры URI.</translation>
+        <source>URI cannot be parsed! This can be caused by an invalid Rapids address or malformed URI parameters.</source>
+        <translation>URI не интерпретируется! Причиной этому может быть неверный Rapids адрес или неверные параметеры URI.</translation>
     </message>
     <message>
         <source>Payment request file cannot be read! This can be caused by an invalid payment request file.</source>
@@ -2547,8 +2288,8 @@ Address: %4
         <translation>Нажать кнопку</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <source>Privacy</source>
@@ -2572,8 +2313,8 @@ transaction history, making transactions untraceable </source>
         <translation>Чеканить новые zRPD или конвертировать обратно в RPD</translation>
     </message>
     <message>
-        <source>Last Zerocoin Movements</source>
-        <translation>Последние движения Zerocoin</translation>
+        <source>Last zRPD Movements</source>
+        <translation>Последние движения zRPD</translation>
     </message>
     <message>
         <source>No transactions yet</source>
@@ -2640,8 +2381,8 @@ transaction history, making transactions untraceable </source>
         <translation>Ваши чеканки zerocoin будут сканироваться из блокчейна с нуля</translation>
     </message>
     <message>
-        <source>Reset Spent Zerocoins</source>
-        <translation>Сбросить потраченные Zerocoins</translation>
+        <source>Reset Spent zRPD</source>
+        <translation>Сброс потраченных zRPD</translation>
     </message>
     <message>
         <source>Your zerocoin spends are going to be scanned from the blockchain from scratch</source>
@@ -2653,83 +2394,14 @@ transaction history, making transactions untraceable </source>
     </message>
 </context>
 <context>
-    <name>ProposalFrame</name>
-    <message>
-        <source>Open proposal page in browser</source>
-        <translation>Откройте страницу предложения в браузере</translation>
-    </message>
-    <message>
-        <source> remaining payment(s).</source>
-        <translation>оставшиеся платеж(и).</translation>
-    </message>
-    <message>
-        <source>Yes:</source>
-        <translation>Да:</translation>
-    </message>
-    <message>
-        <source>Abstain:</source>
-        <translation>Воздержаться:</translation>
-    </message>
-    <message>
-        <source>No:</source>
-        <translation>Нет:</translation>
-    </message>
-    <message>
-        <source>A proposal URL can be used for phishing, scams and computer viruses. Open this link only if you trust the following URL.
-</source>
-        <translation>URL-адрес предложения может быть использован для фишинга, мошенничества и компьютерных вирусов. Открывайте эту ссылку, только если вы доверяете данному URL.
-</translation>
-    </message>
-    <message>
-        <source>Open link</source>
-        <translation>Открыть ссылку</translation>
-    </message>
-    <message>
-        <source>Copy link</source>
-        <translation>Копировать ссылку</translation>
-    </message>
-    <message>
-        <source>Wallet Locked</source>
-        <translation>Кошелек заблокирован</translation>
-    </message>
-    <message>
-        <source>You must unlock your wallet to vote.</source>
-        <translation>Для того, чтобы голосовать вы должны разблокировать ваш кошелек.</translation>
-    </message>
-    <message>
-        <source>Do you want to vote %1 on</source>
-        <translation>Вы хотите проголосовать %1 за</translation>
-    </message>
-    <message>
-        <source>using all your masternodes?</source>
-        <translation>использовать все ваши мастерноды?</translation>
-    </message>
-    <message>
-        <source>Proposal Hash:</source>
-        <translation>Hash предложения:</translation>
-    </message>
-    <message>
-        <source>Proposal URL:</source>
-        <translation>URL предложения:</translation>
-    </message>
-    <message>
-        <source>Confirm Vote</source>
-        <translation>Подтвердить свой голос</translation>
-    </message>
-    <message>
-        <source>Vote Results</source>
-        <translation>Результаты голосования</translation>
-    </message>
-</context>
-<context>
     <name>QObject</name>
     <message>
         <source>Amount</source>
         <translation>Сумма</translation>
     </message>
     <message>
-        <source>Enter a RPD address (e.g. %1)</source>
-        <translation>Введите адрес RPD (например %1)</translation>
+        <source>Enter Rapids address (e.g. %1)</source>
+        <translation>Введите адрес Rapids (например, %1)</translation>
     </message>
     <message>
         <source>%1 d</source>
@@ -2754,10 +2426,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>BLOOM</source>
         <translation>BLOOM</translation>
-    </message>
-    <message>
-        <source>ZK_BLOOM</source>
-        <translation>ZK_BLOOM </translation>
     </message>
     <message>
         <source>UNKNOWN</source>
@@ -2798,6 +2466,102 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Rapids didn't yet exit safely...</source>
         <translation>Rapids еще не вышел безопасно...</translation>
+    </message>
+    <message>
+        <source>Contact</source>
+        <translation>Контакты</translation>
+    </message>
+    <message>
+        <source>Receiving</source>
+        <translation>Получающий</translation>
+    </message>
+    <message>
+        <source>Delegator</source>
+        <translation>Делегатор</translation>
+    </message>
+    <message>
+        <source>Cold Staking</source>
+        <translation>Холодный стекинг</translation>
+    </message>
+    <message>
+        <source>Cold Staking Contact</source>
+        <translation>Контакт холодного стекинга</translation>
+    </message>
+    <message>
+        <source>Hidden</source>
+        <translation>Спрятан</translation>
+    </message>
+    <message>
+        <source>Unknown</source>
+        <translation>Неизвестно</translation>
+    </message>
+    <message>
+        <source>All</source>
+        <translation>все</translation>
+    </message>
+    <message>
+        <source>Contacts</source>
+        <translation>Контакты</translation>
+    </message>
+    <message>
+        <source>Delegators</source>
+        <translation>Делегаторы</translation>
+    </message>
+    <message>
+        <source>Staking Contacts</source>
+        <translation>Контакты стекинга</translation>
+    </message>
+    <message>
+        <source>Received</source>
+        <translation>Принято</translation>
+    </message>
+    <message>
+        <source>Sent</source>
+        <translation>Отправлено</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>заминированный</translation>
+    </message>
+    <message>
+        <source>Minted</source>
+        <translation>Чеканка</translation>
+    </message>
+    <message>
+        <source>MN reward</source>
+        <translation>Вознаграждение от MN</translation>
+    </message>
+    <message>
+        <source>To yourself</source>
+        <translation>Самому себе</translation>
+    </message>
+    <message>
+        <source>Cold stakes</source>
+        <translation>Холодные стекинг ставки</translation>
+    </message>
+    <message>
+        <source>Hot stakes</source>
+        <translation>Горячие стекинг ставки</translation>
+    </message>
+    <message>
+        <source>Delegated</source>
+        <translation>Делегирован</translation>
+    </message>
+    <message>
+        <source>Delegations</source>
+        <translation>Делегирования</translation>
+    </message>
+    <message>
+        <source>by Label</source>
+        <translation>по метке</translation>
+    </message>
+    <message>
+        <source>by Address</source>
+        <translation>по адресу</translation>
+    </message>
+    <message>
+        <source>by Date</source>
+        <translation>по дате</translation>
     </message>
 </context>
 <context>
@@ -2871,8 +2635,8 @@ transaction history, making transactions untraceable </source>
         <translation>Блокчейн</translation>
     </message>
     <message>
-        <source>Open the RPD debug log file from the current data directory. This can take a few seconds for large log files.</source>
-        <translation>Открыть протокол отладки RPD. Это может занять некоторе время, если файл протокола очень большой.</translation>
+        <source>Open the Rapids debug log file from the current data directory. This can take a few seconds for large log files.</source>
+        <translation>Открыть протокол отладки Rapids. Это может занять некоторе время, если файл протокола очень большой.</translation>
     </message>
     <message>
         <source>Number of Masternodes</source>
@@ -3096,8 +2860,8 @@ transaction history, making transactions untraceable </source>
         <translation>Вывод:</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>Добро пожаловать в окружение RPD RPC.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Добро пожаловать в окружение Rapids RPC.</translation>
     </message>
     <message>
         <source>&amp;Disconnect Node</source>
@@ -3157,7 +2921,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <source>WARNING: Scammers have been active, telling users to type commands here, stealing their wallet contents. Do not use this console without fully understanding the ramifications of a command.</source>
-        <translation>ВНИМАНИЕ: мошенники активизировались, предлагая пользователям вводить здесь команды и воруя содержимое кошелька. Не используйте эту консоль без полного понимания последствий команды.</translation>
+        <translation>ВНИМАНИЕ: активизировались мошенники, которые предлагают пользователям вводить здесь команды и воруя содержимое их кошелька. Не используйте эту консоль без полного понимания последствий команды.</translation>
     </message>
     <message>
         <source>%1 B</source>
@@ -3219,12 +2983,8 @@ transaction history, making transactions untraceable </source>
         <translation>Детали транзакции</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3282,8 +3042,8 @@ transaction history, making transactions untraceable </source>
         <translation>Ошибка при генерации адреса</translation>
     </message>
     <message>
-        <source>Change Label</source>
-        <translation>Сменить ярлык</translation>
+        <source>Edit Label</source>
+        <translation>Изменить ярлык</translation>
     </message>
     <message>
         <source>Edit Address Label</source>
@@ -3298,12 +3058,20 @@ transaction history, making transactions untraceable </source>
         <translation>Ошибка при сохранении адресной метки</translation>
     </message>
     <message>
+        <source>Cannot create new address, wallet locked</source>
+        <translation>Невозможно создать новый адрес, кошелек заблокирован</translation>
+    </message>
+    <message>
         <source>New address created</source>
         <translation>Создан новый адрес</translation>
     </message>
     <message>
         <source>Address copied</source>
         <translation>Адрес скопирован</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Невозможно выполнить операцию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>URI copied to clipboard</source>
@@ -3338,7 +3106,7 @@ transaction history, making transactions untraceable </source>
     </message>
     <message>
         <source>(no label)</source>
-        <translation>(нет метки)</translation>
+        <translation>(нет ярлыка)</translation>
     </message>
     <message>
         <source>(no message)</source>
@@ -3376,8 +3144,8 @@ transaction history, making transactions untraceable </source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
+        <source>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </source>
+        <translation>M6tGR83SQbie1SW72hjcWJvFfip5krte2Z </translation>
     </message>
     <message>
         <source>COPY ADDRESS</source>
@@ -3396,24 +3164,28 @@ transaction history, making transactions untraceable </source>
         <translation>ЗАПРОС</translation>
     </message>
     <message>
-        <source>Instead of only sharing a RPD address, you can create a Payment Request message which bundles up more information than is contained in just a RPD address.</source>
-        <translation>Вместо того, чтобы просто делиться адресом RPD, вы можете создать сообщение с запросом платежа, в котором содержится больше информации, чем содержится в адресе RPD.</translation>
-    </message>
-    <message>
         <source>Label</source>
         <translation>Метка</translation>
-    </message>
-    <message>
-        <source>Enter a label to be saved within the address</source>
-        <translation>Введите метку для сохранения в адресе</translation>
     </message>
     <message>
         <source>Description (optional)</source>
         <translation>Описание (необязательно)</translation>
     </message>
     <message>
-        <source>Add description </source>
-        <translation>Добавить описание</translation>
+        <source>New Payment Request</source>
+        <translation>Новый запрос на оплату</translation>
+    </message>
+    <message>
+        <source>Instead of sharing only a Rapids address, you can create a payment request, bundling up more information.</source>
+        <translation>Вместо того, чтобы делиться только адресом Rapids, вы можете создать запрос на оплату, объединив больше информации.</translation>
+    </message>
+    <message>
+        <source>Enter a label for the address</source>
+        <translation>Введите метку для адреса</translation>
+    </message>
+    <message>
+        <source>Enter description</source>
+        <translation>Введите описание</translation>
     </message>
     <message>
         <source>Error</source>
@@ -3431,6 +3203,10 @@ transaction history, making transactions untraceable </source>
         <source>New Cold Staking Address</source>
         <translation>Новый адрес для холодного стекинга</translation>
     </message>
+    <message>
+        <source>Amount (optional)</source>
+        <translation>Сумма (необязательно)</translation>
+    </message>
 </context>
 <context>
     <name>SendChangeAddressDialog</name>
@@ -3441,10 +3217,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Transaction Details</source>
         <translation>Детали транзакции</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
     </message>
     <message>
         <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
@@ -3463,8 +3235,20 @@ transaction history, making transactions untraceable </source>
         <translation>Смена адреса</translation>
     </message>
     <message>
-        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" RPD address</source>
-        <translation>Остаточная часть значения, полученного от значения входов минус выходов, идет на «изменение» адреса RPD</translation>
+        <source>The remainder of the value resultant from the inputs minus the outputs value goes to the "change" Rapids address</source>
+        <translation>Остаточная часть значения, полученного от значения входов минус выходов, идет на «изменение» адреса Rapids</translation>
+    </message>
+    <message>
+        <source>SAVE</source>
+        <translation>СОХРАНИТЬ</translation>
+    </message>
+    <message>
+        <source>RESET</source>
+        <translation>СБРОС</translation>
+    </message>
+    <message>
+        <source>Invalid address</source>
+        <translation>Неверный адрес</translation>
     </message>
 </context>
 <context>
@@ -3482,8 +3266,12 @@ transaction history, making transactions untraceable </source>
         <translation>Настроить комиссию за транзакцию на свой выбор, в зависимости от суммы комиссии, которая будет/не будет включена в вашу транзакцию в блокчейне.</translation>
     </message>
     <message>
-        <source>Recomended</source>
-        <translation>Рекоммендуется</translation>
+        <source>Recommended</source>
+        <translation>рекомендуемые</translation>
+    </message>
+    <message>
+        <source>RPD/kilobyte</source>
+        <translation>RPD/килобайт</translation>
     </message>
     <message>
         <source>0.00 KB</source>
@@ -3492,10 +3280,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Custom</source>
         <translation>Настроенная</translation>
-    </message>
-    <message>
-        <source>Per kilobyte</source>
-        <translation>За килобайт</translation>
     </message>
     <message>
         <source>CANCEL</source>
@@ -3510,8 +3294,8 @@ transaction history, making transactions untraceable </source>
         <translation>Настройка комиссии</translation>
     </message>
     <message>
-        <source>Customize the transaction fee, depending on the fee value your transaction will be included or not in the blockchain.</source>
-        <translation>Настройте комиссию за транзакцию. В зависимости от величины комиссии, ваша транзакция будет включена или не включена в блокчейн.</translation>
+        <source>Customize the transaction fee, depending on the fee value your transaction might be included faster in the blockchain.</source>
+        <translation>Настройка комиссии за транзакцию; в зависимости от величины комиссии ваша транзакция может быть быстрее включена в блокчейн.</translation>
     </message>
     <message>
         <source>Normal</source>
@@ -3529,7 +3313,7 @@ transaction history, making transactions untraceable </source>
         <source>SAVE</source>
         <translation>СОХРАНИТЬ</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>SendMultiRow</name>
     <message>
@@ -3541,12 +3325,12 @@ transaction history, making transactions untraceable </source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Добавить адрес</translation>
+        <source>Enter address</source>
+        <translation>Ввести адрес</translation>
     </message>
     <message>
-        <source>Add description</source>
-        <translation>Добавить описание</translation>
+        <source>Enter label</source>
+        <translation>Введите метку</translation>
     </message>
 </context>
 <context>
@@ -3562,10 +3346,6 @@ transaction history, making transactions untraceable </source>
     <message>
         <source>Select coin type to spend</source>
         <translation>Выберите тип монеты для трат</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address or contact label</source>
-        <translation>Введите адрес RPD или метку контакта</translation>
     </message>
     <message>
         <source>Amount</source>
@@ -3608,6 +3388,18 @@ transaction history, making transactions untraceable </source>
         <translation>Всего осталось</translation>
     </message>
     <message>
+        <source>Warning!</source>
+        <translation>Предупреждение!</translation>
+    </message>
+    <message>
+        <source>The change address doesn't belong to this wallet.
+
+Do you want to continue?</source>
+        <translation>Смена адреса не относится к этому кошельку.
+
+Хотите продолжить?</translation>
+    </message>
+    <message>
         <source>Customize Fee</source>
         <translation>Настройка комиссии</translation>
     </message>
@@ -3616,8 +3408,16 @@ transaction history, making transactions untraceable </source>
         <translation>Достигнуто максимальное количество выходов</translation>
     </message>
     <message>
+        <source>Rapids address or contact label</source>
+        <translation>Rapids адрес или метка контакта</translation>
+    </message>
+    <message>
         <source>Invalid entry, previous entries must be valid before add a new one</source>
         <translation>Неверная запись. Прежде чем добавить новую запись, предыдущие записи должны быть действительными</translation>
+    </message>
+    <message>
+        <source>Possibly spend coins delegated for cold-staking (currently available: %1</source>
+        <translation>Возможно потратить монеты, выделенные для холодного стекинга (в настоящее время доступно: %1</translation>
     </message>
     <message>
         <source>Invalid entry</source>
@@ -3700,10 +3500,6 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Не удалось обновить метку адреса для адреса: %1</translation>
     </message>
     <message>
-        <source>Invalid change address</source>
-        <translation>Неверное изменение адреса</translation>
-    </message>
-    <message>
         <source>Invalid URI</source>
         <translation>Неверный URI</translation>
     </message>
@@ -3741,7 +3537,7 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
     </message>
     <message>
         <source>Cannot store your own address as contact</source>
-        <translation>Невозможно хранить ваш личный адрес в качестве контакта</translation>
+        <translation>Невозможно сохранить ваш личный адрес в качестве контакта</translation>
     </message>
     <message>
         <source>Update Contact</source>
@@ -3771,22 +3567,12 @@ Either mint higher denominations (so fewer inputs are needed) or reduce the amou
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Backup Wallet </source>
         <translation>Сделать резервную копию кошелька</translation>
     </message>
     <message>
         <source>Change Wallet Passphrase</source>
         <translation>Изменить фразовый пароль кошелька</translation>
-    </message>
-    <message>
-        <source>Keep your wallet safe doing regular backups, store your backup file externally.
-This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) from another device.</source>
-        <translation>Храните свой кошелек в безопасности, делайте регулярные резервные копии и храните файл резервной копии вне сети.
-Этот параметр создает файл wallet.dat, который можно использовать для восстановления всего вашего баланса (транзакций и адресов) с другого устройства.</translation>
     </message>
     <message>
         <source>This will decrypt the whole wallet data and encrypt it back with the new passphrase.
@@ -3798,12 +3584,14 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Где</translation>
     </message>
     <message>
-        <source>Set a folder location</source>
-        <translation>Установить местоположение папки</translation>
+        <source>Keep your wallet safe by doing regular backups and storing your backup file externally.
+This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) on another device.</source>
+        <translation>Обеспечьте безопасность своего кошелька, регулярно создавая резервные копии и храня файл резервной копии вне системы.
+Этот параметр создает файл wallet.dat, который можно использовать для восстановления всего баланса (транзакций и адресов) на другом устройстве.</translation>
     </message>
     <message>
-        <source>Backup</source>
-        <translation>Сделать резервную копию</translation>
+        <source>Select folder...</source>
+        <translation>Выберите папку...</translation>
     </message>
     <message>
         <source>Change Passphrase</source>
@@ -3897,16 +3685,16 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Расшифровать ключ</translation>
     </message>
     <message>
-        <source>Enter a RPD address</source>
-        <translation>Ввести адрес RPD</translation>
+        <source>Rapids address</source>
+        <translation>Адрес Rapids</translation>
     </message>
     <message>
-        <source>Add address</source>
-        <translation>Добавить адрес</translation>
+        <source>Enter address</source>
+        <translation>Ввести адрес</translation>
     </message>
     <message>
-        <source>Write a message</source>
-        <translation>Написать сообщение</translation>
+        <source>Enter passphrase</source>
+        <translation>Введите кодовую фразу</translation>
     </message>
     <message>
         <source>Encrypted Key</source>
@@ -3989,8 +3777,8 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Ошибка при добавлении ключа к кошельку</translation>
     </message>
     <message>
-        <source>Successfully added rpdate key to the wallet</source>
-        <translation>Добавление приватного ключа к кошельку прошло успешно</translation>
+        <source>Successfully added private key to the wallet</source>
+        <translation>Закрытый ключ успешно добавлен в кошелек</translation>
     </message>
 </context>
 <context>
@@ -4020,14 +3808,18 @@ Remember to write it down and store it safely, otherwise you might lose access t
         <translation>Открыть файл отладки</translation>
     </message>
     <message>
+        <source>Clear history</source>
+        <translation>Очистить историю</translation>
+    </message>
+    <message>
         <source>Cannot open debug file.
 Verify that you have installed a predetermined text editor.</source>
         <translation>Не удается открыть файл отладки.
 Убедитесь, что вы установили заранее установленный текстовый редактор.</translation>
     </message>
     <message>
-        <source>Welcome to the RPD RPC console.</source>
-        <translation>Добро пожаловать в окружение RPD RPC.</translation>
+        <source>Welcome to the Rapids RPC console.</source>
+        <translation>Добро пожаловать в окружение Rapids RPC.</translation>
     </message>
     <message>
         <source>Use up and down arrows to navigate history, and %1 to clear screen.</source>
@@ -4053,8 +3845,8 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
+        <source>Hide stake charts in the dashboard</source>
+        <translation>Скрыть график стекинга на панели инструментов</translation>
     </message>
     <message>
         <source>Reset to default</source>
@@ -4106,6 +3898,108 @@ Verify that you have installed a predetermined text editor.</source>
     </message>
 </context>
 <context>
+    <name>SettingsExportCSV</name>
+    <message>
+        <source>Form</source>
+        <translation>Вид</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>Экспорт учета</translation>
+    </message>
+    <message>
+        <source>Export your wallet's accounting data to a csv file.</source>
+        <translation>Экспорт учетных данных вашего кошелька в CSV-файл.</translation>
+    </message>
+    <message>
+        <source>Where</source>
+        <translation>Где</translation>
+    </message>
+    <message>
+        <source>Select folder...</source>
+        <translation>Выберите папку...</translation>
+    </message>
+    <message>
+        <source>Export Address Book</source>
+        <translation>Экспорт адресной книги</translation>
+    </message>
+    <message>
+        <source>Export CSV</source>
+        <translation>Экспорт CSV</translation>
+    </message>
+    <message>
+        <source>Export Address List</source>
+        <translation>Экспорт списка адресов</translation>
+    </message>
+    <message>
+        <source>Rapids_tx_csv_export(*.csv)</source>
+        <translation>Rapids_tx_csv_export(*.csv)</translation>
+    </message>
+    <message>
+        <source>Rapids_addresses_csv_export(*.csv)</source>
+        <translation>Rapids_addresses_csv_export(*.csv)</translation>
+    </message>
+    <message>
+        <source>Please select a folder to export the csv file first.</source>
+        <translation>Пожалуйста, сначало выберите папку для экспорта файла CSV.</translation>
+    </message>
+    <message>
+        <source>Confirmed</source>
+        <translation>Подтверждено</translation>
+    </message>
+    <message>
+        <source>Watch-only</source>
+        <translation>смотреть только</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <source>Type</source>
+        <translation>Тип</translation>
+    </message>
+    <message>
+        <source>Label</source>
+        <translation>Метка</translation>
+    </message>
+    <message>
+        <source>Address</source>
+        <translation>Адрес</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>Номер</translation>
+    </message>
+    <message>
+        <source>Exporting Successful
+The transaction history was successfully saved to %1.</source>
+        <translation>Экспорт выполнен успешно.
+История транзакций была успешно сохранена в %1.</translation>
+    </message>
+    <message>
+        <source>Exporting Failed
+There was an error trying to save the transaction history to %1.</source>
+        <translation>Экспорт не удался. Произошла ошибка при попытке сохранить историю транзакций в %1.</translation>
+    </message>
+    <message>
+        <source>No available addresses to export under the selected filter</source>
+        <translation>Нет доступных адресов для экспорта под выбранным фильтром</translation>
+    </message>
+    <message>
+        <source>Exporting Successful
+The address book was successfully saved to %1.</source>
+        <translation>Экспорт выполнен успешно.
+Адресная книга успешно сохранена в %1.</translation>
+    </message>
+    <message>
+        <source>Exporting Failed
+There was an error trying to save the address list to %1. Please try again.</source>
+        <translation>Экспорт не удался.
+Произошла ошибка при попытке сохранить список адресов в %1. Пожалуйста, попробуйте еще раз.</translation>
+    </message>
+</context>
+<context>
     <name>SettingsFaqWidget</name>
     <message>
         <source>Form</source>
@@ -4120,16 +4014,16 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>Нажать кнопку</translation>
     </message>
     <message>
-        <source>1) What is RPD?</source>
-        <translation>1) Что такое RPD?</translation>
+        <source>1) What is Rapids?</source>
+        <translation>1) Что такое Rapids?</translation>
     </message>
     <message>
         <source>2) Why are my RPD unspendable?</source>
         <translation>2) Почему мои RPD невозможно потратить?</translation>
     </message>
     <message>
-        <source>3) RPD privacy? What is Zerocoin (zRPD)?</source>
-        <translation>3) Конфиденциальность RPD? Что такое Zerocoin (zRPD)?</translation>
+        <source>3) Rapids privacy? What is Zerocoin (zRPD)?</source>
+        <translation>3) Конфиденциальность Rapids? Что такое Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>4) Why are my zRPD unspendable?</source>
@@ -4154,48 +4048,48 @@ Verify that you have installed a predetermined text editor.</source>
         <translation>8) Куда я могу обратиться за помощью?</translation>
     </message>
     <message>
-        <source>9) What is a Master Node?</source>
-        <translation>9) Что такое мастернода?</translation>
+        <source>9) What is a Masternode?</source>
+        <translation>9) Что такое Мастернода?</translation>
     </message>
     <message>
-        <source>10) What is a Master Node Controller?</source>
-        <translation>10) Что такое контролер мастерноды?</translation>
+        <source>10) What is a Masternode Controller?</source>
+        <translation>10) Что такое контроллер Мастерноды?</translation>
     </message>
     <message>
         <source>1</source>
         <translation>1</translation>
     </message>
     <message>
-        <source>What is RPD?</source>
-        <translation>Что такое RPD?</translation>
+        <source>What is Rapids?</source>
+        <translation>Что такое Rapids?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           RPD is a form of digital online money using blockchain technology
+                           Rapids is a form of digital online money using blockchain technology
                            that can be easily transferred globally, instantly, and with near
-                           zero fees.  RPD incorporates market leading security &amp;
+                           zero fees.  Rapids incorporates market leading security &amp;
                            privacy and is also the first PoS (Proof of Stake) Cryptocurrency
                            to implement ZeroCoin(zRPD) and Zerocoin staking.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           RPD utilizes a Proof of Stake (PoS) consensus system algorithm,
-                           allowing all owners of RPD to participate in earning block rewards
+                           Rapids utilizes a Proof of Stake (PoS) consensus system algorithm,
+                           allowing all owners of Rapids to participate in earning block rewards
                            while securing the network with full node wallets, as well as to
                            run Masternodes to create and vote on proposals.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-RPD - это форма цифровых онлайн-денег, использующая технологию блокчейн,
+Rapids - это форма цифровых онлайн-денег, использующая технологию блокчейн,
 которая может быть легко переведена по всему миру, мгновенно и с практически
-нулевой комиссией. RPD включает в себя лидирующую на рынке защиту и
+нулевой комиссией. Rapids включает в себя лидирующую на рынке защиту и
 «конфиденциальность», а также является первой PoS криптовалютой (Proof of Stake),
 в которой реализована система стекинга ZeroCoin (zRPD) и Zerocoin.
 &lt;/p&gt;&lt;p align="justify"&gt;
-RPD использует консенсус PoS (Proof of Stake), позволяя всем владельцам RPD участвовать в заработке вознаграждений
+Rapids использует консенсус PoS (Proof of Stake), позволяя всем владельцам Rapids участвовать в заработке вознаграждений
 при этом обеспечивая безопасность сети с помощью кошельков с полными узлами, а также позволяет
 запускать мастерноды для создания предложений и голосования по ним.
- &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>2</source>
@@ -4208,19 +4102,19 @@ RPD использует консенсус PoS (Proof of Stake), позволя
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           Newly received RPD requires 6 confirmations on the network
+                           Newly received Rapids requires 6 confirmations on the network
                            to become eligible for spending which can take ~6 minutes.
                            &lt;/p&gt;&lt;p align="justify"&gt;
-                           Your RPD wallet also needs to be completely synchronized
+                           Your Rapids wallet also needs to be completely synchronized
                            to see and spend balances on the network.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-Недавно полученным RPD требуется 6 подтверждений в сети,
+Недавно полученным Rapids требуется 6 подтверждений в сети,
 чтобы получить право быть расходуемыми. Это может занять примерно 6 минут.
 &lt;/p&gt;&lt;p align="justify"&gt;
-Ваш кошелек RPD также должен быть полностью синхронизирован,
+Ваш кошелек Rapids также должен быть полностью синхронизирован,
 чтобы видеть баланс и расходовать его в сети.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
@@ -4229,26 +4123,26 @@ RPD использует консенсус PoS (Proof of Stake), позволя
         <translation>3</translation>
     </message>
     <message>
-        <source>RPD privacy? What is Zerocoin (zRPD)?</source>
-        <translation>Конфиденциальность RPD? Что такое Zerocoin (zRPD)?</translation>
+        <source>Rapids privacy? What is Zerocoin (zRPD)?</source>
+        <translation>Конфиденциальность Rapids? Что такое Zerocoin (zRPD)?</translation>
     </message>
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
                            zRPD is an optional privacy-centric method of coin mixing on the
-                           RPD blockchain. Basically all your transactions cannot be tracked
+                           Rapids blockchain. Basically all your transactions cannot be tracked
                            on to any block explorer. You can read more about the technicals in the
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
-                           "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+                           "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
 zRPD - это необязательная конфиденциальность, которая возможна при микшировании монет
-в блокчейне RPD. По сути,ни одна транзакция не может быть отслежена
+в блокчейне Rapids. По сути,ни одна транзакция не может быть отслежена
 ни в одном из обозревателей блоков. Вы можете прочитать больше о технических характеристиках в
-&lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
-"Техническом документе RPD Zerocoin (zRPD)"&lt;/a&gt;.
+&lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+"Техническом документе Rapids Zerocoin (zRPD)"&lt;/a&gt;.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
     </message>
     <message>
@@ -4285,33 +4179,33 @@ zRPD - это необязательная конфиденциальность,
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           By default the RPD wallet will convert 10% of your entire RPD
+                           By default the Rapids wallet will convert 10% of your entire RPD
                            balance to zRPD to assist the network. If you do not wish to
                            stake zRPD or take advantage of the privacy benefit it brings,
-                           you can disable the automatic minting in your RPD wallet by
+                           you can disable the automatic minting in your Rapids wallet by
                            going to Settings-&gt;Options and deselecting “Enable zRPD Automint”.
-                           If you are not making use of the RPD-QT or GUI you can simply open
+                           If you are not making use of the Rapids-QT or GUI you can simply open
                            your rapids.conf file and add &lt;i&gt;enablezeromint=0&lt;/i&gt; Without the quotation
                            marks and restart your wallet to disable automint.&lt;/p&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            You can read more about zRPD in the
-                           &lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt; "RPD Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
+                           &lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt; "Rapids Zerocoin (zRPD) Technical Paper"&lt;/a&gt;.
                            If you would like to keep and stake your zRPD, please read the "How do I stake"
                            section of the FAQ below.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-По умолчанию кошелек RPD преобразует 10% всего вашего баланса RPD
+По умолчанию кошелек Rapids преобразует 10% всего вашего баланса RPD
 в zRPD для помощи сети. Если вы не хотите
 запускать стекинг zRPD или пользоваться преимуществами конфиденциальности, которые она приносит,
-вы можете отключить автоматическую чеканку в своем RPD-кошельке,
+вы можете отключить автоматическую чеканку в своем Rapids-кошельке,
 перейдя в «Настройки-&gt; Параметры» и отменив выбор «Включить авточекунку zRPD».
-Если вы не используете RPD-QT или GUI, вы можете просто открыть
+Если вы не используете Rapids-QT или GUI, вы можете просто открыть
 свой файл rapids.conf и добавить &lt;i&gt;enablezeromint=0&lt;/i&gt; без кавычек и
 перезапустите свой кошелек для отключения  автоматической чеканки. &lt;/p&gt; &lt;/p&gt;&lt;p align="justify"&gt; Вы можете прочитать больше о zRPD в
-&lt;a style='color: #b088ff' href='https://RPD.org/zrpd/'&gt;
- "Технический документ RPD Zerocoin (zRPD)"&lt;/a&gt;.
+&lt;a style='color: #B0B0B0' href='https://Rapids.org/zrpd/'&gt;
+ "Технический документ Rapids Zerocoin (zRPD)"&lt;/a&gt;.
 Если вы хотите продолжать стекинг zRPD, ознакомьтесь с разделом" Как осуществить стекинг"
 в разделе часто задаваемых вопросов ниже.
  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
@@ -4327,16 +4221,16 @@ zRPD - это необязательная конфиденциальность,
     <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           zRPD can be spent and sent to any RPD address. The receiver will
-                           receive standard RPD but the origin of the RPD is anonymized by the zRPD Protocol.
+                           zRPD can be spent and sent to any Rapids address. The receiver will
+                           receive standard Rapids but the origin of the Rapids is anonymized by the zRPD Protocol.
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            If you want more zRPD you will need to mint your balance in the “Privacy” tab.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
 &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-zRPD можно потратить и отправить на любой адрес RPD. Получатель получит
-стандартный RPD, но оригинальное происхождение RPD анонимизируется протоколом zRPD.
+zRPD можно потратить и отправить на любой адрес Rapids. Получатель получит
+стандартный Rapids, но оригинальное происхождение Rapids анонимизируется протоколом zRPD.
 &lt;/p&gt;&lt;p align="justify"&gt;
 Если вы хотите больше zRPD, вам нужно будет чеканить свой баланс на вкладке «Конфиденциальность».
 &lt;/p&gt;&lt;/body&gt;&lt;/html&gt; </translation>
@@ -4350,88 +4244,31 @@ zRPD можно потратить и отправить на любой адр�
         <translation>Как мне запустить стекинг RPD/zRPD?</translation>
     </message>
     <message>
-        <source>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           To Stake RPD:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Make sure your wallet is completely synchronized and you are using the latest release.
-                           &lt;li&gt;
-                           You must have a balance of RPD with a minimum of 101 confirmations.
-                           &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
-                           &lt;li&gt;
-                           Once all those steps are followed staking should be enabled.
-                           &lt;li&gt;
-                           You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state "Staking Enabled" to indicate it is staking.  Using the command line interface (rapids-cli); the command &lt;i&gt;getstakingstatus&lt;/i&gt; will confirm that staking is active.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           To Stake zRPD:
-                           &lt;/p&gt;&lt;p align="justify"&gt;
-                           &lt;ol&gt;&lt;li&gt;
-                           Make sure your wallet is completely synchronized and you are using the latest release.
-                           &lt;li&gt;
-                           Your newly minted or existing zRPD balance must have a minimum of 200 confirmations.
-                           &lt;li&gt;
-                           Your wallet must stay online and be unlocked for anonymization and staking purposes.
-                           Staking should now be enabled.
-                           &lt;/li&gt;&lt;/ol&gt;
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </source>
-        <translation>
-&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Чтобы запустить стекинг RPD:
-&lt;/p&gt;&lt;p align="justify"&gt;
- &lt;ol&gt;&lt;li&gt;убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию.
-&lt;li&gt;
-Вы должны иметь баланс RPD с минимумом в 101 подтверждение
-&lt;li&gt;
-Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга.
-&lt;li&gt;
-После того, как все эти шаги будут выполнены, следует включить стекинг.
-&lt;li&gt;
-Вы можете увидеть статус стекинга в кошельке, наведя курсор на соответствующий значок в строке в левом верхнем углу интерфейса кошелька. Там будет подсвечен значек, в котором будет указано «Стекинг включен», а это значит, что делает стекинг запущен. Использование интерфейса командной строки (rapids-cli); команда getstakingstatus подтвердит, что стекинг активен. Чтобы запустить стекинг zRPD: убедитесь, что ваш кошелек полностью синхронизирован и вы используете последнюю версию. Ваш недавно отчеканенный или существующий баланс zRPD должен иметь, как минимум, 200 подтверждений. Ваш кошелек должен оставаться в сети и быть разблокированным для анонимизации и стекинга. Стекинг будет включен.</translation>
+        <source>Where should I go if I need support?</source>
+        <translation>Куда мне обратиться, если мне нужна поддержка?</translation>
+    </message>
+    <message>
+        <source>What is a Masternode?</source>
+        <translation>Что такое мастернода?</translation>
+    </message>
+    <message>
+        <source>What is a Masternode Controller?</source>
+        <translation>Что такое контроллер Мастерноды?
+
+ </translation>
     </message>
     <message>
         <source>8</source>
         <translation>8</translation>
     </message>
     <message>
-        <source>Where I should go if I need support?</source>
-        <translation>Куда мне обращаться за помощью?</translation>
-    </message>
-    <message>
-        <source>
-                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           We have support channels in most of our official chat groups, for example
-                           &lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
-                           #support in our Discord&lt;/a&gt;.
-                           If you prefer to submit a ticket, One can be
-                           &lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
-                           our Freshdesk support site&lt;/a&gt;.
-                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
-                         </source>
-        <translation>
-&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-У нас есть каналы поддержки в большинстве наших официальных групп, например
-&lt;a style='color: #b088ff' href='https://Discord.RPD.com'&gt;
-#support в нашем Discord&lt;/a&gt;.
-Если вы хотите задать вопрос, одним из способов это сделать может послужить
-&lt;a style='color: #b088ff' href='https://RPD.FreshDesk.com'&gt;
-наш сайт поддержки Freshdesk&lt;/a&gt;.
-&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
-    </message>
-    <message>
         <source>9</source>
         <translation>9</translation>
     </message>
     <message>
-        <source>What is a Master Node?</source>
-        <translation>Что такое мастернода?</translation>
-    </message>
-    <message>
         <source>
                            &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
-                           A masternode is a computer running a full node RPD core wallet with a
+                           A masternode is a computer running a full node Rapids wallet with a
                            requirement of 10,000 RPD secured collateral to provide extra services
                            to the network and in return, receive a portion of the block reward
                            regularly.  These services include:
@@ -4454,10 +4291,10 @@ zRPD можно потратить и отправить на любой адр�
                            Masternode Perks:
                            &lt;/p&gt;&lt;p align="justify"&gt;
                            &lt;ul&gt;
-                           &lt;li&gt;Participate in RPD Governance&lt;/li&gt;
+                           &lt;li&gt;Participate in Rapids Governance&lt;/li&gt;
                            &lt;li&gt;Earn Masternode Rewards&lt;/li&gt;
                            &lt;li&gt;Commodity option for future sale&lt;/li&gt;
-                           &lt;li&gt;Help secure the RPD network&lt;/li&gt;
+                           &lt;li&gt;Help secure the Rapids network&lt;/li&gt;
                            &lt;/ul&gt;
                            &lt;/p&gt;&lt;p align="justify"&gt;
 
@@ -4472,7 +4309,7 @@ zRPD можно потратить и отправить на любой адр�
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </source>
         <translation>
-Мастернода - это компьютер, на котором запущен базовый кошелек RPD с полным узлом и для которого требуется обеспечение в 10000 RPD для обеспечения дополнительных услуг сети и, в свою очередь, регулярного получения части вознаграждения за блок. Эти услуги в себя включают:
+Мастернода - это компьютер, на котором запущен базовый кошелек Rapids с полным узлом и для которого требуется обеспечение в 10000 RPD для обеспечения дополнительных услуг сети и, в свою очередь, регулярного получения части вознаграждения за блок. Эти услуги в себя включают:
 
 Мгновенные транзакции (SwiftX)
 Децентрализованное управление (Голосование по предложениям)
@@ -4484,10 +4321,10 @@ zRPD можно потратить и отправить на любой адр�
 
 Привилегии мастерноды:
 
-Участие в управлении RPD
+Участие в управлении Rapids
 Получение вознаграждений за мастерноду
 Товарные опционы для будущей продажи
-Помощь в защите сети RPD
+Помощь в защите сети Rapids
 
 Требования:
 
@@ -4499,14 +4336,6 @@ zRPD можно потратить и отправить на любой адр�
     <message>
         <source>10</source>
         <translation>10</translation>
-    </message>
-    <message>
-        <source>What is a Master Node Controller?</source>
-        <translation>Что такое контролер мастерноды?</translation>
-    </message>
-    <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;A Masternode Controller wallet is where the 10,000 RPD collateral can reside during a Controller-Remote masternode setup. It is a wallet that can activate the remote masternode wallet/s and allows you to keep your collateral coins offline while the remote masternode remains online. &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;Кошелек контролера мастерноды - это то место, где может находиться залог в 10 000 RPD во время настройки удаленного контролера мастерноды. Это кошелек, который может активировать удаленный кошелек / кошельки мастерноды и позволит вам сохранять ваши сопутствующие монеты в автономном режиме, пока удаленная мастернода остается в сети.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Frequently Asked Questions</source>
@@ -4528,10 +4357,6 @@ zRPD можно потратить и отправить на любой адр�
         <translation>Вид</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
         <source>Network Monitor</source>
         <translation>Сетевой монитор</translation>
     </message>
@@ -4544,24 +4369,48 @@ zRPD можно потратить и отправить на любой адр�
         <translation>Основное</translation>
     </message>
     <message>
-        <source>Client Version: </source>
-        <translation>Версия клиента:</translation>
+        <source>Client Version:</source>
+        <translation>Версия Клиента:</translation>
+    </message>
+    <message>
+        <source>BerkeleyDB version:</source>
+        <translation>Версия BerkeleyDB:</translation>
+    </message>
+    <message>
+        <source>Datadir:</source>
+        <translation>Datadir:</translation>
+    </message>
+    <message>
+        <source>Startup time:</source>
+        <translation>Время запуска:</translation>
+    </message>
+    <message>
+        <source>Connections:</source>
+        <translation>Соединения:</translation>
+    </message>
+    <message>
+        <source>Number of Masternodes:</source>
+        <translation>Число Мастернод:</translation>
+    </message>
+    <message>
+        <source>Current number of blocks:</source>
+        <translation>Текущее количество блоков:</translation>
+    </message>
+    <message>
+        <source>Last block time:</source>
+        <translation>Время последнего блока:</translation>
+    </message>
+    <message>
+        <source>Last block hash:</source>
+        <translation>Хэш последнего блока:</translation>
+    </message>
+    <message>
+        <source>Current number of transactions:</source>
+        <translation>Текущее количество транзакций:</translation>
     </message>
     <message>
         <source>User Agent:</source>
         <translation>Пользовательский агент:</translation>
-    </message>
-    <message>
-        <source>Using BerkeleyDB version:</source>
-        <translation>Используя версию BerkeleyDB:</translation>
-    </message>
-    <message>
-        <source>Datadir: </source>
-        <translation>Datadir: </translation>
-    </message>
-    <message>
-        <source>Startup Time:  </source>
-        <translation>Время запуска:</translation>
     </message>
     <message>
         <source>Network</source>
@@ -4572,28 +4421,12 @@ zRPD можно потратить и отправить на любой адр�
         <translation>Имя:</translation>
     </message>
     <message>
-        <source>Number Connections:</source>
-        <translation>Количество подключений:</translation>
-    </message>
-    <message>
         <source>Blockchain</source>
         <translation>Блокчейн</translation>
     </message>
     <message>
-        <source>Current Number of Blocks:</source>
-        <translation>Текущий номер блоков:</translation>
-    </message>
-    <message>
-        <source>Last Block Time:</source>
-        <translation>Время последнего блока:</translation>
-    </message>
-    <message>
         <source>Memory Pool</source>
         <translation>Пул памяти</translation>
-    </message>
-    <message>
-        <source>Current Number of Transactions:</source>
-        <translation>Текущий номер транзакций:</translation>
     </message>
     <message>
         <source>Main</source>
@@ -4675,8 +4508,8 @@ zRPD можно потратить и отправить на любой адр�
         <translation>Количество потоков проверки скрипта</translation>
     </message>
     <message>
-        <source>Start RPD on system login</source>
-        <translation>Запускать RPD при входе в систему</translation>
+        <source>Start Rapids on system login</source>
+        <translation>Запускать Rapids при входе в систему</translation>
     </message>
     <message>
         <source>Minimize to the tray instead of the taskbar</source>
@@ -4732,12 +4565,12 @@ Are you sure?
         <translation>Новый получатель для мультиотправки</translation>
     </message>
     <message>
-        <source>Label (optional)</source>
-        <translation>Метка (необязательно)</translation>
+        <source>Address Label (optional)</source>
+        <translation>Лейбл Адреса (необязательно)</translation>
     </message>
     <message>
-        <source>Enter a label to add this address in your address book</source>
-        <translation>Введите метку, чтобы добавить этот адрес в адресную книгу</translation>
+        <source>Enter label to be saved with this address</source>
+        <translation>Введите лейбл для сохранения с этим адресом</translation>
     </message>
     <message>
         <source>Percentage</source>
@@ -4755,16 +4588,16 @@ Are you sure?
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>No active Master Node yet</source>
-        <translation>Пока что нет активной Мастерноды</translation>
+        <source>N/A</source>
+        <translation>Недоступно</translation>
     </message>
     <message>
         <source>CheckBox</source>
         <translation>Флажок</translation>
     </message>
     <message>
-        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other RPD addresses after it matures.</source>
-        <translation>MultiSend позволяет автоматически отправлять до 100% ваших вознаграждений от стекинга или мастернод в список других адресов RPD после его созревания.</translation>
+        <source>MultiSend allows you to automatically send up to 100% of your stake or masternode reward to a list of other Rapids addresses after it matures.</source>
+        <translation>MultiSend позволяет автоматически отправлять до 100% ваших вознаграждений от стекинга или мастернод в список других адресов Rapids после его созревания.</translation>
     </message>
     <message>
         <source>Active</source>
@@ -4792,7 +4625,11 @@ Are you sure?
     </message>
     <message>
         <source>CLEAR ALL</source>
-        <translation>УБРАТЬ ВСЕ</translation>
+        <translation>ОЧИСТИТЬ ВСЕ</translation>
+    </message>
+    <message>
+        <source>Cannot perform operation, wallet locked</source>
+        <translation>Невозможно выполнить операцию, кошелек заблокирован</translation>
     </message>
     <message>
         <source>Clear succeed</source>
@@ -4801,6 +4638,10 @@ Are you sure?
     <message>
         <source>Clear all failed, could not locate address in wallet file</source>
         <translation>Полная очистка не удалась. Не удалось найти адрес в файле кошелька</translation>
+    </message>
+    <message>
+        <source>Cannot add multisend recipient, wallet locked</source>
+        <translation>Невозможно добавить получателя мультисендинга, кошелек заблокирован</translation>
     </message>
     <message>
         <source>The entered address: %1 is invalid.
@@ -4862,24 +4703,12 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Текстовая метка</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Clear</source>
         <translation>Очистить</translation>
     </message>
     <message>
         <source>Sign/Verify Message</source>
         <translation>Подписать/верифицировать сообщение</translation>
-    </message>
-    <message>
-        <source>Enter a RPD address or contact label</source>
-        <translation>Введите адрес RPD или метку контакта</translation>
-    </message>
-    <message>
-        <source>Add address</source>
-        <translation>Добавить адрес</translation>
     </message>
     <message>
         <source>Sign</source>
@@ -4898,7 +4727,15 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Сообщение</translation>
     </message>
     <message>
-        <source>Write a message</source>
+        <source>Rapids address or contact label</source>
+        <translation>Rapids адрес или лейбл контакта</translation>
+    </message>
+    <message>
+        <source>Enter address</source>
+        <translation>Ввести адрес</translation>
+    </message>
+    <message>
+        <source>Write message</source>
         <translation>Написать сообщение</translation>
     </message>
     <message>
@@ -4911,7 +4748,7 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     </message>
     <message>
         <source>CLEAR ALL</source>
-        <translation>УБРАТЬ ВСЕ</translation>
+        <translation>ОЧИСТИТЬ ВСЕ</translation>
     </message>
     <message>
         <source>You can sign messages with your addresses to prove you own them. Be careful not to sign anything vague, as phishing attacks may try to trick you into signing your identity over to them. Only sign fully-detailed statements you agree to.</source>
@@ -5005,10 +4842,6 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Отменить изменения</translation>
     </message>
     <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
         <source>Wallet</source>
         <translation>Кошелек</translation>
     </message>
@@ -5074,10 +4907,6 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     <message>
         <source>TextLabel</source>
         <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
     </message>
     <message>
         <source>Wallet Repair</source>
@@ -5171,10 +5000,6 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>Вид</translation>
     </message>
     <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
         <source>Wallet Data</source>
         <translation>Данные кошелька</translation>
     </message>
@@ -5185,6 +5010,10 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
     <message>
         <source>Multisend</source>
         <translation>Multisend</translation>
+    </message>
+    <message>
+        <source>Export Accounting</source>
+        <translation>Экспортный учета</translation>
     </message>
     <message>
         <source>Tools</source>
@@ -5235,8 +5064,8 @@ Check one or both of the check boxes to send on stake and/or masternode rewards<
         <translation>ЧаВо</translation>
     </message>
     <message>
-        <source>About RPD</source>
-        <translation>О RPD</translation>
+        <source>About Rapids</source>
+        <translation>О Rapids</translation>
     </message>
     <message>
         <source>Settings</source>
@@ -5393,14 +5222,6 @@ Are you sure?
         <translation>Вид</translation>
     </message>
     <message>
-        <source>480.0685 RPD</source>
-        <translation>480.0685 RPD</translation>
-    </message>
-    <message>
-        <source>1,000 zRPD</source>
-        <translation>1 000 zRPD</translation>
-    </message>
-    <message>
         <source>Available</source>
         <translation>Доступный</translation>
     </message>
@@ -5409,24 +5230,8 @@ Are you sure?
         <translation>В ожидании</translation>
     </message>
     <message>
-        <source>6.943 RPD</source>
-        <translation>6.943 RPD</translation>
-    </message>
-    <message>
         <source>Immature</source>
         <translation>Незрелый</translation>
-    </message>
-    <message>
-        <source>10 RPD</source>
-        <translation>10 RPD</translation>
-    </message>
-    <message>
-        <source>60 zRPD</source>
-        <translation>60 zRPD</translation>
-    </message>
-    <message>
-        <source>10 zRPD</source>
-        <translation>10 zRPD</translation>
     </message>
     <message>
         <source>Wallet Unlocked for staking</source>
@@ -5441,14 +5246,6 @@ Are you sure?
         <translation>Адрес скопирован</translation>
     </message>
     <message>
-        <source>Automint enabled</source>
-        <translation>Включена автоматическая чеканка</translation>
-    </message>
-    <message>
-        <source>Automint disabled</source>
-        <translation>Автоматическая чеканка отключена</translation>
-    </message>
-    <message>
         <source>Staking active</source>
         <translation>Стекинг активен</translation>
     </message>
@@ -5457,18 +5254,78 @@ Are you sure?
         <translation>Стекинг не активен</translation>
     </message>
     <message>
-        <source>Synchronized</source>
-        <translation>Синхронизировано</translation>
-    </message>
-    <message numerus="yes">
-        <source>%n hour(s)</source>
-        <translation><numerusform>%n час</numerusform><numerusform>%n часа</numerusform><numerusform>%n часов</numerusform><numerusform>%n часов</numerusform></translation>
+        <source>Synchronized - Block: %1</source>
+        <translation>Синхронизировано - Блок: %1</translation>
     </message>
     <message>
         <source>%1 and %2</source>
         <translation>%1 и %2</translation>
     </message>
-    </context>
+    <message>
+        <source>Wallet Upgrade</source>
+        <translation>Обновление кошелька</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet</source>
+        <translation>Обновить кошелек</translation>
+    </message>
+    <message>
+        <source>Wallet unlock cancelled</source>
+        <translation>Разблокировка кошелька отменена</translation>
+    </message>
+    <message>
+        <source>Tor Active: %1</source>
+        <translation>Активные Tor: %1</translation>
+    </message>
+    <message>
+        <source>Tor Disabled</source>
+        <translation>Tor отключен</translation>
+    </message>
+    <message>
+        <source>The wallet has been successfully upgraded to HD.</source>
+        <translation>Кошелек был успешно обновлен до HD.</translation>
+    </message>
+    <message>
+        <source>It is advised to make a backup.</source>
+        <translation>Рекомендуется сделать резервную копию.</translation>
+    </message>
+    <message>
+        <source>Do you wish to backup now?</source>
+        <translation>Вы хотите сделать резервную копию сейчас?</translation>
+    </message>
+    <message>
+        <source>Backup Wallet</source>
+        <translation>Резервная копия кошелька</translation>
+    </message>
+    <message>
+        <source>Wallet Data (*.dat)</source>
+        <translation>Данные кошелька (* .dat)</translation>
+    </message>
+    <message>
+        <source>Backup created</source>
+        <translation>Резервная копия сделана</translation>
+    </message>
+    <message>
+        <source>Backup creation failed</source>
+        <translation>Не удалось создать резервную копию</translation>
+    </message>
+    <message>
+        <source>no file selected</source>
+        <translation>файл не выбран</translation>
+    </message>
+    <message>
+        <source>Wallet upgraded successfully, but no backup created.</source>
+        <translation>Кошелек успешно обновлен, но резервная копия не создана.</translation>
+    </message>
+    <message>
+        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
+        <translation>НАПОМИНАНИЕ: не забудьте сделать копию своего файла wallet.dat!</translation>
+    </message>
+    <message>
+        <source>Upgrade Wallet Error</source>
+        <translation>Ошибка обновления кошелька</translation>
+    </message>
+</context>
 <context>
     <name>TrafficGraphWidget</name>
     <message>
@@ -5706,10 +5563,6 @@ Are you sure?
         <translation>Получен от</translation>
     </message>
     <message>
-        <source>Received via Obfuscation</source>
-        <translation>Получено через обфускацию</translation>
-    </message>
-    <message>
         <source>RPD Stake</source>
         <translation>Доля RPD</translation>
     </message>
@@ -5722,28 +5575,8 @@ Are you sure?
         <translation>Холодный стекинг RPD</translation>
     </message>
     <message>
-        <source>RPD Stake in behalf of</source>
-        <translation>Стекинг RPD от имени</translation>
-    </message>
-    <message>
         <source>Stake delegation</source>
         <translation>Делегация стекинга</translation>
-    </message>
-    <message>
-        <source>Obfuscation Denominate</source>
-        <translation>Обфускация</translation>
-    </message>
-    <message>
-        <source>Obfuscation Collateral Payment</source>
-        <translation>Обфускационный Сопутствующий платеж</translation>
-    </message>
-    <message>
-        <source>Obfuscation Make Collateral Inputs</source>
-        <translation>Обфускация</translation>
-    </message>
-    <message>
-        <source>Obfuscation Create Denominations</source>
-        <translation>Обфускация Создание конфессий</translation>
     </message>
     <message>
         <source>Converted RPD to zRPD</source>
@@ -5778,12 +5611,16 @@ Are you sure?
         <translation>Оплата себе</translation>
     </message>
     <message>
-        <source>Mined</source>
-        <translation>заминированный</translation>
+        <source>RPD Stake on behalf of</source>
+        <translation>Стекинг RPD от имени</translation>
     </message>
     <message>
-        <source>Obfuscated</source>
-        <translation>затемненный</translation>
+        <source>Stake delegation spent by</source>
+        <translation>Делегация стекинга потрачена</translation>
+    </message>
+    <message>
+        <source>Mined</source>
+        <translation>заминированный</translation>
     </message>
     <message>
         <source>watch-only</source>
@@ -5837,36 +5674,8 @@ Are you sure?
         <translation>Детали транзакции</translation>
     </message>
     <message>
-        <source>ID:</source>
-        <translation>ID:</translation>
-    </message>
-    <message>
-        <source>492526e7fa3c810b35016...40a5df85ee227ab00b1156994</source>
-        <translation>492526e7fa3c810b35016...40a5df85ee227ab00b1156994 </translation>
-    </message>
-    <message>
-        <source>Sending to: </source>
-        <translation>Отправить:</translation>
-    </message>
-    <message>
-        <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
-        <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </translation>
-    </message>
-    <message>
         <source>Total amount</source>
         <translation>Общая сумма</translation>
-    </message>
-    <message>
-        <source>2 RPD</source>
-        <translation>2 RPD</translation>
-    </message>
-    <message>
-        <source>Coin inputs:</source>
-        <translation>Входы монеты:</translation>
-    </message>
-    <message>
-        <source>1 Inputs</source>
-        <translation>1 вход</translation>
     </message>
     <message>
         <source>Previous Transaction</source>
@@ -5877,52 +5686,52 @@ Are you sure?
         <translation>Индекс выхода</translation>
     </message>
     <message>
-        <source>Fee:</source>
-        <translation>Комиссия:</translation>
-    </message>
-    <message>
-        <source>0.0001 RPD</source>
-        <translation>0.0001 RPD</translation>
-    </message>
-    <message>
-        <source>Change address:</source>
-        <translation>Изменить адрес:</translation>
-    </message>
-    <message>
         <source>D7VFR83SQbie…BhjcWJtcfip5krte2Z </source>
         <translation>D7VFR83SQbie…BhjcWJtcfip5krte2Z</translation>
-    </message>
-    <message>
-        <source>Confirmations:</source>
-        <translation>Подтверждения:</translation>
-    </message>
-    <message>
-        <source>12</source>
-        <translation>12</translation>
-    </message>
-    <message>
-        <source>Size:</source>
-        <translation>Размер:</translation>
-    </message>
-    <message>
-        <source>2 kB</source>
-        <translation>2 kB</translation>
-    </message>
-    <message>
-        <source>Date:</source>
-        <translation>Дата:</translation>
     </message>
     <message>
         <source>May 25, 2017</source>
         <translation>25 мая, 2017</translation>
     </message>
     <message>
-        <source>Status:</source>
-        <translation>Статус:</translation>
+        <source>ID</source>
+        <translation>Номер</translation>
+    </message>
+    <message>
+        <source>Sending to</source>
+        <translation>Отправка в</translation>
+    </message>
+    <message>
+        <source>Coin inputs</source>
+        <translation>Входы монеты</translation>
+    </message>
+    <message>
+        <source>Fee</source>
+        <translation>Комиссия</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>Размер</translation>
+    </message>
+    <message>
+        <source>Change address</source>
+        <translation>Изменить адрес</translation>
     </message>
     <message>
         <source>Spendable</source>
         <translation>Расходуемый</translation>
+    </message>
+    <message>
+        <source>Confirmations</source>
+        <translation>Подтверждения</translation>
+    </message>
+    <message>
+        <source>Status</source>
+        <translation>Состояние</translation>
+    </message>
+    <message>
+        <source>Date</source>
+        <translation>Дата</translation>
     </message>
     <message>
         <source>TextLabel</source>
@@ -5984,38 +5793,7 @@ Are you sure?
     </message>
 </context>
 <context>
-    <name>WalletPasswordDialog</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Диалоговое окно</translation>
-    </message>
-    <message>
-        <source>TextLabel</source>
-        <translation>Текстовая метка</translation>
-    </message>
-    <message>
-        <source>PushButton</source>
-        <translation>Нажать кнопку</translation>
-    </message>
-    <message>
-        <source>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim.</source>
-        <translation>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim. </translation>
-    </message>
-    <message>
-        <source>CANCEL</source>
-        <translation>ОТМЕНА</translation>
-    </message>
-    <message>
-        <source>OK</source>
-        <translation>ХОРОШО</translation>
-    </message>
-</context>
-<context>
     <name>WelcomeContentWidget</name>
-    <message>
-        <source>Dialog</source>
-        <translation>Диалоговое окно</translation>
-    </message>
     <message>
         <source>1</source>
         <translation>1</translation>
@@ -6056,23 +5834,23 @@ Are you sure?
         <source>Welcome to
 Rapids Wallet</source>
         <translation>Добро пожаловать
-в основной кошелек RPD</translation>
+в основной кошелек Rapids</translation>
     </message>
     <message>
-        <source>RPD is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
-        <translation>RPD - самая инновационная в мире технология на основе блокчейна Proof of Stake. Разработана командой опытных разработчиков и криптографов.</translation>
+        <source>Rapids is the world’s most innovative Proof of Stake blockchain based technology. Developed by a team of highly experienced developers and cryptographers.</source>
+        <translation>Rapids - самая инновационная в мире технология на основе блокчейна Proof of Stake. Разработана командой опытных разработчиков и криптографов.</translation>
     </message>
     <message>
-        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - RPD believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Как говорится в нашем манифесте: конфиденциальность является не подлежащим обсуждению основным правом человека; это дает пользователям свободу делиться своими данными в любое время и с кем угодно, ведь RPD верит в собственный суверенитет.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;As our manifesto says: Privacy is a non-negotiable basic human right; it grants users the freedom to share their data whenever and with whomever they want - Rapids believes in self sovereignty.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Как говорится в нашем манифесте: конфиденциальность является не подлежащим обсуждению основным правом человека; это дает пользователям свободу делиться своими данными в любое время и с кем угодно, ведь Rapids верит в собственный суверенитет.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <source>The masternode network is RPD's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
-        <translation>Сеть мастернод - это сеть второго уровня RPD поверх блокчейна, которая позволяет нашему ДАО обеспечивать децентрализованное управление и казначейство.</translation>
+        <source>The masternode network is Rapids's second layer network on top of the blockchain that enables our DAO to provide decentralized governance and a treasury.</source>
+        <translation>Сеть мастернод - это сеть второго уровня Rapids поверх блокчейна, которая позволяет нашему ДАО обеспечивать децентрализованное управление и казначейство.</translation>
     </message>
     <message>
-        <source>How RPD respects your privacy?</source>
-        <translation>Как RPD уважает вашу конфиденциальность?</translation>
+        <source>How Rapids respects your privacy?</source>
+        <translation>Как Rapids уважает вашу конфиденциальность?</translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
@@ -6149,10 +5927,6 @@ Rapids Wallet</source>
         <translation>Привяжите к указанному адресу для прослушивания соединений JSON-RPC. Используйте [host]: обозначение порта для IPv6. Эта опция может быть указана несколько раз (по умолчанию: привязка ко всем интерфейсам)</translation>
     </message>
     <message>
-        <source>Calculated accumulator checkpoint is not what is recorded by block index</source>
-        <translation>Расчетная контрольная точка  не является тем, что регистрируется блочным индексом</translation>
-    </message>
-    <message>
         <source>Cannot obtain a lock on data directory %s. Rapids is probably already running.</source>
         <translation>Не удается получить блокировку в каталоге данных %s. Rapids, вероятно, уже запущен.</translation>
     </message>
@@ -6179,14 +5953,6 @@ Rapids Wallet</source>
     <message>
         <source>Distributed under the MIT software license, see the accompanying file COPYING or &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</source>
         <translation>Распространяется по лицензии программного обеспечения MIT, см. Сопроводительный файл COPYING или &lt;http://www.opensource.org/licenses/mit-license.php&gt;.</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting from specific addresses (0-1, default: %u)</source>
-        <translation>Включить автоматическую чеканку Zerocoin с определенных адресов (0-1, по умолчанию:%u)</translation>
-    </message>
-    <message>
-        <source>Enable automatic wallet backups triggered after each zRPD minting (0-1, default: %u)</source>
-        <translation>Включить автоматическое резервное копирование кошелька, запускаемое после каждого чеканки zRPD (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable cold staking functionality (0-1, default: %u). Disabled if staking=0</source>
@@ -6219,6 +5985,10 @@ Rapids Wallet</source>
     <message>
         <source>Error: Unsupported argument -socks found. Setting SOCKS version isn't possible anymore, only SOCKS5 proxies are supported.</source>
         <translation>Ошибка: обнаружен неподдерживаемый аргумент -socks. Настройка версии SOCKS больше невозможна, поддерживаются только прокси SOCKS5.</translation>
+    </message>
+    <message>
+        <source>Exclude debugging information for a category. Can be used in conjunction with -debug=1 to output debug logs for all categories except one or more specified categories.</source>
+        <translation>Исключить отладочную информацию для категории. Может использоваться вместе с -debug=1 для вывода журналов отладки для всех категорий, кроме одной или нескольких указанных категорий.</translation>
     </message>
     <message>
         <source>Execute command when a relevant alert is received or we see a really long fork (%s in cmd is replaced by message)</source>
@@ -6293,10 +6063,6 @@ Rapids Wallet</source>
         <translation>Количество секунд, чтобы не допустить повторного подключения неверных пользователей (по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>Obfuscation uses exact denominated amounts to send funds, you might simply need to anonymize some more coins.</source>
-        <translation>Obfuscation использует точные деноминированные суммы для отправки средств, вам просто нужно будет анонимизировать еще несколько монет.</translation>
-    </message>
-    <message>
         <source>Output debugging information (default: %u, supplying &lt;category&gt; is optional)</source>
         <translation>Выходная информация отладки (по умолчанию: %u, поставка &lt;category&gt; необязательна)</translation>
     </message>
@@ -6319,10 +6085,6 @@ Rapids Wallet</source>
     <message>
         <source>Set maximum size of high-priority/low-fee transactions in bytes (default: %d)</source>
         <translation>Установите максимальный размер транзакций с высоким приоритетом / низкой оплатой в байтах (по умолчанию: %d)</translation>
-    </message>
-    <message>
-        <source>Set the number of included blocks to precompute per cycle. (minimum: %d) (maximum: %d) (default: %d)</source>
-        <translation>Установить количество включенных блоков для предварительного вычисления за цикл. (минимум: %d) (максимум: %d) (по умолчанию: %d)</translation>
     </message>
     <message>
         <source>Set the number of script verification threads (%u to %d, 0 = auto, &lt;0 = leave that many cores free, default: %d)</source>
@@ -6357,18 +6119,6 @@ Rapids Wallet</source>
         <translation>Не удалось привязать к %s на этом компьютере. Rapids, вероятно, уже запущен.</translation>
     </message>
     <message>
-        <source>Unable to locate enough Obfuscation denominated funds for this transaction.</source>
-        <translation>Не удалось найти достаточное количество средств, предназначенных для обфускации, для этой транзакции.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough Obfuscation non-denominated funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>Невозможно найти достаточное количество средств, не предназначенных для обфускации, для этой транзакции, которые не равны 10000 RPD.</translation>
-    </message>
-    <message>
-        <source>Unable to locate enough funds for this transaction that are not equal 10000 RPD.</source>
-        <translation>Не удалось найти достаточное количество средств для этой транзакции, которые не равны 10000 RPD.</translation>
-    </message>
-    <message>
         <source>Use separate SOCKS5 proxy to reach peers via Tor hidden services (default: %s)</source>
         <translation>Используйте отдельный прокси SOCKS5 для доступа к сверстникам через скрытые сервисы Tor (по умолчанию: %s)</translation>
     </message>
@@ -6379,10 +6129,6 @@ Rapids Wallet</source>
     <message>
         <source>Warning: -paytxfee is set very high! This is the transaction fee you will pay if you send a transaction.</source>
         <translation>Предупреждение: -paytxfee установлен очень высоко! Это комиссия за транзакцию, которую вы заплатите, если вы отправляете транзакцию.</translation>
-    </message>
-    <message>
-        <source>Warning: Peers are being disconnected due time differences. Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
-        <translation>Предупреждение: пиры отключаются из-за разницы во времени. Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы настроены не правильно, Rapids не будет работать должным образом.</translation>
     </message>
     <message>
         <source>Warning: Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
@@ -6417,8 +6163,8 @@ Rapids Wallet</source>
         <translation>Вы должны указать в  строке приложенный ключ. Пожалуйста, обратитесь к документации для получения справки</translation>
     </message>
     <message>
-        <source>(51472 could be used only on mainnet)</source>
-        <translation>(51472 можно использовать только в сети)</translation>
+        <source>(28732 could be used only on mainnet)</source>
+        <translation>(28732 можно использовать только в сети)</translation>
     </message>
     <message>
         <source>(default: %s)</source>
@@ -6429,8 +6175,8 @@ Rapids Wallet</source>
         <translation>(неуплата: 1)</translation>
     </message>
     <message>
-        <source>(must be 51472 for mainnet)</source>
-        <translation>(должен быть 51472 для mainet)</translation>
+        <source>(must be 28732 for mainnet)</source>
+        <translation>(должен быть 28732 для mainet)</translation>
     </message>
     <message>
         <source>Accept command line and JSON-RPC commands</source>
@@ -6447,10 +6193,6 @@ Rapids Wallet</source>
     <message>
         <source>Add a node to connect to and attempt to keep the connection open</source>
         <translation>Добавьте узел для подключения и попытку сохранить соединение открытым</translation>
-    </message>
-    <message>
-        <source>Adding Wrapped Serials supply...</source>
-        <translation>Добавление предложения завернутых серий...</translation>
     </message>
     <message>
         <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
@@ -6477,28 +6219,8 @@ Rapids Wallet</source>
         <translation>Варианты создания блока:</translation>
     </message>
     <message>
-        <source>Calculating missing accumulators...</source>
-        <translation>Вычисление недостающих аккумуляторов ...</translation>
-    </message>
-    <message>
         <source>Cannot downgrade wallet</source>
         <translation>Нельзя понизить кошелек</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -bind address: '%s'</source>
-        <translation>Не удается разрешить -включить адрес: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -externalip address: '%s'</source>
-        <translation>Не удается разрешить -externalip адрес: '%s'</translation>
-    </message>
-    <message>
-        <source>Cannot resolve -whitebind address: '%s'</source>
-        <translation>Не удается разрешить -whitebind адрес: '%s'</translation>
-    </message>
-    <message>
-        <source>CoinSpend: failed check</source>
-        <translation>CoinSpend: неудачная проверка</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s)</source>
@@ -6537,10 +6259,6 @@ Rapids Wallet</source>
         <translation>Не удалось разобрать masternode.conf</translation>
     </message>
     <message>
-        <source>Couldn't generate the accumulator witness</source>
-        <translation>Не удалось сгенерировать witness аккумулятор</translation>
-    </message>
-    <message>
         <source>Debugging/Testing options:</source>
         <translation>Параметры отладки / тестирования:</translation>
     </message>
@@ -6571,14 +6289,6 @@ Rapids Wallet</source>
     <message>
         <source>Done loading</source>
         <translation>Загрузка выполнена</translation>
-    </message>
-    <message>
-        <source>Enable automatic Zerocoin minting (0-1, default: %u)</source>
-        <translation>Включить автоматическую чистку Zerocoin (0-1, по умолчанию: %u)</translation>
-    </message>
-    <message>
-        <source>Enable precomputation of zRPD spends and stakes (0-1, default %u)</source>
-        <translation>Включить предварительное вычисление расходов и стекинга zRPD (0-1, по умолчанию %u)</translation>
     </message>
     <message>
         <source>Enable publish hash transaction (locked via SwiftX) in &lt;address&gt;</source>
@@ -6633,6 +6343,10 @@ Rapids Wallet</source>
         <translation>Ошибка</translation>
     </message>
     <message>
+        <source>Error: </source>
+        <translation>Ошибка:</translation>
+    </message>
+    <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
         <translation>Ошибка: произошла фатальная внутренняя ошибка, подробности см. В файле debug.log.</translation>
     </message>
@@ -6647,10 +6361,6 @@ Rapids Wallet</source>
     <message>
         <source>Error: Wallet locked, unable to create transaction!</source>
         <translation>Ошибка: кошелек заблокирован, невозможно создать транзакцию!</translation>
-    </message>
-    <message>
-        <source>Failed to calculate accumulator checkpoint</source>
-        <translation>Не удалось вычислить контрольную точку аккумулятора</translation>
     </message>
     <message>
         <source>Failed to listen on any port. Use -listen=0 if you want this.</source>
@@ -6721,28 +6431,8 @@ Rapids Wallet</source>
         <translation>Недопустимый -онионный адрес или имя хоста: '%s'</translation>
     </message>
     <message>
-        <source>Invalid amount for -maxtxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -maxtxfee =&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -minrelaytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -minrelaytxfee&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -mintxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -mintxfee =&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
         <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (must be at least %s)</source>
         <translation>Invalid amount for -paytxfee=&lt;amount&gt;: '%s' (должен быть не менее%s)</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -paytxfee=&lt;amount&gt;: '%s'</source>
-        <translation>Недопустимая сумма для -paytxfee =&lt;amount&gt;: '%s'</translation>
-    </message>
-    <message>
-        <source>Invalid amount for -reservebalance=&lt;amount&gt;</source>
-        <translation>Недопустимая сумма для -reservebalance =&lt;amount&gt;</translation>
     </message>
     <message>
         <source>Invalid amount</source>
@@ -6761,20 +6451,8 @@ Rapids Wallet</source>
         <translation>Неверный порт обнаружен в файле masternode.conf</translation>
     </message>
     <message>
-        <source>Percentage of automatically minted Zerocoin  (1-100, default: %u)</source>
-        <translation>Процент автоматически отчеканенного Zerocoin (1-100, по умолчанию: %u)</translation>
-    </message>
-    <message>
         <source>Recalculating RPD supply...</source>
         <translation>Перерасчет предложения RPD...</translation>
-    </message>
-    <message>
-        <source>Recalculating minted ZRPD...</source>
-        <translation>Перерасчет отчеканенных ZRPD...</translation>
-    </message>
-    <message>
-        <source>Recalculating spent ZRPD...</source>
-        <translation>Перерасчет потраченных ZRPD...</translation>
     </message>
     <message>
         <source>Reindex the RPD and zRPD money supply statistics</source>
@@ -6791,10 +6469,6 @@ Rapids Wallet</source>
     <message>
         <source>Selected coins value is less than payment target</source>
         <translation>Выбранная стоимость монет меньше цели платежа</translation>
-    </message>
-    <message>
-        <source>Support the zerocoin light node protocol (default: %u)</source>
-        <translation>Поддержка лайт узла zerocoin протокола (по умолчанию: %u)</translation>
     </message>
     <message>
         <source>SwiftX options:</source>
@@ -6821,8 +6495,8 @@ Rapids Wallet</source>
 </translation>
     </message>
     <message>
-        <source>Disable all RPD specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
-        <translation>Отключите все специфические функции RPD (Masternodes, Zerocoin, SwiftX, Бюджетирование) (0-1, по умолчанию: %u)</translation>
+        <source>Disable all Rapids specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
+        <translation>Отключите все специфические функции Rapids (Masternodes, Zerocoin, SwiftX, Бюджетирование) (0-1, по умолчанию: %u)</translation>
     </message>
     <message>
         <source>Enable SwiftX, show confirmations for locked transactions (bool, default: %s)</source>
@@ -6831,10 +6505,6 @@ Rapids Wallet</source>
     <message>
         <source>Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.</source>
         <translation>Ошибка: транзакция была отклонена! Это может произойти, если некоторые из монет в вашем кошельке уже были потрачены, например, если вы использовали копию кошелька. Dat и монеты были потрачены в копии, но не отмечены как потраченные здесь.</translation>
-    </message>
-    <message>
-        <source>Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!</source>
-        <translation>Ошибка. Для этой транзакции требуется комиссия за транзакцию не менее %s из-за ее количества, сложности или использования недавно полученных средств!</translation>
     </message>
     <message>
         <source>Error: Unsupported argument -checklevel found. Checklevel must be level 4.</source>
@@ -6851,14 +6521,6 @@ Rapids Wallet</source>
     <message>
         <source>In rare cases, a spend with 7 coins exceeds our maximum allowable transaction size, please retry spend using 6 or less coins</source>
         <translation>В редких случаях трата с 7 монетами превышает наш максимально допустимый размер транзакции, пожалуйста, попробуйте потратить, используя 6 или менее монет</translation>
-    </message>
-    <message>
-        <source>Preferred Denomination for automatically minted Zerocoin  (1/5/10/50/100/500/1000/5000), 0 for no preference. default: %u)</source>
-        <translation>Предпочтительный номинал для автоматически чеканившегося Zerocoin (1/5/10/50/100/500/1000/5000), 0 без предпочтений. default: %u)</translation>
-    </message>
-    <message>
-        <source>Specify custom backup path to add a copy of any automatic zRPD backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup. If backuppath is set as well, 4 backups will happen</source>
-        <translation>Укажите собственный путь резервного копирования, чтобы добавить копию любой автоматической резервной копии zRPD. Если задано как dir, каждая резервная копия генерирует файл с отметкой времени. Если он установлен как файл, он будет переписывать в этот файл каждую резервную копию. Если также установлен резервный путь, произойдет 4 резервных копии</translation>
     </message>
     <message>
         <source>Specify custom backup path to add a copy of any wallet backup. If set as dir, every backup generates a timestamped file. If set as file, will rewrite to that file every backup.</source>
@@ -6879,10 +6541,6 @@ Rapids Wallet</source>
     <message>
         <source>Cannot create public spend input</source>
         <translation>Невозможно создать вход публичных расходов</translation>
-    </message>
-    <message>
-        <source>CoinSpend: Accumulator witness does not verify</source>
-        <translation>CoinSpend: Свидетель Аккумулятора не проверяет</translation>
     </message>
     <message>
         <source>Display the stake modifier calculations in the debug.log file.</source>
@@ -6919,10 +6577,6 @@ Rapids Wallet</source>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Ошибка: нет действительного utxo!</translation>
-    </message>
-    <message>
-        <source>Failed to create mint</source>
-        <translation>Не удалось создать монетный двор</translation>
     </message>
     <message>
         <source>Failed to find Zerocoins in wallet.dat</source>
@@ -6969,6 +6623,10 @@ Rapids Wallet</source>
         <translation>Загрузка адресов ...</translation>
     </message>
     <message>
+        <source>Loading banlist...</source>
+        <translation>Загрузка банлиста...</translation>
+    </message>
+    <message>
         <source>Loading block index...</source>
         <translation>Загружается индекс блока ...</translation>
     </message>
@@ -6989,10 +6647,6 @@ Rapids Wallet</source>
         <translation>Загрузка ...</translation>
     </message>
     <message>
-        <source>Loading wallet... (%3.2f %%)</source>
-        <translation>Загрузка кошелька ... (%3.2f %%)</translation>
-    </message>
-    <message>
         <source>Loading wallet...</source>
         <translation>Загрузка кошелька ...</translation>
     </message>
@@ -7007,6 +6661,10 @@ Rapids Wallet</source>
     <message>
         <source>Lookup(): Invalid -proxy address or hostname: '%s'</source>
         <translation>Lookup (): Invalid -proxy адрес или имя хоста: '%s'</translation>
+    </message>
+    <message>
+        <source>MNs synchronization pending...</source>
+        <translation>Ожидается синхронизация Мастернод...</translation>
     </message>
     <message>
         <source>Maintain at most &lt;n&gt; connections to peers (default: %u)</source>
@@ -7049,6 +6707,10 @@ Rapids Wallet</source>
         <translation>Количество резервных копий пользовательского местоположения для сохранения (по умолчанию: %d)</translation>
     </message>
     <message>
+        <source>On first run, create a legacy wallet instead of a HD wallet</source>
+        <translation>При первом запуске создайте предыдущий кошелек вместо HD-кошелька</translation>
+    </message>
+    <message>
         <source>Only accept block chain matching built-in checkpoints (default: %u)</source>
         <translation>Учитывать встроенные контрольные точки с использованием цепочки блоков (по умолчанию: %u)</translation>
     </message>
@@ -7065,6 +6727,10 @@ Rapids Wallet</source>
         <translation>Пароль для подключений JSON-RPC</translation>
     </message>
     <message>
+        <source>Peers are being disconnected due time differences.</source>
+        <translation>Пиры отключены из-за разницы во времени.</translation>
+    </message>
+    <message>
         <source>Unable to find transaction containing mint %s</source>
         <translation>Не удалось найти транзакцию, содержащую чеканку %s</translation>
     </message>
@@ -7077,16 +6743,28 @@ Rapids Wallet</source>
         <translation>Использовать блок спам-фильтр (по умолчанию: %u)</translation>
     </message>
     <message>
-        <source>could not get lock on cs_spendcache</source>
-        <translation>не удалось получить блокировку на cs_spendcache</translation>
-    </message>
-    <message>
         <source>isValid(): Invalid -proxy address or hostname: '%s'</source>
         <translation>isValid (): Invalid -proxy адрес или имя хоста: '%s'</translation>
     </message>
     <message>
         <source>Preparing for resync...</source>
         <translation>Подготовка к повторной синхронизации ...</translation>
+    </message>
+    <message>
+        <source>Please check that your computer's date and time are correct! If your clock is wrong Rapids will not work properly.</source>
+        <translation>Пожалуйста, проверьте правильность даты и времени на вашем компьютере! Если ваши часы не точны, Rapids не будет работать должным образом.</translation>
+    </message>
+    <message>
+        <source>Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)</source>
+        <translation>Укажите местоположение файла журнала отладки: это может быть абсолютный путь или путь относительно каталога данных (по умолчанию: %s)</translation>
+    </message>
+    <message>
+        <source>Cannot resolve -%s address: '%s'</source>
+        <translation>Не удается разрешить -%s адрес: '%s'</translation>
+    </message>
+    <message>
+        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
+        <translation>Невозможно обновить до HD-кошелька (поддержка HD уже работает). Версия: %d</translation>
     </message>
     <message>
         <source>Need destination or change address because change is not exact</source>
@@ -7121,14 +6799,6 @@ Rapids Wallet</source>
         <translation>Перестроить индекс цепочки блоков из текущих файлов blk000 ?? .dat</translation>
     </message>
     <message>
-        <source>Receive and display P2P network alerts (default: %u)</source>
-        <translation>Получение и отображение оповещений сети P2P (по умолчанию: %u)</translation>
-    </message>
-    <message>
-        <source>Reindex the accumulator database</source>
-        <translation>Reindex база данных аккумулятора</translation>
-    </message>
-    <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
         <translation>Операции передачи данных реле и мины (по умолчанию: %u)</translation>
     </message>
@@ -7145,14 +6815,6 @@ Rapids Wallet</source>
         <translation>Повторное сканирование ...</translation>
     </message>
     <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>ResetMintZerocoin завершен:</translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>ResetSpentZerocoin завершен:</translation>
-    </message>
-    <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
         <translation>Запустите поток, чтобы периодически очищать кошелек (по умолчанию: %u)</translation>
     </message>
@@ -7163,10 +6825,6 @@ Rapids Wallet</source>
     <message>
         <source>Send transactions as zero-fee transactions if possible (default: %u)</source>
         <translation>Отправлять транзакции как транзакции с нулевой оплатой, если это возможно (по умолчанию: %u)</translation>
-    </message>
-    <message>
-        <source>Session timed out.</source>
-        <translation>Время сеанса истекло.</translation>
     </message>
     <message>
         <source>Set database cache size in megabytes (%d to %d, default: %d)</source>
@@ -7211,10 +6869,6 @@ Rapids Wallet</source>
     <message>
         <source>Shrink debug.log file on client startup (default: 1 when no -debug)</source>
         <translation>Сжать файл debug.log при запуске клиента (по умолчанию: 1, когда нет -debug)</translation>
-    </message>
-    <message>
-        <source>Signing timed out.</source>
-        <translation>Подписание закончилось.</translation>
     </message>
     <message>
         <source>Signing transaction failed</source>
@@ -7273,10 +6927,6 @@ Rapids Wallet</source>
         <translation>Синхронизация завершена</translation>
     </message>
     <message>
-        <source>Synchronization pending...</source>
-        <translation>Ожидается синхронизация ...</translation>
-    </message>
-    <message>
         <source>Synchronizing budgets...</source>
         <translation>Синхронизация бюджетов ...</translation>
     </message>
@@ -7295,14 +6945,6 @@ Rapids Wallet</source>
     <message>
         <source>Syncing zRPD wallet...</source>
         <translation>Синхронизация zRPD кошелька ...</translation>
-    </message>
-    <message>
-        <source>The coin spend has been used</source>
-        <translation>Расходы на монеты использовались</translation>
-    </message>
-    <message>
-        <source>The transaction did not verify</source>
-        <translation>Транзакция не подтверждена</translation>
     </message>
     <message>
         <source>This help message</source>
@@ -7369,6 +7011,10 @@ Rapids Wallet</source>
         <translation>Невозможно сгенерировать первоначальный ключ</translation>
     </message>
     <message>
+        <source>Unable to generate keys</source>
+        <translation>Невозможно сгенерировать ключи</translation>
+    </message>
+    <message>
         <source>Unable to sign spork message, wrong key?</source>
         <translation>Не удалось подписать сообщение , неправильный ключ?</translation>
     </message>
@@ -7379,6 +7025,10 @@ Rapids Wallet</source>
     <message>
         <source>Unknown network specified in -onlynet: '%s'</source>
         <translation>Неизвестная сеть, указанная в -onlynet: '%s'</translation>
+    </message>
+    <message>
+        <source>Unsupported logging category %s=%s.</source>
+        <translation>Неподдерживаемая категория протоколирования %s =%s.</translation>
     </message>
     <message>
         <source>Upgrade wallet to latest format</source>
@@ -7469,6 +7119,10 @@ Rapids Wallet</source>
         <translation>Опции уведомления ZeroMQ:</translation>
     </message>
     <message>
+        <source>Zerocoin minting available only on regtest</source>
+        <translation>Чеканка zerocoin доступна только на regtest</translation>
+    </message>
+    <message>
         <source>Zerocoin options:</source>
         <translation>Варианты Zerocoin:</translation>
     </message>
@@ -7494,6 +7148,10 @@ Rapids Wallet</source>
     <message>
         <source>TextLabel</source>
         <translation>Текстовая метка</translation>
+    </message>
+    <message>
+        <source>Include delegated</source>
+        <translation>Включить делегированного</translation>
     </message>
     <message>
         <source>PushButton</source>

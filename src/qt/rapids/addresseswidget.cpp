@@ -34,7 +34,8 @@ public:
         return cachedRow;
     }
 
-    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override{
+    void init(QWidget* holder,const QModelIndex &index, bool isHovered, bool isSelected) const override
+    {
         AddressLabelRow* row = static_cast<AddressLabelRow*>(holder);
 
         row->updateState(isLightTheme, isHovered, isSelected);
@@ -46,7 +47,8 @@ public:
         row->updateView(address, label);
     }
 
-    QColor rectColor(bool isHovered, bool isSelected) override{
+    QColor rectColor(bool isHovered, bool isSelected) override
+    {
         return getRowColor(isLightTheme, isHovered, isSelected);
     }
 
@@ -79,14 +81,12 @@ AddressesWidget::AddressesWidget(RapidsGUI* parent) :
     setCssProperty(ui->listAddresses, "container");
 
     // Title
-    ui->labelTitle->setText(tr("Contacts"));
-    ui->labelSubtitle1->setText(tr("You can add a new one in the options menu to the side."));
     setCssTitleScreen(ui->labelTitle);
     setCssSubtitleScreen(ui->labelSubtitle1);
 
     // Change address option
-    ui->btnAddContact->setTitleClassAndText("btn-title-grey", "Add new contact");
-    ui->btnAddContact->setSubTitleClassAndText("text-subtitle", "Generate a new address to receive tokens.");
+    ui->btnAddContact->setTitleClassAndText("btn-title-grey", tr("Add new contact"));
+    ui->btnAddContact->setSubTitleClassAndText("text-subtitle", tr("Generate a new address to receive tokens."));
     ui->btnAddContact->setRightIconClass("ic-arrow-down");
 
     // List Addresses
@@ -109,28 +109,21 @@ AddressesWidget::AddressesWidget(RapidsGUI* parent) :
     //Empty List
     ui->emptyContainer->setVisible(false);
     setCssProperty(ui->pushImgEmpty, "img-empty-contacts");
-
-    ui->labelEmpty->setText(tr("No contacts yet"));
     setCssProperty(ui->labelEmpty, "text-empty");
 
     // Add Contact
     setCssProperty(ui->layoutNewContact, "container-options");
 
     // Name
-    ui->labelName->setText(tr("Contact name"));
     setCssProperty(ui->labelName, "text-title");
-    ui->lineEditName->setPlaceholderText(tr("e.g. John Doe"));
     setCssEditLine(ui->lineEditName, true);
 
     // Address
-    ui->labelAddress->setText(tr("Enter RPD address"));
     setCssProperty(ui->labelAddress, "text-title");
-    ui->lineEditAddress->setPlaceholderText("e.g. D7VFR83SQbiezrW72hjc…");
     setCssEditLine(ui->lineEditAddress, true);
     ui->lineEditAddress->setValidator(new QRegExpValidator(QRegExp("^[A-Za-z0-9]+"), ui->lineEditName));
 
     // Buttons
-    ui->btnSave->setText(tr("SAVE"));
     setCssBtnPrimary(ui->btnSave);
 
     connect(ui->listAddresses, &QListView::clicked, this, &AddressesWidget::handleAddressClicked);
@@ -138,7 +131,8 @@ AddressesWidget::AddressesWidget(RapidsGUI* parent) :
     connect(ui->btnAddContact, &OptionButton::clicked, this, &AddressesWidget::onAddContactShowHideClicked);
 }
 
-void AddressesWidget::handleAddressClicked(const QModelIndex &index){
+void AddressesWidget::handleAddressClicked(const QModelIndex &index)
+{
     ui->listAddresses->setCurrentIndex(index);
     QRect rect = ui->listAddresses->visualRect(index);
     QPoint pos = rect.topRight();
@@ -147,13 +141,13 @@ void AddressesWidget::handleAddressClicked(const QModelIndex &index){
 
     QModelIndex rIndex = filter->mapToSource(index);
 
-    if(!this->menu){
+    if (!this->menu) {
         this->menu = new TooltipMenu(window, this);
         connect(this->menu, &TooltipMenu::message, this, &AddressesWidget::message);
         connect(this->menu, &TooltipMenu::onEditClicked, this, &AddressesWidget::onEditClicked);
         connect(this->menu, &TooltipMenu::onDeleteClicked, this, &AddressesWidget::onDeleteClicked);
         connect(this->menu, &TooltipMenu::onCopyClicked, this, &AddressesWidget::onCopyClicked);
-    }else {
+    } else {
         this->menu->hide();
     }
     this->index = rIndex;
@@ -163,7 +157,7 @@ void AddressesWidget::handleAddressClicked(const QModelIndex &index){
 
 void AddressesWidget::loadWalletModel()
 {
-    if(walletModel) {
+    if (walletModel) {
         addressTablemodel = walletModel->getAddressTableModel();
         this->filter = new AddressFilterProxyModel(QStringList({AddressTableModel::Send, AddressTableModel::ColdStakingSend}), this);
         this->filter->setSourceModel(addressTablemodel);
@@ -175,13 +169,15 @@ void AddressesWidget::loadWalletModel()
     }
 }
 
-void AddressesWidget::updateListView(){
+void AddressesWidget::updateListView()
+{
     bool empty = addressTablemodel->sizeSend() == 0;
     ui->emptyContainer->setVisible(empty);
     ui->listAddresses->setVisible(!empty);
 }
 
-void AddressesWidget::onStoreContactClicked(){
+void AddressesWidget::onStoreContactClicked()
+{
     if (walletModel) {
         QString label = ui->lineEditName->text();
         QString address = ui->lineEditAddress->text();
@@ -192,7 +188,8 @@ void AddressesWidget::onStoreContactClicked(){
             return;
         }
 
-        CBitcoinAddress rpdAdd = CBitcoinAddress(address.toUtf8().constData());
+        bool isStakingAddress = false;
+        CTxDestination rpdAdd = DecodeDestination(address.toUtf8().constData(), isStakingAddress);
         if (walletModel->isMine(rpdAdd)) {
             setCssEditLine(ui->lineEditAddress, false, true);
             inform(tr("Cannot store your own address as contact"));
@@ -201,13 +198,13 @@ void AddressesWidget::onStoreContactClicked(){
 
         QString storedLabel = walletModel->getAddressTableModel()->labelForAddress(address);
 
-        if(!storedLabel.isEmpty()){
+        if (!storedLabel.isEmpty()) {
             inform(tr("Address already stored, label: %1").arg("\'"+storedLabel+"\'"));
             return;
         }
 
-        if (walletModel->updateAddressBookLabels(rpdAdd.Get(), label.toUtf8().constData(),
-                rpdAdd.IsStakingAddress() ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND)
+        if (walletModel->updateAddressBookLabels(rpdAdd, label.toUtf8().constData(),
+                isStakingAddress ? AddressBook::AddressBookPurpose::COLD_STAKING_SEND : AddressBook::AddressBookPurpose::SEND)
                 ) {
             ui->lineEditAddress->setText("");
             ui->lineEditName->setText("");
@@ -225,25 +222,27 @@ void AddressesWidget::onStoreContactClicked(){
     }
 }
 
-void AddressesWidget::onEditClicked(){
+void AddressesWidget::onEditClicked()
+{
     QString address = index.data(Qt::DisplayRole).toString();
     QString currentLabel = index.sibling(index.row(), AddressTableModel::Label).data(Qt::DisplayRole).toString();
     showHideOp(true);
     AddNewContactDialog *dialog = new AddNewContactDialog(window);
     dialog->setData(address, currentLabel);
-    if(openDialogWithOpaqueBackground(dialog, window)){
-        if(walletModel->updateAddressBookLabels(
-                CBitcoinAddress(address.toStdString()).Get(), dialog->getLabel().toStdString(), addressTablemodel->purposeForAddress(address.toStdString()))){
+    if (openDialogWithOpaqueBackground(dialog, window)) {
+        if (walletModel->updateAddressBookLabels(
+                DecodeDestination(address.toStdString()), dialog->getLabel().toStdString(), addressTablemodel->purposeForAddress(address.toStdString()))){
             inform(tr("Contact edited"));
-        }else{
+        } else {
             inform(tr("Contact edit failed"));
         }
     }
     dialog->deleteLater();
 }
 
-void AddressesWidget::onDeleteClicked(){
-    if(walletModel) {
+void AddressesWidget::onDeleteClicked()
+{
+    if (walletModel) {
         if (ask(tr("Delete Contact"), tr("You are just about to remove the contact:\n\n%1\n\nAre you sure?").arg(index.data(Qt::DisplayRole).toString().toUtf8().constData()))
         ) {
             if (this->walletModel->getAddressTableModel()->removeRows(index.row(), 1, index)) {
@@ -256,16 +255,18 @@ void AddressesWidget::onDeleteClicked(){
     }
 }
 
-void AddressesWidget::onCopyClicked(){
+void AddressesWidget::onCopyClicked()
+{
     GUIUtil::setClipboard(index.data(Qt::DisplayRole).toString());
     inform(tr("Address copied"));
 }
 
-void AddressesWidget::onAddContactShowHideClicked(){
-    if(!ui->layoutNewContact->isVisible()){
+void AddressesWidget::onAddContactShowHideClicked()
+{
+    if (!ui->layoutNewContact->isVisible()){
         ui->btnAddContact->setRightIconClass("btn-dropdown", true);
         ui->layoutNewContact->setVisible(true);
-    }else {
+    } else {
         ui->btnAddContact->setRightIconClass("ic-arrow", true);
         ui->layoutNewContact->setVisible(false);
     }
@@ -289,10 +290,12 @@ void AddressesWidget::sortAddresses()
         this->filter->sort(sortType, sortOrder);
 }
 
-void AddressesWidget::changeTheme(bool isLightTheme, QString& theme){
+void AddressesWidget::changeTheme(bool isLightTheme, QString& theme)
+{
     static_cast<ContactsHolder*>(this->delegate->getRowFactory())->isLightTheme = isLightTheme;
 }
 
-AddressesWidget::~AddressesWidget(){
+AddressesWidget::~AddressesWidget()
+{
     delete ui;
 }

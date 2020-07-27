@@ -30,20 +30,20 @@ Build-Depends: debhelper,
 Standards-Version: 3.9.2
 Homepage: http://www.rapids.org
 Vcs-Git: git://github.com/RapidsOfficial/Rapids.git
-Vcs-Browser: https://github.com/RapidsOfficial/Rapids/
+Vcs-Browser: http://github.com/RapidsOfficial/Rapids
 
 Package: rapidsd
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer network based digital currency - daemon
- Rapids is a free open source peer-to-peer electronic cash system that
+ Rapids is a free, open source peer-to-peer electronic cash system that
  is completely decentralized, without the need for a central server or
  trusted parties.  Users hold the crypto keys to their own money and
  transact directly with each other, with the help of a P2P network to
  check for double-spending.
  .
  Full transaction history is stored locally at each client.  This
- requires 10+ GB of space, slowly growing.
+ requires 18.5+ GB of space, slowly growing.
  .
  This package provides the daemon, rapidsd, and the CLI tool
  rapids-cli to interact with the daemon.
@@ -52,13 +52,13 @@ Package: rapids-qt
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: peer-to-peer network based digital currency - Qt GUI
- Rapids is a free open source peer-to-peer electronic cash system that
+ Rapids is a free, open source peer-to-peer electronic cash system that
  is completely decentralized, without the need for a central server or
  trusted parties.  Users hold the crypto keys to their own money and
  transact directly with each other, with the help of a P2P network to
  check for double-spending.
  .
  Full transaction history is stored locally at each client.  This
- requires 10+ GB of space, slowly growing.
+ requires 18.5+ GB of space, slowly growing.
  .
  This package provides Rapids-Qt, a GUI for Rapids based on Qt.

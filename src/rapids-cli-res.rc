@@ -17,7 +17,7 @@ BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
             VALUE "CompanyName",        "Rapids"
-            VALUE "FileDescription",    "rapids-cli (OSS RPC client for Rapids)"
+            VALUE "FileDescription",    "Rapids-cli (OSS RPC client for Rapids)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "rapids-cli"
             VALUE "LegalCopyright",     COPYRIGHT_STR

@@ -9,6 +9,7 @@
 #define BITCOIN_QT_TRANSACTIONRECORD_H
 
 #include "amount.h"
+#include "script/script.h"
 #include "uint256.h"
 
 #include <QList>
@@ -78,18 +79,12 @@ public:
         Other,
         Generated,
         StakeMint,
-        StakeZRPD,
         SendToAddress,
         SendToOther,
         RecvWithAddress,
         MNReward,
         RecvFromOther,
         SendToSelf,
-        ZerocoinMint,
-        ZerocoinSpend,
-        RecvFromZerocoinSpend,
-        ZerocoinSpend_Change_zRpd,
-        ZerocoinSpend_FromMe,
         StakeDelegated, // Received cold stake (owner)
         StakeHot, // Staked via a delegated P2CS.
         P2CSDelegation, // Non-spendable P2CS, staker side.

@@ -7,6 +7,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "clientversion.h"
+#include "fs.h"
 #include "init.h"
 #include "main.h"
 #include "masternodeconfig.h"
@@ -18,7 +19,6 @@
 #include "httprpc.h"
 
 #include <boost/algorithm/string/predicate.hpp>
-#include <boost/filesystem.hpp>
 #include <boost/thread.hpp>
 
 #include <stdio.h>
@@ -68,13 +68,13 @@ bool AppInit(int argc, char* argv[])
 
     // Process help and version before taking care about datadir
     if (mapArgs.count("-?") || mapArgs.count("-help") || mapArgs.count("-version")) {
-        std::string strUsage = _("Rapids Core Daemon") + " " + _("version") + " " + FormatFullVersion() + "\n";
+        std::string strUsage = _("Rapids Daemon") + " " + _("version") + " " + FormatFullVersion() + "\n";
 
         if (mapArgs.count("-version")) {
             strUsage += LicenseInfo();
         } else {
             strUsage += "\n" + _("Usage:") + "\n" +
-                        "  rapidsd [options]                     " + _("Start Rapids Core Daemon") + "\n";
+                        "  rapidsd [options]                     " + _("Start Rapids Daemon") + "\n";
 
             strUsage += "\n" + HelpMessage(HMM_BITCOIND);
         }
@@ -84,7 +84,7 @@ bool AppInit(int argc, char* argv[])
     }
 
     try {
-        if (!boost::filesystem::is_directory(GetDataDir(false))) {
+        if (!fs::is_directory(GetDataDir(false))) {
             fprintf(stderr, "Error: Specified data directory \"%s\" does not exist.\n", mapArgs["-datadir"].c_str());
             return false;
         }

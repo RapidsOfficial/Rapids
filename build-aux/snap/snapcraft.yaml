@@ -3,7 +3,7 @@
 # Copyright (c) 2018-2020 The Rapids developers
 name: rapids-core
 base: core18
-version: 4.0.99
+version: 3.0.0
 summary:   Rapids (Private – Instant – Verified – Transaction)
 description: |
   Rapids is an MIT licensed,
@@ -205,13 +205,11 @@ parts:
             chmod +x ${SNAPCRAFT_PART_INSTALL}/usr/bin/test_${BINPREF}-qt
             echo "PPC64EL fix - test_${BINPREF}-qt does not exist, fix required, dummy as test_${BINPREF}-qt"
           fi
-          if [ -e $SNAPCRAFT_PART_BUILD/src/test/test_${BINPREF} ]; then
-            echo "PPC64EL fix - test_${BINPREF} exists, fix unrequired"
-          else
-            echo "echo test_${BINPREF} is not installed" > ${SNAPCRAFT_PART_INSTALL}/usr/bin/test_${BINPREF}
-            chmod +x ${SNAPCRAFT_PART_INSTALL}/usr/bin/test_${BINPREF}
-            echo "PPC64EL fix - test_${BINPREF} does not exist, fix required, dummy as test_${BINPREF}"
-          fi
+
+        echo "echo test_${BINPREF} is not installed" > ${SNAPCRAFT_PART_INSTALL}/usr/bin/test_${BINPREF}
+        chmod +x ${SNAPCRAFT_PART_INSTALL}/usr/bin/test_${BINPREF}
+        echo "PPC64EL fix - test_${BINPREF} does not exist, fix required, dummy as test_${BINPREF}"
+
         fi
         else
           echo "PPC64EL fix disabled, skipping"

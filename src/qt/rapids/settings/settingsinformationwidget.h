@@ -27,7 +27,9 @@ public:
 private Q_SLOTS:
     void setNumConnections(int count);
     void setNumBlocks(int count);
-	void setMasternodeCount(const QString& strMasternodes);
+    void setMasternodeCount(const QString& strMasternodes);
+
+public Q_SLOTS:
     void openNetworkMonitor();
 
 private:

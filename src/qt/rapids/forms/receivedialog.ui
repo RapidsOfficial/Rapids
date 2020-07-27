@@ -92,7 +92,7 @@
            <string notr="true">padding-left:24px;</string>
           </property>
           <property name="text">
-           <string>Transaction Details</string>
+           <string>My Address</string>
           </property>
           <property name="alignment">
            <set>Qt::AlignCenter</set>
@@ -196,7 +196,7 @@
       <item alignment="Qt::AlignHCenter">
        <widget class="QLabel" name="labelAddress">
         <property name="text">
-         <string>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </string>
+         <string notr="true">N/A</string>
         </property>
        </widget>
       </item>
@@ -265,7 +265,7 @@
            <enum>Qt::NoFocus</enum>
           </property>
           <property name="text">
-           <string>OK</string>
+           <string>COPY</string>
           </property>
          </widget>
         </item>

@@ -1,7 +1,6 @@
 // Copyright (c) 2009-2010 Satoshi Nakamoto
 // Copyright (c) 2009-2014 The Bitcoin developers
-// Copyright (c) 2016-2018 The PIVX developers
-// Copyright (c) 2018-2020 The Rapids developers
+// Copyright (c) 2016-2018 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -123,19 +122,15 @@ public:
     }
 
     //! Implement serialization, as if this was a byte vector.
-    unsigned int GetSerializeSize(int nType, int nVersion) const
-    {
-        return size() + 1;
-    }
     template <typename Stream>
-    void Serialize(Stream& s, int nType, int nVersion) const
+    void Serialize(Stream& s) const
     {
         unsigned int len = size();
         ::WriteCompactSize(s, len);
         s.write((char*)vch, len);
     }
     template <typename Stream>
-    void Unserialize(Stream& s, int nType, int nVersion)
+    void Unserialize(Stream& s)
     {
         unsigned int len = ::ReadCompactSize(s);
         if (len <= PUBLIC_KEY_SIZE) {

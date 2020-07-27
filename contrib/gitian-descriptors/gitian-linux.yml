@@ -1,5 +1,5 @@
 ---
-name: "rapids-linux-4.1"
+name: "rapids-linux-4.2"
 enable_cache: true
 distro: "ubuntu"
 suites:

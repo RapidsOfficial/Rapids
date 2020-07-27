@@ -48,7 +48,7 @@
 #define THIN_SP_UTF8 REAL_THIN_SP_UTF8
 #define THIN_SP_HTML HTML_HACK_SP
 
-/** RPD unit definitions. Encapsulates parsing and formatting
+/** Rapids unit definitions. Encapsulates parsing and formatting
    and serves as list model for drop-down selection boxes.
 */
 class BitcoinUnits : public QAbstractListModel
@@ -58,7 +58,7 @@ class BitcoinUnits : public QAbstractListModel
 public:
     explicit BitcoinUnits(QObject* parent);
 
-    /** RPD units.
+    /** Rapids units.
       @note Source: https://en.bitcoin.it/wiki/Units . Please add only sensible ones
      */
     enum Unit {
@@ -84,7 +84,7 @@ public:
     //! Identifier, e.g. for image names
     static QString id(int unit);
     //! Short name
-    static QString name(int unit, bool isZrpd = false);
+    static QString name(int unit);
     //! Longer description
     static QString description(int unit);
     //! Number of Satoshis (1e-8) per unit
@@ -98,8 +98,8 @@ public:
     static QString formatWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
     static QString formatHtmlWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard);
     //! Format as string (with unit) but floor value up to "digits" settings
-    static QString floorWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = false, bool isZRPD = false);
-    static QString floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = false, bool isZRPD = false);
+    static QString floorWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = false);
+    static QString floorHtmlWithUnit(int unit, const CAmount& amount, bool plussign = false, SeparatorStyle separators = separatorStandard, bool cleanRemainderZeros = false);
     //! Parse string to coin amount
     static bool parse(int unit, const QString& value, CAmount* val_out);
     //! Gets title for amount column including current display unit if optionsModel reference available */

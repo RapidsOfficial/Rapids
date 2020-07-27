@@ -12,6 +12,7 @@
 #ifndef BITCOIN_LOGGING_H
 #define BITCOIN_LOGGING_H
 
+#include "fs.h"
 #include "tinyformat.h"
 
 #include <atomic>
@@ -20,7 +21,6 @@
 #include <mutex>
 #include <vector>
 
-#include <boost/filesystem.hpp>
 
 static const bool DEFAULT_LOGTIMEMICROS = false;
 static const bool DEFAULT_LOGIPS        = false;
@@ -49,21 +49,20 @@ namespace BCLog {
         ESTIMATEFEE = (1 <<  8),
         ADDRMAN     = (1 <<  9),
         SELECTCOINS = (1 << 10),
-		SYNC		= (1 << 11),
-        REINDEX     = (1 << 12),
-        CMPCTBLOCK  = (1 << 13),
-        RAND        = (1 << 14),
-        PRUNE       = (1 << 15),
-        PROXY       = (1 << 16),
-        MEMPOOLREJ  = (1 << 17),
-        LIBEVENT    = (1 << 18),
-        COINDB      = (1 << 19),
-        QT          = (1 << 20),
-        LEVELDB     = (1 << 21),
-        STAKING     = (1 << 22),
-        MASTERNODE  = (1 << 23),
-        MNBUDGET    = (1 << 24),
-        LEGACYZC    = (1 << 25),
+        REINDEX     = (1 << 11),
+        CMPCTBLOCK  = (1 << 12),
+        RAND        = (1 << 13),
+        PRUNE       = (1 << 14),
+        PROXY       = (1 << 15),
+        MEMPOOLREJ  = (1 << 16),
+        LIBEVENT    = (1 << 17),
+        COINDB      = (1 << 18),
+        QT          = (1 << 19),
+        LEVELDB     = (1 << 20),
+        STAKING     = (1 << 21),
+        MASTERNODE  = (1 << 22),
+        MNBUDGET    = (1 << 23),
+        LEGACYZC    = (1 << 24),
         ALL         = ~(uint32_t)0,
     };
 
@@ -93,7 +92,7 @@ namespace BCLog {
         bool m_log_timestamps = DEFAULT_LOGTIMESTAMPS;
         bool m_log_time_micros = DEFAULT_LOGTIMEMICROS;
 
-        boost::filesystem::path m_file_path;
+        fs::path m_file_path;
         std::atomic<bool> m_reopen_file{false};
 
         /** Send a string to the log output */

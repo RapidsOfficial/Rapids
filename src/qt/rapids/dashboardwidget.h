@@ -1,4 +1,4 @@
-// Copyright (c) 2019 The PIVX developers
+// Copyright (c) 2019-2020 The PIVX developers
 // Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
@@ -82,9 +82,7 @@ public:
     QMap<int, std::pair<qint64, qint64>> amountsByCache;
     qreal maxValue = 0;
     qint64 totalRpd = 0;
-    qint64 totalZrpd = 0;
     QList<qreal> valuesRpd;
-    QList<qreal> valueszRpd;
     QStringList xLabels;
 };
 
@@ -164,7 +162,6 @@ private:
     int yearFilter = 0;
     int monthFilter = 0;
     int dayStart = 1;
-    bool hasZrpdStakes = false;
 
     ChartData* chartData = nullptr;
     bool hasStakes = false;

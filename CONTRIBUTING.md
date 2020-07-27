@@ -1,7 +1,7 @@
-Contributing to Rapids Core
+Contributing to Rapids
 ============================
 
-The Rapids Core project operates an open contributor model where anyone is
+The Rapids project operates an open contributor model where anyone is
 welcome to contribute towards development in the form of peer review, testing
 and patches. This document explains the practical process and guidelines for
 contributing.
@@ -84,7 +84,7 @@ Examples:
     Trivial: Fix typo in init.cpp
 
 Note that translations should not be submitted as pull requests, please see
-[Translation Process](https://github.com/RapidsOfficial/Rapids/blob/develop/doc/translation_process.md)
+[Translation Process](https://github.com/RapidsOfficial/rapids/blob/master/doc/translation_process.md)
 for more information on helping with translations.
 
 If a pull request is not to be considered for merging (yet), please
@@ -203,10 +203,10 @@ workload on reviewing.
 "Decision Making" Process
 -------------------------
 
-The following applies to code changes to the Rapids Core project, and is not to be
+The following applies to code changes to the Rapids project, and is not to be
 confused with overall Rapids Network Protocol consensus changes.
 
-Whether a pull request is merged into Rapids Core rests with the project merge
+Whether a pull request is merged into Rapids rests with the project merge
 maintainers and ultimately the project lead.
 
 Maintainers will take into consideration if a patch is in line with the general
@@ -303,7 +303,7 @@ about:
 Release Policy
 --------------
 
-The project leader is the release manager for each Rapids Core release.
+The project leader is the release manager for each Rapids release.
 
 Copyright
 ---------

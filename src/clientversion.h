@@ -24,7 +24,7 @@
 #define DO_STRINGIZE(X) #X
 
 //! Copyright string used in Windows .rc files
-#define COPYRIGHT_STR "2009-" STRINGIZE(COPYRIGHT_YEAR) " The Bitcoin Core Developers, 2014-" STRINGIZE(COPYRIGHT_YEAR) " The Dash Core Developers, 2015-" STRINGIZE(COPYRIGHT_YEAR) " The PIVX Developers, 2018-" STRINGIZE(COPYRIGHT_YEAR) " The Rapids Developers."
+#define COPYRIGHT_STR "2009-" STRINGIZE(COPYRIGHT_YEAR) " The Bitcoin Core Developers, 2014-" STRINGIZE(COPYRIGHT_YEAR) " The Dash Core Developers, 2015-" STRINGIZE(COPYRIGHT_YEAR) " The Rapids Developers"
 
 /**
  * rapidsd-res.rc includes this file, but it cannot cope with real c++ code.

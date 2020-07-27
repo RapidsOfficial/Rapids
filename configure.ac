@@ -1,13 +1,13 @@
 dnl require autoconf 2.60 (AS_ECHO/AS_ECHO_N)
 AC_PREREQ([2.60])
-define(_CLIENT_VERSION_MAJOR, 2)
+define(_CLIENT_VERSION_MAJOR, 3)
 define(_CLIENT_VERSION_MINOR, 0)
 define(_CLIENT_VERSION_REVISION, 0)
 define(_CLIENT_VERSION_BUILD, 0)
 define(_CLIENT_VERSION_RC, 0)
 define(_CLIENT_VERSION_IS_RELEASE, true)
 define(_COPYRIGHT_YEAR, 2020)
-AC_INIT([Rapids],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_REVISION, m4_if(_CLIENT_VERSION_BUILD, [0], [], _CLIENT_VERSION_BUILD))m4_if(_CLIENT_VERSION_RC, [0], [], [rc]_CLIENT_VERSION_RC),[https://github.com/RapidsOfficial/Rapids/issues],[rapids],[https://www.rapidsnetwork.io/])
+AC_INIT([Rapids],m4_join([.], _CLIENT_VERSION_MAJOR, _CLIENT_VERSION_MINOR, _CLIENT_VERSION_REVISION, m4_if(_CLIENT_VERSION_BUILD, [0], [], _CLIENT_VERSION_BUILD))m4_if(_CLIENT_VERSION_RC, [0], [], [rc]_CLIENT_VERSION_RC),[https://github.com/RapidsOfficial/rapids/issues],[rapids],[https://rapids.org/])
 AC_CONFIG_SRCDIR([src/main.cpp])
 AC_CONFIG_HEADERS([src/config/rapids-config.h])
 AC_CONFIG_AUX_DIR([build-aux])
@@ -132,7 +132,7 @@ AC_ARG_ENABLE(gui-tests,
 AC_ARG_ENABLE(bench,
     AS_HELP_STRING([--disable-bench],[do not compile benchmarks (default is to compile)]),
     [use_bench=$enableval],
-    [use_bench=no])
+    [use_bench=yes])
 
 AC_ARG_ENABLE([extended-functional-tests],
     AS_HELP_STRING([--enable-extended-functional-tests],[enable expensive functional tests when using lcov (default no)]),
@@ -1407,7 +1407,7 @@ AM_CONDITIONAL([TARGET_DARWIN], [test x$TARGET_OS = xdarwin])
 AM_CONDITIONAL([BUILD_DARWIN], [test x$BUILD_OS = xdarwin])
 AM_CONDITIONAL([TARGET_WINDOWS], [test x$TARGET_OS = xwindows])
 AM_CONDITIONAL([ENABLE_WALLET],[test x$enable_wallet = xyes])
-AM_CONDITIONAL([ENABLE_TESTS],[test x$BUILD_TEST = xyes])
+AM_CONDITIONAL([ENABLE_TESTS],[test x$BUILD_TEST = xno])
 AM_CONDITIONAL([ENABLE_QT],[test x$bitcoin_enable_qt = xyes])
 AM_CONDITIONAL([ENABLE_QT_TESTS],[test x$BUILD_TEST_QT = xyes])
 AM_CONDITIONAL([ENABLE_BENCH],[test x$use_bench = xyes])
@@ -1475,13 +1475,10 @@ AC_SUBST(PROTOBUF_LIBS)
 AC_SUBST(QR_LIBS)
 AC_SUBST(USE_NUM_GMP)
 AC_SUBST(USE_NUM_OPENSSL)
-AC_CONFIG_FILES([Makefile src/Makefile doc/man/Makefile share/setup.nsi share/qt/Info.plist test/config.ini])
+AC_CONFIG_FILES([Makefile src/Makefile doc/man/Makefile share/setup.nsi share/qt/Info.plist])
 AC_CONFIG_FILES([contrib/devtools/split-debug.sh],[chmod +x contrib/devtools/split-debug.sh])
 AM_COND_IF([HAVE_DOXYGEN], [AC_CONFIG_FILES([doc/Doxyfile])])
 AC_CONFIG_LINKS([contrib/filter-lcov.py:contrib/filter-lcov.py])
-AC_CONFIG_LINKS([test/functional/test_runner.py:test/functional/test_runner.py])
-AC_CONFIG_LINKS([test/util/bitcoin-util-test.py:test/util/bitcoin-util-test.py])
-AC_CONFIG_LINKS([test/util/rpcauth-test.py:test/util/rpcauth-test.py])
 
 dnl boost's m4 checks do something really nasty: they export these vars. As a
 dnl result, they leak into secp256k1's configure and crazy things happen.
@@ -1523,14 +1520,6 @@ case $host in
      's/^hardcode_libdir_flag_spec.*$'/'hardcode_libdir_flag_spec=" -D__LIBTOOL_IS_A_FOOL__ "/'
      mv libtool-2 libtool
      chmod 755 libtool
-   ;;
-esac
-
-dnl Replace the BUILDDIR path with the correct Windows path if compiling on Native Windows
-case ${OS} in
-   *Windows*)
-     sed  's/BUILDDIR="\/\([[a-z]]\)/BUILDDIR="\1:/'  test/config.ini > test/config-2.ini
-     mv test/config-2.ini test/config.ini
    ;;
 esac
 
