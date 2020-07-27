@@ -12,7 +12,6 @@ src/rapidsd
 src/rapids-cli
 src/rapids-tx
 src/bench/bench_rapids
-
 src/qt/test/test_rapids-qt
 
 # autoreconf
@@ -137,4 +136,3 @@ ui_*
 build*
 rapidsd.*
 rapidsd-new-gui.*
-

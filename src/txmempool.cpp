@@ -497,123 +497,45 @@ bool CTxMemPool::removeAddressIndex(const uint256 txhash)
 	return true;
 }
 
-void CTxMemPool::addAddressIndex(const CTxMemPoolEntry &entry, const CCoinsViewCache &view)
-{
-    LOCK(cs);
-    const CTransaction& tx = entry.GetTx();
-    std::vector<CMempoolAddressDeltaKey> inserted;
-
-    uint256 txhash = tx.GetHash();
-    for (unsigned int j = 0; j < tx.vin.size(); j++) {
-        const CTxIn input = tx.vin[j];
-        const CTxOut &prevout = view.GetOutputFor(input);
-        if (prevout.scriptPubKey.IsPayToScriptHash()) {
-            std::vector<unsigned char> hashBytes(prevout.scriptPubKey.begin() + 2, prevout.scriptPubKey.begin() + 22);
-            CMempoolAddressDeltaKey key(2, uint160(hashBytes), txhash, j, 1);
-            CMempoolAddressDelta delta(entry.GetTime(), prevout.nValue * -1, input.prevout.hash, input.prevout.n);
-            mapAddress.insert(std::make_pair(key, delta));
-            inserted.push_back(key);
-        } else if (prevout.scriptPubKey.IsPayToPublicKeyHash()) {
-            std::vector<unsigned char> hashBytes(prevout.scriptPubKey.begin() + 3, prevout.scriptPubKey.begin() + 23);
-            CMempoolAddressDeltaKey key(1, uint160(hashBytes), txhash, j, 1);
-            CMempoolAddressDelta delta(entry.GetTime(), prevout.nValue * -1, input.prevout.hash, input.prevout.n);
-            mapAddress.insert(std::make_pair(key, delta));
-            inserted.push_back(key);
-        }
-    }
-
-    for (unsigned int k = 0; k < tx.vout.size(); k++) {
-        const CTxOut &out = tx.vout[k];
-        if (out.scriptPubKey.IsPayToScriptHash()) {
-            std::vector<unsigned char> hashBytes(out.scriptPubKey.begin() + 2, out.scriptPubKey.begin() + 22);
-            CMempoolAddressDeltaKey key(2, uint160(hashBytes), txhash, k, 0);
-            mapAddress.insert(std::make_pair(key, CMempoolAddressDelta(entry.GetTime(), out.nValue)));
-            inserted.push_back(key);
-        } else if (out.scriptPubKey.IsPayToPublicKeyHash()) {
-            std::vector<unsigned char> hashBytes(out.scriptPubKey.begin() + 3, out.scriptPubKey.begin() + 23);
-            std::pair<addressDeltaMap::iterator,bool> ret;
-            CMempoolAddressDeltaKey key(1, uint160(hashBytes), txhash, k, 0);
-            mapAddress.insert(std::make_pair(key, CMempoolAddressDelta(entry.GetTime(), out.nValue)));
-            inserted.push_back(key);
-        }
-    }
-
-    mapAddressInserted.insert(std::make_pair(txhash, inserted));
-}
-
-bool CTxMemPool::getAddressIndex(std::vector<std::pair<uint160, int> > &addresses,
-                                 std::vector<std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> > &results)
-{
-    LOCK(cs);
-    for (std::vector<std::pair<uint160, int> >::iterator it = addresses.begin(); it != addresses.end(); it++) {
-        addressDeltaMap::iterator ait = mapAddress.lower_bound(CMempoolAddressDeltaKey((*it).second, (*it).first));
-        while (ait != mapAddress.end() && (*ait).first.addressBytes == (*it).first && (*ait).first.type == (*it).second) {
-            results.push_back(*ait);
-            ait++;
-        }
-    }
-    return true;
-}
-
-bool CTxMemPool::removeAddressIndex(const uint256 txhash)
-{
-    LOCK(cs);
-    addressDeltaMapInserted::iterator it = mapAddressInserted.find(txhash);
-
-    if (it != mapAddressInserted.end()) {
-        std::vector<CMempoolAddressDeltaKey> keys = (*it).second;
-        for (std::vector<CMempoolAddressDeltaKey>::iterator mit = keys.begin(); mit != keys.end(); mit++) {
-            mapAddress.erase(*mit);
-        }
-        mapAddressInserted.erase(it);
-    }
-
-    return true;
-}
 
 void CTxMemPool::remove(const CTransaction& origTx, std::list<CTransaction>& removed, bool fRecursive)
 {
-    // Remove transaction from memory pool
-    {
-        LOCK(cs);
-        std::deque<uint256> txToRemove;
-        txToRemove.push_back(origTx.GetHash());
-        if (fRecursive && !mapTx.count(origTx.GetHash())) {
-            // If recursively removing but origTx isn't in the mempool
-            // be sure to remove any children that are in the pool. This can
-            // happen during chain re-orgs if origTx isn't re-accepted into
-            // the mempool for any reason.
-            for (unsigned int i = 0; i < origTx.vout.size(); i++) {
-                std::map<COutPoint, CInPoint>::iterator it = mapNextTx.find(COutPoint(origTx.GetHash(), i));
-                if (it == mapNextTx.end())
-                    continue;
-                txToRemove.push_back(it->second.ptx->GetHash());
-            }
-        }
-        while (!txToRemove.empty()) {
-            uint256 hash = txToRemove.front();
-            txToRemove.pop_front();
-            if (!mapTx.count(hash))
-                continue;
-            const CTransaction& tx = mapTx[hash].GetTx();
-            if (fRecursive) {
-                for (unsigned int i = 0; i < tx.vout.size(); i++) {
-                    std::map<COutPoint, CInPoint>::iterator it = mapNextTx.find(COutPoint(hash, i));
-                    if (it == mapNextTx.end())
-                        continue;
-                    txToRemove.push_back(it->second.ptx->GetHash());
-                }
-            }
-            for (const CTxIn& txin : tx.vin)
-                mapNextTx.erase(txin.prevout);
-
-            removed.push_back(tx);
-            totalTxSize -= mapTx[hash].GetTxSize();
-            mapTx.erase(hash);
-            nTransactionsUpdated++;
-            removeAddressIndex(hash);
-        }
-    }
+	// Remove transaction from memory pool
+	{
+		LOCK(cs);
+		setEntries txToRemove;
+		txiter origit = mapTx.find(origTx.GetHash());
+		if (origit != mapTx.end()) {
+			txToRemove.insert(origit);
+		}
+		else if (fRecursive) {
+			// If recursively removing but origTx isn't in the mempool
+			// be sure to remove any children that are in the pool. This can
+			// happen during chain re-orgs if origTx isn't re-accepted into
+			// the mempool for any reason.
+			for (unsigned int i = 0; i < origTx.vout.size(); i++) {
+				std::map<COutPoint, CInPoint>::iterator it = mapNextTx.find(COutPoint(origTx.GetHash(), i));
+				if (it == mapNextTx.end())
+					continue;
+				txiter nextit = mapTx.find(it->second.ptx->GetHash());
+				assert(nextit != mapTx.end());
+				txToRemove.insert(nextit);
+			}
+		}
+		setEntries setAllRemoves;
+		if (fRecursive) {
+			for (const txiter& it : txToRemove) {
+				CalculateDescendants(it, setAllRemoves);
+			}
+		}
+		else {
+			setAllRemoves.swap(txToRemove);
+		}
+		for (const txiter& it : setAllRemoves) {
+			removed.push_back(it->GetTx());
+		}
+		RemoveStaged(setAllRemoves);
+	}
 }
 
 void CTxMemPool::removeCoinbaseSpends(const CCoinsViewCache* pcoins, unsigned int nMemPoolHeight)

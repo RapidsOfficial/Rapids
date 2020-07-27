@@ -34,7 +34,6 @@ extern std::vector<CSporkDef> sporkDefs;
 
 bool getAddressesFromParams(const UniValue& params, std::vector<std::pair<uint160, int> > &addresses)
 {
-
     if (params[0].isStr()) {
         CBitcoinAddress address(params[0].get_str());
         uint160 hashBytes;
@@ -832,7 +831,6 @@ bool heightSort(std::pair<CAddressUnspentKey, CAddressUnspentValue> a,
 bool timestampSort(std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> a,
 	std::pair<CMempoolAddressDeltaKey, CMempoolAddressDelta> b) {
 	return a.second.time < b.second.time;
-
 }
 
 UniValue getaddressmempool(const UniValue& params, bool fHelp)

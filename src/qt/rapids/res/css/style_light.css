@@ -977,7 +977,7 @@ HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH*/
 }
 
 *[cssClass="btn-title-purple"] {
-    color:#0A0A0A;
+    color:#B0B0B0;
     font-size:22px;
 }
 
@@ -1638,11 +1638,11 @@ QPushButton[cssClass="btn-text-primary"] {
 }
 
 QPushButton[cssClass="btn-text-primary"]:hover {
-    color: #0A0A0A;
+    color: #A6A6A6;
 }
 
 QPushButton[cssClass="btn-text-primary"]:pressed {
-    color: #B0B0B0;
+    color: #969696;
 }
 
 
