@@ -65,7 +65,6 @@ public:
      */
     uint256& SetCompact(uint32_t nCompact, bool* pfNegative = nullptr, bool* pfOverflow = nullptr);
     uint32_t GetCompact(bool fNegative = false) const;
-    uint64_t GetHash(const uint256& salt) const;
 
     uint64_t GetUint64(int pos) const
     {

@@ -362,9 +362,6 @@ public:
      */
     arith_uint256& SetCompact(uint32_t nCompact, bool *pfNegative = NULL, bool *pfOverflow = NULL);
     uint32_t GetCompact(bool fNegative = false) const;
-
-    uint64_t GetHash(const arith_uint256& salt) const;
-
     uint32_t Get32(int n = 0) const { return pn[2 * n]; }
 };
 
@@ -376,8 +373,6 @@ public:
     arith_uint512(uint64_t b) : base_uint<512>(b) {}
     explicit arith_uint512(const std::string& str) : base_uint<512>(str) {}
     explicit arith_uint512(const std::vector<unsigned char>& vch) : base_uint<512>(vch) {}
-
-    uint64_t GetHash(const arith_uint256& salt) const;
 
     //friend arith_uint512 UintToArith512(const blob_uint512 &a);
     //friend blob_uint512 ArithToUint512(const arith_uint512 &a);

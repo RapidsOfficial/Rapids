@@ -268,22 +268,23 @@ public:
     }
 };
 
-class CCoinsKeyHasher
+class SaltedTxidHasher
 {
 private:
-    uint256 salt;
+    /** Salt */
+    uint64_t k0, k1;
 
 public:
-    CCoinsKeyHasher();
+    SaltedTxidHasher();
 
     /**
      * This *must* return size_t. With Boost 1.46 on 32-bit systems the
      * unordered_map will behave unpredictably if the custom hasher returns a
      * uint64_t, resulting in failures when syncing the chain (#4634).
      */
-    size_t operator()(const uint256& key) const
+    size_t operator()(const uint256& txid) const
     {
-        return key.GetHash(salt);
+        return SipHashUint256(k0, k1, txid);
     }
 };
 
@@ -299,7 +300,7 @@ struct CCoinsCacheEntry {
     CCoinsCacheEntry() : coins(), flags(0) {}
 };
 
-typedef boost::unordered_map<uint256, CCoinsCacheEntry, CCoinsKeyHasher> CCoinsMap;
+typedef boost::unordered_map<uint256, CCoinsCacheEntry, SaltedTxidHasher> CCoinsMap;
 
 struct CCoinsStats {
     int nHeight;
