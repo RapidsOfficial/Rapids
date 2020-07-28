@@ -430,7 +430,7 @@ public:
     uint64_t Finalize() const;
 };
 
-uint64_t SipHashUint256(uint64_t k0, uint64_t k1, const blob_uint256& val);
+uint64_t SipHashUint256(uint64_t k0, uint64_t k1, const uint256& val);
 
 #endif // PIVX_HASH_H
 
