@@ -538,6 +538,11 @@ libsapling_a_SOURCES = \
   sapling/crypter_sapling.cpp \
   sapling/saplingscriptpubkeyman.cpp
 
+if GLIBC_BACK_COMPAT
+libsapling_a_SOURCES += compat/glibc_compat.cpp
+AM_LDFLAGS += $(COMPAT_LDFLAGS)
+endif
+
 # cli: shared between pivx-cli and pivx-qt
 libbitcoin_cli_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES)
 libbitcoin_cli_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)

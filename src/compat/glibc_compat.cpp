@@ -9,6 +9,9 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
+#include <pthread.h>
+#include <stdlib.h>
 
 #if defined(HAVE_SYS_SELECT_H)
 #include <sys/select.h>
@@ -75,3 +78,31 @@ extern "C" float __wrap_log2f(float x)
 {
     return log2f_old(x);
 }
+
+/* glibc-internal users use __explicit_bzero_chk, and explicit_bzero
+redirects to that.  */
+#undef explicit_bzero
+/* Set LEN bytes of S to 0.  The compiler will not delete a call to
+this function, even if S is dead after the call.  */
+void explicit_bzero (void *s, size_t len)
+{
+    memset (s, '\0', len);
+    /* Compiler barrier.  */
+    asm volatile ("" ::: "memory");
+}
+
+// Redefine explicit_bzero_chk
+void __explicit_bzero_chk (void *dst, size_t len, size_t dstlen)
+{
+    /* Inline __memset_chk to avoid a PLT reference to __memset_chk.  */
+    if (__glibc_unlikely (dstlen < len))
+        __chk_fail ();
+    memset (dst, '\0', len);
+    /* Compiler barrier.  */
+    asm volatile ("" ::: "memory");
+}
+/* libc-internal references use the hidden
+__explicit_bzero_chk_internal symbol.  This is necessary if
+__explicit_bzero_chk is implemented as an IFUNC because some
+targets do not support hidden references to IFUNC symbols.  */
+#define strong_alias (__explicit_bzero_chk, __explicit_bzero_chk_internal)
