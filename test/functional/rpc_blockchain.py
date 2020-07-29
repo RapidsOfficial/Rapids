@@ -69,6 +69,10 @@ class BlockchainTest(PivxTestFramework):
         assert_equal(res['transactions'], 200)
         assert_equal(res['height'], 200)
         assert_equal(res['txouts'], 200)
+        assert_equal(res['bestblock'], node.getblockhash(200))
+        size = res['disk_size']
+        assert_greater_than_or_equal(size, 6400)
+        assert_greater_than_or_equal(64000, size)
         assert_equal(len(res['bestblock']), 64)
         assert_equal(len(res['hash_serialized_2']), 64)
 
