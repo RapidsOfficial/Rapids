@@ -13,11 +13,9 @@
 #include "serialize.h"
 
 /** Undo information for a CTxIn
- *
- *  Contains the prevout's CTxOut being spent, and if this was the
- *  last output of the affected transaction, its metadata as well
- *  (coinbase/coinstake or not, height, transaction version).
- *  Earlier versions also stored the transaction version.
+ *  Contains the prevout's CTxOut being spent, and its metadata as well
+ *  (coinbase/coinstake or not, height). Earlier versions also stored
+ *  the transaction version.
  */
 class CTxInUndo
 {
