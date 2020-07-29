@@ -659,11 +659,6 @@ AX_GCC_FUNC_ATTRIBUTE([dllexport])
 AX_GCC_FUNC_ATTRIBUTE([dllimport])
 
 if test x$use_glibc_compat != xno; then
-
-  #glibc absorbed clock_gettime in 2.17. librt (its previous location) is safe to link
-  #in anyway for back-compat.
-  AC_CHECK_LIB([rt],[clock_gettime],, AC_MSG_ERROR(librt missing))
-
   AX_CHECK_LINK_FLAG([[-Wl,--wrap=__divmoddi4]], [COMPAT_LDFLAGS="$COMPAT_LDFLAGS -Wl,--wrap=__divmoddi4"])
   AX_CHECK_LINK_FLAG([[-Wl,--wrap=log2f]], [COMPAT_LDFLAGS="$COMPAT_LDFLAGS -Wl,--wrap=log2f"])
 else
