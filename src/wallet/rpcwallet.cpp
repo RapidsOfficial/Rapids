@@ -673,22 +673,22 @@ UniValue liststakingaddresses(const JSONRPCRequest& request)
     return ListaddressesForPurpose(AddressBook::AddressBookPurpose::COLD_STAKING);
 }
 
-UniValue listsaplingaddresses(const JSONRPCRequest& request)
+UniValue listshieldedaddresses(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw std::runtime_error(
-                "listsaplingaddresses ( includeWatchonly )\n"
-                "\nReturns the list of Sapling shielded addresses belonging to the wallet.\n"
+                "listshieldedaddresses ( includeWatchonly )\n"
+                "\nReturns the list of shielded addresses belonging to the wallet.\n"
                 "\nArguments:\n"
                 "1. includeWatchonly (bool, optional, default=false) Also include watchonly addresses (see 'importviewingkey')\n"
                 "\nResult:\n"
                 "[                     (json array of string)\n"
-                "  \"addr\"           (string) a sapling address belonging to the wallet\n"
+                "  \"addr\"           (string) a shielded address belonging to the wallet\n"
                 "  ,...\n"
                 "]\n"
                 "\nExamples:\n"
-                + HelpExampleCli("listsaplingaddresses", "")
-                + HelpExampleRpc("listsaplingaddresses", "")
+                + HelpExampleCli("listshieldedaddresses", "")
+                + HelpExampleRpc("listshieldedaddresses", "")
         );
 
     EnsureWallet();
@@ -5078,7 +5078,7 @@ const CRPCCommand vWalletRPCCommands[] =
 
         /** Sapling functions */
         { "wallet",             "getnewshieldedaddress",     &getnewshieldedaddress,     true  },
-        { "wallet",             "listsaplingaddresses",     &listsaplingaddresses,     false },
+        { "wallet",             "listshieldedaddresses",     &listshieldedaddresses,     false },
 
         /** Account functions (deprecated) */
         { "wallet",             "getaccountaddress",        &getaccountaddress,        true  },
