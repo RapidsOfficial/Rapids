@@ -121,6 +121,30 @@ public:
     static QList<TransactionRecord> decomposeTransaction(const CWallet* wallet, const CWalletTx& wtx);
 
     /// Helpers
+    static bool decomposeCoinStake(const CWallet* wallet, const CWalletTx& wtx,
+                                   const CAmount& nCredit, const CAmount& nDebit, bool fZSpendFromMe,
+                                   QList<TransactionRecord>& parts);
+
+    static bool decomposeZcSpendTx(const CWallet* wallet, const CWalletTx& wtx,
+                                    const CAmount& nCredit, const CAmount& nDebit, bool fZSpendFromMe,
+                                    QList<TransactionRecord>& parts);
+
+    static bool decomposeP2CS(const CWallet* wallet, const CWalletTx& wtx,
+                                    const CAmount& nCredit, const CAmount& nDebit,
+                                    QList<TransactionRecord>& parts);
+
+    static bool decomposeCreditTransaction(const CWallet* wallet, const CWalletTx& wtx,
+                                    QList<TransactionRecord>& parts);
+
+    static bool decomposeSendToSelfTransaction(const CWalletTx& wtx, const CAmount& nCredit,
+                                    const CAmount& nDebit, bool involvesWatchAddress,
+                                    QList<TransactionRecord>& parts);
+
+    static bool decomposeDebitTransaction(const CWallet* wallet, const CWalletTx& wtx,
+                                                      const CAmount& nDebit, bool involvesWatchAddress,
+                                                      QList<TransactionRecord>& parts);
+
+    static std::string getValueOrReturnEmpty(const std::map<std::string, std::string>& mapValue, const std::string& key);
     static bool ExtractAddress(const CScript& scriptPubKey, bool fColdStake, std::string& addressStr);
     static void loadHotOrColdStakeOrContract(const CWallet* wallet, const CWalletTx& wtx,
                                             TransactionRecord& record, bool isContract = false);
