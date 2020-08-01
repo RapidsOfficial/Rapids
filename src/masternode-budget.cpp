@@ -213,7 +213,7 @@ void CBudgetManager::SubmitFinalBudget()
         // Get our change address
         CReserveKey reservekey(pwalletMain);
         // Send the tx to the network. Do NOT use SwiftTx, locking might need too much time to propagate, especially for testnet
-        const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, "NO-ix");
+        const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, g_connman.get(), "NO-ix");
         if (res.status != CWallet::CommitStatus::OK)
             return;
         tx = (CTransaction)wtx;

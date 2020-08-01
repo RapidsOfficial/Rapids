@@ -479,7 +479,7 @@ WalletModel::SendCoinsReturn WalletModel::sendCoins(WalletModelTransaction& tran
         }
 
         CReserveKey* keyChange = transaction.getPossibleKeyChange();
-        const CWallet::CommitResult& res = wallet->CommitTransaction(*newTx, *keyChange, (recipients[0].useSwiftTX) ? NetMsgType::IX : NetMsgType::TX);
+        const CWallet::CommitResult& res = wallet->CommitTransaction(*newTx, *keyChange, g_connman.get(), (recipients[0].useSwiftTX) ? NetMsgType::IX : NetMsgType::TX);
         if (res.status != CWallet::CommitStatus::OK) {
             return SendCoinsReturn(res);
         }

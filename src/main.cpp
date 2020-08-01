@@ -4228,7 +4228,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, const CBlock* pblock
 
         // If turned on Auto Combine will scan wallet for dust to combine
         if (pwalletMain->fCombineDust)
-            pwalletMain->AutoCombineDust();
+            pwalletMain->AutoCombineDust(connman);
     }
 
     LogPrintf("%s : ACCEPTED Block %ld in %ld milliseconds with size=%d\n", __func__, GetHeight(), GetTimeMillis() - nStartTime,
@@ -6258,7 +6258,7 @@ bool SendMessages(CNode* pto, CConnman& connman)
         // Except during reindex, importing and IBD, when old wallet
         // transactions become unconfirmed and spams other nodes.
         if (!fReindex && !fImporting && !IsInitialBlockDownload()) {
-            GetMainSignals().Broadcast();
+            GetMainSignals().Broadcast(&connman);
         }
 
         //
