@@ -11,6 +11,6 @@
 
 bool SignBlockWithKey(CBlock& block, const CKey& key);
 bool SignBlock(CBlock& block, const CKeyStore& keystore);
-bool CheckBlockSignature(const CBlock& block);
+bool CheckBlockSignature(const CBlock& block, const bool enableP2PKH);
 
 #endif //PIVX_BLOCKSIGNATURE_H

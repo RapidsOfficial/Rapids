@@ -501,7 +501,7 @@ CBlockTemplate* CreateNewBlockWithKey(CReserveKey& reservekey, CWallet* pwallet)
         return nullptr;
     }
 
-    CScript scriptPubKey = CScript() << ToByteVector(pubkey) << OP_CHECKSIG;
+    CScript scriptPubKey = GetScriptForDestination(pubkey.GetID());
     return CreateNewBlock(scriptPubKey, pwallet, false);
 }
 

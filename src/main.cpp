@@ -4100,14 +4100,19 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, const CBlock* pblock
 
     // Preliminary checks
     int64_t nStartTime = GetTimeMillis();
+    const Consensus::Params& consensus = Params().GetConsensus();
 
     // check block
     bool checked = CheckBlock(*pblock, state);
 
-    if (!CheckBlockSignature(*pblock))
+    // For now, we need the tip to know whether p2pkh block signatures are accepted or not.
+    // After 5.0, this can be removed and replaced by the enforcement block time.
+    const CBlockIndex* pindexPrev = chainActive.Tip();
+    const bool enableP2PKH = (pindexPrev) ? consensus.NetworkUpgradeActive(pindexPrev->nHeight + 1, Consensus::UPGRADE_V5_DUMMY) : false;
+    if (!CheckBlockSignature(*pblock, enableP2PKH))
         return error("%s : bad proof-of-stake block signature", __func__);
 
-    if (pblock->GetHash() != Params().GetConsensus().hashGenesisBlock && pfrom != NULL) {
+    if (pblock->GetHash() != consensus.hashGenesisBlock && pfrom != NULL) {
         //if we get this far, check if the prev block is our prev block, if not then request sync and return false
         BlockMap::iterator mi = mapBlockIndex.find(pblock->hashPrevBlock);
         if (mi == mapBlockIndex.end()) {
