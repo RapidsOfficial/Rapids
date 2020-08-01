@@ -948,6 +948,7 @@ void RPCConsole::showEvent(QShowEvent* event)
 
     // start PeerTableModel auto refresh
     clientModel->getPeerTableModel()->startAutoRefresh();
+    clientModel->startMasternodesTimer();
 }
 
 void RPCConsole::hideEvent(QHideEvent* event)
@@ -959,6 +960,7 @@ void RPCConsole::hideEvent(QHideEvent* event)
 
     // stop PeerTableModel auto refresh
     clientModel->getPeerTableModel()->stopAutoRefresh();
+    clientModel->stopMasternodesTimer();
 }
 
 void RPCConsole::showBackups()
@@ -1049,3 +1051,4 @@ void RPCConsole::showOrHideBanTableIfRequired()
     ui->banlistWidget->setVisible(visible);
     ui->banHeading->setVisible(visible);
 }
+
