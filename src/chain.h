@@ -139,7 +139,7 @@ enum BlockStatus {
      */
     BLOCK_VALID_TRANSACTIONS = 3,
 
-    //! Outputs do not overspend inputs, no double spends, coinbase output ok, immature coinbase spends, BIP30.
+    //! Outputs do not overspend inputs, no double spends, coinbase output ok, immature coinbase spends.
     //! Implies all parents are also at least CHAIN.
     BLOCK_VALID_CHAIN = 4,
 
