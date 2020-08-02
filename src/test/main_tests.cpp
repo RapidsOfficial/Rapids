@@ -33,7 +33,7 @@ std::vector<unsigned char> CreateDummyScriptSigWithKey(CPubKey pubKey)
 {
     std::vector<unsigned char> vchSig;
     const CScript scriptCode;
-    DummySignatureCreator(nullptr).CreateSig(vchSig, pubKey.GetID(), scriptCode);
+    DummySignatureCreator(nullptr).CreateSig(vchSig, pubKey.GetID(), scriptCode, SIGVERSION_BASE);
     return vchSig;
 }
 
