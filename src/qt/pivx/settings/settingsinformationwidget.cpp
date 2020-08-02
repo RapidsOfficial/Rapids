@@ -160,6 +160,21 @@ void SettingsInformationWidget::openNetworkMonitor()
     rpcConsole->showNetwork();
 }
 
+void SettingsInformationWidget::showEvent(QShowEvent *event)
+{
+    QWidget::showEvent(event);
+    if (clientModel) {
+        clientModel->startMasternodesTimer();
+    }
+}
+
+void SettingsInformationWidget::hideEvent(QHideEvent *event) {
+    QWidget::hideEvent(event);
+    if (clientModel) {
+        clientModel->stopMasternodesTimer();
+    }
+}
+
 SettingsInformationWidget::~SettingsInformationWidget()
 {
     delete ui;
