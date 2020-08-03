@@ -416,4 +416,21 @@ inline uint256 HashQuark(const T1 pbegin, const T1 pend)
 
 void scrypt_hash(const char* pass, unsigned int pLen, const char* salt, unsigned int sLen, char* output, unsigned int N, unsigned int r, unsigned int p, unsigned int dkLen);
 
+
+/** SipHash-2-4, using a uint64_t-based (rather than byte-based) interface */
+class CSipHasher
+{
+private:
+    uint64_t v[4];
+    int count;
+
+public:
+    CSipHasher(uint64_t k0, uint64_t k1);
+    CSipHasher& Write(uint64_t data);
+    uint64_t Finalize() const;
+};
+
+uint64_t SipHashUint256(uint64_t k0, uint64_t k1, const uint256& val);
+
 #endif // PIVX_HASH_H
+

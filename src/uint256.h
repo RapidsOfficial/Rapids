@@ -65,7 +65,19 @@ public:
      */
     uint256& SetCompact(uint32_t nCompact, bool* pfNegative = nullptr, bool* pfOverflow = nullptr);
     uint32_t GetCompact(bool fNegative = false) const;
-    uint64_t GetHash(const uint256& salt) const;
+
+    uint64_t GetUint64(int pos) const
+    {
+        const uint8_t* ptr = (uint8_t*) pn + pos * 8;
+        return ((uint64_t)ptr[0]) | \
+               ((uint64_t)ptr[1]) << 8 | \
+               ((uint64_t)ptr[2]) << 16 | \
+               ((uint64_t)ptr[3]) << 24 | \
+               ((uint64_t)ptr[4]) << 32 | \
+               ((uint64_t)ptr[5]) << 40 | \
+               ((uint64_t)ptr[6]) << 48 | \
+               ((uint64_t)ptr[7]) << 56;
+    }
 };
 
 /** 512-bit unsigned big integer. */
