@@ -10,6 +10,17 @@ if(CCACHE_PROGRAM)
     set(CXX_LAUNCHER "${CCACHE_PROGRAM}")
 endif()
 
+# Search for the cargo and rustc compilers required to build libzcashrust
+find_program(CARGO_PROGRAM cargo REQUIRED)
+if(CARGO_PROGRAM)
+    message(STATUS "Found cargo: ${CARGO_PROGRAM}")
+endif()
+
+find_program(RUSTC_PROGRAM rustc REQUIRED)
+if(RUSTC_PROGRAM)
+    message(STATUS "Found rustc: ${RUSTC_PROGRAM}")
+endif()
+
 project(PIVX)
 
 set(BDB_VER "4.8.30")
@@ -116,8 +127,6 @@ ExternalProject_Add (
         INSTALL_COMMAND ""
         )
 
-find_program(CARGO_PROGRAM cargo)
-find_program(RUSTC_PROGRAM rustc)
 ExternalProject_Add (
         libzcashrust
         SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}
