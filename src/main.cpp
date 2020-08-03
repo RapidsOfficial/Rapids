@@ -753,11 +753,10 @@ int GetInputAge(CTxIn& vin)
         CCoinsViewMemPool viewMempool(pcoinsTip, mempool);
         view.SetBackend(viewMempool); // temporarily switch cache backend to db+mempool view
 
-        const CCoins* coins = view.AccessCoins(vin.prevout.hash);
+        const Coin& coin = view.AccessCoin(vin.prevout);
 
-        if (coins) {
-            if (coins->nHeight < 0) return 0;
-            return WITH_LOCK(cs_main, return chainActive.Height() + 1) - coins->nHeight;
+        if (!coin.IsPruned()) {
+            return WITH_LOCK(cs_main, return chainActive.Height() + 1) - coin.nHeight;
         } else
             return -1;
     }
@@ -1011,8 +1010,8 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
             // Keep track of transactions that spend a coinbase, which we re-scan
             // during reorgs to ensure COINBASE_MATURITY is still met.
             for (const CTxIn &txin : tx.vin) {
-                const CCoins *coins = view.AccessCoins(txin.prevout.hash);
-                if (coins->IsCoinBase() || coins->IsCoinStake()) {
+                const Coin &coin = view.AccessCoin(txin.prevout);
+                if (coin.IsCoinBase() || coin.IsCoinStake()) {
                     fSpendsCoinbaseOrCoinstake = true;
                     break;
                 }
@@ -1258,8 +1257,8 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
         // during reorgs to ensure COINBASE_MATURITY is still met.
         bool fSpendsCoinbaseOrCoinstake = false;
         for (const CTxIn &txin : tx.vin) {
-            const CCoins *coins = view.AccessCoins(txin.prevout.hash);
-            if (coins->IsCoinBase() || coins->IsCoinStake()) {
+            const Coin& coin = view.AccessCoin(txin.prevout);
+            if (coin.IsCoinBase() || coin.IsCoinStake()) {
                 fSpendsCoinbaseOrCoinstake = true;
                 break;
             }
@@ -1404,15 +1403,8 @@ bool GetTransaction(const uint256& hash, CTransaction& txOut, uint256& hashBlock
         }
 
         if (fAllowSlow) { // use coin database to locate block that contains transaction, and scan it
-            int nHeight = -1;
-            {
-                CCoinsViewCache& view = *pcoinsTip;
-                const CCoins* coins = view.AccessCoins(hash);
-                if (coins)
-                    nHeight = coins->nHeight;
-            }
-            if (nHeight > 0)
-                pindexSlow = chainActive[nHeight];
+            const Coin& coin = AccessByTxid(*pcoinsTip, hash);
+            if (!coin.IsPruned()) pindexSlow = chainActive[coin.nHeight];
         }
     }
 
@@ -1755,19 +1747,12 @@ void UpdateCoins(const CTransaction& tx, CCoinsViewCache& inputs, CTxUndo& txund
     if (!tx.IsCoinBase() && !tx.HasZerocoinSpendInputs()) {
         txundo.vprevout.reserve(tx.vin.size());
         for (const CTxIn& txin : tx.vin) {
-            CCoinsModifier coins = inputs.ModifyCoins(txin.prevout.hash);
-            unsigned nPos = txin.prevout.n;
-
-            if (nPos >= coins->vout.size() || coins->vout[nPos].IsNull())
-                assert(false);
-            // mark an outpoint spent, and construct undo information
-            txundo.vprevout.emplace_back(coins->vout[nPos], coins->nHeight, coins->fCoinBase, coins->fCoinStake);
-            bool ret = coins->Spend(nPos);
-            assert(ret);
+            txundo.vprevout.emplace_back();
+            inputs.SpendCoin(txin.prevout, &txundo.vprevout.back());
         }
     }
     // add outputs
-    inputs.ModifyNewCoins(tx.GetHash())->FromTx(tx, nHeight);
+    AddCoins(inputs, tx, nHeight);
 }
 
 void UpdateCoins(const CTransaction& tx, CCoinsViewCache &inputs, int nHeight)
@@ -1869,19 +1854,19 @@ bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoins
     CAmount nFees = 0;
     for (unsigned int i = 0; i < tx.vin.size(); i++) {
         const COutPoint &prevout = tx.vin[i].prevout;
-        const CCoins *coins = inputs.AccessCoins(prevout.hash);
-        assert(coins);
+        const Coin& coin = inputs.AccessCoin(prevout);
+        assert(!coin.IsPruned());
 
         // If prev is coinbase, check that it's matured
-        if (coins->IsCoinBase() || coins->IsCoinStake()) {
-            if (nSpendHeight - coins->nHeight < consensus.nCoinbaseMaturity)
+        if (coin.IsCoinBase() || coin.IsCoinStake()) {
+            if (nSpendHeight - coin.nHeight < consensus.nCoinbaseMaturity)
                 return state.Invalid(false, REJECT_INVALID, "bad-txns-premature-spend-of-coinbase-coinstake",
-                        strprintf("tried to spend coinbase/coinstake at depth %d", nSpendHeight - coins->nHeight));
+                        strprintf("tried to spend coinbase/coinstake at depth %d", nSpendHeight - coin.nHeight));
         }
 
         // Check for negative or overflow input values
-        nValueIn += coins->vout[prevout.n].nValue;
-        if (!consensus.MoneyRange(coins->vout[prevout.n].nValue) || !consensus.MoneyRange(nValueIn))
+        nValueIn += coin.out.nValue;
+        if (!consensus.MoneyRange(coin.out.nValue) || !consensus.MoneyRange(nValueIn))
             return state.DoS(100, false, REJECT_INVALID, "bad-txns-inputvalues-outofrange");
     }
 
@@ -2051,26 +2036,22 @@ int ApplyTxInUndo(Coin&& undo, CCoinsViewCache& view, const COutPoint& out)
 {
     bool fClean = true;
 
-    CCoinsModifier coins = view.ModifyCoins(out.hash);
-    if (undo.nHeight != 0) {
-        if (!coins->IsPruned()) {
-            if (coins->fCoinBase != undo.fCoinBase || (uint32_t)coins->nHeight != undo.nHeight)
-                fClean = false; // metadata mismatch
+    if (view.HaveCoins(out)) fClean = false; // overwriting transaction output
+
+    if (undo.nHeight == 0) {
+        // Missing undo metadata (height and coinbase/coinstake). Older versions included this
+        // information only in undo records for the last spend of a transactions'
+        // outputs. This implies that it must be present for some other output of the same tx.
+        const Coin& alternate = AccessByTxid(view, out.hash);
+        if (!alternate.IsPruned()) {
+            undo.nHeight = alternate.nHeight;
+            undo.fCoinBase = alternate.fCoinBase;
+            undo.fCoinStake = alternate.fCoinStake;
+        } else {
+            return DISCONNECT_FAILED; // adding output for transaction without known metadata
         }
-        // restore height/coinbase tx metadata from undo data
-        coins->fCoinBase = undo.fCoinBase;
-        coins->fCoinStake = undo.fCoinStake;
-        coins->nHeight = undo.nHeight;
-    } else {
-        // Undo data does not contain height/coinbase. This should never happen
-        // for newly created undo entries. Previously, this data was only saved
-        // for the last spend of a transaction's outputs, so check IsPruned().
-        if (coins->IsPruned()) fClean = false; // adding output to missing transaction
     }
-    if (coins->IsAvailable(out.n)) fClean = false; // overwriting existing output
-    if (coins->vout.size() < out.n+1)
-        coins->vout.resize(out.n+1);
-    coins->vout[out.n] = std::move(undo.out);
+    view.AddCoin(out, std::move(undo), false);
 
     return fClean ? DISCONNECT_OK : DISCONNECT_UNCLEAN;
 }
@@ -2125,15 +2106,15 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
 
         // Check that all outputs are available and match the outputs in the block itself
         // exactly.
-        {
-            CCoinsModifier outs = view.ModifyCoins(hash);
-            outs->ClearUnspendable();
-
-            CCoins outsBlock(tx, pindex->nHeight);
-            if (*outs != outsBlock) fClean = false; // transaction mismatch
-
-            // remove outputs
-            outs->Clear();
+        for (size_t o = 0; o < tx.vout.size(); o++) {
+            if (!tx.vout[o].scriptPubKey.IsUnspendable()) {
+                COutPoint out(hash, o);
+                Coin coin;
+                view.SpendCoin(out, &coin);
+                if (tx.vout[o] != coin.out) {
+                    fClean = false; // transaction output mismatch
+                }
+            }
         }
 
         // not coinbases or zerocoinspend because they dont have traditional inputs
@@ -4047,17 +4028,10 @@ bool AcceptBlock(const CBlock& block, CValidationState& state, CBlockIndex** ppi
         const CCoinsViewCache coins(pcoinsTip);
         if(!stakeTxIn.HasZerocoinSpendInputs()) {
             for (const CTxIn& in: stakeTxIn.vin) {
-                const CCoins* coin = coins.AccessCoins(in.prevout.hash);
-
-                if(!coin && !isBlockFromFork){
+                const Coin& coin = coins.AccessCoin(in.prevout);
+                if(coin.IsPruned() && !isBlockFromFork){
                     // No coins on the main chain
-                    return error("%s: coin stake inputs not available on main chain, received height %d vs current %d", __func__, nHeight, chainActive.Height());
-                }
-                if(coin && !coin->IsAvailable(in.prevout.n)){
-                    if(!isBlockFromFork){
-                        // Coins not available
-                        return error("%s: coin stake inputs already spent in main chain", __func__);
-                    }
+                    return error("%s: coin stake inputs not-available/already-spent on main chain, received height %d vs current %d", __func__, nHeight, chainActive.Height());
                 }
             }
         } else {

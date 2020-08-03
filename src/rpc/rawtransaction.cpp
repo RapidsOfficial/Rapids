@@ -639,9 +639,7 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
         view.SetBackend(viewMempool); // temporarily switch cache backend to db+mempool view
 
         for (const CTxIn& txin : mergedTx.vin) {
-            const uint256& prevHash = txin.prevout.hash;
-            CCoins coins;
-            view.AccessCoins(prevHash); // this is certainly allowed to fail
+            view.AccessCoin(txin.prevout); // Load entries from viewChain into view; can fail.
         }
 
         view.SetBackend(viewDummy); // switch back to avoid locking mempool for too long
@@ -683,24 +681,27 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
             if (nOut < 0)
                 throw JSONRPCError(RPC_DESERIALIZATION_ERROR, "vout must be positive");
 
+            COutPoint out(txid, nOut);
             std::vector<unsigned char> pkData(ParseHexO(prevOut, "scriptPubKey"));
             CScript scriptPubKey(pkData.begin(), pkData.end());
 
             {
-                CCoinsModifier coins = view.ModifyCoins(txid);
-                if (coins->IsAvailable(nOut) && coins->vout[nOut].scriptPubKey != scriptPubKey) {
+                const Coin& coin = view.AccessCoin(out);
+                if (!coin.IsPruned() && coin.out.scriptPubKey != scriptPubKey) {
                     std::string err("Previous output scriptPubKey mismatch:\n");
-                    err = err + ScriptToAsmStr(coins->vout[nOut].scriptPubKey) + "\nvs:\n"+
+                    err = err + ScriptToAsmStr(coin.out.scriptPubKey) + "\nvs:\n"+
                         ScriptToAsmStr(scriptPubKey);
                     throw JSONRPCError(RPC_DESERIALIZATION_ERROR, err);
                 }
-                if ((unsigned int)nOut >= coins->vout.size())
-                    coins->vout.resize(nOut + 1);
-                coins->vout[nOut].scriptPubKey = scriptPubKey;
-                coins->vout[nOut].nValue = 0;
+
+                Coin newcoin;
+                newcoin.out.scriptPubKey = scriptPubKey;
+                newcoin.out.nValue = 0;
+                newcoin.nHeight = 1;
                 if (prevOut.exists("amount")) {
-                    coins->vout[nOut].nValue = AmountFromValue(find_value(prevOut, "amount"));
+                    newcoin.out.nValue = AmountFromValue(find_value(prevOut, "amount"));
                 }
+                view.AddCoin(out, std::move(newcoin), true);
             }
 
             // if redeemScript given and not using the local wallet (private keys
@@ -752,21 +753,24 @@ UniValue signrawtransaction(const JSONRPCRequest& request)
     // Sign what we can:
     for (unsigned int i = 0; i < mergedTx.vin.size(); i++) {
         CTxIn& txin = mergedTx.vin[i];
-        const CCoins* coins = view.AccessCoins(txin.prevout.hash);
+        const Coin& coin = view.AccessCoin(txin.prevout);
         if (Params().IsRegTestNet()) {
-            if (mapPrevOut.count(txin.prevout) == 0 && (coins == NULL || !coins->IsAvailable(txin.prevout.n)))
+            if (mapPrevOut.count(txin.prevout) == 0 && coin.IsPruned())
             {
                 TxInErrorToJSON(txin, vErrors, "Input not found");
                 continue;
             }
         } else {
-            if (coins == NULL || !coins->IsAvailable(txin.prevout.n)) {
+            if (coin.IsPruned()) {
                 TxInErrorToJSON(txin, vErrors, "Input not found or already spent");
                 continue;
             }
         }
-        const CScript& prevPubKey = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].first : coins->vout[txin.prevout.n].scriptPubKey);
-        const CAmount& amount = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].second : coins->vout[txin.prevout.n].nValue);
+
+        const CScript& prevPubKey = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].first : coin.out.scriptPubKey);
+        const CAmount& amount = (Params().IsRegTestNet() && mapPrevOut.count(txin.prevout) != 0 ? mapPrevOut[txin.prevout].second : coin.out.nValue);
+
+        txin.scriptSig.clear();
 
         // if this is a P2CS script, select which key to use
         bool fColdStake = false;
@@ -845,9 +849,12 @@ UniValue sendrawtransaction(const JSONRPCRequest& request)
 
     AssertLockNotHeld(cs_main);
     CCoinsViewCache& view = *pcoinsTip;
-    const CCoins* existingCoins = view.AccessCoins(hashTx);
+    bool fHaveChain = false;
+    for (size_t o = 0; !fHaveChain && o < tx.vout.size(); o++) {
+        const Coin& existingCoin = view.AccessCoin(COutPoint(hashTx, o));
+        fHaveChain = !existingCoin.IsPruned();
+    }
     bool fHaveMempool = mempool.exists(hashTx);
-    bool fHaveChain = existingCoins && existingCoins->nHeight < 1000000000;
     if (!fHaveMempool && !fHaveChain) {
         // push to local node and sync with wallets
         if (fSwiftX) {

@@ -278,13 +278,13 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     continue;
                 }
 
-                const CCoins* coins = view.AccessCoins(txin.prevout.hash);
-                assert(coins);
+                const Coin& coin = view.AccessCoin(txin.prevout);
+                assert(!coin.IsPruned());
 
-                CAmount nValueIn = coins->vout[txin.prevout.n].nValue;
+                CAmount nValueIn = coin.out.nValue;
                 nTotalIn += nValueIn;
 
-                int nConf = nHeight - coins->nHeight;
+                int nConf = nHeight - coin.nHeight;
 
                 // zPIV spends can have very large priority, use non-overflowing safe functions
                 dPriority = double_safe_addition(dPriority, ((double)nValueIn * nConf));
