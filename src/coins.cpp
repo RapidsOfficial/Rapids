@@ -171,6 +171,7 @@ void CCoinsViewCache::AddCoin(const COutPoint& outpoint, Coin&& coin, bool possi
         }
         fresh = it->second.coins.IsPruned() && !(it->second.flags & CCoinsCacheEntry::DIRTY);
     }
+
     if (it->second.coins.vout.size() <= outpoint.n) {
         it->second.coins.vout.resize(outpoint.n + 1);
     }
@@ -188,9 +189,7 @@ void AddCoins(CCoinsViewCache& cache, const CTransaction& tx, int nHeight)
     bool fCoinstake = tx.IsCoinStake();
     const uint256& txid = tx.GetHash();
     for (size_t i = 0; i < tx.vout.size(); ++i) {
-        // Pass fCoinbase as the possible_overwrite flag to AddCoin, in order to correctly
-        // deal with the pre-BIP30 occurrances of duplicate coinbase transactions.
-        cache.AddCoin(COutPoint(txid, i), Coin(tx.vout[i], nHeight, fCoinbase, fCoinstake), fCoinbase);
+        cache.AddCoin(COutPoint(txid, i), Coin(tx.vout[i], nHeight, fCoinbase, fCoinstake), false);
     }
 }
 
