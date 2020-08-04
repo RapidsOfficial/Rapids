@@ -99,27 +99,25 @@ def check_estimates(node, fees_seen, max_invalid, print_estimates = True):
     This function calls estimatefee and verifies that the estimates
     meet certain invariants.
     """
-    all_estimates = [ node.estimatefee(i) for i in range(1,26) ]
+    all_estimates = [node.estimatefee(i) for i in range(1, 26)]
     if print_estimates:
-        log.info([str(all_estimates[e-1]) for e in [1,2,3,6,15,25]])
-    delta = 1.0e-6 # account for rounding error
+        log.info([str(all_estimates[e-1]) for e in [1, 2, 3, 6, 15, 25]])
+    delta = 1.0e-6  # account for rounding error
     last_e = max(fees_seen)
     for e in [x for x in all_estimates if x >= 0]:
         # Estimates should be within the bounds of what transactions fees actually were:
         if float(e)+delta < min(fees_seen) or float(e)-delta > max(fees_seen):
             raise AssertionError("Estimated fee (%f) out of range (%f,%f)"
-                                 %(float(e), min(fees_seen), max(fees_seen)))
+                                 % (float(e), min(fees_seen), max(fees_seen)))
         # Estimates should be monotonically decreasing
         if float(e)-delta > last_e:
             raise AssertionError("Estimated fee (%f) larger than last fee (%f) for lower number of confirms"
-                                 %(float(e),float(last_e)))
+                                 % (float(e), float(last_e)))
         last_e = e
 
-    # !TODO: uncomment after smart fee implemented
-    '''
     valid_estimate = False
     invalid_estimates = 0
-    for i,e in enumerate(all_estimates): # estimate is for i+1
+    for i, e in enumerate(all_estimates): # estimate is for i+1
         if e >= 0:
             valid_estimate = True
             if i >= 13:  # for n>=14 estimatesmartfee(n/2) should be at least as high as estimatefee(n)
@@ -142,8 +140,8 @@ def check_estimates(node, fees_seen, max_invalid, print_estimates = True):
     # Check on the expected number of different confirmation counts
     # that we might not have valid estimates for
     if invalid_estimates > max_invalid:
-        raise AssertionError("More than (%d) invalid estimates"%(max_invalid))
-    '''
+        raise AssertionError("More than (%d) invalid estimates" % max_invalid)
+
     return all_estimates
 
 
