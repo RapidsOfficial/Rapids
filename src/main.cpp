@@ -1643,7 +1643,7 @@ void CheckForkWarningConditionsOnNewFork(CBlockIndex* pindexNewForkTip)
 }
 
 // Requires cs_main.
-void Misbehaving(NodeId pnode, int howmuch)
+void Misbehaving(NodeId pnode, int howmuch) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     if (howmuch == 0)
         return;
@@ -1687,8 +1687,10 @@ void static InvalidBlockFound(CBlockIndex* pindex, const CValidationState& state
             assert (state.GetRejectCode() < REJECT_INTERNAL); // Blocks are never rejected with internal reject codes
             CBlockReject reject = {(unsigned char) state.GetRejectCode(), state.GetRejectReason().substr(0, MAX_REJECT_MESSAGE_LENGTH), pindex->GetBlockHash()};
             State(it->second)->rejects.push_back(reject);
-            if (nDoS > 0)
+            if (nDoS > 0) {
+                LOCK(cs_main);
                 Misbehaving(it->second, nDoS);
+            }
         }
     }
     if (!state.CorruptionPossible()) {
@@ -5219,9 +5221,11 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 
         pfrom->fClient = !(pfrom->nServices & NODE_NETWORK);
 
-        // Potentially mark this peer as a preferred download peer.
-        UpdatePreferredDownload(pfrom, State(pfrom->GetId()));
-
+        {
+            LOCK(cs_main);
+            // Potentially mark this peer as a preferred download peer.
+            UpdatePreferredDownload(pfrom, State(pfrom->GetId()));
+        }
         // Change version
         pfrom->PushMessage(NetMsgType::VERACK);
         pfrom->ssSend.SetVersion(std::min(pfrom->nVersion, PROTOCOL_VERSION));
