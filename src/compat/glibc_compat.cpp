@@ -20,6 +20,8 @@ extern "C" void* memcpy(void* a, const void* b, size_t c)
     return memmove(a, b, c);
 }
 
+extern "C" void __chk_fail(void) __attribute__((__noreturn__));
+
 #if defined(__i386__) || defined(__arm__)
 
 extern "C" int64_t __udivmoddi4(uint64_t u, uint64_t v, uint64_t* rp);
