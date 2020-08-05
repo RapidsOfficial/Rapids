@@ -8,6 +8,7 @@ NO_QT ?=
 NO_WALLET ?=
 NO_ZMQ ?=
 NO_UPNP ?=
+NO_RUST ?=
 FALLBACK_DOWNLOAD_PATH ?= https://depends.pivx.org
 
 BUILD = $(shell ./config.guess)
@@ -17,8 +18,11 @@ BASEDIR = $(CURDIR)
 HASH_LENGTH:=11
 DOWNLOAD_CONNECT_TIMEOUT:=30
 DOWNLOAD_RETRIES:=3
+CRATE_REGISTRY:=vendored-sources
 HOST_ID_SALT ?= salt
 BUILD_ID_SALT ?= salt
+
+LIBRUSTZCASH_OVERRIDE ?=
 
 host:=$(BUILD)
 ifneq ($(HOST),)
@@ -95,7 +99,7 @@ wallet_packages_$(NO_WALLET) = $(wallet_packages)
 upnp_packages_$(NO_UPNP) = $(upnp_packages)
 zmq_packages_$(NO_ZMQ) = $(zmq_packages)
 
-packages += $($(host_arch)_$(host_os)_packages) $($(host_os)_packages) $(qt_packages_) $(wallet_packages_) $(upnp_packages_)
+packages += $($(host_arch)_$(host_os)_packages) $($(host_os)_packages) $(qt_packages_) $(rust_packages) $(wallet_packages_) $(upnp_packages_)
 native_packages += $($(host_arch)_$(host_os)_native_packages) $($(host_os)_native_packages)
 
 ifneq ($(qt_packages_),)
@@ -108,7 +112,7 @@ endif
 
 all_packages = $(packages) $(native_packages)
 
-meta_depends = Makefile funcs.mk builders/default.mk hosts/default.mk hosts/$(host_os).mk builders/$(build_os).mk
+meta_depends = Makefile funcs.mk builders/default.mk hosts/default.mk hosts/$(host_os).mk builders/$(build_os).mk cargo-checksum.sh
 
 $(host_arch)_$(host_os)_native_toolchain?=$($(host_os)_native_toolchain)
 
@@ -140,6 +144,7 @@ $(host_prefix)/share/config.site : config.site.in $(host_prefix)/.stamp_$(final_
             -e 's|@CXXFLAGS@|$(strip $(host_CXXFLAGS) $(host_$(release_type)_CXXFLAGS))|' \
             -e 's|@CPPFLAGS@|$(strip $(host_CPPFLAGS) $(host_$(release_type)_CPPFLAGS))|' \
             -e 's|@LDFLAGS@|$(strip $(host_LDFLAGS) $(host_$(release_type)_LDFLAGS))|' \
+            -e 's|@rust_target@|$(call rust_target,rust,$(canonical_host),$(host_os))|' \
             -e 's|@allow_host_packages@|$(ALLOW_HOST_PACKAGES)|' \
             -e 's|@no_qt@|$(NO_QT)|' \
             -e 's|@no_zmq@|$(NO_ZMQ)|' \

@@ -52,6 +52,10 @@
 #include "validationinterface.h"
 #include "zpivchain.h"
 
+// Sapling
+#include "sapling/util.h"
+#include <librustzcash.h>
+
 #ifdef ENABLE_WALLET
 #include "wallet/db.h"
 #include "wallet/wallet.h"
@@ -384,6 +388,7 @@ std::string HelpMessage(HelpMessageMode mode)
 #endif
     }
     strUsage += HelpMessageOpt("-datadir=<dir>", _("Specify data directory"));
+    strUsage += HelpMessageOpt("-paramsdir=<dir>", strprintf(_("Specify zk params directory (default: %s)"), ZC_GetParamsDir().string()));
     strUsage += HelpMessageOpt("-debuglogfile=<file>", strprintf(_("Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)"), DEFAULT_DEBUGLOGFILE));
     strUsage += HelpMessageOpt("-dbcache=<n>", strprintf(_("Set database cache size in megabytes (%d to %d, default: %d)"), nMinDbCache, nMaxDbCache, nDefaultDbCache));
     strUsage += HelpMessageOpt("-loadblock=<file>", _("Imports blocks from external blk000??.dat file") + " " + _("on startup"));
@@ -750,6 +755,30 @@ bool InitSanityCheck(void)
     }
 
     return true;
+}
+
+static void LoadSaplingParams()
+{
+    struct timeval tv_start, tv_end;
+    float elapsed;
+    gettimeofday(&tv_start, 0);
+
+    try {
+        initZKSNARKS();
+    } catch (std::runtime_error &e) {
+        uiInterface.ThreadSafeMessageBox(strprintf(
+                _("Cannot find the Sapling parameters in the following directory:\n"
+                  "%s\n"
+                  "Please run 'sapling-fetch-params' or './util/fetch-params.sh' and then restart."),
+                ZC_GetParamsDir()),
+                                         "", CClientUIInterface::MSG_ERROR);
+        StartShutdown();
+        return;
+    }
+
+    gettimeofday(&tv_end, 0);
+    elapsed = float(tv_end.tv_sec-tv_start.tv_sec) + (tv_end.tv_usec-tv_start.tv_usec)/float(1000000);
+    LogPrintf("Loaded Sapling parameters in %fs seconds.\n", elapsed);
 }
 
 bool AppInitServers()
@@ -1176,6 +1205,9 @@ bool AppInit2()
     // Start the lightweight task scheduler thread
     CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &scheduler);
     threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
+
+    // Initialize Sapling circuit parameters
+    LoadSaplingParams();
 
     /* Start the RPC server already.  It will be started in "warmup" mode
      * and not really process calls already (but it will signify connections

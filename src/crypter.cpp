@@ -131,7 +131,7 @@ bool CCryptoKeyStore::SetCrypted()
     LOCK(cs_KeyStore);
     if (fUseCrypto)
         return true;
-    if (!mapKeys.empty())
+    if (!mapKeys.empty() && !mapSaplingSpendingKeys.empty())
         return false;
     fUseCrypto = true;
     return true;

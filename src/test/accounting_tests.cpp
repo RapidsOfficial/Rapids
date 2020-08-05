@@ -12,8 +12,6 @@
 
 #include <boost/test/unit_test.hpp>
 
-extern CWallet* pwalletMain;
-
 BOOST_FIXTURE_TEST_SUITE(accounting_tests, WalletTestingSetup)
 
 static void

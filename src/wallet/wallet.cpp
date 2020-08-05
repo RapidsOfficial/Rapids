@@ -72,9 +72,22 @@ std::string COutput::ToString() const
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-bool CWallet::SetupSPKM()
+bool CWallet::SetupSPKM(bool newKeypool)
 {
-    return m_spk_man->SetupGeneration();
+    if (m_spk_man->SetupGeneration(newKeypool, true)) {
+        LogPrintf("%s : spkm setup completed\n", __func__);
+        return ActivateSaplingWallet();
+    }
+    return false;
+}
+
+bool CWallet::ActivateSaplingWallet()
+{
+    if (m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
+        LogPrintf("%s : sapling spkm setup completed\n", __func__);
+        return true;
+    }
+    return false;
 }
 
 bool CWallet::IsHDEnabled() const
@@ -338,12 +351,22 @@ bool CWallet::Unlock(const CKeyingMaterial& vMasterKeyIn)
             if (fDecryptionThoroughlyChecked)
                 break;
         }
+
         if (keyPass && keyFail) {
-            LogPrintf("The wallet is probably corrupted: Some keys decrypt but not all.");
+            LogPrintf("The wallet is probably corrupted: Some keys decrypt but not all.\n");
             throw std::runtime_error("Error unlocking wallet: some keys decrypt but not all. Your wallet file may be corrupt.");
         }
+
         if (keyFail || !keyPass)
             return false;
+
+        // Sapling
+        if (!UnlockSaplingKeys(vMasterKeyIn, fDecryptionThoroughlyChecked)) {
+            // If Sapling key encryption fail, let's unencrypt the rest of the keys
+            LogPrintf("Sapling wallet unlock keys failed\n");
+            throw std::runtime_error("Error unlocking wallet: some Sapling keys decrypt but not all. Your wallet file may be corrupt.");
+        }
+
         vMasterKey = vMasterKeyIn;
         fDecryptionThoroughlyChecked = true;
 
@@ -583,6 +606,11 @@ ScriptPubKeyMan* CWallet::GetScriptPubKeyMan() const
     return m_spk_man.get();
 }
 
+bool CWallet::HasSaplingSPKM()
+{
+    return GetSaplingScriptPubKeyMan()->IsEnabled();
+}
+
 /**
  * Outpoint is spent if any non-conflicted transaction
  * spends it:
@@ -705,7 +733,7 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
             pwalletdbEncryption->WriteMasterKey(nMasterKeyMaxID, kMasterKey);
         }
 
-        if (!EncryptKeys(vMasterKey)) {
+        if (!EncryptKeys(vMasterKey) || (m_sspk_man->IsEnabled() && !m_sspk_man->EncryptSaplingKeys(vMasterKey))) {
             if (fFileBacked) {
                 pwalletdbEncryption->TxnAbort();
                 delete pwalletdbEncryption;
@@ -729,12 +757,11 @@ bool CWallet::EncryptWallet(const SecureString& strWalletPassphrase)
             delete pwalletdbEncryption;
             pwalletdbEncryption = NULL;
         }
-
         Lock();
         Unlock(strWalletPassphrase);
         // if we are using HD, replace the HD seed with a new one
         if (m_spk_man->IsHDEnabled()) {
-            if (!m_spk_man->SetupGeneration(true)) {
+            if (!m_spk_man->SetupGeneration(true, true)) {
                 return false;
             }
         }
@@ -1590,13 +1617,29 @@ void CWalletTx::GetAmounts(std::list<COutputEntry>& listReceived,
 
 bool CWallet::Upgrade(std::string& error, const int& prevVersion)
 {
-    LOCK(cs_wallet);
+    LOCK2(cs_wallet, cs_KeyStore);
+
     // Do not upgrade versions if we are already in the last one
-    if (prevVersion >= FEATURE_PRE_SPLIT_KEYPOOL) {
-        error = strprintf(_("Cannot upgrade to HD wallet (already running HD support). Version: %d"), prevVersion);
+    if (prevVersion >= FEATURE_SAPLING) {
+        error = strprintf(_("Cannot upgrade to Sapling wallet (already running Sapling support). Version: %d"), prevVersion);
         return false;
     }
-    return m_spk_man->Upgrade(prevVersion, error);
+
+    // Check if we need to upgrade to HD
+    if (prevVersion < FEATURE_PRE_SPLIT_KEYPOOL) {
+        if (!m_spk_man->Upgrade(prevVersion, error)) {
+            return false;
+        }
+    }
+
+    // Now upgrade to Sapling manager
+    if (prevVersion < FEATURE_SAPLING) {
+        if (!ActivateSaplingWallet()) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -4141,6 +4184,36 @@ int CWallet::GetVersion()
     LOCK(cs_wallet);
     return nWalletVersion;
 }
+
+///////////////// Sapling Methods //////////////////////////
+////////////////////////////////////////////////////////////
+
+libzcash::SaplingPaymentAddress CWallet::GenerateNewSaplingZKey() { return m_sspk_man->GenerateNewSaplingZKey(); }
+
+bool CWallet::AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
+                    const libzcash::SaplingPaymentAddress &defaultAddr) { return m_sspk_man->AddSaplingZKey(key, defaultAddr); }
+
+bool CWallet::AddSaplingIncomingViewingKeyW(
+        const libzcash::SaplingIncomingViewingKey &ivk,
+        const libzcash::SaplingPaymentAddress &addr) { return m_sspk_man->AddSaplingIncomingViewingKey(ivk, addr); }
+
+bool CWallet::AddCryptedSaplingSpendingKeyW(
+        const libzcash::SaplingExtendedFullViewingKey &extfvk,
+        const std::vector<unsigned char> &vchCryptedSecret,
+        const libzcash::SaplingPaymentAddress &defaultAddr) { return m_sspk_man->AddCryptedSaplingSpendingKeyDB(extfvk, vchCryptedSecret, defaultAddr); }
+
+bool CWallet::HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const { return m_sspk_man->HaveSpendingKeyForPaymentAddress(zaddr); }
+bool CWallet::LoadSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key) { return m_sspk_man->LoadSaplingZKey(key); }
+bool CWallet::LoadSaplingZKeyMetadata(const libzcash::SaplingIncomingViewingKey &ivk, const CKeyMetadata &meta) { return m_sspk_man->LoadSaplingZKeyMetadata(ivk, meta); }
+bool CWallet::LoadCryptedSaplingZKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
+                            const std::vector<unsigned char> &vchCryptedSecret) { return m_sspk_man->LoadCryptedSaplingZKey(extfvk, vchCryptedSecret); }
+
+bool CWallet::LoadSaplingPaymentAddress(
+        const libzcash::SaplingPaymentAddress &addr,
+        const libzcash::SaplingIncomingViewingKey &ivk) { return m_sspk_man->LoadSaplingPaymentAddress(addr, ivk); }
+
+///////////////// End Sapling Methods //////////////////////
+////////////////////////////////////////////////////////////
 
 CWalletTx::CWalletTx()
 {

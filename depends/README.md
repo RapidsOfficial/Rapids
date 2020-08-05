@@ -71,7 +71,9 @@ The following can be set when running make: make FOO=bar
     NO_ZMQ: Don't download/build/cache packages needed for enabling zeromq
     NO_WALLET: Don't download/build/cache libs needed to enable the wallet
     NO_UPNP: Don't download/build/cache packages needed for enabling upnp
+    NO_RUST: Don't download/build/cache rust packages (including librustzcash)
     DEBUG: disable some optimizations and enable more runtime checking
+    LIBRUSTZCASH_OVERRIDE: Path to a local librustzcash repository
     HOST_ID_SALT: Optional salt to use when generating host package ids
     BUILD_ID_SALT: Optional salt to use when generating build package ids
 

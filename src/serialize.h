@@ -8,6 +8,7 @@
 #define PIVX_SERIALIZE_H
 
 #include <algorithm>
+#include <array>
 #include <assert.h>
 #include <ios>
 #include <limits>
@@ -549,6 +550,43 @@ template<typename Stream, typename T, typename A> inline void Serialize(Stream& 
 template<typename Stream, typename T, typename A> void Unserialize_impl(Stream& is, std::vector<T, A>& v, const unsigned char&);
 template<typename Stream, typename T, typename A, typename V> void Unserialize_impl(Stream& is, std::vector<T, A>& v, const V&);
 template<typename Stream, typename T, typename A> inline void Unserialize(Stream& is, std::vector<T, A>& v);
+
+/**
+ * array
+ */
+template<typename T, std::size_t N> unsigned int GetSerializeSize(const std::array<T, N> &item);
+template<typename Stream, typename T, std::size_t N> void Serialize(Stream& os, const std::array<T, N>& item);
+template<typename Stream, typename T, std::size_t N> void Unserialize(Stream& is, std::array<T, N>& item);
+
+/**
+ * array
+ */
+template<typename T, std::size_t N>
+unsigned int GetSerializeSize(const std::array<T, N> &item)
+{
+    unsigned int size = 0;
+    for (size_t i = 0; i < N; i++) {
+        size += GetSerializeSize(item[0]);
+    }
+    return size;
+}
+
+template<typename Stream, typename T, std::size_t N>
+void Serialize(Stream& os, const std::array<T, N>& item)
+{
+    for (size_t i = 0; i < N; i++) {
+        Serialize(os, item[i]);
+    }
+}
+
+template<typename Stream, typename T, std::size_t N>
+void Unserialize(Stream& is, std::array<T, N>& item)
+{
+    for (size_t i = 0; i < N; i++) {
+        Unserialize(is, item[i]);
+    }
+}
+
 
 /**
  * pair

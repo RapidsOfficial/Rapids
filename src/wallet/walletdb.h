@@ -160,6 +160,18 @@ public:
     //! write the hdchain model (external/internal chain child index counter)
     bool WriteHDChain(const CHDChain& chain);
 
+    /// Write extended spending key to wallet database, where the key is the incoming viewing key
+    bool WriteSaplingZKey(const libzcash::SaplingIncomingViewingKey &ivk,
+                          const libzcash::SaplingExtendedSpendingKey &key,
+                          const CKeyMetadata  &keyMeta);
+
+    bool WriteSaplingPaymentAddress(const libzcash::SaplingPaymentAddress &addr,
+                                    const libzcash::SaplingIncomingViewingKey &ivk);
+
+    bool WriteCryptedSaplingZKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
+                                 const std::vector<unsigned char>& vchCryptedSecret,
+                                 const CKeyMetadata &keyMeta);
+
     /// Write destination data key,value tuple to database
     bool WriteDestData(const std::string& address, const std::string& key, const std::string& value);
     /// Erase destination data tuple from wallet database

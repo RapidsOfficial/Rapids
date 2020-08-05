@@ -20,6 +20,7 @@
 #include "pairresult.h"
 #include "primitives/block.h"
 #include "primitives/transaction.h"
+#include "sapling/address.hpp"
 #include "zpiv/zerocoin.h"
 #include "guiinterface.h"
 #include "util.h"
@@ -27,6 +28,7 @@
 #include "validationinterface.h"
 #include "wallet/wallet_ismine.h"
 #include "wallet/scriptpubkeyman.h"
+#include "sapling/saplingscriptpubkeyman.h"
 #include "wallet/walletdb.h"
 #include "zpiv/zpivmodule.h"
 #include "zpiv/zpivwallet.h"
@@ -76,6 +78,7 @@ class CReserveKey;
 class CScript;
 class CWalletTx;
 class ScriptPubKeyMan;
+class SaplingScriptPubKeyMan;
 
 /** (client) version numbers for particular wallet features */
 enum WalletFeature {
@@ -92,7 +95,9 @@ enum WalletFeature {
 
     FEATURE_PRE_SPLIT_KEYPOOL = 169900, // Upgraded to HD SPLIT and can have a pre-split keypool
 
-    FEATURE_LATEST = FEATURE_PRE_SPLIT_KEYPOOL
+    FEATURE_SAPLING = 170000, // Upgraded to Saplings key manager.
+
+    FEATURE_LATEST = FEATURE_SAPLING
 };
 
 enum AvailableCoinsType {
@@ -222,12 +227,12 @@ struct CRecipient
 class CWallet : public CCryptoKeyStore, public CValidationInterface
 {
 private:
-    CWalletDB* pwalletdbEncryption;
     //! keeps track of whether Unlock has run a thorough check before
     bool fDecryptionThoroughlyChecked{false};
 
     //! Key manager //
     std::unique_ptr<ScriptPubKeyMan> m_spk_man = MakeUnique<ScriptPubKeyMan>(this);
+    std::unique_ptr<SaplingScriptPubKeyMan> m_sspk_man = MakeUnique<SaplingScriptPubKeyMan>(this);
 
     //! the current wallet version: clients below this version are not able to load the wallet
     int nWalletVersion;
@@ -260,7 +265,7 @@ public:
     static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
 
     //! Generates hd wallet //
-    bool SetupSPKM();
+    bool SetupSPKM(bool newKeypool = true);
     //! Whether the wallet is hd or not //
     bool IsHDEnabled() const;
 
@@ -270,6 +275,9 @@ public:
 
     //! Get spkm
     ScriptPubKeyMan* GetScriptPubKeyMan() const;
+    SaplingScriptPubKeyMan* GetSaplingScriptPubKeyMan() const { return m_sspk_man.get(); }
+
+    bool HasSaplingSPKM();
 
     /*
      * Main wallet lock.
@@ -283,6 +291,8 @@ public:
     bool fFileBacked;
     bool fWalletUnlockStaking;
     std::string strWalletFile;
+
+    CWalletDB* pwalletdbEncryption;
 
     std::map<CKeyID, CKeyMetadata> mapKeyMetadata;
 
@@ -388,6 +398,39 @@ public:
     int64_t GetKeyCreationTime(CPubKey pubkey);
     int64_t GetKeyCreationTime(const CTxDestination& address);
 
+    //////////// Sapling //////////////////
+
+    //! Generates new Sapling key
+    libzcash::SaplingPaymentAddress GenerateNewSaplingZKey();
+    //! Adds Sapling spending key to the store, and saves it to disk
+    bool AddSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key,
+            const libzcash::SaplingPaymentAddress &defaultAddr);
+    bool AddSaplingIncomingViewingKeyW(
+            const libzcash::SaplingIncomingViewingKey &ivk,
+            const libzcash::SaplingPaymentAddress &addr);
+    bool AddCryptedSaplingSpendingKeyW(
+            const libzcash::SaplingExtendedFullViewingKey &extfvk,
+            const std::vector<unsigned char> &vchCryptedSecret,
+            const libzcash::SaplingPaymentAddress &defaultAddr);
+    //! Returns true if the wallet contains the spending key
+    bool HaveSpendingKeyForPaymentAddress(const libzcash::SaplingPaymentAddress &zaddr) const;
+
+
+    //! Adds spending key to the store, without saving it to disk (used by LoadWallet)
+    bool LoadSaplingZKey(const libzcash::SaplingExtendedSpendingKey &key);
+    //! Load spending key metadata (used by LoadWallet)
+    bool LoadSaplingZKeyMetadata(const libzcash::SaplingIncomingViewingKey &ivk, const CKeyMetadata &meta);
+    //! Adds a Sapling payment address -> incoming viewing key map entry,
+    //! without saving it to disk (used by LoadWallet)
+    bool LoadSaplingPaymentAddress(
+            const libzcash::SaplingPaymentAddress &addr,
+            const libzcash::SaplingIncomingViewingKey &ivk);
+    //! Adds an encrypted spending key to the store, without saving it to disk (used by LoadWallet)
+    bool LoadCryptedSaplingZKey(const libzcash::SaplingExtendedFullViewingKey &extfvk,
+                                const std::vector<unsigned char> &vchCryptedSecret);
+
+    //////////// End Sapling //////////////
+
     //! Adds a key to the store, and saves it to disk.
     bool AddKeyPubKey(const CKey& key, const CPubKey& pubkey);
     //! Adds a key to the store, without saving it to disk (used by LoadWallet)
@@ -442,9 +485,10 @@ public:
     void EraseFromWallet(const uint256& hash);
 
     /**
-     * Upgrade wallet to HD if needed. Does nothing if not.
+     * Upgrade wallet to HD and Sapling if needed. Does nothing if not.
      */
     bool Upgrade(std::string& error, const int& prevVersion);
+    bool ActivateSaplingWallet();
 
     int ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate = false, bool fromStartup = false);
     void ReacceptWalletTransactions(bool fFirstLoad = false);

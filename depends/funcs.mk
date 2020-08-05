@@ -34,6 +34,21 @@ define fetch_file
       $(call fetch_file_inner,$(1),$(FALLBACK_DOWNLOAD_PATH),$(3),$(4),$(5))))
 endef
 
+define generate_crate_checksum
+$(BASEDIR)/cargo-checksum.sh "$($(1)_file_name)" "$(build_SHA256SUM)" "\"$($(1)_sha256_hash)\""
+endef
+
+define generate_unpackaged_crate_checksum
+$(BASEDIR)/cargo-checksum.sh "$($(1)_file_name)" "$(build_SHA256SUM)" "null"
+endef
+
+define vendor_crate_source
+mkdir -p $($(1)_staging_prefix_dir)/$(CRATE_REGISTRY) && \
+cp -r $($(1)_extract_dir) $($(1)_staging_prefix_dir)/$(CRATE_REGISTRY)/$($(1)_crate_name) && \
+cd $($(1)_staging_prefix_dir)/$(CRATE_REGISTRY)/$($(1)_crate_versioned_name) && \
+rm -r `basename $($(1)_patch_dir)` .stamp_* .$($(1)_file_name).hash
+endef
+
 define int_get_build_recipe_hash
 $(eval $(1)_all_file_checksums:=$(shell $(build_SHA256SUM) $(meta_depends) packages/$(1).mk $(addprefix $(PATCHES_PATH)/$(1)/,$($(1)_patches)) | cut -d" " -f1))
 $(eval $(1)_recipe_hash:=$(shell echo -n "$($(1)_all_file_checksums)" | $(build_SHA256SUM) | cut -d" " -f1))
@@ -46,6 +61,11 @@ $(foreach dep,$($(1)_all_dependencies),$(eval $(1)_build_id_deps+=$(dep)-$($(dep
 $(eval $(1)_build_id_long:=$(1)-$($(1)_version)-$($(1)_recipe_hash)-$(release_type) $($(1)_build_id_deps) $($($(1)_type)_id_string))
 $(eval $(1)_build_id:=$(shell echo -n "$($(1)_build_id_long)" | $(build_SHA256SUM) | cut -c-$(HASH_LENGTH)))
 final_build_id_long+=$($(package)_build_id_long)
+
+#override platform specific files and hashes
+$(eval $(1)_file_name=$(if $($(1)_exact_file_name),$($(1)_exact_file_name),$(if $($(1)_file_name_$(host_os)),$($(1)_file_name_$(host_os)),$($(1)_file_name))))
+$(eval $(1)_sha256_hash=$(if $($(1)_exact_sha256_hash),$($(1)_exact_sha256_hash),$(if $($(1)_sha256_hash_$(host_os)),$($(1)_sha256_hash_$(host_os)),$($(1)_sha256_hash))))
+
 
 #compute package-specific paths
 $(1)_build_subdir?=.
@@ -130,9 +150,9 @@ $(1)_config_env+=$($(1)_config_env_$(host_arch)_$(host_os)) $($(1)_config_env_$(
 
 $(1)_config_env+=PKG_CONFIG_LIBDIR=$($($(1)_type)_prefix)/lib/pkgconfig
 $(1)_config_env+=PKG_CONFIG_PATH=$($($(1)_type)_prefix)/share/pkgconfig
-$(1)_config_env+=PATH=$(build_prefix)/bin:$(PATH)
-$(1)_build_env+=PATH=$(build_prefix)/bin:$(PATH)
-$(1)_stage_env+=PATH=$(build_prefix)/bin:$(PATH)
+$(1)_config_env+=PATH="$(build_prefix)/bin:$(PATH)"
+$(1)_build_env+=PATH="$(build_prefix)/bin:$(PATH)"
+$(1)_stage_env+=PATH="$(build_prefix)/bin:$(PATH)"
 $(1)_autoconf=./configure --host=$($($(1)_type)_host) --disable-dependency-tracking --prefix=$($($(1)_type)_prefix) $$($(1)_config_opts) CC="$$($(1)_cc)" CXX="$$($(1)_cxx)"
 
 ifneq ($($(1)_nm),)
