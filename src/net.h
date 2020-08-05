@@ -10,7 +10,6 @@
 #include "bloom.h"
 #include "compat.h"
 #include "fs.h"
-#include "hash.h"
 #include "limitedmap.h"
 #include "netaddress.h"
 #include "protocol.h"
@@ -334,7 +333,7 @@ public:
     int64_t nLastRecv;
     int64_t nTimeConnected;
     int64_t nTimeOffset;
-    CAddress addr;
+    const CAddress addr;
     std::string addrName;
     CService addrLocal;
     int nVersion;
@@ -362,6 +361,7 @@ public:
     int nRefCount;
     NodeId id;
 
+    const uint64_t nKeyedNetGroup;
 protected:
     // Denial-of-service detection/prevention
     // Key is IP address, value is banned-until-time
@@ -423,6 +423,8 @@ private:
 
     CNode(const CNode&);
     void operator=(const CNode&);
+
+    static uint64_t CalculateKeyedNetGroup(const CAddress& ad);
 
 public:
     NodeId GetId() const
