@@ -4,8 +4,11 @@
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 """Test the wallet accounts properly when there are cloned transactions with malleated scriptsigs."""
 
+import io
 from test_framework.test_framework import PivxTestFramework
 from test_framework.util import *
+from test_framework.messages import CTransaction, COIN
+
 
 class TxnMallTest(PivxTestFramework):
     def set_test_params(self):
@@ -44,8 +47,9 @@ class TxnMallTest(PivxTestFramework):
         # Coins are sent to node1_address
         node1_address = self.nodes[1].getnewaddress()
 
+        tx1_amount = 40 * 5
         # Send tx1, and another transaction tx2 that won't be cloned
-        txid1 = self.nodes[0].sendtoaddress(node1_address, (40 * 5))
+        txid1 = self.nodes[0].sendtoaddress(node1_address, tx1_amount)
         txid2 = self.nodes[0].sendtoaddress(node1_address, (20 * 5))
 
         # Construct a clone of tx1, to be malleated
@@ -57,20 +61,19 @@ class TxnMallTest(PivxTestFramework):
         clone_raw = self.nodes[0].createrawtransaction(clone_inputs, clone_outputs, clone_locktime)
 
         # createrawtransaction randomizes the order of its outputs, so swap them if necessary.
-        # output 0 is at version+#inputs+input+sigstub+sequence+#outputs
-        # 40 BTC serialized is 00286bee00000000
-        pos0 = 2*(4+1+36+1+4+1)
-        hex40 = "00286bee00000000"
-        output_len = 16 + 2 + 2 * int("0x" + clone_raw[pos0 + 16: pos0 + 16 + 2], 0)
-        if (rawtx1["vout"][0]["value"] == 40 and clone_raw[pos0: pos0 + 16] != hex40 or
-            rawtx1["vout"][0]["value"] != 40 and clone_raw[pos0: pos0 + 16] == hex40):
-            output0 = clone_raw[pos0: pos0 + output_len]
-            output1 = clone_raw[pos0 + output_len: pos0 + 2 * output_len]
-            clone_raw = clone_raw[:pos0] + output1 + output0 + clone_raw[pos0 + 2 * output_len:]
+        clone_tx = CTransaction()
+        clone_tx.deserialize(io.BytesIO(bytes.fromhex(clone_raw)))
+
+        if (rawtx1["vout"][0]["value"] == tx1_amount and clone_tx.vout[0].nValue != tx1_amount*COIN or rawtx1["vout"][0]["value"] != tx1_amount and clone_tx.vout[0].nValue == tx1_amount*COIN):
+            (clone_tx.vout[0], clone_tx.vout[1]) = (clone_tx.vout[1], clone_tx.vout[0])
+
+        if (rawtx1 == clone_raw):
+            print("## !! Equal hex!!")
+            assert(False)
 
         # Use a different signature hash type to sign.  This creates an equivalent but malleated clone.
         # Don't send the clone anywhere yet
-        tx1_clone = self.nodes[0].signrawtransaction(clone_raw, None, None, "ALL|ANYONECANPAY")
+        tx1_clone = self.nodes[0].signrawtransaction(clone_tx.serialize().hex(), None, None, "ALL|ANYONECANPAY")
         assert_equal(tx1_clone["complete"], True)
 
         # Have node0 mine a block, if requested:
@@ -129,7 +132,6 @@ class TxnMallTest(PivxTestFramework):
         if (self.options.mine_block):
             expected -= 250
         assert_equal(self.nodes[0].getbalance(), expected)
-
 
 if __name__ == '__main__':
     TxnMallTest().main()
