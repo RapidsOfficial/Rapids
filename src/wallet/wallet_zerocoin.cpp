@@ -101,23 +101,25 @@ void CWallet::doZPivRescan(const CBlockIndex* pindex, const CBlock& block,
     if (fCheckZPIV && consensus.NetworkUpgradeActive(pindex->nHeight, Consensus::UPGRADE_ZC)) {
         std::list<CZerocoinMint> listMints;
         BlockToZerocoinMintList(block, listMints, true);
-        CWalletDB walletdb(strWalletFile);
 
+        int posInBlock = 0;
         for (auto& m : listMints) {
             if (IsMyMint(m.GetValue())) {
                 LogPrint(BCLog::LEGACYZC, "%s: found mint\n", __func__);
                 UpdateMint(m.GetValue(), pindex->nHeight, m.GetTxHash(), m.GetDenomination());
 
                 // Add the transaction to the wallet
-                for (auto& tx : block.vtx) {
+                posInBlock = 0;
+                for (posInBlock = 0; posInBlock < (int)block.vtx.size(); posInBlock++) {
+                    auto& tx = block.vtx[posInBlock];
                     uint256 txid = tx.GetHash();
                     if (setAddedToWallet.count(txid) || mapWallet.count(txid))
                         continue;
                     if (txid == m.GetTxHash()) {
                         CWalletTx wtx(this, tx);
                         wtx.nTimeReceived = block.GetBlockTime();
-                        wtx.SetMerkleBranch(block);
-                        AddToWallet(wtx, &walletdb);
+                        wtx.SetMerkleBranch(pindex, posInBlock);
+                        AddToWallet(wtx);
                         setAddedToWallet.insert(txid);
                     }
                 }
@@ -133,11 +135,17 @@ void CWallet::doZPivRescan(const CBlockIndex* pindex, const CBlock& block,
                     CWalletTx wtx(this, txSpend);
                     CBlockIndex* pindexSpend = chainActive[nHeightSpend];
                     CBlock blockSpend;
-                    if (ReadBlockFromDisk(blockSpend, pindexSpend))
-                        wtx.SetMerkleBranch(blockSpend);
+                    if (ReadBlockFromDisk(blockSpend, pindexSpend)) {
+                        posInBlock = 0;
+                        for (posInBlock = 0; posInBlock < (int)blockSpend.vtx.size(); posInBlock++) {
+                            auto &tx = blockSpend.vtx[posInBlock];
+                            if (tx.GetHash() == txidSpend)
+                                wtx.SetMerkleBranch(pindexSpend, posInBlock);
+                        }
+                    }
 
                     wtx.nTimeReceived = pindexSpend->nTime;
-                    AddToWallet(wtx, &walletdb);
+                    AddToWallet(wtx);
                     setAddedToWallet.emplace(txidSpend);
                 }
             }

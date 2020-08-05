@@ -841,10 +841,12 @@ void CWallet::MarkDirty()
     }
 }
 
-bool CWallet::AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb)
+bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFlushOnClose)
 {
-    uint256 hash = wtxIn.GetHash();
     LOCK(cs_wallet);
+    CWalletDB walletdb(strWalletFile, "r+", fFlushOnClose);
+    uint256 hash = wtxIn.GetHash();
+
     // Inserts only if not already there, returns tx inserted or tx found
     std::pair<std::map<uint256, CWalletTx>::iterator, bool> ret = mapWallet.insert(std::make_pair(hash, wtxIn));
     CWalletTx& wtx = (*ret.first).second;
@@ -852,7 +854,7 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb)
     bool fInsertedNew = ret.second;
     if (fInsertedNew) {
         wtx.nTimeReceived = GetAdjustedTime();
-        wtx.nOrderPos = IncOrderPosNext(pwalletdb);
+        wtx.nOrderPos = IncOrderPosNext(&walletdb);
         wtxOrdered.insert(std::make_pair(wtx.nOrderPos, TxPair(&wtx, (CAccountingEntry*)0)));
         wtx.UpdateTimeSmart();
         AddToSpends(hash);
@@ -887,11 +889,8 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb)
 
     // Write to disk
     if (fInsertedNew || fUpdated) {
-        if (!pwalletdb) {
-            CWalletDB(strWalletFile).WriteTx(wtx);
-        } else if (!pwalletdb->WriteTx(wtx)) {
+        if (!walletdb.WriteTx(wtx))
             return false;
-        }
     }
 
     // Break debit/credit balance caches:
@@ -934,18 +933,18 @@ bool CWallet::LoadToWallet(const CWalletTx& wtxIn)
  * pblock is optional, but should be provided if the transaction is known to be in a block.
  * If fUpdate is true, existing transactions will be updated.
  */
-bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate)
+bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlockIndex* pIndex, int posInBlock, bool fUpdate)
 {
     {
         AssertLockHeld(cs_wallet);
 
-        if (pblock && !tx.HasZerocoinSpendInputs() && !tx.IsCoinBase()) {
+        if (posInBlock != -1 && !tx.HasZerocoinSpendInputs() && !tx.IsCoinBase()) {
             for (const CTxIn& txin : tx.vin) {
                 std::pair<TxSpends::const_iterator, TxSpends::const_iterator> range = mapTxSpends.equal_range(txin.prevout);
                 while (range.first != range.second) {
                     if (range.first->second != tx.GetHash()) {
-                        LogPrintf("Transaction %s (in block %s) conflicts with wallet transaction %s (both spend %s:%i)\n", tx.GetHash().ToString(), pblock->GetHash().ToString(), range.first->second.ToString(), range.first->first.hash.ToString(), range.first->first.n);
-                        MarkConflicted(pblock->GetHash(), range.first->second);
+                        LogPrintf("Transaction %s (in block %s) conflicts with wallet transaction %s (both spend %s:%i)\n", tx.GetHash().ToString(), pIndex->GetBlockHash().ToString(), range.first->second.ToString(), range.first->first.hash.ToString(), range.first->first.n);
+                        MarkConflicted(pIndex->GetBlockHash(), range.first->second);
                     }
                     range.first++;
                 }
@@ -969,13 +968,10 @@ bool CWallet::AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pbl
 
             CWalletTx wtx(this, tx);
             // Get merkle branch if transaction was found in a block
-            if (pblock)
-                wtx.SetMerkleBranch(*pblock);
-            // Do not flush the wallet here for performance reasons
-            // this is safe, as in case of a crash, we rescan the necessary blocks on startup through our SetBestChain-mechanism
-            CWalletDB walletdb(strWalletFile, "r+", false);
+            if (posInBlock != -1)
+                wtx.SetMerkleBranch(pIndex, posInBlock);
 
-            return AddToWallet(wtx, &walletdb);
+            return AddToWallet(wtx, false);
         }
     }
     return false;
@@ -1098,10 +1094,10 @@ void CWallet::MarkConflicted(const uint256& hashBlock, const uint256& hashTx)
     }
 }
 
-void CWallet::SyncTransaction(const CTransaction& tx, const CBlock* pblock)
+void CWallet::SyncTransaction(const CTransaction& tx, const CBlockIndex *pindex, int posInBlock)
 {
     LOCK(cs_wallet);
-    if (!AddToWalletIfInvolvingMe(tx, pblock, true))
+    if (!AddToWalletIfInvolvingMe(tx, pindex, posInBlock, true))
         return; // Not one of ours
 
     // If a transaction changes 'conflicted' state, that changes the balance
@@ -1682,8 +1678,9 @@ int CWallet::ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate, b
 
             CBlock block;
             ReadBlockFromDisk(block, pindex);
-            for (CTransaction& tx : block.vtx) {
-                if (AddToWalletIfInvolvingMe(tx, &block, fUpdate))
+            int posInBlock;
+            for (posInBlock = 0; posInBlock < (int)block.vtx.size(); posInBlock++) {
+                if (AddToWalletIfInvolvingMe(block.vtx[posInBlock], pindex, posInBlock, fUpdate))
                     ret++;
             }
 
@@ -3004,17 +3001,12 @@ CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey&
         LOCK2(cs_main, cs_wallet);
         LogPrintf("%s:\n%s", __func__, wtxNew.ToString());
         {
-            // This is only to keep the database open to defeat the auto-flush for the
-            // duration of this scope.  This is the only place where this optimization
-            // maybe makes sense; please don't do it anywhere else.
-            CWalletDB* pwalletdb = fFileBacked ? new CWalletDB(strWalletFile, "r+") : NULL;
-
             // Take key pair from key pool so it won't be used again
             reservekey.KeepKey();
 
             // Add tx to wallet, because if it has change it's also ours,
             // otherwise just for transaction history.
-            AddToWallet(wtxNew, pwalletdb);
+            AddToWallet(wtxNew);
 
             // Notify that old coins are spent
             if (!wtxNew.HasZerocoinSpendInputs()) {
@@ -3029,9 +3021,6 @@ CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey&
                     updated_hashes.insert(txin.prevout.hash);
                 }
             }
-
-            if (fFileBacked)
-                delete pwalletdb;
         }
 
         res.hashTx = wtxNew.GetHash();
@@ -3897,22 +3886,13 @@ CWalletKey::CWalletKey(int64_t nExpires)
     nTimeExpires = nExpires;
 }
 
-void CMerkleTx::SetMerkleBranch(const CBlock& block)
+void CMerkleTx::SetMerkleBranch(const CBlockIndex* pindex, int posInBlock)
 {
-    CBlock blockTmp;
-
     // Update the tx's hashBlock
-    hashBlock = block.GetHash();
+    hashBlock = pindex->GetBlockHash();
 
-    // Locate the transaction
-    for (nIndex = 0; nIndex < (int)block.vtx.size(); nIndex++)
-        if (block.vtx[nIndex] == *(CTransaction*)this)
-            break;
-    if (nIndex == (int)block.vtx.size()) {
-        nIndex = -1;
-        LogPrintf("ERROR: SetMerkleBranch() : couldn't find tx in block\n");
-        return;
-    }
+    // set the position of the transaction in the block
+    nIndex = posInBlock;
 }
 
 int CMerkleTx::GetDepthInMainChain(bool enableIX) const

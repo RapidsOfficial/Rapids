@@ -478,10 +478,10 @@ public:
 
     bool GetLabelDestination(CTxDestination& dest, const std::string& label, bool bForceNew = false);
     void MarkDirty();
-    bool AddToWallet(const CWalletTx& wtxIn, CWalletDB* pwalletdb = nullptr);
+    bool AddToWallet(const CWalletTx& wtxIn, bool fFlushOnClose = true);
     bool LoadToWallet(const CWalletTx& wtxIn);
-    void SyncTransaction(const CTransaction& tx, const CBlock* pblock);
-    bool AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlock* pblock, bool fUpdate);
+    void SyncTransaction(const CTransaction& tx, const CBlockIndex *pindex, int posInBlock);
+    bool AddToWalletIfInvolvingMe(const CTransaction& tx, const CBlockIndex* pIndex, int posInBlock, bool fUpdate);
     void EraseFromWallet(const uint256& hash);
 
     /**
@@ -806,8 +806,7 @@ public:
         READWRITE(nIndex);
     }
 
-    void SetMerkleBranch(const CBlock& block);
-
+    void SetMerkleBranch(const CBlockIndex* pIndex, int posInBlock);
 
     /**
      * Return depth of transaction in blockchain:
