@@ -162,13 +162,23 @@ BOOST_AUTO_TEST_CASE(coins_cache_simulation_test)
         }
 
         if (InsecureRandRange(100) == 0) {
+            // Every 100 iterations, flush an intermediate cache
+            if (stack.size() > 1 && InsecureRandBool() == 0) {
+                unsigned int flushIndex = InsecureRandRange(stack.size() - 1) == 0;
+                stack[flushIndex]->Flush();
+            }
+        }
+
+        if (InsecureRandRange(100) == 0) {
             // Every 100 iterations, change the cache stack.
             if (stack.size() > 0 && InsecureRandBool() == 0) {
+                //Remove the top cache
                 stack.back()->Flush();
                 delete stack.back();
                 stack.pop_back();
             }
             if (stack.size() == 0 || (stack.size() < 4 && InsecureRandBool())) {
+                //Add a new cache
                 CCoinsView* tip = &base;
                 if (stack.size() > 0) {
                     tip = stack.back();
