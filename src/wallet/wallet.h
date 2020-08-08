@@ -26,7 +26,7 @@
 #include "util.h"
 #include "util/memory.h"
 #include "validationinterface.h"
-#include "wallet/wallet_ismine.h"
+#include "script/ismine.h"
 #include "wallet/scriptpubkeyman.h"
 #include "sapling/saplingscriptpubkeyman.h"
 #include "wallet/walletdb.h"
@@ -992,20 +992,12 @@ public:
     int i;
     int nDepth;
     bool fSpendable;
+    bool fSolvable;
 
-    COutput(const CWalletTx* txIn, int iIn, int nDepthIn, bool fSpendableIn)
-    {
-        tx = txIn;
-        i = iIn;
-        nDepth = nDepthIn;
-        fSpendable = fSpendableIn;
-    }
+    COutput(const CWalletTx* txIn, int iIn, int nDepthIn, bool fSpendableIn, bool fSolvableIn) :
+        tx(txIn), i(iIn), nDepth(nDepthIn), fSpendable(fSpendableIn), fSolvable(fSolvableIn) {}
 
-    CAmount Value() const
-    {
-        return tx->vout[i].nValue;
-    }
-
+    CAmount Value() const { return tx->vout[i].nValue; }
     std::string ToString() const;
 };
 

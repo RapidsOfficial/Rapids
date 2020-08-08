@@ -2013,9 +2013,10 @@ void CWallet::GetAvailableP2CSCoins(std::vector<COutput>& vCoins) const {
                     if (utxo.scriptPubKey.IsPayToColdStaking()) {
                         isminetype mine = IsMine(utxo);
                         bool isMineSpendable = mine & ISMINE_SPENDABLE_DELEGATED;
+                        bool fIsSolvable = (mine & (ISMINE_SPENDABLE_ALL | ISMINE_WATCH_SOLVABLE)) != ISMINE_NO;
                         if (mine & ISMINE_COLD || isMineSpendable)
                             // Depth is not used, no need waste resources and set it for now.
-                            vCoins.emplace_back(COutput(pcoin, i, 0, isMineSpendable));
+                            vCoins.emplace_back(COutput(pcoin, i, 0, isMineSpendable, fIsSolvable));
                     }
                 }
             }
@@ -2112,7 +2113,7 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
     }
 
     return GetVinAndKeysFromOutput(
-            COutput(&wtx, nOutputIndex, nDepth, true),
+            COutput(&wtx, nOutputIndex, nDepth, true, true),
             txinRet,
             pubKeyRet,
             keyRet);
@@ -2181,15 +2182,16 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                 // skip auto-delegated coins
                 if (mine == ISMINE_SPENDABLE_STAKEABLE && !fIncludeColdStaking && !fIncludeDelegated) continue;
 
-                bool fIsValid = (
-                        ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
-                        (coinControl && coinControl->fAllowWatchOnly && (mine & ISMINE_WATCH_SOLVABLE) != ISMINE_NO) ||
+                bool solvable = (mine & (ISMINE_SPENDABLE_ALL | ISMINE_WATCH_SOLVABLE)) != ISMINE_NO;
+
+                bool spendable = ((mine & ISMINE_SPENDABLE) != ISMINE_NO) ||
+                        (((mine & ISMINE_WATCH_ONLY) != ISMINE_NO) && (coinControl && coinControl->fAllowWatchOnly && solvable)) ||
                         ((mine & ((fIncludeColdStaking ? ISMINE_COLD : ISMINE_NO) |
-                                (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO));
+                        (fIncludeDelegated ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO) )) != ISMINE_NO);
 
                 // found valid coin
                 if (!pCoins) return true;
-                pCoins->emplace_back(COutput(pcoin, i, nDepth, fIsValid));
+                pCoins->emplace_back(COutput(pcoin, i, nDepth, spendable, solvable));
             }
         }
         return (pCoins && pCoins->size() > 0);

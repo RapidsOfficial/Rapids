@@ -3140,6 +3140,7 @@ UniValue listunspent(const JSONRPCRequest& request)
                 "    \"amount\" : x.xxx,         (numeric) the transaction amount in PIV\n"
                 "    \"confirmations\" : n,      (numeric) The number of confirmations\n"
                 "    \"spendable\" : true|false  (boolean) Whether we have the private keys to spend this output\n"
+                "    \"solvable\" : xxx          (bool) Whether we know how to spend this output, ignoring the lack of keys\n"
                 "  }\n"
                 "  ,...\n"
                 "]\n"
@@ -3232,6 +3233,7 @@ UniValue listunspent(const JSONRPCRequest& request)
         entry.push_back(Pair("amount", ValueFromAmount(nValue)));
         entry.push_back(Pair("confirmations", out.nDepth));
         entry.push_back(Pair("spendable", out.fSpendable));
+        entry.push_back(Pair("solvable", out.fSolvable));
         results.push_back(entry);
     }
 

@@ -213,6 +213,7 @@ set(SERVER_SOURCES
         ./src/rpc/rawtransaction.cpp
         ./src/rpc/server.cpp
         ./src/script/sigcache.cpp
+        ./src/script/ismine.cpp
         ./src/sporkdb.cpp
         ./src/timedata.cpp
         ./src/torcontrol.cpp
@@ -270,7 +271,6 @@ set(WALLET_SOURCES
         ./src/legacy/stakemodifier.cpp
         ./src/wallet/wallet.cpp
         ./src/wallet/wallet_zerocoin.cpp
-        ./src/wallet/wallet_ismine.cpp
         ./src/wallet/walletdb.cpp
         ./src/zpiv/zpivwallet.cpp
         ./src/zpiv/zpivtracker.cpp

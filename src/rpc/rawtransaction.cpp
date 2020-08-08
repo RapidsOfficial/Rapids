@@ -436,6 +436,7 @@ UniValue fundrawtransaction(const JSONRPCRequest& request)
             "Note that all existing inputs must have their previous output transaction be in the wallet.\n"
             "Note that all inputs selected must be of standard form and P2SH scripts must be "
             "in the wallet using importaddress or addmultisigaddress (to calculate fees).\n"
+            "You can see whether this is the case by checking the \"solvable\" field in the listunspent output.\n"
             "Only pay-to-pubkey, multisig, and P2SH versions thereof are currently supported for watch-only\n"
 
             "\nArguments:\n"
