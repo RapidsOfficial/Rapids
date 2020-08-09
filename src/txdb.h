@@ -7,16 +7,21 @@
 #ifndef BITCOIN_TXDB_H
 #define BITCOIN_TXDB_H
 
+#include "coins.h"
+#include "chain.h"
 #include "dbwrapper.h"
-#include "main.h"
-#include "zpiv/zerocoin.h"
+#include "libzerocoin/Coin.h"
+#include "libzerocoin/CoinSpend.h"
 
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include <boost/function.hpp>
+
 class CCoins;
+class CCoinsViewDBCursor;
 class uint256;
 
 //! -dbcache default (MiB)
@@ -25,8 +30,6 @@ static const int64_t nDefaultDbCache = 100;
 static const int64_t nMaxDbCache = sizeof(void*) > 4 ? 16384 : 1024;
 //! min. -dbcache in (MiB)
 static const int64_t nMinDbCache = 4;
-
-class CCoinsViewDBCursor;
 
 struct CDiskTxPos : public CDiskBlockPos
 {
@@ -118,7 +121,7 @@ public:
     bool ReadFlag(const std::string& name, bool& fValue);
     bool WriteInt(const std::string& name, int nValue);
     bool ReadInt(const std::string& name, int& nValue);
-    bool LoadBlockIndexGuts();
+    bool LoadBlockIndexGuts(boost::function<CBlockIndex*(const uint256&)> insertBlockIndex);
     bool ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet);
     bool WriteMoneySupply(const int64_t& nSupply);
     bool ReadMoneySupply(int64_t& nSupply) const;
