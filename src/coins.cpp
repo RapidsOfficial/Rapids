@@ -433,8 +433,7 @@ CCoinsModifier::~CCoinsModifier()
 }
 
 CCoinsViewCursor::~CCoinsViewCursor()
-{
-}
+{}
 
 static const size_t MAX_OUTPUTS_PER_BLOCK = MAX_BLOCK_SIZE_CURRENT /  ::GetSerializeSize(CTxOut(), SER_NETWORK, PROTOCOL_VERSION); // TODO: merge with similar definition in undo.h.
 
