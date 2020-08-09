@@ -16,7 +16,7 @@
  *
  *  Contains the prevout's CTxOut being spent, and if this was the
  *  last output of the affected transaction, its metadata as well
- *  (coinbase or not, height, transaction version)
+ *  (coinbase/coinstake or not, height, transaction version)
  */
 class CTxInUndo
 {
