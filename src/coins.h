@@ -531,9 +531,6 @@ public:
     //! Check whether all prevouts of the transaction are present in the UTXO set represented by this view
     bool HaveInputs(const CTransaction& tx) const;
 
-    //! Check if the specific output is available in this view
-    bool IsOutputAvailable(const uint256& txId, int index);
-
     /**
      * Return priority of tx at height nHeight. Also calculate the sum of the values of the inputs
      * that are already in the chain.  These are the inputs that will age and increase priority as

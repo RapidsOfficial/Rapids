@@ -328,11 +328,6 @@ bool CCoinsViewCache::HaveInputs(const CTransaction& tx) const
     return true;
 }
 
-bool CCoinsViewCache::IsOutputAvailable(const uint256& txId, int index) {
-    const CCoins* coins = AccessCoins(txId);
-    return coins && coins->IsAvailable(index);
-}
-
 double CCoinsViewCache::GetPriority(const CTransaction& tx, int nHeight, CAmount &inChainInputValue) const
 {
     inChainInputValue = 0;
