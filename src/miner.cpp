@@ -279,7 +279,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 }
 
                 const Coin& coin = view.AccessCoin(txin.prevout);
-                assert(!coin.IsPruned());
+                assert(hasZerocoinSpends || !coin.IsPruned());
 
                 CAmount nValueIn = coin.out.nValue;
                 nTotalIn += nValueIn;
