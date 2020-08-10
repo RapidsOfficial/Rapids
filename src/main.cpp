@@ -812,9 +812,9 @@ void LimitMempoolSize(CTxMemPool& pool, size_t limit, unsigned long age) {
     if (expired != 0)
         LogPrint(BCLog::MEMPOOL, "Expired %i transactions from the memory pool\n", expired);
 
-    std::vector<uint256> vNoSpendsRemaining;
+    std::vector<COutPoint> vNoSpendsRemaining;
     pool.TrimToSize(limit, &vNoSpendsRemaining);
-    for (const uint256& removed: vNoSpendsRemaining)
+    for (const COutPoint& removed: vNoSpendsRemaining)
         pcoinsTip->Uncache(removed);
 }
 
@@ -854,7 +854,7 @@ std::string FormatStateMessage(const CValidationState &state)
 
 bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const CTransaction &tx, bool fLimitFree,
                               bool* pfMissingInputs, bool fOverrideMempoolLimit, bool fRejectAbsurdFee, bool ignoreFees,
-                              std::vector<uint256>& vHashTxnToUncache)
+                              std::vector<COutPoint>& vHashTxnToUncache)
 {
     AssertLockHeld(cs_main);
     if (pfMissingInputs)
@@ -938,22 +938,26 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
             view.SetBackend(viewMemPool);
 
             // do we already have it?
-            bool fHadTxInCache = pcoinsTip->HaveCoinsInCache(hash);
-            if (view.HaveCoins(hash)) {
-                if (!fHadTxInCache)
-                    vHashTxnToUncache.push_back(hash);
-                return state.Invalid(false, REJECT_ALREADY_KNOWN, "txn-already-known");
+            for (size_t out = 0; out < tx.vout.size(); out++) {
+                COutPoint outpoint(hash, out);
+                bool fHadTxInCache = pcoinsTip->HaveCoinsInCache(outpoint);
+                if (view.HaveCoins(outpoint)) {
+                    if (!fHadTxInCache) {
+                        vHashTxnToUncache.push_back(outpoint);
+                    }
+                    return state.Invalid(false, REJECT_ALREADY_KNOWN, "txn-already-known");
+                }
             }
 
             // do all inputs exist?
-            // Note that this does not check for the presence of actual outputs (see the next check for that),
-            // only helps filling in pfMissingInputs (to determine missing vs spent).
             for (const CTxIn& txin : tx.vin) {
-                if (!pcoinsTip->HaveCoinsInCache(txin.prevout.hash))
-                    vHashTxnToUncache.push_back(txin.prevout.hash);
-                if (!view.HaveCoins(txin.prevout.hash)) {
-                    if (pfMissingInputs)
+                if (!pcoinsTip->HaveCoinsInCache(txin.prevout)) {
+                    vHashTxnToUncache.push_back(txin.prevout);
+                }
+                if (!view.HaveCoins(txin.prevout)) {
+                    if (pfMissingInputs) {
                         *pfMissingInputs = true;
+                    }
                     return false; // fMissingInputs and !state.IsInvalid() is used to detect this condition, don't set state.Invalid()
                 }
 
@@ -966,10 +970,6 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
             if (!Params().IsRegTestNet() && tx.HasZerocoinMintOutputs())
                 return state.Invalid(error("%s : tried to include zPIV mint output in tx %s",
                         __func__, tx.GetHash().GetHex()), REJECT_INVALID, "bad-zc-spend-mint");
-
-            // are the actual inputs available?
-            if (!view.HaveInputs(tx))
-                return state.Invalid(false, REJECT_DUPLICATE, "bad-txns-inputs-spent");
 
             // Bring the best block into scope
             view.GetBestBlock();
@@ -1133,11 +1133,11 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
 bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransaction &tx, bool fLimitFree,
                         bool* pfMissingInputs, bool fOverrideMempoolLimit, bool fRejectAbsurdFee, bool fIgnoreFees)
 {
-    std::vector<uint256> vHashTxToUncache;
+    std::vector<COutPoint> vHashTxToUncache;
     bool res = AcceptToMemoryPoolWorker(pool, state, tx, fLimitFree, pfMissingInputs, fOverrideMempoolLimit, fRejectAbsurdFee, fIgnoreFees, vHashTxToUncache);
     if (!res) {
-        for (const uint256& hashTx: vHashTxToUncache)
-            pcoinsTip->Uncache(hashTx);
+        for (const COutPoint& outpoint: vHashTxToUncache)
+            pcoinsTip->Uncache(outpoint);
     }
     return res;
 }
@@ -1200,30 +1200,26 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
             view.SetBackend(viewMemPool);
 
             // do we already have it?
-            if (view.HaveCoins(hash))
-                return false;
-
-            // do all inputs exist?
-            // Note that this does not check for the presence of actual outputs (see the next check for that),
-            // only helps filling in pfMissingInputs (to determine missing vs spent).
-            for (const CTxIn& txin : tx.vin) {
-                if (!view.HaveCoins(txin.prevout.hash)) {
-                    if (pfMissingInputs)
-                        *pfMissingInputs = true;
-                    return false;
-                }
-
-                // check for invalid/fraudulent inputs
-                if (!ValidOutPoint(txin.prevout, chainHeight)) {
-                    return state.Invalid(error("%s : tried to spend invalid input %s in tx %s", __func__, txin.prevout.ToString(),
-                                                tx.GetHash().GetHex()), REJECT_INVALID, "bad-txns-invalid-inputs");
+            for (size_t out = 0; out < tx.vout.size(); out++) {
+                COutPoint outpoint(hash, out);
+                if (view.HaveCoins(outpoint)) {
+                    return state.Invalid(false, REJECT_ALREADY_KNOWN, "txn-already-known");
                 }
             }
 
-            // are the actual inputs available?
-            if (!view.HaveInputs(tx))
-                return state.Invalid(error("AcceptableInputs : inputs already spent"),
-                    REJECT_DUPLICATE, "bad-txns-inputs-spent");
+            // do all inputs exist?
+            for (const CTxIn& txin : tx.vin) {
+                if (!view.HaveCoins(txin.prevout)) {
+                    if (pfMissingInputs) {
+                        *pfMissingInputs = true;
+                    }
+                    return false; // fMissingInputs and !state.IsInvalid() is used to detect this condition, don't set state.Invalid()
+                }
+
+                //Check for invalid/fraudulent inputs
+                if (!ValidOutPoint(txin.prevout, chainHeight))
+                    return state.Invalid(false, REJECT_INVALID, "bad-txns-invalid-inputs");
+            }
 
             // Bring the best block into scope
             view.GetBestBlock();
@@ -2619,12 +2615,12 @@ bool static FlushStateToDisk(CValidationState& state, FlushStateMode mode)
 
         // Flush best chain related state. This can only be done if the blocks / block index write was also done.
         if (fDoFullFlush) {
-            // Typical CCoins structures on disk are around 128 bytes in size.
+            // Typical Coin structures on disk are around 48 bytes in size.
             // Pushing a new one to the database can cause it to be written
             // twice (once in the log, and once in the tables). This is already
             // an overestimation, as most will delete an existing entry or
             // overwrite one. Still, use a conservative safety factor of 2.
-            if (!CheckDiskSpace(128 * 2 * 2 * pcoinsTip->GetCacheSize()))
+            if (!CheckDiskSpace(48 * 2 * 2 * pcoinsTip->GetCacheSize()))
                 return state.Error("out of disk space");
             // Flush the chainstate (which may refer to block index entries).
             if (!pcoinsTip->Flush())
@@ -2665,8 +2661,9 @@ void static UpdateTip(CBlockIndex* pindexNew)
     }
 
     const CBlockIndex* pChainTip = chainActive.Tip();
-    LogPrintf("UpdateTip: new best=%s  height=%d version=%d  log2_work=%.16f  tx=%lu  date=%s progress=%f  cache=%.1fMiB(%utx)\n",
-            pChainTip->GetBlockHash().GetHex(), pChainTip->nHeight, pChainTip->nVersion, log(pChainTip->nChainWork.getdouble()) / log(2.0), (unsigned long)pChainTip->nChainTx,
+    LogPrintf("%s: new best=%s  height=%d version=%d  log2_work=%.16f  tx=%lu  date=%s progress=%f  cache=%.1fMiB(%utxo)\n",
+              __func__,
+              pChainTip->GetBlockHash().GetHex(), pChainTip->nHeight, pChainTip->nVersion, log(pChainTip->nChainWork.getdouble()) / log(2.0), (unsigned long)pChainTip->nChainTx,
               DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pChainTip->GetBlockTime()),
               Checkpoints::GuessVerificationProgress(pChainTip), pcoinsTip->DynamicMemoryUsage() * (1.0 / (1<<20)), pcoinsTip->GetCacheSize());
 
@@ -4891,12 +4888,13 @@ bool static AlreadyHave(const CInv& inv) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
             hashRecentRejectsChainTip = chainActive.Tip()->GetBlockHash();
             recentRejects->reset();
         }
-        // Use pcoinsTip->HaveCoinsInCache as a quick approximation to exclude
-        // requesting or processing some txs which have already been included in a block
+
+
         return recentRejects->contains(inv.hash) ||
                mempool.exists(inv.hash) ||
                mapOrphanTransactions.count(inv.hash) ||
-               pcoinsTip->HaveCoinsInCache(inv.hash);
+               pcoinsTip->HaveCoinsInCache(COutPoint(inv.hash, 0)) || // Best effort: only try output 0 and 1
+               pcoinsTip->HaveCoinsInCache(COutPoint(inv.hash, 1));
     }
 
     case MSG_BLOCK:

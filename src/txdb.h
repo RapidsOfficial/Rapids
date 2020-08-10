@@ -69,8 +69,8 @@ protected:
 public:
     CCoinsViewDB(size_t nCacheSize, bool fMemory = false, bool fWipe = false);
 
-    bool GetCoins(const uint256& txid, CCoins& coins) const override;
-    bool HaveCoins(const uint256& txid) const override;
+    bool GetCoins(const COutPoint& outpoint, Coin& coin) const override;
+    bool HaveCoins(const COutPoint& outpoint) const override;
     uint256 GetBestBlock() const override;
     bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) override;
     CCoinsViewCursor* Cursor() const override;
@@ -84,18 +84,18 @@ class CCoinsViewDBCursor: public CCoinsViewCursor
 public:
     ~CCoinsViewDBCursor() {}
 
-    bool GetKey(uint256 &key) const;
-    bool GetValue(CCoins &coins) const;
+    bool GetKey(COutPoint& key) const;
+    bool GetValue(Coin& coin) const;
     unsigned int GetValueSize() const;
 
     bool Valid() const;
     void Next();
 
 private:
-    CCoinsViewDBCursor(CDBIterator* pcursorIn, const uint256 &hashBlockIn):
+    CCoinsViewDBCursor(CDBIterator* pcursorIn, const uint256& hashBlockIn):
         CCoinsViewCursor(hashBlockIn), pcursor(pcursorIn) {}
     boost::scoped_ptr<CDBIterator> pcursor;
-    std::pair<char, uint256> keyTmp;
+    std::pair<char, COutPoint> keyTmp;
 
     friend class CCoinsViewDB;
 };
