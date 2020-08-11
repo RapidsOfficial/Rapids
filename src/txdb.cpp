@@ -56,12 +56,12 @@ CCoinsViewDB::CCoinsViewDB(size_t nCacheSize, bool fMemory, bool fWipe) : db(Get
 {
 }
 
-bool CCoinsViewDB::GetCoins(const COutPoint& outpoint, Coin& coin) const
+bool CCoinsViewDB::GetCoin(const COutPoint& outpoint, Coin& coin) const
 {
     return db.Read(CoinEntry(&outpoint), coin);
 }
 
-bool CCoinsViewDB::HaveCoins(const COutPoint& outpoint) const
+bool CCoinsViewDB::HaveCoin(const COutPoint& outpoint) const
 {
     return db.Exists(CoinEntry(&outpoint));
 }
@@ -82,7 +82,7 @@ bool CCoinsViewDB::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock)
     for (CCoinsMap::iterator it = mapCoins.begin(); it != mapCoins.end();) {
         if (it->second.flags & CCoinsCacheEntry::DIRTY) {
             CoinEntry entry(&it->first);
-            if (it->second.coin.IsPruned())
+            if (it->second.coin.IsSpent())
                 batch.Erase(entry);
             else
                 batch.Write(entry, it->second.coin);

@@ -509,8 +509,8 @@ void CTxMemPool::removeForReorg(const CCoinsViewCache *pcoins, unsigned int nMem
                 if (it2 != mapTx.end())
                     continue;
                 const Coin &coin = pcoins->AccessCoin(txin.prevout);
-                if (nCheckFrequency != 0) assert(!coin.IsPruned());
-                if (coin.IsPruned() || ((coin.IsCoinBase() || coin.IsCoinStake()) && ((signed long)nMemPoolHeight) - coin.nHeight < Params().GetConsensus().nCoinbaseMaturity)) {
+                if (nCheckFrequency != 0) assert(!coin.IsSpent());
+                if (coin.IsSpent() || ((coin.IsCoinBase() || coin.IsCoinStake()) && ((signed long)nMemPoolHeight) - coin.nHeight < Params().GetConsensus().nCoinbaseMaturity)) {
                     transactionsToRemove.push_back(tx);
                     break;
                 }
@@ -622,7 +622,7 @@ void CTxMemPool::check(const CCoinsViewCache* pcoins) const
                 fDependsWait = true;
                 setParentCheck.insert(it2);
             } else if(!txin.IsZerocoinSpend() && !txin.IsZerocoinPublicSpend()) {
-                assert(pcoins->HaveCoins(txin.prevout));
+                assert(pcoins->HaveCoin(txin.prevout));
             } else {
                 fHasZerocoinSpends = true;
             }
@@ -831,7 +831,7 @@ bool CTxMemPool::HasNoInputsOf(const CTransaction &tx) const
 
 CCoinsViewMemPool::CCoinsViewMemPool(CCoinsView* baseIn, CTxMemPool& mempoolIn) : CCoinsViewBacked(baseIn), mempool(mempoolIn) {}
 
-bool CCoinsViewMemPool::GetCoins(const COutPoint& outpoint, Coin& coin) const
+bool CCoinsViewMemPool::GetCoin(const COutPoint& outpoint, Coin& coin) const
 {
     // If an entry in the mempool exists, always return that one, as it's guaranteed to never
     // conflict with the underlying cache, and it cannot have pruned entries (as it contains full)
@@ -845,12 +845,12 @@ bool CCoinsViewMemPool::GetCoins(const COutPoint& outpoint, Coin& coin) const
             return false;
         }
     }
-    return (base->GetCoins(outpoint, coin) && !coin.IsPruned());
+    return (base->GetCoin(outpoint, coin) && !coin.IsSpent());
 }
 
-bool CCoinsViewMemPool::HaveCoins(const COutPoint& outpoint) const
+bool CCoinsViewMemPool::HaveCoin(const COutPoint& outpoint) const
 {
-    return mempool.exists(outpoint) || base->HaveCoins(outpoint);
+    return mempool.exists(outpoint) || base->HaveCoin(outpoint);
 }
 
 size_t CTxMemPool::DynamicMemoryUsage() const

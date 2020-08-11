@@ -254,7 +254,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
             for (const CTxIn& txin : tx.vin) {
                 // Read prev transaction
-                if (!view.HaveCoins(txin.prevout)) {
+                if (!view.HaveCoin(txin.prevout)) {
                     // This should never happen; all transactions in the memory
                     // pool should connect to either transactions in the chain
                     // or other transactions in the memory pool.
@@ -279,7 +279,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 }
 
                 const Coin& coin = view.AccessCoin(txin.prevout);
-                assert(hasZerocoinSpends || !coin.IsPruned());
+                assert(hasZerocoinSpends || !coin.IsSpent());
 
                 CAmount nValueIn = coin.out.nValue;
                 nTotalIn += nValueIn;

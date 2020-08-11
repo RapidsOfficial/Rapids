@@ -289,7 +289,7 @@ CAmount GetInvalidUTXOValue()
         bool fSpent = false;
         CCoinsViewCache cache(pcoinsTip);
         const Coin& coin = cache.AccessCoin(out);
-        if(coin.IsPruned())
+        if(coin.IsSpent())
             fSpent = true;
         if (!fSpent)
             nValue += coin.out.nValue;
