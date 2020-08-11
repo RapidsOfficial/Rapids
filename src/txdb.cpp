@@ -479,6 +479,61 @@ bool CZerocoinDB::WipeAccChecksums()
     return true;
 }
 
+namespace {
+
+//! Legacy class to deserialize pre-pertxout database entries without reindex.
+class CCoins
+{
+public:
+    //! whether transaction is a coinbase
+    bool fCoinBase;
+    bool fCoinStake;
+
+    //! unspent transaction outputs; spent outputs are .IsNull(); spent outputs at the end of the array are dropped
+    std::vector<CTxOut> vout;
+
+    //! at which height this transaction was included in the active block chain
+    int nHeight;
+
+    template <typename Stream>
+    void Unserialize(Stream& s)
+    {
+        unsigned int nCode = 0;
+        // version
+        int nVersionDummy;
+        ::Unserialize(s, VARINT(nVersionDummy));
+        // header code
+        ::Unserialize(s, VARINT(nCode));
+        fCoinBase = nCode & 1;         //0001 - means coinbase
+        fCoinStake = (nCode & 2) != 0; //0010 coinstake
+        std::vector<bool> vAvail(2, false);
+        vAvail[0] = (nCode & 4) != 0; // 0100
+        vAvail[1] = (nCode & 8) != 0; // 1000
+        unsigned int nMaskCode = (nCode / 16) + ((nCode & 12) != 0 ? 0 : 1);
+        // spentness bitmask
+        while (nMaskCode > 0) {
+            unsigned char chAvail = 0;
+            ::Unserialize(s, chAvail);
+            for (unsigned int p = 0; p < 8; p++) {
+                bool f = (chAvail & (1 << p)) != 0;
+                vAvail.push_back(f);
+            }
+            if (chAvail != 0)
+                nMaskCode--;
+        }
+        // txouts themself
+        vout.assign(vAvail.size(), CTxOut());
+        for (unsigned int i = 0; i < vAvail.size(); i++) {
+            if (vAvail[i])
+                ::Unserialize(s, REF(CTxOutCompressor(vout[i])));
+        }
+        // coinbase height
+        ::Unserialize(s, VARINT(nHeight));
+    }
+};
+
+}
+
 /** Upgrade the database from older formats.
  *
  * Currently implemented:

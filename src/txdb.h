@@ -20,7 +20,6 @@
 
 #include <boost/function.hpp>
 
-class CCoins;
 class CCoinsViewDBCursor;
 class uint256;
 
