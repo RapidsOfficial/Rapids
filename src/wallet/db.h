@@ -25,8 +25,6 @@ class COutPoint;
 
 struct CBlockLocator;
 
-extern unsigned int nWalletDBUpdated;
-
 class CDBEnv
 {
 private:
