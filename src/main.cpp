@@ -797,6 +797,17 @@ bool CheckFinalTx(const CTransaction& tx, int flags)
     return IsFinalTx(tx, nBlockHeight, nBlockTime);
 }
 
+void LimitMempoolSize(CTxMemPool& pool, size_t limit, unsigned long age) {
+    int expired = pool.Expire(GetTime() - age);
+    if (expired != 0)
+        LogPrint(BCLog::MEMPOOL, "Expired %i transactions from the memory pool\n", expired);
+
+    std::vector<uint256> vNoSpendsRemaining;
+    pool.TrimToSize(limit, &vNoSpendsRemaining);
+    for (const uint256& removed: vNoSpendsRemaining)
+        pcoinsTip->Uncache(removed);
+}
+
 CAmount GetMinRelayFee(const CTransaction& tx, const CTxMemPool& pool, unsigned int nBytes, bool fAllowFree)
 {
     uint256 hash = tx.GetHash();
@@ -831,8 +842,9 @@ std::string FormatStateMessage(const CValidationState &state)
         state.GetRejectCode());
 }
 
-bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransaction& tx, bool fLimitFree,
-        bool* pfMissingInputs, bool fOverrideMempoolLimit, bool fRejectInsaneFee, bool ignoreFees)
+bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const CTransaction &tx, bool fLimitFree,
+                              bool* pfMissingInputs, bool fOverrideMempoolLimit, bool fRejectAbsurdFee, bool ignoreFees,
+                              std::vector<uint256>& vHashTxnToUncache)
 {
     AssertLockHeld(cs_main);
     if (pfMissingInputs)
@@ -916,13 +928,19 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
             view.SetBackend(viewMemPool);
 
             // do we already have it?
-            if (view.HaveCoins(hash))
+            bool fHadTxInCache = pcoinsTip->HaveCoinsInCache(hash);
+            if (view.HaveCoins(hash)) {
+                if (!fHadTxInCache)
+                    vHashTxnToUncache.push_back(hash);
                 return state.Invalid(false, REJECT_ALREADY_KNOWN, "txn-already-known");
+            }
 
             // do all inputs exist?
             // Note that this does not check for the presence of actual outputs (see the next check for that),
             // only helps filling in pfMissingInputs (to determine missing vs spent).
             for (const CTxIn& txin : tx.vin) {
+                if (!pcoinsTip->HaveCoinsInCache(txin.prevout.hash))
+                    vHashTxnToUncache.push_back(txin.prevout.hash);
                 if (!view.HaveCoins(txin.prevout.hash)) {
                     if (pfMissingInputs)
                         *pfMissingInputs = true;
@@ -1027,7 +1045,7 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
             }
         }
 
-        if (fRejectInsaneFee && nFees > ::minRelayTxFee.GetFee(nSize) * 10000)
+        if (fRejectAbsurdFee && nFees > ::minRelayTxFee.GetFee(nSize) * 10000)
             return state.Invalid(false,
                 REJECT_HIGHFEE, "absurdly-high-fee",
                 strprintf("%d > %d", nFees, ::minRelayTxFee.GetFee(nSize) * 10000));
@@ -1086,12 +1104,8 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
 
         // trim mempool and check if tx was trimmed
         if (!fOverrideMempoolLimit) {
-            int expired = pool.Expire(GetTime() - GetArg("-mempoolexpiry", DEFAULT_MEMPOOL_EXPIRY) * 60 * 60);
-            if (expired != 0)
-                LogPrint(BCLog::MEMPOOL, "Expired %i transactions from the memory pool\n", expired);
-
-            pool.TrimToSize(GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000);
-            if (!pool.exists(tx.GetHash()))
+            LimitMempoolSize(pool, GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000, GetArg("-mempoolexpiry", DEFAULT_MEMPOOL_EXPIRY) * 60 * 60);
+            if (!pool.exists(hash))
                 return state.DoS(0, false, REJECT_INSUFFICIENTFEE, "mempool full");
         }
 
@@ -1103,6 +1117,18 @@ bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransa
     GetMainSignals().SyncTransaction(tx, nullptr, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
 
     return true;
+}
+
+bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState &state, const CTransaction &tx, bool fLimitFree,
+                        bool* pfMissingInputs, bool fOverrideMempoolLimit, bool fRejectAbsurdFee, bool fIgnoreFees)
+{
+    std::vector<uint256> vHashTxToUncache;
+    bool res = AcceptToMemoryPoolWorker(pool, state, tx, fLimitFree, pfMissingInputs, fOverrideMempoolLimit, fRejectAbsurdFee, fIgnoreFees, vHashTxToUncache);
+    if (!res) {
+        for (const uint256& hashTx: vHashTxToUncache)
+            pcoinsTip->Uncache(hashTx);
+    }
+    return res;
 }
 
 bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransaction& tx, bool fLimitFree, bool* pfMissingInputs, bool fRejectInsaneFee, bool isDSTX)
@@ -2975,7 +3001,7 @@ static bool ActivateBestChainStep(CValidationState& state, CBlockIndex* pindexMo
 
     if (fBlocksDisconnected) {
         mempool.removeForReorg(pcoinsTip, chainActive.Tip()->nHeight + 1, STANDARD_LOCKTIME_VERIFY_FLAGS);
-        mempool.TrimToSize(GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000);
+        LimitMempoolSize(mempool, GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000, GetArg("-mempoolexpiry", DEFAULT_MEMPOOL_EXPIRY) * 60 * 60);
     }
     mempool.check(pcoinsTip);
 
@@ -3113,7 +3139,7 @@ bool InvalidateBlock(CValidationState& state, CBlockIndex* pindex)
         }
     }
 
-    mempool.TrimToSize(GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000);
+    LimitMempoolSize(mempool, GetArg("-maxmempool", DEFAULT_MAX_MEMPOOL_SIZE) * 1000000, GetArg("-mempoolexpiry", DEFAULT_MEMPOOL_EXPIRY) * 60 * 60);
 
     // The resulting new best tip may not be in setBlockIndexCandidates anymore, so
     // add it again.
@@ -5660,6 +5686,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             if (nDoS > 0)
                 Misbehaving(pfrom->GetId(), nDoS);
         }
+        FlushStateToDisk(state, FLUSH_STATE_PERIODIC);
     }
 
 
