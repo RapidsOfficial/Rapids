@@ -52,7 +52,6 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
             sub.credit = nCredit;
             sub.debit = -nDebit;
             loadHotOrColdStakeOrContract(wallet, wtx, sub);
-            parts.append(sub);
         } else {
             // PIV stake reward
             CTxDestination address;
