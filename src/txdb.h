@@ -7,16 +7,21 @@
 #ifndef BITCOIN_TXDB_H
 #define BITCOIN_TXDB_H
 
+#include "coins.h"
+#include "chain.h"
 #include "dbwrapper.h"
-#include "main.h"
-#include "zpiv/zerocoin.h"
+#include "libzerocoin/Coin.h"
+#include "libzerocoin/CoinSpend.h"
 
 #include <map>
 #include <string>
 #include <utility>
 #include <vector>
 
+#include <boost/function.hpp>
+
 class CCoins;
+class CCoinsViewDBCursor;
 class uint256;
 
 //! -dbcache default (MiB)
@@ -26,7 +31,8 @@ static const int64_t nMaxDbCache = sizeof(void*) > 4 ? 16384 : 1024;
 //! min. -dbcache in (MiB)
 static const int64_t nMinDbCache = 4;
 
-struct CDiskTxPos : public CDiskBlockPos {
+struct CDiskTxPos : public CDiskBlockPos
+{
     unsigned int nTxOffset; // after header
 
     ADD_SERIALIZE_METHODS;
@@ -67,7 +73,29 @@ public:
     bool HaveCoins(const uint256& txid) const;
     uint256 GetBestBlock() const;
     bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock);
-    bool GetStats(CCoinsStats& stats) const;
+    CCoinsViewCursor *Cursor() const;
+};
+
+/** Specialization of CCoinsViewCursor to iterate over a CCoinsViewDB */
+class CCoinsViewDBCursor: public CCoinsViewCursor
+{
+public:
+    ~CCoinsViewDBCursor() {}
+
+    bool GetKey(uint256 &key) const;
+    bool GetValue(CCoins &coins) const;
+    unsigned int GetValueSize() const;
+
+    bool Valid() const;
+    void Next();
+
+private:
+    CCoinsViewDBCursor(CDBIterator* pcursorIn, const uint256 &hashBlockIn):
+        CCoinsViewCursor(hashBlockIn), pcursor(pcursorIn) {}
+    boost::scoped_ptr<CDBIterator> pcursor;
+    std::pair<char, uint256> keyTmp;
+
+    friend class CCoinsViewDB;
 };
 
 /** Access to the block database (blocks/index/) */
@@ -93,7 +121,7 @@ public:
     bool ReadFlag(const std::string& name, bool& fValue);
     bool WriteInt(const std::string& name, int nValue);
     bool ReadInt(const std::string& name, int& nValue);
-    bool LoadBlockIndexGuts();
+    bool LoadBlockIndexGuts(boost::function<CBlockIndex*(const uint256&)> insertBlockIndex);
     bool ReadLegacyBlockIndex(const uint256& blockHash, CLegacyBlockIndex& biRet);
     bool WriteMoneySupply(const int64_t& nSupply);
     bool ReadMoneySupply(int64_t& nSupply) const;

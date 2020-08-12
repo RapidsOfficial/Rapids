@@ -47,7 +47,7 @@ bool CCoinsView::GetCoins(const uint256& txid, CCoins& coins) const { return fal
 bool CCoinsView::HaveCoins(const uint256& txid) const { return false; }
 uint256 CCoinsView::GetBestBlock() const { return UINT256_ZERO; }
 bool CCoinsView::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) { return false; }
-bool CCoinsView::GetStats(CCoinsStats& stats) const { return false; }
+CCoinsViewCursor *CCoinsView::Cursor() const { return 0; }
 
 CCoinsViewBacked::CCoinsViewBacked(CCoinsView* viewIn) : base(viewIn) {}
 bool CCoinsViewBacked::GetCoins(const uint256& txid, CCoins& coins) const { return base->GetCoins(txid, coins); }
@@ -55,7 +55,7 @@ bool CCoinsViewBacked::HaveCoins(const uint256& txid) const { return base->HaveC
 uint256 CCoinsViewBacked::GetBestBlock() const { return base->GetBestBlock(); }
 void CCoinsViewBacked::SetBackend(CCoinsView& viewIn) { base = &viewIn; }
 bool CCoinsViewBacked::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) { return base->BatchWrite(mapCoins, hashBlock); }
-bool CCoinsViewBacked::GetStats(CCoinsStats& stats) const { return base->GetStats(stats); }
+CCoinsViewCursor *CCoinsViewBacked::Cursor() const { return base->Cursor(); }
 
 SaltedTxidHasher::SaltedTxidHasher() : k0(GetRand(std::numeric_limits<uint64_t>::max())), k1(GetRand(std::numeric_limits<uint64_t>::max())) {}
 
@@ -315,4 +315,8 @@ CCoinsModifier::~CCoinsModifier()
         // If the coin still exists after the modification, add the new usage
         cache.cachedCoinsUsage += memusage::DynamicUsage(it->second.coins);
     }
+}
+
+CCoinsViewCursor::~CCoinsViewCursor()
+{
 }

@@ -8,6 +8,7 @@
 #include "amount.h"
 #include "primitives/transaction.h"
 #include "txdb.h" // for the zerocoinDB implementation.
+#include "validationinterface.h"
 
 bool AcceptToMemoryPoolZerocoin(const CTransaction& tx, CAmount& nValueIn, int chainHeight, CValidationState& state, const Consensus::Params& consensus);
 bool DisconnectZerocoinTx(const CTransaction& tx, CAmount& nValueIn, CZerocoinDB* zerocoinDB);
