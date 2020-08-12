@@ -25,7 +25,7 @@ std::vector<CFinalizedBudgetBroadcast> vecImmatureFinalizedBudgets;
 
 int nSubmittedFinalBudget;
 
-bool IsBudgetCollateralValid(uint256 nTxCollateralHash, uint256 nExpectedHash, std::string& strError, int64_t& nTime, int& nConf, bool fBudgetFinalization)
+bool IsBudgetCollateralValid(const uint256& nTxCollateralHash, const uint256& nExpectedHash, std::string& strError, int64_t& nTime, int& nConf, bool fBudgetFinalization)
 {
     CTransaction txCollateral;
     uint256 nBlockHash;
@@ -179,11 +179,11 @@ void CBudgetManager::SubmitFinalBudget()
     std::string strBudgetName = "main";
     std::vector<CTxBudgetPayment> vecTxBudgetPayments;
 
-    for (unsigned int i = 0; i < vBudgetProposals.size(); i++) {
+    for (auto & vBudgetProposal : vBudgetProposals) {
         CTxBudgetPayment txBudgetPayment;
-        txBudgetPayment.nProposalHash = vBudgetProposals[i]->GetHash();
-        txBudgetPayment.payee = vBudgetProposals[i]->GetPayee();
-        txBudgetPayment.nAmount = vBudgetProposals[i]->GetAllotted();
+        txBudgetPayment.nProposalHash = vBudgetProposal->GetHash();
+        txBudgetPayment.payee = vBudgetProposal->GetPayee();
+        txBudgetPayment.nAmount = vBudgetProposal->GetAllotted();
         vecTxBudgetPayments.push_back(txBudgetPayment);
     }
 
@@ -592,7 +592,7 @@ void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, b
     }
 }
 
-CFinalizedBudget* CBudgetManager::FindFinalizedBudget(uint256 nHash)
+CFinalizedBudget* CBudgetManager::FindFinalizedBudget(const uint256& nHash)
 {
     if (mapFinalizedBudgets.count(nHash))
         return &mapFinalizedBudgets[nHash];
@@ -621,7 +621,7 @@ CBudgetProposal* CBudgetManager::FindProposal(const std::string& strProposalName
     return pbudgetProposal;
 }
 
-CBudgetProposal* CBudgetManager::FindProposal(uint256 nHash)
+CBudgetProposal* CBudgetManager::FindProposal(const uint256& nHash)
 {
     LOCK(cs);
 
@@ -1242,7 +1242,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
     }
 }
 
-bool CBudgetManager::PropExists(uint256 nHash)
+bool CBudgetManager::PropExists(const uint256& nHash)
 {
     if (mapProposals.count(nHash)) return true;
     return false;
@@ -1323,7 +1323,7 @@ void CBudgetManager::MarkSynced()
 }
 
 
-void CBudgetManager::Sync(CNode* pfrom, uint256 nProp, bool fPartial)
+void CBudgetManager::Sync(CNode* pfrom, const uint256& nProp, bool fPartial)
 {
     LOCK(cs);
 
@@ -1986,8 +1986,8 @@ CAmount CFinalizedBudget::GetTotalPayout()
 {
     CAmount ret = 0;
 
-    for (unsigned int i = 0; i < vecBudgetPayments.size(); i++) {
-        ret += vecBudgetPayments[i].nAmount;
+    for (auto & vecBudgetPayment : vecBudgetPayments) {
+        ret += vecBudgetPayment.nAmount;
     }
 
     return ret;
@@ -2167,7 +2167,7 @@ TrxValidationStatus CFinalizedBudget::IsTransactionValid(const CTransaction& txN
 
     bool paid = false;
 
-    for (CTxOut out : txNew.vout) {
+    for (const CTxOut& out : txNew.vout) {
         LogPrint(BCLog::MNBUDGET,"CFinalizedBudget::IsTransactionValid - nCurrentBudgetPayment=%d, payee=%s == out.scriptPubKey=%s, amount=%ld == out.nValue=%ld\n",
                  nCurrentBudgetPayment, HexStr(vecBudgetPayments[nCurrentBudgetPayment].payee), HexStr(out.scriptPubKey),
                  vecBudgetPayments[nCurrentBudgetPayment].nAmount, out.nValue);
@@ -2242,12 +2242,12 @@ CFinalizedBudgetBroadcast::CFinalizedBudgetBroadcast(const CFinalizedBudget& oth
 
 CFinalizedBudgetBroadcast::CFinalizedBudgetBroadcast(std::string strBudgetNameIn,
                                                      int nBlockStartIn,
-                                                     std::vector<CTxBudgetPayment> vecBudgetPaymentsIn,
+                                                     const std::vector<CTxBudgetPayment>& vecBudgetPaymentsIn,
                                                      uint256 nFeeTXHashIn)
 {
     strBudgetName = strBudgetNameIn;
     nBlockStart = nBlockStartIn;
-    for (CTxBudgetPayment out : vecBudgetPaymentsIn)
+    for (const CTxBudgetPayment& out : vecBudgetPaymentsIn)
         vecBudgetPayments.push_back(out);
     nFeeTXHash = nFeeTXHashIn;
 }
