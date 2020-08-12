@@ -17,7 +17,7 @@
 #include <assert.h>
 #include <stdint.h>
 
-#include <boost/unordered_map.hpp>
+#include <unordered_map>
 
 /** 
 
@@ -300,7 +300,7 @@ struct CCoinsCacheEntry {
     CCoinsCacheEntry() : coins(), flags(0) {}
 };
 
-typedef boost::unordered_map<uint256, CCoinsCacheEntry, SaltedTxidHasher> CCoinsMap;
+typedef std::unordered_map<uint256, CCoinsCacheEntry, SaltedTxidHasher> CCoinsMap;
 
 /** Cursor for iterating over CoinsView state */
 class CCoinsViewCursor
