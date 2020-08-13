@@ -251,14 +251,20 @@ public:
 
     int GetMasternodeInputAge()
     {
-        if (chainActive.Tip() == NULL) return 0;
+        int tipHeight;
+        {
+            LOCK(cs_main);
+            CBlockIndex *pindex = chainActive.Tip();
+            if (!pindex) return 0;
+            tipHeight = pindex->nHeight;
+        }
 
         if (cacheInputAge == 0) {
             cacheInputAge = GetInputAge(vin);
-            cacheInputAgeBlock = chainActive.Tip()->nHeight;
+            cacheInputAgeBlock = tipHeight;
         }
 
-        return cacheInputAge + (chainActive.Tip()->nHeight - cacheInputAgeBlock);
+        return cacheInputAge + (tipHeight - cacheInputAgeBlock);
     }
 
     std::string Status()
