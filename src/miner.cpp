@@ -11,6 +11,7 @@
 #include "miner.h"
 
 #include "amount.h"
+#include "chain.h"
 #include "consensus/merkle.h"
 #include "consensus/tx_verify.h" // needed in case of no ENABLE_WALLET
 #include "hash.h"
@@ -98,17 +99,6 @@ void UpdateTime(CBlockHeader* pblock, const CBlockIndex* pindexPrev)
     // Updating time can change work required on testnet:
     if (Params().GetConsensus().fPowAllowMinDifficultyBlocks)
         pblock->nBits = GetNextWorkRequired(pindexPrev, pblock);
-}
-
-CBlockIndex* GetChainTip()
-{
-    LOCK(cs_main);
-    CBlockIndex* p = chainActive.Tip();
-    if (!p)
-        return nullptr;
-    // Do not pass in the chain active tip, because it can change.
-    // Instead pass the blockindex directly from mapblockindex, which is const
-    return mapBlockIndex.at(p->GetBlockHash());
 }
 
 bool CheckForDuplicatedSerials(const CTransaction& tx, const Consensus::Params& consensus,

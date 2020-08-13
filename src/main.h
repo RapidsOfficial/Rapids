@@ -410,6 +410,11 @@ extern CZerocoinDB* zerocoinDB;
 extern CSporkDB* pSporkDB;
 
 /**
+ * Return a reliable pointer (in mapBlockIndex) to the chain's tip index
+ */
+CBlockIndex* GetChainTip();
+
+/**
  * Return the spend height, which is one more than the inputs.GetBestBlock().
  * While checking, GetBestBlock() refers to the parent block. (protected by cs_main)
  * This is also true for mempool checks.
