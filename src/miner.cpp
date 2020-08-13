@@ -11,7 +11,6 @@
 #include "miner.h"
 
 #include "amount.h"
-#include "chain.h"
 #include "consensus/merkle.h"
 #include "consensus/tx_verify.h" // needed in case of no ENABLE_WALLET
 #include "hash.h"

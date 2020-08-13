@@ -23,33 +23,22 @@ std::map<int64_t, uint256> mapCacheBlockHashes;
 //Get the last hash that matches the modulus given. Processed in reverse order
 bool GetBlockHash(uint256& hash, int nBlockHeight)
 {
-    int tipHeight;
-    const CBlockIndex* tipIndex;
-    {
-        LOCK(cs_main);
-        CBlockIndex *pindex = chainActive.Tip();
-        if (!pindex) return false;
-        tipHeight = pindex->nHeight;
-        tipIndex = mapBlockIndex[pindex->GetBlockHash()];
-    }
+    const CBlockIndex* tipIndex = GetChainTip();
+    if (!tipIndex || !tipIndex->nHeight) return false;
 
     if (nBlockHeight == 0)
-        nBlockHeight = tipHeight;
+        nBlockHeight = tipIndex->nHeight;
 
     if (mapCacheBlockHashes.count(nBlockHeight)) {
         hash = mapCacheBlockHashes[nBlockHeight];
         return true;
     }
 
-    const CBlockIndex* BlockLastSolved = tipIndex;
-    const CBlockIndex* BlockReading = tipIndex;
-
-    if (BlockLastSolved == nullptr || BlockLastSolved->nHeight == 0 || tipHeight + 1 < nBlockHeight) return false;
-
     int nBlocksAgo = 0;
-    if (nBlockHeight > 0) nBlocksAgo = (tipHeight + 1) - nBlockHeight;
-    assert(nBlocksAgo >= 0);
+    if (nBlockHeight > 0) nBlocksAgo = (tipIndex->nHeight + 1) - nBlockHeight;
+    if (nBlocksAgo < 0) return false;
 
+    const CBlockIndex* BlockReading = tipIndex;
     int n = 0;
     for (unsigned int i = 1; BlockReading && BlockReading->nHeight > 0; i++) {
         if (n >= nBlocksAgo) {
@@ -167,7 +156,7 @@ uint256 CMasternode::CalculateScore(int mod, int64_t nBlockHeight)
 {
     {
         LOCK(cs_main);
-        if (chainActive.Tip() == NULL) return UINT256_ZERO;
+        if (!chainActive.Tip()) return UINT256_ZERO;
     }
 
     uint256 hash;

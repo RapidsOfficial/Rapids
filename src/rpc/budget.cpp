@@ -65,7 +65,7 @@ void checkBudgetInputs(const UniValue& params, std::string &strProposalName, std
     if (nPaymentCount < 1)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid payment count, must be more than zero.");
 
-    CBlockIndex* pindexPrev = chainActive.Tip();
+    CBlockIndex* pindexPrev = GetChainTip();
     if (!pindexPrev)
         throw JSONRPCError(RPC_IN_WARMUP, "Try again after active chain is loaded");
 
@@ -552,11 +552,11 @@ UniValue getnextsuperblock(const JSONRPCRequest& request)
             "\nExamples:\n" +
             HelpExampleCli("getnextsuperblock", "") + HelpExampleRpc("getnextsuperblock", ""));
 
-    CBlockIndex* pindexPrev = chainActive.Tip();
-    if (!pindexPrev) return "unknown";
+    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    if (nChainHeight < 0) return "unknown";
 
     const int nBlocksPerCycle = Params().GetConsensus().nBudgetCycleBlocks;
-    int nNext = pindexPrev->nHeight - pindexPrev->nHeight % nBlocksPerCycle + nBlocksPerCycle;
+    int nNext = nChainHeight - nChainHeight % nBlocksPerCycle + nBlocksPerCycle;
     return nNext;
 }
 

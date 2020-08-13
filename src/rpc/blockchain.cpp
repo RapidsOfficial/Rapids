@@ -51,10 +51,11 @@ double GetDifficulty(const CBlockIndex* blockindex)
     // Floating point number that is a multiple of the minimum difficulty,
     // minimum difficulty = 1.0.
     if (blockindex == NULL) {
-        if (chainActive.Tip() == NULL)
+        const CBlockIndex* pChainTip = GetChainTip();
+        if (!pChainTip)
             return 1.0;
         else
-            blockindex = chainActive.Tip();
+            blockindex = pChainTip;
     }
 
     int nShift = (blockindex->nBits >> 24) & 0xff;
@@ -796,7 +797,7 @@ UniValue verifychain(const JSONRPCRequest& request)
 }
 
 /** Implementation of IsSuperMajority with better feedback */
-static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Consensus::Params& consensusParams)
+static UniValue SoftForkMajorityDesc(int version, const CBlockIndex* pindex, const Consensus::Params& consensusParams)
 {
     UniValue rv(UniValue::VOBJ);
     Consensus::UpgradeIndex idx;
@@ -825,7 +826,8 @@ static UniValue SoftForkMajorityDesc(int version, CBlockIndex* pindex, const Con
     rv.push_back(Pair("status", consensusParams.NetworkUpgradeActive(pindex->nHeight, idx)));
     return rv;
 }
-static UniValue SoftForkDesc(const std::string &name, int version, CBlockIndex* pindex)
+
+static UniValue SoftForkDesc(const std::string &name, int version, const CBlockIndex* pindex)
 {
     const Consensus::Params& consensus = Params().GetConsensus();
     UniValue rv(UniValue::VOBJ);
@@ -906,22 +908,23 @@ UniValue getblockchaininfo(const JSONRPCRequest& request)
     LOCK(cs_main);
 
     const Consensus::Params& consensusParams = Params().GetConsensus();
+    const CBlockIndex* pChainTip = chainActive.Tip();
+    int nTipHeight = pChainTip ? pChainTip->nHeight : -1;
 
     UniValue obj(UniValue::VOBJ);
     obj.push_back(Pair("chain", Params().NetworkIDString()));
-    obj.push_back(Pair("blocks", (int)chainActive.Height()));
+    obj.push_back(Pair("blocks", nTipHeight));
     obj.push_back(Pair("headers", pindexBestHeader ? pindexBestHeader->nHeight : -1));
-    obj.push_back(Pair("bestblockhash", chainActive.Tip()->GetBlockHash().GetHex()));
+    obj.push_back(Pair("bestblockhash", pChainTip ? pChainTip->GetBlockHash().GetHex() : ""));
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
-    obj.push_back(Pair("verificationprogress", Checkpoints::GuessVerificationProgress(chainActive.Tip())));
-    obj.push_back(Pair("chainwork", chainActive.Tip()->nChainWork.GetHex()));
-    CBlockIndex* tip = chainActive.Tip();
+    obj.push_back(Pair("verificationprogress", Checkpoints::GuessVerificationProgress(pChainTip)));
+    obj.push_back(Pair("chainwork", pChainTip ? pChainTip->nChainWork.GetHex() : ""));
     UniValue softforks(UniValue::VARR);
-    softforks.push_back(SoftForkDesc("bip65", 5, tip));
+    softforks.push_back(SoftForkDesc("bip65", 5, pChainTip));
     obj.push_back(Pair("softforks",             softforks));
     UniValue upgrades(UniValue::VOBJ);
     for (int i = Consensus::BASE_NETWORK + 1; i < (int) Consensus::MAX_NETWORK_UPGRADES; i++) {
-        NetworkUpgradeDescPushBack(upgrades, consensusParams, Consensus::UpgradeIndex(i), tip->nHeight);
+        NetworkUpgradeDescPushBack(upgrades, consensusParams, Consensus::UpgradeIndex(i), nTipHeight);
     }
     obj.push_back(Pair("upgrades", upgrades));
 

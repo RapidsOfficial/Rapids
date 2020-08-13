@@ -1623,12 +1623,16 @@ void CheckForkWarningConditions()
     if (IsInitialBlockDownload())
         return;
 
+    const CBlockIndex* pChainTip = chainActive.Tip();
+    if (!pChainTip)
+        return;
+
     // If our best fork is no longer within 72 blocks (+/- 3 hours if no one mines it)
     // of our head, drop it
-    if (pindexBestForkTip && chainActive.Height() - pindexBestForkTip->nHeight >= 72)
-        pindexBestForkTip = NULL;
+    if (pindexBestForkTip && pChainTip->nHeight - pindexBestForkTip->nHeight >= 72)
+        pindexBestForkTip = nullptr;
 
-    if (pindexBestForkTip || (pindexBestInvalid && pindexBestInvalid->nChainWork > chainActive.Tip()->nChainWork + (GetBlockProof(*chainActive.Tip()) * 6))) {
+    if (pindexBestForkTip || (pindexBestInvalid && pindexBestInvalid->nChainWork > pChainTip->nChainWork + (GetBlockProof(*pChainTip) * 6))) {
         if (!fLargeWorkForkFound && pindexBestForkBase) {
             if (pindexBestForkBase->phashBlock) {
                 std::string warning = std::string("'Warning: Large-work fork detected, forking after block ") +
@@ -1713,10 +1717,12 @@ void static InvalidChainFound(CBlockIndex* pindexNew)
         log(pindexNew->nChainWork.getdouble()) / log(2.0), DateTimeStrFormat("%Y-%m-%d %H:%M:%S",
                                                                pindexNew->GetBlockTime()));
 
-    const CBlockIndex* pChainTip = mapBlockIndex[chainActive.Tip()->GetBlockHash()];
+    const CBlockIndex* pChainTip = chainActive.Tip();
+    assert(pChainTip);
     LogPrintf("InvalidChainFound:  current best=%s  height=%d  log2_work=%.16f  date=%s\n",
             pChainTip->GetBlockHash().GetHex(), pChainTip->nHeight, log(pChainTip->nChainWork.getdouble()) / log(2.0),
         DateTimeStrFormat("%Y-%m-%d %H:%M:%S", pChainTip->GetBlockTime()));
+
     CheckForkWarningConditions();
 }
 
@@ -2682,7 +2688,7 @@ void static UpdateTip(CBlockIndex* pindexNew)
     static bool fWarned = false;
     if (!IsInitialBlockDownload() && !fWarned) {
         int nUpgraded = 0;
-        const CBlockIndex* pindex = chainActive.Tip();
+        const CBlockIndex* pindex = pChainTip;
         for (int i = 0; i < 100 && pindex != NULL; i++) {
             if (pindex->nVersion > CBlock::CURRENT_VERSION)
                 ++nUpgraded;
