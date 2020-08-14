@@ -111,6 +111,52 @@ CBlockIndex* GetChainTip()
     return mapBlockIndex.at(p->GetBlockHash());
 }
 
+bool CheckForDuplicatedSerials(const CTransaction& tx, const Consensus::Params& consensus,
+                               std::vector<CBigNum>& vBlockSerials)
+{
+    // double check that there are no double spent zPIV spends in this block or tx
+    if (tx.HasZerocoinSpendInputs()) {
+        int nHeightTx = 0;
+        if (IsTransactionInChain(tx.GetHash(), nHeightTx)) {
+            return false;
+        }
+
+        bool fDoubleSerial = false;
+        for (const CTxIn& txIn : tx.vin) {
+            bool isPublicSpend = txIn.IsZerocoinPublicSpend();
+            if (txIn.IsZerocoinSpend() || isPublicSpend) {
+                libzerocoin::CoinSpend* spend;
+                if (isPublicSpend) {
+                    libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
+                    PublicCoinSpend publicSpend(params);
+                    CValidationState state;
+                    if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
+                        throw std::runtime_error("Invalid public spend parse");
+                    }
+                    spend = &publicSpend;
+                } else {
+                    libzerocoin::CoinSpend spendObj = TxInToZerocoinSpend(txIn);
+                    spend = &spendObj;
+                }
+
+                bool fUseV1Params = spend->getCoinVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
+                if (!spend->HasValidSerial(consensus.Zerocoin_Params(fUseV1Params)))
+                    fDoubleSerial = true;
+                if (std::count(vBlockSerials.begin(), vBlockSerials.end(), spend->getCoinSerialNumber()))
+                    fDoubleSerial = true;
+                if (fDoubleSerial)
+                    break;
+                vBlockSerials.emplace_back(spend->getCoinSerialNumber());
+            }
+        }
+        //This zPIV serial has already been included in the block, do not add this tx.
+        if (fDoubleSerial) {
+            return false;
+        }
+    }
+    return true;
+}
+
 CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, bool fProofOfStake)
 {
     // Create new block
@@ -274,7 +320,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         std::make_heap(vecPriority.begin(), vecPriority.end(), comparer);
 
         std::vector<CBigNum> vBlockSerials;
-        std::vector<CBigNum> vTxSerials;
         while (!vecPriority.empty()) {
             // Take highest priority transaction off the priority queue:
             double dPriority = vecPriority.front().get<0>();
@@ -315,45 +360,9 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             if (!view.HaveInputs(tx))
                 continue;
 
-            // double check that there are no double spent zPIV spends in this block or tx
-            if (tx.HasZerocoinSpendInputs()) {
-                int nHeightTx = 0;
-                if (IsTransactionInChain(tx.GetHash(), nHeightTx))
-                    continue;
-
-                bool fDoubleSerial = false;
-                for (const CTxIn& txIn : tx.vin) {
-                    bool isPublicSpend = txIn.IsZerocoinPublicSpend();
-                    if (txIn.IsZerocoinSpend() || isPublicSpend) {
-                        libzerocoin::CoinSpend* spend;
-                        if (isPublicSpend) {
-                            libzerocoin::ZerocoinParams* params = consensus.Zerocoin_Params(false);
-                            PublicCoinSpend publicSpend(params);
-                            CValidationState state;
-                            if (!ZPIVModule::ParseZerocoinPublicSpend(txIn, tx, state, publicSpend)){
-                                throw std::runtime_error("Invalid public spend parse");
-                            }
-                            spend = &publicSpend;
-                        } else {
-                            libzerocoin::CoinSpend spendObj = TxInToZerocoinSpend(txIn);
-                            spend = &spendObj;
-                        }
-
-                        bool fUseV1Params = spend->getCoinVersion() < libzerocoin::PrivateCoin::PUBKEY_VERSION;
-                        if (!spend->HasValidSerial(consensus.Zerocoin_Params(fUseV1Params)))
-                            fDoubleSerial = true;
-                        if (std::count(vBlockSerials.begin(), vBlockSerials.end(), spend->getCoinSerialNumber()))
-                            fDoubleSerial = true;
-                        if (std::count(vTxSerials.begin(), vTxSerials.end(), spend->getCoinSerialNumber()))
-                            fDoubleSerial = true;
-                        if (fDoubleSerial)
-                            break;
-                        vTxSerials.emplace_back(spend->getCoinSerialNumber());
-                    }
-                }
-                //This zPIV serial has already been included in the block, do not add this tx.
-                if (fDoubleSerial)
-                    continue;
+            // zPIV check to not include duplicated serials in the same block.
+            if (!CheckForDuplicatedSerials(tx, consensus, vBlockSerials)) {
+                continue;
             }
 
             CAmount nTxFees = view.GetValueIn(tx) - tx.GetValueOut();
@@ -381,9 +390,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
             ++nBlockTx;
             nBlockSigOps += nTxSigOps;
             nFees += nTxFees;
-
-            for (const CBigNum& bnSerial : vTxSerials)
-                vBlockSerials.emplace_back(bnSerial);
 
             if (fPrintPriority) {
                 LogPrintf("priority %.1f fee %s txid %s\n",
