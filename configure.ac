@@ -1207,6 +1207,11 @@ case $host in
     ;;
 esac
 
+if test -z "$RUST_TARGET"; then
+  AC_MSG_WARN([RUST_TARGET not set, assuming native build])
+fi
+AM_CONDITIONAL([HAVE_RUST_TARGET], [test -n "$RUST_TARGET"])
+
 # Additional Zcash flags
 AX_CHECK_COMPILE_FLAG([-fno-strict-aliasing],[CXXFLAGS="$CXXFLAGS -fno-strict-aliasing"])
 AX_CHECK_COMPILE_FLAG([-Wno-builtin-declaration-mismatch],[CXXFLAGS="$CXXFLAGS -Wno-builtin-declaration-mismatch"],,[[$CXXFLAG_WERROR]])
