@@ -1297,37 +1297,24 @@ CAmount CWalletTx::GetUnspentCredit(const isminefilter& filter) const
     if (GetBlocksToMaturity() > 0)
         return 0;
 
-    CAmount credit = 0;
-    if (filter & ISMINE_SPENDABLE) {
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE, false, true);
-    }
-    if (filter & ISMINE_WATCH_ONLY) {
-        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY, false, true);
-    }
-    if (filter & ISMINE_COLD) {
-        credit += GetCachableAmount(CREDIT, ISMINE_COLD, false, true);
-    }
-    if (filter & ISMINE_SPENDABLE_DELEGATED) {
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED, false, true);
-    }
-    return credit;
+    return GetCredit(filter, false, true);
 }
 
-CAmount CWalletTx::GetCredit(const isminefilter& filter) const
+CAmount CWalletTx::GetCredit(const isminefilter& filter, bool recalculate, bool fUnspent) const
 {
     CAmount credit = 0;
     if (filter & ISMINE_SPENDABLE) {
         // GetBalance can assume transactions in mapWallet won't change
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE);
+        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE, recalculate, fUnspent);
     }
     if (filter & ISMINE_WATCH_ONLY) {
-        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY);
+        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY, recalculate, fUnspent);
     }
     if (filter & ISMINE_COLD) {
-        credit += GetCachableAmount(CREDIT, ISMINE_COLD);
+        credit += GetCachableAmount(CREDIT, ISMINE_COLD, recalculate, fUnspent);
     }
     if (filter & ISMINE_SPENDABLE_DELEGATED) {
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED);
+        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED, recalculate, fUnspent);
     }
     return credit;
 }
