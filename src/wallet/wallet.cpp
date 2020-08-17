@@ -2183,7 +2183,7 @@ static void ApproximateBestSubset(std::vector<std::pair<CAmount, std::pair<const
 bool CWallet::StakeableCoins(std::vector<COutput>* pCoins)
 {
     const bool fIncludeCold = (sporkManager.IsSporkActive(SPORK_17_COLDSTAKING_ENFORCEMENT) &&
-                               GetBoolArg("-coldstaking", true));
+                               GetBoolArg("-coldstaking", DEFAULT_COLDSTAKING));
 
     return AvailableCoins(pCoins,
             nullptr,            // coin control

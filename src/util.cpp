@@ -87,6 +87,7 @@
 
 const char * const PIVX_CONF_FILENAME = "pivx.conf";
 const char * const PIVX_PID_FILENAME = "pivx.pid";
+const char * const PIVX_MASTERNODE_CONF_FILENAME = "masternode.conf";
 
 
 // PIVX only features
@@ -457,7 +458,7 @@ fs::path GetConfigFile()
 
 fs::path GetMasternodeConfigFile()
 {
-    fs::path pathConfigFile(GetArg("-mnconf", "masternode.conf"));
+    fs::path pathConfigFile(GetArg("-mnconf", PIVX_MASTERNODE_CONF_FILENAME));
     return AbsPathForConfigVal(pathConfigFile);
 }
 

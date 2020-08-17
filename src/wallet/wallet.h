@@ -72,6 +72,10 @@ static const int DEFAULT_CUSTOMBACKUPTHRESHOLD = 1;
 static const CAmount DEFAULT_MIN_STAKE_SPLIT_THRESHOLD = 100 * COIN;
 //! Default for -spendzeroconfchange
 static const bool DEFAULT_SPEND_ZEROCONF_CHANGE = true;
+//! Default for -staking
+static const bool DEFAULT_STAKING = true;
+//! Default for -coldstaking
+static const bool DEFAULT_COLDSTAKING = true;
 
 class CAccountingEntry;
 class CCoinControl;
