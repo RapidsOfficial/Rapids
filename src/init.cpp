@@ -1707,12 +1707,14 @@ bool AppInit2()
         std::string warningString;
         std::string errorString;
         pwalletMain = CWallet::InitLoadWallet(fDisableWallet, strWalletFile, warningString, errorString, zwalletMain);
-        if (!pwalletMain)
-            return false;
         if (!warningString.empty())
             UIWarning(warningString);
-        if (!errorString.empty())
+        if (!errorString.empty()) {
+            LogPrintf("%s", errorString);
             return UIError(errorString);
+        }
+        if (!pwalletMain)
+            return false;
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");

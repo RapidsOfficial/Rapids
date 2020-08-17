@@ -3827,7 +3827,8 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
         CWallet *tempWallet = new CWallet(strWalletFile);
         DBErrors nZapWalletRet = pwalletMain->ZapWalletTx(vWtx);
         if (nZapWalletRet != DB_LOAD_OK) {
-            uiInterface.InitMessage(_("Error loading wallet.dat: Wallet corrupted"));
+            errorString = _("Error loading wallet.dat: Wallet corrupted");
+            uiInterface.InitMessage(errorString);
             return nullptr;
         }
 
@@ -3853,10 +3854,12 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
         else if (nLoadWalletRet == DB_NEED_REWRITE) {
             errorString +=  _("Wallet needed to be rewritten: restart PIVX Core to complete\n");
             LogPrintf("%s", errorString);
-            return walletInstance;
         } else
             errorString += _("Error loading wallet.dat\n");
     }
+
+    if (!errorString.empty())
+        return nullptr;
 
     // check minimum stake split threshold
     if (walletInstance->nStakeSplitThreshold && walletInstance->nStakeSplitThreshold < CWallet::minStakeSplitThreshold) {
@@ -3874,7 +3877,7 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
             // Cannot upgrade a locked wallet
             errorString += "Cannot upgrade a locked wallet.\n";
             LogPrintf("%s", errorString);
-            return walletInstance;
+            return nullptr;
         }
 
         int nMaxVersion = GetArg("-upgradewallet", 0);
@@ -3885,8 +3888,10 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
             walletInstance->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
         } else
             LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
-        if (nMaxVersion < walletInstance->GetVersion())
+        if (nMaxVersion < walletInstance->GetVersion()) {
             errorString += _("Cannot downgrade wallet\n");
+            return nullptr;
+        }
         walletInstance->SetMaxVersion(nMaxVersion);
     }
 
@@ -3895,6 +3900,7 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
         std::string upgradeError;
         if (!walletInstance->Upgrade(upgradeError, prev_version)) {
             errorString += (upgradeError + "\n");
+            return nullptr;
         }
     }
 
@@ -3909,7 +3915,7 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
             if (!Params().IsRegTestNet()) {
                 errorString += "Legacy wallets can only be created on RegTest.\n";
                 LogPrintf("%s", errorString);
-                return walletInstance;
+                return nullptr;
             }
             // Create legacy wallet
             LogPrintf("Creating Pre-HD Wallet\n");
@@ -3920,13 +3926,12 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
         if (!walletInstance->TopUpKeyPool()) {
             // Error generating keys
             errorString += _("Unable to generate initial key\n");
-            return walletInstance;
+            return nullptr;
         }
 
         walletInstance->SetBestChain(chainActive.GetLocator());
     }
 
-    LogPrintf("Init errors: %s\n", errorString);
     LogPrintf("Wallet completed loading in %15dms\n", GetTimeMillis() - nStart);
 
     zwallet = new CzPIVWallet(walletInstance);
