@@ -3789,7 +3789,7 @@ std::string CWallet::GetWalletHelpString(bool showDebug)
     strUsage += HelpMessageOpt("-mintxfee=<amt>", strprintf(_("Fees (in %s/Kb) smaller than this are considered zero fee for transaction creation (default: %s)"), CURRENCY_UNIT, FormatMoney(CWallet::minTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-paytxfee=<amt>", strprintf(_("Fee (in %s/kB) to add to transactions you send (default: %s)"), CURRENCY_UNIT, FormatMoney(payTxFee.GetFeePerK())));
     strUsage += HelpMessageOpt("-rescan", _("Rescan the block chain for missing wallet transactions") + " " + _("on startup"));
-    strUsage += HelpMessageOpt("-salvagewallet", _("Attempt to recover private keys from a corrupt wallet.dat") + " " + _("on startup"));
+    strUsage += HelpMessageOpt("-salvagewallet", _("Attempt to recover private keys from a corrupt wallet file") + " " + _("on startup"));
     strUsage += HelpMessageOpt("-sendfreetransactions", strprintf(_("Send transactions as zero-fee transactions if possible (default: %u)"), DEFAULT_SEND_FREE_TRANSACTIONS));
     strUsage += HelpMessageOpt("-spendzeroconfchange", strprintf(_("Spend unconfirmed change when sending transactions (default: %u)"), DEFAULT_SPEND_ZEROCONF_CHANGE));
     strUsage += HelpMessageOpt("-txconfirmtarget=<n>", strprintf(_("If paytxfee is not set, include enough fee so transactions begin confirmation on average within n blocks (default: %u)"), 1));
@@ -3827,7 +3827,7 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
         CWallet *tempWallet = new CWallet(strWalletFile);
         DBErrors nZapWalletRet = pwalletMain->ZapWalletTx(vWtx);
         if (nZapWalletRet != DB_LOAD_OK) {
-            errorString = _("Error loading wallet.dat: Wallet corrupted");
+            errorString = strprintf(_("Error loading %s: Wallet corrupted"), strWalletFile);
             uiInterface.InitMessage(errorString);
             return nullptr;
         }
@@ -3845,17 +3845,17 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
     DBErrors nLoadWalletRet = walletInstance->LoadWallet(fFirstRun);
     if (nLoadWalletRet != DB_LOAD_OK) {
         if (nLoadWalletRet == DB_CORRUPT)
-            errorString += _("Error loading wallet.dat: Wallet corrupted\n");
+            errorString += strprintf(_("Error loading %s: Wallet corrupted\n"), strWalletFile);
         else if (nLoadWalletRet == DB_NONCRITICAL_ERROR) {
-            warningString += _("Warning: error reading wallet.dat! All keys read correctly, but transaction data"
-                         " or address book entries might be missing or incorrect.\n");
+            warningString += strprintf(_("Warning: error reading %s! All keys read correctly, but transaction data"
+                         " or address book entries might be missing or incorrect.\n"), strWalletFile);
         } else if (nLoadWalletRet == DB_TOO_NEW)
-            errorString +=  _("Error loading wallet.dat: Wallet requires newer version of PIVX Core\n");
+            errorString +=  strprintf(_("Error loading %s: Wallet requires newer version of PIVX Core\n"), strWalletFile);
         else if (nLoadWalletRet == DB_NEED_REWRITE) {
             errorString +=  _("Wallet needed to be rewritten: restart PIVX Core to complete\n");
             LogPrintf("%s", errorString);
         } else
-            errorString += _("Error loading wallet.dat\n");
+            errorString += strprintf(_("Error loading %s\n"), strWalletFile);
     }
 
     if (!errorString.empty())
@@ -3908,7 +3908,7 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
         if (!fLegacyWallet) {
             // Create new HD Wallet
             LogPrintf("Creating HD Wallet\n");
-            // Ensure this wallet.dat can only be opened by clients supporting HD.
+            // Ensure this wallet can only be opened by clients supporting HD.
             walletInstance->SetMinVersion(FEATURE_LATEST);
             walletInstance->SetupSPKM();
         } else {
@@ -4130,7 +4130,7 @@ bool CMerkleTx::IsTransactionLockTimedOut() const
 
 std::string CWallet::GetUniqueWalletBackupName() const
 {
-    return strprintf("wallet.dat%s", DateTimeStrFormat(".%Y-%m-%d-%H-%M", GetTime()));
+    return strprintf("%s%s", strWalletFile, DateTimeStrFormat(".%Y-%m-%d-%H-%M", GetTime()));
 }
 
 CWallet::CWallet()

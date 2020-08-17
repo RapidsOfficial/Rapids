@@ -1018,16 +1018,16 @@ void ThreadFlushWalletDB(const std::string& strFile)
                     boost::this_thread::interruption_point();
                     std::map<std::string, int>::iterator mi = bitdb.mapFileUseCount.find(strFile);
                     if (mi != bitdb.mapFileUseCount.end()) {
-                        LogPrint(BCLog::DB, "Flushing wallet.dat\n");
+                        LogPrint(BCLog::DB, "Flushing %s\n", strFile);
                         nLastFlushed = CWalletDB::GetUpdateCounter();
                         int64_t nStart = GetTimeMillis();
 
-                        // Flush wallet.dat so it's self contained
+                        // Flush wallet file so it's self contained
                         bitdb.CloseDb(strFile);
                         bitdb.CheckpointLSN(strFile);
 
                         bitdb.mapFileUseCount.erase(mi++);
-                        LogPrint(BCLog::DB, "Flushed wallet.dat %dms\n", GetTimeMillis() - nStart);
+                        LogPrint(BCLog::DB, "Flushed %s %dms\n", strFile, GetTimeMillis() - nStart);
                     }
                 }
             }
@@ -1074,7 +1074,7 @@ bool BackupWallet(const CWallet& wallet, const fs::path& strDest, bool fEnableCu
                 bitdb.CheckpointLSN(wallet.strWalletFile);
                 bitdb.mapFileUseCount.erase(wallet.strWalletFile);
 
-                // Copy wallet.dat
+                // Copy wallet file
                 fs::path pathDest(strDest);
                 fs::path pathSrc = GetDataDir() / wallet.strWalletFile;
                 if (is_directory(pathDest)) {
@@ -1164,7 +1164,7 @@ bool AttemptBackupWallet(const CWallet& wallet, const fs::path& pathSrc, const f
         src.close();
         dst.close();
 #endif
-        strMessage = strprintf("copied wallet.dat to %s\n", pathDest.string());
+        strMessage = strprintf("copied %s to %s\n", wallet.strWalletFile, pathDest.string());
         LogPrintf("%s : %s\n", __func__, strMessage);
         retStatus = true;
     } catch (const fs::filesystem_error& e) {
@@ -1177,15 +1177,15 @@ bool AttemptBackupWallet(const CWallet& wallet, const fs::path& pathSrc, const f
 }
 
 //
-// Try to (very carefully!) recover wallet.dat if there is a problem.
+// Try to (very carefully!) recover wallet file if there is a problem.
 //
 bool CWalletDB::Recover(CDBEnv& dbenv, std::string filename, bool fOnlyKeys)
 {
     // Recovery procedure:
-    // move wallet.dat to wallet.timestamp.bak
+    // move wallet file to wallet.timestamp.bak
     // Call Salvage with fAggressive=true to
     // get as much data as possible.
-    // Rewrite salvaged data to wallet.dat
+    // Rewrite salvaged data to fresh wallet file.
     // Set -rescan so any missing transactions will be
     // found.
     int64_t now = GetTime();

@@ -427,7 +427,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
             }
         }
 
-        receipt.SetStatus("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.", nStatus);
+        receipt.SetStatus("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of this wallet file, and coins were spent in the copy but not marked as spent here.", nStatus);
         return false;
     }
 
@@ -561,7 +561,7 @@ bool CWallet::CreateZCPublicSpendTransaction(
         //  All of the zPIV used in the public coin spend are mature by default (everything is public now.. no need to wait for any accumulation)
         setMints = zpivTracker->ListMints(true, false, true, true); // need to find mints to spend
         if(setMints.empty()) {
-            receipt.SetStatus(_("Failed to find Zerocoins in wallet.dat"), nStatus);
+            receipt.SetStatus(_("Failed to find Zerocoins in wallet database"), nStatus);
             return false;
         }
 

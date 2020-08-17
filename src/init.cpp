@@ -1317,15 +1317,15 @@ bool AppInit2()
         if (fs::exists(GetDataDir() / strWalletFile)) {
             CDBEnv::VerifyResult r = bitdb.Verify(strWalletFile, CWalletDB::Recover);
             if (r == CDBEnv::RECOVER_OK) {
-                std::string msg = strprintf(_("Warning: wallet.dat corrupt, data salvaged!"
-                                         " Original wallet.dat saved as wallet.{timestamp}.bak in %s; if"
+                std::string msg = strprintf(_("Warning: wallet file corrupt, data salvaged!"
+                                         " Original %s saved as %s in %s; if"
                                          " your balance or transactions are incorrect you should"
                                          " restore from a backup."),
-                    strDataDir);
+                        strWalletFile, "wallet.{timestamp}.bak", strDataDir);
                 UIWarning(msg);
             }
             if (r == CDBEnv::RECOVER_FAIL)
-                return UIError(_("wallet.dat corrupt, salvage failed"));
+                return UIError(strprintf(_("%s corrupt, salvage failed"), strWalletFile));
         }
 
     }  // (!fDisableWallet)
