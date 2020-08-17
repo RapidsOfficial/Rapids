@@ -85,6 +85,9 @@
 #include <openssl/crypto.h>
 #include <openssl/rand.h>
 
+const char * const PIVX_CONF_FILENAME = "pivx.conf";
+const char * const PIVX_PID_FILENAME = "pivx.pid";
+
 
 // PIVX only features
 // Masternode
@@ -448,7 +451,7 @@ void ClearDatadirCache()
 
 fs::path GetConfigFile()
 {
-    fs::path pathConfigFile(GetArg("-conf", "pivx.conf"));
+    fs::path pathConfigFile(GetArg("-conf", PIVX_CONF_FILENAME));
     return AbsPathForConfigVal(pathConfigFile, false);
 }
 
@@ -497,7 +500,7 @@ fs::path AbsPathForConfigVal(const fs::path& path, bool net_specific)
 #ifndef WIN32
 fs::path GetPidFile()
 {
-    fs::path pathPidFile(GetArg("-pid", "pivxd.pid"));
+    fs::path pathPidFile(GetArg("-pid", PIVX_PID_FILENAME));
     return AbsPathForConfigVal(pathPidFile);
 }
 

@@ -30,10 +30,10 @@ CWallet* pwalletMain = nullptr;
 CFeeRate payTxFee(DEFAULT_TRANSACTION_FEE);
 CAmount maxTxFee = DEFAULT_TRANSACTION_MAXFEE;
 unsigned int nTxConfirmTarget = 1;
-bool bSpendZeroConfChange = true;
 bool bdisableSystemnotifications = false; // Those bubbles can be annoying and slow down the UI when you get lots of trx
 bool fSendFreeTransactions = false;
 bool fPayAtLeastCustomFee = true;
+bool bSpendZeroConfChange = DEFAULT_SPEND_ZEROCONF_CHANGE;
 
 /**
  * Fees smaller than this (in upiv) are considered zero fee (for transaction creation)
@@ -581,9 +581,9 @@ bool CWallet::ParameterInteraction()
             return UIError(AmountErrMsg("minstakesplit", mapArgs["-minstakesplit"]));
     }
     nTxConfirmTarget = GetArg("-txconfirmtarget", 1);
-    bSpendZeroConfChange = GetBoolArg("-spendzeroconfchange", false);
+    bSpendZeroConfChange = GetBoolArg("-spendzeroconfchange", DEFAULT_SPEND_ZEROCONF_CHANGE);
     bdisableSystemnotifications = GetBoolArg("-disablesystemnotifications", false);
-    fSendFreeTransactions = GetBoolArg("-sendfreetransactions", false);
+    fSendFreeTransactions = GetBoolArg("-sendfreetransactions", fSendFreeTransactions);
 
     return true;
 }

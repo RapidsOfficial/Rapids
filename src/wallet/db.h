@@ -25,6 +25,9 @@ class COutPoint;
 
 struct CBlockLocator;
 
+static const unsigned int DEFAULT_WALLET_DBLOGSIZE = 100;
+static const bool DEFAULT_WALLET_PRIVDB = true;
+
 class CDBEnv
 {
 private:

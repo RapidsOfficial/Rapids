@@ -33,6 +33,8 @@
 #include <boost/thread/exceptions.hpp>
 #include <boost/thread/condition_variable.hpp> // for boost::thread_interrupted
 
+extern const char * const PIVX_CONF_FILENAME;
+extern const char * const PIVX_PID_FILENAME;
 extern const char * const DEFAULT_DEBUGLOGFILE;
 
 //PIVX only features

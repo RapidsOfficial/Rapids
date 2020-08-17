@@ -989,7 +989,7 @@ void ThreadFlushWalletDB(const std::string& strFile)
     if (fOneThread)
         return;
     fOneThread = true;
-    if (!GetBoolArg("-flushwallet", true))
+    if (!GetBoolArg("-flushwallet", DEFAULT_FLUSHWALLET))
         return;
 
     unsigned int nLastSeen = CWalletDB::GetUpdateCounter();
