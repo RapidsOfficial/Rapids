@@ -1250,11 +1250,11 @@ int CWalletTx::GetRequestCount() const
     return nRequests;
 }
 
-CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate, bool fUnspent) const
+CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate) const
 {
     auto& amount = m_amounts[type];
     if (recalculate || !amount.m_cached[filter]) {
-        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter, fUnspent));
+        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter));
     }
     return amount.m_value[filter];
 }
@@ -1295,30 +1295,21 @@ CAmount CWalletTx::GetStakeDelegationDebit(bool fUseCache) const
     return GetCachableAmount(DEBIT, ISMINE_SPENDABLE_DELEGATED, !fUseCache);
 }
 
-CAmount CWalletTx::GetUnspentCredit(const isminefilter& filter) const
-{
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (GetBlocksToMaturity() > 0)
-        return 0;
-
-    return GetCredit(filter, false, true);
-}
-
-CAmount CWalletTx::GetCredit(const isminefilter& filter, bool recalculate, bool fUnspent) const
+CAmount CWalletTx::GetCredit(const isminefilter& filter, bool recalculate) const
 {
     CAmount credit = 0;
     if (filter & ISMINE_SPENDABLE) {
         // GetBalance can assume transactions in mapWallet won't change
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE, recalculate);
     }
     if (filter & ISMINE_WATCH_ONLY) {
-        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY, recalculate);
     }
     if (filter & ISMINE_COLD) {
-        credit += GetCachableAmount(CREDIT, ISMINE_COLD, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_COLD, recalculate);
     }
     if (filter & ISMINE_SPENDABLE_DELEGATED) {
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED, recalculate);
     }
     return credit;
 }
@@ -1369,12 +1360,12 @@ CAmount CWalletTx::GetAvailableCredit(bool fUseCache, const isminefilter& filter
 
 CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
 {
-    return GetUnspentCredit(ISMINE_COLD);
+    return GetAvailableCredit(fUseCache, ISMINE_COLD);
 }
 
 CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
 {
-    return GetUnspentCredit(ISMINE_SPENDABLE_DELEGATED);
+    return GetAvailableCredit(fUseCache, ISMINE_SPENDABLE_DELEGATED);
 }
 
 // Return sum of unlocked coins
@@ -4066,11 +4057,10 @@ CAmount CWallet::GetDebit(const CTransaction& tx, const isminefilter& filter) co
     return nDebit;
 }
 
-CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter, const bool fUnspent) const
+CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter) const
 {
     CAmount nCredit = 0;
     for (unsigned int i = 0; i < tx.vout.size(); i++) {
-        if (fUnspent && IsSpent(tx.GetHash(), i)) continue;
         nCredit += GetCredit(tx.vout[i], filter);
     }
     if (!Params().GetConsensus().MoneyRange(nCredit))
