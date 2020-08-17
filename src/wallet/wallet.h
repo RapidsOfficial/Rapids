@@ -647,14 +647,20 @@ public:
     //! Get wallet transactions that conflict with given transaction (spend same outputs)
     std::set<uint256> GetConflicts(const uint256& txid) const;
 
+    //! Verify the wallet database and perform salvage if required
+    static bool Verify();
+
     /* Mark a transaction (and it in-wallet descendants) as abandoned so its inputs may be respent. */
     bool AbandonTransaction(const uint256& hashTx);
 
     /* Returns the wallets help message */
     static std::string GetWalletHelpString(bool showDebug);
 
-    /* initializes the wallet, returns a new CWallet instance or a null pointer in case of an error */
-    static CWallet* InitLoadWallet(bool fDisableWallet, const std::string& strWalletFile, std::string& warningString, std::string& errorString);
+    /* Initializes the wallet, returns a new CWallet instance or a null pointer in case of an error */
+    static bool InitLoadWallet();
+
+    /* Wallets parameter interaction */
+    static bool ParameterInteraction();
 
     /**
      * Wallet post-init setup
@@ -734,9 +740,6 @@ public:
     bool UpdateMint(const CBigNum& bnValue, const int& nHeight, const uint256& txid, const libzerocoin::CoinDenomination& denom);
     // Zerocoin entry changed. (called with lock cs_wallet held)
     boost::signals2::signal<void(CWallet* wallet, const std::string& pubCoin, const std::string& isUsed, ChangeType status)> NotifyZerocoinChanged;
-
-    /* Wallets parameter interaction */
-    static bool ParameterInteraction();
 };
 
 /** A key allocated from the key pool. */

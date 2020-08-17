@@ -1109,12 +1109,7 @@ bool AppInit2()
         return UIError(_("Initialization sanity check failed. PIVX Core is shutting down."));
 
     std::string strDataDir = GetDataDir().string();
-#ifdef ENABLE_WALLET
-    // Wallet file must be a plain filename without a directory
-    fs::path wallet_file_path(strWalletFile);
-    if (strWalletFile != wallet_file_path.filename().string())
-        return UIError(strprintf(_("Wallet %s resides outside data directory %s"), strWalletFile, strDataDir));
-#endif
+
     // Make sure only a single PIVX process is using the data directory.
     fs::path pathLockFile = GetDataDir() / ".lock";
     FILE* file = fsbridge::fopen(pathLockFile, "a"); // empty lock file; created if it doesn't exist.
@@ -1283,47 +1278,8 @@ bool AppInit2()
             }
         }
 
-        LogPrintf("Using wallet %s\n", strWalletFile);
-        uiInterface.InitMessage(_("Verifying wallet..."));
-
-        if (!bitdb.Open(GetDataDir())) {
-            // try moving the database env out of the way
-            fs::path pathDatabase = GetDataDir() / "database";
-            fs::path pathDatabaseBak = GetDataDir() / strprintf("database.%d.bak", GetTime());
-            try {
-                fs::rename(pathDatabase, pathDatabaseBak);
-                LogPrintf("Moved old %s to %s. Retrying.\n", pathDatabase.string(), pathDatabaseBak.string());
-            } catch (const fs::filesystem_error& error) {
-                // failure is ok (well, not really, but it's not worse than what we started with)
-            }
-
-            // try again
-            if (!bitdb.Open(GetDataDir())) {
-                // if it still fails, it probably means we can't even create the database env
-                std::string msg = strprintf(_("Error initializing wallet database environment %s!"), strDataDir);
-                return UIError(msg);
-            }
-        }
-
-        if (GetBoolArg("-salvagewallet", false)) {
-            // Recover readable keypairs:
-            if (!CWalletDB::Recover(bitdb, strWalletFile, true))
-                return false;
-        }
-
-        if (fs::exists(GetDataDir() / strWalletFile)) {
-            CDBEnv::VerifyResult r = bitdb.Verify(strWalletFile, CWalletDB::Recover);
-            if (r == CDBEnv::RECOVER_OK) {
-                std::string msg = strprintf(_("Warning: wallet file corrupt, data salvaged!"
-                                         " Original %s saved as %s in %s; if"
-                                         " your balance or transactions are incorrect you should"
-                                         " restore from a backup."),
-                        strWalletFile, "wallet.{timestamp}.bak", strDataDir);
-                UIWarning(msg);
-            }
-            if (r == CDBEnv::RECOVER_FAIL)
-                return UIError(strprintf(_("%s corrupt, salvage failed"), strWalletFile));
-        }
+        if (!CWallet::Verify())
+            return false;
 
     }  // (!fDisableWallet)
 #endif // ENABLE_WALLET
@@ -1700,21 +1656,13 @@ bool AppInit2()
     if (fDisableWallet) {
         LogPrintf("Wallet disabled!\n");
     } else {
-        std::string warningString;
-        std::string errorString;
-        pwalletMain = CWallet::InitLoadWallet(fDisableWallet, strWalletFile, warningString, errorString);
-        if (!warningString.empty())
-            UIWarning(warningString);
-        if (!errorString.empty()) {
-            LogPrintf("%s", errorString);
-            return UIError(errorString);
-        }
+        CWallet::InitLoadWallet();
         if (!pwalletMain)
             return false;
-    }  // (!fDisableWallet)
-#else  // ENABLE_WALLET
+    }
+#else
     LogPrintf("No wallet compiled in!\n");
-#endif // !ENABLE_WALLET
+#endif
     // ********************************************************* Step 9: import blocks
 
     if (!CheckDiskSpace())
