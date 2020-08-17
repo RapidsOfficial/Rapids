@@ -920,7 +920,7 @@ public:
     CAmount GetCredit(const isminefilter& filter, bool recalculate = false, bool fUnspent = false) const;
     CAmount GetUnspentCredit(const isminefilter& filter) const;
     CAmount GetImmatureCredit(bool fUseCache = true, const isminefilter& filter = ISMINE_SPENDABLE_ALL) const;
-    CAmount GetAvailableCredit(bool fUseCache = true) const;
+    CAmount GetAvailableCredit(bool fUseCache = true, const isminefilter& filter=ISMINE_SPENDABLE) const;
     // Return sum of unlocked coins
     CAmount GetUnlockedCredit() const;
     // Return sum of unlocked coins

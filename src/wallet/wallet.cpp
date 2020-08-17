@@ -1333,9 +1333,38 @@ CAmount CWalletTx::GetImmatureCredit(bool fUseCache, const isminefilter& filter)
     return 0;
 }
 
-CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
+CAmount CWalletTx::GetAvailableCredit(bool fUseCache, const isminefilter& filter) const
 {
-    return GetUnspentCredit(ISMINE_SPENDABLE_ALL);
+    if (!pwallet)
+        return 0;
+
+    // Avoid caching ismine for NO or ALL cases (could remove this check and simplify in the future).
+    bool allow_cache = filter == ISMINE_SPENDABLE || filter == ISMINE_WATCH_ONLY;
+
+    // Must wait until coinbase/coinstake is safely deep enough in the chain before valuing it
+    if (GetBlocksToMaturity() > 0)
+        return 0;
+
+    if (fUseCache && allow_cache && m_amounts[AVAILABLE_CREDIT].m_cached[filter]) {
+        return m_amounts[AVAILABLE_CREDIT].m_value[filter];
+    }
+
+    CAmount nCredit = 0;
+    const uint256& hashTx = GetHash();
+    for (unsigned int i = 0; i < vout.size(); i++) {
+        if (!pwallet->IsSpent(hashTx, i)) {
+            const CTxOut &txout = vout[i];
+            nCredit += pwallet->GetCredit(txout, filter);
+            if (!Params().GetConsensus().MoneyRange(nCredit))
+                throw std::runtime_error(std::string(__func__) + " : value out of range");
+        }
+    }
+
+    if (allow_cache) {
+        m_amounts[AVAILABLE_CREDIT].Set(filter, nCredit);
+    }
+
+    return nCredit;
 }
 
 CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
@@ -3825,13 +3854,11 @@ int CMerkleTx::GetDepthInMainChain(const CBlockIndex*& pindexRet, bool enableIX)
     BlockMap::iterator mi = mapBlockIndex.find(hashBlock);
     if (mi == mapBlockIndex.end()) {
         nResult = 0;
-    }
-    else {
+    } else {
         CBlockIndex* pindex = (*mi).second;
         if (!pindex || !chainActive.Contains(pindex)) {
             nResult = 0;
-        }
-        else {
+        } else {
             pindexRet = pindex;
             nResult = ((nIndex == -1) ? (-1) : 1) * (chainActive.Height() - pindex->nHeight + 1);
         }
