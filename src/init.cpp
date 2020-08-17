@@ -1699,183 +1699,20 @@ bool AppInit2()
 
 // ********************************************************* Step 8: load wallet
 #ifdef ENABLE_WALLET
+    pwalletMain = nullptr;
+    zwalletMain = nullptr;
     if (fDisableWallet) {
-        pwalletMain = NULL;
-        zwalletMain = NULL;
         LogPrintf("Wallet disabled!\n");
     } else {
-        // needed to restore wallet transaction meta data after -zapwallettxes
-        std::vector<CWalletTx> vWtx;
-
-        if (GetBoolArg("-zapwallettxes", false)) {
-            uiInterface.InitMessage(_("Zapping all transactions from wallet..."));
-
-            pwalletMain = new CWallet(strWalletFile);
-            DBErrors nZapWalletRet = pwalletMain->ZapWalletTx(vWtx);
-            if (nZapWalletRet != DB_LOAD_OK) {
-                uiInterface.InitMessage(_("Error loading wallet.dat: Wallet corrupted"));
-                return false;
-            }
-
-            delete pwalletMain;
-            pwalletMain = NULL;
-        }
-
-        uiInterface.InitMessage(_("Loading wallet..."));
-        fVerifyingBlocks = true;
-
-        const int64_t nWalletStartTime = GetTimeMillis();
-        bool fFirstRun = true;
-        pwalletMain = new CWallet(strWalletFile);
-        DBErrors nLoadWalletRet = pwalletMain->LoadWallet(fFirstRun);
-        if (nLoadWalletRet != DB_LOAD_OK) {
-            if (nLoadWalletRet == DB_CORRUPT)
-                strErrors << _("Error loading wallet.dat: Wallet corrupted") << "\n";
-            else if (nLoadWalletRet == DB_NONCRITICAL_ERROR) {
-                std::string msg(_("Warning: error reading wallet.dat! All keys read correctly, but transaction data"
-                             " or address book entries might be missing or incorrect."));
-                UIWarning(msg);
-            } else if (nLoadWalletRet == DB_TOO_NEW)
-                strErrors << _("Error loading wallet.dat: Wallet requires newer version of PIVX Core") << "\n";
-            else if (nLoadWalletRet == DB_NEED_REWRITE) {
-                strErrors << _("Wallet needed to be rewritten: restart PIVX Core to complete") << "\n";
-                LogPrintf("%s", strErrors.str());
-                return UIError(strErrors.str());
-            } else
-                strErrors << _("Error loading wallet.dat") << "\n";
-        }
-
-        // check minimum stake split threshold
-        if (pwalletMain->nStakeSplitThreshold && pwalletMain->nStakeSplitThreshold < CWallet::minStakeSplitThreshold) {
-            LogPrintf("WARNING: stake split threshold value %s too low. Restoring to minimum value %s.\n",
-                    FormatMoney(pwalletMain->nStakeSplitThreshold), FormatMoney(CWallet::minStakeSplitThreshold));
-            pwalletMain->nStakeSplitThreshold = CWallet::minStakeSplitThreshold;
-        }
-
-        int prev_version = pwalletMain->GetVersion();
-
-        // Forced upgrade
-        const bool fLegacyWallet = GetBoolArg("-legacywallet", false);
-        if (GetBoolArg("-upgradewallet", fFirstRun && !fLegacyWallet)) {
-            if (prev_version <= FEATURE_PRE_PIVX && pwalletMain->IsLocked()) {
-                // Cannot upgrade a locked wallet
-                std::string strProblem = "Cannot upgrade a locked wallet.\n";
-                strErrors << _("Error: ") << strProblem;
-                LogPrintf("%s", strErrors.str());
-                return UIError(strProblem);
-            }
-
-            int nMaxVersion = GetArg("-upgradewallet", 0);
-            if (nMaxVersion == 0) // the -upgradewallet without argument case
-            {
-                LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
-                nMaxVersion = FEATURE_LATEST;
-                pwalletMain->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
-            } else
-                LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
-            if (nMaxVersion < pwalletMain->GetVersion())
-                strErrors << _("Cannot downgrade wallet") << "\n";
-            pwalletMain->SetMaxVersion(nMaxVersion);
-        }
-
-        // Upgrade to HD only if explicit upgrade was requested
-        if (GetBoolArg("-upgradewallet", false)) {
-            std::string upgradeError;
-            if (!pwalletMain->Upgrade(upgradeError, prev_version)) {
-                strErrors << upgradeError << "\n";
-            }
-        }
-
-        if (fFirstRun) {
-            if (!fLegacyWallet) {
-                // Create new HD Wallet
-                LogPrintf("Creating HD Wallet\n");
-                // Ensure this wallet.dat can only be opened by clients supporting HD.
-                pwalletMain->SetMinVersion(FEATURE_LATEST);
-                pwalletMain->SetupSPKM();
-            } else {
-                if (!Params().IsRegTestNet()) {
-                    std::string strProblem = "Legacy wallets can only be created on RegTest.\n";
-                    strErrors << _("Error: ") << strProblem;
-                    LogPrintf("%s", strErrors.str());
-                    return UIError(strProblem);
-                }
-                // Create legacy wallet
-                LogPrintf("Creating Pre-HD Wallet\n");
-                pwalletMain->SetMaxVersion(FEATURE_PRE_PIVX);
-            }
-
-            // Top up the keypool
-            if (!pwalletMain->TopUpKeyPool()) {
-                // Error generating keys
-                UIError(_("Unable to generate initial key") += "\n");
-                return error("%s %s", __func__ , "Unable to generate initial key");
-            }
-
-            pwalletMain->SetBestChain(chainActive.GetLocator());
-        }
-
-        LogPrintf("Init errors: %s\n", strErrors.str());
-        LogPrintf("Wallet completed loading in %15dms\n", GetTimeMillis() - nWalletStartTime);
-        zwalletMain = new CzPIVWallet(pwalletMain);
-        pwalletMain->setZWallet(zwalletMain);
-
-        RegisterValidationInterface(pwalletMain);
-
-        CBlockIndex* pindexRescan = chainActive.Tip();
-        if (GetBoolArg("-rescan", false))
-            pindexRescan = chainActive.Genesis();
-        else {
-            CWalletDB walletdb(strWalletFile);
-            CBlockLocator locator;
-            if (walletdb.ReadBestBlock(locator))
-                pindexRescan = FindForkInGlobalIndex(chainActive, locator);
-            else
-                pindexRescan = chainActive.Genesis();
-        }
-        if (chainActive.Tip() && chainActive.Tip() != pindexRescan) {
-            uiInterface.InitMessage(_("Rescanning..."));
-            LogPrintf("Rescanning last %i blocks (from block %i)...\n", chainActive.Height() - pindexRescan->nHeight, pindexRescan->nHeight);
-            const int64_t nWalletRescanTime = GetTimeMillis();
-            if (pwalletMain->ScanForWalletTransactions(pindexRescan, true, true) == -1) {
-                return error("Shutdown requested over the txs scan. Exiting.");
-            }
-            LogPrintf("Rescan completed in %15dms\n", GetTimeMillis() - nWalletRescanTime);
-            pwalletMain->SetBestChain(chainActive.GetLocator());
-            CWalletDB::IncrementUpdateCounter();
-
-            // Restore wallet transaction metadata after -zapwallettxes=1
-            if (GetBoolArg("-zapwallettxes", false) && GetArg("-zapwallettxes", "1") != "2") {
-                CWalletDB walletdb(strWalletFile);
-                for (const CWalletTx& wtxOld : vWtx) {
-                    uint256 hash = wtxOld.GetHash();
-                    std::map<uint256, CWalletTx>::iterator mi = pwalletMain->mapWallet.find(hash);
-                    if (mi != pwalletMain->mapWallet.end()) {
-                        const CWalletTx* copyFrom = &wtxOld;
-                        CWalletTx* copyTo = &mi->second;
-                        copyTo->mapValue = copyFrom->mapValue;
-                        copyTo->vOrderForm = copyFrom->vOrderForm;
-                        copyTo->nTimeReceived = copyFrom->nTimeReceived;
-                        copyTo->nTimeSmart = copyFrom->nTimeSmart;
-                        copyTo->fFromMe = copyFrom->fFromMe;
-                        copyTo->strFromAccount = copyFrom->strFromAccount;
-                        copyTo->nOrderPos = copyFrom->nOrderPos;
-                        walletdb.WriteTx(*copyTo);
-                    }
-                }
-            }
-        }
-        fVerifyingBlocks = false;
-
-        if (!zwalletMain->GetMasterSeed().IsNull()) {
-            //Inititalize zPIVWallet
-            uiInterface.InitMessage(_("Syncing zPIV wallet..."));
-
-            //Load zerocoin mint hashes to memory
-            pwalletMain->zpivTracker->Init();
-            zwalletMain->LoadMintPoolFromDB();
-            zwalletMain->SyncWithChain();
-        }
+        std::string warningString;
+        std::string errorString;
+        pwalletMain = CWallet::InitLoadWallet(fDisableWallet, strWalletFile, warningString, errorString, zwalletMain);
+        if (!pwalletMain)
+            return false;
+        if (!warningString.empty())
+            UIWarning(warningString);
+        if (!errorString.empty())
+            return UIError(errorString);
     }  // (!fDisableWallet)
 #else  // ENABLE_WALLET
     LogPrintf("No wallet compiled in!\n");
