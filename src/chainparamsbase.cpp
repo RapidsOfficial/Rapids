@@ -64,22 +64,24 @@ const CBaseChainParams& BaseParams()
     return *pCurrentBaseParams;
 }
 
-void SelectBaseParams(CBaseChainParams::Network network)
+CBaseChainParams& BaseParams(CBaseChainParams::Network network)
 {
     switch (network) {
     case CBaseChainParams::MAIN:
-        pCurrentBaseParams = &mainParams;
-        break;
+        return mainParams;
     case CBaseChainParams::TESTNET:
-        pCurrentBaseParams = &testNetParams;
-        break;
+        return testNetParams;
     case CBaseChainParams::REGTEST:
-        pCurrentBaseParams = &regTestParams;
-        break;
+        return regTestParams;
     default:
         assert(false && "Unimplemented network");
-        return;
+        return mainParams;
     }
+}
+
+void SelectBaseParams(CBaseChainParams::Network network)
+{
+    pCurrentBaseParams = &BaseParams(network);
 }
 
 CBaseChainParams::Network NetworkIdFromCommandLine()
