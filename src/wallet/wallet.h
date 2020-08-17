@@ -851,6 +851,7 @@ public:
     // memory only
     enum AmountType { DEBIT, CREDIT, IMMATURE_CREDIT, AVAILABLE_CREDIT, AMOUNTTYPE_ENUM_ELEMENTS };
     CAmount GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate = false, bool fUnspent = false) const;
+    bool IsAmountCached(AmountType type, const isminefilter& filter) const; // Only used in unit tests
     mutable CachableAmount m_amounts[AMOUNTTYPE_ENUM_ELEMENTS];
     mutable bool fChangeCached;
     mutable bool fStakeDelegationVoided;

@@ -911,7 +911,7 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFlushOnClose)
 
 bool CWallet::LoadToWallet(const CWalletTx& wtxIn)
 {
-    uint256 hash = wtxIn.GetHash();
+    const uint256& hash = wtxIn.GetHash();
     mapWallet[hash] = wtxIn;
     CWalletTx& wtx = mapWallet[hash];
     wtx.BindWallet(this);
@@ -1257,6 +1257,10 @@ CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter
         amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter, fUnspent));
     }
     return amount.m_value[filter];
+}
+
+bool CWalletTx::IsAmountCached(AmountType type, const isminefilter& filter) const {
+    return m_amounts[type].m_cached[filter];
 }
 
 //! filter decides which addresses will count towards the debit
