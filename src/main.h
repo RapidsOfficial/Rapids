@@ -216,14 +216,14 @@ void UnloadBlockIndex();
 /** See whether the protocol update is enforced for connected nodes */
 int ActiveProtocol();
 /** Process protocol messages received from a given node */
-bool ProcessMessages(CNode* pfrom, CConnman& connman);
+bool ProcessMessages(CNode* pfrom, CConnman& connman, std::atomic<bool>& interrupt);
 /**
  * Send queued protocol messages to be sent to a give node.
  *
  * @param[in]   pto             The node which we are sending messages to.
  * @param[in]   connman         The connection manager for that node.
  */
-bool SendMessages(CNode* pto, CConnman& connman);
+bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interrupt);
 /** Run an instance of the script checking thread */
 void ThreadScriptCheck();
 
