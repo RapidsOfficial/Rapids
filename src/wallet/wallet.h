@@ -84,6 +84,8 @@ static const bool DEFAULT_GENERATE = false;
 static const unsigned int DEFAULT_GENERATE_PROCLIMIT = 1;
 //! Default for -createwalletbackups
 static const unsigned int DEFAULT_CREATEWALLETBACKUPS = 10;
+//! Default for -disablewallet
+static const bool DEFAULT_DISABLE_WALLET = false;
 
 extern const char * DEFAULT_WALLET_DAT;
 
@@ -657,6 +659,7 @@ public:
     static std::string GetWalletHelpString(bool showDebug);
 
     /* Initializes the wallet, returns a new CWallet instance or a null pointer in case of an error */
+    static CWallet* CreateWalletFromFile(const std::string walletFile);
     static bool InitLoadWallet();
 
     /* Wallets parameter interaction */

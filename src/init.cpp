@@ -1652,14 +1652,8 @@ bool AppInit2()
 
 // ********************************************************* Step 8: load wallet
 #ifdef ENABLE_WALLET
-    pwalletMain = nullptr;
-    if (fDisableWallet) {
-        LogPrintf("Wallet disabled!\n");
-    } else {
-        CWallet::InitLoadWallet();
-        if (!pwalletMain)
-            return false;
-    }
+    if (!CWallet::InitLoadWallet())
+        return false;
 #else
     LogPrintf("No wallet compiled in!\n");
 #endif
