@@ -86,7 +86,6 @@
 
 
 #ifdef ENABLE_WALLET
-CzPIVWallet* zwalletMain = NULL;
 int nWalletBackups = 10;
 #endif
 volatile bool fFeeEstimatesInitialized = false;
@@ -308,8 +307,6 @@ void Shutdown()
 #ifdef ENABLE_WALLET
     delete pwalletMain;
     pwalletMain = NULL;
-    delete zwalletMain;
-    zwalletMain = NULL;
 #endif
     globalVerifyHandle.reset();
     ECC_Stop();
@@ -1700,13 +1697,12 @@ bool AppInit2()
 // ********************************************************* Step 8: load wallet
 #ifdef ENABLE_WALLET
     pwalletMain = nullptr;
-    zwalletMain = nullptr;
     if (fDisableWallet) {
         LogPrintf("Wallet disabled!\n");
     } else {
         std::string warningString;
         std::string errorString;
-        pwalletMain = CWallet::InitLoadWallet(fDisableWallet, strWalletFile, warningString, errorString, zwalletMain);
+        pwalletMain = CWallet::InitLoadWallet(fDisableWallet, strWalletFile, warningString, errorString);
         if (!warningString.empty())
             UIWarning(warningString);
         if (!errorString.empty()) {

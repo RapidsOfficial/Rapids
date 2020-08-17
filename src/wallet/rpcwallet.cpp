@@ -4808,7 +4808,7 @@ UniValue generatemintlist(const JSONRPCRequest& request)
 
     int nCount = request.params[0].get_int();
     int nRange = request.params[1].get_int();
-    CzPIVWallet* zwallet = pwalletMain->zwalletMain;
+    CzPIVWallet* zwallet = pwalletMain->getZWallet();
 
     UniValue arrRet(UniValue::VARR);
     for (int i = nCount; i < nCount + nRange; i++) {
@@ -4837,7 +4837,7 @@ UniValue dzpivstate(const JSONRPCRequest& request) {
                         "\nExamples\n" +
                 HelpExampleCli("mintpoolstatus", "") + HelpExampleRpc("mintpoolstatus", ""));
 
-    CzPIVWallet* zwallet = pwalletMain->zwalletMain;
+    CzPIVWallet* zwallet = pwalletMain->getZWallet();
     UniValue obj(UniValue::VOBJ);
     int nCount, nCountLastUsed;
     zwallet->GetState(nCount, nCountLastUsed);
@@ -4906,7 +4906,7 @@ UniValue searchdzpiv(const JSONRPCRequest& request)
 
     int nThreads = request.params[2].get_int();
 
-    CzPIVWallet* zwallet = pwalletMain->zwalletMain;
+    CzPIVWallet* zwallet = pwalletMain->getZWallet();
 
     boost::thread_group* dzpivThreads = new boost::thread_group();
     int nRangePerThread = nRange / nThreads;

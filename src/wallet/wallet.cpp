@@ -314,7 +314,7 @@ bool CWallet::Lock()
     {
         LOCK(cs_KeyStore);
         vMasterKey.clear();
-        if (zwalletMain) zwalletMain->Lock();
+        if (zwallet) zwallet->Lock();
     }
 
     NotifyStatusChanged(this);
@@ -372,14 +372,14 @@ bool CWallet::Unlock(const CKeyingMaterial& vMasterKeyIn)
         vMasterKey = vMasterKeyIn;
         fDecryptionThoroughlyChecked = true;
 
-        if (zwalletMain) {
+        if (zwallet) {
             uint256 hashSeed;
             if (CWalletDB(strWalletFile).ReadCurrentSeedHash(hashSeed)) {
                 uint256 nSeed;
                 if (!GetDeterministicSeed(hashSeed, nSeed)) {
                     return error("Failed to read zPIV seed from DB. Wallet is probably corrupt.");
                 }
-                zwalletMain->SetMasterSeed(nSeed, false);
+                zwallet->SetMasterSeed(nSeed, false);
             }
         }
     }
@@ -3816,7 +3816,7 @@ std::string CWallet::GetWalletHelpString(bool showDebug)
     return strUsage;
 }
 
-CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWalletFile, std::string& warningString, std::string& errorString, CzPIVWallet* zwallet)
+CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWalletFile, std::string& warningString, std::string& errorString)
 {
     // needed to restore wallet transaction meta data after -zapwallettxes
     std::vector<CWalletTx> vWtx;
@@ -3934,8 +3934,8 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
 
     LogPrintf("Wallet completed loading in %15dms\n", GetTimeMillis() - nStart);
 
-    zwallet = new CzPIVWallet(walletInstance);
-    walletInstance->setZWallet(zwallet);
+    CzPIVWallet* zwalletInstance = new CzPIVWallet(walletInstance);
+    walletInstance->setZWallet(zwalletInstance);
 
     RegisterValidationInterface(walletInstance);
 
@@ -3985,14 +3985,14 @@ CWallet* CWallet::InitLoadWallet(bool fDisableWallet, const std::string& strWall
     }
     fVerifyingBlocks = false;
 
-    if (!zwallet->GetMasterSeed().IsNull()) {
+    if (!zwalletInstance->GetMasterSeed().IsNull()) {
         //Inititalize zPIVWallet
         uiInterface.InitMessage(_("Syncing zPIV wallet..."));
 
         //Load zerocoin mint hashes to memory
         walletInstance->zpivTracker->Init();
-        zwallet->LoadMintPoolFromDB();
-        zwallet->SyncWithChain();
+        zwalletInstance->LoadMintPoolFromDB();
+        zwalletInstance->SyncWithChain();
     }
 
     return walletInstance;
@@ -4161,6 +4161,7 @@ CWallet::CWallet(std::string strWalletFileIn)
 
 CWallet::~CWallet()
 {
+    delete zwallet;
     delete pwalletdbEncryption;
     delete pStakerStatus;
 }

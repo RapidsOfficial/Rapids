@@ -278,6 +278,9 @@ private:
 
     bool IsKeyUsed(const CPubKey& vchPubKey);
 
+    // Zerocoin wallet
+    CzPIVWallet* zwallet{nullptr};
+
 public:
 
     static const CAmount DEFAULT_STAKE_SPLIT_THRESHOLD = 500 * COIN;
@@ -651,7 +654,7 @@ public:
     static std::string GetWalletHelpString(bool showDebug);
 
     /* initializes the wallet, returns a new CWallet instance or a null pointer in case of an error */
-    static CWallet* InitLoadWallet(bool fDisableWallet, const std::string& strWalletFile, std::string& warningString, std::string& errorString, CzPIVWallet* zwallet);
+    static CWallet* InitLoadWallet(bool fDisableWallet, const std::string& strWalletFile, std::string& warningString, std::string& errorString);
 
     /**
      * Wallet post-init setup
@@ -720,7 +723,6 @@ public:
     std::map<libzerocoin::CoinDenomination, CAmount> GetMyZerocoinDistribution() const;
 
     // zPIV wallet
-    CzPIVWallet* zwalletMain{nullptr};
     std::unique_ptr<CzPIVTracker> zpivTracker{nullptr};
     void setZWallet(CzPIVWallet* zwallet);
     CzPIVWallet* getZWallet();
