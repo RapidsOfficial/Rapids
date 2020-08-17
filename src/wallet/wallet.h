@@ -78,6 +78,13 @@ static const bool DEFAULT_SEND_FREE_TRANSACTIONS = false;
 static const bool DEFAULT_STAKING = true;
 //! Default for -coldstaking
 static const bool DEFAULT_COLDSTAKING = true;
+//! Defaults for -gen and -genproclimit
+static const bool DEFAULT_GENERATE = false;
+static const unsigned int DEFAULT_GENERATE_PROCLIMIT = 1;
+//! Default for -createwalletbackups
+static const unsigned int DEFAULT_CREATEWALLETBACKUPS = 10;
+
+extern const char * DEFAULT_WALLET_DAT;
 
 class CAccountingEntry;
 class CCoinControl;
@@ -636,6 +643,9 @@ public:
 
     /* Mark a transaction (and it in-wallet descendants) as abandoned so its inputs may be respent. */
     bool AbandonTransaction(const uint256& hashTx);
+
+    /* Returns the wallets help message */
+    static std::string GetWalletHelpString(bool showDebug);
 
     /**
      * Address book entry changed.
