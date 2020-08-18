@@ -121,12 +121,33 @@ CCoinsModifier CCoinsViewCache::ModifyCoins(const uint256& txid)
     return CCoinsModifier(*this, ret.first, cachedCoinUsage);
 }
 
+/* ModifyNewCoins allows for faster coin modification when creating the new
+ * outputs from a transaction.  It assumes that BIP 30 (no duplicate txids)
+ * applies and has already been tested for (or the test is not required due to
+ * BIP 34, height in coinbase).  If we can assume BIP 30 then we know that any
+ * non-coinbase transaction we are adding to the UTXO must not already exist in
+ * the utxo unless it is fully spent.  Thus we can check only if it exists DIRTY
+ * at the current level of the cache, in which case it is not safe to mark it
+ * FRESH (b/c then its spentness still needs to flushed).  If it's not dirty and
+ * doesn't exist or is pruned in the current cache, we know it either doesn't
+ * exist or is pruned in parent caches, which is the definition of FRESH.
+ */
 CCoinsModifier CCoinsViewCache::ModifyNewCoins(const uint256 &txid)
 {
     assert(!hasModifier);
     std::pair<CCoinsMap::iterator, bool> ret = cacheCoins.insert(std::make_pair(txid, CCoinsCacheEntry()));
+    // New coins must not already exist.
+    if (!ret.first->second.coins.IsPruned())
+        throw std::logic_error("ModifyNewCoins should not find pre-existing coins on a non-coinbase unless they are pruned!");
+
+    if (!(ret.first->second.flags & CCoinsCacheEntry::DIRTY)) {
+        // If the coin is known to be pruned (have no unspent outputs) in
+        // the current view and the cache entry is not dirty, we know the
+        // coin also must be pruned in the parent view as well, so it is safe
+        // to mark this fresh.
+        ret.first->second.flags |= CCoinsCacheEntry::FRESH;
+    }
     ret.first->second.coins.Clear();
-    ret.first->second.flags = CCoinsCacheEntry::FRESH;
     ret.first->second.flags |= CCoinsCacheEntry::DIRTY;
     return CCoinsModifier(*this, ret.first, 0);
 }
@@ -192,6 +213,13 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn
                         entry.flags |= CCoinsCacheEntry::FRESH;
                 }
             } else {
+                // Assert that the child cache entry was not marked FRESH if the
+                // parent cache entry has unspent outputs. If this ever happens,
+                // it means the FRESH flag was misapplied and there is a logic
+                // error in the calling code.
+                if ((it->second.flags & CCoinsCacheEntry::FRESH) && !itUs->second.coins.IsPruned())
+                    throw std::logic_error("FRESH flag misapplied to cache entry for base transaction with spendable outputs");
+
                 // Found the entry in the parent cache
                 if ((itUs->second.flags & CCoinsCacheEntry::FRESH) && it->second.coins.IsPruned()) {
                     // The grandparent does not have an entry, and the child is
@@ -205,6 +233,11 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn
                     itUs->second.coins.swap(it->second.coins);
                     cachedCoinsUsage += memusage::DynamicUsage(itUs->second.coins);
                     itUs->second.flags |= CCoinsCacheEntry::DIRTY;
+                    // NOTE: It is possible the child has a FRESH flag here in
+                    // the event the entry we found in the parent is pruned. But
+                    // we must not copy that FRESH flag to the parent as that
+                    // pruned state likely still needs to be communicated to the
+                    // grandparent.
                 }
             }
         }
