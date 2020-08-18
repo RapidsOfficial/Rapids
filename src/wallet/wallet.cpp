@@ -2128,7 +2128,6 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
                              bool fIncludeColdStaking,          // Default: false
                              AvailableCoinsType nCoinType,      // Default: ALL_COINS
                              bool fOnlyConfirmed,               // Default: true
-                             bool fIncludeZeroValue,            // Default: false
                              bool fUseIX                       // Default: false
                              ) const
 {
@@ -2153,24 +2152,32 @@ bool CWallet::AvailableCoins(std::vector<COutput>* pCoins,      // --> populates
             if (nCoinType == STAKEABLE_COINS && nDepth < Params().GetConsensus().nStakeMinDepth) continue;
 
             for (unsigned int i = 0; i < pcoin->vout.size(); i++) {
-                bool found = false;
-                if (nCoinType == ONLY_10000) {
-                    found = pcoin->vout[i].nValue == 10000 * COIN;
-                } else {
-                    found = true;
-                }
-                if (!found) continue;
 
+                // Check for only 10k utxo
+                if (nCoinType == ONLY_10000 && pcoin->vout[i].nValue != 10000 * COIN) continue;
+
+                // Check for stakeable utxo
                 if (nCoinType == STAKEABLE_COINS && pcoin->vout[i].IsZerocoinMint()) continue;
+
+                // Check if the utxo was spent.
                 if (IsSpent(wtxid, i)) continue;
 
                 isminetype mine = IsMine(pcoin->vout[i]);
-                if (  (mine == ISMINE_NO) ||
-                      (mine == ISMINE_WATCH_ONLY && coinControl && !coinControl->fAllowWatchOnly) ||
-                      (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) ||
-                      (pcoin->vout[i].nValue <= 0 && !fIncludeZeroValue) ||
-                      (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint((*it).first, i)))
-                   ) continue;
+
+                // Check If not mine
+                if (mine == ISMINE_NO) continue;
+
+                // Check if watch only utxo are allowed
+                if (mine == ISMINE_WATCH_ONLY && coinControl && !coinControl->fAllowWatchOnly) continue;
+
+                // Skip locked utxo
+                if (IsLockedCoin((*it).first, i) && nCoinType != ONLY_10000) continue;
+
+                // Check if we should include zero value utxo
+                if (pcoin->vout[i].nValue <= 0) continue;
+
+                if (fCoinsSelected && !coinControl->fAllowOtherInputs && !coinControl->IsSelected(COutPoint((*it).first, i)))
+                    continue;
 
                 // --Skip P2CS outputs
                 // skip cold coins
@@ -2561,7 +2568,6 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
                 false,                  // fIncludeColdStaking
                 coin_type,
                 true,                   // fOnlyConfirmed
-                false,                  // fIncludeZeroValue
                 useIX);
 
             nFeeRet = 0;
