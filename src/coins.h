@@ -85,17 +85,12 @@ public:
     //! at which height this transaction was included in the active block chain
     int nHeight;
 
-    //! version of the CTransaction; accesses to this value should probably check for nHeight as well,
-    //! as new tx version will probably only be introduced at certain heights
-    int nVersion;
-
     void FromTx(const CTransaction& tx, int nHeightIn)
     {
         fCoinBase = tx.IsCoinBase();
         fCoinStake = tx.IsCoinStake();
         vout = tx.vout;
         nHeight = nHeightIn;
-        nVersion = tx.nVersion;
         ClearUnspendable();
     }
 
@@ -111,11 +106,10 @@ public:
         fCoinStake = false;
         std::vector<CTxOut>().swap(vout);
         nHeight = 0;
-        nVersion = 0;
     }
 
     //! empty constructor
-    CCoins() : fCoinBase(false), fCoinStake(false), vout(0), nHeight(0), nVersion(0) {}
+    CCoins() : fCoinBase(false), fCoinStake(false), vout(0), nHeight(0) {}
 
     //!remove spent outputs at the end of vout
     void Cleanup()
@@ -141,7 +135,6 @@ public:
         std::swap(to.fCoinStake, fCoinStake);
         to.vout.swap(vout);
         std::swap(to.nHeight, nHeight);
-        std::swap(to.nVersion, nVersion);
     }
 
     //! equality test
@@ -153,7 +146,6 @@ public:
         return a.fCoinBase == b.fCoinBase &&
                a.fCoinStake == b.fCoinStake &&
                a.nHeight == b.nHeight &&
-               a.nVersion == b.nVersion &&
                a.vout == b.vout;
     }
     friend bool operator!=(const CCoins& a, const CCoins& b)
@@ -184,7 +176,8 @@ public:
         assert(fFirst || fSecond || nMaskCode);
         unsigned int nCode = 16 * (nMaskCode - (fFirst || fSecond ? 0 : 1)) + (fCoinBase ? 1 : 0) + (fCoinStake ? 2 : 0) + (fFirst ? 4 : 0) + (fSecond ? 8 : 0);
         // version
-        ::Serialize(s, VARINT(this->nVersion));
+        int nVersionDummy = 0;
+        ::Serialize(s, VARINT(nVersionDummy));
         // header code
         ::Serialize(s, VARINT(nCode));
         // spentness bitmask
@@ -209,7 +202,8 @@ public:
     {
         unsigned int nCode = 0;
         // version
-        ::Unserialize(s, VARINT(nVersion));
+        int nVersionDummy;
+        ::Unserialize(s, VARINT(nVersionDummy));
         // header code
         ::Unserialize(s, VARINT(nCode));
         fCoinBase = nCode & 1;         //0001 - means coinbase
@@ -342,10 +336,13 @@ public:
     virtual bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock);
 
     //! Get a cursor to iterate over the whole state
-    virtual CCoinsViewCursor *Cursor() const;
+    virtual CCoinsViewCursor* Cursor() const;
 
     //! As we use CCoinsViews polymorphically, have a virtual destructor
     virtual ~CCoinsView() {}
+
+    //! Estimate database size (0 if not implemented)
+    virtual size_t EstimateSize() const { return 0; }
 };
 
 
@@ -357,12 +354,13 @@ protected:
 
 public:
     CCoinsViewBacked(CCoinsView* viewIn);
-    bool GetCoins(const uint256& txid, CCoins& coins) const;
-    bool HaveCoins(const uint256& txid) const;
-    uint256 GetBestBlock() const;
+    bool GetCoins(const uint256& txid, CCoins& coins) const override;
+    bool HaveCoins(const uint256& txid) const override;
+    uint256 GetBestBlock() const override;
     void SetBackend(CCoinsView& viewIn);
-    bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock);
-    CCoinsViewCursor *Cursor() const;
+    bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) override;
+    CCoinsViewCursor* Cursor() const override;
+    size_t EstimateSize() const override;
 };
 
 class CCoinsViewCache;
@@ -413,11 +411,11 @@ public:
     ~CCoinsViewCache();
 
     // Standard CCoinsView methods
-    bool GetCoins(const uint256& txid, CCoins& coins) const;
-    bool HaveCoins(const uint256& txid) const;
-    uint256 GetBestBlock() const;
+    bool GetCoins(const uint256& txid, CCoins& coins) const override;
+    bool HaveCoins(const uint256& txid) const override;
+    uint256 GetBestBlock() const override;
     void SetBestBlock(const uint256& hashBlock);
-    bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock);
+    bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) override;
 
     /**
      * Check if we have the given tx already loaded in this cache.

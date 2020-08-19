@@ -13,10 +13,9 @@
 #include "serialize.h"
 
 /** Undo information for a CTxIn
- *
- *  Contains the prevout's CTxOut being spent, and if this was the
- *  last output of the affected transaction, its metadata as well
- *  (coinbase/coinstake or not, height, transaction version)
+ *  Contains the prevout's CTxOut being spent, and its metadata as well
+ *  (coinbase/coinstake or not, height). Earlier versions also stored
+ *  the transaction version.
  */
 class CTxInUndo
 {
@@ -25,17 +24,18 @@ public:
     bool fCoinBase; // if the outpoint was the last unspent: whether it belonged to a coinbase
     bool fCoinStake;
     unsigned int nHeight; // if the outpoint was the last unspent: its height
-    int nVersion;         // if the outpoint was the last unspent: its version
 
-    CTxInUndo() : txout(), fCoinBase(false), fCoinStake(false), nHeight(0), nVersion(0) {}
-    CTxInUndo(const CTxOut& txoutIn, bool fCoinBaseIn = false, bool fCoinStakeIn = false, unsigned int nHeightIn = 0, int nVersionIn = 0) : txout(txoutIn), fCoinBase(fCoinBaseIn), fCoinStake(fCoinStakeIn), nHeight(nHeightIn), nVersion(nVersionIn) {}
+    CTxInUndo() : txout(), fCoinBase(false), fCoinStake(false), nHeight(0) {}
+    CTxInUndo(const CTxOut& txoutIn, bool fCoinBaseIn = false, bool fCoinStakeIn = false, unsigned int nHeightIn = 0) : txout(txoutIn), fCoinBase(fCoinBaseIn), fCoinStake(fCoinStakeIn), nHeight(nHeightIn) {}
 
     template <typename Stream>
     void Serialize(Stream& s) const
     {
         ::Serialize(s, VARINT(nHeight * 4 + (fCoinBase ? 2 : 0) + (fCoinStake ? 1 : 0)));
-        if (nHeight > 0)
-            ::Serialize(s, VARINT(this->nVersion));
+        if (nHeight > 0) {
+            int nVersionDummy = 0;
+            ::Serialize(s, VARINT(nVersionDummy));
+        }
         ::Serialize(s, CTxOutCompressor(REF(txout)));
     }
 
@@ -47,8 +47,10 @@ public:
         nHeight = nCode >> 2;
         fCoinBase = nCode & 2;
         fCoinStake = nCode & 1;
-        if (nHeight > 0)
-            ::Unserialize(s, VARINT(this->nVersion));
+        if (nHeight > 0) {
+            int nVersionDummy;
+            ::Unserialize(s, VARINT(nVersionDummy));
+        }
         ::Unserialize(s, REF(CTxOutCompressor(REF(txout))));
     }
 };
