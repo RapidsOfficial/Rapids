@@ -40,9 +40,7 @@ class DeprecatedRpcTest(PivxTestFramework):
         # - setlabel
         #
         address0 = self.nodes[0].getnewaddress()
-        self.nodes[0].generate(101)
         address1 = self.nodes[1].getnewaddress()
-        self.nodes[1].generate(101)
 
         self.log.info("- getaccount")
         assert_raises_rpc_error(-32, "getaccount is deprecated", self.nodes[0].getaccount, address0)
