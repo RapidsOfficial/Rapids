@@ -54,13 +54,9 @@ UniValue listmasternodes(const JSONRPCRequest& request)
             HelpExampleCli("listmasternodes", "") + HelpExampleRpc("listmasternodes", ""));
 
     UniValue ret(UniValue::VARR);
-    int nHeight;
-    {
-        LOCK(cs_main);
-        CBlockIndex* pindex = chainActive.Tip();
-        if(!pindex) return 0;
-        nHeight = pindex->nHeight;
-    }
+    int nHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    if (nHeight < 0) return "[]";
+
     std::vector<std::pair<int, CMasternode> > vMasternodeRanks = mnodeman.GetMasternodeRanks(nHeight);
     for (PAIRTYPE(int, CMasternode) & s : vMasternodeRanks) {
         UniValue obj(UniValue::VOBJ);
@@ -124,9 +120,10 @@ UniValue getmasternodecount (const JSONRPCRequest& request)
     int nCount = 0;
     int ipv4 = 0, ipv6 = 0, onion = 0;
 
-    if (chainActive.Tip())
-        mnodeman.GetNextMasternodeInQueueForPayment(chainActive.Tip()->nHeight, true, nCount);
+    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    if (nChainHeight < 0) return "unknown";
 
+    mnodeman.GetNextMasternodeInQueueForPayment(nChainHeight, true, nCount);
     mnodeman.CountNetworks(ActiveProtocol(), ipv4, ipv6, onion);
 
     obj.push_back(Pair("total", mnodeman.size()));
@@ -562,13 +559,8 @@ UniValue getmasternodewinners (const JSONRPCRequest& request)
             "\nExamples:\n" +
             HelpExampleCli("getmasternodewinners", "") + HelpExampleRpc("getmasternodewinners", ""));
 
-    int nHeight;
-    {
-        LOCK(cs_main);
-        CBlockIndex* pindex = chainActive.Tip();
-        if(!pindex) return 0;
-        nHeight = pindex->nHeight;
-    }
+    int nHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    if (nHeight < 0) return "[]";
 
     int nLast = 10;
     std::string strFilter = "";
@@ -651,10 +643,11 @@ UniValue getmasternodescores (const JSONRPCRequest& request)
             throw std::runtime_error("Exception on param 2");
         }
     }
+    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    if (nChainHeight < 0) return "unknown";
     UniValue obj(UniValue::VOBJ);
-
     std::vector<CMasternode> vMasternodes = mnodeman.GetFullMasternodeVector();
-    for (int nHeight = chainActive.Tip()->nHeight - nLast; nHeight < chainActive.Tip()->nHeight + 20; nHeight++) {
+    for (int nHeight = nChainHeight - nLast; nHeight < nChainHeight + 20; nHeight++) {
         uint256 nHigh;
         CMasternode* pBestMasternode = NULL;
         for (CMasternode& mn : vMasternodes) {

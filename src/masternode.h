@@ -251,13 +251,8 @@ public:
 
     int GetMasternodeInputAge()
     {
-        int tipHeight;
-        {
-            LOCK(cs_main);
-            CBlockIndex *pindex = chainActive.Tip();
-            if (!pindex) return 0;
-            tipHeight = pindex->nHeight;
-        }
+        int tipHeight = WITH_LOCK(cs_main, return chainActive.Height());
+        if (tipHeight < 0) return 0;
 
         if (cacheInputAge == 0) {
             cacheInputAge = GetInputAge(vin);
