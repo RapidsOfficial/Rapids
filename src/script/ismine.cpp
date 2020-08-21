@@ -39,8 +39,9 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
     std::vector<valtype> vSolutions;
     txnouttype whichType;
     if(!Solver(scriptPubKey, whichType, vSolutions)) {
-        if(keystore.HaveWatchOnly(scriptPubKey))
-            return ISMINE_WATCH_UNSOLVABLE;
+        if(keystore.HaveWatchOnly(scriptPubKey)) {
+            return ISMINE_WATCH_ONLY;
+        }
 
         return ISMINE_NO;
     }
@@ -77,12 +78,15 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
         CKeyID ownerKeyID = CKeyID(uint160(vSolutions[1]));
         bool spendKeyIsMine = keystore.HaveKey(ownerKeyID);
 
-        if (spendKeyIsMine && stakeKeyIsMine)
-            return ISMINE_SPENDABLE_STAKEABLE;
-        else if (stakeKeyIsMine)
-            return ISMINE_COLD;
-        else if (spendKeyIsMine)
+        if (spendKeyIsMine) {
+            // If the wallet has both keys, ISMINE_SPENDABLE_DELEGATED
+            // takes precedence over ISMINE_COLD
             return ISMINE_SPENDABLE_DELEGATED;
+        } else if (stakeKeyIsMine) {
+            return ISMINE_COLD;
+        } else {
+            // todo: Include watch only..
+        }
         break;
     }
     case TX_MULTISIG: {
@@ -99,9 +103,7 @@ isminetype IsMine(const CKeyStore& keystore, const CScript& scriptPubKey)
     }
 
     if (keystore.HaveWatchOnly(scriptPubKey)) {
-        // TODO: This could be optimized some by doing some work after the above solver
-        SignatureData sigdata;
-        return ProduceSignature(DummySignatureCreator(&keystore), scriptPubKey, sigdata, false) ? ISMINE_WATCH_SOLVABLE : ISMINE_WATCH_UNSOLVABLE;
+        return ISMINE_WATCH_ONLY;
     }
 
     return ISMINE_NO;

@@ -849,33 +849,12 @@ public:
     int64_t nOrderPos; //! position in ordered transaction list
 
     // memory only
-    mutable bool fDebitCached;
-    mutable bool fCreditCached;
-    mutable bool fImmatureCreditCached;
-    mutable bool fAvailableCreditCached;
-    mutable bool fWatchDebitCached;
-    mutable bool fWatchCreditCached;
-    mutable bool fImmatureWatchCreditCached;
-    mutable bool fAvailableWatchCreditCached;
+    enum AmountType { DEBIT, CREDIT, IMMATURE_CREDIT, AVAILABLE_CREDIT, AMOUNTTYPE_ENUM_ELEMENTS };
+    CAmount GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate = false, bool fUnspent = false) const;
+    mutable CachableAmount m_amounts[AMOUNTTYPE_ENUM_ELEMENTS];
     mutable bool fChangeCached;
-    mutable bool fColdDebitCached;
-    mutable bool fColdCreditCached;
-    mutable bool fDelegatedDebitCached;
-    mutable bool fDelegatedCreditCached;
     mutable bool fStakeDelegationVoided;
-    mutable CAmount nDebitCached;
-    mutable CAmount nCreditCached;
-    mutable CAmount nImmatureCreditCached;
-    mutable CAmount nAvailableCreditCached;
-    mutable CAmount nWatchDebitCached;
-    mutable CAmount nWatchCreditCached;
-    mutable CAmount nImmatureWatchCreditCached;
-    mutable CAmount nAvailableWatchCreditCached;
     mutable CAmount nChangeCached;
-    mutable CAmount nColdDebitCached;
-    mutable CAmount nColdCreditCached;
-    mutable CAmount nDelegatedDebitCached;
-    mutable CAmount nDelegatedCreditCached;
 
     CWalletTx();
     CWalletTx(const CWallet* pwalletIn);
@@ -937,7 +916,7 @@ public:
 
     //! filter decides which addresses will count towards the debit
     CAmount GetDebit(const isminefilter& filter) const;
-    CAmount GetCredit(const isminefilter& filter) const;
+    CAmount GetCredit(const isminefilter& filter, bool recalculate = false, bool fUnspent = false) const;
     CAmount GetUnspentCredit(const isminefilter& filter) const;
     CAmount GetImmatureCredit(bool fUseCache = true, const isminefilter& filter = ISMINE_SPENDABLE_ALL) const;
     CAmount GetAvailableCredit(bool fUseCache = true) const;
@@ -955,9 +934,6 @@ public:
     CAmount GetColdStakingDebit(bool fUseCache = true) const;
     CAmount GetStakeDelegationCredit(bool fUseCache = true) const;
     CAmount GetStakeDelegationDebit(bool fUseCache = true) const;
-
-    // Helper method to update the amount and cacheFlag.
-    CAmount UpdateAmount(CAmount& amountToUpdate, bool& cacheFlagToUpdate, bool fUseCache, isminetype mimeType, bool fCredit = true) const;
 
     void GetAmounts(std::list<COutputEntry>& listReceived,
         std::list<COutputEntry>& listSent,
