@@ -1300,7 +1300,7 @@ bool AppInit2()
     // ********************************************************* Step 6: network initialization
 
     assert(!g_connman);
-    g_connman = std::unique_ptr<CConnman>(new CConnman());
+    g_connman = MakeUnique<CConnman>();
     CConnman& connman = *g_connman;
 
     RegisterNodeSignals(GetNodeSignals());

@@ -1656,24 +1656,18 @@ void CWalletTx::RelayWalletTransaction(CConnman* connman, std::string strCommand
             uint256 hash = GetHash();
             LogPrintf("Relaying wtx %s\n", hash.ToString());
 
+            int invType = MSG_TX;
             if (strCommand == NetMsgType::IX) {
                 mapTxLockReq.insert(std::make_pair(hash, (CTransaction) * this));
                 CreateNewLock(((CTransaction) * this));
-                if (connman) {
-                    CInv inv(MSG_TXLOCK_REQUEST, GetHash());
-                    connman->ForEachNode([&inv](CNode* pnode)
-                    {
-                        pnode->PushInventory(inv);
-                    });
-                }
-            } else {
-                if (connman) {
-                    CInv inv(MSG_TX, GetHash());
-                    connman->ForEachNode([&inv](CNode* pnode)
-                    {
-                        pnode->PushInventory(inv);
-                    });
-                }
+                invType = MSG_TXLOCK_REQUEST;
+            }
+
+            if (connman) {
+                CInv inv(invType, hash);
+                connman->ForEachNode([&inv](CNode* pnode) {
+                  pnode->PushInventory(inv);
+                });
             }
         }
     }

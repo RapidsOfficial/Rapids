@@ -133,7 +133,7 @@ bool CAddrDB::Write(const CAddrMan& addr)
     ssPeers << hash;
 
     // open output file, and associate with CAutoFile
-    fs::path _pathAddr = GetDataDir() / "peers.dat";
+    fs::path _pathAddr = GetDataDir() / tmpfn;
     FILE* file = fsbridge::fopen(_pathAddr, "wb");
     CAutoFile fileout(file, SER_DISK, CLIENT_VERSION);
     if (fileout.IsNull())
@@ -147,6 +147,11 @@ bool CAddrDB::Write(const CAddrMan& addr)
     }
     FileCommit(fileout.Get());
     fileout.fclose();
+
+    // replace existing peers.dat, if any, with new peers.dat.XXXX
+    if (!RenameOver(_pathAddr, pathAddr))
+        return error("%s: Rename-into-place failed", __func__);
+
 
     return true;
 }
