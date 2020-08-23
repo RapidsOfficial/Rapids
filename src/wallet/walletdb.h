@@ -220,6 +220,8 @@ public:
     std::map<uint256, std::vector<std::pair<uint256, uint32_t> > > MapMintPool();
     bool WriteMintPoolPair(const uint256& hashMasterSeed, const uint256& hashPubcoin, const uint32_t& nCount);
 
+    static void IncrementUpdateCounter();
+    static unsigned int GetUpdateCounter();
 private:
     CWalletDB(const CWalletDB&);
     void operator=(const CWalletDB&);
@@ -230,6 +232,6 @@ private:
 void NotifyBacked(const CWallet& wallet, bool fSuccess, std::string strMessage);
 bool BackupWallet(const CWallet& wallet, const fs::path& strDest, bool fEnableCustom = true);
 bool AttemptBackupWallet(const CWallet& wallet, const fs::path& pathSrc, const fs::path& pathDest);
-
+void ThreadFlushWalletDB(const std::string& strFile);
 
 #endif // BITCOIN_WALLETDB_H

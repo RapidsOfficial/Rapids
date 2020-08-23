@@ -1882,7 +1882,7 @@ bool AppInit2()
             }
             LogPrintf("Rescan completed in %15dms\n", GetTimeMillis() - nWalletRescanTime);
             pwalletMain->SetBestChain(chainActive.GetLocator());
-            nWalletDBUpdated++;
+            CWalletDB::IncrementUpdateCounter();
 
             // Restore wallet transaction metadata after -zapwallettxes=1
             if (GetBoolArg("-zapwallettxes", false) && GetArg("-zapwallettxes", "1") != "2") {
