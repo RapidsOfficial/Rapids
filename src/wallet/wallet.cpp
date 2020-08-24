@@ -2734,14 +2734,6 @@ bool CWallet::CreateCoinStake(
         return false;
     }
 
-    // Parse utxos into CPivStakes
-    std::list<std::unique_ptr<CStakeInput> > listInputs;
-    for (const COutput &out : vCoins) {
-        std::unique_ptr<CPivStake> input(new CPivStake());
-        input->SetPrevout((CTransaction) *out.tx, out.i);
-        listInputs.emplace_back(std::move(input));
-    }
-
     const Consensus::Params& consensus = Params().GetConsensus();
 
     // Mark coin stake transaction
@@ -2751,7 +2743,7 @@ bool CWallet::CreateCoinStake(
 
     // update staker status (hash)
     pStakerStatus->SetLastTip(pindexPrev);
-    pStakerStatus->SetLastCoins(listInputs.size());
+    pStakerStatus->SetLastCoins((int) vCoins.size());
 
     // P2PKH block signatures were not accepted before v5 update.
     bool onlyP2PK = !consensus.NetworkUpgradeActive(pindexPrev->nHeight + 1, Consensus::UPGRADE_V5_DUMMY);
@@ -2761,7 +2753,10 @@ bool CWallet::CreateCoinStake(
     CScript scriptPubKeyKernel;
     bool fKernelFound = false;
     int nAttempts = 0;
-    for (std::unique_ptr<CStakeInput>& stakeInput : listInputs) {
+    for (const COutput &out : vCoins) {
+        CPivStake stakeInput;
+        stakeInput.SetPrevout((CTransaction) *out.tx, out.i);
+
         //new block came in, move on
         if (chainActive.Height() != pindexPrev->nHeight) return false;
 
@@ -2769,7 +2764,7 @@ bool CWallet::CreateCoinStake(
         if (IsLocked() || ShutdownRequested()) return false;
 
         // This should never happen
-        if (stakeInput->IsZPIV()) {
+        if (stakeInput.IsZPIV()) {
             LogPrintf("%s: ERROR - zPOS is disabled\n", __func__);
             continue;
         }
@@ -2777,7 +2772,7 @@ bool CWallet::CreateCoinStake(
         nCredit = 0;
 
         nAttempts++;
-        fKernelFound = Stake(pindexPrev, stakeInput.get(), nBits, nTxNewTime);
+        fKernelFound = Stake(pindexPrev, &stakeInput, nBits, nTxNewTime);
 
         // update staker status (time, attempts)
         pStakerStatus->SetLastTime(nTxNewTime);
@@ -2787,7 +2782,7 @@ bool CWallet::CreateCoinStake(
 
         // Found a kernel
         LogPrintf("CreateCoinStake : kernel found\n");
-        nCredit += stakeInput->GetValue();
+        nCredit += stakeInput.GetValue();
 
         // Calculate reward
         CAmount nReward;
@@ -2796,7 +2791,7 @@ bool CWallet::CreateCoinStake(
 
         // Create the output transaction(s)
         std::vector<CTxOut> vout;
-        if (!stakeInput->CreateTxOuts(this, vout, nCredit, onlyP2PK)) {
+        if (!stakeInput.CreateTxOuts(this, vout, nCredit, onlyP2PK)) {
             LogPrintf("%s : failed to create output\n", __func__);
             continue;
         }
@@ -2827,7 +2822,7 @@ bool CWallet::CreateCoinStake(
 
         uint256 hashTxOut = txNew.GetHash();
         CTxIn in;
-        if (!stakeInput->CreateTxIn(this, in, hashTxOut)) {
+        if (!stakeInput.CreateTxIn(this, in, hashTxOut)) {
             LogPrintf("%s : failed to create TxIn\n", __func__);
             txNew.vin.clear();
             txNew.vout.clear();
