@@ -624,18 +624,6 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     result.push_back(Pair("bits", strprintf("%08x", pblock->nBits)));
     result.push_back(Pair("height", (int64_t)(pindexPrev->nHeight + 1)));
     result.push_back(Pair("votes", aVotes));
-
-
-    if (pblock->payee != CScript()) {
-        CTxDestination address1;
-        ExtractDestination(pblock->payee, address1);
-        result.push_back(Pair("payee", EncodeDestination(address1).c_str()));
-        result.push_back(Pair("payee_amount", (int64_t)pblock->vtx[0].vout[1].nValue));
-    } else {
-        result.push_back(Pair("payee", ""));
-        result.push_back(Pair("payee_amount", ""));
-    }
-
     result.push_back(Pair("enforce_masternode_payments", true));
 
     return result;

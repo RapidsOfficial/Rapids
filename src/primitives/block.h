@@ -88,7 +88,6 @@ public:
     std::vector<unsigned char> vchBlockSig;
 
     // memory only
-    mutable CScript payee;
     mutable bool fChecked;
 
     CBlock()
@@ -117,7 +116,6 @@ public:
         CBlockHeader::SetNull();
         vtx.clear();
         fChecked = false;
-        payee = CScript();
         vchBlockSig.clear();
     }
 
