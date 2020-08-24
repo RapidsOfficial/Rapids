@@ -146,6 +146,31 @@ bool CheckForDuplicatedSerials(const CTransaction& tx, const Consensus::Params& 
     return true;
 }
 
+bool CreateCoinbaseTx(CBlock* pblock, const CScript& scriptPubKeyIn, CBlockIndex* pindexPrev)
+{
+    // Create coinbase tx
+    CMutableTransaction txNew;
+    txNew.vin.resize(1);
+    txNew.vin[0].prevout.SetNull();
+    txNew.vout.resize(1);
+    txNew.vout[0].scriptPubKey = scriptPubKeyIn;
+
+    //Masternode and general budget payments
+    FillBlockPayee(txNew, pindexPrev, false, false);
+
+    txNew.vin[0].scriptSig = CScript() << pindexPrev->nHeight + 1 << OP_0;
+    //Make payee
+    if (txNew.vout.size() > 1) {
+        pblock->payee = txNew.vout[1].scriptPubKey;
+    } else {
+        CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
+        txNew.vout[0].nValue = blockValue;
+    }
+
+    pblock->vtx.emplace_back(txNew);
+    return true;
+}
+
 bool SolveProofOfStake(CBlock* pblock, CBlockIndex* pindexPrev, CWallet* pwallet)
 {
     boost::this_thread::interruption_point();
@@ -190,36 +215,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
     }
 
+    // Depending on the tip height, try to find a coinstake who solves the block or create a coinbase tx.
+    if (!(fProofOfStake ? SolveProofOfStake(pblock, pindexPrev, pwallet)
+                        : CreateCoinbaseTx(pblock, scriptPubKeyIn, pindexPrev))) {
+        return nullptr;
+    }
+
     pblocktemplate->vTxFees.push_back(-1);   // updated at end
     pblocktemplate->vTxSigOps.push_back(-1); // updated at end
-
-    if (fProofOfStake) {
-        // Try to find a coinstake who solves it.
-        if(!SolveProofOfStake(pblock, pindexPrev, pwallet)) {
-            return nullptr;
-        }
-    } else {
-        // Create coinbase tx
-        CMutableTransaction txNew;
-        txNew.vin.resize(1);
-        txNew.vin[0].prevout.SetNull();
-        txNew.vout.resize(1);
-        txNew.vout[0].scriptPubKey = scriptPubKeyIn;
-
-        //Masternode and general budget payments
-        FillBlockPayee(txNew, pindexPrev, fProofOfStake, false);
-
-        txNew.vin[0].scriptSig = CScript() << nHeight << OP_0;
-        //Make payee
-        if (txNew.vout.size() > 1) {
-            pblock->payee = txNew.vout[1].scriptPubKey;
-        } else {
-            CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
-            txNew.vout[0].nValue = blockValue;
-        }
-
-        pblock->vtx.emplace_back(txNew);
-    }
 
     // Largest block you're willing to create:
     unsigned int nBlockMaxSize = GetArg("-blockmaxsize", DEFAULT_BLOCK_MAX_SIZE);
