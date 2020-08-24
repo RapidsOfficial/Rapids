@@ -532,7 +532,7 @@ void CBudgetManager::CheckAndRemove()
 
 }
 
-void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake)
+void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, bool fProofOfStake)
 {
     LOCK(cs);
 

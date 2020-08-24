@@ -2801,10 +2801,9 @@ bool CWallet::CreateCoinStake(
         }
         txNew.vout.insert(txNew.vout.end(), vout.begin(), vout.end());
 
-        CAmount nMinFee = 0;
         // Set output amount
-        int outputs = txNew.vout.size() - 1;
-        CAmount nRemaining = nCredit - nMinFee;
+        int outputs = (int) txNew.vout.size() - 1;
+        CAmount nRemaining = nCredit;
         if (outputs > 1) {
             // Split the stake across the outputs
             CAmount nShare = nRemaining / outputs;
@@ -2823,7 +2822,7 @@ bool CWallet::CreateCoinStake(
             return error("%s : exceeded coinstake size limit", __func__);
 
         // Masternode payment
-        FillBlockPayee(txNew, nMinFee, true, false);
+        FillBlockPayee(txNew, true, false);
 
         uint256 hashTxOut = txNew.GetHash();
         CTxIn in;

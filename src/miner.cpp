@@ -158,8 +158,12 @@ bool SolveProofOfStake(CBlock* pblock, CBlockIndex* pindexPrev, CWallet* pwallet
     }
     // Stake found
     pblock->nTime = nTxNewTime;
-    pblock->vtx[0].vout[0].SetEmpty();
-    pblock->vtx.emplace_back(CTransaction(txCoinStake));
+    CMutableTransaction emptyTx;
+    emptyTx.vin.resize(1);
+    emptyTx.vout.resize(1);
+    emptyTx.vout[0].SetEmpty();
+    pblock->vtx.emplace_back(emptyTx);
+    pblock->vtx.emplace_back(txCoinStake);
     return true;
 }
 
@@ -186,13 +190,6 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
     }
 
-    // Create coinbase tx
-    CMutableTransaction txNew;
-    txNew.vin.resize(1);
-    txNew.vin[0].prevout.SetNull();
-    txNew.vout.resize(1);
-    txNew.vout[0].scriptPubKey = scriptPubKeyIn;
-    pblock->vtx.push_back(txNew);
     pblocktemplate->vTxFees.push_back(-1);   // updated at end
     pblocktemplate->vTxSigOps.push_back(-1); // updated at end
 
@@ -201,6 +198,27 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         if(!SolveProofOfStake(pblock, pindexPrev, pwallet)) {
             return nullptr;
         }
+    } else {
+        // Create coinbase tx
+        CMutableTransaction txNew;
+        txNew.vin.resize(1);
+        txNew.vin[0].prevout.SetNull();
+        txNew.vout.resize(1);
+        txNew.vout[0].scriptPubKey = scriptPubKeyIn;
+
+        //Masternode and general budget payments
+        FillBlockPayee(txNew, fProofOfStake, false);
+
+        txNew.vin[0].scriptSig = CScript() << nHeight << OP_0;
+        //Make payee
+        if (txNew.vout.size() > 1) {
+            pblock->payee = txNew.vout[1].scriptPubKey;
+        } else {
+            CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
+            txNew.vout[0].nValue = blockValue;
+        }
+
+        pblock->vtx.emplace_back(txNew);
     }
 
     // Largest block you're willing to create:
@@ -409,29 +427,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         }
 
         if (!fProofOfStake) {
-            //Masternode and general budget payments
-            FillBlockPayee(txNew, nFees, fProofOfStake, false);
-
-            //Make payee
-            if (txNew.vout.size() > 1) {
-                pblock->payee = txNew.vout[1].scriptPubKey;
-            } else {
-                CAmount blockValue = nFees + GetBlockValue(pindexPrev->nHeight);
-                txNew.vout[0].nValue = blockValue;
-                txNew.vin[0].scriptSig = CScript() << nHeight << OP_0;
-            }
+            // Coinbase can get the fees.
+            pblock->vtx[0].vout[0].nValue += nFees;
+            pblocktemplate->vTxFees[0] = -nFees;
         }
 
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
         LogPrintf("%s : total size %u\n", __func__, nBlockSize);
-
-        // Compute final coinbase transaction.
-        pblock->vtx[0].vin[0].scriptSig = CScript() << nHeight << OP_0;
-        if (!fProofOfStake) {
-            pblock->vtx[0] = txNew;
-            pblocktemplate->vTxFees[0] = -nFees;
-        }
 
         // Fill in header
         pblock->hashPrevBlock = pindexPrev->GetBlockHash();
