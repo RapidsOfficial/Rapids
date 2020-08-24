@@ -159,10 +159,9 @@ bool CreateCoinbaseTx(CBlock* pblock, const CScript& scriptPubKeyIn, CBlockIndex
     FillBlockPayee(txNew, pindexPrev, false);
 
     txNew.vin[0].scriptSig = CScript() << pindexPrev->nHeight + 1 << OP_0;
-    //Make payee
+    // If no payee was detected, then the whole block value goes to the first output.
     if (txNew.vout.size() == 1) {
-        CAmount blockValue = GetBlockValue(pindexPrev->nHeight);
-        txNew.vout[0].nValue = blockValue;
+        txNew.vout[0].nValue = GetBlockValue(pindexPrev->nHeight);
     }
 
     pblock->vtx.emplace_back(txNew);
