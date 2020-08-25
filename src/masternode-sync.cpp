@@ -283,143 +283,144 @@ void CMasternodeSync::Process()
 
     std::vector<CNode*> vNodesCopy = g_connman->CopyNodeVector();
     for (CNode* pnode : vNodesCopy) {
-        if (isRegTestNet) {
-            if (RequestedMasternodeAttempt <= 2) {
-                pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
-            } else if (RequestedMasternodeAttempt < 4) {
-                mnodeman.DsegUpdate(pnode);
-            } else if (RequestedMasternodeAttempt < 6) {
-                int nMnCount = mnodeman.CountEnabled();
-                pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
-                uint256 n;
-                pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
-            } else {
-                RequestedMasternodeAssets = MASTERNODE_SYNC_FINISHED;
-            }
-            RequestedMasternodeAttempt++;
+        if (!SyncWithNode(pnode, isRegTestNet)) {
             g_connman->ReleaseNodeVector(vNodesCopy);
             return;
-        }
-
-        //set to synced
-        if (RequestedMasternodeAssets == MASTERNODE_SYNC_SPORKS) {
-            if (pnode->HasFulfilledRequest("getspork")) continue;
-            pnode->FulfilledRequest("getspork");
-
-            pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
-            if (RequestedMasternodeAttempt >= 2) GetNextAsset();
-            RequestedMasternodeAttempt++;
-            g_connman->ReleaseNodeVector(vNodesCopy);
-            return;
-        }
-
-        if (pnode->nVersion >= masternodePayments.GetMinMasternodePaymentsProto()) {
-            if (RequestedMasternodeAssets == MASTERNODE_SYNC_LIST) {
-                LogPrint(BCLog::MASTERNODE, "CMasternodeSync::Process() - lastMasternodeList %lld (GetTime() - MASTERNODE_SYNC_TIMEOUT) %lld\n", lastMasternodeList, GetTime() - MASTERNODE_SYNC_TIMEOUT);
-                if (lastMasternodeList > 0 && lastMasternodeList < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) { //hasn't received a new item in the last five seconds, so we'll move to the
-                    GetNextAsset();
-                    g_connman->ReleaseNodeVector(vNodesCopy);
-                    return;
-                }
-
-                if (pnode->HasFulfilledRequest("mnsync")) continue;
-                pnode->FulfilledRequest("mnsync");
-
-                // timeout
-                if (lastMasternodeList == 0 &&
-                    (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT * 5)) {
-                    if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
-                        LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed on %s, will retry later\n", "MASTERNODE_SYNC_LIST");
-                        RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
-                        RequestedMasternodeAttempt = 0;
-                        lastFailure = GetTime();
-                        nCountFailures++;
-                    } else {
-                        GetNextAsset();
-                    }
-                    g_connman->ReleaseNodeVector(vNodesCopy);
-                    return;
-                }
-
-                if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return;
-
-                mnodeman.DsegUpdate(pnode);
-                RequestedMasternodeAttempt++;
-                g_connman->ReleaseNodeVector(vNodesCopy);
-                return;
-            }
-
-            if (RequestedMasternodeAssets == MASTERNODE_SYNC_MNW) {
-                if (lastMasternodeWinner > 0 && lastMasternodeWinner < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) { //hasn't received a new item in the last five seconds, so we'll move to the
-                    GetNextAsset();
-                    g_connman->ReleaseNodeVector(vNodesCopy);
-                    return;
-                }
-
-                if (pnode->HasFulfilledRequest("mnwsync")) continue;
-                pnode->FulfilledRequest("mnwsync");
-
-                // timeout
-                if (lastMasternodeWinner == 0 &&
-                    (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT * 5)) {
-                    if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
-                        LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed on %s, will retry later\n", "MASTERNODE_SYNC_MNW");
-                        RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
-                        RequestedMasternodeAttempt = 0;
-                        lastFailure = GetTime();
-                        nCountFailures++;
-                    } else {
-                        GetNextAsset();
-                    }
-                    g_connman->ReleaseNodeVector(vNodesCopy);
-                    return;
-                }
-
-                if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return;
-
-                int nMnCount = mnodeman.CountEnabled();
-                pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
-                RequestedMasternodeAttempt++;
-                g_connman->ReleaseNodeVector(vNodesCopy);
-                return;
-            }
-        }
-
-        if (pnode->nVersion >= ActiveProtocol()) {
-            if (RequestedMasternodeAssets == MASTERNODE_SYNC_BUDGET) {
-                // We'll start rejecting votes if we accidentally get set as synced too soon
-                if (lastBudgetItem > 0 && lastBudgetItem < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) {
-                    // Hasn't received a new item in the last five seconds, so we'll move to the
-                    GetNextAsset();
-
-                    // Try to activate our masternode if possible
-                    activeMasternode.ManageStatus();
-                    g_connman->ReleaseNodeVector(vNodesCopy);
-                    return;
-                }
-
-                // timeout
-                if (lastBudgetItem == 0 &&
-                    (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT * 5)) {
-                    // maybe there is no budgets at all, so just finish syncing
-                    GetNextAsset();
-                    activeMasternode.ManageStatus();
-                    g_connman->ReleaseNodeVector(vNodesCopy);
-                    return;
-                }
-
-                if (pnode->HasFulfilledRequest("busync")) continue;
-                pnode->FulfilledRequest("busync");
-
-                if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return;
-
-                uint256 n;
-                pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
-                RequestedMasternodeAttempt++;
-                g_connman->ReleaseNodeVector(vNodesCopy);
-                return;
-            }
         }
     }
     g_connman->ReleaseNodeVector(vNodesCopy);
 }
+
+bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
+{
+    if (isRegTestNet) {
+        if (RequestedMasternodeAttempt <= 2) {
+            pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
+        } else if (RequestedMasternodeAttempt < 4) {
+            mnodeman.DsegUpdate(pnode);
+        } else if (RequestedMasternodeAttempt < 6) {
+            int nMnCount = mnodeman.CountEnabled();
+            pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
+            uint256 n;
+            pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
+        } else {
+            RequestedMasternodeAssets = MASTERNODE_SYNC_FINISHED;
+        }
+        RequestedMasternodeAttempt++;
+        return false;
+    }
+
+    //set to synced
+    if (RequestedMasternodeAssets == MASTERNODE_SYNC_SPORKS) {
+        if (pnode->HasFulfilledRequest("getspork")) return true;
+        pnode->FulfilledRequest("getspork");
+
+        pnode->PushMessage(NetMsgType::GETSPORKS); //get current network sporks
+        if (RequestedMasternodeAttempt >= 2) GetNextAsset();
+        RequestedMasternodeAttempt++;
+        return false;
+    }
+
+    if (pnode->nVersion >= masternodePayments.GetMinMasternodePaymentsProto()) {
+        if (RequestedMasternodeAssets == MASTERNODE_SYNC_LIST) {
+            LogPrint(BCLog::MASTERNODE, "CMasternodeSync::Process() - lastMasternodeList %lld (GetTime() - MASTERNODE_SYNC_TIMEOUT) %lld\n", lastMasternodeList, GetTime() - MASTERNODE_SYNC_TIMEOUT);
+            if (lastMasternodeList > 0 && lastMasternodeList < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) { //hasn't received a new item in the last five seconds, so we'll move to the
+                GetNextAsset();
+                return false;
+            }
+
+            if (pnode->HasFulfilledRequest("mnsync")) return true;
+            pnode->FulfilledRequest("mnsync");
+
+            // timeout
+            if (lastMasternodeList == 0 &&
+                (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT * 5)) {
+                if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
+                    LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed on %s, will retry later\n", "MASTERNODE_SYNC_LIST");
+                    RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
+                    RequestedMasternodeAttempt = 0;
+                    lastFailure = GetTime();
+                    nCountFailures++;
+                } else {
+                    GetNextAsset();
+                }
+                return false;
+            }
+
+            if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return false;
+
+            mnodeman.DsegUpdate(pnode);
+            RequestedMasternodeAttempt++;
+            return false;
+        }
+
+        if (RequestedMasternodeAssets == MASTERNODE_SYNC_MNW) {
+            if (lastMasternodeWinner > 0 && lastMasternodeWinner < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) { //hasn't received a new item in the last five seconds, so we'll move to the
+                GetNextAsset();
+                return false;
+            }
+
+            if (pnode->HasFulfilledRequest("mnwsync")) return true;
+            pnode->FulfilledRequest("mnwsync");
+
+            // timeout
+            if (lastMasternodeWinner == 0 &&
+                (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT * 5)) {
+                if (sporkManager.IsSporkActive(SPORK_8_MASTERNODE_PAYMENT_ENFORCEMENT)) {
+                    LogPrintf("CMasternodeSync::Process - ERROR - Sync has failed on %s, will retry later\n", "MASTERNODE_SYNC_MNW");
+                    RequestedMasternodeAssets = MASTERNODE_SYNC_FAILED;
+                    RequestedMasternodeAttempt = 0;
+                    lastFailure = GetTime();
+                    nCountFailures++;
+                } else {
+                    GetNextAsset();
+                }
+                return false;
+            }
+
+            if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return false;
+
+            int nMnCount = mnodeman.CountEnabled();
+            pnode->PushMessage(NetMsgType::GETMNWINNERS, nMnCount); //sync payees
+            RequestedMasternodeAttempt++;
+            return false;
+        }
+    }
+
+    if (pnode->nVersion >= ActiveProtocol()) {
+        if (RequestedMasternodeAssets == MASTERNODE_SYNC_BUDGET) {
+            // We'll start rejecting votes if we accidentally get set as synced too soon
+            if (lastBudgetItem > 0 && lastBudgetItem < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) {
+                // Hasn't received a new item in the last five seconds, so we'll move to the
+                GetNextAsset();
+
+                // Try to activate our masternode if possible
+                activeMasternode.ManageStatus();
+                return false;
+            }
+
+            // timeout
+            if (lastBudgetItem == 0 &&
+                (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3 || GetTime() - nAssetSyncStarted > MASTERNODE_SYNC_TIMEOUT * 5)) {
+                // maybe there is no budgets at all, so just finish syncing
+                GetNextAsset();
+                activeMasternode.ManageStatus();
+                return false;
+            }
+
+            if (pnode->HasFulfilledRequest("busync")) return true;
+            pnode->FulfilledRequest("busync");
+
+            if (RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD * 3) return false;
+
+            uint256 n;
+            pnode->PushMessage(NetMsgType::BUDGETVOTESYNC, n); //sync masternode votes
+            RequestedMasternodeAttempt++;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
