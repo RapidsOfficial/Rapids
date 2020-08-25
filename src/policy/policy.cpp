@@ -15,6 +15,8 @@
 
 #include <boost/foreach.hpp>
 
+bool fIsBareMultisigStd = DEFAULT_PERMIT_BAREMULTISIG;
+
 /**
  * Check transaction inputs to mitigate two
  * potential denial-of-service attacks:
@@ -51,7 +53,7 @@ bool IsStandard(const CScript& scriptPubKey, txnouttype& whichType)
         if (m < 1 || m > n)
             return false;
     } else if (whichType == TX_NULL_DATA &&
-               (!GetBoolArg("-datacarrier", true) || scriptPubKey.size() > nMaxDatacarrierBytes))
+               (!GetBoolArg("-datacarrier", DEFAULT_ACCEPT_DATACARRIER) || scriptPubKey.size() > nMaxDatacarrierBytes))
         return false;
 
     return whichType != TX_NONSTANDARD;

@@ -18,6 +18,8 @@ class CReserveKey;
 class CScript;
 class CWallet;
 
+static const bool DEFAULT_PRINTPRIORITY = false;
+
 struct CBlockTemplate;
 
 /** Generate a new block, without valid proof-of-work */

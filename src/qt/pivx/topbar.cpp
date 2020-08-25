@@ -677,7 +677,7 @@ void TopBar::updateHDState(const bool& upgraded, const QString& upgradeError)
             }
         } else {
             inform(tr("Wallet upgraded successfully, but no backup created.") + "\n" +
-                    tr("WARNING: remember to make a copy of your wallet.dat file!"));
+                    tr("WARNING: remember to make a copy of your wallet file!"));
         }
     } else {
         warn(tr("Upgrade Wallet Error"), upgradeError);

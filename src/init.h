@@ -18,8 +18,6 @@ namespace boost
 class thread_group;
 } // namespace boost
 
-extern CzPIVWallet* zwalletMain;
-
 void StartShutdown();
 bool ShutdownRequested();
 /** Interrupt threads */

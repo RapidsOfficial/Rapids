@@ -230,7 +230,7 @@ bool CWallet::CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, CTxOu
 {
     // mint a new coin (create Pedersen Commitment) and extract PublicCoin that is shareable from it
     libzerocoin::PrivateCoin coin(Params().GetConsensus().Zerocoin_Params(false), denomination, false);
-    zwalletMain->GenerateDeterministicZPIV(denomination, coin, dMint);
+    zwallet->GenerateDeterministicZPIV(denomination, coin, dMint);
 
     libzerocoin::PublicCoin pubCoin = coin.getPublicCoin();
 
@@ -238,7 +238,7 @@ bool CWallet::CreateZPIVOutPut(libzerocoin::CoinDenomination denomination, CTxOu
     if(!pubCoin.validate())
         return error("%s: newly created pubcoin is not valid", __func__);
 
-    zwalletMain->UpdateCount();
+    zwallet->UpdateCount();
 
     CScript scriptSerializedCoin = CScript() << OP_ZEROCOINMINT << pubCoin.getValue().getvch().size() << pubCoin.getValue().getvch();
     outMint = CTxOut(libzerocoin::ZerocoinDenominationToAmount(denomination), scriptSerializedCoin);
@@ -427,7 +427,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
             }
         }
 
-        receipt.SetStatus("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of wallet.dat and coins were spent in the copy but not marked as spent here.", nStatus);
+        receipt.SetStatus("Error: The transaction was rejected! This might happen if some of the coins in your wallet were already spent, such as if you used a copy of this wallet file, and coins were spent in the copy but not marked as spent here.", nStatus);
         return false;
     }
 
@@ -561,7 +561,7 @@ bool CWallet::CreateZCPublicSpendTransaction(
         //  All of the zPIV used in the public coin spend are mature by default (everything is public now.. no need to wait for any accumulation)
         setMints = zpivTracker->ListMints(true, false, true, true); // need to find mints to spend
         if(setMints.empty()) {
-            receipt.SetStatus(_("Failed to find Zerocoins in wallet.dat"), nStatus);
+            receipt.SetStatus(_("Failed to find Zerocoins in wallet database"), nStatus);
             return false;
         }
 
@@ -812,13 +812,13 @@ std::map<libzerocoin::CoinDenomination, CAmount> CWallet::GetMyZerocoinDistribut
 
 void CWallet::setZWallet(CzPIVWallet* zwallet)
 {
-    zwalletMain = zwallet;
+    this->zwallet = zwallet;
     zpivTracker = std::unique_ptr<CzPIVTracker>(new CzPIVTracker(this));
 }
 
 CzPIVWallet* CWallet::getZWallet()
 {
-    return zwalletMain;
+    return zwallet;
 }
 
 bool CWallet::IsMyZerocoinSpend(const CBigNum& bnSerial) const
@@ -831,7 +831,7 @@ bool CWallet::IsMyMint(const CBigNum& bnValue) const
     if (zpivTracker->HasPubcoin(bnValue))
         return true;
 
-    return zwalletMain->IsInMintPool(bnValue);
+    return zwallet->IsInMintPool(bnValue);
 }
 
 bool IsMintInChain(const uint256& hashPubcoin, uint256& txid, int& nHeight)
@@ -910,7 +910,7 @@ bool CWallet::GetMint(const uint256& hashSerial, CZerocoinMint& mint)
         CDeterministicMint dMint;
         if (!walletdb.ReadDeterministicMint(meta.hashPubcoin, dMint))
             return error("%s: failed to read deterministic mint", __func__);
-        if (!zwalletMain->RegenerateMint(dMint, mint))
+        if (!zwallet->RegenerateMint(dMint, mint))
             return error("%s: failed to generate mint", __func__);
 
         return true;
@@ -944,8 +944,8 @@ bool CWallet::UpdateMint(const CBigNum& bnValue, const int& nHeight, const uint2
         return zpivTracker->UpdateState(meta);
     } else {
         //Check if this mint is one that is in our mintpool (a potential future mint from our deterministic generation)
-        if (zwalletMain->IsInMintPool(bnValue)) {
-            if (zwalletMain->SetMintSeen(bnValue, nHeight, txid, denom))
+        if (zwallet->IsInMintPool(bnValue)) {
+            if (zwallet->SetMintSeen(bnValue, nHeight, txid, denom))
                 return true;
         }
     }
