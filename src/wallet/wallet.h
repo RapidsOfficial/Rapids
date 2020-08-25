@@ -567,7 +567,12 @@ public:
     };
     CWallet::CommitResult CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, CConnman* connman, std::string strCommand = NetMsgType::TX);
     bool AddAccountingEntry(const CAccountingEntry&, CWalletDB & pwalletdb);
-    bool CreateCoinStake(const CKeyStore& keystore, const CBlockIndex* pindexPrev, unsigned int nBits, CMutableTransaction& txNew, int64_t& nTxNewTime);
+    bool CreateCoinStake(const CKeyStore& keystore,
+                         const CBlockIndex* pindexPrev,
+                         unsigned int nBits,
+                         CMutableTransaction& txNew,
+                         int64_t& nTxNewTime,
+                         std::vector<COutput>* availableCoins);
     bool MultiSend();
     void AutoCombineDust(CConnman* connman);
 
