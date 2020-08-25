@@ -974,12 +974,11 @@ void CBudgetManager::NewBlock()
             ResetSync();
         }
 
-        std::vector<CNode*> vNodesCopy = g_connman->CopyNodeVector();
-        for (CNode* pnode : vNodesCopy)
+        CBudgetManager* manager = this;
+        g_connman->ForEachNode([manager](CNode* pnode){
             if (pnode->nVersion >= ActiveProtocol())
-                Sync(pnode, UINT256_ZERO, true);
-
-        g_connman->ReleaseNodeVector(vNodesCopy);
+                manager->Sync(pnode, UINT256_ZERO, true);
+        });
         MarkSynced();
     }
 
