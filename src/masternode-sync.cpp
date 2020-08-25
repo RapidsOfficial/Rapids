@@ -281,14 +281,10 @@ void CMasternodeSync::Process()
     if (!isRegTestNet && !IsBlockchainSynced() &&
         RequestedMasternodeAssets > MASTERNODE_SYNC_SPORKS) return;
 
-    std::vector<CNode*> vNodesCopy = g_connman->CopyNodeVector();
-    for (CNode* pnode : vNodesCopy) {
-        if (!SyncWithNode(pnode, isRegTestNet)) {
-            g_connman->ReleaseNodeVector(vNodesCopy);
-            return;
-        }
-    }
-    g_connman->ReleaseNodeVector(vNodesCopy);
+    CMasternodeSync* sync = this;
+    g_connman->ForEachNodeContinueIf([sync, isRegTestNet](CNode* pnode){
+        return sync->SyncWithNode(pnode, isRegTestNet);
+    });
 }
 
 bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
