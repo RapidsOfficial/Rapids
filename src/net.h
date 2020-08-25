@@ -221,9 +221,6 @@ public:
         post();
     };
 
-    std::vector<CNode*> CopyNodeVector();
-    void ReleaseNodeVector(const std::vector<CNode*>& vecNodes);
-
     void RelayTransaction(const CTransaction& tx);
     void RelayTransaction(const CTransaction& tx, const CDataStream& ss);
     void RelayTransactionLockReq(const CTransaction& tx, bool relayToAll = false);

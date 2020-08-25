@@ -2625,21 +2625,3 @@ int64_t PoissonNextSend(int64_t nNow, int average_interval_seconds) {
     return CSipHasher(k0, k1).Write(&vchNetGroup[0], vchNetGroup.size()).Finalize();
 }
 
-std::vector<CNode*> CConnman::CopyNodeVector()
-{
-    std::vector<CNode*> vecNodesCopy;
-    LOCK(cs_vNodes);
-    for(CNode* pnode : vNodes) {
-        pnode->AddRef();
-        vecNodesCopy.push_back(pnode);
-    }
-    return vecNodesCopy;
-}
-
-void CConnman::ReleaseNodeVector(const std::vector<CNode*>& vecNodes)
-{
-    LOCK(cs_vNodes);
-    for(CNode* pnode : vecNodes) {
-        pnode->Release();
-    }
-}
