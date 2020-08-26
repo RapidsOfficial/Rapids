@@ -550,7 +550,7 @@ public:
     RecursiveMutex cs_sendProcessing;
 
     std::deque<CInv> vRecvGetData;
-    std::deque<CNetMessage> vRecvMsg;
+    std::list<CNetMessage> vRecvMsg;
     RecursiveMutex cs_vRecvMsg;
     uint64_t nRecvBytes;
     int nRecvVersion;
