@@ -1759,10 +1759,10 @@ CAmount CWallet::loopTxsBalance(std::function<void(const uint256&, const CWallet
 
 CAmount CWallet::GetAvailableBalance(bool fIncludeDelegated) const
 {
-    return loopTxsBalance([fIncludeDelegated](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
+    isminetype filter = fIncludeDelegated ? ISMINE_SPENDABLE_ALL : ISMINE_SPENDABLE;
+    return loopTxsBalance([filter](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
         if (pcoin.IsTrusted()) {
-            nTotal += pcoin.GetAvailableCredit();
-            if (!fIncludeDelegated) nTotal -= pcoin.GetStakeDelegationCredit();
+            nTotal += pcoin.GetAvailableCredit(true, filter);
         }
     });
 }
