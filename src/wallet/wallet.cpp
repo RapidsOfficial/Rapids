@@ -1441,14 +1441,7 @@ CAmount CWalletTx::GetImmatureWatchOnlyCredit(const bool& fUseCache) const
 
 CAmount CWalletTx::GetAvailableWatchOnlyCredit(const bool& fUseCache) const
 {
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    return GetCachableAmount(AVAILABLE_CREDIT, ISMINE_WATCH_ONLY, !fUseCache);
+    return GetAvailableCredit(fUseCache, ISMINE_WATCH_ONLY);
 }
 
 CAmount CWalletTx::GetLockedWatchOnlyCredit() const
