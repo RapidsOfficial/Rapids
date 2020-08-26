@@ -937,7 +937,7 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
     if (nValue <= 0)
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount");
 
-    if (nValue > pwalletMain->GetBalance())
+    if (nValue > pwalletMain->GetAvailableBalance())
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
 
     std::string strError;
@@ -954,7 +954,7 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
     CReserveKey reservekey(pwalletMain);
     CAmount nFeeRequired;
     if (!pwalletMain->CreateTransaction(scriptPubKey, nValue, wtxNew, reservekey, nFeeRequired, strError, nullptr, ALL_COINS, fUseIX, (CAmount)0)) {
-        if (nValue + nFeeRequired > pwalletMain->GetBalance())
+        if (nValue + nFeeRequired > pwalletMain->GetAvailableBalance())
             strError = strprintf("Error: This transaction requires a transaction fee of at least %s because of its amount, complexity, or use of recently received funds!", FormatMoney(nFeeRequired));
         LogPrintf("SendMoney() : %s\n", strError);
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
@@ -1051,7 +1051,7 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
         fUseDelegated = params[4].get_bool();
 
     // Check amount
-    CAmount currBalance = pwalletMain->GetBalance() + (fUseDelegated ? pwalletMain->GetDelegatedBalance() : 0);
+    CAmount currBalance = pwalletMain->GetAvailableBalance() + (fUseDelegated ? pwalletMain->GetDelegatedBalance() : 0);
     if (nValue > currBalance)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
 
@@ -1525,7 +1525,7 @@ UniValue getbalance(const JSONRPCRequest& request)
 
     if (IsDeprecatedRPCEnabled("accounts")) {
         if (request.params.size() == 0)
-            return ValueFromAmount(pwalletMain->GetBalance());
+            return ValueFromAmount(pwalletMain->GetAvailableBalance());
 
         const std::string* account = request.params[0].get_str() != "*" ? &request.params[0].get_str() : nullptr;
 
@@ -1543,7 +1543,7 @@ UniValue getbalance(const JSONRPCRequest& request)
 
     // TODO: re-incorporate the includeDelegated argument
     //  after 4.2 branch off for 5.0
-    return ValueFromAmount(pwalletMain->GetBalance());
+    return ValueFromAmount(pwalletMain->GetAvailableBalance());
 }
 
 UniValue getcoldstakingbalance(const JSONRPCRequest& request)
@@ -3467,7 +3467,7 @@ UniValue getwalletinfo(const JSONRPCRequest& request)
 
     UniValue obj(UniValue::VOBJ);
     obj.push_back(Pair("walletversion", pwalletMain->GetVersion()));
-    obj.push_back(Pair("balance", ValueFromAmount(pwalletMain->GetBalance())));
+    obj.push_back(Pair("balance", ValueFromAmount(pwalletMain->GetAvailableBalance())));
     obj.push_back(Pair("delegated_balance", ValueFromAmount(pwalletMain->GetDelegatedBalance())));
     obj.push_back(Pair("cold_staking_balance", ValueFromAmount(pwalletMain->GetColdStakingBalance())));
     obj.push_back(Pair("unconfirmed_balance", ValueFromAmount(pwalletMain->GetUnconfirmedBalance())));
