@@ -17,8 +17,6 @@
 
 #include <vector>
 
-typedef unsigned char MessageStartChars[MESSAGE_START_SIZE];
-
 struct CDNSSeedData {
     std::string name, host;
     bool supportsServiceBitsFiltering;
@@ -62,7 +60,7 @@ public:
     };
 
     const Consensus::Params& GetConsensus() const { return consensus; }
-    const MessageStartChars& MessageStart() const { return pchMessageStart; }
+    const CMessageHeader::MessageStartChars& MessageStart() const { return pchMessageStart; }
     int GetDefaultPort() const { return nDefaultPort; }
 
     const CBlock& GenesisBlock() const { return genesis; }
@@ -93,7 +91,7 @@ protected:
     std::string strNetworkID;
     CBlock genesis;
     Consensus::Params consensus;
-    MessageStartChars pchMessageStart;
+    CMessageHeader::MessageStartChars pchMessageStart;
     int nDefaultPort;
     std::vector<CDNSSeedData> vSeeds;
     std::vector<unsigned char> base58Prefixes[MAX_BASE58_TYPES];

@@ -709,7 +709,7 @@ bool CNode::ReceiveMsgBytes(const char* pch, unsigned int nBytes, bool& complete
         // get current incomplete message, or create a new one
         if (vRecvMsg.empty() ||
             vRecvMsg.back().complete())
-            vRecvMsg.push_back(CNetMessage(SER_NETWORK, nRecvVersion));
+            vRecvMsg.push_back(CNetMessage(Params().MessageStart(), SER_NETWORK, nRecvVersion));
 
         CNetMessage& msg = vRecvMsg.back();
 
@@ -2533,7 +2533,7 @@ void CNode::BeginMessage(const char* pszCommand) EXCLUSIVE_LOCK_FUNCTION(cs_vSen
 {
     ENTER_CRITICAL_SECTION(cs_vSend);
     assert(ssSend.size() == 0);
-    ssSend << CMessageHeader(pszCommand, 0);
+    ssSend << CMessageHeader(Params().MessageStart(), pszCommand, 0);
     LogPrint(BCLog::NET, "sending: %s ", SanitizeString(pszCommand));
 }
 
