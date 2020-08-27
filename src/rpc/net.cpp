@@ -95,6 +95,14 @@ UniValue getpeerinfo(const JSONRPCRequest& request)
             "       n,                        (numeric) The heights of blocks we're currently asking from this peer\n"
             "       ...\n"
             "    ]\n"
+            "    \"bytessent_per_msg\": {\n"
+            "       \"addr\": n,             (numeric) The total bytes sent aggregated by message type\n"
+            "       ...\n"
+            "    }\n"
+            "    \"bytesrecv_per_msg\": {\n"
+            "       \"addr\": n,             (numeric) The total bytes received aggregated by message type\n"
+            "       ...\n"
+            "    }\n"
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -146,6 +154,20 @@ UniValue getpeerinfo(const JSONRPCRequest& request)
             obj.push_back(Pair("inflight", heights));
         }
         obj.push_back(Pair("whitelisted", stats.fWhitelisted));
+
+        UniValue sendPerMsgCmd(UniValue::VOBJ);
+        for (const mapMsgCmdSize::value_type &i : stats.mapSendBytesPerMsgCmd) {
+            if (i.second > 0)
+                sendPerMsgCmd.pushKV(i.first, i.second);
+        }
+        obj.pushKV("bytessent_per_msg", sendPerMsgCmd);
+
+        UniValue recvPerMsgCmd(UniValue::VOBJ);
+        for (const mapMsgCmdSize::value_type &i : stats.mapRecvBytesPerMsgCmd) {
+            if (i.second > 0)
+                recvPerMsgCmd.pushKV(i.first, i.second);
+        }
+        obj.pushKV("bytesrecv_per_msg", recvPerMsgCmd);
 
         ret.push_back(obj);
     }
