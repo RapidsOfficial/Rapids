@@ -1178,9 +1178,7 @@ void CConnman::ThreadSocketHandler()
                 }
                 {
                     TRY_LOCK(pnode->cs_vRecvMsg, lockRecv);
-                    if (lockRecv && (
-                        pnode->vRecvMsg.empty() || !pnode->vRecvMsg.front().complete() ||
-                        pnode->GetTotalRecvSize() <= GetReceiveFloodSize()))
+                    if (lockRecv && !pnode->fPauseRecv)
                         FD_SET(pnode->hSocket, &fdsetRecv);
                 }
             }
@@ -1245,14 +1243,18 @@ void CConnman::ThreadSocketHandler()
                                 pnode->CloseSocketDisconnect();
                             RecordBytesRecv(nBytes);
                             if (notify) {
+                                size_t nSizeAdded = 0;
                                 auto it(pnode->vRecvMsg.begin());
                                 for (; it != pnode->vRecvMsg.end(); ++it) {
                                     if (!it->complete())
                                         break;
+                                    nSizeAdded += it->vRecv.size() + CMessageHeader::HEADER_SIZE;
                                 }
                                 {
                                     LOCK(pnode->cs_vProcessMsg);
                                     pnode->vProcessMsg.splice(pnode->vProcessMsg.end(), pnode->vRecvMsg, pnode->vRecvMsg.begin(), it);
+                                    pnode->nProcessQueueSize += nSizeAdded;
+                                    pnode->fPauseRecv = pnode->nProcessQueueSize > nReceiveFloodSize;
                                 }
                                 WakeMessageHandler();
                             }
@@ -2509,6 +2511,8 @@ CNode::CNode(NodeId idIn, ServiceFlags nLocalServicesIn, int nMyStartingHeightIn
     id = idIn;
     nOptimisticBytesWritten = 0;
     nLocalServices = nLocalServicesIn;
+    fPauseRecv = false;
+    nProcessQueueSize = 0;
 
     for (const std::string &msg : getAllNetMessageTypes())
         mapRecvBytesPerMsgCmd[msg] = 0;

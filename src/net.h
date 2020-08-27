@@ -555,6 +555,7 @@ public:
 
     RecursiveMutex cs_vProcessMsg;
     std::list<CNetMessage> vProcessMsg;
+    size_t nProcessQueueSize;
 
     RecursiveMutex cs_sendProcessing;
 
@@ -597,6 +598,7 @@ public:
     NodeId id;
 
     const uint64_t nKeyedNetGroup;
+    std::atomic_bool fPauseRecv;
 protected:
     mapMsgCmdSize mapSendBytesPerMsgCmd;
     mapMsgCmdSize mapRecvBytesPerMsgCmd;
