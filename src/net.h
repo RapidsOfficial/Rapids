@@ -553,6 +553,9 @@ public:
     std::deque<CSerializeData> vSendMsg;
     RecursiveMutex cs_vSend;
 
+    RecursiveMutex cs_vProcessMsg;
+    std::list<CNetMessage> vProcessMsg;
+
     RecursiveMutex cs_sendProcessing;
 
     std::deque<CInv> vRecvGetData;
