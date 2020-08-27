@@ -373,6 +373,9 @@ private:
     std::atomic<int> nBestHeight;
     CClientUIInterface* clientInterface;
 
+    /** flag for waking the message processor. */
+    bool fMsgProcWake;
+
     std::condition_variable condMsgProc;
     std::mutex mutexMsgProc;
     std::atomic<bool> flagInterruptMsgProc;
