@@ -513,7 +513,7 @@ public:
 
     int ScanForWalletTransactions(CBlockIndex* pindexStart, bool fUpdate = false, bool fromStartup = false);
     void ReacceptWalletTransactions(bool fFirstLoad = false);
-    void ResendWalletTransactions();
+    void ResendWalletTransactions(CConnman* connman);
 
     CAmount loopTxsBalance(std::function<void(const uint256&, const CWalletTx&, CAmount&)>method) const;
     CAmount GetBalance(bool fIncludeDelegated = true) const;
@@ -567,11 +567,11 @@ public:
         // converts CommitResult in human-readable format
         std::string ToString() const;
     };
-    CWallet::CommitResult CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, std::string strCommand = NetMsgType::TX);
+    CWallet::CommitResult CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, CConnman* connman, std::string strCommand = NetMsgType::TX);
     bool AddAccountingEntry(const CAccountingEntry&, CWalletDB & pwalletdb);
     bool CreateCoinStake(const CKeyStore& keystore, const CBlockIndex* pindexPrev, unsigned int nBits, CMutableTransaction& txNew, int64_t& nTxNewTime);
     bool MultiSend();
-    void AutoCombineDust();
+    void AutoCombineDust(CConnman* connman);
 
     static CFeeRate minTxFee;
     /**
@@ -992,7 +992,7 @@ public:
     int64_t GetTxTime() const;
     void UpdateTimeSmart();
     int GetRequestCount() const;
-    void RelayWalletTransaction(std::string strCommand = NetMsgType::TX);
+    void RelayWalletTransaction(CConnman* connman, std::string strCommand = NetMsgType::TX);
     std::set<uint256> GetConflicts() const;
 };
 

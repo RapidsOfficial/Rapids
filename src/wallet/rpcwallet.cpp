@@ -940,6 +940,9 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
     if (nValue > pwalletMain->GetBalance())
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "Insufficient funds");
 
+    if (!g_connman)
+        throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
+
     std::string strError;
     if (pwalletMain->IsLocked()) {
         strError = "Error: Wallet locked, unable to create transaction!";
@@ -959,7 +962,7 @@ void SendMoney(const CTxDestination& address, CAmount nValue, CWalletTx& wtxNew,
         LogPrintf("SendMoney() : %s\n", strError);
         throw JSONRPCError(RPC_WALLET_ERROR, strError);
     }
-    const CWallet::CommitResult&& res = pwalletMain->CommitTransaction(wtxNew, reservekey, (!fUseIX ? NetMsgType::TX : NetMsgType::IX));
+    const CWallet::CommitResult&& res = pwalletMain->CommitTransaction(wtxNew, reservekey, g_connman.get(), (!fUseIX ? NetMsgType::TX : NetMsgType::IX));
     if (res.status != CWallet::CommitStatus::OK)
         throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 }
@@ -1143,7 +1146,7 @@ UniValue delegatestake(const JSONRPCRequest& request)
     CReserveKey reservekey(pwalletMain);
     UniValue ret = CreateColdStakeDelegation(request.params, wtx, reservekey);
 
-    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, NetMsgType::TX);
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, g_connman.get(), NetMsgType::TX);
     if (res.status != CWallet::CommitStatus::OK)
         throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 
@@ -1852,6 +1855,9 @@ UniValue sendmany(const JSONRPCRequest& request)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
+    if (!g_connman)
+        throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
+
     if (!IsDeprecatedRPCEnabled("accounts") && !request.params[0].get_str().empty()) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Dummy value must be set to \"\"");
     }
@@ -1909,7 +1915,7 @@ UniValue sendmany(const JSONRPCRequest& request)
     bool fCreated = pwalletMain->CreateTransaction(vecSend, wtx, keyChange, nFeeRequired, nChangePosInOut, strFailReason);
     if (!fCreated)
         throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, strFailReason);
-    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, keyChange);
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, keyChange, g_connman.get());
     if (res.status != CWallet::CommitStatus::OK)
         throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 

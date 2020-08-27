@@ -195,7 +195,7 @@ std::string CWallet::MintZerocoin(CAmount nValue, CWalletTx& wtxNew, std::vector
     }
 
     //commit the transaction to the network
-    const CWallet::CommitResult& res = CommitTransaction(wtxNew, reservekey);
+    const CWallet::CommitResult& res = CommitTransaction(wtxNew, reservekey, g_connman.get());
     if (res.status != CWallet::CommitStatus::OK) {
         return res.ToString();
     } else {
@@ -398,7 +398,7 @@ bool CWallet::SpendZerocoin(CAmount nAmount, CWalletTx& wtxNew, CZerocoinSpendRe
 
 
     CWalletDB walletdb(strWalletFile);
-    const CWallet::CommitResult& res = CommitTransaction(wtxNew, reserveKey);
+    const CWallet::CommitResult& res = CommitTransaction(wtxNew, reserveKey, g_connman.get());
     if (res.status != CWallet::CommitStatus::OK) {
         LogPrintf("%s: failed to commit\n", __func__);
         nStatus = ZPIV_COMMIT_FAILED;

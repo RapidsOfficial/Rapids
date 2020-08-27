@@ -140,6 +140,7 @@ LIBSAPLING_H = \
 # pivx core #
 BITCOIN_CORE_H = \
   activemasternode.h \
+  addrdb.h \
   addrman.h \
   allocators.h \
   arith_uint256.h \
@@ -243,6 +244,7 @@ BITCOIN_CORE_H = \
   support/cleanse.h \
   sync.h \
   threadsafety.h \
+  threadinterrupt.h \
   timedata.h \
   tinyformat.h \
   torcontrol.h \
@@ -292,6 +294,7 @@ libbitcoin_util_a-clientversion.$(OBJEXT): obj/build.h
 libbitcoin_server_a_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) $(MINIUPNPC_CPPFLAGS) $(EVENT_CFLAGS) $(EVENT_PTHREADS_CFLAGS)
 libbitcoin_server_a_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 libbitcoin_server_a_SOURCES = \
+  addrdb.cpp \
   addrman.cpp \
   bloom.cpp \
   blocksignature.cpp \
@@ -511,6 +514,7 @@ libbitcoin_util_a_SOURCES = \
   rpc/protocol.cpp \
   support/cleanse.cpp \
   sync.cpp \
+  threadinterrupt.cpp \
   uint256.cpp \
   blob_uint256.cpp \
   util.cpp \

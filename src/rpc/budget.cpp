@@ -155,7 +155,7 @@ UniValue preparebudget(const JSONRPCRequest& request)
     // make our change address
     CReserveKey reservekey(pwalletMain);
     //send the tx to the network
-    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, useIX ? NetMsgType::IX : NetMsgType::TX);
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, g_connman.get(), useIX ? NetMsgType::IX : NetMsgType::TX);
     if (res.status != CWallet::CommitStatus::OK)
         throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 

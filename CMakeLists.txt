@@ -184,6 +184,7 @@ source_group("BitcoinHeaders" FILES
         )
 
 set(SERVER_SOURCES
+        ./src/addrdb.cpp
         ./src/addrman.cpp
         ./src/bloom.cpp
         ./src/blocksignature.cpp
@@ -415,6 +416,7 @@ set(UTIL_SOURCES
         ./src/random.cpp
         ./src/rpc/protocol.cpp
         ./src/sync.cpp
+        ./src/threadinterrupt.cpp
         ./src/blob_uint256.cpp
         ./src/arith_uint256.cpp
         ./src/uint256.cpp

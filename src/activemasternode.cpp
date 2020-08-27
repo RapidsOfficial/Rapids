@@ -81,7 +81,7 @@ void CActiveMasternode::ManageStatus()
         LogPrintf("CActiveMasternode::ManageStatus() - Checking inbound connection to '%s'\n", service.ToString());
 
         CAddress addr(service, NODE_NETWORK);
-        if (!OpenNetworkConnection(addr, true, nullptr)) {
+        if (!g_connman->OpenNetworkConnection(addr, true, nullptr)) {
             notCapableReason = "Could not connect to " + service.ToString();
             LogPrintf("CActiveMasternode::ManageStatus() - not capable: %s\n", notCapableReason);
             return;

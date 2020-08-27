@@ -1133,7 +1133,7 @@ UniValue invalidateblock(const JSONRPCRequest& request)
     }
 
     if (state.IsValid()) {
-        ActivateBestChain(state);
+        ActivateBestChain(state, NULL, g_connman.get());
     }
 
     if (!state.IsValid()) {
@@ -1171,7 +1171,7 @@ UniValue reconsiderblock(const JSONRPCRequest& request)
     }
 
     if (state.IsValid()) {
-        ActivateBestChain(state);
+        ActivateBestChain(state, NULL, g_connman.get());
     }
 
     if (!state.IsValid()) {

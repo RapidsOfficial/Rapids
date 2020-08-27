@@ -537,13 +537,14 @@ bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, Optional<CReserveKey>& r
 
     // Process this block the same as if we had received it from another node
     CValidationState state;
-    if (!ProcessNewBlock(state, NULL, pblock)) {
+    if (!ProcessNewBlock(state, nullptr, pblock, nullptr, g_connman.get())) {
         return error("PIVXMiner : ProcessNewBlock, block not accepted");
     }
 
-    for (CNode* node : vNodes) {
+    g_connman->ForEachNode([&pblock](CNode* node)
+    {
         node->PushInventory(CInv(MSG_BLOCK, pblock->GetHash()));
-    }
+    });
 
     return true;
 }
@@ -595,8 +596,8 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
             // update fStakeableCoins (5 minute check time);
             CheckForCoins(pwallet, 5);
 
-            while ((vNodes.empty() && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins ||
-                    masternodeSync.NotCompleted()) {
+            while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers())
+                    || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
                 MilliSleep(5000);
                 // Do a separate 1 minute check here to ensure fStakeableCoins is updated
                 if (!fStakeableCoins) CheckForCoins(pwallet, 1);
@@ -703,7 +704,7 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
             // Check for stop or if block needs to be rebuilt
             boost::this_thread::interruption_point();
-            if (    (vNodes.empty() && Params().MiningRequiresPeers()) || // Regtest mode doesn't require peers
+            if (    (g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || // Regtest mode doesn't require peers
                     (pblock->nNonce >= 0xffff0000) ||
                     (mempool.GetTransactionsUpdated() != nTransactionsUpdatedLast && GetTime() - nStart > 60) ||
                     (pindexPrev != chainActive.Tip())

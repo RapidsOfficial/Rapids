@@ -1648,7 +1648,7 @@ bool CWalletTx::InMempool() const
     return false;
 }
 
-void CWalletTx::RelayWalletTransaction(std::string strCommand)
+void CWalletTx::RelayWalletTransaction(CConnman* connman, std::string strCommand)
 {
     LOCK(cs_main);
     if (!IsCoinBase() && !IsCoinStake()) {
@@ -1656,12 +1656,18 @@ void CWalletTx::RelayWalletTransaction(std::string strCommand)
             uint256 hash = GetHash();
             LogPrintf("Relaying wtx %s\n", hash.ToString());
 
+            int invType = MSG_TX;
             if (strCommand == NetMsgType::IX) {
                 mapTxLockReq.insert(std::make_pair(hash, (CTransaction) * this));
                 CreateNewLock(((CTransaction) * this));
-                RelayTransactionLockReq((CTransaction) * this, true);
-            } else {
-                RelayTransaction((CTransaction) * this);
+                invType = MSG_TXLOCK_REQUEST;
+            }
+
+            if (connman) {
+                CInv inv(invType, hash);
+                connman->ForEachNode([&inv](CNode* pnode) {
+                  pnode->PushInventory(inv);
+                });
             }
         }
     }
@@ -1733,7 +1739,7 @@ bool CWallet::Verify()
 
 
 
-void CWallet::ResendWalletTransactions()
+void CWallet::ResendWalletTransactions(CConnman* connman)
 {
     // Do this infrequently and randomly to avoid giving away
     // that these are our transactions.
@@ -1764,7 +1770,7 @@ void CWallet::ResendWalletTransactions()
         }
         for (PAIRTYPE(const unsigned int, CWalletTx*) & item : mapSorted) {
             CWalletTx& wtx = *item.second;
-            wtx.RelayWalletTransaction();
+            wtx.RelayWalletTransaction(connman);
         }
     }
 }
@@ -2957,7 +2963,7 @@ std::string CWallet::CommitResult::ToString() const
 /**
  * Call after CreateTransaction unless you want to abort
  */
-CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, std::string strCommand)
+CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey& reservekey, CConnman* connman, std::string strCommand)
 {
     CommitResult res;
     {
@@ -3009,7 +3015,7 @@ CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey&
         mapRequestCount[res.hashTx] = 0;
 
         // Broadcast
-        wtxNew.RelayWalletTransaction(strCommand);
+        wtxNew.RelayWalletTransaction(connman, strCommand);
     }
     return res;
 }
@@ -3605,7 +3611,7 @@ bool CWallet::LoadDestData(const CTxDestination& dest, const std::string& key, c
     return true;
 }
 
-void CWallet::AutoCombineDust()
+void CWallet::AutoCombineDust(CConnman* connman)
 {
     LOCK2(cs_main, cs_wallet);
     const CBlockIndex* tip = chainActive.Tip();
@@ -3695,7 +3701,7 @@ void CWallet::AutoCombineDust()
         if (!maxSize && nTotalRewardsValue < nAutoCombineThreshold * COIN && nFeeRet > 0)
             continue;
 
-        const CWallet::CommitResult& res = CommitTransaction(wtx, keyChange);
+        const CWallet::CommitResult& res = CommitTransaction(wtx, keyChange, connman);
         if (res.status != CWallet::CommitStatus::OK) {
             LogPrintf("AutoCombineDust transaction commit failed\n");
             continue;

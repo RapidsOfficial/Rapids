@@ -19,20 +19,12 @@
 
 #include <atomic>
 
-#ifdef HAVE_GETADDRINFO_A
-#include <netdb.h>
-#endif
-
 #ifndef WIN32
-#if HAVE_INET_PTON
-#include <arpa/inet.h>
-#endif
 #include <fcntl.h>
 #endif
 
 #include <boost/algorithm/string/case_conv.hpp> // for to_lower()
 #include <boost/algorithm/string/predicate.hpp> // for startswith() and endswith()
-#include <boost/thread.hpp>
 
 #if !defined(HAVE_MSG_NOSIGNAL) && !defined(MSG_NOSIGNAL)
 #define MSG_NOSIGNAL 0
@@ -48,6 +40,7 @@ bool fNameLookup = false;
 
 // Need ample time for negotiation for very slow proxies such as Tor (milliseconds)
 static const int SOCKS5_RECV_TIMEOUT = 20 * 1000;
+static std::atomic<bool> interruptSocks5Recv(false);
 
 enum Network ParseNetwork(std::string net)
 {
@@ -265,7 +258,7 @@ enum class IntrRecvError {
 /**
  * Read bytes from socket. This will either read the full number of bytes requested
  * or return False on error or timeout.
- * This function can be interrupted by boost thread interrupt.
+ * This function can be interrupted by calling InterruptSocks5()
  *
  * @param data Buffer to receive into
  * @param len  Length of data to receive
@@ -305,7 +298,8 @@ static IntrRecvError InterruptibleRecv(char* data, size_t len, int timeout, SOCK
                 return IntrRecvError::NetworkError;
             }
         }
-        boost::this_thread::interruption_point();
+        if (interruptSocks5Recv)
+            return IntrRecvError::Interrupted;
         curTime = GetTimeMillis();
     }
     return len == 0 ? IntrRecvError::OK : IntrRecvError::Timeout;
@@ -651,8 +645,8 @@ bool ConnectSocketByName(CService& addr, SOCKET& hSocketRet, const char* pszDest
 
     SplitHostPort(std::string(pszDest), port, strDest);
 
-    proxyType nameProxy;
-    GetNameProxy(nameProxy);
+    proxyType proxy;
+    GetNameProxy(proxy);
 
     std::vector<CService> addrResolved;
     if (Lookup(strDest.c_str(), addrResolved, port, fNameLookup && !HaveNameProxy(), 256)) {
@@ -666,7 +660,7 @@ bool ConnectSocketByName(CService& addr, SOCKET& hSocketRet, const char* pszDest
 
     if (!HaveNameProxy())
         return false;
-    return ConnectThroughProxy(nameProxy, strDest, port, hSocketRet, nTimeout, outProxyConnectionFailed);
+    return ConnectThroughProxy(proxy, strDest, port, hSocketRet, nTimeout, outProxyConnectionFailed);
 }
 
 bool LookupSubNet(const char* pszName, CSubNet& ret)
@@ -773,4 +767,9 @@ bool SetSocketNonBlocking(SOCKET& hSocket, bool fNonBlocking)
     }
 
     return true;
+}
+
+void InterruptSocks5(bool interrupt)
+{
+    interruptSocks5Recv = interrupt;
 }

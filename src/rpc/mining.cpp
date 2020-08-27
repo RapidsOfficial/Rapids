@@ -179,7 +179,7 @@ UniValue generate(const JSONRPCRequest& request)
         }
 
         CValidationState state;
-        if (!ProcessNewBlock(state, nullptr, pblock))
+        if (!ProcessNewBlock(state, nullptr, pblock, nullptr, g_connman.get()))
             throw JSONRPCError(RPC_INTERNAL_ERROR, "ProcessNewBlock, block not accepted");
 
         ++nHeight;
@@ -478,7 +478,10 @@ UniValue getblocktemplate(const JSONRPCRequest& request)
     if (strMode != "template")
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid mode");
 
-    if (vNodes.empty())
+    if(!g_connman)
+        throw JSONRPCError(RPC_CLIENT_P2P_DISABLED, "Error: Peer-to-peer functionality missing or disabled");
+
+    if (g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0)
         throw JSONRPCError(RPC_CLIENT_NOT_CONNECTED, "PIVX is not connected!");
 
     if (IsInitialBlockDownload())
@@ -708,7 +711,7 @@ UniValue submitblock(const JSONRPCRequest& request)
     CValidationState state;
     submitblock_StateCatcher sc(block.GetHash());
     RegisterValidationInterface(&sc);
-    bool fAccepted = ProcessNewBlock(state, NULL, &block);
+    bool fAccepted = ProcessNewBlock(state, nullptr, &block, nullptr, g_connman.get());
     UnregisterValidationInterface(&sc);
     if (fBlockPresent) {
         if (fAccepted && !sc.found)
