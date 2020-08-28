@@ -269,9 +269,9 @@ UniValue mnbudgetvote(const JSONRPCRequest& request)
     std::string strVote = request.params[2].get_str();
 
     if (strVote != "yes" && strVote != "no") return "You can only vote 'yes' or 'no'";
-    int nVote = VOTE_ABSTAIN;
-    if (strVote == "yes") nVote = VOTE_YES;
-    if (strVote == "no") nVote = VOTE_NO;
+    CBudgetVote::VoteDirection nVote = CBudgetVote::VOTE_ABSTAIN;
+    if (strVote == "yes") nVote = CBudgetVote::VOTE_YES;
+    if (strVote == "no") nVote = CBudgetVote::VOTE_NO;
 
     int success = 0;
     int failed = 0;
@@ -706,9 +706,9 @@ UniValue mnbudgetrawvote(const JSONRPCRequest& request)
     std::string strVote = request.params[3].get_str();
 
     if (strVote != "yes" && strVote != "no") return "You can only vote 'yes' or 'no'";
-    int nVote = VOTE_ABSTAIN;
-    if (strVote == "yes") nVote = VOTE_YES;
-    if (strVote == "no") nVote = VOTE_NO;
+    CBudgetVote::VoteDirection nVote = CBudgetVote::VOTE_ABSTAIN;
+    if (strVote == "yes") nVote = CBudgetVote::VOTE_YES;
+    if (strVote == "no") nVote = CBudgetVote::VOTE_NO;
 
     int64_t nTime = request.params[4].get_int64();
     std::string strSig = request.params[5].get_str();

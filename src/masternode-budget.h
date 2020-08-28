@@ -27,10 +27,6 @@ class CBudgetProposal;
 class CBudgetProposalBroadcast;
 class CTxBudgetPayment;
 
-#define VOTE_ABSTAIN 0
-#define VOTE_YES 1
-#define VOTE_NO 2
-
 enum class TrxValidationStatus {
     InValid,         /** Transaction verification failed */
     Valid,           /** Transaction successfully verified */
@@ -59,17 +55,24 @@ bool IsBudgetCollateralValid(const uint256& nTxCollateralHash, const uint256& nE
 
 class CBudgetVote : public CSignedMessage
 {
+public:
+    enum VoteDirection {
+        VOTE_ABSTAIN = 0,
+        VOTE_YES = 1,
+        VOTE_NO = 2
+    };
+
 private:
     bool fValid;  //if the vote is currently valid / counted
     bool fSynced; //if we've sent this to our peers
     uint256 nProposalHash;
-    int nVote;      // YES, NO, ABSTAIN
+    VoteDirection nVote;
     int64_t nTime;
     CTxIn vin;
 
 public:
     CBudgetVote();
-    CBudgetVote(CTxIn vin, uint256 nProposalHash, int nVoteIn);
+    CBudgetVote(CTxIn vin, uint256 nProposalHash, VoteDirection nVoteIn);
 
     void Relay() const;
 
@@ -90,7 +93,7 @@ public:
 
     UniValue ToJSON() const;
 
-    int GetDirection() const { return nVote; }
+    VoteDirection GetDirection() const { return nVote; }
     uint256 GetProposalHash() const { return nProposalHash; }
     int64_t GetTime() const { return nTime; }
     bool IsSynced() const { return fSynced; }
@@ -107,7 +110,10 @@ public:
     {
         READWRITE(vin);
         READWRITE(nProposalHash);
-        READWRITE(nVote);
+        int nVoteInt = (int) nVote;
+        READWRITE(nVoteInt);
+        if (ser_action.ForRead())
+            nVote = (VoteDirection) nVoteInt;
         READWRITE(nTime);
         READWRITE(vchSig);
         try

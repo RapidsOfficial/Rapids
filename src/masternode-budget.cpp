@@ -1649,8 +1649,8 @@ double CBudgetProposal::GetRatio()
     std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
 
     while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == VOTE_YES) yeas++;
-        if ((*it).second.GetDirection() == VOTE_NO) nays++;
+        if ((*it).second.GetDirection() == CBudgetVote::VOTE_YES) yeas++;
+        if ((*it).second.GetDirection() == CBudgetVote::VOTE_NO) nays++;
         ++it;
     }
 
@@ -1665,7 +1665,7 @@ int CBudgetProposal::GetYeas() const
 
     std::map<uint256, CBudgetVote>::const_iterator it = mapVotes.begin();
     while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == VOTE_YES && (*it).second.IsValid()) ret++;
+        if ((*it).second.GetDirection() == CBudgetVote::VOTE_YES && (*it).second.IsValid()) ret++;
         ++it;
     }
 
@@ -1678,7 +1678,7 @@ int CBudgetProposal::GetNays() const
 
     std::map<uint256, CBudgetVote>::const_iterator it = mapVotes.begin();
     while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == VOTE_NO && (*it).second.IsValid()) ret++;
+        if ((*it).second.GetDirection() == CBudgetVote::VOTE_NO && (*it).second.IsValid()) ret++;
         ++it;
     }
 
@@ -1691,7 +1691,7 @@ int CBudgetProposal::GetAbstains() const
 
     std::map<uint256, CBudgetVote>::const_iterator it = mapVotes.begin();
     while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == VOTE_ABSTAIN && (*it).second.IsValid()) ret++;
+        if ((*it).second.GetDirection() == CBudgetVote::VOTE_ABSTAIN && (*it).second.IsValid()) ret++;
         ++it;
     }
 
@@ -1780,7 +1780,7 @@ CBudgetVote::CBudgetVote() :
         vin()
 { }
 
-CBudgetVote::CBudgetVote(CTxIn vinIn, uint256 nProposalHashIn, int nVoteIn) :
+CBudgetVote::CBudgetVote(CTxIn vinIn, uint256 nProposalHashIn, VoteDirection nVoteIn) :
         CSignedMessage(),
         fValid(true),
         fSynced(false),
@@ -1802,7 +1802,7 @@ uint256 CBudgetVote::GetHash() const
     CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
     ss << vin;
     ss << nProposalHash;
-    ss << nVote;
+    ss << (int) nVote;
     ss << nTime;
     return ss.GetHash();
 }
