@@ -539,9 +539,10 @@ public:
     int GetBlockCurrentCycle();
     int GetBlockEndCycle();
     double GetRatio();
-    int GetYeas() const;
-    int GetNays() const;
-    int GetAbstains() const;
+    int GetVoteCount(CBudgetVote::VoteDirection vd) const;
+    int GetYeas() const { return GetVoteCount(CBudgetVote::VOTE_YES); }
+    int GetNays() const { return GetVoteCount(CBudgetVote::VOTE_NO); }
+    int GetAbstains() const { return GetVoteCount(CBudgetVote::VOTE_ABSTAIN); };
     CAmount GetAmount() { return nAmount; }
     void SetAllotted(CAmount nAllotedIn) { nAlloted = nAllotedIn; }
     CAmount GetAllotted() { return nAlloted; }

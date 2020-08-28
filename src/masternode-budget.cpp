@@ -1659,42 +1659,14 @@ double CBudgetProposal::GetRatio()
     return ((double)(yeas) / (double)(yeas + nays));
 }
 
-int CBudgetProposal::GetYeas() const
+int CBudgetProposal::GetVoteCount(CBudgetVote::VoteDirection vd) const
 {
     int ret = 0;
-
-    std::map<uint256, CBudgetVote>::const_iterator it = mapVotes.begin();
-    while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == CBudgetVote::VOTE_YES && (*it).second.IsValid()) ret++;
-        ++it;
+    for (const auto& it : mapVotes) {
+        const CBudgetVote& vote = it.second;
+        if (vote.GetDirection() == vd && vote.IsValid())
+            ret++;
     }
-
-    return ret;
-}
-
-int CBudgetProposal::GetNays() const
-{
-    int ret = 0;
-
-    std::map<uint256, CBudgetVote>::const_iterator it = mapVotes.begin();
-    while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == CBudgetVote::VOTE_NO && (*it).second.IsValid()) ret++;
-        ++it;
-    }
-
-    return ret;
-}
-
-int CBudgetProposal::GetAbstains() const
-{
-    int ret = 0;
-
-    std::map<uint256, CBudgetVote>::const_iterator it = mapVotes.begin();
-    while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == CBudgetVote::VOTE_ABSTAIN && (*it).second.IsValid()) ret++;
-        ++it;
-    }
-
     return ret;
 }
 
