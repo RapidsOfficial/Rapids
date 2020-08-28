@@ -522,17 +522,9 @@ UniValue getbudgetvotes(const JSONRPCRequest& request)
 
     if (pbudgetProposal == NULL) throw std::runtime_error("Unknown proposal name");
 
-    std::map<uint256, CBudgetVote>::iterator it = pbudgetProposal->mapVotes.begin();
+    auto it = pbudgetProposal->mapVotes.begin();
     while (it != pbudgetProposal->mapVotes.end()) {
-        UniValue bObj(UniValue::VOBJ);
-        bObj.push_back(Pair("mnId", (*it).second.vin.prevout.hash.ToString()));
-        bObj.push_back(Pair("nHash", (*it).first.ToString().c_str()));
-        bObj.push_back(Pair("Vote", (*it).second.GetVoteString()));
-        bObj.push_back(Pair("nTime", (int64_t)(*it).second.nTime));
-        bObj.push_back(Pair("fValid", (*it).second.fValid));
-
-        ret.push_back(bObj);
-
+        ret.push_back((*it).second.ToJSON());
         it++;
     }
 
@@ -732,7 +724,7 @@ UniValue mnbudgetrawvote(const JSONRPCRequest& request)
     }
 
     CBudgetVote vote(vin, hashProposal, nVote);
-    vote.nTime = nTime;
+    vote.SetTime(nTime);
     vote.SetVchSig(vchSig);
 
     if (!vote.CheckSignature()) {
@@ -916,15 +908,10 @@ UniValue mnfinalbudget(const JSONRPCRequest& request)
 
         if (pfinalBudget == NULL) return "Unknown budget hash";
 
-        std::map<uint256, CFinalizedBudgetVote>::iterator it = pfinalBudget->mapVotes.begin();
+        auto it = pfinalBudget->mapVotes.begin();
         while (it != pfinalBudget->mapVotes.end()) {
-            UniValue bObj(UniValue::VOBJ);
-            bObj.push_back(Pair("nHash", (*it).first.ToString().c_str()));
-            bObj.push_back(Pair("nTime", (int64_t)(*it).second.nTime));
-            bObj.push_back(Pair("fValid", (*it).second.fValid));
-
-            obj.push_back(Pair((*it).second.vin.prevout.ToStringShort(), bObj));
-
+            const CFinalizedBudgetVote& vote = (*it).second;
+            obj.push_back(Pair(vote.GetVin().prevout.ToStringShort(), vote.ToJSON()));
             it++;
         }
 

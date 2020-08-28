@@ -15,6 +15,8 @@
 #include "sync.h"
 #include "util.h"
 
+#include <univalue.h>
+
 
 extern RecursiveMutex cs_budget;
 
@@ -57,20 +59,21 @@ bool IsBudgetCollateralValid(const uint256& nTxCollateralHash, const uint256& nE
 
 class CBudgetVote : public CSignedMessage
 {
-public:
+private:
     bool fValid;  //if the vote is currently valid / counted
     bool fSynced; //if we've sent this to our peers
-    CTxIn vin;
     uint256 nProposalHash;
-    int nVote;
+    int nVote;      // YES, NO, ABSTAIN
     int64_t nTime;
+    CTxIn vin;
 
+public:
     CBudgetVote();
     CBudgetVote(CTxIn vin, uint256 nProposalHash, int nVoteIn);
 
-    void Relay();
+    void Relay() const;
 
-    std::string GetVoteString()
+    std::string GetVoteString() const
     {
         std::string ret = "ABSTAIN";
         if (nVote == VOTE_YES) ret = "YES";
@@ -84,6 +87,18 @@ public:
     uint256 GetSignatureHash() const override { return GetHash(); }
     std::string GetStrMessage() const override;
     const CTxIn GetVin() const override { return vin; };
+
+    UniValue ToJSON() const;
+
+    int GetDirection() const { return nVote; }
+    uint256 GetProposalHash() const { return nProposalHash; }
+    int64_t GetTime() const { return nTime; }
+    bool IsSynced() const { return fSynced; }
+    bool IsValid() const { return fValid; }
+
+    void SetSynced(bool _fSynced) { fSynced = _fSynced; }
+    void SetTime(const int64_t& _nTime) { nTime = _nTime; }
+    void SetValid(bool _fValid) { fValid = _fValid; }
 
     ADD_SERIALIZE_METHODS;
 
@@ -110,23 +125,35 @@ public:
 
 class CFinalizedBudgetVote : public CSignedMessage
 {
-public:
+private:
     bool fValid;  //if the vote is currently valid / counted
     bool fSynced; //if we've sent this to our peers
     CTxIn vin;
     uint256 nBudgetHash;
     int64_t nTime;
 
+public:
     CFinalizedBudgetVote();
     CFinalizedBudgetVote(CTxIn vinIn, uint256 nBudgetHashIn);
 
-    void Relay();
+    void Relay() const;
     uint256 GetHash() const;
 
     // override CSignedMessage functions
     uint256 GetSignatureHash() const override { return GetHash(); }
     std::string GetStrMessage() const override;
     const CTxIn GetVin() const override { return vin; };
+
+    UniValue ToJSON() const;
+
+    uint256 GetBudgetHash() const { return nBudgetHash; }
+    int64_t GetTime() const { return nTime; }
+    bool IsSynced() const { return fSynced; }
+    bool IsValid() const { return fValid; }
+
+    void SetSynced(bool _fSynced) { fSynced = _fSynced; }
+    void SetTime(const int64_t& _nTime) { nTime = _nTime; }
+    void SetValid(bool _fValid) { fValid = _fValid; }
 
     ADD_SERIALIZE_METHODS;
 
@@ -302,6 +329,10 @@ public:
         READWRITE(nAmount);
         READWRITE(nProposalHash);
     }
+
+    // compare payments by proposal hash
+    inline bool operator>(const CTxBudgetPayment& other) const { return nProposalHash > other.nProposalHash; }
+
 };
 
 //

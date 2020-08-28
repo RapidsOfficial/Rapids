@@ -58,7 +58,7 @@ public:
 
     size_t DynamicMemoryUsage() const { return 0; }
 
-    uint256 GetHash();
+    uint256 GetHash() const;
 
 };
 
