@@ -250,7 +250,6 @@ public:
     void MarkSynced();
     void Sync(CNode* node, const uint256& nProp, bool fPartial = false);
 
-    void Calculate();
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
     void NewBlock();
     CBudgetProposal* FindProposal(const std::string& strProposalName);
@@ -269,7 +268,6 @@ public:
 
     bool UpdateProposal(CBudgetVote& vote, CNode* pfrom, std::string& strError);
     bool UpdateFinalizedBudget(CFinalizedBudgetVote& vote, CNode* pfrom, std::string& strError);
-    bool PropExists(const uint256& nHash);
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     std::string GetRequiredPaymentsString(int nBlockHeight);
     void FillBlockPayee(CMutableTransaction& txNew, const CBlockIndex* pindexPrev, bool fProofOfStake);
@@ -292,9 +290,7 @@ public:
     void CheckAndRemove();
     std::string ToString() const;
 
-
     ADD_SERIALIZE_METHODS;
-
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action)
     {
@@ -304,7 +300,6 @@ public:
         READWRITE(mapSeenFinalizedBudgetVotes);
         READWRITE(mapOrphanMasternodeBudgetVotes);
         READWRITE(mapOrphanFinalizedBudgetVotes);
-
         READWRITE(mapProposals);
         READWRITE(mapFinalizedBudgets);
     }
@@ -366,8 +361,6 @@ public:
 
     void CleanAndRemove();
     bool AddOrUpdateVote(CFinalizedBudgetVote& vote, std::string& strError);
-    double GetScore();
-    bool HasMinimumRequiredSupport();
 
     bool IsValid(std::string& strError, bool fCheckCollateral = true);
 
@@ -518,9 +511,7 @@ public:
     CBudgetProposal(const CBudgetProposal& other);
     CBudgetProposal(std::string strProposalNameIn, std::string strURLIn, int nBlockStartIn, int nBlockEndIn, CScript addressIn, CAmount nAmountIn, uint256 nFeeTXHashIn);
 
-    void Calculate();
     bool AddOrUpdateVote(CBudgetVote& vote, std::string& strError);
-    bool HasMinimumRequiredSupport();
     std::pair<std::string, std::string> GetVotes();
 
     bool IsValid(std::string& strError, bool fCheckCollateral = true);

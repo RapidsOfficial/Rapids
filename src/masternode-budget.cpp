@@ -1245,12 +1245,6 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
     }
 }
 
-bool CBudgetManager::PropExists(const uint256& nHash)
-{
-    if (mapProposals.count(nHash)) return true;
-    return false;
-}
-
 //mark that a full sync is needed
 void CBudgetManager::ResetSync()
 {
@@ -2039,6 +2033,7 @@ std::string CFinalizedBudget::GetStatus()
 
     return retBadHashes + retBadPayeeOrAmount;
 }
+
 
 bool CFinalizedBudget::IsValid(std::string& strError, bool fCheckCollateral)
 {
