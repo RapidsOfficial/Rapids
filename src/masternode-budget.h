@@ -272,7 +272,7 @@ public:
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
     void NewBlock();
     CBudgetProposal* FindProposal(const uint256& nHash);
-    // finds the proposal with the given name, with highest yes count.
+    // finds the proposal with the given name, with highest net yes count.
     const CBudgetProposal* FindProposalByName(const std::string& strProposalName) const;
     CFinalizedBudget* FindFinalizedBudget(const uint256& nHash);
 

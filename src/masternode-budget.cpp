@@ -578,14 +578,15 @@ CFinalizedBudget* CBudgetManager::FindFinalizedBudget(const uint256& nHash)
 
 const CBudgetProposal* CBudgetManager::FindProposalByName(const std::string& strProposalName) const
 {
-    int nYesCount = 0;
+    int64_t nYesCountMax = std::numeric_limits<int64_t>::min();
     const CBudgetProposal* pbudgetProposal = nullptr;
 
     for (const auto& it: mapProposals) {
         const CBudgetProposal& proposal = it.second;
-        if (proposal.GetName() == strProposalName && proposal.GetYeas() > nYesCount) {
+        int64_t nYesCount = proposal.GetYeas() - proposal.GetNays();
+        if (proposal.GetName() == strProposalName && nYesCount > nYesCountMax) {
             pbudgetProposal = &proposal;
-            nYesCount = pbudgetProposal->GetYeas();
+            nYesCountMax = nYesCount;
         }
     }
 
