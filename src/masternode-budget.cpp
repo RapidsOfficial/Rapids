@@ -599,15 +599,13 @@ CFinalizedBudget* CBudgetManager::FindFinalizedBudget(const uint256& nHash)
     return NULL;
 }
 
-// !TODO: return const pointer
-CBudgetProposal* CBudgetManager::FindProposal(const std::string& strProposalName)
+const CBudgetProposal* CBudgetManager::FindProposalByName(const std::string& strProposalName) const
 {
-    //find the prop with the highest yes count
     int nYesCount = 0;
-    CBudgetProposal* pbudgetProposal = nullptr;
+    const CBudgetProposal* pbudgetProposal = nullptr;
 
-    for (auto& it: mapProposals) {
-        CBudgetProposal& proposal = it.second;
+    for (const auto& it: mapProposals) {
+        const CBudgetProposal& proposal = it.second;
         if (proposal.GetName() == strProposalName && proposal.GetYeas() > nYesCount) {
             pbudgetProposal = &proposal;
             nYesCount = pbudgetProposal->GetYeas();
@@ -1484,7 +1482,7 @@ bool CBudgetProposal::IsValid(std::string& strError, bool fCheckCollateral)
     return true;
 }
 
-bool CBudgetProposal::IsEstablished()
+bool CBudgetProposal::IsEstablished() const
 {
     return nTime < GetAdjustedTime() - Params().GetConsensus().nProposalEstablishmentTime;
 }

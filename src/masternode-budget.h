@@ -254,8 +254,9 @@ public:
 
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
     void NewBlock();
-    CBudgetProposal* FindProposal(const std::string& strProposalName);
     CBudgetProposal* FindProposal(const uint256& nHash);
+    // finds the proposal with the given name, with highest yes count.
+    const CBudgetProposal* FindProposalByName(const std::string& strProposalName) const;
     CFinalizedBudget* FindFinalizedBudget(const uint256& nHash);
     std::pair<std::string, std::string> GetVotes(std::string strProposalName);
 
@@ -526,7 +527,7 @@ public:
     void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
     bool IsValid(std::string& strError, bool fCheckCollateral = true);
-    bool IsEstablished();
+    bool IsEstablished() const;
     bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount);
 
     std::string GetName() const { return strProposalName; }

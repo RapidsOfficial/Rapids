@@ -21,7 +21,7 @@
 
 #include <fstream>
 
-void budgetToJSON(CBudgetProposal* pbudgetProposal, UniValue& bObj)
+void budgetToJSON(const CBudgetProposal* pbudgetProposal, UniValue& bObj)
 {
     CTxDestination address1;
     ExtractDestination(pbudgetProposal->GetPayee(), address1);
@@ -44,9 +44,8 @@ void budgetToJSON(CBudgetProposal* pbudgetProposal, UniValue& bObj)
     bObj.push_back(Pair("IsEstablished", pbudgetProposal->IsEstablished()));
 
     std::string strError = "";
-    bObj.push_back(Pair("IsValid", pbudgetProposal->IsValid(strError)));
+    bObj.push_back(Pair("IsValid", pbudgetProposal->fValid));
     bObj.push_back(Pair("IsValidReason", strError.c_str()));
-    bObj.push_back(Pair("fValid", pbudgetProposal->fValid));
 }
 
 void checkBudgetInputs(const UniValue& params, std::string &strProposalName, std::string &strURL,
@@ -515,7 +514,7 @@ UniValue getbudgetvotes(const JSONRPCRequest& request)
             HelpExampleCli("getbudgetvotes", "\"test-proposal\"") + HelpExampleRpc("getbudgetvotes", "\"test-proposal\""));
 
     std::string strProposalName = SanitizeString(request.params[0].get_str());
-    CBudgetProposal* pbudgetProposal = budget.FindProposal(strProposalName);
+    const CBudgetProposal* pbudgetProposal = budget.FindProposalByName(strProposalName);
     if (pbudgetProposal == NULL) throw std::runtime_error("Unknown proposal name");
     return pbudgetProposal->GetVotesArray();
 }
@@ -569,7 +568,6 @@ UniValue getbudgetprojection(const JSONRPCRequest& request)
             "    \"IsEstablished\": true|false,  (boolean) Established (true) or (false)\n"
             "    \"IsValid\": true|false,        (boolean) Valid (true) or Invalid (false)\n"
             "    \"IsValidReason\": \"xxxx\",      (string) Error message, if any\n"
-            "    \"fValid\": true|false,         (boolean) Valid (true) or Invalid (false)\n"
             "    \"Alloted\": xxx.xxx,           (numeric) Amount alloted in current period\n"
             "    \"TotalBudgetAlloted\": xxx.xxx (numeric) Total alloted\n"
             "  }\n"
@@ -632,7 +630,6 @@ UniValue getbudgetinfo(const JSONRPCRequest& request)
             "    \"IsEstablished\": true|false,  (boolean) Established (true) or (false)\n"
             "    \"IsValid\": true|false,        (boolean) Valid (true) or Invalid (false)\n"
             "    \"IsValidReason\": \"xxxx\",      (string) Error message, if any\n"
-            "    \"fValid\": true|false,         (boolean) Valid (true) or Invalid (false)\n"
             "  }\n"
             "  ,...\n"
             "]\n"
@@ -645,7 +642,7 @@ UniValue getbudgetinfo(const JSONRPCRequest& request)
     std::string strShow = "valid";
     if (request.params.size() == 1) {
         std::string strProposalName = SanitizeString(request.params[0].get_str());
-        CBudgetProposal* pbudgetProposal = budget.FindProposal(strProposalName);
+        const CBudgetProposal* pbudgetProposal = budget.FindProposalByName(strProposalName);
         if (pbudgetProposal == NULL) throw std::runtime_error("Unknown proposal name");
         UniValue bObj(UniValue::VOBJ);
         budgetToJSON(pbudgetProposal, bObj);
@@ -875,7 +872,7 @@ UniValue mnfinalbudget(const JSONRPCRequest& request)
             bObj.push_back(Pair("Status", finalizedBudget->GetStatus()));
 
             std::string strError = "";
-            bObj.push_back(Pair("IsValid", finalizedBudget->IsValid(strError)));
+            bObj.push_back(Pair("IsValid", finalizedBudget->fValid));
             bObj.push_back(Pair("IsValidReason", strError.c_str()));
 
             resultObj.push_back(Pair(finalizedBudget->GetName(), bObj));
