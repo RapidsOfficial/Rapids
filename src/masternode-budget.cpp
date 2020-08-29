@@ -458,18 +458,8 @@ bool CBudgetManager::AddProposal(CBudgetProposal& budgetProposal)
 
 void CBudgetManager::CheckAndRemove()
 {
-    int nHeight = 0;
-
-    // Add some verbosity once loading blocks from files has finished
-    {
-        TRY_LOCK(cs_main, locked);
-        if ((locked) && (chainActive.Tip() != NULL)) {
-            CBlockIndex* pindexPrev = chainActive.Tip();
-            if (pindexPrev) {
-                nHeight = pindexPrev->nHeight;
-            }
-        }
-    }
+    int nHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    if (nHeight <= 0) return;
 
     LogPrint(BCLog::MNBUDGET, "%s: Height=%d\n", __func__, nHeight);
 
@@ -1392,6 +1382,7 @@ CBudgetProposal::CBudgetProposal(const CBudgetProposal& other)
 
 void CBudgetProposal::SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const
 {
+    LOCK(cs);
     for (const auto& it: mapVotes) {
         const CBudgetVote& vote = it.second;
         if (vote.IsValid() && (!fPartial || !vote.IsSynced())) {
@@ -1558,6 +1549,7 @@ UniValue CBudgetProposal::GetVotesArray() const
 
 void CBudgetProposal::SetSynced(bool synced)
 {
+    LOCK(cs);
     for (auto& it: mapVotes) {
         CBudgetVote& vote = it.second;
         if (synced) {
@@ -1592,6 +1584,7 @@ double CBudgetProposal::GetRatio() const
 
 int CBudgetProposal::GetVoteCount(CBudgetVote::VoteDirection vd) const
 {
+    LOCK(cs);
     int ret = 0;
     for (const auto& it : mapVotes) {
         const CBudgetVote& vote = it.second;
@@ -1800,6 +1793,7 @@ UniValue CFinalizedBudget::GetVotesObject() const
 
 void CFinalizedBudget::SetSynced(bool synced)
 {
+    LOCK(cs);
     for (auto& it: mapVotes) {
         CFinalizedBudgetVote& vote = it.second;
         if (synced) {
@@ -1998,6 +1992,7 @@ std::string CFinalizedBudget::GetStatus() const
 
 void CFinalizedBudget::SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const
 {
+    LOCK(cs);
     for (const auto& it: mapVotes) {
         const CFinalizedBudgetVote& vote = it.second;
         if (vote.IsValid() && (!fPartial || !vote.IsSynced())) {
