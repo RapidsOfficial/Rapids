@@ -258,7 +258,6 @@ public:
     // finds the proposal with the given name, with highest yes count.
     const CBudgetProposal* FindProposalByName(const std::string& strProposalName) const;
     CFinalizedBudget* FindFinalizedBudget(const uint256& nHash);
-    std::pair<std::string, std::string> GetVotes(std::string strProposalName);
 
     CAmount GetTotalBudget(int nHeight);
     std::vector<CBudgetProposal*> GetBudget();
@@ -524,7 +523,6 @@ public:
     CBudgetProposal(std::string strProposalNameIn, std::string strURLIn, int nBlockStartIn, int nBlockEndIn, CScript addressIn, CAmount nAmountIn, uint256 nFeeTXHashIn);
 
     bool AddOrUpdateVote(CBudgetVote& vote, std::string& strError);
-    std::pair<std::string, std::string> GetVotes();
     UniValue GetVotesArray() const;
     void SetSynced(bool synced);    // sets fSynced on votes (true only if valid)
 
