@@ -132,8 +132,6 @@ public:
     CService addr;
     CPubKey pubKeyCollateralAddress;
     CPubKey pubKeyMasternode;
-    CPubKey pubKeyCollateralAddress1;
-    CPubKey pubKeyMasternode1;
     int activeState;
     int64_t sigTime; //mnb message time
     bool unitTest;
