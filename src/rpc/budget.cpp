@@ -515,20 +515,9 @@ UniValue getbudgetvotes(const JSONRPCRequest& request)
             HelpExampleCli("getbudgetvotes", "\"test-proposal\"") + HelpExampleRpc("getbudgetvotes", "\"test-proposal\""));
 
     std::string strProposalName = SanitizeString(request.params[0].get_str());
-
-    UniValue ret(UniValue::VARR);
-
     CBudgetProposal* pbudgetProposal = budget.FindProposal(strProposalName);
-
     if (pbudgetProposal == NULL) throw std::runtime_error("Unknown proposal name");
-
-    auto it = pbudgetProposal->mapVotes.begin();
-    while (it != pbudgetProposal->mapVotes.end()) {
-        ret.push_back((*it).second.ToJSON());
-        it++;
-    }
-
-    return ret;
+    return pbudgetProposal->GetVotesArray();
 }
 
 UniValue getnextsuperblock(const JSONRPCRequest& request)
@@ -901,21 +890,9 @@ UniValue mnfinalbudget(const JSONRPCRequest& request)
 
         std::string strHash = request.params[1].get_str();
         uint256 hash(uint256S(strHash));
-
-        UniValue obj(UniValue::VOBJ);
-
         CFinalizedBudget* pfinalBudget = budget.FindFinalizedBudget(hash);
-
         if (pfinalBudget == NULL) return "Unknown budget hash";
-
-        auto it = pfinalBudget->mapVotes.begin();
-        while (it != pfinalBudget->mapVotes.end()) {
-            const CFinalizedBudgetVote& vote = (*it).second;
-            obj.push_back(Pair(vote.GetVin().prevout.ToStringShort(), vote.ToJSON()));
-            it++;
-        }
-
-        return obj;
+        return pfinalBudget->GetVotesObject();
     }
 
     return NullUniValue;

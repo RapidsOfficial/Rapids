@@ -347,12 +347,14 @@ private:
     mutable RecursiveMutex cs;
     bool fAutoChecked; //If it matches what we see, we'll auto vote for it (masternode only)
 
+protected:
+    std::map<uint256, CFinalizedBudgetVote> mapVotes;
+
 public:
     bool fValid;
     std::string strBudgetName;
     int nBlockStart;
     std::vector<CTxBudgetPayment> vecBudgetPayments;
-    std::map<uint256, CFinalizedBudgetVote> mapVotes;
     uint256 nFeeTXHash;
     int64_t nTime;
 
@@ -361,6 +363,11 @@ public:
 
     void CleanAndRemove();
     bool AddOrUpdateVote(CFinalizedBudgetVote& vote, std::string& strError);
+    UniValue GetVotesObject() const;
+    void SetSynced(bool synced);    // sets fSynced on votes (true only if valid)
+
+    // sync budget votes with a node
+    void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
     bool IsValid(std::string& strError, bool fCheckCollateral = true);
 
@@ -488,6 +495,9 @@ private:
     mutable RecursiveMutex cs;
     CAmount nAlloted;
 
+protected:
+    std::map<uint256, CBudgetVote> mapVotes;
+
 public:
     bool fValid;
     std::string strProposalName;
@@ -504,7 +514,6 @@ public:
     int64_t nTime;
     uint256 nFeeTXHash;
 
-    std::map<uint256, CBudgetVote> mapVotes;
     //cache object
 
     CBudgetProposal();
@@ -513,9 +522,13 @@ public:
 
     bool AddOrUpdateVote(CBudgetVote& vote, std::string& strError);
     std::pair<std::string, std::string> GetVotes();
+    UniValue GetVotesArray() const;
+    void SetSynced(bool synced);    // sets fSynced on votes (true only if valid)
+
+    // sync proposal votes with a node
+    void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
     bool IsValid(std::string& strError, bool fCheckCollateral = true);
-
     bool IsEstablished();
     bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount);
 
