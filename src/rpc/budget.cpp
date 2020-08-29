@@ -29,7 +29,7 @@ void budgetToJSON(const CBudgetProposal* pbudgetProposal, UniValue& bObj)
     bObj.push_back(Pair("Name", pbudgetProposal->GetName()));
     bObj.push_back(Pair("URL", pbudgetProposal->GetURL()));
     bObj.push_back(Pair("Hash", pbudgetProposal->GetHash().ToString()));
-    bObj.push_back(Pair("FeeHash", pbudgetProposal->nFeeTXHash.ToString()));
+    bObj.push_back(Pair("FeeHash", pbudgetProposal->GetFeeTXHash().ToString()));
     bObj.push_back(Pair("BlockStart", (int64_t)pbudgetProposal->GetBlockStart()));
     bObj.push_back(Pair("BlockEnd", (int64_t)pbudgetProposal->GetBlockEnd()));
     bObj.push_back(Pair("TotalPaymentCount", (int64_t)pbudgetProposal->GetTotalPaymentCount()));
@@ -859,7 +859,7 @@ UniValue mnfinalbudget(const JSONRPCRequest& request)
         std::vector<CFinalizedBudget*> winningFbs = budget.GetFinalizedBudgets();
         for (CFinalizedBudget* finalizedBudget : winningFbs) {
             UniValue bObj(UniValue::VOBJ);
-            bObj.push_back(Pair("FeeTX", finalizedBudget->nFeeTXHash.ToString()));
+            bObj.push_back(Pair("FeeTX", finalizedBudget->GetFeeTXHash().ToString()));
             bObj.push_back(Pair("Hash", finalizedBudget->GetHash().ToString()));
             bObj.push_back(Pair("BlockStart", (int64_t)finalizedBudget->GetBlockStart()));
             bObj.push_back(Pair("BlockEnd", (int64_t)finalizedBudget->GetBlockEnd()));

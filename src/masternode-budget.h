@@ -355,10 +355,10 @@ protected:
     std::map<uint256, CFinalizedBudgetVote> mapVotes;
     std::string strBudgetName;
     int nBlockStart;
-
-public:
     std::vector<CTxBudgetPayment> vecBudgetPayments;
     uint256 nFeeTXHash;
+
+public:
     int64_t nTime;
 
     CFinalizedBudget();
@@ -381,9 +381,10 @@ public:
     std::string GetProposals();
     int GetBlockStart() const { return nBlockStart; }
     int GetBlockEnd() const { return nBlockStart + (int)(vecBudgetPayments.size() - 1); }
+    const uint256& GetFeeTXHash() const { return nFeeTXHash;  }
     int GetVoteCount() const { return (int)mapVotes.size(); }
-    bool IsPaidAlready(uint256 nProposalHash, int nBlockHeight);
-    TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
+    bool IsPaidAlready(uint256 nProposalHash, int nBlockHeight) const;
+    TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight) const;
     bool GetBudgetPaymentByBlock(int64_t nBlockHeight, CTxBudgetPayment& payment) const
     {
         LOCK(cs);
@@ -409,12 +410,12 @@ public:
     // Verify and vote on finalized budget
     void CheckAndVote();
     //total pivx paid out by this budget
-    CAmount GetTotalPayout();
+    CAmount GetTotalPayout() const;
     //vote on this finalized budget as a masternode
     void SubmitVote();
 
     //checks the hashes to make sure we know about them
-    std::string GetStatus();
+    std::string GetStatus() const;
 
     uint256 GetHash() const
     {
@@ -511,10 +512,10 @@ protected:
     int nBlockEnd;
     CAmount nAmount;
     CScript address;
+    uint256 nFeeTXHash;
 
 public:
     int64_t nTime;
-    uint256 nFeeTXHash;
 
     //cache object
 
@@ -535,7 +536,7 @@ public:
     std::string IsInvalidReason() const { return strInvalid; }
 
     bool IsEstablished() const;
-    bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount);
+    bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount) const;
 
     std::string GetName() const { return strProposalName; }
     std::string GetURL() const { return strURL; }
@@ -547,6 +548,7 @@ public:
     int GetBlockStartCycle() const;
     int GetBlockCurrentCycle() const;
     int GetBlockEndCycle() const;
+    const uint256& GetFeeTXHash() const { return nFeeTXHash;  }
     double GetRatio() const;
     int GetVoteCount(CBudgetVote::VoteDirection vd) const;
     int GetYeas() const { return GetVoteCount(CBudgetVote::VOTE_YES); }
