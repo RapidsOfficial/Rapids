@@ -714,15 +714,13 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
 
     std::vector<CBudgetProposal*> vBudgetProposalRet;
 
-    std::map<uint256, CBudgetProposal>::iterator it = mapProposals.begin();
-    while (it != mapProposals.end()) {
-        (*it).second.CleanAndRemove();
-
-        CBudgetProposal* pbudgetProposal = &((*it).second);
+    for (auto& it: mapProposals) {
+        CBudgetProposal* pbudgetProposal = &(it.second);
+        pbudgetProposal->CleanAndRemove();
         vBudgetProposalRet.push_back(pbudgetProposal);
-
-        ++it;
     }
+
+    std::sort(vBudgetProposalRet.begin(), vBudgetProposalRet.end(), CBudgetProposal::PtrHigherYes);
 
     return vBudgetProposalRet;
 }
