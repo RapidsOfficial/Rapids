@@ -4948,25 +4948,25 @@ bool static AlreadyHave(const CInv& inv) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
         }
         return false;
     case MSG_BUDGET_VOTE:
-        if (budget.mapSeenMasternodeBudgetVotes.count(inv.hash)) {
+        if (budget.HaveSeenProposalVote(inv.hash)) {
             masternodeSync.AddedBudgetItem(inv.hash);
             return true;
         }
         return false;
     case MSG_BUDGET_PROPOSAL:
-        if (budget.mapSeenMasternodeBudgetProposals.count(inv.hash)) {
+        if (budget.HaveSeenProposal(inv.hash)) {
             masternodeSync.AddedBudgetItem(inv.hash);
             return true;
         }
         return false;
     case MSG_BUDGET_FINALIZED_VOTE:
-        if (budget.mapSeenFinalizedBudgetVotes.count(inv.hash)) {
+        if (budget.HaveSeenFinalizedBudgetVote(inv.hash)) {
             masternodeSync.AddedBudgetItem(inv.hash);
             return true;
         }
         return false;
     case MSG_BUDGET_FINALIZED:
-        if (budget.mapSeenFinalizedBudgets.count(inv.hash)) {
+        if (budget.HaveSeenFinalizedBudget(inv.hash)) {
             masternodeSync.AddedBudgetItem(inv.hash);
             return true;
         }
@@ -5163,41 +5163,29 @@ void static ProcessGetData(CNode* pfrom, CConnman& connman, std::atomic<bool>& i
                     }
                 }
                 if (!pushed && inv.type == MSG_BUDGET_VOTE) {
-                    if (budget.mapSeenMasternodeBudgetVotes.count(inv.hash)) {
-                        CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-                        ss.reserve(1000);
-                        ss << budget.mapSeenMasternodeBudgetVotes[inv.hash];
-                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::BUDGETVOTE, ss));
+                    if (budget.HaveSeenProposalVote(inv.hash)) {
+                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::BUDGETVOTE, budget.GetProposalVoteSerialized(inv.hash)));
                         pushed = true;
                     }
                 }
 
                 if (!pushed && inv.type == MSG_BUDGET_PROPOSAL) {
-                    if (budget.mapSeenMasternodeBudgetProposals.count(inv.hash)) {
-                        CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-                        ss.reserve(1000);
-                        ss << budget.mapSeenMasternodeBudgetProposals[inv.hash];
-                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::BUDGETPROPOSAL, ss));
+                    if (budget.HaveSeenProposal(inv.hash)) {
+                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::BUDGETPROPOSAL, budget.GetProposalSerialized(inv.hash)));
                         pushed = true;
                     }
                 }
 
                 if (!pushed && inv.type == MSG_BUDGET_FINALIZED_VOTE) {
-                    if (budget.mapSeenFinalizedBudgetVotes.count(inv.hash)) {
-                        CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-                        ss.reserve(1000);
-                        ss << budget.mapSeenFinalizedBudgetVotes[inv.hash];
-                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::FINALBUDGETVOTE, ss));
+                    if (budget.HaveSeenFinalizedBudgetVote(inv.hash)) {
+                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::FINALBUDGETVOTE, budget.GetFinalizedBudgetVoteSerialized(inv.hash)));
                         pushed = true;
                     }
                 }
 
                 if (!pushed && inv.type == MSG_BUDGET_FINALIZED) {
-                    if (budget.mapSeenFinalizedBudgets.count(inv.hash)) {
-                        CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
-                        ss.reserve(1000);
-                        ss << budget.mapSeenFinalizedBudgets[inv.hash];
-                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::FINALBUDGET, ss));
+                    if (budget.HaveSeenFinalizedBudget(inv.hash)) {
+                        connman.PushMessage(pfrom, msgMaker.Make(NetMsgType::FINALBUDGET, budget.GetFinalizedBudgetSerialized(inv.hash)));
                         pushed = true;
                     }
                 }

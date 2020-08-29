@@ -193,7 +193,7 @@ void CBudgetManager::SubmitFinalBudget()
     }
 
     CFinalizedBudgetBroadcast tempBudget(strBudgetName, nBlockStart, vecTxBudgetPayments, UINT256_ZERO);
-    if (mapSeenFinalizedBudgets.count(tempBudget.GetHash())) {
+    if (HaveSeenFinalizedBudget(tempBudget.GetHash())) {
         LogPrint(BCLog::MNBUDGET,"%s: Budget already exists - %s\n", __func__, tempBudget.GetHash().ToString());
         nSubmittedHeight = nCurrentHeight;
         return; //already exists
@@ -262,7 +262,7 @@ void CBudgetManager::SubmitFinalBudget()
     }
 
     LOCK(cs);
-    mapSeenFinalizedBudgets.insert(std::make_pair(finalizedBudgetBroadcast.GetHash(), finalizedBudgetBroadcast));
+    AddSeenFinalizedBudget(finalizedBudgetBroadcast);
     finalizedBudgetBroadcast.Relay();
     budget.AddFinalizedBudget(finalizedBudgetBroadcast);
     nSubmittedHeight = nCurrentHeight;
@@ -922,6 +922,69 @@ CAmount CBudgetManager::GetTotalBudget(int nHeight)
     }
 }
 
+void CBudgetManager::AddSeenProposal(const CBudgetProposalBroadcast& prop)
+{
+    mapSeenMasternodeBudgetProposals.insert(std::make_pair(prop.GetHash(), prop));
+}
+
+void CBudgetManager::AddSeenProposalVote(const CBudgetVote& vote)
+{
+    mapSeenMasternodeBudgetVotes.insert(std::make_pair(vote.GetHash(), vote));
+}
+
+void CBudgetManager::AddSeenFinalizedBudget(const CFinalizedBudgetBroadcast& bud)
+{
+    mapSeenFinalizedBudgets.insert(std::make_pair(bud.GetHash(), bud));
+}
+
+void CBudgetManager::AddSeenFinalizedBudgetVote(const CFinalizedBudgetVote& vote)
+{
+    mapSeenFinalizedBudgetVotes.insert(std::make_pair(vote.GetHash(), vote));
+}
+
+
+CDataStream CBudgetManager::GetProposalVoteSerialized(const uint256& voteHash) const
+{
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss.reserve(1000);
+    ss << mapSeenMasternodeBudgetVotes.at(voteHash);
+    return ss;
+}
+
+CDataStream CBudgetManager::GetProposalSerialized(const uint256& propHash) const
+{
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss.reserve(1000);
+    ss << mapSeenMasternodeBudgetProposals.at(propHash);
+    return ss;
+}
+
+CDataStream CBudgetManager::GetFinalizedBudgetVoteSerialized(const uint256& voteHash) const
+{
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss.reserve(1000);
+    ss << mapSeenFinalizedBudgetVotes.at(voteHash);
+    return ss;
+}
+
+CDataStream CBudgetManager::GetFinalizedBudgetSerialized(const uint256& budgetHash) const
+{
+    CDataStream ss(SER_NETWORK, PROTOCOL_VERSION);
+    ss.reserve(1000);
+    ss << mapSeenFinalizedBudgets.at(budgetHash);
+    return ss;
+}
+
+bool CBudgetManager::AddAndRelayProposalVote(const CBudgetVote& vote, std::string& strError)
+{
+    if (UpdateProposal(vote, nullptr, strError)) {
+        AddSeenProposalVote(vote);
+        vote.Relay();
+        return true;
+    }
+    return false;
+}
+
 void CBudgetManager::NewBlock()
 {
     TRY_LOCK(cs, fBudgetNewBlock);
@@ -1068,7 +1131,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         CBudgetProposalBroadcast budgetProposalBroadcast;
         vRecv >> budgetProposalBroadcast;
 
-        if (mapSeenMasternodeBudgetProposals.count(budgetProposalBroadcast.GetHash())) {
+        if (HaveSeenProposal(budgetProposalBroadcast.GetHash())) {
             masternodeSync.AddedBudgetItem(budgetProposalBroadcast.GetHash());
             return;
         }
@@ -1083,7 +1146,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             return;
         }
 
-        mapSeenMasternodeBudgetProposals.insert(std::make_pair(nHash, budgetProposalBroadcast));
+        AddSeenProposal(budgetProposalBroadcast);
 
         if (!budgetProposalBroadcast.UpdateValid()) {
             LogPrint(BCLog::MNBUDGET,"mprop - invalid budget proposal - %s\n", budgetProposalBroadcast.IsInvalidReason());
@@ -1107,7 +1170,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         vRecv >> vote;
         vote.SetValid(true);
 
-        if (mapSeenMasternodeBudgetVotes.count(vote.GetHash())) {
+        if (HaveSeenProposalVote(vote.GetHash())) {
             masternodeSync.AddedBudgetItem(vote.GetHash());
             return;
         }
@@ -1121,7 +1184,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         }
 
 
-        mapSeenMasternodeBudgetVotes.insert(std::make_pair(vote.GetHash(), vote));
+        AddSeenProposalVote(vote);
         if (!vote.CheckSignature()) {
             if (masternodeSync.IsSynced()) {
                 LogPrintf("mvote - signature invalid\n");
@@ -1146,7 +1209,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         CFinalizedBudgetBroadcast finalizedBudgetBroadcast;
         vRecv >> finalizedBudgetBroadcast;
 
-        if (mapSeenFinalizedBudgets.count(finalizedBudgetBroadcast.GetHash())) {
+        if (HaveSeenFinalizedBudget(finalizedBudgetBroadcast.GetHash())) {
             masternodeSync.AddedBudgetItem(finalizedBudgetBroadcast.GetHash());
             return;
         }
@@ -1162,7 +1225,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             return;
         }
 
-        mapSeenFinalizedBudgets.insert(std::make_pair(nHash, finalizedBudgetBroadcast));
+        AddSeenFinalizedBudget(finalizedBudgetBroadcast);
 
         if (!finalizedBudgetBroadcast.UpdateValid()) {
             LogPrint(BCLog::MNBUDGET,"fbs - invalid finalized budget - %s\n", finalizedBudgetBroadcast.IsInvalidReason());
@@ -1186,7 +1249,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         vRecv >> vote;
         vote.SetValid(true);
 
-        if (mapSeenFinalizedBudgetVotes.count(vote.GetHash())) {
+        if (HaveSeenFinalizedBudgetVote(vote.GetHash())) {
             masternodeSync.AddedBudgetItem(vote.GetHash());
             return;
         }
@@ -1199,7 +1262,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             return;
         }
 
-        mapSeenFinalizedBudgetVotes.insert(std::make_pair(vote.GetHash(), vote));
+        AddSeenFinalizedBudgetVote(vote);
         if (!vote.CheckSignature()) {
             if (masternodeSync.IsSynced()) {
                 LogPrintf("fbvote - signature from masternode %s invalid\n", HexStr(pmn->pubKeyMasternode));
@@ -1286,7 +1349,7 @@ void CBudgetManager::Sync(CNode* pfrom, const uint256& nProp, bool fPartial)
     LogPrint(BCLog::MNBUDGET, "%s: sent %d items\n", __func__, nInvCount);
 }
 
-bool CBudgetManager::UpdateProposal(CBudgetVote& vote, CNode* pfrom, std::string& strError)
+bool CBudgetManager::UpdateProposal(const CBudgetVote& vote, CNode* pfrom, std::string& strError)
 {
     LOCK(cs);
 
@@ -1501,7 +1564,7 @@ bool CBudgetProposal::IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBu
     return true;
 }
 
-bool CBudgetProposal::AddOrUpdateVote(CBudgetVote& vote, std::string& strError)
+bool CBudgetProposal::AddOrUpdateVote(const CBudgetVote& vote, std::string& strError)
 {
     std::string strAction = "New vote inserted:";
     LOCK(cs);
@@ -1744,7 +1807,7 @@ CFinalizedBudget::CFinalizedBudget(const CFinalizedBudget& other) :
         nTime(other.nTime)
 { }
 
-bool CFinalizedBudget::AddOrUpdateVote(CFinalizedBudgetVote& vote, std::string& strError)
+bool CFinalizedBudget::AddOrUpdateVote(const CFinalizedBudgetVote& vote, std::string& strError)
 {
     LOCK(cs);
 
@@ -2206,7 +2269,7 @@ void CFinalizedBudget::SubmitVote()
     if (budget.UpdateFinalizedBudget(vote, NULL, strError)) {
         LogPrint(BCLog::MNBUDGET,"%s: new finalized budget vote - %s\n", __func__, vote.GetHash().ToString());
 
-        budget.mapSeenFinalizedBudgetVotes.insert(std::make_pair(vote.GetHash(), vote));
+        budget.AddSeenFinalizedBudgetVote(vote);
         vote.Relay();
     } else {
         LogPrint(BCLog::MNBUDGET,"%s: Error submitting vote - %s\n", __func__, strError);

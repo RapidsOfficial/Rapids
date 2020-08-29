@@ -211,14 +211,7 @@ class CBudgetManager
 {
 private:
     //hold txes until they mature enough to use
-    // XX42    std::map<uint256, CTransaction> mapCollateral;
     std::map<uint256, uint256> mapCollateralTxids;
-
-    void SetSynced(bool synced);
-
-public:
-    // critical section to protect the inner data structures
-    mutable RecursiveMutex cs;
 
     // keep track of the scanning errors I've seen
     std::map<uint256, CBudgetProposal> mapProposals;
@@ -230,6 +223,12 @@ public:
     std::map<uint256, CFinalizedBudgetBroadcast> mapSeenFinalizedBudgets;
     std::map<uint256, CFinalizedBudgetVote> mapSeenFinalizedBudgetVotes;
     std::map<uint256, CFinalizedBudgetVote> mapOrphanFinalizedBudgetVotes;
+
+    void SetSynced(bool synced);
+
+public:
+    // critical section to protect the inner data structures
+    mutable RecursiveMutex cs;
 
     CBudgetManager()
     {
@@ -247,6 +246,24 @@ public:
 
     int sizeFinalized() { return (int)mapFinalizedBudgets.size(); }
     int sizeProposals() { return (int)mapProposals.size(); }
+
+    bool HaveSeenProposal(const uint256& propHash) const { return mapSeenMasternodeBudgetProposals.count(propHash); }
+    bool HaveSeenProposalVote(const uint256& voteHash) const { return mapSeenMasternodeBudgetVotes.count(voteHash); }
+    bool HaveSeenFinalizedBudget(const uint256& budgetHash) const { return mapSeenFinalizedBudgets.count(budgetHash); }
+    bool HaveSeenFinalizedBudgetVote(const uint256& voteHash) const { return mapSeenFinalizedBudgetVotes.count(voteHash); }
+
+    void AddSeenProposal(const CBudgetProposalBroadcast& prop);
+    void AddSeenProposalVote(const CBudgetVote& vote);
+    void AddSeenFinalizedBudget(const CFinalizedBudgetBroadcast& bud);
+    void AddSeenFinalizedBudgetVote(const CFinalizedBudgetVote& vote);
+
+    // Use const operator std::map::at(), thus existence must be checked before calling.
+    CDataStream GetProposalVoteSerialized(const uint256& voteHash) const;
+    CDataStream GetProposalSerialized(const uint256& propHash) const;
+    CDataStream GetFinalizedBudgetVoteSerialized(const uint256& voteHash) const;
+    CDataStream GetFinalizedBudgetSerialized(const uint256& budgetHash) const;
+
+    bool AddAndRelayProposalVote(const CBudgetVote& vote, std::string& strError);
 
     void ResetSync() { SetSynced(false); }
     void MarkSynced() { SetSynced(true); }
@@ -268,7 +285,7 @@ public:
     bool AddFinalizedBudget(CFinalizedBudget& finalizedBudget);
     void SubmitFinalBudget();
 
-    bool UpdateProposal(CBudgetVote& vote, CNode* pfrom, std::string& strError);
+    bool UpdateProposal(const CBudgetVote& vote, CNode* pfrom, std::string& strError);
     bool UpdateFinalizedBudget(CFinalizedBudgetVote& vote, CNode* pfrom, std::string& strError);
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     std::string GetRequiredPaymentsString(int nBlockHeight);
@@ -365,7 +382,7 @@ public:
     CFinalizedBudget(const CFinalizedBudget& other);
 
     void CleanAndRemove();
-    bool AddOrUpdateVote(CFinalizedBudgetVote& vote, std::string& strError);
+    bool AddOrUpdateVote(const CFinalizedBudgetVote& vote, std::string& strError);
     UniValue GetVotesObject() const;
     void SetSynced(bool synced);    // sets fSynced on votes (true only if valid)
 
@@ -404,14 +421,10 @@ public:
         ss << strBudgetName;
         ss << nBlockStart;
         ss << vecBudgetPayments;
-
-        uint256 h1 = ss.GetHash();
-        return h1;
+        return ss.GetHash();
     }
 
     ADD_SERIALIZE_METHODS;
-
-    //for saving to the serialized db
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action)
     {
@@ -421,7 +434,6 @@ public:
         READWRITE(nBlockStart);
         READWRITE(vecBudgetPayments);
         READWRITE(fAutoChecked);
-
         READWRITE(mapVotes);
     }
 };
@@ -438,7 +450,6 @@ public:
     {
         // enable ADL (not necessary in our case, but good practice)
         using std::swap;
-
         // by swapping the members of two classes,
         // the two classes are effectively swapped
         swap(first.strBudgetName, second.strBudgetName);
@@ -458,8 +469,6 @@ public:
     void Relay();
 
     ADD_SERIALIZE_METHODS;
-
-    //for propagating messages
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action)
     {
@@ -498,13 +507,11 @@ protected:
 public:
     int64_t nTime;
 
-    //cache object
-
     CBudgetProposal();
     CBudgetProposal(const CBudgetProposal& other);
     CBudgetProposal(std::string strProposalNameIn, std::string strURLIn, int nBlockStartIn, int nBlockEndIn, CScript addressIn, CAmount nAmountIn, uint256 nFeeTXHashIn);
 
-    bool AddOrUpdateVote(CBudgetVote& vote, std::string& strError);
+    bool AddOrUpdateVote(const CBudgetVote& vote, std::string& strError);
     UniValue GetVotesArray() const;
     void SetSynced(bool synced);    // sets fSynced on votes (true only if valid)
 
@@ -551,12 +558,10 @@ public:
         ss << nAmount;
         ss << std::vector<unsigned char>(address.begin(), address.end());
         uint256 h1 = ss.GetHash();
-
         return h1;
     }
 
     ADD_SERIALIZE_METHODS;
-
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action)
     {
@@ -589,7 +594,6 @@ public:
     {
         // enable ADL (not necessary in our case, but good practice)
         using std::swap;
-
         // by swapping the members of two classes,
         // the two classes are effectively swapped
         swap(first.strProposalName, second.strProposalName);
@@ -612,12 +616,10 @@ public:
     void Relay();
 
     ADD_SERIALIZE_METHODS;
-
     template <typename Stream, typename Operation>
     inline void SerializationOp(Stream& s, Operation ser_action)
     {
         //for syncing with other clients
-
         READWRITE(LIMITED_STRING(strProposalName, 20));
         READWRITE(LIMITED_STRING(strURL, 64));
         READWRITE(nTime);
