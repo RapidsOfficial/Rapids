@@ -385,27 +385,8 @@ public:
     int GetVoteCount() const { return (int)mapVotes.size(); }
     bool IsPaidAlready(uint256 nProposalHash, int nBlockHeight) const;
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight) const;
-    bool GetBudgetPaymentByBlock(int64_t nBlockHeight, CTxBudgetPayment& payment) const
-    {
-        LOCK(cs);
-
-        int i = nBlockHeight - GetBlockStart();
-        if (i < 0) return false;
-        if (i > (int)vecBudgetPayments.size() - 1) return false;
-        payment = vecBudgetPayments[i];
-        return true;
-    }
-    bool GetPayeeAndAmount(int64_t nBlockHeight, CScript& payee, CAmount& nAmount) const
-    {
-        LOCK(cs);
-
-        int i = nBlockHeight - GetBlockStart();
-        if (i < 0) return false;
-        if (i > (int)vecBudgetPayments.size() - 1) return false;
-        payee = vecBudgetPayments[i].payee;
-        nAmount = vecBudgetPayments[i].nAmount;
-        return true;
-    }
+    bool GetBudgetPaymentByBlock(int64_t nBlockHeight, CTxBudgetPayment& payment) const;
+    bool GetPayeeAndAmount(int64_t nBlockHeight, CScript& payee, CAmount& nAmount) const;
 
     // Verify and vote on finalized budget
     void CheckAndVote();
