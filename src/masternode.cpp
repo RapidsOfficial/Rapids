@@ -181,6 +181,8 @@ void CMasternode::Check(bool forceCheck)
 {
     if (ShutdownRequested()) return;
 
+    // todo: add LOCK(cs) but be careful with the AcceptableInputs() below that requires cs_main.
+
     if (!forceCheck && (GetTime() - lastTimeChecked < MASTERNODE_CHECK_SECONDS)) return;
     lastTimeChecked = GetTime();
 
