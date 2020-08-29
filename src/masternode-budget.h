@@ -214,6 +214,8 @@ private:
     // XX42    std::map<uint256, CTransaction> mapCollateral;
     std::map<uint256, uint256> mapCollateralTxids;
 
+    void SetSynced(bool synced);
+
 public:
     // critical section to protect the inner data structures
     mutable RecursiveMutex cs;
@@ -246,8 +248,8 @@ public:
     int sizeFinalized() { return (int)mapFinalizedBudgets.size(); }
     int sizeProposals() { return (int)mapProposals.size(); }
 
-    void ResetSync();
-    void MarkSynced();
+    void ResetSync() { SetSynced(false); }
+    void MarkSynced() { SetSynced(true); }
     void Sync(CNode* node, const uint256& nProp, bool fPartial = false);
 
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);

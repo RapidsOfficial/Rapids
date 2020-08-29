@@ -1245,8 +1245,7 @@ void CBudgetManager::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
     }
 }
 
-//mark that a full sync is needed
-void CBudgetManager::ResetSync()
+void CBudgetManager::SetSynced(bool synced)
 {
     LOCK(cs);
 
@@ -1254,7 +1253,7 @@ void CBudgetManager::ResetSync()
         CBudgetProposal* pbudgetProposal = FindProposal(it.first);
         if (pbudgetProposal && pbudgetProposal->fValid) {
             //mark votes
-            pbudgetProposal->SetSynced(false);
+            pbudgetProposal->SetSynced(synced);
         }
     }
 
@@ -1262,32 +1261,7 @@ void CBudgetManager::ResetSync()
         CFinalizedBudget* pfinalizedBudget = FindFinalizedBudget(it.first);
         if (pfinalizedBudget && pfinalizedBudget->fValid) {
             //mark votes
-            pfinalizedBudget->SetSynced(false);
-        }
-    }
-}
-
-void CBudgetManager::MarkSynced()
-{
-    LOCK(cs);
-
-    /*
-        Mark that we've sent all valid items
-    */
-
-    for (const auto& it: mapSeenMasternodeBudgetProposals) {
-        CBudgetProposal* pbudgetProposal = FindProposal(it.first);
-        if (pbudgetProposal && pbudgetProposal->fValid) {
-            //mark votes
-            pbudgetProposal->SetSynced(true);
-        }
-    }
-
-    for (const auto& it: mapSeenFinalizedBudgets) {
-        CFinalizedBudget* pfinalizedBudget = FindFinalizedBudget(it.first);
-        if (pfinalizedBudget && pfinalizedBudget->fValid) {
-            //mark votes
-            pfinalizedBudget->SetSynced(true);
+            pfinalizedBudget->SetSynced(synced);
         }
     }
 }
