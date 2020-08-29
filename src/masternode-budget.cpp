@@ -489,7 +489,7 @@ void CBudgetManager::CheckAndRemove()
         }
         else {
             LogPrint(BCLog::MNBUDGET,"%s: Found valid finalized budget: %s %s\n", __func__,
-                      pfinalizedBudget->strBudgetName.c_str(), pfinalizedBudget->nFeeTXHash.ToString().c_str());
+                      pfinalizedBudget->GetName(), pfinalizedBudget->nFeeTXHash.ToString().c_str());
         }
 
         if (pfinalizedBudget->fValid) {
@@ -511,7 +511,7 @@ void CBudgetManager::CheckAndRemove()
         }
         else {
              LogPrint(BCLog::MNBUDGET,"%s: Found valid budget proposal: %s %s\n", __func__,
-                      pbudgetProposal->strProposalName.c_str(), pbudgetProposal->nFeeTXHash.ToString().c_str());
+                      pbudgetProposal->GetName(), pbudgetProposal->nFeeTXHash.ToString().c_str());
         }
         if (pbudgetProposal->fValid) {
             tmpMapProposals.insert(std::make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
@@ -599,23 +599,20 @@ CFinalizedBudget* CBudgetManager::FindFinalizedBudget(const uint256& nHash)
     return NULL;
 }
 
+// !TODO: return const pointer
 CBudgetProposal* CBudgetManager::FindProposal(const std::string& strProposalName)
 {
     //find the prop with the highest yes count
+    int nYesCount = 0;
+    CBudgetProposal* pbudgetProposal = nullptr;
 
-    int nYesCount = -99999;
-    CBudgetProposal* pbudgetProposal = NULL;
-
-    std::map<uint256, CBudgetProposal>::iterator it = mapProposals.begin();
-    while (it != mapProposals.end()) {
-        if ((*it).second.strProposalName == strProposalName && (*it).second.GetYeas() > nYesCount) {
-            pbudgetProposal = &((*it).second);
+    for (auto& it: mapProposals) {
+        CBudgetProposal& proposal = it.second;
+        if (proposal.GetName() == strProposalName && proposal.GetYeas() > nYesCount) {
+            pbudgetProposal = &proposal;
             nYesCount = pbudgetProposal->GetYeas();
         }
-        ++it;
     }
-
-    if (nYesCount == -99999) return NULL;
 
     return pbudgetProposal;
 }
@@ -807,11 +804,11 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
     while (it2 != vBudgetPorposalsSort.end()) {
         CBudgetProposal* pbudgetProposal = (*it2).first;
 
-        LogPrint(BCLog::MNBUDGET,"%s: Processing Budget %s\n", __func__, pbudgetProposal->strProposalName.c_str());
+        LogPrint(BCLog::MNBUDGET,"%s: Processing Budget %s\n", __func__, pbudgetProposal->GetName());
         //prop start/end should be inside this period
         if (pbudgetProposal->IsPassing(pindexPrev, nBlockStart, nBlockEnd, mnCount)) {
             LogPrint(BCLog::MNBUDGET,"%s:  -   Check 1 passed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
-                    __func__, pbudgetProposal->fValid, pbudgetProposal->nBlockStart, nBlockStart, pbudgetProposal->nBlockEnd,
+                    __func__, pbudgetProposal->fValid, pbudgetProposal->GetBlockStart(), nBlockStart, pbudgetProposal->GetBlockEnd(),
                     nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnCount / 10, pbudgetProposal->IsEstablished());
 
             if (pbudgetProposal->GetAmount() + nBudgetAllocated <= nTotalBudget) {
@@ -826,7 +823,7 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
         }
         else {
             LogPrint(BCLog::MNBUDGET,"%s:  -   Check 1 failed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
-                    __func__, pbudgetProposal->fValid, pbudgetProposal->nBlockStart, nBlockStart, pbudgetProposal->nBlockEnd,
+                    __func__, pbudgetProposal->fValid, pbudgetProposal->GetBlockStart(), nBlockStart, pbudgetProposal->GetBlockEnd(),
                     nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnodeman.CountEnabled(ActiveProtocol()) / 10,
                     pbudgetProposal->IsEstablished());
         }
@@ -1585,18 +1582,10 @@ void CBudgetProposal::CleanAndRemove()
     }
 }
 
-double CBudgetProposal::GetRatio()
+double CBudgetProposal::GetRatio() const
 {
-    int yeas = 0;
-    int nays = 0;
-
-    std::map<uint256, CBudgetVote>::iterator it = mapVotes.begin();
-
-    while (it != mapVotes.end()) {
-        if ((*it).second.GetDirection() == CBudgetVote::VOTE_YES) yeas++;
-        if ((*it).second.GetDirection() == CBudgetVote::VOTE_NO) nays++;
-        ++it;
-    }
+    int yeas = GetYeas();
+    int nays = GetNays();
 
     if (yeas + nays == 0) return 0.0f;
 
@@ -1614,14 +1603,14 @@ int CBudgetProposal::GetVoteCount(CBudgetVote::VoteDirection vd) const
     return ret;
 }
 
-int CBudgetProposal::GetBlockStartCycle()
+int CBudgetProposal::GetBlockStartCycle() const
 {
     //end block is half way through the next cycle (so the proposal will be removed much after the payment is sent)
 
     return nBlockStart - nBlockStart % Params().GetConsensus().nBudgetCycleBlocks;
 }
 
-int CBudgetProposal::GetBlockCurrentCycle()
+int CBudgetProposal::GetBlockCurrentCycle() const
 {
     CBlockIndex* pindexPrev = chainActive.Tip();
     if (pindexPrev == NULL) return -1;
@@ -1631,7 +1620,7 @@ int CBudgetProposal::GetBlockCurrentCycle()
     return pindexPrev->nHeight - pindexPrev->nHeight % Params().GetConsensus().nBudgetCycleBlocks;
 }
 
-int CBudgetProposal::GetBlockEndCycle()
+int CBudgetProposal::GetBlockEndCycle() const
 {
     // Right now single payment proposals have nBlockEnd have a cycle too early!
     // switch back if it break something else
@@ -1643,12 +1632,12 @@ int CBudgetProposal::GetBlockEndCycle()
 
 }
 
-int CBudgetProposal::GetTotalPaymentCount()
+int CBudgetProposal::GetTotalPaymentCount() const
 {
     return (GetBlockEndCycle() - GetBlockStartCycle()) / Params().GetConsensus().nBudgetCycleBlocks;
 }
 
-int CBudgetProposal::GetRemainingPaymentCount()
+int CBudgetProposal::GetRemainingPaymentCount() const
 {
     // If this budget starts in the future, this value will be wrong
     int nPayments = (GetBlockEndCycle() - GetBlockCurrentCycle()) / Params().GetConsensus().nBudgetCycleBlocks - 1;
@@ -1743,9 +1732,9 @@ UniValue CBudgetVote::ToJSON() const
 CFinalizedBudget::CFinalizedBudget() :
         fAutoChecked(false),
         mapVotes(),
-        fValid(true),
         strBudgetName(""),
         nBlockStart(0),
+        fValid(true),
         vecBudgetPayments(),
         nFeeTXHash(),
         nTime(0)
@@ -1754,9 +1743,9 @@ CFinalizedBudget::CFinalizedBudget() :
 CFinalizedBudget::CFinalizedBudget(const CFinalizedBudget& other) :
         fAutoChecked(false),
         mapVotes(other.mapVotes),
-        fValid(true),
         strBudgetName(other.strBudgetName),
         nBlockStart(other.nBlockStart),
+        fValid(true),
         vecBudgetPayments(other.vecBudgetPayments),
         nFeeTXHash(other.nFeeTXHash),
         nTime(other.nTime)

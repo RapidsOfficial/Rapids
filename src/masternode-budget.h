@@ -351,11 +351,11 @@ private:
 
 protected:
     std::map<uint256, CFinalizedBudgetVote> mapVotes;
+    std::string strBudgetName;
+    int nBlockStart;
 
 public:
     bool fValid;
-    std::string strBudgetName;
-    int nBlockStart;
     std::vector<CTxBudgetPayment> vecBudgetPayments;
     uint256 nFeeTXHash;
     int64_t nTime;
@@ -373,14 +373,14 @@ public:
 
     bool IsValid(std::string& strError, bool fCheckCollateral = true);
 
-    std::string GetName() { return strBudgetName; }
+    std::string GetName() const { return strBudgetName; }
     std::string GetProposals();
-    int GetBlockStart() { return nBlockStart; }
-    int GetBlockEnd() { return nBlockStart + (int)(vecBudgetPayments.size() - 1); }
-    int GetVoteCount() { return (int)mapVotes.size(); }
+    int GetBlockStart() const { return nBlockStart; }
+    int GetBlockEnd() const { return nBlockStart + (int)(vecBudgetPayments.size() - 1); }
+    int GetVoteCount() const { return (int)mapVotes.size(); }
     bool IsPaidAlready(uint256 nProposalHash, int nBlockHeight);
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
-    bool GetBudgetPaymentByBlock(int64_t nBlockHeight, CTxBudgetPayment& payment)
+    bool GetBudgetPaymentByBlock(int64_t nBlockHeight, CTxBudgetPayment& payment) const
     {
         LOCK(cs);
 
@@ -390,7 +390,7 @@ public:
         payment = vecBudgetPayments[i];
         return true;
     }
-    bool GetPayeeAndAmount(int64_t nBlockHeight, CScript& payee, CAmount& nAmount)
+    bool GetPayeeAndAmount(int64_t nBlockHeight, CScript& payee, CAmount& nAmount) const
     {
         LOCK(cs);
 
@@ -412,7 +412,7 @@ public:
     //checks the hashes to make sure we know about them
     std::string GetStatus();
 
-    uint256 GetHash()
+    uint256 GetHash() const
     {
         CHashWriter ss(SER_GETHASH, PROTOCOL_VERSION);
         ss << strBudgetName;
@@ -499,20 +499,15 @@ private:
 
 protected:
     std::map<uint256, CBudgetVote> mapVotes;
-
-public:
-    bool fValid;
     std::string strProposalName;
-
-    /*
-        json object with name, short-description, long-description, pdf-url and any other info
-        This allows the proposal website to stay 100% decentralized
-    */
     std::string strURL;
     int nBlockStart;
     int nBlockEnd;
     CAmount nAmount;
     CScript address;
+
+public:
+    bool fValid;
     int64_t nTime;
     uint256 nFeeTXHash;
 
@@ -534,24 +529,24 @@ public:
     bool IsEstablished();
     bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount);
 
-    std::string GetName() { return strProposalName; }
-    std::string GetURL() { return strURL; }
-    int GetBlockStart() { return nBlockStart; }
-    int GetBlockEnd() { return nBlockEnd; }
-    CScript GetPayee() { return address; }
-    int GetTotalPaymentCount();
-    int GetRemainingPaymentCount();
-    int GetBlockStartCycle();
-    int GetBlockCurrentCycle();
-    int GetBlockEndCycle();
-    double GetRatio();
+    std::string GetName() const { return strProposalName; }
+    std::string GetURL() const { return strURL; }
+    int GetBlockStart() const { return nBlockStart; }
+    int GetBlockEnd() const { return nBlockEnd; }
+    CScript GetPayee() const { return address; }
+    int GetTotalPaymentCount() const;
+    int GetRemainingPaymentCount() const;
+    int GetBlockStartCycle() const;
+    int GetBlockCurrentCycle() const;
+    int GetBlockEndCycle() const;
+    double GetRatio() const;
     int GetVoteCount(CBudgetVote::VoteDirection vd) const;
     int GetYeas() const { return GetVoteCount(CBudgetVote::VOTE_YES); }
     int GetNays() const { return GetVoteCount(CBudgetVote::VOTE_NO); }
     int GetAbstains() const { return GetVoteCount(CBudgetVote::VOTE_ABSTAIN); };
-    CAmount GetAmount() { return nAmount; }
+    CAmount GetAmount() const { return nAmount; }
     void SetAllotted(CAmount nAllotedIn) { nAlloted = nAllotedIn; }
-    CAmount GetAllotted() { return nAlloted; }
+    CAmount GetAllotted() const { return nAlloted; }
 
     void CleanAndRemove();
 
