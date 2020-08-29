@@ -349,6 +349,8 @@ private:
     // critical section to protect the inner data structures
     mutable RecursiveMutex cs;
     bool fAutoChecked; //If it matches what we see, we'll auto vote for it (masternode only)
+    bool fValid;
+    std::string strInvalid;
 
 protected:
     std::map<uint256, CFinalizedBudgetVote> mapVotes;
@@ -356,7 +358,6 @@ protected:
     int nBlockStart;
 
 public:
-    bool fValid;
     std::vector<CTxBudgetPayment> vecBudgetPayments;
     uint256 nFeeTXHash;
     int64_t nTime;
@@ -372,7 +373,10 @@ public:
     // sync budget votes with a node
     void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
-    bool IsValid(std::string& strError, bool fCheckCollateral = true);
+    // sets fValid and strInvalid, returns fValid
+    bool UpdateValid(bool fCheckCollateral = true);
+    bool IsValid() const  { return fValid; }
+    std::string IsInvalidReason() const { return strInvalid; }
 
     std::string GetName() const { return strBudgetName; }
     std::string GetProposals();
@@ -497,6 +501,8 @@ private:
     // critical section to protect the inner data structures
     mutable RecursiveMutex cs;
     CAmount nAlloted;
+    bool fValid;
+    std::string strInvalid;
 
 protected:
     std::map<uint256, CBudgetVote> mapVotes;
@@ -508,7 +514,6 @@ protected:
     CScript address;
 
 public:
-    bool fValid;
     int64_t nTime;
     uint256 nFeeTXHash;
 
@@ -526,7 +531,11 @@ public:
     // sync proposal votes with a node
     void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
-    bool IsValid(std::string& strError, bool fCheckCollateral = true);
+    // sets fValid and strInvalid, returns fValid
+    bool UpdateValid(bool fCheckCollateral = true);
+    bool IsValid() const  { return fValid; }
+    std::string IsInvalidReason() const { return strInvalid; }
+
     bool IsEstablished() const;
     bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount);
 
