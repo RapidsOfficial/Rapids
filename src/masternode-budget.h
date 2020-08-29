@@ -436,6 +436,11 @@ public:
         READWRITE(fAutoChecked);
         READWRITE(mapVotes);
     }
+
+    // compare finalized budget by votes (sort tie with feeHash)
+    bool operator>(const CFinalizedBudget& other) const;
+    // compare finalized budget pointers
+    static bool PtrGreater(CFinalizedBudget* a, CFinalizedBudget* b) { return *a > *b; }
 };
 
 // FinalizedBudget are cast then sent to peers with this object, which leaves the votes out
@@ -557,8 +562,7 @@ public:
         ss << nBlockEnd;
         ss << nAmount;
         ss << std::vector<unsigned char>(address.begin(), address.end());
-        uint256 h1 = ss.GetHash();
-        return h1;
+        return ss.GetHash();
     }
 
     ADD_SERIALIZE_METHODS;
@@ -579,6 +583,14 @@ public:
         //for saving to the serialized db
         READWRITE(mapVotes);
     }
+
+    // compare proposals by proposal hash
+    inline bool operator>(const CBudgetProposal& other) const { return GetHash() > other.GetHash(); }
+    // compare proposals pointers by hash
+    static inline bool PtrGreater(CBudgetProposal* a, CBudgetProposal* b) { return *a > *b; }
+    // compare proposals pointers by net yes count (solve tie with feeHash)
+    static bool PtrHigherYes(CBudgetProposal* a, CBudgetProposal* b);
+
 };
 
 // Proposals are cast then sent to peers with this object, which leaves the votes out

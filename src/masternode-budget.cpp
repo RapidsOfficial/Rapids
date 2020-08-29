@@ -727,48 +727,24 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
     return vBudgetProposalRet;
 }
 
-//
-// Sort by votes, if there's a tie sort by their feeHash TX
-//
-struct sortProposalsByVotes {
-    bool operator()(const std::pair<CBudgetProposal*, int>& left, const std::pair<CBudgetProposal*, int>& right)
-    {
-        if (left.second != right.second)
-            return (left.second > right.second);
-        return (left.first->GetFeeTXHash() > right.first->GetFeeTXHash());
-    }
-};
-
 //Need to review this function
 std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
 {
     LOCK(cs);
 
-    // ------- Sort budgets by Yes Count
-
-    std::vector<std::pair<CBudgetProposal*, int> > vBudgetPorposalsSort;
-
-    std::map<uint256, CBudgetProposal>::iterator it = mapProposals.begin();
-    while (it != mapProposals.end()) {
-        (*it).second.CleanAndRemove();
-        vBudgetPorposalsSort.push_back(std::make_pair(&((*it).second), (*it).second.GetYeas() - (*it).second.GetNays()));
-        ++it;
+    // ------- Sort budgets by net Yes Count
+    std::vector<CBudgetProposal*> vBudgetPorposalsSort;
+    for (auto& it: mapProposals) {
+        it.second.CleanAndRemove();
+        vBudgetPorposalsSort.push_back(&it.second);
     }
-
-    std::sort(vBudgetPorposalsSort.begin(), vBudgetPorposalsSort.end(), sortProposalsByVotes());
+    std::sort(vBudgetPorposalsSort.begin(), vBudgetPorposalsSort.end(), CBudgetProposal::PtrHigherYes);
 
     // ------- Grab The Budgets In Order
-
     std::vector<CBudgetProposal*> vBudgetProposalsRet;
-
     CAmount nBudgetAllocated = 0;
-
-    CBlockIndex* pindexPrev;
-    {
-        LOCK(cs_main);
-        pindexPrev = chainActive.Tip();
-    }
-    if (pindexPrev == NULL) return vBudgetProposalsRet;
+    const CBlockIndex* pindexPrev = GetChainTip();
+    if (!pindexPrev) return vBudgetProposalsRet;
 
     const int nBlocksPerCycle = Params().GetConsensus().nBudgetCycleBlocks;
     int nBlockStart = pindexPrev->nHeight - pindexPrev->nHeight % nBlocksPerCycle + nBlocksPerCycle;
@@ -776,10 +752,7 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
     int mnCount = mnodeman.CountEnabled(ActiveProtocol());
     CAmount nTotalBudget = GetTotalBudget(nBlockStart);
 
-    std::vector<std::pair<CBudgetProposal*, int> >::iterator it2 = vBudgetPorposalsSort.begin();
-    while (it2 != vBudgetPorposalsSort.end()) {
-        CBudgetProposal* pbudgetProposal = (*it2).first;
-
+    for (CBudgetProposal* pbudgetProposal: vBudgetPorposalsSort) {
         LogPrint(BCLog::MNBUDGET,"%s: Processing Budget %s\n", __func__, pbudgetProposal->GetName());
         //prop start/end should be inside this period
         if (pbudgetProposal->IsPassing(pindexPrev, nBlockStart, nBlockEnd, mnCount)) {
@@ -796,15 +769,14 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
                 pbudgetProposal->SetAllotted(0);
                 LogPrint(BCLog::MNBUDGET,"%s:  -     Check 2 failed: no amount allotted\n", __func__);
             }
-        }
-        else {
+
+        } else {
             LogPrint(BCLog::MNBUDGET,"%s:  -   Check 1 failed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
                     __func__, pbudgetProposal->IsValid(), pbudgetProposal->GetBlockStart(), nBlockStart, pbudgetProposal->GetBlockEnd(),
                     nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnodeman.CountEnabled(ActiveProtocol()) / 10,
                     pbudgetProposal->IsEstablished());
         }
 
-        ++it2;
     }
 
     return vBudgetProposalsRet;
@@ -825,24 +797,12 @@ std::vector<CFinalizedBudget*> CBudgetManager::GetFinalizedBudgets()
     LOCK(cs);
 
     std::vector<CFinalizedBudget*> vFinalizedBudgetsRet;
-    std::vector<std::pair<CFinalizedBudget*, int> > vFinalizedBudgetsSort;
 
     // ------- Grab The Budgets In Order
-
-    std::map<uint256, CFinalizedBudget>::iterator it = mapFinalizedBudgets.begin();
-    while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).second);
-
-        vFinalizedBudgetsSort.push_back(std::make_pair(pfinalizedBudget, pfinalizedBudget->GetVoteCount()));
-        ++it;
+    for (auto& it: mapFinalizedBudgets) {
+        vFinalizedBudgetsRet.push_back(&(it.second));
     }
-    std::sort(vFinalizedBudgetsSort.begin(), vFinalizedBudgetsSort.end(), sortFinalizedBudgetsByVotes());
-
-    std::vector<std::pair<CFinalizedBudget*, int> >::iterator it2 = vFinalizedBudgetsSort.begin();
-    while (it2 != vFinalizedBudgetsSort.end()) {
-        vFinalizedBudgetsRet.push_back((*it2).first);
-        ++it2;
-    }
+    std::sort(vFinalizedBudgetsRet.begin(), vFinalizedBudgetsRet.end(), CFinalizedBudget::PtrGreater);
 
     return vFinalizedBudgetsRet;
 }
@@ -1700,6 +1660,16 @@ int CBudgetProposal::GetRemainingPaymentCount() const
     return std::min(nPayments, GetTotalPaymentCount());
 }
 
+inline bool CBudgetProposal::PtrHigherYes(CBudgetProposal* a, CBudgetProposal* b)
+{
+    const int netYes_a = a->GetYeas() - a->GetNays();
+    const int netYes_b = b->GetYeas() - b->GetNays();
+
+    if (netYes_a == netYes_b) return a->GetFeeTXHash() > b->GetFeeTXHash();
+
+    return netYes_a > netYes_b;
+}
+
 CBudgetProposalBroadcast::CBudgetProposalBroadcast(std::string strProposalNameIn, std::string strURLIn, int nPaymentCount, CScript addressIn, CAmount nAmountIn, int nBlockStartIn, uint256 nFeeTXHashIn)
 {
     strProposalName = strProposalNameIn;
@@ -1915,7 +1885,7 @@ void CFinalizedBudget::CheckAndVote()
 
         // Sort copy of proposals by hash (descending)
         std::vector<CBudgetProposal*> vBudgetProposalsSortedByHash(vBudgetProposals);
-        std::sort(vBudgetProposalsSortedByHash.begin(), vBudgetProposalsSortedByHash.end(), sortProposalsByHash());
+        std::sort(vBudgetProposalsSortedByHash.begin(), vBudgetProposalsSortedByHash.end(), CBudgetProposal::PtrGreater);
 
         // Sort copy payments by hash (descending)
         std::vector<CTxBudgetPayment> vecBudgetPaymentsSortedByHash(vecBudgetPayments);
@@ -2275,6 +2245,16 @@ void CFinalizedBudget::SubmitVote()
     } else {
         LogPrint(BCLog::MNBUDGET,"%s: Error submitting vote - %s\n", __func__, strError);
     }
+}
+
+bool CFinalizedBudget::operator>(const CFinalizedBudget& other) const
+{
+    const int count = GetVoteCount();
+    const int otherCount = other.GetVoteCount();
+
+    if (count == otherCount) return GetFeeTXHash() > other.GetFeeTXHash();
+
+    return count > otherCount;
 }
 
 CFinalizedBudgetBroadcast::CFinalizedBudgetBroadcast() :
