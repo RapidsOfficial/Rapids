@@ -21,7 +21,7 @@
 
 #include <fstream>
 
-void budgetToJSON(const CBudgetProposal* pbudgetProposal, UniValue& bObj)
+void budgetToJSON(const CBudgetProposal* pbudgetProposal, UniValue& bObj, int nCurrentHeight)
 {
     CTxDestination address1;
     ExtractDestination(pbudgetProposal->GetPayee(), address1);
@@ -33,7 +33,7 @@ void budgetToJSON(const CBudgetProposal* pbudgetProposal, UniValue& bObj)
     bObj.push_back(Pair("BlockStart", (int64_t)pbudgetProposal->GetBlockStart()));
     bObj.push_back(Pair("BlockEnd", (int64_t)pbudgetProposal->GetBlockEnd()));
     bObj.push_back(Pair("TotalPaymentCount", (int64_t)pbudgetProposal->GetTotalPaymentCount()));
-    bObj.push_back(Pair("RemainingPaymentCount", (int64_t)pbudgetProposal->GetRemainingPaymentCount()));
+    bObj.push_back(Pair("RemainingPaymentCount", (int64_t)pbudgetProposal->GetRemainingPaymentCount(nCurrentHeight)));
     bObj.push_back(Pair("PaymentAddress", EncodeDestination(address1)));
     bObj.push_back(Pair("Ratio", pbudgetProposal->GetRatio()));
     bObj.push_back(Pair("Yeas", (int64_t)pbudgetProposal->GetYeas()));
@@ -136,7 +136,8 @@ UniValue preparebudget(const JSONRPCRequest& request)
     // create transaction 15 minutes into the future, to allow for confirmation time
     CBudgetProposalBroadcast budgetProposalBroadcast(strProposalName, strURL, nPaymentCount, scriptPubKey, nAmount, nBlockStart, UINT256_ZERO);
 
-    if (!budgetProposalBroadcast.UpdateValid(false))
+    int nChainHeight = chainActive.Height();
+    if (!budgetProposalBroadcast.UpdateValid(nChainHeight, false))
         throw std::runtime_error("Proposal is not valid - " + budgetProposalBroadcast.GetHash().ToString() + " - " + budgetProposalBroadcast.IsInvalidReason());
 
     bool useIX = false; //true;
@@ -571,11 +572,7 @@ UniValue getbudgetprojection(const JSONRPCRequest& request)
     UniValue resultObj(UniValue::VOBJ);
     CAmount nTotalAllotted = 0;
 
-    int nCurrentHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
-    if (nCurrentHeight <= 0)
-        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Unable to get chain tip. No blocks yet.");
-
-    std::vector<CBudgetProposal*> winningProps = budget.GetBudget(nCurrentHeight);
+    std::vector<CBudgetProposal*> winningProps = budget.GetBudget();
     for (CBudgetProposal* pbudgetProposal : winningProps) {
         nTotalAllotted += pbudgetProposal->GetAllotted();
 
@@ -583,7 +580,7 @@ UniValue getbudgetprojection(const JSONRPCRequest& request)
         ExtractDestination(pbudgetProposal->GetPayee(), address1);
 
         UniValue bObj(UniValue::VOBJ);
-        budgetToJSON(pbudgetProposal, bObj);
+        budgetToJSON(pbudgetProposal, bObj, budget.GetBestHeight());
         bObj.push_back(Pair("Alloted", ValueFromAmount(pbudgetProposal->GetAllotted())));
         bObj.push_back(Pair("TotalBudgetAlloted", ValueFromAmount(nTotalAllotted)));
 
@@ -632,6 +629,7 @@ UniValue getbudgetinfo(const JSONRPCRequest& request)
             HelpExampleCli("getbudgetprojection", "") + HelpExampleRpc("getbudgetprojection", ""));
 
     UniValue ret(UniValue::VARR);
+    int nCurrentHeight = budget.GetBestHeight();
 
     std::string strShow = "valid";
     if (request.params.size() == 1) {
@@ -639,7 +637,7 @@ UniValue getbudgetinfo(const JSONRPCRequest& request)
         const CBudgetProposal* pbudgetProposal = budget.FindProposalByName(strProposalName);
         if (pbudgetProposal == NULL) throw std::runtime_error("Unknown proposal name");
         UniValue bObj(UniValue::VOBJ);
-        budgetToJSON(pbudgetProposal, bObj);
+        budgetToJSON(pbudgetProposal, bObj, nCurrentHeight);
         ret.push_back(bObj);
         return ret;
     }
@@ -649,7 +647,7 @@ UniValue getbudgetinfo(const JSONRPCRequest& request)
         if (strShow == "valid" && !pbudgetProposal->IsValid()) continue;
 
         UniValue bObj(UniValue::VOBJ);
-        budgetToJSON(pbudgetProposal, bObj);
+        budgetToJSON(pbudgetProposal, bObj, nCurrentHeight);
 
         ret.push_back(bObj);
     }

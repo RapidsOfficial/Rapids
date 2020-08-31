@@ -15,6 +15,7 @@
 #include "sync.h"
 #include "util.h"
 
+#include <atomic>
 #include <univalue.h>
 
 
@@ -226,6 +227,9 @@ private:
 
     void SetSynced(bool synced);
 
+    // Memory Only. Updated in ActivateBestChain
+    std::atomic<int> nBestHeight;
+
 public:
     // critical section to protect the inner data structures
     mutable RecursiveMutex cs;
@@ -268,6 +272,8 @@ public:
     void ResetSync() { SetSynced(false); }
     void MarkSynced() { SetSynced(true); }
     void Sync(CNode* node, const uint256& nProp, bool fPartial = false);
+    void SetBestHeight(int height) { nBestHeight.store(height, std::memory_order_release); };
+    int GetBestHeight() const { return nBestHeight.load(std::memory_order_acquire); }
 
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
     void NewBlock();
@@ -276,8 +282,8 @@ public:
     const CBudgetProposal* FindProposalByName(const std::string& strProposalName) const;
     CFinalizedBudget* FindFinalizedBudget(const uint256& nHash);
 
-    CAmount GetTotalBudget(int nHeight);
-    std::vector<CBudgetProposal*> GetBudget(int nHeight);
+    static CAmount GetTotalBudget(int nHeight);
+    std::vector<CBudgetProposal*> GetBudget();
     std::vector<CBudgetProposal*> GetAllProposals();
     std::vector<CFinalizedBudget*> GetFinalizedBudgets();
     bool IsBudgetPaymentBlock(int nBlockHeight);
@@ -289,7 +295,7 @@ public:
     bool UpdateFinalizedBudget(CFinalizedBudgetVote& vote, CNode* pfrom, std::string& strError);
     TrxValidationStatus IsTransactionValid(const CTransaction& txNew, int nBlockHeight);
     std::string GetRequiredPaymentsString(int nBlockHeight);
-    void FillBlockPayee(CMutableTransaction& txNew, const CBlockIndex* pindexPrev, bool fProofOfStake);
+    void FillBlockPayee(CMutableTransaction& txNew, bool fProofOfStake);
 
     void CheckOrphanVotes();
     void Clear()
@@ -390,7 +396,7 @@ public:
     void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
     // sets fValid and strInvalid, returns fValid
-    bool UpdateValid(bool fCheckCollateral = true);
+    bool UpdateValid(int nHeight, bool fCheckCollateral = true);
     bool IsValid() const  { return fValid; }
     std::string IsInvalidReason() const { return strInvalid; }
 
@@ -524,7 +530,7 @@ public:
     void SyncVotes(CNode* pfrom, bool fPartial, int& nInvCount) const;
 
     // sets fValid and strInvalid, returns fValid
-    bool UpdateValid(bool fCheckCollateral = true);
+    bool UpdateValid(int nHeight, bool fCheckCollateral = true);
     bool IsValid() const  { return fValid; }
     std::string IsInvalidReason() const { return strInvalid; }
 
@@ -537,9 +543,9 @@ public:
     int GetBlockEnd() const { return nBlockEnd; }
     CScript GetPayee() const { return address; }
     int GetTotalPaymentCount() const;
-    int GetRemainingPaymentCount() const;
+    int GetRemainingPaymentCount(int nCurrentHeight) const;
     int GetBlockStartCycle() const;
-    int GetBlockCurrentCycle() const;
+    static int GetBlockCycle(int nCurrentHeight);
     int GetBlockEndCycle() const;
     const uint256& GetFeeTXHash() const { return nFeeTXHash;  }
     double GetRatio() const;

@@ -11,6 +11,7 @@
 #include "consensus/upgrades.h"
 #include "kernel.h"
 #include "main.h"
+#include "masternode-budget.h"
 #include "policy/policy.h"
 #include "rpc/server.h"
 #include "sync.h"
@@ -1146,7 +1147,7 @@ UniValue invalidateblock(const JSONRPCRequest& request)
     }
 
     if (state.IsValid()) {
-        ActivateBestChain(state, nullptr, false, g_connman.get());
+        ActivateBestChain(state, nullptr, false, g_connman.get(), &budget);
     }
 
     if (!state.IsValid()) {
@@ -1184,7 +1185,7 @@ UniValue reconsiderblock(const JSONRPCRequest& request)
     }
 
     if (state.IsValid()) {
-        ActivateBestChain(state, nullptr, false, g_connman.get());
+        ActivateBestChain(state, nullptr, false, g_connman.get(), &budget);
     }
 
     if (!state.IsValid()) {
