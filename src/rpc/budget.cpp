@@ -571,7 +571,11 @@ UniValue getbudgetprojection(const JSONRPCRequest& request)
     UniValue resultObj(UniValue::VOBJ);
     CAmount nTotalAllotted = 0;
 
-    std::vector<CBudgetProposal*> winningProps = budget.GetBudget();
+    int nCurrentHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
+    if (nCurrentHeight <= 0)
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Unable to get chain tip. No blocks yet.");
+
+    std::vector<CBudgetProposal*> winningProps = budget.GetBudget(nCurrentHeight);
     for (CBudgetProposal* pbudgetProposal : winningProps) {
         nTotalAllotted += pbudgetProposal->GetAllotted();
 

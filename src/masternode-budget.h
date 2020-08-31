@@ -277,7 +277,7 @@ public:
     CFinalizedBudget* FindFinalizedBudget(const uint256& nHash);
 
     CAmount GetTotalBudget(int nHeight);
-    std::vector<CBudgetProposal*> GetBudget();
+    std::vector<CBudgetProposal*> GetBudget(int nHeight);
     std::vector<CBudgetProposal*> GetAllProposals();
     std::vector<CFinalizedBudget*> GetFinalizedBudgets();
     bool IsBudgetPaymentBlock(int nBlockHeight);
@@ -529,7 +529,7 @@ public:
     std::string IsInvalidReason() const { return strInvalid; }
 
     bool IsEstablished() const;
-    bool IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount) const;
+    bool IsPassing(int nBlockStartBudget, int nBlockEndBudget, int mnCount) const;
 
     std::string GetName() const { return strProposalName; }
     std::string GetURL() const { return strURL; }

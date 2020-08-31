@@ -175,7 +175,7 @@ void CBudgetManager::SubmitFinalBudget()
         return;
     }
 
-    std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget();
+    std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget(nCurrentHeight);
     std::string strBudgetName = "main";
     std::vector<CTxBudgetPayment> vecTxBudgetPayments;
 
@@ -712,7 +712,7 @@ std::vector<CBudgetProposal*> CBudgetManager::GetAllProposals()
 }
 
 //Need to review this function
-std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
+std::vector<CBudgetProposal*> CBudgetManager::GetBudget(int nHeight)
 {
     LOCK(cs);
 
@@ -727,11 +727,9 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
     // ------- Grab The Budgets In Order
     std::vector<CBudgetProposal*> vBudgetProposalsRet;
     CAmount nBudgetAllocated = 0;
-    const CBlockIndex* pindexPrev = GetChainTip();
-    if (!pindexPrev) return vBudgetProposalsRet;
 
     const int nBlocksPerCycle = Params().GetConsensus().nBudgetCycleBlocks;
-    int nBlockStart = pindexPrev->nHeight - pindexPrev->nHeight % nBlocksPerCycle + nBlocksPerCycle;
+    int nBlockStart = nHeight - nHeight % nBlocksPerCycle + nBlocksPerCycle;
     int nBlockEnd = nBlockStart + nBlocksPerCycle - 1;
     int mnCount = mnodeman.CountEnabled(ActiveProtocol());
     CAmount nTotalBudget = GetTotalBudget(nBlockStart);
@@ -739,7 +737,7 @@ std::vector<CBudgetProposal*> CBudgetManager::GetBudget()
     for (CBudgetProposal* pbudgetProposal: vBudgetPorposalsSort) {
         LogPrint(BCLog::MNBUDGET,"%s: Processing Budget %s\n", __func__, pbudgetProposal->GetName());
         //prop start/end should be inside this period
-        if (pbudgetProposal->IsPassing(pindexPrev, nBlockStart, nBlockEnd, mnCount)) {
+        if (pbudgetProposal->IsPassing(nBlockStart, nBlockEnd, mnCount)) {
             LogPrint(BCLog::MNBUDGET,"%s:  -   Check 1 passed: valid=%d | %ld <= %ld | %ld >= %ld | Yeas=%d Nays=%d Count=%d | established=%d\n",
                     __func__, pbudgetProposal->IsValid(), pbudgetProposal->GetBlockStart(), nBlockStart, pbudgetProposal->GetBlockEnd(),
                     nBlockEnd, pbudgetProposal->GetYeas(), pbudgetProposal->GetNays(), mnCount / 10, pbudgetProposal->IsEstablished());
@@ -1476,12 +1474,9 @@ bool CBudgetProposal::IsEstablished() const
     return nTime < GetAdjustedTime() - Params().GetConsensus().nProposalEstablishmentTime;
 }
 
-bool CBudgetProposal::IsPassing(const CBlockIndex* pindexPrev, int nBlockStartBudget, int nBlockEndBudget, int mnCount) const
+bool CBudgetProposal::IsPassing(int nBlockStartBudget, int nBlockEndBudget, int mnCount) const
 {
     if (!fValid)
-        return false;
-
-    if (!pindexPrev)
         return false;
 
     if (this->nBlockStart > nBlockStartBudget)
@@ -1825,10 +1820,10 @@ void CFinalizedBudget::CheckAndVote()
 {
     LOCK(cs);
 
-    CBlockIndex* pindexPrev = chainActive.Tip();
-    if (!pindexPrev) return;
+    int nCurrentHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
+    if (nCurrentHeight <= 0) return;
 
-    LogPrint(BCLog::MNBUDGET,"%s: %lli - %d\n", __func__, pindexPrev->nHeight, fAutoChecked);
+    LogPrint(BCLog::MNBUDGET,"%s: %lli - %d\n", __func__, nCurrentHeight, fAutoChecked);
 
     if (!fMasterNode || fAutoChecked) {
         LogPrint(BCLog::MNBUDGET,"%s: fMasterNode=%d fAutoChecked=%d\n", __func__, fMasterNode, fAutoChecked);
@@ -1851,7 +1846,7 @@ void CFinalizedBudget::CheckAndVote()
 
     if (strBudgetMode == "auto") //only vote for exact matches
     {
-        std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget();
+        std::vector<CBudgetProposal*> vBudgetProposals = budget.GetBudget(nCurrentHeight);
 
         // We have to resort the proposals by hash (they are sorted by votes here) and sort the payments
         // by hash (they are not sorted at all) to make the following tests deterministic
