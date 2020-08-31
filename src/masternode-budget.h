@@ -227,7 +227,7 @@ private:
 
     void SetSynced(bool synced);
 
-    // Memory Only. Updated in ActivateBestChain
+    // Memory Only. Updated in NewBlock (blocks arrive in order)
     std::atomic<int> nBestHeight;
 
 public:
@@ -276,7 +276,7 @@ public:
     int GetBestHeight() const { return nBestHeight.load(std::memory_order_acquire); }
 
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
-    void NewBlock();
+    void NewBlock(int height);
     CBudgetProposal* FindProposal(const uint256& nHash);
     // finds the proposal with the given name, with highest net yes count.
     const CBudgetProposal* FindProposalByName(const std::string& strProposalName) const;
