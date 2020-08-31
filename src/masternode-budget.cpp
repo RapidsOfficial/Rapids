@@ -458,20 +458,12 @@ bool CBudgetManager::AddProposal(CBudgetProposal& budgetProposal)
 
 void CBudgetManager::CheckAndRemove()
 {
-    int nHeight = WITH_LOCK(cs_main, return chainActive.Height());
-    if (nHeight <= 0) return;
-
-    LogPrint(BCLog::MNBUDGET, "%s: Height=%d\n", __func__, nHeight);
-
     std::map<uint256, CFinalizedBudget> tmpMapFinalizedBudgets;
     std::map<uint256, CBudgetProposal> tmpMapProposals;
 
-    std::string strError = "";
-
     LogPrint(BCLog::MNBUDGET, "%s: mapFinalizedBudgets cleanup - size before: %d\n", __func__, mapFinalizedBudgets.size());
-    auto it = mapFinalizedBudgets.begin();
-    while (it != mapFinalizedBudgets.end()) {
-        CFinalizedBudget* pfinalizedBudget = &((*it).second);
+    for (auto& it: mapFinalizedBudgets) {
+        CFinalizedBudget* pfinalizedBudget = &(it.second);
         if (!pfinalizedBudget->UpdateValid()) {
             LogPrint(BCLog::MNBUDGET,"%s: Invalid finalized budget: %s\n", __func__, pfinalizedBudget->IsInvalidReason());
         } else {
@@ -480,13 +472,11 @@ void CBudgetManager::CheckAndRemove()
             pfinalizedBudget->CheckAndVote();
             tmpMapFinalizedBudgets.insert(std::make_pair(pfinalizedBudget->GetHash(), *pfinalizedBudget));
         }
-        ++it;
     }
 
     LogPrint(BCLog::MNBUDGET, "%s: mapProposals cleanup - size before: %d\n", __func__, mapProposals.size());
-    auto it2 = mapProposals.begin();
-    while (it2 != mapProposals.end()) {
-        CBudgetProposal* pbudgetProposal = &((*it2).second);
+    for (auto& it: mapProposals) {
+        CBudgetProposal* pbudgetProposal = &(it.second);
         if (!pbudgetProposal->UpdateValid()) {
             LogPrint(BCLog::MNBUDGET,"%s: Invalid budget proposal - %s\n", __func__, pbudgetProposal->IsInvalidReason());
         } else {
@@ -494,15 +484,11 @@ void CBudgetManager::CheckAndRemove()
                       pbudgetProposal->GetName(), pbudgetProposal->GetFeeTXHash().ToString());
              tmpMapProposals.insert(std::make_pair(pbudgetProposal->GetHash(), *pbudgetProposal));
         }
-        ++it2;
     }
+
     // Remove invalid entries by overwriting complete map
     mapFinalizedBudgets.swap(tmpMapFinalizedBudgets);
     mapProposals.swap(tmpMapProposals);
-
-    // clang doesn't accept copy assignemnts :-/
-    // mapFinalizedBudgets = tmpMapFinalizedBudgets;
-    // mapProposals = tmpMapProposals;
 
     LogPrint(BCLog::MNBUDGET, "%s: mapFinalizedBudgets cleanup - size after: %d\n", __func__, mapFinalizedBudgets.size());
     LogPrint(BCLog::MNBUDGET, "%s: mapProposals cleanup - size after: %d\n", __func__, mapProposals.size());
@@ -1491,7 +1477,7 @@ bool CBudgetProposal::UpdateValid(bool fCheckCollateral)
     }
 
     fValid = true;
-    strInvalid = "";
+    strInvalid.clear();
     return true;
 }
 
@@ -2104,7 +2090,7 @@ bool CFinalizedBudget::UpdateValid(bool fCheckCollateral)
     }
 
     fValid = true;
-    strInvalid = "";
+    strInvalid.clear();
     return true;
 }
 

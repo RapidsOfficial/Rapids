@@ -894,7 +894,9 @@ UniValue checkbudgets(const JSONRPCRequest& request)
             "\nExamples:\n" +
             HelpExampleCli("checkbudgets", "") + HelpExampleRpc("checkbudgets", ""));
 
-    budget.CheckAndRemove();
+    if (!masternodeSync.IsSynced())
+        throw JSONRPCError(RPC_CLIENT_IN_INITIAL_DOWNLOAD, "Masternode/Budget sync not finished yet");
 
+    budget.CheckAndRemove();
     return NullUniValue;
 }
