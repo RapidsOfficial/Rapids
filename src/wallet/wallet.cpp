@@ -1814,10 +1814,17 @@ CAmount CWallet::loopTxsBalance(std::function<void(const uint256&, const CWallet
 
 CAmount CWallet::GetAvailableBalance(bool fIncludeDelegated) const
 {
-    isminetype filter = fIncludeDelegated ? ISMINE_SPENDABLE_ALL : ISMINE_SPENDABLE;
-    return loopTxsBalance([filter](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
-        if (pcoin.IsTrusted()) {
-            nTotal += pcoin.GetAvailableCredit(true, filter);
+    isminefilter filter = fIncludeDelegated ? ISMINE_SPENDABLE_ALL : ISMINE_SPENDABLE;
+    return GetAvailableBalance(filter, true, 0);
+}
+
+CAmount CWallet::GetAvailableBalance(isminefilter& filter, bool useCache, int minDepth) const
+{
+    return loopTxsBalance([filter, useCache, minDepth](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
+        bool fConflicted;
+        int depth;
+        if (pcoin.IsTrusted(depth, fConflicted) && depth >= minDepth) {
+            nTotal += pcoin.GetAvailableCredit(useCache, filter);
         }
     });
 }
