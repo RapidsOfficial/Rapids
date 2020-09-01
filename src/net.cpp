@@ -466,11 +466,11 @@ void CNode::CloseSocketDisconnect()
     }
 }
 
-bool CNode::DisconnectOldProtocol(int nVersionRequired, std::string strLastCommand)
+bool CNode::DisconnectOldProtocol(int nVersionIn, int nVersionRequired, std::string strLastCommand)
 {
     fDisconnect = false;
-    if (nVersion < nVersionRequired) {
-        LogPrintf("%s : peer=%d using obsolete version %i; disconnecting\n", __func__, id, nVersion);
+    if (nVersionIn < nVersionRequired) {
+        LogPrintf("%s : peer=%d using obsolete version %i; disconnecting\n", __func__, id, nVersionIn);
         g_connman->PushMessage(this, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::REJECT, strLastCommand, REJECT_OBSOLETE, strprintf("Version must be %d or greater", ActiveProtocol())));
         fDisconnect = true;
     }

@@ -5289,7 +5289,8 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         CAddress addrFrom;
         uint64_t nNonce = 1;
         uint64_t nServiceInt;
-        vRecv >> pfrom->nVersion >> nServiceInt >> nTime >> addrMe;
+        int nVersion;
+        vRecv >> nVersion >> nServiceInt >> nTime >> addrMe;
         pfrom->nServices = ServiceFlags(nServiceInt);
         if (!pfrom->fInbound) {
             connman.SetServices(pfrom->addr, pfrom->nServices);
@@ -5302,11 +5303,11 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             return false;
         }
 
-        if (pfrom->DisconnectOldProtocol(ActiveProtocol(), strCommand))
+        if (pfrom->DisconnectOldProtocol(nVersion, ActiveProtocol(), strCommand))
             return false;
 
-        if (pfrom->nVersion == 10300)
-            pfrom->nVersion = 300;
+        if (nVersion == 10300)
+            nVersion = 300;
         if (!vRecv.empty())
             vRecv >> addrFrom >> nNonce;
         if (!vRecv.empty()) {
@@ -5360,7 +5361,8 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         }
         // Change version
         connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::VERACK));
-        int nSendVersion = std::min(pfrom->nVersion, PROTOCOL_VERSION);
+        int nSendVersion = std::min(nVersion, PROTOCOL_VERSION);
+        pfrom->nVersion = nVersion;
         pfrom->SetSendVersion(nSendVersion);
 
         if (!pfrom->fInbound) {
@@ -5854,7 +5856,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                     }
                 }
                 //disconnect this node if its old protocol version
-                pfrom->DisconnectOldProtocol(ActiveProtocol(), strCommand);
+                pfrom->DisconnectOldProtocol(pfrom->nVersion, ActiveProtocol(), strCommand);
             } else {
                 LogPrint(BCLog::NET, "%s : Already processed block %s, skipping ProcessNewBlock()\n", __func__, block.GetHash().GetHex());
             }
