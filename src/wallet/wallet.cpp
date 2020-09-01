@@ -912,7 +912,7 @@ bool CWallet::AddToWallet(const CWalletTx& wtxIn, bool fFlushOnClose)
 
 bool CWallet::LoadToWallet(const CWalletTx& wtxIn)
 {
-    uint256 hash = wtxIn.GetHash();
+    const uint256& hash = wtxIn.GetHash();
     mapWallet[hash] = wtxIn;
     CWalletTx& wtx = mapWallet[hash];
     wtx.BindWallet(this);
@@ -1251,13 +1251,17 @@ int CWalletTx::GetRequestCount() const
     return nRequests;
 }
 
-CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate, bool fUnspent) const
+CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate) const
 {
     auto& amount = m_amounts[type];
     if (recalculate || !amount.m_cached[filter]) {
-        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter, fUnspent));
+        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter));
     }
     return amount.m_value[filter];
+}
+
+bool CWalletTx::IsAmountCached(AmountType type, const isminefilter& filter) const {
+    return m_amounts[type].m_cached[filter];
 }
 
 //! filter decides which addresses will count towards the debit
@@ -1292,30 +1296,21 @@ CAmount CWalletTx::GetStakeDelegationDebit(bool fUseCache) const
     return GetCachableAmount(DEBIT, ISMINE_SPENDABLE_DELEGATED, !fUseCache);
 }
 
-CAmount CWalletTx::GetUnspentCredit(const isminefilter& filter) const
-{
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (GetBlocksToMaturity() > 0)
-        return 0;
-
-    return GetCredit(filter, false, true);
-}
-
-CAmount CWalletTx::GetCredit(const isminefilter& filter, bool recalculate, bool fUnspent) const
+CAmount CWalletTx::GetCredit(const isminefilter& filter, bool recalculate) const
 {
     CAmount credit = 0;
     if (filter & ISMINE_SPENDABLE) {
         // GetBalance can assume transactions in mapWallet won't change
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE, recalculate);
     }
     if (filter & ISMINE_WATCH_ONLY) {
-        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_WATCH_ONLY, recalculate);
     }
     if (filter & ISMINE_COLD) {
-        credit += GetCachableAmount(CREDIT, ISMINE_COLD, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_COLD, recalculate);
     }
     if (filter & ISMINE_SPENDABLE_DELEGATED) {
-        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED, recalculate, fUnspent);
+        credit += GetCachableAmount(CREDIT, ISMINE_SPENDABLE_DELEGATED, recalculate);
     }
     return credit;
 }
@@ -1330,19 +1325,48 @@ CAmount CWalletTx::GetImmatureCredit(bool fUseCache, const isminefilter& filter)
     return 0;
 }
 
-CAmount CWalletTx::GetAvailableCredit(bool fUseCache) const
+CAmount CWalletTx::GetAvailableCredit(bool fUseCache, const isminefilter& filter) const
 {
-    return GetUnspentCredit(ISMINE_SPENDABLE_ALL);
+    if (!pwallet)
+        return 0;
+
+    // Avoid caching ismine for NO or ALL cases (could remove this check and simplify in the future).
+    bool allow_cache = filter == ISMINE_SPENDABLE || filter == ISMINE_WATCH_ONLY;
+
+    // Must wait until coinbase/coinstake is safely deep enough in the chain before valuing it
+    if (GetBlocksToMaturity() > 0)
+        return 0;
+
+    if (fUseCache && allow_cache && m_amounts[AVAILABLE_CREDIT].m_cached[filter]) {
+        return m_amounts[AVAILABLE_CREDIT].m_value[filter];
+    }
+
+    CAmount nCredit = 0;
+    const uint256& hashTx = GetHash();
+    for (unsigned int i = 0; i < vout.size(); i++) {
+        if (!pwallet->IsSpent(hashTx, i)) {
+            const CTxOut &txout = vout[i];
+            nCredit += pwallet->GetCredit(txout, filter);
+            if (!Params().GetConsensus().MoneyRange(nCredit))
+                throw std::runtime_error(std::string(__func__) + " : value out of range");
+        }
+    }
+
+    if (allow_cache) {
+        m_amounts[AVAILABLE_CREDIT].Set(filter, nCredit);
+    }
+
+    return nCredit;
 }
 
 CAmount CWalletTx::GetColdStakingCredit(bool fUseCache) const
 {
-    return GetUnspentCredit(ISMINE_COLD);
+    return GetAvailableCredit(fUseCache, ISMINE_COLD);
 }
 
 CAmount CWalletTx::GetStakeDelegationCredit(bool fUseCache) const
 {
-    return GetUnspentCredit(ISMINE_SPENDABLE_DELEGATED);
+    return GetAvailableCredit(fUseCache, ISMINE_SPENDABLE_DELEGATED);
 }
 
 // Return sum of unlocked coins
@@ -1418,14 +1442,7 @@ CAmount CWalletTx::GetImmatureWatchOnlyCredit(const bool& fUseCache) const
 
 CAmount CWalletTx::GetAvailableWatchOnlyCredit(const bool& fUseCache) const
 {
-    if (pwallet == 0)
-        return 0;
-
-    // Must wait until coinbase is safely deep enough in the chain before valuing it
-    if (IsCoinBase() && GetBlocksToMaturity() > 0)
-        return 0;
-
-    return GetCachableAmount(AVAILABLE_CREDIT, ISMINE_WATCH_ONLY, !fUseCache);
+    return GetAvailableCredit(fUseCache, ISMINE_WATCH_ONLY);
 }
 
 CAmount CWalletTx::GetLockedWatchOnlyCredit() const
@@ -1795,12 +1812,12 @@ CAmount CWallet::loopTxsBalance(std::function<void(const uint256&, const CWallet
     return nTotal;
 }
 
-CAmount CWallet::GetBalance(bool fIncludeDelegated) const
+CAmount CWallet::GetAvailableBalance(bool fIncludeDelegated) const
 {
-    return loopTxsBalance([fIncludeDelegated](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
+    isminetype filter = fIncludeDelegated ? ISMINE_SPENDABLE_ALL : ISMINE_SPENDABLE;
+    return loopTxsBalance([filter](const uint256& id, const CWalletTx& pcoin, CAmount& nTotal){
         if (pcoin.IsTrusted()) {
-            nTotal += pcoin.GetAvailableCredit();
-            if (!fIncludeDelegated) nTotal -= pcoin.GetStakeDelegationCredit();
+            nTotal += pcoin.GetAvailableCredit(true, filter);
         }
     });
 }
@@ -4135,13 +4152,11 @@ int CMerkleTx::GetDepthInMainChain(const CBlockIndex*& pindexRet, bool enableIX)
     BlockMap::iterator mi = mapBlockIndex.find(hashBlock);
     if (mi == mapBlockIndex.end()) {
         nResult = 0;
-    }
-    else {
+    } else {
         CBlockIndex* pindex = (*mi).second;
         if (!pindex || !chainActive.Contains(pindex)) {
             nResult = 0;
-        }
-        else {
+        } else {
             pindexRet = pindex;
             nResult = ((nIndex == -1) ? (-1) : 1) * (chainActive.Height() - pindex->nHeight + 1);
         }
@@ -4350,11 +4365,10 @@ CAmount CWallet::GetDebit(const CTransaction& tx, const isminefilter& filter) co
     return nDebit;
 }
 
-CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter, const bool fUnspent) const
+CAmount CWallet::GetCredit(const CTransaction& tx, const isminefilter& filter) const
 {
     CAmount nCredit = 0;
     for (unsigned int i = 0; i < tx.vout.size(); i++) {
-        if (fUnspent && IsSpent(tx.GetHash(), i)) continue;
         nCredit += GetCredit(tx.vout[i], filter);
     }
     if (!Params().GetConsensus().MoneyRange(nCredit))

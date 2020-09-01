@@ -4,6 +4,7 @@
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
 #include "wallet/wallet.h"
+#include "consensus/merkle.h"
 
 #include <set>
 #include <stdint.h>
@@ -300,6 +301,173 @@ BOOST_AUTO_TEST_CASE(coin_selection_tests)
         }
     }
     empty_wallet();
+}
+
+void removeTxFromMempool(CWalletTx& wtx)
+{
+    LOCK(mempool.cs);
+    if (mempool.exists(wtx.GetHash())) {
+        auto it = mempool.mapTx.find(wtx.GetHash());
+        if (it != mempool.mapTx.end()) {
+            mempool.mapTx.erase(it);
+        }
+    }
+}
+
+/**
+ * Mimic block creation.
+ */
+CBlockIndex* SimpleFakeMine(CWalletTx& wtx, CBlockIndex* pprev = nullptr)
+{
+    CBlock block;
+    block.vtx.push_back(wtx);
+    block.hashMerkleRoot = BlockMerkleRoot(block);
+    if (pprev) block.hashPrevBlock = pprev->GetBlockHash();
+    CBlockIndex* fakeIndex = new CBlockIndex(block);
+    fakeIndex->pprev = pprev;
+    mapBlockIndex.insert(std::make_pair(block.GetHash(), fakeIndex));
+    fakeIndex->phashBlock = &mapBlockIndex.find(block.GetHash())->first;
+    chainActive.SetTip(fakeIndex);
+    BOOST_CHECK(chainActive.Contains(fakeIndex));
+    wtx.SetMerkleBranch(fakeIndex, 0);
+    removeTxFromMempool(wtx);
+    return fakeIndex;
+}
+
+void fakeMempoolInsertion(const CWalletTx& wtxCredit)
+{
+    CTxMemPoolEntry entry(wtxCredit, 0, 0, 0, 0, false, 0, false, 0);
+    LOCK(mempool.cs);
+    mempool.mapTx.insert(entry);
+}
+
+CWalletTx& BuildAndLoadTxToWallet(const std::vector<CTxIn>& vin,
+                                  const std::vector<CTxOut>& vout,
+                                  CWallet& wallet)
+{
+    CMutableTransaction mTx;
+    mTx.vin = vin;
+    mTx.vout = vout;
+    CTransaction tx(mTx);
+    wallet.LoadToWallet({&wallet, tx});
+    return wallet.mapWallet[tx.GetHash()];
+}
+
+CWalletTx& ReceiveBalanceWith(const std::vector<CTxOut>& vout,
+                          CWallet& wallet)
+{
+    std::vector<CTxIn> vin;
+    vin.emplace_back(CTxIn(COutPoint(uint256(), 999)));
+    return BuildAndLoadTxToWallet(vin, vout, wallet);
+}
+
+void CheckBalances(const CWalletTx& tx,
+                   const CAmount& nCreditAll,
+                   const CAmount& nCreditSpendable,
+                   const CAmount& nAvailableCredit,
+                   const CAmount& nDebitAll,
+                   const CAmount& nDebitSpendable)
+{
+    BOOST_CHECK_EQUAL(tx.GetCredit(ISMINE_ALL), nCreditAll);
+    BOOST_CHECK_EQUAL(tx.GetCredit(ISMINE_SPENDABLE), nCreditSpendable);
+    BOOST_CHECK(tx.IsAmountCached(CWalletTx::CREDIT, ISMINE_SPENDABLE));
+    BOOST_CHECK_EQUAL(tx.GetAvailableCredit(), nAvailableCredit);
+    BOOST_CHECK(tx.IsAmountCached(CWalletTx::AVAILABLE_CREDIT, ISMINE_SPENDABLE));
+    BOOST_CHECK_EQUAL(tx.GetDebit(ISMINE_ALL), nDebitAll);
+    BOOST_CHECK_EQUAL(tx.GetDebit(ISMINE_SPENDABLE), nDebitSpendable);
+    BOOST_CHECK(tx.IsAmountCached(CWalletTx::DEBIT, ISMINE_SPENDABLE));
+}
+
+/**
+ * Validates the correct behaviour of the CWalletTx "standard" balance methods.
+ * (where "standard" is defined by direct P2PKH scripts, no P2CS contracts nor other types)
+ *
+ * 1) CWalletTx::GetCredit.
+ * 2) CWalletTx::GetDebit.
+ * 4) CWalletTx::GetAvailableCredit
+ * 3) CWallet::GetUnconfirmedBalance.
+ */
+BOOST_AUTO_TEST_CASE(cached_balances_tests)
+{
+    // 1) Receive balance from an external source and verify:
+    // * GetCredit(ISMINE_ALL) correctness (must be equal to 'nCredit' amount)
+    // * GetCredit(ISMINE_SPENDABLE) correctness (must be equal to ISMINE_ALL) + must be cached.
+    // * GetAvailableCredit() correctness (must be equal to ISMINE_ALL)
+    // * GetDebit(ISMINE_ALL) correctness (must be 0)
+    // * wallet.GetUnconfirmedBalance() correctness (must be equal 'nCredit')
+
+    // 2) Confirm the tx and verify:
+    // * wallet.GetUnconfirmedBalance() correctness (must be 0)
+    // * GetAvailableCredit() correctness (must be equal to (1) ISMINE_ALL)
+
+    // 3) Spend one of the two outputs of the receiving tx to an external source
+    // and verify:
+    // * creditTx.GetAvailableCredit() correctness (must be equal to 'nCredit' / 2) + must be cached.
+    // * debitTx.GetDebit(ISMINE_ALL) correctness (must be equal to 'nCredit' / 2)
+    // * debitTx.GetDebit(ISMINE_SPENDABLE) correctness (must be equal to 'nCredit' / 2) + must be cached.
+    // * debitTx.GetAvailableCredit() correctness (must be 0).
+
+    CAmount nCredit = 20 * COIN;
+
+    // Setup wallet
+    CWallet &wallet = *pwalletMain;
+    LOCK2(cs_main, wallet.cs_wallet);
+    wallet.SetMinVersion(FEATURE_PRE_SPLIT_KEYPOOL);
+    wallet.SetupSPKM(false);
+
+    // Receive balance from an external source
+    CTxDestination receivingAddr;
+    BOOST_ASSERT(wallet.getNewAddress(receivingAddr, "receiving_address").result);
+    CTxOut creditOut(nCredit/2, GetScriptForDestination(receivingAddr));
+    CWalletTx& wtxCredit = ReceiveBalanceWith({creditOut, creditOut},wallet);
+
+    // Validates (1)
+    CheckBalances(
+            wtxCredit,
+            nCredit,            // CREDIT-ISMINE_ALL
+            nCredit,            // CREDIT-ISMINE_SPENDABLE
+            nCredit,            // AVAILABLE_CREDIT
+            0,                  // DEBIT-ISMINE_ALL
+            0                   // DEBIT-ISMINE_SPENDABLE
+    );
+
+    // GetUnconfirmedBalance requires tx in mempool.
+    fakeMempoolInsertion(wtxCredit);
+    BOOST_CHECK_EQUAL(wallet.GetUnconfirmedBalance(), nCredit);
+
+    // 2) Confirm tx and verify
+    SimpleFakeMine(wtxCredit);
+    BOOST_CHECK_EQUAL(wallet.GetUnconfirmedBalance(), 0);
+    BOOST_CHECK_EQUAL(wtxCredit.GetAvailableCredit(), nCredit);
+
+    // 3) Spend one of the two outputs of the receiving tx to an external source and verify.
+    // Create debit transaction.
+    CAmount nDebit = nCredit / 2;
+    std::vector<CTxIn> vinDebit = {CTxIn(COutPoint(wtxCredit.GetHash(), 0))};
+    CKey key;
+    key.MakeNewKey(true);
+    std::vector<CTxOut> voutDebit = {CTxOut(nDebit, GetScriptForDestination(key.GetPubKey().GetID()))};
+    CWalletTx& wtxDebit = BuildAndLoadTxToWallet(vinDebit, voutDebit, wallet);
+
+    // Validates (3)
+
+    // First the debit tx
+    CheckBalances(
+            wtxDebit,
+            0,                   // CREDIT-ISMINE_ALL
+            0,                   // CREDIT-ISMINE_SPENDABLE
+            0,                   // AVAILABLE_CREDIT
+            nDebit,              // DEBIT-ISMINE_ALL
+            nDebit               // DEBIT-ISMINE_SPENDABLE
+    );
+
+    // Secondly the prev credit tx update
+
+    // One output spent, the other one not. Force available credit recalculation.
+    // If we don't request it, it will not happen.
+    BOOST_CHECK_EQUAL(wtxCredit.GetAvailableCredit(false), nCredit - nDebit);
+    BOOST_CHECK(wtxCredit.IsAmountCached(CWalletTx::AVAILABLE_CREDIT, ISMINE_SPENDABLE));
+
 }
 
 BOOST_AUTO_TEST_SUITE_END()
