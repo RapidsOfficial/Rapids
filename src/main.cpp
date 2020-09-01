@@ -5370,7 +5370,6 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         // Change version
         pfrom->SetSendVersion(nSendVersion);
         pfrom->nVersion = nVersion;
-        pfrom->fSuccessfullyConnected = true;
 
         {
             LOCK(cs_main);
@@ -5449,6 +5448,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             LOCK(cs_main);
             State(pfrom->GetId())->fCurrentlyConnected = true;
         }
+        pfrom->fSuccessfullyConnected = true;
     }
 
 
@@ -6216,8 +6216,8 @@ bool ProcessMessages(CNode* pfrom, CConnman& connman, std::atomic<bool>& interru
 bool SendMessages(CNode* pto, CConnman& connman, std::atomic<bool>& interruptMsgProc)
 {
     {
-        // Don't send anything until we get its version message
-        if (pto->nVersion == 0 || pto->fDisconnect)
+        // Don't send anything until the version handshake is complete
+        if (!pto->fSuccessfullyConnected || pto->fDisconnect)
             return true;
 
         // If we get here, the outgoing message serialization version is set and can't change.
