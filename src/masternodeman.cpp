@@ -17,6 +17,7 @@
 #include "swifttx.h"
 #include "util.h"
 
+#include <boost/thread/thread.hpp>
 
 #define MN_WINNER_MINIMUM_AGE 8000    // Age in seconds. This should be > MASTERNODE_REMOVAL_SECONDS to avoid misconfigured new nodes in the list.
 
@@ -868,24 +869,33 @@ void ThreadCheckMasternodes()
 
     unsigned int c = 0;
 
-    while (true) {
-        MilliSleep(1000);
+    try {
+        while (true) {
 
-        // try to sync from all available nodes, one step at a time
-        masternodeSync.Process();
+            if (ShutdownRequested()) {
+                break;
+            }
 
-        if (masternodeSync.IsBlockchainSynced()) {
-            c++;
+            MilliSleep(1000);
+            boost::this_thread::interruption_point();
+            // try to sync from all available nodes, one step at a time
+            masternodeSync.Process();
 
-            // check if we should activate or ping every few minutes,
-            // start right after sync is considered to be done
-            if (c % MASTERNODE_PING_SECONDS == 1) activeMasternode.ManageStatus();
+            if (masternodeSync.IsBlockchainSynced()) {
+                c++;
 
-            if (c % 60 == 0) {
-                mnodeman.CheckAndRemove();
-                masternodePayments.CleanPaymentList();
-                CleanTransactionLocksList();
+                // check if we should activate or ping every few minutes,
+                // start right after sync is considered to be done
+                if (c % MASTERNODE_PING_SECONDS == 1) activeMasternode.ManageStatus();
+
+                if (c % 60 == 0) {
+                    mnodeman.CheckAndRemove();
+                    masternodePayments.CleanPaymentList();
+                    CleanTransactionLocksList();
+                }
             }
         }
+    } catch (boost::thread_interrupted&) {
+        // nothing, thread interrupted.
     }
 }
