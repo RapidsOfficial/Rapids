@@ -5359,7 +5359,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
         connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::VERACK));
 
         pfrom->nServices = nServices;
-        pfrom->addrLocal = addrMe;
+        pfrom->SetAddrLocal(addrMe);
         {
             LOCK(pfrom->cs_SubVer);
             pfrom->strSubVer = strSubVer;
@@ -5391,7 +5391,7 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
                     LogPrintf("ProcessMessages: advertising address %s\n", addr.ToString());
                     pfrom->PushAddress(addr, insecure_rand);
                 } else if (IsPeerAddrLocalGood(pfrom)) {
-                    addr.SetIP(pfrom->addrLocal);
+                    addr.SetIP(addrMe);
                     LogPrintf("ProcessMessages: advertising address %s\n", addr.ToString());
                     pfrom->PushAddress(addr, insecure_rand);
                 }
