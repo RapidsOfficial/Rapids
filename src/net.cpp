@@ -659,7 +659,10 @@ void CNode::copyStats(CNodeStats& stats)
     X(nTimeOffset);
     X(addrName);
     X(nVersion);
-    X(cleanSubVer);
+    {
+        LOCK(cs_SubVer);
+        X(cleanSubVer);
+    }
     X(fInbound);
     X(nStartingHeight);
     {
