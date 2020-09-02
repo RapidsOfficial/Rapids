@@ -285,6 +285,12 @@ public:
      */
     double GetPriority(const CTransaction& tx, int nHeight, CAmount &inChainInputValue) const;
 
+    /*
+     * Return the depth of a coin at height nHeight, or -1 if not found
+     */
+    int GetCoinDepthAtHeight(const COutPoint& output, int nHeight) const;
+
+
 private:
     CCoinsMap::iterator FetchCoin(const COutPoint& outpoint) const;
 
