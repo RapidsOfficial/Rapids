@@ -592,6 +592,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     tx.vin.push_back(vin);
     tx.vout.push_back(vout);
 
+    int nChainHeight = 0;
     {
         TRY_LOCK(cs_main, lockMain);
         if (!lockMain) {
@@ -606,11 +607,13 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             state.IsInvalid(nDoS);
             return false;
         }
+
+        nChainHeight = chainActive.Height();
     }
 
     LogPrint(BCLog::MASTERNODE, "mnb - Accepted Masternode entry\n");
 
-    if (GetInputAge(vin) < MASTERNODE_MIN_CONFIRMATIONS) {
+    if (pcoinsTip->GetCoinDepthAtHeight(vin.prevout, nChainHeight) < MASTERNODE_MIN_CONFIRMATIONS) {
         LogPrint(BCLog::MASTERNODE,"mnb - Input must have at least %d confirmations\n", MASTERNODE_MIN_CONFIRMATIONS);
         // maybe we miss few blocks, let this mnb to be checked again later
         mnodeman.mapSeenMasternodeBroadcast.erase(GetHash());

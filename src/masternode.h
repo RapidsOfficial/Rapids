@@ -255,7 +255,7 @@ public:
         if (tipHeight < 0) return 0;
 
         if (cacheInputAge == 0) {
-            cacheInputAge = GetInputAge(vin);
+            cacheInputAge = pcoinsTip->GetCoinDepthAtHeight(vin.prevout, tipHeight);
             cacheInputAgeBlock = tipHeight;
         }
 
