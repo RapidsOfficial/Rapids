@@ -650,37 +650,6 @@ std::vector<std::pair<int, CMasternode> > CMasternodeMan::GetMasternodeRanks(int
     return vecMasternodeRanks;
 }
 
-CMasternode* CMasternodeMan::GetMasternodeByRank(int nRank, int64_t nBlockHeight, int minProtocol, bool fOnlyActive)
-{
-    std::vector<std::pair<int64_t, CTxIn> > vecMasternodeScores;
-
-    // scan for winner
-    for (CMasternode& mn : vMasternodes) {
-        if (mn.protocolVersion < minProtocol) continue;
-        if (fOnlyActive) {
-            mn.Check();
-            if (!mn.IsEnabled()) continue;
-        }
-
-        uint256 n = mn.CalculateScore(1, nBlockHeight);
-        int64_t n2 = n.GetCompact(false);
-
-        vecMasternodeScores.push_back(std::make_pair(n2, mn.vin));
-    }
-
-    sort(vecMasternodeScores.rbegin(), vecMasternodeScores.rend(), CompareScoreTxIn());
-
-    int rank = 0;
-    for (PAIRTYPE(int64_t, CTxIn) & s : vecMasternodeScores) {
-        rank++;
-        if (rank == nRank) {
-            return Find(s.second);
-        }
-    }
-
-    return NULL;
-}
-
 void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if (fLiteMode) return; //disable all Masternode related functionality
