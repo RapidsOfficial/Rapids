@@ -20,9 +20,13 @@
 
 #include <boost/function.hpp>
 
-class CCoins;
 class CCoinsViewDBCursor;
 class uint256;
+
+//! Compensate for extra memory peak (x1.5-x1.9) at flush time.
+static constexpr int DB_PEAK_USAGE_FACTOR = 2;
+//! No need to periodic flush if at least this much space still available.
+static constexpr int MAX_BLOCK_COINSDB_USAGE = 10 * DB_PEAK_USAGE_FACTOR;
 
 //! -dbcache default (MiB)
 static const int64_t nDefaultDbCache = 100;
@@ -69,12 +73,14 @@ protected:
 public:
     CCoinsViewDB(size_t nCacheSize, bool fMemory = false, bool fWipe = false);
 
-    bool GetCoins(const uint256& txid, CCoins& coins) const override;
-    bool HaveCoins(const uint256& txid) const override;
+    bool GetCoin(const COutPoint& outpoint, Coin& coin) const override;
+    bool HaveCoin(const COutPoint& outpoint) const override;
     uint256 GetBestBlock() const override;
     bool BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlock) override;
     CCoinsViewCursor* Cursor() const override;
 
+    //! Attempt to update from an older database format. Returns whether an error occurred.
+    bool Upgrade();
     size_t EstimateSize() const override;
 };
 
@@ -84,18 +90,18 @@ class CCoinsViewDBCursor: public CCoinsViewCursor
 public:
     ~CCoinsViewDBCursor() {}
 
-    bool GetKey(uint256 &key) const;
-    bool GetValue(CCoins &coins) const;
+    bool GetKey(COutPoint& key) const;
+    bool GetValue(Coin& coin) const;
     unsigned int GetValueSize() const;
 
     bool Valid() const;
     void Next();
 
 private:
-    CCoinsViewDBCursor(CDBIterator* pcursorIn, const uint256 &hashBlockIn):
+    CCoinsViewDBCursor(CDBIterator* pcursorIn, const uint256& hashBlockIn):
         CCoinsViewCursor(hashBlockIn), pcursor(pcursorIn) {}
     boost::scoped_ptr<CDBIterator> pcursor;
-    std::pair<char, uint256> keyTmp;
+    std::pair<char, COutPoint> keyTmp;
 
     friend class CCoinsViewDB;
 };

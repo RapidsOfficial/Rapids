@@ -254,7 +254,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
 
             for (const CTxIn& txin : tx.vin) {
                 // Read prev transaction
-                if (!view.HaveCoins(txin.prevout.hash)) {
+                if (!view.HaveCoin(txin.prevout)) {
                     // This should never happen; all transactions in the memory
                     // pool should connect to either transactions in the chain
                     // or other transactions in the memory pool.
@@ -278,13 +278,13 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                     continue;
                 }
 
-                const CCoins* coins = view.AccessCoins(txin.prevout.hash);
-                assert(coins);
+                const Coin& coin = view.AccessCoin(txin.prevout);
+                assert(hasZerocoinSpends || !coin.IsSpent());
 
-                CAmount nValueIn = coins->vout[txin.prevout.n].nValue;
+                CAmount nValueIn = coin.out.nValue;
                 nTotalIn += nValueIn;
 
-                int nConf = nHeight - coins->nHeight;
+                int nConf = nHeight - coin.nHeight;
 
                 // zPIV spends can have very large priority, use non-overflowing safe functions
                 dPriority = double_safe_addition(dPriority, ((double)nValueIn * nConf));

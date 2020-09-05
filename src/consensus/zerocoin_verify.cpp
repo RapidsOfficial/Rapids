@@ -288,12 +288,11 @@ CAmount GetInvalidUTXOValue()
     for (auto out : invalid_out::setInvalidOutPoints) {
         bool fSpent = false;
         CCoinsViewCache cache(pcoinsTip);
-        const CCoins *coins = cache.AccessCoins(out.hash);
-        if(!coins || !coins->IsAvailable(out.n))
+        const Coin& coin = cache.AccessCoin(out);
+        if(coin.IsSpent())
             fSpent = true;
-
         if (!fSpent)
-            nValue += coins->vout[out.n].nValue;
+            nValue += coin.out.nValue;
     }
 
     return nValue;
