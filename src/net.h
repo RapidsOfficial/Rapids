@@ -161,8 +161,10 @@ public:
     {
         LOCK(cs_vNodes);
         for (auto&& node : vNodes)
-            if(!func(node))
-                return false;
+            if (NodeFullyConnected(node)) {
+                if (!func(node))
+                    return false;
+            }
         return true;
     };
 

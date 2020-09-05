@@ -5333,21 +5333,6 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             return true;
         }
 
-        // PIVX: We use certain sporks during IBD, so check to see if they are
-        // available. If not, ask the first peer connected for them.
-        // TODO: Move this to an instant broadcast of the sporks.
-        bool fMissingSporks = !pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) ||
-                              !pSporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2) ||
-                              !pSporkDB->SporkExists(SPORK_16_ZEROCOIN_MAINTENANCE_MODE) ||
-                              !pSporkDB->SporkExists(SPORK_17_COLDSTAKING_ENFORCEMENT) ||
-                              !pSporkDB->SporkExists(SPORK_18_ZEROCOIN_PUBLICSPEND_V4);
-
-        if (fMissingSporks || !fRequestedSporksIDB){
-            LogPrintf("asking peer for sporks\n");
-            connman.PushMessage(pfrom, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::GETSPORKS));
-            fRequestedSporksIDB = true;
-        }
-
         if (pfrom->fInbound && addrMe.IsRoutable()) {
             SeenLocal(addrMe);
         }
@@ -5431,6 +5416,22 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
             assert(pfrom->fInbound == false);
             pfrom->fDisconnect = true;
         }
+
+        // PIVX: We use certain sporks during IBD, so check to see if they are
+        // available. If not, ask the first peer connected for them.
+        // TODO: Move this to an instant broadcast of the sporks.
+        bool fMissingSporks = !pSporkDB->SporkExists(SPORK_14_NEW_PROTOCOL_ENFORCEMENT) ||
+                              !pSporkDB->SporkExists(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2) ||
+                              !pSporkDB->SporkExists(SPORK_16_ZEROCOIN_MAINTENANCE_MODE) ||
+                              !pSporkDB->SporkExists(SPORK_17_COLDSTAKING_ENFORCEMENT) ||
+                              !pSporkDB->SporkExists(SPORK_18_ZEROCOIN_PUBLICSPEND_V4);
+
+        if (fMissingSporks || !fRequestedSporksIDB){
+            LogPrintf("asking peer for sporks\n");
+            connman.PushMessage(pfrom, CNetMsgMaker(nSendVersion).Make(NetMsgType::GETSPORKS));
+            fRequestedSporksIDB = true;
+        }
+
         return true;
     }
 

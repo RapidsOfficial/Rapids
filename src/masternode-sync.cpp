@@ -283,21 +283,22 @@ void CMasternodeSync::Process()
         RequestedMasternodeAssets > MASTERNODE_SYNC_SPORKS) return;
 
     CMasternodeSync* sync = this;
-    g_connman->ForEachNodeContinueIf([sync, isRegTestNet](CNode* pnode){
-        return sync->SyncWithNode(pnode, isRegTestNet);
+    g_connman->ForEachNodeContinueIf([sync, isRegTestNet](CNode* pnode) {
+      return sync->SyncWithNode(pnode, isRegTestNet);
     });
 }
 
 bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
 {
+    CNetMsgMaker msgMaker(pnode->GetSendVersion());
     if (isRegTestNet) {
         if (RequestedMasternodeAttempt <= 2) {
-            g_connman->PushMessage(pnode, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::GETSPORKS)); //get current network sporks
+            g_connman->PushMessage(pnode, msgMaker.Make(NetMsgType::GETSPORKS)); //get current network sporks
         } else if (RequestedMasternodeAttempt < 4) {
             mnodeman.DsegUpdate(pnode);
         } else if (RequestedMasternodeAttempt < 6) {
             int nMnCount = mnodeman.CountEnabled();
-            CNetMsgMaker msgMaker(pnode->GetSendVersion());
+
             g_connman->PushMessage(pnode, msgMaker.Make(NetMsgType::GETMNWINNERS, nMnCount)); //sync payees
             uint256 n;
             g_connman->PushMessage(pnode, msgMaker.Make(NetMsgType::BUDGETVOTESYNC, n)); //sync masternode votes
@@ -313,14 +314,11 @@ bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
         if (pnode->HasFulfilledRequest("getspork")) return true;
         pnode->FulfilledRequest("getspork");
 
-        g_connman->PushMessage(pnode, CNetMsgMaker(INIT_PROTO_VERSION).Make(NetMsgType::GETSPORKS)); //get current network sporks
+        g_connman->PushMessage(pnode, msgMaker.Make(NetMsgType::GETSPORKS)); //get current network sporks
         if (RequestedMasternodeAttempt >= 2) GetNextAsset();
         RequestedMasternodeAttempt++;
         return false;
     }
-
-    // At this point, we know that the handshake has finished, so set the message version
-    CNetMsgMaker msgMaker(pnode->GetSendVersion());
 
     if (pnode->nVersion >= masternodePayments.GetMinMasternodePaymentsProto()) {
         if (RequestedMasternodeAssets == MASTERNODE_SYNC_LIST) {
