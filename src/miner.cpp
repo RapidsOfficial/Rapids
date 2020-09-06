@@ -146,6 +146,28 @@ bool CheckForDuplicatedSerials(const CTransaction& tx, const Consensus::Params& 
     return true;
 }
 
+bool CreateCoinbaseTx(CBlock* pblock, const CScript& scriptPubKeyIn, CBlockIndex* pindexPrev)
+{
+    // Create coinbase tx
+    CMutableTransaction txNew;
+    txNew.vin.resize(1);
+    txNew.vin[0].prevout.SetNull();
+    txNew.vout.resize(1);
+    txNew.vout[0].scriptPubKey = scriptPubKeyIn;
+
+    //Masternode and general budget payments
+    FillBlockPayee(txNew, pindexPrev, false);
+
+    txNew.vin[0].scriptSig = CScript() << pindexPrev->nHeight + 1 << OP_0;
+    // If no payee was detected, then the whole block value goes to the first output.
+    if (txNew.vout.size() == 1) {
+        txNew.vout[0].nValue = GetBlockValue(pindexPrev->nHeight);
+    }
+
+    pblock->vtx.emplace_back(txNew);
+    return true;
+}
+
 bool SolveProofOfStake(CBlock* pblock, CBlockIndex* pindexPrev, CWallet* pwallet)
 {
     boost::this_thread::interruption_point();
@@ -158,8 +180,13 @@ bool SolveProofOfStake(CBlock* pblock, CBlockIndex* pindexPrev, CWallet* pwallet
     }
     // Stake found
     pblock->nTime = nTxNewTime;
-    pblock->vtx[0].vout[0].SetEmpty();
-    pblock->vtx.emplace_back(CTransaction(txCoinStake));
+    CMutableTransaction emptyTx;
+    emptyTx.vin.resize(1);
+    emptyTx.vin[0].scriptSig = CScript() << pindexPrev->nHeight + 1 << OP_0;
+    emptyTx.vout.resize(1);
+    emptyTx.vout[0].SetEmpty();
+    pblock->vtx.emplace_back(emptyTx);
+    pblock->vtx.emplace_back(txCoinStake);
     return true;
 }
 
@@ -186,22 +213,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         pblock->nVersion = GetArg("-blockversion", pblock->nVersion);
     }
 
-    // Create coinbase tx
-    CMutableTransaction txNew;
-    txNew.vin.resize(1);
-    txNew.vin[0].prevout.SetNull();
-    txNew.vout.resize(1);
-    txNew.vout[0].scriptPubKey = scriptPubKeyIn;
-    pblock->vtx.push_back(txNew);
+    // Depending on the tip height, try to find a coinstake who solves the block or create a coinbase tx.
+    if (!(fProofOfStake ? SolveProofOfStake(pblock, pindexPrev, pwallet)
+                        : CreateCoinbaseTx(pblock, scriptPubKeyIn, pindexPrev))) {
+        return nullptr;
+    }
+
     pblocktemplate->vTxFees.push_back(-1);   // updated at end
     pblocktemplate->vTxSigOps.push_back(-1); // updated at end
-
-    if (fProofOfStake) {
-        // Try to find a coinstake who solves it.
-        if(!SolveProofOfStake(pblock, pindexPrev, pwallet)) {
-            return nullptr;
-        }
-    }
 
     // Largest block you're willing to create:
     unsigned int nBlockMaxSize = GetArg("-blockmaxsize", DEFAULT_BLOCK_MAX_SIZE);
@@ -409,29 +428,14 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         }
 
         if (!fProofOfStake) {
-            //Masternode and general budget payments
-            FillBlockPayee(txNew, nFees, fProofOfStake, false);
-
-            //Make payee
-            if (txNew.vout.size() > 1) {
-                pblock->payee = txNew.vout[1].scriptPubKey;
-            } else {
-                CAmount blockValue = nFees + GetBlockValue(pindexPrev->nHeight);
-                txNew.vout[0].nValue = blockValue;
-                txNew.vin[0].scriptSig = CScript() << nHeight << OP_0;
-            }
+            // Coinbase can get the fees.
+            pblock->vtx[0].vout[0].nValue += nFees;
+            pblocktemplate->vTxFees[0] = -nFees;
         }
 
         nLastBlockTx = nBlockTx;
         nLastBlockSize = nBlockSize;
         LogPrintf("%s : total size %u\n", __func__, nBlockSize);
-
-        // Compute final coinbase transaction.
-        pblock->vtx[0].vin[0].scriptSig = CScript() << nHeight << OP_0;
-        if (!fProofOfStake) {
-            pblock->vtx[0] = txNew;
-            pblocktemplate->vTxFees[0] = -nFees;
-        }
 
         // Fill in header
         pblock->hashPrevBlock = pindexPrev->GetBlockHash();
@@ -443,8 +447,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         pblocktemplate->vTxSigOps[0] = GetLegacySigOpCount(pblock->vtx[0]);
 
         if (fProofOfStake) {
-            unsigned int nExtraNonce = 0;
-            IncrementExtraNonce(pblock, pindexPrev, nExtraNonce);
+            pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
             LogPrintf("CPUMiner : proof-of-stake block found %s \n", pblock->GetHash().GetHex());
             if (!SignBlock(*pblock, *pwallet)) {
                 LogPrintf("%s: Signing new block with UTXO key failed \n", __func__);

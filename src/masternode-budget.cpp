@@ -532,12 +532,10 @@ void CBudgetManager::CheckAndRemove()
 
 }
 
-void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, CAmount nFees, bool fProofOfStake)
+void CBudgetManager::FillBlockPayee(CMutableTransaction& txNew, const CBlockIndex* pindexPrev, bool fProofOfStake)
 {
-    LOCK(cs);
-
-    CBlockIndex* pindexPrev = chainActive.Tip();
     if (!pindexPrev) return;
+    LOCK(cs);
 
     int nHighestCount = 0;
     CScript payee;
