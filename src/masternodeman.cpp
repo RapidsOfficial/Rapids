@@ -12,10 +12,12 @@
 #include "masternode.h"
 #include "messagesigner.h"
 #include "netbase.h"
+#include "netmessagemaker.h"
 #include "spork.h"
 #include "swifttx.h"
 #include "util.h"
 
+#include <boost/thread/thread.hpp>
 
 #define MN_WINNER_MINIMUM_AGE 8000    // Age in seconds. This should be > MASTERNODE_REMOVAL_SECONDS to avoid misconfigured new nodes in the list.
 
@@ -232,7 +234,7 @@ void CMasternodeMan::AskForMN(CNode* pnode, CTxIn& vin)
     // ask for the mnb info once from the node that sent mnp
 
     LogPrint(BCLog::MASTERNODE, "CMasternodeMan::AskForMN - Asking node for missing entry, vin: %s\n", vin.prevout.hash.ToString());
-    pnode->PushMessage(NetMsgType::GETMNLIST, vin);
+    g_connman->PushMessage(pnode, CNetMsgMaker(pnode->GetSendVersion()).Make(NetMsgType::GETMNLIST, vin));
     int64_t askAgain = GetTime() + MASTERNODE_MIN_MNP_SECONDS;
     mWeAskedForMasternodeListEntry[vin.prevout] = askAgain;
 }
@@ -437,7 +439,7 @@ void CMasternodeMan::DsegUpdate(CNode* pnode)
         }
     }
 
-    pnode->PushMessage(NetMsgType::GETMNLIST, CTxIn());
+    g_connman->PushMessage(pnode, CNetMsgMaker(pnode->GetSendVersion()).Make(NetMsgType::GETMNLIST, CTxIn()));
     int64_t askAgain = GetTime() + MASTERNODES_DSEG_SECONDS;
     mWeAskedForMasternodeList[pnode->addr] = askAgain;
 }
@@ -779,7 +781,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         }
 
         if (vin == CTxIn()) {
-            pfrom->PushMessage(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_LIST, nInvCount);
+            g_connman->PushMessage(pfrom, CNetMsgMaker(pfrom->GetSendVersion()).Make(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_LIST, nInvCount));
             LogPrint(BCLog::MASTERNODE, "dseg - Sent %d Masternode entries to peer %i\n", nInvCount, pfrom->GetId());
         }
     }
@@ -836,24 +838,33 @@ void ThreadCheckMasternodes()
 
     unsigned int c = 0;
 
-    while (true) {
-        MilliSleep(1000);
+    try {
+        while (true) {
 
-        // try to sync from all available nodes, one step at a time
-        masternodeSync.Process();
+            if (ShutdownRequested()) {
+                break;
+            }
 
-        if (masternodeSync.IsBlockchainSynced()) {
-            c++;
+            MilliSleep(1000);
+            boost::this_thread::interruption_point();
+            // try to sync from all available nodes, one step at a time
+            masternodeSync.Process();
 
-            // check if we should activate or ping every few minutes,
-            // start right after sync is considered to be done
-            if (c % MASTERNODE_PING_SECONDS == 1) activeMasternode.ManageStatus();
+            if (masternodeSync.IsBlockchainSynced()) {
+                c++;
 
-            if (c % 60 == 0) {
-                mnodeman.CheckAndRemove();
-                masternodePayments.CleanPaymentList();
-                CleanTransactionLocksList();
+                // check if we should activate or ping every few minutes,
+                // start right after sync is considered to be done
+                if (c % MASTERNODE_PING_SECONDS == 1) activeMasternode.ManageStatus();
+
+                if (c % 60 == 0) {
+                    mnodeman.CheckAndRemove();
+                    masternodePayments.CleanPaymentList();
+                    CleanTransactionLocksList();
+                }
             }
         }
+    } catch (boost::thread_interrupted&) {
+        // nothing, thread interrupted.
     }
 }

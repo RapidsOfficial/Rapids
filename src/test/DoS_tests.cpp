@@ -58,18 +58,22 @@ BOOST_AUTO_TEST_CASE(DoS_banning)
 
     connman->ClearBanned();
     CAddress addr1(ip(0xa0b0c001), NODE_NONE);
-    CNode dummyNode1(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr1, "", true);
-    GetNodeSignals().InitializeNode(dummyNode1.GetId(), &dummyNode1);
+    CNode dummyNode1(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr1, 0, 0, "", true);
+    dummyNode1.SetSendVersion(PROTOCOL_VERSION);
+    GetNodeSignals().InitializeNode(&dummyNode1, *connman);
     dummyNode1.nVersion = 1;
+    dummyNode1.fSuccessfullyConnected = true;
     misbehave(dummyNode1.GetId(), 100); // Should get banned
     SendMessages(&dummyNode1, *connman, interruptDummy);
     BOOST_CHECK(connman->IsBanned(addr1));
     BOOST_CHECK(!connman->IsBanned(ip(0xa0b0c001|0x0000ff00))); // Different IP, not banned
 
     CAddress addr2(ip(0xa0b0c002), NODE_NONE);
-    CNode dummyNode2(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr2, "", true);
-    GetNodeSignals().InitializeNode(dummyNode2.GetId(), &dummyNode2);
+    CNode dummyNode2(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr2, 1, 1, "", true);
+    dummyNode2.SetSendVersion(PROTOCOL_VERSION);
+    GetNodeSignals().InitializeNode(&dummyNode2, *connman);
     dummyNode2.nVersion = 1;
+    dummyNode2.fSuccessfullyConnected = true;
     misbehave(dummyNode2.GetId(), 50);
     SendMessages(&dummyNode2, *connman, interruptDummy);
     BOOST_CHECK(!connman->IsBanned(addr2)); // 2 not banned yet...
@@ -86,9 +90,11 @@ BOOST_AUTO_TEST_CASE(DoS_banscore)
     connman->ClearBanned();
     mapArgs["-banscore"] = "111"; // because 11 is my favorite number
     CAddress addr1(ip(0xa0b0c001), NODE_NONE);
-    CNode dummyNode1(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr1, "", true);
-    GetNodeSignals().InitializeNode(dummyNode1.GetId(), &dummyNode1);
+    CNode dummyNode1(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr1, 3, 1, "", true);
+    dummyNode1.SetSendVersion(PROTOCOL_VERSION);
+    GetNodeSignals().InitializeNode(&dummyNode1, *connman);
     dummyNode1.nVersion = 1;
+    dummyNode1.fSuccessfullyConnected = true;
     misbehave(dummyNode1.GetId(), 100);
     SendMessages(&dummyNode1, *connman, interruptDummy);
     BOOST_CHECK(!connman->IsBanned(addr1));
@@ -110,9 +116,11 @@ BOOST_AUTO_TEST_CASE(DoS_bantime)
     SetMockTime(nStartTime); // Overrides future calls to GetTime()
 
     CAddress addr(ip(0xa0b0c001), NODE_NONE);
-    CNode dummyNode(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr, "", true);
-    GetNodeSignals().InitializeNode(dummyNode.GetId(), &dummyNode);
+    CNode dummyNode(id++, NODE_NETWORK, 0, INVALID_SOCKET, addr, 4, 4, "", true);
+    dummyNode.SetSendVersion(PROTOCOL_VERSION);
+    GetNodeSignals().InitializeNode(&dummyNode, *connman);
     dummyNode.nVersion = 1;
+    dummyNode.fSuccessfullyConnected = true;
 
     misbehave(dummyNode.GetId(), 100);
     SendMessages(&dummyNode, *connman, interruptDummy);

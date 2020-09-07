@@ -10,6 +10,7 @@
 #include "masternode-budget.h"
 #include "masternode-sync.h"
 #include "masternodeman.h"
+#include "netmessagemaker.h"
 #include "spork.h"
 #include "sync.h"
 #include "util.h"
@@ -753,7 +754,7 @@ void CMasternodePayments::Sync(CNode* node, int nCountNeeded)
         }
         ++it;
     }
-    node->PushMessage(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_MNW, nInvCount);
+    g_connman->PushMessage(node, CNetMsgMaker(node->GetSendVersion()).Make(NetMsgType::SYNCSTATUSCOUNT, MASTERNODE_SYNC_MNW, nInvCount));
 }
 
 std::string CMasternodePayments::ToString() const
