@@ -1495,7 +1495,9 @@ UniValue getreceivedbylabel(const JSONRPCRequest& request)
 
 UniValue getbalance(const JSONRPCRequest& request)
 {
-    if (request.fHelp || (request.params.size() > 4 && IsDeprecatedRPCEnabled("accounts")) || (request.params.size() != 0 && !IsDeprecatedRPCEnabled("accounts")))
+    if (request.fHelp ||
+        (request.params.size() > 4 && IsDeprecatedRPCEnabled("accounts")) ||
+        (request.params.size() > 3 && !IsDeprecatedRPCEnabled("accounts")))
         throw std::runtime_error(
             "getbalance ( \"account\" minconf includeWatchonly includeDelegated )\n"
             "\nIf account is not specified, returns the server's total available balance (excluding zerocoins).\n"
@@ -1544,9 +1546,12 @@ UniValue getbalance(const JSONRPCRequest& request)
         return ValueFromAmount(pwalletMain->GetLegacyBalance(filter, nMinDepth, account));
     }
 
-    // TODO: re-incorporate the includeDelegated argument
-    //  after 4.2 branch off for 5.0
-    return ValueFromAmount(pwalletMain->GetAvailableBalance());
+    const int paramsSize = request.params.size();
+    const int nMinDepth = (paramsSize > 0 ? request.params[0].get_int() : 0);
+    isminefilter filter = ISMINE_SPENDABLE | (paramsSize > 1 && request.params[1].get_bool() ? ISMINE_WATCH_ONLY : ISMINE_NO);
+    filter |= (paramsSize <= 2 || request.params[2].get_bool() ? ISMINE_SPENDABLE_DELEGATED : ISMINE_NO);
+
+    return ValueFromAmount(pwalletMain->GetAvailableBalance(filter, true, nMinDepth));
 }
 
 UniValue getcoldstakingbalance(const JSONRPCRequest& request)
