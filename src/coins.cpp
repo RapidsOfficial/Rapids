@@ -268,6 +268,14 @@ double CCoinsViewCache::GetPriority(const CTransaction& tx, int nHeight, CAmount
     return tx.ComputePriority(dResult);
 }
 
+int CCoinsViewCache::GetCoinDepthAtHeight(const COutPoint& output, int nHeight) const
+{
+    const Coin& coin = AccessCoin(output);
+    if (!coin.IsSpent())
+        return nHeight - coin.nHeight + 1;
+    return -1;
+}
+
 static const size_t MAX_OUTPUTS_PER_BLOCK = MAX_BLOCK_SIZE_CURRENT /  ::GetSerializeSize(CTxOut(), SER_NETWORK, PROTOCOL_VERSION); // TODO: merge with similar definition in undo.h.
 
 const Coin& AccessByTxid(const CCoinsViewCache& view, const uint256& txid)

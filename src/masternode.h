@@ -136,8 +136,6 @@ public:
     CPubKey pubKeyMasternode1;
     int activeState;
     int64_t sigTime; //mnb message time
-    int cacheInputAge;
-    int cacheInputAgeBlock;
     bool unitTest;
     bool allowFreeTx;
     int protocolVersion;
@@ -171,8 +169,6 @@ public:
         swap(first.activeState, second.activeState);
         swap(first.sigTime, second.sigTime);
         swap(first.lastPing, second.lastPing);
-        swap(first.cacheInputAge, second.cacheInputAge);
-        swap(first.cacheInputAgeBlock, second.cacheInputAgeBlock);
         swap(first.unitTest, second.unitTest);
         swap(first.allowFreeTx, second.allowFreeTx);
         swap(first.protocolVersion, second.protocolVersion);
@@ -213,8 +209,6 @@ public:
         READWRITE(protocolVersion);
         READWRITE(activeState);
         READWRITE(lastPing);
-        READWRITE(cacheInputAge);
-        READWRITE(cacheInputAgeBlock);
         READWRITE(unitTest);
         READWRITE(allowFreeTx);
         READWRITE(nLastDsq);
@@ -249,19 +243,6 @@ public:
     bool IsEnabled()
     {
         return activeState == MASTERNODE_ENABLED;
-    }
-
-    int GetMasternodeInputAge()
-    {
-        int tipHeight = WITH_LOCK(cs_main, return chainActive.Height());
-        if (tipHeight < 0) return 0;
-
-        if (cacheInputAge == 0) {
-            cacheInputAge = GetInputAge(vin);
-            cacheInputAgeBlock = tipHeight;
-        }
-
-        return cacheInputAge + (tipHeight - cacheInputAgeBlock);
     }
 
     std::string Status()

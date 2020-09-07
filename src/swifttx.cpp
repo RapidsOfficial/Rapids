@@ -223,9 +223,10 @@ bool IsIXTXValid(const CTransaction& txCollateral)
 
 int64_t CreateNewLock(CTransaction tx)
 {
+    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
     int64_t nTxAge = 0;
     BOOST_REVERSE_FOREACH (CTxIn i, tx.vin) {
-        nTxAge = GetInputAge(i);
+        nTxAge = pcoinsTip->GetCoinDepthAtHeight(i.prevout, nChainHeight);
         if (nTxAge < 5) //1 less than the "send IX" gui requires, incase of a block propagating the network at the time
         {
             LogPrintf("%s : Transaction not found / too new: %d / %s\n", __func__, nTxAge,
@@ -239,7 +240,7 @@ int64_t CreateNewLock(CTransaction tx)
         This prevents attackers from using transaction mallibility to predict which masternodes
         they'll use.
     */
-    int nBlockHeight = (chainActive.Tip()->nHeight - nTxAge) + 4;
+    int nBlockHeight = nChainHeight - nTxAge + 4;
 
     if (!mapTxLocks.count(tx.GetHash())) {
         LogPrintf("%s : New Transaction Lock %s !\n", __func__, tx.GetHash().ToString().c_str());

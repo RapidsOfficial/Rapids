@@ -769,24 +769,6 @@ unsigned int LimitOrphanTxSize(unsigned int nMaxOrphans) EXCLUSIVE_LOCKS_REQUIRE
     return nEvicted;
 }
 
-int GetInputAge(CTxIn& vin)
-{
-    CCoinsView viewDummy;
-    CCoinsViewCache view(&viewDummy);
-    {
-        LOCK(mempool.cs);
-        CCoinsViewMemPool viewMempool(pcoinsTip, mempool);
-        view.SetBackend(viewMempool); // temporarily switch cache backend to db+mempool view
-
-        const Coin& coin = view.AccessCoin(vin.prevout);
-
-        if (!coin.IsSpent()) {
-            return WITH_LOCK(cs_main, return chainActive.Height() + 1) - coin.nHeight;
-        } else
-            return -1;
-    }
-}
-
 int GetIXConfirmations(uint256 nTXHash)
 {
     int sigs = 0;
