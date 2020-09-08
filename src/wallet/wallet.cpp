@@ -85,7 +85,9 @@ bool CWallet::SetupSPKM(bool newKeypool)
 
 bool CWallet::ActivateSaplingWallet()
 {
-    if (m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
+    // Only on regtest for now
+    if (Params().IsRegTestNet() &&
+        m_sspk_man->SetupGeneration(m_spk_man->GetHDChain().GetID())) {
         LogPrintf("%s : sapling spkm setup completed\n", __func__);
         return true;
     }
@@ -447,8 +449,13 @@ bool CWallet::SetMinVersion(enum WalletFeature nVersion, CWalletDB* pwalletdbIn,
         return true;
 
     // when doing an explicit upgrade, if we pass the max version permitted, upgrade all the way
-    if (fExplicit && nVersion > nWalletMaxVersion)
-        nVersion = FEATURE_LATEST;
+    if (fExplicit && nVersion > nWalletMaxVersion) {
+
+        // For now, Sapling features are locked to regtest.
+        WalletFeature features = Params().IsRegTestNet() ? FEATURE_SAPLING : FEATURE_PRE_SPLIT_KEYPOOL;
+
+        nVersion = features;
+    }
 
     nWalletVersion = nVersion;
 
@@ -3852,9 +3859,12 @@ CWallet* CWallet::CreateWalletFromFile(const std::string walletFile)
         int nMaxVersion = GetArg("-upgradewallet", 0);
         if (nMaxVersion == 0) // the -upgradewallet without argument case
         {
-            LogPrintf("Performing wallet upgrade to %i\n", FEATURE_LATEST);
-            nMaxVersion = FEATURE_LATEST;
-            walletInstance->SetMinVersion(FEATURE_LATEST); // permanently upgrade the wallet immediately
+            // For now, Sapling features are locked to regtest.
+            WalletFeature features = Params().IsRegTestNet() ? FEATURE_SAPLING : FEATURE_PRE_SPLIT_KEYPOOL;
+
+            LogPrintf("Performing wallet upgrade to %i\n", features);
+            nMaxVersion = features;
+            walletInstance->SetMinVersion(features); // permanently upgrade the wallet immediately
         } else
             LogPrintf("Allowing wallet upgrade up to %i\n", nMaxVersion);
         if (nMaxVersion < walletInstance->GetVersion()) {
@@ -3877,8 +3887,12 @@ CWallet* CWallet::CreateWalletFromFile(const std::string walletFile)
         if (!fLegacyWallet) {
             // Create new HD Wallet
             LogPrintf("Creating HD Wallet\n");
+
+            // For now, Sapling features are locked to regtest.
+            WalletFeature features = Params().IsRegTestNet() ? FEATURE_SAPLING : FEATURE_PRE_SPLIT_KEYPOOL;
+
             // Ensure this wallet can only be opened by clients supporting HD.
-            walletInstance->SetMinVersion(FEATURE_LATEST);
+            walletInstance->SetMinVersion(features);
             walletInstance->SetupSPKM();
         } else {
             if (!Params().IsRegTestNet()) {
