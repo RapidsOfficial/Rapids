@@ -106,7 +106,7 @@ void CMasternodeSync::Reset()
     nAssetSyncStarted = GetTime();
 }
 
-void CMasternodeSync::AddedMasternodeList(uint256 hash)
+void CMasternodeSync::AddedMasternodeList(const uint256& hash)
 {
     if (mnodeman.mapSeenMasternodeBroadcast.count(hash)) {
         if (mapSeenSyncMNB[hash] < MASTERNODE_SYNC_THRESHOLD) {
@@ -119,7 +119,7 @@ void CMasternodeSync::AddedMasternodeList(uint256 hash)
     }
 }
 
-void CMasternodeSync::AddedMasternodeWinner(uint256 hash)
+void CMasternodeSync::AddedMasternodeWinner(const uint256& hash)
 {
     if (masternodePayments.mapMasternodePayeeVotes.count(hash)) {
         if (mapSeenSyncMNW[hash] < MASTERNODE_SYNC_THRESHOLD) {
@@ -132,10 +132,12 @@ void CMasternodeSync::AddedMasternodeWinner(uint256 hash)
     }
 }
 
-void CMasternodeSync::AddedBudgetItem(uint256 hash)
+void CMasternodeSync::AddedBudgetItem(const uint256& hash)
 {
-    if (budget.mapSeenMasternodeBudgetProposals.count(hash) || budget.mapSeenMasternodeBudgetVotes.count(hash) ||
-        budget.mapSeenFinalizedBudgets.count(hash) || budget.mapSeenFinalizedBudgetVotes.count(hash)) {
+    if (budget.HaveSeenProposal(hash) ||
+            budget.HaveSeenProposalVote(hash) ||
+            budget.HaveSeenFinalizedBudget(hash) ||
+            budget.HaveSeenFinalizedBudgetVote(hash)) {
         if (mapSeenSyncBudget[hash] < MASTERNODE_SYNC_THRESHOLD) {
             lastBudgetItem = GetTime();
             mapSeenSyncBudget[hash]++;
