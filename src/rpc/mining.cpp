@@ -157,10 +157,17 @@ UniValue generate(const JSONRPCRequest& request)
     UniValue blockHashes(UniValue::VARR);
     CReserveKey reservekey(pwalletMain);
     unsigned int nExtraNonce = 0;
-    while (nHeight < nHeightEnd && !ShutdownRequested())
-    {
+
+    while (nHeight < nHeightEnd && !ShutdownRequested()) {
+
+        // Get available coins
+        std::vector<COutput> availableCoins;
+        if (fPoS && !pwalletMain->StakeableCoins(&availableCoins)) {
+            throw JSONRPCError(RPC_WALLET_INSUFFICIENT_FUNDS, "No available coins to stake");
+        }
+
         std::unique_ptr<CBlockTemplate> pblocktemplate(fPoS ?
-                                                       CreateNewBlock(CScript(), pwalletMain, fPoS) :
+                                                       CreateNewBlock(CScript(), pwalletMain, true, &availableCoins) :
                                                        CreateNewBlockWithKey(reservekey, pwalletMain));
         if (!pblocktemplate.get()) break;
         CBlock *pblock = &pblocktemplate->block;
