@@ -181,6 +181,8 @@ void CMasternode::Check(bool forceCheck)
 {
     if (ShutdownRequested()) return;
 
+    // todo: add LOCK(cs) but be careful with the AcceptableInputs() below that requires cs_main.
+
     if (!forceCheck && (GetTime() - lastTimeChecked < MASTERNODE_CHECK_SECONDS)) return;
     lastTimeChecked = GetTime();
 
@@ -246,8 +248,8 @@ int64_t CMasternode::SecondsSincePayment()
 
 int64_t CMasternode::GetLastPaid()
 {
-    CBlockIndex* pindexPrev = chainActive.Tip();
-    if (pindexPrev == NULL) return false;
+    const CBlockIndex* BlockReading = GetChainTip();
+    if (BlockReading == nullptr) return false;
 
     CScript mnpayee;
     mnpayee = GetScriptForDestination(pubKeyCollateralAddress.GetID());
@@ -259,10 +261,6 @@ int64_t CMasternode::GetLastPaid()
 
     // use a deterministic offset to break a tie -- 2.5 minutes
     int64_t nOffset = hash.GetCompact(false) % 150;
-
-    if (chainActive.Tip() == NULL) return false;
-
-    const CBlockIndex* BlockReading = chainActive.Tip();
 
     int nMnCount = mnodeman.CountEnabled() * 1.25;
     int n = 0;
@@ -485,7 +483,7 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
     if(lastPing.IsNull() || !lastPing.CheckAndUpdate(nDos, false, true))
     return false;
 
-    if (protocolVersion < masternodePayments.GetMinMasternodePaymentsProto()) {
+    if (protocolVersion < ActiveProtocol()) {
         LogPrint(BCLog::MASTERNODE,"mnb - ignoring outdated Masternode %s protocol version %d\n", vin.prevout.hash.ToString(), protocolVersion);
         return false;
     }
@@ -727,7 +725,7 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fChec
 
     LogPrint(BCLog::MNPING, "%s: New Ping - %s - %s - %lli\n", __func__, GetHash().ToString(), blockHash.ToString(), sigTime);
 
-    if (isMasternodeFound && pmn->protocolVersion >= masternodePayments.GetMinMasternodePaymentsProto()) {
+    if (isMasternodeFound && pmn->protocolVersion >= ActiveProtocol()) {
         if (fRequireEnabled && !pmn->IsEnabled()) return false;
 
         // update only if there is no known ping for this masternode or

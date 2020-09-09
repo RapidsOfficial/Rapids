@@ -132,8 +132,6 @@ public:
     CService addr;
     CPubKey pubKeyCollateralAddress;
     CPubKey pubKeyMasternode;
-    CPubKey pubKeyCollateralAddress1;
-    CPubKey pubKeyMasternode1;
     int activeState;
     int64_t sigTime; //mnb message time
     bool unitTest;
@@ -236,19 +234,21 @@ public:
 
     void Disable()
     {
+        LOCK(cs);
         sigTime = 0;
         lastPing = CMasternodePing();
     }
 
     bool IsEnabled()
     {
-        return activeState == MASTERNODE_ENABLED;
+        return WITH_LOCK(cs, return activeState == MASTERNODE_ENABLED);
     }
 
     std::string Status()
     {
         std::string strStatus = "ACTIVE";
 
+        LOCK(cs);
         if (activeState == CMasternode::MASTERNODE_ENABLED) strStatus = "ENABLED";
         if (activeState == CMasternode::MASTERNODE_EXPIRED) strStatus = "EXPIRED";
         if (activeState == CMasternode::MASTERNODE_VIN_SPENT) strStatus = "VIN_SPENT";
