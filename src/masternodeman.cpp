@@ -260,7 +260,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
         if ((*it).activeState == CMasternode::MASTERNODE_REMOVE ||
             (*it).activeState == CMasternode::MASTERNODE_VIN_SPENT ||
             (forceExpiredRemoval && (*it).activeState == CMasternode::MASTERNODE_EXPIRED) ||
-            (*it).protocolVersion < masternodePayments.GetMinMasternodePaymentsProto()) {
+            (*it).protocolVersion < ActiveProtocol()) {
             LogPrint(BCLog::MASTERNODE, "CMasternodeMan: Removing inactive Masternode %s - %i now\n", (*it).vin.prevout.hash.ToString(), size() - 1);
 
             //erase all of the broadcasts we've seen from this vin
@@ -386,7 +386,7 @@ int CMasternodeMan::stable_size ()
 int CMasternodeMan::CountEnabled(int protocolVersion)
 {
     int i = 0;
-    protocolVersion = protocolVersion == -1 ? masternodePayments.GetMinMasternodePaymentsProto() : protocolVersion;
+    protocolVersion = protocolVersion == -1 ? ActiveProtocol() : protocolVersion;
 
     for (CMasternode& mn : vMasternodes) {
         mn.Check();
@@ -399,8 +399,6 @@ int CMasternodeMan::CountEnabled(int protocolVersion)
 
 void CMasternodeMan::CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion)
 {
-    protocolVersion = protocolVersion == -1 ? masternodePayments.GetMinMasternodePaymentsProto() : protocolVersion;
-
     for (CMasternode& mn : vMasternodes) {
         mn.Check();
         std::string strHost;
