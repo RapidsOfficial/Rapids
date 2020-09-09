@@ -384,9 +384,7 @@ bool CMasternodeSync::SyncWithNode(CNode* pnode, bool isRegTestNet)
             RequestedMasternodeAttempt++;
             return false;
         }
-    }
 
-    if (pnode->nVersion >= ActiveProtocol()) {
         if (RequestedMasternodeAssets == MASTERNODE_SYNC_BUDGET) {
             // We'll start rejecting votes if we accidentally get set as synced too soon
             if (lastBudgetItem > 0 && lastBudgetItem < GetTime() - MASTERNODE_SYNC_TIMEOUT * 2 && RequestedMasternodeAttempt >= MASTERNODE_SYNC_THRESHOLD) {
