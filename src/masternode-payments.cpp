@@ -379,11 +379,6 @@ void CMasternodePayments::FillBlockPayee(CMutableTransaction& txNew, const CBloc
     }
 }
 
-int CMasternodePayments::GetMinMasternodePaymentsProto()
-{
-    return ActiveProtocol();
-}
-
 void CMasternodePayments::ProcessMessageMasternodePayments(CNode* pfrom, std::string& strCommand, CDataStream& vRecv)
 {
     if (!masternodeSync.IsBlockchainSynced()) return;
