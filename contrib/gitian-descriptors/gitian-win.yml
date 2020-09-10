@@ -1,5 +1,5 @@
 ---
-name: "pivx-win-5.0"
+name: "pivx-win-4.3"
 enable_cache: true
 distro: "ubuntu"
 suites:

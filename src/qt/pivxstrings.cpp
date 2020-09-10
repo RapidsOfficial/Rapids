@@ -9,14 +9,11 @@
 #define UNUSED
 #endif
 static const char UNUSED *pivx_strings[] = {
-QT_TRANSLATE_NOOP("pivx-core", " mints deleted\n"),
-QT_TRANSLATE_NOOP("pivx-core", " mints updated, "),
-QT_TRANSLATE_NOOP("pivx-core", " unconfirmed transactions removed\n"),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "(1 = keep tx meta data e.g. account owner and payment request information, 2 "
 "= drop tx meta data)"),
 QT_TRANSLATE_NOOP("pivx-core", ""
-"Accept connections from outside (default: 1 if no -proxy or -connect/-"
+"Accept connections from outside (default: %u if no -proxy or -connect/-"
 "noconnect)"),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "Allow JSON-RPC connections from specified source. Valid for <ip> are a "
@@ -33,8 +30,16 @@ QT_TRANSLATE_NOOP("pivx-core", ""
 "notation for IPv6. This option can be specified multiple times (default: "
 "bind to all interfaces)"),
 QT_TRANSLATE_NOOP("pivx-core", ""
+"Cannot find the Sapling parameters in the following directory:\n"
+"%s\n"
+"Please run 'sapling-fetch-params' or './util/fetch-params.sh' and then "
+"restart."),
+QT_TRANSLATE_NOOP("pivx-core", ""
 "Cannot obtain a lock on data directory %s. PIVX Core is probably already "
 "running."),
+QT_TRANSLATE_NOOP("pivx-core", ""
+"Cannot upgrade to Sapling wallet (already running Sapling support). Version: "
+"%d"),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "Change automatic finalized budget voting behavior. mode=auto: Vote for only "
 "exact finalized budget match to my generated budget. (string, default: auto)"),
@@ -231,12 +236,12 @@ QT_TRANSLATE_NOOP("pivx-core", ""
 "Warning: We do not appear to fully agree with our peers! You may need to "
 "upgrade, or other nodes may need to upgrade."),
 QT_TRANSLATE_NOOP("pivx-core", ""
-"Warning: error reading wallet.dat! All keys read correctly, but transaction "
-"data or address book entries might be missing or incorrect."),
+"Warning: error reading %s! All keys read correctly, but transaction data or "
+"address book entries might be missing or incorrect."),
 QT_TRANSLATE_NOOP("pivx-core", ""
-"Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as "
-"wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect "
-"you should restore from a backup."),
+"Warning: wallet file corrupt, data salvaged! Original %s saved as %s in %s; "
+"if your balance or transactions are incorrect you should restore from a "
+"backup."),
 QT_TRANSLATE_NOOP("pivx-core", ""
 "Whitelist peers connecting from the given netmask or IP address. Can be "
 "specified multiple times."),
@@ -246,27 +251,25 @@ QT_TRANSLATE_NOOP("pivx-core", ""
 QT_TRANSLATE_NOOP("pivx-core", ""
 "You must specify a masternodeprivkey in the configuration. Please see "
 "documentation for help."),
+QT_TRANSLATE_NOOP("pivx-core", "%s corrupt, salvage failed"),
 QT_TRANSLATE_NOOP("pivx-core", "(default: %s)"),
-QT_TRANSLATE_NOOP("pivx-core", "(default: 1)"),
 QT_TRANSLATE_NOOP("pivx-core", "(must be %d for %s-net)"),
 QT_TRANSLATE_NOOP("pivx-core", "<category> can be:"),
 QT_TRANSLATE_NOOP("pivx-core", "Accept command line and JSON-RPC commands"),
 QT_TRANSLATE_NOOP("pivx-core", "Accept public REST requests (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Active Masternode not initialized."),
 QT_TRANSLATE_NOOP("pivx-core", "Add a node to connect to and attempt to keep the connection open"),
-QT_TRANSLATE_NOOP("pivx-core", "Allow DNS lookups for -addnode, -seednode and -connect"),
+QT_TRANSLATE_NOOP("pivx-core", "Allow DNS lookups for -addnode, -seednode and -connect (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Allows deprecated RPC method(s) to be used"),
 QT_TRANSLATE_NOOP("pivx-core", "Always query for peer addresses via DNS lookup (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Append comment to the user agent string"),
 QT_TRANSLATE_NOOP("pivx-core", "Attempt to force blockchain corruption recovery"),
-QT_TRANSLATE_NOOP("pivx-core", "Attempt to recover private keys from a corrupt wallet.dat"),
+QT_TRANSLATE_NOOP("pivx-core", "Attempt to recover private keys from a corrupt wallet file"),
 QT_TRANSLATE_NOOP("pivx-core", "Automatically create Tor hidden service (default: %d)"),
 QT_TRANSLATE_NOOP("pivx-core", "Block creation options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Can't generate a change-address key. Please call keypoolrefill first."),
 QT_TRANSLATE_NOOP("pivx-core", "Cannot create public spend input"),
-QT_TRANSLATE_NOOP("pivx-core", "Cannot downgrade wallet"),
 QT_TRANSLATE_NOOP("pivx-core", "Cannot resolve -%s address: '%s'"),
-QT_TRANSLATE_NOOP("pivx-core", "Cannot upgrade to HD wallet (already running HD support). Version: %d"),
 QT_TRANSLATE_NOOP("pivx-core", "Change index out of range"),
 QT_TRANSLATE_NOOP("pivx-core", "Connect through SOCKS5 proxy"),
 QT_TRANSLATE_NOOP("pivx-core", "Connect to a node to retrieve peer addresses, and disconnect"),
@@ -279,7 +282,6 @@ QT_TRANSLATE_NOOP("pivx-core", "Could not parse masternode.conf"),
 QT_TRANSLATE_NOOP("pivx-core", "Debugging/Testing options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Delete blockchain folders and resync from scratch"),
 QT_TRANSLATE_NOOP("pivx-core", "Disable OS notifications for incoming transactions (default: %u)"),
-QT_TRANSLATE_NOOP("pivx-core", "Disable safemode, override a real safe mode event (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Discover own IP address (default: 1 when listening and no -externalip)"),
 QT_TRANSLATE_NOOP("pivx-core", "Display the stake modifier calculations in the debug.log file."),
 QT_TRANSLATE_NOOP("pivx-core", "Display verbose coin stake messages in the debug.log file."),
@@ -296,15 +298,15 @@ QT_TRANSLATE_NOOP("pivx-core", "Enable staking functionality (0-1, default: %u)"
 QT_TRANSLATE_NOOP("pivx-core", "Enable the client to act as a masternode (0-1, default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Error initializing block database"),
 QT_TRANSLATE_NOOP("pivx-core", "Error initializing wallet database environment %s!"),
+QT_TRANSLATE_NOOP("pivx-core", "Error loading %s: Wallet corrupted"),
+QT_TRANSLATE_NOOP("pivx-core", "Error loading %s: Wallet requires newer version of PIVX Core"),
+QT_TRANSLATE_NOOP("pivx-core", "Error loading %s\n"),
 QT_TRANSLATE_NOOP("pivx-core", "Error loading block database"),
-QT_TRANSLATE_NOOP("pivx-core", "Error loading wallet.dat"),
-QT_TRANSLATE_NOOP("pivx-core", "Error loading wallet.dat: Wallet corrupted"),
-QT_TRANSLATE_NOOP("pivx-core", "Error loading wallet.dat: Wallet requires newer version of PIVX Core"),
 QT_TRANSLATE_NOOP("pivx-core", "Error opening block database"),
 QT_TRANSLATE_NOOP("pivx-core", "Error reading from database, shutting down."),
+QT_TRANSLATE_NOOP("pivx-core", "Error upgrading chainstate database"),
 QT_TRANSLATE_NOOP("pivx-core", "Error writing zerocoinDB to disk"),
 QT_TRANSLATE_NOOP("pivx-core", "Error"),
-QT_TRANSLATE_NOOP("pivx-core", "Error: "),
 QT_TRANSLATE_NOOP("pivx-core", "Error: -listen must be true if -masternode is set."),
 QT_TRANSLATE_NOOP("pivx-core", "Error: -maxmempool must be at least %d MB"),
 QT_TRANSLATE_NOOP("pivx-core", "Error: A fatal internal error occured, see debug.log for details"),
@@ -315,7 +317,7 @@ QT_TRANSLATE_NOOP("pivx-core", "Error: No valid utxo!"),
 QT_TRANSLATE_NOOP("pivx-core", "Error: Unsupported argument -tor found, use -onion."),
 QT_TRANSLATE_NOOP("pivx-core", "Error: Wallet locked, unable to create transaction!"),
 QT_TRANSLATE_NOOP("pivx-core", "Failed to accept tx in the memory pool (reason: %s)\n"),
-QT_TRANSLATE_NOOP("pivx-core", "Failed to find Zerocoins in wallet.dat"),
+QT_TRANSLATE_NOOP("pivx-core", "Failed to find Zerocoins in wallet database"),
 QT_TRANSLATE_NOOP("pivx-core", "Failed to listen on any port. Use -listen=0 if you want this."),
 QT_TRANSLATE_NOOP("pivx-core", "Failed to parse host:port string"),
 QT_TRANSLATE_NOOP("pivx-core", "Failed to parse public spend"),
@@ -369,13 +371,14 @@ QT_TRANSLATE_NOOP("pivx-core", "Masternode options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Masternodes are required to run on port %d for %s-net"),
 QT_TRANSLATE_NOOP("pivx-core", "Maximum per-connection receive buffer, <n>*1000 bytes (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Maximum per-connection send buffer, <n>*1000 bytes (default: %u)"),
+QT_TRANSLATE_NOOP("pivx-core", "Mining/Staking options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Mint did not make it into blockchain"),
 QT_TRANSLATE_NOOP("pivx-core", "Need destination or change address because change is not exact"),
 QT_TRANSLATE_NOOP("pivx-core", "Need to specify a port with -whitebind: '%s'"),
 QT_TRANSLATE_NOOP("pivx-core", "No error"),
 QT_TRANSLATE_NOOP("pivx-core", "Node relay options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Not enough file descriptors available."),
-QT_TRANSLATE_NOOP("pivx-core", "Number of automatic wallet backups (default: 10)"),
+QT_TRANSLATE_NOOP("pivx-core", "Number of automatic wallet backups (default: %d)"),
 QT_TRANSLATE_NOOP("pivx-core", "Number of custom location backups to retain (default: %d)"),
 QT_TRANSLATE_NOOP("pivx-core", "On first run, create a legacy wallet instead of a HD wallet"),
 QT_TRANSLATE_NOOP("pivx-core", "Only accept block chain matching built-in checkpoints (default: %u)"),
@@ -399,8 +402,6 @@ QT_TRANSLATE_NOOP("pivx-core", "Relay and mine data carrier transactions (defaul
 QT_TRANSLATE_NOOP("pivx-core", "Relay non-P2SH multisig (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Rescan the block chain for missing wallet transactions"),
 QT_TRANSLATE_NOOP("pivx-core", "Rescanning..."),
-QT_TRANSLATE_NOOP("pivx-core", "ResetMintZerocoin finished: "),
-QT_TRANSLATE_NOOP("pivx-core", "ResetSpentZerocoin finished: "),
 QT_TRANSLATE_NOOP("pivx-core", "Run a thread to flush wallet periodically (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Run in the background as a daemon and accept commands"),
 QT_TRANSLATE_NOOP("pivx-core", "Selected coins value is less than payment target"),
@@ -416,6 +417,7 @@ QT_TRANSLATE_NOOP("pivx-core", "Set the number of threads to service RPC calls (
 QT_TRANSLATE_NOOP("pivx-core", "Sets the DB_PRIVATE flag in the wallet db environment (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Show all debugging options (usage: --help -help-debug)"),
 QT_TRANSLATE_NOOP("pivx-core", "Shrink debug.log file on client startup (default: 1 when no -debug)"),
+QT_TRANSLATE_NOOP("pivx-core", "Shutdown requested over the txs scan. Exiting."),
 QT_TRANSLATE_NOOP("pivx-core", "Signing transaction failed"),
 QT_TRANSLATE_NOOP("pivx-core", "Specify configuration file (default: %s)"),
 QT_TRANSLATE_NOOP("pivx-core", "Specify connection timeout in milliseconds (minimum: 1, default: %d)"),
@@ -424,9 +426,9 @@ QT_TRANSLATE_NOOP("pivx-core", "Specify masternode configuration file (default: 
 QT_TRANSLATE_NOOP("pivx-core", "Specify pid file (default: %s)"),
 QT_TRANSLATE_NOOP("pivx-core", "Specify wallet file (within data directory)"),
 QT_TRANSLATE_NOOP("pivx-core", "Specify your own public address"),
+QT_TRANSLATE_NOOP("pivx-core", "Specify zk params directory (default: %s)"),
 QT_TRANSLATE_NOOP("pivx-core", "Spend Valid"),
 QT_TRANSLATE_NOOP("pivx-core", "Spend unconfirmed change when sending transactions (default: %u)"),
-QT_TRANSLATE_NOOP("pivx-core", "Staking options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Stop running after importing blocks from disk (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "SwiftX options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Synchronization failed"),
@@ -457,7 +459,6 @@ QT_TRANSLATE_NOOP("pivx-core", "Trying to spend an already spent serial #, try a
 QT_TRANSLATE_NOOP("pivx-core", "Unable to bind to %s on this computer (bind returned error %s)"),
 QT_TRANSLATE_NOOP("pivx-core", "Unable to find transaction containing mint %s"),
 QT_TRANSLATE_NOOP("pivx-core", "Unable to find transaction containing mint, txHash: %s"),
-QT_TRANSLATE_NOOP("pivx-core", "Unable to generate initial key"),
 QT_TRANSLATE_NOOP("pivx-core", "Unable to generate keys"),
 QT_TRANSLATE_NOOP("pivx-core", "Unable to sign spork message, wrong key?"),
 QT_TRANSLATE_NOOP("pivx-core", "Unable to start HTTP server. See debug log for details."),
@@ -465,8 +466,6 @@ QT_TRANSLATE_NOOP("pivx-core", "Unknown network specified in -onlynet: '%s'"),
 QT_TRANSLATE_NOOP("pivx-core", "Unsupported logging category %s=%s."),
 QT_TRANSLATE_NOOP("pivx-core", "Upgrade wallet to latest format"),
 QT_TRANSLATE_NOOP("pivx-core", "Use UPnP to map the listening port (default: %u)"),
-QT_TRANSLATE_NOOP("pivx-core", "Use UPnP to map the listening port (default: 1 when listening)"),
-QT_TRANSLATE_NOOP("pivx-core", "Use a custom max chain reorganization depth (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Use block spam filter (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Use the test network"),
 QT_TRANSLATE_NOOP("pivx-core", "User Agent comment (%s) contains unsafe characters."),
@@ -475,6 +474,7 @@ QT_TRANSLATE_NOOP("pivx-core", "Value is below the smallest available denominati
 QT_TRANSLATE_NOOP("pivx-core", "Verifying blocks..."),
 QT_TRANSLATE_NOOP("pivx-core", "Verifying wallet..."),
 QT_TRANSLATE_NOOP("pivx-core", "Wallet %s resides outside data directory %s"),
+QT_TRANSLATE_NOOP("pivx-core", "Wallet debugging/testing options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Wallet needed to be rewritten: restart PIVX Core to complete"),
 QT_TRANSLATE_NOOP("pivx-core", "Wallet options:"),
 QT_TRANSLATE_NOOP("pivx-core", "Wallet window title"),
@@ -490,5 +490,4 @@ QT_TRANSLATE_NOOP("pivx-core", "Zerocoin minting available only on regtest"),
 QT_TRANSLATE_NOOP("pivx-core", "Zerocoin options:"),
 QT_TRANSLATE_NOOP("pivx-core", "isValid(): Invalid -proxy address or hostname: '%s'"),
 QT_TRANSLATE_NOOP("pivx-core", "on startup"),
-QT_TRANSLATE_NOOP("pivx-core", "wallet.dat corrupt, salvage failed"),
 };
