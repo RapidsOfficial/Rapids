@@ -24,7 +24,7 @@ void clean()
 
 WalletTestingSetup::WalletTestingSetup(): TestingSetup()
 {
-    initZKSNARKS(); // init zk-snarks lib
+    //initZKSNARKS(); // init zk-snarks lib
 
     clean(); // todo: research why we have an initialized bitdb here.
     bitdb.MakeMock();

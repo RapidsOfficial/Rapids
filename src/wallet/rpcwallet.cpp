@@ -390,9 +390,13 @@ UniValue upgradewallet(const JSONRPCRequest& request)
 
     // Get version
     int prev_version = pwalletMain->GetVersion();
+
+    // For now, Sapling features are locked to regtest.
+    WalletFeature features = Params().IsRegTestNet() ? FEATURE_SAPLING : FEATURE_PRE_SPLIT_KEYPOOL;
+
     // Upgrade wallet's version
-    pwalletMain->SetMinVersion(FEATURE_LATEST);
-    pwalletMain->SetMaxVersion(FEATURE_LATEST);
+    pwalletMain->SetMinVersion(features);
+    pwalletMain->SetMaxVersion(features);
 
     // Upgrade to HD
     std::string upgradeError;
@@ -513,6 +517,10 @@ UniValue getnewshieldedaddress(const JSONRPCRequest& request)
                 + HelpExampleCli("getnewshieldedaddress", "")
                 + HelpExampleRpc("getnewshieldedaddress", "")
         );
+
+    if (!Params().IsRegTestNet()) {
+        throw std::runtime_error("Sapling only available on regtest");
+    }
 
     EnsureWallet();
 
@@ -691,6 +699,10 @@ UniValue listshieldedaddresses(const JSONRPCRequest& request)
                 + HelpExampleCli("listshieldedaddresses", "")
                 + HelpExampleRpc("listshieldedaddresses", "")
         );
+
+    if (!Params().IsRegTestNet()) {
+        throw std::runtime_error("Sapling only available on regtest");
+    }
 
     EnsureWallet();
     LOCK2(cs_main, pwalletMain->cs_wallet);
