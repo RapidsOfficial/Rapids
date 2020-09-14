@@ -1225,39 +1225,6 @@ void CWalletTx::UpdateTimeSmart()
     }
 }
 
-int CWalletTx::GetRequestCount() const
-{
-    // Returns -1 if it wasn't being tracked
-    int nRequests = -1;
-    {
-        LOCK(pwallet->cs_wallet);
-        if (IsCoinBase()) {
-            // Generated block
-            if (!hashUnset()) {
-                std::map<uint256, int>::const_iterator mi = pwallet->mapRequestCount.find(hashBlock);
-                if (mi != pwallet->mapRequestCount.end())
-                    nRequests = (*mi).second;
-            }
-        } else {
-            // Did anyone request this transaction?
-            std::map<uint256, int>::const_iterator mi = pwallet->mapRequestCount.find(GetHash());
-            if (mi != pwallet->mapRequestCount.end()) {
-                nRequests = (*mi).second;
-
-                // How about the block it's in?
-                if (nRequests == 0 && !hashUnset()) {
-                    std::map<uint256, int>::const_iterator mi = pwallet->mapRequestCount.find(hashBlock);
-                    if (mi != pwallet->mapRequestCount.end())
-                        nRequests = (*mi).second;
-                    else
-                        nRequests = 1; // If it's in someone else's block it must have got out
-                }
-            }
-        }
-    }
-    return nRequests;
-}
-
 CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter, bool recalculate) const
 {
     auto& amount = m_amounts[type];
@@ -2928,9 +2895,6 @@ CWallet::CommitResult CWallet::CommitTransaction(CWalletTx& wtxNew, CReserveKey&
 
         res.status = CWallet::CommitStatus::OK;
 
-        // Track how many getdata requests our transaction gets
-        mapRequestCount[res.hashTx] = 0;
-
         // Broadcast
         wtxNew.RelayWalletTransaction(connman, strCommand);
     }
@@ -4292,16 +4256,6 @@ CAmount CWallet::GetChange(const CTransaction& tx) const
             throw std::runtime_error("CWallet::GetChange() : value out of range");
     }
     return nChange;
-}
-
-void CWallet::Inventory(const uint256& hash)
-{
-    {
-        LOCK(cs_wallet);
-        std::map<uint256, int>::iterator mi = mapRequestCount.find(hash);
-        if (mi != mapRequestCount.end())
-            (*mi).second++;
-    }
 }
 
 unsigned int CWallet::GetKeyPoolSize()
