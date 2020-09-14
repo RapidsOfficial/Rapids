@@ -10,7 +10,6 @@
 #include "guiconstants.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
-#include "transactiondesc.h"
 #include "transactionrecord.h"
 #include "walletmodel.h"
 
@@ -324,18 +323,6 @@ public:
             return rec;
         }
         return 0;
-    }
-
-    QString describe(TransactionRecord* rec, int unit)
-    {
-        {
-            LOCK2(cs_main, wallet->cs_wallet);
-            std::map<uint256, CWalletTx>::iterator mi = wallet->mapWallet.find(rec->hash);
-            if (mi != wallet->mapWallet.end()) {
-                return TransactionDesc::toHTML(wallet, mi->second, rec, unit);
-            }
-        }
-        return QString();
     }
 };
 
@@ -757,8 +744,6 @@ QVariant TransactionTableModel::data(const QModelIndex& index, int role) const
         return rec->involvesWatchAddress;
     case WatchonlyDecorationRole:
         return txWatchonlyDecoration(rec);
-    case LongDescriptionRole:
-        return priv->describe(rec, walletModel->getOptionsModel()->getDisplayUnit());
     case AddressRole:
         return QString::fromStdString(rec->address);
     case LabelRole:
