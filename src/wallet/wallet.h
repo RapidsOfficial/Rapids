@@ -602,7 +602,7 @@ public:
     void DeleteLabel(const std::string& label);
 
     bool GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useIX);
-    bool GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX); // Only used for budget finalization
+    bool GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, CReserveKey& keyChange, bool useIX); // Only used for budget finalization
 
     bool IsUsed(const CTxDestination address) const;
 

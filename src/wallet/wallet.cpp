@@ -2343,11 +2343,8 @@ bool CWallet::GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useI
     return true;
 }
 
-bool CWallet::GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX)
+bool CWallet::GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, CReserveKey& keyChange, bool useIX)
 {
-    // make our change address
-    CReserveKey reservekey(this);
-
     CScript scriptChange;
     scriptChange << OP_RETURN << ToByteVector(hash);
 
@@ -2358,7 +2355,7 @@ bool CWallet::GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, boo
 
     CCoinControl* coinControl = NULL;
     int nChangePosInOut = -1;
-    bool success = CreateTransaction(vecSend, tx, reservekey, nFeeRet, nChangePosInOut, strFail, coinControl, ALL_COINS, true, useIX, (CAmount)0);
+    bool success = CreateTransaction(vecSend, tx, keyChange, nFeeRet, nChangePosInOut, strFail, coinControl, ALL_COINS, true, useIX, (CAmount)0);
     if (!success) {
         LogPrintf("GetBudgetSystemCollateralTX: Error - %s\n", strFail);
         return false;
