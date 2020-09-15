@@ -200,7 +200,7 @@ void CBudgetManager::SubmitFinalBudget()
         CWalletTx wtx;
         // Get our change address
         CReserveKey keyChange(pwalletMain);
-        if (!pwalletMain->GetBudgetFinalizationCollateralTX(wtx, tempBudget.GetHash(), keyChange, false)) {
+        if (!pwalletMain->CreateBudgetFeeTX(wtx, tempBudget.GetHash(), keyChange, true)) {
             LogPrint(BCLog::MNBUDGET,"%s: Can't make collateral transaction\n", __func__);
             return;
         }

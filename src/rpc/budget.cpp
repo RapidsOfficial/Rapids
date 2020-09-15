@@ -148,14 +148,14 @@ UniValue preparebudget(const JSONRPCRequest& request)
     // }
 
     CWalletTx wtx;
-    if (!pwalletMain->GetBudgetSystemCollateralTX(wtx, budgetProposalBroadcast.GetHash(), useIX)) { // 50 PIV collateral for proposal
+    // make our change address
+    CReserveKey keyChange(pwalletMain);
+    if (!pwalletMain->CreateBudgetFeeTX(wtx, budgetProposalBroadcast.GetHash(), keyChange, false)) { // 50 PIV collateral for proposal
         throw std::runtime_error("Error making collateral transaction for proposal. Please check your wallet balance.");
     }
 
-    // make our change address
-    CReserveKey reservekey(pwalletMain);
     //send the tx to the network
-    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, g_connman.get(), useIX ? NetMsgType::IX : NetMsgType::TX);
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, keyChange, g_connman.get(), useIX ? NetMsgType::IX : NetMsgType::TX);
     if (res.status != CWallet::CommitStatus::OK)
         throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 
