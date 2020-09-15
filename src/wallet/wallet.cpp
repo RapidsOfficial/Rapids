@@ -2327,7 +2327,7 @@ bool CWallet::CreateBudgetFeeTX(CWalletTx& tx, const uint256& hash, CReserveKey&
     CAmount nFeeRet = 0;
     std::string strFail = "";
     std::vector<CRecipient> vecSend;
-    vecSend.push_back(CRecipient{scriptChange, (fFinalization ? BUDGET_FEE_TX : BUDGET_FEE_TX_OLD), false});
+    vecSend.emplace_back(scriptChange, (fFinalization ? BUDGET_FEE_TX : BUDGET_FEE_TX_OLD), false);
 
     CCoinControl* coinControl = NULL;
     int nChangePosInOut = -1;
@@ -2668,7 +2668,7 @@ bool CWallet::CreateTransaction(const std::vector<CRecipient>& vecSend,
 bool CWallet::CreateTransaction(CScript scriptPubKey, const CAmount& nValue, CWalletTx& wtxNew, CReserveKey& reservekey, CAmount& nFeeRet, std::string& strFailReason, const CCoinControl* coinControl, AvailableCoinsType coin_type, bool useIX, CAmount nFeePay, bool fIncludeDelegated)
 {
     std::vector<CRecipient> vecSend;
-    vecSend.push_back(CRecipient{scriptPubKey, nValue, false});
+    vecSend.emplace_back(scriptPubKey, nValue, false);
     int nChangePosInOut = -1;
     return CreateTransaction(vecSend, wtxNew, reservekey, nFeeRet, nChangePosInOut, strFailReason, coinControl, coin_type, true, useIX, nFeePay, fIncludeDelegated);
 }
@@ -3526,7 +3526,7 @@ void CWallet::AutoCombineDust(CConnman* connman)
 
         std::vector<CRecipient> vecSend;
         CScript scriptPubKey = GetScriptForDestination(it->first);
-        vecSend.push_back(CRecipient{scriptPubKey, nTotalRewardsValue, false});
+        vecSend.emplace_back(scriptPubKey, nTotalRewardsValue, false);
 
         //Send change to same address
         CTxDestination destMyAddress;
@@ -3639,7 +3639,7 @@ bool CWallet::MultiSend()
             CBitcoinAddress strAddSend(vMultiSend[i].first);
             CScript scriptPubKey;
             scriptPubKey = GetScriptForDestination(strAddSend.Get());
-            vecSend.push_back(CRecipient{scriptPubKey, nAmount, false});
+            vecSend.emplace_back(scriptPubKey, nAmount, false);
         }
 
         //get the fee amount

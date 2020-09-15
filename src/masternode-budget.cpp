@@ -186,8 +186,9 @@ void CBudgetManager::SubmitFinalBudget()
     }
 
     CFinalizedBudgetBroadcast tempBudget(strBudgetName, nBlockStart, vecTxBudgetPayments, UINT256_ZERO);
-    if (HaveSeenFinalizedBudget(tempBudget.GetHash())) {
-        LogPrint(BCLog::MNBUDGET,"%s: Budget already exists - %s\n", __func__, tempBudget.GetHash().ToString());
+    const uint256& budgetHash = tempBudget.GetHash();
+    if (HaveSeenFinalizedBudget(budgetHash)) {
+        LogPrint(BCLog::MNBUDGET,"%s: Budget already exists - %s\n", __func__, budgetHash.ToString());
         nSubmittedHeight = nCurrentHeight;
         return; //already exists
     }
@@ -196,11 +197,11 @@ void CBudgetManager::SubmitFinalBudget()
     CTransaction tx;
     uint256 txidCollateral;
 
-    if (!mapCollateralTxids.count(tempBudget.GetHash())) {
+    if (!mapCollateralTxids.count(budgetHash)) {
         CWalletTx wtx;
         // Get our change address
         CReserveKey keyChange(pwalletMain);
-        if (!pwalletMain->CreateBudgetFeeTX(wtx, tempBudget.GetHash(), keyChange, true)) {
+        if (!pwalletMain->CreateBudgetFeeTX(wtx, budgetHash, keyChange, true)) {
             LogPrint(BCLog::MNBUDGET,"%s: Can't make collateral transaction\n", __func__);
             return;
         }
@@ -211,9 +212,9 @@ void CBudgetManager::SubmitFinalBudget()
             return;
         tx = (CTransaction)wtx;
         txidCollateral = tx.GetHash();
-        mapCollateralTxids.insert(std::make_pair(tempBudget.GetHash(), txidCollateral));
+        mapCollateralTxids.emplace(budgetHash, txidCollateral);
     } else {
-        txidCollateral = mapCollateralTxids[tempBudget.GetHash()];
+        txidCollateral = mapCollateralTxids[budgetHash];
     }
 
     //create the proposal incase we're the first to make it

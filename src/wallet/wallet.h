@@ -235,6 +235,12 @@ struct CRecipient
     CScript scriptPubKey;
     CAmount nAmount;
     bool fSubtractFeeFromAmount;
+
+    CRecipient(const CScript& _scriptPubKey, const CAmount& _nAmount, bool _fSubtractFeeFromAmount):
+        scriptPubKey(_scriptPubKey),
+        nAmount(_nAmount),
+        fSubtractFeeFromAmount(_fSubtractFeeFromAmount)
+    {}
 };
 
 
