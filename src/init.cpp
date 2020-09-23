@@ -1472,8 +1472,6 @@ bool AppInit2()
         bool fReset = fReindex;
         std::string strLoadError;
 
-        uiInterface.InitMessage(_("Loading block index..."));
-
         do {
             const int64_t load_block_index_start_time = GetTimeMillis();
 
@@ -1498,6 +1496,7 @@ bool AppInit2()
                 if (fReindex) {
                     pblocktree->WriteReindexing(true);
                 } else {
+                    uiInterface.InitMessage(_("Upgrading coins database..."));
                     // If necessary, upgrade from older database format.
                     if (!pcoinsdbview->Upgrade()) {
                         strLoadError = _("Error upgrading chainstate database");
