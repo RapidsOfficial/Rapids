@@ -192,7 +192,7 @@ public:
         nDefaultPort = 28732;
 
         // Note that of those with the service bits flag, most only support a subset of possible options
-		vSeeds.push_back(CDNSSeedData("seed1.rapidsnetwork.io ", "seed1.rapidsnetwork.io ", true));
+		vSeeds.push_back(CDNSSeedData("seed1.rapidsnetwork.io", "seed1.rapidsnetwork.io", true));
 		vSeeds.push_back(CDNSSeedData("seed2.rapidsnetwork.io", "seed2.rapidsnetwork.io", true));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 61);
