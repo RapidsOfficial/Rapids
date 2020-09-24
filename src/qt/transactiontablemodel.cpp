@@ -10,7 +10,6 @@
 #include "guiconstants.h"
 #include "guiutil.h"
 #include "optionsmodel.h"
-#include "transactiondesc.h"
 #include "transactionrecord.h"
 #include "walletmodel.h"
 
@@ -325,18 +324,6 @@ public:
         }
         return 0;
     }
-
-    QString describe(TransactionRecord* rec, int unit)
-    {
-        {
-            LOCK2(cs_main, wallet->cs_wallet);
-            std::map<uint256, CWalletTx>::iterator mi = wallet->mapWallet.find(rec->hash);
-            if (mi != wallet->mapWallet.end()) {
-                return TransactionDesc::toHTML(wallet, mi->second, rec, unit);
-            }
-        }
-        return QString();
-    }
 };
 
 TransactionTableModel::TransactionTableModel(CWallet* wallet, WalletModel* parent) : QAbstractTableModel(parent),
@@ -419,9 +406,6 @@ QString TransactionTableModel::formatTxStatus(const TransactionRecord* wtx) cons
     case TransactionStatus::OpenUntilDate:
         status = tr("Open until %1").arg(GUIUtil::dateTimeStr(wtx->status.open_for));
         break;
-    case TransactionStatus::Offline:
-        status = tr("Offline");
-        break;
     case TransactionStatus::Unconfirmed:
         status = tr("Unconfirmed");
         break;
@@ -436,9 +420,6 @@ QString TransactionTableModel::formatTxStatus(const TransactionRecord* wtx) cons
         break;
     case TransactionStatus::Immature:
         status = tr("Immature (%1 confirmations, will be available after %2)").arg(wtx->status.depth).arg(wtx->status.depth + wtx->status.matures_in);
-        break;
-    case TransactionStatus::MaturesWarning:
-        status = tr("This block was not received by any other nodes and will probably not be accepted!");
         break;
     case TransactionStatus::NotAccepted:
         status = tr("Orphan Block - Generated but not accepted. This does not impact your holdings.");
@@ -623,8 +604,6 @@ QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord* wtx)
     case TransactionStatus::OpenUntilBlock:
     case TransactionStatus::OpenUntilDate:
         return COLOR_TX_STATUS_OPENUNTILDATE;
-    case TransactionStatus::Offline:
-        return COLOR_TX_STATUS_OFFLINE;
     case TransactionStatus::Unconfirmed:
         return QIcon(":/icons/transaction_0");
     case TransactionStatus::Confirming:
@@ -649,7 +628,6 @@ QVariant TransactionTableModel::txStatusDecoration(const TransactionRecord* wtx)
         int part = (wtx->status.depth * 5 / total) + 1;
         return QIcon(QString(":/icons/transaction_%1").arg(part));
     }
-    case TransactionStatus::MaturesWarning:
     case TransactionStatus::NotAccepted:
         return QIcon(":/icons/transaction_0");
     default:
@@ -757,8 +735,6 @@ QVariant TransactionTableModel::data(const QModelIndex& index, int role) const
         return rec->involvesWatchAddress;
     case WatchonlyDecorationRole:
         return txWatchonlyDecoration(rec);
-    case LongDescriptionRole:
-        return priv->describe(rec, walletModel->getOptionsModel()->getDisplayUnit());
     case AddressRole:
         return QString::fromStdString(rec->address);
     case LabelRole:

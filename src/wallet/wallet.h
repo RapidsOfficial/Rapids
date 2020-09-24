@@ -235,6 +235,12 @@ struct CRecipient
     CScript scriptPubKey;
     CAmount nAmount;
     bool fSubtractFeeFromAmount;
+
+    CRecipient(const CScript& _scriptPubKey, const CAmount& _nAmount, bool _fSubtractFeeFromAmount):
+        scriptPubKey(_scriptPubKey),
+        nAmount(_nAmount),
+        fSubtractFeeFromAmount(_fSubtractFeeFromAmount)
+    {}
 };
 
 
@@ -362,7 +368,6 @@ public:
     TxItems wtxOrdered;
 
     int64_t nOrderPosNext;
-    std::map<uint256, int> mapRequestCount;
 
     std::map<CTxDestination, AddressBook::CAddressBookData> mapAddressBook;
 
@@ -602,8 +607,7 @@ public:
     std::set<CTxDestination> GetLabelAddresses(const std::string& label) const;
     void DeleteLabel(const std::string& label);
 
-    bool GetBudgetSystemCollateralTX(CWalletTx& tx, uint256 hash, bool useIX);
-    bool GetBudgetFinalizationCollateralTX(CWalletTx& tx, uint256 hash, bool useIX); // Only used for budget finalization
+    bool CreateBudgetFeeTX(CWalletTx& tx, const uint256& hash, CReserveKey& keyChange, bool fFinalization);
 
     bool IsUsed(const CTxDestination address) const;
 
@@ -635,8 +639,6 @@ public:
     const std::string& GetAccountName(const CScript& scriptPubKey) const;
 
     bool UpdatedTransaction(const uint256& hashTx);
-
-    void Inventory(const uint256& hash);
 
     unsigned int GetKeyPoolSize();
     unsigned int GetStakingKeyPoolSize();
@@ -992,7 +994,6 @@ public:
 
     int64_t GetTxTime() const;
     void UpdateTimeSmart();
-    int GetRequestCount() const;
     void RelayWalletTransaction(CConnman* connman, std::string strCommand = NetMsgType::TX);
     std::set<uint256> GetConflicts() const;
 };

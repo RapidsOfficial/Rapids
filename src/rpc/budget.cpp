@@ -135,10 +135,11 @@ UniValue preparebudget(const JSONRPCRequest& request)
 
     // create transaction 15 minutes into the future, to allow for confirmation time
     CBudgetProposalBroadcast budgetProposalBroadcast(strProposalName, strURL, nPaymentCount, scriptPubKey, nAmount, nBlockStart, UINT256_ZERO);
+    const uint256& proposalHash = budgetProposalBroadcast.GetHash();
 
     int nChainHeight = chainActive.Height();
     if (!budgetProposalBroadcast.UpdateValid(nChainHeight, false))
-        throw std::runtime_error("Proposal is not valid - " + budgetProposalBroadcast.GetHash().ToString() + " - " + budgetProposalBroadcast.IsInvalidReason());
+        throw std::runtime_error("Proposal is not valid - " + proposalHash.ToString() + " - " + budgetProposalBroadcast.IsInvalidReason());
 
     bool useIX = false; //true;
     // if (request.params.size() > 7) {
@@ -148,14 +149,14 @@ UniValue preparebudget(const JSONRPCRequest& request)
     // }
 
     CWalletTx wtx;
-    if (!pwalletMain->GetBudgetSystemCollateralTX(wtx, budgetProposalBroadcast.GetHash(), useIX)) { // 50 PIV collateral for proposal
+    // make our change address
+    CReserveKey keyChange(pwalletMain);
+    if (!pwalletMain->CreateBudgetFeeTX(wtx, proposalHash, keyChange, false)) { // 50 PIV collateral for proposal
         throw std::runtime_error("Error making collateral transaction for proposal. Please check your wallet balance.");
     }
 
-    // make our change address
-    CReserveKey reservekey(pwalletMain);
     //send the tx to the network
-    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, reservekey, g_connman.get(), useIX ? NetMsgType::IX : NetMsgType::TX);
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtx, keyChange, g_connman.get(), useIX ? NetMsgType::IX : NetMsgType::TX);
     if (res.status != CWallet::CommitStatus::OK)
         throw JSONRPCError(RPC_WALLET_ERROR, res.ToString());
 

@@ -529,12 +529,6 @@ bool ProcessBlockFound(CBlock* pblock, CWallet& wallet, Optional<CReserveKey>& r
     if (reservekey)
         reservekey->KeepKey();
 
-    // Track how many getdata requests this block gets
-    {
-        LOCK(wallet.cs_wallet);
-        wallet.mapRequestCount[pblock->GetHash()] = 0;
-    }
-
     // Inform about the new block
     GetMainSignals().BlockFound(pblock->GetHash());
 
