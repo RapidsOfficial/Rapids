@@ -6,6 +6,10 @@
         <translation>Dialoog</translation>
     </message>
     <message>
+        <source>New Address</source>
+        <translation>Nieuw Adres</translation>
+    </message>
+    <message>
         <source>Address</source>
         <translation>Adres</translation>
     </message>
@@ -39,6 +43,10 @@
     <message>
         <source>Set a label for the selected address</source>
         <translation>Stel een label in voor het geselecteerde adres</translation>
+    </message>
+    <message>
+        <source>Enter a label for the address (e.g. Exchange)</source>
+        <translation>Voer een label in voor het adres (bv. Beurs)</translation>
     </message>
     <message>
         <source>SAVE</source>
@@ -219,6 +227,14 @@
         <translation>Opslaan</translation>
     </message>
     <message>
+        <source>Add new contact</source>
+        <translation>Nieuw contact toevoegen</translation>
+    </message>
+    <message>
+        <source>Generate a new address to receive tokens.</source>
+        <translation>Genereer een nieuw adres om tokens te ontvangen.</translation>
+    </message>
+    <message>
         <source>Invalid Contact Address</source>
         <translation>Ongeldig contactadres</translation>
     </message>
@@ -360,6 +376,18 @@ voor bewijs van Inzet</translation>
         <translation>Portemonnee versleuteld</translation>
     </message>
     <message>
+        <source>WARNING:</source>
+        <translation>WAARSCHUWING:</translation>
+    </message>
+    <message>
+        <source>The caps lock key is on!</source>
+        <translation>De caps Lock-toets staat aan!</translation>
+    </message>
+    <message>
+        <source>Passphrases do not match!</source>
+        <translation>Wachtwoorden komen niet overeen!</translation>
+    </message>
+    <message>
         <source>IMPORTANT: Any previous backups you have made of your wallet file should be replaced with the newly generated, encrypted wallet file. For security reasons, previous backups of the unencrypted wallet file will become useless as soon as you start using the new, encrypted wallet.</source>
         <translation>BELANGRIJK: Elke eerder gemaakte backup van uw portemonneebestand dient te worden vervangen door het nieuwe gegenereerde, versleutelde portemonneebestand. Om veiligheidsredenen zullen eerdere backups van het niet-versleutelde portemonneebestand onbruikbaar worden zodra u uw nieuwe, versleutelde, portemonnee begint te gebruiken.</translation>
     </message>
@@ -378,6 +406,10 @@ voor bewijs van Inzet</translation>
     <message>
         <source>The supplied passphrases do not match.</source>
         <translation>De opgegeven wachtwoordzinnen komen niet overeen.</translation>
+    </message>
+    <message>
+        <source>LOSE ALL OF YOUR COINS</source>
+        <translation>VERLIES VAN AL UW MUNTEN</translation>
     </message>
     <message>
         <source>Wallet unlock failed</source>
@@ -640,6 +672,10 @@ voor bewijs van Inzet</translation>
         <translation>ja</translation>
     </message>
     <message>
+        <source>Can vary +/- %1 u%2 per input.</source>
+        <translation>Kan +/- %1 u%2 per invoer verschillen.</translation>
+    </message>
+    <message>
         <source>delegated to %1 for cold staking</source>
         <translation>gedelegeerd naar %1 voor cold staking</translation>
     </message>
@@ -777,6 +813,28 @@ voor je laten staken, terwijl je de sleutels veilig offline opslag bewaart.</tra
         <translation>Munt Controle</translation>
     </message>
     <message>
+        <source>Select %1 outputs to delegate.</source>
+        <translation>Selecteer %1 uitvoeren om te delegeren.</translation>
+    </message>
+    <message>
+        <source>Create Cold Staking Address</source>
+        <translation>Cold Staking Adres aanmaken</translation>
+    </message>
+    <message>
+        <source>Creates an address to receive delegated coins
+and stake them on their owner's behalf.</source>
+        <translation>Maak een adres aan om muntdelegaties te ontvangen
+en deze te kunnen staken namens hun eigenaar.</translation>
+    </message>
+    <message>
+        <source>My Cold Staking Addresses</source>
+        <translation>Mijn Cold Staking Adressen</translation>
+    </message>
+    <message>
+        <source>List your own cold staking addresses.</source>
+        <translation>Oplijsten van uw cold staking adressen.</translation>
+    </message>
+    <message>
         <source>Invalid entry</source>
         <translation>Ongeldige invoer</translation>
     </message>
@@ -819,6 +877,10 @@ Wil je verdergaan?</translation>
     <message>
         <source>Coins delegated</source>
         <translation>Gedelegeerde Munten</translation>
+    </message>
+    <message>
+        <source>You don't have any %1 to select.</source>
+        <translation>Je hebt geen %1 om te selecteren.</translation>
     </message>
     <message>
         <source>Cannot perform operation, wallet locked</source>
@@ -922,6 +984,14 @@ address</source>
     <message>
         <source>Staking statistics</source>
         <translation>Staking statistieken</translation>
+    </message>
+    <message>
+        <source>View your account's history</source>
+        <translation>Bekijk de geschiedenis van uw account</translation>
+    </message>
+    <message>
+        <source>How to get PIV</source>
+        <translation>Hoe PIV verkrijgen</translation>
     </message>
     <message>
         <source>Sort by</source>
@@ -1248,7 +1318,15 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <source>Form</source>
         <translation>Formulier</translation>
     </message>
-    </context>
+    <message>
+        <source>Collateral tx not found</source>
+        <translation>Terugbetalingstransactie niet gevonden</translation>
+    </message>
+    <message>
+        <source>Status: %1</source>
+        <translation>Status: %1</translation>
+    </message>
+</context>
 <context>
     <name>MasterNodeWizardDialog</name>
     <message>
@@ -1336,6 +1414,10 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Ongeldig IP-adres</translation>
     </message>
     <message>
+        <source>Unknown error</source>
+        <translation>Ongekend probleem</translation>
+    </message>
+    <message>
         <source>Prepare master node failed.
 
 %1
@@ -1360,6 +1442,10 @@ Het zal automatisch starten zodra de portemonnee voldoende bevestigingen heeft o
         <translation>Kan geen collaterale transactie versturen.
 
 %1</translation>
+    </message>
+    <message>
+        <source>walletModel not set</source>
+        <translation>walletModel niet ingesteld</translation>
     </message>
     <message>
         <source>Invalid masternode.conf file</source>
@@ -1475,12 +1561,28 @@ Gelieve nog enkele minuten te wachten (het onderpand van een masternode vereist 
         <translation>Masternodegegevens gekopieerd naar het klembord</translation>
     </message>
     <message>
+        <source>Not enough balance to create a masternode, 10,000 %1 required.</source>
+        <translation>Niet genoeg balans om een masternode te creëren, 10,000 %1 vereist.</translation>
+    </message>
+    <message>
         <source>Remote Masternode Data</source>
         <translation>Remote Masternodegegevens</translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
         <translation>Wat is een Masternode?</translation>
+    </message>
+    <message>
+        <source>FAQ explaining what Masternodes are</source>
+        <translation>FAQ legt uit wat Masternodes zijn</translation>
+    </message>
+    <message>
+        <source>What is a Controller?</source>
+        <translation>Wat is een Controller?</translation>
+    </message>
+    <message>
+        <source>FAQ explaining what is a Masternode Controller</source>
+        <translation>FAQ legt uit wat een Masternode Controller is</translation>
     </message>
     <message>
         <source>You are just about to export the required data to run a Masternode
@@ -1573,7 +1675,15 @@ Weet je het zeker?</translation>
         <source>Export data to run the Masternode on a remote server</source>
         <translation>Exporteer gegevens om de Masternode op een externe server uit te voeren</translation>
     </message>
-    </context>
+    <message>
+        <source>Masternode public key copied</source>
+        <translation>Masternode publieke sleutel gekopieerd</translation>
+    </message>
+    <message>
+        <source>Collateral tx id copied</source>
+        <translation>ID terugbetalingstransactie gekopieerd</translation>
+    </message>
+</context>
 <context>
     <name>MyAddressRow</name>
     <message>
@@ -1586,6 +1696,48 @@ Weet je het zeker?</translation>
     <message>
         <source>Form</source>
         <translation>Formulier</translation>
+    </message>
+    <message>
+        <source>HOME
+</source>
+        <translation>THUIS
+</translation>
+    </message>
+    <message>
+        <source>SEND
+</source>
+        <translation>VERSTUREN
+</translation>
+    </message>
+    <message>
+        <source>RECEIVE
+</source>
+        <translation>ONTVANGEN
+</translation>
+    </message>
+    <message>
+        <source>CONTACTS
+</source>
+        <translation>CONTACTEN
+</translation>
+    </message>
+    <message>
+        <source>MASTER
+NODES</source>
+        <translation>MASTER
+NODES</translation>
+    </message>
+    <message>
+        <source>COLD
+STAKING</source>
+        <translation>COLD
+STAKING</translation>
+    </message>
+    <message>
+        <source>SETTINGS
+</source>
+        <translation>INSTELLINGEN
+</translation>
     </message>
     <message>
         <source>V 1.0.0</source>
@@ -2107,7 +2259,7 @@ Adres: %4
         <source>Ping Time</source>
         <translation>Pingtijd</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>QObject</name>
     <message>
@@ -2197,6 +2349,10 @@ Adres: %4
     <message>
         <source>Delegator</source>
         <translation>Delegator</translation>
+    </message>
+    <message>
+        <source>Delegable</source>
+        <translation>Delegeerbaar</translation>
     </message>
     <message>
         <source>Cold Staking</source>
@@ -2294,7 +2450,59 @@ Adres: %4
         <source>by Date</source>
         <translation>per Datum</translation>
     </message>
-    </context>
+    <message>
+        <source>Jan</source>
+        <translation>Jan</translation>
+    </message>
+    <message>
+        <source>Feb</source>
+        <translation>Feb</translation>
+    </message>
+    <message>
+        <source>Mar</source>
+        <translation>Mrt</translation>
+    </message>
+    <message>
+        <source>Apr</source>
+        <translation>Apr</translation>
+    </message>
+    <message>
+        <source>May</source>
+        <translation>Mei</translation>
+    </message>
+    <message>
+        <source>Jun</source>
+        <translation>Jun</translation>
+    </message>
+    <message>
+        <source>Jul</source>
+        <translation>Jul</translation>
+    </message>
+    <message>
+        <source>Aug</source>
+        <translation>Aug</translation>
+    </message>
+    <message>
+        <source>Sep</source>
+        <translation>Sep</translation>
+    </message>
+    <message>
+        <source>Oct</source>
+        <translation>Okt</translation>
+    </message>
+    <message>
+        <source>Nov</source>
+        <translation>Nov</translation>
+    </message>
+    <message>
+        <source>Dec</source>
+        <translation>Dec</translation>
+    </message>
+    <message>
+        <source>Address with no label</source>
+        <translation>Adres zonder label</translation>
+    </message>
+</context>
 <context>
     <name>RPCConsole</name>
     <message>
@@ -2713,6 +2921,10 @@ Adres: %4
         <translation>Mijn Adres</translation>
     </message>
     <message>
+        <source>COPY</source>
+        <translation>KOPIEER</translation>
+    </message>
+    <message>
         <source>CANCEL</source>
         <translation>Annuleren</translation>
     </message>
@@ -2726,6 +2938,10 @@ Adres: %4
     <message>
         <source>No address</source>
         <translation>Geen adres</translation>
+    </message>
+    <message>
+        <source>Scan the QR code or copy the address to receive PIV</source>
+        <translation>Scan de QR code of kopieer het adres om PIV te ontvangen</translation>
     </message>
     <message>
         <source>Add Label</source>
@@ -2742,6 +2958,22 @@ Adres: %4
     <message>
         <source>Receive</source>
         <translation>Ontvangen</translation>
+    </message>
+    <message>
+        <source>My Addresses</source>
+        <translation>Mijn Adressen</translation>
+    </message>
+    <message>
+        <source>List your own addresses</source>
+        <translation>Oplijsten van uw adressen</translation>
+    </message>
+    <message>
+        <source>Create Request</source>
+        <translation>Verzoek aanmaken</translation>
+    </message>
+    <message>
+        <source>Request payment with a fixed amount</source>
+        <translation>Verzoek tot betaling met een vaste waarde</translation>
     </message>
     <message>
         <source>No available address, try unlocking the wallet</source>
@@ -2842,6 +3074,10 @@ Adres: %4
         <translation>PIV</translation>
     </message>
     <message>
+        <source>Instead of sharing only a PIVX address, you can create a payment request, bundling up more information</source>
+        <translation>In plaats van een PIVX-adres te delen, kunt u een betalingsverzoek creëren dat meer informatie bundelt.</translation>
+    </message>
+    <message>
         <source>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z </source>
         <translation>D7VFR83SQbiezrW72hjcWJtcfip5krte2Z</translation>
     </message>
@@ -2898,10 +3134,22 @@ Adres: %4
         <translation>Bedrag (optioneel)</translation>
     </message>
     <message>
+        <source>Address label cannot be empty</source>
+        <translation>Adreslabel kan niet leeg zijn</translation>
+    </message>
+    <message>
         <source>Invalid amount</source>
         <translation>Ongeldige hoeveelheid</translation>
     </message>
-    </context>
+    <message>
+        <source>Request for </source>
+        <translation>Verzoek voor</translation>
+    </message>
+    <message>
+        <source>Cold Staking Address Generated</source>
+        <translation>Colg Staking Adres gegenereerd</translation>
+    </message>
+</context>
 <context>
     <name>SendChangeAddressDialog</name>
     <message>
@@ -2932,7 +3180,11 @@ Adres: %4
         <source>Invalid address</source>
         <translation>Ongeldig adres</translation>
     </message>
-    </context>
+    <message>
+        <source>Cannot use cold staking addresses for change</source>
+        <translation>Kan geen colg staking adressen gebruiken voor specie</translation>
+    </message>
+</context>
 <context>
     <name>SendCustomFeeDialog</name>
     <message>
@@ -2950,6 +3202,10 @@ Adres: %4
     <message>
         <source>0.00 KB</source>
         <translation>0.00 KB</translation>
+    </message>
+    <message>
+        <source>Customize the transaction fee, depending on the fee value your transaction might be included faster in the blockchain</source>
+        <translation>Pas de transactie aan, afhankelijk van de kostenwaarde zal uw transactie mogelijks sneller opgenomen worden in de blockchain</translation>
     </message>
     <message>
         <source>Custom</source>
@@ -2979,7 +3235,15 @@ Adres: %4
         <source>SAVE</source>
         <translation>Opslaan</translation>
     </message>
-    </context>
+    <message>
+        <source>Fee too high. Must be below: %1</source>
+        <translation>Kost te hoog. Moet lager zijn dan: %1</translation>
+    </message>
+    <message>
+        <source>Fee too low. Must be at least: %1</source>
+        <translation>Kost te laag. Moet minstens: %1 zijn</translation>
+    </message>
+</context>
 <context>
     <name>SendMultiRow</name>
     <message>
@@ -2989,6 +3253,10 @@ Adres: %4
     <message>
         <source>Enter address</source>
         <translation>Voeg adres toe</translation>
+    </message>
+    <message>
+        <source>Address label (optional)</source>
+        <translation>Adreslabel (optioneel)</translation>
     </message>
     <message>
         <source>Enter label</source>
@@ -3078,8 +3346,32 @@ Deze munten zullen niet langer cold-staked zijn.</translation>
         <translation>Munt Controle</translation>
     </message>
     <message>
+        <source>Select the source of the coins</source>
+        <translation>Selecteer de herkomst van de munten</translation>
+    </message>
+    <message>
+        <source>Change Address</source>
+        <translation>Wijzig adres</translation>
+    </message>
+    <message>
+        <source>Customize the change address</source>
+        <translation>Aangepast wisselgeldadres</translation>
+    </message>
+    <message>
         <source>Open URI</source>
         <translation>URI openen</translation>
+    </message>
+    <message>
+        <source>Parse a payment request</source>
+        <translation>Verwerk een betalingsverzoek</translation>
+    </message>
+    <message>
+        <source>Unlocked remaining</source>
+        <translation>Ontgrendeld resterende</translation>
+    </message>
+    <message>
+        <source>You don't have any %1 to select.</source>
+        <translation>Je hebt geen %1 om te selecteren.</translation>
     </message>
     <message>
         <source>No contacts available, you can go to the contacts screen and add some there!</source>
@@ -3133,8 +3425,20 @@ Deze munten zullen niet langer cold-staked zijn.</translation>
         <translation>Waar</translation>
     </message>
     <message>
+        <source>Keep your wallet safe by doing regular backups and storing your backup file externally.
+This option creates a wallet.dat file that can be used to recover your whole balance (transactions and addresses) on another device</source>
+        <translation>Bewaar uw portemonnee veilig door middel van regelmatige back-ups, bewaar uw back-upbestand extern.
+Deze optie maakt een wallet.dat bestand aan dat gebruikt kan worden om uw volledige saldo (transacties en adressen) van een ander apparaat terug te krijgen</translation>
+    </message>
+    <message>
         <source>Select folder...</source>
         <translation>Map Selecteren...</translation>
+    </message>
+    <message>
+        <source>This will decrypt the whole wallet data and encrypt it back with the new passphrase.
+Remember to write it down and store it safely, otherwise you might lose access to your funds</source>
+        <translation>Dit zal de gehele portemonneegegevens decrypteren en zal opnieuw encrypteren met een nieuwe wachtwoordzin.
+Vergeet deze niet op te schrijven en veilig te bewaren, anders verlies je mogelijks de toegang tot uw geld</translation>
     </message>
     <message>
         <source>Change Passphrase</source>
@@ -3174,6 +3478,12 @@ Deze munten zullen niet langer cold-staked zijn.</translation>
     <message>
         <source>BIP38 Tool</source>
         <translation>BIP38 Tool</translation>
+    </message>
+    <message>
+        <source>Encrypt your PIVX addresses (key pair actually) using BIP38 encryption.
+Using this mechanism you can share your keys without middle-man risk, only need to store your passphrase safely</source>
+        <translation>Encrypteer uw PIVX-adressen (met key pair) gebruikmakende van BIP38 versleuteling.
+Door gebruik te maken van dit mechanisme kan je jouw sleutels delen zonder het risico van een tussenpersoon, je moet enkel je wachtwoordzin veilig opbergen</translation>
     </message>
     <message>
         <source>Encrypt</source>
@@ -3230,6 +3540,10 @@ Deze munten zullen niet langer cold-staked zijn.</translation>
     <message>
         <source>CLEAR ALL</source>
         <translation>WIS ALLES</translation>
+    </message>
+    <message>
+        <source>Enter a passphrase</source>
+        <translation>Voer wachtwoordzin in</translation>
     </message>
     <message>
         <source>CLEAR</source>
@@ -3321,6 +3635,10 @@ Deze munten zullen niet langer cold-staked zijn.</translation>
     <message>
         <source>Open Debug File</source>
         <translation>Open debugbestand</translation>
+    </message>
+    <message>
+        <source>Command Line Options</source>
+        <translation>Command Line Opties</translation>
     </message>
     <message>
         <source>Clear history</source>
@@ -3526,6 +3844,10 @@ Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Prob
         <translation>2) Waarom is mijn PIV niet besteedbaar?</translation>
     </message>
     <message>
+        <source>https://PIVX.org/</source>
+        <translation>https://PIVX.org/</translation>
+    </message>
+    <message>
         <source>1</source>
         <translation>1</translation>
     </message>
@@ -3596,6 +3918,14 @@ Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Prob
         <translation>3</translation>
     </message>
     <message>
+        <source>How do I stake PIV?</source>
+        <translation>Hoe stake ik PIV?</translation>
+    </message>
+    <message>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;ol style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;&lt;li align="justify" style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Make sure your wallet is completely synchronized and you are using the latest release. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;You must have a balance of PIVX with a minimum of 600 confirmations. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Your wallet must stay online and be unlocked for staking purposes. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Once all those steps are followed staking should be enabled. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;You can see the status of staking in the wallet by mousing over the package icon in the row on the top left of the wallet interface. There package will be lit up and will state &amp;quot;Staking Enabled&amp;quot; to indicate it is staking. Using the command line interface (pivx-cli); the command &lt;span style=" font-style:italic;"&gt;getstakingstatus&lt;/span&gt; will confirm that staking is active. &lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;ol style="margin-top: 0px; margin-bottom: 0px; margin-left: 0px; margin-right: 0px; -qt-list-indent: 1;"&gt;&lt;li align="justify" style=" margin-top:12px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Zorg ervoor dat uw portemonnee volledig gesynchroniseerd is en je op de juiste versie zit. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Je moet een balans van PIVX hebben met een minimum van 600 bevestigingen. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Uw portemonnee moet steeds online en ontgrendeld blijven voor stakingsdoeleinden. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Van zodra al deze stappen gevolgd zijn, zou staking ingeschakeld moeten zijn. &lt;/li&gt;&lt;li align="justify" style=" margin-top:0px; margin-bottom:12px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;"&gt;Je kan de stakingsstatus controleren door over het pakketicoontje te gaan gaan met je muis. Deze staat op de linker van de portemonnee interface. Dit pakketje zal oplichten en zal &amp;quot;Staking Inschakeld&amp;quot; vermelden om aan te geven dat staking actief is. Als je gebruik maakt van de command line interface (pivx-cli); het commando &lt;span style=" font-style:italic;"&gt;getstakingstatus&lt;/span&gt; zal bevestigen dat staking actief is. &lt;/li&gt;&lt;/ol&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
         <source>4</source>
         <translation>4</translation>
     </message>
@@ -3610,6 +3940,28 @@ Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Prob
     <message>
         <source>Where should I go if I need support?</source>
         <translation>Waar moet ik heen gaan als ik ondersteuning nodig heb?</translation>
+    </message>
+    <message>
+        <source>
+                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
+                           We have support channels in most of our official chat groups, for example
+                           &lt;a style='color: #b088ff' href='https://discord.PIVX.org'&gt;
+                           #support in our Discord&lt;/a&gt;.
+                           If you prefer to submit a ticket, You can do so at
+                           &lt;a style='color: #b088ff' href='https://PIVX.freshdesk.com'&gt;
+                           our Freshdesk support site&lt;/a&gt;.
+                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                         </source>
+        <translation>
+                           &lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align="justify"&gt;
+                           We hebben ondersteuningskanalen in de meeste van onze officiële chatgroepen, bijvoorbeeld
+                           &lt;a style='color: #b088ff' href='https://discord.PIVX.org'&gt;
+                           #support in onze Discord&lt;/a&gt;.
+                           Als u liever een ticket indient, kan jedat
+                           &lt;a style='color: #b088ff' href='https://PIVX.freshdesk.com'&gt;
+                           op onze Freshdesk ondersteuningssite.
+                           &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
+                         </translation>
     </message>
     <message>
         <source>What is a Masternode?</source>
@@ -3712,6 +4064,22 @@ Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Prob
     <message>
         <source>Frequently Asked Questions</source>
         <translation>Frequently Asked Questions</translation>
+    </message>
+    <message>
+        <source>3) How do I stake PIV?</source>
+        <translation>3) Hoe stake ik PIV?</translation>
+    </message>
+    <message>
+        <source>4) Where I should go if I need support?</source>
+        <translation>4) Waar moet ik heen gaan als ik ondersteuning nodig heb?</translation>
+    </message>
+    <message>
+        <source>5) What is a Masternode?</source>
+        <translation>5) Wat is een Masternode?</translation>
+    </message>
+    <message>
+        <source>6) What is a Masternode Controller?</source>
+        <translation>6) Wat is een Masternode Controller?</translation>
     </message>
     <message>
         <source>You can read more here</source>
@@ -3862,6 +4230,10 @@ Er was een fout opgetreden tijdens het opslaan van deze adreslijst naar %1. Prob
     <message>
         <source>Main</source>
         <translation>Hoofd</translation>
+    </message>
+    <message>
+        <source>Customize the main application options</source>
+        <translation>De opties van de hoofdtoepassing aanpassen</translation>
     </message>
     <message>
         <source>Size of database cache</source>
@@ -4075,6 +4447,10 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Verifiëer</translation>
     </message>
     <message>
+        <source>Write message here...</source>
+        <translation>Schrijf hier een bericht...</translation>
+    </message>
+    <message>
         <source>Select mode</source>
         <translation>Selecteer mode</translation>
     </message>
@@ -4190,6 +4566,10 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Pas de interne portemonnee-opties aan</translation>
     </message>
     <message>
+        <source>Stake split threshold</source>
+        <translation>Stake splitsdrempel</translation>
+    </message>
+    <message>
         <source>Spend unconfirmed change</source>
         <translation>Besteed onbevestigde wijziging</translation>
     </message>
@@ -4200,6 +4580,18 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     <message>
         <source>Customize the node network options</source>
         <translation>Pas de nodenetwerkopties aan</translation>
+    </message>
+    <message>
+        <source>Connect through SOCKS5 proxy (default proxy)</source>
+        <translation>Connecteer via SOCKS5 proxy (standaardproxy)</translation>
+    </message>
+    <message>
+        <source>Proxy IP</source>
+        <translation>Proxy IP</translation>
+    </message>
+    <message>
+        <source>Port</source>
+        <translation>Poort</translation>
     </message>
     <message>
         <source>Enter port</source>
@@ -4241,6 +4633,10 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Upgrade de portemonnee naar het laatste formaat bij het opstarten. (Opmerking: dit is GEEN update van de portemonnee zelf).</translation>
     </message>
     <message>
+        <source>The buttons below will restart the wallet with command-line options to repair this wallet, fix issues with corrupt blockchain files or missing/obsolete transactions</source>
+        <translation>De knoppen hieronder herstarten de portemonnee met commandoregelopties om deze portemonnee te repareren, problemen met beschadigde blockchain bestanden of ontbrekende/verouderde transacties op te lossen</translation>
+    </message>
+    <message>
         <source>Salvage wallet</source>
         <translation>Red portemonnee</translation>
     </message>
@@ -4253,12 +4649,24 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
         <translation>Blockchainbestand opnieuw scannen</translation>
     </message>
     <message>
+        <source>Rescan the blockchain for missing wallet transactions</source>
+        <translation>Scan de blockchain opnieuw voor ontbrekende portemonneetransacties</translation>
+    </message>
+    <message>
         <source>Recover transactions 1</source>
         <translation>Herstel transacties 1</translation>
     </message>
     <message>
+        <source>Recover transactions from blockchain (keep-meta-data, e.g. account owner)</source>
+        <translation>Herstel transacties uit de blockchain (keep-meta-data, bijvoorbeeld van de rekeninghouder)</translation>
+    </message>
+    <message>
         <source>Recover transactions 2</source>
         <translation>Herstel transacties 2</translation>
+    </message>
+    <message>
+        <source>Recover transactions from blockchain (drop meta-data)</source>
+        <translation>Herstel transacties van blockchain (laat meta-data vallen)</translation>
     </message>
     <message>
         <source>Upgrade wallet format</source>
@@ -4267,6 +4675,18 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     <message>
         <source>Rebuild index</source>
         <translation>Herbouw index</translation>
+    </message>
+    <message>
+        <source>Rebuild blockchain index from current blk000???.dat files</source>
+        <translation>Bouw de blockchain index opnieuw vanuit huidige blk000???.dat bestanden</translation>
+    </message>
+    <message>
+        <source>Delete local blockchain</source>
+        <translation>Verwijder lokale blockchain</translation>
+    </message>
+    <message>
+        <source>Deletes all local blockchain folders so the wallet synchronizes from scratch</source>
+        <translation>Verwijder alle lokale blockchain mappen zodat de portemonnee alles opnieuw kan hersynchroniseren</translation>
     </message>
     <message>
         <source>This will delete your local blockchain folders and the wallet will synchronize the complete Blockchain from scratch.&lt;br /&gt;&lt;br /&gt;</source>
@@ -4378,6 +4798,10 @@ Vink één of beide selectievakjes aan om beloningen op de inzet en/of masternod
     <message>
         <source>Client will be shutdown, do you want to proceed?</source>
         <translation>Client wordt uitgeschakeld, wil je doorgaan?</translation>
+    </message>
+    <message>
+        <source>Stake Split too low, it shall be either &gt;= %1 or equal to 0 (to disable stake splitting)</source>
+        <translation>Stake split te laag, het moet ofwel &gt;= %1 of gelijk zijn aan 0 (om stake splitsing uit te schakelen)</translation>
     </message>
     <message>
         <source>Restart required</source>
@@ -4578,8 +5002,48 @@ nieuwe back-up aangemaakt worden.
         <translation>Veelgestelde vragen</translation>
     </message>
     <message>
+        <source>Upgrade to HD Wallet</source>
+        <translation>Naar HD Portemonnee upgraden</translation>
+    </message>
+    <message>
+        <source>No Connection</source>
+        <translation>Geen Verbinding</translation>
+    </message>
+    <message>
+        <source>Staking Disabled</source>
+        <translation>Staking uitgeschakeld</translation>
+    </message>
+    <message>
+        <source>Cold Staking Disabled</source>
+        <translation>Cold Staking uitgeschakeld</translation>
+    </message>
+    <message>
+        <source> %54 Synchronizing..</source>
+        <translation>%54 Synchroniseren..</translation>
+    </message>
+    <message>
+        <source>Light Theme</source>
+        <translation>Light Thema</translation>
+    </message>
+    <message>
+        <source>Dark Theme</source>
+        <translation>Donker Thema</translation>
+    </message>
+    <message>
+        <source>Wallet Locked </source>
+        <translation>Portemonnee Vergrendeld</translation>
+    </message>
+    <message>
         <source>Wallet Locked</source>
         <translation>Portemonnee Vergrendeld</translation>
+    </message>
+    <message>
+        <source>Wallet Unlocked</source>
+        <translation>Portemonnee Ontgrendeld</translation>
+    </message>
+    <message>
+        <source>Wallet Unencrypted</source>
+        <translation>Portemonnee Onversleuteld</translation>
     </message>
     <message>
         <source>Available (Locked included)</source>
@@ -4622,10 +5086,6 @@ nieuwe back-up aangemaakt worden.
         <translation>Portemonnee succesvol geüpgraded, maar geen back-up aangemaakt.</translation>
     </message>
     <message>
-        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
-        <translation>WAARSCHUWING: vergeet niet op je wallet.dat bestand te kopiëren!</translation>
-    </message>
-    <message>
         <source>Upgrade Wallet Error</source>
         <translation>Upgrade Portemonnee Error</translation>
     </message>
@@ -4635,177 +5095,6 @@ nieuwe back-up aangemaakt worden.
     <message>
         <source>KB/s</source>
         <translation>KB/s</translation>
-    </message>
-</context>
-<context>
-    <name>TransactionDesc</name>
-    <message>
-        <source>Open until %1</source>
-        <translation>Open tot %1</translation>
-    </message>
-    <message>
-        <source>conflicted</source>
-        <translation>conflicteert</translation>
-    </message>
-    <message>
-        <source>%1/offline</source>
-        <translation>%1/offline</translation>
-    </message>
-    <message>
-        <source>%1/unconfirmed</source>
-        <translation>%1/onbevestigd</translation>
-    </message>
-    <message>
-        <source>%1 confirmations</source>
-        <translation>%1 bevestigingen</translation>
-    </message>
-    <message>
-        <source>%1/offline (verified via SwiftX)</source>
-        <translation>%1/offline (gecontroleerd via SwiftX)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (verified via SwiftX)</source>
-        <translation>%1/bevestigd (gecontroleerd via swifttx)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (verified via SwiftX)</source>
-        <translation>%1 bevestigingen (gecontroleerd via swifttx)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/offline (SwiftTX controle in uitvoering - %2 van %3 handtekeningen)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</source>
-        <translation>%1/bevestigd (SwiftTX controle in uitvoering - %2 van %3 handtekeningen)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 bevestigingen (SwiftTX controle in uitvoering -%2 van %3 handtekeningen)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification failed)</source>
-        <translation>%1/offline (SwiftTX verificatie mislukt)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification failed)</source>
-        <translation>%1/bevestigd (SwiftTX verificatie mislukt)</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <source>, has not been successfully broadcast yet</source>
-        <translation>, is nog niet succesvol uitgezonden</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Datum</translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation>Bron</translation>
-    </message>
-    <message>
-        <source>Generated</source>
-        <translation>Gegeneerd</translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation>Van</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation>ongekend</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation>Naar</translation>
-    </message>
-    <message>
-        <source>own address</source>
-        <translation>eigen adres</translation>
-    </message>
-    <message>
-        <source>watch-only</source>
-        <translation>watch-only</translation>
-    </message>
-    <message>
-        <source>label</source>
-        <translation>label</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation>Credit</translation>
-    </message>
-    <message>
-        <source>not accepted</source>
-        <translation>niet geaccepteerd</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation>Debet</translation>
-    </message>
-    <message>
-        <source>Total debit</source>
-        <translation>Totaal debet</translation>
-    </message>
-    <message>
-        <source>Total credit</source>
-        <translation>Totaal credit</translation>
-    </message>
-    <message>
-        <source>Transaction fee</source>
-        <translation>Transactiekosten</translation>
-    </message>
-    <message>
-        <source>Net amount</source>
-        <translation>Netto bedrag</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Bericht</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>Reactie</translation>
-    </message>
-    <message>
-        <source>Transaction ID</source>
-        <translation>Transactie ID</translation>
-    </message>
-    <message>
-        <source>Output index</source>
-        <translation>Output index</translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation>Winkelier</translation>
-    </message>
-    <message>
-        <source>Debug information</source>
-        <translation>Debug informatie</translation>
-    </message>
-    <message>
-        <source>Transaction</source>
-        <translation>Transactie</translation>
-    </message>
-    <message>
-        <source>Inputs</source>
-        <translation>Inputs</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Bedrag</translation>
-    </message>
-    <message>
-        <source>true</source>
-        <translation>waar</translation>
-    </message>
-    <message>
-        <source>false</source>
-        <translation>onwaar</translation>
     </message>
 </context>
 <context>
@@ -4825,10 +5114,6 @@ nieuwe back-up aangemaakt worden.
     <message>
         <source>Open until %1</source>
         <translation>Open tot %1</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation>Offline</translation>
     </message>
     <message>
         <source>Unconfirmed</source>
@@ -4851,10 +5136,6 @@ nieuwe back-up aangemaakt worden.
         <translation>Onvolwassen (%1 bevestigingen, zullen beschikbaar zijn na %2)</translation>
     </message>
     <message>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>Dit blok is niet ontvangen door andere noden en wordt waarschijnlijk niet geaccepteerd!</translation>
-    </message>
-    <message>
         <source>Received with</source>
         <translation>Ontvangen met</translation>
     </message>
@@ -4865,6 +5146,22 @@ nieuwe back-up aangemaakt worden.
     <message>
         <source>Received from</source>
         <translation>Ontvangen van</translation>
+    </message>
+    <message>
+        <source>%1 Stake</source>
+        <translation>%1 Stake</translation>
+    </message>
+    <message>
+        <source>z%1 Stake</source>
+        <translation>z%1 Stake</translation>
+    </message>
+    <message>
+        <source>%1 Cold Stake</source>
+        <translation>%1 Cold Stake</translation>
+    </message>
+    <message>
+        <source>%1 Stake on behalf of</source>
+        <translation>%1 Stake in naam van</translation>
     </message>
     <message>
         <source>Stake delegation</source>
@@ -4889,6 +5186,26 @@ nieuwe back-up aangemaakt worden.
     <message>
         <source>Mined</source>
         <translation>Mined</translation>
+    </message>
+    <message>
+        <source>Converted %1 to z%1</source>
+        <translation>Geconverteerde %1 naar z%1</translation>
+    </message>
+    <message>
+        <source>Spent z%1</source>
+        <translation>Beste z%1</translation>
+    </message>
+    <message>
+        <source>Received %1 from z%1</source>
+        <translation>Ontvangen %1 van z%1</translation>
+    </message>
+    <message>
+        <source>Minted Change as z%1 from z%1 Spend</source>
+        <translation>Gemunt wisselgeld als z%1 van bestede z%1</translation>
+    </message>
+    <message>
+        <source>Converted z%1 to %1</source>
+        <translation>Geconverteerde z%1 naar %1</translation>
     </message>
     <message>
         <source>watch-only</source>
@@ -5026,6 +5343,10 @@ nieuwe back-up aangemaakt worden.
         <translation>ID gekopieerd</translation>
     </message>
     <message>
+        <source>Delegating to</source>
+        <translation>Gedelegeerd naar</translation>
+    </message>
+    <message>
         <source>Unknown</source>
         <translation>Ongekend</translation>
     </message>
@@ -5043,7 +5364,23 @@ nieuwe back-up aangemaakt worden.
         <source>Send Coins</source>
         <translation>Verzend Munten</translation>
     </message>
-    </context>
+    <message>
+        <source>SwiftX doesn't support sending values that high yet. Transactions are currently limited to %1 %2.</source>
+        <translation>SwiftTX ondersteunt geen verzendwaarden die zo hoog zijn. Transacties zijn momenteel beperkt tot %1 %2.</translation>
+    </message>
+    <message>
+        <source>Transaction creation failed!
+%1</source>
+        <translation>Transactie creatie mislukt!
+%1</translation>
+    </message>
+    <message>
+        <source>The size of the transaction is too big.
+Select fewer inputs with coin control.</source>
+        <translation>De grootte van de transactie is te groot.
+Selecteer minder invoeren met muntcontrole.</translation>
+    </message>
+</context>
 <context>
     <name>WelcomeContentWidget</name>
     <message>
@@ -5328,14 +5665,6 @@ PIVX Core Portemonnee</translation>
         <translation>Waarschuwing: Wij lijken het er niet helemaal eens te zijn met onze peers! Mogelijk moet je upgraden, of andere nodes moeten mogelijk upgraden.</translation>
     </message>
     <message>
-        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>Waarschuwing: fout lezen wallet.dat! Alle sleutels lezen correct, maar transactie gegevens of adresboek invoeringen kunnen missen of niet correct zijn.</translation>
-    </message>
-    <message>
-        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Waarschuwing: wallet.dat corrupt, data gered! Originele wallet.dat opgeslagen als wallet.{timestamp}.bak in %s; als je saldo of transacties onjuist zijn, moet je een back-up herstellen.</translation>
-    </message>
-    <message>
         <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
         <translation>Whitelist peers verbinden van het opgegeven netmask of IP adres. Kan meerdere keren worden opgegeven.</translation>
     </message>
@@ -5352,10 +5681,6 @@ PIVX Core Portemonnee</translation>
         <translation>(standaard: %s)</translation>
     </message>
     <message>
-        <source>(default: 1)</source>
-        <translation>(standaard: 1)</translation>
-    </message>
-    <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Accepteer command line en JSON-RPC commando's</translation>
     </message>
@@ -5368,10 +5693,6 @@ PIVX Core Portemonnee</translation>
         <translation>Voeg een node toe om verbinding mee te maken en probeer de verbinding open te houden</translation>
     </message>
     <message>
-        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation>DNS lookups toestaan voor -addnode, -seednode en -connect</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>Vraag altijd naar peer adressen via DNS lookup (standaard: %u)</translation>
     </message>
@@ -5380,20 +5701,12 @@ PIVX Core Portemonnee</translation>
         <translation>Voeg opmerking toe aan de user agent string</translation>
     </message>
     <message>
-        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation>Poog om privé sleutels te herstellen van een corrupte wallet.dat</translation>
-    </message>
-    <message>
         <source>Automatically create Tor hidden service (default: %d)</source>
         <translation>Creëer automatisch de Tor verborgen service (standaard: %d)</translation>
     </message>
     <message>
         <source>Block creation options:</source>
         <translation>Block creatie opties:</translation>
-    </message>
-    <message>
-        <source>Cannot downgrade wallet</source>
-        <translation>Kan de portemonnee niet downgraden</translation>
     </message>
     <message>
         <source>Connect through SOCKS5 proxy</source>
@@ -5440,10 +5753,6 @@ PIVX Core Portemonnee</translation>
         <translation>Schakel OS notificaties uit voor inkomende transacties (standaard: %u)</translation>
     </message>
     <message>
-        <source>Disable safemode, override a real safe mode event (default: %u)</source>
-        <translation>Schakel safe mode uit, override een echte safe mode gebeurtenis (standaard: %u)</translation>
-    </message>
-    <message>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
         <translation>Ontdek eigen IP adres (standaard: 1 bij luisteren en niet -externalip)</translation>
     </message>
@@ -5484,18 +5793,6 @@ PIVX Core Portemonnee</translation>
         <translation>Error tijdens het laden van de block database</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat</source>
-        <translation>Error tijdens het laden van wallet.dat</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet corrupted</source>
-        <translation>Error tijdens het laden van wallet.dat: Portemonnee corrupt</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>Fout bij het laden van wallet.dat: Portemonnee vereist een nieuwere versie van PIVX Core</translation>
-    </message>
-    <message>
         <source>Error opening block database</source>
         <translation>Error tijdens het openen van de block database</translation>
     </message>
@@ -5510,10 +5807,6 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>Error</source>
         <translation>Error</translation>
-    </message>
-    <message>
-        <source>Error: </source>
-        <translation>Error: </translation>
     </message>
     <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
@@ -5632,22 +5925,6 @@ PIVX Core Portemonnee</translation>
         <translation>Dit is een pre-release test build - gebruik op eigen risico - niet gebruiken voor staking of handel applicaties!</translation>
     </message>
     <message>
-        <source> mints deleted
-</source>
-        <translation>mints verwijderd
-</translation>
-    </message>
-    <message>
-        <source> mints updated, </source>
-        <translation>mints bijgewerkt,</translation>
-    </message>
-    <message>
-        <source> unconfirmed transactions removed
-</source>
-        <translation>onbevestigde transacties verwijderd
-</translation>
-    </message>
-    <message>
         <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation>Schakel alle specifieke PIVX functionaliteit uit (Masternodes, Zerocoin, SwiftTX, Budgeting) (0-1, standaard: %u)</translation>
     </message>
@@ -5726,10 +6003,6 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Fout: geen geldige utxo!</translation>
-    </message>
-    <message>
-        <source>Failed to find Zerocoins in wallet.dat</source>
-        <translation>Niet gelukt om Zerocoins in wallet.dat te vinden.</translation>
     </message>
     <message>
         <source>Failed to parse public spend</source>
@@ -5848,10 +6121,6 @@ PIVX Core Portemonnee</translation>
         <translation>Niet genoeg bestandsbeschrijvingen beschikbaar.</translation>
     </message>
     <message>
-        <source>Number of automatic wallet backups (default: 10)</source>
-        <translation>Aantal automatische portemonnee backups (standaard: 10)</translation>
-    </message>
-    <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>Aantal aangepaste locatie back-ups om te behouden (standaard: %d)</translation>
     </message>
@@ -5900,24 +6169,142 @@ PIVX Core Portemonnee</translation>
         <translation>Voorbereiden van hersynchronisatie...</translation>
     </message>
     <message>
+        <source>Connect only to the specified node(s); -noconnect or -connect=0 alone to disable automatic connections</source>
+        <translation>Connecteer enkel naar specifieke node(s); -noconnect of -connect=0 enkel om de automatische verbindingen uit te schakelen</translation>
+    </message>
+    <message>
+        <source>Do not accept transactions if any ancestor would have &lt;n&gt; or more in-mempool descendants (default: %u)</source>
+        <translation>Accepteer geen transacties als een voorouder &lt;n&gt; of meer nazaten in mempool zou hebben (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Do not accept transactions if any ancestor would have more than &lt;n&gt; kilobytes of in-mempool descendants (default: %u).</source>
+        <translation>Accepteer geen transacties als een voorouder &lt;n&gt; of meer nazaten van kilobytes in mempool zou hebben (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Do not accept transactions if number of in-mempool ancestors is &lt;n&gt; or more (default: %u)</source>
+        <translation>Accepteer geen transacties als het nummer &lt;n&gt; of meer aan afkomsten van in-mempool is (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Do not accept transactions whose size with all in-mempool ancestors exceeds &lt;n&gt; kilobytes (default: %u)</source>
+        <translation>Accepteer geen transacties als de grootte van alle in-mempool afkomsten &lt;n&gt;kilobytes overschrijdt (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Do not keep transactions in the mempool longer than &lt;n&gt; hours (default: %u)</source>
+        <translation>Bewaar geen transacties in de mempool langer dan &lt;n&gt; uren (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Fees (in %s/Kb) smaller than this are considered zero fee for relaying, mining and transaction creation (default: %s)</source>
+        <translation>Kosten (in %s/Kb) kleiner dan dit worden beschouwd als zero fee voor het heruitzenden, minen en een transactie te verrichting (standaard: %s)</translation>
+    </message>
+    <message>
+        <source>Fees (in %s/Kb) smaller than this are considered zero fee for transaction creation (default: %s)</source>
+        <translation>Kosten (in %s/Kb) kleiner dan dit worden beschouwd als zero fee voor transactie verrichting (standaard: %s)</translation>
+    </message>
+    <message>
+        <source>Minimum positive amount (in PIV) allowed by GUI and RPC for the stake split threshold (default: %s)</source>
+        <translation>Minimum geldige waarde (in PIV) toegestaan bij GUI en RPC voor de staking splitsdrempel (standaard: %s)</translation>
+    </message>
+    <message>
         <source>Please check that your computer's date and time are correct! If your clock is wrong PIVX Core will not work properly.</source>
         <translation>Controleer of de datum en tijd van je computer juist zijn! Als je klok verkeerd ingesteld staat, werkt PIVX Core niet goed.</translation>
+    </message>
+    <message>
+        <source>Query for peer addresses via DNS lookup, if low on addresses (default: 1 unless -connect/-noconnect)</source>
+        <translation>Query voor peer adressen via DNS lookup, als er weinig adressen zijn (standaard: 1 tenzij -connect/-noconnect)</translation>
     </message>
     <message>
         <source>Specify location of debug log file: this can be an absolute path or a path relative to the data directory (default: %s)</source>
         <translation>Geef de locatie van het foutopsporingslogboek op: dit kan een absoluut pad zijn of een pad ten opzichte van de gegevensmap (standaard: %s)</translation>
     </message>
     <message>
+        <source>WARNING: The transaction has been signed and recorded, so the wallet will try to re-send it. Use 'abandontransaction' to cancel it. (txid: %s)</source>
+        <translation>WAARSCHUWING: De transactie is ondertekend en opgenomen, dus de portemonnee zal deze opnieuw proberen te versturen. Gebruik 'abandontransaction' om deze te annuleren. (txid: %s)</translation>
+    </message>
+    <message>
+        <source>(must be %d for %s-net)</source>
+        <translation>(moet %d voor %s-net zijn)</translation>
+    </message>
+    <message>
+        <source>Active Masternode not initialized.</source>
+        <translation>Actieve Masternode niet geïnitialiseerd.</translation>
+    </message>
+    <message>
+        <source>Allows deprecated RPC method(s) to be used</source>
+        <translation>Sta verouderde RPC methode(s) toe om gebruikt te worden</translation>
+    </message>
+    <message>
+        <source>Can't generate a change-address key. Please call keypoolrefill first.</source>
+        <translation>Kan geen wisselgeldadressleutel genereren. Roep eerst de keypoolrefill op.</translation>
+    </message>
+    <message>
         <source>Cannot resolve -%s address: '%s'</source>
         <translation>Kan oplossing -%s niet voltooien voor adres: '%s'</translation>
     </message>
     <message>
-        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
-        <translation>Kan niet upgraden naar een HD portemonnee (Voert alreeds HD ondersteuning uit). Versie: %d</translation>
+        <source>Change index out of range</source>
+        <translation>Wissel buiten het bereik</translation>
+    </message>
+    <message>
+        <source>Error: -listen must be true if -masternode is set.</source>
+        <translation>Error: -listen moet op true staan als de -masternode is ingesteld.</translation>
+    </message>
+    <message>
+        <source>Error: -maxmempool must be at least %d MB</source>
+        <translation>Error: -maxmempool moet minsten %d MB groot zijn</translation>
+    </message>
+    <message>
+        <source>Error: Invalid port %d for running a masternode.</source>
+        <translation>Error: Ongeldige poort %d voor het uitvoeren van een masternode.</translation>
+    </message>
+    <message>
+        <source>Failed to accept tx in the memory pool (reason: %s)
+</source>
+        <translation>Mislukt om transactie in memorypool te accepteren (reden: %s)
+</translation>
+    </message>
+    <message>
+        <source>Fee (in %s/kB) to add to transactions you send (default: %s)</source>
+        <translation>Kosten (in %s/kB) om toe te voegen aan de transactie die je verstuurd (standaard: %s)</translation>
+    </message>
+    <message>
+        <source>Invalid -masternodeaddr address: %s</source>
+        <translation>Ongeldig -masternodeaddr adres: %s</translation>
+    </message>
+    <message>
+        <source>Invalid -masternodeaddr port %d, only %d is supported on %s-net.</source>
+        <translation>Ongeldig -masternodeaddr poort %d, enkel %d is ondersteund op %s-net.</translation>
+    </message>
+    <message>
+        <source>Invalid port %d detected in masternode.conf</source>
+        <translation>Ongeldige poort %d gedetecteerd in masternode.conf</translation>
+    </message>
+    <message>
+        <source>Invalid status error.</source>
+        <translation>Ongeldige statuserror.</translation>
+    </message>
+    <message>
+        <source>Keep the transaction memory pool below &lt;n&gt; megabytes (default: %u)</source>
+        <translation>Hou de transactiememorypool lager dan &lt;n&gt; megabytes (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Keypool ran out, please call keypoolrefill first, or unlock the wallet.</source>
+        <translation>Keypool is opgeraakt, roep eerst keypoolrefill op of ontgrendel de portemonnee.</translation>
+    </message>
+    <message>
+        <source>Limit size of signature cache to &lt;n&gt; MiB (default: %u)</source>
+        <translation>Limietgrootte van signature cache naar &lt;n&gt; MiB (standaard: %u)</translation>
+    </message>
+    <message>
+        <source>Masternodes are required to run on port %d for %s-net</source>
+        <translation>Masternodes zijn vereist om te draaien op poort %d voor %s-net</translation>
     </message>
     <message>
         <source>Need destination or change address because change is not exact</source>
         <translation>Bestemmings- of wisseladres nodig omdat wissel niet exact is</translation>
+    </message>
+    <message>
+        <source>No error</source>
+        <translation>Geen error</translation>
     </message>
     <message>
         <source>Prepend debug output with timestamp (default: %u)</source>
@@ -5948,6 +6335,10 @@ PIVX Core Portemonnee</translation>
         <translation>Herstel blockchain index van huidige blk000??.dat bestanden</translation>
     </message>
     <message>
+        <source>Reindex the %s and z%s money supply statistics</source>
+        <translation>Indexeer de %s en z%s geldvoorraadstatistieken opnieuw</translation>
+    </message>
+    <message>
         <source>Relay and mine data carrier transactions (default: %u)</source>
         <translation>Relay en mine data carrier transacties (standaard: %u)</translation>
     </message>
@@ -5962,14 +6353,6 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>Rescanning...</source>
         <translation>Opnieuw scannen...</translation>
-    </message>
-    <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>ResetMintZerocoin voltooid: </translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>ResetSpentZerocoin voltooid: </translation>
     </message>
     <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
@@ -6068,10 +6451,6 @@ PIVX Core Portemonnee</translation>
         <translation>Onbevestigd wisselgeld besteden bij het verzenden van transacties (standaard: %u)</translation>
     </message>
     <message>
-        <source>Staking options:</source>
-        <translation>Staking opties:</translation>
-    </message>
-    <message>
         <source>Stop running after importing blocks from disk (default: %u)</source>
         <translation>Stop na het importeren van blokken van schijf (standaard: %u)</translation>
     </message>
@@ -6104,6 +6483,10 @@ PIVX Core Portemonnee</translation>
         <translation>Synchroniseren zPIV portemonnee...</translation>
     </message>
     <message>
+        <source>The threshold value cannot be less than %s</source>
+        <translation>De drempelwaarde kan niet lager zijn dan %s</translation>
+    </message>
+    <message>
         <source>This help message</source>
         <translation>Dit help bericht</translation>
     </message>
@@ -6114,6 +6497,14 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>This is intended for regression testing tools and app development.</source>
         <translation>Dit is bedoeld voor regressie test tools en app ontwikkeling.</translation>
+    </message>
+    <message>
+        <source>This is not a masternode. 'local' option disabled.</source>
+        <translation>Dit is geen masternode. 'Lokaal' optie uitgeschakeld.</translation>
+    </message>
+    <message>
+        <source>This is not a masternode.</source>
+        <translation>Dit is geen Masternode.</translation>
     </message>
     <message>
         <source>Threshold for disconnecting misbehaving peers (default: %u)</source>
@@ -6148,6 +6539,10 @@ PIVX Core Portemonnee</translation>
         <translation>Transactie bedragen moeten positief zijn</translation>
     </message>
     <message>
+        <source>Transaction canceled.</source>
+        <translation>Transactie geannuleerd.</translation>
+    </message>
+    <message>
         <source>Transaction too large for fee policy</source>
         <translation>Transactie te groot voor kosten beleid</translation>
     </message>
@@ -6162,10 +6557,6 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>Unable to bind to %s on this computer (bind returned error %s)</source>
         <translation>Niet mogelijk te binden aan %s op deze computer (bind stuurt fout %s terug)</translation>
-    </message>
-    <message>
-        <source>Unable to generate initial key</source>
-        <translation>Niet mogelijke om de initiële sleutel te genereren.</translation>
     </message>
     <message>
         <source>Unable to generate keys</source>
@@ -6194,14 +6585,6 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>Use UPnP to map the listening port (default: %u)</source>
         <translation>Gebruik UPnP om de luisterpoort te mappen (standaard: %u)</translation>
-    </message>
-    <message>
-        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation>Gebruik UPnP om de luisterpoort te mappen (standaard: 1 bij het luisteren)</translation>
-    </message>
-    <message>
-        <source>Use a custom max chain reorganization depth (default: %u)</source>
-        <translation>Gebruik een aangepaste max chain reorganisatie diepte (standaard: %u)</translation>
     </message>
     <message>
         <source>Use the test network</source>
@@ -6287,10 +6670,6 @@ PIVX Core Portemonnee</translation>
         <source>on startup</source>
         <translation>tijdens het opstarten</translation>
     </message>
-    <message>
-        <source>wallet.dat corrupt, salvage failed</source>
-        <translation>wallet.dat corrupt, redding mislukt</translation>
-    </message>
 </context>
 <context>
     <name>send</name>
@@ -6301,6 +6680,10 @@ PIVX Core Portemonnee</translation>
     <message>
         <source>Send</source>
         <translation>Zenden</translation>
+    </message>
+    <message>
+        <source>Send public coins (PIV)</source>
+        <translation>Verstuur publieke munten (PIV)</translation>
     </message>
     <message>
         <source>PIVX address or contact label</source>

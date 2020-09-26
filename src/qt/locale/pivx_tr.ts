@@ -1959,7 +1959,7 @@ Adres: %4
         <source>Ping Time</source>
         <translation>Ping Time</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>QObject</name>
     <message>
@@ -4150,177 +4150,6 @@ Emin misiniz?
     </message>
 </context>
 <context>
-    <name>TransactionDesc</name>
-    <message>
-        <source>Open until %1</source>
-        <translation>Açık %1 e dek</translation>
-    </message>
-    <message>
-        <source>conflicted</source>
-        <translation>çatışmalı</translation>
-    </message>
-    <message>
-        <source>%1/offline</source>
-        <translation>%1 / çevrimdışı</translation>
-    </message>
-    <message>
-        <source>%1/unconfirmed</source>
-        <translation>%1 / doğrulanmamış</translation>
-    </message>
-    <message>
-        <source>%1 confirmations</source>
-        <translation>%1 doğrulama</translation>
-    </message>
-    <message>
-        <source>%1/offline (verified via SwiftX)</source>
-        <translation>%1 / çevrimdışı (SwiftX ile doğrulanmış)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (verified via SwiftX)</source>
-        <translation>%1 / doğrulandı (SwiftX ile doğrulandı)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (verified via SwiftX)</source>
-        <translation>%1 doğrulama (SwiftX ile doğrulandı)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 / çevrimdışı (SwiftX doğrulama işlemi devam ediyor - %3 imzalardan %2 si)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</source>
-        <translation>%1 / onaylandı (SwiftX doğrulama işlemi - %3 imzalardan %2 si)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 doğrulama (SwiftX doğrulama işlemi - %3 imzalardan %2 si)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification failed)</source>
-        <translation>%1 / çevrimdışı (SwiftX doğrulama başarısız)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification failed)</source>
-        <translation>%1 / onaylandı (SwiftX doğrulama başarısız oldu)</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Durum</translation>
-    </message>
-    <message>
-        <source>, has not been successfully broadcast yet</source>
-        <translation>, henüz başarıyla yayınlanmamış</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Tarih</translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation>Kaynak</translation>
-    </message>
-    <message>
-        <source>Generated</source>
-        <translation>Oluşturuldu</translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation>Tarafından</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation>Bilinmeyen</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation>Şuna</translation>
-    </message>
-    <message>
-        <source>own address</source>
-        <translation>Kendi adresin</translation>
-    </message>
-    <message>
-        <source>watch-only</source>
-        <translation>sadece-izle </translation>
-    </message>
-    <message>
-        <source>label</source>
-        <translation>Etiket</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation>Kredi</translation>
-    </message>
-    <message>
-        <source>not accepted</source>
-        <translation>kabul edilmez</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation>Debit</translation>
-    </message>
-    <message>
-        <source>Total debit</source>
-        <translation>Total debit</translation>
-    </message>
-    <message>
-        <source>Total credit</source>
-        <translation>Total Kredi</translation>
-    </message>
-    <message>
-        <source>Transaction fee</source>
-        <translation>İşlem ücreti</translation>
-    </message>
-    <message>
-        <source>Net amount</source>
-        <translation>Net miktar</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Mesaj</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>Yorum</translation>
-    </message>
-    <message>
-        <source>Transaction ID</source>
-        <translation>İşlem ID si</translation>
-    </message>
-    <message>
-        <source>Output index</source>
-        <translation>Çıktı İndeksi</translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation>Satıcı</translation>
-    </message>
-    <message>
-        <source>Debug information</source>
-        <translation>Debug bilgisi</translation>
-    </message>
-    <message>
-        <source>Transaction</source>
-        <translation>İşlem</translation>
-    </message>
-    <message>
-        <source>Inputs</source>
-        <translation>Girdiler</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Miktar</translation>
-    </message>
-    <message>
-        <source>true</source>
-        <translation>true</translation>
-    </message>
-    <message>
-        <source>false</source>
-        <translation>false</translation>
-    </message>
-</context>
-<context>
     <name>TransactionTableModel</name>
     <message>
         <source>Date</source>
@@ -4337,10 +4166,6 @@ Emin misiniz?
     <message>
         <source>Open until %1</source>
         <translation>Açık %1 e dek</translation>
-    </message>
-    <message>
-        <source>Offline</source>
-        <translation>Çevrimdışı</translation>
     </message>
     <message>
         <source>Unconfirmed</source>
@@ -4361,10 +4186,6 @@ Emin misiniz?
     <message>
         <source>Immature (%1 confirmations, will be available after %2)</source>
         <translation>Olgunlaşmamış (%1 doğrulama, %2'den sonra mevcut olacak)</translation>
-    </message>
-    <message>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>Bu blok diğer düğümler tarafından alınmadı ve muhtemelen kabul edilmeyecek!</translation>
     </message>
     <message>
         <source>Received with</source>
@@ -4812,14 +4633,6 @@ Hoşgeldiniz</translation>
         <translation>Uyarı: Diğer eşlerle anlaşamıyor gibiyiz.! Sizin yada diğer düğümlerin güncelleme yapması gerekiyor. </translation>
     </message>
     <message>
-        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>Uyarı: wallet.dat dosyası okunurken hata oluştu. Tüm anahtarlar doğru şekilde okundu, fakat işlemler bilgisi veya adres defteri girişleri eksik veya yanlış olabilir.</translation>
-    </message>
-    <message>
-        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Uyarı: wallet.dat dosyası bozuk, bilgi kurtarıldı! Orjinal cüzdan wallet.{timestamp}.bak adıyla  %s içine kaydedildiİ bakiyeniz veya işlemler yanlış ise yedekten yükleme yapmalısınız.</translation>
-    </message>
-    <message>
         <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
         <translation>Verilen netmask veya IP adresinden gelen bağlantıları güvenli listeye ekle. Birden çok defa belirlenebilir.</translation>
     </message>
@@ -4836,10 +4649,6 @@ Hoşgeldiniz</translation>
         <translation>(default: %s)</translation>
     </message>
     <message>
-        <source>(default: 1)</source>
-        <translation>(default: 1)</translation>
-    </message>
-    <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>JSON-RPC ve komut satırı komutlarını kabul et</translation>
     </message>
@@ -4852,10 +4661,6 @@ Hoşgeldiniz</translation>
         <translation>Bağlanmak için bir düğüm ekle ve bağlantıyı açık tut</translation>
     </message>
     <message>
-        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation>DNS lookup ile -addnode, -seednode ve -connect işlemlerine izin ver</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>Eş adreslerini her zaman DNS lookup yoluyla ara (varsayılan: %u)</translation>
     </message>
@@ -4864,20 +4669,12 @@ Hoşgeldiniz</translation>
         <translation>Kullanıcı gereç dizisine yorumu ekle ekle</translation>
     </message>
     <message>
-        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation>Bozuk wallet.dat dosyasından gizli anahtarları kurtar</translation>
-    </message>
-    <message>
         <source>Automatically create Tor hidden service (default: %d)</source>
         <translation>Tor gizli servislerini otomatik olarak oluştur (varsayılan: %d)</translation>
     </message>
     <message>
         <source>Block creation options:</source>
         <translation>Blok oluşturma seçenekleri:</translation>
-    </message>
-    <message>
-        <source>Cannot downgrade wallet</source>
-        <translation>Cüzdan alt versiyona düşürülemiyor</translation>
     </message>
     <message>
         <source>Connect through SOCKS5 proxy</source>
@@ -4924,10 +4721,6 @@ Hoşgeldiniz</translation>
         <translation>Gelen işlemler için işletim sistemi uyarılarını devre dışı bırak (varsayılan: %u)</translation>
     </message>
     <message>
-        <source>Disable safemode, override a real safe mode event (default: %u)</source>
-        <translation>Güvenli modu devre dışı bırak, gerçek bir güvenli mode durumunu üstüne yaz (varsayılan: %u)</translation>
-    </message>
-    <message>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
         <translation>Kendi IP adresini tespit et (varsayılan:1 dinliyorken ve dış IP yokken)</translation>
     </message>
@@ -4966,18 +4759,6 @@ Hoşgeldiniz</translation>
     <message>
         <source>Error loading block database</source>
         <translation>Blok veritabanı yüklenirken hata oluştu</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat</source>
-        <translation>Wallet.dat yüklenirken hata oluştu</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet corrupted</source>
-        <translation>Wallet.dat yüklenirken hata oluştu: Cüzdan dosyası bozuk</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>Wallet.dat yüklenirken hata oluştu: Cüzdan daha yeni bir PIVX Core versiyonuna ihtiyaç duyuyor</translation>
     </message>
     <message>
         <source>Error opening block database</source>
@@ -5112,22 +4893,6 @@ Hoşgeldiniz</translation>
         <translation>Bu ön-sürümdeki bir test programıdır - riski kabullenerek kullanınız - staking ve ticaret uygulamalarında kullanmayın.</translation>
     </message>
     <message>
-        <source> mints deleted
-</source>
-        <translation>mintler silindi
-</translation>
-    </message>
-    <message>
-        <source> mints updated, </source>
-        <translation> mints güncellendi</translation>
-    </message>
-    <message>
-        <source> unconfirmed transactions removed
-</source>
-        <translation>Doğrulanmamış işlemler kaldırıldı
-</translation>
-    </message>
-    <message>
         <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation>PIVX spesifik tüm fonksiyonaliteyi devre dışı bırak (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, varsayılan: %u)</translation>
     </message>
@@ -5206,10 +4971,6 @@ Hoşgeldiniz</translation>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Hata: Geçerli utxo yok!</translation>
-    </message>
-    <message>
-        <source>Failed to find Zerocoins in wallet.dat</source>
-        <translation>Wallet.dat dosyasından Zerocoin bulunamadı.</translation>
     </message>
     <message>
         <source>Failed to parse public spend</source>
@@ -5316,10 +5077,6 @@ Hoşgeldiniz</translation>
         <translation>Yeterli dosya tanımlayıcısı bulunmuyor.</translation>
     </message>
     <message>
-        <source>Number of automatic wallet backups (default: 10)</source>
-        <translation>Otomatik olarak yedeklenmiş cüzdan sayısı</translation>
-    </message>
-    <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>Tutulacak özel lokasyonlu yedek sayısı (varsayılan: %d)</translation>
     </message>
@@ -5406,14 +5163,6 @@ Hoşgeldiniz</translation>
     <message>
         <source>Rescanning...</source>
         <translation>Yeniden taranıyor...</translation>
-    </message>
-    <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>ResetMintZerocoin tamamlandı: </translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>ResetSpentZerocoin tamamlandı: </translation>
     </message>
     <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
@@ -5512,10 +5261,6 @@ Hoşgeldiniz</translation>
         <translation>Transfer yapılırken onaylanmamış farkları kullan (varsayılan: %u)</translation>
     </message>
     <message>
-        <source>Staking options:</source>
-        <translation>Staking seçenekleri:</translation>
-    </message>
-    <message>
         <source>Stop running after importing blocks from disk (default: %u)</source>
         <translation>Disk üzerinden bloklar içer aktarıldıktan sonra çalışmayı durdur (varsayılan: %u)</translation>
     </message>
@@ -5608,10 +5353,6 @@ Hoşgeldiniz</translation>
         <translation>Bu bilgisayarda %s 'e bağlanılamıyor (bağlantıdan dönen hata %s )</translation>
     </message>
     <message>
-        <source>Unable to generate initial key</source>
-        <translation>Başlangıç anahtarı oluşturulamadı</translation>
-    </message>
-    <message>
         <source>Unable to sign spork message, wrong key?</source>
         <translation>Spork mesajı imzalanamıyor, yanlış anahtar?</translation>
     </message>
@@ -5630,14 +5371,6 @@ Hoşgeldiniz</translation>
     <message>
         <source>Use UPnP to map the listening port (default: %u)</source>
         <translation>Dinleme portunu belirlemek için UPnP kullanın (varsayılan: %u)</translation>
-    </message>
-    <message>
-        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation>Dinleme portunu belirlemek için UPnP kullanın (varsayılan: 1 dinlerken)</translation>
-    </message>
-    <message>
-        <source>Use a custom max chain reorganization depth (default: %u)</source>
-        <translation>Özel bir maksimum zincir re-organizasyon derinliği kullanın (varsayılan: %u)</translation>
     </message>
     <message>
         <source>Use the test network</source>
@@ -5718,10 +5451,6 @@ Hoşgeldiniz</translation>
     <message>
         <source>on startup</source>
         <translation>Başlangıçta</translation>
-    </message>
-    <message>
-        <source>wallet.dat corrupt, salvage failed</source>
-        <translation>wallte.dat dosyası bozuk, kurtarma başarız</translation>
     </message>
 </context>
 <context>
