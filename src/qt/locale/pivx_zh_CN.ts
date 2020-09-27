@@ -2108,7 +2108,7 @@ Address: %4
         <source>Ping Time</source>
         <translation>Ping时间</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>QObject</name>
     <message>
@@ -4618,10 +4618,6 @@ backup will be created.
         <translation>钱包升级成功，但没有创建备份。</translation>
     </message>
     <message>
-        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
-        <translation>注意：记得复制备份你的wallet.dat文件！</translation>
-    </message>
-    <message>
         <source>Upgrade Wallet Error</source>
         <translation>升级钱包出错</translation>
     </message>
@@ -4631,177 +4627,6 @@ backup will be created.
     <message>
         <source>KB/s</source>
         <translation>KB/s</translation>
-    </message>
-</context>
-<context>
-    <name>TransactionDesc</name>
-    <message>
-        <source>Open until %1</source>
-        <translation>直到%1才打开</translation>
-    </message>
-    <message>
-        <source>conflicted</source>
-        <translation>冲突</translation>
-    </message>
-    <message>
-        <source>%1/offline</source>
-        <translation>%1/线下</translation>
-    </message>
-    <message>
-        <source>%1/unconfirmed</source>
-        <translation>%1/未确认</translation>
-    </message>
-    <message>
-        <source>%1 confirmations</source>
-        <translation>%1确认</translation>
-    </message>
-    <message>
-        <source>%1/offline (verified via SwiftX)</source>
-        <translation>%1/线下（通过SwiftX验证）</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (verified via SwiftX)</source>
-        <translation>%1/确认（通过SwiftX验证）</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (verified via SwiftX)</source>
-        <translation>%1/确认（通过SwiftX验证）</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/线下（SwiftX验证正在进行当中- %3的%2 签名 ）</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</source>
-        <translation>%1/确认（SwiftX验证正在进行当中- %3的%2 签名 ）</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/确认（SwiftX验证正在进行当中- %3的%2 签名 ）</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification failed)</source>
-        <translation>%1/线下（SwiftX验证失败 ）</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification failed)</source>
-        <translation>%1/确认（SwiftX验证失败 ）</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>状态</translation>
-    </message>
-    <message>
-        <source>, has not been successfully broadcast yet</source>
-        <translation>，尚未成功播出</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>日期</translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation>资源</translation>
-    </message>
-    <message>
-        <source>Generated</source>
-        <translation>已生成</translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation>从</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation>未知</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation>到</translation>
-    </message>
-    <message>
-        <source>own address</source>
-        <translation>拥有的地址</translation>
-    </message>
-    <message>
-        <source>watch-only</source>
-        <translation>只读</translation>
-    </message>
-    <message>
-        <source>label</source>
-        <translation>标签</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation>信用</translation>
-    </message>
-    <message>
-        <source>not accepted</source>
-        <translation>不接受</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation>借记</translation>
-    </message>
-    <message>
-        <source>Total debit</source>
-        <translation>借记总额</translation>
-    </message>
-    <message>
-        <source>Total credit</source>
-        <translation>信用总额</translation>
-    </message>
-    <message>
-        <source>Transaction fee</source>
-        <translation>交易费用</translation>
-    </message>
-    <message>
-        <source>Net amount</source>
-        <translation>Net数量</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>消息 </translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>评论</translation>
-    </message>
-    <message>
-        <source>Transaction ID</source>
-        <translation>交易 ID</translation>
-    </message>
-    <message>
-        <source>Output index</source>
-        <translation>输出索引</translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation>商家</translation>
-    </message>
-    <message>
-        <source>Debug information</source>
-        <translation>纠错信息</translation>
-    </message>
-    <message>
-        <source>Transaction</source>
-        <translation>交易</translation>
-    </message>
-    <message>
-        <source>Inputs</source>
-        <translation>输入</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>金额</translation>
-    </message>
-    <message>
-        <source>true</source>
-        <translation>是</translation>
-    </message>
-    <message>
-        <source>false</source>
-        <translation>否</translation>
     </message>
 </context>
 <context>
@@ -4823,10 +4648,6 @@ backup will be created.
         <translation>直到%1才打开</translation>
     </message>
     <message>
-        <source>Offline</source>
-        <translation>线下</translation>
-    </message>
-    <message>
         <source>Unconfirmed</source>
         <translation>未确认</translation>
     </message>
@@ -4845,10 +4666,6 @@ backup will be created.
     <message>
         <source>Immature (%1 confirmations, will be available after %2)</source>
         <translation>未完成的(%1确认，将在%2之后可用)</translation>
-    </message>
-    <message>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>此区块未被任何其他节点接收，可能不会被接受!</translation>
     </message>
     <message>
         <source>Received with</source>
@@ -5324,14 +5141,6 @@ PIVX核心钱包</translation>
         <translation>警告:我们似乎不完全同意我们端口!您可能需要升级，或者其他节点可能需要升级。</translation>
     </message>
     <message>
-        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>警告:读取钱包出错。所有键都正确读取，但交易数据或地址簿项可能丢失或不正确。</translation>
-    </message>
-    <message>
-        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>注意：wallet.dat损坏，请恢复数据！原始wallet.dat保存为钱包。{timestamp} .bak in %s; 如果您的余额或交易不正确，您应该从备份还原。</translation>
-    </message>
-    <message>
         <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
         <translation>从给定的网络掩码或IP地址连接的白名单端口。可以多次指定。</translation>
     </message>
@@ -5348,10 +5157,6 @@ PIVX核心钱包</translation>
         <translation>(默认: %s)</translation>
     </message>
     <message>
-        <source>(default: 1)</source>
-        <translation>(默认: 1)</translation>
-    </message>
-    <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>接受命令行和JSON-RPC命令</translation>
     </message>
@@ -5364,10 +5169,6 @@ PIVX核心钱包</translation>
         <translation>添加要连接的节点并尝试保持连接打开</translation>
     </message>
     <message>
-        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation>允许DNS查找-addnode， -seednode和-connect</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>始终通过DNS查询端口地址(默认:%u)</translation>
     </message>
@@ -5376,20 +5177,12 @@ PIVX核心钱包</translation>
         <translation>将注释附加到用户代理字符串</translation>
     </message>
     <message>
-        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation>试图从损坏的钱包中恢复私钥</translation>
-    </message>
-    <message>
         <source>Automatically create Tor hidden service (default: %d)</source>
         <translation>自动创建Tor隐藏服务(默认:%d)</translation>
     </message>
     <message>
         <source>Block creation options:</source>
         <translation>区块创建选项:</translation>
-    </message>
-    <message>
-        <source>Cannot downgrade wallet</source>
-        <translation>不能降级钱包</translation>
     </message>
     <message>
         <source>Connect through SOCKS5 proxy</source>
@@ -5436,10 +5229,6 @@ PIVX核心钱包</translation>
         <translation>禁用OS交易通知(默认:%u)</translation>
     </message>
     <message>
-        <source>Disable safemode, override a real safe mode event (default: %u)</source>
-        <translation>禁用安全模式，覆盖一个真正的安全模式事件(默认:%u)</translation>
-    </message>
-    <message>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
         <translation>发现自己的IP地址(监听时默认为1，没有-externalip)</translation>
     </message>
@@ -5480,18 +5269,6 @@ PIVX核心钱包</translation>
         <translation>加载区块数据库出错</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat</source>
-        <translation>加载钱包.dat错误</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet corrupted</source>
-        <translation>加载钱包出错。dat:钱包损坏</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>加载的钱包出错。dat: 钱包需要更新版本的PIVX核心</translation>
-    </message>
-    <message>
         <source>Error opening block database</source>
         <translation>打开块数据库出错</translation>
     </message>
@@ -5506,10 +5283,6 @@ PIVX核心钱包</translation>
     <message>
         <source>Error</source>
         <translation>出错</translation>
-    </message>
-    <message>
-        <source>Error: </source>
-        <translation>出错：</translation>
     </message>
     <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
@@ -5628,22 +5401,6 @@ PIVX核心钱包</translation>
         <translation>这是一个预发行测试版本 - 您自己承担风险 - 不要用于商业应用！</translation>
     </message>
     <message>
-        <source> mints deleted
-</source>
-        <translation>铸造已删除
-</translation>
-    </message>
-    <message>
-        <source> mints updated, </source>
-        <translation>铸造已更新</translation>
-    </message>
-    <message>
-        <source> unconfirmed transactions removed
-</source>
-        <translation>未确认交易已经移除
-</translation>
-    </message>
-    <message>
         <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation>禁用所有PIVX特定功能(主节点, 零币, SwiftX, budget)(0-1，默认值:%u)</translation>
     </message>
@@ -5722,10 +5479,6 @@ PIVX核心钱包</translation>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>错误:没有有效的utxo!</translation>
-    </message>
-    <message>
-        <source>Failed to find Zerocoins in wallet.dat</source>
-        <translation>钱包里没找到零币</translation>
     </message>
     <message>
         <source>Failed to parse public spend</source>
@@ -5844,10 +5597,6 @@ PIVX核心钱包</translation>
         <translation>可用的文件描述符不足</translation>
     </message>
     <message>
-        <source>Number of automatic wallet backups (default: 10)</source>
-        <translation>钱包自动备份次数(默认为10次)</translation>
-    </message>
-    <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>要保留的自定义位置备份的数量(默认值:%d)</translation>
     </message>
@@ -5908,10 +5657,6 @@ PIVX核心钱包</translation>
         <translation>无法解析-%s地址:'%s'</translation>
     </message>
     <message>
-        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
-        <translation>无法升级到HD钱包(已经运行HD支持)。版本: %d</translation>
-    </message>
-    <message>
         <source>Need destination or change address because change is not exact</source>
         <translation>需要目的地或更改地址，因为更改不准确</translation>
     </message>
@@ -5958,14 +5703,6 @@ PIVX核心钱包</translation>
     <message>
         <source>Rescanning...</source>
         <translation>重新扫描……</translation>
-    </message>
-    <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>重置铸造零币完成:</translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>重置花费零币完成：</translation>
     </message>
     <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
@@ -6064,10 +5801,6 @@ PIVX核心钱包</translation>
         <translation>发送交易时花费未确认更改(默认值:%u)</translation>
     </message>
     <message>
-        <source>Staking options:</source>
-        <translation>加注选项：</translation>
-    </message>
-    <message>
         <source>Stop running after importing blocks from disk (default: %u)</source>
         <translation>从磁盘导入区块后停止运行(默认值:%u)</translation>
     </message>
@@ -6160,10 +5893,6 @@ PIVX核心钱包</translation>
         <translation>无法绑定到此计算机上的%s(绑定返回的错误%s)</translation>
     </message>
     <message>
-        <source>Unable to generate initial key</source>
-        <translation>无法生成初始密钥</translation>
-    </message>
-    <message>
         <source>Unable to generate keys</source>
         <translation>无法合成密钥</translation>
     </message>
@@ -6190,14 +5919,6 @@ PIVX核心钱包</translation>
     <message>
         <source>Use UPnP to map the listening port (default: %u)</source>
         <translation>使用UPnP映射监听端口(默认:%u)</translation>
-    </message>
-    <message>
-        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation>使用UPnP映射监听端口(监听时默认为1)</translation>
-    </message>
-    <message>
-        <source>Use a custom max chain reorganization depth (default: %u)</source>
-        <translation>使用自定义最大链重组深度(默认:%u)</translation>
     </message>
     <message>
         <source>Use the test network</source>
@@ -6282,10 +6003,6 @@ PIVX核心钱包</translation>
     <message>
         <source>on startup</source>
         <translation>启动</translation>
-    </message>
-    <message>
-        <source>wallet.dat corrupt, salvage failed</source>
-        <translation>wallet.dat 损坏，修复失败</translation>
     </message>
 </context>
 <context>

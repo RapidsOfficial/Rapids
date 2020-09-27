@@ -465,6 +465,7 @@ QT_TRANSLATE_NOOP("pivx-core", "Unable to start HTTP server. See debug log for d
 QT_TRANSLATE_NOOP("pivx-core", "Unknown network specified in -onlynet: '%s'"),
 QT_TRANSLATE_NOOP("pivx-core", "Unsupported logging category %s=%s."),
 QT_TRANSLATE_NOOP("pivx-core", "Upgrade wallet to latest format"),
+QT_TRANSLATE_NOOP("pivx-core", "Upgrading coins database..."),
 QT_TRANSLATE_NOOP("pivx-core", "Use UPnP to map the listening port (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Use block spam filter (default: %u)"),
 QT_TRANSLATE_NOOP("pivx-core", "Use the test network"),

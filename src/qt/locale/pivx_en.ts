@@ -6292,261 +6292,9 @@ backup will be created.
     </message>
 </context>
 <context>
-    <name>TransactionDesc</name>
-    <message numerus="yes">
-        <location filename="../transactiondesc.cpp" line="+32"/>
-        <source>Open for %n more block(s)</source>
-        <translation>
-            <numerusform>Open for %n more block</numerusform>
-            <numerusform>Open for %n more blocks</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Open until %1</source>
-        <translation>Open until %1</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>conflicted</source>
-        <translation>conflicted</translation>
-    </message>
-    <message>
-        <location line="+31"/>
-        <source>%1/offline</source>
-        <translation>%1/offline</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>%1/unconfirmed</source>
-        <translation>%1/unconfirmed</translation>
-    </message>
-    <message>
-        <location line="-7"/>
-        <location line="+9"/>
-        <source>%1 confirmations</source>
-        <translation>%1 confirmations</translation>
-    </message>
-    <message>
-        <location line="-28"/>
-        <source>%1/offline (verified via SwiftX)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>%1/confirmed (verified via SwiftX)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>%1 confirmations (verified via SwiftX)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>%1/offline (SwiftX verification failed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>%1/confirmed (SwiftX verification failed)</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+26"/>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>, has not been successfully broadcast yet</source>
-        <translation>, has not been successfully broadcast yet</translation>
-    </message>
-    <message numerus="yes">
-        <location line="+2"/>
-        <source>, broadcast through %n node(s)</source>
-        <translation>
-            <numerusform>, broadcast through %n node</numerusform>
-            <numerusform>, broadcast through %n nodes</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location line="+4"/>
-        <source>Date</source>
-        <translation>Date</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <source>Source</source>
-        <translation>Source</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <source>Generated</source>
-        <translation>Generated</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <location line="+8"/>
-        <location line="+63"/>
-        <source>From</source>
-        <translation>From</translation>
-    </message>
-    <message>
-        <location line="-63"/>
-        <source>unknown</source>
-        <translation>unknown</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+19"/>
-        <location line="+58"/>
-        <source>To</source>
-        <translation>To</translation>
-    </message>
-    <message>
-        <location line="-75"/>
-        <source>own address</source>
-        <translation>own address</translation>
-    </message>
-    <message>
-        <location line="+0"/>
-        <location line="+60"/>
-        <source>watch-only</source>
-        <translation>watch-only</translation>
-    </message>
-    <message>
-        <location line="-58"/>
-        <source>label</source>
-        <translation>label</translation>
-    </message>
-    <message>
-        <location line="+32"/>
-        <location line="+10"/>
-        <location line="+45"/>
-        <location line="+23"/>
-        <location line="+50"/>
-        <source>Credit</source>
-        <translation>Credit</translation>
-    </message>
-    <message numerus="yes">
-        <location line="-126"/>
-        <source>matures in %n more block(s)</source>
-        <translation>
-            <numerusform>matures in %n more block</numerusform>
-            <numerusform>matures in %n more blocks</numerusform>
-        </translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>not accepted</source>
-        <translation>not accepted</translation>
-    </message>
-    <message>
-        <location line="+49"/>
-        <location line="+22"/>
-        <location line="+50"/>
-        <source>Debit</source>
-        <translation>Debit</translation>
-    </message>
-    <message>
-        <location line="-63"/>
-        <source>Total debit</source>
-        <translation>Total debit</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Total credit</source>
-        <translation>Total credit</translation>
-    </message>
-    <message>
-        <location line="+5"/>
-        <source>Transaction fee</source>
-        <translation>Transaction fee</translation>
-    </message>
-    <message>
-        <location line="+14"/>
-        <source>Net amount</source>
-        <translation>Net amount</translation>
-    </message>
-    <message>
-        <location line="+6"/>
-        <location line="+10"/>
-        <source>Message</source>
-        <translation>Message</translation>
-    </message>
-    <message>
-        <location line="-8"/>
-        <source>Comment</source>
-        <translation>Comment</translation>
-    </message>
-    <message>
-        <location line="+2"/>
-        <source>Transaction ID</source>
-        <translation>Transaction ID</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <source>Output index</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Merchant</source>
-        <translation>Merchant</translation>
-    </message>
-    <message>
-        <location line="+13"/>
-        <source>Debug information</source>
-        <translation>Debug information</translation>
-    </message>
-    <message>
-        <location line="+8"/>
-        <source>Transaction</source>
-        <translation>Transaction</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>Inputs</source>
-        <translation>Inputs</translation>
-    </message>
-    <message>
-        <location line="+16"/>
-        <source>Amount</source>
-        <translation>Amount</translation>
-    </message>
-    <message>
-        <location line="+1"/>
-        <location line="+1"/>
-        <source>true</source>
-        <translation>true</translation>
-    </message>
-    <message>
-        <location line="-1"/>
-        <location line="+1"/>
-        <source>false</source>
-        <translation>false</translation>
-    </message>
-</context>
-<context>
     <name>TransactionTableModel</name>
     <message>
-        <location filename="../transactiontablemodel.cpp" line="+348"/>
+        <location filename="../transactiontablemodel.cpp" line="+335"/>
         <source>Date</source>
         <translation>Date</translation>
     </message>
@@ -6575,11 +6323,6 @@ backup will be created.
     </message>
     <message>
         <location line="+3"/>
-        <source>Offline</source>
-        <translation>Offline</translation>
-    </message>
-    <message>
-        <location line="+3"/>
         <source>Unconfirmed</source>
         <translation>Unconfirmed</translation>
     </message>
@@ -6602,11 +6345,6 @@ backup will be created.
         <location line="+3"/>
         <source>Immature (%1 confirmations, will be available after %2)</source>
         <translation>Immature (%1 confirmations, will be available after %2)</translation>
-    </message>
-    <message>
-        <location line="+3"/>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>This block was not received by any other nodes and will probably not be accepted!</translation>
     </message>
     <message>
         <location line="+38"/>
@@ -6719,7 +6457,7 @@ backup will be created.
         <translation>(n/a)</translation>
     </message>
     <message>
-        <location line="+210"/>
+        <location line="+205"/>
         <source>Transaction status. Hover over this field to show number of confirmations.</source>
         <translation>Transaction status. Hover over this field to show number of confirmations.</translation>
     </message>
@@ -6889,7 +6627,7 @@ backup will be created.
 <context>
     <name>WalletModel</name>
     <message>
-        <location filename="../walletmodel.cpp" line="+401"/>
+        <location filename="../walletmodel.cpp" line="+404"/>
         <location line="+20"/>
         <location line="+10"/>
         <source>Send Coins</source>
@@ -7933,7 +7671,7 @@ Please run &apos;sapling-fetch-params&apos; or &apos;./util/fetch-params.sh&apos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="+8"/>
+        <location line="+9"/>
         <source>Use block spam filter (default: %u)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -7943,7 +7681,7 @@ Please run &apos;sapling-fetch-params&apos; or &apos;./util/fetch-params.sh&apos
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location line="-102"/>
+        <location line="-103"/>
         <source>Preparing for resync...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8498,6 +8236,11 @@ Please run &apos;sapling-fetch-params&apos; or &apos;./util/fetch-params.sh&apos
         <location line="+1"/>
         <source>Upgrade wallet to latest format</source>
         <translation type="unfinished">Upgrade wallet to latest format</translation>
+    </message>
+    <message>
+        <location line="+1"/>
+        <source>Upgrading coins database...</source>
+        <translation type="unfinished"></translation>
     </message>
     <message>
         <location line="+1"/>

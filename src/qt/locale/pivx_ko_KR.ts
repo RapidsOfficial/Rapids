@@ -2100,7 +2100,7 @@ Address: %4
         <source>Ping Time</source>
         <translation>응답 시간</translation>
     </message>
-</context>
+    </context>
 <context>
     <name>QObject</name>
     <message>
@@ -4264,10 +4264,6 @@ NOTE: 업그레이드 이후에는
         <translation>지갑이 성공적으로 업그레이드 되었지만, 백업이 만들어지지 않았습니다.</translation>
     </message>
     <message>
-        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
-        <translation>주의 : 당신의 wallet.dat 파일을 만드는 것을 꼭 기억하세요.</translation>
-    </message>
-    <message>
         <source>Upgrade Wallet Error</source>
         <translation>지갑 업그레이드 오류</translation>
     </message>
@@ -4277,178 +4273,6 @@ NOTE: 업그레이드 이후에는
     <message>
         <source>KB/s</source>
         <translation>KB/s</translation>
-    </message>
-</context>
-<context>
-    <name>TransactionDesc</name>
-    <message>
-        <source>Open until %1</source>
-        <translation>%1까지 열기</translation>
-    </message>
-    <message>
-        <source>conflicted</source>
-        <translation>충돌됨</translation>
-    </message>
-    <message>
-        <source>%1/offline</source>
-        <translation>%1/오프라인</translation>
-    </message>
-    <message>
-        <source>%1/unconfirmed</source>
-        <translation>%1/미확인 됨</translation>
-    </message>
-    <message>
-        <source>%1 confirmations</source>
-        <translation>%1 확인</translation>
-    </message>
-    <message>
-        <source>%1/offline (verified via SwiftX)</source>
-        <translation>%1/오프라인 (swifttx를 통해 확인 됨)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (verified via SwiftX)</source>
-        <translation>%1/확인 됨 (swifttx를 통해 확인 됨)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (verified via SwiftX)</source>
-        <translation>%1 확인 (swifttx를 통해 확인 됨)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/오프라인 (SwiftTX 확인 진행 중 - %2 중 %3 서명)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</source>
-        <translation>%1/확인 됨 (SwiftTX 확인 진행 중 - %2 중 %3 서명)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 확인 (SwiftTX 확인 진행 중 - %2 중 %3 서명)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification failed)</source>
-        <translation>%1/오프라인 (SwiftTX 확인 실패)
-</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification failed)</source>
-        <translation>%1/확인 됨 (SwiftTX 확인 실패)</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>상태</translation>
-    </message>
-    <message>
-        <source>, has not been successfully broadcast yet</source>
-        <translation>, 아직 성공적으로 브로드캐스트되지 않았습니다</translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>날짜</translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation>원본</translation>
-    </message>
-    <message>
-        <source>Generated</source>
-        <translation>생성 된</translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation>From</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation>unknown</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation>대상</translation>
-    </message>
-    <message>
-        <source>own address</source>
-        <translation>내 주소</translation>
-    </message>
-    <message>
-        <source>watch-only</source>
-        <translation>읽기 전용</translation>
-    </message>
-    <message>
-        <source>label</source>
-        <translation>라벨</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation>크레딧</translation>
-    </message>
-    <message>
-        <source>not accepted</source>
-        <translation>허용되지 않음</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation>인출액</translation>
-    </message>
-    <message>
-        <source>Total debit</source>
-        <translation>총 인출액</translation>
-    </message>
-    <message>
-        <source>Total credit</source>
-        <translation>총 크레딧</translation>
-    </message>
-    <message>
-        <source>Transaction fee</source>
-        <translation>트랜잭션 수수료</translation>
-    </message>
-    <message>
-        <source>Net amount</source>
-        <translation>순수액</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>메세지</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>코멘트</translation>
-    </message>
-    <message>
-        <source>Transaction ID</source>
-        <translation>트랜잭션 ID</translation>
-    </message>
-    <message>
-        <source>Output index</source>
-        <translation>출력 인덱스</translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation>상인</translation>
-    </message>
-    <message>
-        <source>Debug information</source>
-        <translation>디버그 정보</translation>
-    </message>
-    <message>
-        <source>Transaction</source>
-        <translation>트랜잭션</translation>
-    </message>
-    <message>
-        <source>Inputs</source>
-        <translation>입력</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>금액</translation>
-    </message>
-    <message>
-        <source>true</source>
-        <translation>허용</translation>
-    </message>
-    <message>
-        <source>false</source>
-        <translation>거부</translation>
     </message>
 </context>
 <context>
@@ -4470,10 +4294,6 @@ NOTE: 업그레이드 이후에는
         <translation>%1까지 열기</translation>
     </message>
     <message>
-        <source>Offline</source>
-        <translation>오프라인</translation>
-    </message>
-    <message>
         <source>Unconfirmed</source>
         <translation>미확인됨</translation>
     </message>
@@ -4492,10 +4312,6 @@ NOTE: 업그레이드 이후에는
     <message>
         <source>Immature (%1 confirmations, will be available after %2)</source>
         <translation>완료되지 않음 (%1 확인이 %2 후에 가능합니다)</translation>
-    </message>
-    <message>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>이 블록은 다른 노드에 의해 수신되지 않았으며 아마도 승인되지 않을 것입니다!</translation>
     </message>
     <message>
         <source>Received with</source>
@@ -4931,14 +4747,6 @@ PIVX Core Wallet</translation>
         <translation>경고: 우리의 피어들과 완벽하게 일치하지 않습니다! 업그레이드 또는 다른 노드들의 업그레이드가 필요할 수 있습니다.</translation>
     </message>
     <message>
-        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>경고 : wallet.dat을 읽는 중 오류가 발생했습니다! 모든 키가 올바르게 읽혀 지지만 트랜잭션 데이터 또는 주소록 항목이 누락되었거나 올바르지 않을 수 있습니다.</translation>
-    </message>
-    <message>
-        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>경고 : wallet.dat에 손상된 데이터가 복구되었습니다. 본래 wallet.dat은 wallet으로 저장되었습니다. {timestamp}.bak %s; 잔액 또는 트랜잭션가 올바르지 않은 경우 백업에서 복원해야합니다.</translation>
-    </message>
-    <message>
         <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
         <translation>주어진 넷마스크 또는 IP 주소로부터 화이트리스트 피어가 연결되고 있습니다. 여러 번 지정될 수 있습니다.</translation>
     </message>
@@ -4955,10 +4763,6 @@ PIVX Core Wallet</translation>
         <translation>(기본값: %s)</translation>
     </message>
     <message>
-        <source>(default: 1)</source>
-        <translation>(기본값: 1)</translation>
-    </message>
-    <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation> command line 과 JSON-RPC 적용</translation>
     </message>
@@ -4971,16 +4775,8 @@ PIVX Core Wallet</translation>
         <translation>연결할 노드를 추가하고 계속해서 연결을 유지하십시오.</translation>
     </message>
     <message>
-        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation>-addnode, -seednode, -connect을 위해 DNS 조회를 허용하십시오.</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>피어 주소에게 DNS 조회를 통한 지속적인 정보 수신 요청을 합니다 (기본값: %u)</translation>
-    </message>
-    <message>
-        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation>손상된 wallet.dat으로 부터 개인 키 복구를 시도합니다.</translation>
     </message>
     <message>
         <source>Automatically create Tor hidden service (default: %d)</source>
@@ -4989,10 +4785,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Block creation options:</source>
         <translation>블록 생성 옵션:</translation>
-    </message>
-    <message>
-        <source>Cannot downgrade wallet</source>
-        <translation>지갑을 다운그레이드 할 수 없습니다.</translation>
     </message>
     <message>
         <source>Connect through SOCKS5 proxy</source>
@@ -5039,10 +4831,6 @@ PIVX Core Wallet</translation>
         <translation>거래시 수신 알림창 해제  (기본값: %u)</translation>
     </message>
     <message>
-        <source>Disable safemode, override a real safe mode event (default: %u)</source>
-        <translation>안전모드 비활성화, 실시간 안전모드 이벤트 중단 (기본값: %u)</translation>
-    </message>
-    <message>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
         <translation>자신의 IP 주소를 찾습니다 (기본값: 1 수신중이거나 -외부아이피가 없을 경우)</translation>
     </message>
@@ -5083,18 +4871,6 @@ PIVX Core Wallet</translation>
         <translation>블록 데이터베이스를 불러오는 중 오류가 발생했습니다.</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat</source>
-        <translation>wallet.dat을 불러오는 중 오류가 발생했습니다.</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet corrupted</source>
-        <translation>wallet.dat을 불러오는 중 오류가 발생했습니다: 지갑 손상됨</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>wallet.dat를 로드하는 중 오류가 발생했습니다. 지갑에 최신 버전의 PIVX 코어가 필요합니다.</translation>
-    </message>
-    <message>
         <source>Error opening block database</source>
         <translation>블록 데이터베이스를 여는 중 오류가 발생했습니다.</translation>
     </message>
@@ -5109,10 +4885,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Error</source>
         <translation>에러</translation>
-    </message>
-    <message>
-        <source>Error: </source>
-        <translation>에러:</translation>
     </message>
     <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
@@ -5231,22 +5003,6 @@ PIVX Core Wallet</translation>
         <translation>이것은 사전 릴리스 테스트 빌드입니다 - 사용상 책임은 귀하에게 있습니다. - staking이나 상업적인 용도로는 절대 사용하지 마십시오!</translation>
     </message>
     <message>
-        <source> mints deleted
-</source>
-        <translation>생성 삭제
-</translation>
-    </message>
-    <message>
-        <source> mints updated, </source>
-        <translation>생성 업데이드</translation>
-    </message>
-    <message>
-        <source> unconfirmed transactions removed
-</source>
-        <translation>미확인된 거래 삭제됨
-</translation>
-    </message>
-    <message>
         <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
         <translation>PIVX의 모든 특정 기능들을 비활성화합니다(마스터노드, 난독화, SwiftTX, Budgeting) (0-1, 기본값: %u)</translation>
     </message>
@@ -5321,10 +5077,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Error: 유효하지 않는 utxo!</translation>
-    </message>
-    <message>
-        <source>Failed to find Zerocoins in wallet.dat</source>
-        <translation>wallet.dat 에서 제로코인을 인식 실패</translation>
     </message>
     <message>
         <source>Failed to select a zerocoin</source>
@@ -5435,10 +5187,6 @@ PIVX Core Wallet</translation>
         <translation>사용 가능한 파일 디스크립터가 충분하지 않습니다.</translation>
     </message>
     <message>
-        <source>Number of automatic wallet backups (default: 10)</source>
-        <translation>자동 지갑 백업 횟수 (기본값: 10)</translation>
-    </message>
-    <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>Number of custom location backups to retain (default: %d)</translation>
     </message>
@@ -5529,14 +5277,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Rescanning...</source>
         <translation>다시 스캔하는 중...</translation>
-    </message>
-    <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>생성된 제로코인 초기화 완료:</translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>사용된 제로코인 초기화 완료:</translation>
     </message>
     <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
@@ -5635,10 +5375,6 @@ PIVX Core Wallet</translation>
         <translation>트랜잭션 전송시 승인되지 않은 잔돈을 전송합니다 (기본값: %u)</translation>
     </message>
     <message>
-        <source>Staking options:</source>
-        <translation>스테이킹 옵션:</translation>
-    </message>
-    <message>
         <source>Stop running after importing blocks from disk (default: %u)</source>
         <translation>디스크에서 블록을 가져오면 실행 중지 (기본값: %u)</translation>
     </message>
@@ -5731,10 +5467,6 @@ PIVX Core Wallet</translation>
         <translation>이 컴퓨터에서 %s 로 바인드할 수 없습니다 (바인드 리턴 오류 %s)</translation>
     </message>
     <message>
-        <source>Unable to generate initial key</source>
-        <translation>이니셜 키를 생성할 수 없습니다.</translation>
-    </message>
-    <message>
         <source>Unable to generate keys</source>
         <translation>키를 생성할 수 없습니다.</translation>
     </message>
@@ -5757,14 +5489,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Use UPnP to map the listening port (default: %u)</source>
         <translation>수신 포트를 매핑하려면 UPnP를 사용하십시오 (기본값: %u)</translation>
-    </message>
-    <message>
-        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation>수신 포트를 매핑하려면 UPnP를 사용하십시오 (기본값: 1 수신 상태일 때)</translation>
-    </message>
-    <message>
-        <source>Use a custom max chain reorganization depth (default: %u)</source>
-        <translation>맞춤 최대 체인 재구성 깊이 사용 (기본값 : %u)</translation>
     </message>
     <message>
         <source>Use the test network</source>
@@ -5841,10 +5565,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>on startup</source>
         <translation>시작 시</translation>
-    </message>
-    <message>
-        <source>wallet.dat corrupt, salvage failed</source>
-        <translation>wallet.dat 파일이 손상되어 복구에 실패했습니다</translation>
     </message>
 </context>
 <context>

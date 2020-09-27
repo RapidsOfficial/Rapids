@@ -2260,6 +2260,10 @@ Address: %4
         <source>Ping Time</source>
         <translation>Ping Time</translation>
     </message>
+    <message>
+        <source>NodeID</source>
+        <translation>NodeID</translation>
+    </message>
 </context>
 <context>
     <name>QObject</name>
@@ -5107,8 +5111,8 @@ backup will be created.
         <translation>Wallet upgraded successfully, but no backup created.</translation>
     </message>
     <message>
-        <source>WARNING: remember to make a copy of your wallet.dat file!</source>
-        <translation>WARNING: remember to make a copy of your wallet.dat file!</translation>
+        <source>WARNING: remember to make a copy of your wallet file!</source>
+        <translation>WARNING: remember to make a copy of your wallet file!</translation>
     </message>
     <message>
         <source>Upgrade Wallet Error</source>
@@ -5120,189 +5124,6 @@ backup will be created.
     <message>
         <source>KB/s</source>
         <translation>KB/s</translation>
-    </message>
-</context>
-<context>
-    <name>TransactionDesc</name>
-    <message numerus="yes">
-        <source>Open for %n more block(s)</source>
-        <translation><numerusform>Open for %n more block</numerusform><numerusform>Open for %n more blocks</numerusform></translation>
-    </message>
-    <message>
-        <source>Open until %1</source>
-        <translation>Open until %1</translation>
-    </message>
-    <message>
-        <source>conflicted</source>
-        <translation>conflicted</translation>
-    </message>
-    <message>
-        <source>%1/offline</source>
-        <translation>%1/offline</translation>
-    </message>
-    <message>
-        <source>%1/unconfirmed</source>
-        <translation>%1/unconfirmed</translation>
-    </message>
-    <message>
-        <source>%1 confirmations</source>
-        <translation>%1 confirmations</translation>
-    </message>
-    <message>
-        <source>%1/offline (verified via SwiftX)</source>
-        <translation>%1/offline (verified via SwiftX)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (verified via SwiftX)</source>
-        <translation>%1/confirmed (verified via SwiftX)</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (verified via SwiftX)</source>
-        <translation>%1 confirmations (verified via SwiftX)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1/offline (SwiftX verification in progress - %2 of %3 signatures)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</source>
-        <translation>%1/confirmed (SwiftX verification in progress - %2 of %3 signatures )</translation>
-    </message>
-    <message>
-        <source>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</source>
-        <translation>%1 confirmations (SwiftX verification in progress - %2 of %3 signatures)</translation>
-    </message>
-    <message>
-        <source>%1/offline (SwiftX verification failed)</source>
-        <translation>%1/offline (SwiftX verification failed)</translation>
-    </message>
-    <message>
-        <source>%1/confirmed (SwiftX verification failed)</source>
-        <translation>%1/confirmed (SwiftX verification failed)</translation>
-    </message>
-    <message>
-        <source>Status</source>
-        <translation>Status</translation>
-    </message>
-    <message>
-        <source>, has not been successfully broadcast yet</source>
-        <translation>, has not been successfully broadcast yet</translation>
-    </message>
-    <message numerus="yes">
-        <source>, broadcast through %n node(s)</source>
-        <translation><numerusform>, broadcast through %n node</numerusform><numerusform>, broadcast through %n nodes</numerusform></translation>
-    </message>
-    <message>
-        <source>Date</source>
-        <translation>Date</translation>
-    </message>
-    <message>
-        <source>Source</source>
-        <translation>Source</translation>
-    </message>
-    <message>
-        <source>Generated</source>
-        <translation>Generated</translation>
-    </message>
-    <message>
-        <source>From</source>
-        <translation>From</translation>
-    </message>
-    <message>
-        <source>unknown</source>
-        <translation>unknown</translation>
-    </message>
-    <message>
-        <source>To</source>
-        <translation>To</translation>
-    </message>
-    <message>
-        <source>own address</source>
-        <translation>own address</translation>
-    </message>
-    <message>
-        <source>watch-only</source>
-        <translation>watch-only</translation>
-    </message>
-    <message>
-        <source>label</source>
-        <translation>label</translation>
-    </message>
-    <message>
-        <source>Credit</source>
-        <translation>Credit</translation>
-    </message>
-    <message numerus="yes">
-        <source>matures in %n more block(s)</source>
-        <translation><numerusform>matures in %n more block</numerusform><numerusform>matures in %n more blocks</numerusform></translation>
-    </message>
-    <message>
-        <source>not accepted</source>
-        <translation>not accepted</translation>
-    </message>
-    <message>
-        <source>Debit</source>
-        <translation>Debit</translation>
-    </message>
-    <message>
-        <source>Total debit</source>
-        <translation>Total debit</translation>
-    </message>
-    <message>
-        <source>Total credit</source>
-        <translation>Total credit</translation>
-    </message>
-    <message>
-        <source>Transaction fee</source>
-        <translation>Transaction fee</translation>
-    </message>
-    <message>
-        <source>Net amount</source>
-        <translation>Net amount</translation>
-    </message>
-    <message>
-        <source>Message</source>
-        <translation>Message</translation>
-    </message>
-    <message>
-        <source>Comment</source>
-        <translation>Comment</translation>
-    </message>
-    <message>
-        <source>Transaction ID</source>
-        <translation>Transaction ID</translation>
-    </message>
-    <message>
-        <source>Output index</source>
-        <translation>Output index</translation>
-    </message>
-    <message>
-        <source>Merchant</source>
-        <translation>Merchant</translation>
-    </message>
-    <message>
-        <source>Debug information</source>
-        <translation>Debug information</translation>
-    </message>
-    <message>
-        <source>Transaction</source>
-        <translation>Transaction</translation>
-    </message>
-    <message>
-        <source>Inputs</source>
-        <translation>Inputs</translation>
-    </message>
-    <message>
-        <source>Amount</source>
-        <translation>Amount</translation>
-    </message>
-    <message>
-        <source>true</source>
-        <translation>true</translation>
-    </message>
-    <message>
-        <source>false</source>
-        <translation>false</translation>
     </message>
 </context>
 <context>
@@ -5328,10 +5149,6 @@ backup will be created.
         <translation>Open until %1</translation>
     </message>
     <message>
-        <source>Offline</source>
-        <translation>Offline</translation>
-    </message>
-    <message>
         <source>Unconfirmed</source>
         <translation>Unconfirmed</translation>
     </message>
@@ -5350,10 +5167,6 @@ backup will be created.
     <message>
         <source>Immature (%1 confirmations, will be available after %2)</source>
         <translation>Immature (%1 confirmations, will be available after %2)</translation>
-    </message>
-    <message>
-        <source>This block was not received by any other nodes and will probably not be accepted!</source>
-        <translation>This block was not received by any other nodes and will probably not be accepted!</translation>
     </message>
     <message>
         <source>Received with</source>
@@ -5677,6 +5490,10 @@ PIVX Core Wallet</translation>
         <translation>(1 = keep tx meta data e.g. account owner and payment request information, 2 = drop tx meta data)</translation>
     </message>
     <message>
+        <source>Accept connections from outside (default: %u if no -proxy or -connect/-noconnect)</source>
+        <translation>Accept connections from outside (default: %u if no -proxy or -connect/-noconnect)</translation>
+    </message>
+    <message>
         <source>Allow JSON-RPC connections from specified source. Valid for &lt;ip&gt; are a single IP (e.g. 1.2.3.4), a network/netmask (e.g. 1.2.3.4/255.255.255.0) or a network/CIDR (e.g. 1.2.3.4/24). This option can be specified multiple times</source>
         <translation>Allow JSON-RPC connections from specified source. Valid for &lt;ip&gt; are a single IP (e.g. 1.2.3.4), a network/netmask (e.g. 1.2.3.4/255.255.255.0) or a network/CIDR (e.g. 1.2.3.4/24). This option can be specified multiple times</translation>
     </message>
@@ -5693,8 +5510,20 @@ PIVX Core Wallet</translation>
         <translation>Bind to given address to listen for JSON-RPC connections. Use [host]:port notation for IPv6. This option can be specified multiple times (default: bind to all interfaces)</translation>
     </message>
     <message>
+        <source>Cannot find the Sapling parameters in the following directory:
+%s
+Please run 'sapling-fetch-params' or './util/fetch-params.sh' and then restart.</source>
+        <translation>Cannot find the Sapling parameters in the following directory:
+%s
+Please run 'sapling-fetch-params' or './util/fetch-params.sh' and then restart.</translation>
+    </message>
+    <message>
         <source>Cannot obtain a lock on data directory %s. PIVX Core is probably already running.</source>
         <translation>Cannot obtain a lock on data directory %s. PIVX Core is probably already running.</translation>
+    </message>
+    <message>
+        <source>Cannot upgrade to Sapling wallet (already running Sapling support). Version: %d</source>
+        <translation>Cannot upgrade to Sapling wallet (already running Sapling support). Version: %d</translation>
     </message>
     <message>
         <source>Change automatic finalized budget voting behavior. mode=auto: Vote for only exact finalized budget match to my generated budget. (string, default: auto)</source>
@@ -5885,14 +5714,6 @@ PIVX Core Wallet</translation>
         <translation>Warning: We do not appear to fully agree with our peers! You may need to upgrade, or other nodes may need to upgrade.</translation>
     </message>
     <message>
-        <source>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
-        <translation>Warning: error reading wallet.dat! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</translation>
-    </message>
-    <message>
-        <source>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
-        <translation>Warning: wallet.dat corrupt, data salvaged! Original wallet.dat saved as wallet.{timestamp}.bak in %s; if your balance or transactions are incorrect you should restore from a backup.</translation>
-    </message>
-    <message>
         <source>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</source>
         <translation>Whitelist peers connecting from the given netmask or IP address. Can be specified multiple times.</translation>
     </message>
@@ -5909,10 +5730,6 @@ PIVX Core Wallet</translation>
         <translation>(default: %s)</translation>
     </message>
     <message>
-        <source>(default: 1)</source>
-        <translation>(default: 1)</translation>
-    </message>
-    <message>
         <source>Accept command line and JSON-RPC commands</source>
         <translation>Accept command line and JSON-RPC commands</translation>
     </message>
@@ -5925,10 +5742,6 @@ PIVX Core Wallet</translation>
         <translation>Add a node to connect to and attempt to keep the connection open</translation>
     </message>
     <message>
-        <source>Allow DNS lookups for -addnode, -seednode and -connect</source>
-        <translation>Allow DNS lookups for -addnode, -seednode and -connect</translation>
-    </message>
-    <message>
         <source>Always query for peer addresses via DNS lookup (default: %u)</source>
         <translation>Always query for peer addresses via DNS lookup (default: %u)</translation>
     </message>
@@ -5937,20 +5750,12 @@ PIVX Core Wallet</translation>
         <translation>Append comment to the user agent string</translation>
     </message>
     <message>
-        <source>Attempt to recover private keys from a corrupt wallet.dat</source>
-        <translation>Attempt to recover private keys from a corrupt wallet.dat</translation>
-    </message>
-    <message>
         <source>Automatically create Tor hidden service (default: %d)</source>
         <translation>Automatically create Tor hidden service (default: %d)</translation>
     </message>
     <message>
         <source>Block creation options:</source>
         <translation>Block creation options:</translation>
-    </message>
-    <message>
-        <source>Cannot downgrade wallet</source>
-        <translation>Cannot downgrade wallet</translation>
     </message>
     <message>
         <source>Connect through SOCKS5 proxy</source>
@@ -5997,10 +5802,6 @@ PIVX Core Wallet</translation>
         <translation>Disable OS notifications for incoming transactions (default: %u)</translation>
     </message>
     <message>
-        <source>Disable safemode, override a real safe mode event (default: %u)</source>
-        <translation>Disable safemode, override a real safe mode event (default: %u)</translation>
-    </message>
-    <message>
         <source>Discover own IP address (default: 1 when listening and no -externalip)</source>
         <translation>Discover own IP address (default: 1 when listening and no -externalip)</translation>
     </message>
@@ -6041,18 +5842,6 @@ PIVX Core Wallet</translation>
         <translation>Error loading block database</translation>
     </message>
     <message>
-        <source>Error loading wallet.dat</source>
-        <translation>Error loading wallet.dat</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet corrupted</source>
-        <translation>Error loading wallet.dat: Wallet corrupted</translation>
-    </message>
-    <message>
-        <source>Error loading wallet.dat: Wallet requires newer version of PIVX Core</source>
-        <translation>Error loading wallet.dat: Wallet requires newer version of PIVX Core</translation>
-    </message>
-    <message>
         <source>Error opening block database</source>
         <translation>Error opening block database</translation>
     </message>
@@ -6067,10 +5856,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Error</source>
         <translation>Error</translation>
-    </message>
-    <message>
-        <source>Error: </source>
-        <translation>Error: </translation>
     </message>
     <message>
         <source>Error: A fatal internal error occured, see debug.log for details</source>
@@ -6181,28 +5966,20 @@ PIVX Core Wallet</translation>
         <translation>Selected coins value is less than payment target</translation>
     </message>
     <message>
+        <source>Shutdown requested over the txs scan. Exiting.</source>
+        <translation>Shutdown requested over the txs scan. Exiting.</translation>
+    </message>
+    <message>
+        <source>Specify zk params directory (default: %s)</source>
+        <translation>Specify zk params directory (default: %s)</translation>
+    </message>
+    <message>
         <source>SwiftX options:</source>
         <translation>SwiftX options:</translation>
     </message>
     <message>
         <source>This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!</source>
         <translation>This is a pre-release test build - use at your own risk - do not use for staking or merchant applications!</translation>
-    </message>
-    <message>
-        <source> mints deleted
-</source>
-        <translation> mints deleted
-</translation>
-    </message>
-    <message>
-        <source> mints updated, </source>
-        <translation> mints updated, </translation>
-    </message>
-    <message>
-        <source> unconfirmed transactions removed
-</source>
-        <translation> unconfirmed transactions removed
-</translation>
     </message>
     <message>
         <source>Disable all PIVX specific functionality (Masternodes, Zerocoin, SwiftX, Budgeting) (0-1, default: %u)</source>
@@ -6237,12 +6014,32 @@ PIVX Core Wallet</translation>
         <translation>SwiftX requires inputs with at least 6 confirmations, you might need to wait a few minutes and try again.</translation>
     </message>
     <message>
+        <source>Warning: error reading %s! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</source>
+        <translation>Warning: error reading %s! All keys read correctly, but transaction data or address book entries might be missing or incorrect.</translation>
+    </message>
+    <message>
+        <source>Warning: wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</source>
+        <translation>Warning: wallet file corrupt, data salvaged! Original %s saved as %s in %s; if your balance or transactions are incorrect you should restore from a backup.</translation>
+    </message>
+    <message>
+        <source>%s corrupt, salvage failed</source>
+        <translation>%s corrupt, salvage failed</translation>
+    </message>
+    <message>
         <source>&lt;category&gt; can be:</source>
         <translation>&lt;category&gt; can be:</translation>
     </message>
     <message>
+        <source>Allow DNS lookups for -addnode, -seednode and -connect (default: %u)</source>
+        <translation>Allow DNS lookups for -addnode, -seednode and -connect (default: %u)</translation>
+    </message>
+    <message>
         <source>Attempt to force blockchain corruption recovery</source>
         <translation>Attempt to force blockchain corruption recovery</translation>
+    </message>
+    <message>
+        <source>Attempt to recover private keys from a corrupt wallet file</source>
+        <translation>Attempt to recover private keys from a corrupt wallet file</translation>
     </message>
     <message>
         <source>Cannot create public spend input</source>
@@ -6283,10 +6080,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Error: No valid utxo!</source>
         <translation>Error: No valid utxo!</translation>
-    </message>
-    <message>
-        <source>Failed to find Zerocoins in wallet.dat</source>
-        <translation>Failed to find Zerocoins in wallet.dat</translation>
     </message>
     <message>
         <source>Failed to parse public spend</source>
@@ -6405,10 +6198,6 @@ PIVX Core Wallet</translation>
         <translation>Not enough file descriptors available.</translation>
     </message>
     <message>
-        <source>Number of automatic wallet backups (default: 10)</source>
-        <translation>Number of automatic wallet backups (default: 10)</translation>
-    </message>
-    <message>
         <source>Number of custom location backups to retain (default: %d)</source>
         <translation>Number of custom location backups to retain (default: %d)</translation>
     </message>
@@ -6455,10 +6244,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Preparing for resync...</source>
         <translation>Preparing for resync...</translation>
-    </message>
-    <message>
-        <source>Accept connections from outside (default: 1 if no -proxy or -connect/-noconnect)</source>
-        <translation>Accept connections from outside (default: 1 if no -proxy or -connect/-noconnect)</translation>
     </message>
     <message>
         <source>Connect only to the specified node(s); -noconnect or -connect=0 alone to disable automatic connections</source>
@@ -6533,12 +6318,26 @@ PIVX Core Wallet</translation>
         <translation>Cannot resolve -%s address: '%s'</translation>
     </message>
     <message>
-        <source>Cannot upgrade to HD wallet (already running HD support). Version: %d</source>
-        <translation>Cannot upgrade to HD wallet (already running HD support). Version: %d</translation>
-    </message>
-    <message>
         <source>Change index out of range</source>
         <translation>Change index out of range</translation>
+    </message>
+    <message>
+        <source>Error loading %s: Wallet corrupted</source>
+        <translation>Error loading %s: Wallet corrupted</translation>
+    </message>
+    <message>
+        <source>Error loading %s: Wallet requires newer version of PIVX Core</source>
+        <translation>Error loading %s: Wallet requires newer version of PIVX Core</translation>
+    </message>
+    <message>
+        <source>Error loading %s
+</source>
+        <translation>Error loading %s
+</translation>
+    </message>
+    <message>
+        <source>Error upgrading chainstate database</source>
+        <translation>Error upgrading chainstate database</translation>
     </message>
     <message>
         <source>Error: -listen must be true if -masternode is set.</source>
@@ -6557,6 +6356,10 @@ PIVX Core Wallet</translation>
 </source>
         <translation>Failed to accept tx in the memory pool (reason: %s)
 </translation>
+    </message>
+    <message>
+        <source>Failed to find Zerocoins in wallet database</source>
+        <translation>Failed to find Zerocoins in wallet database</translation>
     </message>
     <message>
         <source>Fee (in %s/kB) to add to transactions you send (default: %s)</source>
@@ -6595,12 +6398,20 @@ PIVX Core Wallet</translation>
         <translation>Masternodes are required to run on port %d for %s-net</translation>
     </message>
     <message>
+        <source>Mining/Staking options:</source>
+        <translation>Mining/Staking options:</translation>
+    </message>
+    <message>
         <source>Need destination or change address because change is not exact</source>
         <translation>Need destination or change address because change is not exact</translation>
     </message>
     <message>
         <source>No error</source>
         <translation>No error</translation>
+    </message>
+    <message>
+        <source>Number of automatic wallet backups (default: %d)</source>
+        <translation>Number of automatic wallet backups (default: %d)</translation>
     </message>
     <message>
         <source>Prepend debug output with timestamp (default: %u)</source>
@@ -6649,14 +6460,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Rescanning...</source>
         <translation>Rescanning...</translation>
-    </message>
-    <message>
-        <source>ResetMintZerocoin finished: </source>
-        <translation>ResetMintZerocoin finished: </translation>
-    </message>
-    <message>
-        <source>ResetSpentZerocoin finished: </source>
-        <translation>ResetSpentZerocoin finished: </translation>
     </message>
     <message>
         <source>Run a thread to flush wallet periodically (default: %u)</source>
@@ -6753,10 +6556,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>Spend unconfirmed change when sending transactions (default: %u)</source>
         <translation>Spend unconfirmed change when sending transactions (default: %u)</translation>
-    </message>
-    <message>
-        <source>Staking options:</source>
-        <translation>Staking options:</translation>
     </message>
     <message>
         <source>Stop running after importing blocks from disk (default: %u)</source>
@@ -6867,10 +6666,6 @@ PIVX Core Wallet</translation>
         <translation>Unable to bind to %s on this computer (bind returned error %s)</translation>
     </message>
     <message>
-        <source>Unable to generate initial key</source>
-        <translation>Unable to generate initial key</translation>
-    </message>
-    <message>
         <source>Unable to generate keys</source>
         <translation>Unable to generate keys</translation>
     </message>
@@ -6895,16 +6690,12 @@ PIVX Core Wallet</translation>
         <translation>Upgrade wallet to latest format</translation>
     </message>
     <message>
+        <source>Upgrading coins database...</source>
+        <translation>Upgrading coins database...</translation>
+    </message>
+    <message>
         <source>Use UPnP to map the listening port (default: %u)</source>
         <translation>Use UPnP to map the listening port (default: %u)</translation>
-    </message>
-    <message>
-        <source>Use UPnP to map the listening port (default: 1 when listening)</source>
-        <translation>Use UPnP to map the listening port (default: 1 when listening)</translation>
-    </message>
-    <message>
-        <source>Use a custom max chain reorganization depth (default: %u)</source>
-        <translation>Use a custom max chain reorganization depth (default: %u)</translation>
     </message>
     <message>
         <source>Use the test network</source>
@@ -6933,6 +6724,10 @@ PIVX Core Wallet</translation>
     <message>
         <source>Wallet %s resides outside data directory %s</source>
         <translation>Wallet %s resides outside data directory %s</translation>
+    </message>
+    <message>
+        <source>Wallet debugging/testing options:</source>
+        <translation>Wallet debugging/testing options:</translation>
     </message>
     <message>
         <source>Wallet needed to be rewritten: restart PIVX Core to complete</source>
@@ -6989,10 +6784,6 @@ PIVX Core Wallet</translation>
     <message>
         <source>on startup</source>
         <translation>on startup</translation>
-    </message>
-    <message>
-        <source>wallet.dat corrupt, salvage failed</source>
-        <translation>wallet.dat corrupt, salvage failed</translation>
     </message>
 </context>
 <context>
