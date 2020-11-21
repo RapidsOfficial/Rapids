@@ -38,10 +38,11 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return consensus.powLimit.GetCompact();
     }
 
-    if (consensus.NetworkUpgradeActive(pindexLast->nHeight + 1, Consensus::UPGRADE_POS)) {
-        const bool fTimeV2 = !Params().IsRegTestNet() && consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
-        const uint256& bnTargetLimit = consensus.ProofOfStakeLimit(fTimeV2);
-        const int64_t& nTargetTimespan = consensus.TargetTimespan(fTimeV2);
+    if (pindexLast->nHeight > Params().GetConsensus().height_last_PoW) {
+        const bool fTimeV2 = consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
+        const uint256& bnTargetLimit = (~uint256(0) >> 24);  // consensus.ProofOfStakeLimit(fTimeV2);
+        const int64_t& nTargetTimespan = 60 * 40;  // consensus.TargetTimespan(fTimeV2);
+		int64_t nTargetSpacing = 60;
 
         int64_t nActualSpacing = 0;
         if (pindexLast->nHeight != 0)
@@ -60,9 +61,9 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         if (fTimeV2 && !consensus.IsTimeProtocolV2(pindexLast->nHeight))
             bnNew <<= 4;
 
-        int64_t nInterval = nTargetTimespan / consensus.nTargetSpacing;
-        bnNew *= ((nInterval - 1) * consensus.nTargetSpacing + nActualSpacing + nActualSpacing);
-        bnNew /= ((nInterval + 1) * consensus.nTargetSpacing);
+        int64_t nInterval = nTargetTimespan / nTargetSpacing;
+        bnNew *= ((nInterval - 1) * nTargetSpacing + nActualSpacing + nActualSpacing);
+        bnNew /= ((nInterval + 1) * nTargetSpacing);
 
         if (bnNew <= 0 || bnNew > bnTargetLimit)
             bnNew = bnTargetLimit;

@@ -34,7 +34,7 @@ CStakeKernel::CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* sta
     stakeValue(stakeInput->GetValue())
 {
     // Set kernel stake modifier
-    if (!Params().GetConsensus().NetworkUpgradeActive(pindexPrev->nHeight + 1, Consensus::UPGRADE_V3_4)) {
+    if (pindexPrev->nHeight + 1 < 915000) {
         uint64_t nStakeModifier = 0;
         if (!GetOldStakeModifier(stakeInput, nStakeModifier))
             LogPrintf("%s : ERROR: Failed to get kernel stake modifier\n", __func__);
@@ -107,36 +107,68 @@ bool LoadStakeInput(const CBlock& block, const CBlockIndex* pindexPrev, std::uni
 
     // Construct the stakeinput object
     const CTxIn& txin = block.vtx[1].vin[0];
-    stake = txin.IsZerocoinSpend() ?
-            std::unique_ptr<CStakeInput>(new CLegacyZPivStake()) :
-            std::unique_ptr<CStakeInput>(new CPivStake());
+    stake = std::unique_ptr<CStakeInput>(new CPivStake());
 
     return stake->InitFromTxIn(txin);
 }
 
 /*
- * Stake                Check if stakeInput can stake a block on top of pindexPrev
- *
- * @param[in]   pindexPrev      index of the parent block of the block being staked
- * @param[in]   stakeInput      input for the coinstake
- * @param[in]   nBits           target difficulty bits
- * @param[in]   nTimeTx         new blocktime
- * @return      bool            true if stake kernel hash meets target protocol
- */
+* Stake                Check if stakeInput can stake a block on top of pindexPrev
+*
+* @param[in]   pindexPrev      index of the parent block of the block being staked
+* @param[in]   stakeInput      input for the coinstake
+* @param[in]   nBits           target difficulty bits
+* @param[in]   nTimeTx         new blocktime
+* @return      bool            true if stake kernel hash meets target protocol
+*/
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx)
 {
     // Double check stake input contextual checks
     const int nHeightTx = pindexPrev->nHeight + 1;
-    if (!stakeInput || !stakeInput->ContextCheck(nHeightTx, nTimeTx)) return false;
+    if (!stakeInput || !stakeInput->ContextCheck(nHeightTx, nTimeTx))
+        return false;
 
-    // Get the new time slot (and verify it's not the same as previous block)
-    const bool fRegTest = Params().IsRegTestNet();
-    nTimeTx = (fRegTest ? GetAdjustedTime() : GetCurrentTimeSlot());
-    if (nTimeTx <= pindexPrev->nTime && !fRegTest) return false;
+    const Consensus::Params& consensus = Params().GetConsensus();
+    const bool fTimeV2 = consensus.IsTimeProtocolV2(nHeightTx);
+    if (fTimeV2) {
+        const bool fRegTest = Params().IsRegTestNet();
+        nTimeTx = (fRegTest ? GetAdjustedTime() : GetCurrentTimeSlot());
+        // double check that we are not on the same slot as prev block
+        if (nTimeTx <= pindexPrev->nTime && !fRegTest)
+            return false;
 
-    // Verify Proof Of Stake
-    CStakeKernel stakeKernel(pindexPrev, stakeInput, nBits, nTimeTx);
-    return stakeKernel.CheckKernelHash(true);
+        // Verify Proof Of Stake
+        CStakeKernel stakeKernel(pindexPrev, stakeInput, nBits, nTimeTx);
+        return stakeKernel.CheckKernelHash(true);
+    }
+
+    // Time protocol V1: iterate the hashing (can be removed after hard-fork)
+    return StakeV1(pindexPrev, stakeInput, nBits, nTimeTx);
+}
+
+bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx)
+{
+    bool fSuccess = false;
+    unsigned int nTryTime = 0;
+    unsigned int i;
+    int nHeightStart = chainActive.Height();
+    for (i = 0; i < (45); i++) //iterate the hashing
+    {
+        if (chainActive.Height() != nHeightStart)
+            break;
+
+        nTryTime = nTimeTx + 45 - i;
+        CStakeKernel stakeKernel(pindexPrev, stakeInput, nBits, nTryTime);
+        if (!stakeKernel.CheckKernelHash(true))
+            continue;
+        fSuccess = true; // if we make it this far then we have successfully created a stake hash
+        nTimeTx = nTryTime;
+        break;
+    }
+    mapHashedBlocks.clear();
+    mapHashedBlocks[pindexPrev->nHeight] = GetTime(); //store a time stamp of when we last hashed on this block
+
+    return fSuccess;
 }
 
 

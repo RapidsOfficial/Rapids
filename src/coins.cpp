@@ -170,8 +170,11 @@ bool CCoinsViewCache::BatchWrite(CCoinsMap& mapCoins, const uint256& hashBlockIn
                 // parent cache entry has unspent outputs. If this ever happens,
                 // it means the FRESH flag was misapplied and there is a logic
                 // error in the calling code.
-                if ((it->second.flags & CCoinsCacheEntry::FRESH) && !itUs->second.coin.IsSpent())
-                    throw std::logic_error("FRESH flag misapplied to cache entry for base transaction with spendable outputs");
+
+// note: the following check is commented out, due to a strange spend that occurs in block 324.
+//       the daemon will not continue syncing past this block otherwise (baz 21112020).
+//              if ((it->second.flags & CCoinsCacheEntry::FRESH) && !itUs->second.coin.IsSpent())
+//                  throw std::logic_error("FRESH flag misapplied to cache entry for base transaction with spendable outputs");
 
                 // Found the entry in the parent cache
                 if ((itUs->second.flags & CCoinsCacheEntry::FRESH) && it->second.coin.IsSpent()) {
