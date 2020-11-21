@@ -2,9 +2,9 @@
 # Distributed under the MIT software license, see the accompanying
 # file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-bin_PROGRAMS += test/test_pivx
+bin_PROGRAMS += test/test_rapids
 TEST_SRCDIR = test
-TEST_BINARY=test/test_pivx$(EXEEXT)
+TEST_BINARY=test/test_rapids$(EXEEXT)
 
 JSON_TEST_FILES = \
   test/data/script_valid.json \
@@ -97,30 +97,30 @@ BITCOIN_TESTS += \
   wallet/test/crypto_tests.cpp
 endif
 
-test_test_pivx_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
-test_test_pivx_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) -I$(builddir)/test/ $(TESTDEFS) $(EVENT_FLAGS)
-test_test_pivx_LDADD =
+test_test_rapids_SOURCES = $(BITCOIN_TEST_SUITE) $(BITCOIN_TESTS) $(JSON_TEST_FILES) $(RAW_TEST_FILES)
+test_test_rapids_CPPFLAGS = $(AM_CPPFLAGS) $(BITCOIN_INCLUDES) -I$(builddir)/test/ $(TESTDEFS) $(EVENT_FLAGS)
+test_test_rapids_LDADD =
 
-test_test_pivx_LDADD += $(LIBBITCOIN_SERVER) $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) \
+test_test_rapids_LDADD += $(LIBBITCOIN_SERVER) $(LIBBITCOIN_CLI) $(LIBBITCOIN_COMMON) $(LIBBITCOIN_UTIL) $(LIBBITCOIN_CRYPTO) $(LIBUNIVALUE) $(LIBBITCOIN_ZEROCOIN) \
   $(LIBLEVELDB) $(LIBLEVELDB_SSE42) $(LIBMEMENV) $(BOOST_LIBS) $(BOOST_UNIT_TEST_FRAMEWORK_LIB) $(LIBSECP256K1) $(EVENT_LIBS) $(EVENT_PTHREADS_LIBS)
 
 if ENABLE_WALLET
-test_test_pivx_LDADD += $(LIBBITCOIN_WALLET)
+test_test_rapids_LDADD += $(LIBBITCOIN_WALLET)
 endif
 
-test_test_pivx_LDADD += $(LIBSAPLING)
+test_test_rapids_LDADD += $(LIBSAPLING)
 
-test_test_pivx_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
+test_test_rapids_CXXFLAGS = $(AM_CXXFLAGS) $(PIE_FLAGS)
 
-test_test_pivx_LDADD += $(LIBRUSTZCASH) $(LIBBITCOIN_CONSENSUS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBZCASH_LIBS)
-test_test_pivx_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) -static
+test_test_rapids_LDADD += $(LIBRUSTZCASH) $(LIBBITCOIN_CONSENSUS) $(BDB_LIBS) $(SSL_LIBS) $(CRYPTO_LIBS) $(MINIUPNPC_LIBS) $(LIBZCASH_LIBS)
+test_test_rapids_LDFLAGS = $(RELDFLAGS) $(AM_LDFLAGS) $(LIBTOOL_APP_LDFLAGS) -static
 
 if ENABLE_ZMQ
-test_test_pivx_LDADD += $(ZMQ_LIBS)
+test_test_rapids_LDADD += $(ZMQ_LIBS)
 endif
 #
 
-nodist_test_test_pivx_SOURCES = $(GENERATED_TEST_FILES)
+nodist_test_test_rapids_SOURCES = $(GENERATED_TEST_FILES)
 
 $(BITCOIN_TESTS): $(GENERATED_TEST_FILES)
 
@@ -134,7 +134,7 @@ pivx_test_check: $(TEST_BINARY) FORCE
 	$(MAKE) check-TESTS TESTS=$^
 
 pivx_test_clean : FORCE
-	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_pivx_OBJECTS) $(TEST_BINARY)
+	rm -f $(CLEAN_BITCOIN_TEST) $(test_test_rapids_OBJECTS) $(TEST_BINARY)
 
 check-local: $(BITCOIN_TESTS:.cpp=.cpp.test)
 	@echo "Running test/util/bitcoin-util-test.py..."

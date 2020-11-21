@@ -85,8 +85,8 @@
 #include <openssl/crypto.h>
 #include <openssl/rand.h>
 
-const char * const PIVX_CONF_FILENAME = "pivx.conf";
-const char * const PIVX_PID_FILENAME = "pivx.pid";
+const char * const PIVX_CONF_FILENAME = "rapids.conf";
+const char * const PIVX_PID_FILENAME = "rapids.pid";
 const char * const PIVX_MASTERNODE_CONF_FILENAME = "masternode.conf";
 
 
@@ -296,7 +296,7 @@ fs::path GetDefaultDataDir()
 // Unix: ~/.pivx
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "PIVX";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "Rapids";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -308,10 +308,10 @@ fs::path GetDefaultDataDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDirectory(pathRet);
-    return pathRet / "PIVX";
+    return pathRet / "Rapids";
 #else
     // Unix
-    return pathRet / ".pivx";
+    return pathRet / ".rapids";
 #endif
 #endif
 }
@@ -330,7 +330,7 @@ static fs::path ZC_GetBaseParamsDir()
     // Unix: ~/.pivx-params
 #ifdef WIN32
     // Windows
-    return GetSpecialFolderPath(CSIDL_APPDATA) / "PIVXParams";
+    return GetSpecialFolderPath(CSIDL_APPDATA) / "RapidsParams";
 #else
     fs::path pathRet;
     char* pszHome = getenv("HOME");
@@ -342,10 +342,10 @@ static fs::path ZC_GetBaseParamsDir()
     // Mac
     pathRet /= "Library/Application Support";
     TryCreateDirectory(pathRet);
-    return pathRet / "PIVXParams";
+    return pathRet / "RapidsParams";
 #else
     // Unix
-    return pathRet / ".pivx-params";
+    return pathRet / ".rapids-params";
 #endif
 #endif
 }
