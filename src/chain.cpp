@@ -71,8 +71,6 @@ CBlockIndex::CBlockIndex(const CBlock& block):
         nBits{block.nBits},
         nNonce{block.nNonce}
 {
-    if(block.nVersion > 3 && block.nVersion < 7)
-        nAccumulatorCheckpoint = block.nAccumulatorCheckpoint;
     if (block.IsProofOfStake())
         SetProofOfStake();
 }
@@ -114,7 +112,6 @@ CBlockHeader CBlockIndex::GetBlockHeader() const
     block.nTime = nTime;
     block.nBits = nBits;
     block.nNonce = nNonce;
-    if (nVersion > 3 && nVersion < 7) block.nAccumulatorCheckpoint = nAccumulatorCheckpoint;
     return block;
 }
 

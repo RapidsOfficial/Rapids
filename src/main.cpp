@@ -3249,10 +3249,9 @@ CBlockIndex* AddToBlockIndex(const CBlock& block)
         pindexNew->BuildSkip();
 
         const Consensus::Params& consensus = Params().GetConsensus();
-        if (!consensus.NetworkUpgradeActive(pindexNew->nHeight, Consensus::UPGRADE_V3_4)) {
+        if (pindexNew->nHeight <= 915000) {
             // compute and set new V1 stake modifier (entropy bits)
             pindexNew->SetNewStakeModifier();
-
         } else {
             // compute and set new V2 stake modifier (hash of prevout and prevModifier)
             pindexNew->SetNewStakeModifier(block.vtx[1].vin[0].prevout.hash);

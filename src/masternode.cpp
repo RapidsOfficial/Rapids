@@ -515,13 +515,13 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
     if (!CheckSignature())
     {
         // don't ban for old masternodes, their sigs could be broken because of the bug
-        nDos = protocolVersion < MIN_PEER_MNANNOUNCE ? 0 : 100;
+        nDos = 0;
         return error("%s : Got bad Masternode address signature", __func__);
     }
 
     if (Params().NetworkID() == CBaseChainParams::MAIN) {
-        if (addr.GetPort() != 51472) return false;
-    } else if (addr.GetPort() == 51472)
+        if (addr.GetPort() != 28732) return false;
+    } else if (addr.GetPort() == 28732)
         return false;
 
     //search existing Masternode list, this is where we update existing Masternodes with new mnb broadcasts

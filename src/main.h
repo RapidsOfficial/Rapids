@@ -77,7 +77,7 @@ static const unsigned int DEFAULT_DESCENDANT_SIZE_LIMIT = 101;
 static const unsigned int DEFAULT_MEMPOOL_EXPIRY = 72;
 /** Default for -txindex */
 static const bool DEFAULT_TXINDEX = true;
-static const bool DEFAULT_CHECKPOINTS_ENABLED = true;
+static const bool DEFAULT_CHECKPOINTS_ENABLED = false;
 /** Default for -testsafemode */
 static const bool DEFAULT_TESTSAFEMODE = false;
 /** Default for -relaypriority */
@@ -90,7 +90,7 @@ static const unsigned int MAX_ZEROCOIN_TX_SIZE = 150000;
 /** Default for -maxorphantx, maximum number of orphan transactions kept in memory */
 static const unsigned int DEFAULT_MAX_ORPHAN_TRANSACTIONS = 100;
 /** Default for -checkblocks */
-static const signed int DEFAULT_CHECKBLOCKS = 10;
+static const signed int DEFAULT_CHECKBLOCKS = 6;
 /** The maximum size of a blk?????.dat file (since 0.8) */
 static const unsigned int MAX_BLOCKFILE_SIZE = 0x8000000; // 128 MiB
 /** The pre-allocation chunk size for blk?????.dat files (since 0.8) */

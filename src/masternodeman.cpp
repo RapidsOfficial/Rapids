@@ -682,7 +682,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
         if (!mnb.IsInputAssociatedWithPubkey()) {
             LogPrintf("CMasternodeMan::ProcessMessage() : mnb - Got mismatched pubkey and vin\n");
             LOCK(cs_main);
-            Misbehaving(pfrom->GetId(), 33);
+            //Misbehaving(pfrom->GetId(), 33);
             return;
         }
 

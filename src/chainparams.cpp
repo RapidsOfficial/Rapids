@@ -208,13 +208,13 @@ public:
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
         consensus.vUpgrades[Consensus::UPGRADE_ZC].hashActivationBlock =
-                uint256S("0x5b2482eca24caf2a46bb22e0545db7b7037282733faa3a42ec20542509999a64");
+                uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].hashActivationBlock =
-                uint256S("0x37ea75fe1c9314171cff429a91b25b9f11331076d1c9de50ee4054d61877f8af");
+                uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].hashActivationBlock =
                 uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].hashActivationBlock =
-                uint256S("0xe2448b76d88d37aba4194ffed1041b680d779919157ddf5cbf423373d7f8078e");
+                uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
         consensus.vUpgrades[Consensus::UPGRADE_V3_4].hashActivationBlock =
                 uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
         consensus.vUpgrades[Consensus::UPGRADE_V4_0].hashActivationBlock =
