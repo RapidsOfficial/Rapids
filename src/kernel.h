@@ -52,7 +52,6 @@ private:
  * @return      bool            true if stake kernel hash meets target protocol
  */
 bool Stake(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx);
-bool StakeV1(const CBlockIndex* pindexPrev, CStakeInput* stakeInput, unsigned int nBits, int64_t& nTimeTx);
 
 /*
  * CheckProofOfStake    Check if block has valid proof of stake

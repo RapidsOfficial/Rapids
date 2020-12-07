@@ -38,9 +38,9 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return consensus.powLimit.GetCompact();
     }
 
-    if (pindexLast->nHeight > Params().GetConsensus().height_last_PoW) {
-        const bool fTimeV2 = consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
-        const uint256& bnTargetLimit = (~uint256(0) >> 24);  // consensus.ProofOfStakeLimit(fTimeV2);
+    if (consensus.NetworkUpgradeActive(pindexLast->nHeight, Consensus::UPGRADE_POS)) {
+        const bool fTimeV2 = !Params().IsRegTestNet() && consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
+        const uint256& bnTargetLimit = (~UINT256_ZERO >> 24);
         const int64_t& nTargetTimespan = 60 * 40;  // consensus.TargetTimespan(fTimeV2);
 		int64_t nTargetSpacing = 60;
 
