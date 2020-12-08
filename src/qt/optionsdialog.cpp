@@ -1,5 +1,6 @@
 // Copyright (c) 2011-2013 The Bitcoin developers
 // Copyright (c) 2017-2020 The PIVX developers
+// Copyright (c) 2018-2020 The Rapids developers
 // Distributed under the MIT/X11 software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
@@ -83,17 +84,6 @@ OptionsDialog::OptionsDialog(QWidget* parent, bool enableWallet) : QDialog(paren
 
     /* Theme selector static themes */
     ui->theme->addItem(QString("Default"), QVariant("default"));
-
-    /* Preferred Zerocoin Denominations */
-    ui->preferredDenom->addItem(QString(tr("Any")), QVariant("0"));
-    ui->preferredDenom->addItem(QString("1"), QVariant("1"));
-    ui->preferredDenom->addItem(QString("5"), QVariant("5"));
-    ui->preferredDenom->addItem(QString("10"), QVariant("10"));
-    ui->preferredDenom->addItem(QString("50"), QVariant("50"));
-    ui->preferredDenom->addItem(QString("100"), QVariant("100"));
-    ui->preferredDenom->addItem(QString("500"), QVariant("500"));
-    ui->preferredDenom->addItem(QString("1000"), QVariant("1000"));
-    ui->preferredDenom->addItem(QString("5000"), QVariant("5000"));
 
     /* Theme selector external themes */
     fs::path pathAddr = GetDataDir() / "themes";
@@ -186,14 +176,6 @@ void OptionsDialog::setMapper()
     mapper->addMapping(ui->bitcoinAtStartup, OptionsModel::StartAtStartup);
     mapper->addMapping(ui->threadsScriptVerif, OptionsModel::ThreadsScriptVerif);
     mapper->addMapping(ui->databaseCache, OptionsModel::DatabaseCache);
-    // Zeromint Enabled
-    mapper->addMapping(ui->checkBoxZeromintEnable, OptionsModel::ZeromintEnable);
-    // Zeromint Addresses
-    mapper->addMapping(ui->checkBoxZeromintAddresses, OptionsModel::ZeromintAddresses);
-    // Zerocoin mint percentage
-    mapper->addMapping(ui->zeromintPercentage, OptionsModel::ZeromintPercentage);
-    // Zerocoin preferred denomination
-    mapper->addMapping(ui->preferredDenom, OptionsModel::ZeromintPrefDenom);
 
     /* Wallet */
     mapper->addMapping(ui->spendZeroConfChange, OptionsModel::SpendZeroConfChange);

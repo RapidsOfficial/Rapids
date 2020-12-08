@@ -7,12 +7,12 @@
 #define BITCOIN_QT_ASKPASSPHRASEDIALOG_H
 
 #include <QDialog>
-#include "qt/pivx/prunnable.h"
+#include "qt/rapids/prunnable.h"
 #include "allocators.h"
 #include <QCheckBox>
 
 class WalletModel;
-class PIVXGUI;
+class RapidsGUI;
 
 namespace Ui
 {

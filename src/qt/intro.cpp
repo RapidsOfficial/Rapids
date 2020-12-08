@@ -11,7 +11,7 @@
 #include "guiutil.h"
 
 #include "util.h"
-#include "qt/pivx/qtutils.h"
+#include "qt/rapids/qtutils.h"
 
 #include <QFileDialog>
 #include <QMessageBox>
