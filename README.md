@@ -24,7 +24,7 @@ Specifications
 |      **Parameter**    |   **Specification**       | 
 |-----------------------|---------------------------|
 | Block Time            | 60 Seconds                |
-| Max Coin Supply       | 35,000,000,000 RPD        |
+| Max Coin Supply       | 30,000,000,000 RPD        |
 | Premine               | 20,000,000,000 RPD        |
 | Masternode Collateral | 10,000,000 RPD            |
 | Reward Rate per block | MN 65%. POS 35%           |    
