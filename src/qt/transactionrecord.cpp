@@ -211,10 +211,16 @@ bool TransactionRecord::decomposeCreditTransaction(const CWallet* wallet, const 
     return true;
 }
 
+//! prevent duplicate transactions appearing
+std::vector<uint256> selfsend;
 bool TransactionRecord::decomposeSendToSelfTransaction(const CWalletTx& wtx, const CAmount& nCredit,
                                                        const CAmount& nDebit, bool involvesWatchAddress,
                                                        QList<TransactionRecord>& parts)
 {
+    for (auto& l : selfsend)
+        if (l == wtx.GetHash()) return false;
+    selfsend.push_back(wtx.GetHash());
+
     // Payment to self tx is presented as a single record.
     TransactionRecord sub(wtx.GetHash(), wtx.GetTxTime(), wtx.GetTotalSize());
     // Payment to self by default
