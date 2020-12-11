@@ -112,12 +112,23 @@ uint256 CMasternode::GetSignatureHash() const
 
 std::string CMasternode::GetStrMessage() const
 {
+	std::string vchPubKey(pubKeyCollateralAddress.begin(), pubKeyCollateralAddress.end());
+	std::string vchPubKey2(pubKeyMasternode.begin(), pubKeyMasternode.end());
     return (addr.ToString() +
             std::to_string(sigTime) +
-            pubKeyCollateralAddress.GetID().ToString() +
-            pubKeyMasternode.GetID().ToString() +
+		vchPubKey +
+		vchPubKey2 +
             std::to_string(protocolVersion)
     );
+}
+
+std::string CMasternode::GetNewStrMessage() const
+{
+	std::string strMessage;
+
+	strMessage = addr.ToString() + std::to_string(sigTime) + pubKeyCollateralAddress.GetID().ToString() + pubKeyMasternode.GetID().ToString() + std::to_string(protocolVersion);
+
+	return strMessage;
 }
 
 //
@@ -211,7 +222,7 @@ void CMasternode::Check(bool forceCheck)
         CMutableTransaction tx = CMutableTransaction();
         CScript dummyScript;
         dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-        CTxOut vout = CTxOut(9999.99 * COIN, dummyScript);
+        CTxOut vout = CTxOut(9999999.99 * COIN, dummyScript);
         tx.vin.push_back(vin);
         tx.vout.push_back(vout);
         {
@@ -307,7 +318,7 @@ bool CMasternode::IsInputAssociatedWithPubkey() const
     uint256 hash;
     if(GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         for (CTxOut out : txVin.vout) {
-            if (out.nValue == 10000 * COIN && out.scriptPubKey == payee) return true;
+            if (out.nValue == 10000000 * COIN && out.scriptPubKey == payee) return true;
         }
     }
 
@@ -449,8 +460,14 @@ bool CMasternodeBroadcast::CheckSignature() const
                             GetSignatureHash().GetHex() :
                             GetStrMessage()
                             );
+	std::string newStrMessage = (
+		nMessVersion == MessageVersion::MESS_VER_HASH ?
+		GetSignatureHash().GetHex() :
+		GetNewStrMessage()
+		);
 
-    if(!CMessageSigner::VerifyMessage(pubKeyCollateralAddress, vchSig, strMessage, strError))
+	if (!CMessageSigner::VerifyMessage(pubKeyCollateralAddress, vchSig, strMessage, strError)
+		&& !CMessageSigner::VerifyMessage(pubKeyCollateralAddress, vchSig, newStrMessage, strError))
         return error("%s : VerifyMessage (nMessVersion=%d) failed: %s", __func__, nMessVersion, strError);
 
     return true;
@@ -582,7 +599,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     CMutableTransaction tx = CMutableTransaction();
     CScript dummyScript;
     dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-    CTxOut vout = CTxOut(9999.99 * COIN, dummyScript);
+    CTxOut vout = CTxOut(9999999.99 * COIN, dummyScript);
     tx.vin.push_back(vin);
     tx.vout.push_back(vout);
 

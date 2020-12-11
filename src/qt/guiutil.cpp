@@ -852,7 +852,7 @@ bool isExternal(QString theme)
     if (theme.isEmpty())
         return false;
 
-    return (theme.operator!=("default") && theme.operator!=("default-dark"));
+    return (theme.operator!=("default"));
 }
 
 // Open CSS when configured

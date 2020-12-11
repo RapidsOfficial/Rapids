@@ -148,6 +148,7 @@ public:
     // override CSignedMessage functions
     uint256 GetSignatureHash() const override;
     std::string GetStrMessage() const override;
+	std::string GetNewStrMessage() const;
     const CTxIn GetVin() const override { return vin; };
     const CPubKey GetPublicKey(std::string& strErrorRet) const override { return pubKeyCollateralAddress; }
 
