@@ -3,9 +3,6 @@
 Rapids staging tree 3.4
 =======================
 
-rebased over PIVX 4.3 (https://github.com/PIVX-Project/PIVX/tree/4.3)
-
-
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
 
 
