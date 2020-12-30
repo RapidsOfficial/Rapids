@@ -828,7 +828,15 @@ std::string CMasternodeMan::ToString() const
 
 void ThreadCheckMasternodes()
 {
-    if (fLiteMode) return; //disable all Masternode related functionality
+    //! dont begin the mnsync loop until we're synced
+    bool isIBDdone = false;
+    while (!ShutdownRequested()) {
+        MilliSleep(1000);
+        boost::this_thread::interruption_point();
+        isIBDdone = !IsInitialBlockDownload();
+        if (isIBDdone)
+            break;
+    }
 
     // Make this thread recognisable as the wallet flushing thread
     util::ThreadRename("pivx-masternodeman");
