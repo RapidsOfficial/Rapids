@@ -90,7 +90,7 @@ const char * const PIVX_PID_FILENAME = "rapids.pid";
 const char * const PIVX_MASTERNODE_CONF_FILENAME = "masternode.conf";
 
 
-// PIVX only features
+// RPD only features
 // Masternode
 bool fMasterNode = false;
 std::string strMasterNodePrivKey = "";
@@ -290,9 +290,9 @@ void PrintExceptionContinue(const std::exception* pex, const char* pszThread)
 
 fs::path GetDefaultDataDir()
 {
-// Windows < Vista: C:\Documents and Settings\Username\Application Data\PIVX
-// Windows >= Vista: C:\Users\Username\AppData\Roaming\PIVX
-// Mac: ~/Library/Application Support/PIVX
+// Windows < Vista: C:\Documents and Settings\Username\Application Data\RPD
+// Windows >= Vista: C:\Users\Username\AppData\Roaming\RPD
+// Mac: ~/Library/Application Support/RPD
 // Unix: ~/.pivx
 #ifdef WIN32
     // Windows
@@ -324,9 +324,9 @@ static RecursiveMutex csPathCached;
 static fs::path ZC_GetBaseParamsDir()
 {
     // Copied from GetDefaultDataDir and adapter for zcash params.
-    // Windows < Vista: C:\Documents and Settings\Username\Application Data\PIVXParams
-    // Windows >= Vista: C:\Users\Username\AppData\Roaming\PIVXParams
-    // Mac: ~/Library/Application Support/PIVXParams
+    // Windows < Vista: C:\Documents and Settings\Username\Application Data\RPDParams
+    // Windows >= Vista: C:\Users\Username\AppData\Roaming\RPDParams
+    // Mac: ~/Library/Application Support/RPDParams
     // Unix: ~/.pivx-params
 #ifdef WIN32
     // Windows

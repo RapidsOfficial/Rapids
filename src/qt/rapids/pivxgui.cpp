@@ -414,7 +414,7 @@ void RapidsGUI::message(const QString& title, const QString& message, unsigned i
     } else if (style & CClientUIInterface::MSG_INFORMATION_SNACK) {
         messageInfo(message);
     } else {
-        // Append title to "PIVX - "
+        // Append title to "RPD - "
         if (!msgType.isEmpty())
             strTitle += " - " + msgType;
         notificator->notify((Notificator::Class) nNotifyIcon, strTitle, message);

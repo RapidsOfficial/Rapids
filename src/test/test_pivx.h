@@ -2,8 +2,8 @@
 // Distributed under the MIT software license, see the accompanying
 // file COPYING or http://www.opensource.org/licenses/mit-license.php.
 
-#ifndef PIVX_TEST_TEST_PIVX_H
-#define PIVX_TEST_TEST_PIVX_H
+#ifndef PIVX_TEST_TEST_RPD_H
+#define PIVX_TEST_TEST_RPD_H
 
 #include "fs.h"
 #include "txdb.h"

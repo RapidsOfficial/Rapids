@@ -176,7 +176,7 @@ private:
     void handleRunawayException(const std::exception* e);
 };
 
-/** Main PIVX application object */
+/** Main RPD application object */
 class BitcoinApplication : public QApplication
 {
     Q_OBJECT
@@ -494,7 +494,7 @@ void BitcoinApplication::initializeResult(int retval)
 
 #ifdef ENABLE_WALLET
         // Now that initialization/startup is done, process any command-line
-        // PIVX: URIs or payment requests:
+        // RPD: URIs or payment requests:
         //connect(paymentServer, &PaymentServer::receivedPaymentRequest, window, &RapidsGUI::handlePaymentRequest);
         connect(window, &RapidsGUI::receivedURI, paymentServer, &PaymentServer::handleURIOrFile);
         connect(paymentServer, &PaymentServer::message, [this](const QString& title, const QString& message, unsigned int style) {
@@ -515,7 +515,7 @@ void BitcoinApplication::shutdownResult(int retval)
 
 void BitcoinApplication::handleRunawayException(const QString& message)
 {
-    QMessageBox::critical(0, "Runaway exception", QObject::tr("A fatal error occurred. PIVX can no longer continue safely and will quit.") + QString("\n\n") + message);
+    QMessageBox::critical(0, "Runaway exception", QObject::tr("A fatal error occurred. RPD can no longer continue safely and will quit.") + QString("\n\n") + message);
     ::exit(1);
 }
 

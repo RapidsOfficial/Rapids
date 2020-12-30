@@ -301,7 +301,7 @@ private:
 };
 
 //! Utility function to add all of a transaction's outputs to a cache.
-// PIVX: It assumes that overwrites are never possible due to BIP34 always in effect
+// RPD: It assumes that overwrites are never possible due to BIP34 always in effect
 void AddCoins(CCoinsViewCache& cache, const CTransaction& tx, int nHeight);
 
 //! Utility function to find any unspent output with a given txid.

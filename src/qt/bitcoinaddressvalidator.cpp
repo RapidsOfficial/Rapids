@@ -82,7 +82,7 @@ BitcoinAddressCheckValidator::BitcoinAddressCheckValidator(QObject* parent) : QV
 QValidator::State BitcoinAddressCheckValidator::validate(QString& input, int& pos) const
 {
     Q_UNUSED(pos);
-    // Validate the passed PIVX address
+    // Validate the passed RPD address
     CTxDestination addr = DecodeDestination(input.toStdString());
     if (IsValidDestination(addr))
         return QValidator::Acceptable;
