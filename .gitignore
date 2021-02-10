@@ -8,12 +8,14 @@ reset-files.bash
 
 *.exe
 src/rapids
-src/rapidsd
-src/rapids-cli
-src/rapids-tx
+# src/rapidsd
+# src/rapids-cli
+# src/rapids-tx
+# src/qt/rapids-qt
+# src/qt/test/test_rapids-qt
 src/bench/bench_rapids
-src/bench/bench_pivx
-src/test/test_rapids
+# src/bench/bench_pivx
+# src/test/test_rapids
 src/qt/test/test_rapids-qt
 
 # autoreconf
@@ -41,9 +43,9 @@ conftest.cpp
 conftest.err
 libtool
 src/config/rapids-config.h
-src/config/pivx-config.h
+# src/config/pivx-config.h
 src/config/rapids-config.h.in
-src/config/pivx-config.h.in
+# src/config/pivx-config.h.in
 src/config/stamp-h1
 share/setup.nsi
 share/qt/Info.plist
