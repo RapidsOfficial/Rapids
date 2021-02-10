@@ -1155,7 +1155,9 @@ bool AttemptBackupWallet(const CWallet& wallet, const fs::path& pathSrc, const f
             LogPrintf("cannot backup to wallet source file %s\n", pathDest.string());
             return false;
         }
-#if BOOST_VERSION >= 105800 /* BOOST_LIB_VERSION 1_58 */
+#if BOOST_VERSION >= 107400
+        fs::copy_file(pathSrc.c_str(), pathDest, fs::copy_options::overwrite_existing);
+#elif BOOST_VERSION >= 105800 /* BOOST_LIB_VERSION 1_58 */
         fs::copy_file(pathSrc.c_str(), pathDest, fs::copy_option::overwrite_if_exists);
 #else
         std::ifstream src(pathSrc.c_str(),  std::ios::binary | std::ios::in);
