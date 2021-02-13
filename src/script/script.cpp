@@ -259,6 +259,22 @@ bool CScript::IsPayToColdStaking() const
             (*this)[50] == OP_CHECKSIG);
 }
 
+bool CScript::IsPayToPublicKey() const
+{
+    // Test for pay-to-pubkey CScript with both
+    // compressed or uncompressed pubkey
+    if (this->size() == 35) {
+        return ((*this)[1] == 0x02 || (*this)[1] == 0x03) &&
+                (*this)[34] == OP_CHECKSIG;
+    }
+    if (this->size() == 67) {
+        return (*this)[1] == 0x04 &&
+                (*this)[66] == OP_CHECKSIG;
+
+    }
+    return false;
+}
+
 bool CScript::StartsWithOpcode(const opcodetype opcode) const
 {
     return (!this->empty() && (*this)[0] == opcode);

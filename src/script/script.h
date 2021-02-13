@@ -623,6 +623,7 @@ public:
     bool IsPayToPublicKeyHash() const;
     bool IsPayToScriptHash() const;
     bool IsPayToColdStaking() const;
+    bool IsPayToPublicKey() const;
     bool StartsWithOpcode(const opcodetype opcode) const;
     bool IsZerocoinMint() const;
     bool IsZerocoinSpend() const;
