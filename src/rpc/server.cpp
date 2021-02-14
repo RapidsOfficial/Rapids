@@ -63,12 +63,12 @@ void RPCServer::OnStopped(std::function<void ()> slot)
 
 void RPCServer::OnPreCommand(std::function<void (const CRPCCommand&)> slot)
 {
-    g_rpcSignals.PreCommand.connect(boost::bind(slot, _1));
+    g_rpcSignals.PreCommand.connect(boost::bind(slot, boost::placeholders::_1));
 }
 
 void RPCServer::OnPostCommand(std::function<void (const CRPCCommand&)> slot)
 {
-    g_rpcSignals.PostCommand.connect(boost::bind(slot, _1));
+    g_rpcSignals.PostCommand.connect(boost::bind(slot, boost::placeholders::_1));
 }
 
 void RPCTypeCheck(const UniValue& params,
@@ -349,7 +349,7 @@ static const CRPCCommand vRPCCommands[] =
         {"util", "validateaddress", &validateaddress, true }, /* uses wallet if enabled */
         {"util", "verifymessage", &verifymessage, true },
         {"util", "estimatefee", &estimatefee, true },
-        { "util","estimatesmartfee",       &estimatesmartfee,       true  },
+        {"util","estimatesmartfee",       &estimatesmartfee,       true  },
 
                 /* Not shown in help */
         {"hidden", "invalidateblock", &invalidateblock, true },
@@ -414,6 +414,14 @@ static const CRPCCommand vRPCCommands[] =
         {"zerocoin", "generatemintlist", &generatemintlist, false },
         {"zerocoin", "searchdzpiv", &searchdzpiv, false },
         {"zerocoin", "dzpivstate", &dzpivstate, false },
+
+        {"util", "getaddresstxids", &getaddresstxids, true },
+        {"util", "getaddressdeltas", &getaddressdeltas, true },
+        {"util", "getaddressbalance", &getaddressbalance, true },
+        {"util", "getaddressutxos", &getaddressutxos, true },
+        {"util", "getaddressmempool", &getaddressmempool, true },
+        {"util", "getblockhashes", &getblockhashes, true },
+        {"util", "getspentinfo", &getspentinfo, true }
 
 #endif // ENABLE_WALLET
 };

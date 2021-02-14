@@ -240,6 +240,14 @@ extern UniValue generatemintlist(const JSONRPCRequest& request);
 extern UniValue searchdzpiv(const JSONRPCRequest& request);
 extern UniValue dzpivstate(const JSONRPCRequest& request);
 
+extern UniValue getaddresstxids(const JSONRPCRequest& request);
+extern UniValue getaddressdeltas(const JSONRPCRequest& request);
+extern UniValue getaddressbalance(const JSONRPCRequest& request);
+extern UniValue getaddressutxos(const JSONRPCRequest& request);
+extern UniValue getaddressmempool(const JSONRPCRequest& request);
+extern UniValue getblockhashes(const JSONRPCRequest& request);
+extern UniValue getspentinfo(const JSONRPCRequest& request);
+
 extern UniValue getrawtransaction(const JSONRPCRequest& request); // in rpc/rawtransaction.cpp
 extern UniValue createrawtransaction(const JSONRPCRequest& request);
 extern UniValue decoderawtransaction(const JSONRPCRequest& request);

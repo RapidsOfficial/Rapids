@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+#include <uint256.h>
 
 /**
  * Encode a byte sequence as a base58-encoded string.
@@ -178,5 +179,7 @@ public:
         return EncodeDestination(dest, isP2CS ? CChainParams::STAKING_ADDRESS : CChainParams::PUBKEY_ADDRESS);
     }
 };
+
+bool DecodeIndexKey(const std::string& str, uint160& hashBytes, int& type);
 
 #endif // BITCOIN_BASE58_H

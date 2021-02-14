@@ -8,6 +8,8 @@
 #include "hash.h"
 #include "script/script.h"
 #include "uint256.h"
+#include <script/standard.h>
+#include <key_io.h>
 
 #include <boost/variant/apply_visitor.hpp>
 #include <boost/variant/static_visitor.hpp>
@@ -349,4 +351,29 @@ bool IsValidDestinationString(const std::string& str, bool fStaking, const CChai
 bool IsValidDestinationString(const std::string& str, bool isStaking)
 {
     return IsValidDestinationString(str, isStaking, Params());
+}
+
+bool DecodeIndexKey(const std::string &str, uint160 &hashBytes, int &type)
+{
+    CTxDestination dest = DecodeDestination(str);
+    if (IsValidDestination(dest))
+    {
+        const CKeyID *keyID = boost::get<CKeyID>(&dest);
+        if(keyID)
+        {
+            memcpy(&hashBytes, keyID, 20);
+            type = 1;
+            return true;
+        }
+
+        const CScriptID *scriptID = boost::get<CScriptID>(&dest);
+        if(scriptID)
+        {
+            memcpy(&hashBytes, scriptID, 20);
+            type = 2;
+            return true;
+        }
+    }
+
+    return false;
 }
