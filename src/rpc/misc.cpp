@@ -277,7 +277,7 @@ UniValue getaddressbalance(const JSONRPCRequest& request)
 
 UniValue getaddressutxos(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 1)
+    if (request.fHelp || request.params.size() < 1 || request.params.size() > 3)
         throw std::runtime_error(
             "getaddressutxos\n"
             "\nReturns all unspent outputs for an address (requires addressindex to be enabled).\n"
@@ -306,9 +306,14 @@ UniValue getaddressutxos(const JSONRPCRequest& request)
             + HelpExampleRpc("getaddressutxos", "{\"addresses\": [\"12c6DSiU4Rq3P4ZxziKxzrL5LmMBrzjrJX\"]}")
             );
 
+    CAmount requiredAmount = 0;
+    if (!request.params[1].isNull()) {
+        requiredAmount = AmountFromValue(request.params[1]);
+    }
+
     bool includeChainInfo = false;
-    if (request.params[0].isObject()) {
-        UniValue chainInfo = find_value(request.params[0].get_obj(), "chainInfo");
+    if (request.params[2].isObject()) {
+        UniValue chainInfo = find_value(request.params[2].get_obj(), "chainInfo");
         if (chainInfo.isBool()) {
             includeChainInfo = chainInfo.get_bool();
         }
