@@ -311,3 +311,7 @@ std::string CTransaction::ToString() const
         str += "    " + vout[i].ToString() + "\n";
     return str;
 }
+
+CAmount CTxOut::GetValue(int outputHeight, int spendHeight) const{
+    return nValue;
+}

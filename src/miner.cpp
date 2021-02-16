@@ -382,7 +382,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 continue;
             }
 
-            CAmount nTxFees = view.GetValueIn(tx) - tx.GetValueOut();
+            CAmount nTxFees = view.GetValueIn(tx, nHeight) - tx.GetValueOut();
 
             nTxSigOps += GetP2SHSigOpCount(tx, view);
             if (nBlockSigOps + nTxSigOps >= nMaxBlockSigOps)

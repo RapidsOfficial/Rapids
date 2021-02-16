@@ -976,7 +976,7 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
             // Bring the best block into scope
             view.GetBestBlock();
 
-            nValueIn = view.GetValueIn(tx);
+            nValueIn = view.GetValueIn(tx, chainHeight);
 
             // we have all inputs cached now, so switch back to dummy, so we don't need to keep lock on mempool
             view.SetBackend(dummy);
@@ -1296,7 +1296,7 @@ bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransact
             // Bring the best block into scope
             view.GetBestBlock();
 
-            nValueIn = view.GetValueIn(tx);
+            nValueIn = view.GetValueIn(tx, chainHeight);
 
             // we have all inputs cached now, so switch back to dummy, so we don't need to keep lock on mempool
             view.SetBackend(dummy);
@@ -1970,7 +1970,7 @@ bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoins
         }
 
         // Check for negative or overflow input values
-        nValueIn += coin.out.nValue;
+        nValueIn += coin.out.GetValue(coin.nHeight, nSpendHeight);
         if (!consensus.MoneyRange(coin.out.nValue) || !consensus.MoneyRange(nValueIn))
             return state.DoS(100, false, REJECT_INVALID, "bad-txns-inputvalues-outofrange");
     }
@@ -2330,7 +2330,7 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
         // At this point, all of txundo.vprevout should have been moved out.
 
         if (view.HaveInputs(tx))
-            nValueIn += view.GetValueIn(tx);
+            nValueIn += view.GetValueIn(tx, pindex->nHeight);
     }
 
     // track money
@@ -2606,8 +2606,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
         if (!tx.IsCoinBase()) {
             if (!tx.IsCoinStake())
-                nFees += view.GetValueIn(tx) - tx.GetValueOut();
-            nValueIn += view.GetValueIn(tx);
+                nFees += view.GetValueIn(tx, pindex->nHeight) - tx.GetValueOut();
+
+            nValueIn += view.GetValueIn(tx, pindex->nHeight);
 
             std::vector<CScriptCheck> vChecks;
             unsigned int flags = SCRIPT_VERIFY_P2SH | SCRIPT_VERIFY_DERSIG;
