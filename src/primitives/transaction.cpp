@@ -312,6 +312,13 @@ std::string CTransaction::ToString() const
     return str;
 }
 
-CAmount CTxOut::GetValue(int outputHeight, int spendHeight) const{
+CAmount CTxOut::GetValue(int outputHeight, int spendHeight) const {
+    const Consensus::Params& consensusParams = Params().GetConsensus();
+    int reduction = consensusParams.height_supply_reduction;
+
+    if (outputHeight < reduction && spendHeight > reduction) {
+        return nValue / 1000;
+    }
+
     return nValue;
 }

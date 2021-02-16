@@ -120,6 +120,7 @@ struct Params {
     int height_start_ZC_InvalidSerials;
     int height_start_ZC_SerialRangeCheck;
     int height_ZC_RecalcAccumulators;
+    int height_supply_reduction;
 
     // validation by-pass
     int64_t nPivxBadBlockTime;
