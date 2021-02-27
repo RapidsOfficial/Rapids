@@ -1575,48 +1575,67 @@ double ConvertBitsToDouble(unsigned int nBits)
     return dDiff;
 }
 
-int64_t GetTotalValue(int nHeight)
+int64_t GetBlockValue(int nHeight)
 {
-    int64_t nSubsidy = 0;
+    if (nHeight <= Params().GetConsensus().height_supply_reduction) {
+        // Old subsidy
+        int64_t nSubsidy = 0;
+        const int nHalvingPeriod = 2102400;
 
-    if (nHeight == 0) {
-        nSubsidy = 20000000000 * COIN;
+        //! unfortunately this must remain to validate the existing
+        //! chain, but we can just disable it at new client height
+        if (IsBurnBlock(nHeight) && nHeight < 793850) {
+            nSubsidy = GetBurnAward(nHeight);
+        } else {
+            //! existing reward schema
+            if (nHeight == 0) {
+                nSubsidy = 20000000000 * COIN;
+            } else {
+                nSubsidy = 3567.352 * COIN;
+                nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
+            }
+
+            //! remove the old restriction on reward with new client
+            if (nHeight > 0 && nHeight < 793850)
+                nSubsidy *= 0.9;
+        }
+
+        return nSubsidy;
     }
-    else {
-        nSubsidy = 3567.352 * COIN;
-        nSubsidy >>= ((nHeight - 1) / 2102400);
-    }
+
+    // New subsidy
+    const int nHalvingPeriod = 2102400;
+    int64_t nSubsidy = 1.7835 * COIN;
+
+    nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
 
     return nSubsidy;
 }
 
-int64_t GetBlockValue(int nHeight)
+int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
 {
-    int64_t nSubsidy = 0;
-    const int nHalvingPeriod = 2102400;
+    if (nHeight <= Params().GetConsensus().height_supply_reduction) {
+        // Old masternode payment
+        int64_t ret = 0;
 
-    //! unfortunately this must remain to validate the existing
-    //! chain, but we can just disable it at new client height
-    if (IsBurnBlock(nHeight) && nHeight < 793850) {
-        nSubsidy = GetBurnAward(nHeight);
-    }
-    else {
+        // No rewards till masternode activation.
+        if (nHeight < Params().GetConsensus().height_last_PoW || blockValue == 0)
+            return 0;
 
-        //! existing reward schema
-        if (nHeight == 0) {
-            nSubsidy = 20000000000 * COIN;
-        }
-        else {
-            nSubsidy = 3567.352 * COIN;
-            nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
+        // Check if we reached coin supply
+        if (nHeight < 50) {
+            ret = 0;
+        } else if (nHeight >= 793850) {
+            ret = blockValue * 0.65;
+        } else {
+            ret = blockValue * 0.60 / 0.9; // 60% of block reward
         }
 
-        //! remove the old restriction on reward with new client
-        if (nHeight > 0 && nHeight < 793850)
-            nSubsidy *= 0.9;
+        return ret;
     }
 
-    return nSubsidy;
+    // New masternode payment
+    return blockValue * 0.60;
 }
 
 bool IsBurnBlock(int nHeight)
@@ -1626,10 +1645,26 @@ bool IsBurnBlock(int nHeight)
 
     if (nHeight < nStartBurnBlock)
         return false;
+
     else if ((nHeight - nStartBurnBlock) % nBurnBlockStep == 0)
         return true;
+
     else
         return false;
+}
+
+int64_t GetTotalValue(int nHeight)
+{
+    int64_t nSubsidy = 0;
+
+    if (nHeight == 0) {
+        nSubsidy = 20000000000 * COIN;
+    } else {
+        nSubsidy = 3567.352 * COIN;
+        nSubsidy >>= ((nHeight - 1) / 2102400);
+    }
+
+    return nSubsidy;
 }
 
 int64_t GetBurnAward(int nHeight)
@@ -1641,30 +1676,8 @@ int64_t GetBurnAward(int nHeight)
         nSubsidy = 43200 * GetTotalValue(nHeight) * 0.1 + GetTotalValue(nHeight) * 0.3;
         return nSubsidy;
     }
-    else
-        return 0;
-}
 
-int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
-{
-    int64_t ret = 0;
-
-    // No rewards till masternode activation.
-    if (nHeight < Params().GetConsensus().height_last_PoW || blockValue == 0)
-        return 0;
-
-    // Check if we reached coin supply
-    if (nHeight < 50) {
-        ret = 0;
-    }
-    else if (nHeight >= 793850) {
-        ret = blockValue * 0.65;
-    }
-    else {
-        ret = blockValue * 0.60 / 0.9; // 60% of block reward
-    }
-
-    return ret;
+    return 0;
 }
 
 bool IsInitialBlockDownload()
