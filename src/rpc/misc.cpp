@@ -745,13 +745,6 @@ UniValue getinfo(const JSONRPCRequest& request)
     obj.push_back(Pair("proxy", (proxy.IsValid() ? proxy.proxy.ToStringIPPort() : std::string())));
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
     obj.push_back(Pair("testnet", Params().NetworkID() == CBaseChainParams::TESTNET));
-
-    // During inital block verification chainActive.Tip() might be not yet initialized
-    if (chainActive.Tip() == NULL) {
-        obj.push_back(Pair("status", "Blockchain information not yet available"));
-        return obj;
-    }
-
     obj.push_back(Pair("moneysupply",ValueFromAmount(nMoneySupply)));
     UniValue zpivObj(UniValue::VOBJ);
     for (auto denom : libzerocoin::zerocoinDenomList) {
