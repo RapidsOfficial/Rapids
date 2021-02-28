@@ -43,7 +43,7 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
     int nHeight = pindexLast->nHeight + 1;
 
     // Reset diff after supply reduction
-    if (nHeight >= consensus.height_supply_reduction || nHeight < consensus.height_supply_reduction + PastBlocksMin) {
+    if (nHeight >= consensus.height_supply_reduction && nHeight < consensus.height_supply_reduction + PastBlocksMin) {
         return bnTargetLimit.GetCompact();
     }
 
