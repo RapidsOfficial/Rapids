@@ -150,6 +150,8 @@ void MasterNodeWizardDialog::accept()
 
 bool MasterNodeWizardDialog::createMN()
 {
+    int nHeight = chainActive.Height() + 1;
+
     if (!walletModel) {
         returnStr = tr("walletModel not set");
         return false;
@@ -212,7 +214,7 @@ bool MasterNodeWizardDialog::createMN()
         SendCoinsRecipient sendCoinsRecipient(
                 QString::fromStdString(dest.ToString()),
                 QString::fromStdString(alias),
-                10000000 * COIN,
+                Params().Collateral(nHeight),
                 "");
 
         // Send the 10 tx to one of your address
@@ -260,9 +262,10 @@ bool MasterNodeWizardDialog::createMN()
         CWalletTx* walletTx = currentTransaction.getTransaction();
         std::string txID = walletTx->GetHash().GetHex();
         int indexOut = -1;
+
         for (int i=0; i < (int)walletTx->vout.size(); i++) {
             CTxOut& out = walletTx->vout[i];
-            if (out.nValue == 10000000 * COIN) {
+            if (out.GetValue(nHeight - walletTx->GetDepthInMainChain(), nHeight) == Params().Collateral(nHeight)) {
                 indexOut = i;
                 break;
             }

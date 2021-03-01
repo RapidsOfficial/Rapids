@@ -2034,7 +2034,9 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
                 // failures through additional data in, eg, the coins being
                 // spent being checked as a part of CScriptCheck.
                 const CScript& scriptPubKey = coin.out.scriptPubKey;
-                const CAmount amount = coin.out.nValue;
+                int nSpendHeight = GetSpendHeight(inputs);
+
+                const CAmount amount = coin.out.GetValue(coin.nHeight, nSpendHeight);
 
                 // Verify signature
                 CScriptCheck check(scriptPubKey, amount, tx, i, flags, cacheStore, &precomTxData);

@@ -300,7 +300,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 const Coin& coin = view.AccessCoin(txin.prevout);
                 assert(hasZerocoinSpends || !coin.IsSpent());
 
-                CAmount nValueIn = coin.out.nValue;
+                CAmount nValueIn = coin.out.GetValue(coin.nHeight, nHeight);
                 nTotalIn += nValueIn;
 
                 int nConf = nHeight - coin.nHeight;

@@ -67,6 +67,8 @@ public:
 
     /** Make miner wait to have peers to avoid wasting work */
     bool MiningRequiresPeers() const { return !IsRegTestNet(); }
+    /** Get masternode collateral */
+    CAmount Collateral(int nHeight) const { return 10000000 * COIN; }
     /** Headers first syncing is disabled */
     bool HeadersFirstSyncingActive() const { return false; };
     /** Default value for -checkmempool and -checkblockindex argument */

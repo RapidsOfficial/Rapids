@@ -316,9 +316,13 @@ bool CMasternode::IsInputAssociatedWithPubkey() const
 
     CTransaction txVin;
     uint256 hash;
-    if(GetTransaction(vin.prevout.hash, txVin, hash, true)) {
+
+    int nChainHeight = chainActive.Height();
+    int nDepth = pcoinsTip->GetCoinDepthAtHeight(vin.prevout, nChainHeight);
+
+    if (GetTransaction(vin.prevout.hash, txVin, hash, true)) {
         for (CTxOut out : txVin.vout) {
-            if (out.nValue == 10000000 * COIN && out.scriptPubKey == payee) return true;
+            if (out.GetValue(nChainHeight - nDepth, nChainHeight) == Params().Collateral(nChainHeight) && out.scriptPubKey == payee) return true;
         }
     }
 
