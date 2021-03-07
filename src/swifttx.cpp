@@ -175,6 +175,8 @@ void ProcessMessageSwiftTX(CNode* pfrom, std::string& strCommand, CDataStream& v
 
 bool IsIXTXValid(const CTransaction& txCollateral)
 {
+    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
+
     if (txCollateral.vout.size() < 1) return false;
     if (txCollateral.nLockTime != 0) return false;
 
@@ -190,7 +192,8 @@ bool IsIXTXValid(const CTransaction& txCollateral)
         uint256 hash;
         if (GetTransaction(i.prevout.hash, tx2, hash, true)) {
             if (tx2.vout.size() > i.prevout.n) {
-                nValueIn += tx2.vout[i.prevout.n].nValue;
+                int nDepth = pcoinsTip->GetCoinDepthAtHeight(i.prevout, nChainHeight);
+                nValueIn += tx2.vout[i.prevout.n].GetValue(nChainHeight - nDepth, nChainHeight);
             }
         } else {
             missingTx = true;
