@@ -66,7 +66,7 @@ public:
     const CBlock& GenesisBlock() const { return genesis; }
 
     /** Make miner wait to have peers to avoid wasting work */
-    bool MiningRequiresPeers() const { return !IsRegTestNet(); }
+    bool MiningRequiresPeers() const { return !IsRegTestNet() && !IsTestNet(); }
     /** Headers first syncing is disabled */
     bool HeadersFirstSyncingActive() const { return false; };
     /** Default value for -checkmempool and -checkblockindex argument */
@@ -81,6 +81,7 @@ public:
     virtual const Checkpoints::CCheckpointData& Checkpoints() const = 0;
 
     CBaseChainParams::Network NetworkID() const { return networkID; }
+    bool IsTestNet() const { return NetworkID() == CBaseChainParams::TESTNET; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
 
     /** Get masternode collateral */

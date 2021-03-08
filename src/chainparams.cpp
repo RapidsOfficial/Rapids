@@ -313,11 +313,11 @@ public:
 
         consensus.fPowAllowMinDifficultyBlocks = true;
         consensus.powLimit   = ~UINT256_ZERO >> 1;   // RPD starting difficulty is 1 / 2^12
-        consensus.posLimitV1 = ~UINT256_ZERO >> 1;
-        consensus.posLimitV2 = ~UINT256_ZERO >> 1;
+        consensus.posLimitV1 = ~UINT256_ZERO >> 24;
+        consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 144;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on testnet)
-        consensus.nCoinbaseMaturity = 15;
+        consensus.nCoinbaseMaturity = 1;
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
         consensus.nMasternodeCountDrift = 4;        // num of MN we allow the see-saw payments to be off by
@@ -325,7 +325,7 @@ public:
         consensus.nPoolMaxTransactions = 2;
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
         consensus.nStakeMinAge = 60 * 60;
-        consensus.nStakeMinDepth = 100;
+        consensus.nStakeMinDepth = 2;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
@@ -338,14 +338,14 @@ public:
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
         // height based activations
-        consensus.height_last_PoW = 200;
-        consensus.height_last_ZC_AccumCheckpoint = 1106090;
-        consensus.height_last_ZC_WrappedSerials = -1;
-        consensus.height_start_InvalidUTXOsCheck = 999999999;
-        consensus.height_start_ZC_InvalidSerials = 999999999;
-        consensus.height_start_ZC_SerialRangeCheck = 1;
-        consensus.height_ZC_RecalcAccumulators = 999999999;
-        consensus.height_supply_reduction = 20;
+        consensus.height_last_PoW = 19;
+        consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
+        consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
+        consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
+        consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
+        consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
+        consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
+        consensus.height_supply_reduction = 50;
 
         // validation by-pass
         consensus.nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 201 per PR #915
@@ -371,14 +371,14 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 100000;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 100000;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 20;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 21;
         consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
         consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 0;
         consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 915000;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 915000;
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 22;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 23;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
