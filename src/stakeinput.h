@@ -25,7 +25,7 @@ public:
     virtual bool CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut = UINT256_ZERO) = 0;
     virtual bool GetTxFrom(CTransaction& tx) const = 0;
     virtual bool GetTxOutFrom(CTxOut& out) const = 0;
-    virtual CAmount GetValue() const = 0;
+    virtual CAmount GetStakeValue(int nHeight) = 0;
     virtual bool CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal, const bool onlyP2PK) = 0;
     virtual bool IsZPIV() const = 0;
     virtual CDataStream GetUniqueness() const = 0;
@@ -48,7 +48,7 @@ public:
     CBlockIndex* GetIndexFrom() override;
     bool GetTxFrom(CTransaction& tx) const override;
     bool GetTxOutFrom(CTxOut& out) const override;
-    CAmount GetValue() const override;
+    CAmount GetStakeValue(int nHeight) override;
     CDataStream GetUniqueness() const override;
     bool CreateTxIn(CWallet* pwallet, CTxIn& txIn, uint256 hashTxOut = UINT256_ZERO) override;
     bool CreateTxOuts(CWallet* pwallet, std::vector<CTxOut>& vout, CAmount nTotal, const bool onlyP2PK) override;

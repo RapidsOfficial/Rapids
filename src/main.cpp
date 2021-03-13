@@ -2008,7 +2008,6 @@ bool CheckTxInputs(const CTransaction& tx, CValidationState& state, const CCoins
 bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsViewCache &inputs, bool fScriptChecks, unsigned int flags, bool cacheStore, PrecomputedTransactionData& precomTxData, std::vector<CScriptCheck> *pvChecks)
 {
     if (!tx.IsCoinBase() && !tx.HasZerocoinSpendInputs()) {
-
         if (!Consensus::CheckTxInputs(tx, state, inputs, GetSpendHeight(inputs)))
             return false;
 
@@ -2691,7 +2690,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     CAmount nExpectedMint = nFees + GetBlockValue(pindex->pprev->nHeight);
 
     //Check that the block does not overmint
-    if (!IsBlockValueValid(pindex->nHeight, nExpectedMint, nMint)) {
+    if (!(nMint <= nExpectedMint)) {
         return state.DoS(100, error("ConnectBlock() : reward pays too much (actual=%s vs limit=%s)",
                                     FormatMoney(nMint), FormatMoney(nExpectedMint)),
                          REJECT_INVALID, "bad-cb-amount");

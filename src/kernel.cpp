@@ -15,7 +15,6 @@
 #include "stakeinput.h"
 #include "utilmoneystr.h"
 #include "zpivchain.h"
-#include "zpiv/zpos.h"
 
 #include <boost/assign/list_of.hpp>
 
@@ -31,7 +30,7 @@ CStakeKernel::CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* sta
     stakeUniqueness(stakeInput->GetUniqueness()),
     nTime(nTimeTx),
     nBits(nBits),
-    stakeValue(stakeInput->GetValue())
+    stakeValue(stakeInput->GetStakeValue(pindexPrev->nHeight + 1))
 {
     // Set kernel stake modifier
     const Consensus::Params& consensus = Params().GetConsensus();
@@ -181,7 +180,7 @@ bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockI
     const CTransaction& tx = block.vtx[1];
     const CTxIn& txin = tx.vin[0];
 
-    CAmount stakePrevoutValue = stakePrevout.nValue;
+    CAmount stakePrevoutValue = stakeInput->GetStakeValue(nHeight);
 
     ScriptError serror;
     if (!VerifyScript(txin.scriptSig, stakePrevout.scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS,

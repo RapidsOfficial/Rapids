@@ -2693,6 +2693,7 @@ bool CWallet::CreateCoinStake(
 {
 
     const Consensus::Params& consensus = Params().GetConsensus();
+    int nHeight = pindexPrev->nHeight + 1;
 
     // Mark coin stake transaction
     txNew.vin.clear();
@@ -2740,7 +2741,7 @@ bool CWallet::CreateCoinStake(
 
         // Found a kernel
         LogPrintf("CreateCoinStake : kernel found\n");
-        nCredit += stakeInput.GetValue();
+        nCredit += stakeInput.GetStakeValue(nHeight);
 
         // Add block reward to the credit
         nCredit += GetBlockValue(pindexPrev->nHeight + 1);
