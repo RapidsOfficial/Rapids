@@ -1974,6 +1974,7 @@ bool CWallet::GetMasternodeVinAndKeys(CTxIn& txinRet, CPubKey& pubKeyRet, CKey& 
 
     // Masternode collateral value
     int nHeight = chainActive.Height() + 1;
+
     if (txOut.GetValue(nHeight - wtx.GetDepthInMainChain(), nHeight) != Params().Collateral(nHeight)) {
         strError = "Invalid collateral tx value, must be 10,000,000 RPD";
         return error("%s: tx %s, index %d not a masternode collateral", __func__, strTxHash, nOutputIndex);
