@@ -551,7 +551,8 @@ void CoinControlDialog::updateDialogLabels()
         nQuantity++;
 
         // Amount
-        nAmount += out.tx->vout[out.i].nValue;
+        int chainHeight = chainActive.Height();
+        nAmount += out.tx->vout[out.i].GetValue(chainHeight - out.nDepth, chainHeight);
     }
 }
 
@@ -604,10 +605,14 @@ void CoinControlDialog::updateLabels()
         nQuantity++;
 
         // Amount
-        nAmount += out.tx->vout[out.i].nValue;
+
+        int chainHeight = chainActive.Height();
+        CAmount outputAmount = out.tx->vout[out.i].GetValue(chainHeight - out.nDepth, chainHeight);
+
+        nAmount += outputAmount;
 
         // Priority
-        dPriorityInputs += (double)out.tx->vout[out.i].nValue * (out.nDepth + 1);
+        dPriorityInputs += (double)outputAmount * (out.nDepth + 1);
 
         // Bytes
         CTxDestination address;
@@ -802,6 +807,8 @@ void CoinControlDialog::updateView()
             itemWalletAddress->setToolTip(COLUMN_ADDRESS, sWalletAddress);
         }
 
+        int chainHeight = chainActive.Height();
+
         CAmount nSum = 0;
         double dPrioritySum = 0;
         int nChildren = 0;
@@ -809,7 +816,10 @@ void CoinControlDialog::updateView()
         for(const COutput& out: coins.second) {
             ++nSelectableInputs;
             int nInputSize = 0;
-            nSum += out.tx->vout[out.i].nValue;
+
+            CAmount outputAmount = out.tx->vout[out.i].GetValue(chainHeight - out.nDepth, chainHeight);
+
+            nSum += outputAmount;
             nChildren++;
 
             CCoinControlWidgetItem* itemOutput;
@@ -866,9 +876,9 @@ void CoinControlDialog::updateView()
             }
 
             // amount
-            itemOutput->setText(COLUMN_AMOUNT, BitcoinUnits::format(nDisplayUnit, out.tx->vout[out.i].nValue));
-            itemOutput->setToolTip(COLUMN_AMOUNT, BitcoinUnits::format(nDisplayUnit, out.tx->vout[out.i].nValue));
-            itemOutput->setData(COLUMN_AMOUNT, Qt::UserRole, QVariant((qlonglong) out.tx->vout[out.i].nValue));
+            itemOutput->setText(COLUMN_AMOUNT, BitcoinUnits::format(nDisplayUnit, outputAmount));
+            itemOutput->setToolTip(COLUMN_AMOUNT, BitcoinUnits::format(nDisplayUnit, outputAmount));
+            itemOutput->setData(COLUMN_AMOUNT, Qt::UserRole, QVariant((qlonglong) outputAmount));
 
             // date
             itemOutput->setText(COLUMN_DATE, GUIUtil::dateTimeStr(out.tx->GetTxTime()));
@@ -880,7 +890,7 @@ void CoinControlDialog::updateView()
             itemOutput->setData(COLUMN_CONFIRMATIONS, Qt::UserRole, QVariant((qlonglong) out.nDepth));
 
             // priority
-            dPrioritySum += (double)out.tx->vout[out.i].nValue * (out.nDepth + 1);
+            dPrioritySum += (double)outputAmount * (out.nDepth + 1);
             nInputSum += nInputSize;
 
             // transaction hash
