@@ -338,14 +338,14 @@ public:
         consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
 
         // height based activations
-        consensus.height_last_PoW = 19;
+        consensus.height_last_PoW = 30;
         consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
         consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
         consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
-        consensus.height_supply_reduction = 25;
+        consensus.height_supply_reduction = 500;
 
         // validation by-pass
         consensus.nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 201 per PR #915
