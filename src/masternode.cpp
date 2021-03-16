@@ -599,15 +599,19 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             mnodeman.Remove(pmn->vin);
     }
 
+    int nChainHeight = chainActive.Height();
+    int reductionHeight = Params().GetConsensus().height_supply_reduction;
+
+    CAmount checkAmount = nChainHeight <= reductionHeight ? 9999999.99 * COIN : 9999.99 * COIN;
+
     CValidationState state;
     CMutableTransaction tx = CMutableTransaction();
     CScript dummyScript;
     dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-    CTxOut vout = CTxOut(9999999.99 * COIN, dummyScript);
+    CTxOut vout = CTxOut(checkAmount * COIN, dummyScript);
     tx.vin.push_back(vin);
     tx.vout.push_back(vout);
 
-    int nChainHeight = 0;
     {
         TRY_LOCK(cs_main, lockMain);
         if (!lockMain) {
@@ -622,8 +626,6 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             state.IsInvalid(nDoS);
             return false;
         }
-
-        nChainHeight = chainActive.Height();
     }
 
     LogPrint(BCLog::MASTERNODE, "mnb - Accepted Masternode entry\n");

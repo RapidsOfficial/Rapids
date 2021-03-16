@@ -3487,6 +3487,8 @@ void CWallet::AutoCombineDust(CConnman* connman)
 
     std::map<CTxDestination, std::vector<COutput> > mapCoinsByAddress = AvailableCoinsByAddress(true, nAutoCombineThreshold * COIN);
 
+    int chainTipHeight = tip->nHeight;
+
     //coins are sectioned by address. This combination code only wants to combine inputs that belong to the same address
     for (std::map<CTxDestination, std::vector<COutput> >::iterator it = mapCoinsByAddress.begin(); it != mapCoinsByAddress.end(); it++) {
         std::vector<COutput> vCoins, vRewardCoins;
@@ -3514,7 +3516,8 @@ void CWallet::AutoCombineDust(CConnman* connman)
             COutPoint outpt(out.tx->GetHash(), out.i);
             coinControl->Select(outpt);
             vRewardCoins.push_back(out);
-            nTotalRewardsValue += out.Value();
+
+            nTotalRewardsValue += out.Value(chainTipHeight);
 
             // Combine to the threshold and not way above
             if (nTotalRewardsValue > nAutoCombineThreshold * COIN)
