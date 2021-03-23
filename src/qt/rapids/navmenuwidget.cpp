@@ -38,7 +38,9 @@ NavMenuWidget::NavMenuWidget(RapidsGUI *mainWindow, QWidget *parent) :
     ui->btnColdStaking->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     ui->btnSettings->setProperty("name", "settings");
     ui->btnSettings->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
-    btns = {ui->btnDashboard, ui->btnSend, ui->btnReceive, ui->btnAddress, ui->btnMaster, ui->btnColdStaking, ui->btnSettings, ui->btnColdStaking};
+    ui->btnTokens->setProperty("name", "tokens");
+    ui->btnTokens->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    btns = {ui->btnDashboard, ui->btnSend, ui->btnReceive, ui->btnAddress, ui->btnMaster, ui->btnColdStaking, ui->btnSettings, ui->btnTokens, ui->btnColdStaking};
     onNavSelected(ui->btnDashboard, true);
 
     ui->scrollAreaNav->setWidgetResizable(true);
@@ -69,6 +71,7 @@ void NavMenuWidget::connectActions() {
     connect(ui->btnAddress, &QPushButton::clicked, this, &NavMenuWidget::onAddressClicked);
     connect(ui->btnMaster, &QPushButton::clicked, this, &NavMenuWidget::onMasterNodesClicked);
     connect(ui->btnSettings, &QPushButton::clicked, this, &NavMenuWidget::onSettingsClicked);
+    connect(ui->btnTokens, &QPushButton::clicked, this, &NavMenuWidget::onTokensClicked);
     connect(ui->btnReceive, &QPushButton::clicked, this, &NavMenuWidget::onReceiveClicked);
     connect(ui->btnColdStaking, &QPushButton::clicked, this, &NavMenuWidget::onColdStakingClicked);
 
@@ -79,6 +82,7 @@ void NavMenuWidget::connectActions() {
     ui->btnMaster->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_5));
     ui->btnColdStaking->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_6));
     ui->btnSettings->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_7));
+    ui->btnTokens->setShortcut(QKeySequence(SHORT_KEY + Qt::Key_8));
 }
 
 void NavMenuWidget::onSendClicked(){
@@ -109,6 +113,14 @@ void NavMenuWidget::onColdStakingClicked() {
 void NavMenuWidget::onSettingsClicked(){
     window->goToSettings();
     onNavSelected(ui->btnSettings);
+}
+
+void NavMenuWidget::onTokensClicked(){
+    QMessageBox::warning(
+        this,
+        tr("Native Tokens"),
+        tr("Native tokens coming soon.")
+    );
 }
 
 void NavMenuWidget::onReceiveClicked(){
@@ -152,6 +164,7 @@ void NavMenuWidget::updateButtonStyles(){
          ui->btnAddress,
          ui->btnMaster,
          ui->btnSettings,
+         ui->btnTokens,
          ui->btnReceive,
          ui->btnColdStaking
     });
