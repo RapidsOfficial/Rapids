@@ -218,11 +218,16 @@ void CMasternode::Check(bool forceCheck)
     }
 
     if (!unitTest) {
+        int nChainHeight = chainActive.Height();
+        int reductionHeight = Params().GetConsensus().height_supply_reduction;
+
+        CAmount checkAmount = nChainHeight <= reductionHeight ? 9999999.99 * COIN : 9999.99 * COIN;
+
         CValidationState state;
         CMutableTransaction tx = CMutableTransaction();
         CScript dummyScript;
         dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-        CTxOut vout = CTxOut(9999999.99 * COIN, dummyScript);
+        CTxOut vout = CTxOut(checkAmount * COIN, dummyScript);
         tx.vin.push_back(vin);
         tx.vout.push_back(vout);
         {
@@ -608,7 +613,7 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     CMutableTransaction tx = CMutableTransaction();
     CScript dummyScript;
     dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-    CTxOut vout = CTxOut(checkAmount * COIN, dummyScript);
+    CTxOut vout = CTxOut(checkAmount, dummyScript);
     tx.vin.push_back(vin);
     tx.vout.push_back(vout);
 
