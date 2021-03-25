@@ -449,7 +449,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         if (fProofOfStake) {
             pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
             LogPrintf("CPUMiner : proof-of-stake block found %s \n", pblock->GetHash().GetHex());
-            if (!SignBlock(*pblock, *pwallet)) {
+            if (!SignBlock(*pblock, *pwallet, nHeight, consensus.height_supply_reduction)) {
                 LogPrintf("%s: Signing new block with UTXO key failed \n", __func__);
                 return nullptr;
             }

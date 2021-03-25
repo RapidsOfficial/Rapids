@@ -1638,6 +1638,26 @@ int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
     return blockValue * 0.60;
 }
 
+CAmount GetBlockDevSubsidy(int nHeight)
+{
+    CAmount reward = GetBlockValue(nHeight);
+
+    if (nHeight <= Params().GetConsensus().height_supply_reduction)
+        return reward;
+
+    return reward * 0.2;
+}
+
+CAmount GetBlockStakeSubsidy(int nHeight)
+{
+    CAmount reward = GetBlockValue(nHeight);
+
+    if (nHeight <= Params().GetConsensus().height_supply_reduction)
+        return reward;
+
+    return reward * 0.8;
+}
+
 bool IsBurnBlock(int nHeight)
 {
     const int nStartBurnBlock = 43199;
@@ -2687,13 +2707,27 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     LogPrint(BCLog::BENCH, "      - Connect %u transactions: %.2fms (%.3fms/tx, %.3fms/txin) [%.2fs]\n", (unsigned)block.vtx.size(), 0.001 * (nTime1 - nTimeStart), 0.001 * (nTime1 - nTimeStart) / block.vtx.size(), nInputs <= 1 ? 0 : 0.001 * (nTime1 - nTimeStart) / (nInputs - 1), nTimeConnect * 0.000001);
 
     //PoW phase redistributed fees to miner. PoS stage destroys fees.
-    CAmount nExpectedMint = nFees + GetBlockValue(pindex->pprev->nHeight);
+    int nHeight = pindex->pprev->nHeight;
+
+    CAmount nExpectedMint = nFees + GetBlockValue(nHeight);
 
     //Check that the block does not overmint
     if (!(nMint <= nExpectedMint)) {
         return state.DoS(100, error("ConnectBlock() : reward pays too much (actual=%s vs limit=%s)",
                                     FormatMoney(nMint), FormatMoney(nExpectedMint)),
                          REJECT_INVALID, "bad-cb-amount");
+    }
+
+    // Dev fund checks
+    if (nHeight > consensus.height_supply_reduction) {
+        CTxDestination dest = DecodeDestination(Params().DevFundAddress(nHeight));
+        CScript devScriptPubKey = GetScriptForDestination(dest);
+
+        if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
+            return state.DoS(100, error("CheckReward(): Dev fund payment is missing"), REJECT_INVALID, "bad-cs-dev-payment-missing");
+
+        if (block.vtx[1].vout[1].nValue < GetBlockDevSubsidy(nHeight))
+            return state.DoS(100, error("CheckReward(): Dev fund payment is invalid"), REJECT_INVALID, "bad-cs-dev-payment-invalid");
     }
 
     if (!control.Wait())
@@ -4421,8 +4455,9 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, const CBlock* pblock
     // For now, we need the tip to know whether p2pkh block signatures are accepted or not.
     // After 5.0, this can be removed and replaced by the enforcement block time.
     const int newHeight = chainActive.Height() + 1;
+    const int reductionHeight = consensus.height_supply_reduction;
     const bool enableP2PKH = consensus.NetworkUpgradeActive(newHeight, Consensus::UPGRADE_V5_DUMMY);
-    if (!CheckBlockSignature(*pblock, enableP2PKH))
+    if (!CheckBlockSignature(*pblock, enableP2PKH, newHeight, reductionHeight))
         return error("%s : bad proof-of-stake block signature", __func__);
 
     if (pblock->GetHash() != consensus.hashGenesisBlock && pfrom != NULL) {
