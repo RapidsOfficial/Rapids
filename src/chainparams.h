@@ -88,7 +88,7 @@ public:
 
     /** Get masternode collateral */
     CAmount Collateral(int nHeight) const {
-        if (nHeight >= consensus.height_supply_reduction)
+        if (nHeight > consensus.height_supply_reduction)
             return 10000 * COIN;
 
         return 10000000 * COIN;

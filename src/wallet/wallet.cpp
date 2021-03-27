@@ -1165,7 +1165,7 @@ bool CWallet::IsUsed(const CTxDestination address) const
     return false;
 }
 
-CAmount CWallet::GetDebit(const CTxIn& txin, const isminefilter& filter) const
+CAmount CWallet::GetDebit(const CTxIn& txin, const isminefilter& filter, const int& nDepth) const
 {
     {
         LOCK(cs_wallet);
@@ -1173,8 +1173,11 @@ CAmount CWallet::GetDebit(const CTxIn& txin, const isminefilter& filter) const
         if (mi != mapWallet.end()) {
             const CWalletTx& prev = (*mi).second;
             if (txin.prevout.n < prev.vout.size())
-                if (IsMine(prev.vout[txin.prevout.n]) & filter)
-                    return prev.vout[txin.prevout.n].nValue;
+                if (IsMine(prev.vout[txin.prevout.n]) & filter) {
+                    int nHeight = chainActive.Height() + 1;
+
+                    return prev.vout[txin.prevout.n].GetValue(nHeight - nDepth, nHeight);
+                }
         }
     }
     return 0;
@@ -1229,7 +1232,7 @@ CAmount CWalletTx::GetCachableAmount(AmountType type, const isminefilter& filter
 {
     auto& amount = m_amounts[type];
     if (recalculate || !amount.m_cached[filter]) {
-        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter) : pwallet->GetCredit(*this, filter, GetDepthInMainChain()));
+        amount.Set(filter, type == DEBIT ? pwallet->GetDebit(*this, filter, GetDepthInMainChain()) : pwallet->GetCredit(*this, filter, GetDepthInMainChain()));
     }
     return amount.m_value[filter];
 }
@@ -1257,6 +1260,7 @@ CAmount CWalletTx::GetDebit(const isminefilter& filter) const
     if (filter & ISMINE_SPENDABLE_DELEGATED) {
         debit += GetCachableAmount(DEBIT, ISMINE_SPENDABLE_DELEGATED);
     }
+
     return debit;
 }
 
@@ -4223,14 +4227,14 @@ bool CWallet::IsMine(const CTransaction& tx) const
 
 bool CWallet::IsFromMe(const CTransaction& tx) const
 {
-    return (GetDebit(tx, ISMINE_ALL) > 0);
+    return (GetDebit(tx, ISMINE_ALL, 0) > 0);
 }
 
-CAmount CWallet::GetDebit(const CTransaction& tx, const isminefilter& filter) const
+CAmount CWallet::GetDebit(const CTransaction& tx, const isminefilter& filter, const int& nDepth) const
 {
     CAmount nDebit = 0;
     for (const CTxIn& txin : tx.vin) {
-        nDebit += GetDebit(txin, filter);
+        nDebit += GetDebit(txin, filter, nDepth);
         if (!Params().GetConsensus().MoneyRange(nDebit))
             throw std::runtime_error("CWallet::GetDebit() : value out of range");
     }
