@@ -36,7 +36,10 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
     const uint256& hash = wtx.GetHash();
     TransactionRecord sub(hash, wtx.GetTxTime(), wtx.GetTotalSize());
 
-    if (isminetype mine = wallet->IsMine(wtx.vout[1])) {
+    const int reductionHeight = Params().GetConsensus().height_supply_reduction;
+    int keyIndex = nHeight > reductionHeight ? 2 : 1;
+
+    if (isminetype mine = wallet->IsMine(wtx.vout[keyIndex])) {
         // Check for cold stakes.
         if (wtx.HasP2CSOutputs()) {
             sub.credit = nCredit;
@@ -45,7 +48,7 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
         } else {
             // PIV stake reward
             CTxDestination address;
-            if (!ExtractDestination(wtx.vout[1].scriptPubKey, address))
+            if (!ExtractDestination(wtx.vout[keyIndex].scriptPubKey, address))
                 return true;
 
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
@@ -212,8 +215,7 @@ bool TransactionRecord::decomposeDebitTransaction(const CWallet* wallet, const C
         CAmount nValue = txout.GetValue(nHeight - nDepth, nHeight);
         /* Add fee to first output */
         if (nTxFee > 0) {
-            // ToDo: Fix this?
-            // nValue += nTxFee;
+            nValue += nTxFee;
             nTxFee = 0;
         }
         sub.debit = -nValue;
