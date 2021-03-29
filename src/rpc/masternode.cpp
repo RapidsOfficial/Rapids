@@ -668,15 +668,16 @@ UniValue getmasternodescores (const JSONRPCRequest& request)
             throw std::runtime_error("Exception on param 2");
         }
     }
-    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height());
+    int nChainHeight = mnodeman.GetBestHeight();
     if (nChainHeight < 0) return "unknown";
     UniValue obj(UniValue::VOBJ);
     std::vector<CMasternode> vMasternodes = mnodeman.GetFullMasternodeVector();
     for (int nHeight = nChainHeight - nLast; nHeight < nChainHeight + 20; nHeight++) {
+        const uint256& hash = mnodeman.GetHashAtHeight(nHeight - 101);
         uint256 nHigh;
         CMasternode* pBestMasternode = NULL;
         for (CMasternode& mn : vMasternodes) {
-            uint256 n = mn.CalculateScore(1, nHeight - 100);
+            const uint256& n = mn.CalculateScore(hash);
             if (n > nHigh) {
                 nHigh = n;
                 pBestMasternode = &mn;

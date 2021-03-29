@@ -190,7 +190,7 @@ public:
         return !(a.vin == b.vin);
     }
 
-    uint256 CalculateScore(int mod = 1, int64_t nBlockHeight = 0);
+    uint256 CalculateScore(const uint256& hash) const;
 
     ADD_SERIALIZE_METHODS;
 

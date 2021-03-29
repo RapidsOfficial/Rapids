@@ -535,11 +535,12 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
     int nTenthNetwork = CountEnabled() / 10;
     int nCountTenth = 0;
     uint256 nHigh;
+    const uint256& hash = GetHashAtHeight(nBlockHeight - 101);
     for (PAIRTYPE(int64_t, CTxIn) & s : vecMasternodeLastPaid) {
         CMasternode* pmn = Find(s.second.prevout);
         if (!pmn) break;
 
-        uint256 n = pmn->CalculateScore(1, nBlockHeight - 100);
+        const uint256& n = pmn->CalculateScore(hash);
         if (n > nHigh) {
             nHigh = n;
             pBestMasternode = pmn;
@@ -554,6 +555,7 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
 {
     int64_t score = 0;
     CMasternode* winner = NULL;
+    const uint256& hash = GetHashAtHeight(nBlockHeight - 1);
 
     // scan for winner
     for (auto& it : mapMasternodes) {
@@ -562,7 +564,7 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
         if (mn.protocolVersion < minProtocol || !mn.IsEnabled()) continue;
 
         // calculate the score for each Masternode
-        uint256 n = mn.CalculateScore(mod, nBlockHeight);
+        uint256 n = mn.CalculateScore(hash);
         int64_t n2 = n.GetCompact(false);
 
         // determine the winner
@@ -581,8 +583,9 @@ int CMasternodeMan::GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, in
     int64_t nMasternode_Min_Age = MN_WINNER_MINIMUM_AGE;
     int64_t nMasternode_Age = 0;
 
-    // check height
-    if (nBlockHeight > GetBestHeight() + 1) return -1;
+    const uint256& hash = GetHashAtHeight(nBlockHeight - 1);
+    // height outside range
+    if (!hash) return -1;
 
     // scan for winner
     for (auto& it : mapMasternodes) {
@@ -603,7 +606,7 @@ int CMasternodeMan::GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, in
             mn.Check();
             if (!mn.IsEnabled()) continue;
         }
-        uint256 n = mn.CalculateScore(1, nBlockHeight);
+        uint256 n = mn.CalculateScore(hash);
         int64_t n2 = n.GetCompact(false);
 
         vecMasternodeScores.push_back(std::make_pair(n2, mn.vin));
@@ -627,8 +630,9 @@ std::vector<std::pair<int, CMasternode> > CMasternodeMan::GetMasternodeRanks(int
     std::vector<std::pair<int64_t, CMasternode> > vecMasternodeScores;
     std::vector<std::pair<int, CMasternode> > vecMasternodeRanks;
 
-    // check height
-    if (nBlockHeight > GetBestHeight() + 1) return vecMasternodeRanks;
+    const uint256& hash = GetHashAtHeight(nBlockHeight - 1);
+    // height outside range
+    if (!hash) return vecMasternodeRanks;
 
     // scan for winner
     for (auto& it : mapMasternodes) {
@@ -642,7 +646,7 @@ std::vector<std::pair<int, CMasternode> > CMasternodeMan::GetMasternodeRanks(int
             continue;
         }
 
-        uint256 n = mn.CalculateScore(1, nBlockHeight);
+        uint256 n = mn.CalculateScore(hash);
         int64_t n2 = n.GetCompact(false);
 
         vecMasternodeScores.push_back(std::make_pair(n2, mn));
@@ -843,7 +847,26 @@ void CMasternodeMan::UncacheBlockHash(const CBlockIndex* pindex)
 
 uint256 CMasternodeMan::GetHashAtHeight(int nHeight) const
 {
-    return cvLastBlockHashes.Get(nHeight);
+        // return zero if outside bounds
+    if (nHeight < 0) {
+        LogPrint(BCLog::MASTERNODE, "%s: Negative height. Returning 0\n",  __func__);
+        return UINT256_ZERO;
+    }
+    int nCurrentHeight = GetBestHeight();
+    if (nHeight > nCurrentHeight) {
+        LogPrint(BCLog::MASTERNODE, "%s: height %d over current height %d. Returning 0\n",
+                __func__, nHeight, nCurrentHeight);
+        return UINT256_ZERO;
+    }
+
+    if (nHeight > nCurrentHeight - (int) CACHED_BLOCK_HASHES) {
+        // Use cached hash
+        return cvLastBlockHashes.Get(nHeight);
+    } else {
+        // Use chainActive
+        LOCK(cs_main);
+        return chainActive[nHeight]->GetBlockHash();
+    }
 }
 
 bool CMasternodeMan::IsWithinDepth(const uint256& nHash, int depth) const
