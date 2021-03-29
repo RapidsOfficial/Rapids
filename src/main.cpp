@@ -1577,10 +1577,11 @@ double ConvertBitsToDouble(unsigned int nBits)
 
 int64_t GetBlockValue(int nHeight)
 {
+    const int nHalvingPeriod = 2102400;
+
     if (nHeight <= Params().GetConsensus().height_supply_reduction) {
         // Old subsidy
         int64_t nSubsidy = 0;
-        const int nHalvingPeriod = 2102400;
 
         //! unfortunately this must remain to validate the existing
         //! chain, but we can just disable it at new client height
@@ -1604,7 +1605,6 @@ int64_t GetBlockValue(int nHeight)
     }
 
     // New subsidy
-    const int nHalvingPeriod = 2102400;
     int64_t nSubsidy = 1.7835 * COIN;
 
     nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
@@ -1655,7 +1655,7 @@ CAmount GetBlockStakeSubsidy(int nHeight)
     if (nHeight <= Params().GetConsensus().height_supply_reduction)
         return reward;
 
-    return reward * 0.8;
+    return reward * 0.2;
 }
 
 bool IsBurnBlock(int nHeight)
