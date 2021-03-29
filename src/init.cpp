@@ -940,6 +940,19 @@ static std::string ResolveErrMsg(const char * const optname, const std::string& 
     return strprintf(_("Cannot resolve -%s address: '%s'"), optname, strBind);
 }
 
+// Sets the last CACHED_BLOCK_HASHES hashes into masternode manager cache
+static void LoadBlockHashesCache(CMasternodeMan& man)
+{
+    LOCK(cs_main);
+    const CBlockIndex* pindex = chainActive.Tip();
+    unsigned int inserted = 0;
+    while (pindex && inserted < CACHED_BLOCK_HASHES) {
+        man.CacheBlockHash(pindex);
+        pindex = pindex->pprev;
+        ++inserted;
+    }
+}
+
 void InitLogging()
 {
     //g_logger->m_print_to_file = !IsArgNegated("-debuglogfile");
@@ -1757,6 +1770,7 @@ bool AppInit2()
 
     mnodeman.SetBestHeight(nChainHeight);
 
+    LoadBlockHashesCache(mnodeman);
     CMasternodeDB mndb;
     CMasternodeDB::ReadResult readResult = mndb.Read(mnodeman);
     if (readResult == CMasternodeDB::FileError)
