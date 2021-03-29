@@ -3091,7 +3091,13 @@ bool static DisconnectTip(CValidationState& state)
     // block that were added back and cleans up the mempool state.
     mempool.UpdateTransactionsFromBlock(vHashUpdate);
     // Update MN manager cache
-    mnodeman.UncacheBlockHash(pindexDelete);
+    // replace the cached hash of pindexDelete with the hash of the block
+    // at depth CACHED_BLOCK_HASHES if it exists, or empty hash otherwise.
+    if ((unsigned) pindexDelete->nHeight >= CACHED_BLOCK_HASHES) {
+        mnodeman.CacheBlockHash(chainActive[pindexDelete->nHeight - CACHED_BLOCK_HASHES]);
+    } else {
+        mnodeman.UncacheBlockHash(pindexDelete);
+    }
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev);
     // Let wallets know transactions went from 1-confirmed to
