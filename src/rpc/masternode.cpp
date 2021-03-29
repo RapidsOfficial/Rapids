@@ -64,7 +64,7 @@ UniValue listmasternodes(const JSONRPCRequest& request)
         std::string strTxHash = s.second.vin.prevout.hash.ToString();
         uint32_t oIdx = s.second.vin.prevout.n;
 
-        CMasternode* mn = mnodeman.Find(s.second.vin);
+        CMasternode* mn = mnodeman.Find(s.second.vin.prevout);
 
         if (mn != NULL) {
             if (strFilter != "" && strTxHash.find(strFilter) == std::string::npos &&
@@ -180,7 +180,7 @@ bool StartMasternodeEntry(UniValue& statusObjRet, CMasternodeBroadcast& mnbRet, 
     }
 
     CTxIn vin = CTxIn(uint256S(mne.getTxHash()), uint32_t(nIndex));
-    CMasternode* pmn = mnodeman.Find(vin);
+    CMasternode* pmn = mnodeman.Find(vin.prevout);
     if (pmn != NULL) {
         if (strCommand == "missing") return false;
         if (strCommand == "disabled" && pmn->IsEnabled()) return false;
@@ -454,7 +454,7 @@ UniValue listmasternodeconf (const JSONRPCRequest& request)
         if(!mne.castOutputIndex(nIndex))
             continue;
         CTxIn vin = CTxIn(uint256S(mne.getTxHash()), uint32_t(nIndex));
-        CMasternode* pmn = mnodeman.Find(vin);
+        CMasternode* pmn = mnodeman.Find(vin.prevout);
 
         std::string strStatus = pmn ? pmn->Status() : "MISSING";
 
@@ -502,7 +502,7 @@ UniValue getmasternodestatus (const JSONRPCRequest& request)
     if (activeMasternode.vin == nullopt)
         throw JSONRPCError(RPC_MISC_ERROR, _("Active Masternode not initialized."));
 
-    CMasternode* pmn = mnodeman.Find(*(activeMasternode.vin));
+    CMasternode* pmn = mnodeman.Find(activeMasternode.vin->prevout);
 
     if (pmn) {
         UniValue mnObj(UniValue::VOBJ);

@@ -213,10 +213,10 @@ bool CMasternodeMan::Add(CMasternode& mn)
     if (!mn.IsEnabled())
         return false;
 
-    CMasternode* pmn = Find(mn.vin);
-    if (pmn == NULL) {
+    const auto& it = mapMasternodes.find(mn.vin.prevout);
+    if (it == mapMasternodes.end()) {
         LogPrint(BCLog::MASTERNODE, "CMasternodeMan: Adding new Masternode %s - %i now\n", mn.vin.prevout.hash.ToString(), size() + 1);
-        vMasternodes.push_back(mn);
+        mapMasternodes.emplace(mn.vin.prevout, mn);
         return true;
     }
 
@@ -243,8 +243,8 @@ void CMasternodeMan::Check()
 {
     LOCK(cs);
 
-    for (CMasternode& mn : vMasternodes) {
-        mn.Check();
+    for (auto& mnIt : mapMasternodes) {
+        mnIt.second.Check();
     }
 }
 
@@ -254,21 +254,21 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
 
     LOCK(cs);
 
-    //remove inactive and outdated
-    std::vector<CMasternode>::iterator it = vMasternodes.begin();
-    while (it != vMasternodes.end()) {
-        if ((*it).activeState == CMasternode::MASTERNODE_REMOVE ||
-            (*it).activeState == CMasternode::MASTERNODE_VIN_SPENT ||
-            (forceExpiredRemoval && (*it).activeState == CMasternode::MASTERNODE_EXPIRED) ||
-            (*it).protocolVersion < ActiveProtocol()) {
-            LogPrint(BCLog::MASTERNODE, "CMasternodeMan: Removing inactive Masternode %s - %i now\n", (*it).vin.prevout.hash.ToString(), size() - 1);
+    auto it = mapMasternodes.begin();
+    while (it != mapMasternodes.end()) {
+        CMasternode& mn = it->second;
+        if (mn.activeState == CMasternode::MASTERNODE_REMOVE ||
+            mn.activeState == CMasternode::MASTERNODE_VIN_SPENT ||
+            (forceExpiredRemoval && mn.activeState == CMasternode::MASTERNODE_EXPIRED) ||
+            mn.protocolVersion < ActiveProtocol()) {
+            LogPrint(BCLog::MASTERNODE, "CMasternodeMan: Removing inactive Masternode %s - %i now\n", it->first.hash.ToString(), size() - 1);
 
             //erase all of the broadcasts we've seen from this vin
             // -- if we missed a few pings and the node was removed, this will allow is to get it back without them
             //    sending a brand new mnb
             std::map<uint256, CMasternodeBroadcast>::iterator it3 = mapSeenMasternodeBroadcast.begin();
             while (it3 != mapSeenMasternodeBroadcast.end()) {
-                if ((*it3).second.vin == (*it).vin) {
+                if (it3->second.vin == it->second.vin) {
                     masternodeSync.mapSeenSyncMNB.erase((*it3).first);
                     mapSeenMasternodeBroadcast.erase(it3++);
                 } else {
@@ -279,14 +279,14 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
             // allow us to ask for this masternode again if we see another ping
             std::map<COutPoint, int64_t>::iterator it2 = mWeAskedForMasternodeListEntry.begin();
             while (it2 != mWeAskedForMasternodeListEntry.end()) {
-                if ((*it2).first == (*it).vin.prevout) {
+                if (it2->first == it->first) {
                     mWeAskedForMasternodeListEntry.erase(it2++);
                 } else {
                     ++it2;
                 }
             }
 
-            it = vMasternodes.erase(it);
+            it = mapMasternodes.erase(it);
         } else {
             ++it;
         }
@@ -347,7 +347,7 @@ void CMasternodeMan::CheckAndRemove(bool forceExpiredRemoval)
 void CMasternodeMan::Clear()
 {
     LOCK(cs);
-    vMasternodes.clear();
+    mapMasternodes.clear();
     mAskedUsForMasternodeList.clear();
     mWeAskedForMasternodeList.clear();
     mWeAskedForMasternodeListEntry.clear();
@@ -363,7 +363,8 @@ int CMasternodeMan::stable_size ()
     int64_t nMasternode_Min_Age = MN_WINNER_MINIMUM_AGE;
     int64_t nMasternode_Age = 0;
 
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         if (mn.protocolVersion < nMinProtocol) {
             continue; // Skip obsolete versions
         }
@@ -388,7 +389,8 @@ int CMasternodeMan::CountEnabled(int protocolVersion)
     int i = 0;
     protocolVersion = protocolVersion == -1 ? ActiveProtocol() : protocolVersion;
 
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         mn.Check();
         if (mn.protocolVersion < protocolVersion || !mn.IsEnabled()) continue;
         i++;
@@ -399,7 +401,8 @@ int CMasternodeMan::CountEnabled(int protocolVersion)
 
 void CMasternodeMan::CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion)
 {
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         mn.Check();
         std::string strHost;
         int port;
@@ -442,28 +445,31 @@ void CMasternodeMan::DsegUpdate(CNode* pnode)
     mWeAskedForMasternodeList[pnode->addr] = askAgain;
 }
 
+CMasternode* CMasternodeMan::Find(const COutPoint& collateralOut)
+{
+    LOCK(cs);
+
+    if (mapMasternodes.count(collateralOut)) {
+        // todo: move to a const pointer or copy
+        return &mapMasternodes.at(collateralOut);
+    }
+
+    return nullptr;
+}
+
 CMasternode* CMasternodeMan::Find(const CScript& payee)
 {
     LOCK(cs);
     CScript payee2;
 
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         payee2 = GetScriptForDestination(mn.pubKeyCollateralAddress.GetID());
         if (payee2 == payee)
             return &mn;
     }
-    return NULL;
-}
 
-CMasternode* CMasternodeMan::Find(const CTxIn& vin)
-{
-    LOCK(cs);
-
-    for (CMasternode& mn : vMasternodes) {
-        if (mn.vin.prevout == vin.prevout)
-            return &mn;
-    }
-    return NULL;
+    return nullptr;
 }
 
 
@@ -471,11 +477,12 @@ CMasternode* CMasternodeMan::Find(const CPubKey& pubKeyMasternode)
 {
     LOCK(cs);
 
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         if (mn.pubKeyMasternode == pubKeyMasternode)
             return &mn;
     }
-    return NULL;
+    return nullptr;
 }
 
 //
@@ -493,7 +500,8 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
     */
 
     int nMnCount = CountEnabled();
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         mn.Check();
         if (!mn.IsEnabled()) continue;
 
@@ -528,7 +536,7 @@ CMasternode* CMasternodeMan::GetNextMasternodeInQueueForPayment(int nBlockHeight
     int nCountTenth = 0;
     uint256 nHigh;
     for (PAIRTYPE(int64_t, CTxIn) & s : vecMasternodeLastPaid) {
-        CMasternode* pmn = Find(s.second);
+        CMasternode* pmn = Find(s.second.prevout);
         if (!pmn) break;
 
         uint256 n = pmn->CalculateScore(1, nBlockHeight - 100);
@@ -548,7 +556,8 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
     CMasternode* winner = NULL;
 
     // scan for winner
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         mn.Check();
         if (mn.protocolVersion < minProtocol || !mn.IsEnabled()) continue;
 
@@ -577,7 +586,8 @@ int CMasternodeMan::GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, in
     if (!GetBlockHash(hash, nBlockHeight)) return -1;
 
     // scan for winner
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         if (mn.protocolVersion < minProtocol) {
             LogPrint(BCLog::MASTERNODE,"Skipping Masternode with obsolete version %d\n", mn.protocolVersion);
             continue;                                                       // Skip obsolete versions
@@ -623,7 +633,8 @@ std::vector<std::pair<int, CMasternode> > CMasternodeMan::GetMasternodeRanks(int
     if (!GetBlockHash(hash, nBlockHeight)) return vecMasternodeRanks;
 
     // scan for winner
-    for (CMasternode& mn : vMasternodes) {
+    for (auto& it : mapMasternodes) {
+        CMasternode& mn = it.second;
         mn.Check();
 
         if (mn.protocolVersion < minProtocol) continue;
@@ -720,7 +731,7 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
             Misbehaving(pfrom->GetId(), nDoS);
         } else {
             // if nothing significant failed, search existing Masternode list
-            CMasternode* pmn = Find(mnp.vin);
+            CMasternode* pmn = Find(mnp.vin.prevout);
             // if it's known, don't ask for the mnb, just return
             if (pmn != NULL) return;
         }
@@ -757,7 +768,8 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
 
         int nInvCount = 0;
 
-        for (CMasternode& mn : vMasternodes) {
+        for (auto& it : mapMasternodes) {
+            CMasternode& mn = it.second;
             if (mn.addr.IsRFC1918()) continue; //local network
 
             if (mn.IsEnabled()) {
@@ -785,18 +797,13 @@ void CMasternodeMan::ProcessMessage(CNode* pfrom, std::string& strCommand, CData
     }
 }
 
-void CMasternodeMan::Remove(CTxIn vin)
+void CMasternodeMan::Remove(const COutPoint& collateralOut)
 {
     LOCK(cs);
 
-    std::vector<CMasternode>::iterator it = vMasternodes.begin();
-    while (it != vMasternodes.end()) {
-        if ((*it).vin == vin) {
-            LogPrint(BCLog::MASTERNODE, "CMasternodeMan: Removing Masternode %s - %i now\n", (*it).vin.prevout.hash.ToString(), size() - 1);
-            vMasternodes.erase(it);
-            break;
-        }
-        ++it;
+    const auto it = mapMasternodes.find(collateralOut);
+    if (it != mapMasternodes.end()) {
+        mapMasternodes.erase(it);
     }
 }
 
@@ -808,7 +815,7 @@ void CMasternodeMan::UpdateMasternodeList(CMasternodeBroadcast mnb)
 
     LogPrint(BCLog::MASTERNODE,"CMasternodeMan::UpdateMasternodeList() -- masternode=%s\n", mnb.vin.prevout.ToString());
 
-    CMasternode* pmn = Find(mnb.vin);
+    CMasternode* pmn = Find(mnb.vin.prevout);
     if (pmn == NULL) {
         CMasternode mn(mnb);
         Add(mn);
@@ -821,7 +828,7 @@ std::string CMasternodeMan::ToString() const
 {
     std::ostringstream info;
 
-    info << "Masternodes: " << (int)vMasternodes.size() << ", peers who asked us for Masternode list: " << (int)mAskedUsForMasternodeList.size() << ", peers we asked for Masternode list: " << (int)mWeAskedForMasternodeList.size() << ", entries in Masternode list we asked for: " << (int)mWeAskedForMasternodeListEntry.size();
+    info << "Masternodes: " << (int)size() << ", peers who asked us for Masternode list: " << (int)mAskedUsForMasternodeList.size() << ", peers we asked for Masternode list: " << (int)mWeAskedForMasternodeList.size() << ", entries in Masternode list we asked for: " << (int)mWeAskedForMasternodeListEntry.size();
 
     return info.str();
 }

@@ -313,7 +313,7 @@ bool ProcessConsensusVote(CNode* pnode, CConsensusVote& ctx)
 {
     int n = mnodeman.GetMasternodeRank(ctx.vinMasternode, ctx.nBlockHeight, MIN_SWIFTTX_PROTO_VERSION);
 
-    CMasternode* pmn = mnodeman.Find(ctx.vinMasternode);
+    CMasternode* pmn = mnodeman.Find(ctx.vinMasternode.prevout);
     if (pmn != NULL)
         LogPrint(BCLog::MASTERNODE, "%s : Masternode ADDR %s %d\n", __func__, pmn->addr.ToString().c_str(), n);
 

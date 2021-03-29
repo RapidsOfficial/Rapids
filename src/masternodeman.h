@@ -61,8 +61,8 @@ private:
     // critical section to protect the inner data structures specifically on messaging
     mutable RecursiveMutex cs_process_message;
 
-    // map to hold all MNs
-    std::vector<CMasternode> vMasternodes;
+    // map to hold all MNs (indexed by collateral outpoint)
+    std::map<COutPoint, CMasternode> mapMasternodes;
     // who's asked for the Masternode list and the last time
     std::map<CNetAddr, int64_t> mAskedUsForMasternodeList;
     // who we asked for the Masternode list and the last time
@@ -86,7 +86,7 @@ public:
     inline void SerializationOp(Stream& s, Operation ser_action)
     {
         LOCK(cs);
-        READWRITE(vMasternodes);
+        READWRITE(mapMasternodes);
         READWRITE(mAskedUsForMasternodeList);
         READWRITE(mWeAskedForMasternodeList);
         READWRITE(mWeAskedForMasternodeListEntry);
@@ -120,8 +120,8 @@ public:
     void DsegUpdate(CNode* pnode);
 
     /// Find an entry
+    CMasternode* Find(const COutPoint& collateralOut);
     CMasternode* Find(const CScript& payee);
-    CMasternode* Find(const CTxIn& vin);
     CMasternode* Find(const CPubKey& pubKeyMasternode);
 
     /// Find an entry in the masternode list that is next to be paid
@@ -130,9 +130,14 @@ public:
     /// Get the current winner for this block
     CMasternode* GetCurrentMasterNode(int mod = 1, int64_t nBlockHeight = 0, int minProtocol = 0);
 
+    // !todo: remove this
     std::vector<CMasternode> GetFullMasternodeVector()
     {
         Check();
+        std::vector<CMasternode> vMasternodes;
+        for (const auto it : mapMasternodes) {
+            vMasternodes.emplace_back(it.second);
+        }
         return vMasternodes;
     }
 
@@ -142,14 +147,14 @@ public:
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
     /// Return the number of (unique) Masternodes
-    int size() { return vMasternodes.size(); }
+    int size() const { LOCK(cs); return mapMasternodes.size(); }
 
     /// Return the number of Masternodes older than (default) 8000 seconds
     int stable_size ();
 
     std::string ToString() const;
 
-    void Remove(CTxIn vin);
+    void Remove(const COutPoint& collateralOut);
 
     /// Update masternode list and maps using provided CMasternodeBroadcast
     void UpdateMasternodeList(CMasternodeBroadcast mnb);

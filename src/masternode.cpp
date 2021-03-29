@@ -551,7 +551,7 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
         return false;
 
     //search existing Masternode list, this is where we update existing Masternodes with new mnb broadcasts
-    CMasternode* pmn = mnodeman.Find(vin);
+    CMasternode* pmn = mnodeman.Find(vin.prevout);
 
     // no such masternode, nothing to update
     if (pmn == NULL) return true;
@@ -594,14 +594,14 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
     if(lastPing.IsNull() || !lastPing.CheckAndUpdate(nDoS, false, true)) return false;
 
     // search existing Masternode list
-    CMasternode* pmn = mnodeman.Find(vin);
+    CMasternode* pmn = mnodeman.Find(vin.prevout);
 
     if (pmn != NULL) {
         // nothing to do here if we already know about this masternode and it's enabled
         if (pmn->IsEnabled()) return true;
         // if it's not enabled, remove old MN first and continue
         else
-            mnodeman.Remove(pmn->vin);
+            mnodeman.Remove(pmn->vin.prevout);
     }
 
     int nChainHeight = chainActive.Height();
@@ -739,7 +739,7 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fChec
     }
 
     // see if we have this Masternode
-    CMasternode* pmn = mnodeman.Find(vin);
+    CMasternode* pmn = mnodeman.Find(vin.prevout);
     const bool isMasternodeFound = (pmn != nullptr);
     const bool isSignatureValid = (isMasternodeFound && CheckSignature(pmn->pubKeyMasternode));
 
