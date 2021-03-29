@@ -8,6 +8,7 @@
 
 #include "activemasternode.h"
 #include "base58.h"
+#include "cyclingvector.h"
 #include "key.h"
 #include "main.h"
 #include "masternode.h"
@@ -18,6 +19,8 @@
 #define MASTERNODES_DUMP_SECONDS (15 * 60)
 #define MASTERNODES_DSEG_SECONDS (3 * 60 * 60)
 
+/** Maximum number of block hashes to cache */
+static const unsigned int CACHED_BLOCK_HASHES = 200;
 
 class CMasternodeMan;
 class CActiveMasternode;
@@ -72,6 +75,9 @@ private:
 
     // Memory Only. Updated in NewBlock (blocks arrive in order)
     std::atomic<int> nBestHeight;
+
+    // Memory Only. Cache last block hashes. Used to verify mn pings and winners.
+    CyclingVector<uint256> cvLastBlockHashes;
 
 public:
     // Keep track of all broadcasts I've seen
@@ -164,6 +170,12 @@ public:
 
     /// Update masternode list and maps using provided CMasternodeBroadcast
     void UpdateMasternodeList(CMasternodeBroadcast mnb);
+
+    // Block hashes cycling vector management
+    void CacheBlockHash(const CBlockIndex* pindex);
+    void UncacheBlockHash(const CBlockIndex* pindex);
+    uint256 GetHashAtHeight(int nHeight) const;
+    bool IsWithinDepth(const uint256& nHash, int depth) const;
 };
 
 void ThreadCheckMasternodes();

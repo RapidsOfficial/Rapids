@@ -3090,6 +3090,8 @@ bool static DisconnectTip(CValidationState& state)
     // UpdateTransactionsFromBlock finds descendants of any transactions in this
     // block that were added back and cleans up the mempool state.
     mempool.UpdateTransactionsFromBlock(vHashUpdate);
+    // Update MN manager cache
+    mnodeman.UncacheBlockHash(pindexDelete);
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev);
     // Let wallets know transactions went from 1-confirmed to
@@ -3163,6 +3165,8 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     mempool.removeForBlock(pblock->vtx, pindexNew->nHeight, txConflicted, !IsInitialBlockDownload());
     // Update chainActive & related variables.
     UpdateTip(pindexNew);
+    // Update MN manager cache
+    mnodeman.CacheBlockHash(pindexNew);
 
     for(unsigned int i=0; i < pblock->vtx.size(); i++) {
         txChanged.emplace_back(pblock->vtx[i], pindexNew, i);

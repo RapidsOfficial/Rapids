@@ -201,10 +201,10 @@ void DumpMasternodes()
     LogPrint(BCLog::MASTERNODE,"Masternode dump finished  %dms\n", GetTimeMillis() - nStart);
 }
 
-CMasternodeMan::CMasternodeMan()
-{
-    nDsqCount = 0;
-}
+CMasternodeMan::CMasternodeMan():
+    cvLastBlockHashes(CACHED_BLOCK_HASHES, UINT256_ZERO),
+    nDsqCount(0)
+{}
 
 bool CMasternodeMan::Add(CMasternode& mn)
 {
@@ -829,6 +829,40 @@ std::string CMasternodeMan::ToString() const
     info << "Masternodes: " << (int)size() << ", peers who asked us for Masternode list: " << (int)mAskedUsForMasternodeList.size() << ", peers we asked for Masternode list: " << (int)mWeAskedForMasternodeList.size() << ", entries in Masternode list we asked for: " << (int)mWeAskedForMasternodeListEntry.size();
 
     return info.str();
+}
+
+void CMasternodeMan::CacheBlockHash(const CBlockIndex* pindex)
+{
+    cvLastBlockHashes.Set(pindex->nHeight, pindex->GetBlockHash());
+}
+
+void CMasternodeMan::UncacheBlockHash(const CBlockIndex* pindex)
+{
+    cvLastBlockHashes.Set(pindex->nHeight, UINT256_ZERO);
+}
+
+uint256 CMasternodeMan::GetHashAtHeight(int nHeight) const
+{
+    return cvLastBlockHashes.Get(nHeight);
+}
+
+bool CMasternodeMan::IsWithinDepth(const uint256& nHash, int depth) const
+{
+    // Sanity checks
+    if (nHash.IsNull()) {
+        return error("%s: Called with null hash\n", __func__);
+    }
+    if (depth < 0 || (unsigned) depth >= CACHED_BLOCK_HASHES) {
+        return error("%s: Invalid depth %d. Cached block hashes: %d\n", __func__, depth, CACHED_BLOCK_HASHES);
+    }
+    // Check last depth blocks to find one with matching hash
+    const int nCurrentHeight = GetBestHeight();
+    int nStopHeight = std::max(0, nCurrentHeight - depth);
+    for (int i = nCurrentHeight; i >= nStopHeight; i--) {
+        if (GetHashAtHeight(i) == nHash)
+            return true;
+    }
+    return false;
 }
 
 void ThreadCheckMasternodes()
