@@ -4513,6 +4513,7 @@ bool ProcessNewBlock(CValidationState& state, CNode* pfrom, const CBlock* pblock
         return error("%s : ActivateBestChain failed", __func__);
 
     if (!fLiteMode) {
+        mnodeman.SetBestHeight(newHeight);
         budget.NewBlock(newHeight);
         if (masternodeSync.RequestedMasternodeAssets > MASTERNODE_SYNC_LIST) {
             masternodePayments.ProcessBlock(newHeight + 10);

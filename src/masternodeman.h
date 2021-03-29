@@ -70,6 +70,9 @@ private:
     // which Masternodes we've asked for
     std::map<COutPoint, int64_t> mWeAskedForMasternodeListEntry;
 
+    // Memory Only. Updated in NewBlock (blocks arrive in order)
+    std::atomic<int> nBestHeight;
+
 public:
     // Keep track of all broadcasts I've seen
     std::map<uint256, CMasternodeBroadcast> mapSeenMasternodeBroadcast;
@@ -112,6 +115,9 @@ public:
 
     /// Clear Masternode vector
     void Clear();
+
+    void SetBestHeight(int height) { nBestHeight.store(height, std::memory_order_release); };
+    int GetBestHeight() const { return nBestHeight.load(std::memory_order_acquire); }
 
     int CountEnabled(int protocolVersion = -1);
 
