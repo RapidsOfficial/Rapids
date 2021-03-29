@@ -361,6 +361,7 @@ static const CRPCCommand vRPCCommands[] =
 
         /* RPD features */
         {"pivx", "listmasternodes", &listmasternodes, true },
+        {"pivx", "getcachedblockhashes", &getcachedblockhashes, true },
         {"pivx", "getmasternodecount", &getmasternodecount, true },
         {"pivx", "createmasternodebroadcast", &createmasternodebroadcast, true },
         {"pivx", "decodemasternodebroadcast", &decodemasternodebroadcast, true },

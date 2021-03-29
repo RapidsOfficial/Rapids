@@ -19,6 +19,31 @@
 
 #include <boost/tokenizer.hpp>
 
+UniValue getcachedblockhashes(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() > 0)
+        throw std::runtime_error(
+            "getcachedblockhashes \n"
+            "\nReturn the block hashes cached in the masternode manager\n"
+
+            "\nResult:\n"
+            "[\n"
+            "  ...\n"
+            "  \"xxxx\",   (string) hash at Index d (height modulo max cache size)\n"
+            "  ...\n"
+            "]\n"
+
+            "\nExamples:\n" +
+            HelpExampleCli("getcachedblockhashes", "") + HelpExampleRpc("getcachedblockhashes", ""));
+
+    std::vector<uint256> vCacheCopy = mnodeman.GetCachedBlocks();
+    UniValue ret(UniValue::VARR);
+    for (int i = 0; (unsigned) i < vCacheCopy.size(); i++) {
+        ret.push_back(vCacheCopy[i].ToString());
+    }
+    return ret;
+}
+
 UniValue listmasternodes(const JSONRPCRequest& request)
 {
     std::string strFilter = "";

@@ -176,6 +176,7 @@ public:
     void UncacheBlockHash(const CBlockIndex* pindex);
     uint256 GetHashAtHeight(int nHeight) const;
     bool IsWithinDepth(const uint256& nHash, int depth) const;
+    std::vector<uint256> GetCachedBlocks() const { return cvLastBlockHashes.GetCache(); }
 };
 
 void ThreadCheckMasternodes();
