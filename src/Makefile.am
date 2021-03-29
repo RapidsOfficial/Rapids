@@ -189,6 +189,7 @@ BITCOIN_CORE_H = \
   core_io.h \
   cuckoocache.h \
   crypter.h \
+  cyclingvector.h \
   pairresult.h \
   addressbook.h \
   denomination_functions.h \
