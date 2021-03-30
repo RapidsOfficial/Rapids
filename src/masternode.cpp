@@ -718,23 +718,11 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fChec
                 return false;
             }
 
-            // Check if the ping block hash exists in disk
-            BlockMap::iterator mi = mapBlockIndex.find(blockHash);
-            if (mi == mapBlockIndex.end() || !(*mi).second) {
-                LogPrint(BCLog::MNPING,"%s: ping block not in disk. Masternode %s block hash %s\n", __func__, vin.prevout.hash.ToString(), blockHash.ToString());
+            // Check if the ping block hash exists and it's within 24 blocks from the tip
+            if (!mnodeman.IsWithinDepth(blockHash, 2 * MNPING_DEPTH)) {
+                LogPrint(BCLog::MNPING,"%s: Masternode %s block hash %s is too old or has an invalid block hash\n",
+                                                __func__, vin.prevout.hash.ToString(), blockHash.ToString());
                 return false;
-            }
-
-            // Verify ping block hash in main chain and in the [ tip > x > tip - 24 ] range.
-            {
-                LOCK(cs_main);
-                if (!chainActive.Contains((*mi).second) || (chainActive.Height() - (*mi).second->nHeight > 24)) {
-                    LogPrint(BCLog::MNPING,"%s: Masternode %s block hash %s is too old or has an invalid block hash\n",
-                            __func__, vin.prevout.hash.ToString(), blockHash.ToString());
-                    // Do nothing here (no Masternode update, no mnping relay)
-                    // Let this node to be visible but fail to accept mnping
-                    return false;
-                }
             }
 
             pmn->lastPing = *this;
