@@ -577,6 +577,31 @@ CMasternode* CMasternodeMan::GetCurrentMasterNode(int mod, int64_t nBlockHeight,
     return winner;
 }
 
+std::vector<std::pair<CMasternode, int>> CMasternodeMan::GetMnScores(int nLast)
+{
+    std::vector<std::pair<CMasternode, int>> ret;
+    int nChainHeight = GetBestHeight();
+    if (nChainHeight < 0) return ret;
+
+    Check();
+    for (int nHeight = nChainHeight - nLast; nHeight < nChainHeight + 20; nHeight++) {
+        const uint256& hash = GetHashAtHeight(nHeight - 101);
+        uint256 nHigh = UINT256_ZERO;
+        CMasternode pBestMasternode;
+        for (const auto& it : mapMasternodes) {
+            const uint256& n = it.second.CalculateScore(hash);
+            if (n > nHigh) {
+                nHigh = n;
+                pBestMasternode = it.second;
+            }
+        }
+        if (nHigh > UINT256_ZERO) {
+            ret.emplace_back(pBestMasternode, nHeight);
+        }
+    }
+    return ret;
+}
+
 int CMasternodeMan::GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, int minProtocol, bool fOnlyActive)
 {
     std::vector<std::pair<int64_t, CTxIn> > vecMasternodeScores;
