@@ -271,8 +271,6 @@ void FlushStateToDisk();
 /** (try to) add transaction to memory pool **/
 bool AcceptToMemoryPool(CTxMemPool& pool, CValidationState& state, const CTransaction& tx, bool fLimitFree, bool* pfMissingInputs, bool fOverrideMempoolLimit = false, bool fRejectInsaneFee = false, bool ignoreFees = false);
 
-bool AcceptableInputs(CTxMemPool& pool, CValidationState& state, const CTransaction& tx, bool fLimitFree, bool* pfMissingInputs, bool fRejectInsaneFee = false, bool isDSTX = false);
-
 int GetIXConfirmations(uint256 nTXHash);
 
 /** Convert CValidationState to a human-readable message for logging */

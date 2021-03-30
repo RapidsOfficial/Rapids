@@ -163,30 +163,6 @@ void CMasternode::Check(bool forceCheck)
         return;
     }
 
-    if (!unitTest) {
-        int nChainHeight = chainActive.Height();
-        int reductionHeight = Params().GetConsensus().height_supply_reduction;
-
-        CAmount checkAmount = nChainHeight <= reductionHeight ? 9999999.99 * COIN : 9999.99 * COIN;
-
-        CValidationState state;
-        CMutableTransaction tx = CMutableTransaction();
-        CScript dummyScript;
-        dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-        CTxOut vout = CTxOut(checkAmount * COIN, dummyScript);
-        tx.vin.push_back(vin);
-        tx.vout.push_back(vout);
-        {
-            TRY_LOCK(cs_main, lockMain);
-            if (!lockMain) return;
-
-            if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
-                activeState = MASTERNODE_VIN_SPENT;
-                return;
-            }
-        }
-    }
-
     activeState = MASTERNODE_ENABLED; // OK
 }
 
@@ -565,18 +541,10 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             mnodeman.Remove(pmn->vin.prevout);
     }
 
-    int nChainHeight = chainActive.Height();
-    int reductionHeight = Params().GetConsensus().height_supply_reduction;
-
-    CAmount checkAmount = nChainHeight <= reductionHeight ? 9999999.99 * COIN : 9999.99 * COIN;
-
-    CValidationState state;
-    CMutableTransaction tx = CMutableTransaction();
-    CScript dummyScript;
-    dummyScript << ToByteVector(pubKeyCollateralAddress) << OP_CHECKSIG;
-    CTxOut vout = CTxOut(checkAmount, dummyScript);
-    tx.vin.push_back(vin);
-    tx.vout.push_back(vout);
+    if (pcoinsTip->AccessCoin(vin.prevout).IsSpent()) {
+        LogPrint(BCLog::MASTERNODE,"mnb - vin %s spent\n", vin.prevout.ToString());
+        return false;
+    }
 
     {
         TRY_LOCK(cs_main, lockMain);
@@ -586,16 +554,11 @@ bool CMasternodeBroadcast::CheckInputsAndAdd(int& nDoS)
             masternodeSync.mapSeenSyncMNB.erase(GetHash());
             return false;
         }
-
-        if (!AcceptableInputs(mempool, state, CTransaction(tx), false, NULL)) {
-            //set nDos
-            state.IsInvalid(nDoS);
-            return false;
-        }
     }
 
     LogPrint(BCLog::MASTERNODE, "mnb - Accepted Masternode entry\n");
 
+    int nChainHeight = chainActive.Height();
     if (pcoinsTip->GetCoinDepthAtHeight(vin.prevout, nChainHeight) < MASTERNODE_MIN_CONFIRMATIONS) {
         LogPrint(BCLog::MASTERNODE,"mnb - Input must have at least %d confirmations\n", MASTERNODE_MIN_CONFIRMATIONS);
         // maybe we miss few blocks, let this mnb to be checked again later

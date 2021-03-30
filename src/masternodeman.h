@@ -137,7 +137,7 @@ public:
     CMasternode* Find(const CPubKey& pubKeyMasternode);
 
     /// Check all transactions in a block, for spent masternode collateral outpoints.
-    void CheckSpentCollaterals(const std::vector<CTransactionRef>& vtx);
+    void CheckSpentCollaterals(const std::vector<CTransaction>& vtx);
 
     /// Find an entry in the masternode list that is next to be paid
     CMasternode* GetNextMasternodeInQueueForPayment(int nBlockHeight, bool fFilterSigTime, int& nCount);
