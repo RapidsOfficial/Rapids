@@ -129,10 +129,7 @@ public:
     CPubKey pubKeyMasternode;
     int activeState;
     int64_t sigTime; //mnb message time
-    bool unitTest;
-    bool allowFreeTx;
     int protocolVersion;
-    int64_t nLastDsq; //the dsq count from the last dsq broadcast of this node
     int nScanningErrorCount;
     int nLastScanningErrorBlockHeight;
     CMasternodePing lastPing;
@@ -163,10 +160,7 @@ public:
         swap(first.activeState, second.activeState);
         swap(first.sigTime, second.sigTime);
         swap(first.lastPing, second.lastPing);
-        swap(first.unitTest, second.unitTest);
-        swap(first.allowFreeTx, second.allowFreeTx);
         swap(first.protocolVersion, second.protocolVersion);
-        swap(first.nLastDsq, second.nLastDsq);
         swap(first.nScanningErrorCount, second.nScanningErrorCount);
         swap(first.nLastScanningErrorBlockHeight, second.nLastScanningErrorBlockHeight);
     }
@@ -203,9 +197,6 @@ public:
         READWRITE(protocolVersion);
         READWRITE(activeState);
         READWRITE(lastPing);
-        READWRITE(unitTest);
-        READWRITE(allowFreeTx);
-        READWRITE(nLastDsq);
         READWRITE(nScanningErrorCount);
         READWRITE(nLastScanningErrorBlockHeight);
     }
@@ -240,6 +231,11 @@ public:
     bool IsEnabled()
     {
         return WITH_LOCK(cs, return activeState == MASTERNODE_ENABLED);
+    }
+
+    bool IsPreEnabled()
+    {
+        return WITH_LOCK(cs, return activeState == MASTERNODE_PRE_ENABLED );
     }
 
     std::string Status()
@@ -299,9 +295,7 @@ public:
         READWRITE(sigTime);
         READWRITE(protocolVersion);
         READWRITE(lastPing);
-        READWRITE(nMessVersion);    // abuse nLastDsq (which will be removed) for old serialization
-        if (ser_action.ForRead())
-            nLastDsq = 0;
+        READWRITE(nMessVersion);
     }
 
     /// Create Masternode broadcast, needs to be relayed manually after that
