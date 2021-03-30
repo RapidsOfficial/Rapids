@@ -452,22 +452,6 @@ CMasternode* CMasternodeMan::Find(const COutPoint& collateralOut)
     return it != mapMasternodes.end() ? it->second.get() : nullptr;
 }
 
-CMasternode* CMasternodeMan::Find(const CScript& payee)
-{
-    LOCK(cs);
-    CScript payee2;
-
-    for (auto& it : mapMasternodes) {
-        MasternodeRef& mn = it.second;
-        payee2 = GetScriptForDestination(mn->pubKeyCollateralAddress.GetID());
-        if (payee2 == payee)
-            return mn.get();
-    }
-
-    return nullptr;
-}
-
-
 CMasternode* CMasternodeMan::Find(const CPubKey& pubKeyMasternode)
 {
     LOCK(cs);
