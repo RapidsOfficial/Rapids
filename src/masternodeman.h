@@ -55,6 +55,9 @@ public:
     ReadResult Read(CMasternodeMan& mnodemanToLoad, bool fDryRun = false);
 };
 
+//
+typedef std::shared_ptr<CMasternode> MasternodeRef;
+
 class CMasternodeMan
 {
 private:
@@ -65,7 +68,7 @@ private:
     mutable RecursiveMutex cs_process_message;
 
     // map to hold all MNs (indexed by collateral outpoint)
-    std::map<COutPoint, CMasternode> mapMasternodes;
+    std::map<COutPoint, MasternodeRef> mapMasternodes;
     // who's asked for the Masternode list and the last time
     std::map<CNetAddr, int64_t> mAskedUsForMasternodeList;
     // who we asked for the Masternode list and the last time
@@ -146,7 +149,7 @@ public:
     CMasternode* GetCurrentMasterNode(int mod = 1, int64_t nBlockHeight = 0, int minProtocol = 0);
 
     // vector of pairs <masternode winner, height>
-    std::vector<std::pair<CMasternode, int>> GetMnScores(int nLast);
+    std::vector<std::pair<MasternodeRef, int>> GetMnScores(int nLast);
 
     std::vector<std::pair<int, CMasternode> > GetMasternodeRanks(int64_t nBlockHeight, int minProtocol = 0);
     int GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, int minProtocol = 0, bool fOnlyActive = true);

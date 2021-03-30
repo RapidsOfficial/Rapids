@@ -669,15 +669,15 @@ UniValue getmasternodescores (const JSONRPCRequest& request)
         }
     }
 
-    std::vector<std::pair<CMasternode, int>> vMnScores = mnodeman.GetMnScores(nLast);
+    std::vector<std::pair<MasternodeRef, int>> vMnScores = mnodeman.GetMnScores(nLast);
     if (vMnScores.empty()) return "unknown";
 
     UniValue obj(UniValue::VOBJ);
 
     for (const auto& p : vMnScores) {
-        const CMasternode& mn = p.first;
+        const MasternodeRef& mn = p.first;
         const int nHeight = p.second;
-        obj.pushKV(strprintf("%d", nHeight), mn.vin.prevout.hash.ToString().c_str());
+        obj.pushKV(strprintf("%d", nHeight), mn->vin.prevout.hash.ToString().c_str());
     }
 
     return obj;
