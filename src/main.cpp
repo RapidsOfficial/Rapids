@@ -3173,6 +3173,7 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     UpdateTip(pindexNew);
     // Update MN manager cache
     mnodeman.CacheBlockHash(pindexNew);
+    mnodeman.CheckSpentCollaterals(blockConnecting.vtx);
 
     for(unsigned int i=0; i < pblock->vtx.size(); i++) {
         txChanged.emplace_back(pblock->vtx[i], pindexNew, i);
