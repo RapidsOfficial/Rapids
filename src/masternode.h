@@ -232,6 +232,8 @@ public:
         return lastPing.IsNull() ? false : now - lastPing.sigTime < seconds;
     }
 
+    void SetSpent() { LOCK(cs); activeState = CMasternode::MASTERNODE_VIN_SPENT; }
+
     void Disable()
     {
         LOCK(cs);
