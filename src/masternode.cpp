@@ -298,7 +298,13 @@ CMasternodeBroadcast::CMasternodeBroadcast(const CMasternode& mn) :
         CMasternode(mn)
 { }
 
-bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMasternode, std::string strTxHash, std::string strOutputIndex, std::string& strErrorRet, CMasternodeBroadcast& mnbRet, bool fOffline)
+bool CMasternodeBroadcast::Create(const std::string& strService,
+                                  const std::string& strKeyMasternode,
+                                  const std::string& strTxHash,
+                                  const std::string& strOutputIndex,
+                                  std::string& strErrorRet,
+                                  CMasternodeBroadcast& mnbRet,
+                                  bool fOffline)
 {
     CTxIn txin;
     CPubKey pubKeyCollateralAddressNew;
@@ -340,7 +346,14 @@ bool CMasternodeBroadcast::Create(std::string strService, std::string strKeyMast
     return Create(txin, _service, keyCollateralAddressNew, pubKeyCollateralAddressNew, keyMasternodeNew, pubKeyMasternodeNew, strErrorRet, mnbRet);
 }
 
-bool CMasternodeBroadcast::Create(CTxIn txin, CService service, CKey keyCollateralAddressNew, CPubKey pubKeyCollateralAddressNew, CKey keyMasternodeNew, CPubKey pubKeyMasternodeNew, std::string& strErrorRet, CMasternodeBroadcast& mnbRet)
+bool CMasternodeBroadcast::Create(const CTxIn& txin,
+                                  const CService& service,
+                                  const CKey& keyCollateralAddressNew,
+                                  const CPubKey& pubKeyCollateralAddressNew,
+                                  const CKey& keyMasternodeNew,
+                                  const CPubKey& pubKeyMasternodeNew,
+                                  std::string& strErrorRet,
+                                  CMasternodeBroadcast& mnbRet)
 {
     // wait for reindex and/or import to finish
     if (fImporting || fReindex) return false;
@@ -349,7 +362,9 @@ bool CMasternodeBroadcast::Create(CTxIn txin, CService service, CKey keyCollater
              EncodeDestination(pubKeyCollateralAddressNew.GetID()),
         pubKeyMasternodeNew.GetID().ToString());
 
-    CMasternodePing mnp(txin);
+    // Get block hash to ping (TODO: move outside of this function)
+    const uint256& nBlockHashToPing = mnodeman.GetBlockHashToPing();
+    CMasternodePing mnp(txin, nBlockHashToPing);
     if (!mnp.Sign(keyMasternodeNew, pubKeyMasternodeNew)) {
         strErrorRet = strprintf("Failed to sign ping, masternode=%s", txin.prevout.hash.ToString());
         LogPrint(BCLog::MASTERNODE,"CMasternodeBroadcast::Create -- %s\n", strErrorRet);
@@ -642,19 +657,12 @@ CMasternodePing::CMasternodePing() :
         sigTime(GetAdjustedTime())
 { }
 
-CMasternodePing::CMasternodePing(CTxIn& newVin) :
+CMasternodePing::CMasternodePing(const CTxIn& newVin, const uint256& nBlockHash) :
         CSignedMessage(),
         vin(newVin),
+        blockHash(nBlockHash),
         sigTime(GetAdjustedTime())
-{
-    int nHeight;
-    {
-        LOCK(cs_main);
-        nHeight = chainActive.Height();
-        if (nHeight > 12)
-            blockHash = chainActive[nHeight - 12]->GetBlockHash();
-    }
-}
+{ }
 
 uint256 CMasternodePing::GetHash() const
 {

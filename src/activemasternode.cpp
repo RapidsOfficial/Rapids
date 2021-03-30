@@ -138,7 +138,8 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
 
     LogPrintf("CActiveMasternode::SendMasternodePing() - Relay Masternode Ping vin = %s\n", vin->ToString());
 
-    CMasternodePing mnp(*vin);
+    const uint256& nBlockHash = mnodeman.GetBlockHashToPing();
+    CMasternodePing mnp(*vin, nBlockHash);
     if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
         errorMessage = "Couldn't sign Masternode Ping";
         return false;

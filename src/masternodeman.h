@@ -176,6 +176,7 @@ public:
     void UncacheBlockHash(const CBlockIndex* pindex);
     uint256 GetHashAtHeight(int nHeight) const;
     bool IsWithinDepth(const uint256& nHash, int depth) const;
+    uint256 GetBlockHashToPing() const { return GetHashAtHeight(GetBestHeight() - MNPING_DEPTH); }
     std::vector<uint256> GetCachedBlocks() const { return cvLastBlockHashes.GetCache(); }
 };
 
