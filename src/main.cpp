@@ -1449,7 +1449,7 @@ CAmount GetBlockStakeSubsidy(int nHeight)
     if (nHeight <= Params().GetConsensus().height_supply_reduction)
         return reward;
 
-    return reward * 0.2;
+    return reward * 0.8;
 }
 
 bool IsBurnBlock(int nHeight)
