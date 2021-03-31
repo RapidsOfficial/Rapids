@@ -1260,8 +1260,6 @@ bool GetTransaction(const uint256& hash, CTransaction& txOut, uint256& hashBlock
                 return true;
             }
 
-            std::cout << "TEST\n\n";
-
             // transaction not found in the index, nothing more can be done
             return false;
         }
