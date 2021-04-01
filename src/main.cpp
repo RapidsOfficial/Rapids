@@ -1437,7 +1437,7 @@ CAmount GetBlockDevSubsidy(int nHeight)
     CAmount reward = GetBlockValue(nHeight);
 
     if (nHeight <= Params().GetConsensus().height_supply_reduction)
-        return reward;
+        return 0;
 
     return reward * 0.2;
 }
@@ -1449,7 +1449,17 @@ CAmount GetBlockStakeSubsidy(int nHeight)
     if (nHeight <= Params().GetConsensus().height_supply_reduction)
         return reward;
 
-    return reward * 0.8;
+    return reward * 0.2;
+}
+
+CAmount GetBlockMasternodeSubsidy(int nHeight)
+{
+    CAmount reward = GetBlockValue(nHeight);
+
+    if (nHeight <= Params().GetConsensus().height_supply_reduction)
+        return GetMasternodePayment(nHeight, reward);
+
+    return reward * 0.6;
 }
 
 bool IsBurnBlock(int nHeight)
