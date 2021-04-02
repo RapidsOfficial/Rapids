@@ -400,7 +400,7 @@ public:
          */
 
         pchMessageStart[0] = 0x42;
-        pchMessageStart[1] = 0x61;
+        pchMessageStart[1] = 0x62;
         pchMessageStart[2] = 0x81;
         pchMessageStart[3] = 0x01;
         nDefaultPort = 51001;

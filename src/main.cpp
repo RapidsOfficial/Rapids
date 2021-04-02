@@ -3538,14 +3538,19 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
     return true;
 }
 
+// ToDo: Check this
 bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
 {
     if (!tx.HasP2CSOutputs())
         return true;
 
     const unsigned int outs = tx.vout.size();
-    const CTxOut& lastOut = tx.vout[outs-1];
-    if (outs >= 3 && lastOut.scriptPubKey != tx.vout[outs-2].scriptPubKey) {
+    const CTxOut& lastOut = tx.vout[outs - 1];
+
+    const Consensus::Params& consensus = Params().GetConsensus();
+    int keyIndex = nHeight > consensus.height_supply_reduction ? 4 : 3;
+
+    if (outs >= keyIndex && lastOut.scriptPubKey != tx.vout[outs - 2].scriptPubKey) {
         CAmount blockValue = GetBlockValue(nHeight);
         CAmount masternodePayment = GetMasternodePayment(nHeight, blockValue);
 
@@ -3565,7 +3570,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
                 return error("%s : read txPrev failed: %s",  __func__, tx.vin[0].prevout.hash.GetHex());
             CAmount amtIn = txPrev.vout[tx.vin[0].prevout.n].nValue + GetBlockValue(nHeight - 1);
             CAmount amtOut = 0;
-            for (unsigned int i = 1; i < outs-1; i++) amtOut += tx.vout[i].nValue;
+            for (unsigned int i = 1; i < outs - 1; i++) amtOut += tx.vout[i].nValue;
             if (amtOut != amtIn)
                 return error("%s: non-free outputs value %d less than required %d", __func__, amtOut, amtIn);
             return true;
@@ -3581,7 +3586,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
 
         // wrong free output
         return error("%s: Wrong cold staking outputs: vout[%d].scriptPubKey (%s) != vout[%d].scriptPubKey (%s) - value: %s",
-                __func__, outs-1, HexStr(lastOut.scriptPubKey), outs-2, HexStr(tx.vout[outs-2].scriptPubKey), FormatMoney(lastOut.nValue).c_str());
+                __func__, outs - 1, HexStr(lastOut.scriptPubKey), outs - 2, HexStr(tx.vout[outs - 2].scriptPubKey), FormatMoney(lastOut.nValue).c_str());
     }
 
     return true;
