@@ -84,7 +84,7 @@ public:
     bool IsTestNet() const { return NetworkID() == CBaseChainParams::TESTNET; }
     bool IsRegTestNet() const { return NetworkID() == CBaseChainParams::REGTEST; }
 
-    const std::string& DevFundAddress(int nHeight) const { return devFundAddress; }
+    const std::string& DevFundAddress() const { return devFundAddress; }
 
     /** Get masternode collateral */
     CAmount Collateral(int nHeight) const {

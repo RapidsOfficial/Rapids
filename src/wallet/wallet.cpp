@@ -2706,7 +2706,7 @@ bool CWallet::CreateCoinStake(
 
     // Add dev fund output
     if (nHeight > consensus.height_supply_reduction) {
-        CTxDestination dest = DecodeDestination(Params().DevFundAddress(pindexPrev->nHeight + 1));
+        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
         CAmount defFundPayment = GetBlockDevSubsidy(pindexPrev->nHeight + 1);
         CScript devScriptPubKey = GetScriptForDestination(dest);
 

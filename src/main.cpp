@@ -2524,7 +2524,7 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
 
     // Dev fund checks
     if (nHeight > consensus.height_supply_reduction) {
-        CTxDestination dest = DecodeDestination(Params().DevFundAddress(nHeight));
+        CTxDestination dest = DecodeDestination(Params().DevFundAddress());
         CScript devScriptPubKey = GetScriptForDestination(dest);
 
         if (block.vtx[1].vout[1].scriptPubKey != devScriptPubKey)
