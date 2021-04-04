@@ -85,7 +85,13 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
         if (txout.scriptPubKey.IsPayToColdStaking()) {
             if (!fColdStakingActive)
                 return state.DoS(10, false, REJECT_INVALID, "cold-stake-inactive");
-            if (txout.nValue < MIN_COLDSTAKING_AMOUNT)
+
+            const int reductionHeight = consensus.height_supply_reduction;
+            const int nHeight = chainActive.Height() + 1;
+
+            CAmount minColdAmount = nHeight > reductionHeight ? MIN_COLDSTAKING_AMOUNT_REDUCED : MIN_COLDSTAKING_AMOUNT;
+
+            if (txout.nValue < minColdAmount)
                 return state.DoS(100, false, REJECT_INVALID, "cold-stake-vout-toosmall");
         }
     }
@@ -141,7 +147,6 @@ bool CheckTransaction(const CTransaction& tx, bool fZerocoinActive, bool fReject
             if(static_cast<int>(tx.vin.size()) > consensus.ZC_MaxSpendsPerTx)
                 return state.DoS(10, false, REJECT_INVALID, "bad-zc-spend-max-inputs");
         }
-
     } else {
         for (const CTxIn& txin : tx.vin)
             if (txin.prevout.IsNull() && (fZerocoinActive && !txin.IsZerocoinSpend()))
