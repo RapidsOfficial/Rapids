@@ -3538,7 +3538,6 @@ bool CheckBlockHeader(const CBlockHeader& block, CValidationState& state, bool f
     return true;
 }
 
-// ToDo: Check this
 bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
 {
     if (!tx.HasP2CSOutputs())
@@ -3551,8 +3550,7 @@ bool CheckColdStakeFreeOutput(const CTransaction& tx, const int nHeight)
     int keyIndex = nHeight > consensus.height_supply_reduction ? 4 : 3;
 
     if (outs >= keyIndex && lastOut.scriptPubKey != tx.vout[outs - 2].scriptPubKey) {
-        CAmount blockValue = GetBlockValue(nHeight);
-        CAmount masternodePayment = GetMasternodePayment(nHeight, blockValue);
+        CAmount masternodePayment = GetBlockMasternodeSubsidy(nHeight);
 
         if (lastOut.nValue == masternodePayment)
             return true;
