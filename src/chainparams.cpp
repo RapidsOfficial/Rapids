@@ -204,7 +204,7 @@ public:
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
-        consensus.height_supply_reduction = std::numeric_limits<int>::max();
+        consensus.height_supply_reduction = 1286000;
 
         // validation by-pass
         consensus.nPivxBadBlockTime = std::numeric_limits<int>::max();
@@ -285,6 +285,8 @@ public:
         bech32HRPs[SAPLING_FULL_VIEWING_KEY]     = "pviews";
         bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pivks";
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-main";
+
+        devFundAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
