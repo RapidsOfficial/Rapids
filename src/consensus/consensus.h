@@ -24,6 +24,7 @@ static const unsigned int MAX_TX_SIGOPS_LEGACY = MAX_BLOCK_SIGOPS_LEGACY / 5;
 
 /** The minimum amount for the value of a P2CS output */
 static const CAmount MIN_COLDSTAKING_AMOUNT = 1 * COIN;
+static const CAmount MIN_COLDSTAKING_AMOUNT_REDUCED = 0.001 * COIN;
 
 /** The default maximum reorganization depth **/
 static const int DEFAULT_MAX_REORG_DEPTH = 100;

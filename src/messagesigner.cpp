@@ -131,8 +131,8 @@ bool CSignedMessage::CheckSignature() const
 
 const CPubKey CSignedMessage::GetPublicKey(std::string& strErrorRet) const
 {
-    const CTxIn vin = GetVin();
-    CMasternode* pmn = mnodeman.Find(vin);
+    const CTxIn& vin = GetVin();
+    CMasternode* pmn = mnodeman.Find(vin.prevout);
     if(pmn) {
         return pmn->pubKeyMasternode;
     }

@@ -940,6 +940,19 @@ static std::string ResolveErrMsg(const char * const optname, const std::string& 
     return strprintf(_("Cannot resolve -%s address: '%s'"), optname, strBind);
 }
 
+// Sets the last CACHED_BLOCK_HASHES hashes into masternode manager cache
+static void LoadBlockHashesCache(CMasternodeMan& man)
+{
+    LOCK(cs_main);
+    const CBlockIndex* pindex = chainActive.Tip();
+    unsigned int inserted = 0;
+    while (pindex && inserted < CACHED_BLOCK_HASHES) {
+        man.CacheBlockHash(pindex);
+        pindex = pindex->pprev;
+        ++inserted;
+    }
+}
+
 void InitLogging()
 {
     //g_logger->m_print_to_file = !IsArgNegated("-debuglogfile");
@@ -1025,9 +1038,6 @@ bool AppInit2()
     // Check level must be 4 for zerocoin checks
     if (mapArgs.count("-checklevel"))
         return UIError(_("Error: Unsupported argument -checklevel found. Checklevel must be level 4."));
-    // Exit early if -masternode=1 and -listen=0
-    if (GetBoolArg("-masternode", DEFAULT_MASTERNODE) && !GetBoolArg("-listen", DEFAULT_LISTEN))
-        return UIError(_("Error: -listen must be true if -masternode is set."));
     // Exit early if -masternode=1 and -port is not the default port
     if (GetBoolArg("-masternode", DEFAULT_MASTERNODE) && GetListenPort() != Params().GetDefaultPort())
         return UIError(strprintf(_("Error: Invalid port %d for running a masternode."), GetListenPort()) + "\n\n" +
@@ -1752,10 +1762,15 @@ bool AppInit2()
         uiInterface.NotifyBlockTip.disconnect(BlockNotifyGenesisWait);
     }
 
+    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
+
     // ********************************************************* Step 10: setup layer 2 data
 
     uiInterface.InitMessage(_("Loading masternode cache..."));
 
+    mnodeman.SetBestHeight(nChainHeight);
+
+    LoadBlockHashesCache(mnodeman);
     CMasternodeDB mndb;
     CMasternodeDB::ReadResult readResult = mndb.Read(mnodeman);
     if (readResult == CMasternodeDB::FileError)
@@ -1771,7 +1786,6 @@ bool AppInit2()
     uiInterface.InitMessage(_("Loading budget cache..."));
 
     CBudgetDB budgetdb;
-    int nChainHeight = WITH_LOCK(cs_main, return chainActive.Height(); );
     const bool fDryRun = (nChainHeight <= 0);
     CBudgetDB::ReadResult readResult2 = budgetdb.Read(budget, fDryRun);
     if (nChainHeight > 0)

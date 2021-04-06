@@ -11,6 +11,7 @@
 #include "main.h"
 #include "messagesigner.h"
 #include "net.h"
+#include "serialize.h"
 #include "sync.h"
 #include "timedata.h"
 #include "util.h"
@@ -23,13 +24,12 @@
 #define MASTERNODE_REMOVAL_SECONDS (130 * 60)
 #define MASTERNODE_CHECK_SECONDS 5
 
+/* Depth of the block pinged by masternodes */
+static const unsigned int MNPING_DEPTH = 12;
 
 class CMasternode;
 class CMasternodeBroadcast;
 class CMasternodePing;
-extern std::map<int64_t, uint256> mapCacheBlockHashes;
-
-bool GetBlockHash(uint256& hash, int nBlockHeight);
 
 
 //
@@ -44,7 +44,7 @@ public:
     int64_t sigTime; //mnb message times
 
     CMasternodePing();
-    CMasternodePing(CTxIn& newVin);
+    CMasternodePing(const CTxIn& newVin, const uint256& nBlockHash);
 
     ADD_SERIALIZE_METHODS;
 
@@ -121,11 +121,7 @@ public:
         MASTERNODE_ENABLED,
         MASTERNODE_EXPIRED,
         MASTERNODE_REMOVE,
-        MASTERNODE_WATCHDOG_EXPIRED,
-        MASTERNODE_POSE_BAN,
-        MASTERNODE_VIN_SPENT,
-        MASTERNODE_POS_ERROR,
-        MASTERNODE_MISSING
+        MASTERNODE_VIN_SPENT
     };
 
     CTxIn vin;
@@ -134,15 +130,12 @@ public:
     CPubKey pubKeyMasternode;
     int activeState;
     int64_t sigTime; //mnb message time
-    bool unitTest;
-    bool allowFreeTx;
     int protocolVersion;
-    int64_t nLastDsq; //the dsq count from the last dsq broadcast of this node
     int nScanningErrorCount;
     int nLastScanningErrorBlockHeight;
     CMasternodePing lastPing;
 
-    CMasternode();
+    explicit CMasternode();
     CMasternode(const CMasternode& other);
 
     // override CSignedMessage functions
@@ -168,10 +161,7 @@ public:
         swap(first.activeState, second.activeState);
         swap(first.sigTime, second.sigTime);
         swap(first.lastPing, second.lastPing);
-        swap(first.unitTest, second.unitTest);
-        swap(first.allowFreeTx, second.allowFreeTx);
         swap(first.protocolVersion, second.protocolVersion);
-        swap(first.nLastDsq, second.nLastDsq);
         swap(first.nScanningErrorCount, second.nScanningErrorCount);
         swap(first.nLastScanningErrorBlockHeight, second.nLastScanningErrorBlockHeight);
     }
@@ -190,7 +180,7 @@ public:
         return !(a.vin == b.vin);
     }
 
-    uint256 CalculateScore(int mod = 1, int64_t nBlockHeight = 0);
+    uint256 CalculateScore(const uint256& hash) const;
 
     ADD_SERIALIZE_METHODS;
 
@@ -208,11 +198,13 @@ public:
         READWRITE(protocolVersion);
         READWRITE(activeState);
         READWRITE(lastPing);
-        READWRITE(unitTest);
-        READWRITE(allowFreeTx);
-        READWRITE(nLastDsq);
         READWRITE(nScanningErrorCount);
         READWRITE(nLastScanningErrorBlockHeight);
+    }
+
+    template <typename Stream>
+    CMasternode(deserialize_type, Stream& s) {
+        Unserialize(s);
     }
 
     int64_t SecondsSincePayment();
@@ -233,6 +225,8 @@ public:
         return lastPing.IsNull() ? false : now - lastPing.sigTime < seconds;
     }
 
+    void SetSpent() { LOCK(cs); activeState = CMasternode::MASTERNODE_VIN_SPENT; }
+
     void Disable()
     {
         LOCK(cs);
@@ -245,6 +239,11 @@ public:
         return WITH_LOCK(cs, return activeState == MASTERNODE_ENABLED);
     }
 
+    bool IsPreEnabled()
+    {
+        return WITH_LOCK(cs, return activeState == MASTERNODE_PRE_ENABLED );
+    }
+
     std::string Status()
     {
         std::string strStatus = "ACTIVE";
@@ -254,8 +253,6 @@ public:
         if (activeState == CMasternode::MASTERNODE_EXPIRED) strStatus = "EXPIRED";
         if (activeState == CMasternode::MASTERNODE_VIN_SPENT) strStatus = "VIN_SPENT";
         if (activeState == CMasternode::MASTERNODE_REMOVE) strStatus = "REMOVE";
-        if (activeState == CMasternode::MASTERNODE_POS_ERROR) strStatus = "POS_ERROR";
-        if (activeState == CMasternode::MASTERNODE_MISSING) strStatus = "MISSING";
 
         return strStatus;
     }
@@ -304,14 +301,12 @@ public:
         READWRITE(sigTime);
         READWRITE(protocolVersion);
         READWRITE(lastPing);
-        READWRITE(nMessVersion);    // abuse nLastDsq (which will be removed) for old serialization
-        if (ser_action.ForRead())
-            nLastDsq = 0;
+        READWRITE(nMessVersion);
     }
 
     /// Create Masternode broadcast, needs to be relayed manually after that
-    static bool Create(CTxIn vin, CService service, CKey keyCollateralAddressNew, CPubKey pubKeyCollateralAddressNew, CKey keyMasternodeNew, CPubKey pubKeyMasternodeNew, std::string& strErrorRet, CMasternodeBroadcast& mnbRet);
-    static bool Create(std::string strService, std::string strKey, std::string strTxHash, std::string strOutputIndex, std::string& strErrorRet, CMasternodeBroadcast& mnbRet, bool fOffline = false);
+    static bool Create(const CTxIn& vin, const CService& service, const CKey& keyCollateralAddressNew, const CPubKey& pubKeyCollateralAddressNew, const CKey& keyMasternodeNew, const CPubKey& pubKeyMasternodeNew, std::string& strErrorRet, CMasternodeBroadcast& mnbRet);
+    static bool Create(const std::string& strService, const std::string& strKey, const std::string& strTxHash, const std::string& strOutputIndex, std::string& strErrorRet, CMasternodeBroadcast& mnbRet, bool fOffline = false);
     static bool CheckDefaultPort(CService service, std::string& strErrorRet, const std::string& strContext);
 };
 

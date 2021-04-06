@@ -361,6 +361,7 @@ static const CRPCCommand vRPCCommands[] =
 
         /* RPD features */
         {"pivx", "listmasternodes", &listmasternodes, true },
+        {"pivx", "getcachedblockhashes", &getcachedblockhashes, true },
         {"pivx", "getmasternodecount", &getmasternodecount, true },
         {"pivx", "createmasternodebroadcast", &createmasternodebroadcast, true },
         {"pivx", "decodemasternodebroadcast", &decodemasternodebroadcast, true },
@@ -575,6 +576,12 @@ std::string JSONRPCExecBatch(const UniValue& vReq)
 
 UniValue CRPCTable::execute(const JSONRPCRequest &request) const
 {
+    // Return immediately if in warmup
+    std::string strWarmupStatus;
+    if (RPCIsInWarmup(&strWarmupStatus)) {
+        throw JSONRPCError(RPC_IN_WARMUP, "RPC in warm-up: " + strWarmupStatus);
+    }
+
     // Find method
     const CRPCCommand* pcmd = tableRPC[request.strMethod];
     if (!pcmd)

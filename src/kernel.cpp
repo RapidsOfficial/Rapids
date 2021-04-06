@@ -15,7 +15,6 @@
 #include "stakeinput.h"
 #include "utilmoneystr.h"
 #include "zpivchain.h"
-#include "zpiv/zpos.h"
 
 #include <boost/assign/list_of.hpp>
 
@@ -31,10 +30,12 @@ CStakeKernel::CStakeKernel(const CBlockIndex* const pindexPrev, CStakeInput* sta
     stakeUniqueness(stakeInput->GetUniqueness()),
     nTime(nTimeTx),
     nBits(nBits),
-    stakeValue(stakeInput->GetValue())
+    stakeValue(stakeInput->GetStakeValue(pindexPrev->nHeight + 1))
 {
     // Set kernel stake modifier
-    if (pindexPrev->nHeight + 1 < 915000) {
+    const Consensus::Params& consensus = Params().GetConsensus();
+
+    if (pindexPrev->nHeight + 1 < consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight) {
         uint64_t nStakeModifier = 0;
         if (!GetOldStakeModifier(stakeInput, nStakeModifier))
             LogPrintf("%s : ERROR: Failed to get kernel stake modifier\n", __func__);
@@ -178,9 +179,12 @@ bool CheckProofOfStake(const CBlock& block, std::string& strError, const CBlockI
     }
     const CTransaction& tx = block.vtx[1];
     const CTxIn& txin = tx.vin[0];
+
+    CAmount stakePrevoutValue = stakeInput->GetStakeValue(nHeight);
+
     ScriptError serror;
     if (!VerifyScript(txin.scriptSig, stakePrevout.scriptPubKey, STANDARD_SCRIPT_VERIFY_FLAGS,
-             TransactionSignatureChecker(&tx, 0, stakePrevout.nValue), &serror)) {
+             TransactionSignatureChecker(&tx, 0, stakePrevoutValue), &serror)) {
         strError = strprintf("signature fails: %s", serror ? ScriptErrorString(serror) : "");
         return false;
     }

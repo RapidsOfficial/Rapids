@@ -138,14 +138,15 @@ bool CActiveMasternode::SendMasternodePing(std::string& errorMessage)
 
     LogPrintf("CActiveMasternode::SendMasternodePing() - Relay Masternode Ping vin = %s\n", vin->ToString());
 
-    CMasternodePing mnp(*vin);
+    const uint256& nBlockHash = mnodeman.GetBlockHashToPing();
+    CMasternodePing mnp(*vin, nBlockHash);
     if (!mnp.Sign(keyMasternode, pubKeyMasternode)) {
         errorMessage = "Couldn't sign Masternode Ping";
         return false;
     }
 
     // Update lastPing for our masternode in Masternode list
-    CMasternode* pmn = mnodeman.Find(*vin);
+    CMasternode* pmn = mnodeman.Find(vin->prevout);
     if (pmn != NULL) {
         if (pmn->IsPingedWithin(MASTERNODE_PING_SECONDS, mnp.sigTime)) {
             errorMessage = "Too early to send Masternode Ping";

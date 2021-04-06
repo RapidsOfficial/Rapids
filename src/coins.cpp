@@ -226,7 +226,7 @@ unsigned int CCoinsViewCache::GetCacheSize() const
     return cacheCoins.size();
 }
 
-CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx) const
+CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx, int spendHeight) const
 {
     if (tx.IsCoinBase())
         return 0;
@@ -235,11 +235,15 @@ CAmount CCoinsViewCache::GetValueIn(const CTransaction& tx) const
     if (tx.HasZerocoinSpendInputs())
         return tx.GetZerocoinSpent();
 
-    CAmount nResult = 0;
-    for (unsigned int i = 0; i < tx.vin.size(); i++)
-        nResult += AccessCoin(tx.vin[i].prevout).out.nValue;
+    CAmount nValueIn = 0;
+    for (unsigned int i = 0; i < tx.vin.size(); i++) {
+        const COutPoint& prevout = tx.vin[i].prevout;
+        const Coin& coin = AccessCoin(prevout);
 
-    return nResult;
+        nValueIn += coin.out.GetValue(coin.nHeight, spendHeight);
+    }
+
+    return nValueIn;
 }
 
 bool CCoinsViewCache::HaveInputs(const CTransaction& tx) const
@@ -265,7 +269,7 @@ double CCoinsViewCache::GetPriority(const CTransaction& tx, int nHeight, CAmount
         if (coin.IsSpent()) continue;
         if (coin.nHeight <= (unsigned)nHeight) {
             dResult += coin.out.nValue * (nHeight - coin.nHeight);
-            inChainInputValue += coin.out.nValue;
+            inChainInputValue += coin.out.GetValue(coin.nHeight, nHeight);
         }
     }
     return tx.ComputePriority(dResult);

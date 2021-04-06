@@ -36,6 +36,7 @@ private Q_SLOTS:
     void onMasterNodesClicked();
     void onColdStakingClicked();
     void onSettingsClicked();
+    void onTokensClicked();
     void onReceiveClicked();
     void updateButtonStyles();
 private:

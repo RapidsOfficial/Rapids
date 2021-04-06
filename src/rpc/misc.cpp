@@ -65,6 +65,17 @@ static bool getAddressesFromParams(const UniValue& params, std::vector<std::pair
     return true;
 }
 
+CAmount getReducedAmount(CAmount nValue, int outputHeight) {
+    const Consensus::Params& consensusParams = Params().GetConsensus();
+    int reduction = consensusParams.height_supply_reduction;
+    int chainHeight = chainActive.Height();
+
+    if (outputHeight < reduction && chainHeight > reduction) {
+        return nValue / 1000;
+    }
+
+    return nValue;
+}
 
 bool heightSort(std::pair<CAddressUnspentKey, CAddressUnspentValue> a,
                 std::pair<CAddressUnspentKey, CAddressUnspentValue> b) {
@@ -174,7 +185,7 @@ UniValue getaddressdeltas(const JSONRPCRequest& request)
         }
 
         UniValue delta(UniValue::VOBJ);
-        delta.pushKV("satoshis", it->second);
+        delta.pushKV("satoshis", getReducedAmount(it->second, it->first.blockHeight));
         delta.pushKV("txid", it->first.txhash.GetHex());
         delta.pushKV("index", (int)it->first.index);
         delta.pushKV("blockindex", (int)it->first.txindex);
@@ -348,7 +359,7 @@ UniValue getaddressutxos(const JSONRPCRequest& request)
         output.pushKV("txid", it->first.txhash.GetHex());
         output.pushKV("outputIndex", (int)it->first.index);
         output.pushKV("script", HexStr(it->second.script.begin(), it->second.script.end()));
-        output.pushKV("satoshis", it->second.satoshis);
+        output.pushKV("satoshis", getReducedAmount(it->second.satoshis, it->second.blockHeight));
         output.pushKV("height", it->second.blockHeight);
         utxos.push_back(output);
     }
@@ -745,13 +756,6 @@ UniValue getinfo(const JSONRPCRequest& request)
     obj.push_back(Pair("proxy", (proxy.IsValid() ? proxy.proxy.ToStringIPPort() : std::string())));
     obj.push_back(Pair("difficulty", (double)GetDifficulty()));
     obj.push_back(Pair("testnet", Params().NetworkID() == CBaseChainParams::TESTNET));
-
-    // During inital block verification chainActive.Tip() might be not yet initialized
-    if (chainActive.Tip() == NULL) {
-        obj.push_back(Pair("status", "Blockchain information not yet available"));
-        return obj;
-    }
-
     obj.push_back(Pair("moneysupply",ValueFromAmount(nMoneySupply)));
     UniValue zpivObj(UniValue::VOBJ);
     for (auto denom : libzerocoin::zerocoinDenomList) {

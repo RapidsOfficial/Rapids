@@ -14,7 +14,7 @@ bool SignBlockWithKey(CBlock& block, const CKey& key)
     return true;
 }
 
-bool SignBlock(CBlock& block, const CKeyStore& keystore)
+bool SignBlock(CBlock& block, const CKeyStore& keystore, int nHeight, int reductionHeight)
 {
     CKeyID keyID;
     if (block.IsProofOfWork()) {
@@ -28,7 +28,14 @@ bool SignBlock(CBlock& block, const CKeyStore& keystore)
         if (!fFoundID)
             return error("%s: failed to find key for PoW", __func__);
     } else {
-        if (!block.vtx[1].vout[1].GetKeyIDFromUTXO(keyID))
+        if (nHeight > reductionHeight) {
+            if (block.vtx[1].vout.size() < 3)
+                return error("%s: invalid number of outputs for PoS", __func__);
+        }
+
+        int keyIndex = nHeight > reductionHeight ? 2 : 1;
+
+        if (!block.vtx[1].vout[keyIndex].GetKeyIDFromUTXO(keyID))
             return error("%s: failed to find key for PoS", __func__);
     }
 
@@ -39,7 +46,7 @@ bool SignBlock(CBlock& block, const CKeyStore& keystore)
     return SignBlockWithKey(block, key);
 }
 
-bool CheckBlockSignature(const CBlock& block, const bool enableP2PKH)
+bool CheckBlockSignature(const CBlock& block, const bool enableP2PKH, const int nHeight, const int reductionHeight)
 {
     if (block.IsProofOfWork())
         return block.vchBlockSig.empty();
@@ -59,7 +66,16 @@ bool CheckBlockSignature(const CBlock& block, const bool enableP2PKH)
     } else {
         txnouttype whichType;
         std::vector<valtype> vSolutions;
-        const CTxOut& txout = block.vtx[1].vout[1];
+
+        if (nHeight > reductionHeight) {
+            if (block.vtx[1].vout.size() < 3)
+                return false;
+        }
+
+        int keyIndex = nHeight > reductionHeight ? 2 : 1;
+
+        const CTxOut& txout = block.vtx[1].vout[keyIndex];
+
         if (!Solver(txout.scriptPubKey, whichType, vSolutions))
             return false;
 

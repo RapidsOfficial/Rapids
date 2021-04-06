@@ -10,7 +10,7 @@
 #include "keystore.h"
 
 bool SignBlockWithKey(CBlock& block, const CKey& key);
-bool SignBlock(CBlock& block, const CKeyStore& keystore);
-bool CheckBlockSignature(const CBlock& block, const bool enableP2PKH);
+bool SignBlock(CBlock& block, const CKeyStore& keystore, int nHeight, int reductionHeight);
+bool CheckBlockSignature(const CBlock& block, const bool enableP2PKH, const int nHeight, const int reductionHeight);
 
 #endif //PIVX_BLOCKSIGNATURE_H

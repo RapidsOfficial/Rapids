@@ -19,7 +19,7 @@
 
 unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHeader* pblock)
 {
-    if (Params().IsRegTestNet())
+    if (Params().IsRegTestNet() || Params().IsTestNet())
         return pindexLast->nBits;
 
     /* current difficulty formula, pivx - DarkGravity v3, written by Evan Duffield - evan@dashpay.io */
@@ -38,9 +38,17 @@ unsigned int GetNextWorkRequired(const CBlockIndex* pindexLast, const CBlockHead
         return consensus.powLimit.GetCompact();
     }
 
+    // PoS Params
+    const uint256& bnTargetLimit = (~UINT256_ZERO >> 24);
+    int nHeight = pindexLast->nHeight + 1;
+
+    // Reset diff after supply reduction
+    if (nHeight > consensus.height_supply_reduction && nHeight <= consensus.height_supply_reduction + PastBlocksMin) {
+        return bnTargetLimit.GetCompact();
+    }
+
     if (consensus.NetworkUpgradeActive(pindexLast->nHeight, Consensus::UPGRADE_POS)) {
-        const bool fTimeV2 = !Params().IsRegTestNet() && consensus.IsTimeProtocolV2(pindexLast->nHeight+1);
-        const uint256& bnTargetLimit = (~UINT256_ZERO >> 24);
+        const bool fTimeV2 = !Params().IsRegTestNet() && consensus.IsTimeProtocolV2(nHeight);
         const int64_t& nTargetTimespan = 60 * 40;  // consensus.TargetTimespan(fTimeV2);
 		int64_t nTargetSpacing = 60;
 

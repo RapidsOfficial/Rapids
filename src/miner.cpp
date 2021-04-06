@@ -300,7 +300,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 const Coin& coin = view.AccessCoin(txin.prevout);
                 assert(hasZerocoinSpends || !coin.IsSpent());
 
-                CAmount nValueIn = coin.out.nValue;
+                CAmount nValueIn = coin.out.GetValue(coin.nHeight, nHeight);
                 nTotalIn += nValueIn;
 
                 int nConf = nHeight - coin.nHeight;
@@ -382,7 +382,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
                 continue;
             }
 
-            CAmount nTxFees = view.GetValueIn(tx) - tx.GetValueOut();
+            CAmount nTxFees = view.GetValueIn(tx, nHeight) - tx.GetValueOut();
 
             nTxSigOps += GetP2SHSigOpCount(tx, view);
             if (nBlockSigOps + nTxSigOps >= nMaxBlockSigOps)
@@ -449,7 +449,7 @@ CBlockTemplate* CreateNewBlock(const CScript& scriptPubKeyIn, CWallet* pwallet, 
         if (fProofOfStake) {
             pblock->hashMerkleRoot = BlockMerkleRoot(*pblock);
             LogPrintf("CPUMiner : proof-of-stake block found %s \n", pblock->GetHash().GetHex());
-            if (!SignBlock(*pblock, *pwallet)) {
+            if (!SignBlock(*pblock, *pwallet, nHeight, consensus.height_supply_reduction)) {
                 LogPrintf("%s: Signing new block with UTXO key failed \n", __func__);
                 return nullptr;
             }

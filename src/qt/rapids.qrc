@@ -104,6 +104,9 @@
         <file alias="ic-nav-dashboard-active">rapids/res/img/ic-nav-dashboard-active.png</file>
         <file alias="ic-nav-dashboard-hover">rapids/res/img/ic-nav-dashboard-hover.png</file>
         <file alias="ic-nav-dashboard">rapids/res/img/ic-nav-dashboard.png</file>
+        <file alias="ic-nav-tokens-active">rapids/res/img/ic-nav-tokens-active.png</file>
+        <file alias="ic-nav-tokens-hover">rapids/res/img/ic-nav-tokens-hover.png</file>
+        <file alias="ic-nav-tokens">rapids/res/img/ic-nav-tokens.png</file>
         <file alias="ic-nav-master-active">rapids/res/img/ic-nav-master-active.png</file>
         <file alias="ic-nav-master-hover">rapids/res/img/ic-nav-master-hover.png</file>
         <file alias="ic-nav-master">rapids/res/img/ic-nav-master.png</file>

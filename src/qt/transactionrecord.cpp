@@ -31,22 +31,15 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
         return false;
     }
 
+    int nHeight = chainActive.Height() + 1;
+
     const uint256& hash = wtx.GetHash();
     TransactionRecord sub(hash, wtx.GetTxTime(), wtx.GetTotalSize());
 
-    if (wtx.HasZerocoinSpendInputs() && (fZSpendFromMe || wallet->zpivTracker->HasMintTx(hash))) {
-        //zPIV stake reward
-        sub.involvesWatchAddress = false;
-        sub.type = TransactionRecord::StakeZPIV;
-        sub.address = getValueOrReturnEmpty(wtx.mapValue, "zerocoinmint");
-        sub.credit = 0;
-        for (const CTxOut& out : wtx.vout) {
-            if (out.IsZerocoinMint())
-                sub.credit += out.nValue;
-        }
-        sub.debit -= wtx.vin[0].nSequence * COIN;
-    } else if (isminetype mine = wallet->IsMine(wtx.vout[1])) {
+    const int reductionHeight = Params().GetConsensus().height_supply_reduction;
+    int keyIndex = nHeight > reductionHeight ? 2 : 1;
 
+    if (isminetype mine = wallet->IsMine(wtx.vout[keyIndex])) {
         // Check for cold stakes.
         if (wtx.HasP2CSOutputs()) {
             sub.credit = nCredit;
@@ -55,7 +48,7 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
         } else {
             // PIV stake reward
             CTxDestination address;
-            if (!ExtractDestination(wtx.vout[1].scriptPubKey, address))
+            if (!ExtractDestination(wtx.vout[keyIndex].scriptPubKey, address))
                 return true;
 
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
@@ -71,87 +64,11 @@ bool TransactionRecord::decomposeCoinStake(const CWallet* wallet, const CWalletT
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
             sub.type = TransactionRecord::MNReward;
             sub.address = EncodeDestination(destMN);
-            sub.credit = wtx.vout[nIndexMN].nValue;
+            sub.credit = wtx.vout[nIndexMN].GetValue(nHeight - wtx.GetDepthInMainChain(), nHeight);
         }
     }
 
     parts.append(sub);
-    return true;
-}
-
-bool TransactionRecord::decomposeZcSpendTx(const CWallet* wallet, const CWalletTx& wtx,
-                                           const CAmount& nCredit, const CAmount& nDebit, bool fZSpendFromMe,
-                                           QList<TransactionRecord>& parts)
-{
-
-    // Return if it's not a zc spend
-    if (!wtx.HasZerocoinSpendInputs()) {
-        return false;
-    }
-
-    // Basic values
-    const uint256& hash = wtx.GetHash();
-    int64_t nTime = wtx.GetTxTime();
-
-    //zerocoin spend outputs
-    bool fFeeAssigned = false;
-    for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
-        const CTxOut& txout = wtx.vout[nOut];
-        // change that was reminted as zerocoins
-        if (txout.IsZerocoinMint()) {
-            // do not display record if this isn't from our wallet
-            if (!fZSpendFromMe)
-                continue;
-
-            isminetype mine = wallet->IsMine(txout);
-            TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
-            sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-            sub.type = TransactionRecord::ZerocoinSpend_Change_zPiv;
-            sub.address = getValueOrReturnEmpty(wtx.mapValue, "zerocoinmint");
-            if (!fFeeAssigned) {
-                sub.debit -= (wtx.GetZerocoinSpent() - wtx.GetValueOut());
-                fFeeAssigned = true;
-            }
-            sub.idx = (int) nOut;
-            parts.append(sub);
-            continue;
-        }
-
-        std::string strAddress;
-        CTxDestination address;
-        if (ExtractDestination(txout.scriptPubKey, address))
-            strAddress = EncodeDestination(address);
-
-        // a zerocoinspend that was sent to an address held by this wallet
-        isminetype mine = wallet->IsMine(txout);
-        if (mine) {
-            TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
-            sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-            if (fZSpendFromMe) {
-                sub.type = TransactionRecord::ZerocoinSpend_FromMe;
-            } else {
-                sub.type = TransactionRecord::RecvFromZerocoinSpend;
-                sub.credit = txout.nValue;
-            }
-            sub.address = (!strAddress.empty()) ? strAddress : getValueOrReturnEmpty(wtx.mapValue, "recvzerocoinspend");
-            sub.idx = (int) nOut;
-            parts.append(sub);
-            continue;
-        }
-
-        // spend is not from us, so do not display the spend side of the record
-        if (!fZSpendFromMe)
-            continue;
-
-        // zerocoin spend that was sent to someone else
-        TransactionRecord sub(hash, nTime, wtx.GetTotalSize());
-        sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
-        sub.debit = -txout.nValue;
-        sub.type = TransactionRecord::ZerocoinSpend;
-        sub.address = (!strAddress.empty()) ? strAddress : getValueOrReturnEmpty(wtx.mapValue, "zerocoinspend");
-        sub.idx = (int) nOut;
-        parts.append(sub);
-    }
     return true;
 }
 
@@ -182,6 +99,9 @@ bool TransactionRecord::decomposeP2CS(const CWallet* wallet, const CWalletTx& wt
  */
 bool TransactionRecord::decomposeCreditTransaction(const CWallet* wallet, const CWalletTx& wtx, QList<TransactionRecord>& parts)
 {
+    int nHeight = chainActive.Height() + 1;
+    int nDepth = wtx.GetDepthInMainChain();
+
     TransactionRecord sub(wtx.GetHash(), wtx.GetTxTime(), wtx.GetTotalSize());
     for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
         const CTxOut& txout = wtx.vout[nOut];
@@ -189,7 +109,7 @@ bool TransactionRecord::decomposeCreditTransaction(const CWallet* wallet, const 
         if (mine) {
             CTxDestination address;
             sub.idx = (int) nOut; // vout index
-            sub.credit = txout.nValue;
+            sub.credit = txout.GetValue(nHeight - nDepth, nHeight);
             sub.involvesWatchAddress = mine & ISMINE_WATCH_ONLY;
             if (ExtractDestination(txout.scriptPubKey, address) && IsMine(*wallet, address)) {
                 // Received by RPD Address
@@ -255,9 +175,13 @@ bool TransactionRecord::decomposeDebitTransaction(const CWallet* wallet, const C
     }
 
     CAmount nTxFee = nDebit - wtx.GetValueOut();
+
     unsigned int txSize = wtx.GetTotalSize();
     const uint256& txHash = wtx.GetHash();
     const int64_t txTime = wtx.GetTxTime();
+
+    int nHeight = chainActive.Height() + 1;
+    int nDepth = wtx.GetDepthInMainChain();
 
     for (unsigned int nOut = 0; nOut < wtx.vout.size(); nOut++) {
         const CTxOut& txout = wtx.vout[nOut];
@@ -282,17 +206,13 @@ bool TransactionRecord::decomposeDebitTransaction(const CWallet* wallet, const C
             // Sent to RPD Address
             sub.type = TransactionRecord::SendToAddress;
             sub.address = EncodeDestination(address);
-        } else if (txout.IsZerocoinMint()){
-            sub.type = TransactionRecord::ZerocoinMint;
-            sub.address = getValueOrReturnEmpty(wtx.mapValue, "zerocoinmint");
-            sub.credit += txout.nValue;
         } else {
             // Sent to IP, or other non-address transaction like OP_EVAL
             sub.type = TransactionRecord::SendToOther;
             sub.address = getValueOrReturnEmpty(wtx.mapValue, "to");
         }
 
-        CAmount nValue = txout.nValue;
+        CAmount nValue = txout.GetValue(nHeight - nDepth, nHeight);
         /* Add fee to first output */
         if (nTxFee > 0) {
             nValue += nTxFee;
@@ -315,18 +235,8 @@ QList<TransactionRecord> TransactionRecord::decomposeTransaction(const CWallet* 
     CAmount nDebit = wtx.GetDebit(ISMINE_ALL);
     bool fZSpendFromMe = false;
 
-    if (wtx.HasZerocoinSpendInputs()) {
-        libzerocoin::CoinSpend zcspend = wtx.HasZerocoinPublicSpendInputs() ? ZPIVModule::parseCoinSpend(wtx.vin[0]) : TxInToZerocoinSpend(wtx.vin[0]);
-        fZSpendFromMe = wallet->IsMyZerocoinSpend(zcspend.getCoinSerialNumber());
-    }
-
     // Decompose coinstake if needed (if it's not a coinstake, the method will no perform any action).
     if (decomposeCoinStake(wallet, wtx, nCredit, nDebit, fZSpendFromMe, parts)) {
-        return parts;
-    }
-
-    // Decompose zerocoin spend tx if needed (if it's not a zc spend, the method will not perform any action)
-    if (decomposeZcSpendTx(wallet, wtx, nCredit, nDebit, fZSpendFromMe, parts)) {
         return parts;
     }
 

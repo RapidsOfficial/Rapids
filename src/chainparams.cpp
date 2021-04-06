@@ -16,6 +16,37 @@
 
 #include <assert.h>
 
+void GenesisGenerator(CBlock genesis) {
+    printf("Searching for genesis block...\n");
+
+    uint256 hash;
+    bool fNegative;
+    bool fOverflow;
+    arith_uint256 bnTarget;
+    bnTarget.SetCompact(genesis.nBits, &fNegative, &fOverflow);
+
+    while(true)
+    {
+        hash = genesis.GetHash();
+        if (UintToArith256(hash) <= bnTarget)
+            break;
+        if ((genesis.nNonce & 0xFFF) == 0)
+        {
+            printf("nonce %08X: hash = %s (target = %s)\n", genesis.nNonce, hash.ToString().c_str(), bnTarget.ToString().c_str());
+        }
+        ++genesis.nNonce;
+        if (genesis.nNonce == 0)
+        {
+            printf("NONCE WRAPPED, incrementing time\n");
+            ++genesis.nTime;
+        }
+    }
+
+    printf("block.nNonce = %u \n", genesis.nNonce);
+    printf("block.GetHash = %s\n", genesis.GetHash().ToString().c_str());
+    printf("block.MerkleRoot = %s \n", genesis.hashMerkleRoot.ToString().c_str());
+}
+
 static CBlock CreateGenesisBlock(const char* pszTimestamp, const CScript& genesisOutputScript, uint32_t nTime, uint32_t nNonce, uint32_t nBits, int32_t nVersion, const CAmount& genesisReward)
 {
     CMutableTransaction txNew;
@@ -108,13 +139,15 @@ static const Checkpoints::CCheckpointData data = {
 
 static Checkpoints::MapCheckpoints mapCheckpointsTestnet =
     boost::assign::map_list_of
-    (0, uint256S("0x001"))
+    (0, uint256S("0x000004e4f2fa6bf2fa3bb685664ef63b19d40fbf22e75309f32204123655c059"))
  ;
+
 static const Checkpoints::CCheckpointData dataTestnet = {
     &mapCheckpointsTestnet,
-    1575145155,
-    2971390,
-    250};
+    0,
+    0,
+    0
+};
 
 static Checkpoints::MapCheckpoints mapCheckpointsRegtest =
     boost::assign::map_list_of(0, uint256S("0x001"));
@@ -171,6 +204,7 @@ public:
         consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
+        consensus.height_supply_reduction = 1286000;
 
         // validation by-pass
         consensus.nPivxBadBlockTime = std::numeric_limits<int>::max();
@@ -232,7 +266,7 @@ public:
         nDefaultPort = 28732;
 
         // Note that of those with the service bits flag, most only support a subset of possible options
-	vSeeds.push_back(CDNSSeedData("seed1.rapidsnetwork.io ", "seed1.rapidsnetwork.io ", true));
+	vSeeds.push_back(CDNSSeedData("seed1.rapidsnetwork.io", "seed1.rapidsnetwork.io", true));
 	vSeeds.push_back(CDNSSeedData("seed2.rapidsnetwork.io", "seed2.rapidsnetwork.io", true));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 61);
@@ -251,6 +285,8 @@ public:
         bech32HRPs[SAPLING_FULL_VIEWING_KEY]     = "pviews";
         bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pivks";
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-main";
+
+        devFundAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -272,45 +308,46 @@ public:
         networkID = CBaseChainParams::TESTNET;
         strNetworkID = "test";
 
-        genesis = CreateGenesisBlock(1454124731, 2402015, 0x1e0ffff0, 1, 250 * COIN);
+        genesis = CreateGenesisBlock(1613461978, 1, 0x207fffff, 1, 250 * COIN);
         consensus.hashGenesisBlock = genesis.GetHash();
-        //assert(consensus.hashGenesisBlock == uint256S("0x0000041e482b9b9691d98eefb48473405c0b8ec31b76df3797c74a78680ef818"));
-        //assert(genesis.hashMerkleRoot == uint256S("0x1b2ef6e2f28be914103a277377ae7729dcd125dfeb8bf97bd5964ba72b6dc39b"));
+        assert(consensus.hashGenesisBlock == uint256S("0x51c15646268afbab2c9944a29f9bdff636868883e33a3acdffba5b84ba475f82"));
+        assert(genesis.hashMerkleRoot == uint256S("0x4a35dbb78addcfd8570019166f64c66ad9dc26742a6b1adb2ee014940838b864"));
 
         consensus.fPowAllowMinDifficultyBlocks = true;
-        consensus.powLimit   = ~UINT256_ZERO >> 20;   // RPD starting difficulty is 1 / 2^12
+        consensus.powLimit   = ~UINT256_ZERO >> 1;   // RPD starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~UINT256_ZERO >> 24;
         consensus.posLimitV2 = ~UINT256_ZERO >> 20;
-        consensus.nBudgetCycleBlocks = 144;         // approx 10 cycles per day
+        consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on testnet)
-        consensus.nCoinbaseMaturity = 15;
+        consensus.nCoinbaseMaturity = 1;
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
         consensus.nMasternodeCountDrift = 4;        // num of MN we allow the see-saw payments to be off by
-        consensus.nMaxMoneyOut = 43199500 * COIN;
+        consensus.nMaxMoneyOut = 35000000000 * COIN;
         consensus.nPoolMaxTransactions = 2;
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
         consensus.nStakeMinAge = 60 * 60;
-        consensus.nStakeMinDepth = 100;
+        consensus.nStakeMinDepth = 2;
         consensus.nTargetTimespan = 40 * 60;
         consensus.nTargetTimespanV2 = 30 * 60;
         consensus.nTargetSpacing = 1 * 60;
         consensus.nTimeSlotLength = 15;
 
         // spork keys
-        consensus.strSporkPubKey = "04E88BB455E2A04E65FCC41D88CD367E9CCE1F5A409BE94D8C2B4B35D223DED9C8E2F4E061349BA3A38839282508066B6DC4DB72DD432AC4067991E6BF20176127";
-        consensus.strSporkPubKeyOld = "04A8B319388C0F8588D238B9941DC26B26D3F9465266B368A051C5C100F79306A557780101FE2192FE170D7E6DEFDCBEE4C8D533396389C0DAFFDBC842B002243C";
-        consensus.nTime_EnforceNewSporkKey = 1566860400;    //!> August 26, 2019 11:00:00 PM GMT
-        consensus.nTime_RejectOldSporkKey = 1569538800;     //!> September 26, 2019 11:00:00 PM GMT
+        consensus.strSporkPubKey = "043969b1b0e6f327de37f297a015d37e2235eaaeeb3933deecd8162c075cee0207b13537618bde640879606001a8136091c62ec272dd0133424a178704e6e75bb7";
+        consensus.strSporkPubKeyOld = "";
+        consensus.nTime_EnforceNewSporkKey = 0;
+        consensus.nTime_RejectOldSporkKey = 0;
 
         // height based activations
-        consensus.height_last_PoW = 200;
-        consensus.height_last_ZC_AccumCheckpoint = 1106090;
-        consensus.height_last_ZC_WrappedSerials = -1;
-        consensus.height_start_InvalidUTXOsCheck = 999999999;
-        consensus.height_start_ZC_InvalidSerials = 999999999;
-        consensus.height_start_ZC_SerialRangeCheck = 1;
-        consensus.height_ZC_RecalcAccumulators = 999999999;
+        consensus.height_last_PoW = 19;
+        consensus.height_last_ZC_AccumCheckpoint = std::numeric_limits<int>::max();
+        consensus.height_last_ZC_WrappedSerials = std::numeric_limits<int>::max();
+        consensus.height_start_InvalidUTXOsCheck = std::numeric_limits<int>::max();
+        consensus.height_start_ZC_InvalidSerials = std::numeric_limits<int>::max();
+        consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
+        consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
+        consensus.height_supply_reduction = 30;
 
         // validation by-pass
         consensus.nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 201 per PR #915
@@ -336,14 +373,14 @@ public:
                 Consensus::NetworkUpgrade::ALWAYS_ACTIVE;
         consensus.vUpgrades[Consensus::UPGRADE_TESTDUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
-        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 201;
-        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 51197;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = 201576;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = 444020;
-        consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 851019;
-        consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = 1106100;
-        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 1214000;
-        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 1347000;
+        consensus.vUpgrades[Consensus::UPGRADE_POS].nActivationHeight           = 20;
+        consensus.vUpgrades[Consensus::UPGRADE_POS_V2].nActivationHeight        = 21;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC].nActivationHeight            = std::numeric_limits<int>::max();
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_V2].nActivationHeight         = std::numeric_limits<int>::max();
+        consensus.vUpgrades[Consensus::UPGRADE_BIP65].nActivationHeight         = 0;
+        consensus.vUpgrades[Consensus::UPGRADE_ZC_PUBLIC].nActivationHeight     = std::numeric_limits<int>::max();
+        consensus.vUpgrades[Consensus::UPGRADE_V3_4].nActivationHeight          = 22;
+        consensus.vUpgrades[Consensus::UPGRADE_V4_0].nActivationHeight          = 23;
         consensus.vUpgrades[Consensus::UPGRADE_V5_DUMMY].nActivationHeight =
                 Consensus::NetworkUpgrade::NO_ACTIVATION_HEIGHT;
 
@@ -364,17 +401,14 @@ public:
          * a large 4-byte int at any alignment.
          */
 
-        pchMessageStart[0] = 0x45;
-        pchMessageStart[1] = 0x76;
-        pchMessageStart[2] = 0x65;
-        pchMessageStart[3] = 0xba;
-        nDefaultPort = 51474;
+        pchMessageStart[0] = 0x42;
+        pchMessageStart[1] = 0x62;
+        pchMessageStart[2] = 0x81;
+        pchMessageStart[3] = 0x01;
+        nDefaultPort = 51001;
 
         vFixedSeeds.clear();
         vSeeds.clear();
-        // nodes with support for servicebits filtering should be at the top
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx-testnet.seed.fuzzbawls.pw", true));
-        vSeeds.push_back(CDNSSeedData("fuzzbawls.pw", "pivx-testnet.seed2.fuzzbawls.pw", true));
 
         base58Prefixes[PUBKEY_ADDRESS] = std::vector<unsigned char>(1, 139); // Testnet pivx addresses start with 'x' or 'y'
         base58Prefixes[SCRIPT_ADDRESS] = std::vector<unsigned char>(1, 19);  // Testnet pivx script addresses start with '8' or '9'
@@ -394,6 +428,8 @@ public:
         bech32HRPs[SAPLING_FULL_VIEWING_KEY]     = "pviewtestsapling";
         bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pivktestsapling";
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-test";
+
+        devFundAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -423,7 +459,7 @@ public:
         consensus.powLimit   = ~UINT256_ZERO >> 20;   // RPD starting difficulty is 1 / 2^12
         consensus.posLimitV1 = ~UINT256_ZERO >> 24;
         consensus.posLimitV2 = ~UINT256_ZERO >> 20;
-        consensus.nBudgetCycleBlocks = 144;         // approx 10 cycles per day
+        consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on regtest)
         consensus.nCoinbaseMaturity = 100;
         consensus.nFutureTimeDriftPoW = 7200;
@@ -457,6 +493,7 @@ public:
         consensus.height_start_ZC_InvalidSerials = 999999999;
         consensus.height_start_ZC_SerialRangeCheck = 300;
         consensus.height_ZC_RecalcAccumulators = 999999999;
+        consensus.height_supply_reduction = std::numeric_limits<int>::max();
 
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"

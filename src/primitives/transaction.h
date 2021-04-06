@@ -96,6 +96,8 @@ public:
         return (nSequence == std::numeric_limits<uint32_t>::max());
     }
 
+    bool IsNull() const { return prevout.IsNull() && scriptSig.empty() && IsFinal(); }
+
     bool IsZerocoinSpend() const;
     bool IsZerocoinPublicSpend() const;
 
@@ -166,6 +168,8 @@ public:
 
     uint256 GetHash() const;
     bool GetKeyIDFromUTXO(CKeyID& keyIDRet) const;
+
+    CAmount GetValue(int outputHeight, int spendHeight) const;
 
     CAmount GetDustThreshold(const CFeeRate &minRelayTxFee) const
     {

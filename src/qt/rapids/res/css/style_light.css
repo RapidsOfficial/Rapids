@@ -210,6 +210,45 @@ QPushButton[cssClass="img-nav-logo"] {
     color: #B0B0B0;
 }
 
+
+*[cssClass="btn-nav-tokens"] {
+    qproperty-icon: url("://ic-nav-tokens") off,
+    url("://ic-nav-tokens-active") on ;
+    qproperty-iconSize: 24px 40px;
+    background-color:transparent;
+    font-size:14px;
+    color: #939393;
+}
+
+*[cssClass="btn-nav-tokens"]:checked {
+    background-color: #A3023713;
+    font-size:14px;
+    color: #B0B0B0;
+}
+
+*[cssClass="btn-nav-tokens"]:checked:hover  {
+    background-color: #A3023713;
+    color: #B0B0B0;
+}
+
+
+*[cssClass="btn-nav-tokens"]:hover {
+    qproperty-icon: url("://ic-nav-tokens-hover");
+    qproperty-iconSize: 24px 40px;
+    background-color: #1A000000;
+    color: #939393;
+}
+
+*[cssClass="btn-nav-tokens-active"] {
+    qproperty-icon:url("://ic-nav-tokens-active");
+    qproperty-iconSize: 24px 40px;
+    background-color: #A3023713;
+    font-size:14px;
+    color: #B0B0B0;
+}
+
+
+
 *[cssClass="btn-nav-send"] {
     qproperty-icon: url("://ic-nav-send") off,
     url("://ic-nav-send") on ;

@@ -12,7 +12,9 @@
 #include <assert.h>
 #include <ios>
 #include <limits>
+#include <list>
 #include <map>
+#include <memory>
 #include <set>
 #include <stdint.h>
 #include <string.h>
@@ -23,11 +25,27 @@
 #include "compat/endian.h"
 #include "libzerocoin/Denominations.h"
 #include "libzerocoin/SpendType.h"
+#include "optional.h"
 #include "prevector.h"
 #include "sporkid.h"
 
+class CScript;
 
 static const unsigned int MAX_SIZE = 0x02000000;
+
+/**
+ * Dummy data type to identify deserializing constructors.
+ *
+ * By convention, a constructor of a type T with signature
+ *
+ *   template <typename Stream> T::T(deserialize_type, Stream& s)
+ *
+ * is a deserializing constructor, which builds the type by
+ * deserializing it from s. If T contains const fields, this
+ * is likely the only way to do so.
+ */
+struct deserialize_type {};
+constexpr deserialize_type deserialize {};
 
 /**
  * Used to bypass the rule against non-const reference to temporary
@@ -95,10 +113,10 @@ template<typename Stream> inline void ser_writedata32(Stream &s, uint32_t obj)
     obj = htole32(obj);
     s.write((char*)&obj, 4);
 }
-template<typename Stream> inline void ser_writedata32be(Stream &s, uint32_t obj)
-{
-    obj = htobe32(obj);
-    s.write((char*)&obj, 4);
+template<typename Stream> inline void ser_writedata32be(Stream &s, uint32_t obj)    
+{   
+    obj = htobe32(obj); 
+    s.write((char*)&obj, 4);    
 }
 template<typename Stream> inline void ser_writedata64(Stream &s, uint64_t obj)
 {
@@ -123,11 +141,11 @@ template<typename Stream> inline uint32_t ser_readdata32(Stream &s)
     s.read((char*)&obj, 4);
     return le32toh(obj);
 }
-template<typename Stream> inline uint32_t ser_readdata32be(Stream &s)
-{
-    uint32_t obj;
-    s.read((char*)&obj, 4);
-    return be32toh(obj);
+template<typename Stream> inline uint32_t ser_readdata32be(Stream &s)   
+{   
+    uint32_t obj;   
+    s.read((char*)&obj, 4); 
+    return be32toh(obj);    
 }
 template<typename Stream> inline uint64_t ser_readdata64(Stream &s)
 {
@@ -571,6 +589,13 @@ template<typename Stream, typename T, std::size_t N> void Serialize(Stream& os, 
 template<typename Stream, typename T, std::size_t N> void Unserialize(Stream& is, std::array<T, N>& item);
 
 /**
+ * optional
+ */
+template<typename T> unsigned int GetSerializeSize(const Optional<T> &item);
+template<typename Stream, typename T> void Serialize(Stream& os, const Optional<T>& item);
+template<typename Stream, typename T> void Unserialize(Stream& is, Optional<T>& item);
+
+/**
  * array
  */
 template<typename T, std::size_t N>
@@ -582,6 +607,50 @@ unsigned int GetSerializeSize(const std::array<T, N> &item)
     }
     return size;
 }
+
+/**
+  * optional
+  */
+template<typename T>
+unsigned int GetSerializeSize(const Optional<T> &item)
+{
+    if (item) {
+        return 1 + GetSerializeSize(*item);
+    } else {
+        return 1;
+    }
+}
+
+template<typename Stream, typename T>
+void Serialize(Stream& os, const Optional<T>& item)
+{
+    // If the value is there, put 0x01 and then serialize the value.
+    // If it's not, put 0x00.
+    if (item) {
+        unsigned char discriminant = 0x01;
+        Serialize(os, discriminant);
+        Serialize(os, *item);
+    } else {
+        unsigned char discriminant = 0x00;
+        Serialize(os, discriminant);
+    }
+}
+
+template<typename Stream, typename T>
+void Unserialize(Stream& is, Optional<T>& item)
+{
+    unsigned char discriminant = 0x00;
+    Unserialize(is, discriminant);
+
+    if (discriminant == 0x00) {
+        item = boost::none;
+    } else {
+        T object;
+        Unserialize(is, object);
+        item = object;
+    }
+}
+
 
 template<typename Stream, typename T, std::size_t N>
 void Serialize(Stream& os, const std::array<T, N>& item)
@@ -617,6 +686,22 @@ template<typename Stream, typename K, typename T, typename Pred, typename A> voi
  */
 template<typename Stream, typename K, typename Pred, typename A> void Serialize(Stream& os, const std::set<K, Pred, A>& m);
 template<typename Stream, typename K, typename Pred, typename A> void Unserialize(Stream& is, std::set<K, Pred, A>& m);
+
+/**
+ * shared_ptr
+ */
+template<typename Stream, typename T> void Serialize(Stream& os, const std::shared_ptr<const T>& p);
+template<typename Stream, typename T> void Unserialize(Stream& os, std::shared_ptr<const T>& p);
+
+template<typename Stream, typename T> void Serialize(Stream& os, const std::shared_ptr<T>& p);
+template<typename Stream, typename T> void Unserialize(Stream& os, std::shared_ptr<T>& p);
+
+/**
+ * unique_ptr
+ */
+template<typename Stream, typename T> void Serialize(Stream& os, const std::unique_ptr<const T>& p);
+template<typename Stream, typename T> void Unserialize(Stream& os, std::unique_ptr<const T>& p);
+
 
 
 /**
@@ -655,6 +740,42 @@ void Unserialize(Stream& is, std::basic_string<C>& str)
         is.read((char*)&str[0], nSize * sizeof(str[0]));
 }
 
+/**
+  * list
+  */
+template<typename T, typename A> unsigned int GetSerializeSize(const std::list<T, A>& m);
+template<typename Stream, typename T, typename A> void Serialize(Stream& os, const std::list<T, A>& m);
+template<typename Stream, typename T, typename A> void Unserialize(Stream& is, std::list<T, A>& m);
+
+template<typename T, typename A>
+unsigned int GetSerializeSize(const std::list<T, A>& l)
+{
+    unsigned int nSize = GetSizeOfCompactSize(l.size());
+    for (typename std::list<T, A>::const_iterator it = l.begin(); it != l.end(); ++it)
+        nSize += GetSerializeSize((*it));
+    return nSize;
+}
+
+template<typename Stream, typename T, typename A>
+void Serialize(Stream& os, const std::list<T, A>& l)
+{
+    WriteCompactSize(os, l.size());
+    for (typename std::list<T, A>::const_iterator it = l.begin(); it != l.end(); ++it)
+        Serialize(os, (*it));
+}
+
+template<typename Stream, typename T, typename A>
+void Unserialize(Stream& is, std::list<T, A>& l)
+{
+    l.clear();
+    unsigned int nSize = ReadCompactSize(is);
+    for (unsigned int i = 0; i < nSize; i++)
+    {
+        T item;
+        Unserialize(is, item);
+        l.push_back(item);
+    }
+}
 
 
 /**
@@ -858,6 +979,51 @@ void Unserialize(Stream& is, std::set<K, Pred, A>& m)
     }
 }
 
+
+
+/**
+ * unique_ptr
+ */
+template<typename Stream, typename T> void
+Serialize(Stream& os, const std::unique_ptr<const T>& p)
+{
+    Serialize(os, *p);
+}
+
+template<typename Stream, typename T>
+void Unserialize(Stream& is, std::unique_ptr<const T>& p)
+{
+    p.reset(new T(deserialize, is));
+}
+
+
+
+/**
+ * shared_ptr
+ */
+template<typename Stream, typename T> void
+Serialize(Stream& os, const std::shared_ptr<const T>& p)
+{
+    Serialize(os, *p);
+}
+
+template<typename Stream, typename T>
+void Unserialize(Stream& is, std::shared_ptr<const T>& p)
+{
+    p = std::make_shared<const T>(deserialize, is);
+}
+
+template<typename Stream, typename T> void
+Serialize(Stream& os, const std::shared_ptr<T>& p)
+{
+    Serialize(os, *p);
+}
+
+template<typename Stream, typename T>
+void Unserialize(Stream& is, std::shared_ptr<T>& p)
+{
+    p = std::make_shared<T>(deserialize, is);
+}
 
 /**
  * Support for ADD_SERIALIZE_METHODS and READWRITE macro
