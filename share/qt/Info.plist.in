@@ -29,10 +29,10 @@
   <string>????</string>
 
   <key>CFBundleExecutable</key>
-  <string>PIVX-Qt</string>
+  <string>Rapids-Qt</string>
 
   <key>CFBundleName</key>
-  <string>PIVX-Qt</string>
+  <string>Rapids-Qt</string>
 
   <key>LSHasLocalizedDisplayName</key>
   <true/>
