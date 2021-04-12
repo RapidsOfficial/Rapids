@@ -91,7 +91,7 @@ src/qt/test/moc*.cpp
 *.qm
 Makefile
 rapids-qt
-PIVX-Qt.app
+Rapids-Qt.app
 background.tiff*
 
 # Rust

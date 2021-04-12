@@ -15,7 +15,7 @@ Masternodes will need to be restarted once both the masternode daemon and the co
 How to Upgrade
 ==============
 
-If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/PIVX-Qt (on Mac) or pivxd/pivx-qt (on Linux).
+If you are running an older version, shut it down. Wait until it has completely shut down (which might take a few minutes for older versions), then run the installer (on Windows) or just copy over /Applications/Rapids-Qt (on Mac) or pivxd/pivx-qt (on Linux).
 
 Wallets for existing users upgrading from an earlier version will undergo a supply recalculation the first time v3.2.0 is started. An initial light weight (partial) recalculation will be attempted first, but if that fails then the wallet will do a full recalculation the next time it is started. This recalculation is a one-time event.
 
