@@ -2674,7 +2674,7 @@ Address: %4
     </message>
     <message>
         <location line="-101"/>
-        <source>Cannot start pivx: click-to-pay handler</source>
+        <source>Cannot start rapids: click-to-pay handler</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
