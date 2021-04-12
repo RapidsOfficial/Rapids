@@ -2122,8 +2122,8 @@ Adresa: %4
         <translation>Nevažeća adresa za plaćanje %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
-        <translation>Ne može se pokrenuti pivx: clik-to-pay handler</translation>
+        <source>Cannot start rapids: click-to-pay handler</source>
+        <translation>Ne može se pokrenuti rapids: clik-to-pay handler</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>

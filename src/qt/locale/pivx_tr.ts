@@ -1877,7 +1877,7 @@ Adres: %4
         <translation>Geçersiz ödeme adresi %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
+        <source>Cannot start rapids: click-to-pay handler</source>
         <translation>Pivx başlatılamıyor: tıkla ve ödeme işleyicisi</translation>
     </message>
     <message>

@@ -2022,8 +2022,8 @@ Adres: %4
         <translation>Nieprawidłowy adres płatności %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
-        <translation>Nie można uruchomić pivx: click-to-pay handler</translation>
+        <source>Cannot start rapids: click-to-pay handler</source>
+        <translation>Nie można uruchomić rapids: click-to-pay handler</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>

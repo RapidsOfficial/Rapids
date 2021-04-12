@@ -2174,8 +2174,8 @@ Adresse : %4
         <translation>Adresse de paiement invalide %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
-        <translation>Impossible de démarrer pivx: gestionnaire click-to-pay</translation>
+        <source>Cannot start rapids: click-to-pay handler</source>
+        <translation>Impossible de démarrer rapids: gestionnaire click-to-pay</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>

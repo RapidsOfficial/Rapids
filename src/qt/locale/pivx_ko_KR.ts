@@ -2018,7 +2018,7 @@ Address: %4
         <translation>잘못된 결제 주소 %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
+        <source>Cannot start rapids: click-to-pay handler</source>
         <translation>PIVX을 시작할 수 없습니다: 결제하기 위한 클릭 처리</translation>
     </message>
     <message>

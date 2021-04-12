@@ -2026,8 +2026,8 @@ Address: %4
         <translation>无效支付地址%1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
-        <translation>无法启动pivx:点击支付处理程序</translation>
+        <source>Cannot start rapids: click-to-pay handler</source>
+        <translation>无法启动rapids:点击支付处理程序</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>

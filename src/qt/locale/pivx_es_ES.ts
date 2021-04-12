@@ -2107,8 +2107,8 @@ Dirección: %4
         <translation>Dirección de pago inválida %1</translation>
     </message>
     <message>
-        <source>Cannot start pivx: click-to-pay handler</source>
-        <translation>No se puede iniciar pivx: módulo click-to-pay</translation>
+        <source>Cannot start rapids: click-to-pay handler</source>
+        <translation>No se puede iniciar rapids: módulo click-to-pay</translation>
     </message>
     <message>
         <source>URI cannot be parsed! This can be caused by an invalid PIVX address or malformed URI parameters.</source>
