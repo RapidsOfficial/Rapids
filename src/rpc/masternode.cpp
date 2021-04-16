@@ -82,42 +82,41 @@ UniValue listmasternodes(const JSONRPCRequest& request)
     int nHeight = WITH_LOCK(cs_main, return chainActive.Height());
     if (nHeight < 0) return "[]";
 
-    std::vector<std::pair<int, CMasternode> > vMasternodeRanks = mnodeman.GetMasternodeRanks(nHeight);
-    for (PAIRTYPE(int, CMasternode) & s : vMasternodeRanks) {
+    std::vector<std::pair<int64_t, CMasternode>> vMasternodeRanks = mnodeman.GetMasternodeRanks(nHeight);
+    for (int pos=0; pos < (int) vMasternodeRanks.size(); pos++) {
+        const auto& s = vMasternodeRanks[pos];
         UniValue obj(UniValue::VOBJ);
-        std::string strVin = s.second.vin.prevout.ToStringShort();
-        std::string strTxHash = s.second.vin.prevout.hash.ToString();
-        uint32_t oIdx = s.second.vin.prevout.n;
+        CMasternode mn = s.second;
 
-        CMasternode* mn = mnodeman.Find(s.second.vin.prevout);
+        std::string strVin = mn.vin.prevout.ToStringShort();
+        std::string strTxHash = mn.vin.prevout.hash.ToString();
+        uint32_t oIdx = mn.vin.prevout.n;
 
-        if (mn != NULL) {
-            if (strFilter != "" && strTxHash.find(strFilter) == std::string::npos &&
-                mn->Status().find(strFilter) == std::string::npos &&
-                EncodeDestination(mn->pubKeyCollateralAddress.GetID()).find(strFilter) == std::string::npos) continue;
+        if (strFilter != "" && strTxHash.find(strFilter) == std::string::npos &&
+            mn.Status().find(strFilter) == std::string::npos &&
+            EncodeDestination(mn.pubKeyCollateralAddress.GetID()).find(strFilter) == std::string::npos) continue;
 
-            std::string strStatus = mn->Status();
-            std::string strHost;
-            int port;
-            SplitHostPort(mn->addr.ToString(), port, strHost);
-            CNetAddr node;
-            LookupHost(strHost.c_str(), node, false);
-            std::string strNetwork = GetNetworkName(node.GetNetwork());
+        std::string strStatus = mn.Status();
+        std::string strHost;
+        int port;
+        SplitHostPort(mn.addr.ToString(), port, strHost);
+        CNetAddr node;
+        LookupHost(strHost.c_str(), node, false);
+        std::string strNetwork = GetNetworkName(node.GetNetwork());
 
-            obj.push_back(Pair("rank", (strStatus == "ENABLED" ? s.first : 0)));
-            obj.push_back(Pair("network", strNetwork));
-            obj.push_back(Pair("txhash", strTxHash));
-            obj.push_back(Pair("outidx", (uint64_t)oIdx));
-            obj.push_back(Pair("pubkey", HexStr(mn->pubKeyMasternode)));
-            obj.push_back(Pair("status", strStatus));
-            obj.push_back(Pair("addr", EncodeDestination(mn->pubKeyCollateralAddress.GetID())));
-            obj.push_back(Pair("version", mn->protocolVersion));
-            obj.push_back(Pair("lastseen", (int64_t)mn->lastPing.sigTime));
-            obj.push_back(Pair("activetime", (int64_t)(mn->lastPing.sigTime - mn->sigTime)));
-            obj.push_back(Pair("lastpaid", (int64_t)mn->GetLastPaid()));
+        obj.pushKV("rank", (strStatus == "ENABLED" ? pos : 0));
+        obj.pushKV("network", strNetwork);
+        obj.pushKV("txhash", strTxHash);
+        obj.pushKV("outidx", (uint64_t)oIdx);
+        obj.pushKV("pubkey", HexStr(mn.pubKeyMasternode));
+        obj.pushKV("status", strStatus);
+        obj.pushKV("addr", EncodeDestination(mn.pubKeyCollateralAddress.GetID()));
+        obj.pushKV("version", mn.protocolVersion);
+        obj.pushKV("lastseen", (int64_t)mn.lastPing.sigTime);
+        obj.pushKV("activetime", (int64_t)(mn.lastPing.sigTime - mn.sigTime));
+        obj.pushKV("lastpaid", (int64_t)mn.GetLastPaid());
 
-            ret.push_back(obj);
-        }
+        ret.push_back(obj);
     }
 
     return ret;
@@ -183,7 +182,7 @@ UniValue masternodecurrent (const JSONRPCRequest& request)
 
     const int nHeight = WITH_LOCK(cs_main, return chainActive.Height() + 1);
     int nCount = 0;
-    CMasternode* winner = mnodeman.GetNextMasternodeInQueueForPayment(nHeight, true, nCount);
+    const CMasternode* winner = mnodeman.GetNextMasternodeInQueueForPayment(nHeight, true, nCount);
     if (winner) {
         UniValue obj(UniValue::VOBJ);
         obj.push_back(Pair("protocol", (int64_t)winner->protocolVersion));

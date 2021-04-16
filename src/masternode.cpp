@@ -15,8 +15,53 @@
 #include "util.h"
 #include "wallet/wallet.h"
 
+#define MASTERNODE_MIN_CONFIRMATIONS_REGTEST 1
+#define MASTERNODE_MIN_MNP_SECONDS_REGTEST 90
+#define MASTERNODE_MIN_MNB_SECONDS_REGTEST 25
+#define MASTERNODE_PING_SECONDS_REGTEST 25
+#define MASTERNODE_EXPIRATION_SECONDS_REGTEST 180
+#define MASTERNODE_REMOVAL_SECONDS_REGTEST 200
+
+#define MASTERNODE_MIN_CONFIRMATIONS 15
+#define MASTERNODE_MIN_MNP_SECONDS (10 * 60)
+#define MASTERNODE_MIN_MNB_SECONDS (5 * 60)
+#define MASTERNODE_PING_SECONDS (5 * 60)
+#define MASTERNODE_EXPIRATION_SECONDS (120 * 60)
+#define MASTERNODE_REMOVAL_SECONDS (130 * 60)
+#define MASTERNODE_CHECK_SECONDS 5
+
 // keep track of the scanning errors I've seen
 std::map<uint256, int> mapSeenMasternodeScanningErrors;
+
+int MasternodeMinPingSeconds()
+{
+    return Params().IsRegTestNet() ? MASTERNODE_MIN_MNP_SECONDS_REGTEST : MASTERNODE_MIN_MNP_SECONDS;
+}
+
+int MasternodeBroadcastSeconds()
+{
+    return Params().IsRegTestNet() ? MASTERNODE_MIN_MNB_SECONDS_REGTEST : MASTERNODE_MIN_MNB_SECONDS;
+}
+
+int MasternodeCollateralMinConf()
+{
+    return Params().IsRegTestNet() ? MASTERNODE_MIN_CONFIRMATIONS_REGTEST : MASTERNODE_MIN_CONFIRMATIONS;
+}
+
+int MasternodePingSeconds()
+{
+    return Params().IsRegTestNet() ? MASTERNODE_PING_SECONDS_REGTEST : MASTERNODE_PING_SECONDS;
+}
+
+int MasternodeExpirationSeconds()
+{
+    return Params().IsRegTestNet() ? MASTERNODE_EXPIRATION_SECONDS_REGTEST : MASTERNODE_EXPIRATION_SECONDS;
+}
+
+int MasternodeRemovalSeconds()
+{
+    return Params().IsRegTestNet() ? MASTERNODE_REMOVAL_SECONDS_REGTEST : MASTERNODE_REMOVAL_SECONDS;
+}
 
 CMasternode::CMasternode() :
         CSignedMessage()
@@ -26,13 +71,11 @@ CMasternode::CMasternode() :
     addr = CService();
     pubKeyCollateralAddress = CPubKey();
     pubKeyMasternode = CPubKey();
-    activeState = MASTERNODE_ENABLED;
     sigTime = GetAdjustedTime();
     lastPing = CMasternodePing();
     protocolVersion = PROTOCOL_VERSION;
     nScanningErrorCount = 0;
     nLastScanningErrorBlockHeight = 0;
-    lastTimeChecked = 0;
 }
 
 CMasternode::CMasternode(const CMasternode& other) :
@@ -43,13 +86,11 @@ CMasternode::CMasternode(const CMasternode& other) :
     addr = other.addr;
     pubKeyCollateralAddress = other.pubKeyCollateralAddress;
     pubKeyMasternode = other.pubKeyMasternode;
-    activeState = other.activeState;
     sigTime = other.sigTime;
     lastPing = other.lastPing;
     protocolVersion = other.protocolVersion;
     nScanningErrorCount = other.nScanningErrorCount;
     nLastScanningErrorBlockHeight = other.nLastScanningErrorBlockHeight;
-    lastTimeChecked = 0;
 }
 
 uint256 CMasternode::GetSignatureHash() const
@@ -97,7 +138,6 @@ bool CMasternode::UpdateFromNewBroadcast(CMasternodeBroadcast& mnb)
         vchSig = mnb.vchSig;
         protocolVersion = mnb.protocolVersion;
         addr = mnb.addr;
-        lastTimeChecked = 0;
         int nDoS = 0;
         if (mnb.lastPing.IsNull() || (!mnb.lastPing.IsNull() && mnb.lastPing.CheckAndUpdate(nDoS, false))) {
             lastPing = mnb.lastPing;
@@ -128,39 +168,24 @@ uint256 CMasternode::CalculateScore(const uint256& hash) const
     return (hash3 > hash2 ? hash3 - hash2 : hash2 - hash3);
 }
 
-void CMasternode::Check(bool forceCheck)
+CMasternode::state CMasternode::GetActiveState() const
 {
-    if (ShutdownRequested()) return;
-
-    // todo: add LOCK(cs) but be careful with the AcceptableInputs() below that requires cs_main.
-
-    if (!forceCheck && (GetTime() - lastTimeChecked < MASTERNODE_CHECK_SECONDS)) return;
-    lastTimeChecked = GetTime();
-
-
-    //once spent, stop doing the checks
-    if (activeState == MASTERNODE_VIN_SPENT) return;
-
-
-    if (!IsPingedWithin(MASTERNODE_REMOVAL_SECONDS)) {
-        activeState = MASTERNODE_REMOVE;
-        return;
+    if (fCollateralSpent) {
+        return MASTERNODE_VIN_SPENT;
     }
-
-    if (!IsPingedWithin(MASTERNODE_EXPIRATION_SECONDS)) {
-        activeState = MASTERNODE_EXPIRED;
-        return;
+    if (!IsPingedWithin(MasternodeRemovalSeconds())) {
+        return MASTERNODE_REMOVE;
     }
-
-    if(lastPing.sigTime - sigTime < MASTERNODE_MIN_MNP_SECONDS){
-        activeState = MASTERNODE_PRE_ENABLED;
-        return;
+    if (!IsPingedWithin(MasternodeExpirationSeconds())) {
+        return MASTERNODE_EXPIRED;
     }
-
-    activeState = MASTERNODE_ENABLED; // OK
+    if(lastPing.sigTime - sigTime < MasternodeMinPingSeconds()){
+        return MASTERNODE_PRE_ENABLED;
+    }
+    return MASTERNODE_ENABLED;
 }
 
-int64_t CMasternode::SecondsSincePayment()
+int64_t CMasternode::SecondsSincePayment() const
 {
     CScript pubkeyScript;
     pubkeyScript = GetScriptForDestination(pubKeyCollateralAddress.GetID());
@@ -178,7 +203,7 @@ int64_t CMasternode::SecondsSincePayment()
     return month + hash.GetCompact(false);
 }
 
-int64_t CMasternode::GetLastPaid()
+int64_t CMasternode::GetLastPaid() const
 {
     const CBlockIndex* BlockReading = GetChainTip();
     if (BlockReading == nullptr) return false;
@@ -222,7 +247,7 @@ int64_t CMasternode::GetLastPaid()
     return 0;
 }
 
-bool CMasternode::IsValidNetAddr()
+bool CMasternode::IsValidNetAddr() const
 {
     // TODO: regtest is fine with any addresses for now,
     // should probably be a bit smarter if one day we start to implement tests for this
@@ -504,7 +529,6 @@ bool CMasternodeBroadcast::CheckAndUpdate(int& nDos)
         //take the newest entry
         LogPrint(BCLog::MASTERNODE,"mnb - Got updated entry for %s\n", vin.prevout.hash.ToString());
         if (pmn->UpdateFromNewBroadcast((*this))) {
-            pmn->Check();
             if (pmn->IsEnabled()) Relay();
         }
         masternodeSync.AddedMasternodeList(GetHash());
@@ -682,16 +706,16 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fChec
                 return false;
             }
 
-            pmn->lastPing = *this;
+            // SetLastPing locks masternode cs. Be careful with the lock ordering.
+            pmn->SetLastPing(*this);
 
             //mnodeman.mapSeenMasternodeBroadcast.lastPing is probably outdated, so we'll update it
             CMasternodeBroadcast mnb(*pmn);
-            uint256 hash = mnb.GetHash();
+            const uint256& hash = mnb.GetHash();
             if (mnodeman.mapSeenMasternodeBroadcast.count(hash)) {
                 mnodeman.mapSeenMasternodeBroadcast[hash].lastPing = *this;
             }
 
-            pmn->Check(true);
             if (!pmn->IsEnabled()) return false;
 
             LogPrint(BCLog::MNPING, "%s: Masternode ping accepted, vin: %s\n", __func__, vin.prevout.hash.ToString());

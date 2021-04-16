@@ -116,9 +116,6 @@ public:
     /// Ask (source) node for mnb
     void AskForMN(CNode* pnode, const CTxIn& vin);
 
-    /// Check all Masternodes
-    void Check();
-
     /// Check all Masternodes and remove inactive
     void CheckAndRemove(bool forceExpiredRemoval = false);
 
@@ -128,30 +125,32 @@ public:
     void SetBestHeight(int height) { nBestHeight.store(height, std::memory_order_release); };
     int GetBestHeight() const { return nBestHeight.load(std::memory_order_acquire); }
 
-    int CountEnabled(int protocolVersion = -1);
+    int CountEnabled(int protocolVersion = -1) const;
 
-    void CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion);
+    void CountNetworks(int protocolVersion, int& ipv4, int& ipv6, int& onion) const;
 
     void DsegUpdate(CNode* pnode);
 
     /// Find an entry
     CMasternode* Find(const COutPoint& collateralOut);
+    const CMasternode* Find(const COutPoint& collateralOut) const;
     CMasternode* Find(const CPubKey& pubKeyMasternode);
 
-    /// Check all transactions in a block, for spent masternode collateral outpoints.
+    /// Check all transactions in a block, for spent masternode collateral outpoints (marking them as spent)
     void CheckSpentCollaterals(const std::vector<CTransaction>& vtx);
 
     /// Find an entry in the masternode list that is next to be paid
-    CMasternode* GetNextMasternodeInQueueForPayment(int nBlockHeight, bool fFilterSigTime, int& nCount);
+    const CMasternode* GetNextMasternodeInQueueForPayment(int nBlockHeight, bool fFilterSigTime, int& nCount) const;
 
     /// Get the current winner for this block
-    CMasternode* GetCurrentMasterNode(int mod = 1, int64_t nBlockHeight = 0, int minProtocol = 0);
+    const CMasternode* GetCurrentMasterNode(int mod = 1, int64_t nBlockHeight = 0, int minProtocol = 0) const;
 
     // vector of pairs <masternode winner, height>
-    std::vector<std::pair<MasternodeRef, int>> GetMnScores(int nLast);
+    std::vector<std::pair<MasternodeRef, int>> GetMnScores(int nLast) const;
 
-    std::vector<std::pair<int, CMasternode> > GetMasternodeRanks(int64_t nBlockHeight, int minProtocol = 0);
-    int GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, int minProtocol = 0, bool fOnlyActive = true);
+    // Retrieve the known masternodes ordered by scoring without checking them. (Only used for listmasternodes RPC call)
+    std::vector<std::pair<int64_t, CMasternode>> GetMasternodeRanks(int nBlockHeight) const;
+    int GetMasternodeRank(const CTxIn& vin, int64_t nBlockHeight, int minProtocol = 0, bool fOnlyActive = true) const;
 
     void ProcessMessage(CNode* pfrom, std::string& strCommand, CDataStream& vRecv);
 
@@ -159,7 +158,7 @@ public:
     int size() const { LOCK(cs); return mapMasternodes.size(); }
 
     /// Return the number of Masternodes older than (default) 8000 seconds
-    int stable_size ();
+    int stable_size() const;
 
     std::string ToString() const;
 

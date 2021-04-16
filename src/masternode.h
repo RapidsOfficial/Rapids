@@ -69,7 +69,7 @@ public:
     uint256 GetSignatureHash() const override { return GetHash(); }
     std::string GetStrMessage() const override;
     const CTxIn GetVin() const override  { return vin; };
-    bool IsNull() { return blockHash.IsNull() || vin.prevout.IsNull(); }
+    bool IsNull() const { return blockHash.IsNull() || vin.prevout.IsNull(); }
 
     bool CheckAndUpdate(int& nDos, bool fRequireEnabled = true, bool fCheckSigTimeOnly = false);
     void Relay();
@@ -113,7 +113,7 @@ class CMasternode : public CSignedMessage
 private:
     // critical section to protect the inner data structures
     mutable RecursiveMutex cs;
-    int64_t lastTimeChecked;
+    bool fCollateralSpent{false};
 
 public:
     enum state {
@@ -128,7 +128,6 @@ public:
     CService addr;
     CPubKey pubKeyCollateralAddress;
     CPubKey pubKeyMasternode;
-    int activeState;
     int64_t sigTime; //mnb message time
     int protocolVersion;
     int nScanningErrorCount;
@@ -145,6 +144,8 @@ public:
     const CTxIn GetVin() const override { return vin; };
     const CPubKey GetPublicKey(std::string& strErrorRet) const override { return pubKeyCollateralAddress; }
 
+    void SetLastPing(const CMasternodePing& _lastPing) { WITH_LOCK(cs, lastPing = _lastPing;); }
+
     void swap(CMasternode& first, CMasternode& second) // nothrow
     {
         CSignedMessage::swap(first, second);
@@ -158,7 +159,6 @@ public:
         swap(first.addr, second.addr);
         swap(first.pubKeyCollateralAddress, second.pubKeyCollateralAddress);
         swap(first.pubKeyMasternode, second.pubKeyMasternode);
-        swap(first.activeState, second.activeState);
         swap(first.sigTime, second.sigTime);
         swap(first.lastPing, second.lastPing);
         swap(first.protocolVersion, second.protocolVersion);
@@ -196,7 +196,6 @@ public:
         READWRITE(vchSig);
         READWRITE(sigTime);
         READWRITE(protocolVersion);
-        READWRITE(activeState);
         READWRITE(lastPing);
         READWRITE(nScanningErrorCount);
         READWRITE(nLastScanningErrorBlockHeight);
@@ -207,25 +206,25 @@ public:
         Unserialize(s);
     }
 
-    int64_t SecondsSincePayment();
+    int64_t SecondsSincePayment() const;
 
     bool UpdateFromNewBroadcast(CMasternodeBroadcast& mnb);
 
-    void Check(bool forceCheck = false);
+    CMasternode::state GetActiveState() const;
 
     bool IsBroadcastedWithin(int seconds)
     {
         return (GetAdjustedTime() - sigTime) < seconds;
     }
 
-    bool IsPingedWithin(int seconds, int64_t now = -1)
+    bool IsPingedWithin(int seconds, int64_t now = -1) const
     {
         now == -1 ? now = GetAdjustedTime() : now;
 
         return lastPing.IsNull() ? false : now - lastPing.sigTime < seconds;
     }
 
-    void SetSpent() { LOCK(cs); activeState = CMasternode::MASTERNODE_VIN_SPENT; }
+    void SetSpent() { fCollateralSpent = true; }
 
     void Disable()
     {
@@ -234,31 +233,32 @@ public:
         lastPing = CMasternodePing();
     }
 
-    bool IsEnabled()
+    bool IsEnabled() const
     {
-        return WITH_LOCK(cs, return activeState == MASTERNODE_ENABLED);
+        return WITH_LOCK(cs, return GetActiveState() == MASTERNODE_ENABLED);
     }
 
     bool IsPreEnabled()
     {
-        return WITH_LOCK(cs, return activeState == MASTERNODE_PRE_ENABLED );
+        return WITH_LOCK(cs, return GetActiveState() == MASTERNODE_PRE_ENABLED );
     }
 
-    std::string Status()
+    std::string Status() const
     {
-        std::string strStatus = "ACTIVE";
-
         LOCK(cs);
-        if (activeState == CMasternode::MASTERNODE_ENABLED) strStatus = "ENABLED";
-        if (activeState == CMasternode::MASTERNODE_EXPIRED) strStatus = "EXPIRED";
-        if (activeState == CMasternode::MASTERNODE_VIN_SPENT) strStatus = "VIN_SPENT";
-        if (activeState == CMasternode::MASTERNODE_REMOVE) strStatus = "REMOVE";
+        auto activeState = GetActiveState();
 
-        return strStatus;
+        if (activeState == CMasternode::MASTERNODE_PRE_ENABLED) return "PRE_ENABLED";
+        if (activeState == CMasternode::MASTERNODE_ENABLED)     return "ENABLED";
+        if (activeState == CMasternode::MASTERNODE_EXPIRED)     return "EXPIRED";
+        if (activeState == CMasternode::MASTERNODE_VIN_SPENT)   return "VIN_SPENT";
+        if (activeState == CMasternode::MASTERNODE_REMOVE)      return "REMOVE";
+
+        return strprintf("INVALID_%d", activeState);
     }
 
-    int64_t GetLastPaid();
-    bool IsValidNetAddr();
+    int64_t GetLastPaid() const;
+    bool IsValidNetAddr() const;
 
     /// Is the input associated with collateral public key? (and there is 10000 PIV - checking if valid masternode)
     bool IsInputAssociatedWithPubkey() const;
@@ -309,5 +309,12 @@ public:
     static bool Create(const std::string& strService, const std::string& strKey, const std::string& strTxHash, const std::string& strOutputIndex, std::string& strErrorRet, CMasternodeBroadcast& mnbRet, bool fOffline = false);
     static bool CheckDefaultPort(CService service, std::string& strErrorRet, const std::string& strContext);
 };
+
+int MasternodeMinPingSeconds();
+int MasternodeBroadcastSeconds();
+int MasternodeCollateralMinConf();
+int MasternodePingSeconds();
+int MasternodeExpirationSeconds();
+int MasternodeRemovalSeconds();
 
 #endif
