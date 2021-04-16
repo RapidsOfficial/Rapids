@@ -210,7 +210,7 @@ bool CMasternodeMan::Add(CMasternode& mn)
 {
     LOCK(cs);
 
-    if (!mn.IsEnabled() && !mn.IsPreEnabled())
+    if (!mn.IsAvailableState())
         return false;
 
     const auto& it = mapMasternodes.find(mn.vin.prevout);

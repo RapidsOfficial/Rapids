@@ -170,6 +170,8 @@ uint256 CMasternode::CalculateScore(const uint256& hash) const
 
 CMasternode::state CMasternode::GetActiveState() const
 {
+    LOCK(cs);
+
     if (fCollateralSpent) {
         return MASTERNODE_VIN_SPENT;
     }
@@ -659,7 +661,7 @@ std::string CMasternodePing::GetStrMessage() const
     return vin.ToString() + blockHash.ToString() + std::to_string(sigTime);
 }
 
-bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fCheckSigTimeOnly)
+bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireAvailable, bool fCheckSigTimeOnly)
 {
     if (sigTime > GetAdjustedTime() + 60 * 60) {
         LogPrint(BCLog::MNPING,"%s: Signature rejected, too far into the future %s\n", __func__, vin.prevout.hash.ToString());
@@ -689,7 +691,7 @@ bool CMasternodePing::CheckAndUpdate(int& nDos, bool fRequireEnabled, bool fChec
     LogPrint(BCLog::MNPING, "%s: New Ping - %s - %s - %lli\n", __func__, GetHash().ToString(), blockHash.ToString(), sigTime);
 
     if (isMasternodeFound && pmn->protocolVersion >= ActiveProtocol()) {
-        if (fRequireEnabled && !pmn->IsEnabled()) return false;
+        if (fRequireAvailable && !pmn->IsAvailableState()) return false;
 
         // update only if there is no known ping for this masternode or
         // last ping was more then MASTERNODE_MIN_MNP_SECONDS-60 ago comparing to this one

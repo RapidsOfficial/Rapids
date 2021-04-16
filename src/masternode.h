@@ -71,7 +71,7 @@ public:
     const CTxIn GetVin() const override  { return vin; };
     bool IsNull() const { return blockHash.IsNull() || vin.prevout.IsNull(); }
 
-    bool CheckAndUpdate(int& nDos, bool fRequireEnabled = true, bool fCheckSigTimeOnly = false);
+    bool CheckAndUpdate(int& nDos, bool fRequireAvailable = true, bool fCheckSigTimeOnly = false);
     void Relay();
 
     void swap(CMasternodePing& first, CMasternodePing& second) // nothrow
@@ -235,12 +235,18 @@ public:
 
     bool IsEnabled() const
     {
-        return WITH_LOCK(cs, return GetActiveState() == MASTERNODE_ENABLED);
+        return GetActiveState() == MASTERNODE_ENABLED;
     }
 
     bool IsPreEnabled()
     {
-        return WITH_LOCK(cs, return GetActiveState() == MASTERNODE_PRE_ENABLED );
+        return GetActiveState() == MASTERNODE_PRE_ENABLED;
+    }
+
+    bool IsAvailableState() const
+    {
+        state s = GetActiveState();
+        return s == MASTERNODE_ENABLED || s == MASTERNODE_PRE_ENABLED;
     }
 
     std::string Status() const
