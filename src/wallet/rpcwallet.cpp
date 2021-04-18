@@ -2995,7 +2995,7 @@ UniValue walletpassphrase(const JSONRPCRequest& request)
 
     if (nSleepTime > 0) {
         nWalletUnlockTime = GetTime () + nSleepTime;
-        RPCRunLater ("lockwallet", boost::bind (LockWallet, pwalletMain), nSleepTime);
+        RPCRunLater ("lockwallet", std::bind (LockWallet, pwalletMain), nSleepTime);
     }
 
     return NullUniValue;

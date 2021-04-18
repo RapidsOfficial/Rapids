@@ -9,7 +9,6 @@
 #include "reverselock.h"
 
 #include <assert.h>
-#include <boost/bind.hpp>
 #include <utility>
 
 CScheduler::CScheduler() : nThreadsServicingQueue(0), stopRequested(false), stopWhenEmpty(false)
@@ -102,12 +101,12 @@ void CScheduler::scheduleFromNow(CScheduler::Function f, int64_t deltaSeconds)
 static void Repeat(CScheduler* s, CScheduler::Function f, int64_t deltaSeconds)
 {
     f();
-    s->scheduleFromNow(boost::bind(&Repeat, s, f, deltaSeconds), deltaSeconds);
+    s->scheduleFromNow(std::bind(&Repeat, s, f, deltaSeconds), deltaSeconds);
 }
 
 void CScheduler::scheduleEvery(CScheduler::Function f, int64_t deltaSeconds)
 {
-    scheduleFromNow(boost::bind(&Repeat, this, f, deltaSeconds), deltaSeconds);
+    scheduleFromNow(std::bind(&Repeat, this, f, deltaSeconds), deltaSeconds);
 }
 
 size_t CScheduler::getQueueInfo(boost::chrono::system_clock::time_point &first,

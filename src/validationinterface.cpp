@@ -58,14 +58,14 @@ CMainSignals& GetMainSignals()
 
 void RegisterValidationInterface(CValidationInterface* pwalletIn) {
     ValidationInterfaceConnections& conns = g_signals.m_internals->m_connMainSignals[pwalletIn];
-    conns.UpdatedBlockTip = g_signals.m_internals->UpdatedBlockTip.connect(boost::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, boost::placeholders::_1));
-    conns.SyncTransaction = g_signals.m_internals->SyncTransaction.connect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3));
-    conns.NotifyTransactionLock = g_signals.m_internals->NotifyTransactionLock.connect(boost::bind(&CValidationInterface::NotifyTransactionLock, pwalletIn, boost::placeholders::_1));
-    conns.UpdatedTransaction = g_signals.m_internals->UpdatedTransaction.connect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, boost::placeholders::_1));
-    conns.SetBestChain = g_signals.m_internals->SetBestChain.connect(boost::bind(&CValidationInterface::SetBestChain, pwalletIn, boost::placeholders::_1));
-    conns.Broadcast = g_signals.m_internals->Broadcast.connect(boost::bind(&CValidationInterface::ResendWalletTransactions, pwalletIn, boost::placeholders::_1));
-    conns.BlockChecked = g_signals.m_internals->BlockChecked.connect(boost::bind(&CValidationInterface::BlockChecked, pwalletIn, boost::placeholders::_1, boost::placeholders::_2));
-    conns.BlockFound = g_signals.m_internals->BlockFound.connect(boost::bind(&CValidationInterface::ResetRequestCount, pwalletIn, boost::placeholders::_1));
+    conns.UpdatedBlockTip = g_signals.m_internals->UpdatedBlockTip.connect(std::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, std::placeholders::_1));
+    conns.SyncTransaction = g_signals.m_internals->SyncTransaction.connect(std::bind(&CValidationInterface::SyncTransaction, pwalletIn, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3));
+    conns.NotifyTransactionLock = g_signals.m_internals->NotifyTransactionLock.connect(std::bind(&CValidationInterface::NotifyTransactionLock, pwalletIn, std::placeholders::_1));
+    conns.UpdatedTransaction = g_signals.m_internals->UpdatedTransaction.connect(std::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, std::placeholders::_1));
+    conns.SetBestChain = g_signals.m_internals->SetBestChain.connect(std::bind(&CValidationInterface::SetBestChain, pwalletIn, std::placeholders::_1));
+    conns.Broadcast = g_signals.m_internals->Broadcast.connect(std::bind(&CValidationInterface::ResendWalletTransactions, pwalletIn, std::placeholders::_1));
+    conns.BlockChecked = g_signals.m_internals->BlockChecked.connect(std::bind(&CValidationInterface::BlockChecked, pwalletIn, std::placeholders::_1, std::placeholders::_2));
+    conns.BlockFound = g_signals.m_internals->BlockFound.connect(std::bind(&CValidationInterface::ResetRequestCount, pwalletIn, std::placeholders::_1));
 }
 
 void UnregisterValidationInterface(CValidationInterface* pwalletIn) {

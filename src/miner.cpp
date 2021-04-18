@@ -751,7 +751,7 @@ void GenerateBitcoins(bool fGenerate, CWallet* pwallet, int nThreads)
 
     minerThreads = new boost::thread_group();
     for (int i = 0; i < nThreads; i++)
-        minerThreads->create_thread(boost::bind(&ThreadBitcoinMiner, pwallet));
+        minerThreads->create_thread(std::bind(&ThreadBitcoinMiner, pwallet));
 }
 
 // ppcoin: stake minter thread

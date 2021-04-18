@@ -698,12 +698,12 @@ static void NotifyWalletBacked(WalletModel* model, const bool& fSuccess, const s
 void WalletModel::subscribeToCoreSignals()
 {
     // Connect signals to wallet
-    m_handler_notify_status_changed = interfaces::MakeHandler(wallet->NotifyStatusChanged.connect(boost::bind(&NotifyKeyStoreStatusChanged, this, boost::placeholders::_1)));
-    m_handler_notify_addressbook_changed = interfaces::MakeHandler(wallet->NotifyAddressBookChanged.connect(boost::bind(NotifyAddressBookChanged, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3, boost::placeholders::_4, boost::placeholders::_5, boost::placeholders::_6)));
-    m_handler_notify_transaction_changed = interfaces::MakeHandler(wallet->NotifyTransactionChanged.connect(boost::bind(NotifyTransactionChanged, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3)));
-    m_handler_show_progress = interfaces::MakeHandler(wallet->ShowProgress.connect(boost::bind(ShowProgress, this, boost::placeholders::_1, boost::placeholders::_2)));
-    m_handler_notify_watch_only_changed = interfaces::MakeHandler(wallet->NotifyWatchonlyChanged.connect(boost::bind(NotifyWatchonlyChanged, this, boost::placeholders::_1)));
-    m_handler_notify_walletbacked = interfaces::MakeHandler(wallet->NotifyWalletBacked.connect(boost::bind(NotifyWalletBacked, this, boost::placeholders::_1, boost::placeholders::_2)));
+    m_handler_notify_status_changed = interfaces::MakeHandler(wallet->NotifyStatusChanged.connect(std::bind(&NotifyKeyStoreStatusChanged, this, std::placeholders::_1)));
+    m_handler_notify_addressbook_changed = interfaces::MakeHandler(wallet->NotifyAddressBookChanged.connect(std::bind(NotifyAddressBookChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5, std::placeholders::_6)));
+    m_handler_notify_transaction_changed = interfaces::MakeHandler(wallet->NotifyTransactionChanged.connect(std::bind(NotifyTransactionChanged, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3)));
+    m_handler_show_progress = interfaces::MakeHandler(wallet->ShowProgress.connect(std::bind(ShowProgress, this, std::placeholders::_1, std::placeholders::_2)));
+    m_handler_notify_watch_only_changed = interfaces::MakeHandler(wallet->NotifyWatchonlyChanged.connect(std::bind(NotifyWatchonlyChanged, this, std::placeholders::_1)));
+    m_handler_notify_walletbacked = interfaces::MakeHandler(wallet->NotifyWalletBacked.connect(std::bind(NotifyWalletBacked, this, std::placeholders::_1, std::placeholders::_2)));
 }
 
 void WalletModel::unsubscribeFromCoreSignals()

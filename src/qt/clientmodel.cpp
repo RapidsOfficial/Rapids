@@ -303,11 +303,11 @@ static void BannedListChanged(ClientModel *clientmodel)
 void ClientModel::subscribeToCoreSignals()
 {
     // Connect signals to client
-    m_handler_show_progress = interfaces::MakeHandler(uiInterface.ShowProgress.connect(boost::bind(ShowProgress, this, boost::placeholders::_1, boost::placeholders::_2)));
-    m_handler_notify_num_connections_changed = interfaces::MakeHandler(uiInterface.NotifyNumConnectionsChanged.connect(boost::bind(NotifyNumConnectionsChanged, this, boost::placeholders::_1)));
-    m_handler_notify_alert_changed = interfaces::MakeHandler(uiInterface.NotifyAlertChanged.connect(boost::bind(NotifyAlertChanged, this)));
-    m_handler_banned_list_changed = interfaces::MakeHandler(uiInterface.BannedListChanged.connect(boost::bind(BannedListChanged, this)));
-    m_handler_notify_block_tip = interfaces::MakeHandler(uiInterface.NotifyBlockTip.connect(boost::bind(BlockTipChanged, this, boost::placeholders::_1, boost::placeholders::_2)));
+    m_handler_show_progress = interfaces::MakeHandler(uiInterface.ShowProgress.connect(std::bind(ShowProgress, this, std::placeholders::_1, std::placeholders::_2)));
+    m_handler_notify_num_connections_changed = interfaces::MakeHandler(uiInterface.NotifyNumConnectionsChanged.connect(std::bind(NotifyNumConnectionsChanged, this, std::placeholders::_1)));
+    m_handler_notify_alert_changed = interfaces::MakeHandler(uiInterface.NotifyAlertChanged.connect(std::bind(NotifyAlertChanged, this)));
+    m_handler_banned_list_changed = interfaces::MakeHandler(uiInterface.BannedListChanged.connect(std::bind(BannedListChanged, this)));
+    m_handler_notify_block_tip = interfaces::MakeHandler(uiInterface.NotifyBlockTip.connect(std::bind(BlockTipChanged, this, std::placeholders::_1, std::placeholders::_2)));
 }
 
 void ClientModel::unsubscribeFromCoreSignals()
