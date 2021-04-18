@@ -779,6 +779,18 @@ bool AppInitServers()
     std::terminate();
 };
 
+namespace { // Variables internal to initialization process only
+
+    ServiceFlags nRelevantServices = NODE_NETWORK;
+    int nMaxConnections;
+    int nUserMaxConnections;
+    int nFD;
+    ServiceFlags nLocalServices = NODE_NETWORK;
+
+    std::string strWalletFile;
+    bool fDisableWallet = false;
+}
+
 bool AppInitBasicSetup()
 {
 // ********************************************************* Step 1: setup
@@ -979,24 +991,17 @@ void InitLogging()
     LogPrintf("RPD version %s (%s)\n", version_string, CLIENT_DATE);
 }
 
-/** Initialize pivx.
- *  @pre Parameters should be parsed and config file should be read.
- */
-bool AppInit2()
+bool AppInitParameterInteraction()
 {
-    // ********************************************************* Step 1: setup
-    if (!AppInitBasicSetup())
-        return false;
-
     // ********************************************************* Step 2: parameter interactions
     // Make sure enough file descriptors are available
     int nBind = std::max((int)mapArgs.count("-bind") + (int)mapArgs.count("-whitebind"), 1);
-    int nUserMaxConnections = GetArg("-maxconnections", DEFAULT_MAX_PEER_CONNECTIONS);
-    int nMaxConnections = std::max(nUserMaxConnections, 0);
+    nUserMaxConnections = GetArg("-maxconnections", DEFAULT_MAX_PEER_CONNECTIONS);
+    nMaxConnections = std::max(nUserMaxConnections, 0);
 
     // Trim requested connection counts, to fit into system limitations
     nMaxConnections = std::max(std::min(nMaxConnections, (int)(FD_SETSIZE - nBind - MIN_CORE_FILEDESCRIPTORS)), 0);
-    int nFD = RaiseFileDescriptorLimit(nMaxConnections + MIN_CORE_FILEDESCRIPTORS);
+    nFD = RaiseFileDescriptorLimit(nMaxConnections + MIN_CORE_FILEDESCRIPTORS);
     if (nFD < MIN_CORE_FILEDESCRIPTORS)
         return UIError(_("Not enough file descriptors available."));
     if (nFD - MIN_CORE_FILEDESCRIPTORS < nMaxConnections)
@@ -1104,16 +1109,13 @@ bool AppInit2()
     }
 
 #ifdef ENABLE_WALLET
-    std::string strWalletFile = GetArg("-wallet", DEFAULT_WALLET_DAT);
+    strWalletFile = GetArg("-wallet", DEFAULT_WALLET_DAT);
     if (!CWallet::ParameterInteraction())
         return false;
 #endif // ENABLE_WALLET
 
     fIsBareMultisigStd = GetBoolArg("-permitbaremultisig", DEFAULT_PERMIT_BAREMULTISIG);
     nMaxDatacarrierBytes = GetArg("-datacarriersize", nMaxDatacarrierBytes);
-
-    ServiceFlags nLocalServices = NODE_NETWORK;
-    ServiceFlags nRelevantServices = NODE_NETWORK;
 
     if (GetBoolArg("-peerbloomfilters", DEFAULT_PEERBLOOMFILTERS))
         nLocalServices = ServiceFlags(nLocalServices | NODE_BLOOM);
@@ -1123,7 +1125,39 @@ bool AppInit2()
     if (!InitNUParams())
         return false;
 
-    // ********************************************************* Step 4: application initialization: dir lock, daemonize, pidfile, debug log
+    return true;
+}
+
+static bool LockDataDirectory(bool probeOnly)
+{
+    std::string strDataDir = GetDataDir().string();
+
+    // Make sure only a single RPD process is using the data directory.
+    fs::path pathLockFile = GetDataDir() / ".lock";
+    FILE* file = fsbridge::fopen(pathLockFile, "a"); // empty lock file; created if it doesn't exist.
+    if (file) fclose(file);
+
+    try {
+        static boost::interprocess::file_lock lock(pathLockFile.string().c_str());
+        // Wait maximum 10 seconds if an old wallet is still running. Avoids lockup during restart
+        if (!lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(10))) {
+            return UIError(strprintf(_("Cannot obtain a lock on data directory %s. %s is probably already running."),
+                                     strDataDir, _(PACKAGE_NAME)));
+        }
+        if (probeOnly) {
+            lock.unlock();
+        }
+    } catch (const boost::interprocess::interprocess_exception& e) {
+        return UIError(
+                strprintf(_("Cannot obtain a lock on data directory %s. %s is probably already running.") + " %s.",
+                          strDataDir, _(PACKAGE_NAME), e.what()));
+    }
+    return true;
+}
+
+bool AppInitSanityChecks()
+{
+    // ********************************************************* Step 4: sanity checks
 
     // Initialize elliptic curve code
     RandomInit();
@@ -1132,19 +1166,22 @@ bool AppInit2()
 
     // Sanity check
     if (!InitSanityCheck())
-        return UIError(_("Initialization sanity check failed. Rapids Core is shutting down."));
+        return UIError(strprintf(_("Initialization sanity check failed. %s is shutting down."), _(PACKAGE_NAME)));
 
-    std::string strDataDir = GetDataDir().string();
+    // Probe the data directory lock to give an early error message, if possible
+    return LockDataDirectory(true);
+}
 
-    // Make sure only a single RPD process is using the data directory.
-    fs::path pathLockFile = GetDataDir() / ".lock";
-    FILE* file = fsbridge::fopen(pathLockFile, "a"); // empty lock file; created if it doesn't exist.
-    if (file) fclose(file);
-    static boost::interprocess::file_lock lock(pathLockFile.string().c_str());
-
-    // Wait maximum 10 seconds if an old wallet is still running. Avoids lockup during restart
-    if (!lock.timed_lock(boost::get_system_time() + boost::posix_time::seconds(10)))
-        return UIError(strprintf(_("Cannot obtain a lock on data directory %s. Rapids Core is probably already running."), strDataDir));
+bool AppInitMain()
+{
+    // ********************************************************* Step 4a: application initialization
+    // After daemonization get the data directory lock again and hold on to it until exit
+    // This creates a slight window for a race condition to happen, however this condition is harmless: it
+    // will at most make us exit without printing a message to console.
+    if (!LockDataDirectory(false)) {
+        // Detailed error printed inside LockDataDirectory
+        return false;
+    }
 
 #ifndef WIN32
     CreatePidFile(GetPidFile(), getpid());
@@ -1161,7 +1198,7 @@ bool AppInit2()
     if (!g_logger->m_log_timestamps)
         LogPrintf("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
     LogPrintf("Default data directory %s\n", GetDefaultDataDir().string());
-    LogPrintf("Using data directory %s\n", strDataDir);
+    LogPrintf("Using data directory %s\n", GetDataDir().string());
     LogPrintf("Using config file %s\n", GetConfigFile().string());
     LogPrintf("Using at most %i connections (%i file descriptors available)\n", nMaxConnections, nFD);
     std::ostringstream strErrors;
@@ -1181,8 +1218,8 @@ bool AppInit2()
     }
 
     // Start the lightweight task scheduler thread
-    CScheduler::Function serviceLoop = boost::bind(&CScheduler::serviceQueue, &scheduler);
-    threadGroup.create_thread(boost::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
+    CScheduler::Function serviceLoop = std::bind(&CScheduler::serviceQueue, &scheduler);
+    threadGroup.create_thread(std::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
 
     if (Params().IsRegTestNet()) { // only for regtest for now
         // Initialize Sapling circuit parameters
@@ -1750,7 +1787,7 @@ bool AppInit2()
         for (std::string strFile : mapMultiArgs["-loadblock"])
             vImportFiles.push_back(strFile);
     }
-    threadGroup.create_thread(boost::bind(&ThreadImport, vImportFiles));
+    threadGroup.create_thread(std::bind(&ThreadImport, vImportFiles));
 
     // Wait for genesis block to be processed
     LogPrintf("Waiting for genesis block to be imported...\n");
@@ -1900,7 +1937,7 @@ bool AppInit2()
     LogPrintf("nSwiftTXDepth %d\n", nSwiftTXDepth);
     LogPrintf("Budget Mode %s\n", strBudgetMode.c_str());
 
-    threadGroup.create_thread(boost::bind(&ThreadCheckMasternodes));
+    threadGroup.create_thread(std::bind(&ThreadCheckMasternodes));
 
     if (ShutdownRequested()) {
         LogPrintf("Shutdown requested. Exiting.\n");
@@ -1966,7 +2003,7 @@ bool AppInit2()
 
         // StakeMiner thread disabled by default on regtest
         if (GetBoolArg("-staking", !Params().IsRegTestNet() && DEFAULT_STAKING)) {
-            threadGroup.create_thread(boost::bind(&ThreadStakeMinter));
+            threadGroup.create_thread(std::bind(&ThreadStakeMinter));
         }
     }
 #endif

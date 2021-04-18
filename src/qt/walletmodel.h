@@ -11,7 +11,7 @@
 #include "paymentrequestplus.h"
 #include "walletmodeltransaction.h"
 
-#include "interface/wallet.h"
+#include "interfaces/wallet.h"
 
 #include "allocators.h" /* for SecureString */
 #include "swifttx.h"
@@ -36,6 +36,10 @@ class COutput;
 class CPubKey;
 class CWallet;
 class uint256;
+
+namespace interfaces {
+    class Handler;
+};
 
 QT_BEGIN_NAMESPACE
 class QTimer;
@@ -279,6 +283,14 @@ private:
     // todo: Goal would be to move every CWallet* call to the wallet wrapper and
     //  in the model only perform the data organization (and QT wrappers) to be presented on the UI.
     interfaces::Wallet walletWrapper;
+
+    // Listeners
+    std::unique_ptr<interfaces::Handler> m_handler_notify_status_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_notify_addressbook_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_notify_transaction_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_show_progress;
+    std::unique_ptr<interfaces::Handler> m_handler_notify_watch_only_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_notify_walletbacked;
 
     bool fHaveWatchOnly;
     bool fForceCheckBalanceChanged;

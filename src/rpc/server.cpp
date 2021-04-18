@@ -21,7 +21,6 @@
 #include "wallet/wallet.h"
 #endif // ENABLE_WALLET
 
-#include <boost/bind.hpp>
 #include <boost/iostreams/concepts.hpp>
 #include <boost/iostreams/stream.hpp>
 #include <boost/shared_ptr.hpp>
@@ -63,12 +62,12 @@ void RPCServer::OnStopped(std::function<void ()> slot)
 
 void RPCServer::OnPreCommand(std::function<void (const CRPCCommand&)> slot)
 {
-    g_rpcSignals.PreCommand.connect(boost::bind(slot, boost::placeholders::_1));
+    g_rpcSignals.PreCommand.connect(std::bind(slot, std::placeholders::_1));
 }
 
 void RPCServer::OnPostCommand(std::function<void (const CRPCCommand&)> slot)
 {
-    g_rpcSignals.PostCommand.connect(boost::bind(slot, boost::placeholders::_1));
+    g_rpcSignals.PostCommand.connect(std::bind(slot, std::placeholders::_1));
 }
 
 void RPCTypeCheck(const UniValue& params,
@@ -602,11 +601,7 @@ UniValue CRPCTable::execute(const JSONRPCRequest &request) const
 std::vector<std::string> CRPCTable::listCommands() const
 {
     std::vector<std::string> commandList;
-    typedef std::map<std::string, const CRPCCommand*> commandMap;
-
-    std::transform( mapCommands.begin(), mapCommands.end(),
-                   std::back_inserter(commandList),
-                   boost::bind(&commandMap::value_type::first,_1) );
+    for (const auto& i : mapCommands) commandList.emplace_back(i.first);
     return commandList;
 }
 

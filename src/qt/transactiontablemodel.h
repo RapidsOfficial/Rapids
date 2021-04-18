@@ -11,6 +11,12 @@
 #include <QAbstractTableModel>
 #include <QStringList>
 
+#include <memory>
+
+namespace interfaces {
+    class Handler;
+}
+
 class TransactionRecord;
 class TransactionTablePriv;
 class WalletModel;
@@ -81,6 +87,10 @@ Q_SIGNALS:
     void txArrived(const QString& hash, const bool& isCoinStake, const bool& isCSAnyType);
 
 private:
+    // Listeners
+    std::unique_ptr<interfaces::Handler> m_handler_transaction_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_show_progress;
+
     CWallet* wallet;
     WalletModel* walletModel;
     QStringList columns;

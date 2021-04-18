@@ -10,6 +10,8 @@
 #include "streams.h"
 #include "util.h"
 
+#include <list>
+
 void zmqError(const char *str)
 {
     LogPrint(BCLog::ZMQ, "Error: %s, errno=%s\n", str, zmq_strerror(errno));
