@@ -6,7 +6,20 @@
 
 #include "validationinterface.h"
 
+#include <unordered_map>
 #include <boost/signals2/signal.hpp>
+
+struct ValidationInterfaceConnections {
+    boost::signals2::scoped_connection UpdatedBlockTip;
+    boost::signals2::scoped_connection SyncTransaction;
+    boost::signals2::scoped_connection NotifyTransactionLock;
+    boost::signals2::scoped_connection UpdatedTransaction;
+    boost::signals2::scoped_connection SetBestChain;
+    boost::signals2::scoped_connection Broadcast;
+    boost::signals2::scoped_connection BlockChecked;
+    boost::signals2::scoped_connection BlockFound;
+    boost::signals2::scoped_connection ChainTip;
+};
 
 struct MainSignalsInstance {
 // XX42    boost::signals2::signal<void(const uint256&)> EraseTransaction;
@@ -28,6 +41,8 @@ struct MainSignalsInstance {
     boost::signals2::signal<void (const CBlock&, const CValidationState&)> BlockChecked;
     /** Notifies listeners that a block has been successfully mined */
     boost::signals2::signal<void (const uint256 &)> BlockFound;
+
+    std::unordered_map<CValidationInterface*, ValidationInterfaceConnections> m_connMainSignals;
 };
 
 static CMainSignals g_signals;
@@ -42,42 +57,26 @@ CMainSignals& GetMainSignals()
 }
 
 void RegisterValidationInterface(CValidationInterface* pwalletIn) {
-// XX42 g_signals.m_internals->EraseTransaction.connect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->UpdatedBlockTip.connect(boost::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->SyncTransaction.connect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3));
-    g_signals.m_internals->NotifyTransactionLock.connect(boost::bind(&CValidationInterface::NotifyTransactionLock, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->UpdatedTransaction.connect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->SetBestChain.connect(boost::bind(&CValidationInterface::SetBestChain, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->Broadcast.connect(boost::bind(&CValidationInterface::ResendWalletTransactions, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->BlockChecked.connect(boost::bind(&CValidationInterface::BlockChecked, pwalletIn, boost::placeholders::_1, boost::placeholders::_2));
-// XX42    g_signals.m_internals->ScriptForMining.connect(boost::bind(&CValidationInterface::GetScriptForMining, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->BlockFound.connect(boost::bind(&CValidationInterface::ResetRequestCount, pwalletIn, boost::placeholders::_1));
+    ValidationInterfaceConnections& conns = g_signals.m_internals->m_connMainSignals[pwalletIn];
+    conns.UpdatedBlockTip = g_signals.m_internals->UpdatedBlockTip.connect(boost::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, boost::placeholders::_1));
+    conns.SyncTransaction = g_signals.m_internals->SyncTransaction.connect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3));
+    conns.NotifyTransactionLock = g_signals.m_internals->NotifyTransactionLock.connect(boost::bind(&CValidationInterface::NotifyTransactionLock, pwalletIn, boost::placeholders::_1));
+    conns.UpdatedTransaction = g_signals.m_internals->UpdatedTransaction.connect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, boost::placeholders::_1));
+    conns.SetBestChain = g_signals.m_internals->SetBestChain.connect(boost::bind(&CValidationInterface::SetBestChain, pwalletIn, boost::placeholders::_1));
+    conns.Broadcast = g_signals.m_internals->Broadcast.connect(boost::bind(&CValidationInterface::ResendWalletTransactions, pwalletIn, boost::placeholders::_1));
+    conns.BlockChecked = g_signals.m_internals->BlockChecked.connect(boost::bind(&CValidationInterface::BlockChecked, pwalletIn, boost::placeholders::_1, boost::placeholders::_2));
+    conns.BlockFound = g_signals.m_internals->BlockFound.connect(boost::bind(&CValidationInterface::ResetRequestCount, pwalletIn, boost::placeholders::_1));
 }
 
 void UnregisterValidationInterface(CValidationInterface* pwalletIn) {
-    g_signals.m_internals->BlockFound.disconnect(boost::bind(&CValidationInterface::ResetRequestCount, pwalletIn, boost::placeholders::_1));
-// XX42    g_signals.m_internals->ScriptForMining.disconnect(boost::bind(&CValidationInterface::GetScriptForMining, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->BlockChecked.disconnect(boost::bind(&CValidationInterface::BlockChecked, pwalletIn, boost::placeholders::_1, boost::placeholders::_2));
-    g_signals.m_internals->Broadcast.disconnect(boost::bind(&CValidationInterface::ResendWalletTransactions, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->SetBestChain.disconnect(boost::bind(&CValidationInterface::SetBestChain, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->UpdatedTransaction.disconnect(boost::bind(&CValidationInterface::UpdatedTransaction, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->NotifyTransactionLock.disconnect(boost::bind(&CValidationInterface::NotifyTransactionLock, pwalletIn, boost::placeholders::_1));
-    g_signals.m_internals->SyncTransaction.disconnect(boost::bind(&CValidationInterface::SyncTransaction, pwalletIn, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3));
-    g_signals.m_internals->UpdatedBlockTip.disconnect(boost::bind(&CValidationInterface::UpdatedBlockTip, pwalletIn, boost::placeholders::_1));
-// XX42    g_signals.m_internals->EraseTransaction.disconnect(boost::bind(&CValidationInterface::EraseFromWallet, pwalletIn, boost::placeholders::_1));
+    g_signals.m_internals->m_connMainSignals.erase(pwalletIn);
 }
 
 void UnregisterAllValidationInterfaces() {
-    g_signals.m_internals->BlockFound.disconnect_all_slots();
-// XX42    g_signals.m_internals->ScriptForMining.disconnect_all_slots();
-    g_signals.m_internals->BlockChecked.disconnect_all_slots();
-    g_signals.m_internals->Broadcast.disconnect_all_slots();
-    g_signals.m_internals->SetBestChain.disconnect_all_slots();
-    g_signals.m_internals->UpdatedTransaction.disconnect_all_slots();
-    g_signals.m_internals->NotifyTransactionLock.disconnect_all_slots();
-    g_signals.m_internals->SyncTransaction.disconnect_all_slots();
-    g_signals.m_internals->UpdatedBlockTip.disconnect_all_slots();
-// XX42    g_signals.m_internals->EraseTransaction.disconnect_all_slots();
+    if (!g_signals.m_internals) {
+        return;
+    }
+    g_signals.m_internals->m_connMainSignals.clear();
 }
 
 void CMainSignals::UpdatedBlockTip(const CBlockIndex* pindex) {
