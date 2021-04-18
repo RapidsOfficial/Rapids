@@ -116,6 +116,25 @@ bool AppInit(int argc, char* argv[])
             fprintf(stderr, "Error: There is no RPC client functionality in rapidsd anymore. Use the rapids-cli utility instead.\n");
             exit(1);
         }
+
+        // -server defaults to true for bitcoind but not for the GUI so do this here
+        SoftSetBoolArg("-server", true);
+        // Set this early so that parameter interactions go to console
+        InitLogging();
+        InitParameterInteraction();
+        if (!AppInitBasicSetup()) {
+            // UIError will have been called with detailed error, which ends up on console
+            exit(1);
+        }
+        if (!AppInitParameterInteraction()) {
+            // UIError will have been called with detailed error, which ends up on console
+            exit(1);
+        }
+        if (!AppInitSanityChecks()) {
+            // UIError will have been called with detailed error, which ends up on console
+            exit(1);
+        }
+
 #ifndef WIN32
         fDaemon = GetBoolArg("-daemon", false);
         if (fDaemon) {
@@ -138,12 +157,7 @@ bool AppInit(int argc, char* argv[])
                 fprintf(stderr, "Error: setsid() returned %d errno %d\n", sid, errno);
         }
 #endif
-        SoftSetBoolArg("-server", true);
-
-        // Set this early so that parameter interactions go to console
-        InitLogging();
-        InitParameterInteraction();
-        fRet = AppInit2();
+        fRet = AppInitMain();
     } catch (const std::exception& e) {
         PrintExceptionContinue(&e, "AppInit()");
     } catch (...) {
