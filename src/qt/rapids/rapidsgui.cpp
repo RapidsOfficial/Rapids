@@ -10,6 +10,7 @@
 
 #include "qt/guiutil.h"
 #include "clientmodel.h"
+#include "interfaces/handler.h"
 #include "optionsmodel.h"
 #include "networkstyle.h"
 #include "notificator.h"
@@ -687,11 +688,11 @@ static bool ThreadSafeMessageBox(RapidsGUI* gui, const std::string& message, con
 void RapidsGUI::subscribeToCoreSignals()
 {
     // Connect signals to client
-    uiInterface.ThreadSafeMessageBox.connect(boost::bind(ThreadSafeMessageBox, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3));
+    m_handler_message_box = interfaces::MakeHandler(uiInterface.ThreadSafeMessageBox.connect(boost::bind(ThreadSafeMessageBox, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3)));
 }
 
 void RapidsGUI::unsubscribeFromCoreSignals()
 {
     // Disconnect signals from client
-    uiInterface.ThreadSafeMessageBox.disconnect(boost::bind(ThreadSafeMessageBox, this, boost::placeholders::_1, boost::placeholders::_2, boost::placeholders::_3));
+    m_handler_message_box->disconnect();
 }

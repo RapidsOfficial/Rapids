@@ -199,6 +199,7 @@ BITCOIN_CORE_H = \
   httprpc.h \
   httpserver.h \
   init.h \
+  interfaces/handler.h \
   interfaces/wallet.h \
   invalid.h \
   invalid_outpoints.json.h \
@@ -548,6 +549,7 @@ libbitcoin_util_a_SOURCES = \
   compat/glibcxx_sanity.cpp \
   compat/strnlen.cpp \
   fs.cpp \
+  interfaces/handler.cpp \
   logging.cpp \
   random.cpp \
   rpc/protocol.cpp \
