@@ -4539,7 +4539,7 @@ bool static LoadBlockIndexDB(std::string& strError)
     if(fReindexing) fReindex = true;
 
     // Check whether we have an address index
-    pblocktree->ReadFlag("addressindex", fAddressIndex);
+    pblocktree->ReadFlag("addrindex", fAddressIndex);
     LogPrintf("%s: address index %s\n", __func__, fAddressIndex ? "enabled" : "disabled");
 
     // Check whether we have a timestamp index
@@ -4722,7 +4722,7 @@ bool InitBlockIndex()
 
     // Use the provided setting for -addressindex in the new database
     fAddressIndex = GetBoolArg("-addressindex", DEFAULT_ADDRESSINDEX);
-    pblocktree->WriteFlag("addressindex", fAddressIndex);
+    pblocktree->WriteFlag("addrindex", fAddressIndex);
 
     // Use the provided setting for -timestampindex in the new database
     fTimestampIndex = GetBoolArg("-timestampindex", DEFAULT_TIMESTAMPINDEX);
