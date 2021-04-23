@@ -35,11 +35,6 @@ LIBBITCOIN_ZEROCOIN=libzerocoin/libbitcoin_zerocoin.a
 LIBBITCOINQT=qt/libbitcoinqt.a
 LIBSECP256K1=secp256k1/libsecp256k1.la
 LIBSAPLING=libsapling.a
-if ENABLE_ONLINE_RUST
-LIBRUSTZCASH=$(top_builddir)/target/release/librustzcash.a
-else
-LIBRUSTZCASH=$(top_builddir)/target/$(RUST_TARGET)/release/librustzcash.a
-endif
 
 if ENABLE_ZMQ
 LIBBITCOIN_ZMQ=libbitcoin_zmq.a
@@ -55,6 +50,7 @@ RUST_ENV_VARS = RUSTC="$(RUSTC)" TERM=dumb
 RUST_BUILD_OPTS = --release
 
 if ENABLE_ONLINE_RUST
+LIBRUSTZCASH=$(top_builddir)/target/release/librustzcash.a
 # Ensure that .cargo/config does not exist
 CARGO_CONFIGURED = $(top_srcdir)/.cargo/.configured-for-online
 $(CARGO_CONFIGURED):
@@ -64,16 +60,17 @@ $(CARGO_CONFIGURED):
 else
 # Enable dependency vendoring
 RUST_BUILD_OPTS += --locked --offline
-if HAVE_RUST_TARGET
-RUST_BUILD_OPTS += --target $(RUST_TARGET)
-endif
-
 CARGO_CONFIGURED = $(top_srcdir)/.cargo/.configured-for-offline
 $(CARGO_CONFIGURED): $(top_srcdir)/.cargo/config.offline
 	$(AM_V_at)rm -f $(top_srcdir)/.cargo/.configured-for-online
 	$(AM_V_at)cp $< $(top_srcdir)/.cargo/config
 	$(AM_V_at)echo "directory = \"$(RUST_VENDORED_SOURCES)\"" >> $(top_srcdir)/.cargo/config
 	$(AM_V_at)touch $@
+endif
+
+if HAVE_RUST_TARGET
+LIBRUSTZCASH=$(top_builddir)/target/$(RUST_TARGET)/release/librustzcash.a
+RUST_BUILD_OPTS += --target $(RUST_TARGET)
 endif
 
 cargo-build: $(CARGO_CONFIGURED)
