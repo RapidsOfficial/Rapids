@@ -168,7 +168,7 @@ CBlockIndex* pindexBestInvalid;
      */
 std::set<CBlockIndex*, CBlockIndexWorkComparator> setBlockIndexCandidates;
 /** Number of nodes with fSyncStarted. */
-int nSyncStarted = 0;
+int nSyncStarted GUARDED_BY(cs_main) = 0;
 /** All pairs A->B, where A (or one if its ancestors) misses transactions, but B has transactions. */
 std::multimap<CBlockIndex*, CBlockIndex*> mapBlocksUnlinked;
 
@@ -188,7 +188,7 @@ uint32_t nBlockSequenceId = 1;
      * Sources of received blocks, to be able to send them reject messages or ban
      * them, if processing happens afterwards. Protected by cs_main.
      */
-std::map<uint256, NodeId> mapBlockSource;
+std::map<uint256, NodeId> mapBlockSource GUARDED_BY(cs_main);
 
 /**
      * Filter for transactions that were recently rejected by
@@ -210,8 +210,8 @@ std::map<uint256, NodeId> mapBlockSource;
      *
      * Memory used: 1.7MB
      */
-boost::scoped_ptr<CRollingBloomFilter> recentRejects;
-uint256 hashRecentRejectsChainTip;
+boost::scoped_ptr<CRollingBloomFilter> recentRejects GUARDED_BY(cs_main);
+uint256 hashRecentRejectsChainTip GUARDED_BY(cs_main);
 
 /** Blocks that are in flight, and that are in the queue to be downloaded. Protected by cs_main. */
 struct QueuedBlock {
@@ -221,13 +221,13 @@ struct QueuedBlock {
     int nValidatedQueuedBefore; //! Number of blocks queued with validated headers (globally) at the time this one is requested.
     bool fValidatedHeaders;     //! Whether this block has validated headers at the time of request.
 };
-std::map<uint256, std::pair<NodeId, std::list<QueuedBlock>::iterator> > mapBlocksInFlight;
+std::map<uint256, std::pair<NodeId, std::list<QueuedBlock>::iterator> > mapBlocksInFlight GUARDED_BY(cs_main);
 
 /** Number of blocks in flight with validated headers. */
 int nQueuedValidatedHeaders = 0;
 
 /** Number of preferable block download peers. */
-int nPreferredDownload = 0;
+int nPreferredDownload GUARDED_BY(cs_main) = 0;
 
 /** Dirty block index entries. */
 std::set<CBlockIndex*> setDirtyBlockIndex;
@@ -377,10 +377,10 @@ struct CNodeState {
 };
 
 /** Map maintaining per-node state. Requires cs_main. */
-std::map<NodeId, CNodeState> mapNodeState;
+std::map<NodeId, CNodeState> mapNodeState GUARDED_BY(cs_main);
 
 // Requires cs_main.
-CNodeState* State(NodeId pnode)
+CNodeState* State(NodeId pnode) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     std::map<NodeId, CNodeState>::iterator it = mapNodeState.find(pnode);
     if (it == mapNodeState.end())
@@ -388,7 +388,7 @@ CNodeState* State(NodeId pnode)
     return &it->second;
 }
 
-void UpdatePreferredDownload(CNode* node, CNodeState* state)
+void UpdatePreferredDownload(CNode* node, CNodeState* state) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     nPreferredDownload -= state->fPreferredDownload;
 
@@ -452,7 +452,7 @@ void FinalizeNode(NodeId nodeid, bool& fUpdateConnectionTime)
 }
 
 // Requires cs_main.
-void MarkBlockAsReceived(const uint256& hash)
+void MarkBlockAsReceived(const uint256& hash) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     std::map<uint256, std::pair<NodeId, std::list<QueuedBlock>::iterator> >::iterator itInFlight = mapBlocksInFlight.find(hash);
     if (itInFlight != mapBlocksInFlight.end()) {
@@ -466,7 +466,7 @@ void MarkBlockAsReceived(const uint256& hash)
 }
 
 // Requires cs_main.
-void MarkBlockAsInFlight(NodeId nodeid, const uint256& hash, CBlockIndex* pindex = NULL)
+void MarkBlockAsInFlight(NodeId nodeid, const uint256& hash, CBlockIndex* pindex = NULL) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     CNodeState* state = State(nodeid);
     assert(state != NULL);
@@ -482,7 +482,7 @@ void MarkBlockAsInFlight(NodeId nodeid, const uint256& hash, CBlockIndex* pindex
 }
 
 /** Check whether the last unknown block a peer advertised is not yet known. */
-void ProcessBlockAvailability(NodeId nodeid)
+void ProcessBlockAvailability(NodeId nodeid) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     CNodeState* state = State(nodeid);
     assert(state != NULL);
@@ -498,7 +498,7 @@ void ProcessBlockAvailability(NodeId nodeid)
 }
 
 /** Update tracking information about which blocks a peer is assumed to have. */
-void UpdateBlockAvailability(NodeId nodeid, const uint256& hash)
+void UpdateBlockAvailability(NodeId nodeid, const uint256& hash) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     CNodeState* state = State(nodeid);
     assert(state != NULL);
@@ -538,7 +538,7 @@ CBlockIndex* LastCommonAncestor(CBlockIndex* pa, CBlockIndex* pb)
 
 /** Update pindexLastCommonBlock and add not-in-flight missing successors to vBlocks, until it has
  *  at most count entries. */
-void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<CBlockIndex*>& vBlocks, NodeId& nodeStaller)
+void FindNextBlocksToDownload(NodeId nodeid, unsigned int count, std::vector<CBlockIndex*>& vBlocks, NodeId& nodeStaller) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
 {
     if (count == 0)
         return;
