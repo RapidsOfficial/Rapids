@@ -203,8 +203,8 @@ void DashboardWidget::loadWalletModel()
 			ui->comboBoxSort->setVisible(false);
 		}
 
-		connect(ui->pushImgEmpty, &QPushButton::clicked, window, &RapidsGUI::openFAQ);
-		connect(ui->btnHowTo, &QPushButton::clicked, window, &RapidsGUI::openFAQ);
+		connect(ui->pushImgEmpty, &QPushButton::clicked, window, [this](){window->openFAQ();});
+		connect(ui->btnHowTo, &QPushButton::clicked, window, [this](){window->openFAQ();});
 		connect(txModel, &TransactionTableModel::txArrived, this, &DashboardWidget::onTxArrived);
 
 		// Notification pop-up for new transaction

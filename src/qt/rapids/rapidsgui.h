@@ -24,6 +24,7 @@
 #include "qt/rapids/masternodeswidget.h"
 #include "qt/rapids/snackbar.h"
 #include "qt/rapids/settings/settingswidget.h"
+#include "qt/rapids/settings/settingsfaqwidget.h"
 #include "qt/rpcconsole.h"
 
 namespace interfaces {
@@ -90,7 +91,7 @@ public Q_SLOTS:
     void messageInfo(const QString& message);
     bool execDialog(QDialog *dialog, int xDiv = 3, int yDiv = 5);
     /** Open FAQ dialog **/
-    void openFAQ(int section = 0);
+    void openFAQ(SettingsFaqWidget::Section section = SettingsFaqWidget::Section::INTRO);
 
     /** Show incoming transaction notification for new transactions. */
     void incomingTransaction(const QString& date, int unit, const CAmount& amount, const QString& type, const QString& address);

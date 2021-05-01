@@ -88,18 +88,14 @@ SettingsFaqWidget::SettingsFaqWidget(RapidsGUI *parent) :
 
 void SettingsFaqWidget::showEvent(QShowEvent *event)
 {
-    if (pos != 0) {
-        QPushButton* btn = getButtons()[pos - 1];
-        QMetaObject::invokeMethod(btn, "setChecked", Qt::QueuedConnection, Q_ARG(bool, true));
-        QMetaObject::invokeMethod(btn, "clicked", Qt::QueuedConnection);
-    }
+    QPushButton* btn = getButtons()[section];
+    QMetaObject::invokeMethod(btn, "setChecked", Qt::QueuedConnection, Q_ARG(bool, true));
+    QMetaObject::invokeMethod(btn, "clicked", Qt::QueuedConnection);
 }
 
-void SettingsFaqWidget::setSection(int num)
+void SettingsFaqWidget::setSection(Section _section)
 {
-    if (num < 1 || num > 10)
-        return;
-    pos = num;
+    section = _section;
 }
 
 void SettingsFaqWidget::onFaqClicked(const QWidget* const widget)

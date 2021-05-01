@@ -17,7 +17,6 @@
 #include "guiinterface.h"
 #include "qt/rapids/qtutils.h"
 #include "qt/rapids/defaultdialog.h"
-#include "qt/rapids/settings/settingsfaqwidget.h"
 
 #include "init.h"
 #include "util.h"
@@ -588,11 +587,11 @@ int RapidsGUI::getNavWidth()
     return this->navMenu->width();
 }
 
-void RapidsGUI::openFAQ(int section)
+void RapidsGUI::openFAQ(SettingsFaqWidget::Section section)
 {
     showHide(true);
     SettingsFaqWidget* dialog = new SettingsFaqWidget(this);
-    if (section > 0) dialog->setSection(section);
+    dialog->setSection(section);
     openDialogWithOpaqueBackgroundFullScreen(dialog, this);
     dialog->deleteLater();
 }
