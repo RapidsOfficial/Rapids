@@ -136,7 +136,7 @@ SettingsWidget::SettingsWidget(RapidsGUI* parent) :
 
     // Help
     connect(ui->pushButtonHelp, &QPushButton::clicked, this, &SettingsWidget::onHelpClicked);
-    connect(ui->pushButtonHelp1, &QPushButton::clicked, window, &RapidsGUI::openFAQ);
+    connect(ui->pushButtonHelp1, &QPushButton::clicked, window, [this](){window->openFAQ();});
     connect(ui->pushButtonHelp2, &QPushButton::clicked, this, &SettingsWidget::onAboutClicked);
 
     // Get restart command-line parameters and handle restart
