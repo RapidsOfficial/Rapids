@@ -1,6 +1,6 @@
 <a href="https://imgbb.com/"><img src="https://i.ibb.co/Cwdp2XM/Rapids-V2-Logo-Side-Writing.png" alt="Rapids-V2-Logo-Side-Writing" border="0"></a>
 
-Rapids staging tree 3.4
+Rapids staging tree 4.0
 =======================
 
 ![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg)
@@ -17,27 +17,27 @@ License
 Rapids is released under the terms of the MIT license. See [COPYING](https://github.com/RapidsOfficial/Rapids/blob/develop/COPYING) for more information or see https://opensource.org/licenses/MIT.
 
 Specifications
-=================================================
-|      **Parameter**    |   **Specification**       | 
-|-----------------------|---------------------------|
-| Block Time            | 60 Seconds                |
-| Max Coin Supply       | 30,000,000,000 RPD        |
-| Premine               | 20,000,000,000 RPD        |
-| Masternode Collateral | 10,000,000 RPD            |
-| Reward Rate per block | MN 65%. POS 35%           |    
-| Halving Cycle         | 4years (2102400 blocks)   |
+==========================================================
+|      **Parameter**    |   **Specification**             | 
+|-----------------------|---------------------------------|
+| Block Time            | 60 Seconds                      |
+| Max Coin Supply       | 30,000,000 RPD                  |
+| Premine               | 20,000,000 RPD                  |
+| Masternode Collateral | 10,000 RPD                      |
+| Reward Rate per block | MN 60%. POS 20% Development 20% |    
+| Halving Cycle         | 4years (2102400 blocks)         |
 
 Reward Distribution
 =================================================
 |  **Block Height**  | **Reward per block** 
 |--------------------|-----------------------|
-| 1                  |  20,000,000,000 RPD   | 
-| 2-2102401          |  3567.352 RPD         |
-| 2102402-4204801    |  1783.676 RPD         | 
-| 4204802-6307201    |  891.838 RPD          |
-| 6307202-8409601    |  445.919 RPD          | 
-| 8409602-10512001   |  222.959 RPD          | 
-| 10512002-Infinite  |  111.480 RPD          | 
+| 1                  |  20,000,000 RPD       | 
+| 2-2102401          |  1.7835      RPD      |
+| 2102402-4204801    |  0.89175     RPD      | 
+| 4204802-6307201    |  0.445875    RPD      |
+| 6307202-8409601    |  0.2229375   RPD      | 
+| 8409602-10512001   |  0.11146875  RPD      | 
+| 10512002-Infinite  |  0.055734375 RPD      | 
 
 Staking
 =================================================
