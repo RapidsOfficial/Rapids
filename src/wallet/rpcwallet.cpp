@@ -3180,6 +3180,8 @@ UniValue listunspent(const JSONRPCRequest& request)
 
     RPCTypeCheck(request.params, boost::assign::list_of(UniValue::VNUM)(UniValue::VNUM)(UniValue::VARR)(UniValue::VNUM));
 
+    const int nHeight = chainActive.Height();
+
     int nMinDepth = 1;
     if (request.params.size() > 0)
         nMinDepth = request.params[0].get_int();
@@ -3238,7 +3240,7 @@ UniValue listunspent(const JSONRPCRequest& request)
                 continue;
         }
 
-        CAmount nValue = out.tx->vout[out.i].nValue;
+        CAmount nValue = out.tx->vout[out.i].GetValue(nHeight - out.nDepth, nHeight);
         const CScript& pk = out.tx->vout[out.i].scriptPubKey;
         UniValue entry(UniValue::VOBJ);
         entry.push_back(Pair("txid", out.tx->GetHash().GetHex()));
