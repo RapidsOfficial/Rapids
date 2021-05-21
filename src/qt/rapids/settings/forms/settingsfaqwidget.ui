@@ -342,7 +342,7 @@
                   <enum>Qt::NoFocus</enum>
                  </property>
                  <property name="text">
-                  <string>https://www.rapids.org/</string>
+                  <string>https://rapidsnetwork.io/</string>
                  </property>
                 </widget>
                </item>
@@ -820,7 +820,7 @@
                            &lt;a style='color: #b07d00' href='https://discord.gg/ndQVgtv'&gt;
                            #support in our Discord&lt;/a&gt;.
                            You can also write us at
-                           &lt;a style='color: #b07d00' href='http://www.rapids.org/discussion'&gt;
+                           &lt;a style='color: #b07d00' href='http://rapidsnetwork.io/discussion'&gt;
                            our support site&lt;/a&gt;.
                            &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;
                          </string>
