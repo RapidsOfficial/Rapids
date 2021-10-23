@@ -111,6 +111,9 @@ std::map<std::string, std::vector<std::string> > mapMultiArgs;
 bool fDaemon = false;
 std::string strMiscWarning;
 
+/** Flag to indicate, whether the Omni Core log file should be reopened. */
+std::atomic<bool> fReopenOmniCoreLog(false);
+
 /** Init OpenSSL library multithreading support */
 static RecursiveMutex** ppmutexOpenSSL;
 void locking_callback(int mode, int i, const char* file, int line) NO_THREAD_SAFETY_ANALYSIS

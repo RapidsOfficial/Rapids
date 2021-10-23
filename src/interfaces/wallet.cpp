@@ -7,7 +7,6 @@
 #include "wallet.h"
 
 namespace interfaces {
-
     WalletBalances Wallet::getBalances() {
         WalletBalances result;
         result.balance = m_wallet.GetAvailableBalance();

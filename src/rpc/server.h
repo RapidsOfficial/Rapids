@@ -266,6 +266,7 @@ extern UniValue waitforblockheight(const JSONRPCRequest& request);
 extern UniValue getdifficulty(const JSONRPCRequest& request);
 extern UniValue getmempoolinfo(const JSONRPCRequest& request);
 extern UniValue getrawmempool(const JSONRPCRequest& request);
+extern UniValue clearmempool(const JSONRPCRequest& request);
 extern UniValue getblockhash(const JSONRPCRequest& request);
 extern UniValue getblock(const JSONRPCRequest& request);
 extern UniValue getblockheader(const JSONRPCRequest& request);

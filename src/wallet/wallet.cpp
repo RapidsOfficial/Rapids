@@ -170,6 +170,18 @@ int64_t CWallet::GetKeyCreationTime(const CTxDestination& address)
     return 0;
 }
 
+bool CWallet::GetPubKey(const CTxDestination& address, CPubKey& keyRet)
+{
+    const CKeyID* keyID = boost::get<CKeyID>(&address);
+    if (keyID) {
+        if (GetPubKey(*keyID, keyRet)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool CWallet::AddKeyPubKey(const CKey& secret, const CPubKey& pubkey)
 {
     AssertLockHeld(cs_wallet); // mapKeyMetadata

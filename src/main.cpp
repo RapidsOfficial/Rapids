@@ -238,6 +238,20 @@ std::set<int> setDirtyFileInfo;
 
 //////////////////////////////////////////////////////////////////////////////
 //
+// Omni Core notification handlers
+//
+
+// TODO: replace handlers with signals
+int mastercore_handler_disc_begin(int nBlockNow, CBlockIndex const * pBlockIndex);
+int mastercore_handler_disc_end(int nBlockNow, CBlockIndex const * pBlockIndex);
+int mastercore_handler_block_begin(int nBlockNow, CBlockIndex const * pBlockIndex);
+int mastercore_handler_block_end(int nBlockNow, CBlockIndex const * pBlockIndex, unsigned int);
+int mastercore_handler_tx(const CTransaction &tx, int nBlock, unsigned int idx, CBlockIndex const * pBlockIndex);
+void TryToAddToMarkerCache(const CTransaction& tx);
+void RemoveFromMarkerCache(const CTransaction& tx);
+
+//////////////////////////////////////////////////////////////////////////////
+//
 // Registration of network node signals.
 //
 
@@ -1139,6 +1153,8 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
 
     GetMainSignals().SyncTransaction(tx, nullptr, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
 
+    TryToAddToMarkerCache(tx);
+
     return true;
 }
 
@@ -1529,7 +1545,7 @@ bool fLargeWorkForkFound = false;
 bool fLargeWorkInvalidChainFound = false;
 CBlockIndex *pindexBestForkTip = NULL, *pindexBestForkBase = NULL;
 
-static void AlertNotify(const std::string& strMessage, bool fThread)
+void AlertNotify(const std::string& strMessage, bool fThread)
 {
     uiInterface.NotifyAlertChanged();
     std::string strCmd = GetArg("-alertnotify", "");
@@ -1896,7 +1912,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
 }
 
 /** Abort with a message */
-static bool AbortNode(const std::string& strMessage, const std::string& userMessage="")
+bool AbortNode(const std::string& strMessage, const std::string& userMessage)
 {
     strMiscWarning = strMessage;
     LogPrintf("*** %s\n", strMessage);
@@ -1907,7 +1923,7 @@ static bool AbortNode(const std::string& strMessage, const std::string& userMess
     return false;
 }
 
-static bool AbortNode(CValidationState& state, const std::string& strMessage, const std::string& userMessage="")
+bool AbortNode(CValidationState& state, const std::string& strMessage, const std::string& userMessage)
 {
     AbortNode(strMessage, userMessage);
     return state.Error(strMessage);
@@ -2902,11 +2918,22 @@ bool static DisconnectTip(CValidationState& state)
     }
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev);
+
+    //! Omni Core: begin block disconnect notification
+    // // LogPrint("handler", "Omni Core handler: block disconnect begin [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
+    mastercore_handler_disc_begin(pindexDelete->nHeight, pindexDelete);
+
     // Let wallets know transactions went from 1-confirmed to
     // 0-confirmed or conflicted:
     for (const CTransaction& tx : block.vtx) {
         GetMainSignals().SyncTransaction(tx, pindexDelete->pprev, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
+        TryToAddToMarkerCache(tx);
     }
+
+    //! Omni Core: end of block disconnect notification
+    // // LogPrint("handler", "Omni Core handler: block disconnect end [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
+    mastercore_handler_disc_end(pindexDelete->nHeight, pindexDelete);
+
     return true;
 }
 
@@ -2968,6 +2995,10 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     int64_t nTime5 = GetTimeMicros();
     nTimeChainState += nTime5 - nTime4;
     LogPrint(BCLog::BENCH, "  - Writing chainstate: %.2fms [%.2fs]\n", (nTime5 - nTime4) * 0.001, nTimeChainState * 0.000001);
+
+    //! Omni Core: begin block connect notification
+    // // LogPrint("handler", "Omni Core handler: block connect begin [height: %d]\n", GetHeight());
+    mastercore_handler_block_begin(pindexNew->nHeight, pindexNew);
 
     // Remove conflicting transactions from the mempool.
     mempool.removeForBlock(pblock->vtx, pindexNew->nHeight, txConflicted, !IsInitialBlockDownload());
@@ -3197,6 +3228,11 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
     // sanely for performance or correctness!
     AssertLockNotHeld(cs_main);
 
+    //! Omni Core: transaction position within the block
+    unsigned int nTxIdx = 0;
+    //! Omni Core: number of meta transactions found
+    unsigned int nNumMetaTxs = 0;
+
     CBlockIndex* pindexNewTip = nullptr;
     CBlockIndex* pindexMostWork = nullptr;
     std::vector<std::tuple<CTransaction,CBlockIndex*,int>> txChanged;
@@ -3233,11 +3269,22 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
             // throw all transactions though the signal-interface
             for (const CTransaction &tx : txConflicted) {
                 GetMainSignals().SyncTransaction(tx, pindexNewTip, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
+                RemoveFromMarkerCache(tx);
             }
+
             // ... and about transactions that got confirmed:
             for(unsigned int i = 0; i < txChanged.size(); i++) {
                 GetMainSignals().SyncTransaction(std::get<0>(txChanged[i]), std::get<1>(txChanged[i]), std::get<2>(txChanged[i]));
+
+                //! Omni Core: new confirmed transaction notification
+                // // LogPrint("handler", "Omni Core handler: new confirmed transaction [height: %d, idx: %u]\n", GetHeight(), nTxIdx);
+                if (mastercore_handler_tx(std::get<0>(txChanged[i]), pindexNewTip->nHeight, nTxIdx++, pindexNewTip)) ++nNumMetaTxs;
+                RemoveFromMarkerCache(std::get<0>(txChanged[i]));
             }
+
+            //! Omni Core: end of block connect notification
+            // LogPrint("handler", "Omni Core handler: block connect end [new height: %d, found: %u txs]\n", GetHeight(), nNumMetaTxs);
+            mastercore_handler_block_end(pindexNewTip->nHeight, pindexNewTip, nNumMetaTxs);
 
             break;
         }

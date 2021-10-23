@@ -261,8 +261,13 @@ CAmount GetBlockValue(int nHeight);
 
 /** Create a new block index entry for a given block hash */
 CBlockIndex* InsertBlockIndex(uint256 hash);
+/** Abort with a message */
+bool AbortNode(const std::string &msg, const std::string &userMessage="");
+bool AbortNode(CValidationState& state, const std::string& strMessage, const std::string& userMessage="");
 /** Get statistics from node state */
 bool GetNodeStateStats(NodeId nodeid, CNodeStateStats& stats);
+/* Sends out an alert */
+void AlertNotify(const std::string& strMessage, bool fThread);
 /** Increase a node's misbehavior score. */
 void Misbehaving(NodeId nodeid, int howmuch) EXCLUSIVE_LOCKS_REQUIRED(cs_main);
 /** Flush all state, indexes and buffers to disk. */
@@ -470,5 +475,7 @@ static const unsigned int REJECT_HIGHFEE = 0x100;
 static const unsigned int REJECT_ALREADY_KNOWN = 0x101;
 /** Transaction conflicts with a transaction already known */
 static const unsigned int REJECT_CONFLICT = 0x102;
+
+static void RelayTransaction(const CTransaction& tx, CConnman& connman);
 
 #endif // BITCOIN_MAIN_H
