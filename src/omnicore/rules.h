@@ -9,11 +9,6 @@
 
 namespace mastercore
 {
-//! Block to enable the Exodus fundraiser address in regtest mode
-const int MONEYMAN_REGTEST_BLOCK = 101;
-//! Block to enable the Exodus fundraiser address on testnet
-const int MONEYMAN_TESTNET_BLOCK = 270775;
-
 //! Feature identifier to enable Class C transaction parsing and processing
 const uint16_t FEATURE_CLASS_C = 1;
 //! Feature identifier to enable the distributed token exchange
@@ -80,16 +75,8 @@ struct TransactionCheckpoint
 class CConsensusParams
 {
 public:
-    //! Earily bird bonus per week of Exodus crowdsale
-    double exodusBonusPerWeek;
-    //! Deadline of Exodus crowdsale as Unix timestamp
-    unsigned int exodusDeadline;
-    //! Number of MSC/TMSC generated per unit invested
-    int64_t exodusReward;
-    //! First block of the Exodus crowdsale
+    //! First block of the Exodus feature
     int GENESIS_BLOCK;
-    //! Last block of the Exodus crowdsale
-    int LAST_EXODUS_BLOCK;
 
     //! Minimum number of blocks to use for notice rules on activation
     int MIN_ACTIVATION_BLOCKS;
@@ -145,9 +132,6 @@ public:
     /** Returns a mapping of transaction types, and the blocks at which they are enabled. */
     virtual std::vector<TransactionRestriction> GetRestrictions() const;
 
-    /** Returns an empty vector of consensus checkpoints. */
-    virtual std::vector<ConsensusCheckpoint> GetCheckpoints() const;
-
     /** Returns an empty vector of transaction checkpoints. */
     virtual std::vector<TransactionCheckpoint> GetTransactions() const;
 
@@ -168,9 +152,6 @@ public:
     CMainConsensusParams();
     /** Destructor. */
     virtual ~CMainConsensusParams() {}
-
-    /** Returns consensus checkpoints for mainnet, used to verify transaction processing. */
-    virtual std::vector<ConsensusCheckpoint> GetCheckpoints() const;
 
     /** Returns transactions checkpoints for mainnet, used to verify DB consistency. */
     virtual std::vector<TransactionCheckpoint> GetTransactions() const;
@@ -223,8 +204,6 @@ bool IsAllowedOutputType(int whichType, int nBlock);
 /** Checks, if the transaction type and version is supported and enabled. */
 bool IsTransactionTypeAllowed(int txBlock, uint32_t txProperty, uint16_t txType, uint16_t version);
 
-/** Compares a supplied block, block hash and consensus hash against a hardcoded list of checkpoints. */
-bool VerifyCheckpoint(int block, const uint256& blockHash);
 /** Checks, if a specific transaction exists in the database. */
 bool VerifyTransactionExistence(int block);
 }

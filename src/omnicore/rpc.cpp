@@ -766,7 +766,7 @@ static UniValue omni_getbalance(const JSONRPCRequest& request)
         );
 
     std::string address = ParseAddress(request.params[0]);
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    uint32_t propertyId = ParsePropertyId(request.params[1]);
 
     RequireExistingProperty(propertyId);
 
@@ -2535,7 +2535,7 @@ static const CRPCCommand commands[] =
 #endif
 };
 
-void RegisterOmniDataRetrievalRPCCommands(CRPCTable &tableRPC)
+void RegisterOmniDataRetrievalRPCCommands()
 {
     for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
         tableRPC.appendCommand(commands[vcidx].name, &commands[vcidx]);

@@ -476,6 +476,6 @@ static const unsigned int REJECT_ALREADY_KNOWN = 0x101;
 /** Transaction conflicts with a transaction already known */
 static const unsigned int REJECT_CONFLICT = 0x102;
 
-static void RelayTransaction(const CTransaction& tx, CConnman& connman);
+void RelayTransaction(const CTransaction& tx, CConnman& connman);
 
 #endif // BITCOIN_MAIN_H

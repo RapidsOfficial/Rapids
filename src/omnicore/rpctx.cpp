@@ -1571,7 +1571,7 @@ static const CRPCCommand commands[] =
 #endif
 };
 
-void RegisterOmniTransactionCreationRPCCommands(CRPCTable &tableRPC)
+void RegisterOmniTransactionCreationRPCCommands()
 {
     for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
         tableRPC.appendCommand(commands[vcidx].name, &commands[vcidx]);

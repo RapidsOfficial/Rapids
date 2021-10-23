@@ -41,7 +41,7 @@ bool AddressToPubKey(const std::string& key, CPubKey& pubKey)
         return false;
     }
 
-    if (!pwalletMain->GetPubKey(dest, pubKey)) {
+    if (!pwalletMain->GetPubKeyFromDestination(dest, pubKey)) {
         PrintToLog("%s() ERROR: no public key in wallet for redemption address %s\n", __func__, key);
         return false;
     }

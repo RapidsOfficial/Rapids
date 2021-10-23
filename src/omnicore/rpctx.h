@@ -24,4 +24,6 @@ UniValue omni_sendchangeissuer(const UniValue& params, bool fHelp);
 UniValue omni_sendactivation(const UniValue& params, bool fHelp);
 UniValue omni_sendalert(const UniValue& params, bool fHelp);
 
+void RegisterOmniTransactionCreationRPCCommands();
+
 #endif // OMNICORE_RPCTX

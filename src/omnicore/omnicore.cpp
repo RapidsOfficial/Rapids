@@ -88,10 +88,10 @@ using namespace mastercore;
 RecursiveMutex cs_tally;
 
 //! Exodus address (changes based on network)
-static std::string exodus_address = "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P";
+static std::string exodus_address = "RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9";
 
 //! Mainnet Exodus address
-static const std::string exodus_mainnet = "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P";
+static const std::string exodus_mainnet = "RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9";
 //! Testnet Exodus address
 static const std::string exodus_testnet = "mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv";
 //! Testnet Exodus crowdsale address
@@ -648,35 +648,6 @@ void CheckWalletUpdate(bool forceUpdate)
 #endif
 }
 
-/**
- * Executes Exodus crowdsale purchases.
- *
- * @return True, if it was a valid purchase
- */
-static bool TXExodusFundraiser(const CTransaction& tx, const std::string& sender, int64_t amountInvested, int nBlock, unsigned int nTime)
-{
-    const int secondsPerWeek = 60 * 60 * 24 * 7;
-    const CConsensusParams& params = ConsensusParams();
-
-    if (nBlock >= params.GENESIS_BLOCK && nBlock <= params.LAST_EXODUS_BLOCK) {
-        int deadlineTimeleft = params.exodusDeadline - nTime;
-        double bonusPercentage = params.exodusBonusPerWeek * deadlineTimeleft / secondsPerWeek;
-        double bonus = 1.0 + std::max(bonusPercentage, 0.0);
-
-        int64_t amountGenerated = round(params.exodusReward * amountInvested * bonus);
-        if (amountGenerated > 0) {
-            PrintToLog("Exodus Fundraiser tx detected, tx %s generated %s\n", tx.GetHash().ToString(), FormatDivisibleMP(amountGenerated));
-
-            assert(update_tally_map(sender, OMNI_PROPERTY_MSC, amountGenerated, BALANCE));
-            assert(update_tally_map(sender, OMNI_PROPERTY_TMSC, amountGenerated, BALANCE));
-
-            return true;
-        }
-    }
-
-    return false;
-}
-
 //! Cache for potential Omni Layer transactions
 static std::set<uint256> setMarkerCache;
 
@@ -758,7 +729,6 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
     bool hasExodus = false;
     bool hasMultisig = false;
     bool hasOpReturn = false;
-    bool hasMoney = false;
 
     /* Fast Search
      * Perform a string comparison on hex for each scriptPubKey & look directly for Exodus hash160 bytes or omni marker bytes
@@ -771,13 +741,9 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
         const CTxOut& output = tx.vout[n];
         std::string strSPB = HexStr(output.scriptPubKey.begin(), output.scriptPubKey.end());
         if (strSPB != strClassAB) { // not an exodus marker
-            if (nBlock < 395000) { // class C not enabled yet, no need to search for marker bytes
-                continue;
-            } else {
-                if (strSPB.find(strClassC) != std::string::npos) {
-                    examineClosely = true;
-                    break;
-                }
+            if (strSPB.find(strClassC) != std::string::npos) {
+                examineClosely = true;
+                break;
             }
         } else {
             examineClosely = true;
@@ -808,9 +774,6 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
             if (ExtractDestination(output.scriptPubKey, dest)) {
                 if (dest == ExodusAddress()) {
                     hasExodus = true;
-                }
-                if (dest == ExodusCrowdsaleAddress(nBlock)) {
-                    hasMoney = true;
                 }
             }
         }
@@ -843,9 +806,9 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
     if (hasExodus && hasMultisig) {
         return OMNI_CLASS_B;
     }
-    if (hasExodus || hasMoney) {
-        return OMNI_CLASS_A;
-    }
+    // if (hasExodus || hasMoney) {
+    //     return OMNI_CLASS_A;
+    // }
 
     return NO_MARKER;
 }
@@ -1364,64 +1327,6 @@ int ParseTransaction(const CTransaction& tx, int nBlock, unsigned int idx, CMPTr
 }
 
 /**
- * Handles potential DEx payments.
- *
- * Note: must *not* be called outside of the transaction handler, and it does not
- * check, if a transaction marker exists.
- *
- * @return True, if valid
- */
-static bool HandleDExPayments(const CTransaction& tx, int nBlock, const std::string& strSender)
-{
-    int count = 0;
-
-    for (unsigned int n = 0; n < tx.vout.size(); ++n) {
-        CTxDestination dest;
-        if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
-            if (dest == ExodusAddress()) {
-                continue;
-            }
-            std::string strAddress = EncodeDestination(dest);
-            if (msc_debug_parser_dex) PrintToLog("payment #%d %s %s\n", count, strAddress, FormatIndivisibleMP(tx.vout[n].nValue));
-
-            // check everything and pay BTC for the property we are buying here...
-            if (0 == DEx_payment(tx.GetHash(), n, strAddress, strSender, tx.vout[n].nValue, nBlock)) ++count;
-        }
-    }
-
-    return (count > 0);
-}
-
-/**
- * Handles potential Exodus crowdsale purchases.
- *
- * Note: must *not* be called outside of the transaction handler, and it does not
- * check, if a transaction marker exists.
- *
- * @return True, if it was a valid purchase
- */
-static bool HandleExodusPurchase(const CTransaction& tx, int nBlock, const std::string& strSender, unsigned int nTime)
-{
-    int64_t amountInvested = 0;
-
-    for (unsigned int n = 0; n < tx.vout.size(); ++n) {
-        CTxDestination dest;
-        if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
-            if (dest == ExodusCrowdsaleAddress(nBlock)) {
-                amountInvested = tx.vout[n].nValue;
-                break; // TODO: maybe sum all values
-            }
-        }
-    }
-
-    if (0 < amountInvested) {
-        return TXExodusFundraiser(tx, strSender, amountInvested, nBlock, nTime);
-    }
-
-    return false;
-}
-
-/**
  * Reports the progress of the initial transaction scanning.
  *
  * The progress is printed to the console, written to the debug log file, and
@@ -1900,24 +1805,6 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
     bool fFoundTx = false;
     int pop_ret = parseTransaction(false, tx, nBlock, idx, mp_obj, nBlockTime);
 
-    if (pop_ret >= 0) {
-        assert(mp_obj.getEncodingClass() != NO_MARKER);
-        assert(mp_obj.getSender().empty() == false);
-
-        // extra iteration of the outputs for every transaction, not needed on mainnet after Exodus closed
-        const CConsensusParams& params = ConsensusParams();
-        if (isNonMainNet() || nBlock <= params.LAST_EXODUS_BLOCK) {
-            fFoundTx |= HandleExodusPurchase(tx, nBlock, mp_obj.getSender(), nBlockTime);
-        }
-    }
-
-    if (pop_ret > 0) {
-        assert(mp_obj.getEncodingClass() == OMNI_CLASS_A);
-        assert(mp_obj.getPayload().empty() == true);
-
-        fFoundTx |= HandleDExPayments(tx, nBlock, mp_obj.getSender());
-    }
-
     if (0 == pop_ret) {
         int interp_ret = mp_obj.interpretPacket();
         if (interp_ret) PrintToLog("!!! interpretPacket() returned %d !!!\n", interp_ret);
@@ -2022,25 +1909,9 @@ int mastercore_handler_block_end(int nBlockNow, CBlockIndex const * pBlockIndex,
         PrintToLog("Consensus hash for block %d: %s\n", nBlockNow, consensusHash.GetHex());
     }
 
-    // request checkpoint verification
-    bool checkpointValid = VerifyCheckpoint(nBlockNow, pBlockIndex->GetBlockHash());
-    if (!checkpointValid) {
-        // failed checkpoint, can't be trusted to provide valid data - shutdown client
-        const std::string& msg = strprintf(
-                "Shutting down due to failed checkpoint for block %d (hash %s). "
-                "Please restart with -startclean flag and if this doesn't work, please reach out to the support.\n",
-                nBlockNow, pBlockIndex->GetBlockHash().GetHex());
-        PrintToLog(msg);
-        if (!GetBoolArg("-overrideforcedshutdown", false)) {
-            boost::filesystem::path persistPath = GetDataDir() / "MP_persist";
-            if (boost::filesystem::exists(persistPath)) boost::filesystem::remove_all(persistPath); // prevent the node being restarted without a reparse after forced shutdown
-            AbortNode(msg, msg);
-        }
-    } else {
-        // save out the state after this block
-        if (IsPersistenceEnabled(nBlockNow) && nBlockNow >= ConsensusParams().GENESIS_BLOCK) {
-            PersistInMemoryState(pBlockIndex);
-        }
+    // save out the state after this block
+    if (IsPersistenceEnabled(nBlockNow) && nBlockNow >= ConsensusParams().GENESIS_BLOCK) {
+        PersistInMemoryState(pBlockIndex);
     }
 
     return 0;
@@ -2064,14 +1935,6 @@ int mastercore_handler_disc_end(int nBlockNow, CBlockIndex const * pBlockIndex)
 
 /**
  * Returns the Exodus address.
- *
- * Main network:
- *   1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P
- *
- * Test network:
- *   mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv
- *
- * @return The Exodus address
  */
 const CTxDestination ExodusAddress()
 {
@@ -2082,32 +1945,6 @@ const CTxDestination ExodusAddress()
         static CTxDestination mainAddress = DecodeDestination(exodus_mainnet);
         return mainAddress;
     }
-}
-
-/**
- * Returns the Exodus crowdsale address.
- *
- * Main network:
- *   1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P
- *
- * Test network:
- *   mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv (for blocks <  270775)
- *   moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP (for blocks >= 270775)
- *
- * @return The Exodus fundraiser address
- */
-const CTxDestination ExodusCrowdsaleAddress(int nBlock)
-{
-    if (MONEYMAN_TESTNET_BLOCK <= nBlock && isNonMainNet()) {
-        static CTxDestination moneyAddress = DecodeDestination(getmoney_testnet);
-        return moneyAddress;
-    }
-    else if (MONEYMAN_REGTEST_BLOCK <= nBlock && RegTest()) {
-        static CTxDestination moneyAddress = DecodeDestination(getmoney_testnet);
-        return moneyAddress;
-    }
-
-    return ExodusAddress();
 }
 
 /**

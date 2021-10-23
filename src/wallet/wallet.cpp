@@ -170,7 +170,7 @@ int64_t CWallet::GetKeyCreationTime(const CTxDestination& address)
     return 0;
 }
 
-bool CWallet::GetPubKey(const CTxDestination& address, CPubKey& keyRet)
+bool CWallet::GetPubKeyFromDestination(const CTxDestination& address, CPubKey& keyRet)
 {
     const CKeyID* keyID = boost::get<CKeyID>(&address);
     if (keyID) {

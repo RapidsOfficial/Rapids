@@ -122,9 +122,6 @@ std::string FormatShortMP(uint32_t propertyId, int64_t amount);
 /** Returns the Exodus address. */
 const CTxDestination ExodusAddress();
 
-/** Returns the Exodus crowdsale address. */
-const CTxDestination ExodusCrowdsaleAddress(int nBlock = 0);
-
 /** Returns the marker for class C transactions. */
 const std::vector<unsigned char> GetOmMarker();
 

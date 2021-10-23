@@ -10,5 +10,6 @@ UniValue omni_createrawtx_input(const UniValue& params, bool fHelp);
 UniValue omni_createrawtx_reference(const UniValue& params, bool fHelp);
 UniValue omni_createrawtx_change(const UniValue& params, bool fHelp);
 
+void RegisterOmniRawTransactionRPCCommands();
 
 #endif // OMNICORE_RPCRAWTX_H

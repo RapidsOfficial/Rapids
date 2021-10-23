@@ -704,7 +704,7 @@ static const CRPCCommand commands[] =
     { "omni layer (payload creation)", "omni_createpayload_unfreeze",            &omni_createpayload_unfreeze,            true },
 };
 
-void RegisterOmniPayloadCreationRPCCommands(CRPCTable &tableRPC)
+void RegisterOmniPayloadCreationRPCCommands()
 {
     for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
         tableRPC.appendCommand(commands[vcidx].name, &commands[vcidx]);
