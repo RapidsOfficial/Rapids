@@ -25,6 +25,7 @@
 #include "qt/rapids/snackbar.h"
 #include "qt/rapids/settings/settingswidget.h"
 #include "qt/rapids/settings/settingsfaqwidget.h"
+#include "qt/balancesdialog.h"
 #include "qt/rpcconsole.h"
 
 namespace interfaces {
@@ -72,6 +73,7 @@ public Q_SLOTS:
     void goToMasterNodes();
     void goToColdStaking();
     void goToSettings();
+    void gotoBalancesPage();
     void goToSettingsInfo();
     void openNetworkMonitor();
 
@@ -139,6 +141,8 @@ private:
     MasterNodesWidget *masterNodesWidget = nullptr;
     ColdStakingWidget *coldStakingWidget = nullptr;
     SettingsWidget* settingsWidget = nullptr;
+
+    BalancesDialog *balancesPage = nullptr;
 
     SnackBar *snackBar = nullptr;
 

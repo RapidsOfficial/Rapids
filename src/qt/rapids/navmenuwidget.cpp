@@ -116,11 +116,8 @@ void NavMenuWidget::onSettingsClicked(){
 }
 
 void NavMenuWidget::onTokensClicked(){
-    QMessageBox::warning(
-        this,
-        tr("Native Tokens"),
-        tr("Native tokens coming soon.")
-    );
+    window->gotoBalancesPage();
+    onNavSelected(ui->btnTokens);
 }
 
 void NavMenuWidget::onReceiveClicked(){
