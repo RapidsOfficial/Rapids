@@ -18,6 +18,15 @@ QT_FORMS_UI = \
   qt/forms/openuridialog.ui \
   qt/forms/optionsdialog.ui \
   qt/forms/rpcconsole.ui \
+  qt/forms/sendmpdialog.ui \
+  qt/forms/lookupaddressdialog.ui \
+  qt/forms/lookupspdialog.ui \
+  qt/forms/lookuptxdialog.ui \
+  qt/forms/txhistorydialog.ui \
+  qt/forms/metadexcanceldialog.ui \
+  qt/forms/metadexdialog.ui \
+  qt/forms/tradehistorydialog.ui \
+  qt/forms/balancesdialog.ui \
   qt/rapids/forms/loadingdialog.ui \
   qt/rapids/forms/snackbar.ui \
   qt/rapids/forms/navmenuwidget.ui \
@@ -99,6 +108,15 @@ QT_MOC_CPP = \
   qt/moc_transactiontablemodel.cpp \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletmodel.cpp \
+  qt/moc_sendmpdialog.cpp \
+  qt/moc_lookupaddressdialog.cpp \
+  qt/moc_lookupspdialog.cpp \
+  qt/moc_lookuptxdialog.cpp \
+  qt/moc_txhistorydialog.cpp \
+  qt/moc_balancesdialog.cpp \
+  qt/moc_metadexdialog.cpp \
+  qt/moc_metadexcanceldialog.cpp \
+  qt/moc_tradehistorydialog.cpp \
   qt/rapids/moc_loadingdialog.cpp \
   qt/rapids/moc_pwidget.cpp \
   qt/rapids/moc_focuseddialog.cpp \
@@ -216,6 +234,17 @@ BITCOIN_QT_H = \
   qt/rapids/pfborderimage.h \
   qt/rapids/loadingdialog.h \
   qt/winshutdownmonitor.h \
+  qt/lookupaddressdialog.h \
+  qt/lookupspdialog.h \
+  qt/lookuptxdialog.h \
+  qt/txhistorydialog.h \
+  qt/balancesdialog.h \
+  qt/omnicore_init.h \
+  qt/metadexdialog.h \
+  qt/metadexcanceldialog.h \
+  qt/tradehistorydialog.h \
+  qt/sendmpdialog.h \
+  qt/omnicore_qtutils.h \
   qt/rapids/pwidget.h \
   qt/rapids/focuseddialog.h \
   qt/rapids/guitransactionsutils.h \
@@ -288,6 +317,20 @@ RES_ICONS = \
   qt/res/icons/ic-transaction-mint.png \
   qt/res/icons/ic-transaction-sent.png \
   qt/res/icons/ic-transaction-staked.png \
+  qt/res/icons/balances.png \
+  qt/res/icons/exchange.png \
+  qt/res/icons/meta_cancelled.png \
+  qt/res/icons/meta_filled.png \
+  qt/res/icons/meta_open.png \
+  qt/res/icons/meta_partcancelled.png \
+  qt/res/icons/meta_partfilled.png \
+  qt/res/icons/meta_pending.png \
+  qt/res/icons/omni_in.png \
+  qt/res/icons/omni_inout.png \
+  qt/res/icons/omni_invalid.png \
+  qt/res/icons/omni_out.png \
+  qt/res/icons/omni_hourglass.png \
+  qt/res/icons/tools.png \
   qt/rapids/res/img/bg-dashboard-banner.png \
   qt/rapids/res/img/bg-multi-number-dark.png \
   qt/rapids/res/img/ic-check-locked.png \
@@ -507,7 +550,10 @@ BITCOIN_QT_BASE_CPP = \
   qt/qvaluecombobox.cpp \
   qt/rpcconsole.cpp \
   qt/trafficgraphwidget.cpp \
-  qt/utilitydialog.cpp
+  qt/utilitydialog.cpp \
+  qt/utilitydialog.cpp \
+  qt/omnicore_init.cpp \
+  qt/omnicore_qtutils.cpp
 
 BITCOIN_QT_WINDOWS_CPP = qt/winshutdownmonitor.cpp
 
@@ -527,6 +573,15 @@ BITCOIN_QT_WALLET_CPP = \
   qt/transactiontablemodel.cpp \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
+  qt/sendmpdialog.cpp \
+  qt/lookupaddressdialog.cpp \
+  qt/lookupspdialog.cpp \
+  qt/lookuptxdialog.cpp \
+  qt/txhistorydialog.cpp \
+  qt/balancesdialog.cpp \
+  qt/metadexdialog.cpp \
+  qt/metadexcanceldialog.cpp \
+  qt/tradehistorydialog.cpp \
   qt/rapids/loadingdialog.cpp \
   qt/rapids/pwidget.cpp \
   qt/rapids/focuseddialog.cpp \
