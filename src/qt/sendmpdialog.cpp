@@ -49,24 +49,23 @@ using std::ostringstream;
 
 using namespace mastercore;
 
-SendMPDialog::SendMPDialog(const PlatformStyle *platformStyle, QWidget *parent) :
-    QDialog(parent),
+SendMPDialog::SendMPDialog() :
     ui(new Ui::SendMPDialog),
     clientModel(0),
-    walletModel(0),
-    platformStyle(platformStyle)
+    walletModel(0)
+    // platformStyle(platformStyle)
 {
     ui->setupUi(this);
 
     // Use platformStyle instead of ifdef Q_OS_MAC to hide icons on Mac
-    if (!platformStyle->getImagesOnButtons()) {
-        ui->clearButton->setIcon(QIcon());
-        ui->sendButton->setIcon(QIcon());
-    } else {
-        // Use platformStyle to color the icons to match the rest of the UI
-        ui->clearButton->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
-        ui->sendButton->setIcon(platformStyle->SingleColorIcon(":/icons/send"));
-    }
+    // if (!platformStyle->getImagesOnButtons()) {
+    //     ui->clearButton->setIcon(QIcon());
+    //     ui->sendButton->setIcon(QIcon());
+    // } else {
+    //     // Use platformStyle to color the icons to match the rest of the UI
+    //     ui->clearButton->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
+    //     ui->sendButton->setIcon(platformStyle->SingleColorIcon(":/icons/send"));
+    // }
 
 #if QT_VERSION >= 0x040700 // populate placeholder text
     ui->sendToLineEdit->setPlaceholderText("Enter an Omni Layer address (e.g. 1oMn1LaYeRADDreSShef77z6A5S4P)");
@@ -80,7 +79,7 @@ SendMPDialog::SendMPDialog(const PlatformStyle *platformStyle, QWidget *parent) 
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendButtonClicked()));
 
     // initial update
-    balancesUpdated();
+    // balancesUpdated();
 }
 
 SendMPDialog::~SendMPDialog()
@@ -114,7 +113,6 @@ void SendMPDialog::updatePropSelector()
     uint32_t nextPropIdTestEco = GetNextPropertyId(false); // property ID rather than a fixed value like 100000 (optimization)
     QString spId = ui->propertyComboBox->itemData(ui->propertyComboBox->currentIndex()).toString();
     ui->propertyComboBox->clear();
-
     for (unsigned int propertyId = 1; propertyId < nextPropIdMainEco; propertyId++) {
         if ((global_balance_money[propertyId] > 0) || (global_balance_reserved[propertyId] > 0)) {
             std::string spName = getPropertyName(propertyId);

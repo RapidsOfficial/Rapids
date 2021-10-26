@@ -28,7 +28,7 @@ class SendMPDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SendMPDialog(const PlatformStyle *platformStyle, QWidget *parent = 0);
+    explicit SendMPDialog();
     ~SendMPDialog();
 
     void setClientModel(ClientModel *model);
@@ -51,7 +51,6 @@ private:
     Ui::SendMPDialog *ui;
     ClientModel *clientModel;
     WalletModel *walletModel;
-    const PlatformStyle *platformStyle;
 
 Q_SIGNALS:
     // Fired when a message should be reported to the user

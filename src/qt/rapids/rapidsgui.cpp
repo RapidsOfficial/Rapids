@@ -130,6 +130,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
         // Omni
         balancesPage = new BalancesDialog();
+        sendTokenPage = new SendMPDialog();
 
         // Add to parent
         stackedContainer->addWidget(dashboard);
@@ -140,6 +141,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         stackedContainer->addWidget(coldStakingWidget);
         stackedContainer->addWidget(settingsWidget);
         stackedContainer->addWidget(balancesPage);
+        stackedContainer->addWidget(sendTokenPage);
         stackedContainer->setCurrentWidget(dashboard);
 
     } else
@@ -257,6 +259,7 @@ void RapidsGUI::setClientModel(ClientModel* clientModel)
         sendWidget->setClientModel(clientModel);
         settingsWidget->setClientModel(clientModel);
         balancesPage->setClientModel(clientModel);
+        sendTokenPage->setClientModel(clientModel);
 
         // Receive and report messages from client model
         connect(clientModel, &ClientModel::message, this, &RapidsGUI::message);
@@ -507,8 +510,11 @@ void RapidsGUI::goToSettings(){
 }
 
 void RapidsGUI::gotoBalancesPage(){
-    balancesPage->balancesUpdated();
-    showTop(balancesPage);
+    // balancesPage->balancesUpdated();
+    // showTop(balancesPage);
+
+    sendTokenPage->balancesUpdated();
+    showTop(sendTokenPage);
 }
 
 void RapidsGUI::goToSettingsInfo()
@@ -625,6 +631,7 @@ bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
     coldStakingWidget->setWalletModel(walletModel);
     settingsWidget->setWalletModel(walletModel);
     balancesPage->setWalletModel(walletModel);
+    sendTokenPage->setWalletModel(walletModel);
 
     // Connect actions..
     connect(walletModel, &WalletModel::message, this, &RapidsGUI::message);
