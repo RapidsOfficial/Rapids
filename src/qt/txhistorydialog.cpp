@@ -176,7 +176,10 @@ void TXHistoryDialog::setClientModel(ClientModel *model)
 void TXHistoryDialog::setWalletModel(WalletModel *model)
 {
     this->walletModel = model;
-    if (model != NULL) { } // do nothing, signals from walletModel no longer needed
+    if (model != nullptr)
+    {
+        UpdateHistory();
+    }
 }
 
 int TXHistoryDialog::PopulateHistoryMap()
@@ -254,6 +257,7 @@ int TXHistoryDialog::PopulateHistoryMap()
         CMPTransaction mp_obj;
         int parseRC = ParseTransaction(wtx, blockHeight, 0, mp_obj);
         HistoryTXObject htxo;
+        htxo.blockHeight = blockHeight;
         if (it->first.length() == 16) {
             htxo.blockHeight = atoi(it->first.substr(0,6));
             htxo.blockByteOffset = atoi(it->first.substr(6));
@@ -386,6 +390,7 @@ void TXHistoryDialog::UpdateHistory()
 
     // first things first, call PopulateHistoryMap to add in any missing (ie new) transactions
     int newTXCount = PopulateHistoryMap();
+
     // were any transactions added?
     if(newTXCount > 0) { // there are new transactions (or a pending shifted to confirmed), refresh the table adding any that are in the map but not in the table
         ui->txHistoryTable->setSortingEnabled(false); // disable sorting temporarily while we update the table (leaving enabled gives unexpected results)
@@ -404,7 +409,8 @@ void TXHistoryDialog::UpdateHistory()
                 ui->txHistoryTable->insertRow(workingRow); // append a new row (sorting will take care of ordering)
                 QDateTime txTime;
                 QTableWidgetItem *dateCell = new QTableWidgetItem;
-                if (htxo.blockHeight>0) {
+
+                if (htxo.blockHeight > 0) {
                     LOCK(cs_main);
                     CBlockIndex* pBlkIdx = chainActive[htxo.blockHeight];
                     if (NULL != pBlkIdx) txTime.setTime_t(pBlkIdx->GetBlockTime());
@@ -412,6 +418,7 @@ void TXHistoryDialog::UpdateHistory()
                 } else {
                     dateCell->setData(Qt::DisplayRole, QString::fromStdString("Unconfirmed"));
                 }
+
                 QTableWidgetItem *typeCell = new QTableWidgetItem(QString::fromStdString(htxo.txType));
                 QTableWidgetItem *addressCell = new QTableWidgetItem(QString::fromStdString(htxo.address));
                 QTableWidgetItem *amountCell = new QTableWidgetItem(QString::fromStdString(htxo.amount));

@@ -25,6 +25,7 @@
 #include "qt/rapids/snackbar.h"
 #include "qt/rapids/settings/settingswidget.h"
 #include "qt/rapids/settings/settingsfaqwidget.h"
+#include "qt/txhistorydialog.h"
 #include "qt/sendmpdialog.h"
 #include "qt/balancesdialog.h"
 #include "qt/rpcconsole.h"
@@ -144,6 +145,7 @@ private:
     SettingsWidget* settingsWidget = nullptr;
 
     BalancesDialog *balancesPage = nullptr;
+    TXHistoryDialog *tokensHistory = nullptr;
     SendMPDialog *sendTokenPage = nullptr;
 
     SnackBar *snackBar = nullptr;
