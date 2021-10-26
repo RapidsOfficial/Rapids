@@ -135,6 +135,12 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         sendTokenPage = new SendMPDialog();
         // dexPage = new MetaDExDialog();
 
+        tabHolder = new QTabWidget();
+        tabHolder->addTab(balancesPage, tr("Tokens"));
+        tabHolder->addTab(tokensHistory, tr("History"));
+        tabHolder->addTab(sendTokenPage, tr("Send"));
+        // txvbox->addWidget(txTabHolder);
+
         // Add to parent
         stackedContainer->addWidget(dashboard);
         stackedContainer->addWidget(sendWidget);
@@ -143,10 +149,11 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         stackedContainer->addWidget(masterNodesWidget);
         stackedContainer->addWidget(coldStakingWidget);
         stackedContainer->addWidget(settingsWidget);
-        stackedContainer->addWidget(balancesPage);
-        stackedContainer->addWidget(tokensHistory);
-        stackedContainer->addWidget(sendTokenPage);
+        // stackedContainer->addWidget(balancesPage);
+        // stackedContainer->addWidget(tokensHistory);
+        // stackedContainer->addWidget(sendTokenPage);
         // stackedContainer->addWidget(dexPage);
+        stackedContainer->addWidget(tabHolder);
         stackedContainer->setCurrentWidget(dashboard);
 
     } else
@@ -516,17 +523,11 @@ void RapidsGUI::goToSettings(){
     showTop(settingsWidget);
 }
 
-void RapidsGUI::gotoBalancesPage(){
-    // balancesPage->balancesUpdated();
-    // showTop(balancesPage);
+void RapidsGUI::gotoTokensPage(){
+    balancesPage->balancesUpdated();
+    sendTokenPage->balancesUpdated();
 
-    // sendTokenPage->balancesUpdated();
-    // showTop(sendTokenPage);
-
-    // showTop(tokensHistory);
-
-    // dexPage->FullRefresh();
-    // showTop(dexPage);
+    showTop(tabHolder);
 }
 
 void RapidsGUI::goToSettingsInfo()

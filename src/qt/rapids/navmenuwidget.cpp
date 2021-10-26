@@ -116,7 +116,7 @@ void NavMenuWidget::onSettingsClicked(){
 }
 
 void NavMenuWidget::onTokensClicked(){
-    window->gotoBalancesPage();
+    window->gotoTokensPage();
     onNavSelected(ui->btnTokens);
 }
 

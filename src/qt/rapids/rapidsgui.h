@@ -12,6 +12,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QSystemTrayIcon>
+#include <QTabWidget>
 #include <QLabel>
 
 #include "qt/rapids/navmenuwidget.h"
@@ -76,7 +77,7 @@ public Q_SLOTS:
     void goToMasterNodes();
     void goToColdStaking();
     void goToSettings();
-    void gotoBalancesPage();
+    void gotoTokensPage();
     void goToSettingsInfo();
     void openNetworkMonitor();
 
@@ -148,6 +149,7 @@ private:
     BalancesDialog *balancesPage = nullptr;
     TXHistoryDialog *tokensHistory = nullptr;
     SendMPDialog *sendTokenPage = nullptr;
+    QTabWidget *tabHolder = nullptr;
     // MetaDExDialog *dexPage = nullptr;
 
     SnackBar *snackBar = nullptr;
