@@ -127,11 +127,13 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         masterNodesWidget = new MasterNodesWidget(this);
         coldStakingWidget = new ColdStakingWidget(this);
         settingsWidget = new SettingsWidget(this);
+        // dexPage = new MetaDExDialog(this);
 
         // Omni
         balancesPage = new BalancesDialog();
         tokensHistory = new TXHistoryDialog();
         sendTokenPage = new SendMPDialog();
+        // dexPage = new MetaDExDialog();
 
         // Add to parent
         stackedContainer->addWidget(dashboard);
@@ -144,6 +146,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         stackedContainer->addWidget(balancesPage);
         stackedContainer->addWidget(tokensHistory);
         stackedContainer->addWidget(sendTokenPage);
+        // stackedContainer->addWidget(dexPage);
         stackedContainer->setCurrentWidget(dashboard);
 
     } else
@@ -263,6 +266,7 @@ void RapidsGUI::setClientModel(ClientModel* clientModel)
         balancesPage->setClientModel(clientModel);
         tokensHistory->setClientModel(clientModel);
         sendTokenPage->setClientModel(clientModel);
+        // dexPage->setClientModel(clientModel);
 
         // Receive and report messages from client model
         connect(clientModel, &ClientModel::message, this, &RapidsGUI::message);
@@ -519,7 +523,10 @@ void RapidsGUI::gotoBalancesPage(){
     // sendTokenPage->balancesUpdated();
     // showTop(sendTokenPage);
 
-    showTop(tokensHistory);
+    // showTop(tokensHistory);
+
+    // dexPage->FullRefresh();
+    // showTop(dexPage);
 }
 
 void RapidsGUI::goToSettingsInfo()
@@ -638,6 +645,7 @@ bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
     balancesPage->setWalletModel(walletModel);
     tokensHistory->setWalletModel(walletModel);
     sendTokenPage->setWalletModel(walletModel);
+    // dexPage->setWalletModel(walletModel);
 
     // Connect actions..
     connect(walletModel, &WalletModel::message, this, &RapidsGUI::message);

@@ -90,8 +90,6 @@ MetaDExDialog::MetaDExDialog(QWidget *parent) :
     connect(ui->sellUnitPriceLE, SIGNAL(textEdited(const QString &)), this, SLOT(RecalcSellValues()));
     connect(ui->sellList, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(ShowDetails()));
     connect(ui->sellButton, SIGNAL(clicked()), this, SLOT(sendTrade()));
-
-    FullRefresh();
 }
 
 MetaDExDialog::~MetaDExDialog()

@@ -28,6 +28,7 @@
 #include "qt/txhistorydialog.h"
 #include "qt/sendmpdialog.h"
 #include "qt/balancesdialog.h"
+#include "qt/metadexdialog.h"
 #include "qt/rpcconsole.h"
 
 namespace interfaces {
@@ -147,12 +148,12 @@ private:
     BalancesDialog *balancesPage = nullptr;
     TXHistoryDialog *tokensHistory = nullptr;
     SendMPDialog *sendTokenPage = nullptr;
+    // MetaDExDialog *dexPage = nullptr;
 
     SnackBar *snackBar = nullptr;
 
     RPCConsole* rpcConsole = nullptr;
 
-    //
     QSystemTrayIcon* trayIcon = nullptr;
     QMenu* trayIconMenu = nullptr;
     Notificator* notificator = nullptr;
