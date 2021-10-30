@@ -3,6 +3,8 @@
 #include "balancesdialog.h"
 #include "ui_balancesdialog.h"
 
+#include "qt/rapids/qtutils.h"
+
 #include "clientmodel.h"
 #include "walletmodel.h"
 #include "guiutil.h"
@@ -43,6 +45,13 @@ BalancesDialog::BalancesDialog(QWidget *parent) :
 {
     // setup
     ui->setupUi(this);
+
+    // CSS
+    this->setStyleSheet(parent->styleSheet());
+    setCssProperty(ui->label, "text-subtitle", false);
+    setCssProperty(ui->propSelectorWidget, "btn-combo-secundary");
+    ui->propSelectorWidget->setView(new QListView());
+
     ui->balancesTable->setColumnCount(4);
     ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Property ID"));
     ui->balancesTable->setHorizontalHeaderItem(1, new QTableWidgetItem("Property Name"));

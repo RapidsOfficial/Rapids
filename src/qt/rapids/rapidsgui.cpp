@@ -130,7 +130,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         // dexPage = new MetaDExDialog(this);
 
         // Omni
-        balancesPage = new BalancesDialog();
+        balancesPage = new BalancesDialog(this);
         tokensHistory = new TXHistoryDialog();
         sendTokenPage = new SendMPDialog();
         // dexPage = new MetaDExDialog();
