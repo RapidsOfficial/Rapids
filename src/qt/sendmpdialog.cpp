@@ -5,6 +5,8 @@
 #include "sendmpdialog.h"
 #include "ui_sendmpdialog.h"
 
+#include "qt/rapids/qtutils.h"
+
 #include "omnicore_qtutils.h"
 
 #include "clientmodel.h"
@@ -49,13 +51,31 @@ using std::ostringstream;
 
 using namespace mastercore;
 
-SendMPDialog::SendMPDialog() :
+SendMPDialog::SendMPDialog(QWidget *parent) :
     ui(new Ui::SendMPDialog),
     clientModel(0),
-    walletModel(0)
+    walletModel(0),
+    QDialog(parent)
     // platformStyle(platformStyle)
 {
     ui->setupUi(this);
+
+    // CSS
+    this->setStyleSheet(parent->styleSheet());
+    // setCssProperty(ui->scrollArea, "container");
+    setCssProperty(ui->balanceLabel, "text-subtitle", false);
+    setCssProperty(ui->sendFromLabel, "text-subtitle", false);
+    setCssProperty(ui->sendToLabel, "text-subtitle", false);
+    setCssProperty(ui->amountLabel, "text-subtitle", false);
+    setCssProperty(ui->globalBalanceLabel, "text-subtitle", false);
+    setCssBtnPrimary(ui->sendButton);
+    setCssBtnSecondary(ui->clearButton);
+    initCssEditLine(ui->sendToLineEdit, true);
+    initCssEditLine(ui->amountLineEdit, true);
+    setCssProperty(ui->sendFromComboBox, "btn-combo-address");
+    setCssProperty(ui->propertyComboBox, "btn-combo-address");
+    ui->sendFromComboBox->setView(new QListView());
+    ui->propertyComboBox->setView(new QListView());
 
     // Use platformStyle instead of ifdef Q_OS_MAC to hide icons on Mac
     // if (!platformStyle->getImagesOnButtons()) {
@@ -150,10 +170,10 @@ void SendMPDialog::updateFrom()
     size_t spacer = currentSetFromAddress.find(" ");
     if (spacer!=std::string::npos) {
         currentSetFromAddress = currentSetFromAddress.substr(0,spacer);
-        ui->sendFromComboBox->setEditable(true);
-        QLineEdit *comboDisplay = ui->sendFromComboBox->lineEdit();
-        comboDisplay->setText(QString::fromStdString(currentSetFromAddress));
-        comboDisplay->setReadOnly(true);
+        ui->sendFromComboBox->setEditable(false);
+        // QLineEdit *comboDisplay = ui->sendFromComboBox->lineEdit();
+        // comboDisplay->setText(QString::fromStdString(currentSetFromAddress));
+        // comboDisplay->setReadOnly(true);
     }
 
     if (currentSetFromAddress.empty()) {
@@ -197,7 +217,8 @@ void SendMPDialog::updateProperty()
         if (!includeAddress) continue; //ignore this address, has never transacted in this propertyId
         if (IsMyAddress(address) != ISMINE_SPENDABLE) continue; // ignore this address, it's not spendable
         if (!GetAvailableTokenBalance(address, propertyId)) continue; // ignore this address, has no available balance to spend
-        ui->sendFromComboBox->addItem(QString::fromStdString(address + " \t" + FormatMP(propertyId, GetAvailableTokenBalance(address, propertyId)) + getTokenLabel(propertyId)));
+        // ui->sendFromComboBox->addItem(QString::fromStdString(address + " \t" + FormatMP(propertyId, GetAvailableTokenBalance(address, propertyId)) + getTokenLabel(propertyId)));
+        ui->sendFromComboBox->addItem(QString::fromStdString(address));
     }
 
     // attempt to set from address back to cached value

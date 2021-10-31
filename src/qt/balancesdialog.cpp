@@ -50,7 +50,16 @@ BalancesDialog::BalancesDialog(QWidget *parent) :
     this->setStyleSheet(parent->styleSheet());
     setCssProperty(ui->label, "text-subtitle", false);
     setCssProperty(ui->propSelectorWidget, "btn-combo-secundary");
+    setCssProperty(ui->balancesTable, "token-table");
     ui->propSelectorWidget->setView(new QListView());
+
+    setCssProperty(ui->listView, "container");
+    // ui->listView->setItemDelegate(txViewDelegate);
+    // ui->listView->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
+    // ui->listView->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
+    // ui->listView->setAttribute(Qt::WA_MacShowFocusRect, false);
+    // ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // ui->listView->setUniformItemSizes(true);
 
     ui->balancesTable->setColumnCount(4);
     ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Property ID"));

@@ -1790,6 +1790,22 @@ QComboBox[cssClass="btn-combo-secundary"] {
         height: 24px;
     }
 
+QComboBox[cssClass="btn-combo-address"] {
+    background-color: #14100B;
+    padding: 6px 12px 6px 6px;
+    font-size: 16px;
+    border: 2px solid #bababa;
+    color: #707070;
+    text-align: right;
+    border-radius: 2px;
+}
+
+    QComboBox[cssClass="btn-combo-address"]::down-arrow {
+        image: url("://ic-arrow-drop-down-purple");
+        width: 24px;
+        height: 24px;
+    }
+
 QComboBox[cssClass="btn-combo-chart"] {
     background-color: #14100B;
     padding: 6px 12px 6px 6px;
@@ -3248,3 +3264,9 @@ QRadioButton[cssClass="radio-welcome"] {
             background-repeat: no-repeat;
             background-position: center;
         }
+
+
+
+
+
+

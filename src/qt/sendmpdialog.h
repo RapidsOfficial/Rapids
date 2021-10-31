@@ -28,7 +28,7 @@ class SendMPDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit SendMPDialog();
+    explicit SendMPDialog(QWidget *parent = 0);
     ~SendMPDialog();
 
     void setClientModel(ClientModel *model);
