@@ -77,9 +77,6 @@
      </item>
     </layout>
    </item>
-   <item>
-    <widget class="QListView" name="listView"/>
-   </item>
   </layout>
  </widget>
  <resources/>

@@ -130,15 +130,15 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         // dexPage = new MetaDExDialog(this);
 
         // Omni
+        sendTokenPage = new SendMPDialog(this);
         balancesPage = new BalancesDialog(this);
         tokensHistory = new TXHistoryDialog();
-        sendTokenPage = new SendMPDialog(this);
         // dexPage = new MetaDExDialog();
 
         tabHolder = new QTabWidget();
+        tabHolder->addTab(sendTokenPage, tr("Send"));
         tabHolder->addTab(balancesPage, tr("Tokens"));
         tabHolder->addTab(tokensHistory, tr("History"));
-        tabHolder->addTab(sendTokenPage, tr("Send"));
         // txvbox->addWidget(txTabHolder);
 
         // Add to parent

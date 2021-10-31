@@ -10,6 +10,8 @@
 #include <QDialog>
 #include <QString>
 
+#include "qt/rapids/snackbar.h"
+
 #include "platformstyle.h"
 
 class ClientModel;
@@ -44,6 +46,7 @@ public Q_SLOTS:
     void sendFromComboBoxChanged(int idx);
     void clearButtonClicked();
     void sendButtonClicked();
+    void onCopyClicked();
     void balancesUpdated();
     void updateFrom();
 
@@ -51,6 +54,9 @@ private:
     Ui::SendMPDialog *ui;
     ClientModel *clientModel;
     WalletModel *walletModel;
+    SnackBar *snackBar = nullptr;
+
+    void inform(const QString& text);
 
 Q_SIGNALS:
     // Fired when a message should be reported to the user

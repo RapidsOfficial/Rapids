@@ -77,6 +77,9 @@ SendMPDialog::SendMPDialog(QWidget *parent) :
     ui->sendFromComboBox->setView(new QListView());
     ui->propertyComboBox->setView(new QListView());
 
+    ui->copyButton->setLayoutDirection(Qt::RightToLeft);
+    setCssProperty(ui->copyButton, "btn-secundary-copy");
+
     // Use platformStyle instead of ifdef Q_OS_MAC to hide icons on Mac
     // if (!platformStyle->getImagesOnButtons()) {
     //     ui->clearButton->setIcon(QIcon());
@@ -97,6 +100,7 @@ SendMPDialog::SendMPDialog(QWidget *parent) :
     connect(ui->sendFromComboBox, SIGNAL(activated(int)), this, SLOT(sendFromComboBoxChanged(int)));
     connect(ui->clearButton, SIGNAL(clicked()), this, SLOT(clearButtonClicked()));
     connect(ui->sendButton, SIGNAL(clicked()), this, SLOT(sendButtonClicked()));
+    connect(ui->copyButton, SIGNAL(clicked()), this, SLOT(onCopyClicked()));
 
     // initial update
     // balancesUpdated();
@@ -118,7 +122,7 @@ void SendMPDialog::setClientModel(ClientModel *model)
 
 void SendMPDialog::setWalletModel(WalletModel *model)
 {
-    // use wallet model to get visibility into BTC balance changes for fees
+    // use wallet model to get visibility into RPD balance changes for fees
     this->walletModel = model;
     if (model != NULL) {
        connect(model, SIGNAL(balanceChanged(CAmount,CAmount,CAmount,CAmount,CAmount,CAmount)), this, SLOT(updateFrom()));
@@ -190,7 +194,7 @@ void SendMPDialog::updateFrom()
         if (CheckFee(currentSetFromAddress, 16)) {
             ui->feeWarningLabel->setVisible(false);
         } else {
-            ui->feeWarningLabel->setText("WARNING: The sending address is low on BTC for transaction fees. Please topup the BTC balance for the sending address to send Omni Layer transactions.");
+            ui->feeWarningLabel->setText("WARNING: This address doesn't have enough RPD to pay network fees.");
             ui->feeWarningLabel->setVisible(true);
         }
     }
@@ -386,6 +390,20 @@ void SendMPDialog::clearButtonClicked()
 void SendMPDialog::sendButtonClicked()
 {
     sendMPTransaction();
+}
+
+void SendMPDialog::onCopyClicked()
+{
+    GUIUtil::setClipboard(ui->sendFromComboBox->currentText());
+    inform(tr("Address copied"));
+}
+
+void SendMPDialog::inform(const QString& text)
+{
+    if (!snackBar) snackBar = new SnackBar(nullptr, this);
+    snackBar->setText(text);
+    snackBar->resize(this->width(), snackBar->height());
+    openDialog(snackBar, this);
 }
 
 void SendMPDialog::balancesUpdated()

@@ -53,7 +53,7 @@ BalancesDialog::BalancesDialog(QWidget *parent) :
     setCssProperty(ui->balancesTable, "token-table");
     ui->propSelectorWidget->setView(new QListView());
 
-    setCssProperty(ui->listView, "container");
+    // setCssProperty(ui->listView, "container");
     // ui->listView->setItemDelegate(txViewDelegate);
     // ui->listView->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
     // ui->listView->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
