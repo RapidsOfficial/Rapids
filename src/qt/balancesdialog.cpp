@@ -53,13 +53,10 @@ BalancesDialog::BalancesDialog(QWidget *parent) :
     setCssProperty(ui->balancesTable, "token-table");
     ui->propSelectorWidget->setView(new QListView());
 
-    // setCssProperty(ui->listView, "container");
-    // ui->listView->setItemDelegate(txViewDelegate);
-    // ui->listView->setIconSize(QSize(DECORATION_SIZE, DECORATION_SIZE));
-    // ui->listView->setMinimumHeight(NUM_ITEMS * (DECORATION_SIZE + 2));
-    // ui->listView->setAttribute(Qt::WA_MacShowFocusRect, false);
-    // ui->listView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    // ui->listView->setUniformItemSizes(true);
+    ui->balancesTable->setShowGrid(false);
+    ui->balancesTable->setStyleSheet("QTableWidget {color:white;background-color:transparent;} QHeaderView::section { font-weight: bold; }");
+
+    // setCssProperty(ui->balancesTable, "token-table");
 
     ui->balancesTable->setColumnCount(4);
     ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Property ID"));
@@ -189,6 +186,19 @@ void BalancesDialog::AddRow(const std::string& label, const std::string& address
     QTableWidgetItem *addressCell = new QTableWidgetItem(QString::fromStdString(address));
     QTableWidgetItem *reservedCell = new QTableWidgetItem(QString::fromStdString(reserved));
     QTableWidgetItem *availableCell = new QTableWidgetItem(QString::fromStdString(available));
+
+    if (workingRow % 2 == 0) {
+        labelCell->setData(Qt::BackgroundRole, QColor(27,27,27));
+        addressCell->setData(Qt::BackgroundRole, QColor(27,27,27));
+        reservedCell->setData(Qt::BackgroundRole, QColor(27,27,27));
+        availableCell->setData(Qt::BackgroundRole, QColor(27,27,27));
+    } else {
+        labelCell->setData(Qt::BackgroundRole, QColor(40,40,40));
+        addressCell->setData(Qt::BackgroundRole, QColor(40,40,40));
+        reservedCell->setData(Qt::BackgroundRole, QColor(40,40,40));
+        availableCell->setData(Qt::BackgroundRole, QColor(40,40,40));
+    }
+
     labelCell->setTextAlignment(Qt::AlignLeft + Qt::AlignVCenter);
     addressCell->setTextAlignment(Qt::AlignLeft + Qt::AlignVCenter);
     reservedCell->setTextAlignment(Qt::AlignRight + Qt::AlignVCenter);

@@ -134,6 +134,11 @@ TXHistoryDialog::TXHistoryDialog(QWidget *parent) :
     borrowedColumnResizingFixer->stretchColumnWidth(5);
     ui->txHistoryTable->setSortingEnabled(true);
     ui->txHistoryTable->horizontalHeader()->setSortIndicator(1, Qt::DescendingOrder); // sort by hidden sort key
+
+    // CSS
+
+    ui->txHistoryTable->setShowGrid(false);
+    ui->txHistoryTable->setStyleSheet("QTableWidget {color:white;background-color:transparent;} QHeaderView::section { font-weight: bold; }");
 }
 
 TXHistoryDialog::~TXHistoryDialog()
@@ -376,7 +381,14 @@ void TXHistoryDialog::UpdateConfirmations()
         if (confirmations > 5) ic = QIcon(":/icons/transaction_confirmed");
         if (!valid) ic = QIcon(":/icons/transaction_conflicted");
         QTableWidgetItem *iconCell = new QTableWidgetItem;
-//        ic = platformStyle->SingleColorIcon(ic);
+        // ic = platformStyle->SingleColorIcon(ic);
+
+        if (row % 2 == 0) {
+            iconCell->setData(Qt::BackgroundRole, QColor(27,27,27));
+        } else {
+            iconCell->setData(Qt::BackgroundRole, QColor(40,40,40));
+        }
+
         iconCell->setIcon(ic);
         ui->txHistoryTable->setItem(row, 2, iconCell);
     }
@@ -435,6 +447,7 @@ void TXHistoryDialog::UpdateHistory()
                     if (htxo.amount.substr(0,1) == "-") amountCell->setForeground(QColor("#EE0000")); // outbound
                 }
                 if (!htxo.fundsMoved) amountCell->setForeground(QColor("#404040"));
+
                 ui->txHistoryTable->setItem(workingRow, 0, txidCell);
                 ui->txHistoryTable->setItem(workingRow, 1, sortKeyCell);
                 ui->txHistoryTable->setItem(workingRow, 2, iconCell);
@@ -447,6 +460,21 @@ void TXHistoryDialog::UpdateHistory()
         ui->txHistoryTable->setSortingEnabled(true); // re-enable sorting
     }
     UpdateConfirmations();
+
+    int nRows = ui->txHistoryTable->rowCount();
+    int nColumns = ui->txHistoryTable->columnCount();
+
+    for (int i = 0; i < nRows; ++i)
+    {
+        for (int j = 0; j < nColumns; ++j)
+        {
+            if (i % 2 == 0) {
+                ui->txHistoryTable->item(i, j)->setData(Qt::BackgroundRole, QColor(27,27,27));
+            } else {
+                ui->txHistoryTable->item(i, j)->setData(Qt::BackgroundRole, QColor(40,40,40));
+            }
+        }
+    }
 }
 
 void TXHistoryDialog::contextualMenu(const QPoint &point)
