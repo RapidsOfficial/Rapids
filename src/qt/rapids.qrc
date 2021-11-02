@@ -214,6 +214,9 @@
         <file alias="ic-check-cold-staking-enabled">rapids/res/img/ic-check-cold-staking-enabled.png</file>
         <file alias="tools">res/icons/tools.png</file>
         <file alias="exchange">res/icons/exchange.png</file>
+        <file alias="token_confirmed">res/icons/token_confirmed.png</file>
+        <file alias="token_pending">res/icons/token_pending.png</file>
+        <file alias="token_error">res/icons/token_error.png</file>
         <file alias="balances">res/icons/balances.png</file>
         <file alias="omni_in">res/icons/omni_in.png</file>
         <file alias="omni_inout">res/icons/omni_inout.png</file>

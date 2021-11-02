@@ -136,7 +136,6 @@ TXHistoryDialog::TXHistoryDialog(QWidget *parent) :
     ui->txHistoryTable->horizontalHeader()->setSortIndicator(1, Qt::DescendingOrder); // sort by hidden sort key
 
     // CSS
-
     ui->txHistoryTable->setShowGrid(false);
     ui->txHistoryTable->setStyleSheet("QTableWidget {color:white;background-color:transparent;} QHeaderView::section { font-weight: bold; }");
 }
@@ -370,16 +369,11 @@ void TXHistoryDialog::UpdateConfirmations()
         int txBlockHeight = ui->txHistoryTable->item(row,1)->text().toInt();
         if (txBlockHeight>0) confirmations = (chainHeight+1) - txBlockHeight;
         // setup the appropriate icon
-        QIcon ic = QIcon(":/icons/transaction_0");
-        switch(confirmations) {
-            case 1: ic = QIcon(":/icons/transaction_1"); break;
-            case 2: ic = QIcon(":/icons/transaction_2"); break;
-            case 3: ic = QIcon(":/icons/transaction_3"); break;
-            case 4: ic = QIcon(":/icons/transaction_4"); break;
-            case 5: ic = QIcon(":/icons/transaction_5"); break;
-        }
-        if (confirmations > 5) ic = QIcon(":/icons/transaction_confirmed");
-        if (!valid) ic = QIcon(":/icons/transaction_conflicted");
+        QIcon ic = QIcon("://token_pending");
+
+        if (confirmations > 5) ic = QIcon("://token_confirmed");
+
+        if (!valid) ic = QIcon("://token_error");
         QTableWidgetItem *iconCell = new QTableWidgetItem;
         // ic = platformStyle->SingleColorIcon(ic);
 
@@ -390,6 +384,7 @@ void TXHistoryDialog::UpdateConfirmations()
         }
 
         iconCell->setIcon(ic);
+
         ui->txHistoryTable->setItem(row, 2, iconCell);
     }
 }
