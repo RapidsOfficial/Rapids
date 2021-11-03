@@ -44,33 +44,33 @@ using namespace mastercore;
 std::string mastercore::strTransactionType(uint16_t txType)
 {
     switch (txType) {
-        case MSC_TYPE_SIMPLE_SEND: return "Simple Send";
-        case MSC_TYPE_RESTRICTED_SEND: return "Restricted Send";
-        case MSC_TYPE_SEND_TO_OWNERS: return "Send To Owners";
-        case MSC_TYPE_SEND_ALL: return "Send All";
-        case MSC_TYPE_SAVINGS_MARK: return "Savings";
-        case MSC_TYPE_SAVINGS_COMPROMISED: return "Savings COMPROMISED";
-        case MSC_TYPE_RATELIMITED_MARK: return "Rate-Limiting";
-        case MSC_TYPE_AUTOMATIC_DISPENSARY: return "Automatic Dispensary";
-        case MSC_TYPE_TRADE_OFFER: return "DEx Sell Offer";
-        case MSC_TYPE_METADEX_TRADE: return "MetaDEx trade";
-        case MSC_TYPE_METADEX_CANCEL_PRICE: return "MetaDEx cancel-price";
-        case MSC_TYPE_METADEX_CANCEL_PAIR: return "MetaDEx cancel-pair";
-        case MSC_TYPE_METADEX_CANCEL_ECOSYSTEM: return "MetaDEx cancel-ecosystem";
-        case MSC_TYPE_ACCEPT_OFFER_BTC: return "DEx Accept Offer";
-        case MSC_TYPE_CREATE_PROPERTY_FIXED: return "Create Property - Fixed";
-        case MSC_TYPE_CREATE_PROPERTY_VARIABLE: return "Create Property - Variable";
-        case MSC_TYPE_PROMOTE_PROPERTY: return "Promote Property";
-        case MSC_TYPE_CLOSE_CROWDSALE: return "Close Crowdsale";
-        case MSC_TYPE_CREATE_PROPERTY_MANUAL: return "Create Property - Manual";
-        case MSC_TYPE_GRANT_PROPERTY_TOKENS: return "Grant Property Tokens";
-        case MSC_TYPE_REVOKE_PROPERTY_TOKENS: return "Revoke Property Tokens";
-        case MSC_TYPE_CHANGE_ISSUER_ADDRESS: return "Change Issuer Address";
-        case MSC_TYPE_ENABLE_FREEZING: return "Enable Freezing";
-        case MSC_TYPE_DISABLE_FREEZING: return "Disable Freezing";
-        case MSC_TYPE_FREEZE_PROPERTY_TOKENS: return "Freeze Property Tokens";
-        case MSC_TYPE_UNFREEZE_PROPERTY_TOKENS: return "Unfreeze Property Tokens";
-        case MSC_TYPE_NOTIFICATION: return "Notification";
+        case TOKEN_TYPE_SIMPLE_SEND: return "Simple Send";
+        case TOKEN_TYPE_RESTRICTED_SEND: return "Restricted Send";
+        case TOKEN_TYPE_SEND_TO_OWNERS: return "Send To Owners";
+        case TOKEN_TYPE_SEND_ALL: return "Send All";
+        case TOKEN_TYPE_SAVINGS_MARK: return "Savings";
+        case TOKEN_TYPE_SAVINGS_COMPROMISED: return "Savings COMPROMISED";
+        case TOKEN_TYPE_RATELIMITED_MARK: return "Rate-Limiting";
+        case TOKEN_TYPE_AUTOMATIC_DISPENSARY: return "Automatic Dispensary";
+        case TOKEN_TYPE_TRADE_OFFER: return "DEx Sell Offer";
+        case TOKEN_TYPE_METADEX_TRADE: return "MetaDEx trade";
+        case TOKEN_TYPE_METADEX_CANCEL_PRICE: return "MetaDEx cancel-price";
+        case TOKEN_TYPE_METADEX_CANCEL_PAIR: return "MetaDEx cancel-pair";
+        case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM: return "MetaDEx cancel-ecosystem";
+        case TOKEN_TYPE_ACCEPT_OFFER_BTC: return "DEx Accept Offer";
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED: return "Create Property - Fixed";
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: return "Create Property - Variable";
+        case TOKEN_TYPE_PROMOTE_PROPERTY: return "Promote Property";
+        case TOKEN_TYPE_CLOSE_CROWDSALE: return "Close Crowdsale";
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: return "Create Property - Manual";
+        case TOKEN_TYPE_GRANT_PROPERTY_TOKENS: return "Grant Property Tokens";
+        case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS: return "Revoke Property Tokens";
+        case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS: return "Change Issuer Address";
+        case TOKEN_TYPE_ENABLE_FREEZING: return "Enable Freezing";
+        case TOKEN_TYPE_DISABLE_FREEZING: return "Disable Freezing";
+        case TOKEN_TYPE_FREEZE_PROPERTY_TOKENS: return "Freeze Property Tokens";
+        case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS: return "Unfreeze Property Tokens";
+        case TOKEN_TYPE_NOTIFICATION: return "Notification";
         case OMNICORE_MESSAGE_TYPE_ALERT: return "ALERT";
         case OMNICORE_MESSAGE_TYPE_DEACTIVATION: return "Feature Deactivation";
         case OMNICORE_MESSAGE_TYPE_ACTIVATION: return "Feature Activation";
@@ -112,64 +112,64 @@ bool CMPTransaction::interpret_Transaction()
     }
 
     switch (type) {
-        case MSC_TYPE_SIMPLE_SEND:
+        case TOKEN_TYPE_SIMPLE_SEND:
             return interpret_SimpleSend();
 
-        case MSC_TYPE_SEND_TO_OWNERS:
+        case TOKEN_TYPE_SEND_TO_OWNERS:
             return interpret_SendToOwners();
 
-        case MSC_TYPE_SEND_ALL:
+        case TOKEN_TYPE_SEND_ALL:
             return interpret_SendAll();
 
-        case MSC_TYPE_TRADE_OFFER:
+        case TOKEN_TYPE_TRADE_OFFER:
             return interpret_TradeOffer();
 
-        case MSC_TYPE_ACCEPT_OFFER_BTC:
+        case TOKEN_TYPE_ACCEPT_OFFER_BTC:
             return interpret_AcceptOfferBTC();
 
-        case MSC_TYPE_METADEX_TRADE:
+        case TOKEN_TYPE_METADEX_TRADE:
             return interpret_MetaDExTrade();
 
-        case MSC_TYPE_METADEX_CANCEL_PRICE:
+        case TOKEN_TYPE_METADEX_CANCEL_PRICE:
             return interpret_MetaDExCancelPrice();
 
-        case MSC_TYPE_METADEX_CANCEL_PAIR:
+        case TOKEN_TYPE_METADEX_CANCEL_PAIR:
             return interpret_MetaDExCancelPair();
 
-        case MSC_TYPE_METADEX_CANCEL_ECOSYSTEM:
+        case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             return interpret_MetaDExCancelEcosystem();
 
-        case MSC_TYPE_CREATE_PROPERTY_FIXED:
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED:
             return interpret_CreatePropertyFixed();
 
-        case MSC_TYPE_CREATE_PROPERTY_VARIABLE:
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE:
             return interpret_CreatePropertyVariable();
 
-        case MSC_TYPE_CLOSE_CROWDSALE:
+        case TOKEN_TYPE_CLOSE_CROWDSALE:
             return interpret_CloseCrowdsale();
 
-        case MSC_TYPE_CREATE_PROPERTY_MANUAL:
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL:
             return interpret_CreatePropertyManaged();
 
-        case MSC_TYPE_GRANT_PROPERTY_TOKENS:
+        case TOKEN_TYPE_GRANT_PROPERTY_TOKENS:
             return interpret_GrantTokens();
 
-        case MSC_TYPE_REVOKE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS:
             return interpret_RevokeTokens();
 
-        case MSC_TYPE_CHANGE_ISSUER_ADDRESS:
+        case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS:
             return interpret_ChangeIssuer();
 
-        case MSC_TYPE_ENABLE_FREEZING:
+        case TOKEN_TYPE_ENABLE_FREEZING:
             return interpret_EnableFreezing();
 
-        case MSC_TYPE_DISABLE_FREEZING:
+        case TOKEN_TYPE_DISABLE_FREEZING:
             return interpret_DisableFreezing();
 
-        case MSC_TYPE_FREEZE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_FREEZE_PROPERTY_TOKENS:
             return interpret_FreezeTokens();
 
-        case MSC_TYPE_UNFREEZE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS:
             return interpret_UnfreezeTokens();
 
         case OMNICORE_MESSAGE_TYPE_DEACTIVATION:
@@ -874,64 +874,64 @@ int CMPTransaction::interpretPacket()
     }
 
     switch (type) {
-        case MSC_TYPE_SIMPLE_SEND:
+        case TOKEN_TYPE_SIMPLE_SEND:
             return logicMath_SimpleSend();
 
-        case MSC_TYPE_SEND_TO_OWNERS:
+        case TOKEN_TYPE_SEND_TO_OWNERS:
             return logicMath_SendToOwners();
 
-        case MSC_TYPE_SEND_ALL:
+        case TOKEN_TYPE_SEND_ALL:
             return logicMath_SendAll();
 
-        case MSC_TYPE_TRADE_OFFER:
+        case TOKEN_TYPE_TRADE_OFFER:
             return logicMath_TradeOffer();
 
-        case MSC_TYPE_ACCEPT_OFFER_BTC:
+        case TOKEN_TYPE_ACCEPT_OFFER_BTC:
             return logicMath_AcceptOffer_BTC();
 
-        case MSC_TYPE_METADEX_TRADE:
+        case TOKEN_TYPE_METADEX_TRADE:
             return logicMath_MetaDExTrade();
 
-        case MSC_TYPE_METADEX_CANCEL_PRICE:
+        case TOKEN_TYPE_METADEX_CANCEL_PRICE:
             return logicMath_MetaDExCancelPrice();
 
-        case MSC_TYPE_METADEX_CANCEL_PAIR:
+        case TOKEN_TYPE_METADEX_CANCEL_PAIR:
             return logicMath_MetaDExCancelPair();
 
-        case MSC_TYPE_METADEX_CANCEL_ECOSYSTEM:
+        case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             return logicMath_MetaDExCancelEcosystem();
 
-        case MSC_TYPE_CREATE_PROPERTY_FIXED:
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED:
             return logicMath_CreatePropertyFixed();
 
-        case MSC_TYPE_CREATE_PROPERTY_VARIABLE:
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE:
             return logicMath_CreatePropertyVariable();
 
-        case MSC_TYPE_CLOSE_CROWDSALE:
+        case TOKEN_TYPE_CLOSE_CROWDSALE:
             return logicMath_CloseCrowdsale();
 
-        case MSC_TYPE_CREATE_PROPERTY_MANUAL:
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL:
             return logicMath_CreatePropertyManaged();
 
-        case MSC_TYPE_GRANT_PROPERTY_TOKENS:
+        case TOKEN_TYPE_GRANT_PROPERTY_TOKENS:
             return logicMath_GrantTokens();
 
-        case MSC_TYPE_REVOKE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS:
             return logicMath_RevokeTokens();
 
-        case MSC_TYPE_CHANGE_ISSUER_ADDRESS:
+        case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS:
             return logicMath_ChangeIssuer();
 
-        case MSC_TYPE_ENABLE_FREEZING:
+        case TOKEN_TYPE_ENABLE_FREEZING:
             return logicMath_EnableFreezing();
 
-        case MSC_TYPE_DISABLE_FREEZING:
+        case TOKEN_TYPE_DISABLE_FREEZING:
             return logicMath_DisableFreezing();
 
-        case MSC_TYPE_FREEZE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_FREEZE_PROPERTY_TOKENS:
             return logicMath_FreezeTokens();
 
-        case MSC_TYPE_UNFREEZE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS:
             return logicMath_UnfreezeTokens();
 
         case OMNICORE_MESSAGE_TYPE_DEACTIVATION:
@@ -1572,7 +1572,7 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -23);
     }
 
-    if (MSC_PROPERTY_TYPE_INDIVISIBLE != prop_type && MSC_PROPERTY_TYPE_DIVISIBLE != prop_type) {
+    if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type && TOKEN_PROPERTY_TYPE_DIVISIBLE != prop_type) {
         PrintToLog("%s(): rejected: invalid property type: %d\n", __func__, prop_type);
         return (PKT_ERROR_SP -36);
     }
@@ -1661,7 +1661,7 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
         return (PKT_ERROR_SP -24);
     }
 
-    if (MSC_PROPERTY_TYPE_INDIVISIBLE != prop_type && MSC_PROPERTY_TYPE_DIVISIBLE != prop_type) {
+    if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type && TOKEN_PROPERTY_TYPE_DIVISIBLE != prop_type) {
         PrintToLog("%s(): rejected: invalid property type: %d\n", __func__, prop_type);
         return (PKT_ERROR_SP -36);
     }
@@ -1808,7 +1808,7 @@ int CMPTransaction::logicMath_CreatePropertyManaged()
         return (PKT_ERROR_SP -22);
     }
 
-    if (MSC_PROPERTY_TYPE_INDIVISIBLE != prop_type && MSC_PROPERTY_TYPE_DIVISIBLE != prop_type) {
+    if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type && TOKEN_PROPERTY_TYPE_DIVISIBLE != prop_type) {
         PrintToLog("%s(): rejected: invalid property type: %d\n", __func__, prop_type);
         return (PKT_ERROR_SP -36);
     }

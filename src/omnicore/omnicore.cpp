@@ -242,7 +242,7 @@ std::string FormatMP(uint32_t property, int64_t n, bool fSign)
 
 std::string FormatByType(int64_t amount, uint16_t propertyType)
 {
-    if (propertyType & MSC_PROPERTY_TYPE_INDIVISIBLE) {
+    if (propertyType & TOKEN_PROPERTY_TYPE_INDIVISIBLE) {
         return FormatIndivisibleMP(amount);
     } else {
         return FormatDivisibleMP(amount);
@@ -1813,6 +1813,13 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
         // PKT_ERROR - 2 = interpret_Transaction failed, structurally invalid payload
         if (interp_ret != PKT_ERROR - 2) {
             bool bValid = (0 <= interp_ret);
+
+            // ToDo: Add amount check here
+
+            std::cout << mp_obj.getType() << "\n\n";
+
+            // ToDo: Add unique name check here
+
             pDbTransactionList->recordTX(tx.GetHash(), bValid, nBlock, mp_obj.getType(), mp_obj.getNewAmount());
             pDbTransaction->RecordTransaction(tx.GetHash(), idx, interp_ret);
         }

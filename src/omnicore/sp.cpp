@@ -419,8 +419,8 @@ unsigned int mastercore::eraseExpiredCrowdsale(const CBlockIndex* pBlockIndex)
 std::string mastercore::strPropertyType(uint16_t propertyType)
 {
     switch (propertyType) {
-        case MSC_PROPERTY_TYPE_DIVISIBLE: return "divisible";
-        case MSC_PROPERTY_TYPE_INDIVISIBLE: return "indivisible";
+        case TOKEN_PROPERTY_TYPE_DIVISIBLE: return "divisible";
+        case TOKEN_PROPERTY_TYPE_INDIVISIBLE: return "indivisible";
     }
 
     return "unknown";

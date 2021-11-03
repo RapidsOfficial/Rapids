@@ -30,9 +30,9 @@ CMPSPInfo::Entry::Entry()
 bool CMPSPInfo::Entry::isDivisible() const
 {
     switch (prop_type) {
-        case MSC_PROPERTY_TYPE_DIVISIBLE:
-        case MSC_PROPERTY_TYPE_DIVISIBLE_REPLACING:
-        case MSC_PROPERTY_TYPE_DIVISIBLE_APPENDING:
+        case TOKEN_PROPERTY_TYPE_DIVISIBLE:
+        case TOKEN_PROPERTY_TYPE_DIVISIBLE_REPLACING:
+        case TOKEN_PROPERTY_TYPE_DIVISIBLE_APPENDING:
             return true;
     }
     return false;
@@ -93,7 +93,7 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
     // special cases for constant SPs OMN and TOMN
     implied_omni.issuer = EncodeDestination(ExodusAddress());
     implied_omni.updateIssuer(0, 0, implied_omni.issuer);
-    implied_omni.prop_type = MSC_PROPERTY_TYPE_DIVISIBLE;
+    implied_omni.prop_type = TOKEN_PROPERTY_TYPE_DIVISIBLE;
     implied_omni.num_tokens = 700000;
     implied_omni.category = "N/A";
     implied_omni.subcategory = "N/A";
@@ -103,7 +103,7 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
 
     implied_tomni.issuer = EncodeDestination(ExodusAddress());
     implied_tomni.updateIssuer(0, 0, implied_tomni.issuer);
-    implied_tomni.prop_type = MSC_PROPERTY_TYPE_DIVISIBLE;
+    implied_tomni.prop_type = TOKEN_PROPERTY_TYPE_DIVISIBLE;
     implied_tomni.num_tokens = 700000;
     implied_tomni.category = "N/A";
     implied_tomni.subcategory = "N/A";

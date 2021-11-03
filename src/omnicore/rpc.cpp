@@ -1321,8 +1321,8 @@ static UniValue omni_getcrowdsale(const JSONRPCRequest& request)
     // note the database is already deserialized here and there is minimal performance penalty to iterate recipients to calculate amountRaised
     int64_t amountRaised = 0;
     int64_t amountIssuerTokens = 0;
-    uint16_t propertyIdType = isPropertyDivisible(propertyId) ? MSC_PROPERTY_TYPE_DIVISIBLE : MSC_PROPERTY_TYPE_INDIVISIBLE;
-    uint16_t desiredIdType = isPropertyDivisible(sp.property_desired) ? MSC_PROPERTY_TYPE_DIVISIBLE : MSC_PROPERTY_TYPE_INDIVISIBLE;
+    uint16_t propertyIdType = isPropertyDivisible(propertyId) ? TOKEN_PROPERTY_TYPE_DIVISIBLE : TOKEN_PROPERTY_TYPE_INDIVISIBLE;
+    uint16_t desiredIdType = isPropertyDivisible(sp.property_desired) ? TOKEN_PROPERTY_TYPE_DIVISIBLE : TOKEN_PROPERTY_TYPE_INDIVISIBLE;
     std::map<std::string, UniValue> sortMap;
     for (std::map<uint256, std::vector<int64_t> >::const_iterator it = database.begin(); it != database.end(); it++) {
         UniValue participanttx(UniValue::VOBJ);

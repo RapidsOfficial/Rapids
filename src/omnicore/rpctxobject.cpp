@@ -137,7 +137,7 @@ int populateRPCTransactionObject(const CTransaction& tx, const uint256& blockHas
     txobj.push_back(Pair("ismine", fMine));
     txobj.push_back(Pair("version", (uint64_t)mp_obj.getVersion()));
     txobj.push_back(Pair("type_int", (uint64_t)mp_obj.getType()));
-    if (mp_obj.getType() != MSC_TYPE_SIMPLE_SEND) { // Type 0 will add "Type" attribute during populateRPCTypeSimpleSend
+    if (mp_obj.getType() != TOKEN_TYPE_SIMPLE_SEND) { // Type 0 will add "Type" attribute during populateRPCTypeSimpleSend
         txobj.push_back(Pair("type", mp_obj.getTypeString()));
     }
 
@@ -170,64 +170,64 @@ int populateRPCTransactionObject(const CTransaction& tx, const uint256& blockHas
 void populateRPCTypeInfo(CMPTransaction& mp_obj, UniValue& txobj, uint32_t txType, bool extendedDetails, std::string extendedDetailsFilter, int confirmations)
 {
     switch (txType) {
-        case MSC_TYPE_SIMPLE_SEND:
+        case TOKEN_TYPE_SIMPLE_SEND:
             populateRPCTypeSimpleSend(mp_obj, txobj);
             break;
-        case MSC_TYPE_SEND_TO_OWNERS:
+        case TOKEN_TYPE_SEND_TO_OWNERS:
             populateRPCTypeSendToOwners(mp_obj, txobj, extendedDetails, extendedDetailsFilter);
             break;
-        case MSC_TYPE_SEND_ALL:
+        case TOKEN_TYPE_SEND_ALL:
             populateRPCTypeSendAll(mp_obj, txobj, confirmations);
             break;
-        case MSC_TYPE_TRADE_OFFER:
+        case TOKEN_TYPE_TRADE_OFFER:
             populateRPCTypeTradeOffer(mp_obj, txobj);
             break;
-        case MSC_TYPE_METADEX_TRADE:
+        case TOKEN_TYPE_METADEX_TRADE:
             populateRPCTypeMetaDExTrade(mp_obj, txobj, extendedDetails);
             break;
-        case MSC_TYPE_METADEX_CANCEL_PRICE:
+        case TOKEN_TYPE_METADEX_CANCEL_PRICE:
             populateRPCTypeMetaDExCancelPrice(mp_obj, txobj, extendedDetails);
             break;
-        case MSC_TYPE_METADEX_CANCEL_PAIR:
+        case TOKEN_TYPE_METADEX_CANCEL_PAIR:
             populateRPCTypeMetaDExCancelPair(mp_obj, txobj, extendedDetails);
             break;
-        case MSC_TYPE_METADEX_CANCEL_ECOSYSTEM:
+        case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             populateRPCTypeMetaDExCancelEcosystem(mp_obj, txobj, extendedDetails);
             break;
-        case MSC_TYPE_ACCEPT_OFFER_BTC:
+        case TOKEN_TYPE_ACCEPT_OFFER_BTC:
             populateRPCTypeAcceptOffer(mp_obj, txobj);
             break;
-        case MSC_TYPE_CREATE_PROPERTY_FIXED:
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED:
             populateRPCTypeCreatePropertyFixed(mp_obj, txobj, confirmations);
             break;
-        case MSC_TYPE_CREATE_PROPERTY_VARIABLE:
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE:
             populateRPCTypeCreatePropertyVariable(mp_obj, txobj, confirmations);
             break;
-        case MSC_TYPE_CREATE_PROPERTY_MANUAL:
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL:
             populateRPCTypeCreatePropertyManual(mp_obj, txobj, confirmations);
             break;
-        case MSC_TYPE_CLOSE_CROWDSALE:
+        case TOKEN_TYPE_CLOSE_CROWDSALE:
             populateRPCTypeCloseCrowdsale(mp_obj, txobj);
             break;
-        case MSC_TYPE_GRANT_PROPERTY_TOKENS:
+        case TOKEN_TYPE_GRANT_PROPERTY_TOKENS:
             populateRPCTypeGrant(mp_obj, txobj);
             break;
-        case MSC_TYPE_REVOKE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS:
             populateRPCTypeRevoke(mp_obj, txobj);
             break;
-        case MSC_TYPE_CHANGE_ISSUER_ADDRESS:
+        case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS:
             populateRPCTypeChangeIssuer(mp_obj, txobj);
             break;
-        case MSC_TYPE_ENABLE_FREEZING:
+        case TOKEN_TYPE_ENABLE_FREEZING:
             populateRPCTypeEnableFreezing(mp_obj, txobj);
             break;
-        case MSC_TYPE_DISABLE_FREEZING:
+        case TOKEN_TYPE_DISABLE_FREEZING:
             populateRPCTypeDisableFreezing(mp_obj, txobj);
             break;
-        case MSC_TYPE_FREEZE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_FREEZE_PROPERTY_TOKENS:
             populateRPCTypeFreezeTokens(mp_obj, txobj);
             break;
-        case MSC_TYPE_UNFREEZE_PROPERTY_TOKENS:
+        case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS:
             populateRPCTypeUnfreezeTokens(mp_obj, txobj);
             break;
         case OMNICORE_MESSAGE_TYPE_ACTIVATION:
@@ -241,26 +241,26 @@ void populateRPCTypeInfo(CMPTransaction& mp_obj, UniValue& txobj, uint32_t txTyp
 bool showRefForTx(uint32_t txType)
 {
     switch (txType) {
-        case MSC_TYPE_SIMPLE_SEND: return true;
-        case MSC_TYPE_SEND_TO_OWNERS: return false;
-        case MSC_TYPE_TRADE_OFFER: return false;
-        case MSC_TYPE_METADEX_TRADE: return false;
-        case MSC_TYPE_METADEX_CANCEL_PRICE: return false;
-        case MSC_TYPE_METADEX_CANCEL_PAIR: return false;
-        case MSC_TYPE_METADEX_CANCEL_ECOSYSTEM: return false;
-        case MSC_TYPE_ACCEPT_OFFER_BTC: return true;
-        case MSC_TYPE_CREATE_PROPERTY_FIXED: return false;
-        case MSC_TYPE_CREATE_PROPERTY_VARIABLE: return false;
-        case MSC_TYPE_CREATE_PROPERTY_MANUAL: return false;
-        case MSC_TYPE_CLOSE_CROWDSALE: return false;
-        case MSC_TYPE_GRANT_PROPERTY_TOKENS: return true;
-        case MSC_TYPE_REVOKE_PROPERTY_TOKENS: return false;
-        case MSC_TYPE_CHANGE_ISSUER_ADDRESS: return true;
-        case MSC_TYPE_SEND_ALL: return true;
-        case MSC_TYPE_ENABLE_FREEZING: return false;
-        case MSC_TYPE_DISABLE_FREEZING: return false;
-        case MSC_TYPE_FREEZE_PROPERTY_TOKENS: return true;
-        case MSC_TYPE_UNFREEZE_PROPERTY_TOKENS: return true;
+        case TOKEN_TYPE_SIMPLE_SEND: return true;
+        case TOKEN_TYPE_SEND_TO_OWNERS: return false;
+        case TOKEN_TYPE_TRADE_OFFER: return false;
+        case TOKEN_TYPE_METADEX_TRADE: return false;
+        case TOKEN_TYPE_METADEX_CANCEL_PRICE: return false;
+        case TOKEN_TYPE_METADEX_CANCEL_PAIR: return false;
+        case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM: return false;
+        case TOKEN_TYPE_ACCEPT_OFFER_BTC: return true;
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED: return false;
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: return false;
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: return false;
+        case TOKEN_TYPE_CLOSE_CROWDSALE: return false;
+        case TOKEN_TYPE_GRANT_PROPERTY_TOKENS: return true;
+        case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS: return false;
+        case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS: return true;
+        case TOKEN_TYPE_SEND_ALL: return true;
+        case TOKEN_TYPE_ENABLE_FREEZING: return false;
+        case TOKEN_TYPE_DISABLE_FREEZING: return false;
+        case TOKEN_TYPE_FREEZE_PROPERTY_TOKENS: return true;
+        case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS: return true;
         case OMNICORE_MESSAGE_TYPE_ACTIVATION: return false;
     }
     return true; // default to true, shouldn't be needed but just in case

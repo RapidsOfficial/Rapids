@@ -96,25 +96,25 @@ public:
     int NULLDATA_BLOCK;
 
     //! Block to enable alerts and notifications
-    int MSC_ALERT_BLOCK;
+    int TOKEN_ALERT_BLOCK;
     //! Block to enable simple send transactions
-    int MSC_SEND_BLOCK;
+    int TOKEN_SEND_BLOCK;
     //! Block to enable DEx transactions
-    int MSC_DEX_BLOCK;
+    int TOKEN_DEX_BLOCK;
     //! Block to enable smart property transactions
-    int MSC_SP_BLOCK;
+    int TOKEN_SP_BLOCK;
     //! Block to enable managed properties
-    int MSC_MANUALSP_BLOCK;
+    int TOKEN_MANUALSP_BLOCK;
     //! Block to enable send-to-owners transactions
-    int MSC_STO_BLOCK;
+    int TOKEN_STO_BLOCK;
     //! Block to enable MetaDEx transactions
-    int MSC_METADEX_BLOCK;
+    int TOKEN_METADEX_BLOCK;
     //! Block to enable "send all" transactions
-    int MSC_SEND_ALL_BLOCK;
+    int TOKEN_SEND_ALL_BLOCK;
     //! Block to enable betting transactions
-    int MSC_BET_BLOCK;
+    int TOKEN_BET_BLOCK;
     //! Block to enable cross property STO (v1)
-    int MSC_STOV1_BLOCK;
+    int TOKEN_STOV1_BLOCK;
 
     //! Block to deactivate crowdsale participations when "granting tokens"
     int GRANTEFFECTS_FEATURE_BLOCK;

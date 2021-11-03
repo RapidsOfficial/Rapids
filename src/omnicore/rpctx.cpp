@@ -221,7 +221,7 @@ static UniValue omni_send(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_SIMPLE_SEND, propertyId, amount);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_SIMPLE_SEND, propertyId, amount);
             return txid.GetHex();
         }
     }
@@ -364,7 +364,7 @@ static UniValue omni_senddexsell(const JSONRPCRequest& request)
             return rawHex;
         } else {
             bool fSubtract = (action <= CMPTransaction::UPDATE); // no pending balances for cancels
-            PendingAdd(txid, fromAddress, MSC_TYPE_TRADE_OFFER, propertyIdForSale, amountForSale, fSubtract);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_TRADE_OFFER, propertyIdForSale, amountForSale, fSubtract);
             return txid.GetHex();
         }
     }
@@ -697,7 +697,7 @@ static UniValue omni_sendsto(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_SEND_TO_OWNERS, propertyId, amount);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_SEND_TO_OWNERS, propertyId, amount);
             return txid.GetHex();
         }
     }
@@ -914,7 +914,7 @@ static UniValue omni_sendtrade(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_METADEX_TRADE, propertyIdForSale, amountForSale);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_METADEX_TRADE, propertyIdForSale, amountForSale);
             return txid.GetHex();
         }
     }
@@ -972,7 +972,7 @@ static UniValue omni_sendcanceltradesbyprice(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_METADEX_CANCEL_PRICE, propertyIdForSale, amountForSale, false);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_METADEX_CANCEL_PRICE, propertyIdForSale, amountForSale, false);
             return txid.GetHex();
         }
     }
@@ -1026,7 +1026,7 @@ static UniValue omni_sendcanceltradesbypair(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_METADEX_CANCEL_PAIR, propertyIdForSale, 0, false);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_METADEX_CANCEL_PAIR, propertyIdForSale, 0, false);
             return txid.GetHex();
         }
     }
@@ -1074,7 +1074,7 @@ static UniValue omni_sendcancelalltrades(const JSONRPCRequest& request)
         if (!autoCommit) {
             return rawHex;
         } else {
-            PendingAdd(txid, fromAddress, MSC_TYPE_METADEX_CANCEL_ECOSYSTEM, ecosystem, 0, false);
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM, ecosystem, 0, false);
             return txid.GetHex();
         }
     }
