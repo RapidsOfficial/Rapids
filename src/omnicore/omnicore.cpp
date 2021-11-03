@@ -1805,6 +1805,8 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
     bool fFoundTx = false;
     int pop_ret = parseTransaction(false, tx, nBlock, idx, mp_obj, nBlockTime);
 
+    // ToDo: calculate amount send to dev fee address here
+
     if (0 == pop_ret) {
         int interp_ret = mp_obj.interpretPacket();
         if (interp_ret) PrintToLog("!!! interpretPacket() returned %d !!!\n", interp_ret);
@@ -1816,7 +1818,11 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
 
             // ToDo: Add amount check here
 
-            std::cout << mp_obj.getType() << "\n\n";
+            // TOKEN_TYPE_CREATE_PROPERTY_FIXED
+            // TOKEN_TYPE_CREATE_PROPERTY_VARIABLE
+            // TOKEN_TYPE_CREATE_PROPERTY_MANUAL
+
+            // ToDo: Enforce token naming conventions here
 
             // ToDo: Add unique name check here
 

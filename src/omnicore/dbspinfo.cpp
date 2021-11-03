@@ -90,6 +90,8 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
     leveldb::Status status = Open(path, fWipe);
     PrintToConsole("Loading smart property database: %s\n", status.ToString());
 
+    // ToDo: Remove OMNI and TOMNI
+
     // special cases for constant SPs OMN and TOMN
     implied_omni.issuer = EncodeDestination(ExodusAddress());
     implied_omni.updateIssuer(0, 0, implied_omni.issuer);
