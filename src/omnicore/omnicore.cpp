@@ -1600,14 +1600,16 @@ int mastercore_init()
     if (GetBoolArg("-startclean", false)) {
         PrintToLog("Process was started with --startclean option, attempting to clear persistence files..\n");
         try {
-            boost::filesystem::path persistPath = GetDataDir() / "MP_persist";
-            boost::filesystem::path txlistPath = GetDataDir() / "MP_txlist";
-            boost::filesystem::path tradePath = GetDataDir() / "MP_tradelist";
-            boost::filesystem::path spPath = GetDataDir() / "MP_spinfo";
-            boost::filesystem::path stoPath = GetDataDir() / "MP_stolist";
-            boost::filesystem::path omniTXDBPath = GetDataDir() / "Omni_TXDB";
-            boost::filesystem::path feesPath = GetDataDir() / "OMNI_feecache";
-            boost::filesystem::path feeHistoryPath = GetDataDir() / "OMNI_feehistory";
+            boost::filesystem::path tokensPath = GetDataDir() / "tokens";
+            boost::filesystem::path persistPath = GetDataDir() / "tokens" / "persist";
+            boost::filesystem::path txlistPath = GetDataDir() / "tokens" / "txlist";
+            boost::filesystem::path tradePath = GetDataDir() / "tokens" / "tradelist";
+            boost::filesystem::path spPath = GetDataDir() / "tokens" / "spinfo";
+            boost::filesystem::path stoPath = GetDataDir() / "tokens" / "stolist";
+            boost::filesystem::path omniTXDBPath = GetDataDir() / "tokens" / "txdb";
+            boost::filesystem::path feesPath = GetDataDir() / "tokens" / "feecache";
+            boost::filesystem::path feeHistoryPath = GetDataDir() / "tokens" / "feehistory";
+            if (boost::filesystem::exists(tokensPath)) boost::filesystem::remove_all(tokensPath);
             if (boost::filesystem::exists(persistPath)) boost::filesystem::remove_all(persistPath);
             if (boost::filesystem::exists(txlistPath)) boost::filesystem::remove_all(txlistPath);
             if (boost::filesystem::exists(tradePath)) boost::filesystem::remove_all(tradePath);
@@ -1624,15 +1626,17 @@ int mastercore_init()
         }
     }
 
-    pDbTradeList = new CMPTradeList(GetDataDir() / "MP_tradelist", fReindex);
-    pDbStoList = new CMPSTOList(GetDataDir() / "MP_stolist", fReindex);
-    pDbTransactionList = new CMPTxList(GetDataDir() / "MP_txlist", fReindex);
-    pDbSpInfo = new CMPSPInfo(GetDataDir() / "MP_spinfo", fReindex);
-    pDbTransaction = new COmniTransactionDB(GetDataDir() / "Omni_TXDB", fReindex);
-    pDbFeeCache = new COmniFeeCache(GetDataDir() / "OMNI_feecache", fReindex);
-    pDbFeeHistory = new COmniFeeHistory(GetDataDir() / "OMNI_feehistory", fReindex);
+    TryCreateDirectory(GetDataDir() / "tokens");
 
-    pathStateFiles = GetDataDir() / "MP_persist";
+    pDbTradeList = new CMPTradeList(GetDataDir() / "tokens" / "tradelist", fReindex);
+    pDbStoList = new CMPSTOList(GetDataDir() / "tokens" / "stolist", fReindex);
+    pDbTransactionList = new CMPTxList(GetDataDir() / "tokens" / "txlist", fReindex);
+    pDbSpInfo = new CMPSPInfo(GetDataDir() / "tokens" / "spinfo", fReindex);
+    pDbTransaction = new COmniTransactionDB(GetDataDir() / "tokens" / "txdb", fReindex);
+    pDbFeeCache = new COmniFeeCache(GetDataDir() / "tokens" / "feecache", fReindex);
+    pDbFeeHistory = new COmniFeeHistory(GetDataDir() / "tokens" / "feehistory", fReindex);
+
+    pathStateFiles = GetDataDir() / "tokens" / "persist";
     TryCreateDirectory(pathStateFiles);
 
     bool wrongDBVersion = (pDbTransactionList->getDBVersion() != DB_VERSION);
