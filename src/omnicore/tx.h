@@ -8,6 +8,8 @@ class CTransaction;
 #include "omnicore/omnicore.h"
 #include "omnicore/parsing.h"
 
+#include "amount.h"
+
 #include "uint256.h"
 #include "utilstrencodings.h"
 
@@ -59,6 +61,7 @@ private:
     // CreatePropertyFixed, CreatePropertyVariable, GrantTokens, RevokeTokens
     uint64_t nValue;
     uint64_t nNewValue;
+    CAmount nDonation;
 
     // SimpleSend, SendToOwners, TradeOffer, MetaDEx, AcceptOfferBTC,
     // CreatePropertyFixed, CreatePropertyVariable, CloseCrowdsale,
@@ -245,6 +248,7 @@ public:
         version = 0;
         nValue = 0;
         nNewValue = 0;
+        nDonation = 0;
         property = 0;
         ecosystem = 0;
         prop_type = 0;
@@ -275,12 +279,13 @@ public:
     }
 
     /** Sets the given values. */
-    void Set(const uint256& t, int b, unsigned int idx, int64_t bt)
+    void Set(const uint256& t, int b, unsigned int idx, int64_t bt, CAmount donation)
     {
         txid = t;
         block = b;
         tx_idx = idx;
         blockTime = bt;
+        nDonation = donation;
     }
 
     /** Sets the given values. */
