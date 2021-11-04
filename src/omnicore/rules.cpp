@@ -111,7 +111,7 @@ std::vector<TransactionCheckpoint> CMainConsensusParams::GetTransactions() const
 CMainConsensusParams::CMainConsensusParams()
 {
     // Exodus related:
-    GENESIS_BLOCK = 1526910;
+    GENESIS_BLOCK = 1543180;
     // Notice range for feature activations:
     MIN_ACTIVATION_BLOCKS = 10080;  // ~2 weeks
     MAX_ACTIVATION_BLOCKS = 60480; // ~12 weeks
@@ -133,8 +133,8 @@ CMainConsensusParams::CMainConsensusParams()
     TOKEN_METADEX_BLOCK = 0;
     TOKEN_SEND_ALL_BLOCK = 0;
 
-    TOKEN_BET_BLOCK = 999999;
-    TOKEN_STOV1_BLOCK = 999999;
+    TOKEN_BET_BLOCK = std::numeric_limits<int>::max();
+    TOKEN_STOV1_BLOCK = std::numeric_limits<int>::max();
 
     // Other feature activations:
     GRANTEFFECTS_FEATURE_BLOCK = 0;
@@ -142,8 +142,8 @@ CMainConsensusParams::CMainConsensusParams()
     SPCROWDCROSSOVER_FEATURE_BLOCK = 0;
     TRADEALLPAIRS_FEATURE_BLOCK = 0;
 
-    FEES_FEATURE_BLOCK = 999999;
-    FREEZENOTICE_FEATURE_BLOCK = 999999;
+    FEES_FEATURE_BLOCK = std::numeric_limits<int>::max();
+    FREEZENOTICE_FEATURE_BLOCK = std::numeric_limits<int>::max();
 }
 
 /**

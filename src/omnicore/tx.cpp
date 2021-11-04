@@ -145,11 +145,11 @@ bool CMPTransaction::interpret_Transaction()
         case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE:
             return interpret_CreatePropertyVariable();
 
-        case TOKEN_TYPE_CLOSE_CROWDSALE:
-            return interpret_CloseCrowdsale();
-
         case TOKEN_TYPE_CREATE_PROPERTY_MANUAL:
             return interpret_CreatePropertyManaged();
+
+        case TOKEN_TYPE_CLOSE_CROWDSALE:
+            return interpret_CloseCrowdsale();
 
         case TOKEN_TYPE_GRANT_PROPERTY_TOKENS:
             return interpret_GrantTokens();
@@ -901,17 +901,21 @@ int CMPTransaction::interpretPacket()
         case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             return logicMath_MetaDExCancelEcosystem();
 
+        // Create tokens
+
         case TOKEN_TYPE_CREATE_PROPERTY_FIXED:
             return logicMath_CreatePropertyFixed();
 
         case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE:
             return logicMath_CreatePropertyVariable();
 
-        case TOKEN_TYPE_CLOSE_CROWDSALE:
-            return logicMath_CloseCrowdsale();
-
         case TOKEN_TYPE_CREATE_PROPERTY_MANUAL:
             return logicMath_CreatePropertyManaged();
+
+        // End create tokens
+
+        case TOKEN_TYPE_CLOSE_CROWDSALE:
+            return logicMath_CloseCrowdsale();
 
         case TOKEN_TYPE_GRANT_PROPERTY_TOKENS:
             return logicMath_GrantTokens();
@@ -1582,6 +1586,17 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -37);
     }
 
+    if (pDbSpInfo->findSPByName(name) > 0) {
+        PrintToLog("%s(): rejected: token with name %s already exists\n", __func__, name);
+        return (PKT_ERROR_SP -71);
+    }
+
+    if (!IsTokenNameValid(name))
+    {
+        PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
+        return (PKT_ERROR_SP -72);
+    }
+
     // ------------------------------------------
 
     CMPSPInfo::Entry newSP;
@@ -1679,6 +1694,17 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
     if (NULL != getCrowd(sender)) {
         PrintToLog("%s(): rejected: sender %s has an active crowdsale\n", __func__, sender);
         return (PKT_ERROR_SP -39);
+    }
+
+    if (pDbSpInfo->findSPByName(name) > 0) {
+        PrintToLog("%s(): rejected: token with name %s already exists\n", __func__, name);
+        return (PKT_ERROR_SP -71);
+    }
+
+    if (!IsTokenNameValid(name))
+    {
+        PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
+        return (PKT_ERROR_SP -72);
     }
 
     // ------------------------------------------
@@ -1816,6 +1842,17 @@ int CMPTransaction::logicMath_CreatePropertyManaged()
     if ('\0' == name[0]) {
         PrintToLog("%s(): rejected: property name must not be empty\n", __func__);
         return (PKT_ERROR_SP -37);
+    }
+
+    if (pDbSpInfo->findSPByName(name) > 0) {
+        PrintToLog("%s(): rejected: token with name %s already exists\n", __func__, name);
+        return (PKT_ERROR_SP -71);
+    }
+
+    if (!IsTokenNameValid(name))
+    {
+        PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
+        return (PKT_ERROR_SP -72);
     }
 
     // ------------------------------------------

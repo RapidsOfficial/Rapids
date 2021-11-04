@@ -300,6 +300,14 @@ inline std::string error_str(int ec) {
           ec_str = "Tokens to issue and desired property are not in the same ecosystem";
           break;
 
+      case PKT_ERROR_SP -71:
+          ec_str = "Token name already used";
+          break;
+
+      case PKT_ERROR_SP -72:
+          ec_str = "Token name is invalid";
+          break;
+
       case PKT_ERROR_TOKENS -22:
           ec_str = "Transaction type or version not permitted";
           break;

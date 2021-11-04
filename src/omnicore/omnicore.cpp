@@ -1808,24 +1808,19 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
     // ToDo: calculate amount send to dev fee address here
 
     if (0 == pop_ret) {
+        // ToDo: Add amount check here
+
+        // TOKEN_TYPE_CREATE_PROPERTY_FIXED
+        // TOKEN_TYPE_CREATE_PROPERTY_VARIABLE
+        // TOKEN_TYPE_CREATE_PROPERTY_MANUAL
+
         int interp_ret = mp_obj.interpretPacket();
-        if (interp_ret) PrintToLog("!!! interpretPacket() returned %d !!!\n", interp_ret);
+        if (interp_ret) PrintToLog("interpretPacket() returned error %d\n", interp_ret);
 
         // Only structurally valid transactions get recorded in levelDB
         // PKT_ERROR - 2 = interpret_Transaction failed, structurally invalid payload
         if (interp_ret != PKT_ERROR - 2) {
             bool bValid = (0 <= interp_ret);
-
-            // ToDo: Add amount check here
-
-            // TOKEN_TYPE_CREATE_PROPERTY_FIXED
-            // TOKEN_TYPE_CREATE_PROPERTY_VARIABLE
-            // TOKEN_TYPE_CREATE_PROPERTY_MANUAL
-
-            // ToDo: Enforce token naming conventions here
-
-            // ToDo: Add unique name check here
-
             pDbTransactionList->recordTX(tx.GetHash(), bValid, nBlock, mp_obj.getType(), mp_obj.getNewAmount());
             pDbTransaction->RecordTransaction(tx.GetHash(), idx, interp_ret);
         }

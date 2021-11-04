@@ -16,6 +16,14 @@ class CTransaction;
 
 #include <string.h>
 #include <string>
+#include <regex>
+
+static const std::regex TOKEN_NAME_CHARACTERS("^[A-Z0-9._]{3,25}$");
+
+bool IsTokenNameValid(const std::string& name)
+{
+    return std::regex_match(name, TOKEN_NAME_CHARACTERS);
+}
 
 using mastercore::strTransactionType;
 

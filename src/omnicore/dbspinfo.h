@@ -37,6 +37,12 @@
  *      uint32_t propertyId
  *
  *  Key:
+ *      char 'n'
+ *      std::string name
+ *  Value:
+ *      uint32_t propertyId
+ *
+ *  Key:
  *      char 'b'
  *      uint256 hashBlock
  *      uint32_t propertyId
@@ -154,6 +160,7 @@ public:
     bool getSP(uint32_t propertyId, Entry& info) const;
     bool hasSP(uint32_t propertyId) const;
     uint32_t findSPByTX(const uint256& txid) const;
+    uint32_t findSPByName(const std::string& name) const;
 
     int64_t popBlock(const uint256& block_hash);
 

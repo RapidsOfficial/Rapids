@@ -234,6 +234,19 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
     ssTxValue << propertyId;
     leveldb::Slice slTxValue(&ssTxValue[0], ssTxValue.size());
 
+
+    // DB key for identifier lookup entry by name
+    CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
+    ssNameIndexKey << std::make_pair('n', info.name);
+    leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
+
+    // DB value for name identifier
+    CDataStream ssNameValue(SER_DISK, CLIENT_VERSION);
+    ssNameValue.reserve(::GetSerializeSize(propertyId, CLIENT_VERSION));
+    ssNameValue << propertyId;
+    leveldb::Slice slNameValue(&ssTxValue[0], ssNameValue.size());
+
+
     // sanity checking
     std::string existingEntry;
     if (!pdb->Get(readoptions, slSpKey, &existingEntry).IsNotFound() && slSpValue.compare(existingEntry) != 0) {
@@ -242,12 +255,16 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
     } else if (!pdb->Get(readoptions, slTxIndexKey, &existingEntry).IsNotFound() && slTxValue.compare(existingEntry) != 0) {
         std::string strError = strprintf("writing index txid %s : SP %d is overwriting a different value", info.txid.ToString(), propertyId);
         PrintToLog("%s() ERROR: %s\n", __func__, strError);
+    } else if (!pdb->Get(readoptions, slNameIndexKey, &existingEntry).IsNotFound() && slNameValue.compare(existingEntry) != 0) {
+        std::string strError = strprintf("writing index name %s : SP %d is overwriting a different value", info.txid.ToString(), propertyId);
+        PrintToLog("%s() ERROR: %s\n", __func__, strError);
     }
 
     // atomically write both the the SP and the index to the database
     leveldb::WriteBatch batch;
     batch.Put(slSpKey, slSpValue);
     batch.Put(slTxIndexKey, slTxValue);
+    batch.Put(slNameIndexKey, slNameValue);
 
     leveldb::Status status = pdb->Write(syncoptions, &batch);
 
@@ -342,6 +359,34 @@ uint32_t CMPSPInfo::findSPByTX(const uint256& txid) const
     return propertyId;
 }
 
+uint32_t CMPSPInfo::findSPByName(const std::string& name) const
+{
+    uint32_t propertyId = 0;
+
+    // DB key for identifier lookup entry
+    CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
+    ssNameIndexKey << std::make_pair('n', name);
+    leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
+
+    // DB value for identifier
+    std::string strNameIndexValue;
+    if (!pdb->Get(readoptions, slNameIndexKey, &strNameIndexValue).ok()) {
+        std::string strError = strprintf("property with name %s not found\n", name);
+        PrintToLog("%s(): INFO: %s", __func__, strError);
+        return 0;
+    }
+
+    try {
+        CDataStream ssValue(strNameIndexValue.data(), strNameIndexValue.data() + strNameIndexValue.size(), SER_DISK, CLIENT_VERSION);
+        ssValue >> propertyId;
+    } catch (const std::exception& e) {
+        PrintToLog("%s(): ERROR: %s\n", __func__, e.what());
+        return 0;
+    }
+
+    return propertyId;
+}
+
 int64_t CMPSPInfo::popBlock(const uint256& block_hash)
 {
     int64_t remainingSPs = 0;
@@ -373,8 +418,14 @@ int64_t CMPSPInfo::popBlock(const uint256& block_hash)
                 CDataStream ssTxIndexKey(SER_DISK, CLIENT_VERSION);
                 ssTxIndexKey << std::make_pair('t', info.txid);
                 leveldb::Slice slTxIndexKey(&ssTxIndexKey[0], ssTxIndexKey.size());
+
+                CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
+                ssNameIndexKey << std::make_pair('n', info.name);
+                leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
+
                 commitBatch.Delete(slSpKey);
                 commitBatch.Delete(slTxIndexKey);
+                commitBatch.Delete(slNameIndexKey);
             } else {
                 uint32_t propertyId = 0;
                 try {
