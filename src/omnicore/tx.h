@@ -19,10 +19,12 @@ class CTransaction;
 #include <regex>
 
 static const std::regex TOKEN_NAME_CHARACTERS("^[A-Z0-9._]{3,25}$");
+static const std::regex PROTECTED_NAMES("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
 
 bool IsTokenNameValid(const std::string& name)
 {
-    return std::regex_match(name, TOKEN_NAME_CHARACTERS);
+    return std::regex_match(name, TOKEN_NAME_CHARACTERS)
+        && !std::regex_match(name, PROTECTED_NAMES);
 }
 
 using mastercore::strTransactionType;
