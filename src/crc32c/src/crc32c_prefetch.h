@@ -14,11 +14,11 @@
 
 #if HAVE_MM_PREFETCH
 
-#if defined(_MSC_VER)
+#if defined(_TOKEN_VER)
 #include <intrin.h>
-#else  // !defined(_MSC_VER)
+#else  // !defined(_TOKEN_VER)
 #include <xmmintrin.h>
-#endif  // defined(_MSC_VER)
+#endif  // defined(_TOKEN_VER)
 
 #endif  // HAVE_MM_PREFETCH
 

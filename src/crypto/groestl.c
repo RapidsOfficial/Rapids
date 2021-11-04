@@ -59,7 +59,7 @@ extern "C"{
 #undef SPH_GROESTL_64
 #endif
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning (disable: 4146)
 #endif
 

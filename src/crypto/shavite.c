@@ -43,7 +43,7 @@ extern "C"{
 #define SPH_SMALL_FOOTPRINT_SHAVITE   1
 #endif
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning (disable: 4146)
 #endif
 

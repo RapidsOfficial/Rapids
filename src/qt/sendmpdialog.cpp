@@ -364,7 +364,7 @@ void SendMPDialog::sendMPTransaction()
         if (!autoCommit) {
             PopulateSimpleDialog(rawHex, "Raw Hex (auto commit is disabled)", "Raw transaction hex");
         } else {
-            PendingAdd(txid, EncodeDestination(fromAddress), MSC_TYPE_SIMPLE_SEND, propertyId, sendAmount);
+            PendingAdd(txid, EncodeDestination(fromAddress), TOKEN_TYPE_SIMPLE_SEND, propertyId, sendAmount);
             PopulateTXSentDialog(txid.GetHex());
         }
     }

@@ -52,7 +52,7 @@ extern "C"{
 #undef SPH_JH_64
 #endif
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning (disable: 4146)
 #endif
 

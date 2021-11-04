@@ -423,7 +423,9 @@ std::string mastercore::getTokenLabel(uint32_t propertyId)
             tokenStr = " TOMNI";
         }
     } else {
-        tokenStr = strprintf(" SPT#%d", propertyId);
+        CMPSPInfo::Entry property;
+        pDbSpInfo->getSP(propertyId, property);
+        tokenStr = strprintf(" %s", property.name);
     }
     return tokenStr;
 }

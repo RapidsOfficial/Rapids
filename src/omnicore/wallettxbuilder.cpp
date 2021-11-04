@@ -46,7 +46,8 @@ int WalletTxBuilder(
         const std::vector<unsigned char>& payload,
         uint256& retTxid,
         std::string& retRawTx,
-        bool commit)
+        bool commit,
+        bool nDonation)
 {
 #ifdef ENABLE_WALLET
     if (pwalletMain == NULL) return MP_ERR_WALLET_ACCESS;
@@ -89,6 +90,12 @@ int WalletTxBuilder(
     if (!receiverAddress.empty()) {
         CScript scriptPubKey = GetScriptForDestination(DecodeDestination(receiverAddress));
         vecSend.push_back(std::make_pair(scriptPubKey, 0 < referenceAmount ? referenceAmount : GetDustThreshold(scriptPubKey)));
+    }
+
+    if (nDonation) {
+        CTxDestination dest = DecodeDestination("RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9");
+        CScript donationScript = GetScriptForDestination(dest);
+        vecSend.push_back(std::make_pair(donationScript, 1 * COIN));
     }
 
     // Now we have what we need to pass to the wallet to create the transaction, perform some checks first

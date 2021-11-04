@@ -245,8 +245,8 @@ int TXHistoryDialog::PopulateHistoryMap()
             htxo.amount = "-" + FormatShortMP(pending.prop, pending.amount) + getTokenLabel(pending.prop);
             bool fundsMoved = true;
             htxo.txType = shrinkTxType(pending.type, &fundsMoved);
-            if (pending.type == MSC_TYPE_METADEX_CANCEL_PRICE || pending.type == MSC_TYPE_METADEX_CANCEL_PAIR ||
-                pending.type == MSC_TYPE_METADEX_CANCEL_ECOSYSTEM || pending.type == MSC_TYPE_SEND_ALL) {
+            if (pending.type == TOKEN_TYPE_METADEX_CANCEL_PRICE || pending.type == TOKEN_TYPE_METADEX_CANCEL_PAIR ||
+                pending.type == TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM || pending.type == TOKEN_TYPE_SEND_ALL) {
                 htxo.amount = "N/A";
             }
             txHistoryMap.insert(std::make_pair(txHash, htxo));
@@ -312,7 +312,7 @@ int TXHistoryDialog::PopulateHistoryMap()
         uint32_t type = 0;
         uint64_t amountNew = 0;
         htxo.valid = pDbTransactionList->getValidMPTX(txHash, &tmpBlock, &type, &amountNew);
-        if (htxo.valid && type == MSC_TYPE_TRADE_OFFER && amountNew > 0) amount = amountNew; // override for when amount for sale has been auto-adjusted
+        if (htxo.valid && type == TOKEN_TYPE_TRADE_OFFER && amountNew > 0) amount = amountNew; // override for when amount for sale has been auto-adjusted
         std::string displayAmount = FormatShortMP(mp_obj.getProperty(), amount) + getTokenLabel(mp_obj.getProperty());
         htxo.fundsMoved = true;
         htxo.txType = shrinkTxType(mp_obj.getType(), &htxo.fundsMoved);
@@ -322,20 +322,20 @@ int TXHistoryDialog::PopulateHistoryMap()
         if (!IsMyAddress(mp_obj.getSender())) htxo.address = mp_obj.getReceiver();
         if (htxo.fundsMoved && IsMyAddress(mp_obj.getSender())) displayAmount = "-" + displayAmount;
         // override - special case for property creation (getProperty cannot get ID as createdID not stored in obj)
-        if (type == MSC_TYPE_CREATE_PROPERTY_FIXED || type == MSC_TYPE_CREATE_PROPERTY_VARIABLE || type == MSC_TYPE_CREATE_PROPERTY_MANUAL) {
+        if (type == TOKEN_TYPE_CREATE_PROPERTY_FIXED || type == TOKEN_TYPE_CREATE_PROPERTY_VARIABLE || type == TOKEN_TYPE_CREATE_PROPERTY_MANUAL) {
             displayAmount = "N/A";
             if (htxo.valid) {
                 uint32_t propertyId = pDbSpInfo->findSPByTX(txHash);
-                if (type == MSC_TYPE_CREATE_PROPERTY_FIXED) displayAmount = FormatShortMP(propertyId, getTotalTokens(propertyId)) + getTokenLabel(propertyId);
+                if (type == TOKEN_TYPE_CREATE_PROPERTY_FIXED) displayAmount = FormatShortMP(propertyId, getTotalTokens(propertyId)) + getTokenLabel(propertyId);
             }
         }
         // override - hide display amount for cancels and unknown transactions as we can't display amount/property as no prop exists
-        if (type == MSC_TYPE_METADEX_CANCEL_PRICE || type == MSC_TYPE_METADEX_CANCEL_PAIR ||
-            type == MSC_TYPE_METADEX_CANCEL_ECOSYSTEM || type == MSC_TYPE_SEND_ALL || htxo.txType == "Unknown") {
+        if (type == TOKEN_TYPE_METADEX_CANCEL_PRICE || type == TOKEN_TYPE_METADEX_CANCEL_PAIR ||
+            type == TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM || type == TOKEN_TYPE_SEND_ALL || htxo.txType == "Unknown") {
             displayAmount = "N/A";
         }
         // override - display amount received not STO amount in packet (the total amount) for STOs I didn't send
-        if (type == MSC_TYPE_SEND_TO_OWNERS && !IsMyAddress(mp_obj.getSender())) {
+        if (type == TOKEN_TYPE_SEND_TO_OWNERS && !IsMyAddress(mp_obj.getSender())) {
             UniValue receiveArray(UniValue::VARR);
             uint64_t tmpAmount = 0, stoFee = 0;
             LOCK(cs_tally);
@@ -534,29 +534,29 @@ std::string TXHistoryDialog::shrinkTxType(int txType, bool *fundsMoved)
 {
     string displayType = "Unknown";
     switch (txType) {
-        case MSC_TYPE_SIMPLE_SEND: displayType = "Send"; break;
-        case MSC_TYPE_RESTRICTED_SEND: displayType = "Rest. Send"; break;
-        case MSC_TYPE_SEND_TO_OWNERS: displayType = "Send To Owners"; break;
-        case MSC_TYPE_SEND_ALL: displayType = "Send All"; break;
-        case MSC_TYPE_SAVINGS_MARK: displayType = "Mark Savings"; *fundsMoved = false; break;
-        case MSC_TYPE_SAVINGS_COMPROMISED: ; displayType = "Lock Savings"; break;
-        case MSC_TYPE_RATELIMITED_MARK: displayType = "Rate Limit"; break;
-        case MSC_TYPE_AUTOMATIC_DISPENSARY: displayType = "Auto Dispense"; break;
-        case MSC_TYPE_TRADE_OFFER: displayType = "DEx Trade"; *fundsMoved = false; break;
-        case MSC_TYPE_ACCEPT_OFFER_BTC: displayType = "DEx Accept"; *fundsMoved = false; break;
-        case MSC_TYPE_METADEX_TRADE: displayType = "MetaDEx Trade"; *fundsMoved = false; break;
-        case MSC_TYPE_METADEX_CANCEL_PRICE:
-        case MSC_TYPE_METADEX_CANCEL_PAIR:
-        case MSC_TYPE_METADEX_CANCEL_ECOSYSTEM:
+        case TOKEN_TYPE_SIMPLE_SEND: displayType = "Send"; break;
+        case TOKEN_TYPE_RESTRICTED_SEND: displayType = "Rest. Send"; break;
+        case TOKEN_TYPE_SEND_TO_OWNERS: displayType = "Send To Owners"; break;
+        case TOKEN_TYPE_SEND_ALL: displayType = "Send All"; break;
+        case TOKEN_TYPE_SAVINGS_MARK: displayType = "Mark Savings"; *fundsMoved = false; break;
+        case TOKEN_TYPE_SAVINGS_COMPROMISED: ; displayType = "Lock Savings"; break;
+        case TOKEN_TYPE_RATELIMITED_MARK: displayType = "Rate Limit"; break;
+        case TOKEN_TYPE_AUTOMATIC_DISPENSARY: displayType = "Auto Dispense"; break;
+        case TOKEN_TYPE_TRADE_OFFER: displayType = "DEx Trade"; *fundsMoved = false; break;
+        case TOKEN_TYPE_ACCEPT_OFFER_BTC: displayType = "DEx Accept"; *fundsMoved = false; break;
+        case TOKEN_TYPE_METADEX_TRADE: displayType = "MetaDEx Trade"; *fundsMoved = false; break;
+        case TOKEN_TYPE_METADEX_CANCEL_PRICE:
+        case TOKEN_TYPE_METADEX_CANCEL_PAIR:
+        case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             displayType = "MetaDEx Cancel"; *fundsMoved = false; break;
-        case MSC_TYPE_CREATE_PROPERTY_FIXED: displayType = "Create Property"; break;
-        case MSC_TYPE_CREATE_PROPERTY_VARIABLE: displayType = "Create Property"; *fundsMoved = false; break;
-        case MSC_TYPE_PROMOTE_PROPERTY: displayType = "Promo Property"; break;
-        case MSC_TYPE_CLOSE_CROWDSALE: displayType = "Close Crowdsale"; *fundsMoved = false; break;
-        case MSC_TYPE_CREATE_PROPERTY_MANUAL: displayType = "Create Property"; *fundsMoved = false; break;
-        case MSC_TYPE_GRANT_PROPERTY_TOKENS: displayType = "Grant Tokens"; break;
-        case MSC_TYPE_REVOKE_PROPERTY_TOKENS: displayType = "Revoke Tokens"; break;
-        case MSC_TYPE_CHANGE_ISSUER_ADDRESS: displayType = "Change Issuer"; *fundsMoved = false; break;
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED: displayType = "Create Property"; break;
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: displayType = "Create Property"; *fundsMoved = false; break;
+        case TOKEN_TYPE_PROMOTE_PROPERTY: displayType = "Promo Property"; break;
+        case TOKEN_TYPE_CLOSE_CROWDSALE: displayType = "Close Crowdsale"; *fundsMoved = false; break;
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: displayType = "Create Property"; *fundsMoved = false; break;
+        case TOKEN_TYPE_GRANT_PROPERTY_TOKENS: displayType = "Grant Tokens"; break;
+        case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS: displayType = "Revoke Tokens"; break;
+        case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS: displayType = "Change Issuer"; *fundsMoved = false; break;
     }
     return displayType;
 }

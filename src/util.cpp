@@ -45,7 +45,7 @@
 
 #else
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4804)
 #pragma warning(disable : 4805)
