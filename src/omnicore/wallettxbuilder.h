@@ -18,7 +18,8 @@ int WalletTxBuilder(
         const std::vector<unsigned char>& payload,
         uint256& retTxid,
         std::string& retRawTx,
-        bool commit);
+        bool commit,
+        bool nDonation = false);
 
 /**
  * Creates and sends a raw transaction by selecting all coins from the sender
