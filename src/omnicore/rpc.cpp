@@ -2133,12 +2133,6 @@ static UniValue omni_getinfo(const JSONRPCRequest& request)
 
     UniValue infoResponse(UniValue::VOBJ);
 
-    // provide the mastercore and bitcoin version
-    infoResponse.pushKV("omnicoreversion_int", OMNICORE_VERSION);
-    infoResponse.pushKV("omnicoreversion", OmniCoreVersion());
-    infoResponse.pushKV("mastercoreversion", OmniCoreVersion());
-    infoResponse.pushKV("bitcoincoreversion", BitcoinCoreVersion());
-
     // provide the current block details
     int block = GetHeight();
     int64_t blockTime = GetLatestBlockTime();
