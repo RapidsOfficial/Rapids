@@ -169,11 +169,11 @@ static UniValue omni_sendrawtx(const JSONRPCRequest& request)
     }
 }
 
-static UniValue omni_send(const JSONRPCRequest& request)
+static UniValue sendtoken(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 4 || request.params.size() > 6)
         throw runtime_error(
-            "omni_send \"fromaddress\" \"toaddress\" propertyid \"amount\" ( \"redeemaddress\" \"referenceamount\" )\n"
+            "sendtoken \"fromaddress\" \"toaddress\" propertyid \"amount\" ( \"redeemaddress\" \"referenceamount\" )\n"
 
             "\nCreate and broadcast a simple send transaction.\n"
 
@@ -189,8 +189,8 @@ static UniValue omni_send(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_send", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 1 \"100.0\"")
-            + HelpExampleRpc("omni_send", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", 1, \"100.0\"")
+            + HelpExampleCli("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 1 \"100.0\"")
+            + HelpExampleRpc("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", 1, \"100.0\"")
         );
 
     // obtain parameters & info
@@ -227,11 +227,11 @@ static UniValue omni_send(const JSONRPCRequest& request)
     }
 }
 
-static UniValue omni_sendall(const JSONRPCRequest& request)
+static UniValue sendalltokens(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 3 || request.params.size() > 5)
         throw runtime_error(
-            "omni_sendall \"fromaddress\" \"toaddress\" ecosystem ( \"redeemaddress\" \"referenceamount\" )\n"
+            "sendalltokens \"fromaddress\" \"toaddress\" ecosystem ( \"redeemaddress\" \"referenceamount\" )\n"
 
             "\nTransfers all available tokens in the given ecosystem to the recipient.\n"
 
@@ -246,8 +246,8 @@ static UniValue omni_sendall(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_sendall", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 2")
-            + HelpExampleRpc("omni_sendall", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 2")
+            + HelpExampleCli("sendalltokens", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 2")
+            + HelpExampleRpc("sendalltokens", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 2")
         );
 
     // obtain parameters & info
@@ -525,11 +525,11 @@ static UniValue omni_sendissuancecrowdsale(const JSONRPCRequest& request)
     }
 }
 
-static UniValue omni_sendissuancefixed(const JSONRPCRequest& request)
+static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 10)
         throw runtime_error(
-            "omni_sendissuancefixed \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" \"amount\"\n"
+            "sendtokenissuancefixed \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" \"amount\"\n"
 
             "\nCreate new tokens with fixed supply.\n"
 
@@ -549,8 +549,8 @@ static UniValue omni_sendissuancefixed(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_sendissuancefixed", "\"3Ck2kEGLJtZw9ENj2tameMCtS3HB7uRar3\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" \"1000000\"")
-            + HelpExampleRpc("omni_sendissuancefixed", "\"3Ck2kEGLJtZw9ENj2tameMCtS3HB7uRar3\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", \"1000000\"")
+            + HelpExampleCli("sendtokenissuancefixed", "\"3Ck2kEGLJtZw9ENj2tameMCtS3HB7uRar3\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" \"1000000\"")
+            + HelpExampleRpc("sendtokenissuancefixed", "\"3Ck2kEGLJtZw9ENj2tameMCtS3HB7uRar3\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", \"1000000\"")
         );
 
     // obtain parameters & info
@@ -567,6 +567,13 @@ static UniValue omni_sendissuancefixed(const JSONRPCRequest& request)
 
     // perform checks
     RequirePropertyName(name);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name already exists");
+
+    if (!IsTokenNameValid(name))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token name is invalid");
 
     // create a payload for the transaction
     std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, url, data, amount);
@@ -588,11 +595,11 @@ static UniValue omni_sendissuancefixed(const JSONRPCRequest& request)
     }
 }
 
-static UniValue omni_sendissuancemanaged(const JSONRPCRequest& request)
+static UniValue sendtokenissuancemanaged(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 9)
         throw runtime_error(
-            "omni_sendissuancemanaged \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\"\n"
+            "sendtokenissuancemanaged \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\"\n"
 
             "\nCreate new tokens with manageable supply.\n"
 
@@ -611,8 +618,8 @@ static UniValue omni_sendissuancemanaged(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_sendissuancemanaged", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
-            + HelpExampleRpc("omni_sendissuancemanaged", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
+            + HelpExampleCli("sendtokenissuancemanaged", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
+            + HelpExampleRpc("sendtokenissuancemanaged", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
         );
 
     // obtain parameters & info
@@ -628,6 +635,13 @@ static UniValue omni_sendissuancemanaged(const JSONRPCRequest& request)
 
     // perform checks
     RequirePropertyName(name);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name already exists");
+
+    if (!IsTokenNameValid(name))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token name is invalid");
 
     // create a payload for the transaction
     std::vector<unsigned char> payload = CreatePayload_IssuanceManaged(ecosystem, type, previousId, category, subcategory, name, url, data);
@@ -1229,11 +1243,11 @@ static UniValue omni_senddisablefreezing(const JSONRPCRequest& request)
     }
 }
 
-static UniValue omni_sendfreeze(const JSONRPCRequest& request)
+static UniValue sendtokenfreeze(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "omni_sendfreeze \"fromaddress\" \"toaddress\" propertyid amount \n"
+            "sendtokenfreeze \"fromaddress\" \"toaddress\" propertyid amount \n"
             "\nFreeze an address for a centrally managed token.\n"
             "\nNote: Only the issuer may freeze tokens, and only if the token is of the managed type with the freezing option enabled.\n"
             "\nArguments:\n"
@@ -1244,8 +1258,8 @@ static UniValue omni_sendfreeze(const JSONRPCRequest& request)
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_sendfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 0")
-            + HelpExampleRpc("omni_sendfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, 0")
+            + HelpExampleCli("sendtokenfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 0")
+            + HelpExampleRpc("sendtokenfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, 0")
         );
 
     // obtain parameters & info
@@ -1280,11 +1294,11 @@ static UniValue omni_sendfreeze(const JSONRPCRequest& request)
     }
 }
 
-static UniValue omni_sendunfreeze(const JSONRPCRequest& request)
+static UniValue sendtokenunfreeze(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "omni_sendunfreeze \"fromaddress\" \"toaddress\" propertyid amount \n"
+            "sendtokenunfreeze \"fromaddress\" \"toaddress\" propertyid amount \n"
             "\nUnfreezes an address for a centrally managed token.\n"
             "\nNote: Only the issuer may unfreeze tokens.\n"
             "\nArguments:\n"
@@ -1295,8 +1309,8 @@ static UniValue omni_sendunfreeze(const JSONRPCRequest& request)
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_sendunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 0")
-            + HelpExampleRpc("omni_sendunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, 0")
+            + HelpExampleCli("sendtokenunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 0")
+            + HelpExampleRpc("sendtokenunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, 0")
         );
 
     // obtain parameters & info
@@ -1533,35 +1547,35 @@ static UniValue trade_MP(const JSONRPCRequest& request)
 }
 
 static const CRPCCommand commands[] =
-{ //  category                             name                            actor (function)               okSafeMode
-  //  ------------------------------------ ------------------------------- ------------------------------ ----------
+{ //  category                         name                            actor (function)               okSafeMode
+  //  -------------------------------- ------------------------------- ------------------------------ ----------
 #ifdef ENABLE_WALLET
-    { "omni layer (transaction creation)", "omni_sendrawtx",               &omni_sendrawtx,               false },
-    { "omni layer (transaction creation)", "omni_send",                    &omni_send,                    false },
-    { "omni layer (transaction creation)", "omni_senddexsell",             &omni_senddexsell,             false },
-    { "omni layer (transaction creation)", "omni_senddexaccept",           &omni_senddexaccept,           false },
-    { "omni layer (transaction creation)", "omni_sendissuancecrowdsale",   &omni_sendissuancecrowdsale,   false },
-    { "omni layer (transaction creation)", "omni_sendissuancefixed",       &omni_sendissuancefixed,       false },
-    { "omni layer (transaction creation)", "omni_sendissuancemanaged",     &omni_sendissuancemanaged,     false },
-    { "omni layer (transaction creation)", "omni_sendtrade",               &omni_sendtrade,               false },
-    { "omni layer (transaction creation)", "omni_sendcanceltradesbyprice", &omni_sendcanceltradesbyprice, false },
-    { "omni layer (transaction creation)", "omni_sendcanceltradesbypair",  &omni_sendcanceltradesbypair,  false },
-    { "omni layer (transaction creation)", "omni_sendcancelalltrades",     &omni_sendcancelalltrades,     false },
-    { "omni layer (transaction creation)", "omni_sendsto",                 &omni_sendsto,                 false },
-    { "omni layer (transaction creation)", "omni_sendgrant",               &omni_sendgrant,               false },
-    { "omni layer (transaction creation)", "omni_sendrevoke",              &omni_sendrevoke,              false },
-    { "omni layer (transaction creation)", "omni_sendclosecrowdsale",      &omni_sendclosecrowdsale,      false },
-    { "omni layer (transaction creation)", "omni_sendchangeissuer",        &omni_sendchangeissuer,        false },
-    { "omni layer (transaction creation)", "omni_sendall",                 &omni_sendall,                 false },
-    { "omni layer (transaction creation)", "omni_sendenablefreezing",      &omni_sendenablefreezing,      false },
-    { "omni layer (transaction creation)", "omni_senddisablefreezing",     &omni_senddisablefreezing,     false },
-    { "omni layer (transaction creation)", "omni_sendfreeze",              &omni_sendfreeze,              false },
-    { "omni layer (transaction creation)", "omni_sendunfreeze",            &omni_sendunfreeze,            false },
-    { "hidden",                            "omni_senddeactivation",        &omni_senddeactivation,        true  },
-    { "hidden",                            "omni_sendactivation",          &omni_sendactivation,          false },
-    { "hidden",                            "omni_sendalert",               &omni_sendalert,               true  },
-    { "omni layer (transaction creation)", "omni_funded_send",             &omni_funded_send,             false },
-    { "omni layer (transaction creation)", "omni_funded_sendall",          &omni_funded_sendall,          false },
+    // { "tokens (transaction creation)", "omni_sendrawtx",               &omni_sendrawtx,               false },
+    { "tokens (transaction creation)", "sendtoken",                    &sendtoken,                    false },
+    // { "tokens (transaction creation)", "omni_senddexsell",             &omni_senddexsell,             false },
+    // { "tokens (transaction creation)", "omni_senddexaccept",           &omni_senddexaccept,           false },
+    // { "tokens (transaction creation)", "omni_sendissuancecrowdsale",   &omni_sendissuancecrowdsale,   false },
+    { "tokens (transaction creation)", "sendtokenissuancefixed",       &sendtokenissuancefixed,       false },
+    { "tokens (transaction creation)", "sendtokenissuancemanaged",     &sendtokenissuancemanaged,     false },
+    // { "tokens (transaction creation)", "omni_sendtrade",               &omni_sendtrade,               false },
+    // { "tokens (transaction creation)", "omni_sendcanceltradesbyprice", &omni_sendcanceltradesbyprice, false },
+    // { "tokens (transaction creation)", "omni_sendcanceltradesbypair",  &omni_sendcanceltradesbypair,  false },
+    // { "tokens (transaction creation)", "omni_sendcancelalltrades",     &omni_sendcancelalltrades,     false },
+    // { "tokens (transaction creation)", "omni_sendsto",                 &omni_sendsto,                 false },
+    // { "tokens (transaction creation)", "omni_sendgrant",               &omni_sendgrant,               false },
+    // { "tokens (transaction creation)", "omni_sendrevoke",              &omni_sendrevoke,              false },
+    // { "tokens (transaction creation)", "omni_sendclosecrowdsale",      &omni_sendclosecrowdsale,      false },
+    // { "tokens (transaction creation)", "omni_sendchangeissuer",        &omni_sendchangeissuer,        false },
+    { "tokens (transaction creation)", "sendalltokens",                 &sendalltokens,               false },
+    // { "tokens (transaction creation)", "omni_sendenablefreezing",      &omni_sendenablefreezing,      false },
+    // { "tokens (transaction creation)", "omni_senddisablefreezing",     &omni_senddisablefreezing,     false },
+    { "tokens (transaction creation)", "sendtokenfreeze",               &sendtokenfreeze,             false },
+    { "tokens (transaction creation)", "sendtokenunfreeze",             &sendtokenunfreeze,           false },
+    // { "hidden",                            "omni_senddeactivation",        &omni_senddeactivation,        true  },
+    // { "hidden",                            "omni_sendactivation",          &omni_sendactivation,          false },
+    // { "hidden",                            "omni_sendalert",               &omni_sendalert,               true  },
+    // { "tokens (transaction creation)", "omni_funded_send",             &omni_funded_send,             false },
+    // { "tokens (transaction creation)", "omni_funded_sendall",          &omni_funded_sendall,          false },
 #endif
 };
 

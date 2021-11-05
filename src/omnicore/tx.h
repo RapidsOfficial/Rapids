@@ -313,5 +313,6 @@ public:
     }
 };
 
+bool IsTokenNameValid(const std::string& name);
 
 #endif // OMNICORE_TX_H
