@@ -106,6 +106,11 @@ private:
     std::unique_ptr<interfaces::Handler> m_handler_banned_list_changed;
     std::unique_ptr<interfaces::Handler> m_handler_notify_block_tip;
 
+    std::unique_ptr<interfaces::Handler> m_handler_omni_state_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_omni_pending_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_omni_balance_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_omni_state_invalidated;
+
     QString getMasternodeCountString() const;
     OptionsModel* optionsModel;
     PeerTableModel* peerTableModel;

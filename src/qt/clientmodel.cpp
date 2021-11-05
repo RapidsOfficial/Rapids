@@ -382,12 +382,12 @@ void ClientModel::subscribeToCoreSignals()
     m_handler_notify_alert_changed = interfaces::MakeHandler(uiInterface.NotifyAlertChanged.connect(std::bind(NotifyAlertChanged, this)));
     m_handler_banned_list_changed = interfaces::MakeHandler(uiInterface.BannedListChanged.connect(std::bind(BannedListChanged, this)));
     m_handler_notify_block_tip = interfaces::MakeHandler(uiInterface.NotifyBlockTip.connect(std::bind(BlockTipChanged, this, std::placeholders::_1, std::placeholders::_2)));
-
+    
     // Connect Omni signals
-    uiInterface.OmniStateChanged.connect(boost::bind(OmniStateChanged, this));
-    uiInterface.OmniPendingChanged.connect(boost::bind(OmniPendingChanged, this, std::placeholders::_1));
-    uiInterface.OmniBalanceChanged.connect(boost::bind(OmniBalanceChanged, this));
-    uiInterface.OmniStateInvalidated.connect(boost::bind(OmniStateInvalidated, this));
+    m_handler_omni_state_changed = interfaces::MakeHandler(uiInterface.OmniStateChanged.connect(std::bind(OmniStateChanged, this)));
+    m_handler_omni_pending_changed = interfaces::MakeHandler(uiInterface.OmniPendingChanged.connect(std::bind(OmniPendingChanged, this, std::placeholders::_1)));
+    m_handler_omni_balance_changed = interfaces::MakeHandler(uiInterface.OmniBalanceChanged.connect(std::bind(OmniBalanceChanged, this)));
+    m_handler_omni_state_invalidated = interfaces::MakeHandler(uiInterface.OmniStateInvalidated.connect(std::bind(OmniStateInvalidated, this)));
 }
 
 void ClientModel::unsubscribeFromCoreSignals()
@@ -400,10 +400,10 @@ void ClientModel::unsubscribeFromCoreSignals()
     m_handler_notify_block_tip->disconnect();
 
     // Disconnect Omni signals
-    uiInterface.OmniStateChanged.disconnect(boost::bind(OmniStateChanged, this));
-    uiInterface.OmniPendingChanged.disconnect(boost::bind(OmniPendingChanged, this, std::placeholders::_1));
-    uiInterface.OmniBalanceChanged.disconnect(boost::bind(OmniBalanceChanged, this));
-    uiInterface.OmniStateInvalidated.disconnect(boost::bind(OmniStateInvalidated, this));
+    m_handler_omni_state_changed->disconnect();
+    m_handler_omni_pending_changed->disconnect();
+    m_handler_omni_balance_changed->disconnect();
+    m_handler_omni_state_invalidated->disconnect();
 }
 
 bool ClientModel::getTorInfo(std::string& ip_port) const
