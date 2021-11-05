@@ -2513,26 +2513,6 @@ static const CRPCCommand commands[] =
     { "omni layer (data retrieval)", "omni_getwalletaddressbalances",  &omni_getwalletaddressbalances,   false },
 #endif
     { "hidden",                      "mscrpc",                         &mscrpc,                          true  },
-
-    /* depreciated: */
-    { "hidden",                      "getinfo_MP",                     &omni_getinfo,                    true  },
-    { "hidden",                      "getbalance_MP",                  &omni_getbalance,                 false },
-    { "hidden",                      "getallbalancesforaddress_MP",    &omni_getallbalancesforaddress,   false },
-    { "hidden",                      "getallbalancesforid_MP",         &omni_getallbalancesforid,        false },
-    { "hidden",                      "getproperty_MP",                 &omni_getproperty,                false },
-    { "hidden",                      "listproperties_MP",              &omni_listproperties,             false },
-    { "hidden",                      "getcrowdsale_MP",                &omni_getcrowdsale,               false },
-    { "hidden",                      "getgrants_MP",                   &omni_getgrants,                  false },
-    { "hidden",                      "getactivedexsells_MP",           &omni_getactivedexsells,          false },
-    { "hidden",                      "getactivecrowdsales_MP",         &omni_getactivecrowdsales,        false },
-    { "hidden",                      "getsto_MP",                      &omni_getsto,                     false },
-    { "hidden",                      "getorderbook_MP",                &omni_getorderbook,               false },
-    { "hidden",                      "gettrade_MP",                    &omni_gettrade,                   false },
-    { "hidden",                      "gettransaction_MP",              &omni_gettransaction,             false },
-    { "hidden",                      "listblocktransactions_MP",       &omni_listblocktransactions,      false },
-#ifdef ENABLE_WALLET
-    { "hidden",                      "listtransactions_MP",            &omni_listtransactions,           false },
-#endif
 };
 
 void RegisterOmniDataRetrievalRPCCommands()

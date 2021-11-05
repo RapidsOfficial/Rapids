@@ -136,10 +136,10 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         // dexPage = new MetaDExDialog();
 
         tabHolder = new QTabWidget();
+        tabHolder->setStyleSheet("background-color: #0f0f0f;");
         tabHolder->addTab(sendTokenPage, tr("Send"));
         tabHolder->addTab(balancesPage, tr("Tokens"));
         tabHolder->addTab(tokensHistory, tr("History"));
-        // txvbox->addWidget(txTabHolder);
 
         // Add to parent
         stackedContainer->addWidget(dashboard);

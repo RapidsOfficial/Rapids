@@ -40,6 +40,15 @@ using boost::algorithm::token_compress_on;
 
 using namespace mastercore;
 
+static const std::regex TOKEN_NAME_CHARACTERS("^[A-Z0-9._]{3,25}$");
+static const std::regex PROTECTED_NAMES("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
+
+bool IsTokenNameValid(const std::string& name)
+{
+    return std::regex_match(name, TOKEN_NAME_CHARACTERS)
+        && !std::regex_match(name, PROTECTED_NAMES);
+}
+
 /** Returns a label for the given transaction type. */
 std::string mastercore::strTransactionType(uint16_t txType)
 {
