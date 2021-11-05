@@ -3,12 +3,12 @@
 
 #include <univalue.h>
 
-UniValue omni_decodetransaction(const UniValue& params, bool fHelp);
-UniValue omni_createrawtx_opreturn(const UniValue& params, bool fHelp);
-UniValue omni_createrawtx_multisig(const UniValue& params, bool fHelp);
-UniValue omni_createrawtx_input(const UniValue& params, bool fHelp);
-UniValue omni_createrawtx_reference(const UniValue& params, bool fHelp);
-UniValue omni_createrawtx_change(const UniValue& params, bool fHelp);
+UniValue decodetransaction(const UniValue& params, bool fHelp);
+UniValue createrawtokentxopreturn(const UniValue& params, bool fHelp);
+UniValue createrawtokentxmultisig(const UniValue& params, bool fHelp);
+UniValue createrawtokentxinput(const UniValue& params, bool fHelp);
+UniValue createrawtokentxreference(const UniValue& params, bool fHelp);
+UniValue createrawtokentxchange(const UniValue& params, bool fHelp);
 
 void RegisterOmniRawTransactionRPCCommands();
 

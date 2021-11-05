@@ -196,7 +196,7 @@ BOOST_AUTO_TEST_CASE(txbuilder_add_change_position)
 
 BOOST_AUTO_TEST_CASE(omnitxbuilder_empty)
 {
-    OmniTxBuilder builder;
+    TokenTxBuilder builder;
     CMutableTransaction tx = builder.build();
 
     BOOST_CHECK_EQUAL("01000000000000000000", EncodeHexTx(CTransaction(tx)));
@@ -213,7 +213,7 @@ BOOST_AUTO_TEST_CASE(omnitxbuilder_from_existing)
     CTransaction txBasis;
     BOOST_CHECK(DecodeHexTx(txBasis, rawTx));
 
-    CMutableTransaction tx = OmniTxBuilder(txBasis).build();
+    CMutableTransaction tx = TokenTxBuilder(txBasis).build();
     BOOST_CHECK_EQUAL(rawTx, EncodeHexTx(CTransaction(tx)));
 }
 
@@ -246,13 +246,13 @@ BOOST_AUTO_TEST_CASE(omnitxbuilder_op_return)
     CCoinsViewCache viewTemp(&viewDummy);
     InputsToView(prevTxs, viewTemp);
 
-    CMutableTransaction tx = OmniTxBuilder()
+    CMutableTransaction tx = TokenTxBuilder()
         .addInputs(prevTxs)
         .build();
 
     BOOST_CHECK(viewTemp.HaveInputs(CTransaction(tx)));
 
-    tx = OmniTxBuilder(tx)
+    tx = TokenTxBuilder(tx)
         .addOpReturn(payload)
         .addReference("12faQbtHsD7ECFweehhHoRYxiRjyB1d1uy", 2730LL)
         .addChange("1JovPp7XB8Tjc6E2fVPigxXtfmrFLBoMhK", viewTemp, 10000LL, 1)

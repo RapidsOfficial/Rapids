@@ -2243,8 +2243,8 @@ static UniValue gettokenbalanceshash(const JSONRPCRequest& request)
 }
 
 static const CRPCCommand commands[] =
-{ //  category                             name                            actor (function)               okSafeMode
-  //  ------------------------------------ ------------------------------- ------------------------------ ----------
+{ //  category                  name                            actor (function)                       okSafeMode
+  //  ------------------------- ------------------------------- -------------------------------------- ----------
     { "tokens (data retrieval)", "gettokensinfo",                   &gettokensinfo,                    true  },
     { "tokens (data retrieval)", "getalltokenbalances",             &getalltokenbalances,              false },
     { "tokens (data retrieval)", "gettokenbalance",                 &gettokenbalance,                  false },

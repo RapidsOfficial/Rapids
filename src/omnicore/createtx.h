@@ -29,9 +29,9 @@ struct PrevTxsEntry
 };
 
 // TODO:
-// CMutableTransaction tx = OmniTxBuilder().addInput(input).addOpReturn(data).build();
+// CMutableTransaction tx = TokenTxBuilder().addInput(input).addOpReturn(data).build();
 // ... currently doesn't work, because addInput() returns a reference to a TxBuilder,
-// but not to an OmniTxBuilder.
+// but not to an TokenTxBuilder.
 
 /**
  * Builder to create transactions.
@@ -128,7 +128,7 @@ protected:
 /**
  * Builder to create Omni transactions.
  *
- * The OmniTxBuilder class is an extension of the TxBuilder, with additional
+ * The TokenTxBuilder class is an extension of the TxBuilder, with additional
  * methods to build Omni transactions. Payloads can be embedded with class B
  * (bare-multisig) or class C (op-return) encoding.
  *
@@ -139,32 +139,32 @@ protected:
  *
  * @code
  *   // add a bare-multisig encoded payload to an existing transaction:
- *   CMutableTransaction modifiedTx = OmniTxBuilder(basisTx)
+ *   CMutableTransaction modifiedTx = TokenTxBuilder(basisTx)
  *           .addMultisig(payload, obfuscationSeed, redeemingPubKey)
  *           .build();
  * @endcode
  */
-class OmniTxBuilder: public TxBuilder
+class TokenTxBuilder: public TxBuilder
 {
 public:
     /**
      * Creates a new Omni transaction builder.
      */
-    OmniTxBuilder();
+    TokenTxBuilder();
 
     /**
      * Creates a new Omni transaction builder to extend a transaction.
      *
      * @param transactionIn The transaction used to build upon
      */
-    OmniTxBuilder(const CMutableTransaction& transactionIn);
+    TokenTxBuilder(const CMutableTransaction& transactionIn);
 
     /**
      * Adds a collection of previous outputs as inputs to the transaction.
      *
      * @param outPoint The transaction outpoint to add
      */
-    OmniTxBuilder& addInputs(const std::vector<PrevTxsEntry>& prevTxs);
+    TokenTxBuilder& addInputs(const std::vector<PrevTxsEntry>& prevTxs);
 
     /**
      * Adds an output for the reference address.
@@ -174,7 +174,7 @@ public:
      * @param destination The reference address
      * @param value       The optional reference amount
      */
-    OmniTxBuilder& addReference(const std::string& destination, int64_t value = 0);
+    TokenTxBuilder& addReference(const std::string& destination, int64_t value = 0);
 
     /**
      * Embeds a payload with class C (op-return) encoding.
@@ -183,7 +183,7 @@ public:
      *
      * @param data The payload to embed
      */
-    OmniTxBuilder& addOpReturn(const std::vector<unsigned char>& data);
+    TokenTxBuilder& addOpReturn(const std::vector<unsigned char>& data);
 
     /**
      * Embeds a payload with class B (bare-multisig) encoding.
@@ -194,7 +194,7 @@ public:
      * @param seed   The address of the sender, used as seed for obfuscation
      * @param pubKey A public key that may be used to redeem the multisig dust
      */
-    OmniTxBuilder& addMultisig(const std::vector<unsigned char>& data, const std::string& seed, const CPubKey& pubKey);
+    TokenTxBuilder& addMultisig(const std::vector<unsigned char>& data, const std::string& seed, const CPubKey& pubKey);
 
     /**
      * Adds an output for change.
@@ -213,7 +213,7 @@ public:
      * @param txFee       The desired transaction fees
      * @param position    The position of the change output (default: first position)
      */
-    OmniTxBuilder& addChange(const std::string& destination, const CCoinsViewCache& view, int64_t txFee, uint32_t position = 0);
+    TokenTxBuilder& addChange(const std::string& destination, const CCoinsViewCache& view, int64_t txFee, uint32_t position = 0);
 };
 
 /**

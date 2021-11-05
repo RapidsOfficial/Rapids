@@ -109,19 +109,19 @@ CMutableTransaction TxBuilder::build()
 }
 
 /** Creates a new Omni transaction builder. */
-OmniTxBuilder::OmniTxBuilder()
+TokenTxBuilder::TokenTxBuilder()
   : TxBuilder()
 {
 }
 
 /** Creates a new Omni transaction builder to extend a transaction. */
-OmniTxBuilder::OmniTxBuilder(const CMutableTransaction& transactionIn)
+TokenTxBuilder::TokenTxBuilder(const CMutableTransaction& transactionIn)
   : TxBuilder(transactionIn)
 {
 }
 
 /** Adds a collection of previous outputs as inputs to the transaction. */
-OmniTxBuilder& OmniTxBuilder::addInputs(const std::vector<PrevTxsEntry>& prevTxs)
+TokenTxBuilder& TokenTxBuilder::addInputs(const std::vector<PrevTxsEntry>& prevTxs)
 {
     for (std::vector<PrevTxsEntry>::const_iterator it = prevTxs.begin();
             it != prevTxs.end(); ++it) {
@@ -132,7 +132,7 @@ OmniTxBuilder& OmniTxBuilder::addInputs(const std::vector<PrevTxsEntry>& prevTxs
 }
 
 /** Adds an output for the reference address. */
-OmniTxBuilder& OmniTxBuilder::addReference(const std::string& destination, int64_t value)
+TokenTxBuilder& TokenTxBuilder::addReference(const std::string& destination, int64_t value)
 {
     CTxDestination dest = DecodeDestination(destination);
     CScript scriptPubKey = GetScriptForDestination(dest);
@@ -140,11 +140,11 @@ OmniTxBuilder& OmniTxBuilder::addReference(const std::string& destination, int64
     int64_t minValue = GetDustThreshold(scriptPubKey);
     value = std::max(minValue, value);
 
-    return (OmniTxBuilder&) TxBuilder::addOutput(scriptPubKey, value);
+    return (TokenTxBuilder&) TxBuilder::addOutput(scriptPubKey, value);
 }
 
 /** Embeds a payload with class C (op-return) encoding. */
-OmniTxBuilder& OmniTxBuilder::addOpReturn(const std::vector<unsigned char>& data)
+TokenTxBuilder& TokenTxBuilder::addOpReturn(const std::vector<unsigned char>& data)
 {
     std::vector<std::pair<CScript, int64_t> > outputs;
 
@@ -152,11 +152,11 @@ OmniTxBuilder& OmniTxBuilder::addOpReturn(const std::vector<unsigned char>& data
         return *this;
     }
 
-    return (OmniTxBuilder&) TxBuilder::addOutputs(outputs);
+    return (TokenTxBuilder&) TxBuilder::addOutputs(outputs);
 }
 
 /** Embeds a payload with class B (bare-multisig) encoding. */
-OmniTxBuilder& OmniTxBuilder::addMultisig(const std::vector<unsigned char>& data, const std::string& seed, const CPubKey& pubKey)
+TokenTxBuilder& TokenTxBuilder::addMultisig(const std::vector<unsigned char>& data, const std::string& seed, const CPubKey& pubKey)
 {
     std::vector<std::pair<CScript, int64_t> > outputs;
 
@@ -164,15 +164,15 @@ OmniTxBuilder& OmniTxBuilder::addMultisig(const std::vector<unsigned char>& data
         return *this;
     }
 
-    return (OmniTxBuilder&) TxBuilder::addOutputs(outputs);
+    return (TokenTxBuilder&) TxBuilder::addOutputs(outputs);
 }
 
 /** Adds an output for change. */
-OmniTxBuilder& OmniTxBuilder::addChange(const std::string& destination, const CCoinsViewCache& view, int64_t txFee, uint32_t position)
+TokenTxBuilder& TokenTxBuilder::addChange(const std::string& destination, const CCoinsViewCache& view, int64_t txFee, uint32_t position)
 {
     CTxDestination dest = DecodeDestination(destination);
 
-    return (OmniTxBuilder&) TxBuilder::addChange(dest, view, txFee, position);
+    return (TokenTxBuilder&) TxBuilder::addChange(dest, view, txFee, position);
 }
 
 /** Adds previous transaction outputs to coins view. */
