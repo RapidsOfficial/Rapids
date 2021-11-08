@@ -1780,7 +1780,7 @@ int mastercore_shutdown()
 
     mastercoreInitialized = 0;
 
-    PrintToLog("\nOmni Core shutdown completed\n");
+    PrintToLog("Omni Core shutdown completed\n");
     PrintToLog("Shutdown time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
 
     PrintToConsole("Omni Core shutdown completed\n");

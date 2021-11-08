@@ -172,7 +172,7 @@ void TXHistoryDialog::setClientModel(ClientModel *model)
     this->clientModel = model;
     if (model != NULL) {
         connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(UpdateHistory()));
-        connect(model, SIGNAL(numBlocksChanged(int)), this, SLOT(UpdateConfirmations()));
+        connect(model, SIGNAL(numBlocksChanged(int)), this, SLOT(UpdateHistory()));
         connect(model, SIGNAL(reinitOmniState()), this, SLOT(ReinitTXHistoryTable()));
     }
 }
@@ -371,7 +371,7 @@ void TXHistoryDialog::UpdateConfirmations()
         // setup the appropriate icon
         QIcon ic = QIcon("://token_pending");
 
-        if (confirmations > 5) ic = QIcon("://token_confirmed");
+        if (confirmations > 1) ic = QIcon("://token_confirmed");
 
         if (!valid) ic = QIcon("://token_error");
         QTableWidgetItem *iconCell = new QTableWidgetItem;
