@@ -1,10 +1,10 @@
-#include "omnicore/consensushash.h"
-#include "omnicore/dex.h"
-#include "omnicore/mdex.h"
-#include "omnicore/sp.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/tally.h"
+#include "tokencore/consensushash.h"
+#include "tokencore/dex.h"
+#include "tokencore/mdex.h"
+#include "tokencore/sp.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/tally.h"
 
 #include "arith_uint256.h"
 #include "sync.h"
@@ -30,7 +30,7 @@ extern void clear_all_state();
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_checkpoint_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_checkpoint_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(consensus_string_tally)
 {

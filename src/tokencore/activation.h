@@ -1,5 +1,5 @@
-#ifndef OMNICORE_ACTIVATION_H
-#define OMNICORE_ACTIVATION_H
+#ifndef TOKENCORE_ACTIVATION_H
+#define TOKENCORE_ACTIVATION_H
 
 #include <stdint.h>
 #include <string>
@@ -17,7 +17,7 @@ struct FeatureActivation
     std::string featureName;
 };
 
-/** Determines whether the sender is an authorized source for Omni Core activations. */
+/** Determines whether the sender is an authorized source for Token Core activations. */
 bool CheckActivationAuthorization(const std::string& sender);
 /** Determines whether the sender is an authorized source to deactivate features. */
 bool CheckDeactivationAuthorization(const std::string& sender);
@@ -33,4 +33,4 @@ void CheckLiveActivations(int blockHeight);
 void AddPendingActivation(uint16_t featureId, int activationBlock, uint32_t minClientVersion, const std::string& featureName);
 }
 
-#endif // OMNICORE_ACTIVATION_H
+#endif // TOKENCORE_ACTIVATION_H

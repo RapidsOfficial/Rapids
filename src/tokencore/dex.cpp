@@ -4,15 +4,15 @@
  * This file contains DEx logic.
  */
 
-#include "omnicore/dex.h"
+#include "tokencore/dex.h"
 
-#include "omnicore/convert.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/errors.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/uint256_extensions.h"
+#include "tokencore/convert.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/errors.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/uint256_extensions.h"
 
 #include "arith_uint256.h"
 #include "main.h"
@@ -446,11 +446,11 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
 
     int rc = DEX_ERROR_PAYMENT;
 
-    uint32_t propertyId = OMNI_PROPERTY_MSC; // test for MSC accept first
+    uint32_t propertyId = TOKEN_PROPERTY_MSC; // test for MSC accept first
     CMPAccept* p_accept = DEx_getAccept(addressSeller, propertyId, addressBuyer);
 
     if (!p_accept) {
-        propertyId = OMNI_PROPERTY_TMSC; // test for TMSC accept second
+        propertyId = TOKEN_PROPERTY_TMSC; // test for TMSC accept second
         p_accept = DEx_getAccept(addressSeller, propertyId, addressBuyer);
     }
 

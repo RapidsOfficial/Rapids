@@ -1,5 +1,5 @@
-#ifndef OMNICORE_RPCRAWTX_H
-#define OMNICORE_RPCRAWTX_H
+#ifndef TOKENCORE_RPCRAWTX_H
+#define TOKENCORE_RPCRAWTX_H
 
 #include <univalue.h>
 
@@ -10,6 +10,6 @@ UniValue createrawtokentxinput(const UniValue& params, bool fHelp);
 UniValue createrawtokentxreference(const UniValue& params, bool fHelp);
 UniValue createrawtokentxchange(const UniValue& params, bool fHelp);
 
-void RegisterOmniRawTransactionRPCCommands();
+void RegisterTokenRawTransactionRPCCommands();
 
-#endif // OMNICORE_RPCRAWTX_H
+#endif // TOKENCORE_RPCRAWTX_H

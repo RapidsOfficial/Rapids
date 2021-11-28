@@ -1,9 +1,9 @@
-#ifndef OMNICORE_DEX_H
-#define OMNICORE_DEX_H
+#ifndef TOKENCORE_DEX_H
+#define TOKENCORE_DEX_H
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/tx.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
 
 #include "amount.h"
 #include "tinyformat.h"
@@ -95,7 +95,7 @@ public:
                 offer_amount_original,
                 property,
                 BTC_desired_original,
-                (OMNI_PROPERTY_BTC),
+                (TOKEN_PROPERTY_BTC),
                 min_fee,
                 blocktimelimit,
                 txid.ToString()
@@ -245,4 +245,4 @@ unsigned int eraseExpiredAccepts(int block);
 }
 
 
-#endif // OMNICORE_DEX_H
+#endif // TOKENCORE_DEX_H

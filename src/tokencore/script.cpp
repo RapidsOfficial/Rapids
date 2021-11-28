@@ -1,4 +1,4 @@
-#include "omnicore/script.h"
+#include "tokencore/script.h"
 
 #include "amount.h"
 #include "script/script.h"

@@ -2,15 +2,15 @@
  * @file walletcache.cpp
  *
  * Provides a cache of wallet balances and functionality for determining whether
- * Omni state changes affected anything in the wallet.
+ * Token state changes affected anything in the wallet.
  */
 
-#include "omnicore/walletcache.h"
+#include "tokencore/walletcache.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/tally.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/tally.h"
+#include "tokencore/walletutils.h"
 
 #include "init.h"
 #include "sync.h"

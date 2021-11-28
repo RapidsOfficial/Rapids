@@ -1,4 +1,4 @@
-#include "omnicore/createtx.h"
+#include "tokencore/createtx.h"
 
 #include "base58.h"
 #include "coins.h"
@@ -21,7 +21,7 @@
 extern CFeeRate minRelayTxFee;
 static CFeeRate minRelayTxFeeOriginal = CFeeRate(DEFAULT_MIN_RELAY_TX_FEE);
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_create_tx_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_create_tx_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(txbuilder_empty)
 {
@@ -194,7 +194,7 @@ BOOST_AUTO_TEST_CASE(txbuilder_add_change_position)
     BOOST_CHECK_EQUAL(rawTx, EncodeHexTx(CTransaction(tx)));
 }
 
-BOOST_AUTO_TEST_CASE(omnitxbuilder_empty)
+BOOST_AUTO_TEST_CASE(tokentxbuilder_empty)
 {
     TokenTxBuilder builder;
     CMutableTransaction tx = builder.build();
@@ -202,7 +202,7 @@ BOOST_AUTO_TEST_CASE(omnitxbuilder_empty)
     BOOST_CHECK_EQUAL("01000000000000000000", EncodeHexTx(CTransaction(tx)));
 }
 
-BOOST_AUTO_TEST_CASE(omnitxbuilder_from_existing)
+BOOST_AUTO_TEST_CASE(tokentxbuilder_from_existing)
 {
     std::string rawTx("01000000017f63a90b9f89c1ad0616825d2565050e53ef044721f58822148193da511e76f8010000006b"
         "483045022100c135ed7eb933d97e59ea758e394f93a83ddc5861277da3ccfd28bd77d02d55c70220568e4255aa69fdb860"
@@ -217,7 +217,7 @@ BOOST_AUTO_TEST_CASE(omnitxbuilder_from_existing)
     BOOST_CHECK_EQUAL(rawTx, EncodeHexTx(CTransaction(tx)));
 }
 
-BOOST_AUTO_TEST_CASE(omnitxbuilder_op_return)
+BOOST_AUTO_TEST_CASE(tokentxbuilder_op_return)
 {
     minRelayTxFee = CFeeRate(1000);
 

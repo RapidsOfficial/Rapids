@@ -1,16 +1,16 @@
 /**
  * @file dbfees.cpp
  *
- * This file contains code for handling Omni fees.
+ * This file contains code for handling Token fees.
  */
 
-#include "omnicore/dbfees.h"
+#include "tokencore/dbfees.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/sp.h"
-#include "omnicore/sto.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/sp.h"
+#include "tokencore/sto.h"
 
 #include "main.h"
 
@@ -31,27 +31,27 @@ using namespace mastercore;
 
 std::map<uint32_t, int64_t> distributionThresholds;
 
-COmniFeeCache::COmniFeeCache(const boost::filesystem::path& path, bool fWipe)
+CTokenFeeCache::CTokenFeeCache(const boost::filesystem::path& path, bool fWipe)
 {
     leveldb::Status status = Open(path, fWipe);
     PrintToConsole("Loading fee cache database: %s\n", status.ToString());
 }
 
-COmniFeeCache::~COmniFeeCache()
+CTokenFeeCache::~CTokenFeeCache()
 {
-    if (msc_debug_fees) PrintToLog("COmniFeeCache closed\n");
+    if (msc_debug_fees) PrintToLog("CTokenFeeCache closed\n");
 }
 
 // Returns the distribution threshold for a property
-int64_t COmniFeeCache::GetDistributionThreshold(const uint32_t &propertyId)
+int64_t CTokenFeeCache::GetDistributionThreshold(const uint32_t &propertyId)
 {
     return distributionThresholds[propertyId];
 }
 
-// Sets the distribution thresholds to total tokens for a property / OMNI_FEE_THRESHOLD
-void COmniFeeCache::UpdateDistributionThresholds(uint32_t propertyId)
+// Sets the distribution thresholds to total tokens for a property / TOKEN_FEE_THRESHOLD
+void CTokenFeeCache::UpdateDistributionThresholds(uint32_t propertyId)
 {
-    int64_t distributionThreshold = getTotalTokens(propertyId) / OMNI_FEE_THRESHOLD;
+    int64_t distributionThreshold = getTotalTokens(propertyId) / TOKEN_FEE_THRESHOLD;
     if (distributionThreshold <= 0) {
         // protect against zero valued thresholds for low token count properties
         distributionThreshold = 1;
@@ -60,7 +60,7 @@ void COmniFeeCache::UpdateDistributionThresholds(uint32_t propertyId)
 }
 
 // Gets the current amount of the fee cache for a property
-int64_t COmniFeeCache::GetCachedAmount(const uint32_t &propertyId)
+int64_t CTokenFeeCache::GetCachedAmount(const uint32_t &propertyId)
 {
     assert(pdb);
     // Get the fee history, set is sorted by block so last entry is most recent
@@ -76,7 +76,7 @@ int64_t COmniFeeCache::GetCachedAmount(const uint32_t &propertyId)
 }
 
 // Zeros a property in the fee cache
-void COmniFeeCache::ClearCache(const uint32_t &propertyId, int block)
+void CTokenFeeCache::ClearCache(const uint32_t &propertyId, int block)
 {
     if (msc_debug_fees) PrintToLog("ClearCache starting (block %d, property ID %d)...\n", block, propertyId);
     const std::string key = strprintf("%010d", propertyId);
@@ -105,7 +105,7 @@ void COmniFeeCache::ClearCache(const uint32_t &propertyId, int block)
 }
 
 // Adds a fee to the cache (eg on a completed trade)
-void COmniFeeCache::AddFee(const uint32_t &propertyId, int block, const int64_t &amount)
+void CTokenFeeCache::AddFee(const uint32_t &propertyId, int block, const int64_t &amount)
 {
     if (msc_debug_fees) PrintToLog("Starting AddFee for prop %d (block %d amount %d)...\n", propertyId, block, amount);
 
@@ -158,7 +158,7 @@ void COmniFeeCache::AddFee(const uint32_t &propertyId, int block, const int64_t 
 }
 
 // Rolls back the cache to an earlier state (eg in event of a reorg) - block is *inclusive* (ie entries=block will get deleted)
-void COmniFeeCache::RollBackCache(int block)
+void CTokenFeeCache::RollBackCache(int block)
 {
     assert(pdb);
     for (uint8_t ecosystem = 1; ecosystem <= 2; ecosystem++) {
@@ -187,7 +187,7 @@ void COmniFeeCache::RollBackCache(int block)
 }
 
 // Evaluates fee caches for the property against threshold and executes distribution if threshold met
-void COmniFeeCache::EvalCache(const uint32_t &propertyId, int block)
+void CTokenFeeCache::EvalCache(const uint32_t &propertyId, int block)
 {
     if (GetCachedAmount(propertyId) >= distributionThresholds[propertyId]) {
         DistributeCache(propertyId, block);
@@ -195,7 +195,7 @@ void COmniFeeCache::EvalCache(const uint32_t &propertyId, int block)
 }
 
 // Performs distribution of fees
-void COmniFeeCache::DistributeCache(const uint32_t &propertyId, int block)
+void CTokenFeeCache::DistributeCache(const uint32_t &propertyId, int block)
 {
     LOCK(cs_tally);
 
@@ -207,12 +207,12 @@ void COmniFeeCache::DistributeCache(const uint32_t &propertyId, int block)
 
     OwnerAddrType receiversSet;
     if (isTestEcosystemProperty(propertyId)) {
-        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", OMNI_PROPERTY_TMSC, cachedAmount);
+        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", TOKEN_PROPERTY_TMSC, cachedAmount);
     } else {
-        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", OMNI_PROPERTY_MSC, cachedAmount);
+        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", TOKEN_PROPERTY_MSC, cachedAmount);
     }
 
-    uint64_t numberOfReceivers = receiversSet.size(); // there will always be addresses holding OMNI, so no need to check size>0
+    uint64_t numberOfReceivers = receiversSet.size(); // there will always be addresses holding TOKEN, so no need to check size>0
     PrintToLog("Starting fee distribution for property %d to %d recipients...\n", propertyId, numberOfReceivers);
 
     int64_t sent_so_far = 0;
@@ -238,7 +238,7 @@ void COmniFeeCache::DistributeCache(const uint32_t &propertyId, int block)
 }
 
 // Prunes entries over MAX_STATE_HISTORY blocks old from the entry for a property
-void COmniFeeCache::PruneCache(const uint32_t &propertyId, int block)
+void CTokenFeeCache::PruneCache(const uint32_t &propertyId, int block)
 {
     if (msc_debug_fees) PrintToLog("Starting PruneCache for prop %d block %d...\n", propertyId, block);
     assert(pdb);
@@ -285,13 +285,13 @@ void COmniFeeCache::PruneCache(const uint32_t &propertyId, int block)
 }
 
 // Show Fee Cache DB statistics
-void COmniFeeCache::printStats()
+void CTokenFeeCache::printStats()
 {
-    PrintToConsole("COmniFeeCache stats: nWritten= %d , nRead= %d\n", nWritten, nRead);
+    PrintToConsole("CTokenFeeCache stats: nWritten= %d , nRead= %d\n", nWritten, nRead);
 }
 
 // Show Fee Cache DB records
-void COmniFeeCache::printAll()
+void CTokenFeeCache::printAll()
 {
     int count = 0;
     leveldb::Iterator* it = NewIterator();
@@ -303,7 +303,7 @@ void COmniFeeCache::printAll()
 }
 
 // Return a set containing fee cache history items
-std::set<feeCacheItem> COmniFeeCache::GetCacheHistory(const uint32_t &propertyId)
+std::set<feeCacheItem> CTokenFeeCache::GetCacheHistory(const uint32_t &propertyId)
 {
     assert(pdb);
 
@@ -334,25 +334,25 @@ std::set<feeCacheItem> COmniFeeCache::GetCacheHistory(const uint32_t &propertyId
     return sCacheHistoryItems;
 }
 
-COmniFeeHistory::COmniFeeHistory(const boost::filesystem::path& path, bool fWipe)
+CTokenFeeHistory::CTokenFeeHistory(const boost::filesystem::path& path, bool fWipe)
 {
     leveldb::Status status = Open(path, fWipe);
     PrintToConsole("Loading fee history database: %s\n", status.ToString());
 }
 
-COmniFeeHistory::~COmniFeeHistory()
+CTokenFeeHistory::~CTokenFeeHistory()
 {
-    if (msc_debug_fees) PrintToLog("COmniFeeHistory closed\n");
+    if (msc_debug_fees) PrintToLog("CTokenFeeHistory closed\n");
 }
     
 // Show Fee History DB statistics
-void COmniFeeHistory::printStats()
+void CTokenFeeHistory::printStats()
 {
-    PrintToConsole("COmniFeeHistory stats: nWritten= %d , nRead= %d\n", nWritten, nRead);
+    PrintToConsole("CTokenFeeHistory stats: nWritten= %d , nRead= %d\n", nWritten, nRead);
 }
 
 // Show Fee History DB records
-void COmniFeeHistory::printAll()
+void CTokenFeeHistory::printAll()
 {
     int count = 0;
     leveldb::Iterator* it = NewIterator();
@@ -365,7 +365,7 @@ void COmniFeeHistory::printAll()
 }
 
 // Count Fee History DB records
-int COmniFeeHistory::CountRecords()
+int CTokenFeeHistory::CountRecords()
 {
     // No faster way to count than to iterate - "There is no way to implement Count more efficiently inside leveldb than outside."
     int count = 0;
@@ -378,7 +378,7 @@ int COmniFeeHistory::CountRecords()
 }
 
 // Roll back history in event of reorg, block is inclusive
-void COmniFeeHistory::RollBackHistory(int block)
+void CTokenFeeHistory::RollBackHistory(int block)
 {
     assert(pdb);
 
@@ -403,7 +403,7 @@ void COmniFeeHistory::RollBackHistory(int block)
 }
 
 // Retrieve fee distributions for a property
-std::set<int> COmniFeeHistory::GetDistributionsForProperty(const uint32_t &propertyId)
+std::set<int> CTokenFeeHistory::GetDistributionsForProperty(const uint32_t &propertyId)
 {
     assert(pdb);
 
@@ -430,7 +430,7 @@ std::set<int> COmniFeeHistory::GetDistributionsForProperty(const uint32_t &prope
 }
 
 // Populate data about a fee distribution
-bool COmniFeeHistory::GetDistributionData(int id, uint32_t *propertyId, int *block, int64_t *total)
+bool CTokenFeeHistory::GetDistributionData(int id, uint32_t *propertyId, int *block, int64_t *total)
 {
     assert(pdb);
 
@@ -455,7 +455,7 @@ bool COmniFeeHistory::GetDistributionData(int id, uint32_t *propertyId, int *blo
 }
 
 // Retrieve the recipients for a fee distribution
-std::set<feeHistoryItem> COmniFeeHistory::GetFeeDistribution(int id)
+std::set<feeHistoryItem> CTokenFeeHistory::GetFeeDistribution(int id)
 {
     assert(pdb);
 
@@ -492,7 +492,7 @@ std::set<feeHistoryItem> COmniFeeHistory::GetFeeDistribution(int id)
 }
 
 // Record a fee distribution
-void COmniFeeHistory::RecordFeeDistribution(const uint32_t &propertyId, int block, int64_t total, std::set<feeHistoryItem> feeRecipients)
+void CTokenFeeHistory::RecordFeeDistribution(const uint32_t &propertyId, int block, int64_t total, std::set<feeHistoryItem> feeRecipients)
 {
     assert(pdb);
 

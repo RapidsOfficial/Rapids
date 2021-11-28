@@ -4,36 +4,36 @@
  * This file contains RPC calls for data retrieval.
  */
 
-#include "omnicore/rpc.h"
+#include "tokencore/rpc.h"
 
-#include "omnicore/activation.h"
-#include "omnicore/consensushash.h"
-#include "omnicore/convert.h"
-#include "omnicore/dbfees.h"
-#include "omnicore/dbspinfo.h"
-#include "omnicore/dbstolist.h"
-#include "omnicore/dbtradelist.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/dex.h"
-#include "omnicore/errors.h"
-#include "omnicore/log.h"
-#include "omnicore/mdex.h"
-#include "omnicore/notifications.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/rpcrequirements.h"
-#include "omnicore/rpctx.h"
-#include "omnicore/rpctxobject.h"
-#include "omnicore/rpcvalues.h"
-#include "omnicore/rules.h"
-#include "omnicore/sp.h"
-#include "omnicore/sto.h"
-#include "omnicore/tally.h"
-#include "omnicore/tx.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/version.h"
-#include "omnicore/walletfetchtxs.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/activation.h"
+#include "tokencore/consensushash.h"
+#include "tokencore/convert.h"
+#include "tokencore/dbfees.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/dbstolist.h"
+#include "tokencore/dbtradelist.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/dex.h"
+#include "tokencore/errors.h"
+#include "tokencore/log.h"
+#include "tokencore/mdex.h"
+#include "tokencore/notifications.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/rpcrequirements.h"
+#include "tokencore/rpctx.h"
+#include "tokencore/rpctxobject.h"
+#include "tokencore/rpcvalues.h"
+#include "tokencore/rules.h"
+#include "tokencore/sp.h"
+#include "tokencore/sto.h"
+#include "tokencore/tally.h"
+#include "tokencore/tx.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/version.h"
+#include "tokencore/walletfetchtxs.h"
+#include "tokencore/walletutils.h"
 
 #include "amount.h"
 #include "base58.h"
@@ -79,8 +79,8 @@ void PopulateFailure(int error)
                                                   \"Crowdsale Purchase\" without valid property identifier");
         case MP_INVALID_TX_IN_DB_FOUND:
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Potential database corruption: Invalid transaction found");
-        case MP_TX_IS_NOT_OMNI_PROTOCOL:
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Omni Layer Protocol transaction");
+        case MP_TX_IS_NOT_TOKEN_PROTOCOL:
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Token Layer Protocol transaction");
     }
     throw JSONRPCError(RPC_INTERNAL_ERROR, "Generic transaction population failure");
 }
@@ -152,11 +152,11 @@ bool BalanceToJSON(const std::string& address, uint32_t property, UniValue& bala
 }
 
 // Obtains details of a fee distribution
-static UniValue omni_getfeedistribution(const JSONRPCRequest& request)
+static UniValue token_getfeedistribution(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_getfeedistribution distributionid\n"
+            "token_getfeedistribution distributionid\n"
             "\nGet the details for a fee distribution.\n"
             "\nArguments:\n"
             "1. distributionid           (number, required) the distribution to obtain details for\n"
@@ -175,8 +175,8 @@ static UniValue omni_getfeedistribution(const JSONRPCRequest& request)
             "  ]\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getfeedistribution", "1")
-            + HelpExampleRpc("omni_getfeedistribution", "1")
+            + HelpExampleCli("token_getfeedistribution", "1")
+            + HelpExampleRpc("token_getfeedistribution", "1")
         );
 
     int id = request.params[0].get_int();
@@ -218,11 +218,11 @@ static UniValue omni_getfeedistribution(const JSONRPCRequest& request)
 
 // Obtains all fee distributions for a property
 // TODO : Split off code to populate a fee distribution object into a seperate function
-static UniValue omni_getfeedistributions(const JSONRPCRequest& request)
+static UniValue token_getfeedistributions(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_getfeedistributions propertyid\n"
+            "token_getfeedistributions propertyid\n"
             "\nGet the details of all fee distributions for a property.\n"
             "\nArguments:\n"
             "1. propertyid           (number, required) the property id to retrieve distributions for\n"
@@ -242,8 +242,8 @@ static UniValue omni_getfeedistributions(const JSONRPCRequest& request)
             "  }\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getfeedistributions", "1")
-            + HelpExampleRpc("omni_getfeedistributions", "1")
+            + HelpExampleCli("token_getfeedistributions", "1")
+            + HelpExampleRpc("token_getfeedistributions", "1")
         );
 
     uint32_t prop = ParsePropertyId(request.params[0]);
@@ -293,11 +293,11 @@ static UniValue omni_getfeedistributions(const JSONRPCRequest& request)
 }
 
 // Obtains the trigger value for fee distribution for a/all properties
-static UniValue omni_getfeetrigger(const JSONRPCRequest& request)
+static UniValue token_getfeetrigger(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "omni_getfeetrigger ( propertyid )\n"
+            "token_getfeetrigger ( propertyid )\n"
             "\nReturns the amount of fees required in the cache to trigger distribution.\n"
             "\nArguments:\n"
             "1. propertyid           (number, optional) filter the results on this property id\n"
@@ -310,8 +310,8 @@ static UniValue omni_getfeetrigger(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getfeetrigger", "3")
-            + HelpExampleRpc("omni_getfeetrigger", "3")
+            + HelpExampleCli("token_getfeetrigger", "3")
+            + HelpExampleRpc("token_getfeetrigger", "3")
         );
 
     uint32_t propertyId = 0;
@@ -343,11 +343,11 @@ static UniValue omni_getfeetrigger(const JSONRPCRequest& request)
 }
 
 // Provides the fee share the wallet (or specific address) will receive from fee distributions
-static UniValue omni_getfeeshare(const JSONRPCRequest& request)
+static UniValue token_getfeeshare(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 2)
         throw runtime_error(
-            "omni_getfeeshare ( address ecosystem )\n"
+            "token_getfeeshare ( address ecosystem )\n"
             "\nReturns the percentage share of fees distribution applied to the wallet (default) or address (if supplied).\n"
             "\nArguments:\n"
             "1. address              (string, optional) retrieve the fee share for the supplied address\n"
@@ -361,8 +361,8 @@ static UniValue omni_getfeeshare(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getfeeshare", "\"RiGQ12CCidStpSKmjdJMfzc2uE9JFD7epe\" 1")
-            + HelpExampleRpc("omni_getfeeshare", "\"RiGQ12CCidStpSKmjdJMfzc2uE9JFD7epe\", 1")
+            + HelpExampleCli("token_getfeeshare", "\"RiGQ12CCidStpSKmjdJMfzc2uE9JFD7epe\" 1")
+            + HelpExampleRpc("token_getfeeshare", "\"RiGQ12CCidStpSKmjdJMfzc2uE9JFD7epe\", 1")
         );
 
     std::string address;
@@ -384,9 +384,9 @@ static UniValue omni_getfeeshare(const JSONRPCRequest& request)
 
     OwnerAddrType receiversSet;
     if (ecosystem == 1) {
-        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", OMNI_PROPERTY_MSC, COIN);
+        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", TOKEN_PROPERTY_MSC, COIN);
     } else {
-        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", OMNI_PROPERTY_TMSC, COIN);
+        receiversSet = STO_GetReceivers("FEEDISTRIBUTION", TOKEN_PROPERTY_TMSC, COIN);
     }
 
     for (OwnerAddrType::reverse_iterator it = receiversSet.rbegin(); it != receiversSet.rend(); ++it) {
@@ -401,7 +401,7 @@ static UniValue omni_getfeeshare(const JSONRPCRequest& request)
         if (addObj) {
             UniValue feeShareObj(UniValue::VOBJ);
             // NOTE: using float here as this is a display value only which isn't an exact percentage and
-            //       changes block to block (due to dev Omni) so high precision not required(?)
+            //       changes block to block (due to dev Token) so high precision not required(?)
             double feeShare = (double(it->first) / double(COIN)) * (double)100;
             std::string strFeeShare = strprintf("%.4f", feeShare);
             strFeeShare += "%";
@@ -415,11 +415,11 @@ static UniValue omni_getfeeshare(const JSONRPCRequest& request)
 }
 
 // Provides the current values of the fee cache
-static UniValue omni_getfeecache(const JSONRPCRequest& request)
+static UniValue token_getfeecache(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "omni_getfeecache ( propertyid )\n"
+            "token_getfeecache ( propertyid )\n"
             "\nReturns the amount of fees cached for distribution.\n"
             "\nArguments:\n"
             "1. propertyid           (number, optional) filter the results on this property id\n"
@@ -432,8 +432,8 @@ static UniValue omni_getfeecache(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getfeecache", "31")
-            + HelpExampleRpc("omni_getfeecache", "31")
+            + HelpExampleCli("token_getfeecache", "31")
+            + HelpExampleRpc("token_getfeecache", "31")
         );
 
     uint32_t propertyId = 0;
@@ -473,11 +473,11 @@ static UniValue gettokenseedblocks(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "omni_getseedblocks startblock endblock\n"
-            "\nReturns a list of blocks containing Omni transactions for use in seed block filtering.\n"
+            "token_getseedblocks startblock endblock\n"
+            "\nReturns a list of blocks containing Token transactions for use in seed block filtering.\n"
             "\nArguments:\n"
-            "1. startblock           (number, required) the first block to look for Omni transactions (inclusive)\n"
-            "2. endblock             (number, required) the last block to look for Omni transactions (inclusive)\n"
+            "1. startblock           (number, required) the first block to look for Token transactions (inclusive)\n"
+            "2. endblock             (number, required) the last block to look for Token transactions (inclusive)\n"
             "\nResult:\n"
             "[                     (array of numbers) a list of seed blocks\n"
             "   nnnnnn,              (number) the block height of the seed block\n"
@@ -513,12 +513,12 @@ static UniValue gettokenpayload(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
             "gettokenpayload \"txid\"\n"
-            "\nGet the payload for an Omni transaction.\n"
+            "\nGet the payload for an Token transaction.\n"
             "\nArguments:\n"
             "1. txid                 (string, required) the hash of the transaction to retrieve payload\n"
             "\nResult:\n"
             "{\n"
-            "  \"payload\" : \"payloadmessage\",       (string) the decoded Omni payload message\n"
+            "  \"payload\" : \"payloadmessage\",       (string) the decoded Token payload message\n"
             "  \"payloadsize\" : n                     (number) the size of the payload\n"
             "}\n"
             "\nExamples:\n"
@@ -546,7 +546,7 @@ static UniValue gettokenpayload(const JSONRPCRequest& request)
 
     CMPTransaction mp_obj;
     int parseRC = ParseTransaction(tx, blockHeight, 0, mp_obj, blockTime);
-    if (parseRC < 0) PopulateFailure(MP_TX_IS_NOT_OMNI_PROTOCOL);
+    if (parseRC < 0) PopulateFailure(MP_TX_IS_NOT_TOKEN_PROTOCOL);
 
     UniValue payloadObj(UniValue::VOBJ);
     payloadObj.pushKV("payload", mp_obj.getPayload());
@@ -555,19 +555,19 @@ static UniValue gettokenpayload(const JSONRPCRequest& request)
 }
 
 // determine whether to automatically commit transactions
-static UniValue omni_setautocommit(const JSONRPCRequest& request)
+static UniValue token_setautocommit(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_setautocommit flag\n"
+            "token_setautocommit flag\n"
             "\nSets the global flag that determines whether transactions are automatically committed and broadcast.\n"
             "\nArguments:\n"
             "1. flag                 (boolean, required) the flag\n"
             "\nResult:\n"
             "true|false              (boolean) the updated flag status\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_setautocommit", "false")
-            + HelpExampleRpc("omni_setautocommit", "false")
+            + HelpExampleCli("token_setautocommit", "false")
+            + HelpExampleRpc("token_setautocommit", "false")
         );
 
     LOCK(cs_tally);
@@ -1061,11 +1061,11 @@ static UniValue listtokens(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_getcrowdsale(const JSONRPCRequest& request)
+static UniValue token_getcrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "omni_getcrowdsale propertyid ( verbose )\n"
+            "token_getcrowdsale propertyid ( verbose )\n"
             "\nReturns information about a crowdsale.\n"
             "\nArguments:\n"
             "1. propertyid           (number, required) the identifier of the crowdsale\n"
@@ -1101,8 +1101,8 @@ static UniValue omni_getcrowdsale(const JSONRPCRequest& request)
             "  ]\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getcrowdsale", "3 true")
-            + HelpExampleRpc("omni_getcrowdsale", "3, true")
+            + HelpExampleCli("token_getcrowdsale", "3 true")
+            + HelpExampleRpc("token_getcrowdsale", "3, true")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -1209,11 +1209,11 @@ static UniValue omni_getcrowdsale(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_getactivecrowdsales(const JSONRPCRequest& request)
+static UniValue token_getactivecrowdsales(const JSONRPCRequest& request)
 {
     if (request.fHelp)
         throw runtime_error(
-            "omni_getactivecrowdsales\n"
+            "token_getactivecrowdsales\n"
             "\nLists currently active crowdsales.\n"
             "\nResult:\n"
             "[                                 (array of JSON objects)\n"
@@ -1231,8 +1231,8 @@ static UniValue omni_getactivecrowdsales(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getactivecrowdsales", "")
-            + HelpExampleRpc("omni_getactivecrowdsales", "")
+            + HelpExampleCli("token_getactivecrowdsales", "")
+            + HelpExampleRpc("token_getactivecrowdsales", "")
         );
 
     UniValue response(UniValue::VARR);
@@ -1277,11 +1277,11 @@ static UniValue omni_getactivecrowdsales(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_getgrants(const JSONRPCRequest& request)
+static UniValue token_getgrants(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_getgrants propertyid\n"
+            "token_getgrants propertyid\n"
             "\nReturns information about granted and revoked units of managed tokens.\n"
             "\nArguments:\n"
             "1. propertyid           (number, required) the identifier of the managed tokens to lookup\n"
@@ -1305,8 +1305,8 @@ static UniValue omni_getgrants(const JSONRPCRequest& request)
             "  ]\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getgrants", "31")
-            + HelpExampleRpc("omni_getgrants", "31")
+            + HelpExampleCli("token_getgrants", "31")
+            + HelpExampleRpc("token_getgrants", "31")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -1359,11 +1359,11 @@ static UniValue omni_getgrants(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_getorderbook(const JSONRPCRequest& request)
+static UniValue token_getorderbook(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "omni_getorderbook propertyid ( propertyid )\n"
+            "token_getorderbook propertyid ( propertyid )\n"
             "\nList active offers on the distributed token exchange.\n"
             "\nArguments:\n"
             "1. propertyid           (number, required) filter orders by property identifier for sale\n"
@@ -1389,8 +1389,8 @@ static UniValue omni_getorderbook(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getorderbook", "2")
-            + HelpExampleRpc("omni_getorderbook", "2")
+            + HelpExampleCli("token_getorderbook", "2")
+            + HelpExampleRpc("token_getorderbook", "2")
         );
 
     bool filterDesired = (request.params.size() > 1);
@@ -1428,11 +1428,11 @@ static UniValue omni_getorderbook(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_gettradehistoryforaddress(const JSONRPCRequest& request)
+static UniValue token_gettradehistoryforaddress(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 3)
         throw runtime_error(
-            "omni_gettradehistoryforaddress \"address\" ( count propertyid )\n"
+            "token_gettradehistoryforaddress \"address\" ( count propertyid )\n"
             "\nRetrieves the history of orders on the distributed exchange for the supplied address.\n"
             "\nArguments:\n"
             "1. address              (string, required) address to retrieve history for\n"
@@ -1476,8 +1476,8 @@ static UniValue omni_gettradehistoryforaddress(const JSONRPCRequest& request)
             "\nNote:\n"
             "The documentation only covers the output for a trade, but there are also cancel transactions with different properties.\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_gettradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
-            + HelpExampleRpc("omni_gettradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
+            + HelpExampleCli("token_gettradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
+            + HelpExampleRpc("token_gettradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
         );
 
     std::string address = ParseAddress(request.params[0]);
@@ -1512,11 +1512,11 @@ static UniValue omni_gettradehistoryforaddress(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_gettradehistoryforpair(const JSONRPCRequest& request)
+static UniValue token_gettradehistoryforpair(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "omni_gettradehistoryforpair propertyid propertyid ( count )\n"
+            "token_gettradehistoryforpair propertyid propertyid ( count )\n"
             "\nRetrieves the history of trades on the distributed token exchange for the specified market.\n"
             "\nArguments:\n"
             "1. propertyid           (number, required) the first side of the traded pair\n"
@@ -1538,8 +1538,8 @@ static UniValue omni_gettradehistoryforpair(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_gettradehistoryforpair", "1 12 500")
-            + HelpExampleRpc("omni_gettradehistoryforpair", "1, 12, 500")
+            + HelpExampleCli("token_gettradehistoryforpair", "1 12 500")
+            + HelpExampleRpc("token_gettradehistoryforpair", "1, 12, 500")
         );
 
     // obtain property identifiers for pair & check valid parameters
@@ -1559,11 +1559,11 @@ static UniValue omni_gettradehistoryforpair(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_getactivedexsells(const JSONRPCRequest& request)
+static UniValue token_getactivedexsells(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "omni_getactivedexsells ( address )\n"
+            "token_getactivedexsells ( address )\n"
             "\nReturns currently active offers on the distributed exchange.\n"
             "\nArguments:\n"
             "1. address              (string, optional) address filter (default: include any)\n"
@@ -1593,8 +1593,8 @@ static UniValue omni_getactivedexsells(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getactivedexsells", "")
-            + HelpExampleRpc("omni_getactivedexsells", "")
+            + HelpExampleCli("token_getactivedexsells", "")
+            + HelpExampleRpc("token_getactivedexsells", "")
         );
 
     std::string addressFilter;
@@ -1687,7 +1687,7 @@ static UniValue listblocktokentransactions(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
             "listblocktokentransactions index\n"
-            "\nLists all Omni transactions in a block.\n"
+            "\nLists all Token transactions in a block.\n"
             "\nArguments:\n"
             "1. index                (number, required) the block height or block index\n"
             "\nResult:\n"
@@ -1738,8 +1738,8 @@ static UniValue listblockstokentransactions(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "omni_listblocktransactions firstblock lastblock\n"
-            "\nLists all Omni transactions in a given range of blocks.\n"
+            "token_listblocktransactions firstblock lastblock\n"
+            "\nLists all Token transactions in a given range of blocks.\n"
             "\nNote: the list of transactions is unordered and can contain invalid transactions!\n"
             "\nArguments:\n"
             "1. firstblock           (number, required) the index of the first block to consider\n"
@@ -1763,7 +1763,7 @@ static UniValue listblockstokentransactions(const JSONRPCRequest& request)
 
     LOCK(cs_tally);
     {
-        pDbTransactionList->GetOmniTxsInBlockRange(blockFirst, blockLast, txs);
+        pDbTransactionList->GetTokenTxsInBlockRange(blockFirst, blockLast, txs);
     }
 
     for(const uint256& tx : txs) {
@@ -1778,7 +1778,7 @@ static UniValue gettokentransaction(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
             "gettokentransaction \"txid\"\n"
-            "\nGet detailed information about an Omni transaction.\n"
+            "\nGet detailed information about an Token transaction.\n"
             "\nArguments:\n"
             "1. txid                 (string, required) the hash of the transaction to lookup\n"
             "\nResult:\n"
@@ -1864,8 +1864,8 @@ static UniValue listtokentransactions(const JSONRPCRequest& request)
     if (request.params.size() > 4) nEndBlock = request.params[4].get_int64();
     if (nEndBlock < 0) throw JSONRPCError(RPC_INVALID_PARAMETER, "Negative end block");
 
-    // obtain a sorted list of Omni layer wallet transactions (including STO receipts and pending)
-    std::map<std::string,uint256> walletTransactions = FetchWalletOmniTransactions(nFrom+nCount, nStartBlock, nEndBlock);
+    // obtain a sorted list of Token layer wallet transactions (including STO receipts and pending)
+    std::map<std::string,uint256> walletTransactions = FetchWalletTokenTransactions(nFrom+nCount, nStartBlock, nEndBlock);
 
     // reverse iterate over (now ordered) transactions and populate RPC objects for each one
     UniValue response(UniValue::VARR);
@@ -1890,7 +1890,7 @@ static UniValue listpendingtokentransactions(const JSONRPCRequest& request)
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
             "listpendingtokentransactions ( \"address\" )\n"
-            "\nReturns a list of unconfirmed Omni transactions, pending in the memory pool.\n"
+            "\nReturns a list of unconfirmed Token transactions, pending in the memory pool.\n"
             "\nAn optional filter can be provided to only include transactions which involve the given address.\n"
             "\nNote: the validity of pending transactions is uncertain, and the state of the memory pool may "
             "change at any moment. It is recommended to check transactions after confirmation, and pending "
@@ -1950,8 +1950,8 @@ static UniValue gettokensinfo(const JSONRPCRequest& request)
             "{\n"
             "  \"block\" : nnnnnn,                      (number) index of the last processed block\n"
             "  \"blocktime\" : nnnnnnnnnn,              (number) timestamp of the last processed block\n"
-            "  \"blocktransactions\" : nnnn,            (number) Omni transactions found in the last processed block\n"
-            "  \"totaltransactions\" : nnnnnnnn,        (number) Omni transactions processed in total\n"
+            "  \"blocktransactions\" : nnnn,            (number) Token transactions found in the last processed block\n"
+            "  \"totaltransactions\" : nnnnnnnn,        (number) Token transactions processed in total\n"
             "  \"alerts\" : [                           (array of JSON objects) active protocol alert (if any)\n"
             "    {\n"
             "      \"alerttypeint\" : n,                    (number) alert type as integer\n"
@@ -1989,8 +1989,8 @@ static UniValue gettokensinfo(const JSONRPCRequest& request)
 
     // handle alerts
     UniValue alerts(UniValue::VARR);
-    std::vector<AlertData> omniAlerts = GetOmniCoreAlerts();
-    for (std::vector<AlertData>::iterator it = omniAlerts.begin(); it != omniAlerts.end(); it++) {
+    std::vector<AlertData> tokenAlerts = GetTokenCoreAlerts();
+    for (std::vector<AlertData>::iterator it = tokenAlerts.begin(); it != tokenAlerts.end(); it++) {
         AlertData alert = *it;
         UniValue alertResponse(UniValue::VOBJ);
         std::string alertTypeStr;
@@ -2014,11 +2014,11 @@ static UniValue gettokensinfo(const JSONRPCRequest& request)
     return infoResponse;
 }
 
-static UniValue omni_getsto(const JSONRPCRequest& request)
+static UniValue token_getsto(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "omni_getsto \"txid\" \"recipientfilter\"\n"
+            "token_getsto \"txid\" \"recipientfilter\"\n"
             "\nGet information and recipients of a send-to-owners transaction.\n"
             "\nArguments:\n"
             "1. txid                 (string, required) the hash of the transaction to lookup\n"
@@ -2048,8 +2048,8 @@ static UniValue omni_getsto(const JSONRPCRequest& request)
             "  ]\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_getsto", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\" \"*\"")
-            + HelpExampleRpc("omni_getsto", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\", \"*\"")
+            + HelpExampleCli("token_getsto", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\" \"*\"")
+            + HelpExampleRpc("token_getsto", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\", \"*\"")
         );
 
     uint256 hash = ParseHashV(request.params[0], "txid");
@@ -2063,11 +2063,11 @@ static UniValue omni_getsto(const JSONRPCRequest& request)
     return txobj;
 }
 
-static UniValue omni_gettrade(const JSONRPCRequest& request)
+static UniValue token_gettrade(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_gettrade \"txid\"\n"
+            "token_gettrade \"txid\"\n"
             "\nGet detailed information and trade matches for orders on the distributed token exchange.\n"
             "\nArguments:\n"
             "1. txid                 (string, required) the hash of the order to lookup\n"
@@ -2106,8 +2106,8 @@ static UniValue omni_gettrade(const JSONRPCRequest& request)
             "\nNote:\n"
             "The documentation only covers the output for a trade, but there are also cancel transactions with different properties.\n"
             "\nExamples:\n"
-            + HelpExampleCli("omni_gettrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
-            + HelpExampleRpc("omni_gettrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
+            + HelpExampleCli("token_gettrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
+            + HelpExampleRpc("token_gettrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
         );
 
     uint256 hash = ParseHashV(request.params[0], "txid");
@@ -2154,11 +2154,11 @@ static UniValue gettokenconsensushash(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue omni_getmetadexhash(const JSONRPCRequest& request)
+static UniValue token_getmetadexhash(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "omni_getmetadexhash propertyId\n"
+            "token_getmetadexhash propertyId\n"
             "\nReturns a hash of the current state of the MetaDEx (default) or orderbook.\n"
             "\nArguments:\n"
             "1. propertyid                  (number, optional) hash orderbook (only trades selling propertyid)\n"
@@ -2171,8 +2171,8 @@ static UniValue omni_getmetadexhash(const JSONRPCRequest& request)
             "}\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_getmetadexhash", "3")
-            + HelpExampleRpc("omni_getmetadexhash", "3")
+            + HelpExampleCli("token_getmetadexhash", "3")
+            + HelpExampleRpc("token_getmetadexhash", "3")
         );
 
     LOCK(cs_main);
@@ -2251,38 +2251,38 @@ static const CRPCCommand commands[] =
     { "tokens (data retrieval)", "gettokentransaction",             &gettokentransaction,              false },
     { "tokens (data retrieval)", "gettoken",                        &gettoken,                         false },
     { "tokens (data retrieval)", "listtokens",                      &listtokens,                       false },
-    // { "tokens (data retrieval)", "omni_getcrowdsale",              &omni_getcrowdsale,               false },
-    // { "tokens (data retrieval)", "omni_getgrants",                 &omni_getgrants,                  false },
-    // { "tokens (data retrieval)", "omni_getactivedexsells",         &omni_getactivedexsells,          false },
-    // { "tokens (data retrieval)", "omni_getactivecrowdsales",       &omni_getactivecrowdsales,        false },
-    // { "tokens (data retrieval)", "omni_getorderbook",              &omni_getorderbook,               false },
-    // { "tokens (data retrieval)", "omni_gettrade",                  &omni_gettrade,                   false },
-    // { "tokens (data retrieval)", "omni_getsto",                    &omni_getsto,                     false },
+    // { "tokens (data retrieval)", "token_getcrowdsale",              &token_getcrowdsale,               false },
+    // { "tokens (data retrieval)", "token_getgrants",                 &token_getgrants,                  false },
+    // { "tokens (data retrieval)", "token_getactivedexsells",         &token_getactivedexsells,          false },
+    // { "tokens (data retrieval)", "token_getactivecrowdsales",       &token_getactivecrowdsales,        false },
+    // { "tokens (data retrieval)", "token_getorderbook",              &token_getorderbook,               false },
+    // { "tokens (data retrieval)", "token_gettrade",                  &token_gettrade,                   false },
+    // { "tokens (data retrieval)", "token_getsto",                    &token_getsto,                     false },
     { "tokens (data retrieval)", "listblocktokentransactions",      &listblocktokentransactions,       false },
     { "tokens (data retrieval)", "listblockstokentransactions",     &listblockstokentransactions,      false },
     { "tokens (data retrieval)", "listpendingtokentransactions",    &listpendingtokentransactions,     false },
     { "tokens (data retrieval)", "getalltokenbalancesforaddress",   &getalltokenbalancesforaddress,    false },
-    // { "tokens (data retrieval)", "omni_gettradehistoryforaddress", &omni_gettradehistoryforaddress,  false },
-    // { "tokens (data retrieval)", "omni_gettradehistoryforpair",    &omni_gettradehistoryforpair,     false },
+    // { "tokens (data retrieval)", "token_gettradehistoryforaddress", &token_gettradehistoryforaddress,  false },
+    // { "tokens (data retrieval)", "token_gettradehistoryforpair",    &token_gettradehistoryforpair,     false },
     { "tokens (data retrieval)", "gettokenconsensushash",           &gettokenconsensushash,            false },
     { "tokens (data retrieval)", "gettokenpayload",                 &gettokenpayload,                  false },
     { "tokens (data retrieval)", "gettokenseedblocks",              &gettokenseedblocks,               false },
-    // { "tokens (data retrieval)", "omni_getmetadexhash",            &omni_getmetadexhash,             false },
-    // { "tokens (data retrieval)", "omni_getfeecache",               &omni_getfeecache,                false },
-    // { "tokens (data retrieval)", "omni_getfeetrigger",             &omni_getfeetrigger,              false },
-    // { "tokens (data retrieval)", "omni_getfeedistribution",        &omni_getfeedistribution,         false },
-    // { "tokens (data retrieval)", "omni_getfeedistributions",       &omni_getfeedistributions,        false },
+    // { "tokens (data retrieval)", "token_getmetadexhash",            &token_getmetadexhash,             false },
+    // { "tokens (data retrieval)", "token_getfeecache",               &token_getfeecache,                false },
+    // { "tokens (data retrieval)", "token_getfeetrigger",             &token_getfeetrigger,              false },
+    // { "tokens (data retrieval)", "token_getfeedistribution",        &token_getfeedistribution,         false },
+    // { "tokens (data retrieval)", "token_getfeedistributions",       &token_getfeedistributions,        false },
     { "tokens (data retrieval)", "gettokenbalanceshash",            &gettokenbalanceshash,             false },
 #ifdef ENABLE_WALLET
     { "tokens (data retrieval)", "listtokentransactions",           &listtokentransactions,            false },
-    // { "tokens (data retrieval)", "omni_getfeeshare",               &omni_getfeeshare,                false },
-    // { "tokens (configuration)",  "omni_setautocommit",             &omni_setautocommit,              true  },
+    // { "tokens (data retrieval)", "token_getfeeshare",               &token_getfeeshare,                false },
+    // { "tokens (configuration)",  "token_setautocommit",             &token_setautocommit,              true  },
     { "tokens (data retrieval)", "getwallettokenbalances",          &getwallettokenbalances,           false },
     { "tokens (data retrieval)", "getwalletaddresstokenbalances",   &getwalletaddresstokenbalances,    false },
 #endif
 };
 
-void RegisterOmniDataRetrievalRPCCommands()
+void RegisterTokenDataRetrievalRPCCommands()
 {
     for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
         tableRPC.appendCommand(commands[vcidx].name, &commands[vcidx]);

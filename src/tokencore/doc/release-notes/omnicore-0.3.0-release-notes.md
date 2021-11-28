@@ -1,18 +1,18 @@
-Omni Core v0.3.0
+Token Core v0.3.0
 ===================
 
 v0.3.0 includes new logic for the freeze tokens functionality.
 
-v0.3.0 is a major release and consensus critical in terms of the Omni Layer protocol rules.  An upgrade is mandatory, and highly recommended.  Prior releases will not be compatible with new behaviour in this release.
+v0.3.0 is a major release and consensus critical in terms of the Token Layer protocol rules.  An upgrade is mandatory, and highly recommended.  Prior releases will not be compatible with new behaviour in this release.
 
 Please report bugs using the issue tracker on GitHub:
 
-  https://github.com/OmniLayer/omnicore/issues
+  https://github.com/TokenLayer/tokencore/issues
 
 Table of contents
 =================
 
-- [Omni Core v0.3.0](#omni-core-v030)
+- [Token Core v0.3.0](#token-core-v030)
 - [Upgrading and downgrading](#upgrading-and-downgrading)
   - [How to upgrade](#how-to-upgrade)
   - [Downgrading](#downgrading)
@@ -30,19 +30,19 @@ Upgrading and downgrading
 How to upgrade
 --------------
 
-If you are running Bitcoin Core or an older version of Omni Core, shut it down. Wait until it has completely shut down, then copy the new version of `omnicored`, `omnicore-cli` and `omnicore-qt`. On Microsoft Windows the setup routine can be used to automate these steps.
+If you are running Bitcoin Core or an older version of Token Core, shut it down. Wait until it has completely shut down, then copy the new version of `tokencored`, `tokencore-cli` and `tokencore-qt`. On Microsoft Windows the setup routine can be used to automate these steps.
 
-During the first startup historical Omni transactions are reprocessed and Omni Core will not be usable for approximately 15 minutes up to two hours. The progress of the initial scan is reported on the console, the GUI and written to the `debug.log`. The scan may be interrupted, but can not be resumed, and then needs to start from the beginning.
+During the first startup historical Token transactions are reprocessed and Token Core will not be usable for approximately 15 minutes up to two hours. The progress of the initial scan is reported on the console, the GUI and written to the `debug.log`. The scan may be interrupted, but can not be resumed, and then needs to start from the beginning.
 
 Downgrading
 -----------
 
-Downgrading to an Omni Core version prior 0.3.0 is generally not supported as older versions will not provide accurate information due to the changes in consensus rules.
+Downgrading to an Token Core version prior 0.3.0 is generally not supported as older versions will not provide accurate information due to the changes in consensus rules.
 
 Compatibility with Bitcoin Core
 -------------------------------
 
-Omni Core is based on Bitcoin Core 0.13.2 and can be used as replacement for Bitcoin Core. Switching between Omni Core and Bitcoin Core is fully supported at any time.
+Token Core is based on Bitcoin Core 0.13.2 and can be used as replacement for Bitcoin Core. Switching between Token Core and Bitcoin Core is fully supported at any time.
 
 Downgrading to a Bitcoin Core version prior 0.12 may not be supported due to the obfuscation of the blockchain database.
 
@@ -54,11 +54,11 @@ Consensus affecting changes
 Freezing tokens for managed properties
 --------------------------------------
 
-Omni Core 0.3.0 contains a feature that, if an issuer chooses to enable, permits an issuer of a centrally managed token to freeze tokens residing at any address for that specific property.  This feature is restricted to the managed token type (where the issuer retains control over the supply of tokens) and may not be used for any other token type (for example tokens issued via crowdsale or via fixed amount cannot be frozen).
+Token Core 0.3.0 contains a feature that, if an issuer chooses to enable, permits an issuer of a centrally managed token to freeze tokens residing at any address for that specific property.  This feature is restricted to the managed token type (where the issuer retains control over the supply of tokens) and may not be used for any other token type (for example tokens issued via crowdsale or via fixed amount cannot be frozen).
 
 Further, feature ID 14 adds a waiting period for a managed issuer to enable the freezing feature.  Once activated a waiting period (currently 4096 blocks) is enforced between the 'enable freezing' transaction and the 'freeze tokens' transaction.
 
-See also [JSON-RPC API documentation](https://github.com/OmniLayer/omnicore/blob/master/src/omnicore/doc/rpc-api.md).
+See also [JSON-RPC API documentation](https://github.com/TokenLayer/tokencore/blob/master/src/tokencore/doc/rpc-api.md).
 
 Notable changes
 ===============
@@ -66,7 +66,7 @@ Notable changes
 Various bug fixes and improvements
 ----------------------------------
 
-Various smaller improvements were added Omni Core 0.2.0, such as:
+Various smaller improvements were added Token Core 0.2.0, such as:
 
 - Fixing log spam generated by unconfirmed transactions
 - Including the reason for a transaction being invalidated in the RPC response
@@ -85,14 +85,14 @@ The following list includes relevant pull requests merged into this release:
 - #494 Add checkpoints for blocks 480,000 and 490,000
 - #505 Fix log spam from unconfirmed transactions
 - #507 Persist the parsing result and include the reason for tx invalidation in RPC response
-- #508 Add omni_getbalanceshash RPC
+- #508 Add token_getbalanceshash RPC
 - #511 Travis CI: move back to the minimal image
 - #512 Reintroduce forced client upgrade
 - #514 Enable freezing for centrally managed tokens
-- #515 Bump version to Omni Core 0.3.0
+- #515 Bump version to Token Core 0.3.0
 ```
 
 Credits
 =======
 
-Thanks to everyone who contributed to this release, and especially the Bitcoin Core developers for providing the foundation for Omni Core!
+Thanks to everyone who contributed to this release, and especially the Bitcoin Core developers for providing the foundation for Token Core!

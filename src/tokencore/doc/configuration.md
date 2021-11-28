@@ -1,9 +1,9 @@
 Configuration
 =============
 
-Omni Core can be configured by providing one or more optional command-line arguments:
+Token Core can be configured by providing one or more optional command-line arguments:
 ```bash
-$ omnicored -setting=value -setting=value
+$ tokencored -setting=value -setting=value
 ```
 
 All settings can alternatively also be configured via the `bitcoin.conf`.
@@ -17,21 +17,21 @@ Depending on the operating system, the default locations for the configuration f
 A typical `bitcoin.conf` may include:
 ```
 server=1
-rpcuser=omnicorerpc
+rpcuser=tokencorerpc
 rpcpassword=5hMTZI9iBGFqKxsWfOUF
 rpcallowip=127.0.0.1
 rpcport=8332
 txindex=1
 datacarriersize=80
 logtimestamps=1
-omnidebug=tally
-omnidebug=packets
-omnidebug=pending
+tokendebug=tally
+tokendebug=packets
+tokendebug=pending
 ```
 
 ## Optional settings
 
-To run and use Omni Core, no explicit configuration is necessary.
+To run and use Token Core, no explicit configuration is necessary.
 
 More information about the general configuration and Bitcoin Core specific options are available in the [Bitcoin wiki](https://en.bitcoin.it/wiki/Running_Bitcoin).
 
@@ -39,18 +39,18 @@ More information about the general configuration and Bitcoin Core specific optio
 
 | Name                         | Type         | Default        | Description                                                                     |
 |------------------------------|--------------|----------------|---------------------------------------------------------------------------------|
-| `startclean`                 | boolean      | `0`            | clear all persistence files on startup; triggers reparsing of Omni transactions |
-| `omnitxcache`                | number       | `500000`       | the maximum number of transactions in the input transaction cache               |
-| `omniprogressfrequency`      | number       | `30`           | time in seconds after which the initial scanning progress is reported           |
-| `omniseedblockfilter`        | boolean      | `1`            | set skipping of blocks without Omni transactions during initial scan            |
-| `omnishowblockconsensushash` | number       | `0`            | calculate and log the consensus hash for the specified block                    |
+| `startclean`                 | boolean      | `0`            | clear all persistence files on startup; triggers reparsing of Token transactions |
+| `tokentxcache`                | number       | `500000`       | the maximum number of transactions in the input transaction cache               |
+| `tokenprogressfrequency`      | number       | `30`           | time in seconds after which the initial scanning progress is reported           |
+| `tokenseedblockfilter`        | boolean      | `1`            | set skipping of blocks without Token transactions during initial scan            |
+| `tokenshowblockconsensushash` | number       | `0`            | calculate and log the consensus hash for the specified block                    |
 
 #### Log options:
 
 | Name                         | Type         | Default        | Description                                                                     |
 |------------------------------|--------------|----------------|---------------------------------------------------------------------------------|
-| `omnilogfile`                | string       | `omnicore.log` | the path of the log file (in the data directory per default)                    |
-| `omnidebug`                  | multi string | `""`           | enable or disable log categories, can be `"all"`, `"none"`                      |
+| `tokenlogfile`                | string       | `tokencore.log` | the path of the log file (in the data directory per default)                    |
+| `tokendebug`                  | multi string | `""`           | enable or disable log categories, can be `"all"`, `"none"`                      |
 
 #### Transaction options:
 
@@ -73,16 +73,16 @@ More information about the general configuration and Bitcoin Core specific optio
 | Name                         | Type         | Default        | Description                                                                     |
 |------------------------------|--------------|----------------|---------------------------------------------------------------------------------|
 | `disclaimer`                 | boolean      | `0`            | explicitly show QT disclaimer on startup                                        |
-| `omniuiwalletscope`          | number       | `65535`        | max. transactions to show in trade and transaction history                      |
+| `tokenuiwalletscope`          | number       | `65535`        | max. transactions to show in trade and transaction history                      |
 
 #### Alert and activation options:
 
 | Name                         | Type         | Default        | Description                                                                     |
 |------------------------------|--------------|----------------|---------------------------------------------------------------------------------|
 | `overrideforcedshutdown`     | boolean      | `0`            | overwrite shutdown, triggered by an alert                                       |
-| `omnialertallowsender`       | multi string | `""`           | whitelist senders of alerts, can be `"any"`                                     |
-| `omnialertignoresender`      | multi string | `""`           | ignore senders of alerts                                                        |
-| `omniactivationallowsender`  | multi string | `""`           | whitelist senders of activations                                                |
-| `omniactivationignoresender` | multi string | `""`           | ignore senders of activations                                                   |
+| `tokenalertallowsender`       | multi string | `""`           | whitelist senders of alerts, can be `"any"`                                     |
+| `tokenalertignoresender`      | multi string | `""`           | ignore senders of alerts                                                        |
+| `tokenactivationallowsender`  | multi string | `""`           | whitelist senders of activations                                                |
+| `tokenactivationignoresender` | multi string | `""`           | ignore senders of activations                                                   |
 
 **Note:** alert and activation related options are consensus affecting and should only be used for tests or under exceptional circumstances!

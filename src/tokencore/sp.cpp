@@ -1,11 +1,11 @@
 // Smart Properties & Crowd Sales
 
-#include "omnicore/sp.h"
+#include "tokencore/sp.h"
 
-#include "omnicore/dbspinfo.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/uint256_extensions.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/uint256_extensions.h"
 
 #include "arith_uint256.h"
 #include "main.h"
@@ -429,8 +429,8 @@ std::string mastercore::strPropertyType(uint16_t propertyType)
 std::string mastercore::strEcosystem(uint8_t ecosystem)
 {
     switch (ecosystem) {
-        case OMNI_PROPERTY_MSC: return "main";
-        case OMNI_PROPERTY_TMSC: return "test";
+        case TOKEN_PROPERTY_MSC: return "main";
+        case TOKEN_PROPERTY_TMSC: return "test";
     }
 
     return "unknown";

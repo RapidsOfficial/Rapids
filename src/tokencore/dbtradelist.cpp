@@ -1,8 +1,8 @@
-#include "omnicore/dbtradelist.h"
+#include "tokencore/dbtradelist.h"
 
-#include "omnicore/log.h"
-#include "omnicore/mdex.h"
-#include "omnicore/sp.h"
+#include "tokencore/log.h"
+#include "tokencore/mdex.h"
+#include "tokencore/sp.h"
 
 #include "amount.h"
 #include "uint256.h"

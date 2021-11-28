@@ -5,26 +5,26 @@
 #include "metadexdialog.h"
 #include "ui_metadexdialog.h"
 
-#include "omnicore_qtutils.h"
+#include "tokencore_qtutils.h"
 
 #include "clientmodel.h"
 #include "walletmodel.h"
 
-#include "omnicore/createpayload.h"
-#include "omnicore/dbtradelist.h"
-#include "omnicore/errors.h"
-#include "omnicore/mdex.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parse_string.h"
-#include "omnicore/pending.h"
-#include "omnicore/rpctxobject.h"
-#include "omnicore/rules.h"
-#include "omnicore/sp.h"
-#include "omnicore/tally.h"
-#include "omnicore/uint256_extensions.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/wallettxbuilder.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/createpayload.h"
+#include "tokencore/dbtradelist.h"
+#include "tokencore/errors.h"
+#include "tokencore/mdex.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parse_string.h"
+#include "tokencore/pending.h"
+#include "tokencore/rpctxobject.h"
+#include "tokencore/rules.h"
+#include "tokencore/sp.h"
+#include "tokencore/tally.h"
+#include "tokencore/uint256_extensions.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/wallettxbuilder.h"
+#include "tokencore/walletutils.h"
 
 #include "amount.h"
 #include "sync.h"
@@ -115,9 +115,9 @@ void MetaDExDialog::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
     if (NULL != model) {
-        connect(model, SIGNAL(refreshOmniState()), this, SLOT(UpdateOffers()));
-        connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(BalanceOrderRefresh()));
-        connect(model, SIGNAL(reinitOmniState()), this, SLOT(FullRefresh()));
+        connect(model, SIGNAL(refreshTokenState()), this, SLOT(UpdateOffers()));
+        connect(model, SIGNAL(refreshTokenBalance()), this, SLOT(BalanceOrderRefresh()));
+        connect(model, SIGNAL(reinitTokenState()), this, SLOT(FullRefresh()));
     }
 }
 

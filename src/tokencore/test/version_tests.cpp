@@ -1,4 +1,4 @@
-#include "omnicore/version.h"
+#include "tokencore/version.h"
 
 #include "config/pivx-config.h"
 #include "test/test_bitcoin.h"
@@ -7,11 +7,11 @@
 
 #include <string>
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_version_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_version_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(version_comparison)
 {
-    BOOST_CHECK(OMNICORE_VERSION > 1000000); // Omni Core v0.0.10.0
+    BOOST_CHECK(TOKENCORE_VERSION > 1000000); // Token Core v0.0.10.0
 }
 
 /**
@@ -23,12 +23,12 @@ BOOST_AUTO_TEST_CASE(version_comparison)
 
 BOOST_AUTO_TEST_CASE(version_string)
 {
-    BOOST_CHECK_EQUAL(OmniCoreVersion(), "0.5.0");
+    BOOST_CHECK_EQUAL(TokenCoreVersion(), "0.5.0");
 }
 
 BOOST_AUTO_TEST_CASE(version_number)
 {
-    BOOST_CHECK_EQUAL(OMNICORE_VERSION, 50000000);
+    BOOST_CHECK_EQUAL(TOKENCORE_VERSION, 50000000);
 }
 
 BOOST_AUTO_TEST_CASE(config_package_version)

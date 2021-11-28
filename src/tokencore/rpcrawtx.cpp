@@ -1,10 +1,10 @@
-#include "omnicore/rpcrawtx.h"
+#include "tokencore/rpcrawtx.h"
 
-#include "omnicore/createtx.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rpc.h"
-#include "omnicore/rpctxobject.h"
-#include "omnicore/rpcvalues.h"
+#include "tokencore/createtx.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rpc.h"
+#include "tokencore/rpctxobject.h"
+#include "tokencore/rpcvalues.h"
 
 #include "coins.h"
 #include "core_io.h"
@@ -32,7 +32,7 @@ static UniValue decodetokentransaction(const JSONRPCRequest& request)
         throw std::runtime_error(
             "decodetokentransaction \"rawtx\" ( \"prevtxs\" height )\n"
 
-            "\nDecodes an Omni transaction.\n"
+            "\nDecodes an Token transaction.\n"
 
             "\nIf the inputs of the transaction are not in the chain, then they must be provided, because "
             "the transaction inputs are used to identify the sender of a transaction.\n"
@@ -326,7 +326,7 @@ static const CRPCCommand commands[] =
     { "tokens (raw transactions)", "createrawtokentxchange",     &createrawtokentxchange,     true },
 };
 
-void RegisterOmniRawTransactionRPCCommands()
+void RegisterTokenRawTransactionRPCCommands()
 {
     for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
         tableRPC.appendCommand(commands[vcidx].name, &commands[vcidx]);

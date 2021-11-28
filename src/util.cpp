@@ -111,8 +111,8 @@ std::map<std::string, std::vector<std::string> > mapMultiArgs;
 bool fDaemon = false;
 std::string strMiscWarning;
 
-/** Flag to indicate, whether the Omni Core log file should be reopened. */
-std::atomic<bool> fReopenOmniCoreLog(false);
+/** Flag to indicate, whether the Token Core log file should be reopened. */
+std::atomic<bool> fReopenTokenCoreLog(false);
 
 /** Init OpenSSL library multithreading support */
 static RecursiveMutex** ppmutexOpenSSL;

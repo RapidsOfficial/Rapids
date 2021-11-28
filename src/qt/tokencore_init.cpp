@@ -1,4 +1,4 @@
-#include "omnicore_init.h"
+#include "tokencore_init.h"
 
 #include "chainparams.h"
 #include "util.h"
@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <QSettings>
 
-namespace OmniCore {
+namespace TokenCore {
 
 /**
  * Creates a message box with general warnings and potential risks
@@ -25,19 +25,19 @@ static bool getDisclaimerDialogResult()
     QString qstrInformativeText(
     "By default this software will use your existing Bitcoin wallet, including spending "
     "bitcoins contained therein (for example for transaction fees or trading).\n\n"
-    "The protocol and transaction processing rules for the Omni Layer are still under "
+    "The protocol and transaction processing rules for the Token Layer are still under "
     "active development and are subject to change in future.\n\n"
-    "Omni Core should be considered an alpha-level product, and you use it at your "
-    "own risk. Neither the Omni Foundation nor the Omni Core developers assumes "
+    "Token Core should be considered an alpha-level product, and you use it at your "
+    "own risk. Neither the Token Foundation nor the Token Core developers assumes "
     "any responsibility for funds misplaced, mishandled, lost, or misallocated.\n\n"
-    "Further, please note that this installation of Omni Core should be viewed as "
-    "EXPERIMENTAL. Your wallet data, bitcoins and Omni Layer tokens may be lost, "
+    "Further, please note that this installation of Token Core should be viewed as "
+    "EXPERIMENTAL. Your wallet data, bitcoins and Token Layer tokens may be lost, "
     "deleted, or corrupted, with or without warning due to bugs or glitches. "
     "Please take caution.\n\n"
     "This software is provided open-source at no cost. You are responsible for "
     "knowing the law in your country and determining if your use of this software "
     "contravenes any local laws.\n\n"
-    "PLEASE DO NOT use wallet(s) with significant amounts of bitcoins or Omni Layer "
+    "PLEASE DO NOT use wallet(s) with significant amounts of bitcoins or Token Layer "
     "tokens while testing!");
 
     QMessageBox msgBoxDisclaimer;
@@ -76,7 +76,7 @@ static bool showDisclaimer()
     QSettings settings;
 
     // Check whether the disclaimer was acknowledged before
-    return settings.value("OmniCore/fShowDisclaimer", true).toBool();
+    return settings.value("TokenCore/fShowDisclaimer", true).toBool();
 }
 
 /**
@@ -98,13 +98,13 @@ bool AskUserToAcknowledgeRisks()
     bool fAccepted = getDisclaimerDialogResult();
 
     // Store decision and show next time, if declined
-    settings.setValue("OmniCore/fShowDisclaimer", !fAccepted);
+    settings.setValue("TokenCore/fShowDisclaimer", !fAccepted);
 
     return fAccepted;
 }
 
 /**
- * Setup and initialization related to Omni Core Qt
+ * Setup and initialization related to Token Core Qt
  *
  * @return True if the initialization was successful
  */
@@ -116,4 +116,4 @@ bool Initialize()
     return true;
 }
 
-} // namespace OmniCore
+} // namespace TokenCore

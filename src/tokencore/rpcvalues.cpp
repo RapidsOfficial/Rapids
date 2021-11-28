@@ -1,8 +1,8 @@
-#include "omnicore/rpcvalues.h"
+#include "tokencore/rpcvalues.h"
 
-#include "omnicore/createtx.h"
-#include "omnicore/parse_string.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/createtx.h"
+#include "tokencore/parse_string.h"
+#include "tokencore/walletutils.h"
 
 #include "base58.h"
 #include "core_io.h"

@@ -1,5 +1,5 @@
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
 
 #include "chainparams.h"
 #include "script/standard.h"
@@ -12,7 +12,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_output_restriction_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_output_restriction_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(input_nonstandard)
 {

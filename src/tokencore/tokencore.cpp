@@ -1,41 +1,41 @@
 /**
- * @file omnicore.cpp
+ * @file tokencore.cpp
  *
- * This file contains the core of Omni Core.
+ * This file contains the core of Token Core.
  */
 
-#include "omnicore/omnicore.h"
+#include "tokencore/tokencore.h"
 
-#include "omnicore/activation.h"
-#include "omnicore/consensushash.h"
-#include "omnicore/convert.h"
-#include "omnicore/dbbase.h"
-#include "omnicore/dbfees.h"
-#include "omnicore/dbspinfo.h"
-#include "omnicore/dbstolist.h"
-#include "omnicore/dbtradelist.h"
-#include "omnicore/dbtransaction.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/dex.h"
-#include "omnicore/encoding.h"
-#include "omnicore/errors.h"
-#include "omnicore/log.h"
-#include "omnicore/mdex.h"
-#include "omnicore/notifications.h"
-#include "omnicore/parsing.h"
-#include "omnicore/pending.h"
-#include "omnicore/persistence.h"
-#include "omnicore/rules.h"
-#include "omnicore/script.h"
-#include "omnicore/seedblocks.h"
-#include "omnicore/sp.h"
-#include "omnicore/tally.h"
-#include "omnicore/tx.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/utilsui.h"
-#include "omnicore/version.h"
-#include "omnicore/walletcache.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/activation.h"
+#include "tokencore/consensushash.h"
+#include "tokencore/convert.h"
+#include "tokencore/dbbase.h"
+#include "tokencore/dbfees.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/dbstolist.h"
+#include "tokencore/dbtradelist.h"
+#include "tokencore/dbtransaction.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/dex.h"
+#include "tokencore/encoding.h"
+#include "tokencore/errors.h"
+#include "tokencore/log.h"
+#include "tokencore/mdex.h"
+#include "tokencore/notifications.h"
+#include "tokencore/parsing.h"
+#include "tokencore/pending.h"
+#include "tokencore/persistence.h"
+#include "tokencore/rules.h"
+#include "tokencore/script.h"
+#include "tokencore/seedblocks.h"
+#include "tokencore/sp.h"
+#include "tokencore/tally.h"
+#include "tokencore/tx.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/utilsui.h"
+#include "tokencore/version.h"
+#include "tokencore/walletcache.h"
+#include "tokencore/walletutils.h"
 
 #include "base58.h"
 #include "chainparams.h"
@@ -102,17 +102,17 @@ static int nWaterlineBlock = 0;
 /**
  * Used to indicate, whether to automatically commit created transactions.
  *
- * Can be set with configuration "-autocommit" or RPC "setautocommit_OMNI".
+ * Can be set with configuration "-autocommit" or RPC "setautocommit_TOKEN".
  */
 bool autoCommit = true;
 
-//! Number of "Dev Omni" of the last processed block
+//! Number of "Dev Token" of the last processed block
 int64_t exodus_prev = 0;
 
 //! Path for file based persistence
 boost::filesystem::path pathStateFiles;
 
-//! Flag to indicate whether Omni Core was initialized
+//! Flag to indicate whether Token Core was initialized
 static int mastercoreInitialized = 0;
 
 //! Flag to indicate whether there was a block reorganisatzion
@@ -128,12 +128,12 @@ CMPTxList* mastercore::pDbTransactionList;
 CMPTradeList* mastercore::pDbTradeList;
 //! LevelDB based storage for STO recipients
 CMPSTOList* mastercore::pDbStoList;
-//! LevelDB based storage for storing Omni transaction validation and position in block data
-COmniTransactionDB* mastercore::pDbTransaction;
+//! LevelDB based storage for storing Token transaction validation and position in block data
+CTokenTransactionDB* mastercore::pDbTransaction;
 //! LevelDB based storage for the MetaDEx fee cache
-COmniFeeCache* mastercore::pDbFeeCache;
+CTokenFeeCache* mastercore::pDbFeeCache;
 //! LevelDB based storage for the MetaDEx fee distributions
-COmniFeeHistory* mastercore::pDbFeeHistory;
+CTokenFeeHistory* mastercore::pDbFeeHistory;
 
 //! In-memory collection of DEx offers
 OfferMap mastercore::my_offers;
@@ -168,11 +168,11 @@ std::string mastercore::strMPProperty(uint32_t propertyId)
         str = strprintf("Test token: %d : 0x%08X", 0x7FFFFFFF & propertyId, propertyId);
     } else {
         switch (propertyId) {
-            case OMNI_PROPERTY_BTC: str = "BTC";
+            case TOKEN_PROPERTY_BTC: str = "BTC";
                 break;
-            case OMNI_PROPERTY_MSC: str = "OMN";
+            case TOKEN_PROPERTY_MSC: str = "OMN";
                 break;
-            case OMNI_PROPERTY_TMSC: str = "TOMN";
+            case TOKEN_PROPERTY_TMSC: str = "TOMN";
                 break;
             default:
                 str = strprintf("SP token: %d", propertyId);
@@ -265,7 +265,7 @@ int64_t GetTokenBalance(const std::string& address, uint32_t propertyId, TallyTy
     if (TALLY_TYPE_COUNT <= ttype) {
         return 0;
     }
-    if (ttype == ACCEPT_RESERVE && propertyId > OMNI_PROPERTY_TMSC) {
+    if (ttype == ACCEPT_RESERVE && propertyId > TOKEN_PROPERTY_TMSC) {
         // ACCEPT_RESERVE is always empty, except for MSC and TMSC
         return 0;
     }
@@ -314,14 +314,14 @@ int64_t GetFrozenTokenBalance(const std::string& address, uint32_t propertyId)
 
 bool mastercore::isTestEcosystemProperty(uint32_t propertyId)
 {
-    if ((OMNI_PROPERTY_TMSC == propertyId) || (TEST_ECO_PROPERTY_1 <= propertyId)) return true;
+    if ((TOKEN_PROPERTY_TMSC == propertyId) || (TEST_ECO_PROPERTY_1 <= propertyId)) return true;
 
     return false;
 }
 
 bool mastercore::isMainEcosystemProperty(uint32_t propertyId)
 {
-    if ((OMNI_PROPERTY_BTC != propertyId) && !isTestEcosystemProperty(propertyId)) return true;
+    if ((TOKEN_PROPERTY_BTC != propertyId) && !isTestEcosystemProperty(propertyId)) return true;
 
     return false;
 }
@@ -418,9 +418,9 @@ std::string mastercore::getTokenLabel(uint32_t propertyId)
     std::string tokenStr;
     if (propertyId < 3) {
         if (propertyId == 1) {
-            tokenStr = " OMNI";
+            tokenStr = " TOKEN";
         } else {
-            tokenStr = " TOMNI";
+            tokenStr = " TTOKEN";
         }
     } else {
         CMPSPInfo::Entry property;
@@ -532,7 +532,7 @@ bool mastercore::update_tally_map(const std::string& who, uint32_t propertyId, i
  * which are being awarded to the Exodus address slowly over the years.
  *
  * @see The "Dev MSC" specification:
- * https://github.com/OmniLayer/spec#development-mastercoins-dev-msc-previously-reward-mastercoins
+ * https://github.com/TokenLayer/spec#development-mastercoins-dev-msc-previously-reward-mastercoins
  *
  * Note:
  * If timestamps are out of order, then previously vested "Dev MSC" are not voided.
@@ -566,16 +566,16 @@ static int64_t calculate_and_update_devmsc(unsigned int nTime, int block)
 
     // sanity check that devmsc isn't an impossible value
     if (devmsc > all_reward || 0 > devmsc) {
-        PrintToLog("%s(): ERROR: insane number of Dev OMNI (nTime=%d, exodus_prev=%d, devmsc=%d)\n", __func__, nTime, exodus_prev, devmsc);
+        PrintToLog("%s(): ERROR: insane number of Dev TOKEN (nTime=%d, exodus_prev=%d, devmsc=%d)\n", __func__, nTime, exodus_prev, devmsc);
         return 0;
     }
 
     if (exodus_delta > 0) {
-        update_tally_map(exodus_address, OMNI_PROPERTY_MSC, exodus_delta, BALANCE);
+        update_tally_map(exodus_address, TOKEN_PROPERTY_MSC, exodus_delta, BALANCE);
         exodus_prev = devmsc;
     }
 
-    NotifyTotalTokensChanged(OMNI_PROPERTY_MSC, block);
+    NotifyTotalTokensChanged(TOKEN_PROPERTY_MSC, block);
 
     return exodus_delta;
 }
@@ -611,16 +611,16 @@ void CheckWalletUpdate(bool forceUpdate)
     }
 
     if (!WalletCacheUpdate()) {
-        // no balance changes were detected that affect wallet addresses, signal a generic change to overall Omni state
+        // no balance changes were detected that affect wallet addresses, signal a generic change to overall Token state
         if (!forceUpdate) {
-            uiInterface.OmniStateChanged();
+            uiInterface.TokenStateChanged();
             return;
         }
     }
 #ifdef ENABLE_WALLET
     LOCK(cs_tally);
 
-    // balance changes were found in the wallet, update the global totals and signal a Omni balance change
+    // balance changes were found in the wallet, update the global totals and signal a Token balance change
     global_balance_money.clear();
     global_balance_reserved.clear();
 
@@ -645,21 +645,21 @@ void CheckWalletUpdate(bool forceUpdate)
             global_balance_reserved[propertyId] += GetTokenBalance(address, propertyId, ACCEPT_RESERVE);
         }
     }
-    // signal an Omni balance change
-    uiInterface.OmniBalanceChanged();
+    // signal an Token balance change
+    uiInterface.TokenBalanceChanged();
 #endif
 }
 
-//! Cache for potential Omni Layer transactions
+//! Cache for potential Token Layer transactions
 static std::set<uint256> setMarkerCache;
 
 //! Guards marker cache
 static RecursiveMutex cs_marker_cache;
 
 /**
- * Checks, if transaction has any Omni marker.
+ * Checks, if transaction has any Token marker.
  *
- * Note: this may include invalid or malformed Omni Layer transactions!
+ * Note: this may include invalid or malformed Token Layer transactions!
  *
  * MUST NOT BE USED FOR CONSENSUS CRITICAL STUFF!
  */
@@ -733,8 +733,8 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
     bool hasOpReturn = false;
 
     /* Fast Search
-     * Perform a string comparison on hex for each scriptPubKey & look directly for Exodus hash160 bytes or omni marker bytes
-     * This allows to drop non-Omni transactions with less work
+     * Perform a string comparison on hex for each scriptPubKey & look directly for Exodus hash160 bytes or token marker bytes
+     * This allows to drop non-Token transactions with less work
      */
     std::string strClassC = "6f6d6e69";
     std::string strClassAB = "76a914946cb2e08075bcbaf157e47bcb67eb2b2339d24288ac";
@@ -784,7 +784,7 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
         }
         if (outType == TX_NULL_DATA) {
             // Ensure there is a payload, and the first pushed element equals,
-            // or starts with the "omni" marker
+            // or starts with the "token" marker
             std::vector<std::string> scriptPushes;
             if (!GetScriptPushes(output.scriptPubKey, scriptPushes)) {
                 continue;
@@ -803,13 +803,13 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
     }
 
     if (hasOpReturn) {
-        return OMNI_CLASS_C;
+        return TOKEN_CLASS_C;
     }
     if (hasExodus && hasMultisig) {
-        return OMNI_CLASS_B;
+        return TOKEN_CLASS_B;
     }
     // if (hasExodus || hasMoney) {
-    //     return OMNI_CLASS_A;
+    //     return TOKEN_CLASS_A;
     // }
 
     return NO_MARKER;
@@ -835,7 +835,7 @@ static unsigned int nCacheMiss = 0;
  */
 static bool FillTxInputCache(const CTransaction& tx, const std::shared_ptr<std::map<COutPoint, Coin>> removedCoins)
 {
-    static unsigned int nCacheSize = GetArg("-omnitxcache", 500000);
+    static unsigned int nCacheSize = GetArg("-tokentxcache", 500000);
 
     if (view.GetCacheSize() > nCacheSize) {
         PrintToLog("%s(): clearing cache before insertion [size=%d, hit=%d, miss=%d]\n",
@@ -902,10 +902,10 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
     mp_tx.Set(wtx.GetHash(), nBlock, idx, nTime, nDonation);
 
     // ### CLASS IDENTIFICATION AND MARKER CHECK ###
-    int omniClass = GetEncodingClass(wtx, nBlock);
+    int tokenClass = GetEncodingClass(wtx, nBlock);
 
-    if (omniClass == NO_MARKER) {
-        return -1; // No Exodus/Omni marker, thus not a valid Omni transaction
+    if (tokenClass == NO_MARKER) {
+        return -1; // No Exodus/Token marker, thus not a valid Token transaction
     }
 
     if (!bRPConly || msc_debug_parser_readonly) {
@@ -928,7 +928,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
 
     assert(view.HaveInputs(wtx));
 
-    if (omniClass != OMNI_CLASS_C)
+    if (tokenClass != TOKEN_CLASS_C)
     {
         // OLD LOGIC - collect input amounts and identify sender via "largest input by sum"
         std::map<std::string, int64_t> inputs_sum_of_values;
@@ -1040,7 +1040,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
     if (msc_debug_parser_data) PrintToLog(" address_data.size=%lu\n script_data.size=%lu\n value_data.size=%lu\n", address_data.size(), script_data.size(), value_data.size());
 
     // ### CLASS A PARSING ###
-    if (omniClass == OMNI_CLASS_A) {
+    if (tokenClass == TOKEN_CLASS_A) {
         std::string strScriptData;
         std::string strDataAddress;
         std::string strRefAddress;
@@ -1125,7 +1125,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
         }
     }
     // ### CLASS B / CLASS C PARSING ###
-    if ((omniClass == OMNI_CLASS_B) || (omniClass == OMNI_CLASS_C)) {
+    if ((tokenClass == TOKEN_CLASS_B) || (tokenClass == TOKEN_CLASS_C)) {
         if (msc_debug_parser_data) PrintToLog("Beginning reference identification\n");
         bool referenceFound = false; // bool to hold whether we've found the reference yet
         bool changeRemoved = false; // bool to hold whether we've ignored the first output to sender as change
@@ -1164,7 +1164,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
         if (msc_debug_parser_data) PrintToLog("Ending reference identification\nFinal decision on reference identification is: %s\n", strReference);
 
         // ### CLASS B SPECIFC PARSING ###
-        if (omniClass == OMNI_CLASS_B) {
+        if (tokenClass == TOKEN_CLASS_B) {
             std::vector<std::string> multisig_script_data;
 
             // ### POPULATE MULTISIG SCRIPT DATA ###
@@ -1252,7 +1252,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
         }
 
         // ### CLASS C SPECIFIC PARSING ###
-        if (omniClass == OMNI_CLASS_C) {
+        if (tokenClass == TOKEN_CLASS_C) {
             std::vector<std::string> op_return_script_data;
 
             // ### POPULATE OP RETURN SCRIPT DATA ###
@@ -1315,11 +1315,11 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
 
     // ### SET MP TX INFO ###
     if (msc_debug_verbose) PrintToLog("single_pkt: %s\n", HexStr(single_pkt, packet_size + single_pkt));
-    mp_tx.Set(strSender, strReference, 0, wtx.GetHash(), nBlock, idx, (unsigned char *)&single_pkt, packet_size, omniClass, (inAll-outAll));
+    mp_tx.Set(strSender, strReference, 0, wtx.GetHash(), nBlock, idx, (unsigned char *)&single_pkt, packet_size, tokenClass, (inAll-outAll));
 
     // TODO: the following is a bit aweful
     // Provide a hint for DEx payments
-    if (omniClass == OMNI_CLASS_A && packet_size == 0) {
+    if (tokenClass == TOKEN_CLASS_A && packet_size == 0) {
         return 1;
     }
 
@@ -1430,7 +1430,7 @@ public:
  */
 static int msc_initial_scan(int nFirstBlock)
 {
-    int nTimeBetweenProgressReports = GetArg("-omniprogressfrequency", 30);  // seconds
+    int nTimeBetweenProgressReports = GetArg("-tokenprogressfrequency", 30);  // seconds
     int64_t nNow = GetTime();
     unsigned int nTxsTotal = 0;
     unsigned int nTxsFoundTotal = 0;
@@ -1445,7 +1445,7 @@ static int msc_initial_scan(int nFirstBlock)
     ProgressReporter progressReporter(chainActive[nFirstBlock], chainActive[nLastBlock]);
 
     // check if using seed block filter should be disabled
-    bool seedBlockFilterEnabled = GetBoolArg("-omniseedblockfilter", true);
+    bool seedBlockFilterEnabled = GetBoolArg("-tokenseedblockfilter", true);
 
     for (nBlock = nFirstBlock; nBlock <= nLastBlock; ++nBlock)
     {
@@ -1557,7 +1557,7 @@ void RewindDBsAndState(int nHeight, int nBlockPrev = 0, bool fInitialParse = fal
     // clear the global wallet property list, perform a forced wallet update and tell the UI that state is no longer valid, and UI views need to be reinit
     global_wallet_property_list.clear();
     CheckWalletUpdate(true);
-    uiInterface.OmniStateInvalidated();
+    uiInterface.TokenStateInvalidated();
 
     if (nWaterlineBlock < nBlockPrev) {
         // scan from the block after the best active block to catch up to the active chain
@@ -1566,7 +1566,7 @@ void RewindDBsAndState(int nHeight, int nBlockPrev = 0, bool fInitialParse = fal
 }
 
 /**
- * Global handler to initialize Omni Core.
+ * Global handler to initialize Token Core.
  *
  * @return An exit code, indicating success or failure
  */
@@ -1579,7 +1579,7 @@ int mastercore_init()
         return 0;
     }
 
-    PrintToConsole("Initializing Omni Core v%s [%s]\n", OmniCoreVersion(), Params().NetworkIDString());
+    PrintToConsole("Initializing Token Core v%s [%s]\n", TokenCoreVersion(), Params().NetworkIDString());
 
     PrintToLog("Startup time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
 
@@ -1593,7 +1593,7 @@ int mastercore_init()
     // check for --autocommit option and set transaction commit flag accordingly
     if (!GetBoolArg("-autocommit", true)) {
         PrintToLog("Process was started with --autocommit set to false. "
-                "Created Omni transactions will not be committed to wallet or broadcast.\n");
+                "Created Token transactions will not be committed to wallet or broadcast.\n");
         autoCommit = false;
     }
 
@@ -1608,7 +1608,7 @@ int mastercore_init()
             boost::filesystem::path tradePath = GetDataDir() / "tokens" / "tradelist";
             boost::filesystem::path spPath = GetDataDir() / "tokens" / "spinfo";
             boost::filesystem::path stoPath = GetDataDir() / "tokens" / "stolist";
-            boost::filesystem::path omniTXDBPath = GetDataDir() / "tokens" / "txdb";
+            boost::filesystem::path tokenTXDBPath = GetDataDir() / "tokens" / "txdb";
             boost::filesystem::path feesPath = GetDataDir() / "tokens" / "feecache";
             boost::filesystem::path feeHistoryPath = GetDataDir() / "tokens" / "feehistory";
             if (boost::filesystem::exists(tokensPath)) boost::filesystem::remove_all(tokensPath);
@@ -1617,7 +1617,7 @@ int mastercore_init()
             if (boost::filesystem::exists(tradePath)) boost::filesystem::remove_all(tradePath);
             if (boost::filesystem::exists(spPath)) boost::filesystem::remove_all(spPath);
             if (boost::filesystem::exists(stoPath)) boost::filesystem::remove_all(stoPath);
-            if (boost::filesystem::exists(omniTXDBPath)) boost::filesystem::remove_all(omniTXDBPath);
+            if (boost::filesystem::exists(tokenTXDBPath)) boost::filesystem::remove_all(tokenTXDBPath);
             if (boost::filesystem::exists(feesPath)) boost::filesystem::remove_all(feesPath);
             if (boost::filesystem::exists(feeHistoryPath)) boost::filesystem::remove_all(feeHistoryPath);
             PrintToLog("Success clearing persistence files in datadir %s\n", GetDataDir().string());
@@ -1634,9 +1634,9 @@ int mastercore_init()
     pDbStoList = new CMPSTOList(GetDataDir() / "tokens" / "stolist", fReindex);
     pDbTransactionList = new CMPTxList(GetDataDir() / "tokens" / "txlist", fReindex);
     pDbSpInfo = new CMPSPInfo(GetDataDir() / "tokens" / "spinfo", fReindex);
-    pDbTransaction = new COmniTransactionDB(GetDataDir() / "tokens" / "txdb", fReindex);
-    pDbFeeCache = new COmniFeeCache(GetDataDir() / "tokens" / "feecache", fReindex);
-    pDbFeeHistory = new COmniFeeHistory(GetDataDir() / "tokens" / "feehistory", fReindex);
+    pDbTransaction = new CTokenTransactionDB(GetDataDir() / "tokens" / "txdb", fReindex);
+    pDbFeeCache = new CTokenFeeCache(GetDataDir() / "tokens" / "feecache", fReindex);
+    pDbFeeHistory = new CTokenFeeHistory(GetDataDir() / "tokens" / "feehistory", fReindex);
 
     pathStateFiles = GetDataDir() / "tokens" / "persist";
     TryCreateDirectory(pathStateFiles);
@@ -1675,7 +1675,7 @@ int mastercore_init()
         if (inconsistentDb) strReason = "INCONSISTENT DB DETECTED!\n"
                 "\n!!! WARNING !!!\n\n"
                 "IF YOU ARE USING AN OVERLAY DB, YOU MAY NEED TO REPROCESS\n"
-                "ALL OMNI LAYER TRANSACTIONS TO AVOID INCONSISTENCIES!\n"
+                "ALL TOKEN LAYER TRANSACTIONS TO AVOID INCONSISTENCIES!\n"
                 "\n!!! WARNING !!!";
         PrintToConsole("Loading persistent state: NONE (%s)\n", strReason);
     }
@@ -1687,8 +1687,8 @@ int mastercore_init()
 
     if (inconsistentDb) {
         std::string strAlert("INCONSISTENT DB DETECTED! IF YOU ARE USING AN OVERLAY DB, YOU MAY NEED TO REPROCESS"
-                "ALL OMNI LAYER TRANSACTIONS TO AVOID INCONSISTENCIES!");
-        AddAlert("omnicore", ALERT_CLIENT_VERSION_EXPIRY, std::numeric_limits<uint32_t>::max(), strAlert);
+                "ALL TOKEN LAYER TRANSACTIONS TO AVOID INCONSISTENCIES!");
+        AddAlert("tokencore", ALERT_CLIENT_VERSION_EXPIRY, std::numeric_limits<uint32_t>::max(), strAlert);
         AlertNotify(strAlert, true);
     }
 
@@ -1706,7 +1706,7 @@ int mastercore_init()
     // collect the real Exodus balances available at the snapshot time
     // redundant? do we need to show it both pre-parse and post-parse?  if so let's label the printfs accordingly
     if (msc_debug_exo) {
-        int64_t exodus_balance = GetTokenBalance(exodus_address, OMNI_PROPERTY_MSC, BALANCE);
+        int64_t exodus_balance = GetTokenBalance(exodus_address, TOKEN_PROPERTY_MSC, BALANCE);
         PrintToLog("Exodus balance at start: %s\n", FormatDivisibleMP(exodus_balance));
     }
 
@@ -1729,16 +1729,16 @@ int mastercore_init()
     msc_initial_scan(nWaterlineBlock);
 
     // display Exodus balance
-    int64_t exodus_balance = GetTokenBalance(exodus_address, OMNI_PROPERTY_MSC, BALANCE);
+    int64_t exodus_balance = GetTokenBalance(exodus_address, TOKEN_PROPERTY_MSC, BALANCE);
     PrintToLog("Exodus balance after initialization: %s\n", FormatDivisibleMP(exodus_balance));
 
-    PrintToConsole("Omni Core initialization completed\n");
+    PrintToConsole("Token Core initialization completed\n");
 
     return 0;
 }
 
 /**
- * Global handler to shut down Omni Core.
+ * Global handler to shut down Token Core.
  *
  * In particular, the LevelDB databases of the global state objects are closed
  * properly.
@@ -1780,10 +1780,10 @@ int mastercore_shutdown()
 
     mastercoreInitialized = 0;
 
-    PrintToLog("Omni Core shutdown completed\n");
+    PrintToLog("Token Core shutdown completed\n");
     PrintToLog("Shutdown time: %s\n", DateTimeStrFormat("%Y-%m-%d %H:%M:%S", GetTime()));
 
-    PrintToConsole("Omni Core shutdown completed\n");
+    PrintToConsole("Token Core shutdown completed\n");
 
     return 0;
 }
@@ -1791,7 +1791,7 @@ int mastercore_shutdown()
 /**
  * This handler is called for every new transaction that comes in (actually in block parsing loop).
  *
- * @return True, if the transaction was an Exodus purchase, DEx payment or a valid Omni transaction
+ * @return True, if the transaction was an Exodus purchase, DEx payment or a valid Token transaction
  */
 bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx, const CBlockIndex* pBlockIndex)
 {
@@ -1847,7 +1847,7 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
  */
 bool mastercore::UseEncodingClassC(size_t nDataSize)
 {
-    size_t nTotalSize = nDataSize + GetOmMarker().size(); // Marker "omni"
+    size_t nTotalSize = nDataSize + GetOmMarker().size(); // Marker "token"
     bool fDataEnabled = GetBoolArg("-datacarrier", true);
     int nBlockNow = GetHeight();
     if (!IsAllowedOutputType(TX_NULL_DATA, nBlockNow)) {
@@ -1902,7 +1902,7 @@ int mastercore_handler_block_end(int nBlockNow, CBlockIndex const * pBlockIndex,
     devmsc = calculate_and_update_devmsc(pBlockIndex->GetBlockTime(), nBlockNow);
 
     if (msc_debug_exo) {
-        int64_t balance = GetTokenBalance(exodus_address, OMNI_PROPERTY_MSC, BALANCE);
+        int64_t balance = GetTokenBalance(exodus_address, TOKEN_PROPERTY_MSC, BALANCE);
         PrintToLog("devmsc for block %d: %d, Exodus balance: %d\n", nBlockNow, devmsc, FormatDivisibleMP(balance));
     }
 
@@ -1964,7 +1964,7 @@ const CTxDestination ExodusAddress()
  */
 const std::vector<unsigned char> GetOmMarker()
 {
-    static unsigned char pch[] = {0x6f, 0x6d, 0x6e, 0x69}; // Hex-encoded: "omni"
+    static unsigned char pch[] = {0x6f, 0x6d, 0x6e, 0x69}; // Hex-encoded: "token"
 
     return std::vector<unsigned char>(pch, pch + sizeof(pch) / sizeof(pch[0]));
 }

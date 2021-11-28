@@ -4,10 +4,10 @@
  * This file contains parsing and transaction decoding related functions.
  */
 
-#include "omnicore/parsing.h"
+#include "tokencore/parsing.h"
 
-#include "omnicore/log.h"
-#include "omnicore/script.h"
+#include "tokencore/log.h"
+#include "tokencore/script.h"
 
 #include "base58.h"
 #include "uint256.h"

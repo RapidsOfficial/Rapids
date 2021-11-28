@@ -1,7 +1,7 @@
-#ifndef OMNICORE_MDEX_H
-#define OMNICORE_MDEX_H
+#ifndef TOKENCORE_MDEX_H
+#define TOKENCORE_MDEX_H
 
-#include "omnicore/tx.h"
+#include "tokencore/tx.h"
 
 #include "uint256.h"
 
@@ -143,4 +143,4 @@ const CMPMetaDEx* MetaDEx_RetrieveTrade(const uint256& txid);
 }
 
 
-#endif // OMNICORE_MDEX_H
+#endif // TOKENCORE_MDEX_H

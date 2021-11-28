@@ -1,4 +1,4 @@
-Copyright (c) 2013-2015 Omni Core Developers
+Copyright (c) 2013-2015 Token Core Developers
 Copyright (c) 2009-2015 Bitcoin Core Developers
 
 Permission is hereby granted, free of charge, to any person obtaining a copy

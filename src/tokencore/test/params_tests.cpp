@@ -1,5 +1,5 @@
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
 
 #include "chainparams.h"
 #include "test/test_bitcoin.h"
@@ -11,7 +11,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_params_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_params_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(get_params)
 {
@@ -35,15 +35,15 @@ BOOST_AUTO_TEST_CASE(network_restrictions_test)
 BOOST_AUTO_TEST_CASE(ecosystem_restrictions_main)
 {
     // Unit tests and mainnet use the same params
-    BOOST_CHECK(!IsTransactionTypeAllowed(0, OMNI_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
-    BOOST_CHECK(IsTransactionTypeAllowed(0, OMNI_PROPERTY_TMSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(!IsTransactionTypeAllowed(0, TOKEN_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(IsTransactionTypeAllowed(0, TOKEN_PROPERTY_TMSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
 }
 
 BOOST_AUTO_TEST_CASE(ecosystem_restrictions_test)
 {
     SelectParams(CBaseChainParams::TESTNET);
-    BOOST_CHECK(!IsTransactionTypeAllowed(0, OMNI_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
-    BOOST_CHECK(IsTransactionTypeAllowed(0, OMNI_PROPERTY_TMSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(!IsTransactionTypeAllowed(0, TOKEN_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(IsTransactionTypeAllowed(0, TOKEN_PROPERTY_TMSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
     // Restore original
     SelectParams(CBaseChainParams::MAIN);
 }
@@ -58,12 +58,12 @@ BOOST_AUTO_TEST_CASE(update_feature_network)
     // Before updated
     BOOST_CHECK(oldActivationBlock != newActivationBlock);
     BOOST_CHECK_EQUAL(oldActivationBlock, ConsensusParams().TOKEN_BET_BLOCK);
-    BOOST_CHECK(!IsTransactionTypeAllowed(newActivationBlock, OMNI_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(!IsTransactionTypeAllowed(newActivationBlock, TOKEN_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
 
     // Update
     ConsensusParams(network).TOKEN_BET_BLOCK = newActivationBlock;
     BOOST_CHECK_EQUAL(newActivationBlock, ConsensusParams().TOKEN_BET_BLOCK);
-    BOOST_CHECK(IsTransactionTypeAllowed(newActivationBlock, OMNI_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(IsTransactionTypeAllowed(newActivationBlock, TOKEN_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
 
     // Restore original
     ConsensusParams(network).TOKEN_BET_BLOCK = oldActivationBlock;
@@ -77,12 +77,12 @@ BOOST_AUTO_TEST_CASE(update_feature)
 
     // Before updated
     BOOST_CHECK(oldActivationBlock != newActivationBlock);
-    BOOST_CHECK(!IsTransactionTypeAllowed(newActivationBlock, OMNI_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(!IsTransactionTypeAllowed(newActivationBlock, TOKEN_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
 
     // Update
     MutableConsensusParams().TOKEN_BET_BLOCK = newActivationBlock;
     BOOST_CHECK_EQUAL(newActivationBlock, ConsensusParams().TOKEN_BET_BLOCK);
-    BOOST_CHECK(IsTransactionTypeAllowed(newActivationBlock, OMNI_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
+    BOOST_CHECK(IsTransactionTypeAllowed(newActivationBlock, TOKEN_PROPERTY_MSC, TOKEN_TYPE_OFFER_ACCEPT_A_BET, MP_TX_PKT_V0));
 
     // Restore original
     MutableConsensusParams().TOKEN_BET_BLOCK = oldActivationBlock;

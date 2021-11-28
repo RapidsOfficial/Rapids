@@ -1,5 +1,5 @@
-#ifndef OMNICORE_STO_H
-#define OMNICORE_STO_H
+#ifndef TOKENCORE_STO_H
+#define TOKENCORE_STO_H
 
 #include <stdint.h>
 #include <set>
@@ -26,4 +26,4 @@ OwnerAddrType STO_GetReceivers(const std::string& sender, uint32_t property, int
 }
 
 
-#endif // OMNICORE_STO_H
+#endif // TOKENCORE_STO_H

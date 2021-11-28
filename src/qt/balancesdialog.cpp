@@ -9,10 +9,10 @@
 #include "walletmodel.h"
 #include "guiutil.h"
 
-#include "omnicore/omnicore.h"
-#include "omnicore/sp.h"
-#include "omnicore/tally.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/sp.h"
+#include "tokencore/tally.h"
+#include "tokencore/walletutils.h"
 
 #include "amount.h"
 #include "sync.h"
@@ -131,7 +131,7 @@ BalancesDialog::~BalancesDialog()
     delete ui;
 }
 
-void BalancesDialog::reinitOmni()
+void BalancesDialog::reinitToken()
 {
     ui->propSelectorWidget->clear();
     ui->balancesTable->setRowCount(0);
@@ -143,8 +143,8 @@ void BalancesDialog::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
     if (model != NULL) {
-        connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(balancesUpdated()));
-        connect(model, SIGNAL(reinitOmniState()), this, SLOT(reinitOmni()));
+        connect(model, SIGNAL(refreshTokenBalance()), this, SLOT(balancesUpdated()));
+        connect(model, SIGNAL(reinitTokenState()), this, SLOT(reinitToken()));
     }
 }
 

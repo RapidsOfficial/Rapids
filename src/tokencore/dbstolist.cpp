@@ -1,9 +1,9 @@
-#include "omnicore/dbstolist.h"
+#include "tokencore/dbstolist.h"
 
-#include "omnicore/log.h"
-#include "omnicore/sp.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/log.h"
+#include "tokencore/sp.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/walletutils.h"
 
 #include "uint256.h"
 #include "utilstrencodings.h"

@@ -1,107 +1,107 @@
-OMNICORE_H = \
-  omnicore/activation.h \
-  omnicore/consensushash.h \
-  omnicore/convert.h \
-  omnicore/createpayload.h \
-  omnicore/createtx.h \
-  omnicore/dbbase.h \
-  omnicore/dbfees.h \
-  omnicore/dbspinfo.h \
-  omnicore/dbstolist.h \
-  omnicore/dbtradelist.h \
-  omnicore/dbtransaction.h \
-  omnicore/dbtxlist.h \
-  omnicore/dex.h \
-  omnicore/encoding.h \
-  omnicore/errors.h \
-  omnicore/log.h \
-  omnicore/mdex.h \
-  omnicore/notifications.h \
-  omnicore/omnicore.h \
-  omnicore/parse_string.h \
-  omnicore/parsing.h \
-  omnicore/pending.h \
-  omnicore/persistence.h \
-  omnicore/rpc.h \
-  omnicore/rpcmbstring.h \
-  omnicore/rpcpayload.h \
-  omnicore/rpcrawtx.h \
-  omnicore/rpcrequirements.h \
-  omnicore/rpctx.h \
-  omnicore/rpctxobject.h \
-  omnicore/rpcvalues.h \
-  omnicore/rules.h \
-  omnicore/script.h \
-  omnicore/seedblocks.h \
-  omnicore/sp.h \
-  omnicore/sto.h \
-  omnicore/tally.h \
-  omnicore/tx.h \
-  omnicore/uint256_extensions.h \
-  omnicore/utilsbitcoin.h \
-  omnicore/utilsui.h \
-  omnicore/version.h \
-  omnicore/walletcache.h \
-  omnicore/walletfetchtxs.h \
-  omnicore/wallettxbuilder.h \
-  omnicore/walletutils.h
+TOKENCORE_H = \
+  tokencore/activation.h \
+  tokencore/consensushash.h \
+  tokencore/convert.h \
+  tokencore/createpayload.h \
+  tokencore/createtx.h \
+  tokencore/dbbase.h \
+  tokencore/dbfees.h \
+  tokencore/dbspinfo.h \
+  tokencore/dbstolist.h \
+  tokencore/dbtradelist.h \
+  tokencore/dbtransaction.h \
+  tokencore/dbtxlist.h \
+  tokencore/dex.h \
+  tokencore/encoding.h \
+  tokencore/errors.h \
+  tokencore/log.h \
+  tokencore/mdex.h \
+  tokencore/notifications.h \
+  tokencore/tokencore.h \
+  tokencore/parse_string.h \
+  tokencore/parsing.h \
+  tokencore/pending.h \
+  tokencore/persistence.h \
+  tokencore/rpc.h \
+  tokencore/rpcmbstring.h \
+  tokencore/rpcpayload.h \
+  tokencore/rpcrawtx.h \
+  tokencore/rpcrequirements.h \
+  tokencore/rpctx.h \
+  tokencore/rpctxobject.h \
+  tokencore/rpcvalues.h \
+  tokencore/rules.h \
+  tokencore/script.h \
+  tokencore/seedblocks.h \
+  tokencore/sp.h \
+  tokencore/sto.h \
+  tokencore/tally.h \
+  tokencore/tx.h \
+  tokencore/uint256_extensions.h \
+  tokencore/utilsbitcoin.h \
+  tokencore/utilsui.h \
+  tokencore/version.h \
+  tokencore/walletcache.h \
+  tokencore/walletfetchtxs.h \
+  tokencore/wallettxbuilder.h \
+  tokencore/walletutils.h
 
-OMNICORE_CPP = \
-  omnicore/activation.cpp \
-  omnicore/consensushash.cpp \
-  omnicore/convert.cpp \
-  omnicore/createpayload.cpp \
-  omnicore/createtx.cpp \
-  omnicore/dbbase.cpp \
-  omnicore/dbfees.cpp \
-  omnicore/dbspinfo.cpp \
-  omnicore/dbstolist.cpp \
-  omnicore/dbtradelist.cpp \
-  omnicore/dbtransaction.cpp \
-  omnicore/dbtxlist.cpp \
-  omnicore/dex.cpp \
-  omnicore/encoding.cpp \
-  omnicore/log.cpp \
-  omnicore/mdex.cpp \
-  omnicore/notifications.cpp \
-  omnicore/omnicore.cpp \
-  omnicore/parse_string.cpp \
-  omnicore/parsing.cpp \
-  omnicore/pending.cpp \
-  omnicore/persistence.cpp \
-  omnicore/rpc.cpp \
-  omnicore/rpcmbstring.cpp \
-  omnicore/rpcpayload.cpp \
-  omnicore/rpcrawtx.cpp \
-  omnicore/rpcrequirements.cpp \
-  omnicore/rpctx.cpp \
-  omnicore/rpctxobject.cpp \
-  omnicore/rpcvalues.cpp \
-  omnicore/rules.cpp \
-  omnicore/script.cpp \
-  omnicore/seedblocks.cpp \
-  omnicore/sp.cpp \
-  omnicore/sto.cpp \
-  omnicore/tally.cpp \
-  omnicore/tx.cpp \
-  omnicore/utilsbitcoin.cpp \
-  omnicore/utilsui.cpp \
-  omnicore/version.cpp \
-  omnicore/walletcache.cpp \
-  omnicore/walletfetchtxs.cpp \
-  omnicore/wallettxbuilder.cpp \
-  omnicore/walletutils.cpp
+TOKENCORE_CPP = \
+  tokencore/activation.cpp \
+  tokencore/consensushash.cpp \
+  tokencore/convert.cpp \
+  tokencore/createpayload.cpp \
+  tokencore/createtx.cpp \
+  tokencore/dbbase.cpp \
+  tokencore/dbfees.cpp \
+  tokencore/dbspinfo.cpp \
+  tokencore/dbstolist.cpp \
+  tokencore/dbtradelist.cpp \
+  tokencore/dbtransaction.cpp \
+  tokencore/dbtxlist.cpp \
+  tokencore/dex.cpp \
+  tokencore/encoding.cpp \
+  tokencore/log.cpp \
+  tokencore/mdex.cpp \
+  tokencore/notifications.cpp \
+  tokencore/tokencore.cpp \
+  tokencore/parse_string.cpp \
+  tokencore/parsing.cpp \
+  tokencore/pending.cpp \
+  tokencore/persistence.cpp \
+  tokencore/rpc.cpp \
+  tokencore/rpcmbstring.cpp \
+  tokencore/rpcpayload.cpp \
+  tokencore/rpcrawtx.cpp \
+  tokencore/rpcrequirements.cpp \
+  tokencore/rpctx.cpp \
+  tokencore/rpctxobject.cpp \
+  tokencore/rpcvalues.cpp \
+  tokencore/rules.cpp \
+  tokencore/script.cpp \
+  tokencore/seedblocks.cpp \
+  tokencore/sp.cpp \
+  tokencore/sto.cpp \
+  tokencore/tally.cpp \
+  tokencore/tx.cpp \
+  tokencore/utilsbitcoin.cpp \
+  tokencore/utilsui.cpp \
+  tokencore/version.cpp \
+  tokencore/walletcache.cpp \
+  tokencore/walletfetchtxs.cpp \
+  tokencore/wallettxbuilder.cpp \
+  tokencore/walletutils.cpp
 
 libbitcoin_server_a_SOURCES += \
-  $(OMNICORE_CPP) \
-  $(OMNICORE_H)
+  $(TOKENCORE_CPP) \
+  $(TOKENCORE_H)
 
-omnicore/libbitcoin_server_a-version.$(OBJEXT): obj/build.h # build info
+tokencore/libbitcoin_server_a-version.$(OBJEXT): obj/build.h # build info
 
-CLEAN_OMNICORE = omnicore/*.gcda omnicore/*.gcno
+CLEAN_TOKENCORE = tokencore/*.gcda tokencore/*.gcno
 
-CLEANFILES += $(CLEAN_OMNICORE)
+CLEANFILES += $(CLEAN_TOKENCORE)
 
 if ENABLE_TESTS
-include Makefile.omnitest.include
+include Makefile.tokentest.include
 endif

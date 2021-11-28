@@ -1,15 +1,15 @@
-#include "omnicore/mdex.h"
+#include "tokencore/mdex.h"
 
-#include "omnicore/dbfees.h"
-#include "omnicore/dbtradelist.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/errors.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/sp.h"
-#include "omnicore/tx.h"
-#include "omnicore/uint256_extensions.h"
+#include "tokencore/dbfees.h"
+#include "tokencore/dbtradelist.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/errors.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/sp.h"
+#include "tokencore/tx.h"
+#include "tokencore/uint256_extensions.h"
 
 #include "arith_uint256.h"
 #include "chain.h"
@@ -266,9 +266,9 @@ static MatchReturnType x_Trade(CMPMetaDEx* const pnew)
             int64_t buyer_amountGotAfterFee = buyer_amountGot;
             int64_t tradingFee = 0;
 
-            // strip a 0.05% fee from non-OMNI pairs if fees are activated
+            // strip a 0.05% fee from non-TOKEN pairs if fees are activated
             if (IsFeatureActivated(FEATURE_FEES, pnew->getBlock())) {
-                if (pold->getProperty() > OMNI_PROPERTY_TMSC && pold->getDesProperty() > OMNI_PROPERTY_TMSC) {
+                if (pold->getProperty() > TOKEN_PROPERTY_TMSC && pold->getDesProperty() > TOKEN_PROPERTY_TMSC) {
                     int64_t feeDivider = 2000; // 0.05%
                     tradingFee = buyer_amountGot / feeDivider;
 
@@ -278,7 +278,7 @@ static MatchReturnType x_Trade(CMPMetaDEx* const pnew)
                     // add the fee to the fee cache
                     pDbFeeCache->AddFee(pnew->getDesProperty(), pnew->getBlock(), tradingFee);
                 } else {
-                    if (msc_debug_fees) PrintToLog("Skipping fee reduction for trade match %s:%s as one of the properties is Omni\n", pold->getHash().GetHex(), pnew->getHash().GetHex());
+                    if (msc_debug_fees) PrintToLog("Skipping fee reduction for trade match %s:%s as one of the properties is Token\n", pold->getHash().GetHex(), pnew->getHash().GetHex());
                 }
             }
 
@@ -347,7 +347,7 @@ static MatchReturnType x_Trade(CMPMetaDEx* const pnew)
 std::string CMPMetaDEx::displayUnitPrice() const
 {
      rational_t tmpDisplayPrice;
-     if (getDesProperty() == OMNI_PROPERTY_MSC || getDesProperty() == OMNI_PROPERTY_TMSC) {
+     if (getDesProperty() == TOKEN_PROPERTY_MSC || getDesProperty() == TOKEN_PROPERTY_TMSC) {
          tmpDisplayPrice = unitPrice();
          if (isPropertyDivisible(getProperty())) tmpDisplayPrice = tmpDisplayPrice * COIN;
      } else {
@@ -369,7 +369,7 @@ std::string CMPMetaDEx::displayUnitPrice() const
 /**
  * Used for display of unit prices with 50 decimal places at RPC layer.
  *
- * Note: unit price is no longer always shown in OMNI and/or inverted
+ * Note: unit price is no longer always shown in TOKEN and/or inverted
  */
 std::string CMPMetaDEx::displayFullUnitPrice() const
 {
@@ -701,7 +701,7 @@ int mastercore::MetaDEx_SHUTDOWN_ALLPAIR()
         for (md_PricesMap::iterator it = prices.begin(); it != prices.end(); ++it) {
             md_Set& indexes = it->second;
             for (md_Set::iterator it = indexes.begin(); it != indexes.end();) {
-                if (it->getDesProperty() > OMNI_PROPERTY_TMSC && it->getProperty() > OMNI_PROPERTY_TMSC) { // no OMN/TOMN side to the trade
+                if (it->getDesProperty() > TOKEN_PROPERTY_TMSC && it->getProperty() > TOKEN_PROPERTY_TMSC) { // no OMN/TOMN side to the trade
                     PrintToLog("%s(): REMOVING %s\n", __FUNCTION__, it->ToString());
                     // move from reserve to balance
                     assert(update_tally_map(it->getAddr(), it->getProperty(), -it->getAmountRemaining(), METADEX_RESERVE));

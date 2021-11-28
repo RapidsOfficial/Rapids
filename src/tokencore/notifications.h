@@ -1,5 +1,5 @@
-#ifndef OMNICORE_NOTIFICATIONS_H
-#define OMNICORE_NOTIFICATIONS_H
+#ifndef TOKENCORE_NOTIFICATIONS_H
+#define TOKENCORE_NOTIFICATIONS_H
 
 #include <stdint.h>
 #include <string>
@@ -27,7 +27,7 @@ struct AlertData
     std::string alert_message;
 };
 
-/** Determines whether the sender is an authorized source for Omni Core alerts. */
+/** Determines whether the sender is an authorized source for Token Core alerts. */
 bool CheckAlertAuthorization(const std::string& sender);
 
 /** Deletes previously broadcast alerts from the sender. */
@@ -39,12 +39,12 @@ void ClearAlerts();
 void AddAlert(const std::string& sender, uint16_t alertType, uint32_t alertExpiry, const std::string& alertMessage);
 
 /** Alert string including meta data. */
-std::vector<AlertData> GetOmniCoreAlerts();
+std::vector<AlertData> GetTokenCoreAlerts();
 /** Human readable alert messages. */
-std::vector<std::string> GetOmniCoreAlertMessages();
+std::vector<std::string> GetTokenCoreAlertMessages();
 
 /** Expires any alerts that need expiring. */
 bool CheckExpiredAlerts(unsigned int curBlock, uint64_t curTime);
 }
 
-#endif // OMNICORE_NOTIFICATIONS_H
+#endif // TOKENCORE_NOTIFICATIONS_H

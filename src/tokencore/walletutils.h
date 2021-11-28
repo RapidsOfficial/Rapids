@@ -1,5 +1,5 @@
-#ifndef OMNICORE_WALLETUTILS_H
-#define OMNICORE_WALLETUTILS_H
+#ifndef TOKENCORE_WALLETUTILS_H
+#define TOKENCORE_WALLETUTILS_H
 
 class CCoinControl;
 class CPubKey;
@@ -33,4 +33,4 @@ int64_t SelectCoins(const std::string& fromAddress, CCoinControl& coinControl, i
 int64_t SelectAllCoins(const std::string& fromAddress, CCoinControl& coinControl);
 }
 
-#endif // OMNICORE_WALLETUTILS_H
+#endif // TOKENCORE_WALLETUTILS_H

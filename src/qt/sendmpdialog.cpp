@@ -7,23 +7,23 @@
 
 #include "qt/rapids/qtutils.h"
 
-#include "omnicore_qtutils.h"
+#include "tokencore_qtutils.h"
 
 #include "clientmodel.h"
 #include "walletmodel.h"
 
 #include "platformstyle.h"
 
-#include "omnicore/createpayload.h"
-#include "omnicore/errors.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parse_string.h"
-#include "omnicore/pending.h"
-#include "omnicore/sp.h"
-#include "omnicore/tally.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/wallettxbuilder.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/createpayload.h"
+#include "tokencore/errors.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parse_string.h"
+#include "tokencore/pending.h"
+#include "tokencore/sp.h"
+#include "tokencore/tally.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/wallettxbuilder.h"
+#include "tokencore/walletutils.h"
 
 #include "amount.h"
 #include "base58.h"
@@ -91,8 +91,8 @@ SendMPDialog::SendMPDialog(QWidget *parent) :
     // }
 
 #if QT_VERSION >= 0x040700 // populate placeholder text
-    ui->sendToLineEdit->setPlaceholderText("Enter an Omni Layer address (e.g. 1oMn1LaYeRADDreSShef77z6A5S4P)");
-    ui->amountLineEdit->setPlaceholderText("Enter Amount");
+    ui->sendToLineEdit->setPlaceholderText("Enter address");
+    ui->amountLineEdit->setPlaceholderText("Enter amount");
 #endif
 
     // connect actions
@@ -115,8 +115,8 @@ void SendMPDialog::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
     if (model != NULL) {
-        connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(balancesUpdated()));
-        connect(model, SIGNAL(reinitOmniState()), this, SLOT(balancesUpdated()));
+        connect(model, SIGNAL(refreshTokenBalance()), this, SLOT(balancesUpdated()));
+        connect(model, SIGNAL(reinitTokenState()), this, SLOT(balancesUpdated()));
     }
 }
 

@@ -1,7 +1,7 @@
-#ifndef OMNICORE_DBTRADELIST_H
-#define OMNICORE_DBTRADELIST_H
+#ifndef TOKENCORE_DBTRADELIST_H
+#define TOKENCORE_DBTRADELIST_H
 
-#include "omnicore/dbbase.h"
+#include "tokencore/dbbase.h"
 
 #include "uint256.h"
 
@@ -40,4 +40,4 @@ namespace mastercore
     extern CMPTradeList* pDbTradeList;
 }
 
-#endif // OMNICORE_DBTRADELIST_H
+#endif // TOKENCORE_DBTRADELIST_H

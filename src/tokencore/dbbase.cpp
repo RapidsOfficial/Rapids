@@ -1,6 +1,6 @@
-#include "omnicore/dbbase.h"
+#include "tokencore/dbbase.h"
 
-#include "omnicore/log.h"
+#include "tokencore/log.h"
 
 #include "util.h"
 

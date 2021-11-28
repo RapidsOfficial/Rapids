@@ -1,5 +1,5 @@
-#ifndef OMNICORE_CREATETX_H
-#define OMNICORE_CREATETX_H
+#ifndef TOKENCORE_CREATETX_H
+#define TOKENCORE_CREATETX_H
 
 class CCoinsViewCache;
 class CMutableTransaction;
@@ -126,10 +126,10 @@ protected:
 };
 
 /**
- * Builder to create Omni transactions.
+ * Builder to create Token transactions.
  *
  * The TokenTxBuilder class is an extension of the TxBuilder, with additional
- * methods to build Omni transactions. Payloads can be embedded with class B
+ * methods to build Token transactions. Payloads can be embedded with class B
  * (bare-multisig) or class C (op-return) encoding.
  *
  * The output values are based on the dust threshold, but may optionally be
@@ -148,12 +148,12 @@ class TokenTxBuilder: public TxBuilder
 {
 public:
     /**
-     * Creates a new Omni transaction builder.
+     * Creates a new Token transaction builder.
      */
     TokenTxBuilder();
 
     /**
-     * Creates a new Omni transaction builder to extend a transaction.
+     * Creates a new Token transaction builder to extend a transaction.
      *
      * @param transactionIn The transaction used to build upon
      */
@@ -225,4 +225,4 @@ public:
 void InputsToView(const std::vector<PrevTxsEntry>& prevTxs, CCoinsViewCache& view);
 
 
-#endif // OMNICORE_CREATETX_H
+#endif // TOKENCORE_CREATETX_H

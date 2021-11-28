@@ -1,10 +1,10 @@
-#ifndef OMNICORE_SP_H
-#define OMNICORE_SP_H
+#ifndef TOKENCORE_SP_H
+#define TOKENCORE_SP_H
 
-#include "omnicore/dbbase.h"
-#include "omnicore/dbspinfo.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
+#include "tokencore/dbbase.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
 
 class CBlockIndex;
 class uint256;
@@ -101,4 +101,4 @@ unsigned int eraseExpiredCrowdsale(const CBlockIndex* pBlockIndex);
 }
 
 
-#endif // OMNICORE_SP_H
+#endif // TOKENCORE_SP_H

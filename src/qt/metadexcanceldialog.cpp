@@ -5,20 +5,20 @@
 #include "metadexcanceldialog.h"
 #include "ui_metadexcanceldialog.h"
 
-#include "omnicore_qtutils.h"
+#include "tokencore_qtutils.h"
 
 #include "clientmodel.h"
 // #include "ui_interface.h"
 #include "walletmodel.h"
 
-#include "omnicore/createpayload.h"
-#include "omnicore/errors.h"
-#include "omnicore/mdex.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/sp.h"
-#include "omnicore/pending.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/createpayload.h"
+#include "tokencore/errors.h"
+#include "tokencore/mdex.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/sp.h"
+#include "tokencore/pending.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/walletutils.h"
 
 #include <stdint.h>
 #include <map>
@@ -66,8 +66,8 @@ void MetaDExCancelDialog::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
     if (model != NULL) {
-        connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(RefreshUI()));
-        connect(model, SIGNAL(reinitOmniState()), this, SLOT(ReinitUI()));
+        connect(model, SIGNAL(refreshTokenBalance()), this, SLOT(RefreshUI()));
+        connect(model, SIGNAL(reinitTokenState()), this, SLOT(ReinitUI()));
     }
 }
 
@@ -163,7 +163,7 @@ void MetaDExCancelDialog::UpdateCancelCombo()
                     if (isTestEcosystemProperty(obj.getProperty())) fTestEcosystem = true;
 
                     bool isBuy = false; // sell or buy? (from UI perspective)
-                    if ((obj.getProperty() == OMNI_PROPERTY_MSC) || (obj.getProperty() == OMNI_PROPERTY_TMSC)) isBuy = true;
+                    if ((obj.getProperty() == TOKEN_PROPERTY_MSC) || (obj.getProperty() == TOKEN_PROPERTY_TMSC)) isBuy = true;
                     string sellToken = getPropertyName(obj.getProperty()).c_str();
                     string desiredToken = getPropertyName(obj.getDesProperty()).c_str();
                     string sellId = strprintf("%d", obj.getProperty());
@@ -177,7 +177,7 @@ void MetaDExCancelDialog::UpdateCancelCombo()
                     string dataStr = sellId + "/" + desiredId;
                     if (ui->radioCancelPrice->isChecked()) { // append price if needed
                         comboStr += " priced at " + StripTrailingZeros(obj.displayUnitPrice());
-                        if ((obj.getProperty() == OMNI_PROPERTY_MSC) || (obj.getDesProperty() == OMNI_PROPERTY_MSC)) { comboStr += " OMN/SPT"; } else { comboStr += " TOMN/SPT"; }
+                        if ((obj.getProperty() == TOKEN_PROPERTY_MSC) || (obj.getDesProperty() == TOKEN_PROPERTY_MSC)) { comboStr += " OMN/SPT"; } else { comboStr += " TOMN/SPT"; }
                         dataStr += ":" + obj.displayUnitPrice();
                     }
                     int index = ui->cancelCombo->findText(QString::fromStdString(comboStr));
@@ -199,7 +199,7 @@ void MetaDExCancelDialog::UpdateCancelCombo()
 
 /**
  * Refreshes the UI fields with the most current data - called when the
- * refreshOmniState() signal is received.
+ * refreshTokenState() signal is received.
  */
 void MetaDExCancelDialog::RefreshUI()
 {
@@ -340,7 +340,7 @@ void MetaDExCancelDialog::SendCancelTransaction()
         sellToken += " (#" + sellId + ")";
         if(desiredToken.size()>30) desiredToken=desiredToken.substr(0,30)+"...";
         desiredToken += " (#" + desiredId + ")";
-        if ((propertyIdForSale == OMNI_PROPERTY_MSC) || (propertyIdForSale == OMNI_PROPERTY_TMSC)) { // "buy" order
+        if ((propertyIdForSale == TOKEN_PROPERTY_MSC) || (propertyIdForSale == TOKEN_PROPERTY_TMSC)) { // "buy" order
             messageStr += "buying " + desiredToken;
         } else {
             messageStr += "selling " + sellToken;
@@ -349,7 +349,7 @@ void MetaDExCancelDialog::SendCancelTransaction()
              std::string displayPrice = StripTrailingZeros(priceStr);
              if (displayPrice.size()>24) displayPrice = displayPrice.substr(0,24)+"...";
              messageStr += " priced at " + displayPrice;
-             if ((propertyIdForSale == OMNI_PROPERTY_MSC) || (propertyIdDesired == OMNI_PROPERTY_MSC)) { messageStr += " MSC/SPT"; } else { messageStr += " TMSC/SPT"; }
+             if ((propertyIdForSale == TOKEN_PROPERTY_MSC) || (propertyIdDesired == TOKEN_PROPERTY_MSC)) { messageStr += " MSC/SPT"; } else { messageStr += " TMSC/SPT"; }
         }
     } else {
         if (isMainEcosystemProperty(ecosystem)) messageStr += "in the main ecosystem";

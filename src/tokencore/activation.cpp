@@ -6,10 +6,10 @@
  * Note main functions 'ActivateFeature()' and 'DeactivateFeature()' are consensus breaking and reside in rules.cpp
  */
 
-#include "omnicore/activation.h"
+#include "tokencore/activation.h"
 
-#include "omnicore/log.h"
-#include "omnicore/version.h"
+#include "tokencore/log.h"
+#include "tokencore/version.h"
 
 #include "main.h"
 #include "guiinterface.h"
@@ -52,7 +52,7 @@ static void PendingActivationCompleted(const FeatureActivation& activation)
 {
     DeletePendingActivation(activation.featureId);
     vecCompletedActivations.push_back(activation);
-    uiInterface.OmniStateChanged();
+    uiInterface.TokenStateChanged();
 }
 
 /**
@@ -72,7 +72,7 @@ void AddPendingActivation(uint16_t featureId, int activationBlock, uint32_t minC
 
     vecPendingActivations.push_back(featureActivation);
 
-    uiInterface.OmniStateChanged();
+    uiInterface.TokenStateChanged();
 }
 
 /**
@@ -86,7 +86,7 @@ void CheckLiveActivations(int blockHeight)
         if (liveActivation.activationBlock > blockHeight) {
             continue;
         }
-        if (OMNICORE_VERSION < liveActivation.minClientVersion) {
+        if (TOKENCORE_VERSION < liveActivation.minClientVersion) {
             std::string msgText = strprintf("Shutting down due to unsupported feature activation (%d: %s)", liveActivation.featureId, liveActivation.featureName);
             PrintToLog(msgText);
             PrintToConsole(msgText);
@@ -126,16 +126,16 @@ void ClearActivations()
 {
     vecPendingActivations.clear();
     vecCompletedActivations.clear();
-    uiInterface.OmniStateChanged();
+    uiInterface.TokenStateChanged();
 }
 
 /**
- * Determines whether the sender is an authorized source for Omni Core feature activation.
+ * Determines whether the sender is an authorized source for Token Core feature activation.
  *
- * The option "-omniactivationallowsender=source" can be used to whitelist additional sources,
- * and the option "-omniactivationignoresender=source" can be used to ignore a source.
+ * The option "-tokenactivationallowsender=source" can be used to whitelist additional sources,
+ * and the option "-tokenactivationignoresender=source" can be used to ignore a source.
  *
- * To consider any activation as authorized, "-omniactivationallowsender=any" can be used. This
+ * To consider any activation as authorized, "-tokenactivationallowsender=any" can be used. This
  * should only be done for testing purposes!
  */
 bool CheckActivationAuthorization(const std::string& sender)
@@ -148,11 +148,11 @@ bool CheckActivationAuthorization(const std::string& sender)
     "scriptPubKey": "a91498a2d17e08ac677dc220b92e0b79406f2f441c2487",
     "sigsrequired": 4,
     "addresses": [
-      "1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz", // Zathras - zathras@omni.foundation - Project maintainer, developer
+      "1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz", // Zathras - zathras@token.foundation - Project maintainer, developer
       "1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd", // dexx - dexx@bitwatch.co - Project maintainer, developer
-      "1oyvGmABkeFRUECn2t8DEZPes6F7Gsc9T", // J.R. Willett - jr@omni.foundation - Founder and board member
-      "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@omni.foundation - Technologist and board member
-      "16oDZYCspsczfgKXVj3xyvsxH21NpEj94F" // Adam Chamely - adam@omni.foundation - Project maintainer, developer
+      "1oyvGmABkeFRUECn2t8DEZPes6F7Gsc9T", // J.R. Willett - jr@token.foundation - Founder and board member
+      "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@token.foundation - Technologist and board member
+      "16oDZYCspsczfgKXVj3xyvsxH21NpEj94F" // Adam Chamely - adam@token.foundation - Project maintainer, developer
     ],
     */
     whitelisted.insert("3Fc5gWzEQh1YGeqVXH6E4GDEGgbZJREJQ3");
@@ -165,8 +165,8 @@ bool CheckActivationAuthorization(const std::string& sender)
       "hex": "5321036a4caa95ec1d55f1b75a8b6c7345f22b4efc9e25d38ab058ef7d6f60b3b744f74104b7a3d7f7ccdf211dfd180815b87332b4773cc40bff72a4d0bb60f3a85409d19f99709331c6b11c976fe274a86d789a1cf2b3b0be29fe5fc55c93ad9e08459c4f4104e65b098558d637cfcf3194214637f8838338b141259b698d2a027b069d405b6502ad4a4e9aa75094fa431a6c9af580f5917834a6d4cec946054df33194b2967853ae",
       "addresses": [
         "1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd", // dexx - dexx@bitwatch.co - Project maintainer, developer
-        "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@omni.foundation - Technologist and board member
-        "16oDZYCspsczfgKXVj3xyvsxH21NpEj94F"  // Adam Chamely - adam@omni.foundation - Project maintainer, developer
+        "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@token.foundation - Technologist and board member
+        "16oDZYCspsczfgKXVj3xyvsxH21NpEj94F"  // Adam Chamely - adam@token.foundation - Project maintainer, developer
       ],
       "sigsrequired": 3,
     }
@@ -174,11 +174,11 @@ bool CheckActivationAuthorization(const std::string& sender)
     whitelisted.insert("33jx18123xJS59hnHwCgsr6zvYPfiCussh");
 
     // Testnet / Regtest
-    // use -omniactivationallowsender for testing
+    // use -tokenactivationallowsender for testing
 
     // Add manually whitelisted sources
-    if (mapArgs.count("-omniactivationallowsender")) {
-        const std::vector<std::string>& sources = mapMultiArgs["-omniactivationallowsender"];
+    if (mapArgs.count("-tokenactivationallowsender")) {
+        const std::vector<std::string>& sources = mapMultiArgs["-tokenactivationallowsender"];
 
         for (std::vector<std::string>::const_iterator it = sources.begin(); it != sources.end(); ++it) {
             whitelisted.insert(*it);
@@ -186,8 +186,8 @@ bool CheckActivationAuthorization(const std::string& sender)
     }
 
     // Remove manually ignored sources
-    if (mapArgs.count("-omniactivationignoresender")) {
-        const std::vector<std::string>& sources = mapMultiArgs["-omniactivationignoresender"];
+    if (mapArgs.count("-tokenactivationignoresender")) {
+        const std::vector<std::string>& sources = mapMultiArgs["-tokenactivationignoresender"];
 
         for (std::vector<std::string>::const_iterator it = sources.begin(); it != sources.end(); ++it) {
             whitelisted.erase(*it);
@@ -203,7 +203,7 @@ bool CheckActivationAuthorization(const std::string& sender)
 /**
  * Determines whether the sender is an authorized source to deactivate features.
  *
- * The custom options "-omniactivationallowsender=source" and "-omniactivationignoresender=source" are also applied to deactivations.
+ * The custom options "-tokenactivationallowsender=source" and "-tokenactivationignoresender=source" are also applied to deactivations.
  */
 bool CheckDeactivationAuthorization(const std::string& sender)
 {
@@ -215,21 +215,21 @@ bool CheckDeactivationAuthorization(const std::string& sender)
     "script" : "multisig",
     "sigsrequired" : 3,
     "addresses" : [
-      "1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz", // Zathras - zathras@omni.foundation - Project maintainer, developer
+      "1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz", // Zathras - zathras@token.foundation - Project maintainer, developer
       "1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd", // dexx - dexx@bitwatch.co - Project maintainer, developer
-      "1oyvGmABkeFRUECn2t8DEZPes6F7Gsc9T", // J.R. Willett - jr@omni.foundation - Founder and Board Member
-      "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@omni.foundation - Technologist and Board Member
-      "16oDZYCspsczfgKXVj3xyvsxH21NpEj94F" // Adam Chamely - adam@omni.foundation - Project maintainer, developer
+      "1oyvGmABkeFRUECn2t8DEZPes6F7Gsc9T", // J.R. Willett - jr@token.foundation - Founder and Board Member
+      "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@token.foundation - Technologist and Board Member
+      "16oDZYCspsczfgKXVj3xyvsxH21NpEj94F" // Adam Chamely - adam@token.foundation - Project maintainer, developer
     ],
     */
     whitelisted.insert("34kwkVRSvFVEoUwcQSgpQ4ZUasuZ54DJLD");
 
     // Testnet / Regtest
-    // use -omniactivationallowsender for testing
+    // use -tokenactivationallowsender for testing
 
     // Add manually whitelisted sources - custom sources affect both activation and deactivation
-    if (mapArgs.count("-omniactivationallowsender")) {
-        const std::vector<std::string>& sources = mapMultiArgs["-omniactivationallowsender"];
+    if (mapArgs.count("-tokenactivationallowsender")) {
+        const std::vector<std::string>& sources = mapMultiArgs["-tokenactivationallowsender"];
 
         for (std::vector<std::string>::const_iterator it = sources.begin(); it != sources.end(); ++it) {
             whitelisted.insert(*it);
@@ -237,8 +237,8 @@ bool CheckDeactivationAuthorization(const std::string& sender)
     }
 
     // Remove manually ignored sources - custom sources affect both activation and deactivation
-    if (mapArgs.count("-omniactivationignoresender")) {
-        const std::vector<std::string>& sources = mapMultiArgs["-omniactivationignoresender"];
+    if (mapArgs.count("-tokenactivationignoresender")) {
+        const std::vector<std::string>& sources = mapMultiArgs["-tokenactivationignoresender"];
 
         for (std::vector<std::string>::const_iterator it = sources.begin(); it != sources.end(); ++it) {
             whitelisted.erase(*it);

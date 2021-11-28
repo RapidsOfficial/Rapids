@@ -1,7 +1,7 @@
-#ifndef OMNICORE_DBTXLIST_H
-#define OMNICORE_DBTXLIST_H
+#ifndef TOKENCORE_DBTXLIST_H
+#define TOKENCORE_DBTXLIST_H
 
-#include "omnicore/dbbase.h"
+#include "tokencore/dbbase.h"
 
 #include "uint256.h"
 
@@ -36,8 +36,8 @@ public:
     bool getSendAllDetails(const uint256& txid, int subSend, uint32_t& propertyId, int64_t& amount);
     int getMPTransactionCountTotal();
     int getMPTransactionCountBlock(int block);
-    /** Returns a list of all Omni transactions in the given block range. */
-    int GetOmniTxsInBlockRange(int blockFirst, int blockLast, std::set<uint256>& retTxs);
+    /** Returns a list of all Token transactions in the given block range. */
+    int GetTokenTxsInBlockRange(int blockFirst, int blockLast, std::set<uint256>& retTxs);
 
     int getDBVersion();
     int setDBVersion();
@@ -65,4 +65,4 @@ namespace mastercore
 }
 
 
-#endif // OMNICORE_DBTXLIST_H
+#endif // TOKENCORE_DBTXLIST_H

@@ -5,27 +5,27 @@
 #include "txhistorydialog.h"
 #include "ui_txhistorydialog.h"
 
-#include "omnicore_qtutils.h"
+#include "tokencore_qtutils.h"
 
 #include "clientmodel.h"
 #include "guiutil.h"
 #include "walletmodel.h"
 #include "platformstyle.h"
 
-#include "omnicore/dbspinfo.h"
-#include "omnicore/dbstolist.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/pending.h"
-#include "omnicore/rpc.h"
-#include "omnicore/rpctxobject.h"
-#include "omnicore/sp.h"
-#include "omnicore/tx.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/walletcache.h"
-#include "omnicore/walletfetchtxs.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/dbstolist.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/pending.h"
+#include "tokencore/rpc.h"
+#include "tokencore/rpctxobject.h"
+#include "tokencore/sp.h"
+#include "tokencore/tx.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/walletcache.h"
+#include "tokencore/walletfetchtxs.h"
+#include "tokencore/walletutils.h"
 
 #include "init.h"
 #include "main.h"
@@ -171,9 +171,9 @@ void TXHistoryDialog::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
     if (model != NULL) {
-        connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(UpdateHistory()));
+        connect(model, SIGNAL(refreshTokenBalance()), this, SLOT(UpdateHistory()));
         connect(model, SIGNAL(numBlocksChanged(int)), this, SLOT(UpdateHistory()));
-        connect(model, SIGNAL(reinitOmniState()), this, SLOT(ReinitTXHistoryTable()));
+        connect(model, SIGNAL(reinitTokenState()), this, SLOT(ReinitTXHistoryTable()));
     }
 }
 
@@ -198,8 +198,8 @@ int TXHistoryDialog::PopulateHistoryMap()
 
     int64_t nProcessed = 0; // counter for how many transactions we've added to history this time
 
-    // obtain a sorted list of Omni layer wallet transactions (including STO receipts and pending) - default last 65535
-    std::map<std::string,uint256> walletTransactions = FetchWalletOmniTransactions(GetArg("-omniuiwalletscope", 65535L));
+    // obtain a sorted list of Token layer wallet transactions (including STO receipts and pending) - default last 65535
+    std::map<std::string,uint256> walletTransactions = FetchWalletTokenTransactions(GetArg("-tokenuiwalletscope", 65535L));
 
     // reverse iterate over (now ordered) transactions and populate history map for each one
     for (std::map<std::string,uint256>::reverse_iterator it = walletTransactions.rbegin(); it != walletTransactions.rend(); it++) {
@@ -215,7 +215,7 @@ int TXHistoryDialog::PopulateHistoryMap()
                 if (pending_it != my_pending.end()) continue; // transaction is still pending, do nothing
             }
 
-            // pending transaction has confirmed, remove temp pending object from map and allow it to be readded as an Omni transaction
+            // pending transaction has confirmed, remove temp pending object from map and allow it to be readded as an Token transaction
             txHistoryMap.erase(hIter);
             ui->txHistoryTable->setSortingEnabled(false); // disable sorting temporarily while we update the table (leaving enabled gives unexpected results)
             QAbstractItemModel* historyAbstractModel = ui->txHistoryTable->model(); // get a model to work with
@@ -304,7 +304,7 @@ int TXHistoryDialog::PopulateHistoryMap()
             continue;
         }
 
-        // handle Omni transaction
+        // handle Token transaction
         if (0 != parseRC) continue;
         if (!mp_obj.interpret_Transaction()) continue;
         int64_t amount = mp_obj.getAmount();

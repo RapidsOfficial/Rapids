@@ -1,10 +1,10 @@
-#include "omnicore/pending.h"
+#include "tokencore/pending.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/sp.h"
-#include "omnicore/walletcache.h"
-#include "omnicore/mdex.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/sp.h"
+#include "tokencore/walletcache.h"
+#include "tokencore/mdex.h"
 
 #include "amount.h"
 #include "main.h"
@@ -50,7 +50,7 @@ void PendingAdd(const uint256& txid, const std::string& sendingAddress, uint16_t
     }
     // after adding a transaction to pending the available balance may now be reduced, refresh wallet totals
     CheckWalletUpdate(true); // force an update since some outbound pending (eg MetaDEx cancel) may not change balances
-    uiInterface.OmniPendingChanged(true);
+    uiInterface.TokenPendingChanged(true);
 }
 
 /**
@@ -71,7 +71,7 @@ void PendingDelete(const uint256& txid)
         my_pending.erase(it);
 
         // if pending map is now empty following deletion, trigger a status change
-        if (my_pending.empty()) uiInterface.OmniPendingChanged(false);
+        if (my_pending.empty()) uiInterface.TokenPendingChanged(false);
     }
 }
 

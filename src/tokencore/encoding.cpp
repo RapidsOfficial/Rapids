@@ -1,8 +1,8 @@
-#include "omnicore/encoding.h"
+#include "tokencore/encoding.h"
 
-#include "omnicore/omnicore.h"
-#include "omnicore/script.h"
-#include "omnicore/parsing.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/script.h"
+#include "tokencore/parsing.h"
 
 #include "base58.h"
 #include "pubkey.h"
@@ -22,7 +22,7 @@
  * @see The class B transaction encoding specification:
  * https://github.com/mastercoin-MSC/spec#class-b-transactions-also-known-as-the-multisig-method
  */
-bool OmniCore_Encode_ClassB(const std::string& senderAddress, const CPubKey& redeemingPubKey,
+bool TokenCore_Encode_ClassB(const std::string& senderAddress, const CPubKey& redeemingPubKey,
         const std::vector<unsigned char>& vchPayload, std::vector<std::pair<CScript, int64_t> >& vecOutputs)
 {
     unsigned int nRemainingBytes = vchPayload.size();
@@ -80,7 +80,7 @@ bool OmniCore_Encode_ClassB(const std::string& senderAddress, const CPubKey& red
  * The request is rejected, if the size of the payload with marker is larger than
  * the allowed data carrier size ("-datacarriersize=n").
  */
-bool OmniCore_Encode_ClassC(const std::vector<unsigned char>& vchPayload,
+bool TokenCore_Encode_ClassC(const std::vector<unsigned char>& vchPayload,
         std::vector<std::pair <CScript, int64_t> >& vecOutputs)
 {
     std::vector<unsigned char> vchData;

@@ -1,11 +1,11 @@
-#include "omnicore/test/utils_tx.h"
+#include "tokencore/test/utils_tx.h"
 
-#include "omnicore/createpayload.h"
-#include "omnicore/encoding.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/script.h"
-#include "omnicore/tx.h"
+#include "tokencore/createpayload.h"
+#include "tokencore/encoding.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/script.h"
+#include "tokencore/tx.h"
 
 #include "base58.h"
 #include "coins.h"
@@ -22,7 +22,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_sender_firstin_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_sender_firstin_tests, BasicTestingSetup)
 
 /** Creates a dummy class C transaction with the given inputs. */
 static CTransaction TxClassC(const std::vector<CTxOut>& txInputs)
@@ -57,7 +57,7 @@ static CTransaction TxClassC(const std::vector<CTxOut>& txInputs)
     // Outputs:
     std::vector<std::pair<CScript, int64_t> > txOutputs;
     std::vector<unsigned char> vchPayload = CreatePayload_SimpleSend(1, 1000);
-    BOOST_CHECK(OmniCore_Encode_ClassC(vchPayload, txOutputs));
+    BOOST_CHECK(TokenCore_Encode_ClassC(vchPayload, txOutputs));
 
     for (std::vector<std::pair<CScript, int64_t> >::const_iterator it = txOutputs.begin(); it != txOutputs.end(); ++it)
     {

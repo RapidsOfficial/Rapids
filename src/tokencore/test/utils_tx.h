@@ -1,5 +1,5 @@
-#ifndef OMNICORE_TEST_UTILS_TX_H
-#define OMNICORE_TEST_UTILS_TX_H
+#ifndef TOKENCORE_TEST_UTILS_TX_H
+#define TOKENCORE_TEST_UTILS_TX_H
 
 class CTxOut;
 
@@ -20,4 +20,4 @@ CTxOut OpReturn_MultiSimpleSend();
 CTxOut NonStandardOutput();
 
 
-#endif // OMNICORE_TEST_UTILS_TX_H
+#endif // TOKENCORE_TEST_UTILS_TX_H

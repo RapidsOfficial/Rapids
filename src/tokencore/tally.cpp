@@ -1,7 +1,7 @@
-#include "omnicore/tally.h"
+#include "tokencore/tally.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
 
 #include <stdint.h>
 #include <map>

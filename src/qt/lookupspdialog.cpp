@@ -7,9 +7,9 @@
 
 #include "guiutil.h"
 
-#include "omnicore/dbspinfo.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/sp.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/sp.h"
 
 #include "base58.h"
 

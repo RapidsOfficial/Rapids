@@ -1,10 +1,10 @@
-#include "omnicore/walletutils.h"
+#include "tokencore/walletutils.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/script.h"
-#include "omnicore/utilsbitcoin.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/script.h"
+#include "tokencore/utilsbitcoin.h"
 
 #include "amount.h"
 #include "base58.h"

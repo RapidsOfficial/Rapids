@@ -5,7 +5,7 @@
 #include "tradehistorydialog.h"
 #include "ui_tradehistorydialog.h"
 
-#include "omnicore_qtutils.h"
+#include "tokencore_qtutils.h"
 
 #include "guiutil.h"
 // #include "ui_interface.h"
@@ -13,20 +13,20 @@
 #include "clientmodel.h"
 #include "platformstyle.h"
 
-#include "omnicore/dbtradelist.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/mdex.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/pending.h"
-#include "omnicore/rpc.h"
-#include "omnicore/rpctxobject.h"
-#include "omnicore/sp.h"
-#include "omnicore/tx.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/walletcache.h"
-#include "omnicore/walletfetchtxs.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/dbtradelist.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/mdex.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/pending.h"
+#include "tokencore/rpc.h"
+#include "tokencore/rpctxobject.h"
+#include "tokencore/sp.h"
+#include "tokencore/tx.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/walletcache.h"
+#include "tokencore/walletfetchtxs.h"
+#include "tokencore/walletutils.h"
 
 #include "amount.h"
 #include "init.h"
@@ -204,12 +204,12 @@ void TradeHistoryDialog::UpdateTradeHistoryTable(bool forceUpdate)
             QTableWidgetItem *amountInCell = new QTableWidgetItem(QString::fromStdString(objTH.amountIn));
             QTableWidgetItem *txidCell = new QTableWidgetItem(QString::fromStdString(txid.GetHex()));
             QTableWidgetItem *iconCell = new QTableWidgetItem;
-            QIcon ic = QIcon(":/icons/omni_meta_pending");
-            if (objTH.status == "Cancelled") ic =QIcon(":/icons/omni_meta_cancelled");
-            if (objTH.status == "Part Cancel") ic = QIcon(":/icons/omni_meta_partcancelled");
-            if (objTH.status == "Filled") ic = QIcon(":/icons/omni_meta_filled");
-            if (objTH.status == "Open") ic = QIcon(":/icons/omni_meta_open");
-            if (objTH.status == "Part Filled") ic = QIcon(":/icons/omni_meta_partfilled");
+            QIcon ic = QIcon(":/icons/token_meta_pending");
+            if (objTH.status == "Cancelled") ic =QIcon(":/icons/token_meta_cancelled");
+            if (objTH.status == "Part Cancel") ic = QIcon(":/icons/token_meta_partcancelled");
+            if (objTH.status == "Filled") ic = QIcon(":/icons/token_meta_filled");
+            if (objTH.status == "Open") ic = QIcon(":/icons/token_meta_open");
+            if (objTH.status == "Part Filled") ic = QIcon(":/icons/token_meta_partfilled");
             if (!objTH.valid) {
                 ic = QIcon(":/icons/transaction_conflicted");
                 objTH.status = "Invalid";
@@ -302,14 +302,14 @@ int TradeHistoryDialog::PopulateTradeHistoryMap()
     // ### END PENDING TRANSACTIONS PROCESSING ###
 
     // ### START WALLET TRANSACTIONS PROCESSING ###
-    // obtain a sorted list of Omni layer wallet transactions (including STO receipts and pending) - default last 65535
-    std::map<std::string,uint256> walletTransactions = FetchWalletOmniTransactions(GetArg("-omniuiwalletscope", 65535L));
+    // obtain a sorted list of Token layer wallet transactions (including STO receipts and pending) - default last 65535
+    std::map<std::string,uint256> walletTransactions = FetchWalletTokenTransactions(GetArg("-tokenuiwalletscope", 65535L));
 
     // reverse iterate over (now ordered) transactions and populate history map for each one
     for (std::map<std::string,uint256>::reverse_iterator it = walletTransactions.rbegin(); it != walletTransactions.rend(); it++) {
         uint256 hash = it->second;
 
-        // use levelDB to perform a fast check on whether it's a bitcoin or Omni tx and whether it's a trade
+        // use levelDB to perform a fast check on whether it's a bitcoin or Token tx and whether it's a trade
         std::string tempStrValue;
         {
             LOCK(cs_tally);
@@ -538,8 +538,8 @@ void TradeHistoryDialog::setClientModel(ClientModel *model)
 {
     this->clientModel = model;
     if (model != NULL) {
-        connect(model, SIGNAL(refreshOmniBalance()), this, SLOT(UpdateTradeHistoryTable()));
-        connect(model, SIGNAL(reinitOmniState()), this, SLOT(ReinitTradeHistoryTable()));
+        connect(model, SIGNAL(refreshTokenBalance()), this, SLOT(UpdateTradeHistoryTable()));
+        connect(model, SIGNAL(reinitTokenState()), this, SLOT(ReinitTradeHistoryTable()));
     }
 }
 

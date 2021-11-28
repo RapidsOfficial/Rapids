@@ -1,5 +1,5 @@
-#ifndef OMNICORE_OMNICORE_H
-#define OMNICORE_OMNICORE_H
+#ifndef TOKENCORE_TOKENCORE_H
+#define TOKENCORE_TOKENCORE_H
 
 class CBlockIndex;
 class CCoinsView;
@@ -7,8 +7,8 @@ class CCoinsViewCache;
 class CTransaction;
 class Coin;
 
-#include "omnicore/log.h"
-#include "omnicore/tally.h"
+#include "tokencore/log.h"
+#include "tokencore/tally.h"
 
 #include <script/standard.h>
 
@@ -41,7 +41,7 @@ int const STORE_EVERY_N_BLOCK = 10000;
 // maximum size of string fields
 #define SP_STRING_FIELD_LEN 256
 
-// Omni Layer Transaction (Packet) Version
+// Token Layer Transaction (Packet) Version
 #define MP_TX_PKT_V0  0
 #define MP_TX_PKT_V1  1
 
@@ -76,9 +76,9 @@ enum TransactionType {
   TOKEN_TYPE_DISABLE_FREEZING           = 72,
   TOKEN_TYPE_FREEZE_PROPERTY_TOKENS     = 185,
   TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS   = 186,
-  OMNICORE_MESSAGE_TYPE_DEACTIVATION  = 65533,
-  OMNICORE_MESSAGE_TYPE_ACTIVATION    = 65534,
-  OMNICORE_MESSAGE_TYPE_ALERT         = 65535
+  TOKENCORE_MESSAGE_TYPE_DEACTIVATION  = 65533,
+  TOKENCORE_MESSAGE_TYPE_ACTIVATION    = 65534,
+  TOKENCORE_MESSAGE_TYPE_ALERT         = 65535
 };
 
 #define TOKEN_PROPERTY_TYPE_INDIVISIBLE             1
@@ -106,9 +106,9 @@ enum TransactionType {
 #define PKT_ERROR_TOKENS      (-82000)
 #define PKT_ERROR_SEND_ALL    (-83000)
 
-#define OMNI_PROPERTY_BTC   0
-#define OMNI_PROPERTY_MSC   1
-#define OMNI_PROPERTY_TMSC  2
+#define TOKEN_PROPERTY_BTC   0
+#define TOKEN_PROPERTY_MSC   1
+#define TOKEN_PROPERTY_TMSC  2
 
 /** Number formating related functions. */
 std::string FormatDivisibleMP(int64_t amount, bool fSign = false);
@@ -143,10 +143,10 @@ int64_t GetAvailableTokenBalance(const std::string& address, uint32_t propertyId
 int64_t GetReservedTokenBalance(const std::string& address, uint32_t propertyId);
 int64_t GetFrozenTokenBalance(const std::string& address, uint32_t propertyId);
 
-/** Global handler to initialize Omni Core. */
+/** Global handler to initialize Token Core. */
 int mastercore_init();
 
-/** Global handler to shut down Omni Core. */
+/** Global handler to shut down Token Core. */
 int mastercore_shutdown();
 
 /** Block and transaction handlers. */
@@ -221,4 +221,4 @@ void PrintFreezeState();
 
 }
 
-#endif // OMNICORE_OMNICORE_H
+#endif // TOKENCORE_TOKENCORE_H

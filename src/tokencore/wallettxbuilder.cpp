@@ -1,12 +1,12 @@
-#include "omnicore/wallettxbuilder.h"
+#include "tokencore/wallettxbuilder.h"
 
-#include "omnicore/encoding.h"
-#include "omnicore/errors.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/script.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/encoding.h"
+#include "tokencore/errors.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/script.h"
+#include "tokencore/walletutils.h"
 
 #include "amount.h"
 #include "base58.h"
@@ -53,8 +53,8 @@ int WalletTxBuilder(
     if (pwalletMain == NULL) return MP_ERR_WALLET_ACCESS;
 
     // Determine the class to send the transaction via - default is Class C
-    int omniTxClass = OMNI_CLASS_C;
-    if (!UseEncodingClassC(payload.size())) omniTxClass = OMNI_CLASS_B;
+    int tokenTxClass = TOKEN_CLASS_C;
+    if (!UseEncodingClassC(payload.size())) tokenTxClass = TOKEN_CLASS_B;
 
     // Prepare the transaction - first setup some vars
     CCoinControl coinControl;
@@ -72,17 +72,17 @@ int WalletTxBuilder(
     if (0 > SelectCoins(senderAddress, coinControl, referenceAmount)) { return MP_INPUTS_INVALID; }
 
     // Encode the data outputs
-    switch(omniTxClass) {
-        case OMNI_CLASS_B: { // declaring vars in a switch here so use an expicit code block
+    switch(tokenTxClass) {
+        case TOKEN_CLASS_B: { // declaring vars in a switch here so use an expicit code block
             CPubKey redeemingPubKey;
             const std::string& sAddress = redemptionAddress.empty() ? senderAddress : redemptionAddress;
             if (!AddressToPubKey(sAddress, redeemingPubKey)) {
                 return MP_REDEMP_BAD_VALIDATION;
             }
-            if (!OmniCore_Encode_ClassB(senderAddress,redeemingPubKey,payload,vecSend)) { return MP_ENCODING_ERROR; }
+            if (!TokenCore_Encode_ClassB(senderAddress,redeemingPubKey,payload,vecSend)) { return MP_ENCODING_ERROR; }
         break; }
-        case OMNI_CLASS_C:
-            if(!OmniCore_Encode_ClassC(payload,vecSend)) { return MP_ENCODING_ERROR; }
+        case TOKEN_CLASS_C:
+            if(!TokenCore_Encode_ClassC(payload,vecSend)) { return MP_ENCODING_ERROR; }
         break;
     }
 
@@ -208,7 +208,7 @@ int CreateFundedTransaction(
     
     // add payload output
     std::vector<std::pair<CScript, int64_t> > vecSend;
-    if (!OmniCore_Encode_ClassC(payload, vecSend)) {
+    if (!TokenCore_Encode_ClassC(payload, vecSend)) {
         return MP_ENCODING_ERROR;
     }
 

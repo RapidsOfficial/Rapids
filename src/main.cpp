@@ -238,7 +238,7 @@ std::set<int> setDirtyFileInfo;
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Omni Core notification handlers
+// Token Core notification handlers
 //
 
 // TODO: replace handlers with signals
@@ -2919,8 +2919,8 @@ bool static DisconnectTip(CValidationState& state)
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev);
 
-    //! Omni Core: begin block disconnect notification
-    // // LogPrint("handler", "Omni Core handler: block disconnect begin [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
+    //! Token Core: begin block disconnect notification
+    // // LogPrint("handler", "Token Core handler: block disconnect begin [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
     mastercore_handler_disc_begin(pindexDelete->nHeight, pindexDelete);
 
     // Let wallets know transactions went from 1-confirmed to
@@ -2930,8 +2930,8 @@ bool static DisconnectTip(CValidationState& state)
         TryToAddToMarkerCache(tx);
     }
 
-    //! Omni Core: end of block disconnect notification
-    // // LogPrint("handler", "Omni Core handler: block disconnect end [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
+    //! Token Core: end of block disconnect notification
+    // // LogPrint("handler", "Token Core handler: block disconnect end [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
     mastercore_handler_disc_end(pindexDelete->nHeight, pindexDelete);
 
     return true;
@@ -2996,8 +2996,8 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     nTimeChainState += nTime5 - nTime4;
     LogPrint(BCLog::BENCH, "  - Writing chainstate: %.2fms [%.2fs]\n", (nTime5 - nTime4) * 0.001, nTimeChainState * 0.000001);
 
-    //! Omni Core: begin block connect notification
-    // // LogPrint("handler", "Omni Core handler: block connect begin [height: %d]\n", GetHeight());
+    //! Token Core: begin block connect notification
+    // // LogPrint("handler", "Token Core handler: block connect begin [height: %d]\n", GetHeight());
     mastercore_handler_block_begin(pindexNew->nHeight, pindexNew);
 
     // Remove conflicting transactions from the mempool.
@@ -3228,9 +3228,9 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
     // sanely for performance or correctness!
     AssertLockNotHeld(cs_main);
 
-    //! Omni Core: transaction position within the block
+    //! Token Core: transaction position within the block
     unsigned int nTxIdx = 0;
-    //! Omni Core: number of meta transactions found
+    //! Token Core: number of meta transactions found
     unsigned int nNumMetaTxs = 0;
 
     CBlockIndex* pindexNewTip = nullptr;
@@ -3276,14 +3276,14 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
             for(unsigned int i = 0; i < txChanged.size(); i++) {
                 GetMainSignals().SyncTransaction(std::get<0>(txChanged[i]), std::get<1>(txChanged[i]), std::get<2>(txChanged[i]));
 
-                //! Omni Core: new confirmed transaction notification
-                // // LogPrint("handler", "Omni Core handler: new confirmed transaction [height: %d, idx: %u]\n", GetHeight(), nTxIdx);
+                //! Token Core: new confirmed transaction notification
+                // // LogPrint("handler", "Token Core handler: new confirmed transaction [height: %d, idx: %u]\n", GetHeight(), nTxIdx);
                 if (mastercore_handler_tx(std::get<0>(txChanged[i]), pindexNewTip->nHeight, nTxIdx++, pindexNewTip)) ++nNumMetaTxs;
                 RemoveFromMarkerCache(std::get<0>(txChanged[i]));
             }
 
-            //! Omni Core: end of block connect notification
-            // LogPrint("handler", "Omni Core handler: block connect end [new height: %d, found: %u txs]\n", GetHeight(), nNumMetaTxs);
+            //! Token Core: end of block connect notification
+            // LogPrint("handler", "Token Core handler: block connect end [new height: %d, found: %u txs]\n", GetHeight(), nNumMetaTxs);
             mastercore_handler_block_end(pindexNewTip->nHeight, pindexNewTip, nNumMetaTxs);
 
             break;

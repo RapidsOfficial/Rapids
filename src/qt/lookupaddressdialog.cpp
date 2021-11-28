@@ -7,9 +7,9 @@
 
 #include "guiutil.h"
 
-#include "omnicore/omnicore.h"
-#include "omnicore/sp.h"
-#include "omnicore/walletutils.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/sp.h"
+#include "tokencore/walletutils.h"
 
 #include "base58.h"
 
@@ -152,7 +152,7 @@ void LookupAddressDialog::searchAddress()
         if ((searchText.substr(0,1) == "1") || (searchText.substr(0,1) == "m") || (searchText.substr(0,1) == "n")) ui->addressTypeLabel->setText("Public Key Hash");
         if ((searchText.substr(0,1) == "2") || (searchText.substr(0,1) == "3")) ui->addressTypeLabel->setText("Pay to Script Hash");
         if (IsMyAddress(searchText)) { ui->isMineLabel->setText("Yes"); } else { ui->isMineLabel->setText("No"); }
-        ui->balanceLabel->setText(QString::fromStdString(FormatDivisibleMP(GetAvailableTokenBalance(searchText, 1)) + " OMNI"));
+        ui->balanceLabel->setText(QString::fromStdString(FormatDivisibleMP(GetAvailableTokenBalance(searchText, 1)) + " TOKEN"));
         // QR
         #ifdef USE_QRCODE
         ui->QRCode->setText("");
@@ -243,7 +243,7 @@ void LookupAddressDialog::searchAddress()
                 balances[pItem-1]->setVisible(true);
                 labels[pItem-1]->setText(pName[pItem].c_str());
                 std::string tokenLabel = " SPT";
-                if (pName[pItem]=="Test Omni (#2)") { tokenLabel = " TOMN"; }
+                if (pName[pItem]=="Test Token (#2)") { tokenLabel = " TOMN"; }
                 if (pDivisible[pItem])
                 {
                     balances[pItem-1]->setText(QString::fromStdString(FormatDivisibleMP(pBal[pItem]) + tokenLabel));

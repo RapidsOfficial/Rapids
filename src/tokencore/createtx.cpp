@@ -1,7 +1,7 @@
-#include "omnicore/createtx.h"
+#include "tokencore/createtx.h"
 
-#include "omnicore/encoding.h"
-#include "omnicore/script.h"
+#include "tokencore/encoding.h"
+#include "tokencore/script.h"
 
 #include "base58.h"
 #include "coins.h"
@@ -108,13 +108,13 @@ CMutableTransaction TxBuilder::build()
     return transaction;
 }
 
-/** Creates a new Omni transaction builder. */
+/** Creates a new Token transaction builder. */
 TokenTxBuilder::TokenTxBuilder()
   : TxBuilder()
 {
 }
 
-/** Creates a new Omni transaction builder to extend a transaction. */
+/** Creates a new Token transaction builder to extend a transaction. */
 TokenTxBuilder::TokenTxBuilder(const CMutableTransaction& transactionIn)
   : TxBuilder(transactionIn)
 {
@@ -148,7 +148,7 @@ TokenTxBuilder& TokenTxBuilder::addOpReturn(const std::vector<unsigned char>& da
 {
     std::vector<std::pair<CScript, int64_t> > outputs;
 
-    if (!OmniCore_Encode_ClassC(data, outputs)) {
+    if (!TokenCore_Encode_ClassC(data, outputs)) {
         return *this;
     }
 
@@ -160,7 +160,7 @@ TokenTxBuilder& TokenTxBuilder::addMultisig(const std::vector<unsigned char>& da
 {
     std::vector<std::pair<CScript, int64_t> > outputs;
 
-    if (!OmniCore_Encode_ClassB(seed, pubKey, data, outputs)) {
+    if (!TokenCore_Encode_ClassB(seed, pubKey, data, outputs)) {
         return *this;
     }
 

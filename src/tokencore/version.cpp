@@ -1,4 +1,4 @@
-#include "omnicore/version.h"
+#include "tokencore/version.h"
 
 #include "clientversion.h"
 #include "tinyformat.h"
@@ -9,26 +9,26 @@
 #    include "build.h"
 #endif
 
-#ifdef OMNICORE_VERSION_STATUS
-#    define OMNICORE_VERSION_SUFFIX STRINGIZE(OMNICORE_VERSION_STATUS)
+#ifdef TOKENCORE_VERSION_STATUS
+#    define TOKENCORE_VERSION_SUFFIX STRINGIZE(TOKENCORE_VERSION_STATUS)
 #else
-#    define OMNICORE_VERSION_SUFFIX ""
+#    define TOKENCORE_VERSION_SUFFIX ""
 #endif
 
-//! Returns formatted Omni Core version, e.g. "1.2.0" or "1.3.4.1"
-const std::string OmniCoreVersion()
+//! Returns formatted Token Core version, e.g. "1.2.0" or "1.3.4.1"
+const std::string TokenCoreVersion()
 {
-    if (OMNICORE_VERSION_BUILD) {
+    if (TOKENCORE_VERSION_BUILD) {
         return strprintf("%d.%d.%d.%d",
-                OMNICORE_VERSION_MAJOR,
-                OMNICORE_VERSION_MINOR,
-                OMNICORE_VERSION_PATCH,
-                OMNICORE_VERSION_BUILD);
+                TOKENCORE_VERSION_MAJOR,
+                TOKENCORE_VERSION_MINOR,
+                TOKENCORE_VERSION_PATCH,
+                TOKENCORE_VERSION_BUILD);
     } else {
         return strprintf("%d.%d.%d",
-                OMNICORE_VERSION_MAJOR,
-                OMNICORE_VERSION_MINOR,
-                OMNICORE_VERSION_PATCH);
+                TOKENCORE_VERSION_MAJOR,
+                TOKENCORE_VERSION_MINOR,
+                TOKENCORE_VERSION_PATCH);
     }
 }
 

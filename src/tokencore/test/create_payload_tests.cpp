@@ -1,4 +1,4 @@
-#include "omnicore/createpayload.h"
+#include "tokencore/createpayload.h"
 
 #include "test/test_bitcoin.h"
 #include "utilstrencodings.h"
@@ -9,7 +9,7 @@
 #include <vector>
 #include <string>
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_create_payload_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_create_payload_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(payload_simple_send)
 {
@@ -25,9 +25,9 @@ BOOST_AUTO_TEST_CASE(payload_send_to_owners)
 {
     // Send to owners [type 3, version 0] (same property)
     std::vector<unsigned char> vch = CreatePayload_SendToOwners(
-        static_cast<uint32_t>(1),          // property: OMNI
-        static_cast<int64_t>(100000000),   // amount to transfer: 1.0 OMNI (in willets)
-        static_cast<uint32_t>(1));         // property: OMNI
+        static_cast<uint32_t>(1),          // property: TOKEN
+        static_cast<int64_t>(100000000),   // amount to transfer: 1.0 TOKEN (in willets)
+        static_cast<uint32_t>(1));         // property: TOKEN
 
     BOOST_CHECK_EQUAL(HexStr(vch), "00000003000000010000000005f5e100");
 }
@@ -36,8 +36,8 @@ BOOST_AUTO_TEST_CASE(payload_send_to_owners_v1)
 {
     // Send to owners [type 3, version 1] (cross property)
     std::vector<unsigned char> vch = CreatePayload_SendToOwners(
-        static_cast<uint32_t>(1),          // property: OMNI
-        static_cast<int64_t>(100000000),   // amount to transfer: 1.0 OMNI (in willets)
+        static_cast<uint32_t>(1),          // property: TOKEN
+        static_cast<int64_t>(100000000),   // amount to transfer: 1.0 TOKEN (in willets)
         static_cast<uint32_t>(3));         // property: SP#3
 
     BOOST_CHECK_EQUAL(HexStr(vch), "00010003000000010000000005f5e10000000003");
@@ -427,7 +427,7 @@ BOOST_AUTO_TEST_CASE(payload_unfreeze_tokens)
 
 BOOST_AUTO_TEST_CASE(payload_feature_deactivation)
 {
-    // Omni Core feature activation [type 65533, version 65535]
+    // Token Core feature activation [type 65533, version 65535]
     std::vector<unsigned char> vch = CreatePayload_DeactivateFeature(
         static_cast<uint16_t>(1));        // feature identifier: 1 (OP_RETURN)
 
@@ -436,7 +436,7 @@ BOOST_AUTO_TEST_CASE(payload_feature_deactivation)
 
 BOOST_AUTO_TEST_CASE(payload_feature_activation)
 {
-    // Omni Core feature activation [type 65534, version 65535]
+    // Token Core feature activation [type 65534, version 65535]
     std::vector<unsigned char> vch = CreatePayload_ActivateFeature(
         static_cast<uint16_t>(1),        // feature identifier: 1 (OP_RETURN)
         static_cast<uint32_t>(370000),   // activation block
@@ -445,10 +445,10 @@ BOOST_AUTO_TEST_CASE(payload_feature_activation)
     BOOST_CHECK_EQUAL(HexStr(vch), "fffffffe00010005a550000003e7");
 }
 
-BOOST_AUTO_TEST_CASE(payload_omnicore_alert_block)
+BOOST_AUTO_TEST_CASE(payload_tokencore_alert_block)
 {
-    // Omni Core client notification [type 65535, version 65535]
-    std::vector<unsigned char> vch = CreatePayload_OmniCoreAlert(
+    // Token Core client notification [type 65535, version 65535]
+    std::vector<unsigned char> vch = CreatePayload_TokenCoreAlert(
         static_cast<int32_t>(1),            // alert target: by block number
         static_cast<uint64_t>(300000),      // expiry value: 300000
         static_cast<std::string>("test"));  // alert message: test
@@ -456,10 +456,10 @@ BOOST_AUTO_TEST_CASE(payload_omnicore_alert_block)
     BOOST_CHECK_EQUAL(HexStr(vch), "ffffffff0001000493e07465737400");
 }
 
-BOOST_AUTO_TEST_CASE(payload_omnicore_alert_blockexpiry)
+BOOST_AUTO_TEST_CASE(payload_tokencore_alert_blockexpiry)
 {
-    // Omni Core client notification [type 65535, version 65535]
-    std::vector<unsigned char> vch = CreatePayload_OmniCoreAlert(
+    // Token Core client notification [type 65535, version 65535]
+    std::vector<unsigned char> vch = CreatePayload_TokenCoreAlert(
         static_cast<int32_t>(2),            // alert target: by block time
         static_cast<uint64_t>(1439528630),  // expiry value: 1439528630
         static_cast<std::string>("test"));  // alert message: test
@@ -467,10 +467,10 @@ BOOST_AUTO_TEST_CASE(payload_omnicore_alert_blockexpiry)
     BOOST_CHECK_EQUAL(HexStr(vch), "ffffffff000255cd76b67465737400");
 }
 
-BOOST_AUTO_TEST_CASE(payload_omnicore_alert_minclient)
+BOOST_AUTO_TEST_CASE(payload_tokencore_alert_minclient)
 {
-    // Omni Core client notification [type 65535, version 65535]
-    std::vector<unsigned char> vch = CreatePayload_OmniCoreAlert(
+    // Token Core client notification [type 65535, version 65535]
+    std::vector<unsigned char> vch = CreatePayload_TokenCoreAlert(
         static_cast<int32_t>(3),            // alert target: by client version
         static_cast<uint64_t>(900100),      // expiry value: v0.0.9.1
         static_cast<std::string>("test"));  // alert message: test

@@ -1,5 +1,5 @@
-#ifndef OMNICORE_TALLY_H
-#define OMNICORE_TALLY_H
+#ifndef TOKENCORE_TALLY_H
+#define TOKENCORE_TALLY_H
 
 #include <stdint.h>
 #include <map>
@@ -63,4 +63,4 @@ public:
 };
 
 
-#endif // OMNICORE_TALLY_H
+#endif // TOKENCORE_TALLY_H

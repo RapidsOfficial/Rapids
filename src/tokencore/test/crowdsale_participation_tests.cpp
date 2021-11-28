@@ -1,4 +1,4 @@
-#include "omnicore/sp.h"
+#include "tokencore/sp.h"
 
 #include "test/test_bitcoin.h"
 
@@ -8,7 +8,7 @@
 #include <limits>
 #include <utility>
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_crowdsale_participation_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_crowdsale_participation_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(overpayment_close)
 {

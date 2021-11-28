@@ -1,5 +1,5 @@
-#ifndef OMNICORE_WALLETCACHE_H
-#define OMNICORE_WALLETCACHE_H
+#ifndef TOKENCORE_WALLETCACHE_H
+#define TOKENCORE_WALLETCACHE_H
 
 class uint256;
 
@@ -11,4 +11,4 @@ namespace mastercore
 int WalletCacheUpdate();
 }
 
-#endif // OMNICORE_WALLETCACHE_H
+#endif // TOKENCORE_WALLETCACHE_H

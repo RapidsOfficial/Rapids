@@ -1,4 +1,4 @@
-#include "omnicore/dex.h"
+#include "tokencore/dex.h"
 
 #include "test/test_bitcoin.h"
 
@@ -13,7 +13,7 @@ extern int64_t calculateDExPurchase(const int64_t amountOffered, const int64_t a
 
 using mastercore::calculateDExPurchase;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_dex_purchase_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_dex_purchase_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(purchase_amount_exact)
 {

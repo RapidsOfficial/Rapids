@@ -1,5 +1,5 @@
-#ifndef OMNICORE_LOG_H
-#define OMNICORE_LOG_H
+#ifndef TOKENCORE_LOG_H
+#define TOKENCORE_LOG_H
 
 #include "util.h"
 #include "tinyformat.h"
@@ -56,7 +56,7 @@ extern bool msc_debug_fees;
 /* When we switch to C++11, this can be switched to variadic templates instead
  * of this macro-based construction (see tinyformat.h).
  */
-#define MAKE_OMNI_CORE_ERROR_AND_LOG_FUNC(n)                                    \
+#define MAKE_TOKEN_CORE_ERROR_AND_LOG_FUNC(n)                                    \
     template<TINYFORMAT_ARGTYPES(n)>                                            \
     static inline int PrintToLog(const char* format, TINYFORMAT_VARARGS(n))     \
     {                                                                           \
@@ -78,9 +78,9 @@ extern bool msc_debug_fees;
         return ConsolePrint(tfm::format("%s", TINYFORMAT_PASSARGS(n)));         \
     }
 
-TINYFORMAT_FOREACH_ARGNUM(MAKE_OMNI_CORE_ERROR_AND_LOG_FUNC)
+TINYFORMAT_FOREACH_ARGNUM(MAKE_TOKEN_CORE_ERROR_AND_LOG_FUNC)
 
-#undef MAKE_OMNI_CORE_ERROR_AND_LOG_FUNC
+#undef MAKE_TOKEN_CORE_ERROR_AND_LOG_FUNC
 
 
-#endif // OMNICORE_LOG_H
+#endif // TOKENCORE_LOG_H

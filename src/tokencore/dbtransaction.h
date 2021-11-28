@@ -1,7 +1,7 @@
-#ifndef OMNICORE_DBTRANSACTION_H
-#define OMNICORE_DBTRANSACTION_H
+#ifndef TOKENCORE_DBTRANSACTION_H
+#define TOKENCORE_DBTRANSACTION_H
 
-#include "omnicore/dbbase.h"
+#include "tokencore/dbbase.h"
 
 #include "uint256.h"
 
@@ -12,13 +12,13 @@
 #include <string>
 #include <vector>
 
-/** LevelDB based storage for storing Omni transaction validation and position in block data.
+/** LevelDB based storage for storing Token transaction validation and position in block data.
  */
-class COmniTransactionDB : public CDBBase
+class CTokenTransactionDB : public CDBBase
 {
 public:
-    COmniTransactionDB(const boost::filesystem::path& path, bool fWipe);
-    virtual ~COmniTransactionDB();
+    CTokenTransactionDB(const boost::filesystem::path& path, bool fWipe);
+    virtual ~CTokenTransactionDB();
 
     /** Stores position in block and validation result for a transaction. */
     void RecordTransaction(const uint256& txid, uint32_t posInBlock, int processingResult);
@@ -36,9 +36,9 @@ private:
 
 namespace mastercore
 {
-    //! LevelDB based storage for storing Omni transaction validation and position in block data
-    extern COmniTransactionDB* pDbTransaction;
+    //! LevelDB based storage for storing Token transaction validation and position in block data
+    extern CTokenTransactionDB* pDbTransaction;
 }
 
-#endif // OMNICORE_DBTRANSACTION_H
+#endif // TOKENCORE_DBTRANSACTION_H
 

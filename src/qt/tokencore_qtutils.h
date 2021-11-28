@@ -1,5 +1,5 @@
-#ifndef OMNICORE_QTUTILS
-#define OMNICORE_QTUTILS
+#ifndef TOKENCORE_QTUTILS
+#define TOKENCORE_QTUTILS
 
 #include <string>
 
@@ -32,4 +32,4 @@ namespace mastercore
     std::string ReplaceStr(const std::string& findText, const std::string& replaceText, const std::string& inputStr);
 }
 
-#endif // OMNICORE_QTUTILS
+#endif // TOKENCORE_QTUTILS

@@ -1,13 +1,13 @@
-#ifndef OMNICORE_QT_INIT_H
-#define OMNICORE_QT_INIT_H
+#ifndef TOKENCORE_QT_INIT_H
+#define TOKENCORE_QT_INIT_H
 
-namespace OmniCore
+namespace TokenCore
 {
     //! Shows an user dialog with general warnings and potential risks
     bool AskUserToAcknowledgeRisks();
 
-    //! Setup and initialization related to Omni Core Qt
+    //! Setup and initialization related to Token Core Qt
     bool Initialize();
 }
 
-#endif // OMNICORE_QT_INIT_H
+#endif // TOKENCORE_QT_INIT_H

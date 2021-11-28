@@ -39,7 +39,7 @@
 #include "wallet/wallet.h"
 #endif
 
-#include "omnicore/utilsui.h"
+#include "tokencore/utilsui.h"
 
 #include <stdint.h>
 

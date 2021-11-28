@@ -1,5 +1,5 @@
-#ifndef OMNICORE_RPCREQUIREMENTS_H
-#define OMNICORE_RPCREQUIREMENTS_H
+#ifndef TOKENCORE_RPCREQUIREMENTS_H
+#define TOKENCORE_RPCREQUIREMENTS_H
 
 #include <stdint.h>
 #include <string>
@@ -25,4 +25,4 @@ void RequireHeightInChain(int blockHeight);
 // Checks for MetaDEx orders for cancel operations
 
 
-#endif // OMNICORE_RPCREQUIREMENTS_H
+#endif // TOKENCORE_RPCREQUIREMENTS_H

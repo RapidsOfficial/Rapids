@@ -1,12 +1,12 @@
-#ifndef OMNICORE_TX_H
-#define OMNICORE_TX_H
+#ifndef TOKENCORE_TX_H
+#define TOKENCORE_TX_H
 
 class CMPMetaDEx;
 class CMPOffer;
 class CTransaction;
 
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
 
 #include "amount.h"
 
@@ -316,4 +316,4 @@ public:
 bool IsTokenNameValid(const std::string& name);
 bool IsTokenIPFSValid(const std::string& string);
 
-#endif // OMNICORE_TX_H
+#endif // TOKENCORE_TX_H

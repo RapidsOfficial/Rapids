@@ -1,4 +1,4 @@
-#include "omnicore/parse_string.h"
+#include "tokencore/parse_string.h"
 
 #include "test/test_bitcoin.h"
 
@@ -9,7 +9,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_strtoint64_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_strtoint64_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(strtoint64_invidisible)
 {

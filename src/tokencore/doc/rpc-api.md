@@ -1,9 +1,9 @@
 JSON-RPC API
 ============
 
-Omni Core is a fork of Bitcoin Core, with Omni Protocol feature support added as a new layer of functionality on top. As such interacting with the API is done in the same manner (JSON-RPC) as Bitcoin Core, simply with additional RPCs available for utilizing Omni Protocol features.
+Token Core is a fork of Bitcoin Core, with Token Protocol feature support added as a new layer of functionality on top. As such interacting with the API is done in the same manner (JSON-RPC) as Bitcoin Core, simply with additional RPCs available for utilizing Token Protocol features.
 
-As all existing Bitcoin Core functionality is inherent to Omni Core, the RPC port by default remains as `8332` as per Bitcoin Core.  If you wish to run Omni Core in tandem with Bitcoin Core (eg. via a separate datadir) you may utilize the `-rpcport<port>` option to nominate an alternative port number.
+As all existing Bitcoin Core functionality is inherent to Token Core, the RPC port by default remains as `8332` as per Bitcoin Core.  If you wish to run Token Core in tandem with Bitcoin Core (eg. via a separate datadir) you may utilize the `-rpcport<port>` option to nominate an alternative port number.
 
 All available commands can be listed with `"help"`, and information about a specific command can be retrieved with `"help <command>"`.
 
@@ -13,102 +13,102 @@ All available commands can be listed with `"help"`, and information about a spec
 ## Table of contents
 
 - [Transaction creation](#transaction-creation)
-  - [omni_send](#omni_send)
-  - [omni_senddexsell](#omni_senddexsell)
-  - [omni_senddexaccept](#omni_senddexaccept)
-  - [omni_sendissuancecrowdsale](#omni_sendissuancecrowdsale)
-  - [omni_sendissuancefixed](#omni_sendissuancefixed)
-  - [omni_sendissuancemanaged](#omni_sendissuancemanaged)
-  - [omni_sendsto](#omni_sendsto)
-  - [omni_sendgrant](#omni_sendgrant)
-  - [omni_sendrevoke](#omni_sendrevoke)
-  - [omni_sendclosecrowdsale](#omni_sendclosecrowdsale)
-  - [omni_sendtrade](#omni_sendtrade)
-  - [omni_sendcanceltradesbyprice](#omni_sendcanceltradesbyprice)
-  - [omni_sendcanceltradesbypair](#omni_sendcanceltradesbypair)
-  - [omni_sendcancelalltrades](#omni_sendcancelalltrades)
-  - [omni_sendchangeissuer](#omni_sendchangeissuer)
-  - [omni_sendall](#omni_sendall)
-  - [omni_sendenablefreezing](#omni_sendenablefreezing)
-  - [omni_senddisablefreezing](#omni_senddisablefreezing)
-  - [omni_sendfreeze](#omni_sendfreeze)
-  - [omni_sendunfreeze](#omni_sendunfreeze)
-  - [omni_sendrawtx](#omni_sendrawtx)
-  - [omni_funded_send](#omni_funded_send)
-  - [omni_funded_sendall](#omni_funded_sendall)
+  - [token_send](#token_send)
+  - [token_senddexsell](#token_senddexsell)
+  - [token_senddexaccept](#token_senddexaccept)
+  - [token_sendissuancecrowdsale](#token_sendissuancecrowdsale)
+  - [token_sendissuancefixed](#token_sendissuancefixed)
+  - [token_sendissuancemanaged](#token_sendissuancemanaged)
+  - [token_sendsto](#token_sendsto)
+  - [token_sendgrant](#token_sendgrant)
+  - [token_sendrevoke](#token_sendrevoke)
+  - [token_sendclosecrowdsale](#token_sendclosecrowdsale)
+  - [token_sendtrade](#token_sendtrade)
+  - [token_sendcanceltradesbyprice](#token_sendcanceltradesbyprice)
+  - [token_sendcanceltradesbypair](#token_sendcanceltradesbypair)
+  - [token_sendcancelalltrades](#token_sendcancelalltrades)
+  - [token_sendchangeissuer](#token_sendchangeissuer)
+  - [token_sendall](#token_sendall)
+  - [token_sendenablefreezing](#token_sendenablefreezing)
+  - [token_senddisablefreezing](#token_senddisablefreezing)
+  - [token_sendfreeze](#token_sendfreeze)
+  - [token_sendunfreeze](#token_sendunfreeze)
+  - [token_sendrawtx](#token_sendrawtx)
+  - [token_funded_send](#token_funded_send)
+  - [token_funded_sendall](#token_funded_sendall)
 - [Data retrieval](#data-retrieval)
-  - [omni_getinfo](#omni_getinfo)
-  - [omni_getbalance](#omni_getbalance)
-  - [omni_getallbalancesforid](#omni_getallbalancesforid)
-  - [omni_getallbalancesforaddress](#omni_getallbalancesforaddress)
-  - [omni_getwalletbalances](#omni_getwalletbalances)
-  - [omni_getwalletaddressbalances](#omni_getwalletaddressbalances)
-  - [omni_gettransaction](#omni_gettransaction)
-  - [omni_listtransactions](#omni_listtransactions)
-  - [omni_listblocktransactions](#omni_listblocktransactions)
-  - [omni_listblockstransactions](#omni_listblockstransactions)
-  - [omni_listpendingtransactions](#omni_listpendingtransactions)
-  - [omni_getactivedexsells](#omni_getactivedexsells)
-  - [omni_listproperties](#omni_listproperties)
-  - [omni_getproperty](#omni_getproperty)
-  - [omni_getactivecrowdsales](#omni_getactivecrowdsales)
-  - [omni_getcrowdsale](#omni_getcrowdsale)
-  - [omni_getgrants](#omni_getgrants)
-  - [omni_getsto](#omni_getsto)
-  - [omni_gettrade](#omni_gettrade)
-  - [omni_getorderbook](#omni_getorderbook)
-  - [omni_gettradehistoryforpair](#omni_gettradehistoryforpair)
-  - [omni_gettradehistoryforaddress](#omni_gettradehistoryforaddress)
-  - [omni_getactivations](#omni_getactivations)
-  - [omni_getpayload](#omni_getpayload)
-  - [omni_getseedblocks](#omni_getseedblocks)
-  - [omni_getcurrentconsensushash](#omni_getcurrentconsensushash)
+  - [token_getinfo](#token_getinfo)
+  - [token_getbalance](#token_getbalance)
+  - [token_getallbalancesforid](#token_getallbalancesforid)
+  - [token_getallbalancesforaddress](#token_getallbalancesforaddress)
+  - [token_getwalletbalances](#token_getwalletbalances)
+  - [token_getwalletaddressbalances](#token_getwalletaddressbalances)
+  - [token_gettransaction](#token_gettransaction)
+  - [token_listtransactions](#token_listtransactions)
+  - [token_listblocktransactions](#token_listblocktransactions)
+  - [token_listblockstransactions](#token_listblockstransactions)
+  - [token_listpendingtransactions](#token_listpendingtransactions)
+  - [token_getactivedexsells](#token_getactivedexsells)
+  - [token_listproperties](#token_listproperties)
+  - [token_getproperty](#token_getproperty)
+  - [token_getactivecrowdsales](#token_getactivecrowdsales)
+  - [token_getcrowdsale](#token_getcrowdsale)
+  - [token_getgrants](#token_getgrants)
+  - [token_getsto](#token_getsto)
+  - [token_gettrade](#token_gettrade)
+  - [token_getorderbook](#token_getorderbook)
+  - [token_gettradehistoryforpair](#token_gettradehistoryforpair)
+  - [token_gettradehistoryforaddress](#token_gettradehistoryforaddress)
+  - [token_getactivations](#token_getactivations)
+  - [token_getpayload](#token_getpayload)
+  - [token_getseedblocks](#token_getseedblocks)
+  - [token_getcurrentconsensushash](#token_getcurrentconsensushash)
 - [Raw transactions](#raw-transactions)
-  - [omni_decodetransaction](#omni_decodetransaction)
-  - [omni_createrawtx_opreturn](#omni_createrawtx_opreturn)
-  - [omni_createrawtx_multisig](#omni_createrawtx_multisig)
-  - [omni_createrawtx_input](#omni_createrawtx_input)
-  - [omni_createrawtx_reference](#omni_createrawtx_reference)
-  - [omni_createrawtx_change](#omni_createrawtx_change)
-  - [omni_createpayload_simplesend](#omni_createpayload_simplesend)
-  - [omni_createpayload_sendall](#omni_createpayload_sendall)
-  - [omni_createpayload_dexsell](#omni_createpayload_dexsell)
-  - [omni_createpayload_dexaccept](#omni_createpayload_dexaccept)
-  - [omni_createpayload_sto](#omni_createpayload_sto)
-  - [omni_createpayload_issuancefixed](#omni_createpayload_issuancefixed)
-  - [omni_createpayload_issuancecrowdsale](#omni_createpayload_issuancecrowdsale)
-  - [omni_createpayload_issuancemanaged](#omni_createpayload_issuancemanaged)
-  - [omni_createpayload_closecrowdsale](#omni_createpayload_closecrowdsale)
-  - [omni_createpayload_grant](#omni_createpayload_grant)
-  - [omni_createpayload_revoke](#omni_createpayload_revoke)
-  - [omni_createpayload_changeissuer](#omni_createpayload_changeissuer)
-  - [omni_createpayload_trade](#omni_createpayload_trade)
-  - [omni_createpayload_canceltradesbyprice](#omni_createpayload_canceltradesbyprice)
-  - [omni_createpayload_canceltradesbypair](#omni_createpayload_canceltradesbypair)
-  - [omni_createpayload_cancelalltrades](#omni_createpayload_cancelalltrades)
-  - [omni_createpayload_enablefreezing](#omni_createpayload_enablefreezing)
-  - [omni_createpayload_disablefreezing](#omni_createpayload_disablefreezing)
-  - [omni_createpayload_freeze](#omni_createpayload_freeze)
-  - [omni_createpayload_unfreeze](#omni_createpayload_unfreeze)
+  - [token_decodetransaction](#token_decodetransaction)
+  - [token_createrawtx_opreturn](#token_createrawtx_opreturn)
+  - [token_createrawtx_multisig](#token_createrawtx_multisig)
+  - [token_createrawtx_input](#token_createrawtx_input)
+  - [token_createrawtx_reference](#token_createrawtx_reference)
+  - [token_createrawtx_change](#token_createrawtx_change)
+  - [token_createpayload_simplesend](#token_createpayload_simplesend)
+  - [token_createpayload_sendall](#token_createpayload_sendall)
+  - [token_createpayload_dexsell](#token_createpayload_dexsell)
+  - [token_createpayload_dexaccept](#token_createpayload_dexaccept)
+  - [token_createpayload_sto](#token_createpayload_sto)
+  - [token_createpayload_issuancefixed](#token_createpayload_issuancefixed)
+  - [token_createpayload_issuancecrowdsale](#token_createpayload_issuancecrowdsale)
+  - [token_createpayload_issuancemanaged](#token_createpayload_issuancemanaged)
+  - [token_createpayload_closecrowdsale](#token_createpayload_closecrowdsale)
+  - [token_createpayload_grant](#token_createpayload_grant)
+  - [token_createpayload_revoke](#token_createpayload_revoke)
+  - [token_createpayload_changeissuer](#token_createpayload_changeissuer)
+  - [token_createpayload_trade](#token_createpayload_trade)
+  - [token_createpayload_canceltradesbyprice](#token_createpayload_canceltradesbyprice)
+  - [token_createpayload_canceltradesbypair](#token_createpayload_canceltradesbypair)
+  - [token_createpayload_cancelalltrades](#token_createpayload_cancelalltrades)
+  - [token_createpayload_enablefreezing](#token_createpayload_enablefreezing)
+  - [token_createpayload_disablefreezing](#token_createpayload_disablefreezing)
+  - [token_createpayload_freeze](#token_createpayload_freeze)
+  - [token_createpayload_unfreeze](#token_createpayload_unfreeze)
 - [Fee system](#fee-system)
-  - [omni_getfeecache](#omni_getfeecache)
-  - [omni_getfeetrigger](#omni_getfeetrigger)
-  - [omni_getfeeshare](#omni_getfeeshare)
-  - [omni_getfeedistribution](#omni_getfeedistribution)
-  - [omni_getfeedistributions](#omni_getfeedistributions)
+  - [token_getfeecache](#token_getfeecache)
+  - [token_getfeetrigger](#token_getfeetrigger)
+  - [token_getfeeshare](#token_getfeeshare)
+  - [token_getfeedistribution](#token_getfeedistribution)
+  - [token_getfeedistributions](#token_getfeedistributions)
 - [Configuration](#configuration)
-  - [omni_setautocommit](#omni_setautocommit)
+  - [token_setautocommit](#token_setautocommit)
 - [Depreciated API calls](#depreciated-api-calls)
 
 ---
 
 ## Transaction creation
 
-The RPCs for transaction creation can be used to create and broadcast Omni Protocol transactions.
+The RPCs for transaction creation can be used to create and broadcast Token Protocol transactions.
 
 A hash of the broadcasted transaction is returned as result.
 
-### omni_send
+### token_send
 
 Create and broadcast a simple send transaction.
 
@@ -131,14 +131,14 @@ Create and broadcast a simple send transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_send" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 1 "100.0"
+$ tokencore-cli "token_send" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 1 "100.0"
 ```
 
 ---
 
-### omni_senddexsell
+### token_senddexsell
 
-Place, update or cancel a sell offer on the traditional distributed OMNI/BTC exchange.
+Place, update or cancel a sell offer on the traditional distributed TOKEN/BTC exchange.
 
 **Arguments:**
 
@@ -160,12 +160,12 @@ Place, update or cancel a sell offer on the traditional distributed OMNI/BTC exc
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_senddexsell" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 1 "1.5" "0.75" 25 "0.0005" 1
+$ tokencore-cli "token_senddexsell" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 1 "1.5" "0.75" 25 "0.0005" 1
 ```
 
 ---
 
-### omni_senddexaccept
+### token_senddexaccept
 
 Create and broadcast an accept offer for the specified token and amount.
 
@@ -187,13 +187,13 @@ Create and broadcast an accept offer for the specified token and amount.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_senddexaccept" \
+$ tokencore-cli "token_senddexaccept" \
     "35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 1 "15.0"
 ```
 
 ---
 
-### omni_sendissuancecrowdsale
+### token_sendissuancecrowdsale
 
 Create new tokens as crowdsale.
 
@@ -224,14 +224,14 @@ Create new tokens as crowdsale.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendissuancecrowdsale" \
+$ tokencore-cli "token_sendissuancecrowdsale" \
     "3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo" 2 1 0 "Companies" "Bitcoin Mining" \
     "Quantum Miner" "" "" 2 "100" 1483228800 30 2
 ```
 
 ---
 
-### omni_sendissuancefixed
+### token_sendissuancefixed
 
 Create new tokens with fixed supply.
 
@@ -258,14 +258,14 @@ Create new tokens with fixed supply.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendissuancefixed" \
+$ tokencore-cli "token_sendissuancefixed" \
     "3Ck2kEGLJtZw9ENj2tameMCtS3HB7uRar3" 2 1 0 "Companies" "Bitcoin Mining" \
     "Quantum Miner" "" "" "1000000"
 ```
 
 ---
 
-### omni_sendissuancemanaged
+### token_sendissuancemanaged
 
 Create new tokens with manageable supply.
 
@@ -291,13 +291,13 @@ Create new tokens with manageable supply.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendissuancemanaged" \
+$ tokencore-cli "token_sendissuancemanaged" \
     "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
 ```
 
 ---
 
-### omni_sendsto
+### token_sendsto
 
 Create and broadcast a send-to-owners transaction.
 
@@ -319,13 +319,13 @@ Create and broadcast a send-to-owners transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendsto" \
+$ tokencore-cli "token_sendsto" \
     "32Z3tJccZuqQZ4PhJR2hxHC3tjgjA8cbqz" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 3 "5000"
 ```
 
 ---
 
-### omni_sendgrant
+### token_sendgrant
 
 Issue or grant new units of managed tokens.
 
@@ -347,12 +347,12 @@ Issue or grant new units of managed tokens.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendgrant" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "7000"
+$ tokencore-cli "token_sendgrant" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "7000"
 ```
 
 ---
 
-### omni_sendrevoke
+### token_sendrevoke
 
 Revoke units of managed tokens.
 
@@ -373,12 +373,12 @@ Revoke units of managed tokens.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendrevoke" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "100"
+$ tokencore-cli "token_sendrevoke" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "100"
 ```
 
 ---
 
-### omni_sendclosecrowdsale
+### token_sendclosecrowdsale
 
 Manually close a crowdsale.
 
@@ -397,12 +397,12 @@ Manually close a crowdsale.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendclosecrowdsale" "3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo" 70
+$ tokencore-cli "token_sendclosecrowdsale" "3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo" 70
 ```
 
 ---
 
-### omni_sendtrade
+### token_sendtrade
 
 Place a trade offer on the distributed token exchange.
 
@@ -424,12 +424,12 @@ Place a trade offer on the distributed token exchange.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendtrade" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 31 "250.0" 1 "10.0"
+$ tokencore-cli "token_sendtrade" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 31 "250.0" 1 "10.0"
 ```
 
 ---
 
-### omni_sendcanceltradesbyprice
+### token_sendcanceltradesbyprice
 
 Cancel offers on the distributed token exchange with the specified price.
 
@@ -451,12 +451,12 @@ Cancel offers on the distributed token exchange with the specified price.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendcanceltradesbyprice" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 31 "100.0" 1 "5.0"
+$ tokencore-cli "token_sendcanceltradesbyprice" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 31 "100.0" 1 "5.0"
 ```
 
 ---
 
-### omni_sendcanceltradesbypair
+### token_sendcanceltradesbypair
 
 Cancel all offers on the distributed token exchange with the given currency pair.
 
@@ -476,12 +476,12 @@ Cancel all offers on the distributed token exchange with the given currency pair
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendcanceltradesbypair" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 1 31
+$ tokencore-cli "token_sendcanceltradesbypair" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 1 31
 ```
 
 ---
 
-### omni_sendcancelalltrades
+### token_sendcancelalltrades
 
 Cancel all offers on the distributed token exchange.
 
@@ -500,12 +500,12 @@ Cancel all offers on the distributed token exchange.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendcancelalltrades" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 1
+$ tokencore-cli "token_sendcancelalltrades" "3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR" 1
 ```
 
 ---
 
-### omni_sendchangeissuer
+### token_sendchangeissuer
 
 Change the issuer on record of the given tokens.
 
@@ -525,13 +525,13 @@ Change the issuer on record of the given tokens.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendchangeissuer" \
+$ tokencore-cli "token_sendchangeissuer" \
     "1ARjWDkZ7kT9fwjPrjcQyvbXDkEySzKHwu" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 3
 ```
 
 ---
 
-### omni_sendall
+### token_sendall
 
 Transfers all available tokens in the given ecosystem to the recipient.
 
@@ -553,12 +553,12 @@ Transfers all available tokens in the given ecosystem to the recipient.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendall" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 2
+$ tokencore-cli "token_sendall" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "37FaKponF7zqoMLUjEiko25pDiuVH5YLEa" 2
 ```
 
 ---
 
-### omni_sendenablefreezing
+### token_sendenablefreezing
 
 Enables address freezing for a centrally managed property.
 
@@ -577,12 +577,12 @@ Enables address freezing for a centrally managed property.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendenablefreezing" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" 2
+$ tokencore-cli "token_sendenablefreezing" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" 2
 ```
 
 ---
 
-### omni_senddisablefreezing
+### token_senddisablefreezing
 
 Disables address freezing for a centrally managed property.
 
@@ -603,12 +603,12 @@ IMPORTANT NOTE:  Disabling freezing for a property will UNFREEZE all frozen addr
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_senddisablefreezing" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" 2
+$ tokencore-cli "token_senddisablefreezing" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" 2
 ```
 
 ---
 
-### omni_sendfreeze
+### token_sendfreeze
 
 Freeze an address for a centrally managed token.
 
@@ -631,12 +631,12 @@ Note: Only the issuer may freeze tokens, and only if the token is of the managed
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendfreeze" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 2 1000
+$ tokencore-cli "token_sendfreeze" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 2 1000
 ```
 
 ---
 
-### omni_sendunfreeze
+### token_sendunfreeze
 
 Unfreeze an address for a centrally managed token.
 
@@ -659,14 +659,14 @@ Note: Only the issuer may unfreeze tokens
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendunfreeze" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 2 1000
+$ tokencore-cli "token_sendunfreeze" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 2 1000
 ```
 
 ---
 
-### omni_sendrawtx
+### token_sendrawtx
 
-Broadcasts a raw Omni Layer transaction.
+Broadcasts a raw Token Layer transaction.
 
 **Arguments:**
 
@@ -686,14 +686,14 @@ Broadcasts a raw Omni Layer transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_sendrawtx" \
+$ tokencore-cli "token_sendrawtx" \
     "1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8" "000000000000000100000000017d7840" \
     "1EqTta1Rt8ixAA32DuC29oukbsSWU62qAV"
 ```
 
 ---
 
-### omni_funded_send
+### token_funded_send
 
 Creates and sends a funded simple send transaction.
 
@@ -717,14 +717,14 @@ All bitcoins from the sender are consumed and if there are bitcoins missing, the
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_funded_send" "1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH" \
+$ tokencore-cli "token_funded_send" "1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH" \
     "15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH" 1 "100.0" \
     "15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1"
 ```
 
 ---
 
-### omni_funded_sendall
+### token_funded_sendall
 
 Creates and sends a transaction that transfers all available tokens in the given ecosystem to the recipient.
 
@@ -747,7 +747,7 @@ All bitcoins from the sender are consumed and if there are bitcoins missing, the
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_funded_sendall" "1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH" \
+$ tokencore-cli "token_funded_sendall" "1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH" \
     "15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH" 1 "15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1"
 ```
 
@@ -756,9 +756,9 @@ $ omnicore-cli "omni_funded_sendall" "1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH" \
 
 ## Data retrieval
 
-The RPCs for data retrieval can be used to get information about the state of the Omni ecosystem.
+The RPCs for data retrieval can be used to get information about the state of the Token ecosystem.
 
-### omni_getinfo
+### token_getinfo
 
 Returns various state information of the client and protocol.
 
@@ -770,15 +770,15 @@ Returns various state information of the client and protocol.
 ```js
 Result:
 {
-  "omnicoreversion_int" : xxxxxxx,      // (number) client version as integer
-  "omnicoreversion" : "x.x.x.x-xxx",    // (string) client version
+  "tokencoreversion_int" : xxxxxxx,      // (number) client version as integer
+  "tokencoreversion" : "x.x.x.x-xxx",    // (string) client version
   "mastercoreversion" : "x.x.x.x-xxx",  // (string) client version (DEPRECIATED)
   "bitcoincoreversion" : "x.x.x",       // (string) Bitcoin Core version
   "commitinfo" : "xxxxxxx",             // (string) build commit identifier
   "block" : nnnnnn,                     // (number) index of the last processed block
   "blocktime" : nnnnnnnnnn,             // (number) timestamp of the last processed block
-  "blocktransactions" : nnnn,           // (number) Omni transactions found in the last processed block
-  "totaltransactions" : nnnnnnnn,       // (number) Omni transactions processed in total
+  "blocktransactions" : nnnn,           // (number) Token transactions found in the last processed block
+  "totaltransactions" : nnnnnnnn,       // (number) Token transactions processed in total
   "alerts" : [                          // (array of JSON objects) active protocol alert (if any)
     {
       "alerttype" : n                       // (number) alert type as integer
@@ -794,12 +794,12 @@ Result:
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getinfo"
+$ tokencore-cli "token_getinfo"
 ```
 
 ---
 
-### omni_getbalance
+### token_getbalance
 
 Returns the token balance for a given address and property.
 
@@ -822,12 +822,12 @@ Returns the token balance for a given address and property.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getbalance", "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P" 1
+$ tokencore-cli "token_getbalance", "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P" 1
 ```
 
 ---
 
-### omni_getallbalancesforid
+### token_getallbalancesforid
 
 Returns a list of token balances for a given currency or property identifier.
 
@@ -853,12 +853,12 @@ Returns a list of token balances for a given currency or property identifier.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getallbalancesforid" 1
+$ tokencore-cli "token_getallbalancesforid" 1
 ```
 
 ---
 
-### omni_getallbalancesforaddress
+### token_getallbalancesforaddress
 
 Returns a list of all token balances for a given address.
 
@@ -885,12 +885,12 @@ Returns a list of all token balances for a given address.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getallbalancesforaddress" "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P"
+$ tokencore-cli "token_getallbalancesforaddress" "1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P"
 ```
 
 ---
 
-### omni_getwalletbalances
+### token_getwalletbalances
 
 Returns a list of the total token balances of the whole wallet.
 
@@ -917,12 +917,12 @@ Returns a list of the total token balances of the whole wallet.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getwalletbalances"
+$ tokencore-cli "token_getwalletbalances"
 ```
 
 ---
 
-### omni_getwalletaddressbalances
+### token_getwalletaddressbalances
 
 Returns a list of all token balances for every wallet address.
 
@@ -956,14 +956,14 @@ Returns a list of all token balances for every wallet address.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getwalletaddressbalances"
+$ tokencore-cli "token_getwalletaddressbalances"
 ```
 
 ---
 
-### omni_gettransaction
+### token_gettransaction
 
-Get detailed information about an Omni transaction.
+Get detailed information about an Token transaction.
 
 **Arguments:**
 
@@ -993,12 +993,12 @@ Get detailed information about an Omni transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_gettransaction" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
+$ tokencore-cli "token_gettransaction" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
 ```
 
 ---
 
-### omni_listtransactions
+### token_listtransactions
 
 List wallet transactions, optionally filtered by an address and block boundaries.
 
@@ -1037,14 +1037,14 @@ List wallet transactions, optionally filtered by an address and block boundaries
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_listtransactions"
+$ tokencore-cli "token_listtransactions"
 ```
 
 ---
 
-### omni_listblocktransactions
+### token_listblocktransactions
 
-Lists all Omni transactions in a block.
+Lists all Token transactions in a block.
 
 **Arguments:**
 
@@ -1063,14 +1063,14 @@ Lists all Omni transactions in a block.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_listblocktransactions" 279007
+$ tokencore-cli "token_listblocktransactions" 279007
 ```
 
 ---
 
-### omni_listblockstransactions
+### token_listblockstransactions
 
-Lists all Omni transactions in a given range of blocks.
+Lists all Token transactions in a given range of blocks.
 
 Note: the list of transactions is unordered and can contain invalid transactions!
 
@@ -1092,14 +1092,14 @@ Note: the list of transactions is unordered and can contain invalid transactions
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_omni_listblocktransactions" 279007 300000
+$ tokencore-cli "token_token_listblocktransactions" 279007 300000
 ```
 
 ---
 
-### omni_listpendingtransactions
+### token_listpendingtransactions
 
-Returns a list of unconfirmed Omni transactions, pending in the memory pool.
+Returns a list of unconfirmed Token transactions, pending in the memory pool.
 
 Note: the validity of pending transactions is uncertain, and the state of the memory pool may change at any moment. It is recommended to check transactions after confirmation, and pending transactions should be considered as invalid.
 
@@ -1130,12 +1130,12 @@ Note: the validity of pending transactions is uncertain, and the state of the me
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_listpendingtransactions"
+$ tokencore-cli "token_listpendingtransactions"
 ```
 
 ---
 
-### omni_getactivedexsells
+### token_getactivedexsells
 
 Returns currently active offers on the distributed exchange.
 
@@ -1176,12 +1176,12 @@ Returns currently active offers on the distributed exchange.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getactivedexsells"
+$ tokencore-cli "token_getactivedexsells"
 ```
 
 ---
 
-### omni_listproperties
+### token_listproperties
 
 Lists all tokens or smart properties.
 
@@ -1208,12 +1208,12 @@ Lists all tokens or smart properties.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_listproperties"
+$ tokencore-cli "token_listproperties"
 ```
 
 ---
 
-### omni_getproperty
+### token_getproperty
 
 Returns details for about the tokens or smart property to lookup.
 
@@ -1245,12 +1245,12 @@ Returns details for about the tokens or smart property to lookup.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getproperty" 3
+$ tokencore-cli "token_getproperty" 3
 ```
 
 ---
 
-### omni_getactivecrowdsales
+### token_getactivecrowdsales
 
 Lists currently active crowdsales.
 
@@ -1279,12 +1279,12 @@ Lists currently active crowdsales.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getactivecrowdsales"
+$ tokencore-cli "token_getactivecrowdsales"
 ```
 
 ---
 
-### omni_getcrowdsale
+### token_getcrowdsale
 
 Returns information about a crowdsale.
 
@@ -1331,12 +1331,12 @@ Returns information about a crowdsale.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getcrowdsale" 3 true
+$ tokencore-cli "token_getcrowdsale" 3 true
 ```
 
 ---
 
-### omni_getgrants
+### token_getgrants
 
 Returns information about granted and revoked units of managed tokens.
 
@@ -1375,12 +1375,12 @@ Returns information about granted and revoked units of managed tokens.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getgrants" 31
+$ tokencore-cli "token_getgrants" 31
 ```
 
 ---
 
-### omni_getsto
+### token_getsto
 
 Get information and recipients of a send-to-owners transaction.
 
@@ -1422,12 +1422,12 @@ Get information and recipients of a send-to-owners transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getsto" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d" "*"
+$ tokencore-cli "token_getsto" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d" "*"
 ```
 
 ---
 
-### omni_gettrade
+### token_gettrade
 
 Get detailed information and trade matches for orders on the distributed token exchange.
 
@@ -1476,12 +1476,12 @@ Get detailed information and trade matches for orders on the distributed token e
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_gettrade" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
+$ tokencore-cli "token_gettrade" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
 ```
 
 ---
 
-### omni_getorderbook
+### token_getorderbook
 
 List active offers on the distributed token exchange.
 
@@ -1518,12 +1518,12 @@ List active offers on the distributed token exchange.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getorderbook" 2
+$ tokencore-cli "token_getorderbook" 2
 ```
 
 ---
 
-### omni_gettradehistoryforpair
+### token_gettradehistoryforpair
 
 Retrieves the history of trades on the distributed token exchange for the specified market.
 
@@ -1556,12 +1556,12 @@ Retrieves the history of trades on the distributed token exchange for the specif
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_gettradehistoryforpair" 1 12 500
+$ tokencore-cli "token_gettradehistoryforpair" 1 12 500
 ```
 
 ---
 
-### omni_gettradehistoryforaddress
+### token_gettradehistoryforaddress
 
 Retrieves the history of orders on the distributed exchange for the supplied address.
 
@@ -1615,12 +1615,12 @@ Retrieves the history of orders on the distributed exchange for the supplied add
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_gettradehistoryforaddress" "1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8"
+$ tokencore-cli "token_gettradehistoryforaddress" "1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8"
 ```
 
 ---
 
-### omni_getactivations
+### token_getactivations
 
 Returns pending and completed feature activations.
 
@@ -1651,14 +1651,14 @@ Returns pending and completed feature activations.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getactivations"
+$ tokencore-cli "token_getactivations"
 ```
 
 ---
 
-### omni_getpayload
+### token_getpayload
 
-Get the payload for an Omni transaction.
+Get the payload for an Token transaction.
 
 **Arguments:**
 
@@ -1669,7 +1669,7 @@ Get the payload for an Omni transaction.
 **Result:**
 ```js
 {
-  "payload" : "payloadmessage",  // (string) the decoded Omni payload message
+  "payload" : "payloadmessage",  // (string) the decoded Token payload message
   "payloadsize" : n              // (number) the size of the payload
 }
 ```
@@ -1677,14 +1677,14 @@ Get the payload for an Omni transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getactivations" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
+$ tokencore-cli "token_getactivations" "1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d"
 ```
 
 ---
 
-### omni_getseedblocks
+### token_getseedblocks
 
-Returns a list of blocks containing Omni transactions for use in seed block filtering.
+Returns a list of blocks containing Token transactions for use in seed block filtering.
 
 WARNING: The Exodus crowdsale is not stored in LevelDB, thus this is currently only safe to use to generate seed blocks after block 255365.
 
@@ -1692,8 +1692,8 @@ WARNING: The Exodus crowdsale is not stored in LevelDB, thus this is currently o
 
 | Name                | Type    | Presence | Description                                                                                  |
 |---------------------|---------|----------|----------------------------------------------------------------------------------------------|
-| `startblock`        | number  | required | the first block to look for Omni transactions (inclusive)                                    |
-| `endblock`          | number  | required | the last block to look for Omni transactions (inclusive)                                     |
+| `startblock`        | number  | required | the first block to look for Token transactions (inclusive)                                    |
+| `endblock`          | number  | required | the last block to look for Token transactions (inclusive)                                     |
 
 **Result:**
 ```js
@@ -1706,12 +1706,12 @@ WARNING: The Exodus crowdsale is not stored in LevelDB, thus this is currently o
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getseedblocks" 290000 300000
+$ tokencore-cli "token_getseedblocks" 290000 300000
 ```
 
 ---
 
-### omni_getcurrentconsensushash
+### token_getcurrentconsensushash
 
 Returns the consensus hash covering the state of the current block.
 
@@ -1731,20 +1731,20 @@ Returns the consensus hash covering the state of the current block.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getcurrentconsensushash"
+$ tokencore-cli "token_getcurrentconsensushash"
 ```
 
 ---
 
 ## Raw transactions
 
-The RPCs for raw transactions/payloads can be used to decode or create raw Omni transactions.
+The RPCs for raw transactions/payloads can be used to decode or create raw Token transactions.
 
 Raw transactions need to be signed with `"signrawtransaction"` and then broadcasted with `"sendrawtransaction"`.
 
-### omni_decodetransaction
+### token_decodetransaction
 
-Decodes an Omni transaction.
+Decodes an Token transaction.
 
 If the inputs of the transaction are not in the chain, then they must be provided, because the transaction inputs are used to identify the sender of a transaction.
 
@@ -1790,7 +1790,7 @@ The format of `prevtxs` is as following:
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_decodetransaction" "010000000163af14ce6d477e1c793507e32a5b7696288fa89705c0d02a3f66beb3c \
+$ tokencore-cli "token_decodetransaction" "010000000163af14ce6d477e1c793507e32a5b7696288fa89705c0d02a3f66beb3c \
     5b8afee0100000000ffffffff02ac020000000000004751210261ea979f6a06f9dafe00fb1263ea0aca959875a7073556a088cdf \
     adcd494b3752102a3fd0a8a067e06941e066f78d930bfc47746f097fcd3f7ab27db8ddf37168b6b52ae22020000000000001976a \
     914946cb2e08075bcbaf157e47bcb67eb2b2339d24288ac00000000" \
@@ -1800,7 +1800,7 @@ $ omnicore-cli "omni_decodetransaction" "010000000163af14ce6d477e1c793507e32a5b7
 
 ---
 
-### omni_createrawtx_opreturn
+### token_createrawtx_opreturn
 
 Adds a payload with class C (op-return) encoding to the transaction.
 
@@ -1823,12 +1823,12 @@ If the data encoding fails, then the transaction is not modified.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createrawtx_opreturn" "01000000000000000000" "00000000000000020000000006dac2c0"
+$ tokencore-cli "token_createrawtx_opreturn" "01000000000000000000" "00000000000000020000000006dac2c0"
 ```
 
 ---
 
-### omni_createrawtx_multisig
+### token_createrawtx_multisig
 
 Adds a payload with class B (bare-multisig) encoding to the transaction.
 
@@ -1853,7 +1853,7 @@ If the data encoding fails, then the transaction is not modified.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createrawtx_multisig" \
+$ tokencore-cli "token_createrawtx_multisig" \
     "0100000001a7a9402ecd77f3c9f745793c9ec805bfa2e14b89877581c734c774864247e6f50400000000ffffffff01aa0a00000 \
     00000001976a9146d18edfe073d53f84dd491dae1379f8fb0dfe5d488ac00000000" \
     "00000000000000020000000000989680"
@@ -1863,7 +1863,7 @@ $ omnicore-cli "omni_createrawtx_multisig" \
 
 ---
 
-### omni_createrawtx_input
+### token_createrawtx_input
 
 Adds a transaction input to the transaction.
 
@@ -1885,13 +1885,13 @@ If no raw transaction is provided, a new transaction is created.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createrawtx_input" \
+$ tokencore-cli "token_createrawtx_input" \
     "01000000000000000000" "b006729017df05eda586df9ad3f8ccfee5be340aadf88155b784d1fc0e8342ee" 0
 ```
 
 ---
 
-### omni_createrawtx_reference
+### token_createrawtx_reference
 
 Adds a reference output to the transaction.
 
@@ -1915,7 +1915,7 @@ The output value is set to at least the dust threshold.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createrawtx_reference" \
+$ tokencore-cli "token_createrawtx_reference" \
     "0100000001a7a9402ecd77f3c9f745793c9ec805bfa2e14b89877581c734c774864247e6f50400000000ffffffff03aa0a00000
     00000001976a9146d18edfe073d53f84dd491dae1379f8fb0dfe5d488ac5c0d0000000000004751210252ce4bdd3ce38b4ebbc5a
     6e1343608230da508ff12d23d85b58c964204c4cef3210294cc195fc096f87d0f813a337ae7e5f961b1c8a18f1f8604a909b3a51
@@ -1926,7 +1926,7 @@ $ omnicore-cli "omni_createrawtx_reference" \
 
 ---
 
-### omni_createrawtx_change
+### token_createrawtx_change
 
 Adds a change output to the transaction.
 
@@ -1968,7 +1968,7 @@ The format of `prevtxs` is as following:
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createrawtx_change" \
+$ tokencore-cli "token_createrawtx_change" \
     "0100000001b15ee60431ef57ec682790dec5a3c0d83a0c360633ea8308fbf6d5fc10a779670400000000ffffffff025c0d00000 \
     000000047512102f3e471222bb57a7d416c82bf81c627bfcd2bdc47f36e763ae69935bba4601ece21021580b888ff56feb27f17f \
     08802ebed26258c23697d6a462d43fc13b565fda2dd52aeaa0a0000000000001976a914946cb2e08075bcbaf157e47bcb67eb2b2 \
@@ -1980,7 +1980,7 @@ $ omnicore-cli "omni_createrawtx_change" \
 
 ---
 
-### omni_createpayload_simplesend
+### token_createpayload_simplesend
 
 Create the payload for a simple send transaction.
 
@@ -2001,12 +2001,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_simplesend" 1 "100.0"
+$ tokencore-cli "token_createpayload_simplesend" 1 "100.0"
 ```
 
 ---
 
-### omni_createpayload_sendall
+### token_createpayload_sendall
 
 Create the payload for a send all transaction.
 
@@ -2024,14 +2024,14 @@ Create the payload for a send all transaction.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_sendall" 2
+$ tokencore-cli "token_createpayload_sendall" 2
 ```
 
 ---
 
-### omni_createpayload_dexsell
+### token_createpayload_dexsell
 
-Create a payload to place, update or cancel a sell offer on the traditional distributed OMNI/BTC exchange.
+Create a payload to place, update or cancel a sell offer on the traditional distributed TOKEN/BTC exchange.
 
 **Arguments:**
 
@@ -2052,12 +2052,12 @@ Create a payload to place, update or cancel a sell offer on the traditional dist
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_dexsell" 1 "1.5" "0.75" 25 "0.0005" 1
+$ tokencore-cli "token_createpayload_dexsell" 1 "1.5" "0.75" 25 "0.0005" 1
 ```
 
 ---
 
-### omni_createpayload_dexaccept
+### token_createpayload_dexaccept
 
 Create the payload for an accept offer for the specified token and amount.
 
@@ -2078,12 +2078,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_dexaccept" 1 "15.0"
+$ tokencore-cli "token_createpayload_dexaccept" 1 "15.0"
 ```
 
 ---
 
-### omni_createpayload_sto
+### token_createpayload_sto
 
 Creates the payload for a send-to-owners transaction.
 
@@ -2105,12 +2105,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_sto" 3 "5000"
+$ tokencore-cli "token_createpayload_sto" 3 "5000"
 ```
 
 ---
 
-### omni_createpayload_issuancefixed
+### token_createpayload_issuancefixed
 
 Creates the payload for a new tokens issuance with fixed supply.
 
@@ -2136,12 +2136,12 @@ Creates the payload for a new tokens issuance with fixed supply.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_issuancefixed" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" "1000000"
+$ tokencore-cli "token_createpayload_issuancefixed" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" "1000000"
 ```
 
 ---
 
-### omni_createpayload_issuancecrowdsale
+### token_createpayload_issuancecrowdsale
 
 Creates the payload for a new tokens issuance with crowdsale.
 
@@ -2171,12 +2171,12 @@ Creates the payload for a new tokens issuance with crowdsale.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_issuancecrowdsale" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" 2 "100" 1483228800 30 2
+$ tokencore-cli "token_createpayload_issuancecrowdsale" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" 2 "100" 1483228800 30 2
 ```
 
 ---
 
-### omni_createpayload_issuancemanaged
+### token_createpayload_issuancemanaged
 
 Creates the payload for a new tokens issuance with manageable supply.
 
@@ -2201,12 +2201,12 @@ Creates the payload for a new tokens issuance with manageable supply.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_issuancemanaged" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
+$ tokencore-cli "token_createpayload_issuancemanaged" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
 ```
 
 ---
 
-### omni_createpayload_closecrowdsale
+### token_createpayload_closecrowdsale
 
 Creates the payload to manually close a crowdsale.
 
@@ -2224,12 +2224,12 @@ Creates the payload to manually close a crowdsale.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_closecrowdsale" 70
+$ tokencore-cli "token_createpayload_closecrowdsale" 70
 ```
 
 ---
 
-### omni_createpayload_grant
+### token_createpayload_grant
 
 Creates the payload to issue or grant new units of managed tokens.
 
@@ -2251,12 +2251,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_grant" 51 "7000"
+$ tokencore-cli "token_createpayload_grant" 51 "7000"
 ```
 
 ---
 
-### omni_createpayload_revoke
+### token_createpayload_revoke
 
 Creates the payload to revoke units of managed tokens.
 
@@ -2278,12 +2278,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_revoke" 51 "100"
+$ tokencore-cli "token_createpayload_revoke" 51 "100"
 ```
 
 ---
 
-### omni_createpayload_changeissuer
+### token_createpayload_changeissuer
 
 Creates the payload to change the issuer on record of the given tokens.
 
@@ -2301,12 +2301,12 @@ Creates the payload to change the issuer on record of the given tokens.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_changeissuer" 3
+$ tokencore-cli "token_createpayload_changeissuer" 3
 ```
 
 ---
 
-### omni_createpayload_trade
+### token_createpayload_trade
 
 Creates the payload to place a trade offer on the distributed token exchange.
 
@@ -2329,12 +2329,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_trade" 31 "250.0" 1 "10.0"
+$ tokencore-cli "token_createpayload_trade" 31 "250.0" 1 "10.0"
 ```
 
 ---
 
-### omni_createpayload_canceltradesbyprice
+### token_createpayload_canceltradesbyprice
 
 Creates the payload to cancel offers on the distributed token exchange with the specified price.
 
@@ -2357,12 +2357,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_canceltradesbyprice" 31 "100.0" 1 "5.0"
+$ tokencore-cli "token_createpayload_canceltradesbyprice" 31 "100.0" 1 "5.0"
 ```
 
 ---
 
-### omni_createpayload_canceltradesbypair
+### token_createpayload_canceltradesbypair
 
 Creates the payload to cancel all offers on the distributed token exchange with the given currency pair.
 
@@ -2381,12 +2381,12 @@ Creates the payload to cancel all offers on the distributed token exchange with 
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_canceltradesbypair" 1 31
+$ tokencore-cli "token_createpayload_canceltradesbypair" 1 31
 ```
 
 ---
 
-### omni_createpayload_cancelalltrades
+### token_createpayload_cancelalltrades
 
 Creates the payload to cancel all offers on the distributed token exchange with the given currency pair.
 
@@ -2404,12 +2404,12 @@ Creates the payload to cancel all offers on the distributed token exchange with 
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_cancelalltrades" 1
+$ tokencore-cli "token_createpayload_cancelalltrades" 1
 ```
 
 ---
 
-### omni_createpayload_enablefreezing
+### token_createpayload_enablefreezing
 
 Creates the payload to enable address freezing for a centrally managed property.
 
@@ -2427,12 +2427,12 @@ Creates the payload to enable address freezing for a centrally managed property.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_enablefreezing" 3
+$ tokencore-cli "token_createpayload_enablefreezing" 3
 ```
 
 ---
 
-### omni_createpayload_disablefreezing
+### token_createpayload_disablefreezing
 
 Creates the payload to disable address freezing for a centrally managed property.
 
@@ -2452,12 +2452,12 @@ IMPORTANT NOTE:  Disabling freezing for a property will UNFREEZE all frozen addr
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_disablefreezing" 3
+$ tokencore-cli "token_createpayload_disablefreezing" 3
 ```
 
 ---
 
-### omni_createpayload_freeze
+### token_createpayload_freeze
 
 Creates the payload to freeze an address for a centrally managed token.
 
@@ -2479,12 +2479,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_freeze" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 31 "100"
+$ tokencore-cli "token_createpayload_freeze" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 31 "100"
 ```
 
 ---
 
-### omni_createpayload_unfreeze
+### token_createpayload_unfreeze
 
 Creates the payload to unfreeze an address for a centrally managed token.
 
@@ -2506,7 +2506,7 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_createpayload_unfreeze" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 31 "100"
+$ tokencore-cli "token_createpayload_unfreeze" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs" 31 "100"
 ```
 
 ---
@@ -2515,7 +2515,7 @@ $ omnicore-cli "omni_createpayload_unfreeze" "3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs
 
 The RPCs for the fee system can be used to obtain data about the fee system and fee distributions.
 
-### omni_getfeecache
+### token_getfeecache
 
 Obtains the current amount of fees cached (pending distribution).
 
@@ -2541,12 +2541,12 @@ If a property ID is supplied the results will be filtered to show this property 
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getfeecache" 31
+$ tokencore-cli "token_getfeecache" 31
 ```
 
 ---
 
-### omni_getfeetrigger
+### token_getfeetrigger
 
 Obtains the amount at which cached fees will be distributed.
 
@@ -2572,12 +2572,12 @@ If a property ID is supplied the results will be filtered to show this property 
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getfeetrigger" 31
+$ tokencore-cli "token_getfeetrigger" 31
 ```
 
 ---
 
-### omni_getfeeshare
+### token_getfeeshare
 
 Obtains the current percentage share of fees addresses would receive if a distribution were to occur.
 
@@ -2606,12 +2606,12 @@ If an ecosystem is supplied the results will reflect the fee share for that ecos
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getfeeshare" "1CE8bBr1dYZRMnpmyYsFEoexa1YoPz2mfB" 1
+$ tokencore-cli "token_getfeeshare" "1CE8bBr1dYZRMnpmyYsFEoexa1YoPz2mfB" 1
 ```
 
 ---
 
-### omni_getfeedistribution
+### token_getfeedistribution
 
 Obtains data for a past distribution of fees.
 
@@ -2643,12 +2643,12 @@ A distribution ID must be supplied to identify the distribution to obtain data f
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getfeedistribution" 1
+$ tokencore-cli "token_getfeedistribution" 1
 ```
 
 ---
 
-### omni_getfeedistributions
+### token_getfeedistributions
 
 Obtains data for past distributions of fees for a property.
 
@@ -2683,16 +2683,16 @@ A property ID must be supplied to retrieve past distributions for.
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_getfeedistributions" 31
+$ tokencore-cli "token_getfeedistributions" 31
 ```
 
 ---
 
 ## Configuration
 
-The RPCs for the configuration can be used to alter Omni Core settings.
+The RPCs for the configuration can be used to alter Token Core settings.
 
-### omni_setautocommit
+### token_setautocommit
 
 Sets the global flag that determines whether transactions are automatically committed and broadcasted.
 
@@ -2710,7 +2710,7 @@ true|false  // (boolean) the updated flag status
 **Example:**
 
 ```bash
-$ omnicore-cli "omni_setautocommit" false
+$ tokencore-cli "token_setautocommit" false
 ```
 
 ---
@@ -2719,22 +2719,22 @@ $ omnicore-cli "omni_setautocommit" false
 
 To ensure backwards compatibility, depreciated RPCs are kept for at least one major version.
 
-The following calls are replaced in Omni Core 0.0.10, and queries with the old command are forwarded.
+The following calls are replaced in Token Core 0.0.10, and queries with the old command are forwarded.
 
-- `send_MP` by `omni_send`
-- `sendtoowners_MP` by `omni_sendsto`
-- `sendrawtx_MP` by `omni_sendrawtx`
-- `getinfo_MP` by `omni_getinfo`
-- `getbalance_MP` by `omni_getbalance`
-- `getallbalancesforid_MP` by `omni_getallbalancesforid`
-- `getallbalancesforaddress_MP` by `omni_getallbalancesforaddress`
-- `gettransaction_MP` by `omni_gettransaction`
-- `listtransactions_MP` by `omni_listtransactions`
-- `listblocktransactions_MP` by `omni_listblocktransactions`
-- `getactivedexsells_MP` by `omni_getactivedexsells`
-- `listproperties_MP` by `omni_listproperties`
-- `getproperty_MP` by `omni_getproperty`
-- `getactivecrowdsales_MP` by `omni_getactivecrowdsales`
-- `getcrowdsale_MP` by `omni_getcrowdsale`
-- `getgrants_MP` by `omni_getgrants`
-- `getsto_MP` by `omni_getsto` or `omni_gettransaction`
+- `send_MP` by `token_send`
+- `sendtoowners_MP` by `token_sendsto`
+- `sendrawtx_MP` by `token_sendrawtx`
+- `getinfo_MP` by `token_getinfo`
+- `getbalance_MP` by `token_getbalance`
+- `getallbalancesforid_MP` by `token_getallbalancesforid`
+- `getallbalancesforaddress_MP` by `token_getallbalancesforaddress`
+- `gettransaction_MP` by `token_gettransaction`
+- `listtransactions_MP` by `token_listtransactions`
+- `listblocktransactions_MP` by `token_listblocktransactions`
+- `getactivedexsells_MP` by `token_getactivedexsells`
+- `listproperties_MP` by `token_listproperties`
+- `getproperty_MP` by `token_getproperty`
+- `getactivecrowdsales_MP` by `token_getactivecrowdsales`
+- `getcrowdsale_MP` by `token_getcrowdsale`
+- `getgrants_MP` by `token_getgrants`
+- `getsto_MP` by `token_getsto` or `token_gettransaction`

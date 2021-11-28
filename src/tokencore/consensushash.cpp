@@ -4,14 +4,14 @@
  * This file contains the function to generate consensus hashes.
  */
 
-#include "omnicore/consensushash.h"
-#include "omnicore/dbspinfo.h"
-#include "omnicore/dex.h"
-#include "omnicore/mdex.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parse_string.h"
-#include "omnicore/sp.h"
+#include "tokencore/consensushash.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/dex.h"
+#include "tokencore/mdex.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parse_string.h"
+#include "tokencore/sp.h"
 
 #include "arith_uint256.h"
 #include "uint256.h"
@@ -30,11 +30,11 @@ bool ShouldConsensusHashBlock(int block) {
         return true;
     }
 
-    if (!mapArgs.count("-omnishowblockconsensushash")) {
+    if (!mapArgs.count("-tokenshowblockconsensushash")) {
         return false;
     }
 
-    const std::vector<std::string>& vecBlocks = mapMultiArgs["-omnishowblockconsensushash"];
+    const std::vector<std::string>& vecBlocks = mapMultiArgs["-tokenshowblockconsensushash"];
     for (std::vector<std::string>::const_iterator it = vecBlocks.begin(); it != vecBlocks.end(); ++it) {
         int64_t paramBlock = StrToInt64(*it, false);
         if (paramBlock < 1) continue; // ignore non numeric values
@@ -102,7 +102,7 @@ std::string GenerateConsensusString(const uint32_t propertyId, const std::string
 /**
  * Obtains a hash of the active state to use for consensus verification and checkpointing.
  *
- * For increased flexibility, so other implementations like OmniWallet and OmniChest can
+ * For increased flexibility, so other implementations like TokenWallet and TokenChest can
  * also apply this methodology without necessarily using the same exact data types (which
  * would be needed to hash the data bytes directly), create a string in the following
  * format for each entry to use for hashing:

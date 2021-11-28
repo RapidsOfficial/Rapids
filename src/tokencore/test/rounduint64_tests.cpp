@@ -1,4 +1,4 @@
-#include "omnicore/convert.h"
+#include "tokencore/convert.h"
 
 #include "test/test_bitcoin.h"
 
@@ -8,7 +8,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_rounduint64_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_rounduint64_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(rounduint64_simple)
 {

@@ -1,24 +1,24 @@
 // Master Protocol transaction code
 
-#include "omnicore/tx.h"
+#include "tokencore/tx.h"
 
-#include "omnicore/activation.h"
-#include "omnicore/dbfees.h"
-#include "omnicore/dbspinfo.h"
-#include "omnicore/dbstolist.h"
-#include "omnicore/dbtradelist.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/dex.h"
-#include "omnicore/log.h"
-#include "omnicore/mdex.h"
-#include "omnicore/notifications.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/rules.h"
-#include "omnicore/sp.h"
-#include "omnicore/sto.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/version.h"
+#include "tokencore/activation.h"
+#include "tokencore/dbfees.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/dbstolist.h"
+#include "tokencore/dbtradelist.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/dex.h"
+#include "tokencore/log.h"
+#include "tokencore/mdex.h"
+#include "tokencore/notifications.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/rules.h"
+#include "tokencore/sp.h"
+#include "tokencore/sto.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/version.h"
 
 #include "amount.h"
 #include "base58.h"
@@ -86,9 +86,9 @@ std::string mastercore::strTransactionType(uint16_t txType)
         case TOKEN_TYPE_FREEZE_PROPERTY_TOKENS: return "Freeze Property Tokens";
         case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS: return "Unfreeze Property Tokens";
         case TOKEN_TYPE_NOTIFICATION: return "Notification";
-        case OMNICORE_MESSAGE_TYPE_ALERT: return "ALERT";
-        case OMNICORE_MESSAGE_TYPE_DEACTIVATION: return "Feature Deactivation";
-        case OMNICORE_MESSAGE_TYPE_ACTIVATION: return "Feature Activation";
+        case TOKENCORE_MESSAGE_TYPE_ALERT: return "ALERT";
+        case TOKENCORE_MESSAGE_TYPE_DEACTIVATION: return "Feature Deactivation";
+        case TOKENCORE_MESSAGE_TYPE_ACTIVATION: return "Feature Activation";
 
         default: return "* unknown type *";
     }
@@ -98,11 +98,11 @@ std::string mastercore::strTransactionType(uint16_t txType)
 static std::string intToClass(int encodingClass)
 {
     switch (encodingClass) {
-        case OMNI_CLASS_A:
+        case TOKEN_CLASS_A:
             return "A";
-        case OMNI_CLASS_B:
+        case TOKEN_CLASS_B:
             return "B";
-        case OMNI_CLASS_C:
+        case TOKEN_CLASS_C:
             return "C";
     }
 
@@ -187,13 +187,13 @@ bool CMPTransaction::interpret_Transaction()
         case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS:
             return interpret_UnfreezeTokens();
 
-        case OMNICORE_MESSAGE_TYPE_DEACTIVATION:
+        case TOKENCORE_MESSAGE_TYPE_DEACTIVATION:
             return interpret_Deactivation();
 
-        case OMNICORE_MESSAGE_TYPE_ACTIVATION:
+        case TOKENCORE_MESSAGE_TYPE_ACTIVATION:
             return interpret_Activation();
 
-        case OMNICORE_MESSAGE_TYPE_ALERT:
+        case TOKENCORE_MESSAGE_TYPE_ALERT:
             return interpret_Alert();
     }
 
@@ -953,13 +953,13 @@ int CMPTransaction::interpretPacket()
         case TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS:
             return logicMath_UnfreezeTokens();
 
-        case OMNICORE_MESSAGE_TYPE_DEACTIVATION:
+        case TOKENCORE_MESSAGE_TYPE_DEACTIVATION:
             return logicMath_Deactivation();
 
-        case OMNICORE_MESSAGE_TYPE_ACTIVATION:
+        case TOKENCORE_MESSAGE_TYPE_ACTIVATION:
             return logicMath_Activation();
 
-        case OMNICORE_MESSAGE_TYPE_ALERT:
+        case TOKENCORE_MESSAGE_TYPE_ALERT:
             return logicMath_Alert();
     }
 
@@ -1170,7 +1170,7 @@ int CMPTransaction::logicMath_SendToOwners()
     assert(sent_so_far == (int64_t)nValue);
 
     // Number of tokens has changed, update fee distribution thresholds
-    if (version == MP_TX_PKT_V0) NotifyTotalTokensChanged(OMNI_PROPERTY_MSC, block); // fee was burned
+    if (version == MP_TX_PKT_V0) NotifyTotalTokensChanged(TOKEN_PROPERTY_MSC, block); // fee was burned
 
     return 0;
 }
@@ -1201,10 +1201,10 @@ int CMPTransaction::logicMath_SendAll()
 
     while (0 != (propertyId = ptally->next())) {
         // only transfer tokens in the specified ecosystem
-        if (ecosystem == OMNI_PROPERTY_MSC && isTestEcosystemProperty(propertyId)) {
+        if (ecosystem == TOKEN_PROPERTY_MSC && isTestEcosystemProperty(propertyId)) {
             continue;
         }
-        if (ecosystem == OMNI_PROPERTY_TMSC && isMainEcosystemProperty(propertyId)) {
+        if (ecosystem == TOKEN_PROPERTY_TMSC && isMainEcosystemProperty(propertyId)) {
             continue;
         }
 
@@ -1251,7 +1251,7 @@ int CMPTransaction::logicMath_TradeOffer()
         return (PKT_ERROR_TRADEOFFER -23);
     }
 
-    if (OMNI_PROPERTY_TMSC != property && OMNI_PROPERTY_MSC != property) {
+    if (TOKEN_PROPERTY_TMSC != property && TOKEN_PROPERTY_MSC != property) {
         PrintToLog("%s(): rejected: property for sale %d must be OMN or TOMN\n", __func__, property);
         return (PKT_ERROR_TRADEOFFER -47);
     }
@@ -1405,9 +1405,9 @@ int CMPTransaction::logicMath_MetaDExTrade()
     }
 
     if (!IsFeatureActivated(FEATURE_TRADEALLPAIRS, block)) {
-        // Trading non-Omni pairs is not allowed before trading all pairs is activated
-        if ((property != OMNI_PROPERTY_MSC) && (desired_property != OMNI_PROPERTY_MSC) &&
-            (property != OMNI_PROPERTY_TMSC) && (desired_property != OMNI_PROPERTY_TMSC)) {
+        // Trading non-Token pairs is not allowed before trading all pairs is activated
+        if ((property != TOKEN_PROPERTY_MSC) && (desired_property != TOKEN_PROPERTY_MSC) &&
+            (property != TOKEN_PROPERTY_TMSC) && (desired_property != TOKEN_PROPERTY_TMSC)) {
             PrintToLog("%s(): rejected: one side of a trade [%d, %d] must be OMN or TOMN\n", __func__, property, desired_property);
             return (PKT_ERROR_METADEX -35);
         }
@@ -1546,7 +1546,7 @@ int CMPTransaction::logicMath_MetaDExCancelEcosystem()
         return (PKT_ERROR_METADEX -22);
     }
 
-    if (OMNI_PROPERTY_MSC != ecosystem && OMNI_PROPERTY_TMSC != ecosystem) {
+    if (TOKEN_PROPERTY_MSC != ecosystem && TOKEN_PROPERTY_TMSC != ecosystem) {
         PrintToLog("%s(): rejected: invalid ecosystem: %d\n", __func__, ecosystem);
         return (PKT_ERROR_METADEX -21);
     }
@@ -1571,7 +1571,7 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         blockHash = pindex->GetBlockHash();
     }
 
-    if (OMNI_PROPERTY_MSC != ecosystem && OMNI_PROPERTY_TMSC != ecosystem) {
+    if (TOKEN_PROPERTY_MSC != ecosystem && TOKEN_PROPERTY_TMSC != ecosystem) {
         PrintToLog("%s(): rejected: invalid ecosystem: %d\n", __func__, (uint32_t) ecosystem);
         return (PKT_ERROR_SP -21);
     }
@@ -1665,7 +1665,7 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
         blockHash = pindex->GetBlockHash();
     }
 
-    if (OMNI_PROPERTY_MSC != ecosystem && OMNI_PROPERTY_TMSC != ecosystem) {
+    if (TOKEN_PROPERTY_MSC != ecosystem && TOKEN_PROPERTY_TMSC != ecosystem) {
         PrintToLog("%s(): rejected: invalid ecosystem: %d\n", __func__, (uint32_t) ecosystem);
         return (PKT_ERROR_SP -21);
     }
@@ -1858,7 +1858,7 @@ int CMPTransaction::logicMath_CreatePropertyManaged()
         blockHash = pindex->GetBlockHash();
     }
 
-    if (OMNI_PROPERTY_MSC != ecosystem && OMNI_PROPERTY_TMSC != ecosystem) {
+    if (TOKEN_PROPERTY_MSC != ecosystem && TOKEN_PROPERTY_TMSC != ecosystem) {
         PrintToLog("%s(): rejected: invalid ecosystem: %d\n", __func__, (uint32_t) ecosystem);
         return (PKT_ERROR_SP -21);
     }
@@ -2206,7 +2206,7 @@ int CMPTransaction::logicMath_EnableFreezing()
         liveBlock = block;
     } else {
         const CConsensusParams& params = ConsensusParams();
-        liveBlock = params.OMNI_FREEZE_WAIT_PERIOD + block;
+        liveBlock = params.TOKEN_FREEZE_WAIT_PERIOD + block;
     }
 
     enableFreezing(property, liveBlock);
@@ -2485,7 +2485,7 @@ int CMPTransaction::logicMath_Alert()
         return (PKT_ERROR -51);
     }
 
-    if (alert_type == ALERT_CLIENT_VERSION_EXPIRY && OMNICORE_VERSION < alert_expiry) {
+    if (alert_type == ALERT_CLIENT_VERSION_EXPIRY && TOKENCORE_VERSION < alert_expiry) {
         // regular alert keys CANNOT be used to force a client upgrade on mainnet - at least 3 signatures from board/devs are required
         if (sender == "34kwkVRSvFVEoUwcQSgpQ4ZUasuZ54DJLD" || isNonMainNet()) {
             std::string msgText = "Client upgrade is required!  Shutting down due to unsupported consensus state!";

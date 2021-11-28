@@ -174,7 +174,7 @@
             <item>
              <widget class="QLabel" name="lblLastPrice">
               <property name="text">
-               <string>0.00000000 OMNI</string>
+               <string>0.00000000 TOKEN</string>
               </property>
              </widget>
             </item>

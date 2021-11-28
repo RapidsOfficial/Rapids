@@ -17,7 +17,7 @@
 /** Throws a JSONRPCError, depending on error code. */
 void PopulateFailure(int error);
 
-void RegisterOmniDataRetrievalRPCCommands();
+void RegisterTokenDataRetrievalRPCCommands();
 
 #endif /* RPC_H */
 

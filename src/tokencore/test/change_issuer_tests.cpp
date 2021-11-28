@@ -1,4 +1,4 @@
-#include "omnicore/dbspinfo.h"
+#include "tokencore/dbspinfo.h"
 
 #include "test/test_bitcoin.h"
 
@@ -7,7 +7,7 @@
 #include <string>
 #include <stdint.h>
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_change_issuer_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_change_issuer_tests, BasicTestingSetup)
 
 /**
  * Even if no updateIssuer was called, it falls back to the currently

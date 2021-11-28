@@ -1,4 +1,4 @@
-#include "omnicore/log.h"
+#include "tokencore/log.h"
 
 #include "chainparamsbase.h"
 #include "util.h"
@@ -16,7 +16,7 @@
 #include <vector>
 
 // Default log files
-const std::string LOG_FILENAME    = "omnicore.log";
+const std::string LOG_FILENAME    = "tokencore.log";
 
 // Options
 static const long LOG_BUFFERSIZE  =  8000000; //  8 MB
@@ -84,18 +84,18 @@ static boost::once_flag debugLogInitFlag = BOOST_ONCE_INIT;
  */
 static FILE* fileout = NULL;
 static boost::mutex* mutexDebugLog = NULL;
-/** Flag to indicate, whether the Omni Core log file should be reopened. */
-extern std::atomic<bool> fReopenOmniCoreLog;
+/** Flag to indicate, whether the Token Core log file should be reopened. */
+extern std::atomic<bool> fReopenTokenCoreLog;
 /**
  * Returns path for debug log file.
  *
- * The log file can be specified via startup option "--omnilogfile=/path/to/omnicore.log",
+ * The log file can be specified via startup option "--tokenlogfile=/path/to/tokencore.log",
  * and if none is provided, then the client's datadir is used as default location.
  */
 static boost::filesystem::path GetLogPath()
 {
     boost::filesystem::path pathLogFile;
-    std::string strLogPath = GetArg("-omnilogfile", "");
+    std::string strLogPath = GetArg("-tokenlogfile", "");
 
     if (!strLogPath.empty()) {
         pathLogFile = boost::filesystem::path(strLogPath);
@@ -164,8 +164,8 @@ int LogFilePrint(const std::string& str)
         boost::mutex::scoped_lock scoped_lock(*mutexDebugLog);
 
         // Reopen the log file, if requested
-        if (fReopenOmniCoreLog) {
-            fReopenOmniCoreLog = false;
+        if (fReopenTokenCoreLog) {
+            fReopenTokenCoreLog = false;
             boost::filesystem::path pathDebug = GetLogPath();
             if (freopen(pathDebug.string().c_str(), "a", fileout) != NULL) {
                 setbuf(fileout, NULL); // Unbuffered
@@ -213,20 +213,20 @@ int ConsolePrint(const std::string& str)
 }
 
 /**
- * Determine whether to override compiled debug levels via enumerating startup option --omnidebug.
+ * Determine whether to override compiled debug levels via enumerating startup option --tokendebug.
  *
- * Example usage (granular categories)    : --omnidebug=parser --omnidebug=metadex1 --omnidebug=ui
- * Example usage (enable all categories)  : --omnidebug=all
- * Example usage (disable all debugging)  : --omnidebug=none
- * Example usage (disable all except XYZ) : --omnidebug=none --omnidebug=parser --omnidebug=sto
+ * Example usage (granular categories)    : --tokendebug=parser --tokendebug=metadex1 --tokendebug=ui
+ * Example usage (enable all categories)  : --tokendebug=all
+ * Example usage (disable all debugging)  : --tokendebug=none
+ * Example usage (disable all except XYZ) : --tokendebug=none --tokendebug=parser --tokendebug=sto
  */
 void InitDebugLogLevels()
 {
-    if (!mapArgs.count("-omnidebug")) {
+    if (!mapArgs.count("-tokendebug")) {
         return;
     }
 
-    const std::vector<std::string>& debugLevels = mapMultiArgs["-omnidebug"];
+    const std::vector<std::string>& debugLevels = mapMultiArgs["-tokendebug"];
 
     for (std::vector<std::string>::const_iterator it = debugLevels.begin(); it != debugLevels.end(); ++it) {
         if (*it == "parser_data") msc_debug_parser_data = true;

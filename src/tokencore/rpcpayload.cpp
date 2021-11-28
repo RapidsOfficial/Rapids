@@ -1,11 +1,11 @@
-#include "omnicore/rpcpayload.h"
+#include "tokencore/rpcpayload.h"
 
-#include "omnicore/createpayload.h"
-#include "omnicore/rpcvalues.h"
-#include "omnicore/rpcrequirements.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/sp.h"
-#include "omnicore/tx.h"
+#include "tokencore/createpayload.h"
+#include "tokencore/rpcvalues.h"
+#include "tokencore/rpcrequirements.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/sp.h"
+#include "tokencore/tx.h"
 
 #include "rpc/server.h"
 #include "utilstrencodings.h"
@@ -15,11 +15,11 @@
 using std::runtime_error;
 using namespace mastercore;
 
-static UniValue omni_createpayload_simplesend(const JSONRPCRequest& request)
+static UniValue token_createpayload_simplesend(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "omni_createpayload_simplesend propertyid \"amount\"\n"
+            "token_createpayload_simplesend propertyid \"amount\"\n"
 
             "\nCreate the payload for a simple send transaction.\n"
 
@@ -33,8 +33,8 @@ static UniValue omni_createpayload_simplesend(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_simplesend", "1 \"100.0\"")
-            + HelpExampleRpc("omni_createpayload_simplesend", "1, \"100.0\"")
+            + HelpExampleCli("token_createpayload_simplesend", "1 \"100.0\"")
+            + HelpExampleRpc("token_createpayload_simplesend", "1, \"100.0\"")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -45,11 +45,11 @@ static UniValue omni_createpayload_simplesend(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_sendall(const JSONRPCRequest& request)
+static UniValue token_createpayload_sendall(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_createpayload_sendall ecosystem\n"
+            "token_createpayload_sendall ecosystem\n"
 
             "\nCreate the payload for a send all transaction.\n"
 
@@ -60,8 +60,8 @@ static UniValue omni_createpayload_sendall(const JSONRPCRequest& request)
             "\"payload\"               (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_sendall", "2")
-            + HelpExampleRpc("omni_createpayload_sendall", "2")
+            + HelpExampleCli("token_createpayload_sendall", "2")
+            + HelpExampleRpc("token_createpayload_sendall", "2")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -71,13 +71,13 @@ static UniValue omni_createpayload_sendall(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_dexsell(const JSONRPCRequest& request)
+static UniValue token_createpayload_dexsell(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 6)
         throw runtime_error(
-            "omni_createpayload_dexsell propertyidforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
+            "token_createpayload_dexsell propertyidforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
 
-            "\nCreate a payload to place, update or cancel a sell offer on the traditional distributed OMNI/BTC exchange.\n"
+            "\nCreate a payload to place, update or cancel a sell offer on the traditional distributed TOKEN/BTC exchange.\n"
 
             "\nArguments:\n"
 
@@ -92,8 +92,8 @@ static UniValue omni_createpayload_dexsell(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_dexsell", "1 \"1.5\" \"0.75\" 25 \"0.0005\" 1")
-            + HelpExampleRpc("omni_createpayload_dexsell", "1, \"1.5\", \"0.75\", 25, \"0.0005\", 1")
+            + HelpExampleCli("token_createpayload_dexsell", "1 \"1.5\" \"0.75\" 25 \"0.0005\" 1")
+            + HelpExampleRpc("token_createpayload_dexsell", "1, \"1.5\", \"0.75\", 25, \"0.0005\", 1")
         );
 
     uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
@@ -116,11 +116,11 @@ static UniValue omni_createpayload_dexsell(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_dexaccept(const JSONRPCRequest& request)
+static UniValue token_createpayload_dexaccept(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "omni_createpayload_dexaccept propertyid \"amount\"\n"
+            "token_createpayload_dexaccept propertyid \"amount\"\n"
 
             "\nCreate the payload for an accept offer for the specified token and amount.\n"
 
@@ -134,8 +134,8 @@ static UniValue omni_createpayload_dexaccept(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_dexaccept", "1 \"15.0\"")
-            + HelpExampleRpc("omni_createpayload_dexaccept", "1, \"15.0\"")
+            + HelpExampleCli("token_createpayload_dexaccept", "1 \"15.0\"")
+            + HelpExampleRpc("token_createpayload_dexaccept", "1, \"15.0\"")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -146,11 +146,11 @@ static UniValue omni_createpayload_dexaccept(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_sto(const JSONRPCRequest& request)
+static UniValue token_createpayload_sto(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "omni_createpayload_sto propertyid \"amount\" ( distributionproperty )\n"
+            "token_createpayload_sto propertyid \"amount\" ( distributionproperty )\n"
 
             "\nCreates the payload for a send-to-owners transaction.\n"
 
@@ -164,8 +164,8 @@ static UniValue omni_createpayload_sto(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_sto", "3 \"5000\"")
-            + HelpExampleRpc("omni_createpayload_sto", "3, \"5000\"")
+            + HelpExampleCli("token_createpayload_sto", "3 \"5000\"")
+            + HelpExampleRpc("token_createpayload_sto", "3, \"5000\"")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -177,11 +177,11 @@ static UniValue omni_createpayload_sto(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_issuancefixed(const JSONRPCRequest& request)
+static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 9)
         throw runtime_error(
-            "omni_createpayload_issuancefixed ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" \"amount\"\n"
+            "token_createpayload_issuancefixed ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" \"amount\"\n"
 
             "\nCreates the payload for a new tokens issuance with fixed supply.\n"
 
@@ -200,8 +200,8 @@ static UniValue omni_createpayload_issuancefixed(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_issuancefixed", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" \"1000000\"")
-            + HelpExampleRpc("omni_createpayload_issuancefixed", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", \"1000000\"")
+            + HelpExampleCli("token_createpayload_issuancefixed", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" \"1000000\"")
+            + HelpExampleRpc("token_createpayload_issuancefixed", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", \"1000000\"")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -221,11 +221,11 @@ static UniValue omni_createpayload_issuancefixed(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_issuancecrowdsale(const JSONRPCRequest& request)
+static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 13)
         throw runtime_error(
-            "omni_createpayload_issuancecrowdsale ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" propertyiddesired tokensperunit deadline earlybonus issuerpercentage\n"
+            "token_createpayload_issuancecrowdsale ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" propertyiddesired tokensperunit deadline earlybonus issuerpercentage\n"
 
             "\nCreates the payload for a new tokens issuance with crowdsale.\n"
 
@@ -248,8 +248,8 @@ static UniValue omni_createpayload_issuancecrowdsale(const JSONRPCRequest& reque
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_issuancecrowdsale", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" 2 \"100\" 1483228800 30 2")
-            + HelpExampleRpc("omni_createpayload_issuancecrowdsale", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", 2, \"100\", 1483228800, 30, 2")
+            + HelpExampleCli("token_createpayload_issuancecrowdsale", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" 2 \"100\" 1483228800 30 2")
+            + HelpExampleRpc("token_createpayload_issuancecrowdsale", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", 2, \"100\", 1483228800, 30, 2")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -274,11 +274,11 @@ static UniValue omni_createpayload_issuancecrowdsale(const JSONRPCRequest& reque
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_issuancemanaged(const JSONRPCRequest& request)
+static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 8)
         throw runtime_error(
-            "omni_createpayload_issuancemanaged ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\"\n"
+            "token_createpayload_issuancemanaged ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\"\n"
 
             "\nCreates the payload for a new tokens issuance with manageable supply.\n"
 
@@ -296,8 +296,8 @@ static UniValue omni_createpayload_issuancemanaged(const JSONRPCRequest& request
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_issuancemanaged", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
-            + HelpExampleRpc("omni_createpayload_issuancemanaged", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
+            + HelpExampleCli("token_createpayload_issuancemanaged", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
+            + HelpExampleRpc("token_createpayload_issuancemanaged", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -316,11 +316,11 @@ static UniValue omni_createpayload_issuancemanaged(const JSONRPCRequest& request
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_closecrowdsale(const JSONRPCRequest& request)
+static UniValue token_createpayload_closecrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_createpayload_closecrowdsale propertyid\n"
+            "token_createpayload_closecrowdsale propertyid\n"
 
             "\nCreates the payload to manually close a crowdsale.\n"
 
@@ -331,8 +331,8 @@ static UniValue omni_createpayload_closecrowdsale(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_closecrowdsale", "70")
-            + HelpExampleRpc("omni_createpayload_closecrowdsale", "70")
+            + HelpExampleCli("token_createpayload_closecrowdsale", "70")
+            + HelpExampleRpc("token_createpayload_closecrowdsale", "70")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -342,11 +342,11 @@ static UniValue omni_createpayload_closecrowdsale(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_grant(const JSONRPCRequest& request)
+static UniValue token_createpayload_grant(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "omni_createpayload_grant propertyid \"amount\" ( \"memo\" )\n"
+            "token_createpayload_grant propertyid \"amount\" ( \"memo\" )\n"
 
             "\nCreates the payload to issue or grant new units of managed tokens.\n"
 
@@ -361,8 +361,8 @@ static UniValue omni_createpayload_grant(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_grant", "51 \"7000\"")
-            + HelpExampleRpc("omni_createpayload_grant", "51, \"7000\"")
+            + HelpExampleCli("token_createpayload_grant", "51 \"7000\"")
+            + HelpExampleRpc("token_createpayload_grant", "51, \"7000\"")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -374,11 +374,11 @@ static UniValue omni_createpayload_grant(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_revoke(const JSONRPCRequest& request)
+static UniValue token_createpayload_revoke(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "omni_createpayload_revoke propertyid \"amount\" ( \"memo\" )\n"
+            "token_createpayload_revoke propertyid \"amount\" ( \"memo\" )\n"
 
             "\nCreates the payload to revoke units of managed tokens.\n"
 
@@ -393,8 +393,8 @@ static UniValue omni_createpayload_revoke(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_revoke", "51 \"100\"")
-            + HelpExampleRpc("omni_createpayload_revoke", "51, \"100\"")
+            + HelpExampleCli("token_createpayload_revoke", "51 \"100\"")
+            + HelpExampleRpc("token_createpayload_revoke", "51, \"100\"")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -406,11 +406,11 @@ static UniValue omni_createpayload_revoke(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_changeissuer(const JSONRPCRequest& request)
+static UniValue token_createpayload_changeissuer(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_createpayload_changeissuer propertyid\n"
+            "token_createpayload_changeissuer propertyid\n"
 
             "\nCreats the payload to change the issuer on record of the given tokens.\n"
 
@@ -421,8 +421,8 @@ static UniValue omni_createpayload_changeissuer(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_changeissuer", "3")
-            + HelpExampleRpc("omni_createpayload_changeissuer", "3")
+            + HelpExampleCli("token_createpayload_changeissuer", "3")
+            + HelpExampleRpc("token_createpayload_changeissuer", "3")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -432,11 +432,11 @@ static UniValue omni_createpayload_changeissuer(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_trade(const JSONRPCRequest& request)
+static UniValue token_createpayload_trade(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "omni_createpayload_trade propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
+            "token_createpayload_trade propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
 
             "\nCreates the payload to place a trade offer on the distributed token exchange.\n"
 
@@ -452,8 +452,8 @@ static UniValue omni_createpayload_trade(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_trade", "31 \"250.0\" 1 \"10.0\"")
-            + HelpExampleRpc("omni_createpayload_trade", "31, \"250.0\", 1, \"10.0\"")
+            + HelpExampleCli("token_createpayload_trade", "31 \"250.0\" 1 \"10.0\"")
+            + HelpExampleRpc("token_createpayload_trade", "31, \"250.0\", 1, \"10.0\"")
         );
 
     uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
@@ -469,11 +469,11 @@ static UniValue omni_createpayload_trade(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_canceltradesbyprice(const JSONRPCRequest& request)
+static UniValue token_createpayload_canceltradesbyprice(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "omni_createpayload_canceltradesbyprice propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
+            "token_createpayload_canceltradesbyprice propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
 
             "\nCreates the payload to cancel offers on the distributed token exchange with the specified price.\n"
 
@@ -489,8 +489,8 @@ static UniValue omni_createpayload_canceltradesbyprice(const JSONRPCRequest& req
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_canceltradesbyprice", "31 \"100.0\" 1 \"5.0\"")
-            + HelpExampleRpc("omni_createpayload_canceltradesbyprice", "31, \"100.0\", 1, \"5.0\"")
+            + HelpExampleCli("token_createpayload_canceltradesbyprice", "31 \"100.0\" 1 \"5.0\"")
+            + HelpExampleRpc("token_createpayload_canceltradesbyprice", "31, \"100.0\", 1, \"5.0\"")
         );
 
     uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
@@ -505,11 +505,11 @@ static UniValue omni_createpayload_canceltradesbyprice(const JSONRPCRequest& req
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_canceltradesbypair(const JSONRPCRequest& request)
+static UniValue token_createpayload_canceltradesbypair(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "omni_createpayload_canceltradesbypair propertyidforsale propertiddesired\n"
+            "token_createpayload_canceltradesbypair propertyidforsale propertiddesired\n"
 
             "\nCreates the payload to cancel all offers on the distributed token exchange with the given currency pair.\n"
 
@@ -521,8 +521,8 @@ static UniValue omni_createpayload_canceltradesbypair(const JSONRPCRequest& requ
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_canceltradesbypair", "1 31")
-            + HelpExampleRpc("omni_createpayload_canceltradesbypair", "1, 31")
+            + HelpExampleCli("token_createpayload_canceltradesbypair", "1 31")
+            + HelpExampleRpc("token_createpayload_canceltradesbypair", "1, 31")
         );
 
     uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
@@ -535,11 +535,11 @@ static UniValue omni_createpayload_canceltradesbypair(const JSONRPCRequest& requ
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_cancelalltrades(const JSONRPCRequest& request)
+static UniValue token_createpayload_cancelalltrades(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_createpayload_cancelalltrades ecosystem\n"
+            "token_createpayload_cancelalltrades ecosystem\n"
 
             "\nCreates the payload to cancel all offers on the distributed token exchange.\n"
 
@@ -550,8 +550,8 @@ static UniValue omni_createpayload_cancelalltrades(const JSONRPCRequest& request
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_cancelalltrades", "1")
-            + HelpExampleRpc("omni_createpayload_cancelalltrades", "1")
+            + HelpExampleCli("token_createpayload_cancelalltrades", "1")
+            + HelpExampleRpc("token_createpayload_cancelalltrades", "1")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -561,11 +561,11 @@ static UniValue omni_createpayload_cancelalltrades(const JSONRPCRequest& request
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_enablefreezing(const JSONRPCRequest& request)
+static UniValue token_createpayload_enablefreezing(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_createpayload_enablefreezing propertyid\n"
+            "token_createpayload_enablefreezing propertyid\n"
 
             "\nCreates the payload to enable address freezing for a centrally managed property.\n"
 
@@ -576,8 +576,8 @@ static UniValue omni_createpayload_enablefreezing(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_enablefreezing", "3")
-            + HelpExampleRpc("omni_createpayload_enablefreezing", "3")
+            + HelpExampleCli("token_createpayload_enablefreezing", "3")
+            + HelpExampleRpc("token_createpayload_enablefreezing", "3")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -587,11 +587,11 @@ static UniValue omni_createpayload_enablefreezing(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_disablefreezing(const JSONRPCRequest& request)
+static UniValue token_createpayload_disablefreezing(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "omni_createpayload_disablefreezing propertyid\n"
+            "token_createpayload_disablefreezing propertyid\n"
 
             "\nCreates the payload to disable address freezing for a centrally managed property.\n"
             "\nIMPORTANT NOTE:  Disabling freezing for a property will UNFREEZE all frozen addresses for that property!"
@@ -603,8 +603,8 @@ static UniValue omni_createpayload_disablefreezing(const JSONRPCRequest& request
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_disablefreezing", "3")
-            + HelpExampleRpc("omni_createpayload_disablefreezing", "3")
+            + HelpExampleCli("token_createpayload_disablefreezing", "3")
+            + HelpExampleRpc("token_createpayload_disablefreezing", "3")
         );
 
     uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -615,11 +615,11 @@ static UniValue omni_createpayload_disablefreezing(const JSONRPCRequest& request
 }
 
 
-static UniValue omni_createpayload_freeze(const JSONRPCRequest& request)
+static UniValue token_createpayload_freeze(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 3)
         throw runtime_error(
-            "omni_createpayload_freeze \"toaddress\" propertyid amount \n"
+            "token_createpayload_freeze \"toaddress\" propertyid amount \n"
 
             "\nCreates the payload to freeze an address for a centrally managed token.\n"
 
@@ -634,8 +634,8 @@ static UniValue omni_createpayload_freeze(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_freeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 \"100\"")
-            + HelpExampleRpc("omni_createpayload_freeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, \"100\"")
+            + HelpExampleCli("token_createpayload_freeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 \"100\"")
+            + HelpExampleRpc("token_createpayload_freeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, \"100\"")
         );
 
     std::string refAddress = ParseAddress(request.params[0]);
@@ -647,11 +647,11 @@ static UniValue omni_createpayload_freeze(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue omni_createpayload_unfreeze(const JSONRPCRequest& request)
+static UniValue token_createpayload_unfreeze(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 3)
         throw runtime_error(
-            "omni_createpayload_unfreeze \"toaddress\" propertyid amount \n"
+            "token_createpayload_unfreeze \"toaddress\" propertyid amount \n"
 
             "\nCreates the payload to unfreeze an address for a centrally managed token.\n"
 
@@ -666,8 +666,8 @@ static UniValue omni_createpayload_unfreeze(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_createpayload_unfreeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 \"100\"")
-            + HelpExampleRpc("omni_createpayload_unfreeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, \"100\"")
+            + HelpExampleCli("token_createpayload_unfreeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 \"100\"")
+            + HelpExampleRpc("token_createpayload_unfreeze", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, \"100\"")
         );
 
     std::string refAddress = ParseAddress(request.params[0]);
@@ -682,29 +682,29 @@ static UniValue omni_createpayload_unfreeze(const JSONRPCRequest& request)
 static const CRPCCommand commands[] =
 { //  category                         name                                      actor (function)                         okSafeMode
   //  -------------------------------- ----------------------------------------- ---------------------------------------- ----------
-    { "omni layer (payload creation)", "omni_createpayload_simplesend",          &omni_createpayload_simplesend,          true },
-    { "omni layer (payload creation)", "omni_createpayload_sendall",             &omni_createpayload_sendall,             true },
-    { "omni layer (payload creation)", "omni_createpayload_dexsell",             &omni_createpayload_dexsell,             true },
-    { "omni layer (payload creation)", "omni_createpayload_dexaccept",           &omni_createpayload_dexaccept,           true },
-    { "omni layer (payload creation)", "omni_createpayload_sto",                 &omni_createpayload_sto,                 true },
-    { "omni layer (payload creation)", "omni_createpayload_grant",               &omni_createpayload_grant,               true },
-    { "omni layer (payload creation)", "omni_createpayload_revoke",              &omni_createpayload_revoke,              true },
-    { "omni layer (payload creation)", "omni_createpayload_changeissuer",        &omni_createpayload_changeissuer,        true },
-    { "omni layer (payload creation)", "omni_createpayload_trade",               &omni_createpayload_trade,               true },
-    { "omni layer (payload creation)", "omni_createpayload_issuancefixed",       &omni_createpayload_issuancefixed,       true },
-    { "omni layer (payload creation)", "omni_createpayload_issuancecrowdsale",   &omni_createpayload_issuancecrowdsale,   true },
-    { "omni layer (payload creation)", "omni_createpayload_issuancemanaged",     &omni_createpayload_issuancemanaged,     true },
-    { "omni layer (payload creation)", "omni_createpayload_closecrowdsale",      &omni_createpayload_closecrowdsale,      true },
-    { "omni layer (payload creation)", "omni_createpayload_canceltradesbyprice", &omni_createpayload_canceltradesbyprice, true },
-    { "omni layer (payload creation)", "omni_createpayload_canceltradesbypair",  &omni_createpayload_canceltradesbypair,  true },
-    { "omni layer (payload creation)", "omni_createpayload_cancelalltrades",     &omni_createpayload_cancelalltrades,     true },
-    { "omni layer (payload creation)", "omni_createpayload_enablefreezing",      &omni_createpayload_enablefreezing,      true },
-    { "omni layer (payload creation)", "omni_createpayload_disablefreezing",     &omni_createpayload_disablefreezing,     true },
-    { "omni layer (payload creation)", "omni_createpayload_freeze",              &omni_createpayload_freeze,              true },
-    { "omni layer (payload creation)", "omni_createpayload_unfreeze",            &omni_createpayload_unfreeze,            true },
+    { "token layer (payload creation)", "token_createpayload_simplesend",          &token_createpayload_simplesend,          true },
+    { "token layer (payload creation)", "token_createpayload_sendall",             &token_createpayload_sendall,             true },
+    { "token layer (payload creation)", "token_createpayload_dexsell",             &token_createpayload_dexsell,             true },
+    { "token layer (payload creation)", "token_createpayload_dexaccept",           &token_createpayload_dexaccept,           true },
+    { "token layer (payload creation)", "token_createpayload_sto",                 &token_createpayload_sto,                 true },
+    { "token layer (payload creation)", "token_createpayload_grant",               &token_createpayload_grant,               true },
+    { "token layer (payload creation)", "token_createpayload_revoke",              &token_createpayload_revoke,              true },
+    { "token layer (payload creation)", "token_createpayload_changeissuer",        &token_createpayload_changeissuer,        true },
+    { "token layer (payload creation)", "token_createpayload_trade",               &token_createpayload_trade,               true },
+    { "token layer (payload creation)", "token_createpayload_issuancefixed",       &token_createpayload_issuancefixed,       true },
+    { "token layer (payload creation)", "token_createpayload_issuancecrowdsale",   &token_createpayload_issuancecrowdsale,   true },
+    { "token layer (payload creation)", "token_createpayload_issuancemanaged",     &token_createpayload_issuancemanaged,     true },
+    { "token layer (payload creation)", "token_createpayload_closecrowdsale",      &token_createpayload_closecrowdsale,      true },
+    { "token layer (payload creation)", "token_createpayload_canceltradesbyprice", &token_createpayload_canceltradesbyprice, true },
+    { "token layer (payload creation)", "token_createpayload_canceltradesbypair",  &token_createpayload_canceltradesbypair,  true },
+    { "token layer (payload creation)", "token_createpayload_cancelalltrades",     &token_createpayload_cancelalltrades,     true },
+    { "token layer (payload creation)", "token_createpayload_enablefreezing",      &token_createpayload_enablefreezing,      true },
+    { "token layer (payload creation)", "token_createpayload_disablefreezing",     &token_createpayload_disablefreezing,     true },
+    { "token layer (payload creation)", "token_createpayload_freeze",              &token_createpayload_freeze,              true },
+    { "token layer (payload creation)", "token_createpayload_unfreeze",            &token_createpayload_unfreeze,            true },
 };
 
-void RegisterOmniPayloadCreationRPCCommands()
+void RegisterTokenPayloadCreationRPCCommands()
 {
     for (unsigned int vcidx = 0; vcidx < ARRAYLEN(commands); vcidx++)
         tableRPC.appendCommand(commands[vcidx].name, &commands[vcidx]);

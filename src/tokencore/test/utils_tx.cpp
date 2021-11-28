@@ -1,7 +1,7 @@
-#include "omnicore/test/utils_tx.h"
+#include "tokencore/test/utils_tx.h"
 
-#include "omnicore/omnicore.h"
-#include "omnicore/script.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/script.h"
 
 #include "base58.h"
 #include "primitives/transaction.h"

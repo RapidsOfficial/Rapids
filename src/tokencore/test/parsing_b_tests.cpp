@@ -1,11 +1,11 @@
-#include "omnicore/test/utils_tx.h"
+#include "tokencore/test/utils_tx.h"
 
-#include "omnicore/createpayload.h"
-#include "omnicore/encoding.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/script.h"
-#include "omnicore/tx.h"
+#include "tokencore/createpayload.h"
+#include "tokencore/encoding.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/script.h"
+#include "tokencore/tx.h"
 
 #include "base58.h"
 #include "coins.h"
@@ -23,7 +23,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_parsing_b_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_parsing_b_tests, BasicTestingSetup)
 
 /** Creates a dummy transaction with the given inputs and outputs. */
 static CTransaction TxClassB(const std::vector<CTxOut>& txInputs, const std::vector<CTxOut>& txOuts)

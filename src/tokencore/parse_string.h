@@ -1,5 +1,5 @@
-#ifndef OMNICORE_PARSE_STRING_H
-#define OMNICORE_PARSE_STRING_H
+#ifndef TOKENCORE_PARSE_STRING_H
+#define TOKENCORE_PARSE_STRING_H
 
 #include <stdint.h>
 #include <string>
@@ -18,4 +18,4 @@ int64_t StrToInt64(const std::string& str, bool divisible);
 }
 
 
-#endif // OMNICORE_PARSE_STRING_H
+#endif // TOKENCORE_PARSE_STRING_H

@@ -1,6 +1,6 @@
-#include "omnicore/seedblocks.h"
+#include "tokencore/seedblocks.h"
 
-#include "omnicore/log.h"
+#include "tokencore/log.h"
 
 #include "chainparams.h"
 #include "utiltime.h"

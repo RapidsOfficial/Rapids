@@ -35,7 +35,7 @@ public:
       : blockHeight(-1), blockByteOffset(0), valid(false), fundsMoved(true) {};
     int blockHeight; // block transaction was mined in
     int blockByteOffset; // byte offset the tx is stored in the block (used for ordering multiple txs same block)
-    bool valid; // whether the transaction is valid from an Omni perspective
+    bool valid; // whether the transaction is valid from an Token perspective
     bool fundsMoved; // whether tokens actually moved in this transaction
     std::string txType; // human readable string containing type
     std::string address; // the address to be displayed (usually sender or recipient)

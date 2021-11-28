@@ -5,14 +5,14 @@
  * position in block and position in wallet including STO receipts.
  */
 
-#include "omnicore/walletfetchtxs.h"
+#include "tokencore/walletfetchtxs.h"
 
-#include "omnicore/dbstolist.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/pending.h"
-#include "omnicore/utilsbitcoin.h"
+#include "tokencore/dbstolist.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/pending.h"
+#include "tokencore/utilsbitcoin.h"
 
 #include "init.h"
 #include "main.h"
@@ -51,11 +51,11 @@ static unsigned int GetTransactionByteOffset(const uint256& txid)
 }
 
 /**
- * Returns an ordered list of Omni transactions including STO receipts that are relevant to the wallet.
+ * Returns an ordered list of Token transactions including STO receipts that are relevant to the wallet.
  *
  * Ignores order in the wallet (which can be skewed by watch addresses) and utilizes block height and position within block.
  */
-std::map<std::string, uint256> FetchWalletOmniTransactions(unsigned int count, int startBlock, int endBlock)
+std::map<std::string, uint256> FetchWalletTokenTransactions(unsigned int count, int startBlock, int endBlock)
 {
     std::map<std::string, uint256> mapResponse;
 #ifdef ENABLE_WALLET

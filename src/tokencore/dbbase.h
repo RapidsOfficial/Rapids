@@ -1,5 +1,5 @@
-#ifndef OMNICORE_DBBASE_H
-#define OMNICORE_DBBASE_H
+#ifndef TOKENCORE_DBBASE_H
+#define TOKENCORE_DBBASE_H
 
 #include "leveldb/db.h"
 
@@ -94,4 +94,4 @@ public:
 };
 
 
-#endif // OMNICORE_DBBASE_H
+#endif // TOKENCORE_DBBASE_H

@@ -239,12 +239,12 @@ BITCOIN_QT_H = \
   qt/lookuptxdialog.h \
   qt/txhistorydialog.h \
   qt/balancesdialog.h \
-  qt/omnicore_init.h \
+  qt/tokencore_init.h \
   qt/metadexdialog.h \
   qt/metadexcanceldialog.h \
   qt/tradehistorydialog.h \
   qt/sendmpdialog.h \
-  qt/omnicore_qtutils.h \
+  qt/tokencore_qtutils.h \
   qt/rapids/pwidget.h \
   qt/rapids/focuseddialog.h \
   qt/rapids/guitransactionsutils.h \
@@ -325,11 +325,11 @@ RES_ICONS = \
   qt/res/icons/meta_partcancelled.png \
   qt/res/icons/meta_partfilled.png \
   qt/res/icons/meta_pending.png \
-  qt/res/icons/omni_in.png \
-  qt/res/icons/omni_inout.png \
-  qt/res/icons/omni_invalid.png \
-  qt/res/icons/omni_out.png \
-  qt/res/icons/omni_hourglass.png \
+  qt/res/icons/token_in.png \
+  qt/res/icons/token_inout.png \
+  qt/res/icons/token_invalid.png \
+  qt/res/icons/token_out.png \
+  qt/res/icons/token_hourglass.png \
   qt/res/icons/tools.png \
   qt/rapids/res/img/bg-dashboard-banner.png \
   qt/rapids/res/img/bg-multi-number-dark.png \
@@ -552,8 +552,8 @@ BITCOIN_QT_BASE_CPP = \
   qt/trafficgraphwidget.cpp \
   qt/utilitydialog.cpp \
   qt/utilitydialog.cpp \
-  qt/omnicore_init.cpp \
-  qt/omnicore_qtutils.cpp
+  qt/tokencore_init.cpp \
+  qt/tokencore_qtutils.cpp
 
 BITCOIN_QT_WINDOWS_CPP = qt/winshutdownmonitor.cpp
 

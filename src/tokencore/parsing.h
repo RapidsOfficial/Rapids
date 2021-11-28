@@ -1,5 +1,5 @@
-#ifndef OMNICORE_PARSING_H
-#define OMNICORE_PARSING_H
+#ifndef TOKENCORE_PARSING_H
+#define TOKENCORE_PARSING_H
 
 #include <string>
 #include <vector>
@@ -10,9 +10,9 @@ class uint160;
 
 // Encoding classes
 #define NO_MARKER                       0
-#define OMNI_CLASS_A                    1
-#define OMNI_CLASS_B                    2
-#define OMNI_CLASS_C                    3
+#define TOKEN_CLASS_A                    1
+#define TOKEN_CLASS_B                    2
+#define TOKEN_CLASS_C                    3
 
 // Encoding properties
 #define PACKET_SIZE_CLASS_A            19
@@ -38,4 +38,4 @@ void PrepareObfuscatedHashes(const std::string& strSeed, int hashCount, std::str
 int ParseTransaction(const CTransaction& tx, int nBlock, unsigned int idx, CMPTransaction& mptx, unsigned int nTime=0);
 
 
-#endif // OMNICORE_PARSING_H
+#endif // TOKENCORE_PARSING_H

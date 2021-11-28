@@ -1,7 +1,7 @@
-#ifndef OMNICORE_DBSTOLIST_H
-#define OMNICORE_DBSTOLIST_H
+#ifndef TOKENCORE_DBSTOLIST_H
+#define TOKENCORE_DBSTOLIST_H
 
-#include "omnicore/dbbase.h"
+#include "tokencore/dbbase.h"
 
 #include "uint256.h"
 
@@ -42,4 +42,4 @@ namespace mastercore
     extern CMPSTOList* pDbStoList;
 }
 
-#endif // OMNICORE_DBSTOLIST_H
+#endif // TOKENCORE_DBSTOLIST_H

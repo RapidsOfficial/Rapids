@@ -1,8 +1,8 @@
-#ifndef OMNICORE_FEES_H
-#define OMNICORE_FEES_H
+#ifndef TOKENCORE_FEES_H
+#define TOKENCORE_FEES_H
 
-#include "omnicore/dbbase.h"
-#include "omnicore/log.h"
+#include "tokencore/dbbase.h"
+#include "tokencore/log.h"
 
 #include <boost/filesystem.hpp>
 
@@ -16,18 +16,18 @@ typedef std::pair<std::string, int64_t> feeHistoryItem;
 
 /** LevelDB based storage for the MetaDEx fee cache.
  */
-class COmniFeeCache : public CDBBase
+class CTokenFeeCache : public CDBBase
 {
 public:
-    COmniFeeCache(const boost::filesystem::path& path, bool fWipe);
-    virtual ~COmniFeeCache();
+    CTokenFeeCache(const boost::filesystem::path& path, bool fWipe);
+    virtual ~CTokenFeeCache();
 
     /** Show Fee Cache DB statistics */
     void printStats();
     /** Show Fee Cache DB records */
     void printAll();
 
-    /** Sets the distribution thresholds to total tokens for a property / OMNI_FEE_THRESHOLD */
+    /** Sets the distribution thresholds to total tokens for a property / TOKEN_FEE_THRESHOLD */
     void UpdateDistributionThresholds(uint32_t propertyId);
     /** Returns the distribution threshold for a property */
     int64_t GetDistributionThreshold(const uint32_t &propertyId);
@@ -51,11 +51,11 @@ public:
 
 /** LevelDB based storage for the MetaDEx fee distributions.
  */
-class COmniFeeHistory : public CDBBase
+class CTokenFeeHistory : public CDBBase
 {
 public:
-    COmniFeeHistory(const boost::filesystem::path& path, bool fWipe);
-    virtual ~COmniFeeHistory();
+    CTokenFeeHistory(const boost::filesystem::path& path, bool fWipe);
+    virtual ~CTokenFeeHistory();
 
     /** Show Fee History DB statistics */
     void printStats();
@@ -79,9 +79,9 @@ public:
 namespace mastercore
 {
     //! LevelDB based storage for the MetaDEx fee cache
-    extern COmniFeeCache* pDbFeeCache;
+    extern CTokenFeeCache* pDbFeeCache;
     //! LevelDB based storage for the MetaDEx fee distributions
-    extern COmniFeeHistory* pDbFeeHistory;
+    extern CTokenFeeHistory* pDbFeeHistory;
 }
 
-#endif // OMNICORE_FEES_H
+#endif // TOKENCORE_FEES_H

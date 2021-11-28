@@ -31,7 +31,7 @@ public:
     TradeHistoryObject()
       : blockHeight(-1), valid(false) {};
     int blockHeight; // block transaction was mined in
-    bool valid; // whether the transaction is valid from an Omni perspective
+    bool valid; // whether the transaction is valid from an Token perspective
     uint32_t propertyIdForSale; // the property being sold
     uint32_t propertyIdDesired; // the property being requested
     int64_t amountForSale; // the amount being sold

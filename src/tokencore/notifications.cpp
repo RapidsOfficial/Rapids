@@ -1,10 +1,10 @@
-#include "omnicore/notifications.h"
+#include "tokencore/notifications.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/version.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/version.h"
 
 #include "main.h"
 #include "util.h"
@@ -20,8 +20,8 @@
 namespace mastercore
 {
 
-//! Vector of currently active Omni alerts
-std::vector<AlertData> currentOmniAlerts;
+//! Vector of currently active Token alerts
+std::vector<AlertData> currentTokenAlerts;
 
 /**
  * Deletes previously broadcast alerts from sender from the alerts vector
@@ -30,13 +30,13 @@ std::vector<AlertData> currentOmniAlerts;
  */
 void DeleteAlerts(const std::string& sender)
 {
-    for (std::vector<AlertData>::iterator it = currentOmniAlerts.begin(); it != currentOmniAlerts.end(); ) {
+    for (std::vector<AlertData>::iterator it = currentTokenAlerts.begin(); it != currentTokenAlerts.end(); ) {
         AlertData alert = *it;
         if (sender == alert.alert_sender) {
             PrintToLog("Removing deleted alert (from:%s type:%d expiry:%d message:%s)\n", alert.alert_sender,
                 alert.alert_type, alert.alert_expiry, alert.alert_message);
-            it = currentOmniAlerts.erase(it);
-            uiInterface.OmniStateChanged();
+            it = currentTokenAlerts.erase(it);
+            uiInterface.TokenStateChanged();
         } else {
             it++;
         }
@@ -50,8 +50,8 @@ void DeleteAlerts(const std::string& sender)
  */
 void ClearAlerts()
 {
-    currentOmniAlerts.clear();
-    uiInterface.OmniStateChanged();
+    currentTokenAlerts.clear();
+    uiInterface.TokenStateChanged();
 }
 
 /**
@@ -67,22 +67,22 @@ void AddAlert(const std::string& sender, uint16_t alertType, uint32_t alertExpir
     newAlert.alert_message = alertMessage;
 
     // very basic sanity checks for broadcast alerts to catch malformed packets
-    if (sender != "omnicore" && (alertType < ALERT_BLOCK_EXPIRY || alertType > ALERT_CLIENT_VERSION_EXPIRY)) {
+    if (sender != "tokencore" && (alertType < ALERT_BLOCK_EXPIRY || alertType > ALERT_CLIENT_VERSION_EXPIRY)) {
         PrintToLog("New alert REJECTED (alert type not recognized): %s, %d, %d, %s\n", sender, alertType, alertExpiry, alertMessage);
         return;
     }
 
-    currentOmniAlerts.push_back(newAlert);
+    currentTokenAlerts.push_back(newAlert);
     PrintToLog("New alert added: %s, %d, %d, %s\n", sender, alertType, alertExpiry, alertMessage);
 }
 
 /**
- * Determines whether the sender is an authorized source for Omni Core alerts.
+ * Determines whether the sender is an authorized source for Token Core alerts.
  *
- * The option "-omnialertallowsender=source" can be used to whitelist additional sources,
- * and the option "-omnialertignoresender=source" can be used to ignore a source.
+ * The option "-tokenalertallowsender=source" can be used to whitelist additional sources,
+ * and the option "-tokenalertignoresender=source" can be used to ignore a source.
  *
- * To consider any alert as authorized, "-omnialertallowsender=any" can be used. This
+ * To consider any alert as authorized, "-tokenalertallowsender=any" can be used. This
  * should only be done for testing purposes!
  */
 bool CheckAlertAuthorization(const std::string& sender)
@@ -90,18 +90,18 @@ bool CheckAlertAuthorization(const std::string& sender)
     std::set<std::string> whitelisted;
 
     // Mainnet
-    whitelisted.insert("17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26"); // Craig   <craig@omni.foundation>
-    whitelisted.insert("16oDZYCspsczfgKXVj3xyvsxH21NpEj94F"); // Adam    <adam@omni.foundation>
-    whitelisted.insert("1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz"); // Zathras <zathras@omni.foundation>
+    whitelisted.insert("17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26"); // Craig   <craig@token.foundation>
+    whitelisted.insert("16oDZYCspsczfgKXVj3xyvsxH21NpEj94F"); // Adam    <adam@token.foundation>
+    whitelisted.insert("1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz"); // Zathras <zathras@token.foundation>
     whitelisted.insert("1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd"); // dexX7   <dexx@bitwatch.co>
     whitelisted.insert("34kwkVRSvFVEoUwcQSgpQ4ZUasuZ54DJLD"); // multisig (signatories are Craig, Adam, Zathras, dexX7, JR)
 
     // Testnet / Regtest
-    // use -omnialertallowsender for testing
+    // use -tokenalertallowsender for testing
 
     // Add manually whitelisted sources
-    if (mapArgs.count("-omnialertallowsender")) {
-        const std::vector<std::string>& sources = mapMultiArgs["-omnialertallowsender"];
+    if (mapArgs.count("-tokenalertallowsender")) {
+        const std::vector<std::string>& sources = mapMultiArgs["-tokenalertallowsender"];
 
         for (std::vector<std::string>::const_iterator it = sources.begin(); it != sources.end(); ++it) {
             whitelisted.insert(*it);
@@ -109,8 +109,8 @@ bool CheckAlertAuthorization(const std::string& sender)
     }
 
     // Remove manually ignored sources
-    if (mapArgs.count("-omnialertignoresender")) {
-        const std::vector<std::string>& sources = mapMultiArgs["-omnialertignoresender"];
+    if (mapArgs.count("-tokenalertignoresender")) {
+        const std::vector<std::string>& sources = mapMultiArgs["-tokenalertignoresender"];
 
         for (std::vector<std::string>::const_iterator it = sources.begin(); it != sources.end(); ++it) {
             whitelisted.erase(*it);
@@ -126,18 +126,18 @@ bool CheckAlertAuthorization(const std::string& sender)
 /**
  * Alerts including meta data.
  */
-std::vector<AlertData> GetOmniCoreAlerts()
+std::vector<AlertData> GetTokenCoreAlerts()
 {
-    return currentOmniAlerts;
+    return currentTokenAlerts;
 }
 
 /**
  * Human readable alert messages.
  */
-std::vector<std::string> GetOmniCoreAlertMessages()
+std::vector<std::string> GetTokenCoreAlertMessages()
 {
     std::vector<std::string> vstr;
-    for (std::vector<AlertData>::iterator it = currentOmniAlerts.begin(); it != currentOmniAlerts.end(); it++) {
+    for (std::vector<AlertData>::iterator it = currentTokenAlerts.begin(); it != currentTokenAlerts.end(); it++) {
         vstr.push_back((*it).alert_message);
     }
     return vstr;
@@ -148,15 +148,15 @@ std::vector<std::string> GetOmniCoreAlertMessages()
  */
 bool CheckExpiredAlerts(unsigned int curBlock, uint64_t curTime)
 {
-    for (std::vector<AlertData>::iterator it = currentOmniAlerts.begin(); it != currentOmniAlerts.end(); ) {
+    for (std::vector<AlertData>::iterator it = currentTokenAlerts.begin(); it != currentTokenAlerts.end(); ) {
         AlertData alert = *it;
         switch (alert.alert_type) {
             case ALERT_BLOCK_EXPIRY:
                 if (curBlock >= alert.alert_expiry) {
                     PrintToLog("Expiring alert (from %s: type:%d expiry:%d message:%s)\n", alert.alert_sender,
                         alert.alert_type, alert.alert_expiry, alert.alert_message);
-                    it = currentOmniAlerts.erase(it);
-                    uiInterface.OmniStateChanged();
+                    it = currentTokenAlerts.erase(it);
+                    uiInterface.TokenStateChanged();
                 } else {
                     it++;
                 }
@@ -165,18 +165,18 @@ bool CheckExpiredAlerts(unsigned int curBlock, uint64_t curTime)
                 if (curTime > alert.alert_expiry) {
                     PrintToLog("Expiring alert (from %s: type:%d expiry:%d message:%s)\n", alert.alert_sender,
                         alert.alert_type, alert.alert_expiry, alert.alert_message);
-                    it = currentOmniAlerts.erase(it);
-                    uiInterface.OmniStateChanged();
+                    it = currentTokenAlerts.erase(it);
+                    uiInterface.TokenStateChanged();
                 } else {
                     it++;
                 }
             break;
             case ALERT_CLIENT_VERSION_EXPIRY:
-                if (OMNICORE_VERSION > alert.alert_expiry) {
+                if (TOKENCORE_VERSION > alert.alert_expiry) {
                     PrintToLog("Expiring alert (form: %s type:%d expiry:%d message:%s)\n", alert.alert_sender,
                         alert.alert_type, alert.alert_expiry, alert.alert_message);
-                    it = currentOmniAlerts.erase(it);
-                    uiInterface.OmniStateChanged();
+                    it = currentTokenAlerts.erase(it);
+                    uiInterface.TokenStateChanged();
                 } else {
                     it++;
                 }
@@ -184,8 +184,8 @@ bool CheckExpiredAlerts(unsigned int curBlock, uint64_t curTime)
             default: // unrecognized alert type
                     PrintToLog("Removing invalid alert (from:%s type:%d expiry:%d message:%s)\n", alert.alert_sender,
                         alert.alert_type, alert.alert_expiry, alert.alert_message);
-                    it = currentOmniAlerts.erase(it);
-                    uiInterface.OmniStateChanged();
+                    it = currentTokenAlerts.erase(it);
+                    uiInterface.TokenStateChanged();
             break;
         }
     }

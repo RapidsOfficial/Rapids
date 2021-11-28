@@ -1,5 +1,5 @@
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
 
 #include "base58.h"
 #include "chainparams.h"
@@ -11,7 +11,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_exodus_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_exodus_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(exodus_address_mainnet)
 {

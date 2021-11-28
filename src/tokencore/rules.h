@@ -1,5 +1,5 @@
-#ifndef OMNICORE_RULES_H
-#define OMNICORE_RULES_H
+#ifndef TOKENCORE_RULES_H
+#define TOKENCORE_RULES_H
 
 #include "uint256.h"
 
@@ -23,17 +23,17 @@ const uint16_t FEATURE_DEXMATH = 5;
 const uint16_t FEATURE_SENDALL = 6;
 //! Feature identifier disable ecosystem crossovers in crowdsale logic
 const uint16_t FEATURE_SPCROWDCROSSOVER = 7;
-//! Feature identifier to enable non-Omni pairs on the distributed exchange
+//! Feature identifier to enable non-Token pairs on the distributed exchange
 const uint16_t FEATURE_TRADEALLPAIRS = 8;
-//! Feature identifier to enable the fee cache and strip 0.05% fees from non-Omni pairs
+//! Feature identifier to enable the fee cache and strip 0.05% fees from non-Token pairs
 const uint16_t FEATURE_FEES = 9;
 //! Feature identifier to enable cross property (v1) Send To Owners
 const uint16_t FEATURE_STOV1 = 10;
 //! Feature identifier to activate the waiting period for enabling managed property address freezing
 const uint16_t FEATURE_FREEZENOTICE = 14;
 
-//! When (propertyTotalTokens / OMNI_FEE_THRESHOLD) is reached fee distribution will occur
-const int64_t OMNI_FEE_THRESHOLD = 100000; // 0.001%
+//! When (propertyTotalTokens / TOKEN_FEE_THRESHOLD) is reached fee distribution will occur
+const int64_t TOKEN_FEE_THRESHOLD = 100000; // 0.001%
 
 /** A structure to represent transaction restrictions.
  */
@@ -84,7 +84,7 @@ public:
     int MAX_ACTIVATION_BLOCKS;
 
     //! Waiting period after enabling freezing before addresses may be frozen
-    int OMNI_FREEZE_WAIT_PERIOD;
+    int TOKEN_FREEZE_WAIT_PERIOD;
 
     //! Block to enable pay-to-pubkey-hash support
     int PUBKEYHASH_BLOCK;
@@ -122,9 +122,9 @@ public:
     int DEXMATH_FEATURE_BLOCK;
     //! Block to disable ecosystem crossovers in crowdsale logic
     int SPCROWDCROSSOVER_FEATURE_BLOCK;
-    //! Block to enable trading of non-Omni pairs
+    //! Block to enable trading of non-Token pairs
     int TRADEALLPAIRS_FEATURE_BLOCK;
-    //! Block to enable the fee system & 0.05% fee for trading non-Omni pairs
+    //! Block to enable the fee system & 0.05% fee for trading non-Token pairs
     int FEES_FEATURE_BLOCK;
     //! Block to activate the waiting period for enabling managed property address freezing
     int FREEZENOTICE_FEATURE_BLOCK;
@@ -208,4 +208,4 @@ bool IsTransactionTypeAllowed(int txBlock, uint32_t txProperty, uint16_t txType,
 bool VerifyTransactionExistence(int block);
 }
 
-#endif // OMNICORE_RULES_H
+#endif // TOKENCORE_RULES_H

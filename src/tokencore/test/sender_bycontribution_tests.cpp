@@ -1,9 +1,9 @@
-#include "omnicore/test/utils_tx.h"
+#include "tokencore/test/utils_tx.h"
 
-#include "omnicore/omnicore.h"
-#include "omnicore/parsing.h"
-#include "omnicore/script.h"
-#include "omnicore/tx.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/parsing.h"
+#include "tokencore/script.h"
+#include "tokencore/tx.h"
 
 #include "base58.h"
 #include "coins.h"
@@ -22,7 +22,7 @@
 
 using namespace mastercore;
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_sender_bycontribution_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_sender_bycontribution_tests, BasicTestingSetup)
 
 // Forward declarations
 static CTransaction TxClassB(const std::vector<CTxOut>& txInputs);
@@ -125,7 +125,7 @@ BOOST_AUTO_TEST_CASE(p2pkh_contribution_by_total_sum_test)
  * have equal values, and a candidate is chosen based on the lexicographical order of
  * the base58 string representation (!) of the candidate.
  *
- * Note: it reflects the behavior of Omni Core, but this edge case is not specified.
+ * Note: it reflects the behavior of Token Core, but this edge case is not specified.
  */
 BOOST_AUTO_TEST_CASE(p2pkh_contribution_by_sum_order_test)
 {
@@ -211,7 +211,7 @@ BOOST_AUTO_TEST_CASE(p2sh_contribution_by_total_sum_test)
  * have equal values, and a candidate is chosen based on the lexicographical order of
  * the base58 string representation (!) of the candidate.
  *
- * Note: it reflects the behavior of Omni Core, but this edge case is not specified.
+ * Note: it reflects the behavior of Token Core, but this edge case is not specified.
  */
 BOOST_AUTO_TEST_CASE(p2sh_contribution_by_sum_order_test)
 {
@@ -244,7 +244,7 @@ BOOST_AUTO_TEST_CASE(p2sh_contribution_by_sum_order_test)
  * In practise this implies selecting the sender "by sum" via a comparison of 
  * CBitcoinAddress objects would yield faulty results.
  *
- * Note: it reflects the behavior of Omni Core, but this edge case is not specified.
+ * Note: it reflects the behavior of Token Core, but this edge case is not specified.
  */
 BOOST_AUTO_TEST_CASE(sender_selection_string_based_test)
 {

@@ -1,7 +1,7 @@
-#include "omnicore/dbtransaction.h"
+#include "tokencore/dbtransaction.h"
 
-#include "omnicore/errors.h"
-#include "omnicore/log.h"
+#include "tokencore/errors.h"
+#include "tokencore/log.h"
 
 #include "uint256.h"
 #include "tinyformat.h"
@@ -18,21 +18,21 @@
 #include <string>
 #include <vector>
 
-COmniTransactionDB::COmniTransactionDB(const boost::filesystem::path& path, bool fWipe)
+CTokenTransactionDB::CTokenTransactionDB(const boost::filesystem::path& path, bool fWipe)
 {
     leveldb::Status status = Open(path, fWipe);
     PrintToConsole("Loading master transactions database: %s\n", status.ToString());
 }
 
-COmniTransactionDB::~COmniTransactionDB()
+CTokenTransactionDB::~CTokenTransactionDB()
 {
-    if (msc_debug_persistence) PrintToLog("COmniTransactionDB closed\n");
+    if (msc_debug_persistence) PrintToLog("CTokenTransactionDB closed\n");
 }
 
 /**
  * Retrieves the serialized transaction details from the DB. 
  */
-std::vector<std::string> COmniTransactionDB::FetchTransactionDetails(const uint256& txid)
+std::vector<std::string> CTokenTransactionDB::FetchTransactionDetails(const uint256& txid)
 {
     assert(pdb);
     std::string strValue;
@@ -46,10 +46,10 @@ std::vector<std::string> COmniTransactionDB::FetchTransactionDetails(const uint2
             vTransactionDetails.push_back(vStr[0]);
             vTransactionDetails.push_back(vStr[1]);
         } else {
-            PrintToLog("ERROR: Entry (%s) found in OmniTXDB with unexpected number of attributes!\n", txid.GetHex());
+            PrintToLog("ERROR: Entry (%s) found in TokenTXDB with unexpected number of attributes!\n", txid.GetHex());
         }
     } else {
-        PrintToLog("ERROR: Entry (%s) could not be loaded from OmniTXDB!\n", txid.GetHex());
+        PrintToLog("ERROR: Entry (%s) could not be loaded from TokenTXDB!\n", txid.GetHex());
     }
 
     return vTransactionDetails;
@@ -58,7 +58,7 @@ std::vector<std::string> COmniTransactionDB::FetchTransactionDetails(const uint2
 /**
  * Stores position in block and validation result for a transaction.
  */
-void COmniTransactionDB::RecordTransaction(const uint256& txid, uint32_t posInBlock, int processingResult)
+void CTokenTransactionDB::RecordTransaction(const uint256& txid, uint32_t posInBlock, int processingResult)
 {
     assert(pdb);
 
@@ -72,7 +72,7 @@ void COmniTransactionDB::RecordTransaction(const uint256& txid, uint32_t posInBl
 /**
  * Returns the position of a transaction in a block.
  */
-uint32_t COmniTransactionDB::FetchTransactionPosition(const uint256& txid)
+uint32_t CTokenTransactionDB::FetchTransactionPosition(const uint256& txid)
 {
     uint32_t posInBlock = 999999; // setting an initial arbitrarily high value will ensure transaction is always "last" in event of bug/exploit
 
@@ -87,7 +87,7 @@ uint32_t COmniTransactionDB::FetchTransactionPosition(const uint256& txid)
 /**
  * Returns the reason why a transaction is invalid.
  */
-std::string COmniTransactionDB::FetchInvalidReason(const uint256& txid)
+std::string CTokenTransactionDB::FetchInvalidReason(const uint256& txid)
 {
     int processingResult = -999999;
 

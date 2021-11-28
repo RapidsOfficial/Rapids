@@ -4,16 +4,16 @@
  * This file contains consensus rules and restrictions.
  */
 
-#include "omnicore/rules.h"
+#include "tokencore/rules.h"
 
-#include "omnicore/activation.h"
-#include "omnicore/consensushash.h"
-#include "omnicore/dbtxlist.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/notifications.h"
-#include "omnicore/utilsbitcoin.h"
-#include "omnicore/version.h"
+#include "tokencore/activation.h"
+#include "tokencore/consensushash.h"
+#include "tokencore/dbtxlist.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/notifications.h"
+#include "tokencore/utilsbitcoin.h"
+#include "tokencore/version.h"
 
 #include "chainparams.h"
 #include "main.h"
@@ -38,9 +38,9 @@ std::vector<TransactionRestriction> CConsensusParams::GetRestrictions() const
     const TransactionRestriction vTxRestrictions[] =
     { //  transaction type                    version        allow 0  activation block
       //  ----------------------------------  -------------  -------  ------------------
-        { OMNICORE_MESSAGE_TYPE_ALERT,        0xFFFF,        true,    TOKEN_ALERT_BLOCK    },
-        { OMNICORE_MESSAGE_TYPE_ACTIVATION,   0xFFFF,        true,    TOKEN_ALERT_BLOCK    },
-        { OMNICORE_MESSAGE_TYPE_DEACTIVATION, 0xFFFF,        true,    TOKEN_ALERT_BLOCK    },
+        { TOKENCORE_MESSAGE_TYPE_ALERT,        0xFFFF,        true,    TOKEN_ALERT_BLOCK    },
+        { TOKENCORE_MESSAGE_TYPE_ACTIVATION,   0xFFFF,        true,    TOKEN_ALERT_BLOCK    },
+        { TOKENCORE_MESSAGE_TYPE_DEACTIVATION, 0xFFFF,        true,    TOKEN_ALERT_BLOCK    },
 
         { TOKEN_TYPE_SIMPLE_SEND,               MP_TX_PKT_V0,  false,   TOKEN_SEND_BLOCK     },
 
@@ -116,7 +116,7 @@ CMainConsensusParams::CMainConsensusParams()
     MIN_ACTIVATION_BLOCKS = 10080;  // ~2 weeks
     MAX_ACTIVATION_BLOCKS = 60480; // ~12 weeks
     // Waiting period for enabling freezing
-    OMNI_FREEZE_WAIT_PERIOD = 4096; // ~4 weeks
+    TOKEN_FREEZE_WAIT_PERIOD = 4096; // ~4 weeks
     // Script related:
     PUBKEYHASH_BLOCK = 0;
     SCRIPTHASH_BLOCK = 0;
@@ -157,7 +157,7 @@ CTestNetConsensusParams::CTestNetConsensusParams()
     MIN_ACTIVATION_BLOCKS = 0;
     MAX_ACTIVATION_BLOCKS = 999999;
     // Waiting period for enabling freezing
-    OMNI_FREEZE_WAIT_PERIOD = 0;
+    TOKEN_FREEZE_WAIT_PERIOD = 0;
     // Script related:
     PUBKEYHASH_BLOCK = 0;
     SCRIPTHASH_BLOCK = 0;
@@ -194,7 +194,7 @@ CRegTestConsensusParams::CRegTestConsensusParams()
     MIN_ACTIVATION_BLOCKS = 5;
     MAX_ACTIVATION_BLOCKS = 10;
     // Waiting period for enabling freezing
-    OMNI_FREEZE_WAIT_PERIOD = 10;
+    TOKEN_FREEZE_WAIT_PERIOD = 10;
     // Script related:
     PUBKEYHASH_BLOCK = 0;
     SCRIPTHASH_BLOCK = 0;
@@ -348,7 +348,7 @@ bool ActivateFeature(uint16_t featureId, int activationBlock, uint32_t minClient
 
     // check feature is recognized and activation is successful
     std::string featureName = GetFeatureName(featureId);
-    bool supported = OMNICORE_VERSION >= minClientVersion;
+    bool supported = TOKENCORE_VERSION >= minClientVersion;
     switch (featureId) {
         case FEATURE_CLASS_C:
             MutableConsensusParams().NULLDATA_BLOCK = activationBlock;
@@ -395,7 +395,7 @@ bool ActivateFeature(uint16_t featureId, int activationBlock, uint32_t minClient
         PrintToLog("WARNING!!! AS OF BLOCK %d THIS CLIENT WILL BE OUT OF CONSENSUS AND WILL AUTOMATICALLY SHUTDOWN.\n", activationBlock);
         std::string alertText = strprintf("Your client must be updated and will shutdown at block %d (unsupported feature %d ('%s') activated)\n",
                                           activationBlock, featureId, featureName);
-        AddAlert("omnicore", ALERT_BLOCK_EXPIRY, activationBlock, alertText);
+        AddAlert("tokencore", ALERT_BLOCK_EXPIRY, activationBlock, alertText);
         AlertNotify(alertText, true);
     }
 
@@ -462,7 +462,7 @@ bool DeactivateFeature(uint16_t featureId, int transactionBlock)
     PrintToLog("Feature deactivation of ID %d processed. %s has been disabled.\n", featureId, featureName);
 
     std::string alertText = strprintf("An emergency deactivation of feature ID %d (%s) has occurred.", featureId, featureName);
-    AddAlert("omnicore", ALERT_BLOCK_EXPIRY, transactionBlock + 1024, alertText);
+    AddAlert("tokencore", ALERT_BLOCK_EXPIRY, transactionBlock + 1024, alertText);
     AlertNotify(alertText, true);
 
     return true;
@@ -482,7 +482,7 @@ std::string GetFeatureName(uint16_t featureId)
         case FEATURE_SENDALL: return "Send All transactions";
         case FEATURE_SPCROWDCROSSOVER: return "Disable crowdsale ecosystem crossovers";
         case FEATURE_TRADEALLPAIRS: return "Allow trading all pairs on the Distributed Exchange";
-        case FEATURE_FEES: return "Fee system (inc 0.05% fee from trades of non-Omni pairs)";
+        case FEATURE_FEES: return "Fee system (inc 0.05% fee from trades of non-Token pairs)";
         case FEATURE_STOV1: return "Cross-property Send To Owners";
         case FEATURE_FREEZENOTICE: return "Activate the waiting period for enabling freezing";
 
@@ -559,7 +559,7 @@ bool IsTransactionTypeAllowed(int txBlock, uint32_t txProperty, uint16_t txType,
             continue;
         }
         // a property identifier of 0 (= BTC) may be used as wildcard
-        if (OMNI_PROPERTY_BTC == txProperty && !entry.allowWildcard) {
+        if (TOKEN_PROPERTY_BTC == txProperty && !entry.allowWildcard) {
             continue;
         }
         // transactions are not restricted in the test ecosystem

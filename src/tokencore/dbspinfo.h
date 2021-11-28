@@ -1,9 +1,9 @@
-#ifndef OMNICORE_DBSPINFO_H
-#define OMNICORE_DBSPINFO_H
+#ifndef TOKENCORE_DBSPINFO_H
+#define TOKENCORE_DBSPINFO_H
 
-#include "omnicore/dbbase.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
+#include "tokencore/dbbase.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
 
 #include "serialize.h"
 #include "uint256.h"
@@ -139,8 +139,8 @@ public:
 
 private:
     // implied version of OMN and TOMN so they don't hit the leveldb
-    Entry implied_omni;
-    Entry implied_tomni;
+    Entry implied_token;
+    Entry implied_ttoken;
 
     uint32_t next_spid;
     uint32_t next_test_spid;
@@ -171,4 +171,4 @@ public:
 };
 
 
-#endif // OMNICORE_DBSPINFO_H
+#endif // TOKENCORE_DBSPINFO_H

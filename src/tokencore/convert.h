@@ -1,5 +1,5 @@
-#ifndef OMNICORE_CONVERT_H
-#define OMNICORE_CONVERT_H
+#ifndef TOKENCORE_CONVERT_H
+#define TOKENCORE_CONVERT_H
 
 #include <stdint.h>
 
@@ -16,4 +16,4 @@ uint64_t rounduint64(long double);
 }
 
 
-#endif // OMNICORE_CONVERT_H
+#endif // TOKENCORE_CONVERT_H

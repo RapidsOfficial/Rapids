@@ -1,8 +1,8 @@
-#include "omnicore/dbspinfo.h"
+#include "tokencore/dbspinfo.h"
 
-#include "omnicore/dbbase.h"
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
+#include "tokencore/dbbase.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
 
 #include "base58.h"
 #include "clientversion.h"
@@ -90,28 +90,28 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
     leveldb::Status status = Open(path, fWipe);
     PrintToConsole("Loading smart property database: %s\n", status.ToString());
 
-    // ToDo: Remove OMNI and TOMNI
+    // ToDo: Remove TOKEN and TTOKEN
 
     // special cases for constant SPs OMN and TOMN
-    implied_omni.issuer = EncodeDestination(ExodusAddress());
-    implied_omni.updateIssuer(0, 0, implied_omni.issuer);
-    implied_omni.prop_type = TOKEN_PROPERTY_TYPE_INDIVISIBLE;
-    implied_omni.num_tokens = 0;
-    implied_omni.category = "N/A";
-    implied_omni.subcategory = "N/A";
-    implied_omni.name = "Reserved";
-    implied_omni.url = "N/A";
-    implied_omni.data = "Reserved";
+    implied_token.issuer = EncodeDestination(ExodusAddress());
+    implied_token.updateIssuer(0, 0, implied_token.issuer);
+    implied_token.prop_type = TOKEN_PROPERTY_TYPE_INDIVISIBLE;
+    implied_token.num_tokens = 0;
+    implied_token.category = "N/A";
+    implied_token.subcategory = "N/A";
+    implied_token.name = "Reserved";
+    implied_token.url = "N/A";
+    implied_token.data = "Reserved";
 
-    implied_tomni.issuer = EncodeDestination(ExodusAddress());
-    implied_tomni.updateIssuer(0, 0, implied_tomni.issuer);
-    implied_tomni.prop_type = TOKEN_PROPERTY_TYPE_INDIVISIBLE;
-    implied_tomni.num_tokens = 0;
-    implied_tomni.category = "N/A";
-    implied_tomni.subcategory = "N/A";
-    implied_tomni.name = "Reserved";
-    implied_tomni.url = "N/A";
-    implied_tomni.data = "Reserved";
+    implied_ttoken.issuer = EncodeDestination(ExodusAddress());
+    implied_ttoken.updateIssuer(0, 0, implied_ttoken.issuer);
+    implied_ttoken.prop_type = TOKEN_PROPERTY_TYPE_INDIVISIBLE;
+    implied_ttoken.num_tokens = 0;
+    implied_ttoken.category = "N/A";
+    implied_ttoken.subcategory = "N/A";
+    implied_ttoken.name = "Reserved";
+    implied_ttoken.url = "N/A";
+    implied_ttoken.data = "Reserved";
 
     init();
 }
@@ -140,10 +140,10 @@ uint32_t CMPSPInfo::peekNextSPID(uint8_t ecosystem) const
     uint32_t nextId = 0;
 
     switch (ecosystem) {
-        case OMNI_PROPERTY_MSC: // Main ecosystem, MSC: 1, TMSC: 2, First available SP = 3
+        case TOKEN_PROPERTY_MSC: // Main ecosystem, MSC: 1, TMSC: 2, First available SP = 3
             nextId = next_spid;
             break;
-        case OMNI_PROPERTY_TMSC: // Test ecosystem, same as above with high bit set
+        case TOKEN_PROPERTY_TMSC: // Test ecosystem, same as above with high bit set
             nextId = next_test_spid;
             break;
         default: // Non-standard ecosystem, ID's start at 0
@@ -156,7 +156,7 @@ uint32_t CMPSPInfo::peekNextSPID(uint8_t ecosystem) const
 bool CMPSPInfo::updateSP(uint32_t propertyId, const Entry& info)
 {
     // cannot update implied SP
-    if (OMNI_PROPERTY_MSC == propertyId || OMNI_PROPERTY_TMSC == propertyId) {
+    if (TOKEN_PROPERTY_MSC == propertyId || TOKEN_PROPERTY_TMSC == propertyId) {
         return false;
     }
 
@@ -202,10 +202,10 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
 {
     uint32_t propertyId = 0;
     switch (ecosystem) {
-        case OMNI_PROPERTY_MSC: // Main ecosystem, MSC: 1, TMSC: 2, First available SP = 3
+        case TOKEN_PROPERTY_MSC: // Main ecosystem, MSC: 1, TMSC: 2, First available SP = 3
             propertyId = next_spid++;
             break;
-        case OMNI_PROPERTY_TMSC: // Test ecosystem, same as above with high bit set
+        case TOKEN_PROPERTY_TMSC: // Test ecosystem, same as above with high bit set
             propertyId = next_test_spid++;
             break;
         default: // Non-standard ecosystem, ID's start at 0
@@ -278,11 +278,11 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
 bool CMPSPInfo::getSP(uint32_t propertyId, Entry& info) const
 {
     // special cases for constant SPs MSC and TMSC
-    if (OMNI_PROPERTY_MSC == propertyId) {
-        info = implied_omni;
+    if (TOKEN_PROPERTY_MSC == propertyId) {
+        info = implied_token;
         return true;
-    } else if (OMNI_PROPERTY_TMSC == propertyId) {
-        info = implied_tomni;
+    } else if (TOKEN_PROPERTY_TMSC == propertyId) {
+        info = implied_ttoken;
         return true;
     }
 
@@ -315,7 +315,7 @@ bool CMPSPInfo::getSP(uint32_t propertyId, Entry& info) const
 bool CMPSPInfo::hasSP(uint32_t propertyId) const
 {
     // Special cases for constant SPs MSC and TMSC
-    if (OMNI_PROPERTY_MSC == propertyId || OMNI_PROPERTY_TMSC == propertyId) {
+    if (TOKEN_PROPERTY_MSC == propertyId || TOKEN_PROPERTY_TMSC == propertyId) {
         return true;
     }
 
@@ -523,7 +523,7 @@ bool CMPSPInfo::getWatermark(uint256& watermark) const
 void CMPSPInfo::printAll() const
 {
     // print off the hard coded MSC and TMSC entries
-    for (uint32_t idx = OMNI_PROPERTY_MSC; idx <= OMNI_PROPERTY_TMSC; idx++) {
+    for (uint32_t idx = TOKEN_PROPERTY_MSC; idx <= TOKEN_PROPERTY_TMSC; idx++) {
         Entry info;
         PrintToConsole("%10d => ", idx);
         if (getSP(idx, info)) {

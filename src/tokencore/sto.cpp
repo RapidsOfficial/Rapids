@@ -1,9 +1,9 @@
-#include "omnicore/sto.h"
+#include "tokencore/sto.h"
 
-#include "omnicore/log.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/tally.h"
-#include "omnicore/uint256_extensions.h"
+#include "tokencore/log.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/tally.h"
+#include "tokencore/uint256_extensions.h"
 
 #include "arith_uint256.h"
 #include "sync.h"

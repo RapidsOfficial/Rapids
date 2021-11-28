@@ -1,11 +1,11 @@
-Omni Core v0.0.9.2
+Token Core v0.0.9.2
 ==================
 
-v0.0.9.2 is a minor release and not consensus critical in terms of the Omni Layer protocol rules. Due to recent events related to the Bitcoin network, it is recommended to upgrade to this version.
+v0.0.9.2 is a minor release and not consensus critical in terms of the Token Layer protocol rules. Due to recent events related to the Bitcoin network, it is recommended to upgrade to this version.
 
 Please report bugs using the issue tracker on GitHub:
 
-  https://github.com/OmniLayer/omnicore/issues
+  https://github.com/TokenLayer/tokencore/issues
 
 General
 -------
@@ -31,6 +31,6 @@ Downgrading is currently not supported as older versions will not provide accura
 Notable changes
 ---------------
 
-This release upgrades the underlying code base of Omni Core from Bitcoin Core 0.9.3 to Bitcoin Core 0.9.5.
+This release upgrades the underlying code base of Token Core from Bitcoin Core 0.9.3 to Bitcoin Core 0.9.5.
 
-Please see the official release notes of [Bitcoin Core 0.9.5](release-notes.md), as well as the historical release notes of [Omni Core 0.0.9.1](release-notes/omnicore-0.0.9.1-release-notes.md) for details about recent changes.
+Please see the official release notes of [Bitcoin Core 0.9.5](release-notes.md), as well as the historical release notes of [Token Core 0.0.9.1](release-notes/tokencore-0.0.9.1-release-notes.md) for details about recent changes.

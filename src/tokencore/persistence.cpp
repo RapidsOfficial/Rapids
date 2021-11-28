@@ -4,16 +4,16 @@
  * This file contains file based persistence related functions.
  */
 
-#include "omnicore/persistence.h"
+#include "tokencore/persistence.h"
 
-#include "omnicore/dex.h"
-#include "omnicore/log.h"
-#include "omnicore/mdex.h"
-#include "omnicore/omnicore.h"
-#include "omnicore/rules.h"
-#include "omnicore/sp.h"
-#include "omnicore/tally.h"
-#include "omnicore/utilsbitcoin.h"
+#include "tokencore/dex.h"
+#include "tokencore/log.h"
+#include "tokencore/mdex.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/rules.h"
+#include "tokencore/sp.h"
+#include "tokencore/tally.h"
+#include "tokencore/utilsbitcoin.h"
 
 #include "chain.h"
 #include "main.h"
@@ -38,7 +38,7 @@
 
 using namespace mastercore;
 
-//! Number of "Dev Omni" of the last processed block (needed to save global state)
+//! Number of "Dev Token" of the last processed block (needed to save global state)
 extern int64_t exodus_prev;
 
 //! Path for file based persistence
@@ -149,8 +149,8 @@ static int write_mp_accepts(std::ofstream& file, SHA256_CTX* shaCtx)
 
 static int write_globals_state(std::ofstream& file, SHA256_CTX* shaCtx)
 {
-    uint32_t nextSPID = pDbSpInfo->peekNextSPID(OMNI_PROPERTY_MSC);
-    uint32_t nextTestSPID = pDbSpInfo->peekNextSPID(OMNI_PROPERTY_TMSC);
+    uint32_t nextSPID = pDbSpInfo->peekNextSPID(TOKEN_PROPERTY_MSC);
+    uint32_t nextTestSPID = pDbSpInfo->peekNextSPID(TOKEN_PROPERTY_TMSC);
     std::string lineOut = strprintf("%d,%d,%d",
             exodus_prev,
             nextSPID,
@@ -259,7 +259,7 @@ static int input_mp_offers_string(const std::string& s)
     uint256 txid = uint256S(vstr[i++]);
 
     // TODO: should this be here? There are usually no sanity checks..
-    if (OMNI_PROPERTY_BTC != prop_desired) return -1;
+    if (TOKEN_PROPERTY_BTC != prop_desired) return -1;
 
     const std::string combo = STR_SELLOFFER_ADDR_PROP_COMBO(sellerAddr, prop);
     CMPOffer newOffer(offerBlock, amountOriginal, prop, btcDesired, minFee, blocktimelimit, txid);

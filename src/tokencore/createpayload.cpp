@@ -1,9 +1,9 @@
 // This file serves to provide payload creation functions.
 
-#include "omnicore/createpayload.h"
+#include "tokencore/createpayload.h"
 
-#include "omnicore/log.h"
-#include "omnicore/parsing.h"
+#include "tokencore/log.h"
+#include "tokencore/parsing.h"
 
 #include "base58.h"
 
@@ -532,7 +532,7 @@ std::vector<unsigned char> CreatePayload_ActivateFeature(uint16_t featureId, uin
     return payload;
 }
 
-std::vector<unsigned char> CreatePayload_OmniCoreAlert(uint16_t alertType, uint32_t expiryValue, const std::string& alertMessage)
+std::vector<unsigned char> CreatePayload_TokenCoreAlert(uint16_t alertType, uint32_t expiryValue, const std::string& alertMessage)
 {
     std::vector<unsigned char> payload;
     uint16_t messageType = 65535;

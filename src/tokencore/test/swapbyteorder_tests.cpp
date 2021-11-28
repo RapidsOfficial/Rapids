@@ -1,4 +1,4 @@
-#include "omnicore/parsing.h"
+#include "tokencore/parsing.h"
 
 #include "test/test_bitcoin.h"
 
@@ -6,7 +6,7 @@
 
 #include <stdint.h>
 
-BOOST_FIXTURE_TEST_SUITE(omnicore_swapbyteorder_tests, BasicTestingSetup)
+BOOST_FIXTURE_TEST_SUITE(tokencore_swapbyteorder_tests, BasicTestingSetup)
 
 BOOST_AUTO_TEST_CASE(swapbyteorder_cycle)
 {
