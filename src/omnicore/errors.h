@@ -312,6 +312,10 @@ inline std::string error_str(int ec) {
           ec_str = "Token mandatory donation is missing";
           break;
 
+      case PKT_ERROR_SP -74:
+          ec_str = "Token IPFS hash is invalid";
+          break;
+
 
       case PKT_ERROR_TOKENS -22:
           ec_str = "Transaction type or version not permitted";

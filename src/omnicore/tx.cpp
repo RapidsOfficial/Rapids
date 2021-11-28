@@ -40,13 +40,19 @@ using boost::algorithm::token_compress_on;
 
 using namespace mastercore;
 
-static const std::regex TOKEN_NAME_CHARACTERS("^[A-Z0-9._]{3,25}$");
+static const std::regex IPFS_CHARACTERS("Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,}");
 static const std::regex PROTECTED_NAMES("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
+static const std::regex TOKEN_NAME_CHARACTERS("^[A-Z0-9._]{3,25}$");
 
 bool IsTokenNameValid(const std::string& name)
 {
     return std::regex_match(name, TOKEN_NAME_CHARACTERS)
         && !std::regex_match(name, PROTECTED_NAMES);
+}
+
+bool IsTokenIPFSValid(const std::string& string)
+{
+    return std::regex_match(string, IPFS_CHARACTERS) || string == "";
 }
 
 /** Returns a label for the given transaction type. */
@@ -1612,6 +1618,12 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -73);
     }
 
+    if (!IsTokenIPFSValid(data))
+    {
+        PrintToLog("%s(): rejected: token IPFS hash %s is invalid\n", __func__, name);
+        return (PKT_ERROR_SP -74);
+    }
+
     // ------------------------------------------
 
     CMPSPInfo::Entry newSP;
@@ -1726,6 +1738,12 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
     if (nDonation < nMandatory) {
         PrintToLog("%s(): rejected: token creation fee is missing\n", __func__);
         return (PKT_ERROR_SP -73);
+    }
+
+    if (!IsTokenIPFSValid(data))
+    {
+        PrintToLog("%s(): rejected: token IPFS hash %s is invalid\n", __func__, name);
+        return (PKT_ERROR_SP -74);
     }
 
     // ------------------------------------------
@@ -1880,6 +1898,12 @@ int CMPTransaction::logicMath_CreatePropertyManaged()
     if (nDonation < nMandatory) {
         PrintToLog("%s(): rejected: token creation fee is missing\n", __func__);
         return (PKT_ERROR_SP -73);
+    }
+
+    if (!IsTokenIPFSValid(data))
+    {
+        PrintToLog("%s(): rejected: token IPFS hash %s is invalid\n", __func__, name);
+        return (PKT_ERROR_SP -74);
     }
 
     // ------------------------------------------

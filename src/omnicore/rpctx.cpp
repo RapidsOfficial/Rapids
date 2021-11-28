@@ -469,7 +469,7 @@ static UniValue omni_sendissuancecrowdsale(const JSONRPCRequest& request)
             "6. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
             "7. name                 (string, required) the name of the new tokens to create\n"
             "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
+            "9. ipfs                 (string, required) IPFS string for the new tokens (can be \"\")\n"
             "10. propertyiddesired   (number, required) the identifier of a token eligible to participate in the crowdsale\n"
             "11. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
             "12. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
@@ -542,7 +542,7 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
             "6. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
             "7. name                 (string, required) the name of the new tokens to create\n"
             "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
+            "9. ipfs                 (string, required) IPFS string for the new tokens (can be \"\")\n"
             "10. amount              (string, required) the number of tokens to create\n"
 
             "\nResult:\n"
@@ -574,6 +574,9 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
 
     if (!IsTokenNameValid(name))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token name is invalid");
+
+    if (!IsTokenIPFSValid(data))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     // create a payload for the transaction
     std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, url, data, amount);
@@ -612,7 +615,7 @@ static UniValue sendtokenissuancemanaged(const JSONRPCRequest& request)
             "6. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
             "7. name                 (string, required) the name of the new tokens to create\n"
             "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
+            "9. ipfs                 (string, required) IPFS string for the new tokens (can be \"\")\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
@@ -642,6 +645,9 @@ static UniValue sendtokenissuancemanaged(const JSONRPCRequest& request)
 
     if (!IsTokenNameValid(name))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token name is invalid");
+
+    if (!IsTokenIPFSValid(data))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     // create a payload for the transaction
     std::vector<unsigned char> payload = CreatePayload_IssuanceManaged(ecosystem, type, previousId, category, subcategory, name, url, data);

@@ -314,5 +314,6 @@ public:
 };
 
 bool IsTokenNameValid(const std::string& name);
+bool IsTokenIPFSValid(const std::string& string);
 
 #endif // OMNICORE_TX_H
