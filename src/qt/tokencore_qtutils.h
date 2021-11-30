@@ -25,6 +25,8 @@ namespace mastercore
     */
     void PopulateTXSentDialog(const std::string& txidStr);
 
+    void CriticalDialog(const std::string& strTitle, const std::string& strMsgText);
+
     /**
     * Variable length find and replace.  Find all iterations of findText within inputStr and replace them
     * with replaceText.

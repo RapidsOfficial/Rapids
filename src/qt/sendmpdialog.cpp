@@ -62,7 +62,7 @@ SendMPDialog::SendMPDialog(QWidget *parent) :
 
     // CSS
     this->setStyleSheet(parent->styleSheet());
-    // setCssProperty(ui->scrollArea, "container");
+
     setCssProperty(ui->balanceLabel, "text-subtitle", false);
     setCssProperty(ui->sendFromLabel, "text-subtitle", false);
     setCssProperty(ui->sendToLabel, "text-subtitle", false);
@@ -79,16 +79,6 @@ SendMPDialog::SendMPDialog(QWidget *parent) :
 
     ui->copyButton->setLayoutDirection(Qt::RightToLeft);
     setCssProperty(ui->copyButton, "btn-secundary-copy");
-
-    // Use platformStyle instead of ifdef Q_OS_MAC to hide icons on Mac
-    // if (!platformStyle->getImagesOnButtons()) {
-    //     ui->clearButton->setIcon(QIcon());
-    //     ui->sendButton->setIcon(QIcon());
-    // } else {
-    //     // Use platformStyle to color the icons to match the rest of the UI
-    //     ui->clearButton->setIcon(platformStyle->SingleColorIcon(":/icons/remove"));
-    //     ui->sendButton->setIcon(platformStyle->SingleColorIcon(":/icons/send"));
-    // }
 
 #if QT_VERSION >= 0x040700 // populate placeholder text
     ui->sendToLineEdit->setPlaceholderText("Enter address");
@@ -243,7 +233,7 @@ void SendMPDialog::sendMPTransaction()
     // get the property being sent and get divisibility
     QString spId = ui->propertyComboBox->itemData(ui->propertyComboBox->currentIndex()).toString();
     if (spId.toStdString().empty()) {
-        QMessageBox::critical( this, "Unable to send transaction",
+        CriticalDialog("Unable to send transaction",
         "The property selected is not valid.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
         return;
     }
@@ -257,7 +247,7 @@ void SendMPDialog::sendMPTransaction()
     CTxDestination fromAddress;
     if (false == strFromAddress.empty()) { fromAddress = DecodeDestination(strFromAddress); }
     if (!IsValidDestination(fromAddress)) {
-        QMessageBox::critical( this, "Unable to send transaction",
+        CriticalDialog("Unable to send transaction",
         "The sender address selected is not valid.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
         return;
     }
@@ -268,7 +258,7 @@ void SendMPDialog::sendMPTransaction()
     CTxDestination refAddress;
     if (false == strRefAddress.empty()) { refAddress = DecodeDestination(strRefAddress); }
     if (!IsValidDestination(refAddress)) {
-        QMessageBox::critical( this, "Unable to send transaction",
+        CriticalDialog("Unable to send transaction",
         "The recipient address entered is not valid.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
         return;
     }
@@ -283,13 +273,20 @@ void SendMPDialog::sendMPTransaction()
             strMsgText += "Original amount entered: " + strAmount + "\nAmount that will be sent: " + tmpStrAmount + "\n\n";
             strMsgText += "Do you still wish to proceed with the transaction?";
             QString msgText = QString::fromStdString(strMsgText);
-            QMessageBox::StandardButton responseClick;
-            responseClick = QMessageBox::question(this, "Amount truncation warning", msgText, QMessageBox::Yes|QMessageBox::No);
-            if (responseClick == QMessageBox::No) {
-                QMessageBox::critical( this, "Send transaction cancelled",
+
+            QMessageBox sendDialog;
+            sendDialog.setIcon(QMessageBox::Information);
+            sendDialog.setText(msgText);
+            sendDialog.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+            sendDialog.setDefaultButton(QMessageBox::Yes);
+            sendDialog.setButtonText( QMessageBox::Yes, "Confirm send transaction" );
+
+            if (sendDialog.exec() == QMessageBox::No) {
+                CriticalDialog("Send transaction cancelled",
                 "The send transaction has been cancelled.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
                 return;
             }
+
             strAmount = tmpStrAmount;
             ui->amountLineEdit->setText(QString::fromStdString(strAmount));
         }
@@ -298,7 +295,7 @@ void SendMPDialog::sendMPTransaction()
     // use strToInt64 function to get the amount, using divisibility of the property
     int64_t sendAmount = StrToInt64(strAmount, divisible);
     if (0>=sendAmount) {
-        QMessageBox::critical( this, "Unable to send transaction",
+        CriticalDialog("Unable to send transaction",
         "The amount entered is not valid.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
         return;
     }
@@ -306,7 +303,7 @@ void SendMPDialog::sendMPTransaction()
     // check if sending address has enough funds
     int64_t balanceAvailable = GetAvailableTokenBalance(EncodeDestination(fromAddress), propertyId); //getMPbalance(EncodeDestination(fromAddress), propertyId, MONEY);
     if (sendAmount>balanceAvailable) {
-        QMessageBox::critical( this, "Unable to send transaction",
+        CriticalDialog("Unable to send transaction",
         "The selected sending address does not have a sufficient balance to cover the amount entered.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
         return;
     }
@@ -317,7 +314,7 @@ void SendMPDialog::sendMPTransaction()
     QDateTime currentDate = QDateTime::currentDateTime();
     int secs = QDateTime::fromTime_t(intBlockDate).secsTo(currentDate);
     if(secs > 90*60) {
-        QMessageBox::critical( this, "Unable to send transaction",
+        CriticalDialog("Unable to send transaction",
         "The client is still synchronizing.  Sending transactions can currently be performed only when the client has completed synchronizing." );
         return;
     }
@@ -331,18 +328,23 @@ void SendMPDialog::sendMPTransaction()
     if (divisible) { strMsgText += FormatDivisibleMP(sendAmount); } else { strMsgText += FormatIndivisibleMP(sendAmount); }
     strMsgText += "\n\nAre you sure you wish to send this transaction?";
     QString msgText = QString::fromStdString(strMsgText);
-    QMessageBox::StandardButton responseClick;
-    responseClick = QMessageBox::question(this, "Confirm send transaction", msgText, QMessageBox::Yes|QMessageBox::No);
-    if (responseClick == QMessageBox::No) {
-        QMessageBox::critical( this, "Send transaction cancelled",
-        "The send transaction has been cancelled.\n\nPlease double-check the transction details thoroughly before retrying your send transaction." );
+
+    QMessageBox sendDialog;
+    sendDialog.setIcon(QMessageBox::Information);
+    sendDialog.setText(msgText);
+    sendDialog.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+    sendDialog.setDefaultButton(QMessageBox::Yes);
+    sendDialog.setButtonText( QMessageBox::Yes, "Confirm send transaction" );
+
+    if (sendDialog.exec() == QMessageBox::No) {
+        CriticalDialog("Send transaction cancelled", "The send transaction has been cancelled.\n\nPlease double-check the transction details thoroughly before retrying your send transaction.");
         return;
     }
 
     // unlock the wallet
     WalletModel::UnlockContext ctx(walletModel->requestUnlock());
     if(!ctx.isValid()) {
-        QMessageBox::critical( this, "Send transaction failed",
+        CriticalDialog("Send transaction failed",
         "The send transaction has been cancelled.\n\nThe wallet unlock process must be completed to send a transaction." );
         return; // unlock wallet was cancelled/failed
     }
@@ -357,7 +359,7 @@ void SendMPDialog::sendMPTransaction()
 
     // check error and return the txid (or raw hex depending on autocommit)
     if (result != 0) {
-        QMessageBox::critical( this, "Send transaction failed",
+        CriticalDialog("Send transaction failed",
         "The send transaction has failed.\n\nThe error code was: " + QString::number(result) + "\nThe error message was:\n" + QString::fromStdString(error_str(result)));
         return;
     } else {

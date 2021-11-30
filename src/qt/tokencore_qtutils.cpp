@@ -31,6 +31,17 @@ void PopulateTXSentDialog(const std::string& txidStr)
     if(sentDialog.exec() == QMessageBox::Yes) GUIUtil::setClipboard(QString::fromStdString(txidStr));
 }
 
+void CriticalDialog(const std::string& strTitle, const std::string& strMsgText)
+{
+    QMessageBox criticalDialog;
+    criticalDialog.setIcon(QMessageBox::Critical);
+    criticalDialog.setWindowTitle(QString::fromStdString(strTitle));
+    criticalDialog.setText(QString::fromStdString(strMsgText));
+    criticalDialog.setStandardButtons(QMessageBox::Ok);
+    criticalDialog.setDefaultButton(QMessageBox::Ok);
+    criticalDialog.exec();
+}
+
 /**
  * Displays a simple dialog layout that can be used to provide selectable text to the user
  *
