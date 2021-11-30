@@ -360,7 +360,7 @@ void SendMPDialog::sendMPTransaction()
     // check error and return the txid (or raw hex depending on autocommit)
     if (result != 0) {
         CriticalDialog("Send transaction failed",
-        "The send transaction has failed.\n\nThe error code was: " + QString::number(result) + "\nThe error message was:\n" + QString::fromStdString(error_str(result)));
+        "The send transaction has failed.\n\nThe error code was: " + QString::number(result).toStdString() + "\nThe error message was:\n" + error_str(result));
         return;
     } else {
         if (!autoCommit) {
