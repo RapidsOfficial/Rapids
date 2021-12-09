@@ -173,7 +173,7 @@ static UniValue sendtoken(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 4 || request.params.size() > 6)
         throw runtime_error(
-            "sendtoken \"fromaddress\" \"toaddress\" propertyid \"amount\" ( \"redeemaddress\" \"referenceamount\" )\n"
+            "sendtoken \"fromaddress\" \"toaddress\" name \"amount\" ( \"redeemaddress\" \"referenceamount\" )\n"
 
             "\nCreate and broadcast a simple send transaction.\n"
 
@@ -189,8 +189,8 @@ static UniValue sendtoken(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 1 \"100.0\"")
-            + HelpExampleRpc("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", 1, \"100.0\"")
+            + HelpExampleCli("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" TOKEN \"100.0\"")
+            + HelpExampleRpc("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", TOKEN, \"100.0\"")
         );
 
     // obtain parameters & info
@@ -626,8 +626,8 @@ static UniValue sendtokenissuancemanaged(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("sendtokenissuancemanaged", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
-            + HelpExampleRpc("sendtokenissuancemanaged", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
+            + HelpExampleCli("sendtokenissuancemanaged", "\"RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
+            + HelpExampleRpc("sendtokenissuancemanaged", "\"RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
         );
 
     // obtain parameters & info
@@ -732,14 +732,14 @@ static UniValue sendtokengrant(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 4 || request.params.size() > 5)
         throw runtime_error(
-            "sendtokengrant \"fromaddress\" \"toaddress\" propertyid \"amount\" ( \"memo\" )\n"
+            "sendtokengrant \"fromaddress\" \"toaddress\" name \"amount\" ( \"memo\" )\n"
 
             "\nIssue or grant new units of managed tokens.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from\n"
             "2. toaddress            (string, required) the receiver of the tokens (sender by default, can be \"\")\n"
-            "3. propertyid           (number, required) the identifier of the tokens to grant\n"
+            "3. name                 (string, required) the name of the token to grant\n"
             "4. amount               (string, required) the amount of tokens to create\n"
             "5. memo                 (string, optional) a text note attached to this transaction (none by default)\n"
 
@@ -747,14 +747,19 @@ static UniValue sendtokengrant(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("sendtokengrant", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" \"\" 51 \"7000\"")
-            + HelpExampleRpc("sendtokengrant", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", \"\", 51, \"7000\"")
+            + HelpExampleCli("sendtokengrant", "\"RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p\" \"\" TOKEN \"7000\"")
+            + HelpExampleRpc("sendtokengrant", "\"RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p\", \"\", TOKEN, \"7000\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = !ParseText(request.params[1]).empty() ? ParseAddress(request.params[1]): "";
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
     std::string memo = (request.params.size() > 4) ? ParseText(request.params[4]): "";
 
@@ -783,17 +788,17 @@ static UniValue sendtokengrant(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendrevoke(const JSONRPCRequest& request)
+static UniValue sendtokenrevoke(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 3 || request.params.size() > 4)
         throw runtime_error(
-            "token_sendrevoke \"fromaddress\" propertyid \"amount\" ( \"memo\" )\n"
+            "sendtokenrevoke \"fromaddress\" name \"amount\" ( \"memo\" )\n"
 
             "\nRevoke units of managed tokens.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to revoke the tokens from\n"
-            "2. propertyid           (number, required) the identifier of the tokens to revoke\n"
+            "2. name                 (string, required) the name of the token to revoke\n"
             "3. amount               (string, required) the amount of tokens to revoke\n"
             "4. memo                 (string, optional) a text note attached to this transaction (none by default)\n"
 
@@ -801,13 +806,18 @@ static UniValue token_sendrevoke(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendrevoke", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" \"\" 51 \"100\"")
-            + HelpExampleRpc("token_sendrevoke", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", \"\", 51, \"100\"")
+            + HelpExampleCli("sendtokenrevoke", "\"RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p\" \"\" TOKEN \"100\"")
+            + HelpExampleRpc("sendtokenrevoke", "\"RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p\", \"\", TOKEN, \"100\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyId = ParsePropertyId(request.params[1]);
+    std::string name = ParseText(request.params[1]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[2], isPropertyDivisible(propertyId));
     std::string memo = (request.params.size() > 3) ? ParseText(request.params[3]): "";
 
@@ -1574,7 +1584,7 @@ static const CRPCCommand commands[] =
     // { "tokens (transaction creation)", "token_sendcancelalltrades",     &token_sendcancelalltrades,     false },
     // { "tokens (transaction creation)", "token_sendsto",                 &token_sendsto,                 false },
     // { "tokens (transaction creation)", "sendtokengrant",               &sendtokengrant,               false },
-    // { "tokens (transaction creation)", "token_sendrevoke",              &token_sendrevoke,              false },
+    // { "tokens (transaction creation)", "sendtokenrevoke",              &sendtokenrevoke,              false },
     // { "tokens (transaction creation)", "token_sendclosecrowdsale",      &token_sendclosecrowdsale,      false },
     // { "tokens (transaction creation)", "token_sendchangeissuer",        &token_sendchangeissuer,        false },
     { "tokens (transaction creation)", "sendalltokens",                 &sendalltokens,               false },

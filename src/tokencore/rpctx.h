@@ -13,7 +13,7 @@ UniValue sendtokenissuancefixed(const UniValue& params, bool fHelp);
 UniValue sendtokenissuancemanaged(const UniValue& params, bool fHelp);
 UniValue token_sendsto(const UniValue& params, bool fHelp);
 UniValue sendtokengrant(const UniValue& params, bool fHelp);
-UniValue token_sendrevoke(const UniValue& params, bool fHelp);
+UniValue sendtokenrevoke(const UniValue& params, bool fHelp);
 UniValue token_sendclosecrowdsale(const UniValue& params, bool fHelp);
 UniValue trade_MP(const UniValue& params, bool fHelp);
 UniValue token_sendtrade(const UniValue& params, bool fHelp);

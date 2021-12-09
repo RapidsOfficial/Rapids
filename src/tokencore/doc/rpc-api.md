@@ -21,7 +21,7 @@ All available commands can be listed with `"help"`, and information about a spec
   - [token_sendissuancemanaged](#token_sendissuancemanaged)
   - [token_sendsto](#token_sendsto)
   - [sendtokengrant](#sendtokengrant)
-  - [token_sendrevoke](#token_sendrevoke)
+  - [sendtokenrevoke](#sendtokenrevoke)
   - [token_sendclosecrowdsale](#token_sendclosecrowdsale)
   - [token_sendtrade](#token_sendtrade)
   - [token_sendcanceltradesbyprice](#token_sendcanceltradesbyprice)
@@ -292,7 +292,7 @@ Create new tokens with manageable supply.
 
 ```bash
 $ tokencore-cli "token_sendissuancemanaged" \
-    "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
+    "RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
 ```
 
 ---
@@ -347,12 +347,12 @@ Issue or grant new units of managed tokens.
 **Example:**
 
 ```bash
-$ tokencore-cli "sendtokengrant" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "7000"
+$ tokencore-cli "sendtokengrant" "RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p" "" 51 "7000"
 ```
 
 ---
 
-### token_sendrevoke
+### sendtokenrevoke
 
 Revoke units of managed tokens.
 
@@ -373,7 +373,7 @@ Revoke units of managed tokens.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_sendrevoke" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "100"
+$ tokencore-cli "sendtokenrevoke" "RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p" "" 51 "100"
 ```
 
 ---
