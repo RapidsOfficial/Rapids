@@ -211,7 +211,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "getwalletaddresstokenbalances", 0 },
 
         /* Token Core - transaction calls */
-        { "sendtoken", 2 },
         { "token_sendsto", 1 },
         { "token_sendsto", 4 },
         { "sendalltokens", 2 },

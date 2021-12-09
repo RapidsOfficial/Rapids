@@ -180,7 +180,7 @@ static UniValue sendtoken(const JSONRPCRequest& request)
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from\n"
             "2. toaddress            (string, required) the address of the receiver\n"
-            "3. propertyid           (number, required) the identifier of the tokens to send\n"
+            "3. name                 (string, required) the name of the token to send\n"
             "4. amount               (string, required) the amount to send\n"
             "5. redeemaddress        (string, optional) an address that can spend the transaction dust (sender by default)\n"
             "6. referenceamount      (string, optional) a bitcoin amount that is sent to the receiver (minimal by default)\n"
@@ -196,7 +196,12 @@ static UniValue sendtoken(const JSONRPCRequest& request)
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = ParseAddress(request.params[1]);
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
     std::string redeemAddress = (request.params.size() > 4 && !ParseText(request.params[4]).empty()) ? ParseAddress(request.params[4]): "";
     int64_t referenceAmount = (request.params.size() > 5) ? ParseAmount(request.params[5], true): 0;
