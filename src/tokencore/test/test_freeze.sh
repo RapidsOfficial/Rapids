@@ -27,7 +27,7 @@ $SRCDIR/tokencore-cli --regtest generate 1 >$NUL
 printf "   * Creating a test (managed) property and granting 1000 tokens to the test address\n"
 $SRCDIR/tokencore-cli --regtest token_sendissuancemanaged $ADDR 1 1 0 "TestCat" "TestSubCat" "TestProperty" "TestURL" "TestData" >$NUL
 $SRCDIR/tokencore-cli --regtest generate 1 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendgrant $ADDR $FADDR 3 1000 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokengrant $ADDR $FADDR 3 1000 >$NUL
 $SRCDIR/tokencore-cli --regtest generate 1 >$NUL
 printf "\nRunning the test scenario...\n"
 printf "   * Sending a 'freeze' tranasction for the test address prior to enabling freezing\n"

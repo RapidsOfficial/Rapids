@@ -19,6 +19,7 @@ QT_FORMS_UI = \
   qt/forms/optionsdialog.ui \
   qt/forms/rpcconsole.ui \
   qt/forms/sendmpdialog.ui \
+  qt/forms/creatempdialog.ui \
   qt/forms/lookupaddressdialog.ui \
   qt/forms/lookupspdialog.ui \
   qt/forms/lookuptxdialog.ui \
@@ -109,6 +110,7 @@ QT_MOC_CPP = \
   qt/moc_utilitydialog.cpp \
   qt/moc_walletmodel.cpp \
   qt/moc_sendmpdialog.cpp \
+  qt/moc_creatempdialog.cpp \
   qt/moc_lookupaddressdialog.cpp \
   qt/moc_lookupspdialog.cpp \
   qt/moc_lookuptxdialog.cpp \
@@ -244,6 +246,7 @@ BITCOIN_QT_H = \
   qt/metadexcanceldialog.h \
   qt/tradehistorydialog.h \
   qt/sendmpdialog.h \
+  qt/creatempdialog.h \
   qt/tokencore_qtutils.h \
   qt/rapids/pwidget.h \
   qt/rapids/focuseddialog.h \
@@ -574,6 +577,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/walletmodel.cpp \
   qt/walletmodeltransaction.cpp \
   qt/sendmpdialog.cpp \
+  qt/creatempdialog.cpp \
   qt/lookupaddressdialog.cpp \
   qt/lookupspdialog.cpp \
   qt/lookuptxdialog.cpp \

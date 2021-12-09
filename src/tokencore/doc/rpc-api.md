@@ -20,7 +20,7 @@ All available commands can be listed with `"help"`, and information about a spec
   - [token_sendissuancefixed](#token_sendissuancefixed)
   - [token_sendissuancemanaged](#token_sendissuancemanaged)
   - [token_sendsto](#token_sendsto)
-  - [token_sendgrant](#token_sendgrant)
+  - [sendtokengrant](#sendtokengrant)
   - [token_sendrevoke](#token_sendrevoke)
   - [token_sendclosecrowdsale](#token_sendclosecrowdsale)
   - [token_sendtrade](#token_sendtrade)
@@ -325,7 +325,7 @@ $ tokencore-cli "token_sendsto" \
 
 ---
 
-### token_sendgrant
+### sendtokengrant
 
 Issue or grant new units of managed tokens.
 
@@ -347,7 +347,7 @@ Issue or grant new units of managed tokens.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_sendgrant" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "7000"
+$ tokencore-cli "sendtokengrant" "3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH" "" 51 "7000"
 ```
 
 ---

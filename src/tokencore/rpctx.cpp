@@ -723,11 +723,11 @@ static UniValue token_sendsto(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendgrant(const JSONRPCRequest& request)
+static UniValue sendtokengrant(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 4 || request.params.size() > 5)
         throw runtime_error(
-            "token_sendgrant \"fromaddress\" \"toaddress\" propertyid \"amount\" ( \"memo\" )\n"
+            "sendtokengrant \"fromaddress\" \"toaddress\" propertyid \"amount\" ( \"memo\" )\n"
 
             "\nIssue or grant new units of managed tokens.\n"
 
@@ -742,8 +742,8 @@ static UniValue token_sendgrant(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendgrant", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" \"\" 51 \"7000\"")
-            + HelpExampleRpc("token_sendgrant", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", \"\", 51, \"7000\"")
+            + HelpExampleCli("sendtokengrant", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\" \"\" 51 \"7000\"")
+            + HelpExampleRpc("sendtokengrant", "\"3HsJvhr9qzgRe3ss97b1QHs38rmaLExLcH\", \"\", 51, \"7000\"")
         );
 
     // obtain parameters & info
@@ -1568,7 +1568,7 @@ static const CRPCCommand commands[] =
     // { "tokens (transaction creation)", "token_sendcanceltradesbypair",  &token_sendcanceltradesbypair,  false },
     // { "tokens (transaction creation)", "token_sendcancelalltrades",     &token_sendcancelalltrades,     false },
     // { "tokens (transaction creation)", "token_sendsto",                 &token_sendsto,                 false },
-    // { "tokens (transaction creation)", "token_sendgrant",               &token_sendgrant,               false },
+    // { "tokens (transaction creation)", "sendtokengrant",               &sendtokengrant,               false },
     // { "tokens (transaction creation)", "token_sendrevoke",              &token_sendrevoke,              false },
     // { "tokens (transaction creation)", "token_sendclosecrowdsale",      &token_sendclosecrowdsale,      false },
     // { "tokens (transaction creation)", "token_sendchangeissuer",        &token_sendchangeissuer,        false },

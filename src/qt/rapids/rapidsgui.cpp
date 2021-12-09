@@ -130,6 +130,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         // dexPage = new MetaDExDialog(this);
 
         // Token
+        createTokenPage = new CreateMPDialog(this);
         sendTokenPage = new SendMPDialog(this);
         balancesPage = new BalancesDialog(this);
         tokensHistory = new TXHistoryDialog();
@@ -137,6 +138,7 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
 
         tabHolder = new QTabWidget();
         tabHolder->setStyleSheet("background-color: #0f0f0f;");
+        tabHolder->addTab(createTokenPage, tr("Create"));
         tabHolder->addTab(sendTokenPage, tr("Send"));
         tabHolder->addTab(balancesPage, tr("Tokens"));
         tabHolder->addTab(tokensHistory, tr("History"));
@@ -272,6 +274,7 @@ void RapidsGUI::setClientModel(ClientModel* clientModel)
         settingsWidget->setClientModel(clientModel);
         balancesPage->setClientModel(clientModel);
         tokensHistory->setClientModel(clientModel);
+        createTokenPage->setClientModel(clientModel);
         sendTokenPage->setClientModel(clientModel);
         // dexPage->setClientModel(clientModel);
 
@@ -526,6 +529,7 @@ void RapidsGUI::goToSettings(){
 void RapidsGUI::gotoTokensPage(){
     balancesPage->balancesUpdated();
     sendTokenPage->balancesUpdated();
+    createTokenPage->balancesUpdated();
 
     showTop(tabHolder);
 }
@@ -645,6 +649,7 @@ bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
     settingsWidget->setWalletModel(walletModel);
     balancesPage->setWalletModel(walletModel);
     tokensHistory->setWalletModel(walletModel);
+    createTokenPage->setWalletModel(walletModel);
     sendTokenPage->setWalletModel(walletModel);
     // dexPage->setWalletModel(walletModel);
 

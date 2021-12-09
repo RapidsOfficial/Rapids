@@ -241,7 +241,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "token_senddexaccept", 2 },
         { "token_senddexaccept", 4 },
         { "token_sendclosecrowdsale", 1 },
-        { "token_sendgrant", 2 },
+        { "sendtokengrant", 2 },
         { "token_sendrevoke", 1 },
         { "token_sendchangeissuer", 2 },
         { "token_sendenablefreezing", 1 },
