@@ -39,10 +39,9 @@ public:
     void clearFields();
     void sendMPTransaction();
     void updateProperty();
-    void updatePropSelector();
 
 public Q_SLOTS:
-    void propertyComboBoxChanged(int idx);
+    void ChangeDivisibleState(bool divisible);
     void sendFromComboBoxChanged(int idx);
     void clearButtonClicked();
     void sendButtonClicked();

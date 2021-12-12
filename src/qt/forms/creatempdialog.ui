@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>850</width>
-    <height>419</height>
+    <height>449</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,6 +22,25 @@
    </property>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="feeWarningLabel">
+       <property name="font">
+        <font>
+         <pointsize>8</pointsize>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel { 
+    border: 1px solid rgb(142,61,0);padding:5px 5px 5px 5px;background-repeat: no-repeat;background-position: 10px center;color: #133959;background-color: rgb(255,191,142); color:rgb(142,61,0);} </string>
+       </property>
+       <property name="text">
+        <string>Warning: You will not be able to send this transaction.</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+       </property>
+      </widget>
+     </item>
      <item>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="leftMargin">
@@ -76,7 +95,7 @@
          <item>
           <widget class="QLabel" name="balanceLabel">
            <property name="text">
-            <string>Available: 0.00000000 RPD</string>
+            <string>Balance: 0.00000000 RPD</string>
            </property>
            <property name="margin">
             <number>8</number>
@@ -136,7 +155,7 @@
           <widget class="QLineEdit" name="amountLineEdit"/>
          </item>
          <item>
-          <widget class="QCheckBox" name="checkBox">
+          <widget class="QCheckBox" name="divisibleCheckBox">
            <property name="text">
             <string>Divisible</string>
            </property>
