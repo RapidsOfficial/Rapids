@@ -18,7 +18,7 @@ BEGIN
         BLOCK "040904E4" // U.S. English - multilingual (hex)
         BEGIN
             VALUE "CompanyName",        "Token Foundation"
-            VALUE "FileDescription",    "Token Core CLI (OSS RPC client for Bitcoin and the Token Layer)"
+            VALUE "FileDescription",    "Token Core CLI (OSS RPC client for Bitcoin and the RPDx)"
             VALUE "FileVersion",        VER_FILEVERSION_STR
             VALUE "InternalName",       "tokencore-cli"
             VALUE "LegalCopyright",     COPYRIGHT_STR

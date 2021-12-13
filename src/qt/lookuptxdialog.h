@@ -16,7 +16,7 @@ namespace Ui {
     class LookupTXDialog;
 }
 
-/** Dialog for looking up Token Layer transactions */
+/** Dialog for looking up RPDx transactions */
 class LookupTXDialog : public QDialog
 {
     Q_OBJECT

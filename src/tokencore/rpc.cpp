@@ -80,7 +80,7 @@ void PopulateFailure(int error)
         case MP_INVALID_TX_IN_DB_FOUND:
             throw JSONRPCError(RPC_INTERNAL_ERROR, "Potential database corruption: Invalid transaction found");
         case MP_TX_IS_NOT_TOKEN_PROTOCOL:
-            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No Token Layer Protocol transaction");
+            throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "No RPDx Protocol transaction");
     }
     throw JSONRPCError(RPC_INTERNAL_ERROR, "Generic transaction population failure");
 }

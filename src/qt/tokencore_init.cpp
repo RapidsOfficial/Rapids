@@ -25,19 +25,19 @@ static bool getDisclaimerDialogResult()
     QString qstrInformativeText(
     "By default this software will use your existing Bitcoin wallet, including spending "
     "bitcoins contained therein (for example for transaction fees or trading).\n\n"
-    "The protocol and transaction processing rules for the Token Layer are still under "
+    "The protocol and transaction processing rules for the RPDx are still under "
     "active development and are subject to change in future.\n\n"
     "Token Core should be considered an alpha-level product, and you use it at your "
     "own risk. Neither the Token Foundation nor the Token Core developers assumes "
     "any responsibility for funds misplaced, mishandled, lost, or misallocated.\n\n"
     "Further, please note that this installation of Token Core should be viewed as "
-    "EXPERIMENTAL. Your wallet data, bitcoins and Token Layer tokens may be lost, "
+    "EXPERIMENTAL. Your wallet data, bitcoins and RPDx tokens may be lost, "
     "deleted, or corrupted, with or without warning due to bugs or glitches. "
     "Please take caution.\n\n"
     "This software is provided open-source at no cost. You are responsible for "
     "knowing the law in your country and determining if your use of this software "
     "contravenes any local laws.\n\n"
-    "PLEASE DO NOT use wallet(s) with significant amounts of bitcoins or Token Layer "
+    "PLEASE DO NOT use wallet(s) with significant amounts of bitcoins or RPDx "
     "tokens while testing!");
 
     QMessageBox msgBoxDisclaimer;

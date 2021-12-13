@@ -164,10 +164,12 @@ void SendMPDialog::updateFrom()
     size_t spacer = currentSetFromAddress.find(" ");
     if (spacer!=std::string::npos) {
         currentSetFromAddress = currentSetFromAddress.substr(0,spacer);
-        ui->sendFromComboBox->setEditable(false);
-        // QLineEdit *comboDisplay = ui->sendFromComboBox->lineEdit();
-        // comboDisplay->setText(QString::fromStdString(currentSetFromAddress));
-        // comboDisplay->setReadOnly(true);
+        ui->sendFromComboBox->setEditable(true);
+        QLineEdit *comboDisplay = ui->sendFromComboBox->lineEdit();
+        comboDisplay->setText(QString::fromStdString(currentSetFromAddress));
+        comboDisplay->setReadOnly(true);
+
+        comboDisplay->setStyleSheet("QLineEdit {color:white;background-color:transparent;padding:40px 0px;border: none;}");
     }
 
     if (currentSetFromAddress.empty()) {
@@ -211,8 +213,8 @@ void SendMPDialog::updateProperty()
         if (!includeAddress) continue; //ignore this address, has never transacted in this propertyId
         if (IsMyAddress(address) != ISMINE_SPENDABLE) continue; // ignore this address, it's not spendable
         if (!GetAvailableTokenBalance(address, propertyId)) continue; // ignore this address, has no available balance to spend
-        // ui->sendFromComboBox->addItem(QString::fromStdString(address + " \t" + FormatMP(propertyId, GetAvailableTokenBalance(address, propertyId)) + getTokenLabel(propertyId)));
-        ui->sendFromComboBox->addItem(QString::fromStdString(address));
+        ui->sendFromComboBox->addItem(QString::fromStdString(address + " \t(" + FormatMP(propertyId, GetAvailableTokenBalance(address, propertyId)) + getTokenLabel(propertyId) + ")"));
+        // ui->sendFromComboBox->addItem(QString::fromStdString(address));
     }
 
     // attempt to set from address back to cached value

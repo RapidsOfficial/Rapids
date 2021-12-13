@@ -1,9 +1,9 @@
 Token Core v0.5.0
 ================
 
-v0.5.0 is a major release and consensus critical in terms of the Token Layer protocol rules. An upgrade is mandatory, and highly recommended. Prior releases may not be compatible with new behaviour in this release.
+v0.5.0 is a major release and consensus critical in terms of the RPDx protocol rules. An upgrade is mandatory, and highly recommended. Prior releases may not be compatible with new behaviour in this release.
 
-**Note: the first time you run this version, all Token Layer transactions are reprocessed due to an database update, which may take 30 minutes up to several hours.**
+**Note: the first time you run this version, all RPDx transactions are reprocessed due to an database update, which may take 30 minutes up to several hours.**
 
 Please report bugs using the issue tracker on GitHub:
 
@@ -63,24 +63,24 @@ During startup, when reloading the effect of freeze transactions, it is checked,
 
 With this change, historical issuers are persisted and can be accessed for any given block. When there is an issuer check, it now checks against the issuer at that point, resolving the startup issue.
 
-Please note: the internal database of Token Core is upgraded, which triggers a reparse of Token Layer transactions the first time this version is started. This can take between 30 minutes and a few hours of processing time, during which Token Core is unusable!
+Please note: the internal database of Token Core is upgraded, which triggers a reparse of RPDx transactions the first time this version is started. This can take between 30 minutes and a few hours of processing time, during which Token Core is unusable!
 
 Speed up RPC "token_listpendingtransactions"
 -------------------------------------------
 
-When adding a transaction to the mempool, a quick and unsafe check for any Token Layer markers is done without checking transaction validity or whether it's malformed, to identify potential Token Layer transactions.
+When adding a transaction to the mempool, a quick and unsafe check for any RPDx markers is done without checking transaction validity or whether it's malformed, to identify potential RPDx transactions.
 
 If the transaction has a potential marker, then it's added to a new cache. If the transaction is removed from the mempool, it's also removed from the cache.
 
-This speeds up the RPC "token_listpendingtransactions" significantly, which can be used to list pending Token Layer transactions.
+This speeds up the RPC "token_listpendingtransactions" significantly, which can be used to list pending RPDx transactions.
 
 Rename TOKEN and TTOKEN to OMN and TOMN
 -------------------------------------
 
 To be more algined with other symbols and tickers the following changes in wording are made:
 
-- "Token", referring to the native tokens of the Token Layer protocol, becomes "Token tokens"
-- "Test Token", referring to the native test tokens of the Token Layer protocol, becomes "Test Token tokens"
+- "Token", referring to the native tokens of the RPDx protocol, becomes "Token tokens"
+- "Test Token", referring to the native test tokens of the RPDx protocol, becomes "Test Token tokens"
 - "TOKEN", referring to the symbol of Token tokens, becomes "OMN"
 - "TTOKEN", referring to the symbol of Test Token tokens, becomes "TOMN"
 

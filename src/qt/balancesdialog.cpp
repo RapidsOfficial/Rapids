@@ -59,8 +59,8 @@ BalancesDialog::BalancesDialog(QWidget *parent) :
     // setCssProperty(ui->balancesTable, "token-table");
 
     ui->balancesTable->setColumnCount(4);
-    ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Property ID"));
-    ui->balancesTable->setHorizontalHeaderItem(1, new QTableWidgetItem("Property Name"));
+    ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("ID"));
+    ui->balancesTable->setHorizontalHeaderItem(1, new QTableWidgetItem("Token Name"));
     ui->balancesTable->setHorizontalHeaderItem(2, new QTableWidgetItem("Reserved"));
     ui->balancesTable->setHorizontalHeaderItem(3, new QTableWidgetItem("Available"));
     borrowedColumnResizingFixer = new GUIUtil::TableViewLastColumnResizingFixer(ui->balancesTable, 100, 100);
@@ -216,8 +216,8 @@ void BalancesDialog::PopulateBalances(unsigned int propertyId)
     LOCK(cs_tally);
     //are we summary?
     if(propertyId==2147483646) {
-        ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Property ID"));
-        ui->balancesTable->setHorizontalHeaderItem(1, new QTableWidgetItem("Property Name"));
+        ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("ID"));
+        ui->balancesTable->setHorizontalHeaderItem(1, new QTableWidgetItem("Token Name"));
 
         // loop over the wallet property list and add the wallet totals
         for (std::set<uint32_t>::iterator it = global_wallet_property_list.begin() ; it != global_wallet_property_list.end(); ++it) {

@@ -41,7 +41,7 @@ int const STORE_EVERY_N_BLOCK = 10000;
 // maximum size of string fields
 #define SP_STRING_FIELD_LEN 256
 
-// Token Layer Transaction (Packet) Version
+// RPDx Transaction (Packet) Version
 #define MP_TX_PKT_V0  0
 #define MP_TX_PKT_V1  1
 

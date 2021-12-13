@@ -1822,7 +1822,7 @@ bool AppInitMain()
     //     }
     // }
 
-    uiInterface.InitMessage(_("Parsing Token Layer transactions..."));
+    uiInterface.InitMessage(_("Parsing RPDx transactions..."));
 
     mastercore_init();
 
