@@ -257,8 +257,7 @@ void CreateMPDialog::sendMPTransaction()
         return;
     }
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(name);
-    if (propertyId > 0) {
+    if (pDbSpInfo->findSPByName(name) > 0) {
         CriticalDialog("Unable to issue token",
         "Token with this name already exists.\n\nPlease double-check the transction details thoroughly before retrying to issue token.");
         return;
@@ -334,26 +333,30 @@ void CreateMPDialog::sendMPTransaction()
     }
 
     // create a payload for the transaction
-    // std::vector<unsigned char> payload = CreatePayload_SimpleSend(propertyId, issueAmount);
+    int type = divisible ? 2 : 1;
 
-    // request the wallet build the transaction (and if needed commit it) - note UI does not support added reference amounts currently
-    // uint256 txid;
-    // std::string rawHex;
-    // int result = WalletTxBuilder(EncodeDestination(fromAddress), EncodeDestination(refAddress), "", 0, payload, txid, rawHex, autoCommit);
+    // create a payload for the transaction
+    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(1, type, 0, category, subcategory, name, url, ipfs, issueAmount);
+
+    // request the wallet build the transaction (and if needed commit it)
+    uint256 txid;
+    std::string rawHex;
+    int result = WalletTxBuilder(EncodeDestination(fromAddress), "", "", 0, payload, txid, rawHex, autoCommit, true);
 
     // check error and return the txid (or raw hex depending on autocommit)
-    // if (result != 0) {
-    //     CriticalDialog("Send transaction failed",
-    //     "The send transaction has failed.\n\nThe error code was: " + QString::number(result).toStdString() + "\nThe error message was:\n" + error_str(result));
-    //     return;
-    // } else {
-    //     if (!autoCommit) {
-    //         PopulateSimpleDialog(rawHex, "Raw Hex (auto commit is disabled)", "Raw transaction hex");
-    //     } else {
-    //         PendingAdd(txid, EncodeDestination(fromAddress), TOKEN_TYPE_SIMPLE_SEND, propertyId, issueAmount);
-    //         PopulateTXSentDialog(txid.GetHex());
-    //     }
-    // }
+    if (result != 0) {
+        CriticalDialog("Token issuance failed",
+        "Token issance failed.\n\nThe error code was: " + QString::number(result).toStdString() + "\nThe error message was:\n" + error_str(result));
+        return;
+    } else {
+        if (!autoCommit) {
+            PopulateSimpleDialog(rawHex, "Raw Hex (auto commit is disabled)", "Raw transaction hex");
+        } else {
+            // ToDo: Fix this ?
+            // PendingAdd(txid, EncodeDestination(fromAddress), TOKEN_TYPE_CREATE_PROPERTY_FIXED, 0, issueAmount);
+            PopulateTXSentDialog(txid.GetHex());
+        }
+    }
 
     clearFields();
 }
