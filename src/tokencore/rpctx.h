@@ -3,18 +3,18 @@
 
 #include <univalue.h>
 
-UniValue token_sendrawtx(const UniValue& params, bool fHelp);
+UniValue sendtokenrawtx(const UniValue& params, bool fHelp);
 UniValue sendtoken(const UniValue& params, bool fHelp);
 UniValue sendalltokens(const UniValue& params, bool fHelp);
 UniValue token_senddexsell(const UniValue& params, bool fHelp);
 UniValue token_senddexaccept(const UniValue& params, bool fHelp);
-UniValue token_sendissuancecrowdsale(const UniValue& params, bool fHelp);
+UniValue sendtokenissuancecrowdsale(const UniValue& params, bool fHelp);
 UniValue sendtokenissuancefixed(const UniValue& params, bool fHelp);
 UniValue sendtokenissuancemanaged(const UniValue& params, bool fHelp);
 UniValue token_sendsto(const UniValue& params, bool fHelp);
 UniValue sendtokengrant(const UniValue& params, bool fHelp);
 UniValue sendtokenrevoke(const UniValue& params, bool fHelp);
-UniValue token_sendclosecrowdsale(const UniValue& params, bool fHelp);
+UniValue sendtokenclosecrowdsale(const UniValue& params, bool fHelp);
 UniValue trade_MP(const UniValue& params, bool fHelp);
 UniValue token_sendtrade(const UniValue& params, bool fHelp);
 UniValue token_sendcanceltradesbyprice(const UniValue& params, bool fHelp);

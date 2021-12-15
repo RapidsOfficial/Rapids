@@ -16,13 +16,13 @@ All available commands can be listed with `"help"`, and information about a spec
   - [token_send](#token_send)
   - [token_senddexsell](#token_senddexsell)
   - [token_senddexaccept](#token_senddexaccept)
-  - [token_sendissuancecrowdsale](#token_sendissuancecrowdsale)
+  - [sendtokenissuancecrowdsale](#sendtokenissuancecrowdsale)
   - [token_sendissuancefixed](#token_sendissuancefixed)
   - [token_sendissuancemanaged](#token_sendissuancemanaged)
   - [token_sendsto](#token_sendsto)
   - [sendtokengrant](#sendtokengrant)
   - [sendtokenrevoke](#sendtokenrevoke)
-  - [token_sendclosecrowdsale](#token_sendclosecrowdsale)
+  - [sendtokenclosecrowdsale](#sendtokenclosecrowdsale)
   - [token_sendtrade](#token_sendtrade)
   - [token_sendcanceltradesbyprice](#token_sendcanceltradesbyprice)
   - [token_sendcanceltradesbypair](#token_sendcanceltradesbypair)
@@ -33,7 +33,7 @@ All available commands can be listed with `"help"`, and information about a spec
   - [token_senddisablefreezing](#token_senddisablefreezing)
   - [token_sendfreeze](#token_sendfreeze)
   - [token_sendunfreeze](#token_sendunfreeze)
-  - [token_sendrawtx](#token_sendrawtx)
+  - [sendtokenrawtx](#sendtokenrawtx)
   - [token_funded_send](#token_funded_send)
   - [token_funded_sendall](#token_funded_sendall)
 - [Data retrieval](#data-retrieval)
@@ -52,7 +52,7 @@ All available commands can be listed with `"help"`, and information about a spec
   - [token_listproperties](#token_listproperties)
   - [token_getproperty](#token_getproperty)
   - [token_getactivecrowdsales](#token_getactivecrowdsales)
-  - [token_getcrowdsale](#token_getcrowdsale)
+  - [gettokencrowdsale](#gettokencrowdsale)
   - [token_getgrants](#token_getgrants)
   - [token_getsto](#token_getsto)
   - [token_gettrade](#token_gettrade)
@@ -193,7 +193,7 @@ $ tokencore-cli "token_senddexaccept" \
 
 ---
 
-### token_sendissuancecrowdsale
+### sendtokenissuancecrowdsale
 
 Create new tokens as crowdsale.
 
@@ -224,7 +224,7 @@ Create new tokens as crowdsale.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_sendissuancecrowdsale" \
+$ tokencore-cli "sendtokenissuancecrowdsale" \
     "3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo" 2 1 0 "Companies" "Bitcoin Mining" \
     "Quantum Miner" "" "" 2 "100" 1483228800 30 2
 ```
@@ -378,7 +378,7 @@ $ tokencore-cli "sendtokenrevoke" "RpAVz7YHGFjVrr29iiSmezkvd3SzBbuK7p" "" 51 "10
 
 ---
 
-### token_sendclosecrowdsale
+### sendtokenclosecrowdsale
 
 Manually close a crowdsale.
 
@@ -397,7 +397,7 @@ Manually close a crowdsale.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_sendclosecrowdsale" "3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo" 70
+$ tokencore-cli "sendtokenclosecrowdsale" "3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo" 70
 ```
 
 ---
@@ -664,7 +664,7 @@ $ tokencore-cli "token_sendunfreeze" "3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY" "3HTHR
 
 ---
 
-### token_sendrawtx
+### sendtokenrawtx
 
 Broadcasts a raw RPDx transaction.
 
@@ -686,7 +686,7 @@ Broadcasts a raw RPDx transaction.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_sendrawtx" \
+$ tokencore-cli "sendtokenrawtx" \
     "1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8" "000000000000000100000000017d7840" \
     "1EqTta1Rt8ixAA32DuC29oukbsSWU62qAV"
 ```
@@ -1284,7 +1284,7 @@ $ tokencore-cli "token_getactivecrowdsales"
 
 ---
 
-### token_getcrowdsale
+### gettokencrowdsale
 
 Returns information about a crowdsale.
 
@@ -1331,7 +1331,7 @@ Returns information about a crowdsale.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_getcrowdsale" 3 true
+$ tokencore-cli "gettokencrowdsale" 3 true
 ```
 
 ---
@@ -2723,7 +2723,7 @@ The following calls are replaced in Token Core 0.0.10, and queries with the old 
 
 - `send_MP` by `token_send`
 - `sendtoowners_MP` by `token_sendsto`
-- `sendrawtx_MP` by `token_sendrawtx`
+- `sendrawtx_MP` by `sendtokenrawtx`
 - `getinfo_MP` by `token_getinfo`
 - `getbalance_MP` by `token_getbalance`
 - `getallbalancesforid_MP` by `token_getallbalancesforid`
@@ -2735,6 +2735,6 @@ The following calls are replaced in Token Core 0.0.10, and queries with the old 
 - `listproperties_MP` by `token_listproperties`
 - `getproperty_MP` by `token_getproperty`
 - `getactivecrowdsales_MP` by `token_getactivecrowdsales`
-- `getcrowdsale_MP` by `token_getcrowdsale`
+- `getcrowdsale_MP` by `gettokencrowdsale`
 - `getgrants_MP` by `token_getgrants`
 - `getsto_MP` by `token_getsto` or `token_gettransaction`

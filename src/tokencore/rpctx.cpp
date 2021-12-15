@@ -127,11 +127,11 @@ static UniValue token_funded_sendall(const JSONRPCRequest& request)
     return retTxid.ToString();
 }
 
-static UniValue token_sendrawtx(const JSONRPCRequest& request)
+static UniValue sendtokenrawtx(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 5)
         throw runtime_error(
-            "token_sendrawtx \"fromaddress\" \"rawtransaction\" ( \"referenceaddress\" \"redeemaddress\" \"referenceamount\" )\n"
+            "sendtokenrawtx \"fromaddress\" \"rawtransaction\" ( \"referenceaddress\" \"redeemaddress\" \"referenceamount\" )\n"
             "\nBroadcasts a raw RPDx transaction.\n"
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from\n"
@@ -142,8 +142,8 @@ static UniValue token_sendrawtx(const JSONRPCRequest& request)
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_sendrawtx", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\" \"000000000000000100000000017d7840\" \"1EqTta1Rt8ixAA32DuC29oukbsSWU62qAV\"")
-            + HelpExampleRpc("token_sendrawtx", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\", \"000000000000000100000000017d7840\", \"1EqTta1Rt8ixAA32DuC29oukbsSWU62qAV\"")
+            + HelpExampleCli("sendtokenrawtx", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\" \"000000000000000100000000017d7840\" \"1EqTta1Rt8ixAA32DuC29oukbsSWU62qAV\"")
+            + HelpExampleRpc("sendtokenrawtx", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\", \"000000000000000100000000017d7840\", \"1EqTta1Rt8ixAA32DuC29oukbsSWU62qAV\"")
         );
 
     std::string fromAddress = ParseAddress(request.params[0]);
@@ -457,11 +457,11 @@ static UniValue token_senddexaccept(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendissuancecrowdsale(const JSONRPCRequest& request)
+static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 14)
         throw runtime_error(
-            "token_sendissuancecrowdsale \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" propertyiddesired tokensperunit deadline ( earlybonus issuerpercentage )\n"
+            "sendtokenissuancecrowdsale \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" tokendesired tokensperunit deadline ( earlybonus issuerpercentage )\n"
 
             "Create new tokens as crowdsale."
 
@@ -475,7 +475,7 @@ static UniValue token_sendissuancecrowdsale(const JSONRPCRequest& request)
             "7. name                 (string, required) the name of the new tokens to create\n"
             "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
             "9. ipfs                 (string, required) IPFS string for the new tokens (can be \"\")\n"
-            "10. propertyiddesired   (number, required) the identifier of a token eligible to participate in the crowdsale\n"
+            "10. tokendesired        (string, required) the token name eligible to participate in the crowdsale\n"
             "11. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
             "12. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
             "13. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
@@ -485,8 +485,8 @@ static UniValue token_sendissuancecrowdsale(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" 2 \"100\" 1483228800 30 2")
-            + HelpExampleRpc("token_sendissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", 2, \"100\", 1483228800, 30, 2")
+            + HelpExampleCli("sendtokenissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" TOKEN \"100\" 1483228800 30 2")
+            + HelpExampleRpc("sendtokenissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", TOKEN, \"100\", 1483228800, 30, 2")
         );
 
     // obtain parameters & info
@@ -499,7 +499,7 @@ static UniValue token_sendissuancecrowdsale(const JSONRPCRequest& request)
     std::string name = ParseText(request.params[6]);
     std::string url = ParseText(request.params[7]);
     std::string data = ParseText(request.params[8]);
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[9]);
+    std::string desiredName = ParseText(request.params[9]);
     int64_t numTokens = ParseAmount(request.params[10], type);
     int64_t deadline = ParseDeadline(request.params[11]);
     uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[12]);
@@ -507,6 +507,15 @@ static UniValue token_sendissuancecrowdsale(const JSONRPCRequest& request)
 
     // perform checks
     RequirePropertyName(name);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name already exists");
+
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByName(desiredName);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     RequireExistingProperty(propertyIdDesired);
     RequireSameEcosystem(ecosystem, propertyIdDesired);
 
@@ -847,29 +856,33 @@ static UniValue sendtokenrevoke(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendclosecrowdsale(const JSONRPCRequest& request)
+static UniValue sendtokenclosecrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_sendclosecrowdsale \"fromaddress\" propertyid\n"
+            "sendtokenclosecrowdsale \"fromaddress\" name\n"
 
             "\nManually close a crowdsale.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address associated with the crowdsale to close\n"
-            "2. propertyid           (number, required) the identifier of the crowdsale to close\n"
+            "2. name                 (string, required) the token name of crowdsale to close\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendclosecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\" 70")
-            + HelpExampleRpc("token_sendclosecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\", 70")
+            + HelpExampleCli("sendtokenclosecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\" TOKEN")
+            + HelpExampleRpc("sendtokenclosecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\", TOKEN")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyId = ParsePropertyId(request.params[1]);
+    std::string name = ParseText(request.params[1]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     // perform checks
     RequireExistingProperty(propertyId);
@@ -1571,11 +1584,11 @@ static const CRPCCommand commands[] =
 { //  category                         name                            actor (function)               okSafeMode
   //  -------------------------------- ------------------------------- ------------------------------ ----------
 #ifdef ENABLE_WALLET
-    // { "tokens (transaction creation)", "token_sendrawtx",               &token_sendrawtx,               false },
+    { "tokens (transaction creation)", "sendtokenrawtx",               &sendtokenrawtx,               false },
     { "tokens (transaction creation)", "sendtoken",                    &sendtoken,                    false },
     // { "tokens (transaction creation)", "token_senddexsell",             &token_senddexsell,             false },
     // { "tokens (transaction creation)", "token_senddexaccept",           &token_senddexaccept,           false },
-    // { "tokens (transaction creation)", "token_sendissuancecrowdsale",   &token_sendissuancecrowdsale,   false },
+    { "tokens (transaction creation)", "sendtokenissuancecrowdsale",   &sendtokenissuancecrowdsale,   false },
     { "tokens (transaction creation)", "sendtokenissuancefixed",       &sendtokenissuancefixed,       false },
     { "tokens (transaction creation)", "sendtokenissuancemanaged",     &sendtokenissuancemanaged,     false },
     // { "tokens (transaction creation)", "token_sendtrade",               &token_sendtrade,               false },
@@ -1585,13 +1598,13 @@ static const CRPCCommand commands[] =
     // { "tokens (transaction creation)", "token_sendsto",                 &token_sendsto,                 false },
     // { "tokens (transaction creation)", "sendtokengrant",               &sendtokengrant,               false },
     // { "tokens (transaction creation)", "sendtokenrevoke",              &sendtokenrevoke,              false },
-    // { "tokens (transaction creation)", "token_sendclosecrowdsale",      &token_sendclosecrowdsale,      false },
+    { "tokens (transaction creation)", "sendtokenclosecrowdsale",      &sendtokenclosecrowdsale,      false },
     // { "tokens (transaction creation)", "token_sendchangeissuer",        &token_sendchangeissuer,        false },
-    { "tokens (transaction creation)", "sendalltokens",                 &sendalltokens,               false },
+    { "tokens (transaction creation)", "sendalltokens",                &sendalltokens,                false },
     // { "tokens (transaction creation)", "token_sendenablefreezing",      &token_sendenablefreezing,      false },
     // { "tokens (transaction creation)", "token_senddisablefreezing",     &token_senddisablefreezing,     false },
-    { "tokens (transaction creation)", "sendtokenfreeze",               &sendtokenfreeze,             false },
-    { "tokens (transaction creation)", "sendtokenunfreeze",             &sendtokenunfreeze,           false },
+    { "tokens (transaction creation)", "sendtokenfreeze",              &sendtokenfreeze,              false },
+    { "tokens (transaction creation)", "sendtokenunfreeze",            &sendtokenunfreeze,            false },
     // { "hidden",                            "token_senddeactivation",        &token_senddeactivation,        true  },
     // { "hidden",                            "token_sendactivation",          &token_sendactivation,          false },
     // { "hidden",                            "token_sendalert",               &token_sendalert,               true  },

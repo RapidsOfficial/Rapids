@@ -1061,14 +1061,14 @@ static UniValue listtokens(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_getcrowdsale(const JSONRPCRequest& request)
+static UniValue gettokencrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "token_getcrowdsale propertyid ( verbose )\n"
+            "gettokencrowdsale name ( verbose )\n"
             "\nReturns information about a crowdsale.\n"
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the crowdsale\n"
+            "1. name                 (number, required) the token name of the crowdsale\n"
             "2. verbose              (boolean, optional) list crowdsale participants (default: false)\n"
             "\nResult:\n"
             "{\n"
@@ -1101,11 +1101,16 @@ static UniValue token_getcrowdsale(const JSONRPCRequest& request)
             "  ]\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_getcrowdsale", "3 true")
-            + HelpExampleRpc("token_getcrowdsale", "3, true")
+            + HelpExampleCli("gettokencrowdsale", "TOKEN true")
+            + HelpExampleRpc("gettokencrowdsale", "TOKEN, true")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string name = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     bool showVerbose = (request.params.size() > 1) ? request.params[1].get_bool() : false;
 
     RequireExistingProperty(propertyId);
@@ -2251,7 +2256,7 @@ static const CRPCCommand commands[] =
     { "tokens (data retrieval)", "gettokentransaction",             &gettokentransaction,              false },
     { "tokens (data retrieval)", "gettoken",                        &gettoken,                         false },
     { "tokens (data retrieval)", "listtokens",                      &listtokens,                       false },
-    // { "tokens (data retrieval)", "token_getcrowdsale",              &token_getcrowdsale,               false },
+    { "tokens (data retrieval)", "gettokencrowdsale",               &gettokencrowdsale,               false },
     // { "tokens (data retrieval)", "token_getgrants",                 &token_getgrants,                  false },
     // { "tokens (data retrieval)", "token_getactivedexsells",         &token_getactivedexsells,          false },
     // { "tokens (data retrieval)", "token_getactivecrowdsales",       &token_getactivecrowdsales,        false },
