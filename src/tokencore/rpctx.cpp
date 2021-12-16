@@ -16,6 +16,7 @@
 #include "tokencore/sp.h"
 #include "tokencore/tx.h"
 #include "tokencore/wallettxbuilder.h"
+#include "tokencore/utilsbitcoin.h"
 
 #include "init.h"
 #include "main.h"
@@ -323,7 +324,7 @@ static UniValue token_senddexsell(const JSONRPCRequest& request)
 
     // perform conversions
     if (action <= CMPTransaction::UPDATE) { // actions 3 permit zero values, skip check
-        amountForSale = ParseAmount(request.params[2], true); // TMSC/MSC is divisible
+        amountForSale = ParseAmount(request.params[2], isPropertyDivisible(propertyIdForSale));
         amountDesired = ParseAmount(request.params[3], true); // BTC is divisible
         paymentWindow = ParseDExPaymentWindow(request.params[4]);
         minAcceptFee = ParseDExFee(request.params[5]);
@@ -333,21 +334,18 @@ static UniValue token_senddexsell(const JSONRPCRequest& request)
     switch (action) {
         case CMPTransaction::NEW:
         {
-            RequirePrimaryToken(propertyIdForSale);
             RequireBalance(fromAddress, propertyIdForSale, amountForSale);
-            RequireNoOtherDExOffer(fromAddress, propertyIdForSale);
+            RequireNoOtherDExOffer(fromAddress);
             break;
         }
         case CMPTransaction::UPDATE:
         {
-            RequirePrimaryToken(propertyIdForSale);
             RequireBalance(fromAddress, propertyIdForSale, amountForSale);
             RequireMatchingDExOffer(fromAddress, propertyIdForSale);
             break;
         }
         case CMPTransaction::CANCEL:
         {
-            RequirePrimaryToken(propertyIdForSale);
             RequireMatchingDExOffer(fromAddress, propertyIdForSale);
             break;
         }
@@ -402,7 +400,7 @@ static UniValue token_senddexaccept(const JSONRPCRequest& request)
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = ParseAddress(request.params[1]);
     uint32_t propertyId = ParsePropertyId(request.params[2]);
-    int64_t amount = ParseAmount(request.params[3], true); // MSC/TMSC is divisible
+    int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
     bool override = (request.params.size() > 4) ? request.params[4].get_bool(): false;
 
     // perform checks

@@ -90,8 +90,6 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
     leveldb::Status status = Open(path, fWipe);
     PrintToConsole("Loading smart property database: %s\n", status.ToString());
 
-    // ToDo: Remove TOKEN and TTOKEN
-
     // special cases for constant SPs OMN and TOMN
     implied_token.issuer = EncodeDestination(ExodusAddress());
     implied_token.updateIssuer(0, 0, implied_token.issuer);

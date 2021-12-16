@@ -183,7 +183,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "token_gettradehistoryforpair", 1 },
         { "token_gettradehistoryforpair", 2 },
         { "token_setautocommit", 0 },
-        { "gettokencrowdsale", 0 },
         { "gettokencrowdsale", 1 },
         { "token_getgrants", 0 },
         { "gettokenbalance", 1 },

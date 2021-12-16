@@ -1251,11 +1251,6 @@ int CMPTransaction::logicMath_TradeOffer()
         return (PKT_ERROR_TRADEOFFER -23);
     }
 
-    if (TOKEN_PROPERTY_TMSC != property && TOKEN_PROPERTY_MSC != property) {
-        PrintToLog("%s(): rejected: property for sale %d must be OMN or TOMN\n", __func__, property);
-        return (PKT_ERROR_TRADEOFFER -47);
-    }
-
     // ------------------------------------------
 
     int rc = PKT_ERROR_TRADEOFFER;
