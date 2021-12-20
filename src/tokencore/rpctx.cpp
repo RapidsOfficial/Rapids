@@ -1647,8 +1647,8 @@ static const CRPCCommand commands[] =
 #ifdef ENABLE_WALLET
     { "tokens (transaction creation)", "sendtokenrawtx",               &sendtokenrawtx,               false },
     { "tokens (transaction creation)", "sendtoken",                    &sendtoken,                    false },
-    { "tokens (transaction creation)", "sendtokendexsell",             &sendtokendexsell,             false },
-    { "tokens (transaction creation)", "sendtokendexaccept",           &sendtokendexaccept,           false },
+    // { "tokens (transaction creation)", "sendtokendexsell",             &sendtokendexsell,             false },
+    // { "tokens (transaction creation)", "sendtokendexaccept",           &sendtokendexaccept,           false },
     { "tokens (transaction creation)", "sendtokenissuancecrowdsale",   &sendtokenissuancecrowdsale,   false },
     { "tokens (transaction creation)", "sendtokenissuancefixed",       &sendtokenissuancefixed,       false },
     { "tokens (transaction creation)", "sendtokenissuancemanaged",     &sendtokenissuancemanaged,     false },
