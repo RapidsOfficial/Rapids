@@ -56,7 +56,7 @@ fi
 printf "   * Mining 10 blocks to forward past the activation block\n"
 $SRCDIR/tokencore-cli --regtest setgenerate true 10 >$NUL
 printf "   * Sending a trade of #3 for #4 & checking it was valid... "
-TXIDB=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 4 1.0)
+TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 4 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDB | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -68,7 +68,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending a matching trade of #4 for #3 & checking it was valid... "
-TXIDC=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 4 1.0 3 2000)
+TXIDC=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 4 1.0 3 2000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDC | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -104,7 +104,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending a new trade of #3 for #4 & checking it was valid... "
-TXIDE=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 4 1.0)
+TXIDE=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 4 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDE | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -116,7 +116,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending another matching trade of #4 for #3 & checking it was valid... "
-TXIDF=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 4 1.0 3 2000)
+TXIDF=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 4 1.0 3 2000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDF | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -139,7 +139,7 @@ if [ $CACHEDFEEA == "1" ]
 fi
 printf "\nDeactivating all pair trading & testing it's now disabled...\n\n"
 printf "   * Sending a new trade of #3 for #4 & checking it was valid... "
-TXIDG=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 4 1.0)
+TXIDG=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 4 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDG | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -184,7 +184,7 @@ if [ $BALANCE == "9999999" ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending a trade of #3 for #4 & checking it was invalid... "
-TXIDI=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 4 1.0)
+TXIDI=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 4 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDI | grep valid | cut -c15-)
 if [ $RESULT == "false," ]
@@ -197,7 +197,7 @@ if [ $RESULT == "false," ]
 fi
 printf "\nDeactivating the MetaDEx completely & testing it's now disabled...\n\n"
 printf "   * Sending a trade of #3 for #1 & checking it was valid... "
-TXIDJ=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 1 1.0)
+TXIDJ=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 1 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDJ | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -209,7 +209,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending a trade of #4 for #1 & checking it was valid... "
-TXIDK=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 4 2000 1 1.0)
+TXIDK=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 4 2000 1 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDK | grep valid | cut -c15-)
 if [ $RESULT == "true," ]
@@ -274,7 +274,7 @@ if [ $BALANCEB == "10000.00000000" ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending a trade of #3 for #1 & checking it was invalid... "
-TXIDM=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 1 1.0)
+TXIDM=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 1 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDM | grep valid | cut -c15-)
 if [ $RESULT == "false," ]
@@ -286,7 +286,7 @@ if [ $RESULT == "false," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Sending a trade of #1 for #4 & checking it was invalid... "
-TXIDG=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 1 1.0 4 1.0)
+TXIDG=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 1 1.0 4 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 RESULT=$($SRCDIR/tokencore-cli --regtest token_gettransaction $TXIDG | grep valid | cut -c15-)
 if [ $RESULT == "false," ]

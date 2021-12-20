@@ -922,34 +922,44 @@ static UniValue sendtokenclosecrowdsale(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendtrade(const JSONRPCRequest& request)
+static UniValue sendtokentrade(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 5)
         throw runtime_error(
-            "token_sendtrade \"fromaddress\" propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
+            "sendtokentrade \"fromaddress\" tokenforsale \"amountforsale\" tokendesired \"amountdesired\"\n"
 
             "\nPlace a trade offer on the distributed token exchange.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to trade with\n"
-            "2. propertyidforsale    (number, required) the identifier of the tokens to list for sale\n"
+            "2. tokenforsale         (string, required) the name of the tokens to list for sale\n"
             "3. amountforsale        (string, required) the amount of tokens to list for sale\n"
-            "4. propertiddesired     (number, required) the identifier of the tokens desired in exchange\n"
+            "4. tokendesired         (string, required) the name of the tokens desired in exchange\n"
             "5. amountdesired        (string, required) the amount of tokens desired in exchange\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendtrade", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" 31 \"250.0\" 1 \"10.0\"")
-            + HelpExampleRpc("token_sendtrade", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", 31, \"250.0\", 1, \"10.0\"")
+            + HelpExampleCli("sendtokentrade", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" TOKEN \"250.0\" DESIRED \"10.0\"")
+            + HelpExampleRpc("sendtokentrade", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", TOKEN, \"250.0\", DESIRED, \"10.0\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[1]);
+    std::string tokenForSale = ParseText(request.params[1]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByName(tokenForSale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amountForSale = ParseAmount(request.params[2], isPropertyDivisible(propertyIdForSale));
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[3]);
+    std::string tokenDesired = ParseText(request.params[3]);
+
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByName(tokenDesired);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amountDesired = ParseAmount(request.params[4], isPropertyDivisible(propertyIdDesired));
 
     // perform checks
@@ -980,34 +990,44 @@ static UniValue token_sendtrade(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendcanceltradesbyprice(const JSONRPCRequest& request)
+static UniValue sendtokencanceltradesbyprice(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 5)
         throw runtime_error(
-            "token_sendcanceltradesbyprice \"fromaddress\" propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
+            "sendtokencanceltradesbyprice \"fromaddress\" tokenforsale \"amountforsale\" tokenesired \"amountdesired\"\n"
 
             "\nCancel offers on the distributed token exchange with the specified price.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to trade with\n"
-            "2. propertyidforsale    (number, required) the identifier of the tokens listed for sale\n"
+            "2. tokenforsale         (string, required) the name of the token listed for sale\n"
             "3. amountforsale        (string, required) the amount of tokens to listed for sale\n"
-            "4. propertiddesired     (number, required) the identifier of the tokens desired in exchange\n"
+            "4. tokendesired         (string, required) the name of the token desired in exchange\n"
             "5. amountdesired        (string, required) the amount of tokens desired in exchange\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendcanceltradesbyprice", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" 31 \"100.0\" 1 \"5.0\"")
-            + HelpExampleRpc("token_sendcanceltradesbyprice", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", 31, \"100.0\", 1, \"5.0\"")
+            + HelpExampleCli("sendtokencanceltradesbyprice", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" TOKEN \"100.0\" DESIRED \"5.0\"")
+            + HelpExampleRpc("sendtokencanceltradesbyprice", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", TOKEN, \"100.0\", DESIRED, \"5.0\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[1]);
+    std::string tokenForSale = ParseText(request.params[1]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByName(tokenForSale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amountForSale = ParseAmount(request.params[2], isPropertyDivisible(propertyIdForSale));
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[3]);
+    std::string tokenDesired = ParseText(request.params[3]);
+
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByName(tokenDesired);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amountDesired = ParseAmount(request.params[4], isPropertyDivisible(propertyIdDesired));
 
     // perform checks
@@ -1038,31 +1058,39 @@ static UniValue token_sendcanceltradesbyprice(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendcanceltradesbypair(const JSONRPCRequest& request)
+static UniValue sendtokencanceltradesbypair(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 3)
         throw runtime_error(
-            "token_sendcanceltradesbypair \"fromaddress\" propertyidforsale propertiddesired\n"
+            "sendtokencanceltradesbypair \"fromaddress\" tokenforsale tokendesired\n"
 
             "\nCancel all offers on the distributed token exchange with the given currency pair.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to trade with\n"
-            "2. propertyidforsale    (number, required) the identifier of the tokens listed for sale\n"
-            "3. propertiddesired     (number, required) the identifier of the tokens desired in exchange\n"
+            "2. tokenforsale         (string, required) the identifier of the tokens listed for sale\n"
+            "3. tokendesired         (string, required) the identifier of the tokens desired in exchange\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendcanceltradesbypair", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" 1 31")
-            + HelpExampleRpc("token_sendcanceltradesbypair", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", 1, 31")
+            + HelpExampleCli("sendtokencanceltradesbypair", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" TOKEN DESIRED")
+            + HelpExampleRpc("sendtokencanceltradesbypair", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", TOKEN, DESIRED")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[1]);
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[2]);
+    std::string tokenForSale = ParseText(request.params[1]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByName(tokenForSale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
+    std::string tokenDesired = ParseText(request.params[2]);
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByName(tokenDesired);
+        if (propertyIdDesired == 0)
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     // perform checks
     RequireExistingProperty(propertyIdForSale);
@@ -1092,11 +1120,11 @@ static UniValue token_sendcanceltradesbypair(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendcancelalltrades(const JSONRPCRequest& request)
+static UniValue sendtokencancelalltrades(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_sendcancelalltrades \"fromaddress\" ecosystem\n"
+            "sendtokencancelalltrades \"fromaddress\" ecosystem\n"
 
             "\nCancel all offers on the distributed token exchange.\n"
 
@@ -1108,8 +1136,8 @@ static UniValue token_sendcancelalltrades(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendcancelalltrades", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" 1")
-            + HelpExampleRpc("token_sendcancelalltrades", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", 1")
+            + HelpExampleCli("sendtokencancelalltrades", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\" 1")
+            + HelpExampleRpc("sendtokencancelalltrades", "\"3BydPiSLPP3DR5cf726hDQ89fpqWLxPKLR\", 1")
         );
 
     // obtain parameters & info
@@ -1566,7 +1594,7 @@ static UniValue trade_MP(const JSONRPCRequest& request)
             values.push_back(request.params[2]); // amountForSale
             values.push_back(request.params[3]); // propertyIdDesired
             values.push_back(request.params[4]); // amountDesired
-            return token_sendtrade(request);
+            return sendtokentrade(request);
         }
         case CMPTransaction::CANCEL_AT_PRICE:
         {
@@ -1575,14 +1603,14 @@ static UniValue trade_MP(const JSONRPCRequest& request)
             values.push_back(request.params[2]); // amountForSale
             values.push_back(request.params[3]); // propertyIdDesired
             values.push_back(request.params[4]); // amountDesired
-            return token_sendcanceltradesbyprice(request);
+            return sendtokencanceltradesbyprice(request);
         }
         case CMPTransaction::CANCEL_ALL_FOR_PAIR:
         {
             values.push_back(request.params[0]); // fromAddress
             values.push_back(request.params[1]); // propertyIdForSale
             values.push_back(request.params[3]); // propertyIdDesired
-            return token_sendcanceltradesbypair(request);
+            return sendtokencanceltradesbypair(request);
         }
         case CMPTransaction::CANCEL_EVERYTHING:
         {
@@ -1597,7 +1625,7 @@ static UniValue trade_MP(const JSONRPCRequest& request)
             }
             values.push_back(request.params[0]); // fromAddress
             values.push_back(ecosystem);
-            return token_sendcancelalltrades(request);
+            return sendtokencancelalltrades(request);
         }
     }
 
@@ -1615,10 +1643,10 @@ static const CRPCCommand commands[] =
     { "tokens (transaction creation)", "sendtokenissuancecrowdsale",   &sendtokenissuancecrowdsale,   false },
     { "tokens (transaction creation)", "sendtokenissuancefixed",       &sendtokenissuancefixed,       false },
     { "tokens (transaction creation)", "sendtokenissuancemanaged",     &sendtokenissuancemanaged,     false },
-    // { "tokens (transaction creation)", "token_sendtrade",               &token_sendtrade,               false },
-    // { "tokens (transaction creation)", "token_sendcanceltradesbyprice", &token_sendcanceltradesbyprice, false },
-    // { "tokens (transaction creation)", "token_sendcanceltradesbypair",  &token_sendcanceltradesbypair,  false },
-    // { "tokens (transaction creation)", "token_sendcancelalltrades",     &token_sendcancelalltrades,     false },
+    { "tokens (transaction creation)", "sendtokentrade",               &sendtokentrade,               false },
+    { "tokens (transaction creation)", "sendtokencanceltradesbyprice", &sendtokencanceltradesbyprice, false },
+    { "tokens (transaction creation)", "sendtokencanceltradesbypair",  &sendtokencanceltradesbypair,  false },
+    { "tokens (transaction creation)", "sendtokencancelalltrades",     &sendtokencancelalltrades,     false },
     // { "tokens (transaction creation)", "token_sendsto",                 &token_sendsto,                 false },
     { "tokens (transaction creation)", "sendtokengrant",               &sendtokengrant,               false },
     { "tokens (transaction creation)", "sendtokenrevoke",              &sendtokenrevoke,              false },

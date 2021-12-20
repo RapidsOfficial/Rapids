@@ -159,9 +159,9 @@ if [ $FEESHARE == "100.0000%" ]
 fi
 printf "\nTesting a trade against self where the first token is TOKEN\n"
 printf "   * Executing the trade\n"
-TXIDA=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 1 1.0)
+TXIDA=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 1 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-TXIDB=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 1 1.0 3 2000)
+TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 1 1.0 3 2000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking no fee was taken...\n"
@@ -244,9 +244,9 @@ printf "   * Mining 10 blocks to forward past the activation block\n"
 $SRCDIR/tokencore-cli --regtest setgenerate true 10 >$NUL
 printf "\nTesting a trade against self that results in a 1 willet fee for property 3 (1.0 #5 for 2000 #3)\n"
 printf "   * Executing the trade\n"
-TXIDA=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 2000 5 1.0)
+TXIDA=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 2000 5 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-TXIDB=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 3 2000)
+TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 3 2000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
@@ -292,9 +292,9 @@ fi
 
 printf "\nTesting another trade against self that results in a 5 willet fee for property 3 (1.0 #5 for 10000 #3)\n"
 printf "   * Executing the trade\n"
-TXIDA=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 10000 5 1.0)
+TXIDA=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 10000 5 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-TXIDB=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 3 10000)
+TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 3 10000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
@@ -339,9 +339,9 @@ if [ $BALANCE == "9999994" ]
 fi
 printf "\nTesting a trade against self that results in a 1 willet fee for property 6 (1.0 #5 for 0.00002 #6)\n"
 printf "   * Executing the trade\n"
-TXIDA=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.00002000 5 1.0)
+TXIDA=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.00002000 5 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-TXIDB=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 6 0.00002000)
+TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.00002000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
@@ -386,9 +386,9 @@ if [ $BALANCE == "9999.99999999" ]
 fi
 printf "\nTesting a trade against self that results in a 5000 willet fee for property 6 (1.0 #5 for 0.1 #6)\n"
 printf "   * Executing the trade\n"
-TXIDA=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.1 5 1.0)
+TXIDA=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.1 5 1.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-TXIDB=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 6 0.1)
+TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.1)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
@@ -435,9 +435,9 @@ printf "\nIncreasing volume to get close to 10000000 fee trigger point for prope
 printf "   * Executing the trades\n"
 for i in {1..5}
 do
-    $SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 39.96 5 1.0 >$NUL
+    $SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 39.96 5 1.0 >$NUL
     $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-    $SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 6 39.96 >$NUL
+    $SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 39.96 >$NUL
     $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 done
 printf "   * Verifiying the results\n"
@@ -463,8 +463,8 @@ if [ $BALANCE == "9999.90004999" ]
 fi
 printf "\nPerforming a small trade to take fee cache to 0.1 and trigger distribution for property 6\n"
 printf "   * Executing the trade\n"
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.09999999 5 0.8 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 0.8 6 0.09999999 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.09999999 5 0.8 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 0.8 6 0.09999999 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking distribution was triggered and the fee cache is now empty for property 6... "
@@ -631,8 +631,8 @@ if [ $BALANCE == "9999.90004999" ]
 fi
 printf "   * Performing a small trade to take fee cache to 0.1 and retrigger distribution for property 6\n"
 printf "      # Executing the trade\n"
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.09999999 5 0.8 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 0.8 6 0.09999999 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.09999999 5 0.8 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 0.8 6 0.09999999 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "      # Verifiying the results\n"
 printf "        * Checking distribution was triggered again and the fee cache is now empty for property 6... "
@@ -698,9 +698,9 @@ fi
 printf "\nRolling back the chain to test ability to roll back a fee cache change during reorg\n"
 printf "   # Testing a trade against self that results in a 1 willet fee for property 6 (1.0 #6 for 0.00002 #5)\n"
 printf "      * Executing the trade\n"
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.00002000 5 1.0 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.00002000 5 1.0 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 6 0.00002000 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.00002000 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "      * Verifiying the results\n"
 printf "         # Checking the fee cache now has 0.00000001 fee cached for property 6... "
@@ -715,9 +715,9 @@ if [ $CACHEDFEE == "0.00000001" ]
 fi
 printf "   # Testing another trade against self that results in a 1 willet fee for property 6 (1.0 #6 for 0.00002 #5)\n"
 printf "      * Executing the trade\n"
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.00002000 5 1.0 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.00002000 5 1.0 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 6 0.00002000 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.00002000 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "      * Verifiying the results\n"
 printf "         # Checking the fee cache now has 0.00000002 fee cached for property 6... "
@@ -807,9 +807,9 @@ if [ $CACHEDFEE == "0.00000001" ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Executing a trade to generate 1 willet fee\n"
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 6 0.00002000 5 1.0 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 6 0.00002000 5 1.0 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 1.0 6 0.00002000 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.00002000 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "      # Checking the fee cache now has 0.00000002 fee cached for property 6... "
 CACHEDFEE=$($SRCDIR/tokencore-cli --regtest token_getfeecache 6 | grep cachedfee | cut -d '"' -f4)
@@ -825,9 +825,9 @@ printf "\nAdding some test ecosystem volume to trigger distribution\n"
 printf "   * Executing the trades\n"
 for i in {1..9}
 do
-    $SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 2147483651 20000 2147483652 10.0 >$NUL
+    $SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 2147483651 20000 2147483652 10.0 >$NUL
     $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-    $SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 2147483652 10.0 2147483651 20000 >$NUL
+    $SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 2147483652 10.0 2147483651 20000 >$NUL
     $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 done
 printf "   * Verifiying the results\n"
@@ -853,9 +853,9 @@ if [ $BALANCE == "9999910" ]
 fi
 printf "\nTriggering distribution in the test ecosystem for property 2147483651\n"
 printf "   * Executing the trade\n"
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 2147483651 20000 2147483652 10.0 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 2147483651 20000 2147483652 10.0 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
-$SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 2147483652 10.0 2147483651 20000 >$NUL
+$SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 2147483652 10.0 2147483651 20000 >$NUL
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking distribution was triggered and the fee cache is now empty for property 2147483651... "

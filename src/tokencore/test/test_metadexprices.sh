@@ -32,7 +32,7 @@ $SRCDIR/tokencore-cli --regtest token_sendissuancefixed $ADDR 1 1 0 "Z_TestCat" 
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "\nTesting a trade against self that uses divisible / divisible (10.0 TOKEN for 100.0 #4)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 1 10.0 4 100.0)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 1 10.0 4 100.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the unit price was 10.0..."
@@ -47,7 +47,7 @@ if [ $RESULT == "10.00000000000000000000000000000000000000000000000000" ]
 fi
 printf "\nTesting a trade against self that uses divisible / indivisible (10.0 TOKEN for 100 #3)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 1 10.0 3 100)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 1 10.0 3 100)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the unit price was 10.0..."
@@ -62,7 +62,7 @@ if [ $RESULT == "10.00000000000000000000000000000000000000000000000000" ]
 fi
 printf "\nTesting a trade against self that uses indivisible / divisible (10 #3 for 100.0 TOKEN)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 10 1 100.0)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 10 1 100.0)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the unit price was 10.0..."
@@ -77,7 +77,7 @@ if [ $RESULT == "10.00000000000000000000000000000000000000000000000000" ]
 fi
 printf "\nTesting a trade against self that uses indivisible / indivisible (10 #5 for 100 #3)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 5 10 3 100)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 10 3 100)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the unit price was 10.0..."

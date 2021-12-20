@@ -29,7 +29,7 @@ $SRCDIR/tokencore-cli --regtest token_sendissuancefixed $ADDR 1 2 0 "Z_TestCat" 
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "\nTesting a trade against self that uses Token (1.1 TOKEN for 20 #3)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 20 1 1.1)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 20 1 1.1)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the trade was valid..."
@@ -44,7 +44,7 @@ if [ $RESULT == "true," ]
 fi
 printf "\nTesting a trade against self that doesn't use Token to confirm non-Token pairs are disabled (4.45 #4 for 20 #3)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 20 4 4.45)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 20 4 4.45)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the trade was invalid..."
@@ -86,7 +86,7 @@ if [ $FEATUREID == "8" ]
 fi
 printf "\nTesting a trade against self that doesn't use Token to confirm non-Token pairs are now enabled (4.45 #4 for 20 #3)\n"
 printf "   * Executing the trade\n"
-TXID=$($SRCDIR/tokencore-cli --regtest token_sendtrade $ADDR 3 20 4 4.45)
+TXID=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 3 20 4 4.45)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the trade was valid..."
