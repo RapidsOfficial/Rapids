@@ -156,6 +156,11 @@ std::unordered_map<std::string, CMPTally> mastercore::mp_tally_map;
 std::map<uint32_t, int64_t> global_balance_money;
 //! Reserved balances of wallet propertiess
 std::map<uint32_t, int64_t> global_balance_reserved;
+//! Frozen balances of wallet propertiess
+std::map<uint32_t, int64_t> global_balance_frozen;
+
+std::map<uint32_t, std::list<std::string>> global_token_addresses;
+
 //! Vector containing a list of properties relative to the wallet
 std::set<uint32_t> global_wallet_property_list;
 
@@ -606,9 +611,9 @@ void CheckWalletUpdate(bool forceUpdate)
 
     // because the wallet balance cache is *only* used by the UI, it's not needed,
     // when the daemon is running without UI.
-    if (!fQtMode) {
-        return;
-    }
+    // if (!fQtMode) {
+    //     return;
+    // }
 
     if (!WalletCacheUpdate()) {
         // no balance changes were detected that affect wallet addresses, signal a generic change to overall Token state
@@ -617,12 +622,15 @@ void CheckWalletUpdate(bool forceUpdate)
             return;
         }
     }
+
 #ifdef ENABLE_WALLET
     LOCK(cs_tally);
 
     // balance changes were found in the wallet, update the global totals and signal a Token balance change
     global_balance_money.clear();
     global_balance_reserved.clear();
+    global_balance_frozen.clear();
+    global_token_addresses.clear();
 
     // populate global balance totals and wallet property list - note global balances do not include additional balances from watch-only addresses
     for (std::unordered_map<std::string, CMPTally>::iterator my_it = mp_tally_map.begin(); my_it != mp_tally_map.end(); ++my_it) {
@@ -643,6 +651,9 @@ void CheckWalletUpdate(bool forceUpdate)
             global_balance_reserved[propertyId] += GetTokenBalance(address, propertyId, SELLOFFER_RESERVE);
             global_balance_reserved[propertyId] += GetTokenBalance(address, propertyId, METADEX_RESERVE);
             global_balance_reserved[propertyId] += GetTokenBalance(address, propertyId, ACCEPT_RESERVE);
+            global_balance_frozen[propertyId] += GetFrozenTokenBalance(address, propertyId);
+
+            global_token_addresses[propertyId].push_back(address);
         }
     }
     // signal an Token balance change

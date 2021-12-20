@@ -135,6 +135,11 @@ extern RecursiveMutex cs_tally;
 extern std::map<uint32_t, int64_t> global_balance_money;
 //! Reserved balances of wallet propertiess
 extern std::map<uint32_t, int64_t> global_balance_reserved;
+//! Frozen balances of wallet propertiess
+extern std::map<uint32_t, int64_t> global_balance_frozen;
+
+extern std::map<uint32_t, std::list<std::string>> global_token_addresses;
+
 //! Vector containing a list of properties relative to the wallet
 extern std::set<uint32_t> global_wallet_property_list;
 

@@ -95,7 +95,7 @@ int WalletTxBuilder(
     if (nDonation) {
         CTxDestination dest = DecodeDestination("RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9");
         CScript donationScript = GetScriptForDestination(dest);
-        vecSend.push_back(std::make_pair(donationScript, 1 * COIN));
+        vecSend.push_back(std::make_pair(donationScript, 0.0001 * COIN));
     }
 
     // Now we have what we need to pass to the wallet to create the transaction, perform some checks first

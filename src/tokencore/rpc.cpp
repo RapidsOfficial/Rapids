@@ -859,6 +859,108 @@ static UniValue getwallettokenbalances(const JSONRPCRequest& request)
     return response;
 }
 
+static UniValue gettokenbalances(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() > 1)
+        throw runtime_error(
+            "gettokenbalances ( includewatchonly )\n"
+            "\nReturns a list of the total token balances.\n"
+            "\nArguments:\n"
+            "1. includewatchonly     (boolean, optional) include balances of watchonly addresses (default: false)\n"
+            "\nResult:\n"
+            "[                           (array of JSON objects)\n"
+            "  {\n"
+            "    \"propertyid\" : n,         (number) the property identifier\n"
+            "    \"name\" : \"name\",            (string) the name of the token\n"
+            "    \"balance\" : \"n.nnnnnnnn\",   (string) the total available balance for the token\n"
+            "    \"reserved\" : \"n.nnnnnnnn\"   (string) the total amount reserved by sell offers and accepts\n"
+            "    \"frozen\" : \"n.nnnnnnnn\"     (string) the total amount frozen by the issuer (applies to managed properties only)\n"
+            "  },\n"
+            "  ...\n"
+            "]\n"
+            "\nExamples:\n"
+            + HelpExampleCli("gettokenbalances", "")
+            + HelpExampleRpc("gettokenbalances", "")
+        );
+
+    bool fIncludeWatchOnly = false;
+    if (request.params.size() > 0) {
+        fIncludeWatchOnly = request.params[0].get_bool();
+    }
+
+    UniValue response(UniValue::VARR);
+
+#ifdef ENABLE_WALLET
+    if (!pwalletMain) {
+        return response;
+    }
+
+    for (std::set<uint32_t>::iterator it = global_wallet_property_list.begin() ; it != global_wallet_property_list.end(); ++it) {
+        uint32_t propertyId = *it;
+
+        CMPSPInfo::Entry property;
+        if (!pDbSpInfo->getSP(propertyId, property)) {
+            continue; // token wasn't found in the DB
+        }
+
+        int64_t available = global_balance_money[propertyId];
+        int64_t reserved = global_balance_reserved[propertyId];
+        int64_t frozen = global_balance_frozen[propertyId];
+
+        UniValue objBalance(UniValue::VOBJ);
+        objBalance.pushKV("propertyid", (uint64_t) propertyId);
+        objBalance.pushKV("name", property.name);
+
+        if (property.isDivisible()) {
+            objBalance.pushKV("balance", FormatDivisibleMP(available));
+            objBalance.pushKV("reserved", FormatDivisibleMP(reserved));
+            objBalance.pushKV("frozen", FormatDivisibleMP(frozen));
+        } else {
+            objBalance.pushKV("balance", FormatIndivisibleMP(available));
+            objBalance.pushKV("reserved", FormatIndivisibleMP(reserved));
+            objBalance.pushKV("frozen", FormatIndivisibleMP(frozen));
+        }
+
+        UniValue addresses(UniValue::VARR);
+
+        for (std::string address : global_token_addresses[propertyId]) {
+            UniValue objAddrBalance(UniValue::VOBJ);
+
+            objAddrBalance.pushKV("address", address);
+
+            uint64_t addr_balance = 0;
+            uint64_t addr_reserved = 0;
+            uint64_t addr_frozen = 0;
+
+            addr_balance += GetAvailableTokenBalance(address, propertyId);
+            addr_reserved += GetTokenBalance(address, propertyId, SELLOFFER_RESERVE);
+            addr_reserved += GetTokenBalance(address, propertyId, METADEX_RESERVE);
+            addr_reserved += GetTokenBalance(address, propertyId, ACCEPT_RESERVE);
+            addr_frozen += GetFrozenTokenBalance(address, propertyId);
+            
+            if (property.isDivisible()) {
+                objAddrBalance.pushKV("balance", FormatDivisibleMP(addr_balance));
+                objAddrBalance.pushKV("reserved", FormatDivisibleMP(addr_reserved));
+                objAddrBalance.pushKV("frozen", FormatDivisibleMP(addr_frozen));
+            } else {
+                objAddrBalance.pushKV("balance", FormatIndivisibleMP(addr_balance));
+                objAddrBalance.pushKV("reserved", FormatIndivisibleMP(addr_reserved));
+                objAddrBalance.pushKV("frozen", FormatIndivisibleMP(addr_frozen));
+            }
+
+            addresses.push_back(objAddrBalance);
+        }
+
+        objBalance.pushKV("addresses", addresses);
+
+        response.push_back(objBalance);
+    }
+
+#endif
+
+    return response;
+}
+
 static UniValue getwalletaddresstokenbalances(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
@@ -2282,8 +2384,9 @@ static const CRPCCommand commands[] =
     { "tokens (data retrieval)", "listtokentransactions",           &listtokentransactions,            false },
     // { "tokens (data retrieval)", "token_getfeeshare",               &token_getfeeshare,                false },
     // { "tokens (configuration)",  "token_setautocommit",             &token_setautocommit,              true  },
-    { "tokens (data retrieval)", "getwallettokenbalances",          &getwallettokenbalances,           false },
-    { "tokens (data retrieval)", "getwalletaddresstokenbalances",   &getwalletaddresstokenbalances,    false },
+    // { "tokens (data retrieval)", "getwallettokenbalances",          &getwallettokenbalances,           false },
+    // { "tokens (data retrieval)", "getwalletaddresstokenbalances",   &getwalletaddresstokenbalances,    false },
+    { "tokens (data retrieval)", "gettokenbalances",                &gettokenbalances,                 false },
 #endif
 };
 
