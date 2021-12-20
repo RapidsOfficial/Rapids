@@ -418,7 +418,6 @@ static UniValue sendtokendexaccept(const JSONRPCRequest& request)
     bool override = (request.params.size() > 4) ? request.params[4].get_bool(): false;
 
     // perform checks
-    RequirePrimaryToken(propertyId);
     RequireMatchingDExOffer(toAddress, propertyId);
 
     if (!override) { // reject unsafe accepts - note client maximum tx fee will always be respected regardless of override here
