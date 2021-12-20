@@ -1333,25 +1333,30 @@ static UniValue sendtokenfreeze(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "sendtokenfreeze \"fromaddress\" \"toaddress\" propertyid amount \n"
+            "sendtokenfreeze \"fromaddress\" \"toaddress\" tokenname amount \n"
             "\nFreeze an address for a centrally managed token.\n"
             "\nNote: Only the issuer may freeze tokens, and only if the token is of the managed type with the freezing option enabled.\n"
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from (must be the issuer of the property)\n"
             "2. toaddress            (string, required) the address to freeze tokens for\n"
-            "3. propertyid           (number, required) the property to freeze tokens for (must be managed type and have freezing option enabled)\n"
+            "3. tokenname            (string, required) the name of token to freeze for (must be managed type and have freezing option enabled)\n"
             "4. amount               (number, required) the amount of tokens to freeze (note: this is unused - once frozen an address cannot send any transactions for the property)\n"
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
             "\nExamples:\n"
-            + HelpExampleCli("sendtokenfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 0")
-            + HelpExampleRpc("sendtokenfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, 0")
+            + HelpExampleCli("sendtokenfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" TOKEN 0")
+            + HelpExampleRpc("sendtokenfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", TOKEN, 0")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string refAddress = ParseAddress(request.params[1]);
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
 
     // perform checks
@@ -1384,25 +1389,30 @@ static UniValue sendtokenunfreeze(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "sendtokenunfreeze \"fromaddress\" \"toaddress\" propertyid amount \n"
+            "sendtokenunfreeze \"fromaddress\" \"toaddress\" tokenname amount \n"
             "\nUnfreezes an address for a centrally managed token.\n"
             "\nNote: Only the issuer may unfreeze tokens.\n"
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from (must be the issuer of the property)\n"
             "2. toaddress            (string, required) the address to unfreeze tokens for\n"
-            "3. propertyid           (number, required) the property to unfreeze tokens for (must be managed type and have freezing option enabled)\n"
+            "3. tokenname            (string, required) the name of token to unfreeze for (must be managed type and have freezing option enabled)\n"
             "4. amount               (number, required) the amount of tokens to unfreeze (note: this is unused - once frozen an address cannot send any transactions for the property)\n"
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
             "\nExamples:\n"
-            + HelpExampleCli("sendtokenunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 1 0")
-            + HelpExampleRpc("sendtokenunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 1, 0")
+            + HelpExampleCli("sendtokenunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" TOKEN 0")
+            + HelpExampleRpc("sendtokenunfreeze", "\"1EXoDusjGwvnjZUyKkxZ4UHEf77z6A5S4P\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", TOKEN, 0")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string refAddress = ParseAddress(request.params[1]);
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
 
     // perform checks

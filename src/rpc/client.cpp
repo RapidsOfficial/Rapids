@@ -222,8 +222,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "sendtokendexsell", 4 },
         { "sendtokendexsell", 6 },
         { "sendtokendexaccept", 4 },
-        { "sendtokenfreeze", 2 },
-        { "sendtokenunfreeze", 2 },
         { "token_senddeactivation", 1 },
         { "token_sendactivation", 1 },
         { "token_sendactivation", 2 },
