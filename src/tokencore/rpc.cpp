@@ -1309,11 +1309,11 @@ static UniValue gettokencrowdsale(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_getactivecrowdsales(const JSONRPCRequest& request)
+static UniValue gettokenactivecrowdsales(const JSONRPCRequest& request)
 {
     if (request.fHelp)
         throw runtime_error(
-            "token_getactivecrowdsales\n"
+            "gettokenactivecrowdsales\n"
             "\nLists currently active crowdsales.\n"
             "\nResult:\n"
             "[                                 (array of JSON objects)\n"
@@ -1331,8 +1331,8 @@ static UniValue token_getactivecrowdsales(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_getactivecrowdsales", "")
-            + HelpExampleRpc("token_getactivecrowdsales", "")
+            + HelpExampleCli("gettokenactivecrowdsales", "")
+            + HelpExampleRpc("gettokenactivecrowdsales", "")
         );
 
     UniValue response(UniValue::VARR);
@@ -1377,14 +1377,14 @@ static UniValue token_getactivecrowdsales(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_getgrants(const JSONRPCRequest& request)
+static UniValue gettokengrants(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "token_getgrants propertyid\n"
+            "gettokengrants tokename\n"
             "\nReturns information about granted and revoked units of managed tokens.\n"
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the managed tokens to lookup\n"
+            "1. tokename            (string, required) the name of managed token to lookup\n"
             "\nResult:\n"
             "{\n"
             "  \"propertyid\" : n,               (number) the identifier of the managed tokens\n"
@@ -1405,11 +1405,15 @@ static UniValue token_getgrants(const JSONRPCRequest& request)
             "  ]\n"
             "}\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_getgrants", "31")
-            + HelpExampleRpc("token_getgrants", "31")
+            + HelpExampleCli("gettokengrants", "TOKEN")
+            + HelpExampleRpc("gettokengrants", "TOKEN")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string name = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     RequireExistingProperty(propertyId);
     RequireManagedProperty(propertyId);
@@ -1459,15 +1463,15 @@ static UniValue token_getgrants(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_getorderbook(const JSONRPCRequest& request)
+static UniValue gettokenorderbook(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "token_getorderbook propertyid ( propertyid )\n"
+            "gettokenorderbook tokenname ( tokenname )\n"
             "\nList active offers on the distributed token exchange.\n"
             "\nArguments:\n"
-            "1. propertyid           (number, required) filter orders by property identifier for sale\n"
-            "2. propertyid           (number, optional) filter orders by property identifier desired\n"
+            "1. tokenname           (string, required) filter orders by token name for sale\n"
+            "2. tokenname           (string, optional) filter orders by token name desired\n"
             "\nResult:\n"
             "[                                              (array of JSON objects)\n"
             "  {\n"
@@ -1489,18 +1493,27 @@ static UniValue token_getorderbook(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_getorderbook", "2")
-            + HelpExampleRpc("token_getorderbook", "2")
+            + HelpExampleCli("gettokenorderbook", "TOKEN")
+            + HelpExampleRpc("gettokenorderbook", "TOKEN")
         );
 
     bool filterDesired = (request.params.size() > 1);
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
+    std::string nameForSale = ParseText(request.params[0]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByName(nameForSale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     uint32_t propertyIdDesired = 0;
 
     RequireExistingProperty(propertyIdForSale);
 
     if (filterDesired) {
-        propertyIdDesired = ParsePropertyId(request.params[1]);
+        std::string nameDesired = ParseText(request.params[1]);
+
+        propertyIdDesired = pDbSpInfo->findSPByName(nameDesired);
+        if (propertyIdDesired == 0)
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
         RequireExistingProperty(propertyIdDesired);
         RequireSameEcosystem(propertyIdForSale, propertyIdDesired);
@@ -1528,16 +1541,16 @@ static UniValue token_getorderbook(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_gettradehistoryforaddress(const JSONRPCRequest& request)
+static UniValue gettokentradehistoryforaddress(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 3)
         throw runtime_error(
-            "token_gettradehistoryforaddress \"address\" ( count propertyid )\n"
+            "gettokentradehistoryforaddress \"address\" ( count propertyid )\n"
             "\nRetrieves the history of orders on the distributed exchange for the supplied address.\n"
             "\nArguments:\n"
             "1. address              (string, required) address to retrieve history for\n"
             "2. count                (number, optional) number of orders to retrieve (default: 10)\n"
-            "3. propertyid           (number, optional) filter by property identifier transacted (default: no filter)\n"
+            "3. name                 (string, optional) filter by token name transacted (default: no filter)\n"
             "\nResult:\n"
             "[                                              (array of JSON objects)\n"
             "  {\n"
@@ -1576,8 +1589,8 @@ static UniValue token_gettradehistoryforaddress(const JSONRPCRequest& request)
             "\nNote:\n"
             "The documentation only covers the output for a trade, but there are also cancel transactions with different properties.\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_gettradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
-            + HelpExampleRpc("token_gettradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
+            + HelpExampleCli("gettokentradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
+            + HelpExampleRpc("gettokentradehistoryforaddress", "\"1MCHESTptvd2LnNp7wmr2sGTpRomteAkq8\"")
         );
 
     std::string address = ParseAddress(request.params[0]);
@@ -1585,7 +1598,12 @@ static UniValue token_gettradehistoryforaddress(const JSONRPCRequest& request)
     uint32_t propertyId = 0;
 
     if (request.params.size() > 2) {
-        propertyId = ParsePropertyId(request.params[2]);
+        std::string name = ParseText(request.params[2]);
+
+        propertyId = pDbSpInfo->findSPByName(name);
+        if (propertyId == 0)
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
         RequireExistingProperty(propertyId);
     }
 
@@ -1612,15 +1630,15 @@ static UniValue token_gettradehistoryforaddress(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_gettradehistoryforpair(const JSONRPCRequest& request)
+static UniValue gettokentradehistoryforpair(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "token_gettradehistoryforpair propertyid propertyid ( count )\n"
+            "gettokentradehistoryforpair tokenname tokenname ( count )\n"
             "\nRetrieves the history of trades on the distributed token exchange for the specified market.\n"
             "\nArguments:\n"
-            "1. propertyid           (number, required) the first side of the traded pair\n"
-            "2. propertyid           (number, required) the second side of the traded pair\n"
+            "1. tokenname            (string, required) the first side of the traded pair\n"
+            "2. tokenname            (string, required) the second side of the traded pair\n"
             "3. count                (number, optional) number of trades to retrieve (default: 10)\n"
             "\nResult:\n"
             "[                                      (array of JSON objects)\n"
@@ -1638,13 +1656,21 @@ static UniValue token_gettradehistoryforpair(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_gettradehistoryforpair", "1 12 500")
-            + HelpExampleRpc("token_gettradehistoryforpair", "1, 12, 500")
+            + HelpExampleCli("gettokentradehistoryforpair", "TOKEN DESIRED 500")
+            + HelpExampleRpc("gettokentradehistoryforpair", "TOKEN, DESIRED, 500")
         );
 
     // obtain property identifiers for pair & check valid parameters
-    uint32_t propertyIdSideA = ParsePropertyId(request.params[0]);
-    uint32_t propertyIdSideB = ParsePropertyId(request.params[1]);
+    std::string tokenNameSideA = ParseText(request.params[0]);
+    uint32_t propertyIdSideA = pDbSpInfo->findSPByName(tokenNameSideA);
+    if (propertyIdSideA == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
+    std::string tokenNameSideB = ParseText(request.params[1]);
+    uint32_t propertyIdSideB = pDbSpInfo->findSPByName(tokenNameSideB);
+    if (propertyIdSideB == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     uint64_t count = (request.params.size() > 2) ? request.params[2].get_int64() : 10;
 
     RequireExistingProperty(propertyIdSideA);
@@ -1659,11 +1685,11 @@ static UniValue token_gettradehistoryforpair(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_getactivedexsells(const JSONRPCRequest& request)
+static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "token_getactivedexsells ( address )\n"
+            "gettokenactivedexsells ( address )\n"
             "\nReturns currently active offers on the distributed exchange.\n"
             "\nArguments:\n"
             "1. address              (string, optional) address filter (default: include any)\n"
@@ -1693,8 +1719,8 @@ static UniValue token_getactivedexsells(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_getactivedexsells", "")
-            + HelpExampleRpc("token_getactivedexsells", "")
+            + HelpExampleCli("gettokenactivedexsells", "")
+            + HelpExampleRpc("gettokenactivedexsells", "")
         );
 
     std::string addressFilter;
@@ -2163,11 +2189,11 @@ static UniValue token_getsto(const JSONRPCRequest& request)
     return txobj;
 }
 
-static UniValue token_gettrade(const JSONRPCRequest& request)
+static UniValue gettokentrade(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "token_gettrade \"txid\"\n"
+            "gettokentrade \"txid\"\n"
             "\nGet detailed information and trade matches for orders on the distributed token exchange.\n"
             "\nArguments:\n"
             "1. txid                 (string, required) the hash of the order to lookup\n"
@@ -2206,8 +2232,8 @@ static UniValue token_gettrade(const JSONRPCRequest& request)
             "\nNote:\n"
             "The documentation only covers the output for a trade, but there are also cancel transactions with different properties.\n"
             "\nExamples:\n"
-            + HelpExampleCli("token_gettrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
-            + HelpExampleRpc("token_gettrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
+            + HelpExampleCli("gettokentrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
+            + HelpExampleRpc("gettokentrade", "\"1075db55d416d3ca199f55b6084e2115b9345e16c5cf302fc80e9d5fbf5d48d\"")
         );
 
     uint256 hash = ParseHashV(request.params[0], "txid");
@@ -2254,14 +2280,14 @@ static UniValue gettokenconsensushash(const JSONRPCRequest& request)
     return response;
 }
 
-static UniValue token_getmetadexhash(const JSONRPCRequest& request)
+static UniValue gettokenmetadexhash(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "token_getmetadexhash propertyId\n"
+            "gettokenmetadexhash tokenname\n"
             "\nReturns a hash of the current state of the MetaDEx (default) or orderbook.\n"
             "\nArguments:\n"
-            "1. propertyid                  (number, optional) hash orderbook (only trades selling propertyid)\n"
+            "1. token                       (string, optional) hash orderbook (only trades selling token)\n"
             "\nResult:\n"
             "{\n"
             "  \"block\" : nnnnnn,          (number) the index of the block this hash applies to\n"
@@ -2271,15 +2297,20 @@ static UniValue token_getmetadexhash(const JSONRPCRequest& request)
             "}\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_getmetadexhash", "3")
-            + HelpExampleRpc("token_getmetadexhash", "3")
+            + HelpExampleCli("gettokenmetadexhash", "TOKEN")
+            + HelpExampleRpc("gettokenmetadexhash", "TOKEN")
         );
 
     LOCK(cs_main);
 
     uint32_t propertyId = 0;
     if (request.params.size() > 0) {
-        propertyId = ParsePropertyId(request.params[0]);
+        std::string name = ParseText(request.params[0]);
+
+        propertyId = pDbSpInfo->findSPByName(name);
+        if (propertyId == 0)
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
         RequireExistingProperty(propertyId);
     }
 
@@ -2351,23 +2382,23 @@ static const CRPCCommand commands[] =
     { "tokens (data retrieval)", "gettokentransaction",             &gettokentransaction,              false },
     { "tokens (data retrieval)", "gettoken",                        &gettoken,                         false },
     { "tokens (data retrieval)", "listtokens",                      &listtokens,                       false },
-    { "tokens (data retrieval)", "gettokencrowdsale",               &gettokencrowdsale,               false },
-    // { "tokens (data retrieval)", "token_getgrants",                 &token_getgrants,                  false },
-    // { "tokens (data retrieval)", "token_getactivedexsells",         &token_getactivedexsells,          false },
-    // { "tokens (data retrieval)", "token_getactivecrowdsales",       &token_getactivecrowdsales,        false },
-    // { "tokens (data retrieval)", "token_getorderbook",              &token_getorderbook,               false },
-    // { "tokens (data retrieval)", "token_gettrade",                  &token_gettrade,                   false },
+    { "tokens (data retrieval)", "gettokencrowdsale",               &gettokencrowdsale,                false },
+    { "tokens (data retrieval)", "gettokengrants",                  &gettokengrants,                   false },
+    { "tokens (data retrieval)", "gettokenactivedexsells",          &gettokenactivedexsells,           false },
+    { "tokens (data retrieval)", "gettokenactivecrowdsales",        &gettokenactivecrowdsales,         false },
+    { "tokens (data retrieval)", "gettokenorderbook",               &gettokenorderbook,                false },
+    { "tokens (data retrieval)", "gettokentrade",                   &gettokentrade,                    false },
     // { "tokens (data retrieval)", "token_getsto",                    &token_getsto,                     false },
     { "tokens (data retrieval)", "listblocktokentransactions",      &listblocktokentransactions,       false },
     { "tokens (data retrieval)", "listblockstokentransactions",     &listblockstokentransactions,      false },
     { "tokens (data retrieval)", "listpendingtokentransactions",    &listpendingtokentransactions,     false },
     { "tokens (data retrieval)", "getalltokenbalancesforaddress",   &getalltokenbalancesforaddress,    false },
-    // { "tokens (data retrieval)", "token_gettradehistoryforaddress", &token_gettradehistoryforaddress,  false },
-    // { "tokens (data retrieval)", "token_gettradehistoryforpair",    &token_gettradehistoryforpair,     false },
+    { "tokens (data retrieval)", "gettokentradehistoryforaddress",  &gettokentradehistoryforaddress,   false },
+    { "tokens (data retrieval)", "gettokentradehistoryforpair",     &gettokentradehistoryforpair,      false },
     { "tokens (data retrieval)", "gettokenconsensushash",           &gettokenconsensushash,            false },
     { "tokens (data retrieval)", "gettokenpayload",                 &gettokenpayload,                  false },
     { "tokens (data retrieval)", "gettokenseedblocks",              &gettokenseedblocks,               false },
-    // { "tokens (data retrieval)", "token_getmetadexhash",            &token_getmetadexhash,             false },
+    { "tokens (data retrieval)", "gettokenmetadexhash",             &gettokenmetadexhash,              false },
     // { "tokens (data retrieval)", "token_getfeecache",               &token_getfeecache,                false },
     // { "tokens (data retrieval)", "token_getfeetrigger",             &token_getfeetrigger,              false },
     // { "tokens (data retrieval)", "token_getfeedistribution",        &token_getfeedistribution,         false },

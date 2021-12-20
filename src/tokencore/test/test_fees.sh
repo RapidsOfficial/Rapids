@@ -166,7 +166,7 @@ $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking no fee was taken...\n"
 printf "        * Checking the original trade matches to confirm trading fee was 0... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDA | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDA | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00000000" ]
   then
     printf "PASS\n"
@@ -176,7 +176,7 @@ if [ $TRADEFEE == "0.00000000" ]
     FAIL=$((FAIL+1))
 fi
 printf "        * Checking the new trade matches to confirm trading fee was 0... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDB | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDB | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0" ]
   then
     printf "PASS\n"
@@ -250,7 +250,7 @@ TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 3 2000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDA | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDA | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00000000" ]
   then
     printf "PASS\n"
@@ -260,7 +260,7 @@ if [ $TRADEFEE == "0.00000000" ]
     FAIL=$((FAIL+1))
 fi
 printf "      # Checking the new trade matches to confirm trading fee was 1... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDB | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDB | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "1" ]
   then
     printf "PASS\n"
@@ -298,7 +298,7 @@ TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 3 10000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDA | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDA | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00000000" ]
   then
     printf "PASS\n"
@@ -308,7 +308,7 @@ if [ $TRADEFEE == "0.00000000" ]
     FAIL=$((FAIL+1))
 fi
 printf "      # Checking the new trade matches to confirm trading fee was 5... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDB | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDB | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "5" ]
   then
     printf "PASS\n"
@@ -345,7 +345,7 @@ TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.00002000)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDA | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDA | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00000000" ]
   then
     printf "PASS\n"
@@ -355,7 +355,7 @@ if [ $TRADEFEE == "0.00000000" ]
     FAIL=$((FAIL+1))
 fi
 printf "      # Checking the new trade matches to confirm trading fee was 0.00000001... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDB | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDB | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00000001" ]
   then
     printf "PASS\n"
@@ -392,7 +392,7 @@ TXIDB=$($SRCDIR/tokencore-cli --regtest sendtokentrade $ADDR 5 1.0 6 0.1)
 $SRCDIR/tokencore-cli --regtest setgenerate true 1 >$NUL
 printf "   * Verifiying the results\n"
 printf "      # Checking the original trade matches to confirm trading fee was 0... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDA | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDA | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00000000" ]
   then
     printf "PASS\n"
@@ -402,7 +402,7 @@ if [ $TRADEFEE == "0.00000000" ]
     FAIL=$((FAIL+1))
 fi
 printf "      # Checking the new trade matches to confirm trading fee was 0.00005000... "
-TRADEFEE=$($SRCDIR/tokencore-cli --regtest token_gettrade $TXIDB | grep tradingfee | cut -d '"' -f4)
+TRADEFEE=$($SRCDIR/tokencore-cli --regtest gettokentrade $TXIDB | grep tradingfee | cut -d '"' -f4)
 if [ $TRADEFEE == "0.00005000" ]
   then
     printf "PASS\n"

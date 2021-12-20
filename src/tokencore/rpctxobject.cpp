@@ -46,7 +46,7 @@ using namespace mastercore;
  * Function to standardize RPC output for transactions into a JSON object in either basic or extended mode.
  *
  * Use basic mode for generic calls (e.g. token_gettransaction/token_listtransaction etc.)
- * Use extended mode for transaction specific calls (e.g. token_getsto, token_gettrade etc.)
+ * Use extended mode for transaction specific calls (e.g. token_getsto, gettokentrade etc.)
  *
  * DEx payments and the extended mode are only available for confirmed transactions.
  */

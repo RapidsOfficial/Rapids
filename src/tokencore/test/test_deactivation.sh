@@ -164,7 +164,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Making sure the orderbook for #3/#4 is now empty... "
-ORDERS=$($SRCDIR/tokencore-cli --regtest token_getorderbook 3 4 | grep -vF "[" | grep -vF "]" | wc -l)
+ORDERS=$($SRCDIR/tokencore-cli --regtest gettokenorderbook 3 4 | grep -vF "[" | grep -vF "]" | wc -l)
 if [ $ORDERS == "0" ]
   then
     printf "PASS\n"
@@ -234,7 +234,7 @@ if [ $RESULT == "true," ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Making sure the orderbook for #3/#1 is now empty... "
-ORDERSB=$($SRCDIR/tokencore-cli --regtest token_getorderbook 3 1 | grep -vF "[" | grep -vF "]" | wc -l)
+ORDERSB=$($SRCDIR/tokencore-cli --regtest gettokenorderbook 3 1 | grep -vF "[" | grep -vF "]" | wc -l)
 if [ $ORDERSB == "0" ]
   then
     printf "PASS\n"
@@ -244,7 +244,7 @@ if [ $ORDERSB == "0" ]
     FAIL=$((FAIL+1))
 fi
 printf "   * Making sure the orderbook for #4/#1 is now empty... "
-ORDERSC=$($SRCDIR/tokencore-cli --regtest token_getorderbook 4 1 | grep -vF "[" | grep -vF "]" | wc -l)
+ORDERSC=$($SRCDIR/tokencore-cli --regtest gettokenorderbook 4 1 | grep -vF "[" | grep -vF "]" | wc -l)
 if [ $ORDERSC == "0" ]
   then
     printf "PASS\n"
