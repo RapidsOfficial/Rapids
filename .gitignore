@@ -38,6 +38,7 @@ build-aux/test-driver
 config.log
 config.status
 configure
+configure~
 confdefs.h
 conftest.cpp
 conftest.err
