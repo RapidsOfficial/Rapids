@@ -182,7 +182,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "token_setautocommit", 0 },
         { "gettokencrowdsale", 1 },
         { "gettokengrants", 0 },
-        { "gettokenbalance", 1 },
         { "gettoken", 0 },
         { "listtokentransactions", 1 },
         { "listtokentransactions", 2 },

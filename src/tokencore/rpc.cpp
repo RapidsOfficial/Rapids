@@ -1700,7 +1700,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
             "    \"propertyid\" : n,                   (number) the identifier of the tokens for sale\n"
             "    \"seller\" : \"address\",               (string) the Bitcoin address of the seller\n"
             "    \"amountavailable\" : \"n.nnnnnnnn\",   (string) the number of tokens still listed for sale and currently available\n"
-            "    \"bitcoindesired\" : \"n.nnnnnnnn\",    (string) the number of bitcoins desired in exchange\n"
+            "    \"rapidsdesired\" : \"n.nnnnnnnn\",    (string) the number of bitcoins desired in exchange\n"
             "    \"unitprice\" : \"n.nnnnnnnn\" ,        (string) the unit price (BTC/token)\n"
             "    \"timelimit\" : nn,                   (number) the time limit in blocks a buyer has to pay following a successful accept\n"
             "    \"minimumfee\" : \"n.nnnnnnnn\",        (string) the minimum mining fee a buyer has to pay to accept this offer\n"
@@ -1748,7 +1748,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
         int64_t minFee = selloffer.getMinFee();
         uint8_t timeLimit = selloffer.getBlockTimeLimit();
         int64_t sellOfferAmount = selloffer.getOfferAmountOriginal(); //badly named - "Original" implies off the wire, but is amended amount
-        int64_t sellBitcoinDesired = selloffer.getBTCDesiredOriginal(); //badly named - "Original" implies off the wire, but is amended amount
+        int64_t sellRapidsDesired = selloffer.getBTCDesiredOriginal(); //badly named - "Original" implies off the wire, but is amended amount
         int64_t amountAvailable = GetTokenBalance(seller, propertyId, SELLOFFER_RESERVE);
         int64_t amountAccepted = GetTokenBalance(seller, propertyId, ACCEPT_RESERVE);
 
@@ -1756,20 +1756,24 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
         // TODO: no math, and especially no rounding here (!)
         // TODO: no math, and especially no rounding here (!)
 
+        CMPSPInfo::Entry property;
+        pDbSpInfo->getSP(propertyId, property);
+
         // calculate unit price and updated amount of bitcoin desired
         double unitPriceFloat = 0.0;
-        if ((sellOfferAmount > 0) && (sellBitcoinDesired > 0)) {
-            unitPriceFloat = (double) sellBitcoinDesired / (double) sellOfferAmount; // divide by zero protection
+        if ((sellOfferAmount > 0) && (sellRapidsDesired > 0)) {
+            unitPriceFloat = (double) sellRapidsDesired / (double) sellOfferAmount; // divide by zero protection
         }
         int64_t unitPrice = rounduint64(unitPriceFloat * COIN);
-        int64_t bitcoinDesired = calculateDesiredBTC(sellOfferAmount, sellBitcoinDesired, amountAvailable);
+        int64_t bitcoinDesired = calculateDesiredBTC(sellOfferAmount, sellRapidsDesired, amountAvailable);
 
         UniValue responseObj(UniValue::VOBJ);
         responseObj.pushKV("txid", txid);
         responseObj.pushKV("propertyid", (uint64_t) propertyId);
+        responseObj.pushKV("name", property.name);
         responseObj.pushKV("seller", seller);
         responseObj.pushKV("amountavailable", FormatDivisibleMP(amountAvailable));
-        responseObj.pushKV("bitcoindesired", FormatDivisibleMP(bitcoinDesired));
+        responseObj.pushKV("rapidsdesired", FormatDivisibleMP(bitcoinDesired));
         responseObj.pushKV("unitprice", FormatDivisibleMP(unitPrice));
         responseObj.pushKV("timelimit", timeLimit);
         responseObj.pushKV("minimumfee", FormatDivisibleMP(minFee));
