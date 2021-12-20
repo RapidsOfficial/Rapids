@@ -36,11 +36,11 @@ using std::runtime_error;
 using namespace mastercore;
 
 
-static UniValue token_funded_send(const JSONRPCRequest& request)
+static UniValue sendtokenfunded(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 5)
         throw runtime_error(
-            "token_funded_send \"fromaddress\" \"toaddress\" propertyid \"amount\" \"feeaddress\"\n"
+            "sendtokenfunded \"fromaddress\" \"toaddress\" tokenname \"amount\" \"feeaddress\"\n"
 
             "\nCreates and sends a funded simple send transaction.\n"
 
@@ -49,7 +49,7 @@ static UniValue token_funded_send(const JSONRPCRequest& request)
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send the tokens from\n"
             "2. toaddress            (string, required) the address of the receiver\n"
-            "3. propertyid           (number, required) the identifier of the tokens to send\n"
+            "3. tokenname            (string, required) the name of token to send\n"
             "4. amount               (string, required) the amount to send\n"
             "5. feeaddress           (string, required) the address that is used for change and to pay for fees, if needed\n"
 
@@ -57,14 +57,19 @@ static UniValue token_funded_send(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_funded_send", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\" \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\" 1 \"100.0\" \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
-            + HelpExampleRpc("token_funded_send", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\", \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\", 1, \"100.0\", \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
+            + HelpExampleCli("sendtokenfunded", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\" \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\" TOKEN \"100.0\" \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
+            + HelpExampleRpc("sendtokenfunded", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\", \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\", TOKEN, \"100.0\", \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = ParseAddress(request.params[1]);
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
     std::string feeAddress = ParseAddress(request.params[4]);
 
@@ -85,11 +90,11 @@ static UniValue token_funded_send(const JSONRPCRequest& request)
     return retTxid.ToString();
 }
 
-static UniValue token_funded_sendall(const JSONRPCRequest& request)
+static UniValue sendtokenfundedall(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "token_funded_sendall \"fromaddress\" \"toaddress\" ecosystem \"feeaddress\"\n"
+            "sendtokenfundedall \"fromaddress\" \"toaddress\" ecosystem \"feeaddress\"\n"
 
             "\nCreates and sends a transaction that transfers all available tokens in the given ecosystem to the recipient.\n"
 
@@ -105,8 +110,8 @@ static UniValue token_funded_sendall(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_funded_sendall", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\" \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\" 1 \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
-            + HelpExampleRpc("token_funded_sendall", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\", \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\", 1, \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
+            + HelpExampleCli("sendtokenfundedall", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\" \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\" 1 \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
+            + HelpExampleRpc("sendtokenfundedall", "\"1DFa5bT6KMEr6ta29QJouainsjaNBsJQhH\", \"15cWrfuvMxyxGst2FisrQcvcpF48x6sXoH\", 1, \"15Jhzz4omEXEyFKbdcccJwuVPea5LqsKM1\"")
         );
 
     // obtain parameters & info
@@ -287,18 +292,18 @@ static UniValue sendalltokens(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_senddexsell(const JSONRPCRequest& request)
+static UniValue sendtokendexsell(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 7)
         throw runtime_error(
-            "token_senddexsell \"fromaddress\" propertyidforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
+            "sendtokendexsell \"fromaddress\" tokenforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
 
-            "\nPlace, update or cancel a sell offer on the traditional distributed TOKEN/BTC exchange.\n"
+            "\nPlace, update or cancel a sell offer on the traditional distributed TOKEN/RPD exchange.\n"
 
             "\nArguments:\n"
 
             "1. fromaddress          (string, required) the address to send from\n"
-            "2. propertyidforsale    (number, required) the identifier of the tokens to list for sale (must be 1 for OMN or 2 for TOMN)\n"
+            "2. tokenforsale         (string, required) the name of token to list for sale\n"
             "3. amountforsale        (string, required) the amount of tokens to list for sale\n"
             "4. amountdesired        (string, required) the amount of bitcoins desired\n"
             "5. paymentwindow        (number, required) a time limit in blocks a buyer has to pay following a successful accepting order\n"
@@ -309,18 +314,22 @@ static UniValue token_senddexsell(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_senddexsell", "\"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 1 \"1.5\" \"0.75\" 25 \"0.0005\" 1")
-            + HelpExampleRpc("token_senddexsell", "\"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", 1, \"1.5\", \"0.75\", 25, \"0.0005\", 1")
+            + HelpExampleCli("tokenforsale", "\"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" TOKEN \"1.5\" \"0.75\" 25 \"0.0005\" 1")
+            + HelpExampleRpc("tokenforsale", "\"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", TOKEN, \"1.5\", \"0.75\", 25, \"0.0005\", 1")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[1]);
+    std::string tokenForSale = ParseText(request.params[1]);
     int64_t amountForSale = 0; // depending on action
     int64_t amountDesired = 0; // depending on action
     uint8_t paymentWindow = 0; // depending on action
     int64_t minAcceptFee = 0;  // depending on action
     uint8_t action = ParseDExAction(request.params[6]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByName(tokenForSale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     // perform conversions
     if (action <= CMPTransaction::UPDATE) { // actions 3 permit zero values, skip check
@@ -373,18 +382,18 @@ static UniValue token_senddexsell(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_senddexaccept(const JSONRPCRequest& request)
+static UniValue sendtokendexaccept(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 4 || request.params.size() > 5)
         throw runtime_error(
-            "token_senddexaccept \"fromaddress\" \"toaddress\" propertyid \"amount\" ( override )\n"
+            "sendtokendexaccept \"fromaddress\" \"toaddress\" tokenname \"amount\" ( override )\n"
 
             "\nCreate and broadcast an accept offer for the specified token and amount.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from\n"
             "2. toaddress            (string, required) the address of the seller\n"
-            "3. propertyid           (number, required) the identifier of the token to purchase\n"
+            "3. tokenname            (string, required) the name of token to purchase\n"
             "4. amount               (string, required) the amount to accept\n"
             "5. override             (boolean, optional) override minimum accept fee and payment window checks (use with caution!)\n"
 
@@ -392,14 +401,19 @@ static UniValue token_senddexaccept(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_senddexaccept", "\"35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" 1 \"15.0\"")
-            + HelpExampleRpc("token_senddexaccept", "\"35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", 1, \"15.0\"")
+            + HelpExampleCli("sendtokendexaccept", "\"35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" TOKEN \"15.0\"")
+            + HelpExampleRpc("sendtokendexaccept", "\"35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", TOKEN, \"15.0\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = ParseAddress(request.params[1]);
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+
     int64_t amount = ParseAmount(request.params[3], isPropertyDivisible(propertyId));
     bool override = (request.params.size() > 4) ? request.params[4].get_bool(): false;
 
@@ -1126,31 +1140,35 @@ static UniValue token_sendcancelalltrades(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendchangeissuer(const JSONRPCRequest& request)
+static UniValue sendtokenchangeissuer(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 3)
         throw runtime_error(
-            "token_sendchangeissuer \"fromaddress\" \"toaddress\" propertyid\n"
+            "sendtokenchangeissuer \"fromaddress\" \"toaddress\" tokenname\n"
 
             "\nChange the issuer on record of the given tokens.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address associated with the tokens\n"
             "2. toaddress            (string, required) the address to transfer administrative control to\n"
-            "3. propertyid           (number, required) the identifier of the tokens\n"
+            "3. name                 (string, required) the name of token\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendchangeissuer", "\"1ARjWDkZ7kT9fwjPrjcQyvbXDkEySzKHwu\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 3")
-            + HelpExampleRpc("token_sendchangeissuer", "\"1ARjWDkZ7kT9fwjPrjcQyvbXDkEySzKHwu\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 3")
+            + HelpExampleCli("sendtokenchangeissuer", "\"1ARjWDkZ7kT9fwjPrjcQyvbXDkEySzKHwu\" \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" TOKEN")
+            + HelpExampleRpc("sendtokenchangeissuer", "\"1ARjWDkZ7kT9fwjPrjcQyvbXDkEySzKHwu\", \"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", TOKEN")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = ParseAddress(request.params[1]);
-    uint32_t propertyId = ParsePropertyId(request.params[2]);
+    std::string name = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     // perform checks
     RequireExistingProperty(propertyId);
@@ -1176,29 +1194,33 @@ static UniValue token_sendchangeissuer(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_sendenablefreezing(const JSONRPCRequest& request)
+static UniValue sendtokenenablefreezing(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_sendenablefreezing \"fromaddress\" propertyid\n"
+            "sendtokenenablefreezing \"fromaddress\" tokenname\n"
 
             "\nEnables address freezing for a centrally managed property.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string,  required) the issuer of the tokens\n"
-            "2. propertyid           (number,  required) the identifier of the tokens\n"
+            "2. tokenname            (string,  required) the name of token\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_sendenablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 3")
-            + HelpExampleRpc("token_sendenablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 3")
+            + HelpExampleCli("sendtokenenablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" TOKEN")
+            + HelpExampleRpc("sendtokenenablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", TOKEN")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyId = ParsePropertyId(request.params[1]);
+    std::string name = ParseText(request.params[1]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     // perform checks
     RequireExistingProperty(propertyId);
@@ -1225,30 +1247,34 @@ static UniValue token_sendenablefreezing(const JSONRPCRequest& request)
     }
 }
 
-static UniValue token_senddisablefreezing(const JSONRPCRequest& request)
+static UniValue sendtokendisablefreezing(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_senddisablefreezing \"fromaddress\" propertyid\n"
+            "sendtokendisablefreezing \"fromaddress\" tokenname\n"
 
             "\nDisables address freezing for a centrally managed property.\n"
             "\nIMPORTANT NOTE:  Disabling freezing for a property will UNFREEZE all frozen addresses for that property!"
 
             "\nArguments:\n"
             "1. fromaddress          (string,  required) the issuer of the tokens\n"
-            "2. propertyid           (number,  required) the identifier of the tokens\n"
+            "2. tokenname            (string,  required) the name of token\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_senddisablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" 3")
-            + HelpExampleRpc("token_senddisablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", 3")
+            + HelpExampleCli("sendtokendisablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\" TOKEN")
+            + HelpExampleRpc("sendtokendisablefreezing", "\"3HTHRxu3aSDV4deakjC7VmsiUp7c6dfbvs\", TOKEN")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
-    uint32_t propertyId = ParsePropertyId(request.params[1]);
+    std::string name = ParseText(request.params[1]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
 
     // perform checks
     RequireExistingProperty(propertyId);
@@ -1584,8 +1610,8 @@ static const CRPCCommand commands[] =
 #ifdef ENABLE_WALLET
     { "tokens (transaction creation)", "sendtokenrawtx",               &sendtokenrawtx,               false },
     { "tokens (transaction creation)", "sendtoken",                    &sendtoken,                    false },
-    // { "tokens (transaction creation)", "token_senddexsell",             &token_senddexsell,             false },
-    // { "tokens (transaction creation)", "token_senddexaccept",           &token_senddexaccept,           false },
+    { "tokens (transaction creation)", "sendtokendexsell",             &sendtokendexsell,             false },
+    { "tokens (transaction creation)", "sendtokendexaccept",           &sendtokendexaccept,           false },
     { "tokens (transaction creation)", "sendtokenissuancecrowdsale",   &sendtokenissuancecrowdsale,   false },
     { "tokens (transaction creation)", "sendtokenissuancefixed",       &sendtokenissuancefixed,       false },
     { "tokens (transaction creation)", "sendtokenissuancemanaged",     &sendtokenissuancemanaged,     false },
@@ -1594,20 +1620,20 @@ static const CRPCCommand commands[] =
     // { "tokens (transaction creation)", "token_sendcanceltradesbypair",  &token_sendcanceltradesbypair,  false },
     // { "tokens (transaction creation)", "token_sendcancelalltrades",     &token_sendcancelalltrades,     false },
     // { "tokens (transaction creation)", "token_sendsto",                 &token_sendsto,                 false },
-    // { "tokens (transaction creation)", "sendtokengrant",               &sendtokengrant,               false },
-    // { "tokens (transaction creation)", "sendtokenrevoke",              &sendtokenrevoke,              false },
+    { "tokens (transaction creation)", "sendtokengrant",               &sendtokengrant,               false },
+    { "tokens (transaction creation)", "sendtokenrevoke",              &sendtokenrevoke,              false },
     { "tokens (transaction creation)", "sendtokenclosecrowdsale",      &sendtokenclosecrowdsale,      false },
-    // { "tokens (transaction creation)", "token_sendchangeissuer",        &token_sendchangeissuer,        false },
+    { "tokens (transaction creation)", "sendtokenchangeissuer",        &sendtokenchangeissuer,        false },
     { "tokens (transaction creation)", "sendalltokens",                &sendalltokens,                false },
-    // { "tokens (transaction creation)", "token_sendenablefreezing",      &token_sendenablefreezing,      false },
-    // { "tokens (transaction creation)", "token_senddisablefreezing",     &token_senddisablefreezing,     false },
+    { "tokens (transaction creation)", "sendtokenenablefreezing",      &sendtokenenablefreezing,      false },
+    { "tokens (transaction creation)", "sendtokendisablefreezing",     &sendtokendisablefreezing,     false },
     { "tokens (transaction creation)", "sendtokenfreeze",              &sendtokenfreeze,              false },
     { "tokens (transaction creation)", "sendtokenunfreeze",            &sendtokenunfreeze,            false },
     // { "hidden",                            "token_senddeactivation",        &token_senddeactivation,        true  },
     // { "hidden",                            "token_sendactivation",          &token_sendactivation,          false },
     // { "hidden",                            "token_sendalert",               &token_sendalert,               true  },
-    // { "tokens (transaction creation)", "token_funded_send",             &token_funded_send,             false },
-    // { "tokens (transaction creation)", "token_funded_sendall",          &token_funded_sendall,          false },
+    { "tokens (transaction creation)", "sendtokenfunded",             &sendtokenfunded,             false },
+    { "tokens (transaction creation)", "sendtokenfundedall",          &sendtokenfundedall,          false },
 #endif
 };
 

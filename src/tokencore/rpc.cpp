@@ -863,10 +863,8 @@ static UniValue gettokenbalances(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "gettokenbalances ( includewatchonly )\n"
+            "gettokenbalances\n"
             "\nReturns a list of the total token balances.\n"
-            "\nArguments:\n"
-            "1. includewatchonly     (boolean, optional) include balances of watchonly addresses (default: false)\n"
             "\nResult:\n"
             "[                           (array of JSON objects)\n"
             "  {\n"
@@ -882,11 +880,6 @@ static UniValue gettokenbalances(const JSONRPCRequest& request)
             + HelpExampleCli("gettokenbalances", "")
             + HelpExampleRpc("gettokenbalances", "")
         );
-
-    bool fIncludeWatchOnly = false;
-    if (request.params.size() > 0) {
-        fIncludeWatchOnly = request.params[0].get_bool();
-    }
 
     UniValue response(UniValue::VARR);
 
