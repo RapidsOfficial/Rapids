@@ -10,11 +10,11 @@ printf "   * Starting a fresh regtest daemon\n"
 rm -r ~/.bitcoin/regtest
 $SRCDIR/tokencored --regtest --server --daemon --tokenalertallowsender=any >$NUL
 sleep 10
-printf "   * Preparing some mature testnet BTC\n"
+printf "   * Preparing some mature testnet RPD\n"
 $SRCDIR/tokencore-cli --regtest generate 102 >$NUL
 printf "   * Obtaining a master address to work with\n"
 ADDR=$($SRCDIR/tokencore-cli --regtest getnewaddress TOKENAccount)
-printf "   * Funding the address with some testnet BTC for fees\n"
+printf "   * Funding the address with some testnet RPD for fees\n"
 $SRCDIR/tokencore-cli --regtest sendtoaddress $ADDR 20 >$NUL
 $SRCDIR/tokencore-cli --regtest generate 1 >$NUL
 printf "   * Sending an alert with client expiry version of 999999999\n"

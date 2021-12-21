@@ -10,13 +10,13 @@ printf "   * Starting a fresh regtest daemon\n"
 rm -r ~/.bitcoin/regtest
 $SRCDIR/tokencored --regtest --server --daemon --tokenactivationallowsender=any --tokendebug=verbose >$NUL
 sleep 10
-printf "   * Preparing some mature testnet BTC\n"
+printf "   * Preparing some mature testnet RPD\n"
 $SRCDIR/tokencore-cli --regtest generate 105 >$NUL
 printf "   * Obtaining addresses to work with\n"
 ADDR=$($SRCDIR/tokencore-cli --regtest getnewaddress TOKENAccount)
 FADDR=$($SRCDIR/tokencore-cli --regtest getnewaddress)
 printf "   * Master address is %s\n" $ADDR
-printf "   * Funding the addresses with some testnet BTC for fees\n"
+printf "   * Funding the addresses with some testnet RPD for fees\n"
 JSON="{\""$ADDR"\":5,\""$FADDR"\":4}"
 $SRCDIR/tokencore-cli --regtest sendmany "" $JSON >$NUL
 $SRCDIR/tokencore-cli --regtest sendtoaddress $ADDR 6 >$NUL

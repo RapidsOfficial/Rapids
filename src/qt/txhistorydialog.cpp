@@ -543,7 +543,7 @@ std::string TXHistoryDialog::shrinkTxType(int txType, bool *fundsMoved)
         case TOKEN_TYPE_RATELIMITED_MARK: displayType = "Rate Limit"; break;
         case TOKEN_TYPE_AUTOMATIC_DISPENSARY: displayType = "Auto Dispense"; break;
         case TOKEN_TYPE_TRADE_OFFER: displayType = "DEx Trade"; *fundsMoved = false; break;
-        case TOKEN_TYPE_ACCEPT_OFFER_BTC: displayType = "DEx Accept"; *fundsMoved = false; break;
+        case TOKEN_TYPE_ACCEPT_OFFER_RPD: displayType = "DEx Accept"; *fundsMoved = false; break;
         case TOKEN_TYPE_METADEX_TRADE: displayType = "MetaDEx Trade"; *fundsMoved = false; break;
         case TOKEN_TYPE_METADEX_CANCEL_PRICE:
         case TOKEN_TYPE_METADEX_CANCEL_PAIR:

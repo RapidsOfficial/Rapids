@@ -83,7 +83,7 @@ uint8_t ParseDExPaymentWindow(const UniValue& value)
 
 int64_t ParseDExFee(const UniValue& value)
 {
-    int64_t fee = StrToInt64(value.get_str(), true);  // BTC is divisible
+    int64_t fee = StrToInt64(value.get_str(), true);  // RPD is divisible
     if (fee < 0) {
         throw JSONRPCError(RPC_TYPE_ERROR, "Mininmum accept fee must be positive");
     }

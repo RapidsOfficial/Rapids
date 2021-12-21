@@ -88,7 +88,7 @@ int populateRPCTransactionObject(const CTransaction& tx, const uint256& blockHas
 
     const uint256& txid = tx.GetHash();
 
-    // DEx BTC payment needs special handling since it's not actually an Token message - handle and return
+    // DEx RPD payment needs special handling since it's not actually an Token message - handle and return
     if (parseRC > 0) {
         if (confirmations <= 0) {
             // only confirmed DEx payments are currently supported
@@ -194,7 +194,7 @@ void populateRPCTypeInfo(CMPTransaction& mp_obj, UniValue& txobj, uint32_t txTyp
         case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             populateRPCTypeMetaDExCancelEcosystem(mp_obj, txobj, extendedDetails);
             break;
-        case TOKEN_TYPE_ACCEPT_OFFER_BTC:
+        case TOKEN_TYPE_ACCEPT_OFFER_RPD:
             populateRPCTypeAcceptOffer(mp_obj, txobj);
             break;
         case TOKEN_TYPE_CREATE_PROPERTY_FIXED:
@@ -248,7 +248,7 @@ bool showRefForTx(uint32_t txType)
         case TOKEN_TYPE_METADEX_CANCEL_PRICE: return false;
         case TOKEN_TYPE_METADEX_CANCEL_PAIR: return false;
         case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM: return false;
-        case TOKEN_TYPE_ACCEPT_OFFER_BTC: return true;
+        case TOKEN_TYPE_ACCEPT_OFFER_RPD: return true;
         case TOKEN_TYPE_CREATE_PROPERTY_FIXED: return false;
         case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: return false;
         case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: return false;
@@ -324,7 +324,7 @@ void populateRPCTypeTradeOffer(CMPTransaction& tokenObj, UniValue& txobj)
     CMPOffer temp_offer(tokenObj);
     uint32_t propertyId = tokenObj.getProperty();
     int64_t amountOffered = tokenObj.getAmount();
-    int64_t amountDesired = temp_offer.getBTCDesiredOriginal();
+    int64_t amountDesired = temp_offer.getRPDDesiredOriginal();
     uint8_t sellSubAction = temp_offer.getSubaction();
 
     {
@@ -343,7 +343,7 @@ void populateRPCTypeTradeOffer(CMPTransaction& tokenObj, UniValue& txobj)
         LOCK(cs_tally);
         bool tmpValid = pDbTransactionList->getValidMPTX(tokenObj.getHash(), &tmpblock, &tmptype, &amountNew);
         if (tmpValid && amountNew > 0) {
-            amountDesired = calculateDesiredBTC(amountOffered, amountDesired, amountNew);
+            amountDesired = calculateDesiredRPD(amountOffered, amountDesired, amountNew);
             amountOffered = amountNew;
         }
     }
@@ -352,7 +352,7 @@ void populateRPCTypeTradeOffer(CMPTransaction& tokenObj, UniValue& txobj)
     txobj.push_back(Pair("propertyid", (uint64_t)propertyId));
     txobj.push_back(Pair("divisible", isPropertyDivisible(propertyId)));
     txobj.push_back(Pair("amount", FormatMP(propertyId, amountOffered)));
-    txobj.push_back(Pair("bitcoindesired", FormatDivisibleMP(amountDesired)));
+    txobj.push_back(Pair("rapidsdesired", FormatDivisibleMP(amountDesired)));
     txobj.push_back(Pair("timelimit",  temp_offer.getBlockTimeLimit()));
     txobj.push_back(Pair("feerequired", FormatDivisibleMP(temp_offer.getMinFee())));
     if (sellSubAction == 1) txobj.push_back(Pair("action", "new"));
@@ -685,7 +685,7 @@ int populateRPCDExPurchases(const CTransaction& wtx, UniValue& purchases, std::s
         purchaseObj.push_back(Pair("referenceaddress", seller));
         purchaseObj.push_back(Pair("propertyid", propertyId));
         purchaseObj.push_back(Pair("amountbought", FormatDivisibleMP(nValue)));
-        purchaseObj.push_back(Pair("valid", true)); //only valid purchases are stored, anything else is regular BTC tx
+        purchaseObj.push_back(Pair("valid", true)); //only valid purchases are stored, anything else is regular RPD tx
         purchases.push_back(purchaseObj);
     }
     return purchases.size();

@@ -104,10 +104,20 @@ void MetaDexObjectToJSON(const CMPMetaDEx& obj, UniValue& metadex_obj)
     metadex_obj.pushKV("txid", obj.getHash().GetHex());
     if (obj.getAction() == 4) metadex_obj.pushKV("ecosystem", isTestEcosystemProperty(obj.getProperty()) ? "test" : "main");
     metadex_obj.pushKV("propertyidforsale", (uint64_t) obj.getProperty());
+
+    CMPSPInfo::Entry saleproperty;
+    pDbSpInfo->getSP(obj.getProperty(), saleproperty);
+    metadex_obj.pushKV("tokenforsale", saleproperty.name);
+
     metadex_obj.pushKV("propertyidforsaleisdivisible", propertyIdForSaleIsDivisible);
     metadex_obj.pushKV("amountforsale", FormatMP(obj.getProperty(), obj.getAmountForSale()));
     metadex_obj.pushKV("amountremaining", FormatMP(obj.getProperty(), obj.getAmountRemaining()));
     metadex_obj.pushKV("propertyiddesired", (uint64_t) obj.getDesProperty());
+
+    CMPSPInfo::Entry desiredproperty;
+    pDbSpInfo->getSP(obj.getDesProperty(), desiredproperty);
+    metadex_obj.pushKV("tokendesired", desiredproperty.name);
+
     metadex_obj.pushKV("propertyiddesiredisdivisible", propertyIdDesiredIsDivisible);
     metadex_obj.pushKV("amountdesired", FormatMP(obj.getDesProperty(), obj.getAmountDesired()));
     metadex_obj.pushKV("amounttofill", FormatMP(obj.getDesProperty(), obj.getAmountToFill()));
@@ -1701,7 +1711,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
             "    \"seller\" : \"address\",               (string) the Bitcoin address of the seller\n"
             "    \"amountavailable\" : \"n.nnnnnnnn\",   (string) the number of tokens still listed for sale and currently available\n"
             "    \"rapidsdesired\" : \"n.nnnnnnnn\",    (string) the number of bitcoins desired in exchange\n"
-            "    \"unitprice\" : \"n.nnnnnnnn\" ,        (string) the unit price (BTC/token)\n"
+            "    \"unitprice\" : \"n.nnnnnnnn\" ,        (string) the unit price (RPD/token)\n"
             "    \"timelimit\" : nn,                   (number) the time limit in blocks a buyer has to pay following a successful accept\n"
             "    \"minimumfee\" : \"n.nnnnnnnn\",        (string) the minimum mining fee a buyer has to pay to accept this offer\n"
             "    \"amountaccepted\" : \"n.nnnnnnnn\",    (string) the number of tokens currently reserved for pending \"accept\" orders\n"
@@ -1748,7 +1758,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
         int64_t minFee = selloffer.getMinFee();
         uint8_t timeLimit = selloffer.getBlockTimeLimit();
         int64_t sellOfferAmount = selloffer.getOfferAmountOriginal(); //badly named - "Original" implies off the wire, but is amended amount
-        int64_t sellRapidsDesired = selloffer.getBTCDesiredOriginal(); //badly named - "Original" implies off the wire, but is amended amount
+        int64_t sellRapidsDesired = selloffer.getRPDDesiredOriginal(); //badly named - "Original" implies off the wire, but is amended amount
         int64_t amountAvailable = GetTokenBalance(seller, propertyId, SELLOFFER_RESERVE);
         int64_t amountAccepted = GetTokenBalance(seller, propertyId, ACCEPT_RESERVE);
 
@@ -1765,7 +1775,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
             unitPriceFloat = (double) sellRapidsDesired / (double) sellOfferAmount; // divide by zero protection
         }
         int64_t unitPrice = rounduint64(unitPriceFloat * COIN);
-        int64_t bitcoinDesired = calculateDesiredBTC(sellOfferAmount, sellRapidsDesired, amountAvailable);
+        int64_t bitcoinDesired = calculateDesiredRPD(sellOfferAmount, sellRapidsDesired, amountAvailable);
 
         UniValue responseObj(UniValue::VOBJ);
         responseObj.pushKV("txid", txid);
@@ -1794,12 +1804,12 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
                 int blocksLeftToPay = (blockOfAccept + selloffer.getBlockTimeLimit()) - curBlock;
                 int64_t amountAccepted = accept.getAcceptAmountRemaining();
                 // TODO: don't recalculate!
-                int64_t amountToPayInBTC = calculateDesiredBTC(accept.getOfferAmountOriginal(), accept.getBTCDesiredOriginal(), amountAccepted);
+                int64_t amountToPayInRPD = calculateDesiredRPD(accept.getOfferAmountOriginal(), accept.getRPDDesiredOriginal(), amountAccepted);
                 matchedAccept.pushKV("buyer", buyer);
                 matchedAccept.pushKV("block", blockOfAccept);
                 matchedAccept.pushKV("blocksleft", blocksLeftToPay);
                 matchedAccept.pushKV("amount", FormatDivisibleMP(amountAccepted));
-                matchedAccept.pushKV("amounttopay", FormatDivisibleMP(amountToPayInBTC));
+                matchedAccept.pushKV("amounttopay", FormatDivisibleMP(amountToPayInRPD));
                 acceptsMatched.push_back(matchedAccept);
             }
         }

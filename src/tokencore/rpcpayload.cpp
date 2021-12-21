@@ -77,7 +77,7 @@ static UniValue token_createpayload_dexsell(const JSONRPCRequest& request)
         throw runtime_error(
             "token_createpayload_dexsell propertyidforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
 
-            "\nCreate a payload to place, update or cancel a sell offer on the traditional distributed TOKEN/BTC exchange.\n"
+            "\nCreate a payload to place, update or cancel a sell offer on the traditional distributed TOKEN/RPD exchange.\n"
 
             "\nArguments:\n"
 
@@ -106,7 +106,7 @@ static UniValue token_createpayload_dexsell(const JSONRPCRequest& request)
 
     if (action <= CMPTransaction::UPDATE) { // actions 3 permit zero values, skip check
         amountForSale = ParseAmount(request.params[1], isPropertyDivisible(propertyIdForSale));
-        amountDesired = ParseAmount(request.params[2], true); // BTC is divisible
+        amountDesired = ParseAmount(request.params[2], true); // RPD is divisible
         paymentWindow = ParseDExPaymentWindow(request.params[3]);
         minAcceptFee = ParseDExFee(request.params[4]);
     }

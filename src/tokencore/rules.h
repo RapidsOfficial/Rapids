@@ -43,7 +43,7 @@ struct TransactionRestriction
     uint16_t txType;
     //! Transaction version
     uint16_t txVersion;
-    //! Whether the property identifier can be 0 (= BTC)
+    //! Whether the property identifier can be 0 (= RPD)
     bool allowWildcard;
     //! Block after which the feature or transaction is enabled
     int activationBlock;

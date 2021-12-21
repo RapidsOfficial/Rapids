@@ -148,7 +148,7 @@ bool CheckActivationAuthorization(const std::string& sender)
     "scriptPubKey": "a91498a2d17e08ac677dc220b92e0b79406f2f441c2487",
     "sigsrequired": 4,
     "addresses": [
-      "1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz", // Zathras - zathras@token.foundation - Project maintainer, developer
+      "1883ZMsRJfzKNozUBJRPDxQ7EaiNioNDWz", // Zathras - zathras@token.foundation - Project maintainer, developer
       "1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd", // dexx - dexx@bitwatch.co - Project maintainer, developer
       "1oyvGmABkeFRUECn2t8DEZPes6F7Gsc9T", // J.R. Willett - jr@token.foundation - Founder and board member
       "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@token.foundation - Technologist and board member
@@ -215,7 +215,7 @@ bool CheckDeactivationAuthorization(const std::string& sender)
     "script" : "multisig",
     "sigsrequired" : 3,
     "addresses" : [
-      "1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz", // Zathras - zathras@token.foundation - Project maintainer, developer
+      "1883ZMsRJfzKNozUBJRPDxQ7EaiNioNDWz", // Zathras - zathras@token.foundation - Project maintainer, developer
       "1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd", // dexx - dexx@bitwatch.co - Project maintainer, developer
       "1oyvGmABkeFRUECn2t8DEZPes6F7Gsc9T", // J.R. Willett - jr@token.foundation - Founder and Board Member
       "17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26", // Craig Sellars - craig@token.foundation - Technologist and Board Member

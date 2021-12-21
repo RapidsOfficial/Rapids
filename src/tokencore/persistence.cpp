@@ -237,7 +237,7 @@ static int input_msc_balances_string(const std::string& s)
     return 0;
 }
 
-// seller-address, offer_block, amount, property, desired BTC , property_desired, fee, blocktimelimit
+// seller-address, offer_block, amount, property, desired RPD , property_desired, fee, blocktimelimit
 // 13z1JFtDMGTYQvtMq5gs4LmCztK3rmEZga,299076,76375000,1,6415500,0,10000,6
 static int input_mp_offers_string(const std::string& s)
 {
@@ -259,7 +259,7 @@ static int input_mp_offers_string(const std::string& s)
     uint256 txid = uint256S(vstr[i++]);
 
     // TODO: should this be here? There are usually no sanity checks..
-    if (TOKEN_PROPERTY_BTC != prop_desired) return -1;
+    if (TOKEN_PROPERTY_RPD != prop_desired) return -1;
 
     const std::string combo = STR_SELLOFFER_ADDR_PROP_COMBO(sellerAddr, prop);
     CMPOffer newOffer(offerBlock, amountOriginal, prop, btcDesired, minFee, blocktimelimit, txid);

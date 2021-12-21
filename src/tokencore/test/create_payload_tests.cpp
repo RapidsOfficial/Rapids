@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(payload_dex_offer)
     std::vector<unsigned char> vch = CreatePayload_DExSell(
         static_cast<uint32_t>(1),         // property: MSC
         static_cast<int64_t>(100000000),  // amount to transfer: 1.0 MSC (in willets)
-        static_cast<int64_t>(20000000),   // amount desired: 0.2 BTC (in satoshis)
+        static_cast<int64_t>(20000000),   // amount desired: 0.2 RPD (in satoshis)
         static_cast<uint8_t>(10),         // payment window in blocks
         static_cast<int64_t>(10000),      // commitment fee in satoshis
         static_cast<uint8_t>(1));         // sub-action: new offer

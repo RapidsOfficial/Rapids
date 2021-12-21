@@ -173,7 +173,7 @@ int IsMyAddress(const std::string& address)
  */
 static int64_t GetEstimatedFeePerKb()
 {
-    int64_t nFee = 50000; // 0.0005 BTC;
+    int64_t nFee = 50000; // 0.0005 RPD;
 
 #ifdef ENABLE_WALLET
     if (pwalletMain) {

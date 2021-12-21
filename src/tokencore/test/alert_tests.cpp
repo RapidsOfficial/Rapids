@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(alert_positive_authorization)
 {
     // Confirm authorized sources for mainnet
     BOOST_CHECK(CheckAlertAuthorization("17xr7sbehYY4YSZX9yuJe6gK9rrdRrZx26"));  // Craig   <craig@token.foundation>
-    BOOST_CHECK(CheckAlertAuthorization("1883ZMsRJfzKNozUBJBTCxQ7EaiNioNDWz"));  // Zathras <zathras@token.foundation>
+    BOOST_CHECK(CheckAlertAuthorization("1883ZMsRJfzKNozUBJRPDxQ7EaiNioNDWz"));  // Zathras <zathras@token.foundation>
     BOOST_CHECK(CheckAlertAuthorization("1HHv91gRxqBzQ3gydMob3LU8hqXcWoLfvd"));  // dexX7   <dexx@bitwatch.co>
     BOOST_CHECK(CheckAlertAuthorization("16oDZYCspsczfgKXVj3xyvsxH21NpEj94F"));  // Adam    <adam@token.foundation>
 }

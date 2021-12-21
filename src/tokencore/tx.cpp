@@ -72,7 +72,7 @@ std::string mastercore::strTransactionType(uint16_t txType)
         case TOKEN_TYPE_METADEX_CANCEL_PRICE: return "MetaDEx cancel-price";
         case TOKEN_TYPE_METADEX_CANCEL_PAIR: return "MetaDEx cancel-pair";
         case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM: return "MetaDEx cancel-ecosystem";
-        case TOKEN_TYPE_ACCEPT_OFFER_BTC: return "DEx Accept Offer";
+        case TOKEN_TYPE_ACCEPT_OFFER_RPD: return "DEx Accept Offer";
         case TOKEN_TYPE_CREATE_PROPERTY_FIXED: return "Create Property - Fixed";
         case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: return "Create Property - Variable";
         case TOKEN_TYPE_PROMOTE_PROPERTY: return "Promote Property";
@@ -139,8 +139,8 @@ bool CMPTransaction::interpret_Transaction()
         case TOKEN_TYPE_TRADE_OFFER:
             return interpret_TradeOffer();
 
-        case TOKEN_TYPE_ACCEPT_OFFER_BTC:
-            return interpret_AcceptOfferBTC();
+        case TOKEN_TYPE_ACCEPT_OFFER_RPD:
+            return interpret_AcceptOfferRPD();
 
         case TOKEN_TYPE_METADEX_TRADE:
             return interpret_MetaDExTrade();
@@ -335,7 +335,7 @@ bool CMPTransaction::interpret_TradeOffer()
 }
 
 /** Tx 22 */
-bool CMPTransaction::interpret_AcceptOfferBTC()
+bool CMPTransaction::interpret_AcceptOfferRPD()
 {
     if (pkt_size < 16) {
         return false;
@@ -901,8 +901,8 @@ int CMPTransaction::interpretPacket()
         case TOKEN_TYPE_TRADE_OFFER:
             return logicMath_TradeOffer();
 
-        case TOKEN_TYPE_ACCEPT_OFFER_BTC:
-            return logicMath_AcceptOffer_BTC();
+        case TOKEN_TYPE_ACCEPT_OFFER_RPD:
+            return logicMath_AcceptOffer_RPD();
 
         case TOKEN_TYPE_METADEX_TRADE:
             return logicMath_MetaDExTrade();
@@ -1325,7 +1325,7 @@ int CMPTransaction::logicMath_TradeOffer()
 }
 
 /** Tx 22 */
-int CMPTransaction::logicMath_AcceptOffer_BTC()
+int CMPTransaction::logicMath_AcceptOffer_RPD()
 {
     if (!IsTransactionTypeAllowed(block, property, type, version)) {
         PrintToLog("%s(): rejected: type %d or version %d not permitted for property %d at block %d\n",

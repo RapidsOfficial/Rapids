@@ -46,7 +46,7 @@ std::vector<TransactionRestriction> CConsensusParams::GetRestrictions() const
 
         { TOKEN_TYPE_TRADE_OFFER,               MP_TX_PKT_V0,  false,   TOKEN_DEX_BLOCK      },
         { TOKEN_TYPE_TRADE_OFFER,               MP_TX_PKT_V1,  false,   TOKEN_DEX_BLOCK      },
-        { TOKEN_TYPE_ACCEPT_OFFER_BTC,          MP_TX_PKT_V0,  false,   TOKEN_DEX_BLOCK      },
+        { TOKEN_TYPE_ACCEPT_OFFER_RPD,          MP_TX_PKT_V0,  false,   TOKEN_DEX_BLOCK      },
 
         { TOKEN_TYPE_CREATE_PROPERTY_FIXED,     MP_TX_PKT_V0,  false,   TOKEN_SP_BLOCK       },
         { TOKEN_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V0,  false,   TOKEN_SP_BLOCK       },
@@ -545,7 +545,7 @@ bool IsFeatureActivated(uint16_t featureId, int transactionBlock)
  * In the test ecosystem, transactions, which are known to the client are allowed
  * without height restriction.
  *
- * Certain transactions use a property identifier of 0 (= BTC) as wildcard, which
+ * Certain transactions use a property identifier of 0 (= RPD) as wildcard, which
  * must explicitly be allowed.
  */
 bool IsTransactionTypeAllowed(int txBlock, uint32_t txProperty, uint16_t txType, uint16_t version)
@@ -558,8 +558,8 @@ bool IsTransactionTypeAllowed(int txBlock, uint32_t txProperty, uint16_t txType,
         if (entry.txType != txType || entry.txVersion != version) {
             continue;
         }
-        // a property identifier of 0 (= BTC) may be used as wildcard
-        if (TOKEN_PROPERTY_BTC == txProperty && !entry.allowWildcard) {
+        // a property identifier of 0 (= RPD) may be used as wildcard
+        if (TOKEN_PROPERTY_RPD == txProperty && !entry.allowWildcard) {
             continue;
         }
         // transactions are not restricted in the test ecosystem

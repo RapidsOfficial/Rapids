@@ -57,7 +57,7 @@ enum TransactionType {
   TOKEN_TYPE_RATELIMITED_MARK           = 12,
   TOKEN_TYPE_AUTOMATIC_DISPENSARY       = 15,
   TOKEN_TYPE_TRADE_OFFER                = 20,
-  TOKEN_TYPE_ACCEPT_OFFER_BTC           = 22,
+  TOKEN_TYPE_ACCEPT_OFFER_RPD           = 22,
   TOKEN_TYPE_METADEX_TRADE              = 25,
   TOKEN_TYPE_METADEX_CANCEL_PRICE       = 26,
   TOKEN_TYPE_METADEX_CANCEL_PAIR        = 27,
@@ -106,7 +106,7 @@ enum TransactionType {
 #define PKT_ERROR_TOKENS      (-82000)
 #define PKT_ERROR_SEND_ALL    (-83000)
 
-#define TOKEN_PROPERTY_BTC   0
+#define TOKEN_PROPERTY_RPD   0
 #define TOKEN_PROPERTY_MSC   1
 #define TOKEN_PROPERTY_TMSC  2
 

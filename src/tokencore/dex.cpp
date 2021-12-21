@@ -149,17 +149,17 @@ namespace legacy
  * @see:
  * https://github.com/mastercoin-MSC/mastercore/blob/mscore-0.0.9/src/mastercore_dex.cpp#L439-L449
  */
-static int64_t calculateDesiredBTC(const int64_t amountOffered, const int64_t amountDesired, const int64_t amountAvailable)
+static int64_t calculateDesiredRPD(const int64_t amountOffered, const int64_t amountDesired, const int64_t amountAvailable)
 {
     uint64_t nValue = static_cast<uint64_t>(amountOffered);
     uint64_t amount_des = static_cast<uint64_t>(amountDesired);
     uint64_t balanceReallyAvailable = static_cast<uint64_t>(amountAvailable);
 
-    double BTC;
+    double RPD;
 
-    BTC = amount_des * balanceReallyAvailable;
-    BTC /= (double) nValue;
-    amount_des = rounduint64(BTC);
+    RPD = amount_des * balanceReallyAvailable;
+    RPD /= (double) nValue;
+    amount_des = rounduint64(RPD);
 
     return static_cast<int64_t>(amount_des);
 }
@@ -171,7 +171,7 @@ static int64_t calculateDesiredBTC(const int64_t amountOffered, const int64_t am
  * TODO: don't expose it!
  * @return The amount of bitcoins desired
  */
-int64_t calculateDesiredBTC(const int64_t amountOffered, const int64_t amountDesired, const int64_t amountAvailable)
+int64_t calculateDesiredRPD(const int64_t amountOffered, const int64_t amountDesired, const int64_t amountAvailable)
 {
     if (amountOffered == 0) {
         return 0; // divide by null protection
@@ -239,12 +239,12 @@ int DEx_offerCreate(const std::string& addressSeller, uint32_t propertyId, int64
                         addressSeller, FormatDivisibleMP(amountOffered), strMPProperty(propertyId),
                         FormatDivisibleMP(balanceReallyAvailable), strMPProperty(propertyId));
 
-        // AND we must also re-adjust the BTC desired in this case...
-        amountDesired = legacy::calculateDesiredBTC(amountOffered, amountDesired, balanceReallyAvailable);
+        // AND we must also re-adjust the RPD desired in this case...
+        amountDesired = legacy::calculateDesiredRPD(amountOffered, amountDesired, balanceReallyAvailable);
         amountOffered = balanceReallyAvailable;
         if (nAmended) *nAmended = amountOffered;
 
-        PrintToLog("%s: adjusting order: updated amount for sale: %s %s, offered for: %s BTC\n", __func__,
+        PrintToLog("%s: adjusting order: updated amount for sale: %s %s, offered for: %s RPD\n", __func__,
                         FormatDivisibleMP(amountOffered), strMPProperty(propertyId), FormatDivisibleMP(amountDesired));
     }
     // -------------------------------------------------------------------------
@@ -348,7 +348,7 @@ int DEx_acceptCreate(const std::string& addressBuyer, const std::string& address
         return DEX_ERROR_ACCEPT -205;
     }
 
-    // ensure the correct BTC fee was paid in this acceptance message
+    // ensure the correct RPD fee was paid in this acceptance message
     if (feePaid < offer.getMinFee()) {
         PrintToLog("%s: rejected: transaction fee too small [%d < %d]\n", __func__, feePaid, offer.getMinFee());
         return DEX_ERROR_ACCEPT -105;
@@ -369,7 +369,7 @@ int DEx_acceptCreate(const std::string& addressBuyer, const std::string& address
         assert(update_tally_map(addressSeller, propertyId, -amountReserved, SELLOFFER_RESERVE));
         assert(update_tally_map(addressSeller, propertyId, amountReserved, ACCEPT_RESERVE));
 
-        CMPAccept acceptOffer(amountReserved, block, offer.getBlockTimeLimit(), offer.getProperty(), offer.getOfferAmountOriginal(), offer.getBTCDesiredOriginal(), offer.getHash());
+        CMPAccept acceptOffer(amountReserved, block, offer.getBlockTimeLimit(), offer.getProperty(), offer.getOfferAmountOriginal(), offer.getRPDDesiredOriginal(), offer.getHash());
         my_accepts.insert(std::make_pair(keyAcceptOrder, acceptOffer));
 
         rc = 0;
@@ -453,13 +453,13 @@ namespace legacy
 static int64_t calculateDExPurchase(const int64_t amountOffered, const int64_t amountDesired, const int64_t amountPaid)
 {
     uint64_t acceptOfferAmount = static_cast<uint64_t>(amountOffered);
-    uint64_t acceptBTCDesired = static_cast<uint64_t>(amountDesired);
-    uint64_t BTC_paid = static_cast<uint64_t>(amountPaid);
+    uint64_t acceptRPDDesired = static_cast<uint64_t>(amountDesired);
+    uint64_t RPD_paid = static_cast<uint64_t>(amountPaid);
 
-    const double BTC_desired_original = acceptBTCDesired;
+    const double RPD_desired_original = acceptRPDDesired;
     const double offer_amount_original = acceptOfferAmount;
 
-    double perc_X = (double) BTC_paid / BTC_desired_original;
+    double perc_X = (double) RPD_paid / RPD_desired_original;
     double Purchased = offer_amount_original * perc_X;
 
     uint64_t units_purchased = rounduint64(Purchased);
@@ -494,7 +494,7 @@ int64_t calculateDExPurchase(const int64_t amountOffered, const int64_t amountDe
 }
 
 /**
- * Handles incoming BTC payment for the offer.
+ * Handles incoming RPD payment for the offer.
  * TODO: change nAmended: uint64_t -> int64_t
  */
 int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addressSeller, const std::string& addressBuyer, int64_t amountPaid, int block, uint64_t* nAmended)
@@ -518,7 +518,7 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
 
     // -------------------------------------------------------------------------
 
-    const int64_t amountDesired = p_accept->getBTCDesiredOriginal();
+    const int64_t amountDesired = p_accept->getRPDDesiredOriginal();
     const int64_t amountOffered = p_accept->getOfferAmountOriginal();
 
     // divide by 0 protection
@@ -552,7 +552,7 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
     const int64_t amountRemaining = p_accept->getAcceptAmountRemaining(); // actual amount desired, in the Accept
 
     if (msc_debug_dex) PrintToLog(
-            "%s: BTC desired: %s, offered amount: %s, amount to purchase: %s, amount remaining: %s\n", __func__,
+            "%s: RPD desired: %s, offered amount: %s, amount to purchase: %s, amount remaining: %s\n", __func__,
             FormatDivisibleMP(amountDesired), FormatDivisibleMP(amountOffered),
             FormatDivisibleMP(amountPurchased), FormatDivisibleMP(amountRemaining));
 
@@ -564,9 +564,9 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
     }
 
     if (amountPurchased > 0) {
-        PrintToLog("%s: seller %s offered %s %s for %s BTC\n", __func__,
+        PrintToLog("%s: seller %s offered %s %s for %s RPD\n", __func__,
                 addressSeller, FormatDivisibleMP(amountOffered), strMPProperty(propertyId), FormatDivisibleMP(amountDesired));
-        PrintToLog("%s: buyer %s pays %s BTC to purchase %s %s\n", __func__,
+        PrintToLog("%s: buyer %s pays %s RPD to purchase %s %s\n", __func__,
                 addressBuyer, FormatDivisibleMP(amountPaid), FormatDivisibleMP(amountPurchased), strMPProperty(propertyId));
 
         assert(update_tally_map(addressSeller, propertyId, -amountPurchased, ACCEPT_RESERVE));
