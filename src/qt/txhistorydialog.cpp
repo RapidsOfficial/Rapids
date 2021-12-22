@@ -535,6 +535,8 @@ std::string TXHistoryDialog::shrinkTxType(int txType, bool *fundsMoved)
     string displayType = "Unknown";
     switch (txType) {
         case TOKEN_TYPE_SIMPLE_SEND: displayType = "Send"; break;
+        case TOKEN_TYPE_ENABLE_FREEZING: displayType = "Enable freezing"; break;
+        case TOKEN_TYPE_DISABLE_FREEZING: displayType = "Disable freezing"; break;
         case TOKEN_TYPE_RESTRICTED_SEND: displayType = "Rest. Send"; break;
         case TOKEN_TYPE_SEND_TO_OWNERS: displayType = "Send To Owners"; break;
         case TOKEN_TYPE_SEND_ALL: displayType = "Send All"; break;
