@@ -470,9 +470,9 @@ static UniValue sendtokendexaccept(const JSONRPCRequest& request)
 
 static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 14)
+    if (request.fHelp || request.params.size() != 13)
         throw runtime_error(
-            "sendtokenissuancecrowdsale \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" tokendesired tokensperunit deadline ( earlybonus issuerpercentage )\n"
+            "sendtokenissuancecrowdsale \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" tokensperunit deadline ( earlybonus issuerpercentage )\n"
 
             "Create new tokens as crowdsale."
 
@@ -486,18 +486,17 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
             "7. name                 (string, required) the name of the new tokens to create\n"
             "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
             "9. ipfs                 (string, required) IPFS string for the new tokens (can be \"\")\n"
-            "10. tokendesired        (string, required) the token name eligible to participate in the crowdsale\n"
-            "11. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
-            "12. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
-            "13. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
-            "14. issuerpercentage    (number, required) a percentage of tokens that will be granted to the issuer\n"
+            "10. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
+            "11. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
+            "12. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
+            "13. issuerpercentage    (number, required) a percentage of tokens that will be granted to the issuer\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("sendtokenissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" TOKEN \"100\" 1483228800 30 2")
-            + HelpExampleRpc("sendtokenissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", TOKEN, \"100\", 1483228800, 30, 2")
+            + HelpExampleCli("sendtokenissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\" 2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" \"100\" 1483228800 30 2")
+            + HelpExampleRpc("sendtokenissuancecrowdsale", "\"3JYd75REX3HXn1vAU83YuGfmiPXW7BpYXo\", 2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", \"100\", 1483228800, 30, 2")
         );
 
     // obtain parameters & info
@@ -510,11 +509,10 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
     std::string name = ParseText(request.params[6]);
     std::string url = ParseText(request.params[7]);
     std::string data = ParseText(request.params[8]);
-    std::string desiredName = ParseText(request.params[9]);
-    int64_t numTokens = ParseAmount(request.params[10], type);
-    int64_t deadline = ParseDeadline(request.params[11]);
-    uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[12]);
-    uint8_t issuerPercentage = ParseIssuerBonus(request.params[13]);
+    int64_t numTokens = ParseAmount(request.params[9], type);
+    int64_t deadline = ParseDeadline(request.params[10]);
+    uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[11]);
+    uint8_t issuerPercentage = ParseIssuerBonus(request.params[12]);
 
     // perform checks
     RequirePropertyName(name);
@@ -523,6 +521,7 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
     if (propertyId > 0)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name already exists");
 
+    std::string desiredName = "RPDx";
     uint32_t propertyIdDesired = pDbSpInfo->findSPByName(desiredName);
     if (propertyIdDesired == 0)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");

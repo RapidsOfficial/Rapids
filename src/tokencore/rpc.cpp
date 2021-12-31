@@ -1292,6 +1292,11 @@ static UniValue gettokencrowdsale(const JSONRPCRequest& request)
     response.pushKV("active", active);
     response.pushKV("issuer", sp.issuer);
     response.pushKV("propertyiddesired", (uint64_t) sp.property_desired);
+
+    CMPSPInfo::Entry desiredproperty;
+    pDbSpInfo->getSP(sp.property_desired, desiredproperty);
+    response.pushKV("tokendesired", desiredproperty.name);
+
     response.pushKV("tokensperunit", FormatMP(propertyId, sp.num_tokens));
     response.pushKV("earlybonus", sp.early_bird);
     response.pushKV("percenttoissuer", sp.percentage);
@@ -1376,6 +1381,11 @@ static UniValue gettokenactivecrowdsales(const JSONRPCRequest& request)
         responseObj.pushKV("name", sp.name);
         responseObj.pushKV("issuer", sp.issuer);
         responseObj.pushKV("propertyiddesired", (uint64_t) sp.property_desired);
+
+        CMPSPInfo::Entry desiredproperty;
+        pDbSpInfo->getSP(sp.property_desired, desiredproperty);
+        responseObj.pushKV("tokendesired", desiredproperty.name);
+
         responseObj.pushKV("tokensperunit", FormatMP(propertyId, sp.num_tokens));
         responseObj.pushKV("earlybonus", sp.early_bird);
         responseObj.pushKV("percenttoissuer", sp.percentage);

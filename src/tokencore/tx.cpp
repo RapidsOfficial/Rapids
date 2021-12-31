@@ -42,10 +42,13 @@ using namespace mastercore;
 
 static const std::regex IPFS_CHARACTERS("Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,}");
 static const std::regex PROTECTED_NAMES("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
-static const std::regex TOKEN_NAME_CHARACTERS("^[A-Z0-9._]{3,25}$");
+static const std::regex TOKEN_NAME_CHARACTERS("^[r]?[A-Z0-9._]{3,25}$");
 
 bool IsTokenNameValid(const std::string& name)
 {
+    if (name == "RPDx")
+        return true;
+
     return std::regex_match(name, TOKEN_NAME_CHARACTERS)
         && !std::regex_match(name, PROTECTED_NAMES);
 }
@@ -1697,6 +1700,20 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
         PrintToLog("%s(): rejected: property %d does not exist\n", __func__, property);
         return (PKT_ERROR_SP -24);
     }
+
+
+    // Allow only RPDx as desired property
+    uint32_t RPDxPropertyId = pDbSpInfo->findSPByName("RPDx");
+    if (RPDxPropertyId == 0) {
+        PrintToLog("%s(): rejected: RPDx not issued yet\n", __func__);
+        return (PKT_ERROR_SP -25);
+    }
+
+    if (property != RPDxPropertyId) {
+        PrintToLog("%s(): rejected: desired token must be RPDx\n", __func__);
+        return (PKT_ERROR_SP -26);
+    }
+
 
     if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type && TOKEN_PROPERTY_TYPE_DIVISIBLE != prop_type) {
         PrintToLog("%s(): rejected: invalid property type: %d\n", __func__, prop_type);

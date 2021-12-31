@@ -89,7 +89,7 @@ CreateMPDialog::CreateMPDialog(QWidget *parent) :
     initCssEditLine(ui->ipfsLineEdit, true);
 
     ui->amountLineEdit->setPlaceholderText("Enter Indivisible Amount");
-    ui->nameLineEdit->setPlaceholderText("Enter name");
+    ui->nameLineEdit->setPlaceholderText("Enter name (example TOKEN/rTOKEN)");
     ui->urlLineEdit->setPlaceholderText("Enter website URL (optional)");
     ui->categoryLineEdit->setPlaceholderText("Enter category (optional)");
     ui->subcategoryLineEdit->setPlaceholderText("Enter subcategory (optional)");
