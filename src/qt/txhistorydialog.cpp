@@ -326,6 +326,7 @@ int TXHistoryDialog::PopulateHistoryMap()
             displayAmount = "N/A";
             if (htxo.valid) {
                 uint32_t propertyId = pDbSpInfo->findSPByTX(txHash);
+                displayAmount = getTokenLabel(propertyId);
                 if (type == TOKEN_TYPE_CREATE_PROPERTY_FIXED) displayAmount = FormatShortMP(propertyId, getTotalTokens(propertyId)) + getTokenLabel(propertyId);
             }
         }
@@ -551,11 +552,11 @@ std::string TXHistoryDialog::shrinkTxType(int txType, bool *fundsMoved)
         case TOKEN_TYPE_METADEX_CANCEL_PAIR:
         case TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM:
             displayType = "MetaDEx Cancel"; *fundsMoved = false; break;
-        case TOKEN_TYPE_CREATE_PROPERTY_FIXED: displayType = "Create Property"; break;
-        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: displayType = "Create Property"; *fundsMoved = false; break;
+        case TOKEN_TYPE_CREATE_PROPERTY_FIXED: displayType = "Create Token Fixed"; break;
+        case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: displayType = "Create Token Crowdsale"; *fundsMoved = false; break;
         case TOKEN_TYPE_PROMOTE_PROPERTY: displayType = "Promo Property"; break;
         case TOKEN_TYPE_CLOSE_CROWDSALE: displayType = "Close Crowdsale"; *fundsMoved = false; break;
-        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: displayType = "Create Property"; *fundsMoved = false; break;
+        case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: displayType = "Create Token Managed"; *fundsMoved = false; break;
         case TOKEN_TYPE_GRANT_PROPERTY_TOKENS: displayType = "Grant Tokens"; break;
         case TOKEN_TYPE_REVOKE_PROPERTY_TOKENS: displayType = "Revoke Tokens"; break;
         case TOKEN_TYPE_CHANGE_ISSUER_ADDRESS: displayType = "Change Issuer"; *fundsMoved = false; break;
