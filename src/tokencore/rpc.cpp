@@ -104,6 +104,7 @@ void MetaDexObjectToJSON(const CMPMetaDEx& obj, UniValue& metadex_obj)
     metadex_obj.pushKV("txid", obj.getHash().GetHex());
     if (obj.getAction() == 4) metadex_obj.pushKV("ecosystem", isTestEcosystemProperty(obj.getProperty()) ? "test" : "main");
     metadex_obj.pushKV("propertyidforsale", (uint64_t) obj.getProperty());
+    metadex_obj.pushKV("propertynameforsale", getPropertyName(obj.getProperty()));
 
     CMPSPInfo::Entry saleproperty;
     pDbSpInfo->getSP(obj.getProperty(), saleproperty);
@@ -113,6 +114,7 @@ void MetaDexObjectToJSON(const CMPMetaDEx& obj, UniValue& metadex_obj)
     metadex_obj.pushKV("amountforsale", FormatMP(obj.getProperty(), obj.getAmountForSale()));
     metadex_obj.pushKV("amountremaining", FormatMP(obj.getProperty(), obj.getAmountRemaining()));
     metadex_obj.pushKV("propertyiddesired", (uint64_t) obj.getDesProperty());
+    metadex_obj.pushKV("propertynamedesired", getPropertyName(obj.getDesProperty()));
 
     CMPSPInfo::Entry desiredproperty;
     pDbSpInfo->getSP(obj.getDesProperty(), desiredproperty);

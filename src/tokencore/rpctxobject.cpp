@@ -374,9 +374,15 @@ void populateRPCTypeMetaDExTrade(CMPTransaction& tokenObj, UniValue& txobj, bool
 
     // populate
     txobj.push_back(Pair("propertyidforsale", (uint64_t)tokenObj.getProperty()));
+
+    txobj.pushKV("propertynameforsale", getPropertyName(tokenObj.getProperty()));
+
     txobj.push_back(Pair("propertyidforsaleisdivisible", propertyIdForSaleIsDivisible));
     txobj.push_back(Pair("amountforsale", FormatMP(tokenObj.getProperty(), tokenObj.getAmount())));
     txobj.push_back(Pair("propertyiddesired", (uint64_t)metaObj.getDesProperty()));
+
+    txobj.pushKV("propertynamedesired", getPropertyName(metaObj.getDesProperty()));
+
     txobj.push_back(Pair("propertyiddesiredisdivisible", propertyIdDesiredIsDivisible));
     txobj.push_back(Pair("amountdesired", FormatMP(metaObj.getDesProperty(), metaObj.getAmountDesired())));
     txobj.push_back(Pair("unitprice", unitPriceStr));
