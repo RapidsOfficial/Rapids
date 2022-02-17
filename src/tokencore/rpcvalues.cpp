@@ -3,6 +3,8 @@
 #include "tokencore/createtx.h"
 #include "tokencore/parse_string.h"
 #include "tokencore/walletutils.h"
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
 
 #include "base58.h"
 #include "core_io.h"
@@ -25,10 +27,18 @@ using mastercore::StrToInt64;
 
 std::string ParseAddress(const UniValue& value)
 {
-    CTxDestination address = DecodeDestination(value.get_str());
+    std::string rawAddress = value.get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress);
     if (!IsValidDestination(address)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
     }
+
     return EncodeDestination(address);
 }
 

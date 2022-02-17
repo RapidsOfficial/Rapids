@@ -26,6 +26,9 @@
 #include "wallet/walletdb.h"
 #endif
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include <stdint.h>
 
 #include <boost/assign/list_of.hpp>
@@ -37,7 +40,14 @@ extern std::vector<CSporkDef> sporkDefs;
 static bool getAddressesFromParams(const UniValue& params, std::vector<std::pair<uint160, int> > &addresses)
 {
     if (params[0].isStr()) {
-        CTxDestination dest = DecodeDestination(params[0].get_str());
+        std::string rawAddress = params[0].get_str();
+        if (IsUsernameValid(rawAddress)) {
+            std::string dbAddress = GetUsernameAddress(rawAddress);
+            if (dbAddress != "")
+                rawAddress = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(rawAddress);
         CScript scriptPubKey = GetScriptForDestination(dest);
         uint160 hashBytes;
         int addressType;
@@ -1057,6 +1067,13 @@ UniValue validateaddress(const JSONRPCRequest& request)
 
     // First check if it's a regular address
     bool isStakingAddress = false;
+
+    if (IsUsernameValid(strAddress)) {
+        std::string dbAddress = GetUsernameAddress(strAddress);
+        if (dbAddress != "")
+            strAddress = dbAddress;
+    }
+
     CTxDestination dest = DecodeDestination(strAddress, isStakingAddress);
     bool isValid = IsValidDestination(dest);
 
@@ -1209,6 +1226,12 @@ UniValue verifymessage(const JSONRPCRequest& request)
     std::string strAddress = request.params[0].get_str();
     std::string strSign = request.params[1].get_str();
     std::string strMessage = request.params[2].get_str();
+
+    if (IsUsernameValid(strAddress)) {
+        std::string dbAddress = GetUsernameAddress(strAddress);
+        if (dbAddress != "")
+            strAddress = dbAddress;
+    }
 
     CTxDestination destination = DecodeDestination(strAddress);
     if (!IsValidDestination(destination))

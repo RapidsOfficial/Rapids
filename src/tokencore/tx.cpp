@@ -43,6 +43,8 @@ using namespace mastercore;
 static const std::regex IPFS_CHARACTERS("Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,}");
 static const std::regex PROTECTED_NAMES("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
 static const std::regex TOKEN_NAME_CHARACTERS("^[r]?[A-Z0-9._]{3,25}$");
+static const std::regex USERNAME_CHARACTERS("^[a-z0-9._]{3,25}.rpd$");
+static const std::regex PROTECTED_USERNAMES("^rapids.rpd$|^rpd.rpd$");
 
 bool IsTokenNameValid(const std::string& name)
 {
@@ -51,6 +53,12 @@ bool IsTokenNameValid(const std::string& name)
 
     return std::regex_match(name, TOKEN_NAME_CHARACTERS)
         && !std::regex_match(name, PROTECTED_NAMES);
+}
+
+bool IsUsernameValid(const std::string& username)
+{
+    return std::regex_match(username, USERNAME_CHARACTERS)
+        && !std::regex_match(username, PROTECTED_USERNAMES);
 }
 
 bool IsTokenIPFSValid(const std::string& string)
@@ -1604,10 +1612,22 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -71);
     }
 
-    if (!IsTokenNameValid(name))
+    bool isToken = IsTokenNameValid(name);
+    bool isUsername = IsUsernameValid(name);
+
+    if (!isToken && !isUsername)
     {
         PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
         return (PKT_ERROR_SP -72);
+    }
+
+    if (isUsername)
+    {
+        if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type || nValue != 1)
+        {
+            PrintToLog("%s(): rejected: only 1 username token can be created\n", __func__);
+            return (PKT_ERROR_SP -23);
+        }
     }
 
     CAmount nMandatory = 1 * COIN;

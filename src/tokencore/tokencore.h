@@ -226,4 +226,6 @@ void PrintFreezeState();
 
 }
 
+std::string GetUsernameAddress(std::string username);
+
 #endif // TOKENCORE_TOKENCORE_H

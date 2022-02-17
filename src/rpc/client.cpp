@@ -186,7 +186,6 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "listtokentransactions", 2 },
         { "listtokentransactions", 3 },
         { "listtokentransactions", 4 },
-        { "getalltokenbalances", 0 },
         { "listblocktokentransactions", 0 },
         { "listblockstokentransactions", 0 },
         { "listblockstokentransactions", 1 },

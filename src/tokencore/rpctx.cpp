@@ -596,7 +596,7 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     if (propertyId > 0)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name already exists");
 
-    if (!IsTokenNameValid(name))
+    if (!IsTokenNameValid(name) && !IsUsernameValid(name))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token name is invalid");
 
     if (!IsTokenIPFSValid(data))

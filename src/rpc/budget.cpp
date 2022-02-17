@@ -17,6 +17,9 @@
 #include "rpc/server.h"
 #include "utilmoneystr.h"
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include <univalue.h>
 
 #include <fstream>
@@ -79,7 +82,14 @@ void checkBudgetInputs(const UniValue& params, std::string &strProposalName, std
     if ((nBlockStart < nBlockMin) || ((nBlockStart % budgetCycleBlocks) != 0))
         throw JSONRPCError(RPC_INVALID_PARAMETER, strprintf("Invalid block start - must be a budget cycle block. Next valid block: %d", nBlockMin));
 
-    address = DecodeDestination(params[4].get_str());
+    std::string rawAddress = params[4].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    address = DecodeDestination(rawAddress);
     if (!IsValidDestination(address))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 

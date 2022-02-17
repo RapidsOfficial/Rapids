@@ -627,7 +627,7 @@ static UniValue getalltokenbalances(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "getalltokenbalances propertyid\n"
+            "getalltokenbalances name\n"
             "\nReturns a list of token balances for a given token identified by name.\n"
             "\nArguments:\n"
             "1. name           (string, required) the token name\n"
@@ -642,10 +642,9 @@ static UniValue getalltokenbalances(const JSONRPCRequest& request)
             "  ...\n"
             "]\n"
             "\nExamples:\n"
-            + HelpExampleCli("getalltokenbalances", "1")
-            + HelpExampleRpc("getalltokenbalances", "1")
+            + HelpExampleCli("getalltokenbalances", "TOKEN")
+            + HelpExampleRpc("getalltokenbalances", "TOKEN")
         );
-
 
     uint32_t propertyId = pDbSpInfo->findSPByName(request.params[0].get_str());
     if (!propertyId)

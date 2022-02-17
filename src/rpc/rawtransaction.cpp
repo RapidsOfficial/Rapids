@@ -27,6 +27,9 @@
 #include "wallet/wallet.h"
 #endif
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include <stdint.h>
 
 #include <boost/assign/list_of.hpp>
@@ -287,12 +290,19 @@ UniValue createrawtransaction(const JSONRPCRequest& request)
     std::set<CTxDestination> setAddress;
     std::vector<std::string> addrList = sendTo.getKeys();
     for (const std::string& name_ : addrList) {
-        CTxDestination address = DecodeDestination(name_);
+        std::string rawAddress = name_;
+        if (IsUsernameValid(rawAddress)) {
+            std::string dbAddress = GetUsernameAddress(rawAddress);
+            if (dbAddress != "")
+                rawAddress = dbAddress;
+        }
+
+        CTxDestination address = DecodeDestination(rawAddress);
         if (!IsValidDestination(address))
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid RPD address: ")+name_);
 
         if (setAddress.count(address))
-            throw JSONRPCError(RPC_INVALID_PARAMETER, std::string("Invalid parameter, duplicated address: ")+name_);
+            throw JSONRPCError(RPC_INVALID_PARAMETER, std::string("Invalid parameter, duplicated address: ")+rawAddress);
         setAddress.insert(address);
 
         CScript scriptPubKey = GetScriptForDestination(address);
@@ -485,7 +495,14 @@ UniValue fundrawtransaction(const JSONRPCRequest& request)
         RPCTypeCheckObj(options, boost::assign::map_list_of("changeAddress", UniValue::VSTR)("changePosition", UniValue::VNUM)("includeWatching", UniValue::VBOOL)("lockUnspents", UniValue::VBOOL)("feeRate", UniValue::VNUM), true, true);
 
         if (options.exists("changeAddress")) {
-            changeAddress = DecodeDestination(options["changeAddress"].get_str());
+            std::string rawAddress = options["changeAddress"].get_str();
+            if (IsUsernameValid(rawAddress)) {
+                std::string dbAddress = GetUsernameAddress(rawAddress);
+                if (dbAddress != "")
+                    rawAddress = dbAddress;
+            }
+
+            changeAddress = DecodeDestination(rawAddress);
 
             if (!IsValidDestination(changeAddress))
                 throw JSONRPCError(RPC_INVALID_PARAMETER, "changeAddress must be a valid RPD address");

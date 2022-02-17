@@ -164,6 +164,33 @@ std::map<uint32_t, std::list<std::string>> global_token_addresses;
 //! Vector containing a list of properties relative to the wallet
 std::set<uint32_t> global_wallet_property_list;
 
+std::string GetUsernameAddress(std::string username) {
+    uint32_t propertyId = pDbSpInfo->findSPByName(username);
+    std::string address = "";
+
+    if (IsUsernameValid(username) && propertyId) {
+        for (std::unordered_map<std::string, CMPTally>::iterator it = mp_tally_map.begin(); it != mp_tally_map.end(); ++it) {
+            uint32_t id = 0;
+            bool includeAddress = false;
+            address = it->first;
+            (it->second).init();
+            while (0 != (id = (it->second).next())) {
+                if (id == propertyId) {
+                    includeAddress = true;
+                    break;
+                }
+            }
+            if (!includeAddress) {
+                continue; // ignore this address, has never transacted in this propertyId
+            }
+
+            break;
+        }
+    }
+
+    return address;
+}
+
 std::string mastercore::strMPProperty(uint32_t propertyId)
 {
     std::string str = "*unknown*";

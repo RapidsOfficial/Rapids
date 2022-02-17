@@ -17,6 +17,9 @@
 #include "utiltime.h"
 #include "wallet/wallet.h"
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include <fstream>
 #include <secp256k1.h>
 #include <stdint.h>
@@ -213,7 +216,15 @@ UniValue importaddress(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(request.params[0].get_str(), isStakingAddress);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress, isStakingAddress);
 
     if (IsValidDestination(dest)) {
         if (fP2SH)
@@ -411,6 +422,13 @@ UniValue dumpprivkey(const JSONRPCRequest& request)
     EnsureWalletIsUnlocked();
 
     std::string strAddress = request.params[0].get_str();
+
+    if (IsUsernameValid(strAddress)) {
+        std::string dbAddress = GetUsernameAddress(strAddress);
+        if (dbAddress != "")
+            strAddress = dbAddress;
+    }
+
     CTxDestination dest = DecodeDestination(strAddress);
     if (!IsValidDestination(dest))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");

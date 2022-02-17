@@ -21,6 +21,9 @@
 #include "walletdb.h"
 #include "zpivchain.h"
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include "sapling/key_io_sapling.h"
 
 #include <stdint.h>
@@ -186,13 +189,20 @@ UniValue getaddressinfo(const JSONRPCRequest& request)
 
     UniValue ret(UniValue::VOBJ);
 
-    CTxDestination dest = DecodeDestination(request.params[0].get_str());
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress);
     // Make sure the destination is valid
     if (!IsValidDestination(dest)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
     }
 
-    std::string currentAddress = request.params[0].get_str();
+    std::string currentAddress = rawAddress;
     ret.pushKV("address", currentAddress);
 
     CScript scriptPubKey = GetScriptForDestination(dest);
@@ -553,13 +563,21 @@ UniValue delegatoradd(const JSONRPCRequest& request)
 
 
     bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(request.params[0].get_str(), isStakingAddress);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress, isStakingAddress);
     if (!IsValidDestination(dest) || isStakingAddress)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
     const std::string strLabel = (request.params.size() > 1 ? request.params[1].get_str() : "");
 
-    CKeyID keyID = boost::get<CKeyID>(DecodeDestination(request.params[0].get_str()));
+    CKeyID keyID = boost::get<CKeyID>(DecodeDestination(rawAddress));
     if (!keyID)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from RPD address");
 
@@ -585,7 +603,15 @@ UniValue delegatorremove(const JSONRPCRequest& request)
             HelpExampleRpc("delegatorremove", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
 
     bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(request.params[0].get_str(), isStakingAddress);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress, isStakingAddress);
     if (!IsValidDestination(dest) || isStakingAddress)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -831,7 +857,14 @@ UniValue setlabel(const JSONRPCRequest& request)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CTxDestination dest = DecodeDestination(request.params[0].get_str());
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress);
     if (!IsValidDestination(dest))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -890,7 +923,14 @@ UniValue getaccount(const JSONRPCRequest& request)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CTxDestination address = DecodeDestination(request.params[0].get_str());
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress);
     if (!IsValidDestination(address))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -1007,7 +1047,15 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     bool isStaking = false;
-    CTxDestination address = DecodeDestination(request.params[0].get_str(), isStaking);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(address) || isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -1046,7 +1094,15 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     // Get Staking Address
     bool isStaking = false;
-    CTxDestination stakeAddr = DecodeDestination(params[0].get_str(), isStaking);
+
+    std::string rawAddress = params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination stakeAddr = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(stakeAddr) || !isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD staking address");
 
@@ -1085,7 +1141,15 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
     if (params.size() > 2 && !params[2].isNull() && !params[2].get_str().empty()) {
         // Address provided
         bool isStaking = false;
-        CTxDestination dest = DecodeDestination(params[2].get_str(), isStaking);
+
+        std::string rawAddress = params[2].get_str();
+        if (IsUsernameValid(rawAddress)) {
+            std::string dbAddress = GetUsernameAddress(rawAddress);
+            if (dbAddress != "")
+                rawAddress = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(rawAddress, isStaking);
         if (!IsValidDestination(dest) || isStaking)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD spending address");
         ownerKey = *boost::get<CKeyID>(&dest);
@@ -1100,7 +1164,7 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
                     "WARNING: Only the owner of the key to owneraddress will be allowed to spend these coins after the delegation.";
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, errMsg);
         }
-        ownerAddressStr = params[2].get_str();
+        ownerAddressStr = rawAddress;
     } else {
         // Get new owner address from keypool
         CTxDestination ownerAddr = GetNewAddressFromLabel("delegated", NullUniValue);
@@ -1273,7 +1337,15 @@ UniValue sendtoaddressix(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     bool isStaking = false;
-    CTxDestination address = DecodeDestination(request.params[0].get_str(), isStaking);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(address) || isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -1372,6 +1444,12 @@ UniValue signmessage(const JSONRPCRequest& request)
     std::string strAddress = request.params[0].get_str();
     std::string strMessage = request.params[1].get_str();
 
+    if (IsUsernameValid(strAddress)) {
+        std::string dbAddress = GetUsernameAddress(strAddress);
+        if (dbAddress != "")
+            strAddress = dbAddress;
+    }
+
     CTxDestination dest = DecodeDestination(strAddress);
     if (!IsValidDestination(dest))
         throw JSONRPCError(RPC_TYPE_ERROR, "Invalid address");
@@ -1422,7 +1500,15 @@ UniValue getreceivedbyaddress(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     // pivx address
-    CTxDestination address = DecodeDestination(request.params[0].get_str());
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress);
     if (!IsValidDestination(address))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
     CScript scriptPubKey = GetScriptForDestination(address);
@@ -1780,7 +1866,15 @@ UniValue sendfrom(const JSONRPCRequest& request)
 
     std::string strAccount = LabelFromValue(request.params[0]);
     bool isStaking = false;
-    CTxDestination address = DecodeDestination(request.params[1].get_str(), isStaking);
+
+    std::string rawAddress = request.params[1].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(address) || isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
     CAmount nAmount = AmountFromValue(request.params[2]);
@@ -1900,9 +1994,16 @@ UniValue sendmany(const JSONRPCRequest& request)
 
     CAmount totalAmount = 0;
     std::vector<std::string> keys = sendTo.getKeys();
-    for (const std::string& name_ : keys) {
+    for (std::string& name_ : keys) {
         bool isStaking = false;
-        CTxDestination dest = DecodeDestination(name_,isStaking);
+
+        if (IsUsernameValid(name_)) {
+            std::string dbAddress = GetUsernameAddress(name_);
+            if (dbAddress != "")
+                name_ = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(name_, isStaking);
         if (!IsValidDestination(dest) || isStaking)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid RPD address: ")+name_);
 
@@ -2026,7 +2127,14 @@ UniValue ListReceived(const UniValue& params, bool by_label)
     bool has_filtered_address = false;
     CTxDestination filtered_address = CNoDestination();
     if (!by_label && params.size() > 3) {
-        CTxDestination dest = DecodeDestination(params[3].get_str());
+        std::string rawAddress = params[3].get_str();
+        if (IsUsernameValid(rawAddress)) {
+            std::string dbAddress = GetUsernameAddress(rawAddress);
+            if (dbAddress != "")
+                rawAddress = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(rawAddress);
         if (!IsValidDestination(dest)) {
             throw JSONRPCError(RPC_WALLET_ERROR, "address_filter parameter was invalid");
         }
@@ -3195,7 +3303,15 @@ UniValue listunspent(const JSONRPCRequest& request)
         UniValue inputs = request.params[2].get_array();
         for (unsigned int inx = 0; inx < inputs.size(); inx++) {
             const UniValue& input = inputs[inx];
-            CTxDestination dest = DecodeDestination(input.get_str());
+
+            std::string rawAddress = input.get_str();
+            if (IsUsernameValid(rawAddress)) {
+                std::string dbAddress = GetUsernameAddress(rawAddress);
+                if (dbAddress != "")
+                    rawAddress = dbAddress;
+            }
+
+            CTxDestination dest = DecodeDestination(rawAddress);
             if (!IsValidDestination(dest))
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid RPD address: ") + input.get_str());
             if (destinations.count(dest))

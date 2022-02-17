@@ -314,6 +314,7 @@ public:
 };
 
 bool IsTokenNameValid(const std::string& name);
+bool IsUsernameValid(const std::string& username);
 bool IsTokenIPFSValid(const std::string& string);
 
 #endif // TOKENCORE_TX_H
