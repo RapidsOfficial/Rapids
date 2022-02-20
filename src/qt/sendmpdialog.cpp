@@ -24,6 +24,7 @@
 #include "tokencore/utilsbitcoin.h"
 #include "tokencore/wallettxbuilder.h"
 #include "tokencore/walletutils.h"
+#include "tokencore/tx.h"
 
 #include "amount.h"
 #include "base58.h"
@@ -256,6 +257,16 @@ void SendMPDialog::sendMPTransaction()
 
     // obtain the entered recipient address
     std::string strRefAddress = ui->sendToLineEdit->text().toStdString();
+    std::string username;
+
+    if (IsUsernameValid(strRefAddress)) {
+        std::string dbAddress = GetUsernameAddress(strRefAddress);
+        if (dbAddress != "") {
+            username = " (" + strRefAddress + ")";
+            strRefAddress = dbAddress;
+        }
+    }
+
     // push recipient address into a CTxDestination type and check validity
     CTxDestination refAddress;
     if (false == strRefAddress.empty()) { refAddress = DecodeDestination(strRefAddress); }
@@ -326,7 +337,7 @@ void SendMPDialog::sendMPTransaction()
     std::string propDetails = getPropertyName(propertyId).c_str();
     std::string spNum = strprintf("%d", propertyId);
     propDetails += " (#" + spNum + ")";
-    strMsgText += "From: " + EncodeDestination(fromAddress) + "\nTo: " + EncodeDestination(refAddress) + "\nProperty: " + propDetails + "\nAmount that will be sent: ";
+    strMsgText += "From: " + EncodeDestination(fromAddress) + "\nTo: " + EncodeDestination(refAddress) + username + "\nToken: " + propDetails + "\nAmount that will be sent: ";
     if (divisible) { strMsgText += FormatDivisibleMP(sendAmount); } else { strMsgText += FormatIndivisibleMP(sendAmount); }
     strMsgText += "\n\nAre you sure you wish to send this transaction?";
     QString msgText = QString::fromStdString(strMsgText);

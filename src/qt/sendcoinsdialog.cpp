@@ -258,7 +258,8 @@ void SendCoinsDialog::on_sendButton_clicked()
         QString amount = "<b>" + BitcoinUnits::formatHtmlWithUnit(model->getOptionsModel()->getDisplayUnit(), rcp.amount);
         amount.append("</b>");
         // generate monospace address string
-        QString address = "<span style='font-family: monospace;'>" + rcp.address;
+
+        QString address = "<span style='font-family: monospace;'>" + rcp.address + username;
         address.append("</span>");
 
         QString recipientElement;

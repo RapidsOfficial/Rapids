@@ -162,6 +162,13 @@ SendCoinsRecipient SendCoinsEntry::getValue()
     if (recipient.paymentRequest.IsInitialized())
         return recipient;
 
+    std::string rawAddress = params[4].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
     // Normal payment
     recipient.address = ui->payTo->text();
     recipient.label = ui->addAsLabel->text();

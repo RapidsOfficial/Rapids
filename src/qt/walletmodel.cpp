@@ -12,6 +12,8 @@
 #include "recentrequeststablemodel.h"
 #include "transactiontablemodel.h"
 
+#include "tokencore/tx.h"
+
 #include "base58.h"
 #include "db.h"
 #include "keystore.h"
@@ -288,12 +290,12 @@ void WalletModel::updateWatchOnlyFlag(bool fHaveWatchonly)
 bool WalletModel::validateAddress(const QString& address)
 {
     // Only regular base58 addresses accepted here
-    return IsValidDestinationString(address.toStdString(), false);
+    return IsUsernameValid(address.toStdString()) || IsValidDestinationString(address.toStdString(), false);
 }
 
 bool WalletModel::validateAddress(const QString& address, bool fStaking)
 {
-    return IsValidDestinationString(address.toStdString(), fStaking);
+    return IsUsernameValid(address.toStdString()) || IsValidDestinationString(address.toStdString(), fStaking);
 }
 
 bool WalletModel::updateAddressBookLabels(const CTxDestination& dest, const std::string& strName, const std::string& strPurpose)

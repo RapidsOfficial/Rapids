@@ -133,7 +133,7 @@ void TxDetailDialog::setData(WalletModel *model, WalletModelTransaction &tx)
             ui->labelSend->setText(tr("Delegating to"));
         }
         if (recipient.label.isEmpty()) { // If there is no label, then do not show the blank space.
-            ui->textSendLabel->setText(recipient.address);
+            ui->textSendLabel->setText(recipient.address + recipient.username);
             ui->textSend->setVisible(false);
         } else {
             ui->textSend->setText(recipient.address);
