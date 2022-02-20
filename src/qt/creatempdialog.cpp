@@ -251,7 +251,7 @@ void CreateMPDialog::sendMPTransaction()
     }
 
     std::string name = ui->nameLineEdit->text().toStdString();
-    if (!IsTokenNameValid(name)) {
+    if (!IsTokenNameValid(name) && !IsUsernameValid(name)) {
         CriticalDialog("Unable to issue token",
         "The name entered is not valid.\n\nPlease double-check the transction details thoroughly before retrying to issue token.");
         return;
