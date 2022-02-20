@@ -30,6 +30,7 @@
 #include "qt/sendmpdialog.h"
 #include "qt/creatempdialog.h"
 #include "qt/balancesdialog.h"
+#include "qt/usernamesdialog.h"
 #include "qt/metadexdialog.h"
 #include "qt/rpcconsole.h"
 
@@ -148,6 +149,7 @@ private:
     SettingsWidget* settingsWidget = nullptr;
 
     BalancesDialog *balancesPage = nullptr;
+    UsernamesDialog *usernamesPage = nullptr;
     TXHistoryDialog *tokensHistory = nullptr;
     CreateMPDialog *createTokenPage = nullptr;
     SendMPDialog *sendTokenPage = nullptr;

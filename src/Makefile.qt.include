@@ -28,6 +28,7 @@ QT_FORMS_UI = \
   qt/forms/metadexdialog.ui \
   qt/forms/tradehistorydialog.ui \
   qt/forms/balancesdialog.ui \
+  qt/forms/usernamesdialog.ui \
   qt/rapids/forms/loadingdialog.ui \
   qt/rapids/forms/snackbar.ui \
   qt/rapids/forms/navmenuwidget.ui \
@@ -116,6 +117,7 @@ QT_MOC_CPP = \
   qt/moc_lookuptxdialog.cpp \
   qt/moc_txhistorydialog.cpp \
   qt/moc_balancesdialog.cpp \
+  qt/moc_usernamesdialog.cpp \
   qt/moc_metadexdialog.cpp \
   qt/moc_metadexcanceldialog.cpp \
   qt/moc_tradehistorydialog.cpp \
@@ -241,6 +243,7 @@ BITCOIN_QT_H = \
   qt/lookuptxdialog.h \
   qt/txhistorydialog.h \
   qt/balancesdialog.h \
+  qt/usernamesdialog.h \
   qt/tokencore_init.h \
   qt/metadexdialog.h \
   qt/metadexcanceldialog.h \
@@ -583,6 +586,7 @@ BITCOIN_QT_WALLET_CPP = \
   qt/lookuptxdialog.cpp \
   qt/txhistorydialog.cpp \
   qt/balancesdialog.cpp \
+  qt/usernamesdialog.cpp \
   qt/metadexdialog.cpp \
   qt/metadexcanceldialog.cpp \
   qt/tradehistorydialog.cpp \
