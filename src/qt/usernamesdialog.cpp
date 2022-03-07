@@ -71,7 +71,7 @@ UsernamesDialog::UsernamesDialog(QWidget *parent) :
     ui->balancesTable->setAlternatingRowColors(true);
 
     // do an initial population
-    PopulateBalances();
+    PopulateUsernames();
 
     // initial resizing
     // ui->balancesTable->resizeColumnToContents(0);
@@ -109,7 +109,7 @@ UsernamesDialog::~UsernamesDialog()
 void UsernamesDialog::reinitToken()
 {
     ui->balancesTable->setRowCount(0);
-    PopulateBalances(); // 2147483646 = summary (last possible ID for test eco props)
+    PopulateUsernames(); // 2147483646 = summary (last possible ID for test eco props)
 }
 
 void UsernamesDialog::setClientModel(ClientModel *model)
@@ -149,7 +149,7 @@ void UsernamesDialog::AddRow(const std::string& label, const std::string& addres
     ui->balancesTable->setItem(workingRow, 1, addressCell);
 }
 
-void UsernamesDialog::PopulateBalances()
+void UsernamesDialog::PopulateUsernames()
 {
     ui->balancesTable->setRowCount(0); // fresh slate (note this will automatically cleanup all existing QWidgetItems in the table)
 
@@ -160,9 +160,11 @@ void UsernamesDialog::PopulateBalances()
         uint32_t propertyId = *it;
         std::string username = getPropertyName(propertyId).c_str();
 
-        if (IsUsernameValid(username)) {
-            std::string address = GetUsernameAddress(username);
-            AddRow(address, username);
+        if (global_balance_money[propertyId] > 0 || global_balance_reserved[propertyId] > 0) {
+            if (IsUsernameValid(username)) {
+                std::string address = GetUsernameAddress(username);
+                AddRow(address, username);
+            }
         }
     }
 }
@@ -188,7 +190,7 @@ void UsernamesDialog::balancesCopyCol1()
 
 void UsernamesDialog::balancesUpdated()
 {
-    PopulateBalances();
+    PopulateUsernames();
 }
 
 // We override the virtual resizeEvent of the QWidget to adjust tables column

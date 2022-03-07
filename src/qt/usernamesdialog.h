@@ -35,7 +35,7 @@ public:
     void setClientModel(ClientModel *model);
     void setWalletModel(WalletModel *model);
     void AddRow(const std::string& label, const std::string& address);
-    void PopulateBalances();
+    void PopulateUsernames();
 
 private:
     Ui::usernamesDialog *ui;

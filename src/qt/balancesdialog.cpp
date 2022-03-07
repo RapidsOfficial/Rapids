@@ -226,7 +226,9 @@ void BalancesDialog::PopulateBalances(unsigned int propertyId)
             std::string spName = getPropertyName(propertyId).c_str();
             std::string available = FormatMP(propertyId, global_balance_money[propertyId]);
             std::string reserved = FormatMP(propertyId, global_balance_reserved[propertyId]);
-            AddRow(spId, spName, reserved, available);
+
+            if (global_balance_money[propertyId] > 0 || global_balance_reserved[propertyId] > 0)
+                AddRow(spId, spName, reserved, available);
         }
     } else {
         ui->balancesTable->setHorizontalHeaderItem(0, new QTableWidgetItem("Label"));
