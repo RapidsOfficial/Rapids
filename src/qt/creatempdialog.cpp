@@ -83,13 +83,15 @@ CreateMPDialog::CreateMPDialog(QWidget *parent) :
     setCssProperty(ui->ipfsLabel, "text-subtitle", false);
 
     initCssEditLine(ui->nameLineEdit, true);
+    initCssEditLine(ui->tickerLineEdit, true);
     initCssEditLine(ui->urlLineEdit, true);
     initCssEditLine(ui->categoryLineEdit, true);
     initCssEditLine(ui->subcategoryLineEdit, true);
     initCssEditLine(ui->ipfsLineEdit, true);
 
     ui->amountLineEdit->setPlaceholderText("Enter Indivisible Amount");
-    ui->nameLineEdit->setPlaceholderText("Enter name (example TOKEN/rTOKEN)");
+    ui->nameLineEdit->setPlaceholderText("Enter name");
+    ui->tickerLineEdit->setPlaceholderText("Enter ticker (example TOKEN/rTOKEN)");
     ui->urlLineEdit->setPlaceholderText("Enter website URL (optional)");
     ui->categoryLineEdit->setPlaceholderText("Enter category (optional)");
     ui->subcategoryLineEdit->setPlaceholderText("Enter subcategory (optional)");
@@ -251,15 +253,17 @@ void CreateMPDialog::sendMPTransaction()
     }
 
     std::string name = ui->nameLineEdit->text().toStdString();
-    if (!IsTokenNameValid(name) && !IsUsernameValid(name)) {
+
+    std::string ticker = ui->tickerLineEdit->text().toStdString();
+    if (!IsTokenTickerValid(ticker) && !IsUsernameValid(ticker)) {
         CriticalDialog("Unable to issue token",
         "The name entered is not valid.\n\nPlease double-check the transction details thoroughly before retrying to issue token.");
         return;
     }
 
-    if (pDbSpInfo->findSPByName(name) > 0) {
+    if (pDbSpInfo->findSPByTicker(ticker) > 0) {
         CriticalDialog("Unable to issue token",
-        "Token with this name already exists.\n\nPlease double-check the transction details thoroughly before retrying to issue token.");
+        "Token with this ticker already exists.\n\nPlease double-check the transction details thoroughly before retrying to issue token.");
         return;
     }
 
@@ -290,6 +294,7 @@ void CreateMPDialog::sendMPTransaction()
 
     strMsgText += "From: " + EncodeDestination(fromAddress);
     strMsgText += "\nName: " + name;
+    strMsgText += "\nTicker: " + ticker;
 
     if (url != "")
         strMsgText += "\nURL: " + url;
@@ -307,7 +312,7 @@ void CreateMPDialog::sendMPTransaction()
 
     if (divisible) { strMsgText += FormatDivisibleMP(issueAmount); } else { strMsgText += FormatIndivisibleMP(issueAmount); }
 
-    strMsgText += " " + name;
+    strMsgText += " " + name + "(" + ticker + ")";
 
     strMsgText += "\n\nAre you sure you wish to issue this token?";
     QString msgText = QString::fromStdString(strMsgText);
@@ -336,7 +341,7 @@ void CreateMPDialog::sendMPTransaction()
     int type = divisible ? 2 : 1;
 
     // create a payload for the transaction
-    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(1, type, 0, category, subcategory, name, url, ipfs, issueAmount);
+    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(1, type, 0, category, subcategory, name, ticker, url, ipfs, issueAmount);
 
     // request the wallet build the transaction (and if needed commit it)
     uint256 txid;

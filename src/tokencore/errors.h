@@ -306,6 +306,10 @@ inline std::string error_str(int ec) {
           ec_str = "Tokens to issue and desired property are not in the same ecosystem";
           break;
 
+      case PKT_ERROR_SP -51:
+          ec_str = "Property ticker is empty";
+          break;
+
       case PKT_ERROR_SP -71:
           ec_str = "Token name already used";
           break;

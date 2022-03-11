@@ -98,6 +98,7 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
     implied_token.category = "N/A";
     implied_token.subcategory = "N/A";
     implied_token.name = "Reserved";
+    implied_token.ticker = "Reserved";
     implied_token.url = "N/A";
     implied_token.data = "Reserved";
 
@@ -108,6 +109,7 @@ CMPSPInfo::CMPSPInfo(const boost::filesystem::path& path, bool fWipe)
     implied_ttoken.category = "N/A";
     implied_ttoken.subcategory = "N/A";
     implied_ttoken.name = "Reserved";
+    implied_ttoken.ticker = "Reserved";
     implied_ttoken.url = "N/A";
     implied_ttoken.data = "Reserved";
 
@@ -235,7 +237,7 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
 
     // DB key for identifier lookup entry by name
     CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
-    ssNameIndexKey << std::make_pair('n', info.name);
+    ssNameIndexKey << std::make_pair('T', info.ticker);
     leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
 
     // DB value for name identifier
@@ -357,25 +359,25 @@ uint32_t CMPSPInfo::findSPByTX(const uint256& txid) const
     return propertyId;
 }
 
-uint32_t CMPSPInfo::findSPByName(const std::string& name) const
+uint32_t CMPSPInfo::findSPByTicker(const std::string& ticker) const
 {
     uint32_t propertyId = 0;
 
     // DB key for identifier lookup entry
-    CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
-    ssNameIndexKey << std::make_pair('n', name);
-    leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
+    CDataStream ssTickerIndexKey(SER_DISK, CLIENT_VERSION);
+    ssTickerIndexKey << std::make_pair('T', ticker);
+    leveldb::Slice slTickerIndexKey(&ssTickerIndexKey[0], ssTickerIndexKey.size());
 
     // DB value for identifier
-    std::string strNameIndexValue;
-    if (!pdb->Get(readoptions, slNameIndexKey, &strNameIndexValue).ok()) {
-        std::string strError = strprintf("property with name %s not found\n", name);
+    std::string strTickerIndexValue;
+    if (!pdb->Get(readoptions, slTickerIndexKey, &strTickerIndexValue).ok()) {
+        std::string strError = strprintf("property with ticker %s not found\n", ticker);
         PrintToLog("%s(): INFO: %s", __func__, strError);
         return 0;
     }
 
     try {
-        CDataStream ssValue(strNameIndexValue.data(), strNameIndexValue.data() + strNameIndexValue.size(), SER_DISK, CLIENT_VERSION);
+        CDataStream ssValue(strTickerIndexValue.data(), strTickerIndexValue.data() + strTickerIndexValue.size(), SER_DISK, CLIENT_VERSION);
         ssValue >> propertyId;
     } catch (const std::exception& e) {
         PrintToLog("%s(): ERROR: %s\n", __func__, e.what());
@@ -418,7 +420,7 @@ int64_t CMPSPInfo::popBlock(const uint256& block_hash)
                 leveldb::Slice slTxIndexKey(&ssTxIndexKey[0], ssTxIndexKey.size());
 
                 CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
-                ssNameIndexKey << std::make_pair('n', info.name);
+                ssNameIndexKey << std::make_pair('T', info.ticker);
                 leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
 
                 commitBatch.Delete(slSpKey);

@@ -71,6 +71,7 @@ private:
     char category[SP_STRING_FIELD_LEN];
     char subcategory[SP_STRING_FIELD_LEN];
     char name[SP_STRING_FIELD_LEN];
+    char ticker[SP_STRING_FIELD_LEN];
     char url[SP_STRING_FIELD_LEN];
     char data[SP_STRING_FIELD_LEN];
     uint64_t deadline;
@@ -313,7 +314,7 @@ public:
     }
 };
 
-bool IsTokenNameValid(const std::string& name);
+bool IsTokenTickerValid(const std::string& name);
 bool IsUsernameValid(const std::string& username);
 bool IsTokenIPFSValid(const std::string& string);
 

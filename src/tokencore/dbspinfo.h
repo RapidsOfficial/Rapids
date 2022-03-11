@@ -37,8 +37,8 @@
  *      uint32_t propertyId
  *
  *  Key:
- *      char 'n'
- *      std::string name
+ *      char 'T'
+ *      std::string ticker
  *  Value:
  *      uint32_t propertyId
  *
@@ -60,6 +60,7 @@ public:
         std::string category;
         std::string subcategory;
         std::string name;
+        std::string ticker;
         std::string url;
         std::string data;
         int64_t num_tokens;
@@ -160,7 +161,7 @@ public:
     bool getSP(uint32_t propertyId, Entry& info) const;
     bool hasSP(uint32_t propertyId) const;
     uint32_t findSPByTX(const uint256& txid) const;
-    uint32_t findSPByName(const std::string& name) const;
+    uint32_t findSPByTicker(const std::string& ticker) const;
 
     int64_t popBlock(const uint256& block_hash);
 

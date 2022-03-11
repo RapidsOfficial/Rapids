@@ -46,7 +46,7 @@ static const std::regex TOKEN_NAME_CHARACTERS("^[r]?[A-Z0-9._]{3,25}$");
 static const std::regex USERNAME_CHARACTERS("^[a-z0-9._]{3,25}.rpd$");
 static const std::regex PROTECTED_USERNAMES("^rapids.rpd$|^rpd.rpd$");
 
-bool IsTokenNameValid(const std::string& name)
+bool IsTokenTickerValid(const std::string& name)
 {
     if (name == "RPDx")
         return true;
@@ -488,6 +488,7 @@ bool CMPTransaction::interpret_CreatePropertyFixed()
     memcpy(category, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(category)-1)); i++;
     memcpy(subcategory, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(subcategory)-1)); i++;
     memcpy(name, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(name)-1)); i++;
+    memcpy(ticker, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(ticker)-1)); i++;
     memcpy(url, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(url)-1)); i++;
     memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(data)-1)); i++;
     memcpy(&nValue, p, 8);
@@ -502,6 +503,7 @@ bool CMPTransaction::interpret_CreatePropertyFixed()
         PrintToLog("\t        category: %s\n", category);
         PrintToLog("\t     subcategory: %s\n", subcategory);
         PrintToLog("\t            name: %s\n", name);
+        PrintToLog("\t          ticker: %s\n", ticker);
         PrintToLog("\t             url: %s\n", url);
         PrintToLog("\t            data: %s\n", data);
         PrintToLog("\t           value: %s\n", FormatByType(nValue, prop_type));
@@ -536,6 +538,7 @@ bool CMPTransaction::interpret_CreatePropertyVariable()
     memcpy(category, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(category)-1)); i++;
     memcpy(subcategory, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(subcategory)-1)); i++;
     memcpy(name, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(name)-1)); i++;
+    memcpy(ticker, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(ticker)-1)); i++;
     memcpy(url, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(url)-1)); i++;
     memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(data)-1)); i++;
     memcpy(&property, p, 4);
@@ -558,6 +561,7 @@ bool CMPTransaction::interpret_CreatePropertyVariable()
         PrintToLog("\t        category: %s\n", category);
         PrintToLog("\t     subcategory: %s\n", subcategory);
         PrintToLog("\t            name: %s\n", name);
+        PrintToLog("\t          ticker: %s\n", ticker);
         PrintToLog("\t             url: %s\n", url);
         PrintToLog("\t            data: %s\n", data);
         PrintToLog("\tproperty desired: %d (%s)\n", property, strMPProperty(property));
@@ -612,6 +616,7 @@ bool CMPTransaction::interpret_CreatePropertyManaged()
     memcpy(category, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(category)-1)); i++;
     memcpy(subcategory, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(subcategory)-1)); i++;
     memcpy(name, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(name)-1)); i++;
+    memcpy(ticker, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(ticker)-1)); i++;
     memcpy(url, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(url)-1)); i++;
     memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(data)-1)); i++;
 
@@ -622,6 +627,7 @@ bool CMPTransaction::interpret_CreatePropertyManaged()
         PrintToLog("\t        category: %s\n", category);
         PrintToLog("\t     subcategory: %s\n", subcategory);
         PrintToLog("\t            name: %s\n", name);
+        PrintToLog("\t          ticker: %s\n", ticker);
         PrintToLog("\t             url: %s\n", url);
         PrintToLog("\t            data: %s\n", data);
     }
@@ -1607,17 +1613,22 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -37);
     }
 
-    if (pDbSpInfo->findSPByName(name) > 0) {
-        PrintToLog("%s(): rejected: token with name %s already exists\n", __func__, name);
+    if ('\0' == ticker[0]) {
+        PrintToLog("%s(): rejected: property ticker must not be empty\n", __func__);
+        return (PKT_ERROR_SP -51);
+    }
+
+    if (pDbSpInfo->findSPByTicker(ticker) > 0) {
+        PrintToLog("%s(): rejected: token with ticker %s already exists\n", __func__, ticker);
         return (PKT_ERROR_SP -71);
     }
 
-    bool isToken = IsTokenNameValid(name);
-    bool isUsername = IsUsernameValid(name);
+    bool isToken = IsTokenTickerValid(ticker);
+    bool isUsername = IsUsernameValid(ticker);
 
     if (!isToken && !isUsername)
     {
-        PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
+        PrintToLog("%s(): rejected: token ticker %s is invalid\n", __func__, ticker);
         return (PKT_ERROR_SP -72);
     }
 
@@ -1653,6 +1664,7 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
     newSP.category.assign(category);
     newSP.subcategory.assign(subcategory);
     newSP.name.assign(name);
+    newSP.ticker.assign(ticker);
     newSP.url.assign(url);
     newSP.data.assign(data);
     newSP.fixed = true;
@@ -1723,7 +1735,7 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
 
 
     // Allow only RPDx as desired property
-    uint32_t RPDxPropertyId = pDbSpInfo->findSPByName("RPDx");
+    uint32_t RPDxPropertyId = pDbSpInfo->findSPByTicker("RPDx");
     if (RPDxPropertyId == 0) {
         PrintToLog("%s(): rejected: RPDx not issued yet\n", __func__);
         return (PKT_ERROR_SP -25);
@@ -1745,6 +1757,11 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
         return (PKT_ERROR_SP -37);
     }
 
+    if ('\0' == ticker[0]) {
+        PrintToLog("%s(): rejected: property ticker must not be empty\n", __func__);
+        return (PKT_ERROR_SP -51);
+    }
+
     if (!deadline || (int64_t) deadline < blockTime) {
         PrintToLog("%s(): rejected: deadline must not be in the past [%d < %d]\n", __func__, deadline, blockTime);
         return (PKT_ERROR_SP -38);
@@ -1755,14 +1772,14 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
         return (PKT_ERROR_SP -39);
     }
 
-    if (pDbSpInfo->findSPByName(name) > 0) {
-        PrintToLog("%s(): rejected: token with name %s already exists\n", __func__, name);
+    if (pDbSpInfo->findSPByTicker(ticker) > 0) {
+        PrintToLog("%s(): rejected: token with ticker %s already exists\n", __func__, ticker);
         return (PKT_ERROR_SP -71);
     }
 
-    if (!IsTokenNameValid(name))
+    if (!IsTokenTickerValid(ticker))
     {
-        PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
+        PrintToLog("%s(): rejected: token ticker %s is invalid\n", __func__, ticker);
         return (PKT_ERROR_SP -72);
     }
 
@@ -1789,6 +1806,7 @@ int CMPTransaction::logicMath_CreatePropertyVariable()
     newSP.category.assign(category);
     newSP.subcategory.assign(subcategory);
     newSP.name.assign(name);
+    newSP.ticker.assign(ticker);
     newSP.url.assign(url);
     newSP.data.assign(data);
     newSP.fixed = false;
@@ -1915,14 +1933,19 @@ int CMPTransaction::logicMath_CreatePropertyManaged()
         return (PKT_ERROR_SP -37);
     }
 
-    if (pDbSpInfo->findSPByName(name) > 0) {
-        PrintToLog("%s(): rejected: token with name %s already exists\n", __func__, name);
+    if ('\0' == ticker[0]) {
+        PrintToLog("%s(): rejected: property ticker must not be empty\n", __func__);
+        return (PKT_ERROR_SP -51);
+    }
+
+    if (pDbSpInfo->findSPByTicker(ticker) > 0) {
+        PrintToLog("%s(): rejected: token with ticker %s already exists\n", __func__, ticker);
         return (PKT_ERROR_SP -71);
     }
 
-    if (!IsTokenNameValid(name))
+    if (!IsTokenTickerValid(ticker))
     {
-        PrintToLog("%s(): rejected: token name %s is invalid\n", __func__, name);
+        PrintToLog("%s(): rejected: token ticker %s is invalid\n", __func__, ticker);
         return (PKT_ERROR_SP -72);
     }
 
@@ -1948,6 +1971,7 @@ int CMPTransaction::logicMath_CreatePropertyManaged()
     newSP.category.assign(category);
     newSP.subcategory.assign(subcategory);
     newSP.name.assign(name);
+    newSP.ticker.assign(ticker);
     newSP.url.assign(url);
     newSP.data.assign(data);
     newSP.fixed = false;

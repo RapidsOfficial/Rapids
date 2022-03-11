@@ -593,11 +593,11 @@ static UniValue gettokenbalance(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "gettokenbalance \"address\" name\n"
+            "gettokenbalance \"address\" ticker\n"
             "\nReturns the token balance for a given address and token.\n"
             "\nArguments:\n"
             "1. address              (string, required) the address\n"
-            "2. name                 (string, required) the token name\n"
+            "2. ticker               (string, required) the token ticker\n"
             "\nResult:\n"
             "{\n"
             "  \"balance\" : \"n.nnnnnnnn\",   (string) the available balance of the address\n"
@@ -611,7 +611,7 @@ static UniValue gettokenbalance(const JSONRPCRequest& request)
 
     std::string address = ParseAddress(request.params[0]);
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(request.params[1].get_str());
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(request.params[1].get_str());
     if (!propertyId)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token not found");
 
@@ -627,10 +627,10 @@ static UniValue getalltokenbalances(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "getalltokenbalances name\n"
-            "\nReturns a list of token balances for a given token identified by name.\n"
+            "getalltokenbalances ticker\n"
+            "\nReturns a list of token balances for a given token identified by ticker.\n"
             "\nArguments:\n"
-            "1. name           (string, required) the token name\n"
+            "1. ticker           (string, required) the token ticker\n"
             "\nResult:\n"
             "[                           (array of JSON objects)\n"
             "  {\n"
@@ -646,7 +646,7 @@ static UniValue getalltokenbalances(const JSONRPCRequest& request)
             + HelpExampleRpc("getalltokenbalances", "TOKEN")
         );
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(request.params[0].get_str());
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(request.params[0].get_str());
     if (!propertyId)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token not found");
 
@@ -1059,10 +1059,10 @@ static UniValue gettoken(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "gettoken name\n"
+            "gettoken ticker\n"
             "\nReturns details for about the tokens or smart property to lookup.\n"
             "\nArguments:\n"
-            "1. name           (string, required) the identifier of the tokens or property\n"
+            "1. ticker         (string, required) the ticker of the token\n"
             "\nResult:\n"
             "{\n"
             "  \"propertyid\" : n,                (number) the identifier\n"
@@ -1083,7 +1083,7 @@ static UniValue gettoken(const JSONRPCRequest& request)
             + HelpExampleRpc("gettoken", "TOKEN")
         );
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(request.params[0].get_str());
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(request.params[0].get_str());
     if (!propertyId)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token not found");
 
@@ -1176,10 +1176,10 @@ static UniValue gettokencrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "gettokencrowdsale name ( verbose )\n"
+            "gettokencrowdsale ticker ( verbose )\n"
             "\nReturns information about a crowdsale.\n"
             "\nArguments:\n"
-            "1. name                 (number, required) the token name of the crowdsale\n"
+            "1. ticker               (string, required) the token ticker of the crowdsale\n"
             "2. verbose              (boolean, optional) list crowdsale participants (default: false)\n"
             "\nResult:\n"
             "{\n"
@@ -1216,11 +1216,11 @@ static UniValue gettokencrowdsale(const JSONRPCRequest& request)
             + HelpExampleRpc("gettokencrowdsale", "TOKEN, true")
         );
 
-    std::string name = ParseText(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
     if (propertyId == 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
     bool showVerbose = (request.params.size() > 1) ? request.params[1].get_bool() : false;
 
@@ -1407,10 +1407,10 @@ static UniValue gettokengrants(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "gettokengrants tokename\n"
+            "gettokengrants ticker\n"
             "\nReturns information about granted and revoked units of managed tokens.\n"
             "\nArguments:\n"
-            "1. tokename            (string, required) the name of managed token to lookup\n"
+            "1. ticker            (string, required) the ticker of managed token to lookup\n"
             "\nResult:\n"
             "{\n"
             "  \"propertyid\" : n,               (number) the identifier of the managed tokens\n"
@@ -1435,11 +1435,11 @@ static UniValue gettokengrants(const JSONRPCRequest& request)
             + HelpExampleRpc("gettokengrants", "TOKEN")
         );
 
-    std::string name = ParseText(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(name);
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
     if (propertyId == 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
     RequireExistingProperty(propertyId);
     RequireManagedProperty(propertyId);
@@ -1493,11 +1493,11 @@ static UniValue gettokenorderbook(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw runtime_error(
-            "gettokenorderbook tokenname ( tokenname )\n"
+            "gettokenorderbook ticker ( ticker )\n"
             "\nList active offers on the distributed token exchange.\n"
             "\nArguments:\n"
-            "1. tokenname           (string, required) filter orders by token name for sale\n"
-            "2. tokenname           (string, optional) filter orders by token name desired\n"
+            "1. ticker           (string, required) filter orders by token ticker for sale\n"
+            "2. ticker           (string, optional) filter orders by token ticker desired\n"
             "\nResult:\n"
             "[                                              (array of JSON objects)\n"
             "  {\n"
@@ -1524,22 +1524,22 @@ static UniValue gettokenorderbook(const JSONRPCRequest& request)
         );
 
     bool filterDesired = (request.params.size() > 1);
-    std::string nameForSale = ParseText(request.params[0]);
+    std::string tickerForSale = ParseText(request.params[0]);
 
-    uint32_t propertyIdForSale = pDbSpInfo->findSPByName(nameForSale);
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByTicker(tickerForSale);
     if (propertyIdForSale == 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
     uint32_t propertyIdDesired = 0;
 
     RequireExistingProperty(propertyIdForSale);
 
     if (filterDesired) {
-        std::string nameDesired = ParseText(request.params[1]);
+        std::string tickerDesired = ParseText(request.params[1]);
 
-        propertyIdDesired = pDbSpInfo->findSPByName(nameDesired);
+        propertyIdDesired = pDbSpInfo->findSPByTicker(tickerDesired);
         if (propertyIdDesired == 0)
-            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
         RequireExistingProperty(propertyIdDesired);
         RequireSameEcosystem(propertyIdForSale, propertyIdDesired);
@@ -1571,12 +1571,12 @@ static UniValue gettokentradehistoryforaddress(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 3)
         throw runtime_error(
-            "gettokentradehistoryforaddress \"address\" ( count propertyid )\n"
+            "gettokentradehistoryforaddress \"address\" ( count ticker )\n"
             "\nRetrieves the history of orders on the distributed exchange for the supplied address.\n"
             "\nArguments:\n"
             "1. address              (string, required) address to retrieve history for\n"
             "2. count                (number, optional) number of orders to retrieve (default: 10)\n"
-            "3. name                 (string, optional) filter by token name transacted (default: no filter)\n"
+            "3. ticker               (string, optional) filter by token transacted (default: no filter)\n"
             "\nResult:\n"
             "[                                              (array of JSON objects)\n"
             "  {\n"
@@ -1624,11 +1624,11 @@ static UniValue gettokentradehistoryforaddress(const JSONRPCRequest& request)
     uint32_t propertyId = 0;
 
     if (request.params.size() > 2) {
-        std::string name = ParseText(request.params[2]);
+        std::string ticker = ParseText(request.params[2]);
 
-        propertyId = pDbSpInfo->findSPByName(name);
+        propertyId = pDbSpInfo->findSPByTicker(ticker);
         if (propertyId == 0)
-            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
         RequireExistingProperty(propertyId);
     }
@@ -1660,11 +1660,11 @@ static UniValue gettokentradehistoryforpair(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "gettokentradehistoryforpair tokenname tokenname ( count )\n"
+            "gettokentradehistoryforpair ticker ticker ( count )\n"
             "\nRetrieves the history of trades on the distributed token exchange for the specified market.\n"
             "\nArguments:\n"
-            "1. tokenname            (string, required) the first side of the traded pair\n"
-            "2. tokenname            (string, required) the second side of the traded pair\n"
+            "1. ticker               (string, required) the first side of the traded pair\n"
+            "2. ticker               (string, required) the second side of the traded pair\n"
             "3. count                (number, optional) number of trades to retrieve (default: 10)\n"
             "\nResult:\n"
             "[                                      (array of JSON objects)\n"
@@ -1687,15 +1687,15 @@ static UniValue gettokentradehistoryforpair(const JSONRPCRequest& request)
         );
 
     // obtain property identifiers for pair & check valid parameters
-    std::string tokenNameSideA = ParseText(request.params[0]);
-    uint32_t propertyIdSideA = pDbSpInfo->findSPByName(tokenNameSideA);
+    std::string tokenTickerSideA = ParseText(request.params[0]);
+    uint32_t propertyIdSideA = pDbSpInfo->findSPByTicker(tokenTickerSideA);
     if (propertyIdSideA == 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
-    std::string tokenNameSideB = ParseText(request.params[1]);
-    uint32_t propertyIdSideB = pDbSpInfo->findSPByName(tokenNameSideB);
+    std::string tokenTickerSideB = ParseText(request.params[1]);
+    uint32_t propertyIdSideB = pDbSpInfo->findSPByTicker(tokenTickerSideB);
     if (propertyIdSideB == 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
     uint64_t count = (request.params.size() > 2) ? request.params[2].get_int64() : 10;
 
@@ -2314,10 +2314,10 @@ static UniValue gettokenmetadexhash(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() > 1)
         throw runtime_error(
-            "gettokenmetadexhash tokenname\n"
+            "gettokenmetadexhash ticker\n"
             "\nReturns a hash of the current state of the MetaDEx (default) or orderbook.\n"
             "\nArguments:\n"
-            "1. token                       (string, optional) hash orderbook (only trades selling token)\n"
+            "1. ticker                       (string, optional) hash orderbook (only trades selling token with ticker)\n"
             "\nResult:\n"
             "{\n"
             "  \"block\" : nnnnnn,          (number) the index of the block this hash applies to\n"
@@ -2335,11 +2335,11 @@ static UniValue gettokenmetadexhash(const JSONRPCRequest& request)
 
     uint32_t propertyId = 0;
     if (request.params.size() > 0) {
-        std::string name = ParseText(request.params[0]);
+        std::string ticker = ParseText(request.params[0]);
 
-        propertyId = pDbSpInfo->findSPByName(name);
+        propertyId = pDbSpInfo->findSPByTicker(ticker);
         if (propertyId == 0)
-            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this name doesn't exists");
+            throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
         RequireExistingProperty(propertyId);
     }
@@ -2363,10 +2363,10 @@ static UniValue gettokenbalanceshash(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "gettokenbalanceshash name\n"
+            "gettokenbalanceshash ticker\n"
             "\nReturns a hash of the balances for the property.\n"
             "\nArguments:\n"
-            "1. name                  (string, required) the name to hash balances for\n"
+            "1. ticker                  (string, required) the ticker to hash balances for\n"
             "\nResult:\n"
             "{\n"
             "  \"block\" : nnnnnn,          (number) the index of the block this hash applies to\n"
@@ -2376,13 +2376,13 @@ static UniValue gettokenbalanceshash(const JSONRPCRequest& request)
             "}\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("gettokenbalanceshash", "31")
-            + HelpExampleRpc("gettokenbalanceshash", "31")
+            + HelpExampleCli("gettokenbalanceshash", "TOKEN")
+            + HelpExampleRpc("gettokenbalanceshash", "TOKEN")
         );
 
     LOCK(cs_main);
 
-    uint32_t propertyId = pDbSpInfo->findSPByName(request.params[0].get_str());
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(request.params[0].get_str());
     if (!propertyId)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token not found");
 

@@ -179,9 +179,9 @@ static UniValue token_createpayload_sto(const JSONRPCRequest& request)
 
 static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 9)
+    if (request.fHelp || request.params.size() != 10)
         throw runtime_error(
-            "token_createpayload_issuancefixed ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" \"amount\"\n"
+            "token_createpayload_issuancefixed ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" \"amount\"\n"
 
             "\nCreates the payload for a new tokens issuance with fixed supply.\n"
 
@@ -192,16 +192,17 @@ static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
             "4. category             (string, required) a category for the new tokens (can be \"\")\n"
             "5. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
             "6. name                 (string, required) the name of the new tokens to create\n"
-            "7. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "8. data                 (string, required) a description for the new tokens (can be \"\")\n"
-            "9. amount               (string, required) the number of tokens to create\n"
+            "7. ticker               (string, required) the ticker of the new tokens to create\n"
+            "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
+            "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
+            "10. amount              (string, required) the number of tokens to create\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_issuancefixed", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" \"1000000\"")
-            + HelpExampleRpc("token_createpayload_issuancefixed", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", \"1000000\"")
+            + HelpExampleCli("token_createpayload_issuancefixed", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\" \"1000000\"")
+            + HelpExampleRpc("token_createpayload_issuancefixed", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\", \"1000000\"")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -210,22 +211,23 @@ static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
     std::string category = ParseText(request.params[3]);
     std::string subcategory = ParseText(request.params[4]);
     std::string name = ParseText(request.params[5]);
-    std::string url = ParseText(request.params[6]);
-    std::string data = ParseText(request.params[7]);
-    int64_t amount = ParseAmount(request.params[8], type);
+    std::string ticker = ParseText(request.params[6]);
+    std::string url = ParseText(request.params[7]);
+    std::string data = ParseText(request.params[8]);
+    int64_t amount = ParseAmount(request.params[9], type);
 
     RequirePropertyName(name);
 
-    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, url, data, amount);
+    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, ticker, url, data, amount);
 
     return HexStr(payload.begin(), payload.end());
 }
 
 static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 13)
+    if (request.fHelp || request.params.size() != 14)
         throw runtime_error(
-            "token_createpayload_issuancecrowdsale ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" propertyiddesired tokensperunit deadline earlybonus issuerpercentage\n"
+            "token_createpayload_issuancecrowdsale ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" propertyiddesired tokensperunit deadline earlybonus issuerpercentage\n"
 
             "\nCreates the payload for a new tokens issuance with crowdsale.\n"
 
@@ -236,20 +238,21 @@ static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& requ
             "4. category             (string, required) a category for the new tokens (can be \"\")\n"
             "5. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
             "6. name                 (string, required) the name of the new tokens to create\n"
-            "7. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "8. data                 (string, required) a description for the new tokens (can be \"\")\n"
-            "9. propertyiddesired    (number, required) the identifier of a token eligible to participate in the crowdsale\n"
-            "10. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
-            "11. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
-            "12. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
-            "13. issuerpercentage    (number, required) a percentage of tokens that will be granted to the issuer\n"
+            "7. ticker               (string, required) the ticker of the new tokens to create\n"
+            "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
+            "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
+            "10. propertyiddesired   (number, required) the identifier of a token eligible to participate in the crowdsale\n"
+            "11. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
+            "12. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
+            "13. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
+            "14. issuerpercentage    (number, required) a percentage of tokens that will be granted to the issuer\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_issuancecrowdsale", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\" 2 \"100\" 1483228800 30 2")
-            + HelpExampleRpc("token_createpayload_issuancecrowdsale", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\", 2, \"100\", 1483228800, 30, 2")
+            + HelpExampleCli("token_createpayload_issuancecrowdsale", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\" 2 \"100\" 1483228800 30 2")
+            + HelpExampleRpc("token_createpayload_issuancecrowdsale", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\", 2, \"100\", 1483228800, 30, 2")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -258,27 +261,28 @@ static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& requ
     std::string category = ParseText(request.params[3]);
     std::string subcategory = ParseText(request.params[4]);
     std::string name = ParseText(request.params[5]);
-    std::string url = ParseText(request.params[6]);
-    std::string data = ParseText(request.params[7]);
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[8]);
-    int64_t numTokens = ParseAmount(request.params[9], type);
-    int64_t deadline = ParseDeadline(request.params[10]);
-    uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[11]);
-    uint8_t issuerPercentage = ParseIssuerBonus(request.params[12]);
+    std::string ticker = ParseText(request.params[6]);
+    std::string url = ParseText(request.params[7]);
+    std::string data = ParseText(request.params[8]);
+    uint32_t propertyIdDesired = ParsePropertyId(request.params[9]);
+    int64_t numTokens = ParseAmount(request.params[10], type);
+    int64_t deadline = ParseDeadline(request.params[11]);
+    uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[12]);
+    uint8_t issuerPercentage = ParseIssuerBonus(request.params[13]);
 
     RequirePropertyName(name);
     RequireSameEcosystem(ecosystem, propertyIdDesired);
 
-    std::vector<unsigned char> payload = CreatePayload_IssuanceVariable(ecosystem, type, previousId, category, subcategory, name, url, data, propertyIdDesired, numTokens, deadline, earlyBonus, issuerPercentage);
+    std::vector<unsigned char> payload = CreatePayload_IssuanceVariable(ecosystem, type, previousId, category, subcategory, name, ticker, url, data, propertyIdDesired, numTokens, deadline, earlyBonus, issuerPercentage);
 
     return HexStr(payload.begin(), payload.end());
 }
 
 static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 8)
+    if (request.fHelp || request.params.size() != 9)
         throw runtime_error(
-            "token_createpayload_issuancemanaged ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\"\n"
+            "token_createpayload_issuancemanaged ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\"\n"
 
             "\nCreates the payload for a new tokens issuance with manageable supply.\n"
 
@@ -289,15 +293,16 @@ static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& reques
             "4. category             (string, required) a category for the new tokens (can be \"\")\n"
             "5. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
             "6. name                 (string, required) the name of the new tokens to create\n"
-            "7. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "8. data                 (string, required) a description for the new tokens (can be \"\")\n"
+            "7. ticker               (string, required) the ticker of the new tokens to create\n"
+            "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
+            "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_issuancemanaged", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"\" \"\"")
-            + HelpExampleRpc("token_createpayload_issuancemanaged", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"\", \"\"")
+            + HelpExampleCli("token_createpayload_issuancemanaged", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\"")
+            + HelpExampleRpc("token_createpayload_issuancemanaged", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\"")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -306,12 +311,13 @@ static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& reques
     std::string category = ParseText(request.params[3]);
     std::string subcategory = ParseText(request.params[4]);
     std::string name = ParseText(request.params[5]);
-    std::string url = ParseText(request.params[6]);
-    std::string data = ParseText(request.params[7]);
+    std::string ticker = ParseText(request.params[6]);
+    std::string url = ParseText(request.params[7]);
+    std::string data = ParseText(request.params[8]);
 
     RequirePropertyName(name);
 
-    std::vector<unsigned char> payload = CreatePayload_IssuanceManaged(ecosystem, type, previousId, category, subcategory, name, url, data);
+    std::vector<unsigned char> payload = CreatePayload_IssuanceManaged(ecosystem, type, previousId, category, subcategory, name, ticker, url, data);
 
     return HexStr(payload.begin(), payload.end());
 }

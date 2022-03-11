@@ -165,7 +165,7 @@ std::map<uint32_t, std::list<std::string>> global_token_addresses;
 std::set<uint32_t> global_wallet_property_list;
 
 std::string GetUsernameAddress(std::string username) {
-    uint32_t propertyId = pDbSpInfo->findSPByName(username);
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(username);
     std::string address = "";
 
     if (IsUsernameValid(username) && propertyId) {
