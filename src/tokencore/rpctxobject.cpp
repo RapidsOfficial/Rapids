@@ -285,6 +285,7 @@ void populateRPCTypeSimpleSend(CMPTransaction& tokenObj, UniValue& txobj)
         txobj.push_back(Pair("amount", FormatMP(propertyId, tokenObj.getAmount())));
         txobj.push_back(Pair("purchasedpropertyid", crowdPropertyId));
         txobj.push_back(Pair("purchasedpropertyname", sp.name));
+        txobj.push_back(Pair("purchasedpropertyticker", sp.ticker));
         txobj.push_back(Pair("purchasedpropertydivisible", sp.isDivisible()));
         txobj.push_back(Pair("purchasedtokens", FormatMP(crowdPropertyId, crowdTokens)));
         txobj.push_back(Pair("issuertokens", FormatMP(crowdPropertyId, issuerTokens)));

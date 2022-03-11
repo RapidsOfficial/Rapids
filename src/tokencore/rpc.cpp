@@ -88,6 +88,7 @@ void PopulateFailure(int error)
 void PropertyToJSON(const CMPSPInfo::Entry& sProperty, UniValue& property_obj)
 {
     property_obj.pushKV("name", sProperty.name);
+    property_obj.pushKV("ticker", sProperty.ticker);
     property_obj.pushKV("category", sProperty.category);
     property_obj.pushKV("subcategory", sProperty.subcategory);
     property_obj.pushKV("data", sProperty.data);
@@ -108,7 +109,8 @@ void MetaDexObjectToJSON(const CMPMetaDEx& obj, UniValue& metadex_obj)
 
     CMPSPInfo::Entry saleproperty;
     pDbSpInfo->getSP(obj.getProperty(), saleproperty);
-    metadex_obj.pushKV("tokenforsale", saleproperty.name);
+    metadex_obj.pushKV("tokenforsalename", saleproperty.name);
+    metadex_obj.pushKV("tokenforsale", saleproperty.ticker);
 
     metadex_obj.pushKV("propertyidforsaleisdivisible", propertyIdForSaleIsDivisible);
     metadex_obj.pushKV("amountforsale", FormatMP(obj.getProperty(), obj.getAmountForSale()));
@@ -118,7 +120,8 @@ void MetaDexObjectToJSON(const CMPMetaDEx& obj, UniValue& metadex_obj)
 
     CMPSPInfo::Entry desiredproperty;
     pDbSpInfo->getSP(obj.getDesProperty(), desiredproperty);
-    metadex_obj.pushKV("tokendesired", desiredproperty.name);
+    metadex_obj.pushKV("tokendesiredname", desiredproperty.name);
+    metadex_obj.pushKV("tokendesired", desiredproperty.ticker);
 
     metadex_obj.pushKV("propertyiddesiredisdivisible", propertyIdDesiredIsDivisible);
     metadex_obj.pushKV("amountdesired", FormatMP(obj.getDesProperty(), obj.getAmountDesired()));
@@ -731,6 +734,7 @@ static UniValue getalltokenbalancesforaddress(const JSONRPCRequest& request)
         UniValue balanceObj(UniValue::VOBJ);
         balanceObj.pushKV("propertyid", (uint64_t) propertyId);
         balanceObj.pushKV("name", property.name);
+        balanceObj.pushKV("ticker", property.ticker);
 
         bool nonEmptyBalance = BalanceToJSON(address, propertyId, balanceObj, property.isDivisible());
 
@@ -852,6 +856,7 @@ static UniValue getwallettokenbalances(const JSONRPCRequest& request)
         UniValue objBalance(UniValue::VOBJ);
         objBalance.pushKV("propertyid", (uint64_t) propertyId);
         objBalance.pushKV("name", property.name);
+        objBalance.pushKV("ticker", property.ticker);
 
         if (property.isDivisible()) {
             objBalance.pushKV("balance", FormatDivisibleMP(nAvailable));
@@ -915,6 +920,7 @@ static UniValue gettokenbalances(const JSONRPCRequest& request)
         UniValue objBalance(UniValue::VOBJ);
         objBalance.pushKV("propertyid", (uint64_t) propertyId);
         objBalance.pushKV("name", property.name);
+        objBalance.pushKV("ticker", property.ticker);
 
         if (property.isDivisible()) {
             objBalance.pushKV("balance", FormatDivisibleMP(available));
@@ -1035,6 +1041,7 @@ static UniValue getwalletaddresstokenbalances(const JSONRPCRequest& request)
             UniValue objBalance(UniValue::VOBJ);
             objBalance.pushKV("propertyid", (uint64_t) propertyId);
             objBalance.pushKV("name", property.name);
+            objBalance.pushKV("ticker", property.ticker);
 
             bool nonEmptyBalance = BalanceToJSON(address, propertyId, objBalance, property.isDivisible());
 
@@ -1295,13 +1302,15 @@ static UniValue gettokencrowdsale(const JSONRPCRequest& request)
 
     response.pushKV("propertyid", (uint64_t) propertyId);
     response.pushKV("name", sp.name);
+    response.pushKV("ticker", sp.ticker);
     response.pushKV("active", active);
     response.pushKV("issuer", sp.issuer);
     response.pushKV("propertyiddesired", (uint64_t) sp.property_desired);
 
     CMPSPInfo::Entry desiredproperty;
     pDbSpInfo->getSP(sp.property_desired, desiredproperty);
-    response.pushKV("tokendesired", desiredproperty.name);
+    response.pushKV("tokendesiredname", desiredproperty.name);
+    response.pushKV("tokendesired", desiredproperty.ticker);
 
     response.pushKV("tokensperunit", FormatMP(propertyId, sp.num_tokens));
     response.pushKV("earlybonus", sp.early_bird);
@@ -1385,12 +1394,14 @@ static UniValue gettokenactivecrowdsales(const JSONRPCRequest& request)
         UniValue responseObj(UniValue::VOBJ);
         responseObj.pushKV("propertyid", (uint64_t) propertyId);
         responseObj.pushKV("name", sp.name);
+        responseObj.pushKV("ticker", sp.ticker);
         responseObj.pushKV("issuer", sp.issuer);
         responseObj.pushKV("propertyiddesired", (uint64_t) sp.property_desired);
 
         CMPSPInfo::Entry desiredproperty;
         pDbSpInfo->getSP(sp.property_desired, desiredproperty);
-        responseObj.pushKV("tokendesired", desiredproperty.name);
+        responseObj.pushKV("tokendesiredname", desiredproperty.name);
+        responseObj.pushKV("tokendesired", desiredproperty.ticker);
 
         responseObj.pushKV("tokensperunit", FormatMP(propertyId, sp.num_tokens));
         responseObj.pushKV("earlybonus", sp.early_bird);
@@ -1481,6 +1492,7 @@ static UniValue gettokengrants(const JSONRPCRequest& request)
 
     response.pushKV("propertyid", (uint64_t) propertyId);
     response.pushKV("name", sp.name);
+    response.pushKV("ticker", sp.ticker);
     response.pushKV("issuer", sp.issuer);
     response.pushKV("creationtxid", creationHash.GetHex());
     response.pushKV("totaltokens", FormatMP(propertyId, totalTokens));
@@ -1797,6 +1809,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
         responseObj.pushKV("txid", txid);
         responseObj.pushKV("propertyid", (uint64_t) propertyId);
         responseObj.pushKV("name", property.name);
+        responseObj.pushKV("ticker", property.ticker);
         responseObj.pushKV("seller", seller);
         responseObj.pushKV("amountavailable", FormatDivisibleMP(amountAvailable));
         responseObj.pushKV("rapidsdesired", FormatDivisibleMP(bitcoinDesired));

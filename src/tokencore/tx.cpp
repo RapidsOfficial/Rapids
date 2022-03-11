@@ -480,7 +480,7 @@ bool CMPTransaction::interpret_CreatePropertyFixed()
     SwapByteOrder16(prop_type);
     memcpy(&prev_prop_id, &pkt[7], 4);
     SwapByteOrder32(prev_prop_id);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
         spstr.push_back(std::string(p));
         p += spstr.back().size() + 1;
     }
@@ -530,7 +530,7 @@ bool CMPTransaction::interpret_CreatePropertyVariable()
     SwapByteOrder16(prop_type);
     memcpy(&prev_prop_id, &pkt[7], 4);
     SwapByteOrder32(prev_prop_id);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
         spstr.push_back(std::string(p));
         p += spstr.back().size() + 1;
     }
@@ -608,7 +608,7 @@ bool CMPTransaction::interpret_CreatePropertyManaged()
     SwapByteOrder16(prop_type);
     memcpy(&prev_prop_id, &pkt[7], 4);
     SwapByteOrder32(prev_prop_id);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 6; i++) {
         spstr.push_back(std::string(p));
         p += spstr.back().size() + 1;
     }
