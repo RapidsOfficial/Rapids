@@ -137,6 +137,13 @@ std::string mastercore::getPropertyName(uint32_t propertyId)
     return "Property Name Not Found";
 }
 
+std::string mastercore::getPropertyTicker(uint32_t propertyId)
+{
+    CMPSPInfo::Entry sp;
+    if (pDbSpInfo->getSP(propertyId, sp)) return sp.ticker;
+    return "Property Name Not Found";
+}
+
 bool mastercore::isCrowdsaleActive(uint32_t propertyId)
 {
     for (CrowdMap::const_iterator it = my_crowds.begin(); it != my_crowds.end(); ++it) {

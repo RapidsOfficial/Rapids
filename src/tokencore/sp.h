@@ -79,6 +79,7 @@ std::string strPropertyType(uint16_t propertyType);
 std::string strEcosystem(uint8_t ecosystem);
 
 std::string getPropertyName(uint32_t propertyId);
+std::string getPropertyTicker(uint32_t propertyId);
 bool isPropertyDivisible(uint32_t propertyId);
 bool IsPropertyIdValid(uint32_t propertyId);
 

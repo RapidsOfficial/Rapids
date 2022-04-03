@@ -70,18 +70,18 @@ All available commands can be listed with `"help"`, and information about a spec
   - [token_createrawtx_input](#token_createrawtx_input)
   - [token_createrawtx_reference](#token_createrawtx_reference)
   - [token_createrawtx_change](#token_createrawtx_change)
-  - [token_createpayload_simplesend](#token_createpayload_simplesend)
+  - [createtokenpayloadsimplesend](#createtokenpayloadsimplesend)
   - [token_createpayload_sendall](#token_createpayload_sendall)
   - [token_createpayload_dexsell](#token_createpayload_dexsell)
   - [token_createpayload_dexaccept](#token_createpayload_dexaccept)
   - [token_createpayload_sto](#token_createpayload_sto)
-  - [token_createpayload_issuancefixed](#token_createpayload_issuancefixed)
-  - [token_createpayload_issuancecrowdsale](#token_createpayload_issuancecrowdsale)
-  - [token_createpayload_issuancemanaged](#token_createpayload_issuancemanaged)
-  - [token_createpayload_closecrowdsale](#token_createpayload_closecrowdsale)
-  - [token_createpayload_grant](#token_createpayload_grant)
-  - [token_createpayload_revoke](#token_createpayload_revoke)
-  - [token_createpayload_changeissuer](#token_createpayload_changeissuer)
+  - [createtokenpayloadissuancefixed](#createtokenpayloadissuancefixed)
+  - [createtokenpayloadissuancecrowdsale](#createtokenpayloadissuancecrowdsale)
+  - [createtokenpayloadissuancemanaged](#createtokenpayloadissuancemanaged)
+  - [createtokenpayloadclosecrowdsale](#createtokenpayloadclosecrowdsale)
+  - [createtokenpayloadgrant](#createtokenpayloadgrant)
+  - [createtokenpayloadrevoke](#createtokenpayloadrevoke)
+  - [createtokenpayloadchangeissuer](#createtokenpayloadchangeissuer)
   - [token_createpayload_trade](#token_createpayload_trade)
   - [token_createpayload_canceltradesbyprice](#token_createpayload_canceltradesbyprice)
   - [token_createpayload_canceltradesbypair](#token_createpayload_canceltradesbypair)
@@ -1980,7 +1980,7 @@ $ tokencore-cli "token_createrawtx_change" \
 
 ---
 
-### token_createpayload_simplesend
+### createtokenpayloadsimplesend
 
 Create the payload for a simple send transaction.
 
@@ -2001,7 +2001,7 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_simplesend" 1 "100.0"
+$ tokencore-cli "createtokenpayloadsimplesend" 1 "100.0"
 ```
 
 ---
@@ -2110,7 +2110,7 @@ $ tokencore-cli "token_createpayload_sto" 3 "5000"
 
 ---
 
-### token_createpayload_issuancefixed
+### createtokenpayloadissuancefixed
 
 Creates the payload for a new tokens issuance with fixed supply.
 
@@ -2136,12 +2136,12 @@ Creates the payload for a new tokens issuance with fixed supply.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_issuancefixed" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" "1000000"
+$ tokencore-cli "createtokenpayloadissuancefixed" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" "1000000"
 ```
 
 ---
 
-### token_createpayload_issuancecrowdsale
+### createtokenpayloadissuancecrowdsale
 
 Creates the payload for a new tokens issuance with crowdsale.
 
@@ -2171,12 +2171,12 @@ Creates the payload for a new tokens issuance with crowdsale.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_issuancecrowdsale" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" 2 "100" 1483228800 30 2
+$ tokencore-cli "createtokenpayloadissuancecrowdsale" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" "" 2 "100" 1483228800 30 2
 ```
 
 ---
 
-### token_createpayload_issuancemanaged
+### createtokenpayloadissuancemanaged
 
 Creates the payload for a new tokens issuance with manageable supply.
 
@@ -2201,12 +2201,12 @@ Creates the payload for a new tokens issuance with manageable supply.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_issuancemanaged" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
+$ tokencore-cli "createtokenpayloadissuancemanaged" 2 1 0 "Companies" "Bitcoin Mining" "Quantum Miner" "" ""
 ```
 
 ---
 
-### token_createpayload_closecrowdsale
+### createtokenpayloadclosecrowdsale
 
 Creates the payload to manually close a crowdsale.
 
@@ -2224,12 +2224,12 @@ Creates the payload to manually close a crowdsale.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_closecrowdsale" 70
+$ tokencore-cli "createtokenpayloadclosecrowdsale" 70
 ```
 
 ---
 
-### token_createpayload_grant
+### createtokenpayloadgrant
 
 Creates the payload to issue or grant new units of managed tokens.
 
@@ -2251,12 +2251,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_grant" 51 "7000"
+$ tokencore-cli "createtokenpayloadgrant" 51 "7000"
 ```
 
 ---
 
-### token_createpayload_revoke
+### createtokenpayloadrevoke
 
 Creates the payload to revoke units of managed tokens.
 
@@ -2278,12 +2278,12 @@ Note: if the server is not synchronized, amounts are considered as divisible, ev
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_revoke" 51 "100"
+$ tokencore-cli "createtokenpayloadrevoke" 51 "100"
 ```
 
 ---
 
-### token_createpayload_changeissuer
+### createtokenpayloadchangeissuer
 
 Creates the payload to change the issuer on record of the given tokens.
 
@@ -2301,7 +2301,7 @@ Creates the payload to change the issuer on record of the given tokens.
 **Example:**
 
 ```bash
-$ tokencore-cli "token_createpayload_changeissuer" 3
+$ tokencore-cli "createtokenpayloadchangeissuer" 3
 ```
 
 ---

@@ -15,29 +15,34 @@
 using std::runtime_error;
 using namespace mastercore;
 
-static UniValue token_createpayload_simplesend(const JSONRPCRequest& request)
+static UniValue createtokenpayloadsimplesend(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_createpayload_simplesend propertyid \"amount\"\n"
+            "createtokenpayloadsimplesend ticker \"amount\"\n"
 
             "\nCreate the payload for a simple send transaction.\n"
 
             "\nNote: if the server is not synchronized, amounts are considered as divisible, even if the token may have indivisible units!\n"
 
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the tokens to send\n"
+            "1. ticker               (string, required) the ticker of the token to send\n"
             "2. amount               (string, required) the amount to send\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_simplesend", "1 \"100.0\"")
-            + HelpExampleRpc("token_createpayload_simplesend", "1, \"100.0\"")
+            + HelpExampleCli("createtokenpayloadsimplesend", "TICKER \"100.0\"")
+            + HelpExampleRpc("createtokenpayloadsimplesend", "TICKER, \"100.0\"")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amount = ParseAmount(request.params[1], isPropertyDivisible(propertyId));
 
     std::vector<unsigned char> payload = CreatePayload_SimpleSend(propertyId, amount);
@@ -177,11 +182,11 @@ static UniValue token_createpayload_sto(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
+static UniValue createtokenpayloadissuancefixed(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 10)
         throw runtime_error(
-            "token_createpayload_issuancefixed ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" \"amount\"\n"
+            "createtokenpayloadissuancefixed ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" \"amount\"\n"
 
             "\nCreates the payload for a new tokens issuance with fixed supply.\n"
 
@@ -201,8 +206,8 @@ static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_issuancefixed", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\" \"1000000\"")
-            + HelpExampleRpc("token_createpayload_issuancefixed", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\", \"1000000\"")
+            + HelpExampleCli("createtokenpayloadissuancefixed", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\" \"1000000\"")
+            + HelpExampleRpc("createtokenpayloadissuancefixed", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\", \"1000000\"")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -217,17 +222,28 @@ static UniValue token_createpayload_issuancefixed(const JSONRPCRequest& request)
     int64_t amount = ParseAmount(request.params[9], type);
 
     RequirePropertyName(name);
+    RequirePropertyName(ticker);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
+
+    if (!IsTokenTickerValid(ticker))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token ticker is invalid");
+
+    if (!IsTokenIPFSValid(data))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, ticker, url, data, amount);
 
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& request)
+static UniValue createtokenpayloadissuancecrowdsale(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 14)
+    if (request.fHelp || request.params.size() != 13)
         throw runtime_error(
-            "token_createpayload_issuancecrowdsale ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" propertyiddesired tokensperunit deadline earlybonus issuerpercentage\n"
+            "createtokenpayloadissuancecrowdsale ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" tokensperunit deadline earlybonus issuerpercentage\n"
 
             "\nCreates the payload for a new tokens issuance with crowdsale.\n"
 
@@ -241,18 +257,17 @@ static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& requ
             "7. ticker               (string, required) the ticker of the new tokens to create\n"
             "8. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
             "9. data                 (string, required) a description for the new tokens (can be \"\")\n"
-            "10. propertyiddesired   (number, required) the identifier of a token eligible to participate in the crowdsale\n"
-            "11. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
-            "12. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
-            "13. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
-            "14. issuerpercentage    (number, required) a percentage of tokens that will be granted to the issuer\n"
+            "10. tokensperunit       (string, required) the amount of tokens granted per unit invested in the crowdsale\n"
+            "11. deadline            (number, required) the deadline of the crowdsale as Unix timestamp\n"
+            "12. earlybonus          (number, required) an early bird bonus for participants in percent per week\n"
+            "13. issuerpercentage    (number, required) a percentage of tokens that will be granted to the issuer\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_issuancecrowdsale", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\" 2 \"100\" 1483228800 30 2")
-            + HelpExampleRpc("token_createpayload_issuancecrowdsale", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\", 2, \"100\", 1483228800, 30, 2")
+            + HelpExampleCli("createtokenpayloadissuancecrowdsale", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\" \"100\" 1483228800 30 2")
+            + HelpExampleRpc("createtokenpayloadissuancecrowdsale", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\", \"100\", 1483228800, 30, 2")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -264,25 +279,39 @@ static UniValue token_createpayload_issuancecrowdsale(const JSONRPCRequest& requ
     std::string ticker = ParseText(request.params[6]);
     std::string url = ParseText(request.params[7]);
     std::string data = ParseText(request.params[8]);
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[9]);
-    int64_t numTokens = ParseAmount(request.params[10], type);
-    int64_t deadline = ParseDeadline(request.params[11]);
-    uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[12]);
-    uint8_t issuerPercentage = ParseIssuerBonus(request.params[13]);
+    int64_t numTokens = ParseAmount(request.params[9], type);
+    int64_t deadline = ParseDeadline(request.params[10]);
+    uint8_t earlyBonus = ParseEarlyBirdBonus(request.params[11]);
+    uint8_t issuerPercentage = ParseIssuerBonus(request.params[12]);
 
     RequirePropertyName(name);
-    RequireSameEcosystem(ecosystem, propertyIdDesired);
+    RequirePropertyName(ticker);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
+
+    std::string desiredName = "RPDx";
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByTicker(desiredName);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "RPDx token not issued yet");
+
+    if (!IsTokenTickerValid(ticker))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token ticker is invalid");
+
+    if (!IsTokenIPFSValid(data))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     std::vector<unsigned char> payload = CreatePayload_IssuanceVariable(ecosystem, type, previousId, category, subcategory, name, ticker, url, data, propertyIdDesired, numTokens, deadline, earlyBonus, issuerPercentage);
 
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& request)
+static UniValue createtokenpayloadissuancemanaged(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 9)
         throw runtime_error(
-            "token_createpayload_issuancemanaged ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\"\n"
+            "createtokenpayloadissuancemanaged ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\"\n"
 
             "\nCreates the payload for a new tokens issuance with manageable supply.\n"
 
@@ -301,8 +330,8 @@ static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& reques
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_issuancemanaged", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\"")
-            + HelpExampleRpc("token_createpayload_issuancemanaged", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\"")
+            + HelpExampleCli("createtokenpayloadissuancemanaged", "2 1 0 \"Companies\" \"Bitcoin Mining\" \"Quantum Miner\" \"TICKER\" \"\" \"\"")
+            + HelpExampleRpc("createtokenpayloadissuancemanaged", "2, 1, 0, \"Companies\", \"Bitcoin Mining\", \"Quantum Miner\", \"TICKER\", \"\", \"\"")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -316,50 +345,65 @@ static UniValue token_createpayload_issuancemanaged(const JSONRPCRequest& reques
     std::string data = ParseText(request.params[8]);
 
     RequirePropertyName(name);
+    RequirePropertyName(ticker);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
+
+    if (!IsTokenTickerValid(ticker))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token ticker is invalid");
+
+    if (!IsTokenIPFSValid(data))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     std::vector<unsigned char> payload = CreatePayload_IssuanceManaged(ecosystem, type, previousId, category, subcategory, name, ticker, url, data);
 
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_closecrowdsale(const JSONRPCRequest& request)
+static UniValue createtokenpayloadclosecrowdsale(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "token_createpayload_closecrowdsale propertyid\n"
+            "createtokenpayloadclosecrowdsale ticker\n"
 
             "\nCreates the payload to manually close a crowdsale.\n"
 
             "\nArguments:\n"
-            "1. propertyid             (number, required) the identifier of the crowdsale to close\n"
+            "1. ticker               (string, required) the ticker of the crowdsale to close\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_closecrowdsale", "70")
-            + HelpExampleRpc("token_createpayload_closecrowdsale", "70")
+            + HelpExampleCli("createtokenpayloadclosecrowdsale", "TICKER")
+            + HelpExampleRpc("createtokenpayloadclosecrowdsale", "TICKER")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
     std::vector<unsigned char> payload = CreatePayload_CloseCrowdsale(propertyId);
 
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_grant(const JSONRPCRequest& request)
+static UniValue createtokenpayloadgrant(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "token_createpayload_grant propertyid \"amount\" ( \"memo\" )\n"
+            "createtokenpayloadgrant ticker \"amount\" ( \"memo\" )\n"
 
             "\nCreates the payload to issue or grant new units of managed tokens.\n"
 
             "\nNote: if the server is not synchronized, amounts are considered as divisible, even if the token may have indivisible units!\n"
 
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the tokens to grant\n"
+            "1. ticker               (string, required) the ticker of the token to grant\n"
             "2. amount               (string, required) the amount of tokens to create\n"
             "3. memo                 (string, optional) a text note attached to this transaction (none by default)\n"
 
@@ -367,31 +411,40 @@ static UniValue token_createpayload_grant(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_grant", "51 \"7000\"")
-            + HelpExampleRpc("token_createpayload_grant", "51, \"7000\"")
+            + HelpExampleCli("createtokenpayloadgrant", "TICKER \"7000\"")
+            + HelpExampleRpc("createtokenpayloadgrant", "TICKER, \"7000\"")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amount = ParseAmount(request.params[1], isPropertyDivisible(propertyId));
     std::string memo = (request.params.size() > 2) ? ParseText(request.params[2]): "";
+
+    // perform checks
+    RequireExistingProperty(propertyId);
+    RequireManagedProperty(propertyId);
 
     std::vector<unsigned char> payload = CreatePayload_Grant(propertyId, amount, memo);
 
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_revoke(const JSONRPCRequest& request)
+static UniValue createtokenpayloadrevoke(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 3)
         throw runtime_error(
-            "token_createpayload_revoke propertyid \"amount\" ( \"memo\" )\n"
+            "createtokenpayloadrevoke ticker \"amount\" ( \"memo\" )\n"
 
             "\nCreates the payload to revoke units of managed tokens.\n"
 
             "\nNote: if the server is not synchronized, amounts are considered as divisible, even if the token may have indivisible units!\n"
 
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the tokens to revoke\n"
+            "1. ticker               (string, required) the ticker of the token to revoke\n"
             "2. amount               (string, required) the amount of tokens to revoke\n"
             "3. memo                 (string, optional) a text note attached to this transaction (none by default)\n"
 
@@ -399,39 +452,48 @@ static UniValue token_createpayload_revoke(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_revoke", "51 \"100\"")
-            + HelpExampleRpc("token_createpayload_revoke", "51, \"100\"")
+            + HelpExampleCli("createtokenpayloadrevoke", "TICKER \"100\"")
+            + HelpExampleRpc("createtokenpayloadrevoke", "TICKER, \"100\"")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amount = ParseAmount(request.params[1], isPropertyDivisible(propertyId));
-    std::string memo = (request.params.size() > 2) ? ParseText(request.params[2]) : "";
+    std::string memo = (request.params.size() > 2) ? ParseText(request.params[2]): "";
 
     std::vector<unsigned char> payload = CreatePayload_Revoke(propertyId, amount, memo);
 
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_changeissuer(const JSONRPCRequest& request)
+static UniValue createtokenpayloadchangeissuer(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "token_createpayload_changeissuer propertyid\n"
+            "createtokenpayloadchangeissuer ticker\n"
 
-            "\nCreats the payload to change the issuer on record of the given tokens.\n"
+            "\nCreates the payload to change the issuer on record of the given tokens.\n"
 
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the tokens\n"
+            "1. ticker               (string, required) the ticker of the token\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_changeissuer", "3")
-            + HelpExampleRpc("token_createpayload_changeissuer", "3")
+            + HelpExampleCli("createtokenpayloadchangeissuer", "TICKER")
+            + HelpExampleRpc("createtokenpayloadchangeissuer", "TICKER")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
 
     std::vector<unsigned char> payload = CreatePayload_ChangeIssuer(propertyId);
 
@@ -688,19 +750,19 @@ static UniValue token_createpayload_unfreeze(const JSONRPCRequest& request)
 static const CRPCCommand commands[] =
 { //  category                         name                                      actor (function)                         okSafeMode
   //  -------------------------------- ----------------------------------------- ---------------------------------------- ----------
-    { "token layer (payload creation)", "token_createpayload_simplesend",          &token_createpayload_simplesend,          true },
+    { "token layer (payload creation)", "createtokenpayloadsimplesend",          &createtokenpayloadsimplesend,          true },
     { "token layer (payload creation)", "token_createpayload_sendall",             &token_createpayload_sendall,             true },
     { "token layer (payload creation)", "token_createpayload_dexsell",             &token_createpayload_dexsell,             true },
     { "token layer (payload creation)", "token_createpayload_dexaccept",           &token_createpayload_dexaccept,           true },
     { "token layer (payload creation)", "token_createpayload_sto",                 &token_createpayload_sto,                 true },
-    { "token layer (payload creation)", "token_createpayload_grant",               &token_createpayload_grant,               true },
-    { "token layer (payload creation)", "token_createpayload_revoke",              &token_createpayload_revoke,              true },
-    { "token layer (payload creation)", "token_createpayload_changeissuer",        &token_createpayload_changeissuer,        true },
+    { "token layer (payload creation)", "createtokenpayloadgrant",               &createtokenpayloadgrant,               true },
+    { "token layer (payload creation)", "createtokenpayloadrevoke",              &createtokenpayloadrevoke,              true },
+    { "token layer (payload creation)", "createtokenpayloadchangeissuer",        &createtokenpayloadchangeissuer,        true },
     { "token layer (payload creation)", "token_createpayload_trade",               &token_createpayload_trade,               true },
-    { "token layer (payload creation)", "token_createpayload_issuancefixed",       &token_createpayload_issuancefixed,       true },
-    { "token layer (payload creation)", "token_createpayload_issuancecrowdsale",   &token_createpayload_issuancecrowdsale,   true },
-    { "token layer (payload creation)", "token_createpayload_issuancemanaged",     &token_createpayload_issuancemanaged,     true },
-    { "token layer (payload creation)", "token_createpayload_closecrowdsale",      &token_createpayload_closecrowdsale,      true },
+    { "token layer (payload creation)", "createtokenpayloadissuancefixed",       &createtokenpayloadissuancefixed,       true },
+    { "token layer (payload creation)", "createtokenpayloadissuancecrowdsale",   &createtokenpayloadissuancecrowdsale,   true },
+    { "token layer (payload creation)", "createtokenpayloadissuancemanaged",     &createtokenpayloadissuancemanaged,     true },
+    { "token layer (payload creation)", "createtokenpayloadclosecrowdsale",      &createtokenpayloadclosecrowdsale,      true },
     { "token layer (payload creation)", "token_createpayload_canceltradesbyprice", &token_createpayload_canceltradesbyprice, true },
     { "token layer (payload creation)", "token_createpayload_canceltradesbypair",  &token_createpayload_canceltradesbypair,  true },
     { "token layer (payload creation)", "token_createpayload_cancelalltrades",     &token_createpayload_cancelalltrades,     true },

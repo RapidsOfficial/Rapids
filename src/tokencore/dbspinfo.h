@@ -107,6 +107,7 @@ public:
             READWRITE(category);
             READWRITE(subcategory);
             READWRITE(name);
+            READWRITE(ticker);
             READWRITE(url);
             READWRITE(data);
             READWRITE(num_tokens);

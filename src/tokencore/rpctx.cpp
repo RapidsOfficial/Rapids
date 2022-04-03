@@ -522,12 +522,15 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
 
     uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
     if (propertyId > 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
 
     std::string desiredName = "RPDx";
     uint32_t propertyIdDesired = pDbSpInfo->findSPByTicker(desiredName);
     if (propertyIdDesired == 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "RPDx token not issued yet");
+
+    if (!IsTokenIPFSValid(data))
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     RequireExistingProperty(propertyIdDesired);
     RequireSameEcosystem(ecosystem, propertyIdDesired);
@@ -600,7 +603,7 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
 
     uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
     if (propertyId > 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
 
     if (!IsTokenTickerValid(ticker) && !IsUsernameValid(ticker))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token ticker is invalid");
@@ -674,7 +677,7 @@ static UniValue sendtokenissuancemanaged(const JSONRPCRequest& request)
 
     uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
     if (propertyId > 0)
-        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
 
     if (!IsTokenTickerValid(ticker))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token ticker is invalid");

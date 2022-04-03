@@ -235,12 +235,12 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
     leveldb::Slice slTxValue(&ssTxValue[0], ssTxValue.size());
 
 
-    // DB key for identifier lookup entry by name
+    // DB key for identifier lookup entry by ticker
     CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
     ssNameIndexKey << std::make_pair('T', info.ticker);
     leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
 
-    // DB value for name identifier
+    // DB value for ticker identifier
     CDataStream ssNameValue(SER_DISK, CLIENT_VERSION);
     ssNameValue.reserve(::GetSerializeSize(propertyId, CLIENT_VERSION));
     ssNameValue << propertyId;
