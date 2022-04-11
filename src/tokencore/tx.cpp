@@ -35,24 +35,43 @@
 #include <algorithm>
 #include <utility>
 #include <vector>
+#include <sstream>
 
 using boost::algorithm::token_compress_on;
 
 using namespace mastercore;
 
 static const std::regex IPFS_CHARACTERS("Qm[1-9A-HJ-NP-Za-km-z]{44,}|b[A-Za-z2-7]{58,}|B[A-Z2-7]{58,}|z[1-9A-HJ-NP-Za-km-z]{48,}|F[0-9A-F]{50,}");
-static const std::regex PROTECTED_NAMES("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
-static const std::regex TOKEN_NAME_CHARACTERS("^[r]?[A-Z0-9._]{3,25}$");
+static const std::regex TOKEN_SUB_CHARACTERS("^[r]?[A-Z0-9._]{3,25}#[A-Z0-9._]{3,25}$");
+static const std::regex PROTECTED_TICKERS("^RPD$|^RAPIDS$|^RAPIDSNETWORK$");
+static const std::regex TOKEN_TICKER_CHARACTERS("^[r]?[A-Z0-9._]{3,25}$");
 static const std::regex USERNAME_CHARACTERS("^[a-z0-9._]{3,25}.rpd$");
 static const std::regex PROTECTED_USERNAMES("^rapids.rpd$|^rpd.rpd$");
 
-bool IsTokenTickerValid(const std::string& name)
+std::vector<std::string> SplitSubTicker(const std::string &s) {
+    std::vector<std::string> elements;
+    std::stringstream ss(s);
+    std::string step;
+
+    while (std::getline(ss, step, '#')) {
+        elements.push_back(step);
+    }
+
+    return elements;
+}
+
+bool IsTokenTickerValid(const std::string& ticker)
 {
-    if (name == "RPDx")
+    if (ticker == "RPDx")
         return true;
 
-    return std::regex_match(name, TOKEN_NAME_CHARACTERS)
-        && !std::regex_match(name, PROTECTED_NAMES);
+    return std::regex_match(ticker, TOKEN_TICKER_CHARACTERS)
+        && !std::regex_match(ticker, PROTECTED_TICKERS);
+}
+
+bool IsSubTickerValid(const std::string& ticker)
+{
+    return std::regex_match(ticker, TOKEN_SUB_CHARACTERS);
 }
 
 bool IsUsernameValid(const std::string& username)
@@ -1625,23 +1644,61 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
 
     bool isToken = IsTokenTickerValid(ticker);
     bool isUsername = IsUsernameValid(ticker);
+    bool isSub = IsSubTickerValid(ticker);
 
-    if (!isToken && !isUsername)
+    if (!isToken && !isUsername && !isSub)
     {
         PrintToLog("%s(): rejected: token ticker %s is invalid\n", __func__, ticker);
         return (PKT_ERROR_SP -72);
     }
 
-    if (isUsername)
+    // Subtoken validation logic
+    if (isSub)
+    {
+        // Split here
+        std::vector<std::string> result = SplitSubTicker(ticker);
+
+        if (result.size() != 2)
+        {
+            PrintToLog("%s(): rejected: subtoken ticker %s invalid\n", __func__, ticker);
+            return (PKT_ERROR_SP -72);
+        }
+
+        std::string rootTicker = result[0];
+        int rootPropertyId = pDbSpInfo->findSPByTicker(rootTicker);
+
+        if (rootPropertyId == 0) {
+            PrintToLog("%s(): rejected: token with root ticker %s doesn't exists\n", __func__, rootTicker);
+            return (PKT_ERROR_SP -72);
+        }
+
+        CMPSPInfo::Entry rootSP;
+        pDbSpInfo->getSP(rootPropertyId, rootSP);
+
+        if (rootSP.issuer != sender)
+        {
+            PrintToLog("%s(): rejected: root token issuer missmatch %s - %s\n", __func__, rootSP.issuer, sender);
+            return (PKT_ERROR_SP -72);
+        }
+    }
+
+    // Username and subtoken must have 1 unit of supply
+    if (isUsername || isSub)
     {
         if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type || nValue != 1)
         {
-            PrintToLog("%s(): rejected: only 1 username token can be created\n", __func__);
+            PrintToLog("%s(): rejected: only 1 indivisible token can be created\n", __func__);
             return (PKT_ERROR_SP -23);
         }
     }
 
     CAmount nMandatory = 1 * COIN;
+
+    // Subtoken issuance is free
+    if (isSub) {
+        nMandatory = 0;
+    }
+
     if (nDonation < nMandatory) {
         PrintToLog("%s(): rejected: token creation fee is missing\n", __func__);
         return (PKT_ERROR_SP -73);

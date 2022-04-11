@@ -605,7 +605,7 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     if (propertyId > 0)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker already exists");
 
-    if (!IsTokenTickerValid(ticker) && !IsUsernameValid(ticker))
+    if (!IsTokenTickerValid(ticker) && !IsUsernameValid(ticker) && !IsSubTickerValid(ticker))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token ticker is invalid");
 
     if (!IsTokenIPFSValid(data))
@@ -617,7 +617,11 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     // request the wallet build the transaction (and if needed commit it)
     uint256 txid;
     std::string rawHex;
-    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, true);
+
+    // Subtoken doesn't require donation
+    bool requireDonation = !IsSubTickerValid(ticker);
+
+    int result = WalletTxBuilder(fromAddress, "", "", 0, payload, txid, rawHex, autoCommit, requireDonation);
 
     // check error and return the txid (or raw hex depending on autocommit)
     if (result != 0) {

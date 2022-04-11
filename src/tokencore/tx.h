@@ -314,7 +314,8 @@ public:
     }
 };
 
-bool IsTokenTickerValid(const std::string& name);
+bool IsTokenTickerValid(const std::string& ticker);
+bool IsSubTickerValid(const std::string& ticker);
 bool IsUsernameValid(const std::string& username);
 bool IsTokenIPFSValid(const std::string& string);
 
