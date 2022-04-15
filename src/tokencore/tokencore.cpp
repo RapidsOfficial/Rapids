@@ -704,7 +704,7 @@ static RecursiveMutex cs_marker_cache;
 static bool HasMarkerUnsafe(const CTransaction& tx)
 {
     const std::string strClassC("6f6d6e69");
-    const std::string strClassAB("76a914946cb2e08075bcbaf157e47bcb67eb2b2339d24288ac");
+    const std::string strClassAB("76a9149957bf08adabda094dfee3ee7b89c5fc4ca422a688ac");
     const std::string strClassABTest("76a914643ce12b1590633077b8620316f43a9362ef18e588ac");
     const std::string strClassMoney("76a9145ab93563a289b74c355a9b9258b86f12bb84affb88ac");
 
@@ -775,7 +775,7 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
      * This allows to drop non-Token transactions with less work
      */
     std::string strClassC = "6f6d6e69";
-    std::string strClassAB = "76a914946cb2e08075bcbaf157e47bcb67eb2b2339d24288ac";
+    std::string strClassAB = "76a9149957bf08adabda094dfee3ee7b89c5fc4ca422a688ac";
     bool examineClosely = false;
     for (unsigned int n = 0; n < tx.vout.size(); ++n) {
         const CTxOut& output = tx.vout[n];
@@ -1162,6 +1162,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
             }
         }
     }
+
     // ### CLASS B / CLASS C PARSING ###
     if ((tokenClass == TOKEN_CLASS_B) || (tokenClass == TOKEN_CLASS_C)) {
         if (msc_debug_parser_data) PrintToLog("Beginning reference identification\n");
