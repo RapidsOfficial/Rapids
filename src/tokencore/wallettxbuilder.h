@@ -32,5 +32,8 @@ int CreateFundedTransaction(
         const std::vector<unsigned char>& payload,
         uint256& retTxid);
 
+#ifdef ENABLE_WALLET
+int CreateDExTransaction(const std::string& buyerAddress, const std::string& sellerAddress, const CAmount& nAmount, uint256& txid);
+#endif
 
 #endif // TOKENCORE_WALLETTXBUILDER_H

@@ -355,3 +355,81 @@ int CreateFundedTransaction(
 #endif
 
 }
+
+
+
+/**
+ * Used by the sendtokendexpay RPC call to creates and send a
+ * transaction to pay for an accepted offer on the traditional DEx.
+ */
+#ifdef ENABLE_WALLET
+int CreateDExTransaction(const std::string& buyerAddress, const std::string& sellerAddress, const CAmount& nAmount, uint256& txid)
+{
+    if (pwalletMain == NULL) {
+        return MP_ERR_WALLET_ACCESS;
+    }
+
+    // Set the change address to the sender
+    CCoinControl coinControl;
+    coinControl.destChange = DecodeDestination(buyerAddress);
+
+    // Create scripts for outputs
+    CScript exodus = GetScriptForDestination(ExodusAddress());
+    CScript destScript = GetScriptForDestination(DecodeDestination(sellerAddress));
+
+    // Calculate dust for Exodus output
+    CAmount dust = GetDustThreshold(exodus);
+
+    // Select the inputs required to cover amount, dust and fees
+    if (0 > mastercore::SelectCoins(buyerAddress, coinControl, nAmount + dust)) {
+        return MP_INPUTS_INVALID;
+    }
+
+    // Make sure that we have inputs selected.
+    if (!coinControl.HasSelected()) {
+        return MP_ERR_INPUTSELECT_FAIL;
+    }
+
+    // Create CRecipients for outputs
+    std::vector<CRecipient> vecRecipients;
+    vecRecipients.push_back({exodus, dust, false}); // Exodus
+    vecRecipients.push_back({destScript, nAmount, false}); // Seller
+
+    // Ask the wallet to create the transaction (note mining fee determined by Bitcoin Core params)
+    CAmount nFeeRet = 0;
+    int nChangePosInOut = -1;
+    std::string strFailReason;
+
+    // auto wtxNew = pwallet->createTransaction(vecRecipients, coinControl, true /* sign */, nChangePosInOut, nFeeRet, strFailReason, false);
+
+    // if (!wtxNew) {
+    //     return MP_ERR_CREATE_TX;
+    // }
+
+    CWalletTx wtxNew;
+    CReserveKey reserveKey(pwalletMain);
+
+    if (!pwalletMain->CreateTransaction(vecRecipients, wtxNew, reserveKey, nFeeRet, nChangePosInOut, strFailReason, &coinControl)) {
+        PrintToLog("%s: ERROR: wallet transaction creation failed: %s\n", __func__, strFailReason);
+        return MP_ERR_CREATE_TX;
+    }
+
+    const CWallet::CommitResult& res = pwalletMain->CommitTransaction(wtxNew, reserveKey, g_connman.get());
+
+    if (res.status != CWallet::CommitStatus::OK)
+        return MP_ERR_COMMIT_TX;
+
+    txid = wtxNew.GetHash();
+    return 0;
+
+    // // Commit the transaction to the wallet and broadcast
+    // std::string rejectReason;
+    // if (!wtxNew->commit({}, {}, rejectReason)) {
+    //     return MP_ERR_COMMIT_TX;
+    // }
+
+    // txid = wtxNew->get().GetHash();
+
+    // return 0;
+}
+#endif

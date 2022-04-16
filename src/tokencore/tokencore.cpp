@@ -846,9 +846,9 @@ int mastercore::GetEncodingClass(const CTransaction& tx, int nBlock)
     if (hasExodus && hasMultisig) {
         return TOKEN_CLASS_B;
     }
-    // if (hasExodus || hasMoney) {
-    //     return TOKEN_CLASS_A;
-    // }
+    if (hasExodus) {
+        return TOKEN_CLASS_A;
+    }
 
     return NO_MARKER;
 }
@@ -1374,6 +1374,35 @@ int ParseTransaction(const CTransaction& tx, int nBlock, unsigned int idx, CMPTr
 }
 
 /**
+ * Handles potential DEx payments.
+ *
+ * Note: must *not* be called outside of the transaction handler, and it does not
+ * check, if a transaction marker exists.
+ *
+ * @return True, if valid
+ */
+static bool HandleDExPayments(const CTransaction& tx, int nBlock, const std::string& strSender)
+{
+    int count = 0;
+
+    for (unsigned int n = 0; n < tx.vout.size(); ++n) {
+        CTxDestination dest;
+        if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
+            if (dest == ExodusAddress()) {
+                continue;
+            }
+            std::string strAddress = EncodeDestination(dest);
+            if (msc_debug_parser_dex) PrintToLog("payment #%d %s %s\n", count, strAddress, FormatIndivisibleMP(tx.vout[n].nValue));
+
+            // check everything and pay BTC for the property we are buying here...
+            if (0 == DEx_payment(tx.GetHash(), n, strAddress, strSender, tx.vout[n].nValue, nBlock)) ++count;
+        }
+    }
+
+    return (count > 0);
+}
+
+/**
  * Reports the progress of the initial transaction scanning.
  *
  * The progress is printed to the console, written to the debug log file, and
@@ -1855,6 +1884,13 @@ bool mastercore_handler_tx(const CTransaction& tx, int nBlock, unsigned int idx,
 
     bool fFoundTx = false;
     int pop_ret = parseTransaction(false, tx, nBlock, idx, mp_obj, nBlockTime);
+
+    if (pop_ret > 0) {
+        assert(mp_obj.getEncodingClass() == TOKEN_CLASS_A);
+        assert(mp_obj.getPayload().empty() == true);
+
+        fFoundTx |= HandleDExPayments(tx, nBlock, mp_obj.getSender());
+    }
 
     if (0 == pop_ret) {
         int interp_ret = mp_obj.interpretPacket();

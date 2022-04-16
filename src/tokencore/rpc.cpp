@@ -1801,6 +1801,9 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
         double unitPriceFloat = 0.0;
         if ((sellOfferAmount > 0) && (sellRapidsDesired > 0)) {
             unitPriceFloat = (double) sellRapidsDesired / (double) sellOfferAmount; // divide by zero protection
+            if (!isPropertyDivisible(propertyId)) {
+                unitPriceFloat /= 100000000.0;
+            }
         }
         int64_t unitPrice = rounduint64(unitPriceFloat * COIN);
         int64_t bitcoinDesired = calculateDesiredRPD(sellOfferAmount, sellRapidsDesired, amountAvailable);
@@ -1811,14 +1814,14 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
         responseObj.pushKV("name", property.name);
         responseObj.pushKV("ticker", property.ticker);
         responseObj.pushKV("seller", seller);
-        responseObj.pushKV("amountavailable", FormatDivisibleMP(amountAvailable));
+        responseObj.pushKV("amountavailable", FormatMP(propertyId, amountAvailable));
         responseObj.pushKV("rapidsdesired", FormatDivisibleMP(bitcoinDesired));
         responseObj.pushKV("unitprice", FormatDivisibleMP(unitPrice));
         responseObj.pushKV("timelimit", timeLimit);
         responseObj.pushKV("minimumfee", FormatDivisibleMP(minFee));
 
         // display info about accepts related to sell
-        responseObj.pushKV("amountaccepted", FormatDivisibleMP(amountAccepted));
+        responseObj.pushKV("amountaccepted", FormatMP(propertyId, amountAccepted));
         UniValue acceptsMatched(UniValue::VARR);
         for (AcceptMap::const_iterator ait = my_accepts.begin(); ait != my_accepts.end(); ++ait) {
             UniValue matchedAccept(UniValue::VOBJ);
@@ -1837,7 +1840,7 @@ static UniValue gettokenactivedexsells(const JSONRPCRequest& request)
                 matchedAccept.pushKV("buyer", buyer);
                 matchedAccept.pushKV("block", blockOfAccept);
                 matchedAccept.pushKV("blocksleft", blocksLeftToPay);
-                matchedAccept.pushKV("amount", FormatDivisibleMP(amountAccepted));
+                matchedAccept.pushKV("amount", FormatMP(propertyId, amountAccepted));
                 matchedAccept.pushKV("amounttopay", FormatDivisibleMP(amountToPayInRPD));
                 acceptsMatched.push_back(matchedAccept);
             }
@@ -2427,7 +2430,7 @@ static const CRPCCommand commands[] =
     { "tokens (data retrieval)", "listtokens",                      &listtokens,                       false },
     { "tokens (data retrieval)", "gettokencrowdsale",               &gettokencrowdsale,                false },
     { "tokens (data retrieval)", "gettokengrants",                  &gettokengrants,                   false },
-    // { "tokens (data retrieval)", "gettokenactivedexsells",          &gettokenactivedexsells,           false },
+    { "tokens (data retrieval)", "gettokenactivedexsells",          &gettokenactivedexsells,           false },
     { "tokens (data retrieval)", "gettokenactivecrowdsales",        &gettokenactivecrowdsales,         false },
     { "tokens (data retrieval)", "gettokenorderbook",               &gettokenorderbook,                false },
     { "tokens (data retrieval)", "gettokentrade",                   &gettokentrade,                    false },

@@ -19,9 +19,11 @@
 #include "tokencore/utilsbitcoin.h"
 
 #include "init.h"
+#include <key_io.h>
 #include "main.h"
 #include "rpc/server.h"
 #include "sync.h"
+#include "utilmoneystr.h"
 #ifdef ENABLE_WALLET
 #include "wallet/wallet.h"
 #endif
@@ -467,6 +469,85 @@ static UniValue sendtokendexaccept(const JSONRPCRequest& request)
         }
     }
 }
+
+
+
+#ifdef ENABLE_WALLET
+static UniValue sendtokendexpay(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() != 4)
+        throw runtime_error(
+            "sendtokendexpay \"fromaddress\" \"toaddress\" ticker \"amount\"\n"
+
+            "\nCreate and broadcast an accept offer for the specified token and amount.\n"
+
+            "\nArguments:\n"
+            "1. fromaddress          (string, required) the address to send from\n"
+            "2. toaddress            (string, required) the address of the seller\n"
+            "3. ticker               (string, required) the ticker of token to purchase\n"
+            "4. amount               (string, required) the amount to accept\n"
+
+            "\nResult:\n"
+            "\"hash\"                  (string) the hex-encoded transaction hash\n"
+
+            "\nExamples:\n"
+            + HelpExampleCli("sendtokendexpay", "\"35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" TOKEN \"15.0\"")
+            + HelpExampleRpc("sendtokendexpay", "\"35URq1NN3xL6GeRKUP6vzaQVcxoJiiJKd8\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", TOKEN, \"15.0\"")
+        );
+
+    // Parameters
+    std::string buyerAddress = ParseText(request.params[0]);
+    std::string sellerAddress = ParseText(request.params[1]);
+    std::string ticker = ParseText(request.params[2]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
+    CAmount nAmount = ParseAmount(request.params[3], true);
+
+    // Check parameters are valid
+    if (nAmount <= 0)
+        throw JSONRPCError(RPC_INVALID_PARAMETER, "Invalid amount for send");
+
+    CTxDestination buyerDest = DecodeDestination(buyerAddress);
+    if (!IsValidDestination(buyerDest)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid buyer address");
+    }
+
+    CTxDestination sellerDest = DecodeDestination(sellerAddress);
+    if (!IsValidDestination(sellerDest)) {
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid seller address");
+    }
+
+    RequireMatchingDExAccept(sellerAddress, propertyId, buyerAddress);
+
+    // Get accept offer and make sure buyer is not trying to overpay
+    {
+        LOCK(cs_tally);
+        const CMPAccept* acceptOffer = DEx_getAccept(sellerAddress, propertyId, buyerAddress);
+        if (acceptOffer == nullptr)
+            throw JSONRPCError(RPC_MISC_ERROR, "Unable to load accept offer from the distributed exchange");
+
+        const CAmount amountAccepted = acceptOffer->getAcceptAmountRemaining();
+        const CAmount amountToPayInRPD = calculateDesiredRPD(acceptOffer->getOfferAmountOriginal(), acceptOffer->getRPDDesiredOriginal(), amountAccepted);
+
+        if (nAmount > amountToPayInRPD) {
+            throw JSONRPCError(RPC_MISC_ERROR, strprintf("Paying more than required: %lld RPD to pay for %lld tokens", FormatMoney(amountToPayInRPD), FormatMoney(amountAccepted)));
+        }
+    }
+
+    uint256 txid;
+    int result = CreateDExTransaction(buyerAddress, sellerAddress, nAmount, txid);
+
+    // Check error and return the txid
+    if (result != 0) {
+        throw JSONRPCError(result, error_str(result));
+    } else {
+        return txid.GetHex();
+    }
+}
+#endif
 
 static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
 {
@@ -1662,8 +1743,9 @@ static const CRPCCommand commands[] =
 #ifdef ENABLE_WALLET
     { "tokens (transaction creation)", "sendtokenrawtx",               &sendtokenrawtx,               false },
     { "tokens (transaction creation)", "sendtoken",                    &sendtoken,                    false },
-    // { "tokens (transaction creation)", "sendtokendexsell",             &sendtokendexsell,             false },
-    // { "tokens (transaction creation)", "sendtokendexaccept",           &sendtokendexaccept,           false },
+    { "tokens (transaction creation)", "sendtokendexsell",             &sendtokendexsell,             false },
+    { "tokens (transaction creation)", "sendtokendexaccept",           &sendtokendexaccept,           false },
+    { "tokens (transaction creation)", "sendtokendexpay",              &sendtokendexpay,              false },
     { "tokens (transaction creation)", "sendtokenissuancecrowdsale",   &sendtokenissuancecrowdsale,   false },
     { "tokens (transaction creation)", "sendtokenissuancefixed",       &sendtokenissuancefixed,       false },
     { "tokens (transaction creation)", "sendtokenissuancemanaged",     &sendtokenissuancemanaged,     false },
