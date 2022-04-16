@@ -728,7 +728,7 @@ int populateRPCDExPurchases(const CTransaction& wtx, UniValue& purchases, std::s
         purchaseObj.push_back(Pair("propertyid", propertyId));
         purchaseObj.push_back(Pair("propertyname", getPropertyName(propertyId)));
         purchaseObj.push_back(Pair("propertyticker", getPropertyTicker(propertyId)));
-        purchaseObj.push_back(Pair("amountbought", FormatDivisibleMP(nValue)));
+        purchaseObj.push_back(Pair("amountbought", FormatMP(propertyId, nValue)));
         purchaseObj.push_back(Pair("valid", true)); //only valid purchases are stored, anything else is regular RPD tx
         purchases.push_back(purchaseObj);
     }

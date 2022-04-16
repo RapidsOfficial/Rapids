@@ -533,7 +533,11 @@ static UniValue sendtokendexpay(const JSONRPCRequest& request)
         const CAmount amountToPayInRPD = calculateDesiredRPD(acceptOffer->getOfferAmountOriginal(), acceptOffer->getRPDDesiredOriginal(), amountAccepted);
 
         if (nAmount > amountToPayInRPD) {
-            throw JSONRPCError(RPC_MISC_ERROR, strprintf("Paying more than required: %lld RPD to pay for %lld tokens", FormatMoney(amountToPayInRPD), FormatMoney(amountAccepted)));
+            throw JSONRPCError(RPC_MISC_ERROR, strprintf("Paying more than required: %lld RPD to pay for %lld tokens", FormatMoney(amountToPayInRPD), FormatMP(propertyId, amountAccepted)));
+        }
+
+        if (!isPropertyDivisible(propertyId) && nAmount < amountToPayInRPD) {
+            throw JSONRPCError(RPC_MISC_ERROR, strprintf("Paying less than required: %lld RPD to pay for %lld tokens", FormatMoney(amountToPayInRPD), FormatMP(propertyId, amountAccepted)));
         }
     }
 
