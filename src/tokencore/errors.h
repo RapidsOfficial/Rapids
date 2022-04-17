@@ -327,6 +327,27 @@ inline std::string error_str(int ec) {
           break;
 
 
+      case PKT_ERROR_SP -79:
+          ec_str = "Royalties token must have only 1 unit of supply";
+          break;
+
+      case PKT_ERROR_SP -80:
+          ec_str = "Royalties receiver is empty";
+          break;
+
+      case PKT_ERROR_SP -81:
+          ec_str = "Royalties percentage is zero";
+          break;
+
+      case PKT_ERROR_SP -82:
+          ec_str = "Royalties receiver username not registered";
+          break;
+
+      case PKT_ERROR_SP -83:
+          ec_str = "Royalties address is invalid";
+          break;
+
+
       case PKT_ERROR_TOKENS -22:
           ec_str = "Transaction type or version not permitted";
           break;

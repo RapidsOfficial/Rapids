@@ -74,6 +74,10 @@ private:
     char ticker[SP_STRING_FIELD_LEN];
     char url[SP_STRING_FIELD_LEN];
     char data[SP_STRING_FIELD_LEN];
+
+    char royaltiesReceiver[SP_STRING_FIELD_LEN];
+    unsigned char royaltiesPercentage;
+
     uint64_t deadline;
     unsigned char early_bird;
     unsigned char percentage;

@@ -145,7 +145,8 @@ std::vector<unsigned char> CreatePayload_SendToOwners(uint32_t propertyId, uint6
 }
 
 std::vector<unsigned char> CreatePayload_IssuanceFixed(uint8_t ecosystem, uint16_t propertyType, uint32_t previousPropertyId, std::string category,
-                                                       std::string subcategory, std::string name, std::string ticker, std::string url, std::string data, uint64_t amount)
+                                                       std::string subcategory, std::string name, std::string ticker, std::string url, std::string data, uint64_t amount,
+                                                       std::string royaltiesReceiver, uint8_t royaltiesPercentage)
 {
     std::vector<unsigned char> payload;
     uint16_t messageType = 50;
@@ -158,8 +159,10 @@ std::vector<unsigned char> CreatePayload_IssuanceFixed(uint8_t ecosystem, uint16
     if (category.size() > 255) category = category.substr(0,255);
     if (subcategory.size() > 255) subcategory = subcategory.substr(0,255);
     if (name.size() > 255) name = name.substr(0,255);
+    if (ticker.size() > 255) ticker = ticker.substr(0,255);
     if (url.size() > 255) url = url.substr(0,255);
     if (data.size() > 255) data = data.substr(0,255);
+    if (royaltiesReceiver.size() > 255) royaltiesReceiver = royaltiesReceiver.substr(0,255);
 
     PUSH_BACK_BYTES(payload, messageVer);
     PUSH_BACK_BYTES(payload, messageType);
@@ -179,6 +182,11 @@ std::vector<unsigned char> CreatePayload_IssuanceFixed(uint8_t ecosystem, uint16
     payload.insert(payload.end(), data.begin(), data.end());
     payload.push_back('\0');
     PUSH_BACK_BYTES(payload, amount);
+
+    // Royalties data
+    payload.insert(payload.end(), royaltiesReceiver.begin(), royaltiesReceiver.end());
+    payload.push_back('\0');
+    PUSH_BACK_BYTES(payload, royaltiesPercentage);
 
     return payload;
 }

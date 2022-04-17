@@ -85,6 +85,10 @@ public:
         bool fixed;
         bool manual;
 
+        // royalties
+        uint8_t royalties_percentage;
+        std::string royalties_receiver;
+
         // For crowdsale properties:
         //   txid -> amount invested, crowdsale deadline, user issued tokens, issuer issued tokens
         // For managed properties:
@@ -127,6 +131,8 @@ public:
             READWRITE(manual);
             READWRITE(historicalData);
             READWRITE(historicalIssuers);
+            READWRITE(royalties_percentage);
+            READWRITE(royalties_receiver);
         }
 
         bool isDivisible() const;

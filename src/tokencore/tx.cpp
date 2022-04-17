@@ -515,6 +515,10 @@ bool CMPTransaction::interpret_CreatePropertyFixed()
     p += 8;
     nNewValue = nValue;
 
+    // Royalties
+    memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(royaltiesReceiver)-1)); i++;
+    memcpy(&royaltiesPercentage, p++, 1);
+
     if ((!rpcOnly && msc_debug_packets) || msc_debug_packets_readonly) {
         PrintToLog("\t       ecosystem: %d\n", ecosystem);
         PrintToLog("\t   property type: %d (%s)\n", prop_type, strPropertyType(prop_type));
@@ -526,6 +530,11 @@ bool CMPTransaction::interpret_CreatePropertyFixed()
         PrintToLog("\t             url: %s\n", url);
         PrintToLog("\t            data: %s\n", data);
         PrintToLog("\t           value: %s\n", FormatByType(nValue, prop_type));
+
+        if (royaltiesReceiver != "" && royaltiesPercentage > 0) {
+            PrintToLog("\t   royalties receiver: %s\n", royaltiesReceiver);
+            PrintToLog("\t           percentage: %d\n", royaltiesPercentage);
+        }
     }
 
     if (isOverrun(p)) {
@@ -1642,6 +1651,7 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -71);
     }
 
+    bool isNFT = prop_type == TOKEN_PROPERTY_TYPE_INDIVISIBLE && nValue == 1;
     bool isToken = IsTokenTickerValid(ticker);
     bool isUsername = IsUsernameValid(ticker);
     bool isSub = IsSubTickerValid(ticker);
@@ -1685,7 +1695,7 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
     // Username and subtoken must have 1 unit of supply
     if (isUsername || isSub)
     {
-        if (TOKEN_PROPERTY_TYPE_INDIVISIBLE != prop_type || nValue != 1)
+        if (!isNFT)
         {
             PrintToLog("%s(): rejected: only 1 indivisible token can be created\n", __func__);
             return (PKT_ERROR_SP -23);
@@ -1710,6 +1720,43 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -74);
     }
 
+    // Royalties verification
+    if (!isNFT && (royaltiesReceiver != "" || royaltiesPercentage > 0))
+    {
+        PrintToLog("%s(): rejected: royalties can be set only for token with 1 unit of supply\n", __func__);
+        return (PKT_ERROR_SP -79);
+    }
+
+    if (royaltiesReceiver == "" && royaltiesPercentage > 0)
+    {
+        PrintToLog("%s(): rejected: royalties receiver can't be empty if royalties percentage greater than zero\n", __func__);
+        return (PKT_ERROR_SP -80);
+    }
+
+    if (royaltiesReceiver != "" && royaltiesPercentage == 0)
+    {
+        PrintToLog("%s(): rejected: royalties percentage can't be zero if royalties receiver not empty\n", __func__);
+        return (PKT_ERROR_SP -81);
+    }
+
+    if (royaltiesReceiver != "")
+    {
+        if (IsUsernameValid(royaltiesReceiver))
+        {
+            // Make sure username exists
+            if (pDbSpInfo->findSPByTicker(royaltiesReceiver) == 0) {
+                PrintToLog("%s(): rejected: royalties receiver username %s not registered yet\n", __func__, royaltiesReceiver);
+                return (PKT_ERROR_SP -82);
+            }
+        } else {
+            CTxDestination royaltiesAddress = DecodeDestination(royaltiesReceiver);
+            if (!IsValidDestination(royaltiesAddress)) {
+                PrintToLog("%s(): rejected: invalid royalties address %s\n", __func__, royaltiesReceiver);
+                return (PKT_ERROR_SP -83);
+            }
+        }
+    }
+
     // ------------------------------------------
 
     CMPSPInfo::Entry newSP;
@@ -1727,6 +1774,9 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
     newSP.fixed = true;
     newSP.creation_block = blockHash;
     newSP.update_block = newSP.creation_block;
+
+    newSP.royalties_percentage = royaltiesPercentage;
+    newSP.royalties_receiver = royaltiesReceiver;
 
     const uint32_t propertyId = pDbSpInfo->putSP(ecosystem, newSP);
     assert(propertyId > 0);

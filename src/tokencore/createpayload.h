@@ -11,7 +11,8 @@ std::vector<unsigned char> CreatePayload_DExSell(uint32_t propertyId, uint64_t a
 std::vector<unsigned char> CreatePayload_DExAccept(uint32_t propertyId, uint64_t amount);
 std::vector<unsigned char> CreatePayload_SendToOwners(uint32_t propertyId, uint64_t amount, uint32_t distributionProperty);
 std::vector<unsigned char> CreatePayload_IssuanceFixed(uint8_t ecosystem, uint16_t propertyType, uint32_t previousPropertyId, std::string category,
-                                                       std::string subcategory, std::string name, std::string ticker, std::string url, std::string data, uint64_t amount);
+                                                       std::string subcategory, std::string name, std::string ticker, std::string url, std::string data, uint64_t amount,
+                                                       std::string royaltiesReceiver = "", uint8_t royaltiesPercentage = 0);
 std::vector<unsigned char> CreatePayload_IssuanceVariable(uint8_t ecosystem, uint16_t propertyType, uint32_t previousPropertyId, std::string category,
                                                           std::string subcategory, std::string name, std::string ticker, std::string url, std::string data, uint32_t propertyIdDesired,
                                                           uint64_t amountPerUnit, uint64_t deadline, uint8_t earlyBonus, uint8_t issuerPercentage);
