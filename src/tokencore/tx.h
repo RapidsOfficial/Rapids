@@ -75,6 +75,7 @@ private:
     char url[SP_STRING_FIELD_LEN];
     char data[SP_STRING_FIELD_LEN];
 
+    // Royalties
     char royaltiesReceiver[SP_STRING_FIELD_LEN];
     unsigned char royaltiesPercentage;
 

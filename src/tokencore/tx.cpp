@@ -499,42 +499,39 @@ bool CMPTransaction::interpret_CreatePropertyFixed()
     SwapByteOrder16(prop_type);
     memcpy(&prev_prop_id, &pkt[7], 4);
     SwapByteOrder32(prev_prop_id);
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 7; i++) {
         spstr.push_back(std::string(p));
         p += spstr.back().size() + 1;
     }
     int i = 0;
-    memcpy(category, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(category)-1)); i++;
-    memcpy(subcategory, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(subcategory)-1)); i++;
-    memcpy(name, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(name)-1)); i++;
-    memcpy(ticker, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(ticker)-1)); i++;
-    memcpy(url, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(url)-1)); i++;
-    memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(data)-1)); i++;
+    memcpy(category, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(subcategory, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(name, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(ticker, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(url, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(data, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(royaltiesReceiver, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
     memcpy(&nValue, p, 8);
     SwapByteOrder64(nValue);
     p += 8;
     nNewValue = nValue;
 
-    // Royalties
-    memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(royaltiesReceiver)-1)); i++;
     memcpy(&royaltiesPercentage, p++, 1);
 
     if ((!rpcOnly && msc_debug_packets) || msc_debug_packets_readonly) {
-        PrintToLog("\t       ecosystem: %d\n", ecosystem);
-        PrintToLog("\t   property type: %d (%s)\n", prop_type, strPropertyType(prop_type));
-        PrintToLog("\tprev property id: %d\n", prev_prop_id);
-        PrintToLog("\t        category: %s\n", category);
-        PrintToLog("\t     subcategory: %s\n", subcategory);
-        PrintToLog("\t            name: %s\n", name);
-        PrintToLog("\t          ticker: %s\n", ticker);
-        PrintToLog("\t             url: %s\n", url);
-        PrintToLog("\t            data: %s\n", data);
-        PrintToLog("\t           value: %s\n", FormatByType(nValue, prop_type));
+        PrintToLog("\t         ecosystem: %d\n", ecosystem);
+        PrintToLog("\t     property type: %d (%s)\n", prop_type, strPropertyType(prop_type));
+        PrintToLog("\t  prev property id: %d\n", prev_prop_id);
+        PrintToLog("\t          category: %s\n", category);
+        PrintToLog("\t       subcategory: %s\n", subcategory);
+        PrintToLog("\t              name: %s\n", name);
+        PrintToLog("\t            ticker: %s\n", ticker);
+        PrintToLog("\t               url: %s\n", url);
+        PrintToLog("\t              data: %s\n", data);
+        PrintToLog("\t             value: %s\n", FormatByType(nValue, prop_type));
 
-        if (royaltiesReceiver != "" && royaltiesPercentage > 0) {
-            PrintToLog("\t   royalties receiver: %s\n", royaltiesReceiver);
-            PrintToLog("\t           percentage: %d\n", royaltiesPercentage);
-        }
+        PrintToLog("\troyalties receiver: %s\n", royaltiesReceiver);
+        PrintToLog("\t        percentage: %d\n", royaltiesPercentage);
     }
 
     if (isOverrun(p)) {
@@ -563,12 +560,12 @@ bool CMPTransaction::interpret_CreatePropertyVariable()
         p += spstr.back().size() + 1;
     }
     int i = 0;
-    memcpy(category, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(category)-1)); i++;
-    memcpy(subcategory, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(subcategory)-1)); i++;
-    memcpy(name, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(name)-1)); i++;
-    memcpy(ticker, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(ticker)-1)); i++;
-    memcpy(url, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(url)-1)); i++;
-    memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(data)-1)); i++;
+    memcpy(category, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(subcategory, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(name, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(ticker, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(url, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(data, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
     memcpy(&property, p, 4);
     SwapByteOrder32(property);
     p += 4;
@@ -641,12 +638,12 @@ bool CMPTransaction::interpret_CreatePropertyManaged()
         p += spstr.back().size() + 1;
     }
     int i = 0;
-    memcpy(category, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(category)-1)); i++;
-    memcpy(subcategory, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(subcategory)-1)); i++;
-    memcpy(name, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(name)-1)); i++;
-    memcpy(ticker, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(ticker)-1)); i++;
-    memcpy(url, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(url)-1)); i++;
-    memcpy(data, spstr[i].c_str(), std::min(spstr[i].length(), sizeof(data)-1)); i++;
+    memcpy(category, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(subcategory, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(name, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(ticker, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(url, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
+    memcpy(data, spstr[i].c_str(), SP_STRING_FIELD_LEN); i++;
 
     if ((!rpcOnly && msc_debug_packets) || msc_debug_packets_readonly) {
         PrintToLog("\t       ecosystem: %d\n", ecosystem);
@@ -1721,25 +1718,25 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
     }
 
     // Royalties verification
-    if (!isNFT && (royaltiesReceiver != "" || royaltiesPercentage > 0))
+    if (!isNFT && (royaltiesReceiver[0] != '\0' || royaltiesPercentage > 0))
     {
         PrintToLog("%s(): rejected: royalties can be set only for token with 1 unit of supply\n", __func__);
         return (PKT_ERROR_SP -79);
     }
 
-    if (royaltiesReceiver == "" && royaltiesPercentage > 0)
+    if (royaltiesReceiver[0] == '\0' && royaltiesPercentage > 0)
     {
         PrintToLog("%s(): rejected: royalties receiver can't be empty if royalties percentage greater than zero\n", __func__);
         return (PKT_ERROR_SP -80);
     }
 
-    if (royaltiesReceiver != "" && royaltiesPercentage == 0)
+    if (royaltiesReceiver[0] != '\0' && royaltiesPercentage == 0)
     {
         PrintToLog("%s(): rejected: royalties percentage can't be zero if royalties receiver not empty\n", __func__);
         return (PKT_ERROR_SP -81);
     }
 
-    if (royaltiesReceiver != "")
+    if (royaltiesReceiver[0] != '\0')
     {
         if (IsUsernameValid(royaltiesReceiver))
         {

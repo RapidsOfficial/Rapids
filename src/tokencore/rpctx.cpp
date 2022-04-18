@@ -682,6 +682,12 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     std::string data = ParseText(request.params[9]);
     int64_t amount = ParseAmount(request.params[10], type);
 
+    // std::string royaltiesReceiver = "Rp1Tap5P1VjQj3dCzciixMiv4oJ3gjwFCg";
+    // uint8_t royaltiesPercentage = 1;
+
+    std::string royaltiesReceiver = "";
+    uint8_t royaltiesPercentage = 0;
+
     // perform checks
     RequirePropertyName(name);
     RequirePropertyName(ticker);
@@ -697,7 +703,7 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
     // create a payload for the transaction
-    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, ticker, url, data, amount);
+    std::vector<unsigned char> payload = CreatePayload_IssuanceFixed(ecosystem, type, previousId, category, subcategory, name, ticker, url, data, amount, royaltiesReceiver, royaltiesPercentage);
 
     // request the wallet build the transaction (and if needed commit it)
     uint256 txid;
