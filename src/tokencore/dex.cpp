@@ -536,13 +536,13 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
     // ToDo: calculate and check royalties here!
     uint32_t offerPropertyId = p_accept->getProperty();
 
-    CMPSPInfo::Entry sp;
-    pDbSpInfo->getSP(propertyId, sp);
+    CMPSPInfo::Entry royaltiesSP;
+    pDbSpInfo->getSP(propertyId, royaltiesSP);
     int64_t royaltiesAmount = 0;
-    std::string royaltiesReceiver = sp.royalties_receiver;
+    std::string royaltiesReceiver = royaltiesSP.royalties_receiver;
 
-    if (sp.royalties_percentage > 0) {
-        royaltiesAmount = amountDesired * sp.royalties_percentage / 100;
+    if (royaltiesSP.royalties_percentage > 0) {
+        royaltiesAmount = amountDesired * royaltiesSP.royalties_percentage / 100;
         bool foundRoyalties = false;
 
         for (int i = 0; i < payments.size(); ++i) {
@@ -554,7 +554,7 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
         }
 
         if (!foundRoyalties) {
-            if (msc_debug_dex) PrintToLog("%s: ERROR: failed to find royalties payment", __func__);
+            if (msc_debug_dex) PrintToLog("%s: ERROR: failed to find royalties payment\n", __func__);
             return (DEX_ERROR_PAYMENT -3);
         }
     }

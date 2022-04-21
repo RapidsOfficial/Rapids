@@ -541,8 +541,11 @@ static UniValue sendtokendexpay(const JSONRPCRequest& request)
         }
     }
 
+    CMPSPInfo::Entry royaltiesSP;
+    pDbSpInfo->getSP(propertyId, royaltiesSP);
+
     uint256 txid;
-    int result = CreateDExTransaction(buyerAddress, sellerAddress, nAmount, txid);
+    int result = CreateDExTransaction(buyerAddress, sellerAddress, nAmount, royaltiesSP.royalties_percentage, royaltiesSP.royalties_receiver, txid);
 
     // Check error and return the txid
     if (result != 0) {
@@ -682,11 +685,11 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     std::string data = ParseText(request.params[9]);
     int64_t amount = ParseAmount(request.params[10], type);
 
-    // std::string royaltiesReceiver = "Rp1Tap5P1VjQj3dCzciixMiv4oJ3gjwFCg";
-    // uint8_t royaltiesPercentage = 1;
+    std::string royaltiesReceiver = "RmLTuqFkrLyBM8ibfMh3xmeNFSY1Ka6HNs";
+    uint8_t royaltiesPercentage = 50;
 
-    std::string royaltiesReceiver = "";
-    uint8_t royaltiesPercentage = 0;
+    // std::string royaltiesReceiver = "";
+    // uint8_t royaltiesPercentage = 0;
 
     // perform checks
     RequirePropertyName(name);

@@ -363,7 +363,7 @@ int CreateFundedTransaction(
  * transaction to pay for an accepted offer on the traditional DEx.
  */
 #ifdef ENABLE_WALLET
-int CreateDExTransaction(const std::string& buyerAddress, const std::string& sellerAddress, const CAmount& nAmount, uint256& txid)
+int CreateDExTransaction(const std::string& buyerAddress, const std::string& sellerAddress, const CAmount& nAmount, const uint8_t& royaltiesPercentage, const std::string& royaltiesReceiver, uint256& txid)
 {
     if (pwalletMain == NULL) {
         return MP_ERR_WALLET_ACCESS;
@@ -390,21 +390,27 @@ int CreateDExTransaction(const std::string& buyerAddress, const std::string& sel
         return MP_ERR_INPUTSELECT_FAIL;
     }
 
+    // Calculate royalties amount here
+    int64_t royaltiesAmount = 0;
+    if (royaltiesPercentage > 0) {
+        royaltiesAmount = nAmount * royaltiesPercentage / 100;
+    }
+
     // Create CRecipients for outputs
     std::vector<CRecipient> vecRecipients;
     vecRecipients.push_back({exodus, dust, false}); // Exodus
-    vecRecipients.push_back({destScript, nAmount, false}); // Seller
+    vecRecipients.push_back({destScript, nAmount - royaltiesAmount, false}); // Seller
+
+    // Add royalties output
+    if (royaltiesAmount > 0) {
+        CScript royaltiesDestScript = GetScriptForDestination(DecodeDestination(royaltiesReceiver));
+        vecRecipients.push_back({royaltiesDestScript, royaltiesAmount, false}); // Royalties
+    }
 
     // Ask the wallet to create the transaction (note mining fee determined by Bitcoin Core params)
     CAmount nFeeRet = 0;
     int nChangePosInOut = -1;
     std::string strFailReason;
-
-    // auto wtxNew = pwallet->createTransaction(vecRecipients, coinControl, true /* sign */, nChangePosInOut, nFeeRet, strFailReason, false);
-
-    // if (!wtxNew) {
-    //     return MP_ERR_CREATE_TX;
-    // }
 
     CWalletTx wtxNew;
     CReserveKey reserveKey(pwalletMain);

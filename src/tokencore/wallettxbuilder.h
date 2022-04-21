@@ -33,7 +33,7 @@ int CreateFundedTransaction(
         uint256& retTxid);
 
 #ifdef ENABLE_WALLET
-int CreateDExTransaction(const std::string& buyerAddress, const std::string& sellerAddress, const CAmount& nAmount, uint256& txid);
+int CreateDExTransaction(const std::string& buyerAddress, const std::string& sellerAddress, const CAmount& nAmount, const uint8_t& royaltiesPercentage, const std::string& royaltiesReceiver, uint256& txid);
 #endif
 
 #endif // TOKENCORE_WALLETTXBUILDER_H
