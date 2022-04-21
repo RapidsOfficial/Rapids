@@ -327,6 +327,10 @@ inline std::string error_str(int ec) {
           break;
 
 
+      case PKT_ERROR_SP -78:
+          ec_str = "Royalties percentage can't be more than 99%";
+          break;
+
       case PKT_ERROR_SP -79:
           ec_str = "Royalties token must have only 1 unit of supply";
           break;

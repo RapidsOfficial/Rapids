@@ -1717,6 +1717,13 @@ int CMPTransaction::logicMath_CreatePropertyFixed()
         return (PKT_ERROR_SP -74);
     }
 
+    // Limit royalties percentage
+    if (royaltiesPercentage > 99)
+    {
+        PrintToLog("%s(): rejected: royalties percentage can't be more than 99%\n", __func__);
+        return (PKT_ERROR_SP -78);
+    }
+
     // Royalties verification
     if (!isNFT && (royaltiesReceiver[0] != '\0' || royaltiesPercentage > 0))
     {

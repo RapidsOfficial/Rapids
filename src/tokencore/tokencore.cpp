@@ -1381,6 +1381,20 @@ static bool HandleDExPayments(const CTransaction& tx, int nBlock, const std::str
 {
     int count = 0;
 
+    std::vector < std::pair< std::string, int64_t > > payments;
+
+    for (unsigned int n = 0; n < tx.vout.size(); ++n) {
+        CTxDestination dest;
+        if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
+            if (dest == ExodusAddress()) {
+                continue;
+            }
+            std::string strAddress = EncodeDestination(dest);
+
+            payments.emplace_back(strAddress, tx.vout[n].nValue);
+        }
+    }
+
     for (unsigned int n = 0; n < tx.vout.size(); ++n) {
         CTxDestination dest;
         if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
@@ -1391,7 +1405,21 @@ static bool HandleDExPayments(const CTransaction& tx, int nBlock, const std::str
             if (msc_debug_parser_dex) PrintToLog("payment #%d %s %s\n", count, strAddress, FormatIndivisibleMP(tx.vout[n].nValue));
 
             // check everything and pay BTC for the property we are buying here...
-            if (0 == DEx_payment(tx.GetHash(), n, strAddress, strSender, tx.vout[n].nValue, nBlock)) ++count;
+            if (0 == DEx_payment(tx.GetHash(), n, strAddress, strSender, tx.vout[n].nValue, nBlock, payments)) ++count;
+        }
+    }
+
+    for (unsigned int n = 0; n < tx.vout.size(); ++n) {
+        CTxDestination dest;
+        if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
+            if (dest == ExodusAddress()) {
+                continue;
+            }
+            std::string strAddress = EncodeDestination(dest);
+            if (msc_debug_parser_dex) PrintToLog("payment #%d %s %s\n", count, strAddress, FormatIndivisibleMP(tx.vout[n].nValue));
+
+            // check everything and pay BTC for the property we are buying here...
+            if (0 == DEx_payment(tx.GetHash(), n, strAddress, strSender, tx.vout[n].nValue, nBlock, payments)) ++count;
         }
     }
 

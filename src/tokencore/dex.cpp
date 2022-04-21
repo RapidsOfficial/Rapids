@@ -13,6 +13,8 @@
 #include "tokencore/tokencore.h"
 #include "tokencore/rules.h"
 #include "tokencore/uint256_extensions.h"
+#include "tokencore/dbspinfo.h"
+#include "tokencore/sp.h"
 
 #include "arith_uint256.h"
 #include "main.h"
@@ -497,7 +499,7 @@ int64_t calculateDExPurchase(const int64_t amountOffered, const int64_t amountDe
  * Handles incoming RPD payment for the offer.
  * TODO: change nAmended: uint64_t -> int64_t
  */
-int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addressSeller, const std::string& addressBuyer, int64_t amountPaid, int block, uint64_t* nAmended)
+int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addressSeller, const std::string& addressBuyer, int64_t amountPaid, int block, const std::vector < std::pair< std::string, int64_t > >& payments, uint64_t* nAmended)
 {
     if (msc_debug_dex) PrintToLog("%s(%s, %s)\n", __func__, addressSeller, addressBuyer);
 
@@ -526,6 +528,40 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
         if (msc_debug_dex) PrintToLog("%s: ERROR: desired amount of accept order is zero", __func__);
 
         return (DEX_ERROR_PAYMENT -2);
+    }
+
+
+
+
+    // ToDo: calculate and check royalties here!
+    uint32_t offerPropertyId = p_accept->getProperty();
+
+    CMPSPInfo::Entry sp;
+    pDbSpInfo->getSP(propertyId, sp);
+    int64_t royaltiesAmount = 0;
+    std::string royaltiesReceiver = sp.royalties_receiver;
+
+    if (sp.royalties_percentage > 0) {
+        royaltiesAmount = amountDesired * sp.royalties_percentage / 100;
+        bool foundRoyalties = false;
+
+        for (int i = 0; i < payments.size(); ++i) {
+            if (payments[i].first == royaltiesReceiver && payments[i].second >= royaltiesAmount) {
+                if (msc_debug_dex) PrintToLog("%s: Found royalties payment\n", __func__);
+                foundRoyalties = true;
+                break;
+            }
+        }
+
+        if (!foundRoyalties) {
+            if (msc_debug_dex) PrintToLog("%s: ERROR: failed to find royalties payment", __func__);
+            return (DEX_ERROR_PAYMENT -3);
+        }
+    }
+
+    // Add royalties amount to amount paid for correct calculations
+    if (addressSeller != royaltiesReceiver) {
+        amountPaid += royaltiesAmount;
     }
 
     int64_t amountPurchased = 0;
