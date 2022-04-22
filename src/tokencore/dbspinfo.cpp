@@ -236,15 +236,15 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
 
 
     // DB key for identifier lookup entry by ticker
-    CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
-    ssNameIndexKey << std::make_pair('T', info.ticker);
-    leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
+    CDataStream ssTickerIndexKey(SER_DISK, CLIENT_VERSION);
+    ssTickerIndexKey << std::make_pair('T', info.ticker);
+    leveldb::Slice slTickerIndexKey(&ssTickerIndexKey[0], ssTickerIndexKey.size());
 
     // DB value for ticker identifier
-    CDataStream ssNameValue(SER_DISK, CLIENT_VERSION);
-    ssNameValue.reserve(::GetSerializeSize(propertyId, CLIENT_VERSION));
-    ssNameValue << propertyId;
-    leveldb::Slice slNameValue(&ssTxValue[0], ssNameValue.size());
+    CDataStream ssTickerValue(SER_DISK, CLIENT_VERSION);
+    ssTickerValue.reserve(::GetSerializeSize(propertyId, CLIENT_VERSION));
+    ssTickerValue << propertyId;
+    leveldb::Slice slTickerValue(&ssTickerValue[0], ssTickerValue.size());
 
 
     // sanity checking
@@ -255,8 +255,8 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
     } else if (!pdb->Get(readoptions, slTxIndexKey, &existingEntry).IsNotFound() && slTxValue.compare(existingEntry) != 0) {
         std::string strError = strprintf("writing index txid %s : SP %d is overwriting a different value", info.txid.ToString(), propertyId);
         PrintToLog("%s() ERROR: %s\n", __func__, strError);
-    } else if (!pdb->Get(readoptions, slNameIndexKey, &existingEntry).IsNotFound() && slNameValue.compare(existingEntry) != 0) {
-        std::string strError = strprintf("writing index name %s : SP %d is overwriting a different value", info.txid.ToString(), propertyId);
+    } else if (!pdb->Get(readoptions, slTickerIndexKey, &existingEntry).IsNotFound() && slTickerValue.compare(existingEntry) != 0) {
+        std::string strError = strprintf("writing index ticker %s : SP %d is overwriting a different value", info.ticker, propertyId);
         PrintToLog("%s() ERROR: %s\n", __func__, strError);
     }
 
@@ -264,7 +264,7 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
     leveldb::WriteBatch batch;
     batch.Put(slSpKey, slSpValue);
     batch.Put(slTxIndexKey, slTxValue);
-    batch.Put(slNameIndexKey, slNameValue);
+    batch.Put(slTickerIndexKey, slTickerValue);
 
     leveldb::Status status = pdb->Write(syncoptions, &batch);
 
