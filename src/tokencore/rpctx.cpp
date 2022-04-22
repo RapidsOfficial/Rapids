@@ -645,24 +645,26 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
 
 static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 11)
+    if (request.fHelp || request.params.size() < 11 || request.params.size() > 13)
         throw runtime_error(
             "sendtokenissuancefixed \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"ticker\" \"url\" \"data\" \"amount\"\n"
 
             "\nCreate new tokens with fixed supply.\n"
 
             "\nArguments:\n"
-            "1. fromaddress          (string, required) the address to send from\n"
-            "2. ecosystem            (string, required) the ecosystem to create the tokens in (1 for main ecosystem, 2 for test ecosystem)\n"
-            "3. type                 (number, required) the type of the tokens to create: (1 for indivisible tokens, 2 for divisible tokens)\n"
-            "4. previousid           (number, required) an identifier of a predecessor token (use 0 for new tokens)\n"
-            "5. category             (string, required) a category for the new tokens (can be \"\")\n"
-            "6. subcategory          (string, required) a subcategory for the new tokens  (can be \"\")\n"
-            "7. name                 (string, required) the name of the new tokens to create\n"
-            "8. ticker               (string, required) the ticker of the new tokens to create\n"
-            "9. url                  (string, required) an URL for further information about the new tokens (can be \"\")\n"
-            "10. ipfs                (string, required) IPFS string for the new tokens (can be \"\")\n"
-            "11. amount              (string, required) the number of tokens to create\n"
+            "1. fromaddress           (string, required) the address to send from\n"
+            "2. ecosystem             (string, required) the ecosystem to create the tokens in (1 for main ecosystem, 2 for test ecosystem)\n"
+            "3. type                  (number, required) the type of the tokens to create: (1 for indivisible tokens, 2 for divisible tokens)\n"
+            "4. previousid            (number, required) an identifier of a predecessor token (use 0 for new tokens)\n"
+            "5. category              (string, required) a category for the new tokens (can be \"\")\n"
+            "6. subcategory           (string, required) a subcategory for the new tokens  (can be \"\")\n"
+            "7. name                  (string, required) the name of the new tokens to create\n"
+            "8. ticker                (string, required) the ticker of the new tokens to create\n"
+            "9. url                   (string, required) an URL for further information about the new tokens (can be \"\")\n"
+            "10. ipfs                 (string, required) IPFS string for the new tokens (can be \"\")\n"
+            "11. amount               (string, required) the number of tokens to create\n"
+            "12. royalties_receiver   (string, optional, default=\"\") DEX royalties receiver\n"
+            "13. royalties_percentage (number, optional, default=0) DEX royalties percentage\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
@@ -685,11 +687,28 @@ static UniValue sendtokenissuancefixed(const JSONRPCRequest& request)
     std::string data = ParseText(request.params[9]);
     int64_t amount = ParseAmount(request.params[10], type);
 
-    std::string royaltiesReceiver = "RmLTuqFkrLyBM8ibfMh3xmeNFSY1Ka6HNs";
-    uint8_t royaltiesPercentage = 50;
+    std::string royaltiesReceiver = (request.params.size() > 11 && !ParseText(request.params[11]).empty()) ? ParseText(request.params[11]): "";
+    uint8_t royaltiesPercentage = (request.params.size() > 12) ? ParseRoyaltiesPercentage(request.params[12]) : 0;
 
-    // std::string royaltiesReceiver = "";
-    // uint8_t royaltiesPercentage = 0;
+    if (royaltiesReceiver != "")
+    {
+        if (IsUsernameValid(royaltiesReceiver)) {
+            if (GetUsernameAddress(royaltiesReceiver) == "")
+                throw JSONRPCError(RPC_INTERNAL_ERROR, strprintf("Username %s not registered", royaltiesReceiver));
+        } else {
+            if (!IsValidDestination(DecodeDestination(royaltiesReceiver)))
+                throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, strprintf("Invalid royalties address %s", royaltiesReceiver));
+        }
+    }
+
+    if (royaltiesReceiver == "" && royaltiesPercentage > 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Royalties receiver can't be empty if royalties percentage greater than zero");
+
+    if (royaltiesReceiver != "" && royaltiesPercentage == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Royalties percentage can't be zero if royalties receiver not empty");
+
+    std::cout << "\n\nroyaltiesReceiver: " << royaltiesReceiver << "\n";
+    std::cout << "royaltiesPercentage: " << royaltiesPercentage << "\n\n";
 
     // perform checks
     RequirePropertyName(name);

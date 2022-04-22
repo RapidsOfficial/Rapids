@@ -7,6 +7,7 @@
 #include "tokencore/parsing.h"
 #include "tokencore/script.h"
 #include "tokencore/walletutils.h"
+#include "tokencore/tx.h"
 
 #include "amount.h"
 #include "base58.h"
@@ -403,7 +404,9 @@ int CreateDExTransaction(const std::string& buyerAddress, const std::string& sel
 
     // Add royalties output
     if (royaltiesAmount > 0) {
-        CScript royaltiesDestScript = GetScriptForDestination(DecodeDestination(royaltiesReceiver));
+        std::string royaltiesAddress = IsUsernameValid(royaltiesReceiver) ? GetUsernameAddress(royaltiesReceiver) : royaltiesReceiver;
+
+        CScript royaltiesDestScript = GetScriptForDestination(DecodeDestination(royaltiesAddress));
         vecRecipients.push_back({royaltiesDestScript, royaltiesAmount, false}); // Royalties
     }
 

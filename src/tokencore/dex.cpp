@@ -531,15 +531,13 @@ int DEx_payment(const uint256& txid, unsigned int vout, const std::string& addre
     }
 
 
-
-
-    // ToDo: calculate and check royalties here!
     uint32_t offerPropertyId = p_accept->getProperty();
 
     CMPSPInfo::Entry royaltiesSP;
     pDbSpInfo->getSP(propertyId, royaltiesSP);
     int64_t royaltiesAmount = 0;
-    std::string royaltiesReceiver = royaltiesSP.royalties_receiver;
+
+    std::string royaltiesReceiver = IsUsernameValid(royaltiesSP.royalties_receiver) ? GetUsernameAddress(royaltiesSP.royalties_receiver) : royaltiesSP.royalties_receiver;
 
     if (royaltiesSP.royalties_percentage > 0) {
         royaltiesAmount = amountDesired * royaltiesSP.royalties_percentage / 100;

@@ -172,6 +172,15 @@ uint8_t ParseIssuerBonus(const UniValue& value)
     return static_cast<uint8_t>(percentage);
 }
 
+uint8_t ParseRoyaltiesPercentage(const UniValue& value)
+{
+    int64_t percentage = value.get_int64();
+    if (percentage < 0 || 99 < percentage) {
+        throw JSONRPCError(RPC_TYPE_ERROR, "Royalties percentage can be 0-99 percent");
+    }
+    return static_cast<uint8_t>(percentage);
+}
+
 uint8_t ParseMetaDExAction(const UniValue& value)
 {
     int64_t action = value.get_int64();

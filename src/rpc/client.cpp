@@ -207,6 +207,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "sendtokenissuancefixed", 1 },
         { "sendtokenissuancefixed", 2 },
         { "sendtokenissuancefixed", 3 },
+        { "sendtokenissuancefixed", 12 },
         { "sendtokenissuancemanaged", 1 },
         { "sendtokenissuancemanaged", 2 },
         { "sendtokenissuancemanaged", 3 },
