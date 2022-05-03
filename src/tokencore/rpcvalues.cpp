@@ -217,6 +217,20 @@ CPubKey ParsePubKeyOrAddress(const UniValue& value)
     return pubKey;
 }
 
+CPubKey ParsePubKey(const UniValue& value)
+{
+    CPubKey pubKey;
+
+    if (IsHex(value.get_str()))
+        pubKey = CPubKey(ParseHex(value.get_str()));
+
+    if (!pubKey.IsFullyValid())
+        throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid public key");
+
+    return pubKey;
+}
+
+
 uint32_t ParseOutputIndex(const UniValue& value)
 {
     int nOut = value.get_int();

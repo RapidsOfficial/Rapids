@@ -170,7 +170,7 @@ static UniValue createrawtokentxmultisig(const JSONRPCRequest& request)
     CMutableTransaction tx = ParseMutableTransaction(request.params[0]);
     std::vector<unsigned char> payload = ParseHexV(request.params[1], "payload");
     std::string obfuscationSeed = ParseAddressOrEmpty(request.params[2]);
-    CPubKey redeemKey = ParsePubKeyOrAddress(request.params[3]);
+    CPubKey redeemKey = ParsePubKey(request.params[3]);
 
     // extend the transaction
     tx = TokenTxBuilder(tx)
