@@ -104,6 +104,9 @@ private:
     uint32_t activation_block;
     uint32_t min_client_version;
 
+    // Rapids Payment
+    uint256 linked_txid;
+
     // Indicates whether the transaction can be used to execute logic
     bool rpcOnly;
 
@@ -130,6 +133,7 @@ private:
     bool interpret_GrantTokens();
     bool interpret_RevokeTokens();
     bool interpret_ChangeIssuer();
+    bool interpret_RapidsPayment();
     bool interpret_EnableFreezing();
     bool interpret_DisableFreezing();
     bool interpret_FreezeTokens();
@@ -157,6 +161,7 @@ private:
     int logicMath_GrantTokens();
     int logicMath_RevokeTokens();
     int logicMath_ChangeIssuer();
+    int logicMath_RapidsPayment();
     int logicMath_EnableFreezing();
     int logicMath_DisableFreezing();
     int logicMath_FreezeTokens();
@@ -221,6 +226,7 @@ public:
     uint32_t getMinClientVersion() const { return min_client_version; }
     unsigned int getIndexInBlock() const { return tx_idx; }
     uint32_t getDistributionProperty() const { return distribution_property; }
+    uint256 getLinkedTXID() const { return linked_txid; }
 
     /** Creates a new CMPTransaction object. */
     CMPTransaction()

@@ -1370,6 +1370,29 @@ int ParseTransaction(const CTransaction& tx, int nBlock, unsigned int idx, CMPTr
 }
 
 /**
+ * Helper to provide the amount of КЗВ sent to a particular address in a transaction
+ */
+int64_t GetRapidsPaymentAmount(const uint256& txid, const std::string& recipient)
+{
+    CTransaction tx;
+    uint256 blockHash;
+    if (!GetTransaction(txid, tx, blockHash, true)) return 0;
+
+    int64_t totalSatoshis = 0;
+
+    for (unsigned int n = 0; n < tx.vout.size(); ++n) {
+        CTxDestination dest;
+        if (ExtractDestination(tx.vout[n].scriptPubKey, dest)) {
+            std::string strAddress = EncodeDestination(dest);
+            if (strAddress != recipient) continue;
+            totalSatoshis += tx.vout[n].nValue;
+        }
+    }
+
+    return totalSatoshis;
+}
+
+/**
  * Handles potential DEx payments.
  *
  * Note: must *not* be called outside of the transaction handler, and it does not

@@ -51,7 +51,10 @@ std::vector<TransactionRestriction> CConsensusParams::GetRestrictions() const
         { TOKEN_TYPE_CREATE_PROPERTY_FIXED,     MP_TX_PKT_V0,  false,   TOKEN_SP_BLOCK       },
         { TOKEN_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V0,  false,   TOKEN_SP_BLOCK       },
         { TOKEN_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V1,  false,   TOKEN_SP_BLOCK       },
+        { TOKEN_TYPE_CREATE_PROPERTY_VARIABLE,  MP_TX_PKT_V2,  false,   TOKEN_SP_BLOCK       },
         { TOKEN_TYPE_CLOSE_CROWDSALE,           MP_TX_PKT_V0,  false,   TOKEN_SP_BLOCK       },
+
+        { TOKEN_TYPE_RAPIDS_PAYMENT,            MP_TX_PKT_V0,  true,    TOKEN_SP_BLOCK       },
 
         { TOKEN_TYPE_CREATE_PROPERTY_MANUAL,    MP_TX_PKT_V0,  false,   TOKEN_MANUALSP_BLOCK },
         { TOKEN_TYPE_GRANT_PROPERTY_TOKENS,     MP_TX_PKT_V0,  false,   TOKEN_MANUALSP_BLOCK },
@@ -317,6 +320,20 @@ bool IsAllowedOutputType(int whichType, int nBlock)
     }
 
     return false;
+}
+
+/**
+ * Whether Rapids payments are supported for a transaction type/version.
+ */
+bool IsRapidsPaymentAllowed(uint16_t type, uint16_t version)
+{
+    bool allowed = false;
+
+    if (type == TOKEN_TYPE_CREATE_PROPERTY_VARIABLE && version == MP_TX_PKT_V2) {
+        allowed = true;
+    }
+
+    return allowed;
 }
 
 /**

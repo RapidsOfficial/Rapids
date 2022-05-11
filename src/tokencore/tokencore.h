@@ -31,6 +31,8 @@ int const STORE_EVERY_N_BLOCK = 10000;
 
 #define TEST_ECO_PROPERTY_1 (0x80000003UL)
 
+#define RPD_PROPERTY_ID 0
+
 // increment this value to force a refresh of the state (similar to --startclean)
 #define DB_VERSION 7
 
@@ -44,6 +46,7 @@ int const STORE_EVERY_N_BLOCK = 10000;
 // RPDx Transaction (Packet) Version
 #define MP_TX_PKT_V0  0
 #define MP_TX_PKT_V1  1
+#define MP_TX_PKT_V2  2
 
 
 // Transaction types, from the spec
@@ -74,6 +77,7 @@ enum TransactionType {
   TOKEN_TYPE_CHANGE_ISSUER_ADDRESS      = 70,
   TOKEN_TYPE_ENABLE_FREEZING            = 71,
   TOKEN_TYPE_DISABLE_FREEZING           = 72,
+  TOKEN_TYPE_RAPIDS_PAYMENT             = 80,
   TOKEN_TYPE_FREEZE_PROPERTY_TOKENS     = 185,
   TOKEN_TYPE_UNFREEZE_PROPERTY_TOKENS   = 186,
   TOKENCORE_MESSAGE_TYPE_DEACTIVATION  = 65533,
@@ -173,6 +177,8 @@ void CheckWalletUpdate(bool forceUpdate = false);
 
 /** Used to notify that the number of tokens for a property has changed. */
 void NotifyTotalTokensChanged(uint32_t propertyId, int block);
+
+int64_t GetRapidsPaymentAmount(const uint256& txid, const std::string& recipient);
 
 namespace mastercore
 {

@@ -30,6 +30,7 @@ void populateRPCTypeCloseCrowdsale(CMPTransaction& tokenObj, UniValue& txobj);
 void populateRPCTypeGrant(CMPTransaction& tokenObj, UniValue& txobj);
 void populateRPCTypeRevoke(CMPTransaction& tokenOobj, UniValue& txobj);
 void populateRPCTypeChangeIssuer(CMPTransaction& tokenObj, UniValue& txobj);
+void populateRPCTypeRapidsPayment(CMPTransaction& tokenObj, UniValue& txobj);
 void populateRPCTypeActivation(CMPTransaction& tokenObj, UniValue& txobj);
 void populateRPCTypeEnableFreezing(CMPTransaction& tokenObj, UniValue& txobj);
 void populateRPCTypeDisableFreezing(CMPTransaction& tokenObj, UniValue& txobj);
