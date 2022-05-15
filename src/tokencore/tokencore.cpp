@@ -2035,7 +2035,8 @@ int mastercore_handler_block_end(int nBlockNow, CBlockIndex const * pBlockIndex,
     PendingCheck();
 
     // transactions were found in the block, signal the UI accordingly
-    if (countMP > 0) CheckWalletUpdate(true);
+    // if (countMP > 0) CheckWalletUpdate(true);
+    CheckWalletUpdate(true);
 
     // calculate and print a consensus hash if required
     if (ShouldConsensusHashBlock(nBlockNow)) {

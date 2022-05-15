@@ -611,7 +611,7 @@ static UniValue sendtokendexpay(const JSONRPCRequest& request)
 
 static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
 {
-    if (request.fHelp || request.params.size() != 14)
+    if (request.fHelp || request.params.size() != 15)
         throw runtime_error(
             "sendtokenissuancecrowdsale \"fromaddress\" ecosystem type previousid \"category\" \"subcategory\" \"name\" \"url\" \"data\" tokensperunit deadline ( earlybonus issuerpercentage )\n"
 
@@ -678,7 +678,7 @@ static UniValue sendtokenissuancecrowdsale(const JSONRPCRequest& request)
     if (!IsTokenIPFSValid(data))
         throw JSONRPCError(RPC_INTERNAL_ERROR, "Token IPFS is invalid");
 
-    if (propertyIdDesired == RPD_PROPERTY_ID) {
+    if (propertyIdDesired != RPD_PROPERTY_ID) {
         RequireExistingProperty(propertyIdDesired);
         RequireSameEcosystem(ecosystem, propertyIdDesired);
     }
