@@ -241,14 +241,14 @@ static UniValue sendtoken(const JSONRPCRequest& request)
 }
 
 
-// omni_sendbtcpayment - send a BTC payment
-static UniValue omni_sendbtcpayment(const JSONRPCRequest& request)
+// sendtokenrpdpayment - send a RPD payment
+static UniValue sendtokenrpdpayment(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "omni_sendbtcpayment \"fromaddress\" \"toaddress\" \"linkedtxid\" \"amount\"\n"
+            "sendtokenrpdpayment \"fromaddress\" \"toaddress\" \"linkedtxid\" \"amount\"\n"
 
-            "\nCreate and broadcast a BTC payment transaction.\n"
+            "\nCreate and broadcast a RPD payment transaction.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from\n"
@@ -260,8 +260,8 @@ static UniValue omni_sendbtcpayment(const JSONRPCRequest& request)
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("omni_sendbtcpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" \"txid\" \"0.01\"")
-            + HelpExampleRpc("omni_sendbtcpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"txid\", \"0.01\"")
+            + HelpExampleCli("sendtokenrpdpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" \"txid\" \"0.01\"")
+            + HelpExampleRpc("sendtokenrpdpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"txid\", \"0.01\"")
         );
 
     // obtain parameters & info
@@ -1851,7 +1851,7 @@ static const CRPCCommand commands[] =
     { "tokens (transaction creation)", "sendtokenclosecrowdsale",      &sendtokenclosecrowdsale,      false },
     { "tokens (transaction creation)", "sendtokenchangeissuer",        &sendtokenchangeissuer,        false },
     
-    { "tokens (transaction creation)", "omni_sendbtcpayment",          &omni_sendbtcpayment,          false },
+    { "tokens (transaction creation)", "sendtokenrpdpayment",          &sendtokenrpdpayment,          false },
     
     { "tokens (transaction creation)", "sendalltokens",                &sendalltokens,                false },
     { "tokens (transaction creation)", "sendtokenenablefreezing",      &sendtokenenablefreezing,      false },
