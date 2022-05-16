@@ -38,10 +38,10 @@ using mastercore::SelectAllCoins;
 using mastercore::SelectCoins;
 using mastercore::UseEncodingClassC;
 
-/** Creates and sends a transaction. */
+/** Creates and sends a transaction with multiple receivers. */
 int WalletTxBuilder(
         const std::string& senderAddress,
-        const std::string& receiverAddress,
+        const std::vector<std::string>& receiverAddresses,
         const std::string& redemptionAddress,
         int64_t referenceAmount,
         const std::vector<unsigned char>& payload,
@@ -61,7 +61,6 @@ int WalletTxBuilder(
     CCoinControl coinControl;
     CWalletTx wtxNew;
     int64_t nFeeRet = 0;
-    int nChangePosInOut = -1;
     std::string strFailReason;
     std::vector<std::pair<CScript, int64_t> > vecSend;
     CReserveKey reserveKey(pwalletMain);
@@ -88,9 +87,18 @@ int WalletTxBuilder(
     }
 
     // Then add a paytopubkeyhash output for the recipient (if needed) - note we do this last as we want this to be the highest vout
-    if (!receiverAddress.empty()) {
-        CScript scriptPubKey = GetScriptForDestination(DecodeDestination(receiverAddress));
-        vecSend.push_back(std::make_pair(scriptPubKey, 0 < referenceAmount ? referenceAmount : GetDustThreshold(scriptPubKey)));
+    // if (!receiverAddress.empty()) {
+    //     CScript scriptPubKey = GetScriptForDestination(DecodeDestination(receiverAddress));
+    //     vecSend.push_back(std::make_pair(scriptPubKey, 0 < referenceAmount ? referenceAmount : GetDustThreshold(scriptPubKey)));
+    // }
+
+    if (!receiverAddresses.empty()) {
+        for (const std::string& receiverAddress : receiverAddresses) {
+            CScript scriptPubKey = GetScriptForDestination(DecodeDestination(receiverAddress));
+            if (!scriptPubKey.empty()) {
+                vecSend.push_back(std::make_pair(scriptPubKey, 0 < referenceAmount ? referenceAmount : GetDustThreshold(scriptPubKey)));
+            }
+        }
     }
 
     if (nDonation) {
@@ -111,6 +119,7 @@ int WalletTxBuilder(
     }
 
     // Ask the wallet to create the transaction (note mining fee determined by Bitcoin Core params)
+    int nChangePosInOut = vecRecipients.size();
     if (!pwalletMain->CreateTransaction(vecRecipients, wtxNew, reserveKey, nFeeRet, nChangePosInOut, strFailReason, &coinControl)) {
         PrintToLog("%s: ERROR: wallet transaction creation failed: %s\n", __func__, strFailReason);
         return MP_ERR_CREATE_TX;
@@ -135,6 +144,84 @@ int WalletTxBuilder(
     return MP_ERR_WALLET_ACCESS;
 #endif
 
+}
+
+int WalletTxBuilder(
+        const std::string& senderAddress,
+        const std::string& receiverAddress,
+        const std::string& redemptionAddress,
+        int64_t referenceAmount,
+        const std::vector<unsigned char>& payload,
+        uint256& retTxid,
+        std::string& retRawTx,
+        bool commit,
+        bool nDonation)
+{
+#ifdef ENABLE_WALLET
+    std::vector<std::string> receiverAddresses;
+    if (!receiverAddress.empty()) {
+        receiverAddresses.push_back(receiverAddress);
+    }
+
+    return WalletTxBuilder(
+        senderAddress,
+        receiverAddresses,
+        redemptionAddress,
+        referenceAmount,
+        payload,
+        retTxid,
+        retRawTx,
+        commit,
+        nDonation
+    );
+#else
+    return MP_ERR_WALLET_ACCESS;
+#endif
+}
+
+int GetDryPayloadOutputCount(
+        const std::string& senderAddress,
+        const std::string& redemptionAddress,
+        const std::vector<unsigned char>& payload)
+{
+#ifdef ENABLE_WALLET
+    if (pwalletMain == NULL) return MP_ERR_WALLET_ACCESS;
+
+    // Determine the class to send the transaction via - default is Class C
+    int tokenTxClass = TOKEN_CLASS_C;
+    if (!UseEncodingClassC(payload.size() + 1 /* OP_RETURN */ + 2 /* pushdata opcodes */)) {
+        tokenTxClass = TOKEN_CLASS_B;
+    }
+
+    std::vector<std::pair<CScript, int64_t> > vecSend;
+    CAmount outputAmount{0};
+
+    // Encode the data outputs
+    switch (tokenTxClass) {
+        case TOKEN_CLASS_B: {
+            CPubKey redeemingPubKey;
+            const std::string& sAddress = redemptionAddress.empty() ? senderAddress : redemptionAddress;
+            if (!AddressToPubKey(sAddress, redeemingPubKey)) {
+                return MP_REDEMP_BAD_VALIDATION;
+            }
+            if (!TokenCore_Encode_ClassB(senderAddress, redeemingPubKey, payload, vecSend)) {
+                return MP_ENCODING_ERROR;
+            }
+            break;
+        }
+        case TOKEN_CLASS_C: {
+            if(!TokenCore_Encode_ClassC(payload, vecSend)) {
+                return MP_ENCODING_ERROR;
+            }
+            break;
+        }
+    }
+
+    return vecSend.size();
+
+#else
+    return MP_ERR_WALLET_ACCESS;
+#endif
 }
 
 #ifdef ENABLE_WALLET

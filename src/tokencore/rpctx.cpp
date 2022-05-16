@@ -241,6 +241,134 @@ static UniValue sendtoken(const JSONRPCRequest& request)
 }
 
 
+
+
+
+static UniValue sendtokenmany(const JSONRPCRequest& request)
+{
+    // if (request.fHelp || request.params.size() < 4 || request.params.size() > 6)
+    //     throw runtime_error(
+    //         "sendtoken \"fromaddress\" \"toaddress\" ticker \"amount\" ( \"redeemaddress\" \"referenceamount\" )\n"
+
+    //         "\nCreate and broadcast a simple send transaction.\n"
+
+    //         "\nArguments:\n"
+    //         "1. fromaddress          (string, required) the address to send from\n"
+    //         "2. toaddress            (string, required) the address of the receiver\n"
+    //         "3. ticker               (string, required) the ticker of the token to send\n"
+    //         "4. amount               (string, required) the amount to send\n"
+    //         "5. redeemaddress        (string, optional) an address that can spend the transaction dust (sender by default)\n"
+    //         "6. referenceamount      (string, optional) a bitcoin amount that is sent to the receiver (minimal by default)\n"
+
+    //         "\nResult:\n"
+    //         "\"hash\"                  (string) the hex-encoded transaction hash\n"
+
+    //         "\nExamples:\n"
+    //         + HelpExampleCli("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" TOKEN \"100.0\"")
+    //         + HelpExampleRpc("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", TOKEN, \"100.0\"")
+    //     );
+
+    std::string fromAddress = ParseAddress(request.params[0]);
+    std::string ticker = ParseText(request.params[1]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
+    RequireBoundedStmReceiverNumber(request.params[2].size());
+
+    // ---
+    // dry run to get positions for send-to-many outputs
+    // ---
+
+    std::vector<std::string> receiverAddresses;
+    std::vector<std::tuple<uint8_t, uint64_t>> outputValues;
+
+    uint64_t amountToSend = 0;
+    uint8_t output = 1; // dummy position
+
+    for (unsigned int idx = 0; idx < request.params[2].size(); idx++) {
+        const UniValue& input = request.params[2][idx];
+        const UniValue& o = input.get_obj();
+
+        const UniValue& uvOutput = find_value(o, "address");
+        const UniValue& uvAmount = find_value(o, "amount");
+
+        std::string address = ParseAddress(uvOutput);
+        uint64_t amount = ParseAmount(uvAmount, isPropertyDivisible(propertyId));
+
+        amountToSend += amount;
+        receiverAddresses.push_back(address);
+        outputValues.push_back(std::make_tuple(output, amount));
+
+        output += 1;
+    }
+
+    std::vector<unsigned char> testPayload = CreatePayload_SendToMany(
+        propertyId,
+        outputValues);
+
+    int outputCount = GetDryPayloadOutputCount(fromAddress, "", testPayload);
+
+    // perform checks
+    RequireExistingProperty(propertyId);
+    RequireBalance(fromAddress, propertyId, amountToSend);
+
+    if (outputCount < 0) {
+        throw JSONRPCError(RPC_TYPE_ERROR, "Error creating send-to-many payload");
+    }
+
+    // ---
+    // actual run
+    // --
+
+    receiverAddresses.clear();
+    outputValues.clear();
+    output = outputCount;
+
+    for (unsigned int idx = 0; idx < request.params[2].size(); idx++) {
+        const UniValue& input = request.params[2][idx];
+        const UniValue& o = input.get_obj();
+
+        const UniValue& uvOutput = find_value(o, "address");
+        const UniValue& uvAmount = find_value(o, "amount");
+
+        std::string address = ParseAddress(uvOutput);
+        uint64_t amount = ParseAmount(uvAmount, isPropertyDivisible(propertyId));
+
+        receiverAddresses.push_back(address);
+        outputValues.push_back(std::make_tuple(output, amount));
+
+        output += 1;
+    }
+
+    std::vector<unsigned char> payload = CreatePayload_SendToMany(
+        propertyId,
+        outputValues);
+
+    // request the wallet build the transaction (and if needed commit it)
+    uint256 txid;
+    std::string rawHex;
+    int result = WalletTxBuilder(fromAddress, receiverAddresses, "", 0, payload, txid, rawHex, autoCommit);
+
+    // check error and return the txid (or raw hex depending on autocommit)
+    if (result != 0) {
+        throw JSONRPCError(result, error_str(result));
+    } else {
+        if (!autoCommit) {
+            return rawHex;
+        } else {
+            PendingAdd(txid, fromAddress, TOKEN_TYPE_SEND_TO_MANY, propertyId, amountToSend);
+            return txid.GetHex();
+        }
+    }
+
+}
+
+
+
+
+
 // sendtokenrpdpayment - send a RPD payment
 static UniValue sendtokenrpdpayment(const JSONRPCRequest& request)
 {
@@ -1835,6 +1963,7 @@ static const CRPCCommand commands[] =
 #ifdef ENABLE_WALLET
     { "tokens (transaction creation)", "sendtokenrawtx",               &sendtokenrawtx,               false },
     { "tokens (transaction creation)", "sendtoken",                    &sendtoken,                    false },
+    { "tokens (transaction creation)", "sendtokenmany",                &sendtokenmany,                false },
     { "tokens (transaction creation)", "sendtokendexsell",             &sendtokendexsell,             false },
     { "tokens (transaction creation)", "sendtokendexaccept",           &sendtokendexaccept,           false },
     { "tokens (transaction creation)", "sendtokendexpay",              &sendtokendexpay,              false },

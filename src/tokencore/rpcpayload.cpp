@@ -754,11 +754,11 @@ static UniValue token_createpayload_unfreeze(const JSONRPCRequest& request)
 
 
 
-static UniValue omni_createpayload_sendtomany(const JSONRPCRequest& request)
+static UniValue createtokenpayloadsendtomany(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "omni_createpayload_sendtomany\n"
+            "createtokenpayloadsendtomany\n"
         );
 
     // uint32_t propertyId = ParsePropertyId(request.params[0]);
@@ -815,7 +815,7 @@ static const CRPCCommand commands[] =
     { "token layer (payload creation)", "token_createpayload_disablefreezing",     &token_createpayload_disablefreezing,     true },
     { "token layer (payload creation)", "token_createpayload_freeze",              &token_createpayload_freeze,              true },
     { "token layer (payload creation)", "token_createpayload_unfreeze",            &token_createpayload_unfreeze,            true },
-    { "token layer (payload creation)", "omni_createpayload_sendtomany",           &omni_createpayload_sendtomany,            true },
+    { "token layer (payload creation)", "createtokenpayloadsendtomany",           &createtokenpayloadsendtomany,            true },
 };
 
 void RegisterTokenPayloadCreationRPCCommands()

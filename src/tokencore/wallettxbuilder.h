@@ -22,6 +22,28 @@ int WalletTxBuilder(
         bool nDonation = false);
 
 /**
+ * Creates and sends a transaction with multiple receivers.
+ */
+int WalletTxBuilder(
+        const std::string& senderAddress,
+        const std::vector<std::string>& receiverAddresses,
+        const std::string& redemptionAddress,
+        int64_t referenceAmount,
+        const std::vector<unsigned char>& payload,
+        uint256& retTxid,
+        std::string& retRawTx,
+        bool commit,
+        bool nDonation = false);
+
+/**
+ * Simulates the creation of a payload to count the required outputs.
+ */
+int GetDryPayloadOutputCount(
+        const std::string& senderAddress,
+        const std::string& redemptionAddress,
+        const std::vector<unsigned char>& payload);
+
+/**
  * Creates and sends a raw transaction by selecting all coins from the sender
  * and enough coins from a fee source. Change is sent to the fee source!
  */
