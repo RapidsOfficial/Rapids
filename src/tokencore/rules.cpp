@@ -55,6 +55,7 @@ std::vector<TransactionRestriction> CConsensusParams::GetRestrictions() const
         { TOKEN_TYPE_CLOSE_CROWDSALE,           MP_TX_PKT_V0,  false,   TOKEN_SP_BLOCK       },
 
         { TOKEN_TYPE_RAPIDS_PAYMENT,            MP_TX_PKT_V0,  true,    TOKEN_SP_BLOCK       },
+        { TOKEN_TYPE_SEND_TO_MANY,              MP_TX_PKT_V0,  true,    TOKEN_SP_BLOCK       },
 
         { TOKEN_TYPE_CREATE_PROPERTY_MANUAL,    MP_TX_PKT_V0,  false,   TOKEN_MANUALSP_BLOCK },
         { TOKEN_TYPE_GRANT_PROPERTY_TOKENS,     MP_TX_PKT_V0,  false,   TOKEN_MANUALSP_BLOCK },

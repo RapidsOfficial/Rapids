@@ -68,7 +68,7 @@ std::vector<unsigned char> CreatePayload_SimpleSend(uint32_t propertyId, uint64_
 std::vector<unsigned char> CreatePayload_SendToMany(uint32_t propertyId, std::vector<std::tuple<uint8_t, uint64_t>> outputValues)
 {
     std::vector<unsigned char> payload;
-    uint16_t messageType = 7;
+    uint16_t messageType = 5;
     uint16_t messageVer = 0;
     SwapByteOrder16(messageType);
     SwapByteOrder16(messageVer);
