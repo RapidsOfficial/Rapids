@@ -752,6 +752,46 @@ static UniValue token_createpayload_unfreeze(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
+
+
+static UniValue omni_createpayload_sendtomany(const JSONRPCRequest& request)
+{
+    if (request.fHelp || request.params.size() != 2)
+        throw runtime_error(
+            "omni_createpayload_sendtomany\n"
+        );
+
+    // uint32_t propertyId = ParsePropertyId(request.params[0]);
+
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
+    std::vector<std::tuple<uint8_t, uint64_t>> outputValues;
+
+    for (unsigned int idx = 0; idx < request.params[1].size(); idx++) {
+        const UniValue& input = request.params[1][idx];
+        const UniValue& o = input.get_obj();
+
+        const UniValue& uvOutput = find_value(o, "output");
+        const UniValue& uvAmount = find_value(o, "amount");
+
+        uint8_t output = uvOutput.get_int();
+        uint64_t amount = ParseAmount(uvAmount, isPropertyDivisible(propertyId));
+
+        outputValues.push_back(std::make_tuple(output, amount));
+    }
+
+    std::vector<unsigned char> payload = CreatePayload_SendToMany(
+        propertyId,
+        outputValues);           
+
+    return HexStr(payload.begin(), payload.end());
+}
+
+
 static const CRPCCommand commands[] =
 { //  category                         name                                      actor (function)                         okSafeMode
   //  -------------------------------- ----------------------------------------- ---------------------------------------- ----------
@@ -775,6 +815,7 @@ static const CRPCCommand commands[] =
     { "token layer (payload creation)", "token_createpayload_disablefreezing",     &token_createpayload_disablefreezing,     true },
     { "token layer (payload creation)", "token_createpayload_freeze",              &token_createpayload_freeze,              true },
     { "token layer (payload creation)", "token_createpayload_unfreeze",            &token_createpayload_unfreeze,            true },
+    { "token layer (payload creation)", "omni_createpayload_sendtomany",           &omni_createpayload_sendtomany,            true },
 };
 
 void RegisterTokenPayloadCreationRPCCommands()

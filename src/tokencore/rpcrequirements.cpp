@@ -13,6 +13,7 @@
 #include "tinyformat.h"
 
 #include <stdint.h>
+#include <limits>
 #include <string>
 
 void RequireBalance(const std::string& address, uint32_t propertyId, int64_t amount)
@@ -166,5 +167,12 @@ void RequireHeightInChain(int blockHeight)
 {
     if (blockHeight < 0 || mastercore::GetHeight() < blockHeight) {
         throw JSONRPCError(RPC_INVALID_PARAMETER, "Block height is out of range");
+    }
+}
+
+void RequireBoundedStmReceiverNumber(size_t numberOfReceivers)
+{
+    if (numberOfReceivers > std::numeric_limits<uint8_t>::max()) {
+        throw JSONRPCError(RPC_TYPE_ERROR, "Too many send-to-many receivers");
     }
 }

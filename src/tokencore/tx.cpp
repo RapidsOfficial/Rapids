@@ -38,6 +38,7 @@
 #include <algorithm>
 #include <utility>
 #include <vector>
+#include <tuple>
 #include <sstream>
 
 using boost::algorithm::token_compress_on;
@@ -93,6 +94,7 @@ std::string mastercore::strTransactionType(uint16_t txType)
 {
     switch (txType) {
         case TOKEN_TYPE_SIMPLE_SEND: return "Simple Send";
+        case TOKEN_TYPE_SEND_TO_MANY: return "Send To Many";
         case TOKEN_TYPE_RESTRICTED_SEND: return "Restricted Send";
         case TOKEN_TYPE_SEND_TO_OWNERS: return "Send To Owners";
         case TOKEN_TYPE_SEND_ALL: return "Send All";
@@ -163,6 +165,9 @@ bool CMPTransaction::interpret_Transaction()
     switch (type) {
         case TOKEN_TYPE_SIMPLE_SEND:
             return interpret_SimpleSend();
+
+        case TOKEN_TYPE_SEND_TO_MANY:
+            return interpret_SendToMany();
 
         case TOKEN_TYPE_SEND_TO_OWNERS:
             return interpret_SendToOwners();
@@ -332,6 +337,53 @@ bool CMPTransaction::interpret_SendAll()
     if ((!rpcOnly && msc_debug_packets) || msc_debug_packets_readonly) {
         PrintToLog("\t       ecosystem: %d\n", (int)ecosystem);
     }
+
+    return true;
+}
+
+/** Tx 5 */
+bool CMPTransaction::interpret_SendToMany()
+{
+    // minimum case without any recipients, still needs propertyid
+    if (pkt_size < 9) {
+        return false;
+    }
+    memcpy(&property, &pkt[4], 4);
+    SwapByteOrder32(property);
+
+    memcpy(&numberOfSTMReceivers, &pkt[8], 1);
+
+    // check total size for all receivers
+    if (pkt_size < (9 + (numberOfSTMReceivers * (1 + 8)))) {
+        return false;
+    }
+
+    if ((!rpcOnly && msc_debug_packets) || msc_debug_packets_readonly) {
+        PrintToLog("\t        property: %d (%s)\n", property, strMPProperty(property));
+        PrintToLog("\t       receivers: %d\n", numberOfSTMReceivers);
+    }
+
+    size_t pos = 9;
+    for (uint8_t i = 0; i < numberOfSTMReceivers; ++i) {
+        uint8_t outputN = 0;
+        memcpy(&outputN, &pkt[pos], 1);
+
+        uint64_t valueN = 0;
+        memcpy(&valueN, &pkt[pos+1], 8);
+        SwapByteOrder64(valueN);
+
+        outputValuesForSTM.push_back(std::make_tuple(outputN, valueN));
+        nValue += valueN;
+
+        pos = pos + 9;
+
+        if ((!rpcOnly && msc_debug_packets) || msc_debug_packets_readonly) {
+            PrintToLog("\t               output: %d\n", outputN);
+            PrintToLog("\t               value: %s\n", FormatMP(property, valueN));
+        }
+    }
+
+    nNewValue = nValue;
 
     return true;
 }
@@ -959,6 +1011,9 @@ int CMPTransaction::interpretPacket()
         case TOKEN_TYPE_SIMPLE_SEND:
             return logicMath_SimpleSend();
 
+        case TOKEN_TYPE_SEND_TO_MANY:
+            return logicMath_SendToMany();
+
         case TOKEN_TYPE_SEND_TO_OWNERS:
             return logicMath_SendToOwners();
 
@@ -1301,6 +1356,89 @@ int CMPTransaction::logicMath_SendAll()
     }
 
     nNewValue = numberOfPropertiesSent;
+
+    return 0;
+}
+
+/** Tx 5 */
+int CMPTransaction::logicMath_SendToMany()
+{
+    if (!IsTransactionTypeAllowed(block, property, type, version)) {
+        PrintToLog("%s(): rejected: type %d or version %d not permitted for property %d at block %d\n",
+                __func__,
+                type,
+                version,
+                property,
+                block);
+        return (PKT_ERROR_SEND_MANY -22);
+    }
+
+    if (nValue <= 0 || MAX_INT_8_BYTES < nValue) {
+        PrintToLog("%s(): rejected: value out of range or zero: %d", __func__, nValue);
+        return (PKT_ERROR_SEND_MANY -23);
+    }
+
+    if (!IsPropertyIdValid(property)) {
+        PrintToLog("%s(): rejected: property %d does not exist\n", __func__, property);
+        return (PKT_ERROR_SEND_MANY -24);
+    }
+
+    int64_t nBalance = GetTokenBalance(sender, property, BALANCE);
+    if (nBalance < (int64_t) nValue) {
+        PrintToLog("%s(): rejected: sender %s has insufficient balance of property %d [%s < %s]\n",
+                __func__,
+                sender,
+                property,
+                FormatMP(property, nBalance),
+                FormatMP(property, nValue));
+        return (PKT_ERROR_SEND_MANY -25);
+    }
+
+    // ------------------------------------------
+
+    uint64_t totalAmount = 0;
+    uint8_t totalOutputs = 0;
+
+    // Check if all outputs refer to valid destinations
+    for (const std::tuple<uint8_t, uint64_t>& entry : outputValuesForSTM) {
+        uint8_t output = std::get<0>(entry);
+        uint64_t amount = std::get<1>(entry);
+
+        std::string receiver;
+        if (!getValidStmAddressAt(output, receiver)) {
+            PrintToLog("%s(): rejected: output %d doesn't refer to valid destination\n", __func__, output);
+            return (PKT_ERROR_SEND_MANY -26);
+        }
+        if (receiver.empty()) {
+            PrintToLog("%s(): rejected: receiver of output %d doesn't refer to valid destination\n", __func__, output);
+            return (PKT_ERROR_SEND_MANY -27);
+        }
+
+        totalAmount += amount;
+        totalOutputs += 1;
+    }
+
+    if (totalAmount != nValue) {
+        PrintToLog("%s(): rejected: mismatch of total amounts [%d != %d]\n", __func__, totalAmount, nValue);
+        return (PKT_ERROR_SEND_MANY -28);
+    }
+
+    if (totalOutputs != numberOfSTMReceivers) {
+        PrintToLog("%s(): rejected: mismatch of number of valid receivers [%d != %d]\n", __func__, totalOutputs, numberOfSTMReceivers);
+        return (PKT_ERROR_SEND_MANY -29);
+    }
+
+    // Move the tokens
+    for (const std::tuple<uint8_t, uint64_t>& entry : outputValuesForSTM) {
+        uint8_t output = std::get<0>(entry);
+        uint64_t amount = std::get<1>(entry);
+
+        std::string receiver;
+        assert(getValidStmAddressAt(output, receiver));
+
+        assert(update_tally_map(sender, property, -amount, BALANCE));
+        assert(update_tally_map(receiver, property, amount, BALANCE));
+    }
 
     return 0;
 }

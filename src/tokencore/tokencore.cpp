@@ -1065,7 +1065,11 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
             if (!(dest == ExodusAddress())) {
                 // saving for Class A processing or reference
                 GetScriptPushes(wtx.vout[n].scriptPubKey, script_data);
-                address_data.push_back(EncodeDestination(dest));
+                std::string address = EncodeDestination(dest);
+                address_data.push_back(address);
+                if (!address.empty()) {
+                    mp_tx.addValidStmAddress(n, address);
+                }
                 value_data.push_back(wtx.vout[n].nValue);
                 if (msc_debug_parser_data) PrintToLog("saving address_data #%d: %s:%s\n", n, EncodeDestination(dest), ScriptToAsmStr(wtx.vout[n].scriptPubKey));
             }

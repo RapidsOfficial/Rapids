@@ -1,13 +1,15 @@
 #ifndef TOKENCORE_CREATEPAYLOAD_H
 #define TOKENCORE_CREATEPAYLOAD_H
 
-#include <string>
-#include <vector>
 #include <stdint.h>
+#include <string>
+#include <tuple>
+#include <vector>
 
 #include "uint256.h"
 
 std::vector<unsigned char> CreatePayload_SimpleSend(uint32_t propertyId, uint64_t amount);
+std::vector<unsigned char> CreatePayload_SendToMany(uint32_t propertyId, std::vector<std::tuple<uint8_t, uint64_t>> outputValues);
 std::vector<unsigned char> CreatePayload_RapidsPayment(const uint256& linkedtxid);
 std::vector<unsigned char> CreatePayload_SendAll(uint8_t ecosystem);
 std::vector<unsigned char> CreatePayload_DExSell(uint32_t propertyId, uint64_t amountForSale, uint64_t amountDesired, uint8_t timeLimit, uint64_t minFee, uint8_t subAction);

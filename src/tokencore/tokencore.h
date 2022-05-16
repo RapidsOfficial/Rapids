@@ -55,6 +55,7 @@ enum TransactionType {
   TOKEN_TYPE_RESTRICTED_SEND            =  2,
   TOKEN_TYPE_SEND_TO_OWNERS             =  3,
   TOKEN_TYPE_SEND_ALL                   =  4,
+  TOKEN_TYPE_SEND_TO_MANY               =  5,
   TOKEN_TYPE_SAVINGS_MARK               = 10,
   TOKEN_TYPE_SAVINGS_COMPROMISED        = 11,
   TOKEN_TYPE_RATELIMITED_MARK           = 12,
@@ -109,6 +110,7 @@ enum TransactionType {
 #define METADEX_ERROR         (-81000)
 #define PKT_ERROR_TOKENS      (-82000)
 #define PKT_ERROR_SEND_ALL    (-83000)
+#define PKT_ERROR_SEND_MANY   (-84000)
 
 #define TOKEN_PROPERTY_RPD   0
 #define TOKEN_PROPERTY_MSC   1

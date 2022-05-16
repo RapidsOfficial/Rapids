@@ -238,6 +238,7 @@ static const CRPCConvertParam vRPCConvertParams[] =
         { "createrawtokentxchange", 4 },
 
         /* Token Core - payload creation */
+        { "omni_createpayload_sendtomany", 1 },
         { "token_createpayload_sendall", 0 },
         { "token_createpayload_dexsell", 0 },
         { "token_createpayload_dexsell", 3 },

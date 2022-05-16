@@ -15,6 +15,9 @@ class CTransaction;
 
 #include <stdint.h>
 #include <string.h>
+#include <map>
+#include <tuple>
+#include <vector>
 
 #include <string.h>
 #include <string>
@@ -49,14 +52,16 @@ private:
     unsigned short version; // = MP_TX_PKT_V0;
 
     // SimpleSend, SendToOwners, TradeOffer, MetaDEx, AcceptOfferRPD,
-    // CreatePropertyFixed, CreatePropertyVariable, GrantTokens, RevokeTokens
+    // CreatePropertyFixed, CreatePropertyVariable, GrantTokens, RevokeTokens,
+    // SendToMany
     uint64_t nValue;
     uint64_t nNewValue;
     CAmount nDonation;
 
     // SimpleSend, SendToOwners, TradeOffer, MetaDEx, AcceptOfferRPD,
     // CreatePropertyFixed, CreatePropertyVariable, CloseCrowdsale,
-    // CreatePropertyMananged, GrantTokens, RevokeTokens, ChangeIssuer
+    // CreatePropertyMananged, GrantTokens, RevokeTokens, ChangeIssuer,
+    // SendToMany
     unsigned int property;
 
     // SendToOwners v1
@@ -94,6 +99,11 @@ private:
     uint64_t min_fee;
     unsigned char subaction;
 
+    // Send To Many
+    uint8_t numberOfSTMReceivers;
+    std::vector<std::tuple<uint8_t, uint64_t>> outputValuesForSTM;
+    std::map<uint8_t, std::string> validOutputAddressesForSTM;
+
     // Alert
     uint16_t alert_type;
     uint32_t alert_expiry;
@@ -118,6 +128,7 @@ private:
      */
     bool interpret_TransactionType();
     bool interpret_SimpleSend();
+    bool interpret_SendToMany();
     bool interpret_SendToOwners();
     bool interpret_SendAll();
     bool interpret_TradeOffer();
@@ -146,6 +157,7 @@ private:
      * Logic and "effects"
      */
     int logicMath_SimpleSend();
+    int logicMath_SendToMany();
     int logicMath_SendToOwners();
     int logicMath_SendAll();
     int logicMath_TradeOffer();
@@ -228,6 +240,32 @@ public:
     uint32_t getDistributionProperty() const { return distribution_property; }
     uint256 getLinkedTXID() const { return linked_txid; }
 
+    // Send To Many
+    uint8_t getStmNumberOfReceivers() const {
+        return numberOfSTMReceivers;
+    }
+
+    /** Returns output valies. */
+    std::vector<std::tuple<uint8_t, uint64_t>> getStmOutputValues() const {
+        return outputValuesForSTM;
+    }
+
+    /** Adds an address at position output. */
+    void addValidStmAddress(uint8_t output, const std::string& address) {
+        validOutputAddressesForSTM[output] = address;
+    }
+
+    /** Return an output address, if it's considered as valid Omni destination. */
+    bool getValidStmAddressAt(uint8_t output, std::string& addressOut) {
+        if (validOutputAddressesForSTM.find(output) != validOutputAddressesForSTM.end()) {
+            addressOut = validOutputAddressesForSTM[output];
+            return true;
+        }
+
+        addressOut.clear();
+        return false;
+    }
+
     /** Creates a new CMPTransaction object. */
     CMPTransaction()
     {
@@ -279,6 +317,9 @@ public:
         activation_block = 0;
         min_client_version = 0;
         distribution_property = 0;
+        numberOfSTMReceivers = 0;
+        outputValuesForSTM.clear();
+        validOutputAddressesForSTM.clear();
     }
 
     /** Sets the given values. */
