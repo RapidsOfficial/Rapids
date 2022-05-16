@@ -541,6 +541,7 @@ std::string TXHistoryDialog::shrinkTxType(int txType, bool *fundsMoved)
         case TOKEN_TYPE_RESTRICTED_SEND: displayType = "Rest. Send"; break;
         case TOKEN_TYPE_SEND_TO_OWNERS: displayType = "Send To Owners"; break;
         case TOKEN_TYPE_SEND_ALL: displayType = "Send All"; break;
+        case TOKEN_TYPE_SEND_TO_MANY: displayType = "Send To Many"; break;
         case TOKEN_TYPE_SAVINGS_MARK: displayType = "Mark Savings"; *fundsMoved = false; break;
         case TOKEN_TYPE_SAVINGS_COMPROMISED: ; displayType = "Lock Savings"; break;
         case TOKEN_TYPE_RATELIMITED_MARK: displayType = "Rate Limit"; break;
