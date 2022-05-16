@@ -246,27 +246,24 @@ static UniValue sendtoken(const JSONRPCRequest& request)
 
 static UniValue sendtokenmany(const JSONRPCRequest& request)
 {
-    // if (request.fHelp || request.params.size() < 4 || request.params.size() > 6)
-    //     throw runtime_error(
-    //         "sendtoken \"fromaddress\" \"toaddress\" ticker \"amount\" ( \"redeemaddress\" \"referenceamount\" )\n"
+    if (request.fHelp || request.params.size() != 3)
+        throw runtime_error(
+            "sendtokenmany \"fromaddress\" ticker outputs\n"
 
-    //         "\nCreate and broadcast a simple send transaction.\n"
+            "\nCreate and broadcast a simple send transaction.\n"
 
-    //         "\nArguments:\n"
-    //         "1. fromaddress          (string, required) the address to send from\n"
-    //         "2. toaddress            (string, required) the address of the receiver\n"
-    //         "3. ticker               (string, required) the ticker of the token to send\n"
-    //         "4. amount               (string, required) the amount to send\n"
-    //         "5. redeemaddress        (string, optional) an address that can spend the transaction dust (sender by default)\n"
-    //         "6. referenceamount      (string, optional) a bitcoin amount that is sent to the receiver (minimal by default)\n"
+            "\nArguments:\n"
+            "1. fromaddress          (string, required) the address to send from\n"
+            "2. ticker               (string, required) the ticker of the token to send\n"
+            "3. outputs              (array, required) an array with the receiving address \"address\" and the \"amount\" to send\n"
 
-    //         "\nResult:\n"
-    //         "\"hash\"                  (string) the hex-encoded transaction hash\n"
+            "\nResult:\n"
+            "\"hash\"                (string) the hex-encoded transaction hash\n"
 
-    //         "\nExamples:\n"
-    //         + HelpExampleCli("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" TOKEN \"100.0\"")
-    //         + HelpExampleRpc("sendtoken", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", TOKEN, \"100.0\"")
-    //     );
+            "\nExamples:\n"
+            + HelpExampleCli("sendtokenmany", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" TOKEN '[{\"address\": \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"amount\": \"10.5\"}, {\"output\": \"1oQM6A7ZHpuuMZwJvTsLumUrut2GnFCok\", \"amount\": \"0.5\"}]'")
+            + HelpExampleRpc("sendtokenmany", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", TOKEN, '[{\"address\": \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"amount\": \"10.5\"}, {\"output\": \"1oQM6A7ZHpuuMZwJvTsLumUrut2GnFCok\", \"amount\": \"0.5\"}]'")
+        );
 
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string ticker = ParseText(request.params[1]);
