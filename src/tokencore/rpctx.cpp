@@ -371,28 +371,44 @@ static UniValue sendtokenrpdpayment(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "sendtokenrpdpayment \"fromaddress\" \"toaddress\" \"linkedtxid\" \"amount\"\n"
+            "sendtokenrpdpayment \"fromaddress\" \"toaddress\" \"ticker\" \"amount\"\n"
 
             "\nCreate and broadcast a RPD payment transaction.\n"
 
             "\nArguments:\n"
             "1. fromaddress          (string, required) the address to send from\n"
             "2. toaddress            (string, required) the address of the receiver\n"
-            "3. linkedtxid           (string, required) the transaction ID of the linked transaction\n"
-            "4. amount               (string, required) the amount of Bitcoin to send\n"
+            "3. ticker               (string, required) the ticker of crowdsale token\n"
+            "4. amount               (string, required) the amount of Rapids to send\n"
 
             "\nResult:\n"
             "\"hash\"                  (string) the hex-encoded transaction hash\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("sendtokenrpdpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" \"txid\" \"0.01\"")
-            + HelpExampleRpc("sendtokenrpdpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"txid\", \"0.01\"")
+            + HelpExampleCli("sendtokenrpdpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\" \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\" \"TOKEN\" \"0.01\"")
+            + HelpExampleRpc("sendtokenrpdpayment", "\"3M9qvHKtgARhqcMtM5cRT9VaiDJ5PSfQGY\", \"37FaKponF7zqoMLUjEiko25pDiuVH5YLEa\", \"TOKEN\", \"0.01\"")
         );
 
     // obtain parameters & info
     std::string fromAddress = ParseAddress(request.params[0]);
     std::string toAddress = ParseAddress(request.params[1]);
-    uint256 linkedtxid = ParseHashV(request.params[2], "txid");
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(request.params[2].get_str());
+    if (!propertyId)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token not found");
+
+    RequireExistingProperty(propertyId);
+
+    CMPSPInfo::Entry sp;
+    {
+        LOCK(cs_tally);
+        if (!pDbSpInfo->getSP(propertyId, sp)) {
+            throw JSONRPCError(RPC_INVALID_PARAMETER, "Property identifier does not exist");
+        }
+    }
+
+    uint256 linkedtxid = sp.txid;
+
     int64_t referenceAmount = ParseAmount(request.params[3], true);
 
     // create a payload for the transaction
