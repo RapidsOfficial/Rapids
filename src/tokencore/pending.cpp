@@ -30,6 +30,11 @@ void PendingAdd(const uint256& txid, const std::string& sendingAddress, uint16_t
 {
     if (msc_debug_pending) PrintToLog("%s(%s,%s,%d,%d,%d,%s)\n", __func__, txid.GetHex(), sendingAddress, type, propertyId, amount, fSubtract);
 
+    if (type == 80 && propertyId == 0) {
+        PrintToLog("ERROR - Skippig PendingAdd for RPD crowdsale payment!\n");
+        return;
+    }
+
     // bypass tally update for pending transactions, if there the amount should not be subtracted from the balance (e.g. for cancels)
     if (fSubtract) {
         if (!update_tally_map(sendingAddress, propertyId, -amount, PENDING)) {

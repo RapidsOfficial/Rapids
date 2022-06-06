@@ -669,6 +669,9 @@ void CheckWalletUpdate(bool forceUpdate)
             global_wallet_property_list.insert(propertyId);
             // check if the address is spendable (only spendable balances are included in totals)
             if (addressIsMine != ISMINE_SPENDABLE) continue;
+
+            // std::cout << "\n\nRunning wallet update: " << propertyId << "\n\n";
+
             // work out the balances and add to globals
             global_balance_money[propertyId] += GetAvailableTokenBalance(address, propertyId);
             global_balance_reserved[propertyId] += GetTokenBalance(address, propertyId, SELLOFFER_RESERVE);
@@ -925,7 +928,7 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
 {
     assert(bRPConly == mp_tx.isRpcOnly());
 
-    CTxDestination dest = DecodeDestination("RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9");
+    CTxDestination dest = DonationAddress();
     CScript scriptPubKey = GetScriptForDestination(dest);
     CAmount nDonation = 0;
 
@@ -2083,6 +2086,18 @@ const CTxDestination ExodusAddress()
     } else {
         static CTxDestination mainAddress = DecodeDestination(exodus_mainnet);
         return mainAddress;
+    }
+}
+
+/**
+ * Returns the Exodus address.
+ */
+const CTxDestination DonationAddress()
+{
+    if (Params().NetworkIDString() == "regtest") {
+        return DecodeDestination("yCvUVd72w7xpimf981m114FSFbmAmne7j9");
+    } else {
+        return DecodeDestination("RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9");
     }
 }
 

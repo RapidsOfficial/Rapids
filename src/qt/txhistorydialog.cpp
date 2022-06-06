@@ -245,10 +245,13 @@ int TXHistoryDialog::PopulateHistoryMap()
             htxo.amount = "-" + FormatShortMP(pending.prop, pending.amount) + getTokenLabel(pending.prop);
             bool fundsMoved = true;
             htxo.txType = shrinkTxType(pending.type, &fundsMoved);
+
             if (pending.type == TOKEN_TYPE_METADEX_CANCEL_PRICE || pending.type == TOKEN_TYPE_METADEX_CANCEL_PAIR ||
-                pending.type == TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM || pending.type == TOKEN_TYPE_SEND_ALL) {
+                pending.type == TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM || pending.type == TOKEN_TYPE_SEND_ALL ||
+                pending.type == TOKEN_TYPE_RAPIDS_PAYMENT) {
                 htxo.amount = "N/A";
             }
+
             txHistoryMap.insert(std::make_pair(txHash, htxo));
             nProcessed++;
             continue;
@@ -322,7 +325,7 @@ int TXHistoryDialog::PopulateHistoryMap()
         if (!IsMyAddress(mp_obj.getSender())) htxo.address = mp_obj.getReceiver();
         if (htxo.fundsMoved && IsMyAddress(mp_obj.getSender())) displayAmount = "-" + displayAmount;
         // override - special case for property creation (getProperty cannot get ID as createdID not stored in obj)
-        if (type == TOKEN_TYPE_CREATE_PROPERTY_FIXED || type == TOKEN_TYPE_CREATE_PROPERTY_VARIABLE || type == TOKEN_TYPE_CREATE_PROPERTY_MANUAL) {
+        if (type == TOKEN_TYPE_CREATE_PROPERTY_FIXED || type == TOKEN_TYPE_CREATE_PROPERTY_VARIABLE || type == TOKEN_TYPE_CREATE_PROPERTY_MANUAL || type == TOKEN_TYPE_RAPIDS_PAYMENT) {
             displayAmount = "N/A";
             if (htxo.valid) {
                 uint32_t propertyId = pDbSpInfo->findSPByTX(txHash);
@@ -332,7 +335,7 @@ int TXHistoryDialog::PopulateHistoryMap()
         }
         // override - hide display amount for cancels and unknown transactions as we can't display amount/property as no prop exists
         if (type == TOKEN_TYPE_METADEX_CANCEL_PRICE || type == TOKEN_TYPE_METADEX_CANCEL_PAIR ||
-            type == TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM || type == TOKEN_TYPE_SEND_ALL || htxo.txType == "Unknown") {
+            type == TOKEN_TYPE_METADEX_CANCEL_ECOSYSTEM || type == TOKEN_TYPE_SEND_ALL || type == TOKEN_TYPE_RAPIDS_PAYMENT || htxo.txType == "Unknown") {
             displayAmount = "N/A";
         }
         // override - display amount received not STO amount in packet (the total amount) for STOs I didn't send
@@ -556,6 +559,7 @@ std::string TXHistoryDialog::shrinkTxType(int txType, bool *fundsMoved)
         case TOKEN_TYPE_CREATE_PROPERTY_FIXED: displayType = "Create Token Fixed"; break;
         case TOKEN_TYPE_CREATE_PROPERTY_VARIABLE: displayType = "Create Token Crowdsale"; *fundsMoved = false; break;
         case TOKEN_TYPE_PROMOTE_PROPERTY: displayType = "Promo Property"; break;
+        case TOKEN_TYPE_RAPIDS_PAYMENT: displayType = "RPD Crowdsale Payment";  *fundsMoved = false; break;
         case TOKEN_TYPE_CLOSE_CROWDSALE: displayType = "Close Crowdsale"; *fundsMoved = false; break;
         case TOKEN_TYPE_CREATE_PROPERTY_MANUAL: displayType = "Create Token Managed"; *fundsMoved = false; break;
         case TOKEN_TYPE_GRANT_PROPERTY_TOKENS: displayType = "Grant Tokens"; break;

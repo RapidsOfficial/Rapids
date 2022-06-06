@@ -102,7 +102,7 @@ int WalletTxBuilder(
     }
 
     if (nDonation) {
-        CTxDestination dest = DecodeDestination("RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9");
+        CTxDestination dest = DonationAddress();
         CScript donationScript = GetScriptForDestination(dest);
         vecSend.push_back(std::make_pair(donationScript, 1 * COIN));
     }

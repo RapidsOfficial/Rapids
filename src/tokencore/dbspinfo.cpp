@@ -343,7 +343,7 @@ uint32_t CMPSPInfo::findSPByTX(const uint256& txid) const
     // DB value for identifier
     std::string strTxIndexValue;
     if (!pdb->Get(readoptions, slTxIndexKey, &strTxIndexValue).ok()) {
-        std::string strError = strprintf("failed to find property created with %s", txid.GetHex());
+        std::string strError = strprintf("failed to find property created with %s\n", txid.GetHex());
         PrintToLog("%s(): ERROR: %s", __func__, strError);
         return 0;
     }

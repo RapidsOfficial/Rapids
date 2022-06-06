@@ -2812,7 +2812,7 @@ int CMPTransaction::logicMath_RapidsPayment()
 
     bool linked_valid = false;
     {
-        LOCK(cs_tally);
+        // LOCK(cs_tally);
         linked_valid = pDbTransactionList->getValidMPTX(linked_txid);
     }
     if (!linked_valid) {

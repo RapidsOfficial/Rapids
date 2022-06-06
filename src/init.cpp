@@ -1263,10 +1263,10 @@ bool AppInitMain()
     CScheduler::Function serviceLoop = std::bind(&CScheduler::serviceQueue, &scheduler);
     threadGroup.create_thread(std::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
 
-    if (Params().IsRegTestNet()) { // only for regtest for now
-        // Initialize Sapling circuit parameters
-        LoadSaplingParams();
-    }
+    // if (Params().IsRegTestNet()) { // only for regtest for now
+    //     // Initialize Sapling circuit parameters
+    //     LoadSaplingParams();
+    // }
 
     /* Start the RPC server already.  It will be started in "warmup" mode
      * and not really process calls already (but it will signify connections

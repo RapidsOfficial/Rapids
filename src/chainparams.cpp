@@ -462,11 +462,11 @@ public:
         consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on regtest)
-        consensus.nCoinbaseMaturity = 100;
+        consensus.nCoinbaseMaturity = 1;
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
         consensus.nMasternodeCountDrift = 4;        // num of MN we allow the see-saw payments to be off by
-        consensus.nMaxMoneyOut = 43199500 * COIN;
+        consensus.nMaxMoneyOut = 35000000000 * COIN;
         consensus.nPoolMaxTransactions = 2;
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
         consensus.nStakeMinAge = 0;
@@ -542,6 +542,15 @@ public:
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
+
+
+        // Sapling
+        bech32HRPs[SAPLING_PAYMENT_ADDRESS]      = "pregs";
+        bech32HRPs[SAPLING_FULL_VIEWING_KEY]     = "pregviews";
+        bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pregivks";
+        bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-reg-secret-spending-key-main";
+
+        devFundAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
