@@ -47,6 +47,8 @@
 
 #include "libzerocoin/CoinSpend.h"
 
+#include <governance/governance.h>
+
 class CBlockIndex;
 class CBlockTreeDB;
 class CBudgetManager;
@@ -445,6 +447,9 @@ extern CCoinsViewCache* pcoinsTip;
 
 /** Global variable that points to the active block tree (protected by cs_main) */
 extern CBlockTreeDB* pblocktree;
+
+/** Global variable that points to the governance db (protected by cs_main) */
+extern CGovernance *governance;
 
 /** Global variable that points to the zerocoin database (protected by cs_main) */
 extern CZerocoinDB* zerocoinDB;

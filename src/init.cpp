@@ -266,6 +266,11 @@ void PrepareShutdown()
             //record that client took the proper shutdown procedure
             pblocktree->WriteFlag("shutdown", true);
         }
+
+        if (governance != nullptr) {
+            governance->Sync();
+        }
+
         delete pcoinsTip;
         pcoinsTip = NULL;
         delete pcoinscatcher;
@@ -278,6 +283,8 @@ void PrepareShutdown()
         zerocoinDB = NULL;
         delete pSporkDB;
         pSporkDB = NULL;
+        delete governance;
+        governance = nullptr;
     }
 
     //! Token Core shutdown
@@ -1553,10 +1560,13 @@ bool AppInitMain()
     nTotalCache -= nBlockTreeDBCache;
     int64_t nCoinDBCache = std::min(nTotalCache / 2, (nTotalCache / 4) + (1 << 23)); // use 25%-50% of the remainder for disk cache
     nTotalCache -= nCoinDBCache;
+    int64_t nGovernanceDBCache = nTotalCache / 2;
+    nTotalCache -= nGovernanceDBCache;
     nCoinCacheUsage = nTotalCache; // the rest goes to in-memory cache
     LogPrintf("Cache configuration:\n");
     LogPrintf("* Using %.1fMiB for block index database\n", nBlockTreeDBCache * (1.0 / 1024 / 1024));
     LogPrintf("* Using %.1fMiB for chain state database\n", nCoinDBCache * (1.0 / 1024 / 1024));
+    LogPrintf("* Using %.1fMiB for governance database\n", nGovernanceDBCache * (1.0 / 1024 / 1024));
     LogPrintf("* Using %.1fMiB for in-memory UTXO set\n", nCoinCacheUsage * (1.0 / 1024 / 1024));
 
     bool fLoaded = false;
@@ -1575,6 +1585,7 @@ bool AppInitMain()
                 delete pblocktree;
                 delete zerocoinDB;
                 delete pSporkDB;
+                delete governance;
 
                 //RPD specific: zerocoin and spork DB's
                 zerocoinDB = new CZerocoinDB(0, false, fReindex);
@@ -1584,6 +1595,10 @@ bool AppInitMain()
                 pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex);
                 pcoinscatcher = new CCoinsViewErrorCatcher(pcoinsdbview);
                 pcoinsTip = new CCoinsViewCache(pcoinscatcher);
+
+                const CChainParams& chainparams = Params();
+                governance = new CGovernance(nGovernanceDBCache, false, fReindex);
+                governance->Init(fReindex, chainparams);
 
                 if (fReindex) {
                     pblocktree->WriteReindexing(true);

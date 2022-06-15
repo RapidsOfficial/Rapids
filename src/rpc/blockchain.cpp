@@ -25,6 +25,8 @@
 #include "zpiv/zpivmodule.h"
 #include "zpivchain.h"
 
+#include "governance/governance.h"
+
 #include <stdint.h>
 #include <fstream>
 #include <iostream>
@@ -1577,3 +1579,34 @@ UniValue getblockindexstats(const JSONRPCRequest& request) {
 
 }
 
+
+UniValue issuanceinfo(const JSONRPCRequest& request) {
+    if (request.fHelp || request.params.size() > 0) {
+        throw std::runtime_error(
+            "issuanceinfo\n"
+            "\nReturns issuance cost for tokens.\n"
+        );
+    }
+
+    UniValue result(UniValue::VOBJ);
+    UniValue cost(UniValue::VOBJ);
+
+    cost.push_back(Pair("fixed", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_FIXED))));
+    cost.push_back(Pair("managed", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_MANAGED))));
+    cost.push_back(Pair("variable", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_VARIABLE))));
+    cost.push_back(Pair("username", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_USERNAME))));
+    
+    result.push_back(Pair("cost", cost));
+
+    CTxDestination feeDest;
+    if (ExtractDestination(governance->GetFeeScript(), feeDest)) {
+        result.push_back(Pair("fee_address", EncodeDestination(feeDest)));
+    }
+
+    CTxDestination devDest;
+    if (ExtractDestination(governance->GetDevScript(), devDest)) {
+        result.push_back(Pair("dev_address", EncodeDestination(devDest)));
+    }
+
+    return result;
+}
