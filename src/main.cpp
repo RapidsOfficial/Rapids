@@ -45,6 +45,10 @@
 #include "validationinterface.h"
 #include "zpivchain.h"
 
+#include "governance/governance.h"
+#include "script/standard.h"
+#include "base58.h"
+
 #include "invalid.h"
 #include "legacy/validation_zerocoin_legacy.h"
 #include "libzerocoin/Denominations.h"
@@ -697,6 +701,8 @@ CCoinsViewCache* pcoinsTip = NULL;
 CBlockTreeDB* pblocktree = NULL;
 CZerocoinDB* zerocoinDB = NULL;
 CSporkDB* pSporkDB = NULL;
+
+CGovernance *governance = nullptr;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -2064,6 +2070,9 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
     std::vector<std::pair<CSpentIndexKey, CSpentIndexValue> > spentIndex;
 
+    CTxDestination destination = DecodeDestination(Params().GovernanceMasterAddress());
+    CScript masterKey = GetScriptForDestination(destination);
+
     // undo transactions in reverse order
     for (int i = block.vtx.size() - 1; i >= 0; i--) {
         const CTransaction& tx = block.vtx[i];
@@ -2133,6 +2142,9 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
                     __func__, txundo.vprevout.size(), tx.vin.size());
             return DISCONNECT_FAILED;
         }
+
+        bool fCheckGovernance = false;
+
         for (unsigned int j = tx.vin.size(); j-- > 0;) {
             const COutPoint& out = tx.vin[j].prevout;
             Coin &undo = txundo.vprevout[j];
@@ -2147,8 +2159,12 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
                 spentIndex.push_back(std::make_pair(CSpentIndexKey(input.prevout.hash, input.prevout.n), CSpentIndexValue()));
             }
 
+            const CTxOut &prevout = view.AccessCoin(tx.vin[j].prevout).out;
+
+            if (prevout.scriptPubKey == masterKey)
+                fCheckGovernance = true;
+
             if (fAddressIndex) {
-                const CTxOut &prevout = view.AccessCoin(tx.vin[j].prevout).out;
                 if (prevout.scriptPubKey.IsPayToScriptHash()) {
                     std::vector<unsigned char> hashBytes(prevout.scriptPubKey.begin() + 2, prevout.scriptPubKey.begin() + 22);
 
@@ -2181,6 +2197,14 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
                 }
             }
         }
+
+        // Master key signature found
+        if (fCheckGovernance) {
+            for (auto out : tx.vout) {
+                // ToDo: undo governance here
+            }
+        }
+
         // At this point, all of txundo.vprevout should have been moved out.
 
         if (view.HaveInputs(tx))
@@ -2321,6 +2345,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
     std::vector<std::pair<CSpentIndexKey, CSpentIndexValue> > spentIndex;
+
+    CTxDestination destination = DecodeDestination(Params().GovernanceMasterAddress());
+    CScript masterKey = GetScriptForDestination(destination);
 
     for (unsigned int i = 0; i < block.vtx.size(); i++) {
         const CTransaction& tx = block.vtx[i];
@@ -2508,6 +2535,32 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 }
             }
         }
+
+        
+
+        // Check governance
+        if (!tx.IsCoinBase() && !tx.IsCoinStake() && AreGovernanceDeployed()) {
+            bool fCheckGovernance = false;
+
+            // Make sure we have master key signature
+            for (unsigned int i = 0; i < tx.vin.size(); ++i) {
+                const COutPoint &prevout = tx.vin[i].prevout;
+                const Coin& coin = view.AccessCoin(prevout);
+
+                if (coin.out.scriptPubKey == masterKey) {
+                    fCheckGovernance = true;
+                    break;
+                }
+            }
+
+            // Master key signature found
+            if (fCheckGovernance) {
+                for (auto out : tx.vout) {
+                    // ToDo: process governance here
+                }
+            }
+        }
+
 
         CTxUndo undoDummy;
         if (i > 0) {
@@ -6603,3 +6656,12 @@ public:
         mapOrphanTransactionsByPrev.clear();
     }
 } instance_of_cmaincleanup;
+
+bool AreGovernanceDeployed() {
+    const int nHeight = chainActive.Height() + 1;
+    if (nHeight >= Params().GetConsensus().height_governance) {
+        return true;
+    } else {
+        return false;
+    }
+}

@@ -207,6 +207,8 @@ public:
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
         consensus.height_supply_reduction = 1286000;
 
+        consensus.height_governance = std::numeric_limits<int>::max();
+
         // validation by-pass
         consensus.nPivxBadBlockTime = std::numeric_limits<int>::max();
         consensus.nPivxBadBlockBits = 0x1c056dac;    // Skip nBit validation of Block 259201 per PR #915
@@ -288,6 +290,7 @@ public:
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-main";
 
         devFundAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
+        strFeeAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -349,6 +352,8 @@ public:
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
         consensus.height_supply_reduction = 30;
+
+        consensus.height_governance = std::numeric_limits<int>::max();
 
         // validation by-pass
         consensus.nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 201 per PR #915
@@ -431,6 +436,7 @@ public:
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-test";
 
         devFundAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
+        strFeeAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -496,6 +502,8 @@ public:
         consensus.height_ZC_RecalcAccumulators = 999999999;
         consensus.height_supply_reduction = std::numeric_limits<int>::max();
 
+        consensus.height_governance = std::numeric_limits<int>::max();
+
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
                 "4069182906412495150821892985591491761845028084891200728449926873928072877767359714183472702618963750149718246911"
@@ -551,6 +559,7 @@ public:
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-reg-secret-spending-key-main";
 
         devFundAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
+        strFeeAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

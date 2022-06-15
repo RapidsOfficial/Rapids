@@ -86,6 +86,10 @@ public:
 
     const std::string& DevFundAddress() const { return devFundAddress; }
 
+    // Governance
+    const std::string& GovernanceMasterAddress() const { return strMasterAddress; }
+    const std::string& GovernanceFeeAddress() const { return strFeeAddress; }
+
     /** Get masternode collateral */
     CAmount Collateral(int nHeight) const {
         if (nHeight > consensus.height_supply_reduction)
@@ -110,6 +114,11 @@ protected:
     std::vector<SeedSpec6> vFixedSeeds;
 
     std::string devFundAddress;
+
+    // Governance Master address
+    std::string strMasterAddress;
+    // Governance Fee address
+    std::string strFeeAddress;
 };
 
 /**

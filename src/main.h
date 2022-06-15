@@ -478,4 +478,6 @@ static const unsigned int REJECT_CONFLICT = 0x102;
 
 void RelayTransaction(const CTransaction& tx, CConnman& connman);
 
+bool AreGovernanceDeployed();
+
 #endif // BITCOIN_MAIN_H

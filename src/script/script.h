@@ -398,6 +398,15 @@ public:
     CScript(std::vector<unsigned char>::const_iterator pbegin, std::vector<unsigned char>::const_iterator pend) : CScriptBase(pbegin, pend) { }
     CScript(const unsigned char* pbegin, const unsigned char* pend) : CScriptBase(pbegin, pend) { }
 
+
+    ADD_SERIALIZE_METHODS;
+
+    template <typename Stream, typename Operation>
+    inline void SerializationOp(Stream& s, Operation ser_action) {
+        READWRITE(static_cast<CScriptBase&>(*this));
+    }
+
+
     CScript& operator+=(const CScript& b)
     {
         insert(end(), b.begin(), b.end());
