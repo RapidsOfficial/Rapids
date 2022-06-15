@@ -291,6 +291,12 @@ public:
 
         devFundAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
         strFeeAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
+
+        tokenFixedFee = 0 * COIN;
+        tokenManagedFee = 0 * COIN;
+        tokenVariableFee = 1 * COIN;
+        tokenUsernameFee = 1 * COIN;
+        tokenSubFee = 0 * COIN;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -437,6 +443,12 @@ public:
 
         devFundAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
         strFeeAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
+
+        tokenFixedFee = 0 * COIN;
+        tokenManagedFee = 0 * COIN;
+        tokenVariableFee = 1 * COIN;
+        tokenUsernameFee = 1 * COIN;
+        tokenSubFee = 0 * COIN;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -560,6 +572,12 @@ public:
 
         devFundAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
         strFeeAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
+
+        tokenFixedFee = 1 * COIN;
+        tokenManagedFee = 1 * COIN;
+        tokenVariableFee = 1 * COIN;
+        tokenUsernameFee = 1 * COIN;
+        tokenSubFee = 1 * COIN;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

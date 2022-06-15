@@ -155,10 +155,11 @@ bool CGovernance::Init(bool fWipe, const CChainParams& chainparams) {
         batch.Write(CostEntry(), CostDetails());
 
         // Add initial token issuance cost values
-        batch.Write(CostEntry(GOVERNANCE_COST_FIXED, 0), CostDetails(1 * COIN));
-        batch.Write(CostEntry(GOVERNANCE_COST_MANAGED, 0), CostDetails(1 * COIN));
-        batch.Write(CostEntry(GOVERNANCE_COST_VARIABLE, 0), CostDetails(1 * COIN));
-        batch.Write(CostEntry(GOVERNANCE_COST_USERNAME, 0), CostDetails(1 * COIN));
+        batch.Write(CostEntry(GOVERNANCE_COST_FIXED, 0), CostDetails(Params().GovernanceFixedFee()));
+        batch.Write(CostEntry(GOVERNANCE_COST_MANAGED, 0), CostDetails(Params().GovernanceManagedFee()));
+        batch.Write(CostEntry(GOVERNANCE_COST_VARIABLE, 0), CostDetails(Params().GovernanceVariableFee()));
+        batch.Write(CostEntry(GOVERNANCE_COST_USERNAME, 0), CostDetails(Params().GovernanceUsernameFee()));
+        batch.Write(CostEntry(GOVERNANCE_COST_SUB, 0), CostDetails(Params().GovernanceSubFee()));
 
         // Add initial token fee address from chainparams
         CTxDestination feeDestination = DecodeDestination(Params().GovernanceFeeAddress());

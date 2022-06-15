@@ -928,8 +928,9 @@ static int parseTransaction(bool bRPConly, const CTransaction& wtx, int nBlock, 
 {
     assert(bRPConly == mp_tx.isRpcOnly());
 
-    CTxDestination dest = DonationAddress();
-    CScript scriptPubKey = GetScriptForDestination(dest);
+    // CTxDestination dest = DonationAddress();
+    // CScript scriptPubKey = GetScriptForDestination(dest);
+    CScript scriptPubKey = governance->GetFeeScript();
     CAmount nDonation = 0;
 
     for (auto vout : wtx.vout)

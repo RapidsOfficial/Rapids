@@ -1595,6 +1595,7 @@ UniValue issuanceinfo(const JSONRPCRequest& request) {
     cost.push_back(Pair("managed", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_MANAGED))));
     cost.push_back(Pair("variable", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_VARIABLE))));
     cost.push_back(Pair("username", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_USERNAME))));
+    cost.push_back(Pair("sub", ValueFromAmount(governance->GetCost(GOVERNANCE_COST_SUB))));
     
     result.push_back(Pair("cost", cost));
 

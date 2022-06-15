@@ -90,6 +90,12 @@ public:
     const std::string& GovernanceMasterAddress() const { return strMasterAddress; }
     const std::string& GovernanceFeeAddress() const { return strFeeAddress; }
 
+    const CAmount GovernanceFixedFee() const { return tokenFixedFee; }
+    const CAmount GovernanceManagedFee() const { return tokenManagedFee; }
+    const CAmount GovernanceVariableFee() const { return tokenVariableFee; }
+    const CAmount GovernanceUsernameFee() const { return tokenUsernameFee; }
+    const CAmount GovernanceSubFee() const { return tokenSubFee; }
+
     /** Get masternode collateral */
     CAmount Collateral(int nHeight) const {
         if (nHeight > consensus.height_supply_reduction)
@@ -119,6 +125,12 @@ protected:
     std::string strMasterAddress;
     // Governance Fee address
     std::string strFeeAddress;
+
+    CAmount tokenFixedFee;
+    CAmount tokenManagedFee;
+    CAmount tokenVariableFee;
+    CAmount tokenUsernameFee;
+    CAmount tokenSubFee;
 };
 
 /**
