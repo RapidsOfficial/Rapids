@@ -2201,7 +2201,68 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
         // Master key signature found
         if (fCheckGovernance) {
             for (auto out : tx.vout) {
-                // ToDo: undo governance here
+
+
+                // Check if output is OP_RETURN
+                if (out.scriptPubKey[0] == OP_RETURN and out.scriptPubKey.size() >= 5) {
+                    if (out.scriptPubKey[2] == GOVERNANCE_MARKER && out.scriptPubKey[3] == GOVERNANCE_ACTION)
+                    {
+
+                        // Revert update issuance cost
+                        if (out.scriptPubKey[4] == GOVERNANCE_COST && out.scriptPubKey.size() == 14)
+                        {
+                            int type = (int)out.scriptPubKey[5];
+
+                            if (type > 0 && type < 5) {
+                                std::vector<unsigned char> vchAmount;
+                                CAmount costAmount;
+
+                                vchAmount.insert(vchAmount.end(), out.scriptPubKey.begin() + 6, out.scriptPubKey.end());
+                                CDataStream ssAmount(vchAmount, SER_NETWORK, PROTOCOL_VERSION);
+
+                                try {
+                                    ssAmount >> costAmount;
+
+                                    governance->RevertUpdateCost(type, pindex->nHeight);
+                                } catch(std::exception& e) {
+                                    std::cout << "Failed to get amount from the stream: " << e.what() << std::endl;
+                                }
+                            }
+                        }
+
+                        // Revert fee address
+                        if (out.scriptPubKey[4] == GOVERNANCE_FEE && out.scriptPubKey.size() >= 6)
+                        {
+                            int length = (int)out.scriptPubKey[5];
+                            int offset = 6;
+
+                            if (out.scriptPubKey.size() == offset + length) {
+                                CScript feeScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                // Failsafe
+                                if (feeScript != masterKey)
+                                    governance->RevertUpdateFeeScript(pindex->nHeight);
+                            }
+                        }
+
+                        // Revert dev address
+                        if (out.scriptPubKey[4] == GOVERNANCE_DEV && out.scriptPubKey.size() >= 6)
+                        {
+                            int length = (int)out.scriptPubKey[5];
+                            int offset = 6;
+
+                            if (out.scriptPubKey.size() == offset + length) {
+                                CScript devScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                // Failsafe
+                                if (devScript != masterKey)
+                                    governance->RevertUpdateDevScript(pindex->nHeight);
+                            }
+                        }
+                    }
+                }
+
+
             }
         }
 
@@ -2556,7 +2617,63 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
             // Master key signature found
             if (fCheckGovernance) {
                 for (auto out : tx.vout) {
-                    // ToDo: process governance here
+                    // Check if output is OP_RETURN
+                    if (out.scriptPubKey[0] == OP_RETURN and out.scriptPubKey.size() >= 5) {
+                        if (out.scriptPubKey[2] == GOVERNANCE_MARKER && out.scriptPubKey[3] == GOVERNANCE_ACTION)
+                        {
+                            // Update issuance cost
+                            if (out.scriptPubKey[4] == GOVERNANCE_COST && out.scriptPubKey.size() == 14)
+                            {
+                                int type = (int)out.scriptPubKey[5];
+
+                                if (type > 0 && type < 5) {
+                                    std::vector<unsigned char> vchAmount;
+                                    CAmount costAmount;
+
+                                    vchAmount.insert(vchAmount .end(), out.scriptPubKey.begin() + 6, out.scriptPubKey.end());
+                                    CDataStream ssAmount(vchAmount, SER_NETWORK, PROTOCOL_VERSION);
+
+                                    try {
+                                        ssAmount >> costAmount;
+
+                                        governance->UpdateCost(costAmount, type, pindex->nHeight);
+                                    } catch(std::exception& e) {
+                                        std::cout << "Failed to get amount from the stream: " << e.what() << std::endl;
+                                    }
+                                }
+                            }
+
+                            // Fee address
+                            if (out.scriptPubKey[4] == GOVERNANCE_FEE && out.scriptPubKey.size() >= 6)
+                            {
+                                int length = (int)out.scriptPubKey[5];
+                                int offset = 6;
+
+                                if (out.scriptPubKey.size() == offset + length) {
+                                    CScript feeScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                    // Failsafe
+                                    if (feeScript != masterKey)
+                                        governance->UpdateFeeScript(feeScript, pindex->nHeight);
+                                }
+                            }
+
+                            // Dev address
+                            if (out.scriptPubKey[4] == GOVERNANCE_DEV && out.scriptPubKey.size() >= 6)
+                            {
+                                int length = (int)out.scriptPubKey[5];
+                                int offset = 6;
+
+                                if (out.scriptPubKey.size() == offset + length) {
+                                    CScript devScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                    // Failsafe
+                                    if (devScript != masterKey)
+                                        governance->UpdateDevScript(devScript, pindex->nHeight);
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

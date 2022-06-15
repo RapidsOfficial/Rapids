@@ -17,6 +17,7 @@
 static const CScript DUMMY_SCRIPT = CScript() << ParseHex("6885777789"); 
 static const int DUMMY_TYPE = 0;
 
+static const char DB_DEV_ADDRESS = 'd';
 static const char DB_FEE_ADDRESS = 'f';
 static const char DB_COST = 'c';
 
@@ -99,6 +100,43 @@ namespace {
             s >> script;
         }
     };
+
+    struct DevEntry {
+        char key;
+        int height;
+
+        DevEntry() : key(DB_DEV_ADDRESS), height(0) {}
+        DevEntry(int height) : key(DB_DEV_ADDRESS), height(height) {}
+
+        template<typename Stream>
+        void Serialize(Stream &s) const {
+            s << key;
+            s << height;
+        }
+
+        template<typename Stream>
+        void Unserialize(Stream& s) {
+            s >> key;
+            s >> height;
+        }
+    };
+
+    struct DevDetails {
+        CScript script;
+
+        DevDetails() : script(DUMMY_SCRIPT) {}
+        DevDetails(CScript script) : script(script) {}
+
+        template<typename Stream>
+        void Serialize(Stream &s) const {
+            s << script;
+        }
+
+        template<typename Stream>
+        void Unserialize(Stream& s) {
+            s >> script;
+        }
+    };
 }
 
 CGovernance::CGovernance(size_t nCacheSize, bool fMemory, bool fWipe) : CDBWrapper(GetDataDir() / "governance", nCacheSize, fMemory, fWipe) 
@@ -120,11 +158,17 @@ bool CGovernance::Init(bool fWipe, const CChainParams& chainparams) {
         batch.Write(CostEntry(GOVERNANCE_COST_FIXED, 0), CostDetails(1 * COIN));
         batch.Write(CostEntry(GOVERNANCE_COST_MANAGED, 0), CostDetails(1 * COIN));
         batch.Write(CostEntry(GOVERNANCE_COST_VARIABLE, 0), CostDetails(1 * COIN));
+        batch.Write(CostEntry(GOVERNANCE_COST_USERNAME, 0), CostDetails(1 * COIN));
 
         // Add initial token fee address from chainparams
-        CTxDestination destination = DecodeDestination("");
-        CScript feeScript = GetScriptForDestination(destination);
+        CTxDestination feeDestination = DecodeDestination(Params().GovernanceFeeAddress());
+        CScript feeScript = GetScriptForDestination(feeDestination);
         batch.Write(FeeEntry(), FeeDetails(feeScript));
+
+        // Add initial dev fee address from chainparams
+        CTxDestination devDestination = DecodeDestination(Params().DevFundAddress());
+        CScript devScript = GetScriptForDestination(devDestination);
+        batch.Write(DevEntry(), DevDetails(devScript));
 
         batch.Write(DB_GOVERNANCE_INIT, true);
         WriteBatch(batch);
@@ -247,6 +291,55 @@ bool CGovernance::RevertUpdateFeeScript(int height) {
         batch.Erase(entry);
     } else {
         LogPrintf("Governance: Trying to revert unknown fee script update, database is corrupted\n");
+        return false;
+    }
+
+    return WriteBatch(batch);
+}
+
+CScript CGovernance::GetDevScript() {
+    DevDetails details = DevDetails();
+    int height = -1;
+
+    std::unique_ptr<CDBIterator> it(NewIterator());
+    for (it->Seek(DevEntry()); it->Valid(); it->Next()) {
+        DevEntry entry;
+        if (it->GetKey(entry) && entry.key == DB_DEV_ADDRESS) {
+            if (entry.height > height) {
+                height = entry.height;
+                it->GetValue(details);
+            }
+        } else {
+            break;
+        }
+    }
+
+    return details.script;
+}
+
+bool CGovernance::UpdateDevScript(CScript script, int height) {
+    DevEntry entry(height);
+    DevDetails details = DevDetails();
+    CDBBatch batch;
+
+    if (!Read(entry, details)) {
+        LogPrintf("Governance: Updating dev script to %s\n", HexStr(script));
+        batch.Write(entry, DevDetails(script));
+    }
+
+    return WriteBatch(batch);
+}
+
+bool CGovernance::RevertUpdateDevScript(int height) {
+    DevEntry entry(height);
+    DevDetails details = DevDetails();
+    CDBBatch batch;
+
+    if (Read(entry, details)) {
+        LogPrintf("Governance: Revert updating dev script to %s\n", HexStr(details.script));
+        batch.Erase(entry);
+    } else {
+        LogPrintf("Governance: Trying to revert unknown dev script update, database is corrupted\n");
         return false;
     }
 

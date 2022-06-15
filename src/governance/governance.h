@@ -13,11 +13,14 @@
 #define GOVERNANCE_MARKER 71
 #define GOVERNANCE_ACTION 65
 #define GOVERNANCE_COST 67
+
+#define GOVERNANCE_DEV 100
 #define GOVERNANCE_FEE 102
 
 #define GOVERNANCE_COST_FIXED 1
 #define GOVERNANCE_COST_MANAGED 2
 #define GOVERNANCE_COST_VARIABLE 3
+#define GOVERNANCE_COST_USERNAME 4
 
 class CGovernance : CDBWrapper 
 {
@@ -32,6 +35,10 @@ public:
     bool UpdateFeeScript(CScript script, int height);
     bool RevertUpdateFeeScript(int height);
     CScript GetFeeScript();
+
+    bool UpdateDevScript(CScript script, int height);
+    bool RevertUpdateDevScript(int height);
+    CScript GetDevScript();
 
     using CDBWrapper::Sync;
   
