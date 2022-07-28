@@ -76,17 +76,17 @@ static UniValue token_createpayload_sendall(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_dexsell(const JSONRPCRequest& request)
+static UniValue createtokenpayloaddexsell(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 6)
         throw runtime_error(
-            "token_createpayload_dexsell propertyidforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
+            "createtokenpayloaddexsell tickerforsale \"amountforsale\" \"amountdesired\" paymentwindow minacceptfee action\n"
 
             "\nCreate a payload to place, update or cancel a sell offer on the traditional distributed TOKEN/RPD exchange.\n"
 
             "\nArguments:\n"
 
-            "1. propertyidforsale    (number, required) the identifier of the tokens to list for sale (must be 1 for OMN or 2 for TOMN)\n"
+            "1. ticker               (string, required) the ticker of the token to list for sale\n"
             "2. amountforsale        (string, required) the amount of tokens to list for sale\n"
             "3. amountdesired        (string, required) the amount of bitcoins desired\n"
             "4. paymentwindow        (number, required) a time limit in blocks a buyer has to pay following a successful accepting order\n"
@@ -97,11 +97,16 @@ static UniValue token_createpayload_dexsell(const JSONRPCRequest& request)
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_dexsell", "1 \"1.5\" \"0.75\" 25 \"0.0005\" 1")
-            + HelpExampleRpc("token_createpayload_dexsell", "1, \"1.5\", \"0.75\", 25, \"0.0005\", 1")
+            + HelpExampleCli("createtokenpayloaddexsell", "TOKEN \"1.5\" \"0.75\" 25 \"0.0005\" 1")
+            + HelpExampleRpc("createtokenpayloaddexsell", "TOKEN, \"1.5\", \"0.75\", 25, \"0.0005\", 1")
         );
 
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     uint8_t action = ParseDExAction(request.params[5]);
 
     int64_t amountForSale = 0; // depending on action
@@ -121,29 +126,34 @@ static UniValue token_createpayload_dexsell(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_dexaccept(const JSONRPCRequest& request)
+static UniValue createtokenpayloaddexaccept(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_createpayload_dexaccept propertyid \"amount\"\n"
+            "createtokenpayloaddexaccept ticker \"amount\"\n"
 
             "\nCreate the payload for an accept offer for the specified token and amount.\n"
 
             "\nNote: if the server is not synchronized, amounts are considered as divisible, even if the token may have indivisible units!\n"
 
             "\nArguments:\n"
-            "1. propertyid           (number, required) the identifier of the token to purchase\n"
+            "1. ticker               (string, required) the ticker of the token to purchase\n"
             "2. amount               (string, required) the amount to accept\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_dexaccept", "1 \"15.0\"")
-            + HelpExampleRpc("token_createpayload_dexaccept", "1, \"15.0\"")
+            + HelpExampleCli("createtokenpayloaddexaccept", "TOKEN \"15.0\"")
+            + HelpExampleRpc("createtokenpayloaddexaccept", "TOKEN, \"15.0\"")
         );
 
-    uint32_t propertyId = ParsePropertyId(request.params[0]);
+    std::string ticker = ParseText(request.params[0]);
+
+    uint32_t propertyId = pDbSpInfo->findSPByTicker(ticker);
+    if (propertyId == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+    
     int64_t amount = ParseAmount(request.params[1], isPropertyDivisible(propertyId));
 
     std::vector<unsigned char> payload = CreatePayload_DExAccept(propertyId, amount);
@@ -505,33 +515,44 @@ static UniValue createtokenpayloadchangeissuer(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_trade(const JSONRPCRequest& request)
+static UniValue createtokenpayloadtrade(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "token_createpayload_trade propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
+            "createtokenpayloadtrade tickerforsale \"amountforsale\" tickerdesired \"amountdesired\"\n"
 
             "\nCreates the payload to place a trade offer on the distributed token exchange.\n"
 
             "\nNote: if the server is not synchronized, amounts are considered as divisible, even if the token may have indivisible units!\n"
 
             "\nArguments:\n"
-            "1. propertyidforsale    (number, required) the identifier of the tokens to list for sale\n"
+            "1. tickerforsale        (string, required) the ticker of the token to list for sale\n"
             "2. amountforsale        (string, required) the amount of tokens to list for sale\n"
-            "3. propertiddesired     (number, required) the identifier of the tokens desired in exchange\n"
+            "3. tickerdesired        (string, required) the ticker of the token desired in exchange\n"
             "4. amountdesired        (string, required) the amount of tokens desired in exchange\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_trade", "31 \"250.0\" 1 \"10.0\"")
-            + HelpExampleRpc("token_createpayload_trade", "31, \"250.0\", 1, \"10.0\"")
+            + HelpExampleCli("createtokenpayloadtrade", "TOKEN1 \"250.0\" TOKEN2 \"10.0\"")
+            + HelpExampleRpc("createtokenpayloadtrade", "TOKEN1, \"250.0\", TOKEN2, \"10.0\"")
         );
 
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
+    std::string tickerforsale = ParseText(request.params[0]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByTicker(tickerforsale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amountForSale = ParseAmount(request.params[1], isPropertyDivisible(propertyIdForSale));
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[2]);
+    
+    std::string tickerdesired = ParseText(request.params[2]);
+
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByTicker(tickerdesired);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amountDesired = ParseAmount(request.params[3], isPropertyDivisible(propertyIdDesired));
     RequireSameEcosystem(propertyIdForSale, propertyIdDesired);
     RequireDifferentIds(propertyIdForSale, propertyIdDesired);
@@ -542,33 +563,44 @@ static UniValue token_createpayload_trade(const JSONRPCRequest& request)
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_canceltradesbyprice(const JSONRPCRequest& request)
+static UniValue createtokenpayloadcanceltradesbyprice(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 4)
         throw runtime_error(
-            "token_createpayload_canceltradesbyprice propertyidforsale \"amountforsale\" propertiddesired \"amountdesired\"\n"
+            "createtokenpayloadcanceltradesbyprice tickerforsale \"amountforsale\" tickerdesired \"amountdesired\"\n"
 
             "\nCreates the payload to cancel offers on the distributed token exchange with the specified price.\n"
 
             "\nNote: if the server is not synchronized, amounts are considered as divisible, even if the token may have indivisible units!\n"
 
             "\nArguments:\n"
-            "1. propertyidforsale    (number, required) the identifier of the tokens listed for sale\n"
-            "2. amountforsale        (string, required) the amount of tokens to listed for sale\n"
-            "3. propertiddesired     (number, required) the identifier of the tokens desired in exchange\n"
+            "1. tickerforsale        (string, required) the ticker of the token to list for sale\n"
+            "2. amountforsale        (string, required) the amount of tokens to list for sale\n"
+            "3. tickerdesired        (string, required) the ticker of the token desired in exchange\n"
             "4. amountdesired        (string, required) the amount of tokens desired in exchange\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_canceltradesbyprice", "31 \"100.0\" 1 \"5.0\"")
-            + HelpExampleRpc("token_createpayload_canceltradesbyprice", "31, \"100.0\", 1, \"5.0\"")
+            + HelpExampleCli("createtokenpayloadcanceltradesbyprice", "TOKEN1 \"100.0\" TOKEN2 \"5.0\"")
+            + HelpExampleRpc("createtokenpayloadcanceltradesbyprice", "TOKEN1, \"100.0\", TOKEN2, \"5.0\"")
         );
 
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
+    std::string tickerforsale = ParseText(request.params[0]);
+
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByTicker(tickerforsale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amountForSale = ParseAmount(request.params[1], isPropertyDivisible(propertyIdForSale));
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[2]);
+    
+    std::string tickerdesired = ParseText(request.params[2]);
+
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByTicker(tickerdesired);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     int64_t amountDesired = ParseAmount(request.params[3], isPropertyDivisible(propertyIdDesired));
     RequireSameEcosystem(propertyIdForSale, propertyIdDesired);
     RequireDifferentIds(propertyIdForSale, propertyIdDesired);
@@ -578,28 +610,36 @@ static UniValue token_createpayload_canceltradesbyprice(const JSONRPCRequest& re
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_canceltradesbypair(const JSONRPCRequest& request)
+static UniValue createtokenpayloadcanceltradesbypair(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw runtime_error(
-            "token_createpayload_canceltradesbypair propertyidforsale propertiddesired\n"
+            "createtokenpayloadcanceltradesbypair tickerforsale tickerdesired\n"
 
             "\nCreates the payload to cancel all offers on the distributed token exchange with the given currency pair.\n"
 
             "\nArguments:\n"
-            "1. propertyidforsale    (number, required) the identifier of the tokens listed for sale\n"
-            "2. propertiddesired     (number, required) the identifier of the tokens desired in exchange\n"
+            "1. tickerforsale        (number, required) the ticker of the tokens listed for sale\n"
+            "2. tickerdesired        (number, required) the ticker of the tokens desired in exchange\n"
 
             "\nResult:\n"
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_canceltradesbypair", "1 31")
-            + HelpExampleRpc("token_createpayload_canceltradesbypair", "1, 31")
+            + HelpExampleCli("createtokenpayloadcanceltradesbypair", "TOKEN1 TOKEN2")
+            + HelpExampleRpc("createtokenpayloadcanceltradesbypair", "TOKEN1, TOKEN2")
         );
 
-    uint32_t propertyIdForSale = ParsePropertyId(request.params[0]);
-    uint32_t propertyIdDesired = ParsePropertyId(request.params[1]);
+    std::string tickerforsale = ParseText(request.params[0]);
+    uint32_t propertyIdForSale = pDbSpInfo->findSPByTicker(tickerforsale);
+    if (propertyIdForSale == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+    
+    std::string tickerdesired = ParseText(request.params[1]);
+    uint32_t propertyIdDesired = pDbSpInfo->findSPByTicker(tickerdesired);
+    if (propertyIdDesired == 0)
+        throw JSONRPCError(RPC_INTERNAL_ERROR, "Token with this ticker doesn't exists");
+
     RequireSameEcosystem(propertyIdForSale, propertyIdDesired);
     RequireDifferentIds(propertyIdForSale, propertyIdDesired);
 
@@ -608,11 +648,11 @@ static UniValue token_createpayload_canceltradesbypair(const JSONRPCRequest& req
     return HexStr(payload.begin(), payload.end());
 }
 
-static UniValue token_createpayload_cancelalltrades(const JSONRPCRequest& request)
+static UniValue createtokenpayloadcancelalltrades(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw runtime_error(
-            "token_createpayload_cancelalltrades ecosystem\n"
+            "createtokenpayloadcancelalltrades ecosystem\n"
 
             "\nCreates the payload to cancel all offers on the distributed token exchange.\n"
 
@@ -623,8 +663,8 @@ static UniValue token_createpayload_cancelalltrades(const JSONRPCRequest& reques
             "\"payload\"             (string) the hex-encoded payload\n"
 
             "\nExamples:\n"
-            + HelpExampleCli("token_createpayload_cancelalltrades", "1")
-            + HelpExampleRpc("token_createpayload_cancelalltrades", "1")
+            + HelpExampleCli("createtokenpayloadcancelalltrades", "1")
+            + HelpExampleRpc("createtokenpayloadcancelalltrades", "1")
         );
 
     uint8_t ecosystem = ParseEcosystem(request.params[0]);
@@ -810,20 +850,20 @@ static const CRPCCommand commands[] =
   //  -------------------------------- ----------------------------------------- ---------------------------------------- ----------
     { "token layer (payload creation)", "createtokenpayloadsimplesend",          &createtokenpayloadsimplesend,          true },
     { "token layer (payload creation)", "token_createpayload_sendall",             &token_createpayload_sendall,             true },
-    { "token layer (payload creation)", "token_createpayload_dexsell",             &token_createpayload_dexsell,             true },
-    { "token layer (payload creation)", "token_createpayload_dexaccept",           &token_createpayload_dexaccept,           true },
+    { "token layer (payload creation)", "createtokenpayloaddexsell",             &createtokenpayloaddexsell,             true },
+    { "token layer (payload creation)", "createtokenpayloaddexaccept",           &createtokenpayloaddexaccept,           true },
     { "token layer (payload creation)", "token_createpayload_sto",                 &token_createpayload_sto,                 true },
     { "token layer (payload creation)", "createtokenpayloadgrant",               &createtokenpayloadgrant,               true },
     { "token layer (payload creation)", "createtokenpayloadrevoke",              &createtokenpayloadrevoke,              true },
     { "token layer (payload creation)", "createtokenpayloadchangeissuer",        &createtokenpayloadchangeissuer,        true },
-    { "token layer (payload creation)", "token_createpayload_trade",               &token_createpayload_trade,               true },
+    { "token layer (payload creation)", "createtokenpayloadtrade",               &createtokenpayloadtrade,               true },
     { "token layer (payload creation)", "createtokenpayloadissuancefixed",       &createtokenpayloadissuancefixed,       true },
     { "token layer (payload creation)", "createtokenpayloadissuancecrowdsale",   &createtokenpayloadissuancecrowdsale,   true },
     { "token layer (payload creation)", "createtokenpayloadissuancemanaged",     &createtokenpayloadissuancemanaged,     true },
     { "token layer (payload creation)", "createtokenpayloadclosecrowdsale",      &createtokenpayloadclosecrowdsale,      true },
-    { "token layer (payload creation)", "token_createpayload_canceltradesbyprice", &token_createpayload_canceltradesbyprice, true },
-    { "token layer (payload creation)", "token_createpayload_canceltradesbypair",  &token_createpayload_canceltradesbypair,  true },
-    { "token layer (payload creation)", "token_createpayload_cancelalltrades",     &token_createpayload_cancelalltrades,     true },
+    { "token layer (payload creation)", "createtokenpayloadcanceltradesbyprice", &createtokenpayloadcanceltradesbyprice, true },
+    { "token layer (payload creation)", "createtokenpayloadcanceltradesbypair",  &createtokenpayloadcanceltradesbypair,  true },
+    { "token layer (payload creation)", "createtokenpayloadcancelalltrades",     &createtokenpayloadcancelalltrades,     true },
     { "token layer (payload creation)", "token_createpayload_enablefreezing",      &token_createpayload_enablefreezing,      true },
     { "token layer (payload creation)", "token_createpayload_disablefreezing",     &token_createpayload_disablefreezing,     true },
     { "token layer (payload creation)", "token_createpayload_freeze",              &token_createpayload_freeze,              true },
