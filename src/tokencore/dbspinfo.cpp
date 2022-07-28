@@ -234,7 +234,6 @@ uint32_t CMPSPInfo::putSP(uint8_t ecosystem, const Entry& info)
     ssTxValue << propertyId;
     leveldb::Slice slTxValue(&ssTxValue[0], ssTxValue.size());
 
-
     // DB key for identifier lookup entry by ticker
     CDataStream ssTickerIndexKey(SER_DISK, CLIENT_VERSION);
     ssTickerIndexKey << std::make_pair('T', info.ticker);
@@ -419,9 +418,9 @@ int64_t CMPSPInfo::popBlock(const uint256& block_hash)
                 ssTxIndexKey << std::make_pair('t', info.txid);
                 leveldb::Slice slTxIndexKey(&ssTxIndexKey[0], ssTxIndexKey.size());
 
-                CDataStream ssNameIndexKey(SER_DISK, CLIENT_VERSION);
-                ssNameIndexKey << std::make_pair('T', info.ticker);
-                leveldb::Slice slNameIndexKey(&ssNameIndexKey[0], ssNameIndexKey.size());
+                CDataStream ssTickerIndexKey(SER_DISK, CLIENT_VERSION);
+                ssTickerIndexKey << std::make_pair('T', info.ticker);
+                leveldb::Slice slNameIndexKey(&ssTickerIndexKey[0], ssTickerIndexKey.size());
 
                 commitBatch.Delete(slSpKey);
                 commitBatch.Delete(slTxIndexKey);

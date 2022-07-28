@@ -563,7 +563,6 @@ public:
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
 
-
         // Sapling
         bech32HRPs[SAPLING_PAYMENT_ADDRESS]      = "pregs";
         bech32HRPs[SAPLING_FULL_VIEWING_KEY]     = "pregviews";

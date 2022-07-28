@@ -93,9 +93,9 @@ static std::string exodus_address = "RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9";
 //! Mainnet Exodus address
 static const std::string exodus_mainnet = "RnbbZgwL9aCrsrD3MJkjn3yATBXzwXDaw9";
 //! Testnet Exodus address
-static const std::string exodus_testnet = "mpexoDuSkGGqvqrkrjiFng38QPkJQVFyqv";
+static const std::string exodus_testnet = "yBAVKMPkzWiXXehL2oVEH9z57eHX1CExuH";
 //! Testnet Exodus crowdsale address
-static const std::string getmoney_testnet = "moneyqMan7uh8FqdCA2BV5yZ8qVrc9ikLP";
+static const std::string getmoney_testnet = "xxg15XmKKcTx25k2TJYayj2hssHEEbM9nG";
 
 static int nWaterlineBlock = 0;
 

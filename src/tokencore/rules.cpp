@@ -193,7 +193,7 @@ CTestNetConsensusParams::CTestNetConsensusParams()
 CRegTestConsensusParams::CRegTestConsensusParams()
 {
     // Exodus related:
-    GENESIS_BLOCK = 10;
+    GENESIS_BLOCK = 1;
     // Notice range for feature activations:
     MIN_ACTIVATION_BLOCKS = 0;  // ~2 weeks
     MAX_ACTIVATION_BLOCKS = 99999999; // ~12 weeks
