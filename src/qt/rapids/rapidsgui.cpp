@@ -127,6 +127,23 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         masterNodesWidget = new MasterNodesWidget(this);
         coldStakingWidget = new ColdStakingWidget(this);
         settingsWidget = new SettingsWidget(this);
+        // dexPage = new MetaDExDialog(this);
+
+        // Token
+        sendTokenPage = new SendMPDialog(this);
+        balancesPage = new BalancesDialog(this);
+        usernamesPage = new UsernamesDialog(this);
+        tokensHistory = new TXHistoryDialog();
+        createTokenPage = new CreateMPDialog(this);
+        // dexPage = new MetaDExDialog();
+
+        tabHolder = new QTabWidget();
+        tabHolder->setStyleSheet("background-color: #0f0f0f;");
+        tabHolder->addTab(sendTokenPage, tr("Send"));
+        tabHolder->addTab(balancesPage, tr("Tokens"));
+        tabHolder->addTab(usernamesPage, tr("Usernames"));
+        tabHolder->addTab(tokensHistory, tr("History"));
+        tabHolder->addTab(createTokenPage, tr("Create"));
 
         // Add to parent
         stackedContainer->addWidget(dashboard);
@@ -136,6 +153,11 @@ RapidsGUI::RapidsGUI(const NetworkStyle* networkStyle, QWidget* parent) :
         stackedContainer->addWidget(masterNodesWidget);
         stackedContainer->addWidget(coldStakingWidget);
         stackedContainer->addWidget(settingsWidget);
+        // stackedContainer->addWidget(balancesPage);
+        // stackedContainer->addWidget(tokensHistory);
+        // stackedContainer->addWidget(sendTokenPage);
+        // stackedContainer->addWidget(dexPage);
+        stackedContainer->addWidget(tabHolder);
         stackedContainer->setCurrentWidget(dashboard);
 
     } else
@@ -252,6 +274,12 @@ void RapidsGUI::setClientModel(ClientModel* clientModel)
         dashboard->setClientModel(clientModel);
         sendWidget->setClientModel(clientModel);
         settingsWidget->setClientModel(clientModel);
+        balancesPage->setClientModel(clientModel);
+        usernamesPage->setClientModel(clientModel);
+        tokensHistory->setClientModel(clientModel);
+        sendTokenPage->setClientModel(clientModel);
+        createTokenPage->setClientModel(clientModel);
+        // dexPage->setClientModel(clientModel);
 
         // Receive and report messages from client model
         connect(clientModel, &ClientModel::message, this, &RapidsGUI::message);
@@ -501,6 +529,15 @@ void RapidsGUI::goToSettings(){
     showTop(settingsWidget);
 }
 
+void RapidsGUI::gotoTokensPage(){
+    balancesPage->balancesUpdated();
+    usernamesPage->balancesUpdated();
+    sendTokenPage->balancesUpdated();
+    createTokenPage->balancesUpdated();
+
+    showTop(tabHolder);
+}
+
 void RapidsGUI::goToSettingsInfo()
 {
     navMenu->selectSettings();
@@ -614,6 +651,12 @@ bool RapidsGUI::addWallet(const QString& name, WalletModel* walletModel)
     masterNodesWidget->setWalletModel(walletModel);
     coldStakingWidget->setWalletModel(walletModel);
     settingsWidget->setWalletModel(walletModel);
+    balancesPage->setWalletModel(walletModel);
+    usernamesPage->setWalletModel(walletModel);
+    tokensHistory->setWalletModel(walletModel);
+    sendTokenPage->setWalletModel(walletModel);
+    createTokenPage->setWalletModel(walletModel);
+    // dexPage->setWalletModel(walletModel);
 
     // Connect actions..
     connect(walletModel, &WalletModel::message, this, &RapidsGUI::message);

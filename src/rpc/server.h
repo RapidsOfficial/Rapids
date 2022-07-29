@@ -266,6 +266,7 @@ extern UniValue waitforblockheight(const JSONRPCRequest& request);
 extern UniValue getdifficulty(const JSONRPCRequest& request);
 extern UniValue getmempoolinfo(const JSONRPCRequest& request);
 extern UniValue getrawmempool(const JSONRPCRequest& request);
+extern UniValue clearmempool(const JSONRPCRequest& request);
 extern UniValue getblockhash(const JSONRPCRequest& request);
 extern UniValue getblock(const JSONRPCRequest& request);
 extern UniValue getblockheader(const JSONRPCRequest& request);
@@ -277,6 +278,7 @@ extern UniValue getchaintips(const JSONRPCRequest& request);
 extern UniValue invalidateblock(const JSONRPCRequest& request);
 extern UniValue reconsiderblock(const JSONRPCRequest& request);
 extern UniValue getblockindexstats(const JSONRPCRequest& request);
+extern UniValue issuanceinfo(const JSONRPCRequest& request);
 extern UniValue getserials(const JSONRPCRequest& request);
 extern void validaterange(const UniValue& params, int& heightStart, int& heightEnd, int minHeightStart=1);
 

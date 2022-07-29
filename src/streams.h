@@ -59,7 +59,7 @@ public:
         Init(nTypeIn, nVersionIn);
     }
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1300
+#if !defined(_TOKEN_VER) || _TOKEN_VER >= 1300
     CBaseDataStream(const char* pbegin, const char* pend, int nTypeIn, int nVersionIn) : vch(pbegin, pend)
     {
         Init(nTypeIn, nVersionIn);
@@ -147,7 +147,7 @@ public:
             vch.insert(it, first, last);
     }
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1300
+#if !defined(_TOKEN_VER) || _TOKEN_VER >= 1300
     void insert(iterator it, const char* first, const char* last)
     {
         if (last == first) return;
@@ -373,7 +373,7 @@ public:
     CDataStream(const_iterator pbegin, const_iterator pend, int nTypeIn, int nVersionIn) :
             CBaseDataStream(pbegin, pend, nTypeIn, nVersionIn) { }
 
-#if !defined(_MSC_VER) || _MSC_VER >= 1300
+#if !defined(_TOKEN_VER) || _TOKEN_VER >= 1300
     CDataStream(const char* pbegin, const char* pend, int nTypeIn, int nVersionIn) :
             CBaseDataStream(pbegin, pend, nTypeIn, nVersionIn) { }
 #endif

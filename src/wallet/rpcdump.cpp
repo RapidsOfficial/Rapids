@@ -17,6 +17,9 @@
 #include "utiltime.h"
 #include "wallet/wallet.h"
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include <fstream>
 #include <secp256k1.h>
 #include <stdint.h>
@@ -213,7 +216,15 @@ UniValue importaddress(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(request.params[0].get_str(), isStakingAddress);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress, isStakingAddress);
 
     if (IsValidDestination(dest)) {
         if (fP2SH)
@@ -392,13 +403,13 @@ UniValue dumpprivkey(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
-            "dumpprivkey \"pivxaddress\"\n"
-            "\nReveals the private key corresponding to 'pivxaddress'.\n"
+            "dumpprivkey \"rapidsaddress\"\n"
+            "\nReveals the private key corresponding to 'rapidsaddress'.\n"
             "Then the importprivkey can be used with this output\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"   (string, required) The pivx address for the private key\n"
+            "1. \"rapidsaddress\"   (string, required) The pivx address for the private key\n"
 
             "\nResult:\n"
             "\"key\"                (string) The private key\n"
@@ -411,6 +422,13 @@ UniValue dumpprivkey(const JSONRPCRequest& request)
     EnsureWalletIsUnlocked();
 
     std::string strAddress = request.params[0].get_str();
+
+    if (IsUsernameValid(strAddress)) {
+        std::string dbAddress = GetUsernameAddress(strAddress);
+        if (dbAddress != "")
+            strAddress = dbAddress;
+    }
+
     CTxDestination dest = DecodeDestination(strAddress);
     if (!IsValidDestination(dest))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
@@ -537,12 +555,12 @@ UniValue bip38encrypt(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw std::runtime_error(
-            "bip38encrypt \"pivxaddress\" \"passphrase\"\n"
-            "\nEncrypts a private key corresponding to 'pivxaddress'.\n" +
+            "bip38encrypt \"rapidsaddress\" \"passphrase\"\n"
+            "\nEncrypts a private key corresponding to 'rapidsaddress'.\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"   (string, required) The pivx address for the private key (you must hold the key already)\n"
+            "1. \"rapidsaddress\"   (string, required) The pivx address for the private key (you must hold the key already)\n"
             "2. \"passphrase\"   (string, required) The passphrase you want the private key to be encrypted with - Valid special chars: !#$%&'()*+,-./:;<=>?`{|}~ \n"
 
             "\nResult:\n"
@@ -583,7 +601,7 @@ UniValue bip38decrypt(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw std::runtime_error(
-            "bip38decrypt \"pivxaddress\" \"passphrase\"\n"
+            "bip38decrypt \"rapidsaddress\" \"passphrase\"\n"
             "\nDecrypts and then imports password protected private key.\n" +
             HelpRequiringPassphrase() + "\n"
 

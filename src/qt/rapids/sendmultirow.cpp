@@ -5,6 +5,8 @@
 #include "qt/rapids/sendmultirow.h"
 #include "qt/rapids/forms/ui_sendmultirow.h"
 
+#include "tokencore/tx.h"
+
 #include "optionsmodel.h"
 #include "addresstablemodel.h"
 #include "guiutil.h"
@@ -85,7 +87,17 @@ bool SendMultiRow::addressChanged(const QString& str, bool fOnlyValidate)
 {
     if (!str.isEmpty()) {
         QString trimmedStr = str.trimmed();
-        const bool valid = walletModel->validateAddress(trimmedStr, this->onlyStakingAddressAccepted);
+        bool valid = walletModel->validateAddress(trimmedStr, this->onlyStakingAddressAccepted);
+
+        if (IsUsernameValid(trimmedStr.toStdString()))
+        {
+            std::string dbAddress = GetUsernameAddress(trimmedStr.toStdString());
+            if (dbAddress == "")
+            {
+                valid = false;
+            }
+        }
+
         if (!valid) {
             // check URI
             SendCoinsRecipient rcp;
@@ -112,6 +124,7 @@ bool SendMultiRow::addressChanged(const QString& str, bool fOnlyValidate)
                 }
             }
         }
+
         updateStyle(ui->lineEditAddress);
         return valid;
     }
@@ -192,14 +205,34 @@ SendCoinsRecipient SendMultiRow::getValue()
 
     // Normal payment
     recipient.address = getAddress();
+    recipient.username = getUsername();
     recipient.label = ui->lineEditDescription->text();
     recipient.amount = getAmountValue();;
     return recipient;
 }
 
 QString SendMultiRow::getAddress()
-{
-    return ui->lineEditAddress->text().trimmed();
+{   
+    QString address = ui->lineEditAddress->text().trimmed();
+
+    if (IsUsernameValid(address.toStdString())) {
+        std::string dbAddress = GetUsernameAddress(address.toStdString());
+        if (dbAddress != "")
+            address = QString::fromStdString(dbAddress);
+    }
+
+    return address;
+}
+
+QString SendMultiRow::getUsername()
+{   
+    QString address = ui->lineEditAddress->text().trimmed();
+    QString username;
+
+    if (IsUsernameValid(address.toStdString()))
+        username = " (" + address + ")";
+
+    return username;
 }
 
 CAmount SendMultiRow::getAmountValue()

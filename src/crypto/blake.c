@@ -52,7 +52,7 @@ extern "C"{
 #define SPH_COMPACT_BLAKE_64   1
 #endif
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning (disable: 4146)
 #endif
 

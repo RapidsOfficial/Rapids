@@ -117,7 +117,7 @@ typedef int (*secp256k1_nonce_function)(
 # if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
 #  if SECP256K1_GNUC_PREREQ(2,7)
 #   define SECP256K1_INLINE __inline__
-#  elif (defined(_MSC_VER))
+#  elif (defined(_TOKEN_VER))
 #   define SECP256K1_INLINE __inline
 #  else
 #   define SECP256K1_INLINE

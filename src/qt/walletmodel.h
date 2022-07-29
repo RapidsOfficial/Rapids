@@ -61,6 +61,8 @@ public:
     AvailableCoinsType inputType;
     bool useSwiftTX = false;
 
+    QString username; // memory only
+
     // Cold staking.
     bool isP2CS = false;
     QString ownerAddress;

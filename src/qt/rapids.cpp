@@ -39,6 +39,8 @@
 #include "wallet/wallet.h"
 #endif
 
+#include "tokencore/utilsui.h"
+
 #include <stdint.h>
 
 #include <boost/thread.hpp>
@@ -543,6 +545,9 @@ WId BitcoinApplication::getMainWinId() const
 int main(int argc, char* argv[])
 {
     SetupEnvironment();
+
+    // Indicate UI mode
+    fQtMode = true;
 
     /// 1. Parse command-line options. These take precedence over anything else.
     // Command-line options take precedence:

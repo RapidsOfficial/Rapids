@@ -1,0 +1,107 @@
+TOKENCORE_H = \
+  tokencore/activation.h \
+  tokencore/consensushash.h \
+  tokencore/convert.h \
+  tokencore/createpayload.h \
+  tokencore/createtx.h \
+  tokencore/dbbase.h \
+  tokencore/dbfees.h \
+  tokencore/dbspinfo.h \
+  tokencore/dbstolist.h \
+  tokencore/dbtradelist.h \
+  tokencore/dbtransaction.h \
+  tokencore/dbtxlist.h \
+  tokencore/dex.h \
+  tokencore/encoding.h \
+  tokencore/errors.h \
+  tokencore/log.h \
+  tokencore/mdex.h \
+  tokencore/notifications.h \
+  tokencore/tokencore.h \
+  tokencore/parse_string.h \
+  tokencore/parsing.h \
+  tokencore/pending.h \
+  tokencore/persistence.h \
+  tokencore/rpc.h \
+  tokencore/rpcmbstring.h \
+  tokencore/rpcpayload.h \
+  tokencore/rpcrawtx.h \
+  tokencore/rpcrequirements.h \
+  tokencore/rpctx.h \
+  tokencore/rpctxobject.h \
+  tokencore/rpcvalues.h \
+  tokencore/rules.h \
+  tokencore/script.h \
+  tokencore/seedblocks.h \
+  tokencore/sp.h \
+  tokencore/sto.h \
+  tokencore/tally.h \
+  tokencore/tx.h \
+  tokencore/uint256_extensions.h \
+  tokencore/utilsbitcoin.h \
+  tokencore/utilsui.h \
+  tokencore/version.h \
+  tokencore/walletcache.h \
+  tokencore/walletfetchtxs.h \
+  tokencore/wallettxbuilder.h \
+  tokencore/walletutils.h
+
+TOKENCORE_CPP = \
+  tokencore/activation.cpp \
+  tokencore/consensushash.cpp \
+  tokencore/convert.cpp \
+  tokencore/createpayload.cpp \
+  tokencore/createtx.cpp \
+  tokencore/dbbase.cpp \
+  tokencore/dbfees.cpp \
+  tokencore/dbspinfo.cpp \
+  tokencore/dbstolist.cpp \
+  tokencore/dbtradelist.cpp \
+  tokencore/dbtransaction.cpp \
+  tokencore/dbtxlist.cpp \
+  tokencore/dex.cpp \
+  tokencore/encoding.cpp \
+  tokencore/log.cpp \
+  tokencore/mdex.cpp \
+  tokencore/notifications.cpp \
+  tokencore/tokencore.cpp \
+  tokencore/parse_string.cpp \
+  tokencore/parsing.cpp \
+  tokencore/pending.cpp \
+  tokencore/persistence.cpp \
+  tokencore/rpc.cpp \
+  tokencore/rpcmbstring.cpp \
+  tokencore/rpcpayload.cpp \
+  tokencore/rpcrawtx.cpp \
+  tokencore/rpcrequirements.cpp \
+  tokencore/rpctx.cpp \
+  tokencore/rpctxobject.cpp \
+  tokencore/rpcvalues.cpp \
+  tokencore/rules.cpp \
+  tokencore/script.cpp \
+  tokencore/seedblocks.cpp \
+  tokencore/sp.cpp \
+  tokencore/sto.cpp \
+  tokencore/tally.cpp \
+  tokencore/tx.cpp \
+  tokencore/utilsbitcoin.cpp \
+  tokencore/utilsui.cpp \
+  tokencore/version.cpp \
+  tokencore/walletcache.cpp \
+  tokencore/walletfetchtxs.cpp \
+  tokencore/wallettxbuilder.cpp \
+  tokencore/walletutils.cpp
+
+libbitcoin_server_a_SOURCES += \
+  $(TOKENCORE_CPP) \
+  $(TOKENCORE_H)
+
+tokencore/libbitcoin_server_a-version.$(OBJEXT): obj/build.h # build info
+
+CLEAN_TOKENCORE = tokencore/*.gcda tokencore/*.gcno
+
+CLEANFILES += $(CLEAN_TOKENCORE)
+
+if ENABLE_TESTS
+include Makefile.tokentest.include
+endif

@@ -212,5 +212,22 @@
         <file alias="ic-check-cold-staking">rapids/res/img/ic-check-cold-staking.png</file>
         <file alias="ic-check-cold-staking-off">rapids/res/img/ic-check-cold-staking-off.png</file>
         <file alias="ic-check-cold-staking-enabled">rapids/res/img/ic-check-cold-staking-enabled.png</file>
+        <file alias="tools">res/icons/tools.png</file>
+        <file alias="exchange">res/icons/exchange.png</file>
+        <file alias="token_confirmed">res/icons/token_confirmed.png</file>
+        <file alias="token_pending">res/icons/token_pending.png</file>
+        <file alias="token_error">res/icons/token_error.png</file>
+        <file alias="balances">res/icons/balances.png</file>
+        <file alias="token_in">res/icons/token_in.png</file>
+        <file alias="token_inout">res/icons/token_inout.png</file>
+        <file alias="token_invalid">res/icons/token_invalid.png</file>
+        <file alias="token_out">res/icons/token_out.png</file>
+        <file alias="token_meta_cancelled">res/icons/meta_cancelled.png</file>
+        <file alias="token_meta_filled">res/icons/meta_filled.png</file>
+        <file alias="token_meta_open">res/icons/meta_open.png</file>
+        <file alias="token_meta_partcancelled">res/icons/meta_partcancelled.png</file>
+        <file alias="token_meta_partfilled">res/icons/meta_partfilled.png</file>
+        <file alias="token_meta_pending">res/icons/meta_pending.png</file>
+        <file alias="token_hourglass">res/icons/token_hourglass.png</file>
     </qresource>
 </RCC>

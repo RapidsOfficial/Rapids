@@ -12,6 +12,7 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QSystemTrayIcon>
+#include <QTabWidget>
 #include <QLabel>
 
 #include "qt/rapids/navmenuwidget.h"
@@ -25,6 +26,12 @@
 #include "qt/rapids/snackbar.h"
 #include "qt/rapids/settings/settingswidget.h"
 #include "qt/rapids/settings/settingsfaqwidget.h"
+#include "qt/txhistorydialog.h"
+#include "qt/sendmpdialog.h"
+#include "qt/creatempdialog.h"
+#include "qt/balancesdialog.h"
+#include "qt/usernamesdialog.h"
+#include "qt/metadexdialog.h"
 #include "qt/rpcconsole.h"
 
 namespace interfaces {
@@ -72,6 +79,7 @@ public Q_SLOTS:
     void goToMasterNodes();
     void goToColdStaking();
     void goToSettings();
+    void gotoTokensPage();
     void goToSettingsInfo();
     void openNetworkMonitor();
 
@@ -140,11 +148,18 @@ private:
     ColdStakingWidget *coldStakingWidget = nullptr;
     SettingsWidget* settingsWidget = nullptr;
 
+    BalancesDialog *balancesPage = nullptr;
+    UsernamesDialog *usernamesPage = nullptr;
+    TXHistoryDialog *tokensHistory = nullptr;
+    CreateMPDialog *createTokenPage = nullptr;
+    SendMPDialog *sendTokenPage = nullptr;
+    QTabWidget *tabHolder = nullptr;
+    // MetaDExDialog *dexPage = nullptr;
+
     SnackBar *snackBar = nullptr;
 
     RPCConsole* rpcConsole = nullptr;
 
-    //
     QSystemTrayIcon* trayIcon = nullptr;
     QMenu* trayIconMenu = nullptr;
     Notificator* notificator = nullptr;

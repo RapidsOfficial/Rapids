@@ -44,7 +44,7 @@ extern "C"{
 #define SPH_LUFFA_PARALLEL   1
 #endif
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning (disable: 4146)
 #endif
 

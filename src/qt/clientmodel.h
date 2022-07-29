@@ -83,6 +83,10 @@ public:
     QString formatClientStartupTime() const;
     QString dataDir() const;
 
+    // Try to avoid Token queuing too many messages
+    bool tryLockTokenStateChanged();
+    bool tryLockTokenBalanceChanged();
+
     void setCacheTip(const CBlockIndex* const tip) { cacheTip = tip; }
     void setCacheReindexing(bool reindex) { cachedReindexing = reindex; }
     void setCacheImporting(bool import) { cachedImporting = import; }
@@ -101,6 +105,11 @@ private:
     std::unique_ptr<interfaces::Handler> m_handler_notify_alert_changed;
     std::unique_ptr<interfaces::Handler> m_handler_banned_list_changed;
     std::unique_ptr<interfaces::Handler> m_handler_notify_block_tip;
+
+    std::unique_ptr<interfaces::Handler> m_handler_token_state_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_token_pending_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_token_balance_changed;
+    std::unique_ptr<interfaces::Handler> m_handler_token_state_invalidated;
 
     QString getMasternodeCountString() const;
     OptionsModel* optionsModel;
@@ -121,12 +130,22 @@ private:
     void subscribeToCoreSignals();
     void unsubscribeFromCoreSignals();
 
+    // Locks for Token state changes
+    bool lockedTokenStateChanged;
+    bool lockedTokenBalanceChanged;
+
 Q_SIGNALS:
     void numConnectionsChanged(int count);
     void numBlocksChanged(int count);
     void strMasternodesChanged(const QString& strMasternodes);
     void alertsChanged(const QString& warnings);
     void bytesChanged(quint64 totalBytesIn, quint64 totalBytesOut);
+
+    // Additional Token signals
+    void reinitTokenState();
+    void refreshTokenState();
+    void refreshTokenBalance();
+    void refreshTokenPending(bool pending);
 
     //! Fired when a message should be reported to the user
     void message(const QString& title, const QString& message, unsigned int style, bool* ret = nullptr);
@@ -140,6 +159,12 @@ public Q_SLOTS:
     void updateNumConnections(int numConnections);
     void updateAlert();
     void updateBanlist();
+
+    // Additional Token slots
+    void invalidateTokenState();
+    void updateTokenState();
+    void updateTokenBalance();
+    void updateTokenPending(bool pending);
 };
 
 #endif // BITCOIN_QT_CLIENTMODEL_H

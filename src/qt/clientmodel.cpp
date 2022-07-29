@@ -39,7 +39,9 @@ ClientModel::ClientModel(OptionsModel* optionsModel, QObject* parent) : QObject(
                                                                         cacheTip(nullptr),
                                                                         cachedMasternodeCountString(""),
                                                                         cachedReindexing(0), cachedImporting(0),
-                                                                        numBlocksAtStartup(-1), pollTimer(0)
+                                                                        numBlocksAtStartup(-1), pollTimer(0),
+                                                                        lockedTokenStateChanged(false),
+                                                                        lockedTokenBalanceChanged(false)
 {
     peerTableModel = new PeerTableModel(this);
     banTableModel = new BanTableModel(this);
@@ -174,6 +176,50 @@ void ClientModel::updateNumConnections(int numConnections)
     Q_EMIT numConnectionsChanged(numConnections);
 }
 
+void ClientModel::invalidateTokenState()
+{
+    Q_EMIT reinitTokenState();
+}
+
+void ClientModel::updateTokenState()
+{
+    lockedTokenStateChanged = false;
+    Q_EMIT refreshTokenState();
+}
+
+bool ClientModel::tryLockTokenStateChanged()
+{
+    // Try to avoid Token queuing too many messages for the UI
+    if (lockedTokenStateChanged) {
+        return false;
+    }
+
+    lockedTokenStateChanged = true;
+    return true;
+}
+
+void ClientModel::updateTokenBalance()
+{
+    lockedTokenBalanceChanged = false;
+    Q_EMIT refreshTokenBalance();
+}
+
+bool ClientModel::tryLockTokenBalanceChanged()
+{
+    // Try to avoid Token queuing too many messages for the UI
+    if (lockedTokenBalanceChanged) {
+        return false;
+    }
+
+    lockedTokenBalanceChanged = true;
+    return true;
+}
+
+void ClientModel::updateTokenPending(bool pending)
+{
+    Q_EMIT refreshTokenPending(pending);
+}
+
 void ClientModel::updateAlert()
 {
     Q_EMIT alertsChanged(getStatusBarWarnings());
@@ -273,6 +319,34 @@ static void BlockTipChanged(ClientModel *clientmodel, bool initialSync, const CB
 }
 
 // Handlers for core signals
+static void TokenStateInvalidated(ClientModel *clientmodel)
+{
+    // This will be triggered if a reorg invalidates the state
+    QMetaObject::invokeMethod(clientmodel, "invalidateTokenState", Qt::QueuedConnection);
+}
+
+static void TokenStateChanged(ClientModel *clientmodel)
+{
+    // This will be triggered for each block that contains Token layer transactions
+    if (clientmodel->tryLockTokenStateChanged()) {
+        QMetaObject::invokeMethod(clientmodel, "updateTokenState", Qt::QueuedConnection);
+    }
+}
+
+static void TokenBalanceChanged(ClientModel *clientmodel)
+{
+    // Triggered when a balance for a wallet address changes
+    if (clientmodel->tryLockTokenBalanceChanged()) {
+        QMetaObject::invokeMethod(clientmodel, "updateTokenBalance", Qt::QueuedConnection);
+    }
+}
+
+static void TokenPendingChanged(ClientModel *clientmodel, bool pending)
+{
+    // Triggered when Token pending map adds/removes transactions
+    QMetaObject::invokeMethod(clientmodel, "updateTokenPending", Qt::QueuedConnection, Q_ARG(bool, pending));
+}
+
 static void ShowProgress(ClientModel* clientmodel, const std::string& title, int nProgress)
 {
     // emits signal "showProgress"
@@ -308,6 +382,12 @@ void ClientModel::subscribeToCoreSignals()
     m_handler_notify_alert_changed = interfaces::MakeHandler(uiInterface.NotifyAlertChanged.connect(std::bind(NotifyAlertChanged, this)));
     m_handler_banned_list_changed = interfaces::MakeHandler(uiInterface.BannedListChanged.connect(std::bind(BannedListChanged, this)));
     m_handler_notify_block_tip = interfaces::MakeHandler(uiInterface.NotifyBlockTip.connect(std::bind(BlockTipChanged, this, std::placeholders::_1, std::placeholders::_2)));
+    
+    // Connect Token signals
+    m_handler_token_state_changed = interfaces::MakeHandler(uiInterface.TokenStateChanged.connect(std::bind(TokenStateChanged, this)));
+    m_handler_token_pending_changed = interfaces::MakeHandler(uiInterface.TokenPendingChanged.connect(std::bind(TokenPendingChanged, this, std::placeholders::_1)));
+    m_handler_token_balance_changed = interfaces::MakeHandler(uiInterface.TokenBalanceChanged.connect(std::bind(TokenBalanceChanged, this)));
+    m_handler_token_state_invalidated = interfaces::MakeHandler(uiInterface.TokenStateInvalidated.connect(std::bind(TokenStateInvalidated, this)));
 }
 
 void ClientModel::unsubscribeFromCoreSignals()
@@ -318,6 +398,12 @@ void ClientModel::unsubscribeFromCoreSignals()
     m_handler_notify_alert_changed->disconnect();
     m_handler_banned_list_changed->disconnect();
     m_handler_notify_block_tip->disconnect();
+
+    // Disconnect Token signals
+    m_handler_token_state_changed->disconnect();
+    m_handler_token_pending_changed->disconnect();
+    m_handler_token_balance_changed->disconnect();
+    m_handler_token_state_invalidated->disconnect();
 }
 
 bool ClientModel::getTorInfo(std::string& ip_port) const

@@ -18,7 +18,7 @@
 
 // If the compiler supports SSE4.2, it definitely supports X86.
 
-#if defined(_MSC_VER)
+#if defined(_TOKEN_VER)
 #include <intrin.h>
 
 namespace crc32c {
@@ -31,7 +31,7 @@ inline bool CanUseSse42() {
 
 }  // namespace crc32c
 
-#else  // !defined(_MSC_VER)
+#else  // !defined(_TOKEN_VER)
 #include <cpuid.h>
 
 namespace crc32c {
@@ -43,7 +43,7 @@ inline bool CanUseSse42() {
 
 }  // namespace crc32c
 
-#endif  // defined(_MSC_VER)
+#endif  // defined(_TOKEN_VER)
 
 #endif  // HAVE_SSE42 && (defined(_M_X64) || defined(__x86_64__))
 

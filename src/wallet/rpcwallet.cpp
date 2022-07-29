@@ -21,6 +21,9 @@
 #include "walletdb.h"
 #include "zpivchain.h"
 
+#include "tokencore/tokencore.h"
+#include "tokencore/tx.h"
+
 #include "sapling/key_io_sapling.h"
 
 #include <stdint.h>
@@ -163,7 +166,7 @@ UniValue getaddressinfo(const JSONRPCRequest& request)
                 "                                                         hdseedid) and relation to the wallet (ismine, iswatchonly).\n"
                 "  \"iscompressed\" : true|false,        (boolean, optional) If the pubkey is compressed.\n"
                 "  \"label\" :  \"label\"                  (string) The label associated with the address, \"\" is the default label.\n"
-                "  \"account\" : \"account\"                 (string) DEPRECATED. This field will be removed in v5.0. To see this deprecated field, start pivxd with -deprecatedrpc=accounts. The account associated with the address, \"\" is the default account\n"
+                "  \"account\" : \"account\"                 (string) DEPRECATED. This field will be removed in v5.0. To see this deprecated field, start rapidsd with -deprecatedrpc=accounts. The account associated with the address, \"\" is the default account\n"
                 "  \"timestamp\" : timestamp,            (number, optional) The creation time of the key, if available, expressed in the UNIX epoch time.\n"
                 "  \"hdkeypath\" : \"keypath\"             (string, optional) The HD keypath, if the key is HD and available.\n"
                 "  \"hdseedid\" : \"<hash160>\"            (string, optional) The Hash160 of the HD seed.\n"
@@ -186,13 +189,20 @@ UniValue getaddressinfo(const JSONRPCRequest& request)
 
     UniValue ret(UniValue::VOBJ);
 
-    CTxDestination dest = DecodeDestination(request.params[0].get_str());
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress);
     // Make sure the destination is valid
     if (!IsValidDestination(dest)) {
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid address");
     }
 
-    std::string currentAddress = request.params[0].get_str();
+    std::string currentAddress = rawAddress;
     ret.pushKV("address", currentAddress);
 
     CScript scriptPubKey = GetScriptForDestination(dest);
@@ -475,7 +485,7 @@ UniValue getnewaddress(const JSONRPCRequest& request)
             "1. \"label\"        (string, optional) The label name for the address to be linked to. if not provided, the default label \"\" is used. It can also be set to the empty string \"\" to represent the default label. The label does not need to exist, it will be created if there is no label by the given name.\n"
 
             "\nResult:\n"
-            "\"pivxaddress\"    (string) The new pivx address\n"
+            "\"rapidsaddress\"    (string) The new pivx address\n"
 
             "\nExamples:\n" +
             HelpExampleCli("getnewaddress", "") + HelpExampleRpc("getnewaddress", ""));
@@ -496,7 +506,7 @@ UniValue getnewstakingaddress(const JSONRPCRequest& request)
 
 
             "\nResult:\n"
-            "\"pivxaddress\"    (string) The new pivx address\n"
+            "\"rapidsaddress\"    (string) The new pivx address\n"
 
             "\nExamples:\n" +
             HelpExampleCli("getnewstakingaddress", "") + HelpExampleRpc("getnewstakingaddress", ""));
@@ -553,13 +563,21 @@ UniValue delegatoradd(const JSONRPCRequest& request)
 
 
     bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(request.params[0].get_str(), isStakingAddress);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress, isStakingAddress);
     if (!IsValidDestination(dest) || isStakingAddress)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
     const std::string strLabel = (request.params.size() > 1 ? request.params[1].get_str() : "");
 
-    CKeyID keyID = boost::get<CKeyID>(DecodeDestination(request.params[0].get_str()));
+    CKeyID keyID = boost::get<CKeyID>(DecodeDestination(rawAddress));
     if (!keyID)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Unable to get KeyID from RPD address");
 
@@ -585,7 +603,15 @@ UniValue delegatorremove(const JSONRPCRequest& request)
             HelpExampleRpc("delegatorremove", "\"DMJRSsuU9zfyrvxVaAEFQqK4MxZg6vgeS6\""));
 
     bool isStakingAddress = false;
-    CTxDestination dest = DecodeDestination(request.params[0].get_str(), isStakingAddress);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress, isStakingAddress);
     if (!IsValidDestination(dest) || isStakingAddress)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -744,9 +770,9 @@ UniValue getaccountaddress(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts")) {
         if (request.fHelp) {
-            throw std::runtime_error("getaccountaddress (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("getaccountaddress (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getaccountaddress is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getaccountaddress is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
@@ -758,7 +784,7 @@ UniValue getaccountaddress(const JSONRPCRequest& request)
             "1. \"account\"       (string, required) The account for the address. It can also be set to the empty string \"\" to represent the default account. The account does not need to exist, it will be created and a new address created  if there is no account by the given name.\n"
 
             "\nResult:\n"
-            "\"pivxaddress\"   (string) The account pivx address.\n"
+            "\"rapidsaddress\"   (string) The account pivx address.\n"
 
             "\nExamples:\n" +
             HelpExampleCli("getaccountaddress", "") + HelpExampleCli("getaccountaddress", "\"\"") +
@@ -812,18 +838,18 @@ UniValue setlabel(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts") && request.strMethod == "setaccount") {
         if (request.fHelp) {
-            throw std::runtime_error("setaccount (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("setaccount (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "setaccount is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "setaccount is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() != 2)
         throw std::runtime_error(
-            "setlabel \"pivxaddress\" \"label\"\n"
+            "setlabel \"rapidsaddress\" \"label\"\n"
             "\nSets the label associated with the given address.\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"   (string, required) The pivx address to be associated with a label.\n"
+            "1. \"rapidsaddress\"   (string, required) The pivx address to be associated with a label.\n"
             "2. \"label\"         (string, required) The label to assign to the address.\n"
 
             "\nExamples:\n" +
@@ -831,7 +857,14 @@ UniValue setlabel(const JSONRPCRequest& request)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CTxDestination dest = DecodeDestination(request.params[0].get_str());
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination dest = DecodeDestination(rawAddress);
     if (!IsValidDestination(dest))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -869,18 +902,18 @@ UniValue getaccount(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts")) {
         if (request.fHelp) {
-            throw std::runtime_error("getaccount (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("getaccount (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getaccount is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getaccount is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() != 1)
         throw std::runtime_error(
-            "getaccount \"pivxaddress\"\n"
+            "getaccount \"rapidsaddress\"\n"
             "\nDEPRECATED. Returns the account associated with the given address.\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"  (string, required) The pivx address for account lookup.\n"
+            "1. \"rapidsaddress\"  (string, required) The pivx address for account lookup.\n"
 
             "\nResult:\n"
             "\"accountname\"        (string) the account address\n"
@@ -890,7 +923,14 @@ UniValue getaccount(const JSONRPCRequest& request)
 
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
-    CTxDestination address = DecodeDestination(request.params[0].get_str());
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress);
     if (!IsValidDestination(address))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -906,9 +946,9 @@ UniValue getaddressesbyaccount(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts")) {
         if (request.fHelp) {
-            throw std::runtime_error("getaddressesbyaccount (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("getaddressesbyaccount (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getaddressesbyaccount is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getaddressesbyaccount is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() != 1)
@@ -921,7 +961,7 @@ UniValue getaddressesbyaccount(const JSONRPCRequest& request)
 
             "\nResult:\n"
             "[                     (json array of string)\n"
-            "  \"pivxaddress\"  (string) a pivx address associated with the given account\n"
+            "  \"rapidsaddress\"  (string) a pivx address associated with the given account\n"
             "  ,...\n"
             "]\n"
 
@@ -983,12 +1023,12 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 4)
         throw std::runtime_error(
-            "sendtoaddress \"pivxaddress\" amount ( \"comment\" \"comment-to\" )\n"
+            "sendtoaddress \"rapidsaddress\" amount ( \"comment\" \"comment-to\" )\n"
             "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"  (string, required) The pivx address to send to.\n"
+            "1. \"rapidsaddress\"  (string, required) The pivx address to send to.\n"
             "2. \"amount\"      (numeric, required) The amount in PIV to send. eg 0.1\n"
             "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
@@ -1007,7 +1047,15 @@ UniValue sendtoaddress(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     bool isStaking = false;
-    CTxDestination address = DecodeDestination(request.params[0].get_str(), isStaking);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(address) || isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -1046,7 +1094,15 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
 
     // Get Staking Address
     bool isStaking = false;
-    CTxDestination stakeAddr = DecodeDestination(params[0].get_str(), isStaking);
+
+    std::string rawAddress = params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination stakeAddr = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(stakeAddr) || !isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD staking address");
 
@@ -1085,7 +1141,15 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
     if (params.size() > 2 && !params[2].isNull() && !params[2].get_str().empty()) {
         // Address provided
         bool isStaking = false;
-        CTxDestination dest = DecodeDestination(params[2].get_str(), isStaking);
+
+        std::string rawAddress = params[2].get_str();
+        if (IsUsernameValid(rawAddress)) {
+            std::string dbAddress = GetUsernameAddress(rawAddress);
+            if (dbAddress != "")
+                rawAddress = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(rawAddress, isStaking);
         if (!IsValidDestination(dest) || isStaking)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD spending address");
         ownerKey = *boost::get<CKeyID>(&dest);
@@ -1100,7 +1164,7 @@ UniValue CreateColdStakeDelegation(const UniValue& params, CWalletTx& wtxNew, CR
                     "WARNING: Only the owner of the key to owneraddress will be allowed to spend these coins after the delegation.";
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, errMsg);
         }
-        ownerAddressStr = params[2].get_str();
+        ownerAddressStr = rawAddress;
     } else {
         // Get new owner address from keypool
         CTxDestination ownerAddr = GetNewAddressFromLabel("delegated", NullUniValue);
@@ -1218,7 +1282,7 @@ UniValue rawdelegatestake(const JSONRPCRequest& request)
             "         \"reqSigs\" : n,            (numeric) The required sigs\n"
             "         \"type\" : \"pubkeyhash\",  (string) The type, eg 'pubkeyhash'\n"
             "         \"addresses\" : [           (json array of string)\n"
-            "           \"pivxaddress\"        (string) pivx address\n"
+            "           \"rapidsaddress\"        (string) pivx address\n"
             "           ,...\n"
             "         ]\n"
             "       }\n"
@@ -1249,12 +1313,12 @@ UniValue sendtoaddressix(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 2 || request.params.size() > 4)
         throw std::runtime_error(
-            "sendtoaddressix \"pivxaddress\" amount ( \"comment\" \"comment-to\" )\n"
+            "sendtoaddressix \"rapidsaddress\" amount ( \"comment\" \"comment-to\" )\n"
             "\nSend an amount to a given address. The amount is a real and is rounded to the nearest 0.00000001\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"  (string, required) The pivx address to send to.\n"
+            "1. \"rapidsaddress\"  (string, required) The pivx address to send to.\n"
             "2. \"amount\"      (numeric, required) The amount in PIV to send. eg 0.1\n"
             "3. \"comment\"     (string, optional) A comment used to store what the transaction is for. \n"
             "                             This is not part of the transaction, just kept in your wallet.\n"
@@ -1273,7 +1337,15 @@ UniValue sendtoaddressix(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     bool isStaking = false;
-    CTxDestination address = DecodeDestination(request.params[0].get_str(), isStaking);
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(address) || isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
 
@@ -1307,7 +1379,7 @@ UniValue listaddressgroupings(const JSONRPCRequest& request)
             "[\n"
             "  [\n"
             "    [\n"
-            "      \"pivxaddress\",     (string) The pivx address\n"
+            "      \"rapidsaddress\",     (string) The pivx address\n"
             "      amount,                 (numeric) The amount in PIV\n"
             "      \"label\"             (string, optional) The label\n"
             "    ]\n"
@@ -1344,12 +1416,12 @@ UniValue signmessage(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() != 2)
         throw std::runtime_error(
-            "signmessage \"pivxaddress\" \"message\"\n"
+            "signmessage \"rapidsaddress\" \"message\"\n"
             "\nSign a message with the private key of an address" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"  (string, required) The pivx address to use for the private key.\n"
+            "1. \"rapidsaddress\"  (string, required) The pivx address to use for the private key.\n"
             "2. \"message\"         (string, required) The message to create a signature of.\n"
 
             "\nResult:\n"
@@ -1371,6 +1443,12 @@ UniValue signmessage(const JSONRPCRequest& request)
 
     std::string strAddress = request.params[0].get_str();
     std::string strMessage = request.params[1].get_str();
+
+    if (IsUsernameValid(strAddress)) {
+        std::string dbAddress = GetUsernameAddress(strAddress);
+        if (dbAddress != "")
+            strAddress = dbAddress;
+    }
 
     CTxDestination dest = DecodeDestination(strAddress);
     if (!IsValidDestination(dest))
@@ -1399,11 +1477,11 @@ UniValue getreceivedbyaddress(const JSONRPCRequest& request)
 {
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
         throw std::runtime_error(
-            "getreceivedbyaddress \"pivxaddress\" ( minconf )\n"
-            "\nReturns the total amount received by the given pivxaddress in transactions with at least minconf confirmations.\n"
+            "getreceivedbyaddress \"rapidsaddress\" ( minconf )\n"
+            "\nReturns the total amount received by the given rapidsaddress in transactions with at least minconf confirmations.\n"
 
             "\nArguments:\n"
-            "1. \"pivxaddress\"  (string, required) The pivx address for transactions.\n"
+            "1. \"rapidsaddress\"  (string, required) The pivx address for transactions.\n"
             "2. minconf             (numeric, optional, default=1) Only include transactions confirmed at least this many times.\n"
 
             "\nResult:\n"
@@ -1422,7 +1500,15 @@ UniValue getreceivedbyaddress(const JSONRPCRequest& request)
     LOCK2(cs_main, pwalletMain->cs_wallet);
 
     // pivx address
-    CTxDestination address = DecodeDestination(request.params[0].get_str());
+
+    std::string rawAddress = request.params[0].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress);
     if (!IsValidDestination(address))
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
     CScript scriptPubKey = GetScriptForDestination(address);
@@ -1455,9 +1541,9 @@ UniValue getreceivedbylabel(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts") && request.strMethod == "getreceivedbyaccount") {
         if (request.fHelp) {
-            throw std::runtime_error("getreceivedbyaccount (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("getreceivedbyaccount (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getreceivedbyaccount is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "getreceivedbyaccount is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() < 1 || request.params.size() > 2)
@@ -1525,13 +1611,13 @@ UniValue getbalance(const JSONRPCRequest& request)
 
             "\nArguments:\n"
             "1. \"account\"      (string, optional) DEPRECATED. This argument will be removed in v5.0.\n"
-            "                    To use this deprecated argument, start pivxd with -deprecatedrpc=accounts."
+            "                    To use this deprecated argument, start rapidsd with -deprecatedrpc=accounts."
             "2. minconf          (numeric, optional, default=1) DEPRECATED. This argument will be removed in v5.0.\n"
-            "                    To use this deprecated argument, start pivxd with -deprecatedrpc=accounts. Only include transactions confirmed at least this many times.\n"
+            "                    To use this deprecated argument, start rapidsd with -deprecatedrpc=accounts. Only include transactions confirmed at least this many times.\n"
             "3. includeWatchonly (bool, optional, default=false) DEPRECATED. This argument will be removed in v5.0.\n"
-            "                    To use this deprecated argument, start pivxd with -deprecatedrpc=accounts. Also include balance in watchonly addresses (see 'importaddress')\n"
+            "                    To use this deprecated argument, start rapidsd with -deprecatedrpc=accounts. Also include balance in watchonly addresses (see 'importaddress')\n"
             "4. includeDelegated (bool, optional, default=true) Only available when specifying an account.\n"
-            "                    To use this argument, start pivxd with -deprecatedrpc=accounts. Also include balance delegated to cold stakers\n"
+            "                    To use this argument, start rapidsd with -deprecatedrpc=accounts. Also include balance delegated to cold stakers\n"
 
             "\nResult:\n"
             "amount              (numeric) The total amount in PIV received for this account.\n"
@@ -1584,7 +1670,7 @@ UniValue getcoldstakingbalance(const JSONRPCRequest& request)
 
             "\nArguments:\n"
             "1. \"account\"      (string, optional) DEPRECATED. This argument will be removed in v5.0.\n"
-            "                        To use this deprecated argument, start pivxd with -deprecatedrpc=accounts.\n"
+            "                        To use this deprecated argument, start rapidsd with -deprecatedrpc=accounts.\n"
             "                        The selected account, or \"*\" for entire wallet. It may be the default account using \"\".\n"
 
             "\nResult:\n"
@@ -1622,7 +1708,7 @@ UniValue getdelegatedbalance(const JSONRPCRequest& request)
 
             "\nArguments:\n"
             "1. \"account\"      (string, optional) DEPRECATED. This argument will be removed in v5.0.\n"
-            "                        To use this deprecated argument, start pivxd with -deprecatedrpc=accounts.\n"
+            "                        To use this deprecated argument, start rapidsd with -deprecatedrpc=accounts.\n"
             "                        The selected account, or \"*\" for entire wallet. It may be the default account using \"\".\n"
 
             "\nResult:\n"
@@ -1664,9 +1750,9 @@ UniValue movecmd(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts")) {
         if (request.fHelp) {
-            throw std::runtime_error("move (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("move (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "move is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "move is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() < 3 || request.params.size() > 5)
@@ -1741,21 +1827,21 @@ UniValue sendfrom(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts")) {
         if (request.fHelp) {
-            throw std::runtime_error("sendfrom (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("sendfrom (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "sendfrom is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "sendfrom is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() < 3 || request.params.size() > 7)
         throw std::runtime_error(
-            "sendfrom \"fromaccount\" \"topivxaddress\" amount ( minconf \"comment\" \"comment-to\" includeDelegated)\n"
+            "sendfrom \"fromaccount\" \"torapidsaddress\" amount ( minconf \"comment\" \"comment-to\" includeDelegated)\n"
             "\nDEPRECATED (use sendtoaddress). Send an amount from an account to a pivx address.\n"
             "The amount is a real and is rounded to the nearest 0.00000001." +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
             "1. \"fromaccount\"       (string, required) The name of the account to send funds from. May be the default account using \"\".\n"
-            "2. \"topivxaddress\"  (string, required) The pivx address to send funds to.\n"
+            "2. \"torapidsaddress\"  (string, required) The pivx address to send funds to.\n"
             "3. amount                (numeric, required) The amount in PIV. (transaction fee is added on top).\n"
             "4. minconf               (numeric, optional, default=1) Only use funds with at least this many confirmations.\n"
             "5. \"comment\"           (string, optional) A comment used to store what the transaction is for. \n"
@@ -1780,7 +1866,15 @@ UniValue sendfrom(const JSONRPCRequest& request)
 
     std::string strAccount = LabelFromValue(request.params[0]);
     bool isStaking = false;
-    CTxDestination address = DecodeDestination(request.params[1].get_str(), isStaking);
+
+    std::string rawAddress = request.params[1].get_str();
+    if (IsUsernameValid(rawAddress)) {
+        std::string dbAddress = GetUsernameAddress(rawAddress);
+        if (dbAddress != "")
+            rawAddress = dbAddress;
+    }
+
+    CTxDestination address = DecodeDestination(rawAddress, isStaking);
     if (!IsValidDestination(address) || isStaking)
         throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, "Invalid RPD address");
     CAmount nAmount = AmountFromValue(request.params[2]);
@@ -1819,7 +1913,7 @@ UniValue sendmany(const JSONRPCRequest& request)
         help_text = "sendmany \"\" {\"address\":amount,...} ( minconf \"comment\" includeDelegated )\n"
             "\nSend multiple times. Amounts are double-precision floating point numbers.\n"
             "Note that the \"fromaccount\" argument has been removed in v4.2. To use this RPC with a \"fromaccount\" argument, restart\n"
-            "pivxd with -deprecatedrpc=accounts\n" +
+            "rapidsd with -deprecatedrpc=accounts\n" +
             HelpRequiringPassphrase() + "\n"
 
             "\nArguments:\n"
@@ -1900,9 +1994,16 @@ UniValue sendmany(const JSONRPCRequest& request)
 
     CAmount totalAmount = 0;
     std::vector<std::string> keys = sendTo.getKeys();
-    for (const std::string& name_ : keys) {
+    for (std::string& name_ : keys) {
         bool isStaking = false;
-        CTxDestination dest = DecodeDestination(name_,isStaking);
+
+        if (IsUsernameValid(name_)) {
+            std::string dbAddress = GetUsernameAddress(name_);
+            if (dbAddress != "")
+                name_ = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(name_, isStaking);
         if (!IsValidDestination(dest) || isStaking)
             throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid RPD address: ")+name_);
 
@@ -1967,7 +2068,7 @@ UniValue addmultisigaddress(const JSONRPCRequest& request)
             "3. \"label\"      (string, optional) A label to assign the addresses to.\n"
 
             "\nResult:\n"
-            "\"pivxaddress\"  (string) A pivx address associated with the keys.\n"
+            "\"rapidsaddress\"  (string) A pivx address associated with the keys.\n"
 
             "\nExamples:\n"
             "\nAdd a multisig address from 2 addresses\n" +
@@ -2026,7 +2127,14 @@ UniValue ListReceived(const UniValue& params, bool by_label)
     bool has_filtered_address = false;
     CTxDestination filtered_address = CNoDestination();
     if (!by_label && params.size() > 3) {
-        CTxDestination dest = DecodeDestination(params[3].get_str());
+        std::string rawAddress = params[3].get_str();
+        if (IsUsernameValid(rawAddress)) {
+            std::string dbAddress = GetUsernameAddress(rawAddress);
+            if (dbAddress != "")
+                rawAddress = dbAddress;
+        }
+
+        CTxDestination dest = DecodeDestination(rawAddress);
         if (!IsValidDestination(dest)) {
             throw JSONRPCError(RPC_WALLET_ERROR, "address_filter parameter was invalid");
         }
@@ -2193,9 +2301,9 @@ UniValue listreceivedbylabel(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts") && request.strMethod == "listreceivedbyaccount") {
         if (request.fHelp) {
-            throw std::runtime_error("listreceivedbyaccount (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("listreceivedbyaccount (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "listreceivedbyaccount is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "listreceivedbyaccount is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() > 3)
@@ -2411,7 +2519,7 @@ UniValue listtransactions(const JSONRPCRequest& request)
             "\nResult:\n"
             "[\n"
             "  {\n"
-            "    \"address\":\"pivxaddress\",    (string) The pivx address of the transaction. Not present for \n"
+            "    \"address\":\"rapidsaddress\",    (string) The pivx address of the transaction. Not present for \n"
             "                                                move transactions (category = move).\n"
             "    \"category\":\"send|receive|move\", (string) The transaction category. 'move' is a local (off blockchain)\n"
             "                                                transaction between accounts, and not associated with an address,\n"
@@ -2466,7 +2574,7 @@ UniValue listtransactions(const JSONRPCRequest& request)
             "  {\n"
             "    \"account\":\"accountname\",       (string) DEPRECATED. The account name associated with the transaction. \n"
             "                                                It will be \"\" for the default account.\n"
-            "    \"address\":\"pivxaddress\",    (string) The pivx address of the transaction. Not present for \n"
+            "    \"address\":\"rapidsaddress\",    (string) The pivx address of the transaction. Not present for \n"
             "                                                move transactions (category = move).\n"
             "    \"category\":\"send|receive|move\", (string) The transaction category. 'move' is a local (off blockchain)\n"
             "                                                transaction between accounts, and not associated with an address,\n"
@@ -2585,9 +2693,9 @@ UniValue listaccounts(const JSONRPCRequest& request)
 {
     if (!IsDeprecatedRPCEnabled("accounts")) {
         if (request.fHelp) {
-            throw std::runtime_error("listaccounts (Deprecated, will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts)");
+            throw std::runtime_error("listaccounts (Deprecated, will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts)");
         }
-        throw JSONRPCError(RPC_METHOD_DEPRECATED, "listaccounts is deprecated and will be removed in v5.0. To use this command, start pivxd with -deprecatedrpc=accounts.");
+        throw JSONRPCError(RPC_METHOD_DEPRECATED, "listaccounts is deprecated and will be removed in v5.0. To use this command, start rapidsd with -deprecatedrpc=accounts.");
     }
 
     if (request.fHelp || request.params.size() > 2)
@@ -2680,8 +2788,8 @@ UniValue listsinceblock(const JSONRPCRequest& request)
             "\nResult:\n"
             "{\n"
             "  \"transactions\": [\n"
-            "    \"account\":\"accountname\",       (string) DEPRECATED. This field will be removed in v5.0. To see this deprecated field, start pivxd with -deprecatedrpc=accounts. The account name associated with the transaction. Will be \"\" for the default account.\n"
-            "    \"address\":\"pivxaddress\",    (string) The pivx address of the transaction. Not present for move transactions (category = move).\n"
+            "    \"account\":\"accountname\",       (string) DEPRECATED. This field will be removed in v5.0. To see this deprecated field, start rapidsd with -deprecatedrpc=accounts. The account name associated with the transaction. Will be \"\" for the default account.\n"
+            "    \"address\":\"rapidsaddress\",    (string) The pivx address of the transaction. Not present for move transactions (category = move).\n"
             "    \"category\":\"send|receive\",     (string) The transaction category. 'send' has negative amounts, 'receive' has positive amounts.\n"
             "    \"amount\": x.xxx,          (numeric) The amount in PIV. This is negative for the 'send' category, and for the 'move' category for moves \n"
             "                                          outbound. It is positive for the 'receive' category, and for the 'move' category for inbound funds.\n"
@@ -2777,8 +2885,8 @@ UniValue gettransaction(const JSONRPCRequest& request)
             "  \"timereceived\" : ttt,    (numeric) The time received in seconds since epoch (1 Jan 1970 GMT)\n"
             "  \"details\" : [\n"
             "    {\n"
-            "      \"account\" : \"accountname\",  (string) DEPRECATED.This field will be removed in v5.0. To see this deprecated field, start pivxd with -deprecatedrpc=accounts. The account name involved in the transaction, can be \"\" for the default account.\n"
-            "      \"address\" : \"pivxaddress\",   (string) The pivx address involved in the transaction\n"
+            "      \"account\" : \"accountname\",  (string) DEPRECATED.This field will be removed in v5.0. To see this deprecated field, start rapidsd with -deprecatedrpc=accounts. The account name involved in the transaction, can be \"\" for the default account.\n"
+            "      \"address\" : \"rapidsaddress\",   (string) The pivx address involved in the transaction\n"
             "      \"category\" : \"send|receive\",    (string) The category, either 'send' or 'receive'\n"
             "      \"amount\" : x.xxx                  (numeric) The amount in PIV\n"
             "      \"vout\" : n,                       (numeric) the vout value\n"
@@ -3102,7 +3210,7 @@ UniValue encryptwallet(const JSONRPCRequest& request)
             "\nNow set the passphrase to use the wallet, such as for signing or sending PIVs\n" +
             HelpExampleCli("walletpassphrase", "\"my pass phrase\"") +
             "\nNow we can so something like sign\n" +
-            HelpExampleCli("signmessage", "\"pivxaddress\" \"test message\"") +
+            HelpExampleCli("signmessage", "\"rapidsaddress\" \"test message\"") +
             "\nNow lock the wallet again by removing the passphrase\n" +
             HelpExampleCli("walletlock", "") +
             "\nAs a json rpc call\n" +
@@ -3164,7 +3272,7 @@ UniValue listunspent(const JSONRPCRequest& request)
                 "    \"vout\" : n,               (numeric) the vout value\n"
                 "    \"address\" : \"address\",  (string) the pivx address\n"
                 "    \"label\" : \"label\",      (string) The associated label, or \"\" for the default label\n"
-                "    \"account\" : \"account\",  (string) DEPRECATED.This field will be removed in v5.0. To see this deprecated field, start pivxd with -deprecatedrpc=accounts. Backwards compatible alias for label.\n"
+                "    \"account\" : \"account\",  (string) DEPRECATED.This field will be removed in v5.0. To see this deprecated field, start rapidsd with -deprecatedrpc=accounts. Backwards compatible alias for label.\n"
                 "    \"scriptPubKey\" : \"key\", (string) the script key\n"
                 "    \"redeemScript\" : \"key\", (string) the redeemscript key\n"
                 "    \"amount\" : x.xxx,         (numeric) the transaction amount in PIV\n"
@@ -3195,7 +3303,15 @@ UniValue listunspent(const JSONRPCRequest& request)
         UniValue inputs = request.params[2].get_array();
         for (unsigned int inx = 0; inx < inputs.size(); inx++) {
             const UniValue& input = inputs[inx];
-            CTxDestination dest = DecodeDestination(input.get_str());
+
+            std::string rawAddress = input.get_str();
+            if (IsUsernameValid(rawAddress)) {
+                std::string dbAddress = GetUsernameAddress(rawAddress);
+                if (dbAddress != "")
+                    rawAddress = dbAddress;
+            }
+
+            CTxDestination dest = DecodeDestination(rawAddress);
             if (!IsValidDestination(dest))
                 throw JSONRPCError(RPC_INVALID_ADDRESS_OR_KEY, std::string("Invalid RPD address: ") + input.get_str());
             if (destinations.count(dest))

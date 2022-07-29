@@ -122,6 +122,8 @@ struct Params {
     int height_ZC_RecalcAccumulators;
     int height_supply_reduction;
 
+    int height_governance;
+
     // validation by-pass
     int64_t nPivxBadBlockTime;
     unsigned int nPivxBadBlockBits;

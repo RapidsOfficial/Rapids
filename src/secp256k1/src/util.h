@@ -91,7 +91,7 @@ static SECP256K1_INLINE void *checked_realloc(const secp256k1_callback* cb, void
 # if (!defined(__STDC_VERSION__) || (__STDC_VERSION__ < 199901L) )
 #  if SECP256K1_GNUC_PREREQ(3,0)
 #   define SECP256K1_RESTRICT __restrict__
-#  elif (defined(_MSC_VER) && _MSC_VER >= 1400)
+#  elif (defined(_TOKEN_VER) && _TOKEN_VER >= 1400)
 #   define SECP256K1_RESTRICT __restrict
 #  else
 #   define SECP256K1_RESTRICT

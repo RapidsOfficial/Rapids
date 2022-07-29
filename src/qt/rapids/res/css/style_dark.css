@@ -1790,6 +1790,22 @@ QComboBox[cssClass="btn-combo-secundary"] {
         height: 24px;
     }
 
+QComboBox[cssClass="btn-combo-address"] {
+    background-color: #14100B;
+    padding: 6px 12px 6px 6px;
+    font-size: 16px;
+    border: 2px solid #bababa;
+    color: #707070;
+    text-align: right;
+    border-radius: 2px;
+}
+
+    QComboBox[cssClass="btn-combo-address"]::down-arrow {
+        image: url("://ic-arrow-drop-down-purple");
+        width: 24px;
+        height: 24px;
+    }
+
 QComboBox[cssClass="btn-combo-chart"] {
     background-color: #14100B;
     padding: 6px 12px 6px 6px;
@@ -3248,3 +3264,104 @@ QRadioButton[cssClass="radio-welcome"] {
             background-repeat: no-repeat;
             background-position: center;
         }
+
+
+/*
+ * QTableWidget
+*/
+
+QTableWidget {
+alternate-background-color: #f79448;
+gridline-color: white;
+selection-color: white;
+selection-background-color: #f79448;
+border: 1px solid white;
+border-radius: 6px;
+}
+
+QTableWidget QTableWidgetItem {
+font: 18px;
+height: 50px;
+border: 1px solid white;
+}
+
+QTableWidget QScrollBar:vertical {
+border: 1px solid white;
+width: 30px;
+margin: 25px 0px 25px 0px;
+}
+
+QTableWidget QScrollBar::handle:vertical {
+border: 1px solid white;
+min-height: 5px;
+background: solid white;
+}
+
+QTableWidget QScrollBar::add-line:vertical {
+border: 1px solid white;
+border-radius: 6px;
+height: 25px;
+subcontrol-position: bottom;
+subcontrol-origin: margin;
+}
+
+QTableWidget QScrollBar::sub-line:vertical {
+border: 1px solid white;
+border-radius: 6px;
+height: 25px;
+subcontrol-position: top;
+subcontrol-origin: margin;
+}
+
+QTableWidget QScrollBar::up-arrow:vertical, QTableWidget QScrollBar::down-arrow:vertical {
+width: 6px;
+height: 6px;
+background: solid white;
+}
+
+QTableWidget QScrollBar::add-page:vertical, QTableWidget QScrollBar::sub-page:vertical {
+background: none;
+}
+
+QTableWidget QScrollBar:horizontal {
+border: 1px solid white;
+height: 30px;
+margin: 0px 32px 0px 32px;
+}
+
+QTableWidget QScrollBar::handle:horizontal {
+border: 1px solid white;
+min-width: 15px;
+background: solid white;
+}
+
+QTableWidget QScrollBar::add-line:horizontal {
+border: 1px solid white;
+border-radius: 6px;
+width: 30px;
+subcontrol-position: right;
+subcontrol-origin: margin;
+}
+
+QTableWidget QScrollBar::sub-line:horizontal {
+border: 1px solid white;
+border-radius: 6px;
+width: 30px;
+subcontrol-position: left;
+subcontrol-origin: margin;
+}
+
+QTableWidget QScrollBar::left-arrow:horizontal, QTableWidget QScrollBar::right-arrow:horizontal  {
+width: 6px;
+height: 6px;
+background: solid white;
+}
+
+QTableWidget QScrollBar::add-page:horizontal, QTableWidget QScrollBar::sub-page:horizontal {
+background: none;
+}
+
+QTableWidget QHeaderView QTableWidgetItem {
+background: #1c1c74;
+}
+

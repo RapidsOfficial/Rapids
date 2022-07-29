@@ -948,7 +948,7 @@ typedef long long sph_s64;
  */
 #if (defined __STDC__ && __STDC_VERSION__ >= 199901L) || defined __GNUC__
 #define SPH_INLINE inline
-#elif defined _MSC_VER
+#elif defined _TOKEN_VER
 #define SPH_INLINE __inline
 #else
 #define SPH_INLINE
@@ -1005,7 +1005,7 @@ typedef long long sph_s64;
 #ifdef __GNUC__
 #define SPH_DETECT_I386_GCC          1
 #endif
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #define SPH_DETECT_I386_MSVC         1
 #endif
 
@@ -1020,7 +1020,7 @@ typedef long long sph_s64;
 #ifdef __GNUC__
 #define SPH_DETECT_AMD64_GCC         1
 #endif
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #define SPH_DETECT_AMD64_MSVC        1
 #endif
 

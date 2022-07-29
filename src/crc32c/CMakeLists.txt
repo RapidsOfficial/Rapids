@@ -91,11 +91,11 @@ int main() {
 # Check for _mm_prefetch support in the compiler.
 include(CheckCXXSourceCompiles)
 check_cxx_source_compiles("
-#if defined(_MSC_VER)
+#if defined(_TOKEN_VER)
 #include <intrin.h>
-#else  // !defined(_MSC_VER)
+#else  // !defined(_TOKEN_VER)
 #include <xmmintrin.h>
-#endif  // defined(_MSC_VER)
+#endif  // defined(_TOKEN_VER)
 
 int main() {
   char data = 0;
@@ -113,12 +113,12 @@ else(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
   set(CMAKE_REQUIRED_FLAGS "${CMAKE_REQUIRED_FLAGS} -msse4.2")
 endif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 check_cxx_source_compiles("
-#if defined(_MSC_VER)
+#if defined(_TOKEN_VER)
 #include <intrin.h>
-#else  // !defined(_MSC_VER)
+#else  // !defined(_TOKEN_VER)
 #include <cpuid.h>
 #include <nmmintrin.h>
-#endif  // defined(_MSC_VER)
+#endif  // defined(_TOKEN_VER)
 
 int main() {
   _mm_crc32_u8(0, 0); _mm_crc32_u32(0, 0);

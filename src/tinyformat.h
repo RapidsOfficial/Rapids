@@ -194,7 +194,7 @@ private:
     static const T1& makeT1();
 
 public:
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 // Disable spurious loss of precision warnings in tryConvert(makeT1())
 #pragma warning(push)
 #pragma warning(disable : 4244)
@@ -206,7 +206,7 @@ public:
     // function matched.  Very neat, in a disgusting kind of way :)
     static const bool value =
         sizeof(tryConvert(makeT1())) == sizeof(succeed);
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning(pop)
 #endif
 };

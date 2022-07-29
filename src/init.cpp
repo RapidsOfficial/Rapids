@@ -61,6 +61,11 @@
 #include "wallet/walletdb.h"
 #include "wallet/rpcwallet.h"
 
+#include "tokencore/rpcpayload.h"
+#include "tokencore/rpcrawtx.h"
+#include "tokencore/rpctx.h"
+#include "tokencore/rpc.h"
+
 #endif
 
 #include <fstream>
@@ -123,6 +128,11 @@ enum BindFlags {
 
 static const char* FEE_ESTIMATES_FILENAME = "fee_estimates.dat";
 CClientUIInterface uiInterface;
+
+// Token Core initialization and shutdown handlers
+extern int mastercore_init();
+extern int mastercore_shutdown();
+extern int CheckWalletUpdate(bool forceUpdate = false);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -256,6 +266,11 @@ void PrepareShutdown()
             //record that client took the proper shutdown procedure
             pblocktree->WriteFlag("shutdown", true);
         }
+
+        if (governance != nullptr) {
+            governance->Sync();
+        }
+
         delete pcoinsTip;
         pcoinsTip = NULL;
         delete pcoinscatcher;
@@ -268,7 +283,13 @@ void PrepareShutdown()
         zerocoinDB = NULL;
         delete pSporkDB;
         pSporkDB = NULL;
+        delete governance;
+        governance = nullptr;
     }
+
+    //! Token Core shutdown
+    mastercore_shutdown();
+
 #ifdef ENABLE_WALLET
     if (pwalletMain)
         bitdb.Flush(true);
@@ -331,6 +352,7 @@ void HandleSIGTERM(int)
 void HandleSIGHUP(int)
 {
     g_logger->m_reopen_file = true;
+    fReopenTokenCoreLog = true;
 }
 
 #ifndef WIN32
@@ -560,11 +582,31 @@ std::string HelpMessage(HelpMessageMode mode)
     if (showDebug) {
         strUsage += HelpMessageOpt("-rpcworkqueue=<n>", strprintf("Set the depth of the work queue to service RPC calls (default: %d)", DEFAULT_HTTP_WORKQUEUE));
         strUsage += HelpMessageOpt("-rpcservertimeout=<n>", strprintf("Timeout during HTTP requests (default: %d)", DEFAULT_HTTP_SERVER_TIMEOUT));
+        strUsage += HelpMessageOpt("-rpcforceutf8", strprintf("Replace invalid UTF-8 encoded characters with question marks in RPC response (default: %d)", 1));
     }
 
     strUsage += HelpMessageOpt("-blockspamfilter=<n>", strprintf(_("Use block spam filter (default: %u)"), DEFAULT_BLOCK_SPAM_FILTER));
     strUsage += HelpMessageOpt("-blockspamfiltermaxsize=<n>", strprintf(_("Maximum size of the list of indexes in the block spam filter (default: %u)"), DEFAULT_BLOCK_SPAM_FILTER_MAX_SIZE));
     strUsage += HelpMessageOpt("-blockspamfiltermaxavg=<n>", strprintf(_("Maximum average size of an index occurrence in the block spam filter (default: %u)"), DEFAULT_BLOCK_SPAM_FILTER_MAX_AVG));
+
+    // TODO: append help messages somewhere else
+    // TODO: translation
+    strUsage += HelpMessageGroup("Token options:");
+    strUsage += HelpMessageOpt("-startclean", "Clear all persistence files on startup; triggers reparsing of Token transactions (default: 0)");
+    strUsage += HelpMessageOpt("-tokentxcache", "The maximum number of transactions in the input transaction cache (default: 500000)");
+    strUsage += HelpMessageOpt("-tokenprogressfrequency", "Time in seconds after which the initial scanning progress is reported (default: 30)");
+    strUsage += HelpMessageOpt("-tokenseedblockfilter", "Set skipping of blocks without Token transactions during initial scan (default: 1)");
+    strUsage += HelpMessageOpt("-tokenlogfile", "The path of the log file (default: tokencore.log)");
+    strUsage += HelpMessageOpt("-tokendebug=<category>", "Enable or disable log categories, can be \"all\" or \"none\"");
+    strUsage += HelpMessageOpt("-autocommit", "Enable or disable broadcasting of transactions, when creating transactions (default: 1)");
+    strUsage += HelpMessageOpt("-overrideforcedshutdown", "Overwrite shutdown, triggered by an alert (default: 0)");
+    strUsage += HelpMessageOpt("-tokenalertallowsender", "Whitelist senders of alerts, can be \"any\")");
+    strUsage += HelpMessageOpt("-tokenalertignoresender", "Ignore senders of alerts");
+    strUsage += HelpMessageOpt("-tokenactivationignoresender", "Ignore senders of activations");
+    strUsage += HelpMessageOpt("-tokenactivationallowsender", "Whitelist senders of activations");
+    strUsage += HelpMessageOpt("-disclaimer", "Explicitly show QT disclaimer on startup (default: 0)");
+    strUsage += HelpMessageOpt("-tokenuiwalletscope", "Max. transactions to show in trade and transaction history (default: 65535)");
+    strUsage += HelpMessageOpt("-tokenshowblockconsensushash", "Calculate and log the consensus hash for the specified block");
 
     return strUsage;
 }
@@ -794,12 +836,12 @@ namespace { // Variables internal to initialization process only
 bool AppInitBasicSetup()
 {
 // ********************************************************* Step 1: setup
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
     // Turn off Microsoft heap dump noise
     _CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_FILE);
     _CrtSetReportFile(_CRT_WARN, CreateFileA("NUL", GENERIC_WRITE, 0, NULL, OPEN_EXISTING, 0, 0));
 #endif
-#if _MSC_VER >= 1400
+#if _TOKEN_VER >= 1400
     // Disable confusing "helpful" text message on abort, Ctrl-C
     _set_abort_behavior(0, _WRITE_ABORT_MSG | _CALL_REPORTFAULT);
 #endif
@@ -1088,6 +1130,13 @@ bool AppInitParameterInteraction()
         // Register wallet RPC commands
         walletRegisterRPCCommands();
     }
+
+    // Register Token RPC commands
+    RegisterTokenDataRetrievalRPCCommands();
+    RegisterTokenPayloadCreationRPCCommands();
+    RegisterTokenRawTransactionRPCCommands();
+    RegisterTokenTransactionCreationRPCCommands();
+
 #endif
 
     nConnectTimeout = GetArg("-timeout", DEFAULT_CONNECT_TIMEOUT);
@@ -1221,10 +1270,10 @@ bool AppInitMain()
     CScheduler::Function serviceLoop = std::bind(&CScheduler::serviceQueue, &scheduler);
     threadGroup.create_thread(std::bind(&TraceThread<CScheduler::Function>, "scheduler", serviceLoop));
 
-    if (Params().IsRegTestNet()) { // only for regtest for now
-        // Initialize Sapling circuit parameters
-        LoadSaplingParams();
-    }
+    // if (Params().IsRegTestNet()) { // only for regtest for now
+    //     // Initialize Sapling circuit parameters
+    //     LoadSaplingParams();
+    // }
 
     /* Start the RPC server already.  It will be started in "warmup" mode
      * and not really process calls already (but it will signify connections
@@ -1511,10 +1560,13 @@ bool AppInitMain()
     nTotalCache -= nBlockTreeDBCache;
     int64_t nCoinDBCache = std::min(nTotalCache / 2, (nTotalCache / 4) + (1 << 23)); // use 25%-50% of the remainder for disk cache
     nTotalCache -= nCoinDBCache;
+    int64_t nGovernanceDBCache = nTotalCache / 2;
+    nTotalCache -= nGovernanceDBCache;
     nCoinCacheUsage = nTotalCache; // the rest goes to in-memory cache
     LogPrintf("Cache configuration:\n");
     LogPrintf("* Using %.1fMiB for block index database\n", nBlockTreeDBCache * (1.0 / 1024 / 1024));
     LogPrintf("* Using %.1fMiB for chain state database\n", nCoinDBCache * (1.0 / 1024 / 1024));
+    LogPrintf("* Using %.1fMiB for governance database\n", nGovernanceDBCache * (1.0 / 1024 / 1024));
     LogPrintf("* Using %.1fMiB for in-memory UTXO set\n", nCoinCacheUsage * (1.0 / 1024 / 1024));
 
     bool fLoaded = false;
@@ -1533,6 +1585,7 @@ bool AppInitMain()
                 delete pblocktree;
                 delete zerocoinDB;
                 delete pSporkDB;
+                delete governance;
 
                 //RPD specific: zerocoin and spork DB's
                 zerocoinDB = new CZerocoinDB(0, false, fReindex);
@@ -1542,6 +1595,10 @@ bool AppInitMain()
                 pcoinsdbview = new CCoinsViewDB(nCoinDBCache, false, fReindex);
                 pcoinscatcher = new CCoinsViewErrorCatcher(pcoinsdbview);
                 pcoinsTip = new CCoinsViewCache(pcoinscatcher);
+
+                const CChainParams& chainparams = Params();
+                governance = new CGovernance(nGovernanceDBCache, false, fReindex);
+                governance->Init(fReindex, chainparams);
 
                 if (fReindex) {
                     pblocktree->WriteReindexing(true);
@@ -1743,6 +1800,47 @@ bool AppInitMain()
         mempool.ReadFeeEstimates(est_filein);
     fFeeEstimatesInitialized = true;
 
+    // ********************************************************* Step 7.5: load token core
+
+    // if (!fTxIndex) {
+    //     // ask the user if they would like us to modify their config file for them
+    //     std::string msg = _("Disabled transaction index detected.\n\n"
+    //                         "Token Core requires an enabled transaction index. To enable "
+    //                         "transaction indexing, please use the \"-txindex\" option as "
+    //                         "command line argument or add \"txindex=1\" to your client "
+    //                         "configuration file within your data directory.\n\n"
+    //                         "Configuration file"); // allow translation of main text body while still allowing differing config file string
+    //     msg += ": " + GetConfigFile().string() + "\n\n";
+    //     msg += _("Would you like Token Core to attempt to update your configuration file accordingly?");
+    //     bool fRet = uiInterface.ThreadSafeMessageBox(msg, "", CClientUIInterface::MSG_INFORMATION | CClientUIInterface::BTN_OK | CClientUIInterface::MODAL | CClientUIInterface::BTN_ABORT);
+    //     if (fRet) {
+    //         // add txindex=1 to config file in GetConfigFile()
+    //         boost::filesystem::path configPathInfo = GetConfigFile();
+    //         FILE *fp = fopen(configPathInfo.string().c_str(), "at");
+    //         if (!fp) {
+    //             std::string failMsg = _("Unable to update configuration file at");
+    //             failMsg += ":\n" + GetConfigFile().string() + "\n\n";
+    //             failMsg += _("The file may be write protected or you may not have the required permissions to edit it.\n");
+    //             failMsg += _("Please add txindex=1 to your configuration file manually.\n\nToken Core will now shutdown.");
+    //             return InitError(failMsg);
+    //         }
+    //         fprintf(fp, "\ntxindex=1\n");
+    //         fflush(fp);
+    //         fclose(fp);
+    //         std::string strUpdated = _(
+    //                 "Your configuration file has been updated.\n\n"
+    //                 "Token Core will now shutdown - please restart the client for your new configuration to take effect.");
+    //         uiInterface.ThreadSafeMessageBox(strUpdated, "", CClientUIInterface::MSG_INFORMATION | CClientUIInterface::BTN_OK | CClientUIInterface::MODAL);
+    //         return false;
+    //     } else {
+    //         return InitError(_("Please add txindex=1 to your configuration file manually.\n\nToken Core will now shutdown."));
+    //     }
+    // }
+
+    uiInterface.InitMessage(_("Parsing RPDx transactions..."));
+
+    mastercore_init();
+
 // ********************************************************* Step 8: load wallet
 #ifdef ENABLE_WALLET
     if (!CWallet::InitLoadWallet())
@@ -1750,6 +1848,10 @@ bool AppInitMain()
 #else
     LogPrintf("No wallet compiled in!\n");
 #endif
+
+    // Token Core code should be initialized and wallet should now be loaded, perform an initial populat$
+    CheckWalletUpdate();
+
     // ********************************************************* Step 9: import blocks
 
     if (!CheckDiskSpace())

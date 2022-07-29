@@ -23,11 +23,11 @@
 
 #if HAVE_SSE42 && (defined(_M_X64) || defined(__x86_64__))
 
-#if defined(_MSC_VER)
+#if defined(_TOKEN_VER)
 #include <intrin.h>
-#else  // !defined(_MSC_VER)
+#else  // !defined(_TOKEN_VER)
 #include <nmmintrin.h>
-#endif  // defined(_MSC_VER)
+#endif  // defined(_TOKEN_VER)
 
 namespace crc32c {
 

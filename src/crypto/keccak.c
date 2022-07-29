@@ -127,7 +127,7 @@ extern "C"{
 #endif
 #endif
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning (disable: 4146)
 #endif
 

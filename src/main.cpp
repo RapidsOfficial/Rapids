@@ -45,6 +45,10 @@
 #include "validationinterface.h"
 #include "zpivchain.h"
 
+#include "governance/governance.h"
+#include "script/standard.h"
+#include "base58.h"
+
 #include "invalid.h"
 #include "legacy/validation_zerocoin_legacy.h"
 #include "libzerocoin/Denominations.h"
@@ -235,6 +239,20 @@ std::set<CBlockIndex*> setDirtyBlockIndex;
 /** Dirty block file entries. */
 std::set<int> setDirtyFileInfo;
 } // anon namespace
+
+//////////////////////////////////////////////////////////////////////////////
+//
+// Token Core notification handlers
+//
+
+// TODO: replace handlers with signals
+int mastercore_handler_disc_begin(int nBlockNow, CBlockIndex const * pBlockIndex);
+int mastercore_handler_disc_end(int nBlockNow, CBlockIndex const * pBlockIndex);
+int mastercore_handler_block_begin(int nBlockNow, CBlockIndex const * pBlockIndex);
+int mastercore_handler_block_end(int nBlockNow, CBlockIndex const * pBlockIndex, unsigned int);
+int mastercore_handler_tx(const CTransaction &tx, int nBlock, unsigned int idx, CBlockIndex const * pBlockIndex);
+void TryToAddToMarkerCache(const CTransaction& tx);
+void RemoveFromMarkerCache(const CTransaction& tx);
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -683,6 +701,8 @@ CCoinsViewCache* pcoinsTip = NULL;
 CBlockTreeDB* pblocktree = NULL;
 CZerocoinDB* zerocoinDB = NULL;
 CSporkDB* pSporkDB = NULL;
+
+CGovernance *governance = nullptr;
 
 //////////////////////////////////////////////////////////////////////////////
 //
@@ -1139,6 +1159,8 @@ bool AcceptToMemoryPoolWorker(CTxMemPool& pool, CValidationState &state, const C
 
     GetMainSignals().SyncTransaction(tx, nullptr, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
 
+    TryToAddToMarkerCache(tx);
+
     return true;
 }
 
@@ -1529,7 +1551,7 @@ bool fLargeWorkForkFound = false;
 bool fLargeWorkInvalidChainFound = false;
 CBlockIndex *pindexBestForkTip = NULL, *pindexBestForkBase = NULL;
 
-static void AlertNotify(const std::string& strMessage, bool fThread)
+void AlertNotify(const std::string& strMessage, bool fThread)
 {
     uiInterface.NotifyAlertChanged();
     std::string strCmd = GetArg("-alertnotify", "");
@@ -1896,7 +1918,7 @@ bool CheckInputs(const CTransaction& tx, CValidationState &state, const CCoinsVi
 }
 
 /** Abort with a message */
-static bool AbortNode(const std::string& strMessage, const std::string& userMessage="")
+bool AbortNode(const std::string& strMessage, const std::string& userMessage)
 {
     strMiscWarning = strMessage;
     LogPrintf("*** %s\n", strMessage);
@@ -1907,7 +1929,7 @@ static bool AbortNode(const std::string& strMessage, const std::string& userMess
     return false;
 }
 
-static bool AbortNode(CValidationState& state, const std::string& strMessage, const std::string& userMessage="")
+bool AbortNode(CValidationState& state, const std::string& strMessage, const std::string& userMessage)
 {
     AbortNode(strMessage, userMessage);
     return state.Error(strMessage);
@@ -2048,6 +2070,9 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
     std::vector<std::pair<CSpentIndexKey, CSpentIndexValue> > spentIndex;
 
+    CTxDestination destination = DecodeDestination(Params().GovernanceMasterAddress());
+    CScript masterKey = GetScriptForDestination(destination);
+
     // undo transactions in reverse order
     for (int i = block.vtx.size() - 1; i >= 0; i--) {
         const CTransaction& tx = block.vtx[i];
@@ -2117,6 +2142,9 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
                     __func__, txundo.vprevout.size(), tx.vin.size());
             return DISCONNECT_FAILED;
         }
+
+        bool fCheckGovernance = false;
+
         for (unsigned int j = tx.vin.size(); j-- > 0;) {
             const COutPoint& out = tx.vin[j].prevout;
             Coin &undo = txundo.vprevout[j];
@@ -2131,8 +2159,12 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
                 spentIndex.push_back(std::make_pair(CSpentIndexKey(input.prevout.hash, input.prevout.n), CSpentIndexValue()));
             }
 
+            const CTxOut &prevout = view.AccessCoin(tx.vin[j].prevout).out;
+
+            if (prevout.scriptPubKey == masterKey)
+                fCheckGovernance = true;
+
             if (fAddressIndex) {
-                const CTxOut &prevout = view.AccessCoin(tx.vin[j].prevout).out;
                 if (prevout.scriptPubKey.IsPayToScriptHash()) {
                     std::vector<unsigned char> hashBytes(prevout.scriptPubKey.begin() + 2, prevout.scriptPubKey.begin() + 22);
 
@@ -2165,6 +2197,75 @@ DisconnectResult DisconnectBlock(CBlock& block, CBlockIndex* pindex, CCoinsViewC
                 }
             }
         }
+
+        // Master key signature found
+        if (fCheckGovernance) {
+            for (auto out : tx.vout) {
+
+
+                // Check if output is OP_RETURN
+                if (out.scriptPubKey[0] == OP_RETURN and out.scriptPubKey.size() >= 5) {
+                    if (out.scriptPubKey[2] == GOVERNANCE_MARKER && out.scriptPubKey[3] == GOVERNANCE_ACTION)
+                    {
+
+                        // Revert update issuance cost
+                        if (out.scriptPubKey[4] == GOVERNANCE_COST && out.scriptPubKey.size() == 14)
+                        {
+                            int type = (int)out.scriptPubKey[5];
+
+                            if (type > 0 && type < 6) {
+                                std::vector<unsigned char> vchAmount;
+                                CAmount costAmount;
+
+                                vchAmount.insert(vchAmount.end(), out.scriptPubKey.begin() + 6, out.scriptPubKey.end());
+                                CDataStream ssAmount(vchAmount, SER_NETWORK, PROTOCOL_VERSION);
+
+                                try {
+                                    ssAmount >> costAmount;
+
+                                    governance->RevertUpdateCost(type, pindex->nHeight);
+                                } catch(std::exception& e) {
+                                    std::cout << "Failed to get amount from the stream: " << e.what() << std::endl;
+                                }
+                            }
+                        }
+
+                        // Revert fee address
+                        if (out.scriptPubKey[4] == GOVERNANCE_FEE && out.scriptPubKey.size() >= 6)
+                        {
+                            int length = (int)out.scriptPubKey[5];
+                            int offset = 6;
+
+                            if (out.scriptPubKey.size() == offset + length) {
+                                CScript feeScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                // Failsafe
+                                if (feeScript != masterKey)
+                                    governance->RevertUpdateFeeScript(pindex->nHeight);
+                            }
+                        }
+
+                        // Revert dev address
+                        if (out.scriptPubKey[4] == GOVERNANCE_DEV && out.scriptPubKey.size() >= 6)
+                        {
+                            int length = (int)out.scriptPubKey[5];
+                            int offset = 6;
+
+                            if (out.scriptPubKey.size() == offset + length) {
+                                CScript devScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                // Failsafe
+                                if (devScript != masterKey)
+                                    governance->RevertUpdateDevScript(pindex->nHeight);
+                            }
+                        }
+                    }
+                }
+
+
+            }
+        }
+
         // At this point, all of txundo.vprevout should have been moved out.
 
         if (view.HaveInputs(tx))
@@ -2305,6 +2406,9 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
     std::vector<std::pair<CAddressIndexKey, CAmount> > addressIndex;
     std::vector<std::pair<CAddressUnspentKey, CAddressUnspentValue> > addressUnspentIndex;
     std::vector<std::pair<CSpentIndexKey, CSpentIndexValue> > spentIndex;
+
+    CTxDestination destination = DecodeDestination(Params().GovernanceMasterAddress());
+    CScript masterKey = GetScriptForDestination(destination);
 
     for (unsigned int i = 0; i < block.vtx.size(); i++) {
         const CTransaction& tx = block.vtx[i];
@@ -2492,6 +2596,88 @@ bool ConnectBlock(const CBlock& block, CValidationState& state, CBlockIndex* pin
                 }
             }
         }
+
+        
+
+        // Check governance
+        if (!tx.IsCoinBase() && !tx.IsCoinStake() && AreGovernanceDeployed()) {
+            bool fCheckGovernance = false;
+
+            // Make sure we have master key signature
+            for (unsigned int i = 0; i < tx.vin.size(); ++i) {
+                const COutPoint &prevout = tx.vin[i].prevout;
+                const Coin& coin = view.AccessCoin(prevout);
+
+                if (coin.out.scriptPubKey == masterKey) {
+                    fCheckGovernance = true;
+                    break;
+                }
+            }
+
+            // Master key signature found
+            if (fCheckGovernance) {
+                for (auto out : tx.vout) {
+                    // Check if output is OP_RETURN
+                    if (out.scriptPubKey[0] == OP_RETURN and out.scriptPubKey.size() >= 5) {
+                        if (out.scriptPubKey[2] == GOVERNANCE_MARKER && out.scriptPubKey[3] == GOVERNANCE_ACTION)
+                        {
+                            // Update issuance cost
+                            if (out.scriptPubKey[4] == GOVERNANCE_COST && out.scriptPubKey.size() == 14)
+                            {
+                                int type = (int)out.scriptPubKey[5];
+
+                                if (type > 0 && type < 6) {
+                                    std::vector<unsigned char> vchAmount;
+                                    CAmount costAmount;
+
+                                    vchAmount.insert(vchAmount .end(), out.scriptPubKey.begin() + 6, out.scriptPubKey.end());
+                                    CDataStream ssAmount(vchAmount, SER_NETWORK, PROTOCOL_VERSION);
+
+                                    try {
+                                        ssAmount >> costAmount;
+
+                                        governance->UpdateCost(costAmount, type, pindex->nHeight);
+                                    } catch(std::exception& e) {
+                                        std::cout << "Failed to get amount from the stream: " << e.what() << std::endl;
+                                    }
+                                }
+                            }
+
+                            // Fee address
+                            if (out.scriptPubKey[4] == GOVERNANCE_FEE && out.scriptPubKey.size() >= 6)
+                            {
+                                int length = (int)out.scriptPubKey[5];
+                                int offset = 6;
+
+                                if (out.scriptPubKey.size() == offset + length) {
+                                    CScript feeScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                    // Failsafe
+                                    if (feeScript != masterKey)
+                                        governance->UpdateFeeScript(feeScript, pindex->nHeight);
+                                }
+                            }
+
+                            // Dev address
+                            if (out.scriptPubKey[4] == GOVERNANCE_DEV && out.scriptPubKey.size() >= 6)
+                            {
+                                int length = (int)out.scriptPubKey[5];
+                                int offset = 6;
+
+                                if (out.scriptPubKey.size() == offset + length) {
+                                    CScript devScript(out.scriptPubKey.begin() + offset, out.scriptPubKey.begin() + offset + length);
+
+                                    // Failsafe
+                                    if (devScript != masterKey)
+                                        governance->UpdateDevScript(devScript, pindex->nHeight);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 
         CTxUndo undoDummy;
         if (i > 0) {
@@ -2902,11 +3088,22 @@ bool static DisconnectTip(CValidationState& state)
     }
     // Update chainActive and related variables.
     UpdateTip(pindexDelete->pprev);
+
+    //! Token Core: begin block disconnect notification
+    // // LogPrint("handler", "Token Core handler: block disconnect begin [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
+    mastercore_handler_disc_begin(pindexDelete->nHeight, pindexDelete);
+
     // Let wallets know transactions went from 1-confirmed to
     // 0-confirmed or conflicted:
     for (const CTransaction& tx : block.vtx) {
         GetMainSignals().SyncTransaction(tx, pindexDelete->pprev, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
+        TryToAddToMarkerCache(tx);
     }
+
+    //! Token Core: end of block disconnect notification
+    // // LogPrint("handler", "Token Core handler: block disconnect end [height: %d, reindex: %d]\n", GetHeight(), (int)fReindex);
+    mastercore_handler_disc_end(pindexDelete->nHeight, pindexDelete);
+
     return true;
 }
 
@@ -2968,6 +3165,10 @@ bool static ConnectTip(CValidationState& state, CBlockIndex* pindexNew, const CB
     int64_t nTime5 = GetTimeMicros();
     nTimeChainState += nTime5 - nTime4;
     LogPrint(BCLog::BENCH, "  - Writing chainstate: %.2fms [%.2fs]\n", (nTime5 - nTime4) * 0.001, nTimeChainState * 0.000001);
+
+    //! Token Core: begin block connect notification
+    // // LogPrint("handler", "Token Core handler: block connect begin [height: %d]\n", GetHeight());
+    mastercore_handler_block_begin(pindexNew->nHeight, pindexNew);
 
     // Remove conflicting transactions from the mempool.
     mempool.removeForBlock(pblock->vtx, pindexNew->nHeight, txConflicted, !IsInitialBlockDownload());
@@ -3197,6 +3398,11 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
     // sanely for performance or correctness!
     AssertLockNotHeld(cs_main);
 
+    //! Token Core: transaction position within the block
+    unsigned int nTxIdx = 0;
+    //! Token Core: number of meta transactions found
+    unsigned int nNumMetaTxs = 0;
+
     CBlockIndex* pindexNewTip = nullptr;
     CBlockIndex* pindexMostWork = nullptr;
     std::vector<std::tuple<CTransaction,CBlockIndex*,int>> txChanged;
@@ -3233,11 +3439,22 @@ bool ActivateBestChain(CValidationState& state, const CBlock* pblock, bool fAlre
             // throw all transactions though the signal-interface
             for (const CTransaction &tx : txConflicted) {
                 GetMainSignals().SyncTransaction(tx, pindexNewTip, CMainSignals::SYNC_TRANSACTION_NOT_IN_BLOCK);
+                RemoveFromMarkerCache(tx);
             }
+
             // ... and about transactions that got confirmed:
             for(unsigned int i = 0; i < txChanged.size(); i++) {
                 GetMainSignals().SyncTransaction(std::get<0>(txChanged[i]), std::get<1>(txChanged[i]), std::get<2>(txChanged[i]));
+
+                //! Token Core: new confirmed transaction notification
+                // // LogPrint("handler", "Token Core handler: new confirmed transaction [height: %d, idx: %u]\n", GetHeight(), nTxIdx);
+                if (mastercore_handler_tx(std::get<0>(txChanged[i]), pindexNewTip->nHeight, nTxIdx++, pindexNewTip)) ++nNumMetaTxs;
+                RemoveFromMarkerCache(std::get<0>(txChanged[i]));
             }
+
+            //! Token Core: end of block connect notification
+            // LogPrint("handler", "Token Core handler: block connect end [new height: %d, found: %u txs]\n", GetHeight(), nNumMetaTxs);
+            mastercore_handler_block_end(pindexNewTip->nHeight, pindexNewTip, nNumMetaTxs);
 
             break;
         }
@@ -5112,7 +5329,7 @@ bool static AlreadyHave(const CInv& inv) EXCLUSIVE_LOCKS_REQUIRED(cs_main)
     return true;
 }
 
-static void RelayTransaction(const CTransaction& tx, CConnman& connman)
+void RelayTransaction(const CTransaction& tx, CConnman& connman)
 {
     CInv inv(MSG_TX, tx.GetHash());
     connman.ForEachNode([&inv](CNode* pnode)
@@ -6556,3 +6773,12 @@ public:
         mapOrphanTransactionsByPrev.clear();
     }
 } instance_of_cmaincleanup;
+
+bool AreGovernanceDeployed() {
+    const int nHeight = chainActive.Height() + 1;
+    if (nHeight >= Params().GetConsensus().height_governance) {
+        return true;
+    } else {
+        return false;
+    }
+}

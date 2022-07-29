@@ -207,6 +207,8 @@ public:
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
         consensus.height_supply_reduction = 1286000;
 
+        consensus.height_governance = std::numeric_limits<int>::max();
+
         // validation by-pass
         consensus.nPivxBadBlockTime = std::numeric_limits<int>::max();
         consensus.nPivxBadBlockBits = 0x1c056dac;    // Skip nBit validation of Block 259201 per PR #915
@@ -288,6 +290,13 @@ public:
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-main";
 
         devFundAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
+        strFeeAddress = "RbuTqj3g88CU4Z8ipFP8ANBJ8ER7TejAd4";
+
+        tokenFixedFee = 0 * COIN;
+        tokenManagedFee = 0 * COIN;
+        tokenVariableFee = 1 * COIN;
+        tokenUsernameFee = 1 * COIN;
+        tokenSubFee = 0 * COIN;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -349,6 +358,8 @@ public:
         consensus.height_start_ZC_SerialRangeCheck = std::numeric_limits<int>::max();
         consensus.height_ZC_RecalcAccumulators = std::numeric_limits<int>::max();
         consensus.height_supply_reduction = 30;
+
+        consensus.height_governance = std::numeric_limits<int>::max();
 
         // validation by-pass
         consensus.nPivxBadBlockTime = 1489001494; // Skip nBit validation of Block 201 per PR #915
@@ -431,6 +442,13 @@ public:
         bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-secret-spending-key-test";
 
         devFundAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
+        strFeeAddress = "y76GjREPurY29hD4bxTtKRrRDsw2zgxJyc";
+
+        tokenFixedFee = 0 * COIN;
+        tokenManagedFee = 0 * COIN;
+        tokenVariableFee = 1 * COIN;
+        tokenUsernameFee = 1 * COIN;
+        tokenSubFee = 0 * COIN;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const
@@ -462,11 +480,11 @@ public:
         consensus.posLimitV2 = ~UINT256_ZERO >> 20;
         consensus.nBudgetCycleBlocks = 43200;         // approx 10 cycles per day
         consensus.nBudgetFeeConfirmations = 3;      // (only 8-blocks window for finalization on regtest)
-        consensus.nCoinbaseMaturity = 100;
+        consensus.nCoinbaseMaturity = 1;
         consensus.nFutureTimeDriftPoW = 7200;
         consensus.nFutureTimeDriftPoS = 180;
         consensus.nMasternodeCountDrift = 4;        // num of MN we allow the see-saw payments to be off by
-        consensus.nMaxMoneyOut = 43199500 * COIN;
+        consensus.nMaxMoneyOut = 35000000000 * COIN;
         consensus.nPoolMaxTransactions = 2;
         consensus.nProposalEstablishmentTime = 60 * 5;  // at least 5 min old to make it into a budget
         consensus.nStakeMinAge = 0;
@@ -495,6 +513,8 @@ public:
         consensus.height_start_ZC_SerialRangeCheck = 300;
         consensus.height_ZC_RecalcAccumulators = 999999999;
         consensus.height_supply_reduction = std::numeric_limits<int>::max();
+
+        consensus.height_governance = std::numeric_limits<int>::max();
 
         // Zerocoin-related params
         consensus.ZC_Modulus = "25195908475657893494027183240048398571429282126204032027777137836043662020707595556264018525880784"
@@ -542,6 +562,21 @@ public:
 
         vFixedSeeds.clear(); //! Testnet mode doesn't have any fixed seeds.
         vSeeds.clear();      //! Testnet mode doesn't have any DNS seeds.
+
+        // Sapling
+        bech32HRPs[SAPLING_PAYMENT_ADDRESS]      = "pregs";
+        bech32HRPs[SAPLING_FULL_VIEWING_KEY]     = "pregviews";
+        bech32HRPs[SAPLING_INCOMING_VIEWING_KEY] = "pregivks";
+        bech32HRPs[SAPLING_EXTENDED_SPEND_KEY]         = "p-reg-secret-spending-key-main";
+
+        devFundAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
+        strFeeAddress = "yCvUVd72w7xpimf981m114FSFbmAmne7j9";
+
+        tokenFixedFee = 1 * COIN;
+        tokenManagedFee = 1 * COIN;
+        tokenVariableFee = 1 * COIN;
+        tokenUsernameFee = 1 * COIN;
+        tokenSubFee = 1 * COIN;
     }
 
     const Checkpoints::CCheckpointData& Checkpoints() const

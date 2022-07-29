@@ -107,6 +107,18 @@ public:
 
     /** Banlist did change. */
     boost::signals2::signal<void (void)> BannedListChanged;
+
+    /** Token balances have been updated. */
+    boost::signals2::signal<void ()> TokenBalanceChanged;
+
+    /** Token state has been changed. */
+    boost::signals2::signal<void ()> TokenStateChanged;
+
+    /** Token pending status has been changed */
+    boost::signals2::signal<void (bool pending)> TokenPendingChanged;
+
+    /** Token state has been invalidated due to a reorg */
+    boost::signals2::signal<void ()> TokenStateInvalidated;
 };
 
 extern CClientUIInterface uiInterface;

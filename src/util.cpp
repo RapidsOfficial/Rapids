@@ -45,7 +45,7 @@
 
 #else
 
-#ifdef _MSC_VER
+#ifdef _TOKEN_VER
 #pragma warning(disable : 4786)
 #pragma warning(disable : 4804)
 #pragma warning(disable : 4805)
@@ -110,6 +110,9 @@ std::map<std::string, std::vector<std::string> > mapMultiArgs;
 
 bool fDaemon = false;
 std::string strMiscWarning;
+
+/** Flag to indicate, whether the Token Core log file should be reopened. */
+std::atomic<bool> fReopenTokenCoreLog(false);
 
 /** Init OpenSSL library multithreading support */
 static RecursiveMutex** ppmutexOpenSSL;
