@@ -128,11 +128,17 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 	(893378, uint256S("d9997bcab3ea6657a9c3077f58ded04e3ed44c0c1394d6f59c5447be9708f0c4"))
 	(894439, uint256S("c15b15eddb2c9b97e4cc34de18d54c64dffff20c3a83688a2112c7c6492997b1"))
     (1300000, uint256S("3fbe4040a7deb7d812d23675aa8d1289d64c22c859c3e9ff56a7fe6027a336d5"))
+    (2102400, uint256S("c043d4c36660434dda9602ed636f50665c1d7ce3c40fd49d55230d543de75114"))
+    (2102401, uint256S("b384737851bcb6913d4f28f4fdb553cee90ae569044c3fab5d54c9f06d00697f"))
+    (2102401, uint256S("b384737851bcb6913d4f28f4fdb553cee90ae569044c3fab5d54c9f06d00697f"))
+    (2102402, uint256S("bfbf318576518fcce4a3e1f2ae9e642019cb88768d64b6ea7926ee3c054e9d21"))
+    (2102400, uint256S("832517ff62e4ab11f9e616302878f1a40ef2910cf9331bb9736d3e3c4e85d53f"))
+        
     ;
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1596380286, // * UNIX timestamp of last checkpoint block
+    1670371770, // * UNIX timestamp of last checkpoint block
     2003954,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the UpdateTip debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -192,10 +198,10 @@ public:
         consensus.nTimeSlotLength = 15;
 
         // spork keys
-        consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
+        consensus.strSporkPubKey = "030e2385abb6ee4a2991e90993f8e6a60510ec19f8bb4821ea5b2cfdea772594c2";
         consensus.strSporkPubKeyOld = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
-        consensus.nTime_EnforceNewSporkKey = 1592827200;    //!> Monday, 22 June 2020 12:00:00 PM GMT
-        consensus.nTime_RejectOldSporkKey = 1593000000;     //!> Wednesday, 24 June 2020 12:00:00 PM GMT
+        consensus.nTime_EnforceNewSporkKey = 1670376077; //!> Wed Dec 07 2022 01:21:17 GMT+0000
+        consensus.nTime_RejectOldSporkKey = 1670566877;  //!> Fri Dec 09 2022 06:21:17 GMT+0000
 
         // height-based activations
         consensus.height_last_PoW = 200;

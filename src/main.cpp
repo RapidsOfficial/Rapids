@@ -1372,6 +1372,7 @@ double ConvertBitsToDouble(unsigned int nBits)
 int64_t GetBlockValue(int nHeight)
 {
     const int nHalvingPeriod = 2102400;
+    const int nHalvingExtender = 4204800;
 
     if (nHeight <= Params().GetConsensus().height_supply_reduction) {
         // Old subsidy
@@ -1400,10 +1401,10 @@ int64_t GetBlockValue(int nHeight)
 
     // New subsidy
     int64_t nSubsidy = 1.7835 * COIN;
+    int rewardReduction = nHeight / nHalvingPeriod;
 
-    nSubsidy >>= ((nHeight - 1) / nHalvingPeriod);
-
-    return nSubsidy;
+    nSubsidy >>= rewardReduction;
+    if (nHeight > 1) return nSubsidy;
 }
 
 int64_t GetMasternodePayment(int nHeight, int64_t blockValue)
@@ -6202,7 +6203,10 @@ bool static ProcessMessage(CNode* pfrom, std::string strCommand, CDataStream& vR
 //       it was the one which was commented out
 int ActiveProtocol()
 {
-    return PROTOCOL_VERSION;
+    if (sporkManager.IsSporkActive(SPORK_15_NEW_PROTOCOL_ENFORCEMENT_2))
+        return MIN_PEER_PROTO_VERSION_AFTER_ENFORCEMENT;
+
+    return MIN_PEER_PROTO_VERSION_BEFORE_ENFORCEMENT;
 }
 
 bool ProcessMessages(CNode* pfrom, CConnman& connman, std::atomic<bool>& interruptMsgProc)
