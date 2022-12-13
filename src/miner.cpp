@@ -593,12 +593,20 @@ void BitcoinMiner(CWallet* pwallet, bool fProofOfStake)
 
             // update fStakeableCoins (5 minute check time);
             CheckForCoins(pwallet, 5, &availableCoins);
+            if (sporkManager.IsSporkActive(SPORK_19_STAKE_SKIP_MN_SYNC)) {
+                while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins) {
+                    MilliSleep(5000);
+                    // Do a separate 1 minute check here to ensure fStakeableCoins is updated
+                    if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
+                }
+            }
 
-            while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers())
-                    || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
-                MilliSleep(5000);
-                // Do a separate 1 minute check here to ensure fStakeableCoins is updated
-                if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
+            if (!sporkManager.IsSporkActive(SPORK_19_STAKE_SKIP_MN_SYNC)) {
+                while ((g_connman && g_connman->GetNodeCount(CConnman::CONNECTIONS_ALL) == 0 && Params().MiningRequiresPeers()) || pwallet->IsLocked() || !fStakeableCoins || masternodeSync.NotCompleted()) {
+                    MilliSleep(5000);
+                    // Do a separate 1 minute check here to ensure fStakeableCoins is updated
+                    if (!fStakeableCoins) CheckForCoins(pwallet, 1, &availableCoins);
+                }
             }
 
             //search our map of hashed blocks, see if bestblock has been hashed yet

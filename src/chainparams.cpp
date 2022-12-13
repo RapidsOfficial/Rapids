@@ -128,11 +128,17 @@ static Checkpoints::MapCheckpoints mapCheckpoints =
 	(893378, uint256S("d9997bcab3ea6657a9c3077f58ded04e3ed44c0c1394d6f59c5447be9708f0c4"))
 	(894439, uint256S("c15b15eddb2c9b97e4cc34de18d54c64dffff20c3a83688a2112c7c6492997b1"))
     (1300000, uint256S("3fbe4040a7deb7d812d23675aa8d1289d64c22c859c3e9ff56a7fe6027a336d5"))
+    (2102400, uint256S("c043d4c36660434dda9602ed636f50665c1d7ce3c40fd49d55230d543de75114"))
+    (2102401, uint256S("d2b61e538ea348310feaabebff452e3f160f079aa8eb894728a81bcf9add8679"))
+    (2102500, uint256S("da253d8cee91a1de30add69d22c0e24bf45cc3b3d84488f37922d0b2acac5f27"))
+    (2102600, uint256S("389d84735ca14188222a109120ecc00cb84763196a85c838d9a724a0d205ad22"))
+
+        
     ;
 
 static const Checkpoints::CCheckpointData data = {
     &mapCheckpoints,
-    1596380286, // * UNIX timestamp of last checkpoint block
+    1670718675, // * UNIX timestamp of last checkpoint block
     2003954,    // * total number of transactions between genesis and last checkpoint
                 //   (the tx=... number in the UpdateTip debug.log lines)
     2000        // * estimated number of transactions per day after checkpoint
@@ -192,10 +198,10 @@ public:
         consensus.nTimeSlotLength = 15;
 
         // spork keys
-        consensus.strSporkPubKey = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
+        consensus.strSporkPubKey = "030e2385abb6ee4a2991e90993f8e6a60510ec19f8bb4821ea5b2cfdea772594c2";
         consensus.strSporkPubKeyOld = "02f8759d6b73bd870ef27863378f275d273580e1f4d9448f441aa879bb352eb183";
-        consensus.nTime_EnforceNewSporkKey = 1592827200;    //!> Monday, 22 June 2020 12:00:00 PM GMT
-        consensus.nTime_RejectOldSporkKey = 1593000000;     //!> Wednesday, 24 June 2020 12:00:00 PM GMT
+        consensus.nTime_EnforceNewSporkKey = 1670376077; //!> Wed Dec 07 2022 01:21:17 GMT+0000
+        consensus.nTime_RejectOldSporkKey = 1670566877;  //!> Fri Dec 09 2022 06:21:17 GMT+0000
 
         // height-based activations
         consensus.height_last_PoW = 200;
